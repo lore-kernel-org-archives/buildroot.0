@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DC71E8181D
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 05:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0A37E8181D
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0978E61410;
-	Tue, 26 Sep 2023 05:51:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0978E61410
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8625D61405;
+	Tue, 26 Sep 2023 06:06:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8625D61405
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o624HxjWqAmf; Tue, 26 Sep 2023 05:51:13 +0000 (UTC)
+	with ESMTP id 4zN5dHnppWkz; Tue, 26 Sep 2023 06:06:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 516DD6140A;
-	Tue, 26 Sep 2023 05:51:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 516DD6140A
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6239612D4;
+	Tue, 26 Sep 2023 06:06:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6239612D4
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A3AB41BF969
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 05:50:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 85A151BF30B
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:06:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7EAD360DFD
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 05:50:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EAD360DFD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FAEA6132B
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FAEA6132B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dyV_OG3hUCPm for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 05:50:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B249860D51
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 05:50:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B249860D51
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9DA89877CF; Tue, 26 Sep 2023 05:50:57 +0000 (UTC)
+ with ESMTP id qE8_O7mXf1Bu for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 06:06:33 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 23585612D4
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23585612D4
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A1C60240007;
+ Tue, 26 Sep 2023 06:06:28 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ql1DI-002yjg-0W; Tue, 26 Sep 2023 08:06:28 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 07:44:22 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: b362115b259e65f1e575001da5b029c64df61972
-X-Git-Newrev: 395d92503cfc85f8b6a46ba93f34048f634ce40d
-X-Patchwork-Hint: ignore
-Message-Id: <20230926055057.9DA89877CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/fio: remove
- -march=native
+To: Thomas Devoogdt <thomas@devoogdt.com>
+References: <20230909075753.7471-1-thomas@devoogdt.com>
+Date: Tue, 26 Sep 2023 08:06:27 +0200
+In-Reply-To: <20230909075753.7471-1-thomas@devoogdt.com> (Thomas Devoogdt's
+ message of "Sat, 9 Sep 2023 09:57:50 +0200")
+Message-ID: <87edilbh98.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/4] package/webkitgtk: security bump to
+ version 2.40.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,42 +63,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=395d92503cfc85f8b6a46ba93f34048f634ce40d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
 
-Per default, the fio package uses the "-march=native" GCC option. This
-is of course wildly inappropriate for cross-compilation and can result
-in illegal instructions. Thus we make sure fio will not use that
-compiler option by passing --disable-native to configure.
+ > Bugfix release with many security fixes, including (but not limited to)
+ > patches for CVE-2023-37450, CVE-2023-38133, CVE-2023-38572, CVE-2023-38592,
+ > CVE-2023-38594, CVE-2023-38595, CVE-2023-38597, CVE-2023-38599,
+ > CVE-2023-38600, and CVE-2023-38611.
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 056958724b8c7581aff2bc022841c1ca6db1e590)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fio/fio.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Release notes:
 
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index 13818b60fd..b46ece7702 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -26,7 +26,8 @@ FIO_DEPENDENCIES += zlib
- endif
- 
- define FIO_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_MAKE_ENV) ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
-+	(cd $(@D); $(TARGET_MAKE_ENV) ./configure --disable-native \
-+		--cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
- endef
- 
- define FIO_BUILD_CMDS
+ >   https://webkitgtk.org/2023/07/21/webkitgtk2.40.4-released.html
+ >   https://webkitgtk.org/2023/08/01/webkitgtk2.40.5-released.html
+
+ > Accompanying security advisory:
+
+ >   https://webkitgtk.org/security/WSA-2023-0006.html
+ >   https://webkitgtk.org/security/WSA-2023-0007.html
+
+ > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ > ---
+ > v2: no change
+
+Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
