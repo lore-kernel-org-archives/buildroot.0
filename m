@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78010E7D26B
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 09:01:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B09BE7D26A
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 09:02:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2295B61416;
-	Tue, 26 Sep 2023 09:01:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2295B61416
+	by smtp3.osuosl.org (Postfix) with ESMTP id E20D16121E;
+	Tue, 26 Sep 2023 09:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E20D16121E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gkpx_ClscpRd; Tue, 26 Sep 2023 09:01:28 +0000 (UTC)
+	with ESMTP id weui90Id5nkr; Tue, 26 Sep 2023 09:02:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7228360DDF;
-	Tue, 26 Sep 2023 09:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7228360DDF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B42B21BF33A
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:01:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27DDF60DDF;
+	Tue, 26 Sep 2023 09:02:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27DDF60DDF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 619381BF2FA
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C4DD41E4B
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:01:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C4DD41E4B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AF9740189
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:02:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AF9740189
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BSrjyB103j2T for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 09:01:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K8_bRR4gGg0E for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 09:02:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DE3F41E48
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 09:01:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DE3F41E48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7BAB9400EF
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 09:02:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BAB9400EF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CD23806AE; Tue, 26 Sep 2023 09:01:12 +0000 (UTC)
+ id 69E1D80DC9; Tue, 26 Sep 2023 09:02:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 10:50:22 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 7efe2b30fe58b021dd09672ca4b7f1ea4e1666a9
-X-Git-Newrev: 9c4ef96fe8f213e713afee84dc6e642b1987e9fe
+Date: Tue, 26 Sep 2023 10:51:16 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 243ea6eb2927bdb689efbd3e61a1076e887944f3
+X-Git-Newrev: c132c520872ca3435e7c4218da498358fe0e3053
 X-Patchwork-Hint: ignore
-Message-Id: <20230926090112.7CD23806AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/nodejs: fix
+Message-Id: <20230926090230.69E1D80DC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/nodejs: fix
  parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c4ef96fe8f213e713afee84dc6e642b1987e9fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c132c520872ca3435e7c4218da498358fe0e3053
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Unless told otherwise, ninja will spawn as many jobs as there are CPU
 (plus 2). Nodejs is built with ninja, but it is a generic package, so
@@ -87,7 +87,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index fe629ada21..4e70bd71a3 100644
+index 225b371786..ff32ae6c13 100644
 --- a/package/nodejs/nodejs.mk
 +++ b/package/nodejs/nodejs.mk
 @@ -46,14 +46,16 @@ HOST_NODEJS_MAKE_OPTS = \
