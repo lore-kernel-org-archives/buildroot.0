@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21D8DE7D24C
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 08:06:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49390E7D24C
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 08:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEE4D817AF;
-	Tue, 26 Sep 2023 08:06:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEE4D817AF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 035AF817FD;
+	Tue, 26 Sep 2023 08:06:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 035AF817FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p3n2svKUrXd5; Tue, 26 Sep 2023 08:06:08 +0000 (UTC)
+	with ESMTP id i0DV4pq7R-zP; Tue, 26 Sep 2023 08:06:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21A6680EC5;
-	Tue, 26 Sep 2023 08:06:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21A6680EC5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5CDFA1BF2C1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33F87817E4;
+	Tue, 26 Sep 2023 08:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33F87817E4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7734A1BF33A
  for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 08:06:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43C0B61307
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51B45417BE
  for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 08:06:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43C0B61307
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51B45417BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o0bjRdN8Qdey for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vI0w24FQ2P_M for <buildroot@lists.busybox.net>;
  Tue, 26 Sep 2023 08:06:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 613E361409
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B397417C1
  for <buildroot@buildroot.org>; Tue, 26 Sep 2023 08:06:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 613E361409
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B397417C1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4ECB187844; Tue, 26 Sep 2023 08:06:04 +0000 (UTC)
+ id 42D8387842; Tue, 26 Sep 2023 08:06:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 10:01:19 +0200
+Date: Tue, 26 Sep 2023 09:55:16 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 175260e1e7ba60d4a427d3bf52a0fb342011d530
-X-Git-Newrev: cb7613ffb7c1253ae05ef9b5cf6fb77bd421893f
+X-Git-Oldrev: 335dbb595ab027b3a46a4fd764e93c1dc9d31e56
+X-Git-Newrev: 175260e1e7ba60d4a427d3bf52a0fb342011d530
 X-Patchwork-Hint: ignore
-Message-Id: <20230926080604.4ECB187844@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/nut: package/nut:
- specify --with-user/group when building NUT
+Message-Id: <20230926080604.42D8387842@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] docs/manual: add section
+ to explain how to give credits to a sponsor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb7613ffb7c1253ae05ef9b5cf6fb77bd421893f
+commit: https://git.buildroot.net/buildroot/commit/?id=175260e1e7ba60d4a427d3bf52a0fb342011d530
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-This commit fixes a problem where the NUT package couldn't be
-used as a NUT server due to the fact that the default group for
-nobody is "nogroup" and not "nobody" like the internal default
-of NUT. Thus, when starting a NUT server daemon the daemon starts
-with incorrect group permissions. This commit fixes this
-shortcoming by introducing a dedicated 'nut' user and 'nut' group
-to drop priviledges to it.
+Sometimes it happens that a Company or a Physical Person sponsors the
+creation and/or the upstreaming process of a patch, but at the moment
+there is no way to give credits to it. In Linux they prepend '+sponsor'
+to the e-mail of the contributor in both authorship and commit log tag as
+discussed here[0]. So let's describe in the manual how to do that as a
+standard.
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
+[0]: https://lore.kernel.org/linux-doc/20230817220957.41582-1-giulio.benetti@benettiengineering.com/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998@free.fr:
+  - reword to reference sub-addressing and the RFC
+  - move to the "submitting patches" section, that already deals with
+    SoB tags
+  - differentiate between Your/Their names
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit cd46e1b1439e854dc9e4c016795d6e5276e4c573)
+(cherry picked from commit de349df08c653a822166f94dbe01295a5a3cfa6e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nut/nut.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ docs/manual/contribute.txt | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/nut/nut.mk b/package/nut/nut.mk
-index fb98ba04f0..4c322aeb85 100644
---- a/package/nut/nut.mk
-+++ b/package/nut/nut.mk
-@@ -24,7 +24,9 @@ NUT_POST_PATCH_HOOKS += NUT_FIX_CONFIGURE
- NUT_CONF_OPTS = \
- 	--with-altpidpath=/var/run/upsd \
- 	--with-dev \
--	--without-doc
-+	--without-doc \
-+	--with-user=nut \
-+	--with-group=nut
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 94f1c64496..15fe36aef0 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -247,6 +247,23 @@ which have the upstream license), and that you are allowed to do so.
+ See http://developercertificate.org/[the Developer Certificate of
+ Origin] for details.
  
- NUT_CONF_ENV = \
- 	ax_cv_check_cflags__Werror__Wno_unknown_warning_option=no \
-@@ -34,6 +36,10 @@ NUT_CONF_ENV = \
- 	ac_cv_func_strncasecmp=yes \
- 	ax_cv__printf_string_null=yes
- 
-+define NUT_USERS
-+	nut -1 nut -1 * - - - NUT user
-+endef
++To give credits to who sponsored the creation of a patch or the process of
++upstreaming it, you may use
++https://datatracker.ietf.org/doc/html/rfc5233[email subaddressing] for
++your git identity (i.e. what is used as commit author and email +From:+
++field, as well as your Signed-off-by tag); add suffix to the local part,
++separated from it by a plus `+` sign. E.g.:
 +
- ifeq ($(call qstrip,$(BR2_PACKAGE_NUT_DRIVERS)),)
- NUT_CONF_OPTS += --with-drivers=auto
- else
++* for a company which sponsored the submitted work, use the company name
++  as the detail (suffix) part:
+++
++`Your-Name Your-Surname <your-name.your-surname+companyname@mail.com>`
++
++* for an individual who sponsored who sponsored the submitted work, use
++  their name and surname:
+++
++`Your-Name Your-Surname <your-name.your-surname+their-name.their-surname@mail.com>`
++
+ When adding new packages, you should submit every package in a
+ separate patch. This patch should have the update to
+ +package/Config.in+, the package +Config.in+ file, the +.mk+ file, the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
