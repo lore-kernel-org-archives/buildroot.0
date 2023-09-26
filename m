@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DD02EE020C
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24BEAEE020C
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E93BE60EF2;
-	Tue, 26 Sep 2023 06:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E93BE60EF2
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2FBC61410;
+	Tue, 26 Sep 2023 06:13:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2FBC61410
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zn657BO-4BPS; Tue, 26 Sep 2023 06:12:52 +0000 (UTC)
+	with ESMTP id 7KkobzHmjfJF; Tue, 26 Sep 2023 06:13:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2854361416;
-	Tue, 26 Sep 2023 06:12:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2854361416
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9580E1BF30B
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:11:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 449886141E;
+	Tue, 26 Sep 2023 06:13:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 449886141E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C812B1BF30B
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:11:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B83040545
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:11:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B83040545
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1A8760BD6
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:11:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1A8760BD6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cbSs0ACiIixS for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3AF741782
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3AF741782
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8BE9C877ED; Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y0Yu_zUvp2tA for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 06:11:01 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C0D206132B
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0D206132B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9074BE0009;
+ Tue, 26 Sep 2023 06:10:58 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ql1Hd-002z41-VA; Tue, 26 Sep 2023 08:10:57 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 08:10:05 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 0e2c1f75d54bb99d039baf6bb35ae561a0ccb0ed
-X-Git-Newrev: c9b28508e96eed7b0a0fdd79ad48755cc3d637db
-X-Patchwork-Hint: ignore
-Message-Id: <20230926061109.8BE9C877ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libcoap: ignore
- CVE-2023-35862
+To: Daniel Lang <dalang@gmx.at>
+References: <20230906194420.279926-2-dalang@gmx.at>
+ <20230906194420.279926-4-dalang@gmx.at>
+Date: Tue, 26 Sep 2023 08:10:57 +0200
+In-Reply-To: <20230906194420.279926-4-dalang@gmx.at> (Daniel Lang's message of
+ "Wed, 6 Sep 2023 21:44:19 +0200")
+Message-ID: <871qelbh1q.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 2/2] package/libcoap: ignore CVE-2023-35862
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,40 +63,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Joris Lijssens <joris.lijssens@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9b28508e96eed7b0a0fdd79ad48755cc3d637db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
 
-According to a collaborator [0] the affected code isn't in 4.3.1
+ > According to a collaborator [0] the affected code isn't in 4.3.1
+ > [0]: https://github.com/obgm/libcoap/issues/1117
 
-[0]: https://github.com/obgm/libcoap/issues/1117
+ > Signed-off-by: Daniel Lang <dalang@gmx.at>
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 20c023a3b1363f914a18652a79f83648af2cf1e6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcoap/libcoap.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
 
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index 3773ad293c..94bfc59702 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -16,6 +16,8 @@ LIBCOAP_CONF_OPTS = \
- LIBCOAP_AUTORECONF = YES
- # 0001-Backport-fix-for-CVE-2023-30362.patch
- LIBCOAP_IGNORE_CVES += CVE-2023-30362
-+# Doesn't affect 4.3.1, see https://github.com/obgm/libcoap/issues/1117
-+LIBCOAP_IGNORE_CVES += CVE-2023-35862
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LIBCOAP_DEPENDENCIES += gnutls
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
