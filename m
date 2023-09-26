@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B196EE020C
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E27A4E8181F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D8C361343;
-	Tue, 26 Sep 2023 06:11:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D8C361343
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D7566140C;
+	Tue, 26 Sep 2023 06:12:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D7566140C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YYIsqwwaL4f1; Tue, 26 Sep 2023 06:11:00 +0000 (UTC)
+	with ESMTP id Eh1GQPJeeLDL; Tue, 26 Sep 2023 06:12:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A79160BD6;
-	Tue, 26 Sep 2023 06:10:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A79160BD6
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF44F60EF2;
+	Tue, 26 Sep 2023 06:12:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF44F60EF2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 086841BF30B
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:10:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A94881BF969
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D742B60BD6
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D742B60BD6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82EDA60B99
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:11:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82EDA60B99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZE8K_NZTP_q6 for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 06:10:57 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E5A5160B99
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:10:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5A5160B99
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 85B6C40007;
- Tue, 26 Sep 2023 06:10:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1ql1HY-002z3w-Sb; Tue, 26 Sep 2023 08:10:52 +0200
+ with ESMTP id aUNDRiiZ_bRn for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 806E66140C
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 806E66140C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6C8B2877EA; Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Daniel Lang <dalang@gmx.at>
-References: <20230906194420.279926-2-dalang@gmx.at>
-Date: Tue, 26 Sep 2023 08:10:52 +0200
-In-Reply-To: <20230906194420.279926-2-dalang@gmx.at> (Daniel Lang's message of
- "Wed, 6 Sep 2023 21:44:17 +0200")
-Message-ID: <875y3xbh1v.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/libcoap: fix CVE-2023-30362
+To: buildroot@buildroot.org
+Date: Tue, 26 Sep 2023 08:04:57 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: d741d59342036cedda9129cc9001ca560c58ad27
+X-Git-Newrev: 87b2fabf3202865fb8a9314a33bdc4cb07ee5474
+X-Patchwork-Hint: ignore
+Message-Id: <20230926061109.6C8B2877EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/webkitgtk:
+ security bump to version 2.40.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,20 +57,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joris Lijssens <joris.lijssens@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=87b2fabf3202865fb8a9314a33bdc4cb07ee5474
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Signed-off-by: Daniel Lang <dalang@gmx.at>
+Bugfix release with many security fixes, including (but not limited to)
+patches for CVE-2023-37450, CVE-2023-38133, CVE-2023-38572, CVE-2023-38592,
+CVE-2023-38594, CVE-2023-38595, CVE-2023-38597, CVE-2023-38599,
+CVE-2023-38600, and CVE-2023-38611.
 
-Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
+Release notes:
 
--- 
-Bye, Peter Korsgaard
+  https://webkitgtk.org/2023/07/21/webkitgtk2.40.4-released.html
+  https://webkitgtk.org/2023/08/01/webkitgtk2.40.5-released.html
+
+Accompanying security advisory:
+
+  https://webkitgtk.org/security/WSA-2023-0006.html
+  https://webkitgtk.org/security/WSA-2023-0007.html
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 3ba27e682a861e304138fa2a460c10db2c83abe4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ailure-when-gstreamer-support-is-disabled.patch | 36 ++++++++++++++++++++++
+ package/webkitgtk/webkitgtk.hash                   |  6 ++--
+ package/webkitgtk/webkitgtk.mk                     |  2 +-
+ 3 files changed, 40 insertions(+), 4 deletions(-)
+
+diff --git a/package/webkitgtk/0001-Fix-build-failure-when-gstreamer-support-is-disabled.patch b/package/webkitgtk/0001-Fix-build-failure-when-gstreamer-support-is-disabled.patch
+new file mode 100644
+index 0000000000..3fa23b215b
+--- /dev/null
++++ b/package/webkitgtk/0001-Fix-build-failure-when-gstreamer-support-is-disabled.patch
+@@ -0,0 +1,36 @@
++From 9b31965cdf362768e86f7e592e59e68fb3351261 Mon Sep 17 00:00:00 2001
++From: Matt Turner <mattst88@gmail.com>
++Date: Tue, 8 Aug 2023 16:51:25 -0700
++Subject: [PATCH] Fix build failure when gstreamer support is disabled
++ https://bugs.webkit.org/show_bug.cgi?id=259931 https://bugs.gentoo.org/911663
++
++Reviewed by Carlos Alberto Lopez Perez.
++
++* Source/WebCore/loader/MixedContentChecker.cpp:
++
++Canonical link: https://commits.webkit.org/260527.429@fix-build
++
++(cherry picked from commit f5ceef5bf2e3c4d7203a37b9e2d2fdd9b1bb2732)
++
++Upstream: https://github.com/WebKit/WebKit/commit/f5ceef5bf2e3c4d7203a37b9e2d2fdd9b1bb2732
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++---
++ Source/WebCore/loader/MixedContentChecker.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/Source/WebCore/loader/MixedContentChecker.cpp b/Source/WebCore/loader/MixedContentChecker.cpp
++index 9b4c7fe62020..ac4733bc08bc 100644
++--- a/Source/WebCore/loader/MixedContentChecker.cpp
+++++ b/Source/WebCore/loader/MixedContentChecker.cpp
++@@ -33,6 +33,8 @@
++ #include "ContentSecurityPolicy.h"
++ #include "Document.h"
++ #include "Frame.h"
+++#include "FrameLoader.h"
+++#include "FrameLoaderClient.h"
++ #include "SecurityOrigin.h"
++ 
++ namespace WebCore {
++-- 
++2.42.0
++
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 756ac13ec2..7f50f1aa7b 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.40.3.tar.xz.sums
+-sha1  74ee7241f2add46897019e22bd4f8e19e09027bb  webkitgtk-2.40.3.tar.xz
+-sha256  cc0aa83f40dbc64c1c6ae42ec6b85af4be2a9dbf524cfcb95f89a367fb5098dd  webkitgtk-2.40.3.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.40.5.tar.xz.sums
++sha1  2f4d06b021115eb4106177f7d5f534f45b5d3b2e  webkitgtk-2.40.5.tar.xz
++sha256  7de051a263668621d91a61a5eb1c3771d1a7cec900043d4afef06c326c16037f  webkitgtk-2.40.5.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 56277a0a0a..d5e983e403 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.40.3
++WEBKITGTK_VERSION = 2.40.5
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
