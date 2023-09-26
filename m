@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3478E7D0C5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 05:47:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05C3CE8181D
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 05:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 635E94178A;
-	Tue, 26 Sep 2023 05:47:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 635E94178A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9313441792;
+	Tue, 26 Sep 2023 05:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9313441792
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bPWP0tjuD4Jh; Tue, 26 Sep 2023 05:47:35 +0000 (UTC)
+	with ESMTP id F7VHLHBkSioJ; Tue, 26 Sep 2023 05:48:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AF66641786;
-	Tue, 26 Sep 2023 05:47:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF66641786
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 941CB1BF33A
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 05:47:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E44644178A;
+	Tue, 26 Sep 2023 05:48:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E44644178A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4619D1BF33A
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 05:47:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E8BF60EC6
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 05:47:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E8BF60EC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1EEEC41E42
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 05:47:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EEEC41E42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6812lBjqQYkK for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 05:47:30 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8587D60D51
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 05:47:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8587D60D51
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E4D47E0005;
- Tue, 26 Sep 2023 05:47:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4O3Znke33Pe8 for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 05:47:43 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B114141E41
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 05:47:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B114141E41
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 38387FF803;
+ Tue, 26 Sep 2023 05:47:38 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ql0ur-002xp9-Rh; Tue, 26 Sep 2023 07:47:25 +0200
+ id 1ql0v4-002xpb-K1; Tue, 26 Sep 2023 07:47:38 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Jens Maus via buildroot <buildroot@buildroot.org>
-References: <20230917202917.1391442-1-mail@jens-maus.de>
-Date: Tue, 26 Sep 2023 07:47:25 +0200
-In-Reply-To: <20230917202917.1391442-1-mail@jens-maus.de> (Jens Maus via
- buildroot's message of "Sun, 17 Sep 2023 22:29:17 +0200")
-Message-ID: <87r0mlbi4y.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230917201348.1124404-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Sep 2023 07:47:38 +0200
+In-Reply-To: <20230917201348.1124404-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 17 Sep 2023 22:13:48 +0200")
+Message-ID: <87msx9bi4l.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/fio: remove native build to fix
- crashes
+Subject: Re: [Buildroot] [PATCH 1/1] package/pound: include limits.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,25 +62,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Jens Maus <mail@jens-maus.de>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Jens" == Jens Maus via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Per default, the fio package uses the "-march=native" GCC option. This,
- > however can result in "illegal instructions" when fio is compiled in a
- > cross compile environment where the target machine will have a different
- > cpu feature set than the compilation environment. Thus we make sure fio
- > will not use that compiler option by adding --disable-native to
- > FIO_OPTS.
+ > Fix the following build failure raised since bump to version 4.8 in
+ > commit 525cb6a8fbe04a959ea6e3a21a3f6f8828d7e9dc and
+ > https://github.com/graygnuorg/pound/commit/c951f2357d9f606a9e1f8727e74b55f1da91fa2f:
 
- > Signed-off-by: Jens Maus <mail@jens-maus.de>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/4edfffcd5d4383c57947d97139331e0bf2cb6155
 
-Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2023.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
