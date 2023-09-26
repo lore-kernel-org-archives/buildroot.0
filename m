@@ -1,92 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D71E7E7E64E
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 16:37:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DC97E7E65E
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 19:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A0B94203A;
-	Tue, 26 Sep 2023 16:37:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A0B94203A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B69C60C05;
+	Tue, 26 Sep 2023 19:23:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B69C60C05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LVVcWHBM85eP; Tue, 26 Sep 2023 16:37:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zu6XXLE2PNs3; Tue, 26 Sep 2023 19:23:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 089CD4203B;
-	Tue, 26 Sep 2023 16:37:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 089CD4203B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F17C41BF947
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 16:37:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E558F61059;
+	Tue, 26 Sep 2023 19:23:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E558F61059
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E5E6B1BF2A6
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 19:23:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB01D40487
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 16:37:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB01D40487
+ by smtp3.osuosl.org (Postfix) with ESMTP id BEDA161059
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 19:23:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEDA161059
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PSQvQ-8pgwo2 for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 16:37:48 +0000 (UTC)
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
- [IPv6:2a00:1450:4864:20::133])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 88AC140383
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 16:37:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88AC140383
-Received: by mail-lf1-x133.google.com with SMTP id
- 2adb3069b0e04-5041cc983f9so14963330e87.3
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 09:37:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695746266; x=1696351066;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=tTGd+xFpnDyp0BGh6YYW0sY6pPTQcxrNbWmoY8Z0oGs=;
- b=MCqjuhs1/t4srh0w590KqBNQniloWkedK0Ej2b9MR5GI1w6mC+r6beSngpWWdcqO82
- MPcMo5nyvQTXCWoXW+XI95fBI9RmDLTDBhcJlsuKLLlIIWXyxHrSbOX7Qb928sjDwGWV
- /0ek/UG1y1myD8zyNk/tWANmKarFsuWLl6JaFp+zH2b1NNwmehfkLMSKKdh69/HgLyqE
- FFZfPqv6Uqafw4IKDFULOqHSS527igsGKD1bPTVWi+Ru2mTY5uUE5uSeOT3Uw1uboe0b
- Y87rk5AoAZT+q66G3pBp5mXzx77y38FA6PLg7nOwKAkahuKfW6xQoZSJf5c877N9dJ+w
- Zi1g==
-X-Gm-Message-State: AOJu0YyMIuYZ3rrjScasszuZFXd40ZJgroaXDHyFgRGK8Gw38WAAg+pv
- 7zo6ooquT1e2DxsaaT1ZLOw=
-X-Google-Smtp-Source: AGHT+IFkjID4xVrelvXjWsbScPAPrapw3ZWzd8cURHDmLIXkTTw/9p23cW6BbxIhJ7xjeOgg0CRF9w==
-X-Received: by 2002:a05:6512:2245:b0:500:a66b:b189 with SMTP id
- i5-20020a056512224500b00500a66bb189mr12221210lfu.51.1695746266067; 
- Tue, 26 Sep 2023 09:37:46 -0700 (PDT)
-Received: from [192.168.10.7] ([188.191.244.111])
- by smtp.gmail.com with ESMTPSA id
- o13-20020ac2494d000000b005041a71237asm2211769lfi.111.2023.09.26.09.37.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 26 Sep 2023 09:37:45 -0700 (PDT)
-Message-ID: <05b7f0d8-163d-52e0-fa48-c275bb89fff0@gmail.com>
-Date: Tue, 26 Sep 2023 19:37:44 +0300
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ed54ahTersNK for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 19:23:47 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 62EFF60C05
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 19:23:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62EFF60C05
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:fa2:d20d:4ebf:d634])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id DBE862003DE;
+ Tue, 26 Sep 2023 21:23:36 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 26 Sep 2023 21:23:36 +0200
+Date: Tue, 26 Sep 2023 21:23:36 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20230926192336.GT1469982@scaer>
+References: <20230919204252.2272594-1-adam.duskett@amarulasolutions.com>
+ <20230919204252.2272594-7-adam.duskett@amarulasolutions.com>
+ <20230923083500.GA1469982@scaer>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-To: Marcin Niestroj <m.niestroj@grinn-global.com>, buildroot@buildroot.org
-References: <20230918064711.1379428-1-m.niestroj@grinn-global.com>
-Content-Language: ru-RU
-From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-In-Reply-To: <20230918064711.1379428-1-m.niestroj@grinn-global.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695746266; x=1696351066; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=tTGd+xFpnDyp0BGh6YYW0sY6pPTQcxrNbWmoY8Z0oGs=;
- b=JPOUMOSnGhkMN4rDCmbWCUD+K7K1k90esOdwfXZIFVFBiia/iunvPzhSNu/QFdbrVZ
- o5uV3GMpq1/Yvid11LWWb9tx+CO4Wd0rqLm0gdL6ZIwB9vXtMwm9ouLZjz35dw887wao
- yZSlMBJMMJ2OqJSDqm4UGqLrFChSqAn39J9Vs9EcEMKQI2wIq6PxR21cbVwdEhTxdPED
- YHuqCMEDoocJ2txDpa/Nl5mj36Z+lON+YmIwhyFzDK+0Kn+uxv2BdmB6WStxgEPMtw6O
- a/UhlLuwCqAobV0Bk7EIqeXJXJEQdjKlX5KOLDtLoD+rrEGjqDOi7/zUXGVlAzOw8xUy
- qkYA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JPOUMOSn
-Subject: Re: [Buildroot] [PATCH v2] board: add Orangepi Zero3 support
+Content-Disposition: inline
+In-Reply-To: <20230923083500.GA1469982@scaer>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1695756224;
+ bh=0Q85CyH1OC+NONbsgswbDMf5e+UU+KBL5oyhVM/LnMY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=T+8PMAsuWKfVIPiR6sKxAs5mkqPRQOSPFibDOp87DumEhz/vtKGAhuC4Z7hOIyf5t
+ mPfwo7odRHZGs/lCJEQ/4XNoxvAAh2q77HCPB7vrOCuCNBwooI1QrOJQJcY0h7jXQj
+ 1IQRYmprbo4+cZI3xIu3mvEyMIAAtuQrensdlEZxERFP5MOE6QdKOWIuZoFgukJ8Wx
+ qrvbowsSHP9wbybp+kF8UwX1FhX8VCE9qfkTxFyd1tAj0zSriGwOjh1K2xNmftGXWt
+ AYwsj+d1X8ctVzrIf67H8MBPOJKoxuO2yi6My7mFKij3YQ8uOfCJGQL6I+5lL4Hfth
+ /n+iqZZfibEQQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=T+8PMAsu
+Subject: Re: [Buildroot] [PATCH v9 7/7]
+ support/testing/tests/package/test_flutter.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,114 +78,313 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Asaf Kahlon <asafka7@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGVzdGVkLWJ5OiBTZXJnZXkgS3V6bWlub3YgPGt1em1pbm92LnNlcmdleTgxQGdtYWlsLmNvbT4K
-CjE4LjA5LjIwMjMgMDk6NDcsIE1hcmNpbiBOaWVzdHJvaiDQv9C40YjQtdGCOgo+IEFkZCBpbml0
-aWFsIHN1cHBvcnQgZm9yIE9yYW5nZXBpIFplcm8zIGJvYXJkOgo+IC0gVS1Cb290IDIwMjEuMDcg
-Zm9yayBieSBPcmFuZ2VwaQo+IC0gTGludXggNi4xLjMxIGZvcmsgYnkgT3JhbmdlcGkKPiAtIERl
-ZmF1bHQgcGFja2FnZXMgZnJvbSBidWlsZHJvb3QKPiAKPiBFbmFibGUgQ09ORklHX01GRF9BQzIw
-MCBhcyBpdCBpcyB1c2VkIGRpcmVjdGx5IGJ5IG90aGVyIG1vZHVsZSwKPiByZXN1bHRpbmcgaW4g
-YnVpbGQgZmFpbHVyZSB3aGVuIGRpc2FibGVkLgo+IAo+IFNpZ25lZC1vZmYtYnk6IE1hcmNpbiBO
-aWVzdHJvaiA8bS5uaWVzdHJvakBncmlubi1nbG9iYWwuY29tPgo+IC0tLQo+IHYxIC0+IHYyOgo+
-ICAgKiB1c2UgJ2xpbnV4X3N1bnhpNjQnIGluc3RlYWQgb2YgZGVmYXVsdCBhcmNoIGRlZmNvbmZp
-Zywgd2hpY2ggZml4ZXMKPiAgICAgZXRoZXJuZXQgbmV0d29ya2luZyAoc3VnZ2VzdGVkIGJ5IFNl
-cmdleSkKPiAgICogZGlzYWJsZWQgcm9vdGZzLnRhciBnZW5lcmF0aW9uIChzdWdnZXN0ZWQgYnkg
-U2VyZ2V5KQo+ICAgKiBpbmNyZWFzZWQgZXh0MiBmcyBzaXplIHRvIDE4ME0gdG8gZml0IG1vcmUg
-a2VybmVsIG1vZHVsZXMKPiAgICogYWRkZWQgREVWRUxPUEVSUyBlbnRyaWVzIGZvciBib2FyZCBm
-aWxlcwo+IAo+ICAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwg
-IDIgKwo+ICAgYm9hcmQvb3JhbmdlcGkvb3JhbmdlcGktemVybzMvbGludXguY29uZmlnIHwgIDEg
-Kwo+ICAgYm9hcmQvb3JhbmdlcGkvb3JhbmdlcGktemVybzMvcmVhZG1lLnR4dCAgIHwgMzQgKysr
-KysrKysrKysrKwo+ICAgY29uZmlncy9vcmFuZ2VwaV96ZXJvM19kZWZjb25maWcgICAgICAgICAg
-IHwgNTcgKysrKysrKysrKysrKysrKysrKysrKwo+ICAgNCBmaWxlcyBjaGFuZ2VkLCA5NCBpbnNl
-cnRpb25zKCspCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvb3JhbmdlcGkvb3JhbmdlcGkt
-emVybzMvbGludXguY29uZmlnCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvb3JhbmdlcGkv
-b3JhbmdlcGktemVybzMvcmVhZG1lLnR4dAo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZpZ3Mv
-b3JhbmdlcGlfemVybzNfZGVmY29uZmlnCj4gCj4gZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9E
-RVZFTE9QRVJTCj4gaW5kZXggZThiNzhhOGQ0Ni4uNjZhYmMzOWUxNiAxMDA2NDQKPiAtLS0gYS9E
-RVZFTE9QRVJTCj4gKysrIGIvREVWRUxPUEVSUwo+IEBAIC0xOTUzLDggKzE5NTMsMTAgQEAgRjoJ
-cGFja2FnZS9lY3J5cHRmcy11dGlscy8KPiAgIE46CU1hcmNpbiBOaWVzdHJvaiA8bS5uaWVzdHJv
-akBncmlubi1nbG9iYWwuY29tPgo+ICAgRjoJYm9hcmQvZ3Jpbm4vCj4gICBGOglib2FyZC9vcmFu
-Z2VwaS9vcmFuZ2VwaS16ZXJvLXBsdXMvCj4gK0Y6CWJvYXJkL29yYW5nZXBpL29yYW5nZXBpLXpl
-cm8zLwo+ICAgRjoJY29uZmlncy9ncmlubl8qCj4gICBGOgljb25maWdzL29yYW5nZXBpX3plcm9f
-cGx1c19kZWZjb25maWcKPiArRjoJY29uZmlncy9vcmFuZ2VwaV96ZXJvM19kZWZjb25maWcKPiAg
-IEY6CXBhY2thZ2UvYXJncGFyc2UvCj4gICBGOglwYWNrYWdlL2R0LXV0aWxzLwo+ICAgRjoJcGFj
-a2FnZS9lYXN5ZGJ1cy8KPiBkaWZmIC0tZ2l0IGEvYm9hcmQvb3JhbmdlcGkvb3JhbmdlcGktemVy
-bzMvbGludXguY29uZmlnIGIvYm9hcmQvb3JhbmdlcGkvb3JhbmdlcGktemVybzMvbGludXguY29u
-ZmlnCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4wOWI3YTkzYTVh
-Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL29yYW5nZXBpL29yYW5nZXBpLXplcm8zL2xp
-bnV4LmNvbmZpZwo+IEBAIC0wLDAgKzEgQEAKPiArQ09ORklHX01GRF9BQzIwMD15Cj4gZGlmZiAt
-LWdpdCBhL2JvYXJkL29yYW5nZXBpL29yYW5nZXBpLXplcm8zL3JlYWRtZS50eHQgYi9ib2FyZC9v
-cmFuZ2VwaS9vcmFuZ2VwaS16ZXJvMy9yZWFkbWUudHh0Cj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-PiBpbmRleCAwMDAwMDAwMDAwLi40ODcyYTM2M2U3Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2Jv
-YXJkL29yYW5nZXBpL29yYW5nZXBpLXplcm8zL3JlYWRtZS50eHQKPiBAQCAtMCwwICsxLDM0IEBA
-Cj4gK0ludHJvCj4gKz09PT09Cj4gKwo+ICtUaGlzIGRlZmF1bHQgY29uZmlndXJhdGlvbiB3aWxs
-IGFsbG93IHlvdSB0byBzdGFydCBleHBlcmltZW50aW5nIHdpdGggdGhlCj4gK2J1aWxkcm9vdCBl
-bnZpcm9ubWVudCBmb3IgdGhlIE9yYW5nZXBpIFplcm8zLiBXaXRoIHRoZSBjdXJyZW50IGNvbmZp
-Z3VyYXRpb24KPiAraXQgd2lsbCBicmluZy11cCB0aGUgYm9hcmQsIGFuZCBhbGxvdyBhY2Nlc3Mg
-dGhyb3VnaCB0aGUgc2VyaWFsIGNvbnNvbGUuCj4gKwo+ICtPcmFuZ2VwaSBaZXJvMyBsaW5rOgo+
-ICtodHRwOi8vd3d3Lm9yYW5nZXBpLm9yZy9odG1sL2hhcmRXYXJlL2NvbXB1dGVyQW5kTWljcm9j
-b250cm9sbGVycy9kZXRhaWxzL09yYW5nZS1QaS1aZXJvLTMuaHRtbAo+ICsKPiArVGhpcyBjb25m
-aWd1cmF0aW9uIHVzZXMgT3JhbmdlcGkncyBmb3JrIG9mIFUtQm9vdCBhbmQgTGludXgga2VybmVs
-Lgo+ICsKPiArSG93IHRvIGJ1aWxkCj4gKz09PT09PT09PT09PQo+ICsKPiArICAgICQgbWFrZSBv
-cmFuZ2VwaV96ZXJvM19kZWZjb25maWcKPiArICAgICQgbWFrZQo+ICsKPiArTm90ZTogeW91IHdp
-bGwgbmVlZCBhY2Nlc3MgdG8gdGhlIGludGVybmV0IHRvIGRvd25sb2FkIHRoZSByZXF1aXJlZAo+
-ICtzb3VyY2VzLgo+ICsKPiArSG93IHRvIHdyaXRlIHRoZSBTRCBjYXJkCj4gKz09PT09PT09PT09
-PT09PT09PT09PT09PQo+ICsKPiArT25jZSB0aGUgYnVpbGQgcHJvY2VzcyBpcyBmaW5pc2hlZCB5
-b3Ugd2lsbCBoYXZlIGFuIGltYWdlIGNhbGxlZCAic2RjYXJkLmltZyIKPiAraW4gdGhlIG91dHB1
-dC9pbWFnZXMvIGRpcmVjdG9yeS4KPiArCj4gK0NvcHkgdGhlIGJvb3RhYmxlICJzZGNhcmQuaW1n
-IiBvbnRvIGFuIFNEIGNhcmQgd2l0aCAiZGQiOgo+ICsKPiArICAkIHN1ZG8gZGQgaWY9b3V0cHV0
-L2ltYWdlcy9zZGNhcmQuaW1nIG9mPS9kZXYvc2RYCj4gKyAgJCBzdWRvIHN5bmMKPiArCj4gK0lu
-c2VydCB0aGUgbWljcm8gU0RjYXJkIGluIHlvdXIgT3JhbmdlcGkgWmVybzMgYW5kIHBvd2VyIGl0
-IHVwLiBUaGUgY29uc29sZQo+ICtpcyBvbiB0aGUgc2VyaWFsIGxpbmUsIDExNTIwMCA4TjEuCj4g
-ZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvb3JhbmdlcGlfemVybzNfZGVmY29uZmlnIGIvY29uZmlncy9v
-cmFuZ2VwaV96ZXJvM19kZWZjb25maWcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAw
-MDAwMDAwMDAuLjUxYTZlZmQzZWQKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvY29uZmlncy9vcmFu
-Z2VwaV96ZXJvM19kZWZjb25maWcKPiBAQCAtMCwwICsxLDU3IEBACj4gK0JSMl9hYXJjaDY0PXkK
-PiArQlIyX2NvcnRleF9hNTM9eQo+ICtCUjJfQVJNX0ZQVV9WRlBWND15Cj4gKwo+ICtCUjJfUEFD
-S0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMT15Cj4gK0JSMl9ST09URlNfREVWSUNF
-X0NSRUFUSU9OX0RZTkFNSUNfTURFVj15Cj4gK0JSMl9TWVNURU1fREhDUD0iZXRoMCIKPiArCj4g
-KyMgRmlybXdhcmUKPiArQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRT15Cj4gK0JSMl9U
-QVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT049eQo+ICtCUjJfVEFSR0VU
-X0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSJ2Mi45Igo+ICtCUjJf
-VEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX1BMQVRGT1JNPSJzdW41MGlfaDYxNiIKPiArQlIy
-X1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9CTDMxPXkKPiArCj4gKyMgQm9vdGxvYWRlcgo+
-ICtCUjJfVEFSR0VUX1VCT09UPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NP
-TkZJRz15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1RBUkJBTEw9eQo+ICtCUjJfVEFSR0VU
-X1VCT09UX0NVU1RPTV9UQVJCQUxMX0xPQ0FUSU9OPSIkKGNhbGwgZ2l0aHViLG9yYW5nZXBpLXh1
-bmxvbmcsdS1ib290LW9yYW5nZXBpLDZmZTE3ZmFjMzg4YWFkMTc0OTBjZjM4NjU3OGI3NTMyOTc1
-ZTU2N2YpL3UtYm9vdC1vcmFuZ2VwaS02ZmUxN2ZhYzM4OGFhZDE3NDkwY2YzODY1NzhiNzUzMjk3
-NWU1NjdmLnRhci5neiIKPiArQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9Im9yYW5n
-ZXBpX3plcm8zIgo+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX0RUQz15Cj4gK0JSMl9UQVJHRVRf
-VUJPT1RfTkVFRFNfT1BFTlNTTD15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfUFlUSE9OMz15
-Cj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfUFlMSUJGRFQ9eQo+ICtCUjJfVEFSR0VUX1VCT09U
-X05FRURTX0FURl9CTDMxPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9TUEw9eQo+ICtCUjJfVEFSR0VU
-X1VCT09UX1NQTF9OQU1FPSJ1LWJvb3Qtc3VueGktd2l0aC1zcGwuYmluIgo+ICtCUjJfVEFSR0VU
-X1VCT09UX0NVU1RPTV9NQUtFT1BUUz0iU0NQPS9kZXYvbnVsbCIKPiArCj4gKyMgS2VybmVsCj4g
-K0JSMl9MSU5VWF9LRVJORUw9eQo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMPXkK
-PiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1
-YixvcmFuZ2VwaS14dW5sb25nLGxpbnV4LW9yYW5nZXBpLDM0OTViNWVlMDU5NDU2NmM5ZmVkOTMw
-Yjk2YjFjYWU5MDYwMDQxMmUpL2xpbnV4LW9yYW5nZXBpLTM0OTViNWVlMDU5NDU2NmM5ZmVkOTMw
-Yjk2YjFjYWU5MDYwMDQxMmUudGFyLmd6Igo+ICtCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0i
-bGludXhfc3VueGk2NCIKPiArQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQUE9SVD15Cj4gK0JSMl9M
-SU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJhbGx3aW5uZXIvc3VuNTBpLWg2MTYtb3Jhbmdl
-cGktemVybzMiCj4gK0JSMl9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKPiArQlIy
-X0xJTlVYX0tFUk5FTF9JTlNUQUxMX1RBUkdFVD15Cj4gK0JSMl9MSU5VWF9LRVJORUxfRFRCX0tF
-RVBfRElSTkFNRT15Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJi
-b2FyZC9vcmFuZ2VwaS9vcmFuZ2VwaS16ZXJvMy9saW51eC5jb25maWciCj4gKwo+ICsjIEZpbGVz
-eXN0ZW0KPiArQlIyX1RBUkdFVF9HRU5FUklDX0lTU1VFPSJXZWxjb21lIHRvIE9yYW5nZXBpIFpl
-cm8zIgo+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKPiArQlIyX1RBUkdFVF9ST09URlNfRVhU
-Ml80PXkKPiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpFPSIxODBNIgo+ICsjIEJSMl9UQVJH
-RVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0Cj4gKwo+ICsjIGhvc3QgdG9vbHMKPiArQlIyX1BBQ0tB
-R0VfSE9TVF9HRU5JTUFHRT15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFM9eQo+ICsK
-PiArIyBpbWFnZSBzY3JpcHRzCj4gK0JSMl9ST09URlNfUE9TVF9CVUlMRF9TQ1JJUFQ9ImJvYXJk
-L29yYW5nZXBpL2NvbW1vbi9wb3N0LWJ1aWxkLnNoIgo+ICtCUjJfUk9PVEZTX1BPU1RfSU1BR0Vf
-U0NSSVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCj4gK0JSMl9ST09URlNfUE9TVF9T
-Q1JJUFRfQVJHUz0iLWMgJChCSU5BUklFU19ESVIpL2dlbmltYWdlLmNmZyIKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Adam, All,
+
+On 2023-09-23 10:35 +0200, Yann E. MORIN spake thusly:
+> On 2023-09-19 14:42 -0600, Adam Duskett spake thusly:
+> > This is a simple test that builds and runs the futter-gallery application and
+> > checks if the service is active.
+> This runtime test does not demonstrate a worlking flutter stack, because
+> the application in fact does not work:
+
+Note: as discussed on IRC: the above was a bit rough, sorry.
+
+I understand that you did manage to get a flutter stack working, and
+this *is* impressive!
+
+What I meant is that this runtime test does not demonstrate that,
+unfortunately.
+
+The CI/CD pipelines are running in containers that do not have access to
+a GPU. Hence a runtime test that uses GPU passthrough as you initially
+provided is not going to work. That is why I have been insistent on
+doing a headless runtime test.
+
+We do already have working runtime tests for graphical packages, like
+the weston test. What those tests do, is run the graphical application
+to test, and check that the framebuffer changes (by comparing the CRC
+provided by the kernel, as we don't care about what is rendered, just
+that "something" is rendered). This is what I would have expected for
+the flutter test too.
+
+[--SNIP--]
+> So, a few things about this:
+>   - the real issues I'm most afraid of, are the one about mesa failing
+>     to load the proper drivers,
+
+So I had a deeper look, and ran the weston test by hand (I had to fix it
+while at it [0]), and noticed that weston whines about the exact same
+drivers, yet works. So the issue about missing zynq and vkms is benign.
+
+>     [snip] and/or that it can't create an EGL GBM
+>     surface; I think this is the real problem;
+
+So, the remaining issue is that flutter-pi can't t create a GBM surface.
+This is very very similar to an old upstream issue, which got fixed a
+year ago:
+
+    https://github.com/ardera/flutter-pi/issues/269
+    https://github.com/ardera/flutter-pi/pull/270
+
+However, upstream did a big overhaul of the code recently, and the fix
+got lost in the rewrite. Here's what I now came up with (patch against
+flutter-pi):
+
+    From 856f9849763535d62ed01b538ba23905875c93f4 Mon Sep 17 00:00:00 2001
+    From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    Date: Tue, 26 Sep 2023 20:31:17 +0200
+    Subject: [PATCH] src/egl_gbm_render_surface: properly fallback to surface with
+     no modifier
+
+    In 869fa7fcfbeb, we added a fallback to be able to create an EGL sruface
+    when the driver do not support modifiers, like the llvmpipe software
+    renderer (or like some proprietary drivers, like the MALI ones), as
+    reported in #269 [0].
+
+    However, in c6537673c9b6, there was a big overhaul of renderer
+    infrastructure. That commit lost the with-modifiers code path and only
+    kept the without-modifiers fallback one (i.e. it only kept the call to
+    gbm_surface_create(), not to gbm_surface_create_with_modifiers()).
+
+    Then in b0d09f5032a4, the with-modifiers code path was re-instated, but
+    in a way that made it exclusive with the without-modifiers one. That is,
+    the without-modifiers code path was not a fallback to when the other
+    failed.
+
+    Re-instate the fallback mechanism as initially implemented.
+
+    [0] https://github.com/ardera/flutter-pi/issues/269
+
+    Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+    ---
+     src/egl_gbm_render_surface.c | 6 ++++--
+     1 file changed, 4 insertions(+), 2 deletions(-)
+
+    diff --git a/src/egl_gbm_render_surface.c b/src/egl_gbm_render_surface.c
+    index ce9e5e7..8a58667 100644
+    --- a/src/egl_gbm_render_surface.c
+    +++ b/src/egl_gbm_render_surface.c
+    @@ -146,6 +146,7 @@ static int egl_gbm_render_surface_init(
+         }
+     #endif
+
+    +    gbm_surface = NULL;
+         if (allowed_modifiers != NULL) {
+             gbm_surface = gbm_surface_create_with_modifiers(
+                 gbm_device,
+    @@ -158,9 +159,10 @@ static int egl_gbm_render_surface_init(
+             if (gbm_surface == NULL) {
+                 ok = errno;
+                 LOG_ERROR("Couldn't create GBM surface for rendering. gbm_surface_create_with_modifiers: %s\n", strerror(ok));
+    -            return ok;
+    +            LOG_ERROR("Will retry without modifiers\n");
+             }
+    -    } else {
+    +    }
+    +    if (gbm_surface == NULL) {
+             gbm_surface = gbm_surface_create(
+                 gbm_device,
+                 size.x,
+    --
+    2.25.1
+
+With this patch, the application no longer coredumps, and keeps running.
+
+As for the CRC of the framebuffer: without flutter-pi running, the value
+is 0x4c4126bf. Starting the flutter application (and waiting quite a
+bit), it suddenly changes to an arbitrary value! Stopping flutter-pi,
+the CRC reverts to 0x4c4126bf. Starting again, new value! Note that it
+can be like 10s or more before the CRC changes at application start.
+
+So, to me, that means the application is now running! I have no idea what
+is supposed to be displayed, but something is being rendered, and that's
+all that matters!
+
+Care to integrate that patch in your series, test in your actual setup,
+see if it's possible to send it upstream, update the runtime test to
+check on the CRC (instead of checkign the systemd unit status), and
+respin the series, please?
+
+(I'm on the move the next few days, but I'll be able to dedicate time
+during the WE).
+
+>   - you're pointing the gallery app to /usr/share/flutter/gallery/release/
+>     but therat does not exist (what should it contain, btw?).
+
+(blark typoes of mine). I must have messed things with another test,
+because /usr/share/flutter/gallery/release/ *is* populated as expected.
+
+[0] https://patchwork.ozlabs.org/project/buildroot/patch/20230926154703.160448-1-yann.morin.1998@free.fr/
+
+Regards,
+Yann E. MORIN.
+
+> Can you look at that test, please?
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> > ---
+> > v8 -> v9:
+> >   - Changed to aarch64 to avoid problems with older versions of qemu.
+> >   - Added BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF
+> > 
+> >  DEVELOPERS                                    |  1 +
+> >  support/testing/tests/package/test_flutter.py | 56 +++++++++++++++++++
+> >  .../package/test_flutter/linux-vkms.fragment  |  2 +
+> >  .../flutter-gallery.service                   |  1 +
+> >  .../systemd/system/flutter-gallery.service    | 11 ++++
+> >  5 files changed, 71 insertions(+)
+> >  create mode 100644 support/testing/tests/package/test_flutter.py
+> >  create mode 100644 support/testing/tests/package/test_flutter/linux-vkms.fragment
+> >  create mode 120000 support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+> >  create mode 100644 support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
+> > 
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 48a4ec776a..f46d83679a 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -37,6 +37,7 @@ F:	package/flutter-engine/
+> >  F:	package/flutter-gallery/
+> >  F:	package/flutter-pi/
+> >  F:	package/flutter-sdk-bin/
+> > +F:	support/testing/tests/package/test_flutter.py
+> >  
+> >  N:	Adam Heinrich <adam@adamh.cz>
+> >  F:	package/jack1/
+> > diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
+> > new file mode 100644
+> > index 0000000000..e17ed9f659
+> > --- /dev/null
+> > +++ b/support/testing/tests/package/test_flutter.py
+> > @@ -0,0 +1,56 @@
+> > +import os
+> > +import time
+> > +import infra.basetest
+> > +
+> > +
+> > +class TestFlutter(infra.basetest.BRTest):
+> > +    config = f"""
+> > +        BR2_aarch64=y
+> > +        BR2_TOOLCHAIN_EXTERNAL=y
+> > +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> > +        BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_flutter/overlay")}"
+> > +        BR2_PER_PACKAGE_DIRECTORIES=y
+> > +        BR2_INIT_SYSTEMD=y
+> > +        BR2_LINUX_KERNEL=y
+> > +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.54"
+> > +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > +        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+> > +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> > +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_flutter/linux-vkms.fragment")}"
+> > +        BR2_PACKAGE_LIBDRM=y
+> > +        BR2_PACKAGE_MESA3D=y
+> > +        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+> > +        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
+> > +        BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> > +        BR2_PACKAGE_FLUTTER_PI=y
+> > +        BR2_PACKAGE_FLUTTER_PI_RAW_KEYBOARD_PLUGIN=y
+> > +        BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=y
+> > +        BR2_PACKAGE_FLUTTER_GALLERY=y
+> > +        BR2_PACKAGE_FLUTTER_ENGINE=y
+> > +        BR2_TARGET_ROOTFS_EXT2=y
+> > +        BR2_TARGET_ROOTFS_EXT2_4=y
+> > +        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
+> > +        # BR2_TARGET_ROOTFS_TAR is not set
+> > +        """
+> > +
+> > +    def test_run(self):
+> > +        timeout = 35 * self.emulator.timeout_multiplier
+> > +        img = os.path.join(self.builddir, "images", "rootfs.ext2")
+> > +        kern = os.path.join(self.builddir, "images", "Image")
+> > +        self.emulator.boot(
+> > +            arch="aarch64",
+> > +            kernel=kern,
+> > +            kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
+> > +            options=["-M", "virt",
+> > +                     "-cpu", "cortex-a57",
+> > +                     "-m", "512M",
+> > +                     "-smp", "4",
+> > +                     "-vga", "std",
+> > +                     "-vnc", "none",
+> > +                     "-drive", f"file={img},if=virtio,format=raw"])
+> > +        self.emulator.login()
+> > +        cmd = "systemctl is-active flutter-gallery"
+> > +        output, exit_code = self.emulator.run(cmd, 10)
+> > +        self.assertEqual(exit_code, 0)
+> > +        self.assertEqual(output[0], "active")
+> > diff --git a/support/testing/tests/package/test_flutter/linux-vkms.fragment b/support/testing/tests/package/test_flutter/linux-vkms.fragment
+> > new file mode 100644
+> > index 0000000000..3fc7a5dded
+> > --- /dev/null
+> > +++ b/support/testing/tests/package/test_flutter/linux-vkms.fragment
+> > @@ -0,0 +1,2 @@
+> > +CONFIG_DEBUG_FS=y
+> > +CONFIG_DRM_VKMS=y
+> > diff --git a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+> > new file mode 120000
+> > index 0000000000..40993fb16c
+> > --- /dev/null
+> > +++ b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+> > @@ -0,0 +1 @@
+> > +../../../../usr/lib/systemd/system/flutter-gallery.service
+> > \ No newline at end of file
+> > diff --git a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
+> > new file mode 100644
+> > index 0000000000..88a2bcbf0b
+> > --- /dev/null
+> > +++ b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
+> > @@ -0,0 +1,11 @@
+> > +[Unit]
+> > +Description=flutter-gallery daemon
+> > +After=dbus.service systemd-udevd.service
+> > +
+> > +[Service]
+> > +ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/gallery/release/
+> > +Restart=always
+> > +KillMode=process
+> > +
+> > +[Install]
+> > +WantedBy=multi-user.target
+> > -- 
+> > 2.39.2
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
