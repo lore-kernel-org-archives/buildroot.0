@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0A37E8181D
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:06:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E865E7D0C5
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8625D61405;
-	Tue, 26 Sep 2023 06:06:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8625D61405
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAEA061406;
+	Tue, 26 Sep 2023 06:08:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAEA061406
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4zN5dHnppWkz; Tue, 26 Sep 2023 06:06:37 +0000 (UTC)
+	with ESMTP id zVORvGNqgge0; Tue, 26 Sep 2023 06:08:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6239612D4;
-	Tue, 26 Sep 2023 06:06:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6239612D4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5679560EF2;
+	Tue, 26 Sep 2023 06:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5679560EF2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 85A151BF30B
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:06:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AF1F71BF30B
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:08:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5FAEA6132B
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:06:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FAEA6132B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8603F60EF2
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:08:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8603F60EF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qE8_O7mXf1Bu for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 06:06:33 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 23585612D4
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:06:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23585612D4
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A1C60240007;
- Tue, 26 Sep 2023 06:06:28 +0000 (UTC)
+ with ESMTP id 5GCOLBnAZQCD for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 06:08:53 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7024E60BD6
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:08:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7024E60BD6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C170C60006;
+ Tue, 26 Sep 2023 06:08:49 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ql1DI-002yjg-0W; Tue, 26 Sep 2023 08:06:28 +0200
+ id 1ql1FZ-002yse-58; Tue, 26 Sep 2023 08:08:49 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-References: <20230909075753.7471-1-thomas@devoogdt.com>
-Date: Tue, 26 Sep 2023 08:06:27 +0200
-In-Reply-To: <20230909075753.7471-1-thomas@devoogdt.com> (Thomas Devoogdt's
- message of "Sat, 9 Sep 2023 09:57:50 +0200")
-Message-ID: <87edilbh98.fsf@48ers.dk>
+To: Daniel Lang <dalang@gmx.at>
+References: <20230906200929.291410-1-dalang@gmx.at>
+Date: Tue, 26 Sep 2023 08:08:49 +0200
+In-Reply-To: <20230906200929.291410-1-dalang@gmx.at> (Daniel Lang's message of
+ "Wed, 6 Sep 2023 22:09:27 +0200")
+Message-ID: <87a5t9bh5a.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2 1/4] package/webkitgtk: security bump to
- version 2.40.5
+Subject: Re: [Buildroot] [PATCH] package/libssh: ignore CVE-2023-3603
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +62,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
+>>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
 
- > Bugfix release with many security fixes, including (but not limited to)
- > patches for CVE-2023-37450, CVE-2023-38133, CVE-2023-38572, CVE-2023-38592,
- > CVE-2023-38594, CVE-2023-38595, CVE-2023-38597, CVE-2023-38599,
- > CVE-2023-38600, and CVE-2023-38611.
+ > The affected code isn't present in any release, see [0].
+ > [0]:
+ > https://www.libssh.org/2023/07/14/cve-2023-3603-potential-null-dereference-in-libsshs-sftp-server/
 
- > Release notes:
-
- >   https://webkitgtk.org/2023/07/21/webkitgtk2.40.4-released.html
- >   https://webkitgtk.org/2023/08/01/webkitgtk2.40.5-released.html
-
- > Accompanying security advisory:
-
- >   https://webkitgtk.org/security/WSA-2023-0006.html
- >   https://webkitgtk.org/security/WSA-2023-0007.html
-
- > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
- > ---
- > v2: no change
+ > Signed-off-by: Daniel Lang <dalang@gmx.at>
 
 Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
 
