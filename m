@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D6D3E7D0C5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 05:51:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DC71E8181D
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 05:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8638613F2;
-	Tue, 26 Sep 2023 05:51:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8638613F2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0978E61410;
+	Tue, 26 Sep 2023 05:51:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0978E61410
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i3sT-EwT8T1O; Tue, 26 Sep 2023 05:51:01 +0000 (UTC)
+	with ESMTP id o624HxjWqAmf; Tue, 26 Sep 2023 05:51:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27DD760DFD;
-	Tue, 26 Sep 2023 05:51:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27DD760DFD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E6F51BF33A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 516DD6140A;
+	Tue, 26 Sep 2023 05:51:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 516DD6140A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A3AB41BF969
  for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 05:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44E07404A8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7EAD360DFD
  for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 05:50:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44E07404A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EAD360DFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mzG4OJ2YctT9 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dyV_OG3hUCPm for <buildroot@lists.busybox.net>;
  Tue, 26 Sep 2023 05:50:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FC54404A6
+ by smtp3.osuosl.org (Postfix) with ESMTP id B249860D51
  for <buildroot@buildroot.org>; Tue, 26 Sep 2023 05:50:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FC54404A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B249860D51
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EEFD877CF; Tue, 26 Sep 2023 05:50:57 +0000 (UTC)
+ id 9DA89877CF; Tue, 26 Sep 2023 05:50:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 07:43:47 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: b57090af18fde4961eebd322e7cad9ab2ce864a4
-X-Git-Newrev: d741d59342036cedda9129cc9001ca560c58ad27
+Date: Tue, 26 Sep 2023 07:44:22 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: b362115b259e65f1e575001da5b029c64df61972
+X-Git-Newrev: 395d92503cfc85f8b6a46ba93f34048f634ce40d
 X-Patchwork-Hint: ignore
-Message-Id: <20230926055057.4EEFD877CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/fio: remove
+Message-Id: <20230926055057.9DA89877CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/fio: remove
  -march=native
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d741d59342036cedda9129cc9001ca560c58ad27
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=395d92503cfc85f8b6a46ba93f34048f634ce40d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 Per default, the fio package uses the "-march=native" GCC option. This
 is of course wildly inappropriate for cross-compilation and can result
