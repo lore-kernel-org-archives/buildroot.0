@@ -4,54 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61528E82CC6
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:05:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15019E82CB7
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8B9E42C37;
-	Wed, 27 Sep 2023 19:05:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8B9E42C37
+	by smtp4.osuosl.org (Postfix) with ESMTP id B77B2428CC;
+	Wed, 27 Sep 2023 19:05:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B77B2428CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1VrMd63sy_b4; Wed, 27 Sep 2023 19:05:11 +0000 (UTC)
+	with ESMTP id LsOExQ4zhoeQ; Wed, 27 Sep 2023 19:05:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5B2642C42;
-	Wed, 27 Sep 2023 19:05:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5B2642C42
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B40381BF32A
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D3F5428D9;
+	Wed, 27 Sep 2023 19:05:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D3F5428D9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 938121BF32A
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9247A822B8
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9247A822B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66DB2419B4
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66DB2419B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RoV_EwXme99a for <buildroot@lists.busybox.net>;
- Wed, 27 Sep 2023 19:05:07 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D4FC83684
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 19:05:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D4FC83684
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DE33B60002;
- Wed, 27 Sep 2023 19:05:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qlZqJ-005Dao-9n; Wed, 27 Sep 2023 21:05:03 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e4nq6tbu6HcK for <buildroot@lists.busybox.net>;
+ Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C15A401E1
+ for <buildroot@buildroot.org>; Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C15A401E1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7A6D482641; Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230924150926.385304-1-fontaine.fabrice@gmail.com>
-Date: Wed, 27 Sep 2023 21:05:03 +0200
-In-Reply-To: <20230924150926.385304-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 24 Sep 2023 17:09:26 +0200")
-Message-ID: <87bkdn1lpc.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/memcached: bump to version
- 1.6.21
+To: buildroot@buildroot.org
+Date: Wed, 27 Sep 2023 21:02:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6dc3d3c36063b4ef7a76badc0db2a60786eafee9
+X-Git-Newrev: 1c7d532ee9a9a4c9882412cfda7447df28fc3884
+X-Patchwork-Hint: ignore
+Message-Id: <20230927190533.7A6D482641@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.8.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1c7d532ee9a9a4c9882412cfda7447df28fc3884
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - Send first patch upstream
+Release notes:
+https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
 
-Great!
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > - Drop second and third patches (already in version) and so drop
- >   autoreconf
-
- > https://github.com/memcached/memcached/wiki/ReleaseNotes1618
- > https://github.com/memcached/memcached/wiki/ReleaseNotes1619
- > https://github.com/memcached/memcached/wiki/ReleaseNotes1620
- > https://github.com/memcached/memcached/wiki/ReleaseNotes1621
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index b6b183c2d1..ccc3c2c205 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.8.5.tar.gz.sha256sum
+-sha256  6957cfd14a29eee7555c52f8387a46f2ce2f5fe7dadf93547f1bc74b1657e119  tor-0.4.8.5.tar.gz
++# From https://dist.torproject.org/tor-0.4.8.6.tar.gz.sha256sum
++sha256  552d895fcaf66c7cd2b50f5abe63b7884b30fed254115be7bfb9236807355088  tor-0.4.8.6.tar.gz
+ # Locally computed
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index e86fec29f4..8e31ca749b 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.8.5
++TOR_VERSION = 0.4.8.6
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
