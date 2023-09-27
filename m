@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35457E810D0
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 11:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F4E4E810D5
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 11:53:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E321861082;
-	Wed, 27 Sep 2023 11:49:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E321861082
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D16861407;
+	Wed, 27 Sep 2023 11:53:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D16861407
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t8SeTt2DNiSf; Wed, 27 Sep 2023 11:49:46 +0000 (UTC)
+	with ESMTP id Ecr-EI2HSchL; Wed, 27 Sep 2023 11:53:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBDE561420;
-	Wed, 27 Sep 2023 11:49:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBDE561420
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E39321BF909
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 11:49:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 911D060BA2;
+	Wed, 27 Sep 2023 11:53:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 911D060BA2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AEF4D1BF2BE
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 11:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD98F401CC
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 11:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD98F401CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9481A410B7
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 11:53:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9481A410B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MV409pa_Wg43 for <buildroot@lists.busybox.net>;
- Wed, 27 Sep 2023 11:49:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TExGGqzovmq3 for <buildroot@lists.busybox.net>;
+ Wed, 27 Sep 2023 11:53:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B27D040120
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 11:49:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B27D040120
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77EAD40980
+ for <buildroot@buildroot.org>; Wed, 27 Sep 2023 11:53:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77EAD40980
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A1FBD82275; Wed, 27 Sep 2023 11:49:31 +0000 (UTC)
+ id 5E88E8229C; Wed, 27 Sep 2023 11:53:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Sep 2023 13:39:06 +0200
+Date: Wed, 27 Sep 2023 13:52:12 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: a0a7113ae8d7efd7455e361d320d5d8b60bb9b02
-X-Git-Newrev: de37ab0ca5542933e8b72aed6e656f4a4ac7bfa5
+X-Git-Oldrev: 7156bc753e43860c1949483504d611c7cdec5b01
+X-Git-Newrev: df2c4a2301636a3818f36f37f7361ec89b38f36d
 X-Patchwork-Hint: ignore
-Message-Id: <20230927114931.A1FBD82275@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/nodejs: fix
- cross-compile builds
+Message-Id: <20230927115320.5E88E8229C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] Update for 2023.02.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,134 +62,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de37ab0ca5542933e8b72aed6e656f4a4ac7bfa5
+commit: https://git.buildroot.net/buildroot/commit/?id=df2c4a2301636a3818f36f37f7361ec89b38f36d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-When nodejs is build, a qemu wrapper script is used to execute some
-programs built for the target in user-mode emulation. However, when the
-target and build machines are similar (e.g. x86_74), running those
-programs fails, with errors such as:
-
-    cd ../../tools/v8_gypfiles; python ../../deps/v8/tools/run.py ../../out/Release/v8-qemu-wrapper ../../out/Release/bytecode_builtins_list_generator ../../out/Release/obj.host/gen/generate-bytecode-output-root/builtins-generated/bytecodes-builtins-list.h
-    ../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by ../../out/Release/bytecode_builtins_list_generator)
-    ../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by ../../out/Release/bytecode_builtins_list_generator)
-    ../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by ../../out/Release/bytecode_builtins_list_generator)
-    ../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ../../out/Release/bytecode_builtins_list_generator)
-    Return code is 1
-
-So the question is: why the heck does Qemu use the host C library?
-
-To answer this question, we first have to look at how the -L option of
-Qemu is implemented. This option is documented as such:
-
-    -L path     QEMU_LD_PREFIX   set the elf interpreter prefix to 'path'
-
-The v8-qemu-wrapper script makes this option point to $(STAGING_DIR),
-so that the ELF interpreter used is the one in $(STAGING_DIR).
-
-However, contrary to what the option documentation says, this option
-does much more than setting the ELF interpreter prefix: it is going to
-affect how *all* system calls manipulating files (open, etc.) are
-going to work.
-
-When this option is passed, the function init_paths() in
-https://git.qemu.org/?p=qemu.git;a=blob;f=util/path.c is called at
-initialization time, and essentially its sets the global "base"
-variable to point to the directory passed as -L argument.
-
-Then, for every single syscall that manipulates a path, this path will
-be passed through the path() function in the same file. This function
-will first attempt to resolve the path with "base" as a prefix, and if
-not, return the unprefixed path.
-
-After adding some traces into this function, I was able to understand
-what happens:
-
-(1) -L$(STAGING_DIR) is passed, causing "base" to point to
-$(STAGING_DIR)
-
-(2) The target ELF interpreter from $(STAGING_DIR) is properly invoked
-
-(3) When this ELF interpreter then resolves the libc.so.6 library, it
-    first looks for /etc/ld.so.cache.
-
-(4) Qemu first looks for /etc/ld.so.cache with the -L prefix, i.e
-    $(STAGING_DIR)/etc/ld.so.cache, but it does not exist. So, the Qemu
-    system call emulation falls back to /etc/ld.so.cache, which means
-    the target ELF interpreter reads the /etc/ld.so.cache of the host
-    system.
-
-(5) This /etc/ld.so.cache of the host system says that libc.so.6 is in
-    /lib/x86_64-linux-gnu/
-
-(6) The target ELF interpreter therefore tries to use
-    /lib/x86_64-linux-gnu/libc.so.6. The Qemu system call emulation
-    first tries $(STAGING_DIR)/lib/x86_64-linux-gnu/libc.so.6, but
-    this library does not exist (it is in
-    $(STAGING_DIR)/lib/libc.so.6), so the Qemu system call emulation
-    falls back to /lib/x86_64-linux-gnu/libc.so.6 of the host system,
-    which exist... but is too old compared to the target C library.
-    Indeed, results from ld.so.cache take precedence over the simple
-    resolution of library paths in /usr/lib and /lib.
-
-We see 3 possible ideas to resolve this problem:
-
-(A) Change the behavior of Qemu to not fallback to unprefixed paths:
-    when -L is passed, all path-related system calls should see the
-    paths prefixed by the -L option.
-
-    Issue with this is that this change is unlikely to get accepted by
-    Qemu upstream. And there might be some side effects we have not
-    really identified.
-
-(B) Create an empty $(STAGING_DIR)/etc/ld.so.cache. We have tested
-    this solution and it works: it gets used instead of the host
-    /etc/ld.so.cache. Because $(STAGING_DIR)/etc/ld.so.cache is empty,
-    there's no libc.so.6 match, so the target ELF interpreter goes
-    through its normal library location resolution logic, which falls
-    back to trying in /usr/lib and /lib, which works as those paths
-    ends up being prefixed with $(STAGING_DIR) by Qemu.
-
-(C) Pass LD_LIBRARY_PATH pointing to $(STAGING_DIR)/lib and
-    $(STAGING_DIR)/usr/lib in the Qemu wrapper. This works because
-    LD_LIBRARY_PATH paths have precedence over paths given by
-    ld.so.cache.
-
-    This is the solution already used by the GOI qemu wrapper in
-    package/gobject-introspection/g-ir-scanner-qemuwrapper.in.
-
-We chose to go with the third option, because it has been proven to work
-for the GOI wrapper, and has been reported to solve #14366. Even though
-the first option would be the best, it is also the one that has the
-least chances to land any time soon (if ever); the second has not been
-exercised, and the impact is not fully understood either (e.g what about
-non-glibc toolchains?).
-
-Fixes: #14366
-
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-[yann.morin.1998@free.fr:
-  - add whole analsys done by Thomas in:
-    https://lore.kernel.org/buildroot/20221031213926.50d3c778@windsurf/
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 278d1db56becb4c6b5784c9bb9a0c452ea73ae16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/v8-qemu-wrapper.in | 1 +
- 1 file changed, 1 insertion(+)
+ CHANGES                  | 30 ++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 33 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/v8-qemu-wrapper.in b/package/nodejs/v8-qemu-wrapper.in
-index e1083f47f7..48222d089b 100644
---- a/package/nodejs/v8-qemu-wrapper.in
-+++ b/package/nodejs/v8-qemu-wrapper.in
-@@ -5,5 +5,6 @@
- exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
-     @QEMU_USERMODE_ARGS@ \
-    -L "${STAGING_DIR}/" \
-+   -E LD_LIBRARY_PATH="${STAGING_DIR}/lib:${STAGING_DIR}/usr/lib/" \
-     "$@"
+diff --git a/CHANGES b/CHANGES
+index abf5b4bd7c..c6ccc09e3f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,33 @@
++2023.02.5, released September 27th, 2023
++
++	Important / security related fixes.
++
++	Updated/fixed packages: agentpp, asterisk, at91dataflashboot,
++	aubio, berkeleydb, bind, bwm-ng, chocolate-doom, clamav,
++	compiler-rt, connman, cups, dav1d, diffutils, dracut, dt,
++	expect, fail2ban, fio, flite, freerdp, freeswitch, fstrcmp,
++	gcc, gdb, ghostscript, gmp, go, grub2, haproxy,
++	heirloom-mailx, hwloc, icu, intel-microcode, irssi, libcoap,
++	libcurl, libiec61850, libjxl, libks, libksba, libmodsecurity,
++	libpjsip, libqb, libraw, libssh, libtommath, less, lldpd,
++	log4cxx, lsof, mdadm, mosquitto, mpd, mutt, mv-ddr-marvell,
++	ne10, netatalk, network-manager, nftables, nodejs, ntpsec,
++	nut, openblas, openjdk, openjdk-bin, opensc, openssh,
++	pcm-tools, perftest, php, pixman, poppler, postgresql, pppd,
++	python-django, python-ipython, python-pip, python-pylibfdt,
++	python-tornado, python3, qt5, ramspeed, rtl8189fs, samba4,
++	screen, screenfetch, sngrep, sofia-sip, stellarium,
++	strongswan, sysstat, tar, tcl, uboot, uclibc, vim, webkitgtk,
++	webp, wireshark, xfsprogs, xserver_xorg-server, xterm, yajl,
++	zbar, zxing-cpp
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#14366: Nodejs fails with "version `GLIBC_2.34' not found"..
++	#15754: The docker-engine and docker-cli versions are not...
++	#15787: atmel_sama5d3_xplained_mmc_defconfig: Missing...
++	#15790: at91sam9x5ek_dev_defconfig: Missing...
++
+ 2023.02.4, released August 31th, 2023
  
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 42bb7a7b1f..a7b7729946 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2023.02.4
++export BR2_VERSION := 2023.02.5
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1693507700
++BR2_VERSION_EPOCH = 1695815000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 29f1e8223d..ae060e4425 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2023.02.4'
++RELEASE='2023.02.5'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
