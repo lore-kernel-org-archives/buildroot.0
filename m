@@ -1,53 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8709EE80A93
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 06:07:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2661BE80A92
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 06:21:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C3176100B;
-	Wed, 27 Sep 2023 06:07:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C3176100B
+	by smtp1.osuosl.org (Postfix) with ESMTP id A22328219E;
+	Wed, 27 Sep 2023 06:21:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A22328219E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id miHzVssksyWr; Wed, 27 Sep 2023 06:07:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SUNB6hRJxvwD; Wed, 27 Sep 2023 06:21:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5428E60FC8;
-	Wed, 27 Sep 2023 06:07:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5428E60FC8
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC41B81F4F;
+	Wed, 27 Sep 2023 06:21:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC41B81F4F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BC89D1BF23C
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 06:07:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 56EB61BF335
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 06:21:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95B0760FC8
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 06:07:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95B0760FC8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3AC2661005
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 06:21:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AC2661005
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JnSNUADLuqse for <buildroot@lists.busybox.net>;
- Wed, 27 Sep 2023 06:06:59 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2403E60BE4
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 06:06:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2403E60BE4
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0F8EE1BF204
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 06:06:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1qlNhH-004tBy-B0
- for buildroot@buildroot.org; Wed, 27 Sep 2023 08:06:55 +0200
+ with ESMTP id khZi6BAljmut for <buildroot@lists.busybox.net>;
+ Wed, 27 Sep 2023 06:20:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F23C60E53
+ for <buildroot@buildroot.org>; Wed, 27 Sep 2023 06:20:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F23C60E53
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 65C6C821BA; Wed, 27 Sep 2023 06:20:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Sep 2023 08:06:55 +0200
-Message-ID: <87h6ngup34.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] Buildroot 2023.05.3 released, 2023.05.x series EOL
+Date: Wed, 27 Sep 2023 08:16:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0a0dd63c824c1c8a104e09b4f773764daf5b3e3f
+X-Git-Newrev: a0831dd5f5bb4bbbb72fd0b90964695cafc99da5
+X-Patchwork-Hint: ignore
+Message-Id: <20230927062059.65C6C821BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2023.05.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,59 +56,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
-ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
-MjMuMDUuMyBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
-dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIzLjA1LjMudGFyLmd6CgpvcgoKaHR0cDovL2J1
-aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIzLjA1LjMudGFyLnh6CgpPciBnZXQg
-aXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290Lm9yZy9idWlsZHJvb3QKCkJ1aWxkcm9v
-dCAyMDIzLjA1LjMgaXMgYSBidWdmaXggcmVsZWFzZSwgZml4aW5nIGEgbnVtYmVyIG9mIGltcG9y
-dGFudCAvCnNlY3VyaXR5IHJlbGF0ZWQgaXNzdWVzIGRpc2NvdmVyZWQgc2luY2UgdGhlIDIwMjMu
-MDUuMiByZWxlYXNlLgoKLSBEZWZjb25maWdzOiBQQyB4ODYtNjQgYmlvcy9lZmk6IE5lZWRzIGxp
-YmVsZi4gUmFzcGJlcnJ5cGk6CiAgQWxzbyBlbmFibGUgSERNSSBjb25zb2xlIHdoZW4gc3lzdGVt
-ZCBpcyB1c2VkLgoKLSBTZWN1cml0eSBmaXhlcyBmb3IgYXN0ZXJpc2ssIGNsYW1hdiwgY29ubm1h
-biwgY3VwcywgZnJlZXJkcCwKICBmcmVlc3dpdGNoLCBnaG9zdHNjcmlwdCwgZ3J1YjIsIGhhcHJv
-eHksIGh3bG9jLCBpbnRlbC1taWNyb2NvZGUsCiAgaXJzc2ksIGxpYmN1cmwsIGxpYmp4bCwgbGli
-bW9kc2VjdXJpdHksIGxpYnBqc2lwLCBsaWJxYiwgbGlicmF3LAogIGxpYnRvbW1hdGgsIGxsZHBk
-LCBtb3NxdWl0dG8sIG11dHQsIG5ldGF0YWxrLCBudHBzZWMsIG9wZW5qZGssCiAgb3Blbmpkay1i
-aW4sIG9wZW5zYywgcGhwLCBwb3BwbGVyLCBwb3N0Z3Jlc3FsLCBweXRob24tZGphbmdvLAogIHB5
-dGhvbi10b3JuYWRvLCBweXRob24zLCBzYW1iYTQsIHNjcmVlbiwgc25ncmVwLCBzdHJvbmdzd2Fu
-LCB2aW0sCiAgd2Via2l0Z3RrLCB3ZWJwLCB3aXJlc2hhcmssIHh0ZXJtCgotIEZpeGVzIGZvciBk
-b3dubG9hZC9jb21waWxhdGlvbi9ydW50aW1lL2xpY2Vuc2UgaXNzdWVzIGluIGFnZW50cHAsCiAg
-YXQ5MWRhdGFmbGFzaGJvb3QsIGJlcmtlbGV5ZGIsIGNvbXBpbGVyLXJ0LCBkdCwgZXhwZWN0LCBm
-aW8sIGZzdHJjbXAsCiAgZ2NjLCBnZGIsIGdtcCwgZ28sIGxpYmdsaWIyLCBsaWJrcywgbGVzcywg
-bHNvZiwgbXBkLCBtcHYsCiAgbXYtZGRyLW1hcnZlbGwsIG5lMTAsIG5mdGFibGVzLCBub2RlanMs
-IG51dCwgb3BlbmJsYXMsIG9wZW5zc2gsCiAgcGNtLXRvb2xzLCBwZXJmdGVzdCwgcGV0aXRib290
-LCBweXRob24zLCBxdDUsIHJhbXNwZWVkLCBydGw4MTg5ZnMsCiAgcnRsODgxMmF1LWFpcmNyYWNr
-LW5nLCBzY3JlZW5mZXRjaCwgc29maWEtc2lwLCBzdGVsbGFyaXVtLCBzdHJlc3MtbmcsCiAgdGNs
-LCB1Ym9vdCwgdWNsaWJjLCB4ZnNwcm9ncywgeHNlcnZlcl94b3JnLXNlcnZlciwgenhpbmctY3Bw
-CgotIFZhcmlvdXMgZml4ZXMgdG8gdGhlIENQRSAvIENWRSBpZ25vcmUgbWFya2luZ3MKCi0gTmV3
-IHBhY2thZ2VzOiB4bGliX2xpYlhwcmVzZW50CgpGb3IgbW9yZSBkZXRhaWxzLCBzZWUgdGhlIENI
-QU5HRVMgZmlsZToKCmh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L3BsYWluL0NI
-QU5HRVM/aWQ9MjAyMy4wNS4zCgpVc2VycyBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMgYXJlIHN0
-cm9uZ2x5IGVuY291cmFnZWQgdG8gdXBncmFkZS4KCk1hbnkgdGhhbmtzIHRvIGFsbCB0aGUgcGVv
-cGxlIGNvbnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXNuIDIwMjMu
-MDUuMi4uCgogICAgMzAgIEZhYnJpY2UgRm9udGFpbmUKICAgIDI3ICBCZXJuZCBLdWhscwogICAg
-MjAgIERhbmllbCBMYW5nCiAgICAxMyAgVGhvbWFzIFBldGF6em9uaQogICAgMTEgIFdhbGRlbWFy
-IEJyb2Rrb3JiCiAgICAxMCAgSnVsaWVuIE9saXZhaW4KICAgICA5ICBQZXRlciBLb3JzZ2FhcmQK
-ICAgICA3ICBZYW5uIEUuIE1PUklOCiAgICAgNSAgQ2zDqW1lbnQgUmFtaXJlegogICAgIDQgIEFu
-ZHJlYXMgWmllZ2xlcgogICAgIDQgIENocmlzdGlhbiBTdGV3YXJ0CiAgICAgNCAgR2l1bGlvIEJl
-bmV0dGkKICAgICA0ICBSb21haW4gTmFvdXIKICAgICAzICBKZW5zIE1hdXMKICAgICAyICBBZGFt
-IER1c2tldHQKICAgICAyICBCYXJ0b3N6IEJpbGFzCiAgICAgMiAgQmFydWNoIFNpYWNoCiAgICAg
-MiAgQ2xlbWVudCBSYW1pcmV6CiAgICAgMiAgTWFyY2luIE5pZXN0cm9qCiAgICAgMiAgTmVhbCBG
-cmFnZXIKICAgICAyICBUaG9tYXMgRGV2b29nZHQKICAgICAyICBZYW5naGFvIENoZW5nCiAgICAg
-MSAgQWxleGFuZGVyIFN2ZXJkbGluCiAgICAgMSAgQWxleGV5IFJvc2x5YWtvdgogICAgIDEgIEFy
-bm91dCBWYW5kZWNhcHBlbGxlCiAgICAgMSAgRnJhbmNvaXMgUGVycmFkCiAgICAgMSAgRnJhbmsg
-VmFuYmV2ZXIKICAgICAxICBOaWNvbGFzIEJvaWNoYXQKICAgICAxICBOaWNvbGFzIENhcnJpZXIK
-ICAgICAxICBQZXRlciBTZWlkZXJlcgogICAgIDEgIFJhcGhhw6tsIE3DqWxvdHRlCiAgICAgMSAg
-UmV6YSBBcmJhYgogICAgIDEgIFN0ZWZhbiBBZ25lcgoKTm90aWNlOiBUaGlzIHdpbGwgYmUgdGhl
-IGxhc3QgdXBkYXRlIGZvciAyMDIzLjA1LnguIFBsZWFzZSBtaWdyYXRlIHRvCnRoZSAyMDIzLjA4
-Lnggc2VyaWVzIGluc3RlYWQuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=a0831dd5f5bb4bbbb72fd0b90964695cafc99da5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 70638523a704aca46313aba05b74783340b11b32)
+[Peter: drop Makefile/Vagrantfile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/CHANGES b/CHANGES
+index 260e883973..4fc069a68d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -94,6 +94,35 @@
+ 
+ 	Removed packages: libasplib, ocf-linux, tovid
+ 
++2023.05.3, released September 26th, 2023
++
++	Important / security related fixes.
++
++	Defconfigs: PC x86-64 bios/efi: Needs libelf. Raspberrypi:
++	Also enable HDMI console when systemd is used.
++
++	Updated/fixed packages: agentpp, asterisk, at91dataflashboot,
++	aubio, berkeleydb, bind, bwm-ng, chocolate-doom, clamav,
++	compiler-rt, connman, cpio, cups, dav1d, diffutils, dracut,
++	dt, expect, fail2ban, fio, flite, freerdp, freeswitch,
++	fstrcmp, gcc, gdb, ghostscript, gmp, go, grub2, haproxy,
++	heirloom-mailx, hwloc, icu, intel-microcode, irssi, less,
++	libcoap, libcurl, libglib2, libiec61850, libjxl, libks,
++	libksba, libmodsecurity, libpjsip, libqb, libraw, libssh,
++	libtommath, lldpd, log4cxx, lsof, mdadm, mosquitto, mpd, mpv,
++	mutt, mv-ddr-marvell, ne10, netatalk, network-manager,
++	nftables, nodejs, ntpsec, nut, openblas, openjdk, openjdk-bin,
++	opensc, openssh, pcm-tools, perftest, petitboot, php, pixman,
++	poppler, postgresql, python-django, python-ipython,
++	python-pip, python-pylibfdt, python-tornado, python3, qt5,
++	ramspeed, rtl8189fs, rtl8812au-aircrack-ng, samba4, screen,
++	screenfetch, sngrep, sofia-sip, stellarium, stress-ng,
++	strongswan, sysstat, tar, tcl, uboot, uclibc, vim, webkitgtk,
++	webp, wireshark, xfsprogs, xserver_xorg-server, xterm, yajl,
++	zbar, zxing-cpp
++
++	New packages: xlib_libXpresent
++
+ 2023.05.2, released August 31th, 2023
+ 
+ 	Important / security related fixes.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
