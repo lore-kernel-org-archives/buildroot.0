@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50CFDE82CC6
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF5D5E82CB7
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:06:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3AE642C67;
-	Wed, 27 Sep 2023 19:06:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3AE642C67
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8492C409AA;
+	Wed, 27 Sep 2023 19:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8492C409AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7yOEF0UfC76c; Wed, 27 Sep 2023 19:06:17 +0000 (UTC)
+	with ESMTP id 8wwm4rVhpCKo; Wed, 27 Sep 2023 19:06:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9C1442C62;
-	Wed, 27 Sep 2023 19:06:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9C1442C62
+	by smtp4.osuosl.org (Postfix) with ESMTP id 639254227A;
+	Wed, 27 Sep 2023 19:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 639254227A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 507951BF947
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 11EF11BF32A
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96DFB610B0
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96DFB610B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2AD5B61126
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AD5B61126
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oFzSFpp6xDbf for <buildroot@lists.busybox.net>;
+ with ESMTP id oCF2oK4dIIYO for <buildroot@lists.busybox.net>;
  Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 858A861145
+ by smtp3.osuosl.org (Postfix) with ESMTP id A35026144A
  for <buildroot@buildroot.org>; Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 858A861145
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A35026144A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7108282640; Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
+ id 91C108264A; Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Sep 2023 21:01:12 +0200
+Date: Wed, 27 Sep 2023 21:03:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: da8bd82e3b0cdba0d3cbf73a85913a9b567c840e
-X-Git-Newrev: 6dc3d3c36063b4ef7a76badc0db2a60786eafee9
+X-Git-Oldrev: df78ca175c9bd16200b96ad667d6f99b36acbc7b
+X-Git-Newrev: 9e2b91b7ac909065ce4931ad29f46def615413cd
 X-Patchwork-Hint: ignore
-Message-Id: <20230927190533.7108282640@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnuplot: bump version to 5.4.9
+Message-Id: <20230927190533.91C108264A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/omniorb: bump to version 4.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,58 +62,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6dc3d3c36063b4ef7a76badc0db2a60786eafee9
+commit: https://git.buildroot.net/buildroot/commit/?id=9e2b91b7ac909065ce4931ad29f46def615413cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-http://www.gnuplot.info/ReleaseNotes_5_4_9.html
+https://sourceforge.net/projects/omniorb/files/omniORB/omniORB-4.3.1/
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-[Peter: use --without-qt for consistency]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnuplot/gnuplot.hash | 8 ++++----
- package/gnuplot/gnuplot.mk   | 5 +++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/omniorb/omniorb.hash | 8 ++++----
+ package/omniorb/omniorb.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
-index 2f482ca434..6ed24b6d3c 100644
---- a/package/gnuplot/gnuplot.hash
-+++ b/package/gnuplot/gnuplot.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.7/
--md5  cdc9bb3ac0cc7e717246ed3df2d6ffa2  gnuplot-5.4.7.tar.gz
--sha1  6e68f94af822ff56549beab3a465c2fe976d3b34  gnuplot-5.4.7.tar.gz
-+# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.9/
-+md5  345533e461e41c263b3293f46651f0b2  gnuplot-5.4.9.tar.gz
-+sha1  1a3953660656a38178ae2b368efa895af55a5001  gnuplot-5.4.9.tar.gz
- # Locally computed
--sha256  318a1501c9e659f39cf05ee5268335671bddc6c20eae06851f262fde27c2e739  gnuplot-5.4.7.tar.gz
-+sha256  a328a021f53dc05459be6066020e9a71e8eab6255d3381e22696120d465c6a97  gnuplot-5.4.9.tar.gz
- sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
-diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-index 23fbae10a9..b98da4267a 100644
---- a/package/gnuplot/gnuplot.mk
-+++ b/package/gnuplot/gnuplot.mk
+diff --git a/package/omniorb/omniorb.hash b/package/omniorb/omniorb.hash
+index f522c1ef67..36db67191d 100644
+--- a/package/omniorb/omniorb.hash
++++ b/package/omniorb/omniorb.hash
+@@ -1,8 +1,8 @@
+-# From https://sourceforge.net/projects/omniorb/files/omniORB/omniORB-4.3.0/
+-sha1  c3f12c2278f8c4603910c02c8fe892c1dde7217e  omniORB-4.3.0.tar.bz2
+-md5  8889ab13b444b495ca2c2b48ea6a6bd7  omniORB-4.3.0.tar.bz2
++# From https://sourceforge.net/projects/omniorb/files/omniORB/omniORB-4.3.1/
++sha1  b6581c9b6a956c1d442c442767b5a58899a09513  omniORB-4.3.1.tar.bz2
++md5  dc3e4467ef3f457025fedcc6403f8f13  omniORB-4.3.1.tar.bz2
+ 
+ # Locally generated
+-sha256  976045a2341f4e9a85068b21f4bd928993292933eeecefea372db09e0219eadd  omniORB-4.3.0.tar.bz2
++sha256  0f42bc3eb737cae680dafa85b3ae3958e9f56a37912c5fb6b875933f8fb7390d  omniORB-4.3.1.tar.bz2
+ sha256  126647a6ee062fe46f8f3766965dc62e031c0a31238a347e4bc07aab2ac1e2a7  COPYING
+ sha256  eaf5b13ffd5355da7c0b83074e4b798152ff7086c95c4f3045122a06e2673eb9  COPYING.LIB
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index d6434735cf..8235fac797 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPLOT_VERSION = 5.4.7
-+GNUPLOT_VERSION = 5.4.9
- GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
- GNUPLOT_LICENSE = gnuplot license (open source)
- GNUPLOT_LICENSE_FILES = Copyright
-@@ -23,7 +23,8 @@ GNUPLOT_CONF_OPTS = \
- 	--disable-wxwidgets \
- 	--without-lua \
- 	--without-latex \
--	--without-cairo
-+	--without-cairo \
-+	--without-qt
- 
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
+-OMNIORB_VERSION = 4.3.0
++OMNIORB_VERSION = 4.3.1
+ OMNIORB_SITE = http://downloads.sourceforge.net/project/omniorb/omniORB/omniORB-$(OMNIORB_VERSION)
+ OMNIORB_SOURCE = omniORB-$(OMNIORB_VERSION).tar.bz2
+ OMNIORB_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
