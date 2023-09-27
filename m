@@ -4,65 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3245FE80A88
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 05:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8709EE80A93
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 06:07:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84CBE60B71;
-	Wed, 27 Sep 2023 05:22:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84CBE60B71
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C3176100B;
+	Wed, 27 Sep 2023 06:07:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C3176100B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D1iFXA87KQhf; Wed, 27 Sep 2023 05:22:12 +0000 (UTC)
+	with ESMTP id miHzVssksyWr; Wed, 27 Sep 2023 06:07:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABEAD60BBD;
-	Wed, 27 Sep 2023 05:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABEAD60BBD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C5D601BF23C
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 05:22:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5428E60FC8;
+	Wed, 27 Sep 2023 06:07:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5428E60FC8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BC89D1BF23C
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 06:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9EDEB827FD
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 05:22:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EDEB827FD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95B0760FC8
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 06:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95B0760FC8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PKTrd_BUGmU6 for <buildroot@lists.busybox.net>;
- Wed, 27 Sep 2023 05:22:08 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 17FDB82796
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 05:22:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17FDB82796
-Received: from fli4l.lan.fli4l (p4fd6c587.dip0.t-ipconnect.de [79.214.197.135])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D758EA4C06F9
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 07:22:04 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42618)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qlMzs-0005zJ-10
- for buildroot@buildroot.org; Wed, 27 Sep 2023 07:22:04 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JnSNUADLuqse for <buildroot@lists.busybox.net>;
+ Wed, 27 Sep 2023 06:06:59 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2403E60BE4
+ for <buildroot@buildroot.org>; Wed, 27 Sep 2023 06:06:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2403E60BE4
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0F8EE1BF204
+ for <buildroot@buildroot.org>; Wed, 27 Sep 2023 06:06:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1qlNhH-004tBy-B0
+ for buildroot@buildroot.org; Wed, 27 Sep 2023 08:06:55 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Sep 2023 07:22:04 +0200
-Message-Id: <20230927052204.231589-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Wed, 27 Sep 2023 08:06:55 +0200
+Message-ID: <87h6ngup34.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1695792124;
- bh=OlMNpiHS5hNgi/l1DsYJhjguNTdSPKe+jAbswHYT3h0=;
- h=From:To:Subject:Date:From;
- b=BxP5mqVzKLuUqPDD4hjkf0JSvDVnnX0/aUaZvz4sJWyhpx+mMiKdQrkx8BpboLydc
- i+KgVQkOiGO3fPgxOjj8uDgOefKDAyHRGgot4BC5//wTjYwYCRmr3tNGmzsrlbnl3n
- 4milJJaB2sIOB76f2GABSCyuW3PhwTgbyj82NR6puG2XoiUdnTe2S36bOL/Y0wSBxV
- Gr3YMGn7x6/IOR2gQExEnT6b8hGp2q8vzD1dds5FpmmGZDAz04AyOCvKkT6sB2j5mP
- TQ+VJ3nyMVHGG6VZx2CS1mu3m+vUgWUfSGW/4Wbe+Not0eMppsLC7DLWU2a3qIjkyl
- zbfmI8SwbJZSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=BxP5mqVz
-Subject: [Buildroot] [PATCH 1/1] package/alsa-lib: fix musl build
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] Buildroot 2023.05.3 released, 2023.05.x series EOL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,83 +59,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 227d414ded bumped alsa-lib to version 1.2.10 which
-introduced a build error with musl toolchains.
-
-Fixes:
-http://autobuild.buildroot.net/results/bce/bce46fd8aab9ef4918228e8cfc5f8b5abe71e859/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- ...STRING-macro-outside-PIC-ifdef-block.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/alsa-lib/0002-global-h-move-__STRING-macro-outside-PIC-ifdef-block.patch
-
-diff --git a/package/alsa-lib/0002-global-h-move-__STRING-macro-outside-PIC-ifdef-block.patch b/package/alsa-lib/0002-global-h-move-__STRING-macro-outside-PIC-ifdef-block.patch
-new file mode 100644
-index 0000000000..7bd67507fd
---- /dev/null
-+++ b/package/alsa-lib/0002-global-h-move-__STRING-macro-outside-PIC-ifdef-block.patch
-@@ -0,0 +1,50 @@
-+From 10bd599970acc71c92f85eb08943eb8d3d702a9c Mon Sep 17 00:00:00 2001
-+From: Jaroslav Kysela <perex@perex.cz>
-+Date: Wed, 6 Sep 2023 15:16:44 +0200
-+Subject: [PATCH] global.h: move __STRING() macro outside !PIC ifdef block
-+
-+It solves the musl libc compilation issue.
-+
-+control.c: In function 'snd_ctl_open_conf':
-+../../include/global.h:98:36: warning: implicit declaration of function '__STRING' [-Wimplicit-function-declaratio]
-+   98 | #define SND_DLSYM_VERSION(version) __STRING(version)
-+      |                                    ^~~~~~~~
-+
-+Fixes: https://github.com/alsa-project/alsa-lib/issues/350
-+Signed-off-by: Jaroslav Kysela <perex@perex.cz>
-+
-+Upstream: https://github.com/alsa-project/alsa-lib/commit/10bd599970acc71c92f85eb08943eb8d3d702a9c
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ include/global.h | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/include/global.h b/include/global.h
-+index dfe9bc2b..3ecaeee8 100644
-+--- a/include/global.h
-++++ b/include/global.h
-+@@ -51,6 +51,11 @@ const char *snd_asoundlib_version(void);
-+ #define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
-+ #endif
-+ 
-++#ifndef __STRING
-++/** \brief Return 'x' argument as string */
-++#define __STRING(x)     #x
-++#endif
-++
-+ #ifdef PIC /* dynamic build */
-+ 
-+ /** \hideinitializer \brief Helper macro for #SND_DLSYM_BUILD_VERSION. */
-+@@ -71,11 +76,6 @@ struct snd_dlsym_link {
-+ 
-+ extern struct snd_dlsym_link *snd_dlsym_start;
-+ 
-+-#ifndef __STRING
-+-/** \brief Return 'x' argument as string */
-+-#define __STRING(x)     #x
-+-#endif
-+-
-+ /** \hideinitializer \brief Helper macro for #SND_DLSYM_BUILD_VERSION. */
-+ #define __SND_DLSYM_VERSION(prefix, name, version) _ ## prefix ## name ## version
-+ /**
--- 
-2.39.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
+ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
+MjMuMDUuMyBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
+dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIzLjA1LjMudGFyLmd6CgpvcgoKaHR0cDovL2J1
+aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIzLjA1LjMudGFyLnh6CgpPciBnZXQg
+aXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290Lm9yZy9idWlsZHJvb3QKCkJ1aWxkcm9v
+dCAyMDIzLjA1LjMgaXMgYSBidWdmaXggcmVsZWFzZSwgZml4aW5nIGEgbnVtYmVyIG9mIGltcG9y
+dGFudCAvCnNlY3VyaXR5IHJlbGF0ZWQgaXNzdWVzIGRpc2NvdmVyZWQgc2luY2UgdGhlIDIwMjMu
+MDUuMiByZWxlYXNlLgoKLSBEZWZjb25maWdzOiBQQyB4ODYtNjQgYmlvcy9lZmk6IE5lZWRzIGxp
+YmVsZi4gUmFzcGJlcnJ5cGk6CiAgQWxzbyBlbmFibGUgSERNSSBjb25zb2xlIHdoZW4gc3lzdGVt
+ZCBpcyB1c2VkLgoKLSBTZWN1cml0eSBmaXhlcyBmb3IgYXN0ZXJpc2ssIGNsYW1hdiwgY29ubm1h
+biwgY3VwcywgZnJlZXJkcCwKICBmcmVlc3dpdGNoLCBnaG9zdHNjcmlwdCwgZ3J1YjIsIGhhcHJv
+eHksIGh3bG9jLCBpbnRlbC1taWNyb2NvZGUsCiAgaXJzc2ksIGxpYmN1cmwsIGxpYmp4bCwgbGli
+bW9kc2VjdXJpdHksIGxpYnBqc2lwLCBsaWJxYiwgbGlicmF3LAogIGxpYnRvbW1hdGgsIGxsZHBk
+LCBtb3NxdWl0dG8sIG11dHQsIG5ldGF0YWxrLCBudHBzZWMsIG9wZW5qZGssCiAgb3Blbmpkay1i
+aW4sIG9wZW5zYywgcGhwLCBwb3BwbGVyLCBwb3N0Z3Jlc3FsLCBweXRob24tZGphbmdvLAogIHB5
+dGhvbi10b3JuYWRvLCBweXRob24zLCBzYW1iYTQsIHNjcmVlbiwgc25ncmVwLCBzdHJvbmdzd2Fu
+LCB2aW0sCiAgd2Via2l0Z3RrLCB3ZWJwLCB3aXJlc2hhcmssIHh0ZXJtCgotIEZpeGVzIGZvciBk
+b3dubG9hZC9jb21waWxhdGlvbi9ydW50aW1lL2xpY2Vuc2UgaXNzdWVzIGluIGFnZW50cHAsCiAg
+YXQ5MWRhdGFmbGFzaGJvb3QsIGJlcmtlbGV5ZGIsIGNvbXBpbGVyLXJ0LCBkdCwgZXhwZWN0LCBm
+aW8sIGZzdHJjbXAsCiAgZ2NjLCBnZGIsIGdtcCwgZ28sIGxpYmdsaWIyLCBsaWJrcywgbGVzcywg
+bHNvZiwgbXBkLCBtcHYsCiAgbXYtZGRyLW1hcnZlbGwsIG5lMTAsIG5mdGFibGVzLCBub2RlanMs
+IG51dCwgb3BlbmJsYXMsIG9wZW5zc2gsCiAgcGNtLXRvb2xzLCBwZXJmdGVzdCwgcGV0aXRib290
+LCBweXRob24zLCBxdDUsIHJhbXNwZWVkLCBydGw4MTg5ZnMsCiAgcnRsODgxMmF1LWFpcmNyYWNr
+LW5nLCBzY3JlZW5mZXRjaCwgc29maWEtc2lwLCBzdGVsbGFyaXVtLCBzdHJlc3MtbmcsCiAgdGNs
+LCB1Ym9vdCwgdWNsaWJjLCB4ZnNwcm9ncywgeHNlcnZlcl94b3JnLXNlcnZlciwgenhpbmctY3Bw
+CgotIFZhcmlvdXMgZml4ZXMgdG8gdGhlIENQRSAvIENWRSBpZ25vcmUgbWFya2luZ3MKCi0gTmV3
+IHBhY2thZ2VzOiB4bGliX2xpYlhwcmVzZW50CgpGb3IgbW9yZSBkZXRhaWxzLCBzZWUgdGhlIENI
+QU5HRVMgZmlsZToKCmh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L3BsYWluL0NI
+QU5HRVM/aWQ9MjAyMy4wNS4zCgpVc2VycyBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMgYXJlIHN0
+cm9uZ2x5IGVuY291cmFnZWQgdG8gdXBncmFkZS4KCk1hbnkgdGhhbmtzIHRvIGFsbCB0aGUgcGVv
+cGxlIGNvbnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXNuIDIwMjMu
+MDUuMi4uCgogICAgMzAgIEZhYnJpY2UgRm9udGFpbmUKICAgIDI3ICBCZXJuZCBLdWhscwogICAg
+MjAgIERhbmllbCBMYW5nCiAgICAxMyAgVGhvbWFzIFBldGF6em9uaQogICAgMTEgIFdhbGRlbWFy
+IEJyb2Rrb3JiCiAgICAxMCAgSnVsaWVuIE9saXZhaW4KICAgICA5ICBQZXRlciBLb3JzZ2FhcmQK
+ICAgICA3ICBZYW5uIEUuIE1PUklOCiAgICAgNSAgQ2zDqW1lbnQgUmFtaXJlegogICAgIDQgIEFu
+ZHJlYXMgWmllZ2xlcgogICAgIDQgIENocmlzdGlhbiBTdGV3YXJ0CiAgICAgNCAgR2l1bGlvIEJl
+bmV0dGkKICAgICA0ICBSb21haW4gTmFvdXIKICAgICAzICBKZW5zIE1hdXMKICAgICAyICBBZGFt
+IER1c2tldHQKICAgICAyICBCYXJ0b3N6IEJpbGFzCiAgICAgMiAgQmFydWNoIFNpYWNoCiAgICAg
+MiAgQ2xlbWVudCBSYW1pcmV6CiAgICAgMiAgTWFyY2luIE5pZXN0cm9qCiAgICAgMiAgTmVhbCBG
+cmFnZXIKICAgICAyICBUaG9tYXMgRGV2b29nZHQKICAgICAyICBZYW5naGFvIENoZW5nCiAgICAg
+MSAgQWxleGFuZGVyIFN2ZXJkbGluCiAgICAgMSAgQWxleGV5IFJvc2x5YWtvdgogICAgIDEgIEFy
+bm91dCBWYW5kZWNhcHBlbGxlCiAgICAgMSAgRnJhbmNvaXMgUGVycmFkCiAgICAgMSAgRnJhbmsg
+VmFuYmV2ZXIKICAgICAxICBOaWNvbGFzIEJvaWNoYXQKICAgICAxICBOaWNvbGFzIENhcnJpZXIK
+ICAgICAxICBQZXRlciBTZWlkZXJlcgogICAgIDEgIFJhcGhhw6tsIE3DqWxvdHRlCiAgICAgMSAg
+UmV6YSBBcmJhYgogICAgIDEgIFN0ZWZhbiBBZ25lcgoKTm90aWNlOiBUaGlzIHdpbGwgYmUgdGhl
+IGxhc3QgdXBkYXRlIGZvciAyMDIzLjA1LnguIFBsZWFzZSBtaWdyYXRlIHRvCnRoZSAyMDIzLjA4
+Lnggc2VyaWVzIGluc3RlYWQuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
