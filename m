@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8990E82CB7
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC425E82CB7
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:17:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 760C7409A2;
-	Wed, 27 Sep 2023 19:13:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 760C7409A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 956F140289;
+	Wed, 27 Sep 2023 19:17:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 956F140289
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dFMVaAFWMdaj; Wed, 27 Sep 2023 19:13:50 +0000 (UTC)
+	with ESMTP id FOl1XrnmuGde; Wed, 27 Sep 2023 19:17:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C6C7409A3;
-	Wed, 27 Sep 2023 19:13:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C6C7409A3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 354961BF32A
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:13:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E722402A8;
+	Wed, 27 Sep 2023 19:17:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E722402A8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A3D331BF32A
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:17:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F56C404FC
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:13:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F56C404FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 893B140289
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:17:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 893B140289
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WtzkEw2xqT1v for <buildroot@lists.busybox.net>;
- Wed, 27 Sep 2023 19:13:46 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B41BB401E1
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 19:13:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B41BB401E1
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C9FB860005;
- Wed, 27 Sep 2023 19:13:43 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qlZyh-005EHs-7d; Wed, 27 Sep 2023 21:13:43 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KZiLcSlf5kRt for <buildroot@lists.busybox.net>;
+ Wed, 27 Sep 2023 19:16:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89E71402A8
+ for <buildroot@buildroot.org>; Wed, 27 Sep 2023 19:16:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89E71402A8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7685882765; Wed, 27 Sep 2023 19:16:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230924211524.1598438-1-fontaine.fabrice@gmail.com>
-Date: Wed, 27 Sep 2023 21:13:43 +0200
-In-Reply-To: <20230924211524.1598438-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 24 Sep 2023 23:15:24 +0200")
-Message-ID: <87zg17xwd4.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/unixodbc: bump to version 2.3.12
+To: buildroot@buildroot.org
+Date: Wed, 27 Sep 2023 21:09:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6b7f001a475e522233c06c6e92f8aa17d07b794c
+X-Git-Newrev: c7cd67517c97cfaed4316faab3015482a93794af
+X-Patchwork-Hint: ignore
+Message-Id: <20230927191659.7685882765@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/onevpl-intel-gpu: bump version to
+ 23.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,23 +57,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c7cd67517c97cfaed4316faab3015482a93794af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop patch (already in version)
- > https://github.com/lurcher/unixODBC/releases/tag/2.3.12
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
+ package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+index 70af121d28..fab7ca0eae 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  311658f18b45645ffa9337a6307d59a1025b6f77f8fe122c332f536a14e1ef44  onevpl-intel-gpu-23.3.2.tar.gz
++sha256  4f31a10d51fb09c87fa62afb6da51778f0d946de900f3367816864dc0e096b29  onevpl-intel-gpu-23.3.3.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+index cbc612f4f3..311ab88b4e 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ONEVPL_INTEL_GPU_VERSION = 23.3.2
++ONEVPL_INTEL_GPU_VERSION = 23.3.3
+ ONEVPL_INTEL_GPU_SITE = $(call github,oneapi-src,oneVPL-intel-gpu,intel-onevpl-$(ONEVPL_INTEL_GPU_VERSION))
+ ONEVPL_INTEL_GPU_LICENSE = MIT
+ ONEVPL_INTEL_GPU_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
