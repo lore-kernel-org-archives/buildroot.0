@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15019E82CB7
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81A46E82CC6
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:05:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B77B2428CC;
-	Wed, 27 Sep 2023 19:05:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B77B2428CC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CA50428E6;
+	Wed, 27 Sep 2023 19:05:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CA50428E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LsOExQ4zhoeQ; Wed, 27 Sep 2023 19:05:36 +0000 (UTC)
+	with ESMTP id rfYK-SVrUFrP; Wed, 27 Sep 2023 19:05:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D3F5428D9;
-	Wed, 27 Sep 2023 19:05:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D3F5428D9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 938121BF32A
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0F1742C4F;
+	Wed, 27 Sep 2023 19:05:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0F1742C4F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D545F1BF32A
  for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66DB2419B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAA79428CC
  for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:05:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66DB2419B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAA79428CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e4nq6tbu6HcK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e-V9cddIsmMC for <buildroot@lists.busybox.net>;
  Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C15A401E1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6E27428CA
  for <buildroot@buildroot.org>; Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C15A401E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6E27428CA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A6D482641; Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
+ id A685D82641; Wed, 27 Sep 2023 19:05:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Sep 2023 21:02:36 +0200
+Date: Wed, 27 Sep 2023 21:03:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6dc3d3c36063b4ef7a76badc0db2a60786eafee9
-X-Git-Newrev: 1c7d532ee9a9a4c9882412cfda7447df28fc3884
+X-Git-Oldrev: cf155e0d0480f96746cff0ac84025580d375c237
+X-Git-Newrev: 757c81f12690449e290078d9a2b8f8191e057616
 X-Patchwork-Hint: ignore
-Message-Id: <20230927190533.7A6D482641@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.8.6
+Message-Id: <20230927190533.A685D82641@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openresolv: bump to version 3.13.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c7d532ee9a9a4c9882412cfda7447df28fc3884
+commit: https://git.buildroot.net/buildroot/commit/?id=757c81f12690449e290078d9a2b8f8191e057616
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+https://github.com/NetworkConfiguration/openresolv/compare/v3.12.0...v3.13.2
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openresolv/openresolv.hash | 2 +-
+ package/openresolv/openresolv.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index b6b183c2d1..ccc3c2c205 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.5.tar.gz.sha256sum
--sha256  6957cfd14a29eee7555c52f8387a46f2ce2f5fe7dadf93547f1bc74b1657e119  tor-0.4.8.5.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.6.tar.gz.sha256sum
-+sha256  552d895fcaf66c7cd2b50f5abe63b7884b30fed254115be7bfb9236807355088  tor-0.4.8.6.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index e86fec29f4..8e31ca749b 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/openresolv/openresolv.hash b/package/openresolv/openresolv.hash
+index 7a5fb0e140..c32b856de9 100644
+--- a/package/openresolv/openresolv.hash
++++ b/package/openresolv/openresolv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  96b573e26d145f208d3758c2cd6fbf824b01005fc4cb7cedbdae29b3a3c8cb02  openresolv-3.12.0.tar.gz
++sha256  36b5bcbe257a940c884f0d74321a47407baabab9e265e38859851c8311f6f0b0  openresolv-3.13.2.tar.xz
+ sha256  384740bf5e19e7628d20f4dcc22925062fdc6020e9a6f074e567d4d797be57a0  LICENSE
+diff --git a/package/openresolv/openresolv.mk b/package/openresolv/openresolv.mk
+index 3857ab833d..176f6dab3a 100644
+--- a/package/openresolv/openresolv.mk
++++ b/package/openresolv/openresolv.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.8.5
-+TOR_VERSION = 0.4.8.6
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-OPENRESOLV_VERSION = 3.12.0
+-OPENRESOLV_SITE = $(call github,rsmarples,openresolv,openresolv-$(OPENRESOLV_VERSION))
++OPENRESOLV_VERSION = 3.13.2
++OPENRESOLV_SITE = https://github.com/rsmarples/openresolv/releases/download/v$(OPENRESOLV_VERSION)
++OPENRESOLV_SOURCE = openresolv-$(OPENRESOLV_VERSION).tar.xz
+ OPENRESOLV_LICENSE = BSD-2-Clause
+ OPENRESOLV_LICENSE_FILES = LICENSE
+ OPENRESOLV_CPE_ID_VENDOR = openresolv_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
