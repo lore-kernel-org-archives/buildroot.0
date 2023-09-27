@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99B8E82CBB
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 17:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83A2AE82CBD
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 17:56:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46CAF400BA;
-	Wed, 27 Sep 2023 17:50:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46CAF400BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EDEA403EA;
+	Wed, 27 Sep 2023 17:56:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EDEA403EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G2PFyqXbEO0H; Wed, 27 Sep 2023 17:50:15 +0000 (UTC)
+	with ESMTP id dBrC3hEtOlgY; Wed, 27 Sep 2023 17:56:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92371408B6;
-	Wed, 27 Sep 2023 17:50:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92371408B6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 312401BF354
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 17:50:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8AD474149C;
+	Wed, 27 Sep 2023 17:56:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AD474149C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 52C4A1BF354
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 17:56:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F020D82204
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 17:50:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F020D82204
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2AB8C419AB
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 17:56:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AB8C419AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S-MawS7V2YJr for <buildroot@lists.busybox.net>;
- Wed, 27 Sep 2023 17:50:11 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F226D821B2
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 17:50:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F226D821B2
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B245C20003;
- Wed, 27 Sep 2023 17:50:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qlYfl-0055vg-3T; Wed, 27 Sep 2023 19:50:05 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Akr7Ioau9Btk for <buildroot@lists.busybox.net>;
+ Wed, 27 Sep 2023 17:56:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66CCA41B37
+ for <buildroot@buildroot.org>; Wed, 27 Sep 2023 17:56:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66CCA41B37
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5540C8258A; Wed, 27 Sep 2023 17:56:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230924123058.147461-1-fontaine.fabrice@gmail.com>
-Date: Wed, 27 Sep 2023 19:50:05 +0200
-In-Reply-To: <20230924123058.147461-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 24 Sep 2023 14:30:58 +0200")
-Message-ID: <87a5t733qq.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/ndisc6: bump to version 1.0.7
+To: buildroot@buildroot.org
+Date: Wed, 27 Sep 2023 19:49:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 35dcf9ee56695023ace9b2505fa169d262f8ff38
+X-Git-Newrev: da8bd82e3b0cdba0d3cbf73a85913a9b567c840e
+X-Patchwork-Hint: ignore
+Message-Id: <20230927175642.5540C8258A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ndisc6: bump to version 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,21 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=da8bd82e3b0cdba0d3cbf73a85913a9b567c840e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > https://git.remlab.net/gitweb/?p=ndisc6.git;a=blob;f=NEWS;h=34d9a653087a8e89f595156a4ec69969e5ca3013
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://git.remlab.net/gitweb/?p=ndisc6.git;a=blob;f=NEWS;h=34d9a653087a8e89f595156a4ec69969e5ca3013
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ndisc6/ndisc6.hash | 2 +-
+ package/ndisc6/ndisc6.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ndisc6/ndisc6.hash b/package/ndisc6/ndisc6.hash
+index e258382c53..550b9fffac 100644
+--- a/package/ndisc6/ndisc6.hash
++++ b/package/ndisc6/ndisc6.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  a713210e9be1f15cfa0809f4c2728b00cd5f25881d7585126986982055453cfb  ndisc6-1.0.6.tar.bz2
++sha256  edc431d70510d7321a5a39d243de0d0f63846dc9145b3b549c7348cc2bc96609  ndisc6-1.0.7.tar.bz2
+ # Locally computed
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index 23734ca7d7..d797b82e65 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NDISC6_VERSION = 1.0.6
++NDISC6_VERSION = 1.0.7
+ NDISC6_SOURCE = ndisc6-$(NDISC6_VERSION).tar.bz2
+ NDISC6_SITE = http://www.remlab.net/files/ndisc6
+ NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=c11" LIBS=$(TARGET_NLS_LIBS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
