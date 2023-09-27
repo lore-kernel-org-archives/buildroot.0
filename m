@@ -4,55 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86381E82CC7
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:11:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B78E82CB7
+	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 19:11:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3723E42CB9;
-	Wed, 27 Sep 2023 19:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3723E42CB9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92A3C42CC2;
+	Wed, 27 Sep 2023 19:11:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92A3C42CC2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FeFmeHJ9die4; Wed, 27 Sep 2023 19:11:03 +0000 (UTC)
+	with ESMTP id 6IM8RPdSQyAB; Wed, 27 Sep 2023 19:11:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3422542CB5;
-	Wed, 27 Sep 2023 19:11:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3422542CB5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 657FC1BF32A
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:10:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5891942CBD;
+	Wed, 27 Sep 2023 19:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5891942CBD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 342141BF32A
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BECB404FC
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:10:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BECB404FC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D54060D4F
+ for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 19:11:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D54060D4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KtB92c0ER1S5 for <buildroot@lists.busybox.net>;
- Wed, 27 Sep 2023 19:10:42 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 21825401E1
- for <buildroot@buildroot.org>; Wed, 27 Sep 2023 19:10:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21825401E1
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 174CD1BF206;
- Wed, 27 Sep 2023 19:10:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jkuZTqOW_Vsw for <buildroot@lists.busybox.net>;
+ Wed, 27 Sep 2023 19:11:00 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 795E360AB3
+ for <buildroot@buildroot.org>; Wed, 27 Sep 2023 19:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 795E360AB3
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D2E6A1C0008;
+ Wed, 27 Sep 2023 19:10:56 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qlZvj-005E3H-Eb; Wed, 27 Sep 2023 21:10:39 +0200
+ id 1qlZw0-005E48-83; Wed, 27 Sep 2023 21:10:56 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230924183622.41519-1-bernd@kuhls.net>
- <20230924183622.41519-3-bernd@kuhls.net>
-Date: Wed, 27 Sep 2023 21:10:39 +0200
-In-Reply-To: <20230924183622.41519-3-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 24 Sep 2023 20:36:22 +0200")
-Message-ID: <87h6nfzb2o.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230924200845.1518915-1-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Sep 2023 21:10:56 +0200
+In-Reply-To: <20230924200845.1518915-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 24 Sep 2023 22:08:45 +0200")
+Message-ID: <87cyy3zb27.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 3/3] package/onevpl-intel-gpu: bump version
- to 23.3.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/sg3_utils: bump to version 1.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,15 +62,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
+Cc: Marek Belisko <marek.belisko@open-nandra.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > - Drop patches (already in version) and so drop autoreconf
+ > - Update hash of BSD_LICENSE (update in year:
+ >   https://github.com/hreinecke/sg3_utils/commit/551657bfbf3b571a7b8ca6e489a407cb22eab387)
+
+ > https://github.com/hreinecke/sg3_utils/blob/v1.48/ChangeLog
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
