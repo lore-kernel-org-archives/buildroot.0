@@ -4,66 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BDE5E743C3
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 21:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ECF6E743C2
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 21:04:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7BF9615C3;
-	Thu, 28 Sep 2023 21:00:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7BF9615C3
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEBAF60BCC;
+	Thu, 28 Sep 2023 21:04:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEBAF60BCC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wuSpMcCHH0Kq; Thu, 28 Sep 2023 21:00:27 +0000 (UTC)
+	with ESMTP id sbftwzJUMDHG; Thu, 28 Sep 2023 21:04:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF886615AB;
-	Thu, 28 Sep 2023 21:00:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF886615AB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8CE571BF287
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 21:00:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E400160FFF;
+	Thu, 28 Sep 2023 21:04:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E400160FFF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 73C2B1BF20D
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 21:04:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6813A813FF
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 21:00:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6813A813FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46D9E42D9F
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 21:04:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46D9E42D9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yErEkXyBchxe for <buildroot@lists.busybox.net>;
- Thu, 28 Sep 2023 21:00:24 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6BC40813E4
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 21:00:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BC40813E4
-Received: from ymorin.is-a-geek.org (unknown [92.184.106.19])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 2148019F5A5;
- Thu, 28 Sep 2023 23:00:19 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 28 Sep 2023 23:00:17 +0200
-Date: Thu, 28 Sep 2023 23:00:17 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230928210017.GD14593@scaer>
-References: <20230928170955.347663-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230928170955.347663-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1695934821;
- bh=WHrjFvqKXGQ9dbCqWu/b+lukD9RzuNM+XVAz9dUq5bU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=RmI5wsJ1FL9kO/1yRT1gbDuwhj1rxCNYLxUSTC+31FC7OaKgCF0LpqNss865j9TZ6
- tXmtrqHGa224pW/0sCVO/I/DB3QvMT8SrHOWobq0Hca8gTLf/vptrnm/zvuq6Tb3Cl
- hQIafAKekP5dNMiaa1fMdiNFmDliqJt3olf6Y2kPMAIH5rvMasBYYWXMSMHi4tdtkK
- E3MEEzVOnQJnzS9YzT8al0DUVL+y8zDSm3qbEixG2zPbvRFyy44P3u6eGu5j/rpQ4k
- K0++RMjFLbbdIgN7/Rv5DhJakhh6ZeSAToEA2q1xaBlNgwhBNGCKO31E0WI2g041W6
- bi8fqdl/K/3nw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=RmI5wsJ1
-Subject: Re: [Buildroot] [PATCH 1/1] package/librsvg: security bump to
- version 2.50.9
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GwBYGW6io54i for <buildroot@lists.busybox.net>;
+ Thu, 28 Sep 2023 21:04:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D87BE42D9A
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 21:04:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D87BE42D9A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C4A1982B64; Thu, 28 Sep 2023 21:04:33 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 28 Sep 2023 23:03:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e7988c7060d7d8b137d18721ef773ef266114690
+X-Git-Newrev: ce17f93e828a07292e03653be04a49480250f23f
+X-Patchwork-Hint: ignore
+Message-Id: <20230928210433.C4A1982B64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/suricata: security bump to version
+ 6.0.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,75 +57,143 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ce17f93e828a07292e03653be04a49480250f23f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-09-28 19:09 +0200, Fabrice Fontaine spake thusly:
-> Fix CVE-2023-38633: A directory traversal problem in the URL decoder of
-> librsvg before 2.56.3 could be used by local or remote attackers to
-> disclose files (on the local filesystem outside of the expected area),
-> as demonstrated by href=".?../../../../../../../../../../etc/passwd" in
-> an xi:include element.
-> 
-> https://gitlab.gnome.org/GNOME/librsvg/-/blob/2.50.9/NEWS
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- Fix CVE-2023-35852: In Suricata before 6.0.13 (when there is an
+  adversary who controls an external source of rules), a dataset
+  filename, that comes from a rule, may trigger absolute or relative
+  directory traversal, and lead to write access to a local filesystem.
+  This is addressed in 6.0.13 by requiring allow-absolute-filenames and
+  allow-write (in the datasets rules configuration section) if an
+  installation requires traversal/writing in this situation.
+- Fix CVE-2023-35853: In Suricata before 6.0.13, an adversary who
+  controls an external source of Lua rules may be able to execute Lua
+  code. This is addressed in 6.0.13 by disabling Lua unless allow-rules
+  is true in the security lua configuration section.
+- Drop first patch (not needed since
+  https://github.com/OISF/suricata/commit/c8a3aa608eaae1acbaf33dba8a7c1a3cbfeb4285)
 
-Applied to master, thanks.
+https://github.com/OISF/suricata/blob/suricata-6.0.14/ChangeLog
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .checkpackageignore                                |  3 +-
+ ...c-allow-the-user-to-override-RUST_TARGET.patch} |  0
+ ...n-ensure-proper-shabang-on-python-scripts.patch | 47 ----------------------
+ package/suricata/suricata.hash                     |  2 +-
+ package/suricata/suricata.mk                       |  5 +--
+ 5 files changed, 4 insertions(+), 53 deletions(-)
 
-> ---
->  package/librsvg/librsvg.hash | 4 ++--
->  package/librsvg/librsvg.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-> index c8da3354f5..4eab8cdfba 100644
-> --- a/package/librsvg/librsvg.hash
-> +++ b/package/librsvg/librsvg.hash
-> @@ -1,5 +1,5 @@
-> -# From https://download.gnome.org/sources/librsvg/2.50/librsvg-2.50.7.sha256sum
-> -sha256  fffb61b08cd5282aaae147a02b305166a7426fad22a8b9427708f0f2fc426ebc  librsvg-2.50.7.tar.xz
-> +# From https://download.gnome.org/sources/librsvg/2.50/librsvg-2.50.9.sha256sum
-> +sha256  518905fffa879b6c7f3db1aae961cf31333e0eadc7b4cdd4f531707868c54b53  librsvg-2.50.9.tar.xz
->  
->  # Locally computed
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-> index df6559a858..81a6667817 100644
-> --- a/package/librsvg/librsvg.mk
-> +++ b/package/librsvg/librsvg.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  LIBRSVG_VERSION_MAJOR = 2.50
-> -LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).7
-> +LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).9
->  LIBRSVG_SITE = https://download.gnome.org/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
->  LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
->  LIBRSVG_INSTALL_STAGING = YES
-> -- 
-> 2.40.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ecb8609ee9..0c7fae9409 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1355,8 +1355,7 @@ package/statserial/0001-ncurses-link.patch Upstream
+ package/stunnel/S50stunnel Indent Shellcheck Variables
+ package/sudo/0001-configure.ac-fix-openssl-static-build.patch Upstream
+ package/supervisor/S99supervisord Variables
+-package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch Upstream
+-package/suricata/0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch Upstream
++package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch Upstream
+ package/suricata/S99suricata Shellcheck
+ package/swupdate/swupdate.sh Shellcheck
+ package/sylpheed/0001-harden-link-checker-before-accepting-click.patch Upstream
+diff --git a/package/suricata/0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch b/package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+similarity index 100%
+rename from package/suricata/0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+rename to package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+diff --git a/package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch b/package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch
+deleted file mode 100644
+index 424b30d317..0000000000
+--- a/package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 44fe2328b715db25134ee095526d2fa47e6cd834 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Wed, 1 Jan 2020 15:25:57 +0100
+-Subject: [PATCH] python: ensure proper shabang on python scripts
+-
+-When instlling python scripts, distutils would use the python used to
+-run setup.py as shabang for the scripts it installs.
+-
+-However, when cross-compiling, this is most often not correct.
+-
+-Instead, using '/usr/bin/env python' is guaranteed to find the proper
+-python in the PATH, so we need to instruct setyup.py to use that as the
+-executable.
+-
+-[yann.morin.1998@free.fr:
+-  - author did not provide their SoB, but it's simple enough to
+-    not require it for once
+-  - provide proper commit log
+-]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-[Fabrice: update for 6.0.0]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- python/Makefile.am | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/python/Makefile.am b/python/Makefile.am
+-index 59d195f29..a41604f72 100644
+---- a/python/Makefile.am
+-+++ b/python/Makefile.am
+-@@ -6,11 +6,11 @@ EXTRA_DIST =	setup.py \
+- if HAVE_PYTHON_DISTUTILS
+- all-local:
+- 	cd $(srcdir) && \
+--		$(HAVE_PYTHON) setup.py build --build-base "$(abs_builddir)"
+-+		$(HAVE_PYTHON) setup.py build -e "/usr/bin/env python" --build-base "$(abs_builddir)"
+- 
+- install-exec-local:
+- 	cd $(srcdir) && \
+--		$(HAVE_PYTHON) setup.py build --build-base "$(abs_builddir)" \
+-+		$(HAVE_PYTHON) setup.py build -e "/usr/bin/env python" --build-base "$(abs_builddir)" \
+- 		install --prefix $(DESTDIR)$(prefix)
+- 
+- uninstall-local:
+--- 
+-2.20.1
+-
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index 38ab5e9cd3..49341984a2 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  00173634fa76aee636e38a90b1c02616c903e42173107d47b4114960b5fbe839  suricata-6.0.6.tar.gz
++sha256  cfa93de900d0fd8ba67c79fddec58fb7afb8f6c45b0773040035a15407b796ce  suricata-6.0.14.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 72b72cc94d..2aa5a0c5ed 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
+ 
+-SURICATA_VERSION = 6.0.6
++SURICATA_VERSION = 6.0.14
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
+ SURICATA_CPE_ID_VENDOR = oisf
+-# 0001-python-ensure-proper-shabang-on-python-scripts.patch
+-# 0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
++# 0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+ SURICATA_AUTORECONF = YES
+ 
+ SURICATA_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
