@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65EC6CE7B11
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C823CE7B11
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:29:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1727A42C42;
-	Thu, 28 Sep 2023 09:29:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1727A42C42
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B57E42C37;
+	Thu, 28 Sep 2023 09:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B57E42C37
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LO4DlUFnjVqX; Thu, 28 Sep 2023 09:29:14 +0000 (UTC)
+	with ESMTP id f3qZcWEAYDWg; Thu, 28 Sep 2023 09:29:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B048042C45;
-	Thu, 28 Sep 2023 09:29:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B048042C45
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BCEB91BF995
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:28:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3750142C4F;
+	Thu, 28 Sep 2023 09:29:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3750142C4F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 80FE11BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:28:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 94F4242C34
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:28:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94F4242C34
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B4DD6113D
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:28:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B4DD6113D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yAmJs3q9pR8N for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l_A6i_p9azVH for <buildroot@lists.busybox.net>;
  Thu, 28 Sep 2023 09:28:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 637FF42C32
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CD8C60FF5
  for <buildroot@buildroot.org>; Thu, 28 Sep 2023 09:28:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 637FF42C32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CD8C60FF5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F18C82A2E; Thu, 28 Sep 2023 09:28:44 +0000 (UTC)
+ id 6B89382A39; Thu, 28 Sep 2023 09:28:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Sep 2023 11:20:04 +0200
+Date: Thu, 28 Sep 2023 11:25:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28a6c126460b2494395efadc2001e25092ac3b23
-X-Git-Newrev: 0876080307ea6a2077492957ccda8bd56628b934
+X-Git-Oldrev: d821de0e4632a8016b4eaf8019bf885fb56f3579
+X-Git-Newrev: caa0b804a833b387a4c028cee664f6338afece8b
 X-Patchwork-Hint: ignore
-Message-Id: <20230928092844.4F18C82A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.8.7
+Message-Id: <20230928092844.6B89382A39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minizip: bump to version 4.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0876080307ea6a2077492957ccda8bd56628b934
+commit: https://git.buildroot.net/buildroot/commit/?id=caa0b804a833b387a4c028cee664f6338afece8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.8
+https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.9
+https://github.com/zlib-ng/minizip-ng/releases/tag/3.0.10
+https://github.com/zlib-ng/minizip-ng/releases/tag/4.0.0
+https://github.com/zlib-ng/minizip-ng/releases/tag/4.0.1
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/minizip/minizip.hash | 2 +-
+ package/minizip/minizip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index ccc3c2c205..933208fce0 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.6.tar.gz.sha256sum
--sha256  552d895fcaf66c7cd2b50f5abe63b7884b30fed254115be7bfb9236807355088  tor-0.4.8.6.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.7.tar.gz.sha256sum
-+sha256  b20d2b9c74db28a00c07f090ee5b0241b2b684f3afdecccc6b8008931c557491  tor-0.4.8.7.tar.gz
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index 55fc176dbd..5e00881ce3 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 8e31ca749b..1b29fd336e 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+-sha256  39981a0db1bb6da504909bce63d7493286c5e50825c056564544c990d15c55cf  minizip-3.0.7.tar.gz
++sha256  63e47a2b4dbac0da501f43f4da74f118dfb3ef0dee0ffbbe89428271002260f8  minizip-4.0.1.tar.gz
+ sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index c74c0df8d1..d3e539d0e9 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.8.6
-+TOR_VERSION = 0.4.8.7
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-MINIZIP_VERSION = 3.0.7
++MINIZIP_VERSION = 4.0.1
+ MINIZIP_SITE = $(call github,zlib-ng,minizip-ng,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = host-pkgconf
+ MINIZIP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
