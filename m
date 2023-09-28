@@ -4,49 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79E3CE82CBF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Sep 2023 18:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F61CE7B10
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05AB142887;
-	Wed, 27 Sep 2023 18:50:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05AB142887
+	by smtp4.osuosl.org (Postfix) with ESMTP id C895441BDE;
+	Thu, 28 Sep 2023 09:30:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C895441BDE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YUcqpWLpnBCU; Wed, 27 Sep 2023 18:50:08 +0000 (UTC)
+	with ESMTP id BBB9WaCFbTw0; Thu, 28 Sep 2023 09:30:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2DE542403;
-	Wed, 27 Sep 2023 18:50:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2DE542403
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 29DC91BF300
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 18:50:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6349E42255;
+	Thu, 28 Sep 2023 09:30:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6349E42255
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 196E61BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 035AB80F6C
- for <buildroot@lists.busybox.net>; Wed, 27 Sep 2023 18:50:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 035AB80F6C
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2B9942C3E
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:29:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2B9942C3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R6Hy3o6B4l7l for <buildroot@lists.busybox.net>;
- Wed, 27 Sep 2023 18:50:04 +0000 (UTC)
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3749480F53
- for <buildroot@uclibc.org>; Wed, 27 Sep 2023 18:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3749480F53
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qlZbl-0001ZY-NO
- for buildroot@uclibc.org; Wed, 27 Sep 2023 20:50:01 +0200
-X-Injected-Via-Gmane: http://gmane.org/
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LLwV4eg2CCLG for <buildroot@lists.busybox.net>;
+ Thu, 28 Sep 2023 09:29:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EEF242C3F
+ for <buildroot@uclibc.org>; Thu, 28 Sep 2023 09:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EEF242C3F
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 8C1D4817A9; Thu, 28 Sep 2023 09:29:40 +0000 (UTC)
+From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Wed, 27 Sep 2023 20:46:04 +0200
-Message-ID: <pan$2ccf3$99904eb8$a924dfe9$3170dc1f@ID-313208.user.individual.net>
-References: <20230927184310.888176-1-bernd@kuhls.net>
- <20230927184310.888176-2-bernd__45621.6490407073$1695840222$gmane$org@kuhls.net>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
-Subject: Re: [Buildroot] [PATCH 2/2] package/alsa-utils: Fix musl build
+Date: Thu, 28 Sep 2023 09:29:39 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2023.08.1
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: davorin.ucakar@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-15808-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 15808] New: connman is not supported on musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,15 +78,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Wed, 27 Sep 2023 20:43:10 +0200 schrieb Bernd Kuhls:
+https://bugs.busybox.net/show_bug.cgi?id=15808
 
-> Fixes:
-> http://autobuild.buildroot.net/results/bce/
-bce46fd8aab9ef4918228e8cfc5f8b5abe71e859/
+            Bug ID: 15808
+           Summary: connman is not supported on musl
+           Product: buildroot
+           Version: 2023.08.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: davorin.ucakar@gmail.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-Addendum: The build error was introduced when bumping alsa-utils to 1.2.10 
-with buildroot commit f7ae22240bac0300961fa60c7d684b6584d7a631
+Connman is not supported on musl libc because `res_ninit` is missing. Alpine[1]
+& OE/Yocto[2] have patches for this:
 
+[1] https://git.alpinelinux.org/aports/tree/community/connman/libresolv.patch
+[2]
+https://git.yoctoproject.org/poky/tree/meta/recipes-connectivity/connman/connman/0002-resolve-musl-does-not-implement-res_ninit.patch
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
