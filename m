@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F39E732D0
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 20:12:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B467E743C0
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 20:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9643B610E0;
-	Thu, 28 Sep 2023 20:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9643B610E0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B7EC61054;
+	Thu, 28 Sep 2023 20:38:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B7EC61054
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P2rL8ceIOeAL; Thu, 28 Sep 2023 20:12:21 +0000 (UTC)
+	with ESMTP id thYULNI0iXzQ; Thu, 28 Sep 2023 20:38:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7C0060FC9;
-	Thu, 28 Sep 2023 20:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7C0060FC9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8EE3D1BF30C
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 20:12:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 666D260B44;
+	Thu, 28 Sep 2023 20:38:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 666D260B44
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C7B341BF287
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 20:38:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6963F82B94
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 20:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6963F82B94
+ by smtp2.osuosl.org (Postfix) with ESMTP id A310C409E3
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 20:38:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A310C409E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VcovNYbFx38n for <buildroot@lists.busybox.net>;
- Thu, 28 Sep 2023 20:12:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aJ5PFsQo42o6 for <buildroot@lists.busybox.net>;
+ Thu, 28 Sep 2023 20:38:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6952B82ADD
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 20:12:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6952B82ADD
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9AE2404EC
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 20:38:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9AE2404EC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5296482AEA; Thu, 28 Sep 2023 20:12:15 +0000 (UTC)
+ id D65F282B33; Thu, 28 Sep 2023 20:38:47 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 28 Sep 2023 22:05:26 +0200
+Date: Thu, 28 Sep 2023 22:32:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bf284bcfbaa7f031713afcc4c4e33d54724b6f57
-X-Git-Newrev: d574e2a4f440903a0e32de6deb8275b1f385da2e
+X-Git-Oldrev: d574e2a4f440903a0e32de6deb8275b1f385da2e
+X-Git-Newrev: 9677f3a897c9c0ac125954b9a2d5d14a812bcaf4
 X-Patchwork-Hint: ignore
-Message-Id: <20230928201215.5296482AEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: fix parallel build further
+Message-Id: <20230928203847.D65F282B33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/onevpl: disable tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,68 +57,42 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0783914287792993365=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0783914287792993365==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=d574e2a4f440903a0e32de6deb8275b1f385da2e
+commit: https://git.buildroot.net/buildroot/commit/?id=9677f3a897c9c0ac125954b9a2d5d14a812bcaf4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 84c24ab1b5a7 (package/nodejs: fix parallel build) made use of
-BR2_JLEVEL to set the number of jobs nodejs should use instead of using
-the number of CPUs (+2).
+The tools are not needed at runtime, as they are mosty examples, or as
+testing tools, the latter having additional dependencies.
 
-However, BR2_JLEVEL can be set to 0 by the user, to let Buildroot detect
-the number of CPUs (+1), and stores it in PARALLEL_JOBS, and leaves
-BR2_JLEVEL untouched, so 0.
+Fixes:
+http://autobuild.buildroot.net/results/059/059a8581fb809488ad6fa3183874395ebf3f0926/
 
-Thus, we can end up spawning a build by passing -j0 to ninja, which it
-interprets as "no -limit yolo" and does not limit the number oj jobs it
-spawns, which usually ends up in an OOM somewhere...
+This package is not part of any older buildroot release, no backport
+necessary.
 
-Fix this by using PARALLEL_JOBS.
-
-Reported-by: Cédric & Co
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/nodejs/nodejs.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/onevpl/onevpl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 4e70bd71a3..b8e57e567d 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -47,7 +47,7 @@ HOST_NODEJS_MAKE_OPTS = \
- 	LDFLAGS.host="$(HOST_LDFLAGS)" \
- 	NO_LOAD=cctest.target.mk \
- 	PATH=$(@D)/bin:$(BR_PATH) \
--	JOBS=$(BR2_JLEVEL)
-+	JOBS=$(PARALLEL_JOBS)
+diff --git a/package/onevpl/onevpl.mk b/package/onevpl/onevpl.mk
+index 2033f755c0..601e121a55 100644
+--- a/package/onevpl/onevpl.mk
++++ b/package/onevpl/onevpl.mk
+@@ -12,6 +12,7 @@ ONEVPL_INSTALL_STAGING = YES
+ ONEVPL_DEPENDENCIES = host-pkgconf
  
- NODEJS_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
-@@ -55,7 +55,7 @@ NODEJS_MAKE_OPTS = \
- 	PATH=$(@D)/bin:$(BR_PATH) \
- 	LDFLAGS="$(NODEJS_LDFLAGS)" \
- 	LD="$(TARGET_CXX)" \
--	JOBS=$(BR2_JLEVEL)
-+	JOBS=$(PARALLEL_JOBS)
+ ONEVPL_CONF_OPTS = \
++	-DBUILD_TOOLS=OFF \
+ 	-DINSTALL_EXAMPLE_CODE=OFF
  
- # nodejs's build system uses python which can be a symlink to an unsupported
- # python version (e.g. python 3.10 with nodejs 14.18.1). We work around this by
-
---===============0783914287792993365==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0783914287792993365==--
