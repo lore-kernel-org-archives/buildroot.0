@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6C8BE732FD
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 17:25:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7383E732FD
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 17:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F4114192F;
-	Thu, 28 Sep 2023 17:25:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F4114192F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8259542221;
+	Thu, 28 Sep 2023 17:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8259542221
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id czGesnmgEaBZ; Thu, 28 Sep 2023 17:25:11 +0000 (UTC)
+	with ESMTP id RRrx04oW3EGO; Thu, 28 Sep 2023 17:26:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 661F941C01;
-	Thu, 28 Sep 2023 17:25:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 661F941C01
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B13951BF255
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 17:25:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92F6C42222;
+	Thu, 28 Sep 2023 17:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92F6C42222
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 577AF1BF255
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 17:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CA5B61387
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 17:25:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CA5B61387
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32341827D9
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 17:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32341827D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eSCIF0HkJ_87 for <buildroot@lists.busybox.net>;
- Thu, 28 Sep 2023 17:25:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BaKMrOVR7U-b for <buildroot@lists.busybox.net>;
+ Thu, 28 Sep 2023 17:26:09 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A7A5D615AF
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 17:25:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7A5D615AF
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD7DA82393
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 17:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD7DA82393
 Received: from fli4l.lan.fli4l (p4fd6c587.dip0.t-ipconnect.de [79.214.197.135])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 89DEFA4C0C4D
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 19:25:03 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49838)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B9F0AA4C0AFB
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 19:26:06 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53364)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qlul4-0006QL-39
- for buildroot@buildroot.org; Thu, 28 Sep 2023 19:25:03 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qlum6-0006bZ-1f
+ for buildroot@buildroot.org; Thu, 28 Sep 2023 19:26:06 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 28 Sep 2023 19:25:02 +0200
-Message-Id: <20230928172502.62831-1-bernd@kuhls.net>
+Date: Thu, 28 Sep 2023 19:26:06 +0200
+Message-Id: <20230928172606.222711-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1695921903;
- bh=J+9l9ZNkStkafSkJed7SHBJdUjMOiOGLGxDZEnRvgnE=;
+ s=kas202306131828; t=1695921966;
+ bh=5oXR9k6ZGWnGl+qmmUO5lymXphpu5W+W5GzwsL/ukjE=;
  h=From:To:Subject:Date:From;
- b=ApAhZx9broL3x73n8S+x3w+zs1swScPKC2CtCuDHcGKN6Obe5rCL8JxBn4+auJ/Lr
- 0iN5kohF8fT3pMOe1rz7GPiDJftSTC+vnepkdC6n5PM2plh/2oDec7c17eXIDEvMOp
- WI3R1Aj5RhikBnwDhDqbn88cfru5qpgoYdAnxWw6PEV5n9oGW1LUehEiv11AmL9gYG
- bp4gaddwJqwpEQSEnzQGfZlzdUGIh0t+zVWExGlmQcSd5Ujv8BijPSMB85N+2004dg
- 48a3DSMk3yfwJ1LXME0mEchIIvtE81Qc4mrqbBzIfIRh0TwSQHPgRY+xnK14ac2ICF
- uprDpmSGXvQ8g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=fIEO+45+bRh3GYjek4rckJPRWHim5rcnGSM02PdekUPhb7NoClCEQ8WN1ViyHNKiR
+ YFIQLo9uDIyslY4pBa9vwC0IGz7dJ6lGN26pZ0FXBMYqxElZehBahGL6nAHVJ3TxWU
+ a4LGDo0lDx69mU3u/S/DbtN4QScNSx0qWQp+NlneQhtU52s5oJ80wxvc9mfODW0JkK
+ tX2d3SSgVUXdIfjTthwB0+sQSIlmyFYisfFD/jHOiwAgoNwmmC1uxNXA4rRjhSa9QO
+ Fd8ioRLdpNAyGrWaKNYPDQ/x3Pu5tZF4ojhW0G58RCMZGT1G3lMZJYlKCHBzhpTK84
+ BRuLmb4QfzA0g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=ApAhZx9b
-Subject: [Buildroot] [PATCH] package/sqlite: bump version to 3.43.1
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=fIEO+45+
+Subject: [Buildroot] [PATCH] package/php: bump version to 8.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,38 +79,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://sqlite.org/releaselog/3_43_1.html
+Changelog: https://www.php.net/ChangeLog-8.php#8.2.11
+Release notes: https://www.php.net/releases/8_2_11.php
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 1a7f47edcd..ffeb1ff89c 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  49008dbf3afc04d4edc8ecfc34e4ead196973034293c997adad2f63f01762ae1  sqlite-autoconf-3430000.tar.gz
-+sha256  39116c94e76630f22d54cd82c3cea308565f1715f716d1b2527f1c9c969ba4d9  sqlite-autoconf-3430100.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 5e676d5387..f69097f3b7 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/php/php.hash b/package/php/php.hash
+index b8ff7ccc5c..e5f94a5e05 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  561dc4acd5386e47f25be76f2c8df6ae854756469159248313bcf276e282fbb3  php-8.2.10.tar.xz
++sha256  29af82e4f7509831490552918aad502697453f0869a579ee1b80b08f9112c5b8  php-8.2.11.tar.xz
+ 
+ # License file
+ sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ede0980629..ee33000a6f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3.43.0
--SQLITE_TAR_VERSION = 3430000
-+SQLITE_VERSION = 3.43.1
-+SQLITE_TAR_VERSION = 3430100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2023
- SQLITE_LICENSE = Public domain
+-PHP_VERSION = 8.2.10
++PHP_VERSION = 8.2.11
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.39.2
 
