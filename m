@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21277CE7B10
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3465BCE7B10
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:24:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B665428C6;
-	Thu, 28 Sep 2023 09:24:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B665428C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0A2042519;
+	Thu, 28 Sep 2023 09:24:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0A2042519
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wx-q9PxhVYc9; Thu, 28 Sep 2023 09:24:24 +0000 (UTC)
+	with ESMTP id M9txCHnzHT1e; Thu, 28 Sep 2023 09:24:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 560D1428C7;
-	Thu, 28 Sep 2023 09:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 560D1428C7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DE2371BF2BD
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:24:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7870C428E5;
+	Thu, 28 Sep 2023 09:24:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7870C428E5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B96791BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B779D411A2
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:24:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B779D411A2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9FAA6428E8
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FAA6428E8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sEBh-4Q_OahJ for <buildroot@lists.busybox.net>;
- Thu, 28 Sep 2023 09:24:16 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB319400C5
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 09:24:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB319400C5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 103061BF212;
- Thu, 28 Sep 2023 09:24:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0uZb_hBEhIjL for <buildroot@lists.busybox.net>;
+ Thu, 28 Sep 2023 09:24:40 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7C1B842519
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 09:24:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C1B842519
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 212D44000E;
+ Thu, 28 Sep 2023 09:24:36 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qlnFh-005b5u-6f; Thu, 28 Sep 2023 11:24:09 +0200
+ id 1qlnG6-005b6R-5y; Thu, 28 Sep 2023 11:24:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230927200543.490971-1-fontaine.fabrice@gmail.com>
-Date: Thu, 28 Sep 2023 11:24:09 +0200
-In-Reply-To: <20230927200543.490971-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 27 Sep 2023 22:05:43 +0200")
-Message-ID: <87lecqy7k6.fsf@48ers.dk>
+References: <20230927200708.491826-1-fontaine.fabrice@gmail.com>
+Date: Thu, 28 Sep 2023 11:24:34 +0200
+In-Reply-To: <20230927200708.491826-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 27 Sep 2023 22:07:07 +0200")
+Message-ID: <87h6ney7jh.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/json-c: bump to version 0.17
+Subject: Re: [Buildroot] [PATCH 1/2] package/libhtp: bump to version 0.5.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,11 +70,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Disable building apps thanks to variable added by
- > https://github.com/json-c/json-c/commit/bef40a342e98d090afff35ef565b41b22ddaa9a7
-
- > https://github.com/json-c/json-c/blob/json-c-0.17-20230812/ChangeLog
-
+ > https://github.com/OISF/libhtp/blob/0.5.45/ChangeLog
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
