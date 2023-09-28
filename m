@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98C74CE7B10
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21277CE7B10
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA8D2421E1;
-	Thu, 28 Sep 2023 09:24:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA8D2421E1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B665428C6;
+	Thu, 28 Sep 2023 09:24:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B665428C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5AIZdAXaj9Xp; Thu, 28 Sep 2023 09:24:11 +0000 (UTC)
+	with ESMTP id Wx-q9PxhVYc9; Thu, 28 Sep 2023 09:24:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23D3042519;
-	Thu, 28 Sep 2023 09:24:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23D3042519
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E73C21BF2BD
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:24:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 560D1428C7;
+	Thu, 28 Sep 2023 09:24:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 560D1428C7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DE2371BF2BD
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:24:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B98D483A8B
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:24:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B98D483A8B
+ by smtp2.osuosl.org (Postfix) with ESMTP id B779D411A2
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:24:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B779D411A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Phn6LhCPj05r for <buildroot@lists.busybox.net>;
- Thu, 28 Sep 2023 09:24:06 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8247E83AA9
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 09:24:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8247E83AA9
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0819CFF81E;
- Thu, 28 Sep 2023 09:24:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sEBh-4Q_OahJ for <buildroot@lists.busybox.net>;
+ Thu, 28 Sep 2023 09:24:16 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AB319400C5
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 09:24:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB319400C5
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 103061BF212;
+ Thu, 28 Sep 2023 09:24:11 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qlnFW-005b5k-J9; Thu, 28 Sep 2023 11:23:58 +0200
+ id 1qlnFh-005b5u-6f; Thu, 28 Sep 2023 11:24:09 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230927191848.1217422-1-bernd@kuhls.net>
-Date: Thu, 28 Sep 2023 11:23:58 +0200
-In-Reply-To: <20230927191848.1217422-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Wed, 27 Sep 2023 21:18:48 +0200")
-Message-ID: <87pm22y7kh.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230927200543.490971-1-fontaine.fabrice@gmail.com>
+Date: Thu, 28 Sep 2023 11:24:09 +0200
+In-Reply-To: <20230927200543.490971-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 27 Sep 2023 22:05:43 +0200")
+Message-ID: <87lecqy7k6.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.7
+Subject: Re: [Buildroot] [PATCH 1/1] package/json-c: bump to version 0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,12 +68,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Release notes:
- > https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+ > Disable building apps thanks to variable added by
+ > https://github.com/json-c/json-c/commit/bef40a342e98d090afff35ef565b41b22ddaa9a7
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > https://github.com/json-c/json-c/blob/json-c-0.17-20230812/ChangeLog
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
