@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD793CE7B11
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:28:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCDEBCE7B10
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 09:29:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5487642C32;
-	Thu, 28 Sep 2023 09:28:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5487642C32
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71E1D42C34;
+	Thu, 28 Sep 2023 09:29:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71E1D42C34
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VsCTW__35-MY; Thu, 28 Sep 2023 09:28:48 +0000 (UTC)
+	with ESMTP id KSp-cX9AOSrI; Thu, 28 Sep 2023 09:29:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EA7442C33;
-	Thu, 28 Sep 2023 09:28:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EA7442C33
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB2941BF2BD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FDBF42C46;
+	Thu, 28 Sep 2023 09:29:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FDBF42C46
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AEF881BF990
  for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:28:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84FE840597
+ by smtp3.osuosl.org (Postfix) with ESMTP id 889AA61149
  for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 09:28:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84FE840597
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 889AA61149
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DpvLx0PgbGxx for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kl4yl1wpp9J1 for <buildroot@lists.busybox.net>;
  Thu, 28 Sep 2023 09:28:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 72B0B40449
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9322E6113D
  for <buildroot@buildroot.org>; Thu, 28 Sep 2023 09:28:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72B0B40449
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9322E6113D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60DC882A38; Thu, 28 Sep 2023 09:28:44 +0000 (UTC)
+ id 80C1382A2E; Thu, 28 Sep 2023 09:28:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Sep 2023 11:20:47 +0200
+Date: Thu, 28 Sep 2023 11:26:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 725580a26ecbd554567880e95b8533b2c9baa5f9
-X-Git-Newrev: d821de0e4632a8016b4eaf8019bf885fb56f3579
+X-Git-Oldrev: 54f6e1f81fd7c96d2ce68d48c10407e50778fc0c
+X-Git-Newrev: 799512e14935af57c6e685c45fa5e99b04274b4f
 X-Patchwork-Hint: ignore
-Message-Id: <20230928092844.60DC882A38@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libhtp: bump to version 0.5.45
+Message-Id: <20230928092844.80C1382A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libyang: security bump to version
+ 2.1.111
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d821de0e4632a8016b4eaf8019bf885fb56f3579
+commit: https://git.buildroot.net/buildroot/commit/?id=799512e14935af57c6e685c45fa5e99b04274b4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/OISF/libhtp/blob/0.5.45/ChangeLog
+- Fix CVE-2023-26916: libyang from v2.0.164 to v2.1.30 was discovered to
+  contain a NULL pointer dereference via the function lys_parse_mem at
+  lys_parse_mem.c.
+- Fix CVE-2023-26917: libyang from v2.0.164 to v2.1.30 was discovered to
+  contain a NULL pointer dereference via the function
+  lysp_stmt_validate_value at lys_parse_mem.c.
+
+https://github.com/CESNET/libyang/releases/tag/v2.1.55
+https://github.com/CESNET/libyang/releases/tag/v2.1.80
+https://github.com/CESNET/libyang/releases/tag/v2.1.111
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libhtp/libhtp.hash | 2 +-
- package/libhtp/libhtp.mk   | 2 +-
+ package/libyang/libyang.hash | 2 +-
+ package/libyang/libyang.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
-index 8759823e16..c016cb3439 100644
---- a/package/libhtp/libhtp.hash
-+++ b/package/libhtp/libhtp.hash
+diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
+index 26a28d6eed..3658b20e4e 100644
+--- a/package/libyang/libyang.hash
++++ b/package/libyang/libyang.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0afaff837c295c868db8c967b87b1b5e21c0386c15c3b5ead474799724c54ef8  libhtp-0.5.40.tar.gz
-+sha256  d4214f94522fa5a1ec1909dbb52831c534788d93bc6b2ca8252de9332b11b606  libhtp-0.5.45.tar.gz
- sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
-diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
-index bb8aa73b42..8a732d1d5c 100644
---- a/package/libhtp/libhtp.mk
-+++ b/package/libhtp/libhtp.mk
+ # Locally calculated
+-sha256  761cfd959342b147f6a43a84c931c7fde68dd3a1ad540a0e5302288b204f073d  libyang-2.1.30.tar.gz
++sha256  3e52b922fcf371933ad7de1686ad83504e3358236e7817b5af795b0db52fa221  libyang-2.1.111.tar.gz
+ sha256  0b7ec43747d211a1e49c53588b0822062947bab6bdcc95238578beab34cba5bb  LICENSE
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index f160035c09..5533c7c68e 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHTP_VERSION = 0.5.40
-+LIBHTP_VERSION = 0.5.45
- LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
- LIBHTP_LICENSE = BSD-3-Clause
- LIBHTP_LICENSE_FILES = LICENSE
+-LIBYANG_VERSION = 2.1.30
++LIBYANG_VERSION = 2.1.111
+ LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
+ LIBYANG_LICENSE = BSD-3-Clause
+ LIBYANG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
