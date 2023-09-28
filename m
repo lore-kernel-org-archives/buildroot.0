@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7383E732FD
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 17:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80F00E732FE
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 17:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8259542221;
-	Thu, 28 Sep 2023 17:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8259542221
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2070242CB7;
+	Thu, 28 Sep 2023 17:29:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2070242CB7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RRrx04oW3EGO; Thu, 28 Sep 2023 17:26:12 +0000 (UTC)
+	with ESMTP id equkZ0QZM5uS; Thu, 28 Sep 2023 17:29:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92F6C42222;
-	Thu, 28 Sep 2023 17:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92F6C42222
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 577AF1BF255
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 17:26:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28AE042CB4;
+	Thu, 28 Sep 2023 17:29:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28AE042CB4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E45C1BF59C
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 17:29:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32341827D9
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 17:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32341827D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC21F42CB4
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 17:29:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC21F42CB4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BaKMrOVR7U-b for <buildroot@lists.busybox.net>;
- Thu, 28 Sep 2023 17:26:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XSCtyqwVIgmA for <buildroot@lists.busybox.net>;
+ Thu, 28 Sep 2023 17:29:07 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DD7DA82393
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 17:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD7DA82393
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8BB9042CB3
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 17:29:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BB9042CB3
 Received: from fli4l.lan.fli4l (p4fd6c587.dip0.t-ipconnect.de [79.214.197.135])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B9F0AA4C0AFB
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 19:26:06 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:53364)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 32A58A4C0C4D
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 19:29:05 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48252)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qlum6-0006bZ-1f
- for buildroot@buildroot.org; Thu, 28 Sep 2023 19:26:06 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qluoy-00077Q-38
+ for buildroot@buildroot.org; Thu, 28 Sep 2023 19:29:05 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 28 Sep 2023 19:26:06 +0200
-Message-Id: <20230928172606.222711-1-bernd@kuhls.net>
+Date: Thu, 28 Sep 2023 19:29:04 +0200
+Message-Id: <20230928172904.256249-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1695921966;
- bh=5oXR9k6ZGWnGl+qmmUO5lymXphpu5W+W5GzwsL/ukjE=;
+ s=kas202306131828; t=1695922145;
+ bh=mNBDVVH627wfbpaq8PWgzCAT6r/USNaBKqHVuBECQzo=;
  h=From:To:Subject:Date:From;
- b=fIEO+45+bRh3GYjek4rckJPRWHim5rcnGSM02PdekUPhb7NoClCEQ8WN1ViyHNKiR
- YFIQLo9uDIyslY4pBa9vwC0IGz7dJ6lGN26pZ0FXBMYqxElZehBahGL6nAHVJ3TxWU
- a4LGDo0lDx69mU3u/S/DbtN4QScNSx0qWQp+NlneQhtU52s5oJ80wxvc9mfODW0JkK
- tX2d3SSgVUXdIfjTthwB0+sQSIlmyFYisfFD/jHOiwAgoNwmmC1uxNXA4rRjhSa9QO
- Fd8ioRLdpNAyGrWaKNYPDQ/x3Pu5tZF4ojhW0G58RCMZGT1G3lMZJYlKCHBzhpTK84
- BRuLmb4QfzA0g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=qcDboPLXH2eWNhq+dg0pDwxK3IbqcwZlTKwjnDJz/+AcllBnti5CyZsk0XTGeaW34
+ qX4xRgJoIGO8T2Ryt8GlcvbBW557MvJkpFyrgwlVfRB++OWNMYoqh4yhCAGxGz87tF
+ Zs+7OqjxQWdbXWw/l1s1bB2jrYUOcRm/647ph2wpGNEJxRANhV/Y0Lob/mPrQI8MUL
+ TGU632hP6y6lXoUgTclBU4IWpzlpeNE+Ow7ZFMyu+xzFFP0SM9W+Z6j9BWJt/o+1Rw
+ KDvHmdLlzFiMeN7Dx9PD0QmMZ7DN6g84YXPhV/wM7fYkIsL04Uy13/ltYjedD/T25U
+ ytiKvV1AB5JmA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=fIEO+45+
-Subject: [Buildroot] [PATCH] package/php: bump version to 8.2.11
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=qcDboPLX
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.18.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,39 +79,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.2.11
-Release notes: https://www.php.net/releases/8_2_11.php
+Release notes: https://www.samba.org/samba/history/samba-4.18.7.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index b8ff7ccc5c..e5f94a5e05 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  561dc4acd5386e47f25be76f2c8df6ae854756469159248313bcf276e282fbb3  php-8.2.10.tar.xz
-+sha256  29af82e4f7509831490552918aad502697453f0869a579ee1b80b08f9112c5b8  php-8.2.11.tar.xz
- 
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ede0980629..ee33000a6f 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index fb278c1124..fea760c500 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.18.6.tar.asc
+-sha256  284c8a994ce989c87cd6808c390fcb9d00c36b21a0dc1a8a75474b67c9e715e7  samba-4.18.6.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.18.7.tar.asc
++sha256  61559a694f6a13cdc635c2d0e302519756f5f7bee9a61ceab3dc3ceff52160f6  samba-4.18.7.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 865498d0b9..4941503649 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.2.10
-+PHP_VERSION = 8.2.11
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-SAMBA4_VERSION = 4.18.6
++SAMBA4_VERSION = 4.18.7
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.39.2
 
