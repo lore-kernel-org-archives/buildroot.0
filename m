@@ -1,50 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACD56E732C5
-	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 12:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C41E7E732F3
+	for <buildroot@archiver.kernel.org>; Thu, 28 Sep 2023 16:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64BDF83367;
-	Thu, 28 Sep 2023 12:41:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64BDF83367
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QaMOFIkYGplp; Thu, 28 Sep 2023 12:41:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5692E83AAB;
-	Thu, 28 Sep 2023 12:41:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5692E83AAB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C9E91BF98E
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 12:41:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07C8B4060D
- for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 12:41:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07C8B4060D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 445CF41B8B;
+	Thu, 28 Sep 2023 16:51:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 445CF41B8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mth_hok6O_pl for <buildroot@lists.busybox.net>;
- Thu, 28 Sep 2023 12:41:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2EBF4033F
- for <buildroot@buildroot.org>; Thu, 28 Sep 2023 12:41:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2EBF4033F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D120682AD8; Thu, 28 Sep 2023 12:41:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zF_oB-00FuFS; Thu, 28 Sep 2023 16:51:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C81041B8F;
+	Thu, 28 Sep 2023 16:51:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C81041B8F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DC6541BF28E
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 16:51:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B630C41D96
+ for <buildroot@lists.busybox.net>; Thu, 28 Sep 2023 16:51:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B630C41D96
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z7td_yFeqDCe for <buildroot@lists.busybox.net>;
+ Thu, 28 Sep 2023 16:51:32 +0000 (UTC)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B44EF428E7
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 16:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B44EF428E7
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-3214cdb4b27so12230936f8f.1
+ for <buildroot@buildroot.org>; Thu, 28 Sep 2023 09:51:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695919889; x=1696524689;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=D+MRozciEGtWaVcseZCnc6AoOyKaIunLA33XNjRk5Bk=;
+ b=l1gDlthU2RCXKJm1anAQyRbuUn8VhpCzQQdziOD6j3OqQ+AZljH5+UQlCY8MrHL6O0
+ aWwG+sBwTGrBBaqkPSFKmzog63/rync40YCNymCjrdYoLb3r49lrtenT7CQK9m3Vf0BI
+ K+xrGapWOqsIQeLBIotpVwC4sJH6vVNY2bJbTiuG/wVCNH2tu7f2zlOIVHZDtAlwwVxa
+ Jj8IrvUkK7XHDhfQmG14IvSRWiG+3MccnzGRFS2jl8ugwiX5Z0KvYcok6ky3oRFvARxa
+ uaMxEh1YlW1h+n4Jzwwv6STFBc2JmQhzes/Wqy9SESxGt7Clj7Q3Ql3mGsQRcIcOVMkf
+ 4Q8g==
+X-Gm-Message-State: AOJu0YwE8mpX9BgXCU1syuXR1qhD6xDWDzcz5SoHKnpD5ic/18XkEQIc
+ dicfqgI4UykKyHgEtro1uTVksDZNQjM=
+X-Google-Smtp-Source: AGHT+IG4rsMPxy4iHGJyXP9AvJ/fXt8zKoA+IChrH4DiCs5//tY269MG9ka0hS6yCTo2cVIVMJb3PQ==
+X-Received: by 2002:a5d:6749:0:b0:317:c9ad:e96c with SMTP id
+ l9-20020a5d6749000000b00317c9ade96cmr1522315wrw.15.1695919889009; 
+ Thu, 28 Sep 2023 09:51:29 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ s13-20020a5d424d000000b0031f729d883asm19738497wrr.42.2023.09.28.09.51.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 28 Sep 2023 09:51:28 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Sep 2023 14:40:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d15bc66b9a809427b6bc1c7f5d6d3e661acb4b3f
-X-Git-Newrev: bf284bcfbaa7f031713afcc4c4e33d54724b6f57
-X-Patchwork-Hint: ignore
-Message-Id: <20230928124109.D120682AD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/putty: bump version to 0.79
+Date: Thu, 28 Sep 2023 18:51:26 +0200
+Message-Id: <20230928165126.336164-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1695919889; x=1696524689; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=D+MRozciEGtWaVcseZCnc6AoOyKaIunLA33XNjRk5Bk=;
+ b=WHrhxWu/DXoe0+bDPhxYKu+djV5HhW89Ql4dXWvf/+MCK1NWwl26V7bRqFMoLChxlX
+ jCf+mQJe7r0EYiKgAx+5GxGdpuRN4VbCZ5lsdqhHHgErA57UYP+ZrTRr8sh3/wh1+97e
+ GlwJCXykGb3+pf83mFDfaDqLepqay5oLHVgJfZUfoI5sQSnrJJ6Lht8X5mTsvL7uY0TE
+ ZPe7Xj6GjXrtKZxnz+guxmJlxs9kyz2gGGUAMpA+ukX2sRVgzTsEQ5pzJsElJ94xQJYP
+ Q/IMi5LitC5h2IfGBUVruU20g1nasHRVJJqPXV4WO0FcLCRm5NuatqPQuvETnKr7InSa
+ 1eJw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=WHrhxWu/
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/suricata: security bump to version 6.0.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,54 +94,147 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf284bcfbaa7f031713afcc4c4e33d54724b6f57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- Fix CVE-2023-35852: In Suricata before 6.0.13 (when there is an
+  adversary who controls an external source of rules), a dataset
+  filename, that comes from a rule, may trigger absolute or relative
+  directory traversal, and lead to write access to a local filesystem.
+  This is addressed in 6.0.13 by requiring allow-absolute-filenames and
+  allow-write (in the datasets rules configuration section) if an
+  installation requires traversal/writing in this situation.
+- Fix CVE-2023-35853: In Suricata before 6.0.13, an adversary who
+  controls an external source of Lua rules may be able to execute Lua
+  code. This is addressed in 6.0.13 by disabling Lua unless allow-rules
+  is true in the security lua configuration section.
+- Drop first patch (not needed since
+  https://github.com/OISF/suricata/commit/c8a3aa608eaae1acbaf33dba8a7c1a3cbfeb4285)
 
-Bug fixes mostly.
+https://github.com/OISF/suricata/blob/suricata-6.0.14/ChangeLog
 
-Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
-Signed-off-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/putty/putty.hash | 8 ++++----
- package/putty/putty.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Changes v1 -> v2 (after review of Peter Korsgaard):
+ - Do not wrongly delete second patch
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index c691a4f975..05c1a9eea6 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.78/{sha1,sha256,sha512}sums
--sha1  198f01db6bea708e480fb11dd23026eda7b3f49f  putty-0.78.tar.gz
--sha256  274e01bcac6bd155dfd647b2f18f791b4b17ff313753aa919fcae2e32d34614f  putty-0.78.tar.gz
--sha512  d7a3e2eabd5f1f65fc0f3f1ee0789c30fbe891b57f63ddeac0b92befcb6aecd4a748f04a21c76ee42d992deb77c2e1a0454a71cc620ef26fbf23af660bd84bb5  putty-0.78.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.79/{sha1,sha256,sha512}sums
-+sha1  c40c3ce9fd334c40e64c6b33ee7e1096dad52701  putty-0.79.tar.gz
-+sha256  428cc8666fbb938ebf4ac9276341980dcd70de395b33164496cf7995ef0ef0d8  putty-0.79.tar.gz
-+sha512  4f10f870b229c89e928921d3b350955ce1c1170a062e7943d9cc8dbd83389d82a9b844623541605f0db5a429d545c2d188bf8e384c6515466fae69b216120983  putty-0.79.tar.gz
+ .checkpackageignore                           |  3 +-
+ ...ow-the-user-to-override-RUST_TARGET.patch} |  0
+ ...ure-proper-shabang-on-python-scripts.patch | 47 -------------------
+ package/suricata/suricata.hash                |  2 +-
+ package/suricata/suricata.mk                  |  5 +-
+ 5 files changed, 4 insertions(+), 53 deletions(-)
+ rename package/suricata/{0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch => 0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch} (100%)
+ delete mode 100644 package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ecb8609ee9..0c7fae9409 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1355,8 +1355,7 @@ package/statserial/0001-ncurses-link.patch Upstream
+ package/stunnel/S50stunnel Indent Shellcheck Variables
+ package/sudo/0001-configure.ac-fix-openssl-static-build.patch Upstream
+ package/supervisor/S99supervisord Variables
+-package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch Upstream
+-package/suricata/0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch Upstream
++package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch Upstream
+ package/suricata/S99suricata Shellcheck
+ package/swupdate/swupdate.sh Shellcheck
+ package/sylpheed/0001-harden-link-checker-before-accepting-click.patch Upstream
+diff --git a/package/suricata/0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch b/package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+similarity index 100%
+rename from package/suricata/0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+rename to package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+diff --git a/package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch b/package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch
+deleted file mode 100644
+index 424b30d317..0000000000
+--- a/package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 44fe2328b715db25134ee095526d2fa47e6cd834 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Wed, 1 Jan 2020 15:25:57 +0100
+-Subject: [PATCH] python: ensure proper shabang on python scripts
+-
+-When instlling python scripts, distutils would use the python used to
+-run setup.py as shabang for the scripts it installs.
+-
+-However, when cross-compiling, this is most often not correct.
+-
+-Instead, using '/usr/bin/env python' is guaranteed to find the proper
+-python in the PATH, so we need to instruct setyup.py to use that as the
+-executable.
+-
+-[yann.morin.1998@free.fr:
+-  - author did not provide their SoB, but it's simple enough to
+-    not require it for once
+-  - provide proper commit log
+-]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-[Fabrice: update for 6.0.0]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- python/Makefile.am | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/python/Makefile.am b/python/Makefile.am
+-index 59d195f29..a41604f72 100644
+---- a/python/Makefile.am
+-+++ b/python/Makefile.am
+-@@ -6,11 +6,11 @@ EXTRA_DIST =	setup.py \
+- if HAVE_PYTHON_DISTUTILS
+- all-local:
+- 	cd $(srcdir) && \
+--		$(HAVE_PYTHON) setup.py build --build-base "$(abs_builddir)"
+-+		$(HAVE_PYTHON) setup.py build -e "/usr/bin/env python" --build-base "$(abs_builddir)"
+- 
+- install-exec-local:
+- 	cd $(srcdir) && \
+--		$(HAVE_PYTHON) setup.py build --build-base "$(abs_builddir)" \
+-+		$(HAVE_PYTHON) setup.py build -e "/usr/bin/env python" --build-base "$(abs_builddir)" \
+- 		install --prefix $(DESTDIR)$(prefix)
+- 
+- uninstall-local:
+--- 
+-2.20.1
+-
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index 38ab5e9cd3..49341984a2 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  00173634fa76aee636e38a90b1c02616c903e42173107d47b4114960b5fbe839  suricata-6.0.6.tar.gz
++sha256  cfa93de900d0fd8ba67c79fddec58fb7afb8f6c45b0773040035a15407b796ce  suricata-6.0.14.tar.gz
  
- # Locally calculated
- sha256  7b10c93f0d582e820a9e6f8c6abbcff54192e41e60644f4d09b96b14fdbc74f8  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index 82b7464bb4..d3c8d923f0 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,7 +4,7 @@
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 72b72cc94d..2aa5a0c5ed 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,13 +4,12 @@
  #
  ################################################################################
  
--PUTTY_VERSION = 0.78
-+PUTTY_VERSION = 0.79
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
+-SURICATA_VERSION = 6.0.6
++SURICATA_VERSION = 6.0.14
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
+ SURICATA_CPE_ID_VENDOR = oisf
+-# 0001-python-ensure-proper-shabang-on-python-scripts.patch
+-# 0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
++# 0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+ SURICATA_AUTORECONF = YES
+ 
+ SURICATA_DEPENDENCIES = \
+-- 
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
