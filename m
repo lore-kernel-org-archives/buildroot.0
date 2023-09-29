@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E88E728F3
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79C85CE7AF3
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E169680F62;
-	Fri, 29 Sep 2023 20:30:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E169680F62
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30C1880EB1;
+	Fri, 29 Sep 2023 20:30:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30C1880EB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bd5KbUgqC5oL; Fri, 29 Sep 2023 20:30:11 +0000 (UTC)
+	with ESMTP id I-9lY-b_x_sx; Fri, 29 Sep 2023 20:30:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF65081E5A;
-	Fri, 29 Sep 2023 20:30:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF65081E5A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 686F11BF990
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57B9B83CDF;
+	Fri, 29 Sep 2023 20:30:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57B9B83CDF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7EF321BF995
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:28:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B5DC60AD6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2820240150
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:28:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B5DC60AD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2820240150
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zbnGT65lALld for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NricVe9CWj7C for <buildroot@lists.busybox.net>;
  Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 519A860F26
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3BAA440BFB
  for <buildroot@buildroot.org>; Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 519A860F26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BAA440BFB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F3B383708; Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
+ id 3683C83705; Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 22:26:22 +0200
+Date: Fri, 29 Sep 2023 22:25:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c2e739991c529a3c11d0da4d8af01b0c03ad6a01
-X-Git-Newrev: afbef42170f997e2b5caea441116662f8d8578c4
+X-Git-Oldrev: e76d46db79c9ca932cd2c0c9b829d7ed36529649
+X-Git-Newrev: fd3288ed00be73f6cbc47b50fd2963889cfbbd7c
 X-Patchwork-Hint: ignore
-Message-Id: <20230929202828.4F3B383708@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-tiny-type: bump to version
- 2.004000
+Message-Id: <20230929202828.3683C83705@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-sub-install: bump to version
+ 0.929
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afbef42170f997e2b5caea441116662f8d8578c4
+commit: https://git.buildroot.net/buildroot/commit/?id=fd3288ed00be73f6cbc47b50fd2963889cfbbd7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LICENSE: update copyright dates & remove trailing spaces
-see  https://metacpan.org/release/TOBYINK/Type-Tiny-2.004000/diff/TOBYINK/Type-Tiny-1.012004#LICENSE
+LICENSE: remove trailing spaces
+see https://metacpan.org/release/RJBS/Sub-Install-0.929/diff/RJBS/Sub-Install-0.928#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-type-tiny/perl-type-tiny.hash | 8 ++++----
- package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
+ package/perl-sub-install/perl-sub-install.hash | 8 ++++----
+ package/perl-sub-install/perl-sub-install.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-index 9e5924abb8..bca5153a03 100644
---- a/package/perl-type-tiny/perl-type-tiny.hash
-+++ b/package/perl-type-tiny/perl-type-tiny.hash
+diff --git a/package/perl-sub-install/perl-sub-install.hash b/package/perl-sub-install/perl-sub-install.hash
+index bbac2a6377..834e589ee5 100644
+--- a/package/perl-sub-install/perl-sub-install.hash
++++ b/package/perl-sub-install/perl-sub-install.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  7a1688c4de07a0ed481a1811e5e82e63  Type-Tiny-1.012004.tar.gz
--sha256  75cd06b612d1830ae9f4b22298b506b3ff04518fa7453f487c248cd62a906a2b  Type-Tiny-1.012004.tar.gz
+-md5  e1ce4f9cb6b2f6b8778b036c31afa5ab  Sub-Install-0.928.tar.gz
+-sha256  61e567a7679588887b7b86d427bc476ea6d77fffe7e0d17d640f89007d98ef0f  Sub-Install-0.928.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  08bb43feabaab97dac7a3e59b5c77ff3  Type-Tiny-2.004000.tar.gz
-+sha256  697e7f775edfc85f4cf07792d04fd19b09c25285f98f5938e8efc4f74507a128  Type-Tiny-2.004000.tar.gz
++md5  81baf186c62c71f0935c3ccf1c5964c8  Sub-Install-0.929.tar.gz
++sha256  80b1e281d8cd3b2b31dac711f5c8a1657a87cd80bbe69af3924bcbeb4e5db077  Sub-Install-0.929.tar.gz
  
  # computed by scancpan
--sha256  34427749499bd6d6e5d206089bc03d76c647a1350f8b5f95ea628d2b6ff56e4c  LICENSE
-+sha256  1a2929dacaef239beca27a85f7f97b793628dfb22f07fdfb406cb6f3f0d22a6b  LICENSE
-diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-index 5efa78f161..31c84a2637 100644
---- a/package/perl-type-tiny/perl-type-tiny.mk
-+++ b/package/perl-type-tiny/perl-type-tiny.mk
+-sha256  ad5fb5c05003488f924c60ead21694d629055c9db2ee2d9dd0cf0041b9fedaca  LICENSE
++sha256  0150501749fc390e1c747739a7c1d7661607f8f1d9a9f2ad279664f12e46104e  LICENSE
+diff --git a/package/perl-sub-install/perl-sub-install.mk b/package/perl-sub-install/perl-sub-install.mk
+index 85d60caf52..5e02a37ebb 100644
+--- a/package/perl-sub-install/perl-sub-install.mk
++++ b/package/perl-sub-install/perl-sub-install.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TYPE_TINY_VERSION = 1.012004
-+PERL_TYPE_TINY_VERSION = 2.004000
- PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
- PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_SUB_INSTALL_VERSION = 0.928
++PERL_SUB_INSTALL_VERSION = 0.929
+ PERL_SUB_INSTALL_SOURCE = Sub-Install-$(PERL_SUB_INSTALL_VERSION).tar.gz
+ PERL_SUB_INSTALL_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
+ PERL_SUB_INSTALL_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
