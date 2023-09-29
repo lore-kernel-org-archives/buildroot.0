@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7073CE728F3
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15ADFCE7AF3
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 191A260E96;
-	Fri, 29 Sep 2023 20:30:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 191A260E96
+	by smtp3.osuosl.org (Postfix) with ESMTP id B35C160A91;
+	Fri, 29 Sep 2023 20:30:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B35C160A91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nj2faZDS3uvr; Fri, 29 Sep 2023 20:30:35 +0000 (UTC)
+	with ESMTP id Sz_kak76cesg; Fri, 29 Sep 2023 20:30:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75DC060AD6;
-	Fri, 29 Sep 2023 20:30:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75DC060AD6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FD7261637;
+	Fri, 29 Sep 2023 20:30:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FD7261637
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 820AD1BF990
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:28:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BC95B1BF990
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88F1840AA2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 978E240BFB
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:28:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88F1840AA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 978E240BFB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P6or0O9SuH45 for <buildroot@lists.busybox.net>;
+ with ESMTP id QAR6awDwuX3n for <buildroot@lists.busybox.net>;
  Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6E8B40A9B
- for <buildroot@buildroot.org>; Fri, 29 Sep 2023 20:28:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6E8B40A9B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B14240AB7
+ for <buildroot@buildroot.org>; Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B14240AB7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D303C83707; Fri, 29 Sep 2023 20:28:27 +0000 (UTC)
+ id 03B9C83705; Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 22:20:15 +0200
+Date: Fri, 29 Sep 2023 22:21:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 59db0884671a9d71142ddd47de5a4532aec8ef2e
-X-Git-Newrev: 33c500fbbd66a044e6c5da169d016c71a008d3a5
+X-Git-Oldrev: f1de978fc29fd3a4bfc23ae33fa286e19a5cdafe
+X-Git-Newrev: 03bdb1e1b2e25ee979a97f6ca3f918f107a03615
 X-Patchwork-Hint: ignore
-Message-Id: <20230929202827.D303C83707@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-exporter-tiny: bump to
- version 1.006002
+Message-Id: <20230929202828.03B9C83705@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-json-maybexs: bump to version
+ 1.004005
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33c500fbbd66a044e6c5da169d016c71a008d3a5
+commit: https://git.buildroot.net/buildroot/commit/?id=03bdb1e1b2e25ee979a97f6ca3f918f107a03615
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-move homepage to https://exportertiny.github.io
-
 LICENSE: update copyright dates & remove trailing spaces
-see https://metacpan.org/release/TOBYINK/Exporter-Tiny-1.006002/diff/TOBYINK/Exporter-Tiny-1.006000#LICENSE
+see https://metacpan.org/release/ETHER/JSON-MaybeXS-1.004005/diff/ETHER/JSON-MaybeXS-1.004003#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-exporter-tiny/Config.in               | 2 +-
- package/perl-exporter-tiny/perl-exporter-tiny.hash | 8 ++++----
- package/perl-exporter-tiny/perl-exporter-tiny.mk   | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/perl-json-maybexs/perl-json-maybexs.hash | 8 ++++----
+ package/perl-json-maybexs/perl-json-maybexs.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-exporter-tiny/Config.in b/package/perl-exporter-tiny/Config.in
-index 04839ac15c..c3ac89ba28 100644
---- a/package/perl-exporter-tiny/Config.in
-+++ b/package/perl-exporter-tiny/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_PERL_EXPORTER_TINY
- 	  an exporter with the features of Sub::Exporter but only core
- 	  dependencies.
- 
--	  https://metacpan.org/release/Exporter-Tiny
-+	  https://exportertiny.github.io/
-diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.hash b/package/perl-exporter-tiny/perl-exporter-tiny.hash
-index 0ecdf78482..0e16f92b1e 100644
---- a/package/perl-exporter-tiny/perl-exporter-tiny.hash
-+++ b/package/perl-exporter-tiny/perl-exporter-tiny.hash
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.hash b/package/perl-json-maybexs/perl-json-maybexs.hash
+index a53d4ec616..3b603310f6 100644
+--- a/package/perl-json-maybexs/perl-json-maybexs.hash
++++ b/package/perl-json-maybexs/perl-json-maybexs.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  2d555e289eac6450052e8683c292cbf7  Exporter-Tiny-1.006000.tar.gz
--sha256  d95479ff085699d6422f7fc8306db085e34b626438deb82ec82d41df2295f400  Exporter-Tiny-1.006000.tar.gz
+-md5  e46181e34588428d317932744597a7ab  JSON-MaybeXS-1.004003.tar.gz
+-sha256  5bee3b17ff9dcffd6e99ab8cf7f35747650bfce1dc622e3ad10b85a194462fbf  JSON-MaybeXS-1.004003.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  0545ee8f4edcb9dc5a87b21ed25edd74  Exporter-Tiny-1.006002.tar.gz
-+sha256  6f295e2cbffb1dbc15bdb9dadc341671c1e0cd2bdf2d312b17526273c322638d  Exporter-Tiny-1.006002.tar.gz
++md5  bee9d0cba3f87e05e9613684e4ee2159  JSON-MaybeXS-1.004005.tar.gz
++sha256  f5b6bc19f579e66b7299f8748b8ac3e171936dc4e7fcb72a8a257a9bd482a331  JSON-MaybeXS-1.004005.tar.gz
  
  # computed by scancpan
--sha256  a4f85c6f4d6e8bdd37b7ab08013e3e3bee1fe8e910e20f8f54d5025ffe40f384  LICENSE
-+sha256  1a2929dacaef239beca27a85f7f97b793628dfb22f07fdfb406cb6f3f0d22a6b  LICENSE
-diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.mk b/package/perl-exporter-tiny/perl-exporter-tiny.mk
-index 489ee54e17..715070623e 100644
---- a/package/perl-exporter-tiny/perl-exporter-tiny.mk
-+++ b/package/perl-exporter-tiny/perl-exporter-tiny.mk
+-sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
++sha256  de7a14750e81d97e19e111df58a3b51e3f2c8ec2d2dd90f576f54243251972c6  LICENSE
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.mk b/package/perl-json-maybexs/perl-json-maybexs.mk
+index e6891f6808..13c9439ea6 100644
+--- a/package/perl-json-maybexs/perl-json-maybexs.mk
++++ b/package/perl-json-maybexs/perl-json-maybexs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_EXPORTER_TINY_VERSION = 1.006000
-+PERL_EXPORTER_TINY_VERSION = 1.006002
- PERL_EXPORTER_TINY_SOURCE = Exporter-Tiny-$(PERL_EXPORTER_TINY_VERSION).tar.gz
- PERL_EXPORTER_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_EXPORTER_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_JSON_MAYBEXS_VERSION = 1.004003
++PERL_JSON_MAYBEXS_VERSION = 1.004005
+ PERL_JSON_MAYBEXS_SOURCE = JSON-MaybeXS-$(PERL_JSON_MAYBEXS_VERSION).tar.gz
+ PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_JSON_MAYBEXS_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
