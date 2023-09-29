@@ -1,50 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D07B1E728F3
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B95AFE71D58
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 21:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85799615FF;
-	Fri, 29 Sep 2023 20:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85799615FF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 360AB4159D;
+	Fri, 29 Sep 2023 21:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 360AB4159D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6suhlnr6qmkt; Fri, 29 Sep 2023 20:53:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VigtpcwR3EDt; Fri, 29 Sep 2023 21:45:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5AE060EA6;
-	Fri, 29 Sep 2023 20:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5AE060EA6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A40A1BF990
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:53:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEA5B4150E;
+	Fri, 29 Sep 2023 21:45:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEA5B4150E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C0AB31BF397
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 21:45:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3437760EA6
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3437760EA6
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7ECF40A95
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 21:45:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7ECF40A95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8_gt5B383mNz for <buildroot@lists.busybox.net>;
- Fri, 29 Sep 2023 20:53:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62C7C60EAB
- for <buildroot@buildroot.org>; Fri, 29 Sep 2023 20:53:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62C7C60EAB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EF9283738; Fri, 29 Sep 2023 20:53:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mCN9kCzQrJuT for <buildroot@lists.busybox.net>;
+ Fri, 29 Sep 2023 21:45:06 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 29D1A40150
+ for <buildroot@buildroot.org>; Fri, 29 Sep 2023 21:45:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29D1A40150
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 89E4340007;
+ Fri, 29 Sep 2023 21:45:03 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qmLIE-008lra-RI; Fri, 29 Sep 2023 23:45:02 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 22:51:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0c15169f5ae57d88a77df34cc896044a37c9597b
-X-Git-Newrev: be87362f101b11cf765fa9c38501abd3b0b09795
-X-Patchwork-Hint: ignore
-Message-Id: <20230929205322.4EF9283738@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pipewire: bump version to 0.3.80
+Date: Fri, 29 Sep 2023 23:44:41 +0200
+Message-Id: <20230929214441.2090519-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH-2023.08.x] package/{glibc,
+ localedef}: security bump to 2.37-43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +60,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be87362f101b11cf765fa9c38501abd3b0b09795
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes the following security issues:
 
-Release notes:
-https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/NEWS
+CVE-2023-25139: When the printf family of functions is called with a
+format specifier that uses an <apostrophe> (enable grouping) and a
+minimum width specifier, the resulting output could be larger than
+reasonably expected by a caller that computed a tight bound on the
+buffer size.  The resulting larger than expected output could result
+in a buffer overflow in the printf family of functions.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+CVE-2023-4527: If the system is configured in no-aaaa mode via
+/etc/resolv.conf, getaddrinfo is called for the AF_UNSPEC address
+family, and a DNS response is received over TCP that is larger than
+2048 bytes, getaddrinfo may potentially disclose stack contents via
+the returned address data, or crash.
+
+CVE-2023-4806: When an NSS plugin only implements the
+_gethostbyname2_r and _getcanonname_r callbacks, getaddrinfo could use
+memory that was freed during buffer resizing, potentially causing a
+crash or read or write to arbitrary memory.
+
+CVE-2023-5156: The fix for CVE-2023-4806 introduced a memory leak when
+an application calls getaddrinfo for AF_INET6 with AI_CANONNAME,
+AI_ALL and AI_V4MAPPED flags set.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pipewire/pipewire.hash | 2 +-
- package/pipewire/pipewire.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/glibc/glibc.hash       | 2 +-
+ package/glibc/glibc.mk         | 2 +-
+ package/localedef/localedef.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
-index 88fd9c2fab..2f04931284 100644
---- a/package/pipewire/pipewire.hash
-+++ b/package/pipewire/pipewire.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  3027cadf9933adb03b1895069c79f4eb39f7f2873b962c674ee1fec316ec60e1  pipewire-0.3.77.tar.bz2
-+sha256  cf4b770fe4e2379527f63e01b52b50a37d529608f766ecb40fe57da4c087a507  pipewire-0.3.80.tar.bz2
- sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
- sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 994da081b7..f0b37a0e43 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 453aadae11..ab310498b8 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  0f8bfad0b853a0c6e1dd1c3254a30b58d4c7050870fe2b0da90ad40f4d450ce2  glibc-2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa.tar.gz
++sha256  7129dfadea29e8f20865186a7fdec3dc3e65d055a81dc8fc399189491bba493c  glibc-2.37-43-g94ef70136587c40a357f775677997c753b3de56c.tar.gz
  
--PIPEWIRE_VERSION = 0.3.77
-+PIPEWIRE_VERSION = 0.3.80
- PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
- PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
- PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 79e6c76cb4..666d9e4a8c 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa
++GLIBC_VERSION = 2.37-43-g94ef70136587c40a357f775677997c753b3de56c
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 6f8b170516..d368121a1a 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa
++LOCALEDEF_VERSION = 2.37-43-g94ef70136587c40a357f775677997c753b3de56c
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
