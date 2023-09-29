@@ -4,69 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F181E77343
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 22:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AA89E77345
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 22:27:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16B9242E1E;
-	Fri, 29 Sep 2023 22:22:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16B9242E1E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95B1642214;
+	Fri, 29 Sep 2023 22:27:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95B1642214
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kBF21xCP1Gsx; Fri, 29 Sep 2023 22:22:34 +0000 (UTC)
+	with ESMTP id 9okAWtUGHWoO; Fri, 29 Sep 2023 22:27:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4268A42E50;
-	Fri, 29 Sep 2023 22:22:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4268A42E50
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0F3AC1BF2CE
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:22:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D5FD42272;
+	Fri, 29 Sep 2023 22:27:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D5FD42272
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4D7361BF4D8
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:27:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5D4983D1B
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5D4983D1B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2343642272
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:27:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2343642272
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kr04TwQH1E01 for <buildroot@lists.busybox.net>;
- Fri, 29 Sep 2023 22:22:28 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A1FFE83D1A
- for <buildroot@buildroot.org>; Fri, 29 Sep 2023 22:22:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1FFE83D1A
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb04:4ad:b00:c206:30b2:dda3:cc72])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 838A119F553;
- Sat, 30 Sep 2023 00:22:16 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Sep 2023 00:22:16 +0200
-Date: Sat, 30 Sep 2023 00:22:16 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20230929222216.GA2661@scaer>
-References: <20230919204252.2272594-1-adam.duskett@amarulasolutions.com>
- <20230919204252.2272594-7-adam.duskett@amarulasolutions.com>
- <20230923083500.GA1469982@scaer> <20230926192336.GT1469982@scaer>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XTAQRQsLnZTJ for <buildroot@lists.busybox.net>;
+ Fri, 29 Sep 2023 22:27:30 +0000 (UTC)
+X-Greylist: delayed 55837 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 29 Sep 2023 22:27:29 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEC7242214
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CEC7242214
+ for <buildroot@buildroot.org>; Fri, 29 Sep 2023 22:27:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D847240005;
+ Fri, 29 Sep 2023 22:27:26 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qmLxF-009xKm-JK; Sat, 30 Sep 2023 00:27:25 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sat, 30 Sep 2023 00:27:24 +0200
+Message-Id: <20230929222724.2372985-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230926192336.GT1469982@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696026144;
- bh=aQM0cmq/hjIRKw+5OcbQi5NXPc64V6kLQ25aPAWKLoY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=rVwo9J9OKEqjxojVjsgQp2UQjFM5u5IllUb8XapA0wUWQh+gneYhmfAAyM/X84N9K
- zxxXnBHxiHA5VbsDZgy9o10KNTkD2+y2+X2HNYL4dfoCgvitDVptpLt0opUNUA+/Dn
- L/IN2HR6b7bjVojn9FfHerhxuIzimY4HXgLuu/Dp6RtZgiz8g7Gu5my5GonrsQ25e1
- LlT3BPPJ4PxCBLsJrys5b7lWHpNk8Qoq+ewipb8MvZXvXyEANsrjbGlmCGXAkkH3eD
- di7r3DjEd2RlkvfCGF8n8bVj05dg/hg6x7oM8R70HpJJmyOawKNB1Z5XxtUgKGa3ni
- 9pFXD6oziT67g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=rVwo9J9O
-Subject: Re: [Buildroot] [PATCH v9 7/7]
- support/testing/tests/package/test_flutter.py: new runtime test
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH-2023.02.x] package/{glibc,
+ localedef}: security bump to 2.36-117
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,44 +62,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Michael Trimarchi <michael@amarulasolutions.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adam, All
+Fixes the following security issues:
 
-On 2023-09-26 21:23 +0200, Yann E. MORIN spake thusly:
-> On 2023-09-23 10:35 +0200, Yann E. MORIN spake thusly:
-> > On 2023-09-19 14:42 -0600, Adam Duskett spake thusly:
-> > > This is a simple test that builds and runs the futter-gallery application and
-> > > checks if the service is active.
+CVE-2023-4527: If the system is configured in no-aaaa mode via
+/etc/resolv.conf, getaddrinfo is called for the AF_UNSPEC address
+family, and a DNS response is received over TCP that is larger than
+2048 bytes, getaddrinfo may potentially disclose stack contents via
+the returned address data, or crash.
 
-So, we've discussed this tonight, and we decided to just apply the
-series as I had reworked it, including the flutter-pi patch, that I've
-submitted upstream:
-    https://github.com/ardera/flutter-pi/pull/367
+CVE-2023-4806: When an NSS plugin only implements the
+_gethostbyname2_r and _getcanonname_r callbacks, getaddrinfo could use
+memory that was freed during buffer resizing, potentially causing a
+crash or read or write to arbitrary memory.
 
-It would still be nice if you could follow-up on that and check that it
-does not break in your use-case (or whether you have a better solution).
+CVE-2023-5156: The fix for CVE-2023-4806 introduced a memory leak when
+an application calls getaddrinfo for AF_INET6 with AI_CANONNAME,
+AI_ALL and AI_V4MAPPED flags set.
 
-Thank you a lot for working on this, we just now need more flutter-based
-applications! :-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/glibc.hash       | 2 +-
+ package/glibc/glibc.mk         | 2 +-
+ package/localedef/localedef.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 4ce4c6f6d1..1a66b66984 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  666482e657c319f7e139121121a0d97d303c65207b9f9730f42a3ee83c79f686  glibc-2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c.tar.gz
++sha256  a4351e60a33e84236c1866c39eeab321f419dfdc274411b7d2615c9382ace351  glibc-2.36-117-g32957eb6a86acdbeec9f38a60a7d5a0ff32db03d.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 354f035d33..42de53ffc5 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c
++GLIBC_VERSION = 2.36-117-g32957eb6a86acdbeec9f38a60a7d5a0ff32db03d
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 6699840854..e71424490b 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c
++LOCALEDEF_VERSION = 2.36-117-g32957eb6a86acdbeec9f38a60a7d5a0ff32db03d
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
