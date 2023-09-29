@@ -4,53 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4431E743EF
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 07:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0730EE743EF
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 07:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4FD9383BA7;
-	Fri, 29 Sep 2023 07:04:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FD9383BA7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84CD083C02;
+	Fri, 29 Sep 2023 07:13:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84CD083C02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gs73_fYT0Gd9; Fri, 29 Sep 2023 07:04:31 +0000 (UTC)
+	with ESMTP id k3tZBngTyXMb; Fri, 29 Sep 2023 07:13:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CEA883BEE;
-	Fri, 29 Sep 2023 07:04:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CEA883BEE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 57CA01BF842
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 07:04:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7AA783C05;
+	Fri, 29 Sep 2023 07:13:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7AA783C05
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D88181BF2BB
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 07:13:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31064414FA
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 07:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31064414FA
+ by smtp1.osuosl.org (Postfix) with ESMTP id B20C883C05
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 07:13:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B20C883C05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6ZAJyQD6ntpF for <buildroot@lists.busybox.net>;
- Fri, 29 Sep 2023 07:04:26 +0000 (UTC)
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8DCC540122
- for <buildroot@buildroot.org>; Fri, 29 Sep 2023 07:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DCC540122
-Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id E0E87CD414
- for <buildroot@buildroot.org>; Fri, 29 Sep 2023 06:56:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 852FE40004;
- Fri, 29 Sep 2023 06:56:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MWhU24wNxb8o for <buildroot@lists.busybox.net>;
+ Fri, 29 Sep 2023 07:13:45 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A0C3E83C02
+ for <buildroot@buildroot.org>; Fri, 29 Sep 2023 07:13:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0C3E83C02
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 15A05FF811;
+ Fri, 29 Sep 2023 07:13:40 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@48ers.dk>)
- id 1qm7Qd-00671e-PW; Fri, 29 Sep 2023 08:56:47 +0200
+ (envelope-from <peter@korsgaard.com>)
+ id 1qm7gy-0067fs-CC; Fri, 29 Sep 2023 09:13:40 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 08:56:46 +0200
-Message-Id: <20230929065647.1456926-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+References: <20230705164616.671351-1-peter@korsgaard.com>
+ <20230705164616.671351-2-peter@korsgaard.com>
+Date: Fri, 29 Sep 2023 09:13:40 +0200
+In-Reply-To: <20230705164616.671351-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 5 Jul 2023 18:46:15 +0200")
+Message-ID: <87bkdljvtn.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/libfastjson: security bump to version
- 0.99.9.1
+Subject: Re: [Buildroot] [PATCH 2/3] board/raspberrypi/post-image.sh:
+ generate genimage config from template if not present
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,48 +64,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Martin Bark <martin@barkynet.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the equivalent of CVE-2020-12762, which was a json-c vulnerability:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-https://github.com/advisories/GHSA-3797-gmjf-45gm
+ > The rpi genimage configurations are all identical, except for the boot
+ > partition files, which include:
 
-https://github.com/rsyslog/libfastjson/pull/166
+ > - Device tree files (*.dtb)
+ > - rpi-firmware files (rpi-firmware/*)
+ > - Kernel image (Image/zImage)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libfastjson/libfastjson.hash | 2 +-
- package/libfastjson/libfastjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > All of these are quite simple to figure out programatically based on the
+ > content of BINARIES_DIR, so extend post-image.sh to fall back to generating
+ > a genimage configuration based on genimage.cfg.in if a board specific one
+ > does not exist.
 
-diff --git a/package/libfastjson/libfastjson.hash b/package/libfastjson/libfastjson.hash
-index 218a738b37..f220c608df 100644
---- a/package/libfastjson/libfastjson.hash
-+++ b/package/libfastjson/libfastjson.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  881f954633aa76931e4c756ece0bda6fd8a673c6e66955a3db3b2bb9d6bbff72  libfastjson-0.99.9.tar.gz
-+sha256  67cde7e85fa372036d7694f3b32cfc666705ab19367920f555af9d1c183edfef  libfastjson-0.99.9.1.tar.gz
- sha256  b29370bbfa98816e1fca0901f18149d920736771bfd68b4ee0eb00c78b38d245  COPYING
-diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
-index 7ab978dc67..5ee33ba496 100644
---- a/package/libfastjson/libfastjson.mk
-+++ b/package/libfastjson/libfastjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFASTJSON_VERSION = 0.99.9
-+LIBFASTJSON_VERSION = 0.99.9.1
- LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,v$(LIBFASTJSON_VERSION))
- LIBFASTJSON_INSTALL_STAGING = YES
- LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.30.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
