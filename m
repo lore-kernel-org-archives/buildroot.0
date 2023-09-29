@@ -4,87 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3130E82CDE
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 22:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EDD9E77343
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 22:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2930142F76;
-	Fri, 29 Sep 2023 22:03:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2930142F76
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7D3542F30;
+	Fri, 29 Sep 2023 22:13:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7D3542F30
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rrj7NvXbCKYA; Fri, 29 Sep 2023 22:03:17 +0000 (UTC)
+	with ESMTP id ptMknkrQgyoO; Fri, 29 Sep 2023 22:13:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2019E42F83;
-	Fri, 29 Sep 2023 22:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2019E42F83
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5BBB01BF2BB
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:03:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C81042F6D;
+	Fri, 29 Sep 2023 22:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C81042F6D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B91971BF2CE
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:13:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 416FE830C2
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 416FE830C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92EF640A95
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:13:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92EF640A95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e0DX97SpQymN for <buildroot@lists.busybox.net>;
- Fri, 29 Sep 2023 22:02:59 +0000 (UTC)
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C1D5983CE6
- for <buildroot@busybox.net>; Fri, 29 Sep 2023 22:02:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1D5983CE6
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-9a645e54806so1923557966b.0
- for <buildroot@busybox.net>; Fri, 29 Sep 2023 15:02:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696024977; x=1696629777;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ZW2/ngH9jSmWItoetNNI4QvDdcK/I86CZxsPkM5WDFw=;
- b=KNb6tabrIyFCbpG9+MzeFrxQBKFp4WmNcuBvHz+vLcgAEyy7P5VUJPY1rDiDXAvx1k
- o0iP+BLnLMTQUWzfUlysXwVqOK3EFMPUaZXngTQd7MZx0on200LcirArmytfMdmCGHbi
- 5xH/Zr8Rm5sBlGkkVb5/Und/QTXaiTfK7Mfqk0dzMiM0hAIlw0zWr8GPasn/LJJIsZwL
- s1vZO5p5TtV4xywaEksT2T7fTD6dUXVgOGn9zwt82CaX8GdYuLBQN+SNO3FGH095KFDi
- R5wXe0L2C+x5fvP5HwqKA2OJgh0f1ucBq/ZsihVCDdxGWgWDkTVjRtFkXKymdAvyMhuR
- a5KQ==
-X-Gm-Message-State: AOJu0YzxIvuDrvGu9JToXsIruKE6XPvjYBIO5JhCvxmY0hK/eoCdTlw+
- K1SPJIqwXnUddD6NxKVUg+/D+lBiLp0=
-X-Google-Smtp-Source: AGHT+IHxawLWl63HKYVxTvdvePFLk+lytg9CZrThlRT+3JmyxbK8hMdZuhrUVu/8867ehsRcMUbaWg==
-X-Received: by 2002:a17:906:5393:b0:9ae:3fdd:4dd with SMTP id
- g19-20020a170906539300b009ae3fdd04ddmr4733296ejo.24.1696024976514; 
- Fri, 29 Sep 2023 15:02:56 -0700 (PDT)
-Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- p20-20020a1709060e9400b009ae587ce135sm12996857ejf.223.2023.09.29.15.02.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 Sep 2023 15:02:56 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat, 30 Sep 2023 00:02:48 +0200
-Message-Id: <20230929220248.3314845-2-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230929220248.3314845-1-francois.perrad@gadz.org>
-References: <20230929220248.3314845-1-francois.perrad@gadz.org>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696024977; x=1696629777; darn=busybox.net;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ZW2/ngH9jSmWItoetNNI4QvDdcK/I86CZxsPkM5WDFw=;
- b=g0z8UL0DRM+lpHh9uEQkLTAGCfQWfAARd+HraZD6Ad+VC8WF9F0ufAqXrV+HuhUqr2
- IJ0426oLrJAYxc1iJgz0baqRXmOsFeARWuDsFnSJEwf/3ehSTaN+2VuvTEC/brcVGi7n
- 4IkToEnk+WUpnUIl2kDnjcnB88TYM3TCVWve4aqBFf904hnriOQH44137nBEyxPpLA7V
- 0fcSMS4G4M/UtuWUv3SftWD3Px23TIKHxFPBM/VhJavv/hnwlqKB3k+p+Lf4u0x8WfG1
- NBrLgO2ey+tD7bcG03lKsGG0FbEzhHwcr4ej/KPdAejJe2jy782w0MLwQWcaW+giNyiN
- 8F0g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=g0z8UL0D
-Subject: [Buildroot] [PATCH 2/2] package/perl-net-dns: bump to version 1.40
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I-w2YnsBJ8jO for <buildroot@lists.busybox.net>;
+ Fri, 29 Sep 2023 22:13:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B8D8404A6
+ for <buildroot@buildroot.org>; Fri, 29 Sep 2023 22:13:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B8D8404A6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7957E837B6; Fri, 29 Sep 2023 22:13:10 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 30 Sep 2023 00:11:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 48730a1a9d882a7c56146bd2955e074aed790dcb
+X-Git-Newrev: fc8a67f169c1ece88badb971604e87a5b3edf3d3
+X-Patchwork-Hint: ignore
+Message-Id: <20230929221310.7957E837B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flutter-sdk-bin: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,46 +56,199 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+commit: https://git.buildroot.net/buildroot/commit/?id=fc8a67f169c1ece88badb971604e87a5b3edf3d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+flutter-sdk-bin is a collection of host tools and plugins used to compile
+flutter applications.
+
+- As this is a collection of pre-compiled tools, append -bin to the end of the
+  package name.
+
+- We must set the HOME directory variable to the sdk directory or else the
+  flutter dart binaries place .dart, .dart-sdk, and .flutter in ~/.
+
+- set --clear-features, --no-analytics and --disable-telemetry first to disable
+  google tracking as soon as possible.
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[yann.morin.1998@free.fr:
+  - set FLUTTER_SDK_BIN_PUB_CACHE for other packages to make use of it
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/perl-net-dns/perl-net-dns.hash | 5 +++--
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in.host                       |  1 +
+ package/flutter-sdk-bin/Config.in.host       | 16 +++++
+ package/flutter-sdk-bin/flutter-sdk-bin.hash |  3 +
+ package/flutter-sdk-bin/flutter-sdk-bin.mk   | 98 ++++++++++++++++++++++++++++
+ 5 files changed, 119 insertions(+)
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index f6292d242..35f2e92ee 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
-@@ -1,5 +1,6 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--sha256  e99cdedf9f0d60dca16f613e488c5b7f123c2fb24b3346d580cfe7da40851ac6  Net-DNS-1.39.tar.gz
-+# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  a71e4cfe069e700fc52bacb6dbc0cdc5  Net-DNS-1.40.tar.gz
-+sha256  209bbd40de8d48c1bd7aade48da237fe0a499f89d279baa2e1a99bd5ec922ddc  Net-DNS-1.40.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 858e3c45a4..4606e6349e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -33,6 +33,7 @@ F:	package/vulkan-tools/
  
- # computed by scancpan
- sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index 2626c22d6..d49a00f5f 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ N:	Adam Duskett <adam.duskett@amarulasolutions.com>
+ F:	package/depot-tools/
++F:	package/flutter-sdk-bin/
  
--PERL_NET_DNS_VERSION = 1.39
-+PERL_NET_DNS_VERSION = 1.40
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
--- 
-2.39.2
-
+ N:	Adam Heinrich <adam@adamh.cz>
+ F:	package/jack1/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 377dbed7d3..387a28cff2 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -36,6 +36,7 @@ menu "Host utilities"
+ 	source "package/faketime/Config.in.host"
+ 	source "package/fatcat/Config.in.host"
+ 	source "package/firmware-utils/Config.in.host"
++	source "package/flutter-sdk-bin/Config.in.host"
+ 	source "package/fwup/Config.in.host"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+diff --git a/package/flutter-sdk-bin/Config.in.host b/package/flutter-sdk-bin/Config.in.host
+new file mode 100644
+index 0000000000..a48714ea7f
+--- /dev/null
++++ b/package/flutter-sdk-bin/Config.in.host
+@@ -0,0 +1,16 @@
++# All host rust packages should depend on this option
++config BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++	bool
++	default y if BR2_HOSTARCH = "x86_64"
++
++config BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
++	bool "host flutter-sdk-bin"
++	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++	help
++	  Flutter is Google's SDK for crafting beautiful, fast user
++	  experiences for mobile, web, and desktop from a single
++	  codebase. Flutter works with existing code, is used by
++	  developers and organizations around the world, and is
++	  free and open source.
++
++	  https://flutter.dev/
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.hash b/package/flutter-sdk-bin/flutter-sdk-bin.hash
+new file mode 100644
+index 0000000000..9daf6c58be
+--- /dev/null
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  d9bbfbfb6fe3c72a29c1040235126edd0cd461e4e18556335fd1cf217c2e1473  flutter_linux_3.13.4-stable.tar.xz
++sha256  a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20  LICENSE
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+new file mode 100644
+index 0000000000..dc6d68fdcb
+--- /dev/null
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+@@ -0,0 +1,98 @@
++################################################################################
++#
++# host-flutter-sdk-bin
++#
++################################################################################
++
++FLUTTER_SDK_BIN_VERSION = 3.13.4
++FLUTTER_SDK_BIN_SITE = https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
++FLUTTER_SDK_BIN_SOURCE = flutter_linux_$(FLUTTER_SDK_BIN_VERSION)-stable.tar.xz
++FLUTTER_SDK_BIN_LICENSE = BSD-3-Clause
++FLUTTER_SDK_BIN_LICENSE_FILES = LICENSE
++
++HOST_FLUTTER_SDK_BIN_SDK = $(HOST_DIR)/share/flutter/sdk
++HOST_FLUTTER_SDK_BIN_DART_SDK = $(HOST_FLUTTER_SDK_BIN_SDK)/bin/cache/dart-sdk
++HOST_FLUTTER_SDK_BIN_SDK_ENGINE = $(HOST_FLUTTER_SDK_BIN_SDK)/bin/cache/artifacts/engine
++
++# We must set the home directory to the sdk directory or else flutter will
++# place .dart, .dart-sdk, and .flutter in ~/.
++HOST_FLUTTER_SDK_BIN_ENV = \
++	HOME=$(HOST_FLUTTER_SDK_BIN_SDK) \
++	PATH=$(BR_PATH):$(HOST_FLUTTER_SDK_BIN_SDK):$(HOST_FLUTTER_SDK_BIN_SDK)/bin \
++	PUB_CACHE=$(FLUTTER_SDK_BIN_PUB_CACHE)
++
++# The following config options must be ran one at a time.
++HOST_FLUTTER_SDK_BIN_CONF_OPTS = \
++	--clear-features \
++	--no-analytics \
++	--disable-telemetry \
++	--enable-custom-devices \
++	--enable-linux-desktop \
++	--no-enable-android \
++	--no-enable-fuchsia \
++	--no-enable-ios \
++	--no-enable-macos-desktop \
++	--no-enable-windows-desktop
++
++define HOST_FLUTTER_SDK_BIN_CONFIGURE_CMDS
++	$(foreach i,$(HOST_FLUTTER_SDK_BIN_CONF_OPTS),
++		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter config $(i); \
++	)
++	$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/dart --disable-analytics
++endef
++
++# Remove the cache, as we will run precache after setting up flutter and dart
++# with the new config options.
++define HOST_FLUTTER_SDK_BIN_BUILD_CMDS
++	mkdir -p $(HOST_FLUTTER_SDK_BIN_SDK)
++	rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
++	cd $(@D) && \
++		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter precache;
++endef
++
++define HOST_FLUTTER_SDK_BIN_INSTALL_CMDS
++	cp -rpdT $(@D)/. $(HOST_FLUTTER_SDK_BIN_SDK)/
++endef
++
++ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
++HOST_FLUTTER_SDK_BIN_SDK_ROOT = \
++	$(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk
++HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = false
++else
++HOST_FLUTTER_SDK_BIN_SDK_ROOT = \
++	$(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk_product
++HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = true
++endif
++
++# The Order matters.Taken from:
++# https://github.com/meta-flutter/meta-flutter/blob/kirkstone/classes/flutter-app.inc
++HOST_FLUTTER_SDK_BIN_DART_ARGS = \
++	--verbose \
++	--disable-analytics \
++	--disable-dart-dev $(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/linux-x64/frontend_server.dart.snapshot \
++	--sdk-root $(HOST_FLUTTER_SDK_BIN_SDK_ROOT) \
++	--target=flutter \
++	--no-print-incremental-dependencies \
++	-Ddart.vm.profile=false \
++	-Ddart.vm.product=$(HOST_FLUTTER_SDK_BIN_SDK_PRODUCT) \
++	--aot \
++	--tfa \
++	--packages .dart_tool/package_config.json \
++	--output-dill .dart_tool/flutter_build/*/app.dill \
++	--depfile .dart_tool/flutter_build/*/kernel_snapshot.d
++
++# Helper wrapper to run flutter when building flutter applications.
++HOST_FLUTTER_SDK_BIN_FLUTTER = \
++	$(HOST_FLUTTER_SDK_BIN_ENV) \
++	$(HOST_FLUTTER_SDK_BIN_SDK)/bin/flutter
++
++# Helper wrapper to run dart when building flutter applications.
++HOST_FLUTTER_SDK_BIN_DART_BIN = \
++	$(HOST_FLUTTER_SDK_BIN_ENV) \
++	$(HOST_FLUTTER_SDK_BIN_DART_SDK)/bin/dart \
++	$(HOST_FLUTTER_SDK_BIN_DART_ARGS)
++
++$(eval $(host-generic-package))
++
++# For target packages to locate said pub-cache
++FLUTTER_SDK_BIN_PUB_CACHE = $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
