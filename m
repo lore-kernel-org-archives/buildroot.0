@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40693E728F3
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 836BACE7AF3
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52DA060AAC;
-	Fri, 29 Sep 2023 20:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52DA060AAC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 147B6615FF;
+	Fri, 29 Sep 2023 20:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 147B6615FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4C-4HlOxGICY; Fri, 29 Sep 2023 20:49:03 +0000 (UTC)
+	with ESMTP id 2HXAY7N_CTb2; Fri, 29 Sep 2023 20:49:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6655660AAD;
-	Fri, 29 Sep 2023 20:49:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6655660AAD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D239A1BF990
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:49:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A86260EA6;
+	Fri, 29 Sep 2023 20:49:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A86260EA6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B538E1BF990
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:49:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A3BB842F04
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:49:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3BB842F04
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C27960AC0
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:49:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C27960AC0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hpXGR_NumRn1 for <buildroot@lists.busybox.net>;
- Fri, 29 Sep 2023 20:48:59 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D1A342F03
- for <buildroot@buildroot.org>; Fri, 29 Sep 2023 20:48:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D1A342F03
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4919240005;
- Fri, 29 Sep 2023 20:48:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jyDyIfNdD_Mq for <buildroot@lists.busybox.net>;
+ Fri, 29 Sep 2023 20:49:40 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8637660AAD
+ for <buildroot@buildroot.org>; Fri, 29 Sep 2023 20:49:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8637660AAD
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FFB8E0003;
+ Fri, 29 Sep 2023 20:49:38 +0000 (UTC)
 Received: from peko by dell.home with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qmKPv-007Vxe-Lq; Fri, 29 Sep 2023 22:48:55 +0200
+ id 1qmKQb-007Vzs-VE; Fri, 29 Sep 2023 22:49:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230924204349.1543942-1-fontaine.fabrice@gmail.com>
-Date: Fri, 29 Sep 2023 22:48:55 +0200
-In-Reply-To: <20230924204349.1543942-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 24 Sep 2023 22:43:49 +0200")
-Message-ID: <877co8emdk.fsf@48ers.dk>
+References: <20230924212153.1624634-1-fontaine.fabrice@gmail.com>
+Date: Fri, 29 Sep 2023 22:49:37 +0200
+In-Reply-To: <20230924212153.1624634-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 24 Sep 2023 23:21:53 +0200")
+Message-ID: <8734ywemce.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/neon: drop patches
+Subject: Re: [Buildroot] [PATCH 1/1] package/freeipmi: bump to version 1.6.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,9 +70,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Patches (and so autoreconf) are not needed since bump to version 0.32.4
- > in commit f39ac8336e9cd933de50970a657e32a8d9601c67 and
- > https://github.com/notroj/neon/commit/9924d4d31525f8b61e37076b18004c603fd01761
+ > Drop patch (already in version) and so also drop autoreconf
+ > https://lists.gnu.org/archive/html/freeipmi-announce/2023-06/msg00000.html
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
