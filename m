@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AA89E77345
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 22:27:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19AC4E77343
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 22:29:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95B1642214;
-	Fri, 29 Sep 2023 22:27:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95B1642214
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD22F42214;
+	Fri, 29 Sep 2023 22:29:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD22F42214
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9okAWtUGHWoO; Fri, 29 Sep 2023 22:27:33 +0000 (UTC)
+	with ESMTP id GFjDWIU3OaZi; Fri, 29 Sep 2023 22:29:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D5FD42272;
-	Fri, 29 Sep 2023 22:27:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D5FD42272
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4D7361BF4D8
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:27:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DABE242272;
+	Fri, 29 Sep 2023 22:29:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DABE242272
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 42CC91BF4D8
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:29:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2343642272
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:27:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2343642272
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D159403E5
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:29:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D159403E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XTAQRQsLnZTJ for <buildroot@lists.busybox.net>;
- Fri, 29 Sep 2023 22:27:30 +0000 (UTC)
-X-Greylist: delayed 55837 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 29 Sep 2023 22:27:29 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEC7242214
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CEC7242214
- for <buildroot@buildroot.org>; Fri, 29 Sep 2023 22:27:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D847240005;
- Fri, 29 Sep 2023 22:27:26 +0000 (UTC)
-Received: from peko by dell.home with local (Exim 4.94.2)
- (envelope-from <peko@48ers.dk>)
- id 1qmLxF-009xKm-JK; Sat, 30 Sep 2023 00:27:25 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XHaMUVZ0r8we for <buildroot@lists.busybox.net>;
+ Fri, 29 Sep 2023 22:29:20 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56B1B40150
+ for <buildroot@buildroot.org>; Fri, 29 Sep 2023 22:29:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56B1B40150
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 434C9837B8; Fri, 29 Sep 2023 22:29:20 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 00:27:24 +0200
-Message-Id: <20230929222724.2372985-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH-2023.02.x] package/{glibc,
- localedef}: security bump to 2.36-117
+Date: Sat, 30 Sep 2023 00:27:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7f0af11cee31e95a1aace471803dc02b7cc66c8f
+X-Git-Newrev: 540e512f9f88c028e48a6c0936c7bf2c12c1c1f8
+X-Patchwork-Hint: ignore
+Message-Id: <20230929222920.434C9837B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] checkpagage: drop ignore pattern fr
+ removed pppd patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,77 +57,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+commit: https://git.buildroot.net/buildroot/commit/?id=540e512f9f88c028e48a6c0936c7bf2c12c1c1f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2023-4527: If the system is configured in no-aaaa mode via
-/etc/resolv.conf, getaddrinfo is called for the AF_UNSPEC address
-family, and a DNS response is received over TCP that is larger than
-2048 bytes, getaddrinfo may potentially disclose stack contents via
-the returned address data, or crash.
+Commit 0c15169f5ae5 (package/pppd: bump version to 2.5.0) forgot to drop
+the check-package exclusion when it dropped the patches.
 
-CVE-2023-4806: When an NSS plugin only implements the
-_gethostbyname2_r and _getcanonname_r callbacks, getaddrinfo could use
-memory that was freed during buffer resizing, potentially causing a
-crash or read or write to arbitrary memory.
-
-CVE-2023-5156: The fix for CVE-2023-4806 introduced a memory leak when
-an application calls getaddrinfo for AF_INET6 with AI_CANONNAME,
-AI_ALL and AI_V4MAPPED flags set.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/glibc/glibc.hash       | 2 +-
- package/glibc/glibc.mk         | 2 +-
- package/localedef/localedef.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ .checkpackageignore | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 4ce4c6f6d1..1a66b66984 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  666482e657c319f7e139121121a0d97d303c65207b9f9730f42a3ee83c79f686  glibc-2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c.tar.gz
-+sha256  a4351e60a33e84236c1866c39eeab321f419dfdc274411b7d2615c9382ace351  glibc-2.36-117-g32957eb6a86acdbeec9f38a60a7d5a0ff32db03d.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 354f035d33..42de53ffc5 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c
-+GLIBC_VERSION = 2.36-117-g32957eb6a86acdbeec9f38a60a7d5a0ff32db03d
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 6699840854..e71424490b 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.36-81-g4f4d7a13edfd2fdc57c9d76e1fd6d017fb47550c
-+LOCALEDEF_VERSION = 2.36-117-g32957eb6a86acdbeec9f38a60a7d5a0ff32db03d
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
--- 
-2.30.2
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 5d0fc1fa69..7ff14366a9 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1108,8 +1108,6 @@ package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.
+ package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch Upstream
+ package/postgresql/S50postgresql Variables
+ package/powertop/0001-dont-force-stack-smashing-protection.patch Upstream
+-package/pppd/0001-pppd-Fix-compilation-with-older-glibc-or-kernel-headers.patch Upstream
+-package/pppd/0002-pppd-eap-tls.c-fix-build-with-libressl.patch Upstream
+ package/pptp-linux/0001-susv3-legacy.patch Upstream
+ package/pptp-linux/0002-fix-parallel-build.patch Upstream
+ package/prboom/0001-libpng-1.4.patch Upstream
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
