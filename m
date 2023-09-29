@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 441B8CE7AF3
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:50:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6131DCE7AF3
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 030176163D;
-	Fri, 29 Sep 2023 20:50:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 030176163D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14E1361656;
+	Fri, 29 Sep 2023 20:50:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E1361656
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kLm9R0uXfRgF; Fri, 29 Sep 2023 20:50:01 +0000 (UTC)
+	with ESMTP id rohJbgRJLNhc; Fri, 29 Sep 2023 20:50:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16C4560E70;
-	Fri, 29 Sep 2023 20:50:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16C4560E70
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5649E1BF990
+	by smtp3.osuosl.org (Postfix) with ESMTP id C03BA6163C;
+	Fri, 29 Sep 2023 20:50:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C03BA6163C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 95B351BF990
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:49:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D95D40193
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E4C941EB7
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:49:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D95D40193
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E4C941EB7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OXx84lWcgGJ1 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 92-H-9QlsUgl for <buildroot@lists.busybox.net>;
  Fri, 29 Sep 2023 20:49:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B882040150
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0CD940338
  for <buildroot@buildroot.org>; Fri, 29 Sep 2023 20:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B882040150
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0CD940338
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6B5A83725; Fri, 29 Sep 2023 20:49:56 +0000 (UTC)
+ id 9BBEA83724; Fri, 29 Sep 2023 20:49:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 22:49:29 +0200
+Date: Fri, 29 Sep 2023 22:48:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e1b2cd5835d0a13bff763cfcf289919519c202ff
-X-Git-Newrev: 60e899bfa0249cddbfbeea8c2a2ecd4c165dddb5
+X-Git-Oldrev: afbef42170f997e2b5caea441116662f8d8578c4
+X-Git-Newrev: e1b2cd5835d0a13bff763cfcf289919519c202ff
 X-Patchwork-Hint: ignore
-Message-Id: <20230929204956.A6B5A83725@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freeipmi: bump to version 1.6.11
+Message-Id: <20230929204956.9BBEA83724@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/neon: drop patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,145 +62,164 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60e899bfa0249cddbfbeea8c2a2ecd4c165dddb5
+commit: https://git.buildroot.net/buildroot/commit/?id=e1b2cd5835d0a13bff763cfcf289919519c202ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version) and so also drop autoreconf
-
-https://lists.gnu.org/archive/html/freeipmi-announce/2023-06/msg00000.html
+Patches (and so autoreconf) are not needed since bump to version 0.32.4
+in commit f39ac8336e9cd933de50970a657e32a8d9601c67 and
+https://github.com/notroj/neon/commit/9924d4d31525f8b61e37076b18004c603fd01761
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                         |  1 -
- package/freeipmi/0001-add-disable-doc.patch | 72 -----------------------------
- package/freeipmi/freeipmi.hash              |  2 +-
- package/freeipmi/freeipmi.mk                |  4 +-
- 4 files changed, 2 insertions(+), 77 deletions(-)
+ .checkpackageignore                                |  2 -
+ ...vertise-TS_SSL-feature-with-OpenSSL-1.1.0.patch | 76 ----------------------
+ .../neon/0002-configure.ac-fix-autoreconf.patch    | 28 --------
+ package/neon/neon.mk                               |  2 -
+ 4 files changed, 108 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index dba780800f..5d0fc1fa69 100644
+index 0c7fae9409..dba780800f 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -439,7 +439,6 @@ package/flex/0003-build-make-it-possible-to-disable-the-build-of-the-d.patch Ups
- package/flite/0001-fix-alsa-static.patch Upstream
- package/fltk/0001-disable-tests.patch Upstream
- package/fluxbox/0001-fixes-bug-1138.patch Upstream
--package/freeipmi/0001-add-disable-doc.patch Upstream
- package/freeradius-client/0001-fix-for-nettle.patch Upstream
- package/freerdp/0001-Fix-variable-declaration-in-loop.patch Upstream
- package/freerdp/0002-Fixed-variable-declaration-in-loop.patch Upstream
-diff --git a/package/freeipmi/0001-add-disable-doc.patch b/package/freeipmi/0001-add-disable-doc.patch
+@@ -932,8 +932,6 @@ package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch Upstrea
+ package/ne10/0002-fix-build-without-C.patch Upstream
+ package/neard/S53neard Indent Shellcheck Variables
+ package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch Upstream
+-package/neon/0001-Revert-Advertise-TS_SSL-feature-with-OpenSSL-1.1.0.patch Upstream
+-package/neon/0002-configure.ac-fix-autoreconf.patch Upstream
+ package/netatalk/S50netatalk EmptyLastLine Indent Variables
+ package/netcat/0001-signed-bit-counting.patch Sob Upstream
+ package/netopeer2/S52netopeer2 Shellcheck Variables
+diff --git a/package/neon/0001-Revert-Advertise-TS_SSL-feature-with-OpenSSL-1.1.0.patch b/package/neon/0001-Revert-Advertise-TS_SSL-feature-with-OpenSSL-1.1.0.patch
 deleted file mode 100644
-index e410d2b52f..0000000000
---- a/package/freeipmi/0001-add-disable-doc.patch
+index 02088bfe02..0000000000
+--- a/package/neon/0001-Revert-Advertise-TS_SSL-feature-with-OpenSSL-1.1.0.patch
 +++ /dev/null
-@@ -1,72 +0,0 @@
--From 5324c88632c021a87251370b03067d857e9a9892 Mon Sep 17 00:00:00 2001
+@@ -1,76 +0,0 @@
+-From 8f9e110b391f065536780d19c2257ad7afd83522 Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 2 Nov 2022 19:02:42 +0100
--Subject: [PATCH] add --disable-doc
+-Date: Mon, 31 Jan 2022 23:42:13 +0100
+-Subject: [PATCH] Revert "Advertise TS_SSL feature with OpenSSL >= 1.1.0."
 -
--Allow the user to disable documentation through --disable-doc to avoid
--the following build failure without makeinfo:
+-This reverts commit 281c84fc3996c757efdf6e9b3f906d7a1fc08b1d.
 -
--/home/buildroot/autobuild/instance-0/output-1/build/freeipmi-1.6.10/config/missing: line 81: makeinfo: command not found
--WARNING: 'makeinfo' is missing on your system.
--         You should only need it if you modified a '.texi' file, or
--         any other file indirectly affecting the aspect of the manual.
--         You might want to install the Texinfo package:
--         <https://www.gnu.org/software/texinfo/>
--         The spurious makeinfo call might also be the consequence of
--         using a buggy 'make' (AIX, DU, IRIX), in which case you might
--         want to install GNU make:
--         <https://www.gnu.org/software/make/>
--Makefile:442: recipe for target 'freeipmi-faq.info' failed
+-Indeed openssl can be built on toolchains without threads support which
+-will result in the following build failure:
+-
+-ne_openssl.c:43:10: fatal error: pthread.h: No such file or directory
+-   43 | #include <pthread.h>
+-      |          ^~~~~~~~~~~
 -
 -Fixes:
-- - http://autobuild.buildroot.org/results/ac6ff1c746a354f885fc1674d10e7bff9e536134
+- - http://autobuild.buildroot.org/results/da995ef26001357e51a5907de9c6111b9ff89bdf
 -
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/chu11/freeipmi-mirror/pull/61]
+-[Upstream status: https://github.com/notroj/neon/pull/71]
 ----
-- Makefile.am  | 6 +++++-
-- configure.ac | 4 ++++
-- 2 files changed, 9 insertions(+), 1 deletion(-)
+- macros/neon.m4   | 15 ++++-----------
+- src/ne_openssl.c |  4 ++--
+- 2 files changed, 6 insertions(+), 13 deletions(-)
 -
--diff --git a/Makefile.am b/Makefile.am
--index cf757f634..d74952e30 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -3,7 +3,6 @@
-- ACLOCAL_AMFLAGS = -I config
+-diff --git a/macros/neon.m4 b/macros/neon.m4
+-index 129d4ac..5a5fb1b 100644
+---- a/macros/neon.m4
+-+++ b/macros/neon.m4
+-@@ -960,13 +960,9 @@ yes|openssl)
+-    AC_CHECK_HEADERS(openssl/ssl.h openssl/opensslv.h,,
+-    [AC_MSG_ERROR([OpenSSL headers not found, cannot enable SSL support])])
 - 
-- SUBDIRS = \
---	doc \
-- 	etc \
-- 	common \
-- 	libfreeipmi \
--@@ -33,6 +32,11 @@ SUBDIRS = \
-- 	rmcpping \
-- 	contrib
+-+   # Enable EGD support if using 0.9.7 or newer
+-    NE_CHECK_OPENSSLVER(ne_cv_lib_ssl097, 0.9.7, 0x00907000L)
+--   NE_CHECK_OPENSSLVER(ne_cv_lib_ssl110, 1.1.0, 0x10100000L)
+--   if test "$ne_cv_lib_ssl110" = "yes"; then
+--      NE_ENABLE_SUPPORT(SSL, [SSL support enabled, using OpenSSL $NE_SSL_VERSION])
+--      AC_DEFINE(HAVE_OPENSSL11, 1, [Enable OpenSSL 1.1 support])
+--   elif test "$ne_cv_lib_ssl097" = "yes"; then
+--      # Enable EGD support if using 0.9.7 or newer
+-+   if test "$ne_cv_lib_ssl097" = "yes"; then
+-       AC_MSG_NOTICE([OpenSSL >= 0.9.7; EGD support not needed in neon])
+-       NE_ENABLE_SUPPORT(SSL, [SSL support enabled, using OpenSSL $NE_SSL_VERSION])
+-       NE_CHECK_FUNCS(CRYPTO_set_idptr_callback SSL_SESSION_cmp)
+-@@ -1074,11 +1070,8 @@ CC/CFLAGS/LIBS must be used to make the POSIX library interfaces
+- available]),,
+- enable_threadsafe_ssl=no)
 - 
--+if ENABLE_DOC
--+SUBDIRS += \
--+	doc
--+endif
--+
-- PACKAGE = @PACKAGE@
-- VERSION = @VERSION@
+--case ${enable_threadsafe_ssl}X${ne_cv_lib_ssl110} in
+--*Xyes)
+--  NE_ENABLE_SUPPORT(TS_SSL, [OpenSSL is natively thread-safe])
+--  ;;
+--posixX*|yesX*)
+-+case $enable_threadsafe_ssl in
+-+posix|yes)
+-   ne_pthr_ok=yes
+-   AC_CHECK_FUNCS([pthread_mutex_init pthread_mutex_lock],,[ne_pthr_ok=no])
+-   if test "${ne_pthr_ok}" = "no"; then
+-diff --git a/src/ne_openssl.c b/src/ne_openssl.c
+-index 41a5c05..96c768e 100644
+---- a/src/ne_openssl.c
+-+++ b/src/ne_openssl.c
+-@@ -1194,8 +1194,8 @@ char *ne_vstrhash(unsigned int flags, va_list ap)
+-     return ne__strhash2hex(v, vlen, flags);
+- }
 - 
+--#if defined(NE_HAVE_TS_SSL) && OPENSSL_VERSION_NUMBER < 0x10100000L
+--/* From OpenSSL 1.1.0 locking callbacks are no longer needed. */
+-+#if defined(NE_HAVE_TS_SSL) && OPENSSL_VERSION_NUMBER < 0x10101000L
+-+/* For OpenSSL 1.1.1 locking callbacks are no longer need at all. */
+- #define WITH_OPENSSL_LOCKING (1)
+- 
+- /* Implementation of locking callbacks to make OpenSSL thread-safe.
+--- 
+-2.34.1
+-
+diff --git a/package/neon/0002-configure.ac-fix-autoreconf.patch b/package/neon/0002-configure.ac-fix-autoreconf.patch
+deleted file mode 100644
+index cd63d1ed41..0000000000
+--- a/package/neon/0002-configure.ac-fix-autoreconf.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From cf779609a5dd38f0a8fdb3c4539371f13fd3a24a Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 8 Feb 2022 18:34:25 +0100
+-Subject: [PATCH] configure.ac: fix autoreconf
+-
+-Add AC_CONFIG_MACRO_DIR(macros) to fix autoreconf
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: not sent yet]
+----
+- configure.ac | 2 ++
+- 1 file changed, 2 insertions(+)
+-
 -diff --git a/configure.ac b/configure.ac
--index 54fdf6367..7a94b958b 100644
+-index 37b14ec..122151d 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -341,6 +341,10 @@ else
-- fi
-- AC_SUBST(WITH_DEBUG)
+-@@ -1,5 +1,7 @@
+- AC_PREREQ(2.58) dnl 2.58 required for AS_HELP_STRING
 - 
--+AC_ARG_ENABLE(doc,
--+              AC_HELP_STRING([--disable-doc], [turn off documentation]))
--+AM_CONDITIONAL(ENABLE_DOC, test "$enable_doc" != "no")
+-+AC_CONFIG_MACRO_DIR(macros)
 -+
-- dnl Allow advanced developers to compile with raw dumping
-- AC_ARG_ENABLE(rawdumps,
--    AC_HELP_STRING([--enable-rawdumps], [output raw packet dumps when debugging]))
+- dnl Extract the version (sans LF) from .version, created at release-time.
+- m4_define(ne_version, [m4_translit(m4_include(.version), [
+- ])])
 --- 
--2.35.1
+-2.34.1
 -
-diff --git a/package/freeipmi/freeipmi.hash b/package/freeipmi/freeipmi.hash
-index bc22d2ff6b..ac24b7c64e 100644
---- a/package/freeipmi/freeipmi.hash
-+++ b/package/freeipmi/freeipmi.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  fce4a1e401b6189c103d2b1203261d0bfbf45985c6f3fa44c51b186b13fe7a7d  freeipmi-1.6.10.tar.gz
-+sha256  65fbd6910fc010457748695414f27c5755b4e8d75734221221f3858c6230a897  freeipmi-1.6.11.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.bmc-watchdog
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.ipmiconsole
-diff --git a/package/freeipmi/freeipmi.mk b/package/freeipmi/freeipmi.mk
-index 3e0ac0ffa9..ecff6f9925 100644
---- a/package/freeipmi/freeipmi.mk
-+++ b/package/freeipmi/freeipmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREEIPMI_VERSION = 1.6.10
-+FREEIPMI_VERSION = 1.6.11
- FREEIPMI_SITE = https://ftp.gnu.org/gnu/freeipmi
- FREEIPMI_LICENSE = GPL-3.0+, BSD-like (sunbmc)
- FREEIPMI_LICENSE_FILES = \
-@@ -12,8 +12,6 @@ FREEIPMI_LICENSE_FILES = \
- 	COPYING.ipmidetect COPYING.ipmi-fru COPYING.ipmimonitoring \
- 	COPYING.ipmiping COPYING.ipmipower COPYING.ipmiseld COPYING.pstdout \
- 	COPYING.sunbmc COPYING.ZRESEARCH
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index 1ce8f1ff16..96ee608780 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -10,8 +10,6 @@ NEON_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (manual and tests)
+ NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README.md
+ NEON_CPE_ID_VENDOR = webdav
+ NEON_INSTALL_STAGING = YES
 -# We're patching configure.ac
--FREEIPMI_AUTORECONF = YES
- FREEIPMI_DEPENDENCIES = host-pkgconf
- FREEIPMI_INSTALL_STAGING = YES
- # Disable checking for /dev/urandom and /dev/random through AC_CHECK_FILE
+-NEON_AUTORECONF = YES
+ NEON_CONF_OPTS = --without-gssapi --disable-rpath
+ NEON_CONFIG_SCRIPTS = neon-config
+ NEON_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
