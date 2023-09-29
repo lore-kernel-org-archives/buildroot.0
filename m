@@ -4,47 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F713E728D5
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 18:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 916A9E728CF
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 18:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3592983D12;
-	Fri, 29 Sep 2023 18:08:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3592983D12
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27D7F83D12;
+	Fri, 29 Sep 2023 18:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27D7F83D12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DT9KVxQdf0yG; Fri, 29 Sep 2023 18:08:39 +0000 (UTC)
+	with ESMTP id NDK9cioY7jvm; Fri, 29 Sep 2023 18:08:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B22083CFC;
-	Fri, 29 Sep 2023 18:08:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B22083CFC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7224083D35;
+	Fri, 29 Sep 2023 18:08:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7224083D35
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 688BA1BF83A
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 18:08:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DFDAE1BF83A
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 18:08:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4014142EA4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6ED7642EA1
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 18:08:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4014142EA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ED7642EA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HZhesFuQjIZe for <buildroot@lists.busybox.net>;
+ with ESMTP id DNc9wnfWC4Gh for <buildroot@lists.busybox.net>;
  Fri, 29 Sep 2023 18:08:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1583D42EA1
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 544ED42EA3
  for <buildroot@buildroot.org>; Fri, 29 Sep 2023 18:08:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1583D42EA1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE85E83566; Fri, 29 Sep 2023 18:08:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 544ED42EA3
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ED9E5FF803
+ for <buildroot@buildroot.org>; Fri, 29 Sep 2023 18:08:32 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1qmHui-006CZY-8n
+ for buildroot@buildroot.org; Fri, 29 Sep 2023 20:08:32 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 20:08:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e99999d7cb1dca94d1073fc1b2db672152cd728b
-X-Git-Newrev: cfe830c9ee5d66d3bdca15933ed8b59e3ec16e88
-X-Patchwork-Hint: ignore
-Message-Id: <20230929180835.EE85E83566@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfastjson: security bump to
+References: <20230929065647.1456926-1-peter@korsgaard.com>
+Date: Fri, 29 Sep 2023 20:08:32 +0200
+In-Reply-To: <20230929065647.1456926-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 29 Sep 2023 08:56:46 +0200")
+Message-ID: <87a5t4hmxr.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/libfastjson: security bump to
  version 0.99.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,49 +63,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfe830c9ee5d66d3bdca15933ed8b59e3ec16e88
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes the equivalent of CVE-2020-12762, which was a json-c vulnerability:
+ > Fixes the equivalent of CVE-2020-12762, which was a json-c vulnerability:
+ > https://github.com/advisories/GHSA-3797-gmjf-45gm
 
-https://github.com/advisories/GHSA-3797-gmjf-45gm
+ > https://github.com/rsyslog/libfastjson/pull/166
 
-https://github.com/rsyslog/libfastjson/pull/166
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libfastjson/libfastjson.hash | 2 +-
- package/libfastjson/libfastjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/libfastjson/libfastjson.hash b/package/libfastjson/libfastjson.hash
-index 218a738b37..f220c608df 100644
---- a/package/libfastjson/libfastjson.hash
-+++ b/package/libfastjson/libfastjson.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  881f954633aa76931e4c756ece0bda6fd8a673c6e66955a3db3b2bb9d6bbff72  libfastjson-0.99.9.tar.gz
-+sha256  67cde7e85fa372036d7694f3b32cfc666705ab19367920f555af9d1c183edfef  libfastjson-0.99.9.1.tar.gz
- sha256  b29370bbfa98816e1fca0901f18149d920736771bfd68b4ee0eb00c78b38d245  COPYING
-diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
-index 7ab978dc67..5ee33ba496 100644
---- a/package/libfastjson/libfastjson.mk
-+++ b/package/libfastjson/libfastjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFASTJSON_VERSION = 0.99.9
-+LIBFASTJSON_VERSION = 0.99.9.1
- LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,v$(LIBFASTJSON_VERSION))
- LIBFASTJSON_INSTALL_STAGING = YES
- LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
