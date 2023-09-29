@@ -4,51 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B95AFE71D58
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 21:45:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60463E82CDE
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 22:03:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 360AB4159D;
-	Fri, 29 Sep 2023 21:45:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 360AB4159D
+	by smtp4.osuosl.org (Postfix) with ESMTP id D002142EFE;
+	Fri, 29 Sep 2023 22:03:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D002142EFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VigtpcwR3EDt; Fri, 29 Sep 2023 21:45:10 +0000 (UTC)
+	with ESMTP id DX5CBbOY_rIt; Fri, 29 Sep 2023 22:03:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEA5B4150E;
-	Fri, 29 Sep 2023 21:45:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEA5B4150E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C0AB31BF397
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 21:45:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A948542F02;
+	Fri, 29 Sep 2023 22:03:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A948542F02
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 876241BF2BB
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7ECF40A95
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 21:45:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7ECF40A95
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5ED6083CE9
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 22:02:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ED6083CE9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mCN9kCzQrJuT for <buildroot@lists.busybox.net>;
- Fri, 29 Sep 2023 21:45:06 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 29D1A40150
- for <buildroot@buildroot.org>; Fri, 29 Sep 2023 21:45:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29D1A40150
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 89E4340007;
- Fri, 29 Sep 2023 21:45:03 +0000 (UTC)
-Received: from peko by dell.home with local (Exim 4.94.2)
- (envelope-from <peko@48ers.dk>)
- id 1qmLIE-008lra-RI; Fri, 29 Sep 2023 23:45:02 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 23:44:41 +0200
-Message-Id: <20230929214441.2090519-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tuh80SPoc6TX for <buildroot@lists.busybox.net>;
+ Fri, 29 Sep 2023 22:02:58 +0000 (UTC)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 02A5A830C2
+ for <buildroot@busybox.net>; Fri, 29 Sep 2023 22:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02A5A830C2
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-99c3c8adb27so2006334266b.1
+ for <buildroot@busybox.net>; Fri, 29 Sep 2023 15:02:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696024976; x=1696629776;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=RJzfbJWHS/gIan/neJxKGVSqvg1E3w07wTpA4WOuz3o=;
+ b=qilnelMmUHGzwFaoGtxfC7D8V6RiezvsWOHzxf9VAs7MoYHirS7zn2ae1b5XnsNiSm
+ KVEdvLWO00kQcqa4fjMjl5481B+FO8calhrN1q9y5pvKX7c+cWk9B8vZteDs06DDTw1u
+ Gg5X7YhTbAJkJ8DhcgxFZ5sN4ktwy4X2DSMkI8fHL+enGQjRPn0Sxszbqh0DeVp6Z5oj
+ Pn8nwBu1qq/2dAZd1hMsmqHzFrFlZyJ4sKdI+qCpOGWkmcTeYB97Cum1qLZcIr/B7Voz
+ lvLoojppEYlhZ3+YsODDRhTd+U1xfW2IqxsNIp7ibJdW/IsyJ4xGpKxIjxaDdvGv7+HD
+ RPfw==
+X-Gm-Message-State: AOJu0YyjvgKvVB1YBupwQ23MB6tOQO8tyVCjg4iV2MiY01fHHmEfD459
+ cyCTgl2wdsr/KskBxmyeQyV4wd1l8nE=
+X-Google-Smtp-Source: AGHT+IHHSNev/phmWKr2hYs+AwZ0rJBABWGxf6UaOn4HKX0KXVIZgA30RUSHmHA/TRQPhICl1v8tWw==
+X-Received: by 2002:a17:906:9c9:b0:9a5:c4c0:2d8a with SMTP id
+ r9-20020a17090609c900b009a5c4c02d8amr4519059eje.24.1696024975826; 
+ Fri, 29 Sep 2023 15:02:55 -0700 (PDT)
+Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ p20-20020a1709060e9400b009ae587ce135sm12996857ejf.223.2023.09.29.15.02.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 29 Sep 2023 15:02:55 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sat, 30 Sep 2023 00:02:47 +0200
+Message-Id: <20230929220248.3314845-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH-2023.08.x] package/{glibc,
- localedef}: security bump to 2.37-43
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1696024976; x=1696629776; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=RJzfbJWHS/gIan/neJxKGVSqvg1E3w07wTpA4WOuz3o=;
+ b=c6ors9rJeTcAlu89nwWsLNUlkhUEkfoLkVbmjCGdwe9pEyrmcrAVbnFk4jKXQISXPC
+ /SOWw/WCx+7LAVVldybtndthJLc5Ia8HwOypD0pdpSnTQA3Z15HcHsXo1RoGVcGWdIMI
+ 5qmuLGXShyGYxVuuQgoLxyBYpV/3zcxa84N1MrSlbM+HCqZOTnr7WDHMI2KAvYC0F0Rr
+ aHqMetOtRl9dgWNU2XE+p5UaVypOGgtafc41/lM80Lnc/gcKOASp9umhh6Yleo1Fr9dY
+ 3HvFT7G2VUAO7P+yfXTLJevFHlqgkP2HXNGZY4igjkXlynW8B2QJw5sZdGxT53h4vpMV
+ cGeQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=c6ors9rJ
+Subject: [Buildroot] [PATCH 1/2] package/perl-mozilla-ca: bump to version
+ 20230821
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,83 +94,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
-
-CVE-2023-25139: When the printf family of functions is called with a
-format specifier that uses an <apostrophe> (enable grouping) and a
-minimum width specifier, the resulting output could be larger than
-reasonably expected by a caller that computed a tight bound on the
-buffer size.  The resulting larger than expected output could result
-in a buffer overflow in the printf family of functions.
-
-CVE-2023-4527: If the system is configured in no-aaaa mode via
-/etc/resolv.conf, getaddrinfo is called for the AF_UNSPEC address
-family, and a DNS response is received over TCP that is larger than
-2048 bytes, getaddrinfo may potentially disclose stack contents via
-the returned address data, or crash.
-
-CVE-2023-4806: When an NSS plugin only implements the
-_gethostbyname2_r and _getcanonname_r callbacks, getaddrinfo could use
-memory that was freed during buffer resizing, potentially causing a
-crash or read or write to arbitrary memory.
-
-CVE-2023-5156: The fix for CVE-2023-4806 introduced a memory leak when
-an application calls getaddrinfo for AF_INET6 with AI_CANONNAME,
-AI_ALL and AI_V4MAPPED flags set.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/glibc/glibc.hash       | 2 +-
- package/glibc/glibc.mk         | 2 +-
- package/localedef/localedef.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-mozilla-ca/perl-mozilla-ca.hash | 6 +++---
+ package/perl-mozilla-ca/perl-mozilla-ca.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 453aadae11..ab310498b8 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  0f8bfad0b853a0c6e1dd1c3254a30b58d4c7050870fe2b0da90ad40f4d450ce2  glibc-2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa.tar.gz
-+sha256  7129dfadea29e8f20865186a7fdec3dc3e65d055a81dc8fc399189491bba493c  glibc-2.37-43-g94ef70136587c40a357f775677997c753b3de56c.tar.gz
+diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
+index 799a531fe..33465ca31 100644
+--- a/package/perl-mozilla-ca/perl-mozilla-ca.hash
++++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
+@@ -1,6 +1,6 @@
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  2f136d096352a418e546e4afb70e7aa9  Mozilla-CA-20221114.tar.gz
+-sha256  701bea67be670add5a102f9f8c879402b4983096b1cb0e20dd47d52d7a10666b  Mozilla-CA-20221114.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  a9b7b700e651cd74130edf7432f8657f  Mozilla-CA-20230821.tar.gz
++sha256  32e1d0045299004045b9c4d16c2daae453a216208873deea2440f71260a7cda1  Mozilla-CA-20230821.tar.gz
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 79e6c76cb4..666d9e4a8c 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa
-+GLIBC_VERSION = 2.37-43-g94ef70136587c40a357f775677997c753b3de56c
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 6f8b170516..d368121a1a 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.37-2-g9f8513dc64119a424b312db97cef5d87d376defa
-+LOCALEDEF_VERSION = 2.37-43-g94ef70136587c40a357f775677997c753b3de56c
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
+ # computed by scancpan
+ sha256  95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e  README
+diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
+index a124860b7..b122798a2 100644
+--- a/package/perl-mozilla-ca/perl-mozilla-ca.mk
++++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PERL_MOZILLA_CA_VERSION = 20221114
++PERL_MOZILLA_CA_VERSION = 20230821
+ PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
+-PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
++PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LW/LWP
+ PERL_MOZILLA_CA_LICENSE = MPL-2.0
+ PERL_MOZILLA_CA_LICENSE_FILES = README
+ PERL_MOZILLA_CA_DISTNAME = Mozilla-CA
 -- 
-2.30.2
+2.39.2
 
 _______________________________________________
 buildroot mailing list
