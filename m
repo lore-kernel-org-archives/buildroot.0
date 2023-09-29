@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68CEFE728F3
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9E88CE7AF3
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 20:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2445083D5F;
-	Fri, 29 Sep 2023 20:29:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2445083D5F
+	by smtp1.osuosl.org (Postfix) with ESMTP id A37D180FAA;
+	Fri, 29 Sep 2023 20:29:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A37D180FAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WBmzFycZU5Gr; Fri, 29 Sep 2023 20:29:34 +0000 (UTC)
+	with ESMTP id edJc6EJh8IGR; Fri, 29 Sep 2023 20:29:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A1F483D63;
-	Fri, 29 Sep 2023 20:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A1F483D63
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 452BF1BF990
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CE6F80EB2;
+	Fri, 29 Sep 2023 20:29:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CE6F80EB2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 581161BF995
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 16FBF81FD1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B68360A91
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 20:28:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16FBF81FD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B68360A91
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h5lqpXUyljqv for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7DVFuksnzk-2 for <buildroot@lists.busybox.net>;
  Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3FA3F834BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48A0660E96
  for <buildroot@buildroot.org>; Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FA3F834BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48A0660E96
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D2E483709; Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
+ id 4392383707; Fri, 29 Sep 2023 20:28:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 22:25:13 +0200
+Date: Fri, 29 Sep 2023 22:26:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3eb8d430ad771e0fce8751796ccd422c28b7495d
-X-Git-Newrev: e76d46db79c9ca932cd2c0c9b829d7ed36529649
+X-Git-Oldrev: fd3288ed00be73f6cbc47b50fd2963889cfbbd7c
+X-Git-Newrev: c2e739991c529a3c11d0da4d8af01b0c03ad6a01
 X-Patchwork-Hint: ignore
-Message-Id: <20230929202828.2D2E483709@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-plack: bump to version 1.0050
+Message-Id: <20230929202828.4392383707@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-sub-quote: bump to version
+ 2.006008
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e76d46db79c9ca932cd2c0c9b829d7ed36529649
+commit: https://git.buildroot.net/buildroot/commit/?id=c2e739991c529a3c11d0da4d8af01b0c03ad6a01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LICENSE: remove trailing spaces
-see https://metacpan.org/release/MIYAGAWA/Plack-1.0050/diff/MIYAGAWA/Plack-1.0048#LICENSE
+LICENSE: update copyright dates & remove trailing spaces
+see https://metacpan.org/release/HAARG/Sub-Quote-2.006008/diff/HAARG/Sub-Quote-2.006006#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-plack/perl-plack.hash | 8 ++++----
- package/perl-plack/perl-plack.mk   | 2 +-
+ package/perl-sub-quote/perl-sub-quote.hash | 8 ++++----
+ package/perl-sub-quote/perl-sub-quote.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-plack/perl-plack.hash b/package/perl-plack/perl-plack.hash
-index c763d2c173..84d65ec525 100644
---- a/package/perl-plack/perl-plack.hash
-+++ b/package/perl-plack/perl-plack.hash
+diff --git a/package/perl-sub-quote/perl-sub-quote.hash b/package/perl-sub-quote/perl-sub-quote.hash
+index 602ff92cec..8db560fd44 100644
+--- a/package/perl-sub-quote/perl-sub-quote.hash
++++ b/package/perl-sub-quote/perl-sub-quote.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  36282b473b4521219c44a9db437b650f  Plack-1.0048.tar.gz
--sha256  30f5f25e19b437859156a2526f61ca9ab708d50d5730c279189403aabfe542a6  Plack-1.0048.tar.gz
+-md5  1bb9caee697bcfa738f419d40505e506  Sub-Quote-2.006006.tar.gz
+-sha256  6e4e2af42388fa6d2609e0e82417de7cc6be47223f576592c656c73c7524d89d  Sub-Quote-2.006006.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  0856a900a981769e3d79f0a10ccc3e65  Plack-1.0050.tar.gz
-+sha256  d2651ade82ebbff7abe0a3a189fc932dadc4779186ce89468e56d0189eaa6ed4  Plack-1.0050.tar.gz
++md5  f19c60039ba87f69f7f9357fc0a03e07  Sub-Quote-2.006008.tar.gz
++sha256  94bebd500af55762e83ea2f2bc594d87af828072370c7110c60c238a800d15b2  Sub-Quote-2.006008.tar.gz
  
  # computed by scancpan
--sha256  fb67655b5d1adedef83aed2c79bf4f89c68d8595a7060815520173f663a3631d  LICENSE
-+sha256  8a0c0ad4682691b5bc138e553636adfc8bb38f8885c4c44fd421ec8cc69c9a8f  LICENSE
-diff --git a/package/perl-plack/perl-plack.mk b/package/perl-plack/perl-plack.mk
-index b95f204d23..c39c3d8fd6 100644
---- a/package/perl-plack/perl-plack.mk
-+++ b/package/perl-plack/perl-plack.mk
+-sha256  88f4a8719c584d756dcfeebc7f35643066354188bfb57c672fbafcd44e044e9c  LICENSE
++sha256  de7a14750e81d97e19e111df58a3b51e3f2c8ec2d2dd90f576f54243251972c6  LICENSE
+diff --git a/package/perl-sub-quote/perl-sub-quote.mk b/package/perl-sub-quote/perl-sub-quote.mk
+index a22da16922..3c2a25be51 100644
+--- a/package/perl-sub-quote/perl-sub-quote.mk
++++ b/package/perl-sub-quote/perl-sub-quote.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PLACK_VERSION = 1.0048
-+PERL_PLACK_VERSION = 1.0050
- PERL_PLACK_SOURCE = Plack-$(PERL_PLACK_VERSION).tar.gz
- PERL_PLACK_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
- PERL_PLACK_DEPENDENCIES = host-perl-file-sharedir-install
+-PERL_SUB_QUOTE_VERSION = 2.006006
++PERL_SUB_QUOTE_VERSION = 2.006008
+ PERL_SUB_QUOTE_SOURCE = Sub-Quote-$(PERL_SUB_QUOTE_VERSION).tar.gz
+ PERL_SUB_QUOTE_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+ PERL_SUB_QUOTE_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
