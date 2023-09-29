@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5776FE728CC
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 17:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09A94E728CC
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 17:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03046820C2;
-	Fri, 29 Sep 2023 17:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03046820C2
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9C1483CD7;
+	Fri, 29 Sep 2023 17:40:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9C1483CD7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xNUpaRTxa-3O; Fri, 29 Sep 2023 17:40:41 +0000 (UTC)
+	with ESMTP id 7N8HyGOrVmZj; Fri, 29 Sep 2023 17:40:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0DD083168;
-	Fri, 29 Sep 2023 17:40:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0DD083168
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 292631BF947
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1309E83C8B;
+	Fri, 29 Sep 2023 17:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1309E83C8B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A67001BF267
  for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 17:40:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C844260BF5
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 17:40:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C844260BF5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76990410B7
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 17:40:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76990410B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OW0RDSWmlrFG for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yf4OJdbwKoQv for <buildroot@lists.busybox.net>;
  Fri, 29 Sep 2023 17:40:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 099E760E91
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE1E2410A2
  for <buildroot@buildroot.org>; Fri, 29 Sep 2023 17:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 099E760E91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE1E2410A2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC3778354E; Fri, 29 Sep 2023 17:39:59 +0000 (UTC)
+ id DBD798354C; Fri, 29 Sep 2023 17:39:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Sep 2023 19:37:57 +0200
+Date: Fri, 29 Sep 2023 19:34:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c6bf26cfb2ab61675cbab146c43c21511d0d5c29
-X-Git-Newrev: e4038b6af4e7a6b47b01c4b71eacd999bf8300d7
+X-Git-Oldrev: 9eff64e8163b0cb039db8e817f2f97ee8ccfc1e5
+X-Git-Newrev: f64bdf834763e2f0fd86d0fde5cd034d5efa44de
 X-Patchwork-Hint: ignore
-Message-Id: <20230929173959.EC3778354E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/putty: fix legal info
+Message-Id: <20230929173959.DBD798354C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mtd: bump to version 2.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,31 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4038b6af4e7a6b47b01c4b71eacd999bf8300d7
+commit: https://git.buildroot.net/buildroot/commit/?id=f64bdf834763e2f0fd86d0fde5cd034d5efa44de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit bf284bcfbaa7f031713afcc4c4e33d54724b6f57 forgot to update hash of
-license file (year updated)
+https://lists.infradead.org/pipermail/linux-mtd/2023-August/100922.html
 
-Fixes:
- - http://autobuild.buildroot.org/results/900b3fe8d4bf029c6bca6ca63c6e093e42cc1072
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/putty/putty.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mtd/mtd.hash | 4 ++--
+ package/mtd/mtd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 05c1a9eea6..0ae2a86be8 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -4,4 +4,4 @@ sha256  428cc8666fbb938ebf4ac9276341980dcd70de395b33164496cf7995ef0ef0d8  putty-
- sha512  4f10f870b229c89e928921d3b350955ce1c1170a062e7943d9cc8dbd83389d82a9b844623541605f0db5a429d545c2d188bf8e384c6515466fae69b216120983  putty-0.79.tar.gz
+diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
+index a2133e3ce2..9926a34a80 100644
+--- a/package/mtd/mtd.hash
++++ b/package/mtd/mtd.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.5.tar.bz2.asc
+-sha256  386e27fd121699b6b729bc2e8e04dda987b31cca6b16e12fb6cc6dcf26449f46  mtd-utils-2.1.5.tar.bz2
++# https://infraroot.at/pub/mtd/mtd-utils-2.1.6.tar.bz2.asc
++sha256  c1d853bc4adf83bcabd2792fc95af33bdd8643c97e8f7b3f0180af36af76f0e5  mtd-utils-2.1.6.tar.bz2
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index db2b104586..998cc419b3 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Locally calculated
--sha256  7b10c93f0d582e820a9e6f8c6abbcff54192e41e60644f4d09b96b14fdbc74f8  LICENCE
-+sha256  7ede37f344ee03436c155a375ecb6cdb42a77105baa6e7804bf43260dc4a0c54  LICENCE
+-MTD_VERSION = 2.1.5
++MTD_VERSION = 2.1.6
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
+ MTD_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
