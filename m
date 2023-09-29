@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18247E728CD
-	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 17:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C2BBE728CA
+	for <buildroot@archiver.kernel.org>; Fri, 29 Sep 2023 17:27:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9220A83227;
-	Fri, 29 Sep 2023 17:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9220A83227
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10C7883227;
+	Fri, 29 Sep 2023 17:27:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10C7883227
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TqFsUbsRiy-7; Fri, 29 Sep 2023 17:27:43 +0000 (UTC)
+	with ESMTP id KdV4NzTptajR; Fri, 29 Sep 2023 17:27:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 983CD832EA;
-	Fri, 29 Sep 2023 17:27:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 983CD832EA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 031F683CDA;
+	Fri, 29 Sep 2023 17:27:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 031F683CDA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2C4741BF83B
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 17:27:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B558B1BF83B
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 17:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04DB1828EF
- for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 17:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04DB1828EF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F31883CAD
+ for <buildroot@lists.busybox.net>; Fri, 29 Sep 2023 17:27:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F31883CAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YuadDHXAazA8 for <buildroot@lists.busybox.net>;
- Fri, 29 Sep 2023 17:27:39 +0000 (UTC)
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8BEC582373
- for <buildroot@busybox.net>; Fri, 29 Sep 2023 17:27:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BEC582373
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-53636f98538so3339228a12.1
- for <buildroot@busybox.net>; Fri, 29 Sep 2023 10:27:39 -0700 (PDT)
+ with ESMTP id pS-RUOsvFagK for <buildroot@lists.busybox.net>;
+ Fri, 29 Sep 2023 17:27:47 +0000 (UTC)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BAC0583C7E
+ for <buildroot@busybox.net>; Fri, 29 Sep 2023 17:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAC0583C7E
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-530fa34ab80so2046090a12.0
+ for <buildroot@busybox.net>; Fri, 29 Sep 2023 10:27:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696008457; x=1696613257;
+ d=1e100.net; s=20230601; t=1696008465; x=1696613265;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Dl1WjFc4k1Vzq7hR+DUE7tqdtE1ZmCnmQhER6Oc9Vxo=;
- b=ahzKpGlwrnVyDsquK4EgFGfciZHPtQpO+TePOst1uS1AJHiO2CRUSlgQ3VwD/gPkgo
- AveZ88ot/AxETc++8FCoE+INoWClbAElfGNfTt86aEXmWYKdyJpOOicGle26o7ytQYi6
- SxUkGK+nKPucvOrjbFUhi7mOvh1EnR/FN+AcbHFuPZ4w4uOnPFNXz9TjWLK60r0xnskl
- uTcuX9TaZRvF6fxsMRquCAlxz7HYycpoP47Jjefm1Sw61tfx1yTw/olg2PCOjl+rLgJc
- sD5+Cns4IylPPdQri1CVV/F5H1xqfgGpWOF0ZI+wt2VRrbiosb4hD5NamGXHSOF7dwvT
- VoVQ==
-X-Gm-Message-State: AOJu0YxJS18s/LXayNIhd+97YGfpkiI+jo9uawjmLNCZfd55fNDGQ1BV
- U5x1E78wvmVgwbGPQP6+/20QqEVcnZo=
-X-Google-Smtp-Source: AGHT+IHrJPdmq9w1xDlbAXs5qpzS/1Ky4ES/DNWhR4V4ybt9DO2dWVxMjJKQS7O62xtvAuFC21LE6w==
-X-Received: by 2002:aa7:c602:0:b0:52b:d169:b37a with SMTP id
- h2-20020aa7c602000000b0052bd169b37amr4301794edq.28.1696008457190; 
- Fri, 29 Sep 2023 10:27:37 -0700 (PDT)
+ bh=d7RkLX1UJK8QBom7cFoDYSEHE2ffSbiRfK4zqmANpcs=;
+ b=EgjFDEfWZcsn+X+UiqPDuUk0SBDDyiZ/R2c5gC8Aq39bB8S7lFCeGDTxsDYpxsLARA
+ ++KxBy3c1uLRXcpp8/EFdIs4m+7AumYXl8LpFdXBJrqKOazq6NYMze6Vbpl2t1cUOgNK
+ tJGw94fVX9lRA+z27bTsbfHfRjBKdyBuy3uNYEHDP2eA07kKnS2AKDOxai1pLanN+TFY
+ bxJcRdXU8NZRHItAdtphewCcf1hkJaAsahNlu196YLF1mmh+LInLsX9TLLkm7GnhNi7w
+ N8w6PX/xlDVwJitrw4YeYZLvUcUDhFGAwSD9xxjMPwnlJ1arwpNK0+L3k8Jm536wYfRc
+ XtSQ==
+X-Gm-Message-State: AOJu0YzqS5XIVTcVLj/drJEwXwQPFYRJVI+NfTAf5mNxktN96jiUEjNd
+ Xmo+ZTbJHCCAsZvW+sVN0zf8PmVVgUY=
+X-Google-Smtp-Source: AGHT+IGPlmHHulfYSHRhoJ4XqE8DNoiVlRmvPsVxVsj5oxpszJW4I/3Hu0OeoXjCoxcMXVr9v73e/Q==
+X-Received: by 2002:a05:6402:1913:b0:529:d147:e9f3 with SMTP id
+ e19-20020a056402191300b00529d147e9f3mr4052415edz.5.1696008464438; 
+ Fri, 29 Sep 2023 10:27:44 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- dm3-20020a05640222c300b0053635409213sm2259927edb.34.2023.09.29.10.27.36
+ q13-20020a056402518d00b005346925a474sm5261561edd.43.2023.09.29.10.27.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 Sep 2023 10:27:36 -0700 (PDT)
+ Fri, 29 Sep 2023 10:27:44 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri, 29 Sep 2023 19:27:32 +0200
-Message-Id: <20230929172732.3214611-1-francois.perrad@gadz.org>
+Date: Fri, 29 Sep 2023 19:27:41 +0200
+Message-Id: <20230929172741.3214632-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696008457; x=1696613257; darn=busybox.net;
+ d=gmail.com; s=20230601; t=1696008465; x=1696613265; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Dl1WjFc4k1Vzq7hR+DUE7tqdtE1ZmCnmQhER6Oc9Vxo=;
- b=E7rvedLw1rvecrg1VRCKTYzGf8rxoViPqNB2yWQRezcSPd30dstAFRjs5xW1dW4KQo
- mq38tiumCKN1XxIuEPFeW4QeFvkA0uYmGK370T1HDa+IC6UhoELBYCRe2rvm3EIZnkDj
- WGk0KXqAuqDL2zLJyNAiwL+HmGrrNfVXFP6UIUtLZQNNmvXvEMwwEnOh28mQPcuArhvh
- R8OmiQim1WydqjbxGh0dD+BsnxRGogE9h0xui/HTpXV4yb5mSkLd8FuKrWmpmBNSkmDm
- 1tbUD0QDku5IjxE2Cgfa8P6xhOnRcRAMXt2LwBIGotfoEa4Ha8SSLP56MeEJo5jHs+QN
- M7qA==
+ bh=d7RkLX1UJK8QBom7cFoDYSEHE2ffSbiRfK4zqmANpcs=;
+ b=ll/z46vY2iKbAXRSxdj7FIGIHoDKk9exEm5/Mk0YfQ5g7++gH8pXBre+XXtD/lPWHY
+ FOKoXTOncnSjmGSpCfNFNR71CjrzvXNHITfwRWiFpx63nEfUV1Q7K6Vr+g3s3ATFlz/f
+ BnFH+E4yHG8fJB2i1b4XnTr/AtoPgBViRBcfaR898H+rhc9hdlNXWJ+bo1Md79Yq9LsZ
+ MMkyZFrbKsPp0r/5aVYS5Yu6EXKDyc/IpzEMFDxlqfZr1b9gyIEpQNjsayxZ66vZnWYf
+ LKHM/67VMdAYqOWB30/F20UkPRJqappD8q+T3PP6UrHGpFdbm8RpJhJcILFqXK36Pe5L
+ uVMA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=E7rvedLw
-Subject: [Buildroot] [PATCH] package/iproute2: bump to version 6.5.0
+ header.a=rsa-sha256 header.s=20230601 header.b=ll/z46vY
+Subject: [Buildroot] [PATCH] package/lua-messagepack: bump to version 0.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,218 +98,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-remove upstream patches
+diff COPYRIGHT:
+    -Copyright (C) 2012-2019 Francois Perrad.
+    +Copyright (C) 2012-2023 Francois Perrad.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0001-tc-add-missing-separator.patch       |  32 -----
- .../0002-tc-f_u32-fix-json-object-leak.patch  | 134 ------------------
- package/iproute2/iproute2.hash                |   2 +-
- package/iproute2/iproute2.mk                  |   2 +-
- 4 files changed, 2 insertions(+), 168 deletions(-)
- delete mode 100644 package/iproute2/0001-tc-add-missing-separator.patch
- delete mode 100644 package/iproute2/0002-tc-f_u32-fix-json-object-leak.patch
+ package/lua-messagepack/lua-messagepack.hash | 6 +++---
+ package/lua-messagepack/lua-messagepack.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/iproute2/0001-tc-add-missing-separator.patch b/package/iproute2/0001-tc-add-missing-separator.patch
-deleted file mode 100644
-index 534b2c8f6..000000000
---- a/package/iproute2/0001-tc-add-missing-separator.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 4e0e56e0ef05387f7f5d8ab41fe6ec6a1897b26d Mon Sep 17 00:00:00 2001
--From: Christian Hesse <mail@eworm.de>
--Date: Thu, 23 Feb 2023 11:15:03 +0100
--Subject: [PATCH] tc: add missing separator
--Upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=4e0e56e0ef05387f7f5d8ab41fe6ec6a1897b26d
--
--This is missing a separator, that was accidently removed
--when JSON was added.
--
--Fixes: 010a8388aea1 ("tc: Add JSON output to tc-class")
--Signed-off-by: Christian Hesse <mail@eworm.de>
--Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
-----
-- tc/tc_class.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tc/tc_class.c b/tc/tc_class.c
--index c1feb009..096fa2ec 100644
----- a/tc/tc_class.c
--+++ b/tc/tc_class.c
--@@ -356,7 +356,7 @@ int print_class(struct nlmsghdr *n, void *arg)
-- 		print_string(PRINT_ANY, "parent", "parent %s ", abuf);
-- 	}
-- 	if (t->tcm_info)
---		print_0xhex(PRINT_ANY, "leaf", "leaf %x", t->tcm_info>>16);
--+		print_0xhex(PRINT_ANY, "leaf", "leaf %x: ", t->tcm_info>>16);
-- 
-- 	q = get_qdisc_kind(RTA_DATA(tb[TCA_KIND]));
-- 	if (tb[TCA_OPTIONS]) {
---- 
--2.40.0
--
-diff --git a/package/iproute2/0002-tc-f_u32-fix-json-object-leak.patch b/package/iproute2/0002-tc-f_u32-fix-json-object-leak.patch
-deleted file mode 100644
-index 3d90fee56..000000000
---- a/package/iproute2/0002-tc-f_u32-fix-json-object-leak.patch
-+++ /dev/null
-@@ -1,134 +0,0 @@
--From 6637a6d512a940c3d9c101f4eaca3c1c7a36517c Mon Sep 17 00:00:00 2001
--From: Hangbin Liu <liuhangbin@gmail.com>
--Date: Tue, 28 Feb 2023 15:31:46 +0800
--Subject: [PATCH] tc: f_u32: fix json object leak
--Upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=6637a6d512a940c3d9c101f4eaca3c1c7a36517c
--
--Previously, the code returned directly within the switch statement in
--the functions print_{ipv4, ipv6}. While this approach was functional,
--after the commit 721435dc, we can no longer return directly because we
--need to close the match object. To resolve this issue, replace the return
--statement with break.
--
--Fixes: 721435dcfd92 ("tc: u32: add json support in `print_raw`, `print_ipv4`, `print_ipv6`")
--Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
--Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
-----
-- tc/f_u32.c | 24 ++++++++++--------------
-- 1 file changed, 10 insertions(+), 14 deletions(-)
--
--diff --git a/tc/f_u32.c b/tc/f_u32.c
--index de2d0c9e..936dbd65 100644
----- a/tc/f_u32.c
--+++ b/tc/f_u32.c
--@@ -828,12 +828,12 @@ static void print_ipv4(FILE *f, const struct tc_u32_key *key)
-- 			print_nl();
-- 			print_uint(PRINT_ANY, "ip_ihl", "  match IP ihl %u",
-- 				   ntohl(key->val) >> 24);
---			return;
--+			break;
-- 		case 0x00ff0000:
-- 			print_nl();
-- 			print_0xhex(PRINT_ANY, "ip_dsfield", "  match IP dsfield %#x",
-- 				    ntohl(key->val) >> 16);
---			return;
--+			break;
-- 		}
-- 		break;
-- 	case 8:
--@@ -841,7 +841,6 @@ static void print_ipv4(FILE *f, const struct tc_u32_key *key)
-- 			print_nl();
-- 			print_int(PRINT_ANY, "ip_protocol", "  match IP protocol %d",
-- 				  ntohl(key->val) >> 16);
---			return;
-- 		}
-- 		break;
-- 	case 12:
--@@ -864,7 +863,6 @@ static void print_ipv4(FILE *f, const struct tc_u32_key *key)
-- 				print_string(PRINT_ANY, "address", "%s", addr);
-- 				print_int(PRINT_ANY, "prefixlen", "/%d", bits);
-- 				close_json_object();
---				return;
-- 			}
-- 		}
-- 		break;
--@@ -874,19 +872,19 @@ static void print_ipv4(FILE *f, const struct tc_u32_key *key)
-- 		case 0x0000ffff:
-- 			print_uint(PRINT_ANY, "dport", "match dport %u",
-- 				   ntohl(key->val) & 0xffff);
---			return;
--+			break;
-- 		case 0xffff0000:
-- 			print_nl();
-- 			print_uint(PRINT_ANY, "sport", "  match sport %u",
-- 				   ntohl(key->val) >> 16);
---			return;
--+			break;
-- 		case 0xffffffff:
-- 			print_nl();
-- 			print_uint(PRINT_ANY, "dport", "  match dport %u, ",
-- 				   ntohl(key->val) & 0xffff);
-- 			print_uint(PRINT_ANY, "sport", "match sport %u",
-- 				   ntohl(key->val) >> 16);
---			return;
--+			break;
-- 		}
-- 		/* XXX: Default print_raw */
-- 	}
--@@ -905,12 +903,12 @@ static void print_ipv6(FILE *f, const struct tc_u32_key *key)
-- 			print_nl();
-- 			print_uint(PRINT_ANY, "ip_ihl", "  match IP ihl %u",
-- 				   ntohl(key->val) >> 24);
---			return;
--+			break;
-- 		case 0x00ff0000:
-- 			print_nl();
-- 			print_0xhex(PRINT_ANY, "ip_dsfield", "  match IP dsfield %#x",
-- 				    ntohl(key->val) >> 16);
---			return;
--+			break;
-- 		}
-- 		break;
-- 	case 8:
--@@ -918,7 +916,6 @@ static void print_ipv6(FILE *f, const struct tc_u32_key *key)
-- 			print_nl();
-- 			print_int(PRINT_ANY, "ip_protocol", "  match IP protocol %d",
-- 				  ntohl(key->val) >> 16);
---			return;
-- 		}
-- 		break;
-- 	case 12:
--@@ -941,7 +938,6 @@ static void print_ipv6(FILE *f, const struct tc_u32_key *key)
-- 				print_string(PRINT_ANY, "address", "%s", addr);
-- 				print_int(PRINT_ANY, "prefixlen", "/%d", bits);
-- 				close_json_object();
---				return;
-- 			}
-- 		}
-- 		break;
--@@ -952,11 +948,11 @@ static void print_ipv6(FILE *f, const struct tc_u32_key *key)
-- 			print_nl();
-- 			print_uint(PRINT_ANY, "sport", "  match sport %u",
-- 				   ntohl(key->val) & 0xffff);
---			return;
--+			break;
-- 		case 0xffff0000:
-- 			print_uint(PRINT_ANY, "dport", "match dport %u",
-- 				   ntohl(key->val) >> 16);
---			return;
--+			break;
-- 		case 0xffffffff:
-- 			print_nl();
-- 			print_uint(PRINT_ANY, "sport", "  match sport %u, ",
--@@ -964,7 +960,7 @@ static void print_ipv6(FILE *f, const struct tc_u32_key *key)
-- 			print_uint(PRINT_ANY, "dport", "match dport %u",
-- 				   ntohl(key->val) >> 16);
-- 
---			return;
--+			break;
-- 		}
-- 		/* XXX: Default print_raw */
-- 	}
---- 
--2.40.0
--
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index d1ab93618..edd03b645 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  4d72730200ec5b2aabaa1a2f20553c6748292f065d9a154c7d5e22559df9fd62  iproute2-6.2.0.tar.xz
-+sha256  a70179085fa1b96d3c33b040c809b75e2b57563adc505a4ad05e2609df373463  iproute2-6.5.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 49a65516d..a2e90a66f 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
+diff --git a/package/lua-messagepack/lua-messagepack.hash b/package/lua-messagepack/lua-messagepack.hash
+index 5c8dd5936..6c650ce14 100644
+--- a/package/lua-messagepack/lua-messagepack.hash
++++ b/package/lua-messagepack/lua-messagepack.hash
+@@ -1,4 +1,4 @@
+ # computed by luarocks/buildroot
+-sha256  cbb1b7b12834b7f49fd20621446ec4d76eff67d324b8182b7988324b10830a43  lua-messagepack-0.5.2-1.src.rock
+-sha256  b3b3d8c3d28a4d4f26404cdb7d7d9329e2e831ea2dd2c6b119d958ed113579b2  lua-messagepack-lua53-0.5.2-1.src.rock
+-sha256  709fd93a7dd6f8e941e7f0cb9e3eeba1f4de375302f1b19e14bb51aff23c5970  lua-MessagePack-0.5.2/COPYRIGHT
++sha256  fe39b8ad92acf13f91d8660a04ab8fc9fb5d6370f99304d46cab8137ee9147b8  lua-messagepack-0.5.3-1.src.rock
++sha256  a7c1842ab7404104c941bc71809cd41c7685b4cd5edd4f1925f9cbe434f3ed4a  lua-messagepack-lua53-0.5.3-1.src.rock
++sha256  1dbe8e7da2d71088d4759da33a42eda89f5be90d1a9c0b823360a270d6628ed8  lua-MessagePack-0.5.3/COPYRIGHT
+diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
+index 33d460b4f..390f85c6e 100644
+--- a/package/lua-messagepack/lua-messagepack.mk
++++ b/package/lua-messagepack/lua-messagepack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 6.2.0
-+IPROUTE2_VERSION = 6.5.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.2
++LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.3
+ LUA_MESSAGEPACK_VERSION = $(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
+ ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
+ LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack-lua53
 -- 
 2.39.2
 
