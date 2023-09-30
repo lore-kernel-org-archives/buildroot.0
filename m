@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DDE8E77375
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:24:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F2A6E77374
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAC07831A5;
-	Sat, 30 Sep 2023 14:24:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAC07831A5
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7DE983E05;
+	Sat, 30 Sep 2023 14:24:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7DE983E05
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XcSm96uYvfzh; Sat, 30 Sep 2023 14:24:20 +0000 (UTC)
+	with ESMTP id RpjrA9wbceak; Sat, 30 Sep 2023 14:24:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D480682341;
-	Sat, 30 Sep 2023 14:24:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D480682341
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 035631BF2A3
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1B6B83DBE;
+	Sat, 30 Sep 2023 14:24:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1B6B83DBE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 05B851BF86C
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:24:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E07CE40635
+ by smtp1.osuosl.org (Postfix) with ESMTP id E22B082341
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:24:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E07CE40635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E22B082341
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wKvsvhPRio-q for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 14:24:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b_J7TesG3Yki for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 14:24:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01AE5400E4
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:24:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01AE5400E4
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB73A82107
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:24:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB73A82107
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E26B283A33; Sat, 30 Sep 2023 14:24:16 +0000 (UTC)
+ id C73BD83B09; Sat, 30 Sep 2023 14:24:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 16:24:05 +0200
+Date: Sat, 30 Sep 2023 16:24:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5e2810fba6e18525d999909060f28aad5bafbf40
-X-Git-Newrev: 47fbc4559043cc6e5470dacf80a94468269f4169
+X-Git-Oldrev: 2fcb021cc2e6d90616f10a540593abd7a90a9cd6
+X-Git-Newrev: e1308d2ec36493208e9bad97e76c15d43c16ed6b
 X-Patchwork-Hint: ignore
-Message-Id: <20230930142416.E26B283A33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kmod: bump to version 31
+Message-Id: <20230930142416.C73BD83B09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-http-message: bump to version
+ 6.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +64,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47fbc4559043cc6e5470dacf80a94468269f4169
+commit: https://git.buildroot.net/buildroot/commit/?id=e1308d2ec36493208e9bad97e76c15d43c16ed6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+LICENSE: switch to Perl Artistic
+see https://metacpan.org/release/OALDERS/HTTP-Message-6.45/diff/OALDERS/HTTP-Message-6.44#LICENSE
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kmod/kmod.hash | 2 +-
- package/kmod/kmod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-http-message/perl-http-message.hash | 8 ++++----
+ package/perl-http-message/perl-http-message.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index b181f73e9b..f4b01b20a2 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
--sha256  f897dd72698dc6ac1ef03255cd0a5734ad932318e4adbaebc7338ef2f5202f9f  kmod-30.tar.xz
-+sha256  f5a6949043cc72c001b728d8c218609c5a15f3c33d75614b78c79418fcf00d80  kmod-31.tar.xz
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index 94b5c06a4f..b33e00e33e 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
+@@ -1,6 +1,6 @@
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  926a077669a7828c5ca39b5cf7735625  HTTP-Message-6.44.tar.gz
+-sha256  398b647bf45aa972f432ec0111f6617742ba32fc773c6612d21f64ab4eacbca1  HTTP-Message-6.44.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  86c386bcc85a63c8908e6ae9967b34ee  HTTP-Message-6.45.tar.gz
++sha256  01cb8406612a3f738842d1e97313ae4d874870d1b8d6d66331f16000943d4cbe  HTTP-Message-6.45.tar.gz
  
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 5d6d4408f9..dae84611fe 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -4,7 +4,7 @@
+ # computed by scancpan
+-sha256  f2f428b5f8a3bf4e6a71cd5ea92558a3d123d3d7c5075d34923e71e46dea94df  LICENSE
++sha256  553ecefc0ed6d4152809da8516960b9a12352c1c0d7d289ac4ab06d0bd0e67bb  LICENSE
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index 67b68b0de2..7fdba0b29e 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KMOD_VERSION = 30
-+KMOD_VERSION = 31
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
+-PERL_HTTP_MESSAGE_VERSION = 6.44
++PERL_HTTP_MESSAGE_VERSION = 6.45
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+ PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+-PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
++PERL_HTTP_MESSAGE_LICENSE = Artistic-1.0-Perl or GPL-1.0+
+ PERL_HTTP_MESSAGE_LICENSE_FILES = LICENSE
+ PERL_HTTP_MESSAGE_DISTNAME = HTTP-Message
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
