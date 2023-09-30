@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C1EFE748E7
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 20:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F76E748E7
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 20:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2328660FF0;
-	Sat, 30 Sep 2023 20:29:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2328660FF0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5271E61021;
+	Sat, 30 Sep 2023 20:36:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5271E61021
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YGQE8Fstqv45; Sat, 30 Sep 2023 20:29:18 +0000 (UTC)
+	with ESMTP id aKIQcEoPdkCQ; Sat, 30 Sep 2023 20:36:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FF7860FEC;
-	Sat, 30 Sep 2023 20:29:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FF7860FEC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3BAD61BF3B0
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 20:29:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF02B6100C;
+	Sat, 30 Sep 2023 20:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF02B6100C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A2AEE1BF3B0
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 20:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14C5760FEC
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 20:29:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14C5760FEC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 88BAF82690
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 20:36:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88BAF82690
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RhicuI6gFfyl for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 20:29:15 +0000 (UTC)
-Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D1A5960FD1
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 20:29:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1A5960FD1
-Received: from [192.168.50.162] ([146.241.127.78])
- by Aruba Outgoing Smtp  with ESMTPSA
- id mgZOqGisvW2JpmgaOqBGf2; Sat, 30 Sep 2023 22:29:12 +0200
-Message-ID: <acf438eb-5fc1-4e23-82d8-5cd902a2287d@benettiengineering.com>
-Date: Sat, 30 Sep 2023 22:29:12 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eH_kr22CJo3r for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 20:36:27 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 398B382416
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 20:36:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 398B382416
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D1EEE0003;
+ Sat, 30 Sep 2023 20:36:23 +0000 (UTC)
+Date: Sat, 30 Sep 2023 22:36:22 +0200
+To: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+Message-ID: <20230930223622.06e32f3c@windsurf>
+In-Reply-To: <20220819151734.926106-6-Ben.Wolsieffer@hefring.com>
+References: <20220819151734.926106-1-Ben.Wolsieffer@hefring.com>
+ <20220819151734.926106-6-Ben.Wolsieffer@hefring.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230930113651.572c4efa@windsurf>
- <5256DD48-6F80-4FB4-9E8E-796327057033@benettiengineering.com>
-In-Reply-To: <5256DD48-6F80-4FB4-9E8E-796327057033@benettiengineering.com>
-X-CMAE-Envelope: MS4xfA1ilKnIqTcFYjrArSzdDyr7q7eCywn/b1579+HDelVPoDVIg70x+mOY0dCoZseuTwN4ELYO0pQacUquqin4le7QuIYeq/g3FXAmntEJN9IryR7AUN8T
- X3luKQaU+C5C5vUjdx8hit3URXMYqg0KtUtMniDu1PTtAulJSAizzWpnNXyQPY7TCaKTHhO6YC15EVMBY6RNxi9lC+nhE1HXzYLDbkqq1eBUf5n4VT31EHFv
- AqGUevFFZvj2tzqdKyln2J4eeigcv5ZSCdqnfSFUxpwDPkCC8MvdfttP47fLDM3yeLwG5io4sQobeZ57xs7yxQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1696105752; bh=+sX5AnOn/WkCiUvPfGAMb+tp48sseP/QaiSE0GyLvfc=;
- h=Date:MIME-Version:Subject:From:To:Content-Type;
- b=Zsuu6m9peHMpeYTyt1zkYJGU6wDvZE5/q8bUYETHgut7gIauxFLxdhgFQkEmvyIy+
- A/bR7fb+cOjkdu+/WHzs/jN+6cjhE7PNv8xtk9C3s/BDX1wVMf7wxczGXW8Let8po+
- LnqRW5skrdy061wbxXarjqTAYpm5lQN7RHjcmlbmTqcs7Z7WjDURO1KgGQb3JeZequ
- OTHtmWtqcOVNjbHITcsoJ9gWzGzi9VSgilECPStsngPgELj8W3pfdj0LTJBEwGjAtG
- dEvB7+GWXwOlz6ZqxRfvpfo1JhCGddsoyKhfXqz+aYwMPJY3ATSIE9Fa9nq7NdEHDI
- NnnO3uJRZudSA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Zsuu6m9p
-Subject: Re: [Buildroot] [PATCH] configs/bananapi_m2_berry: new defconfig
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1696106184;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=cFWx143jBPg6JObQqtlLtPxVpqknBPL13vQ2OG8OxHo=;
+ b=Oq0ogIaWMDbK8GdHHwERx2x/KioXmLMP5Z6DlZF0LHxI9tVR5mvXV85lRMKX6knFLkkUSx
+ D5GeBh1bR7NPAmIrN1TMxqKI2VM8CDzPotayUX7hXC+kDg/szPsk441L8C21utFDAef+WP
+ O0kkRYeunSJO4kWM5lTWZDy53HUl4+i4WYdBonU2Qut3Kx6wLCaPw/B/7k3zWyv4yRqa05
+ y1muQ5DvsLFV2od/wXa84lfLILd/HQmRboI1KGD8Ss9o6N2K94jvEjkfi4+jVVqfgoyu/2
+ ZGJXHOewMvEpdh/OSUUIG5uvSQm75VK0ViqVBx/m3P2L4bzEIRllIA6oF0sHSg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Oq0ogIaW
+Subject: Re: [Buildroot] [PATCH v3 5/8] boot/uboot: pass -mno-fdpic if FDPIC
+ is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,56 +76,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Vladimir Murzin <vladimir.murzin@arm.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMzAvMDkvMjMgMTc6MzEsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IAo+PiBJbCBnaW9ybm8g
-MzAgc2V0IDIwMjMsIGFsbGUgb3JlIDExOjM3LCBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0
-YXp6b25pQGJvb3RsaW4uY29tPiBoYSBzY3JpdHRvOgo+Pgo+PiDvu79IZWxsbywKPj4KPj4+IE9u
-IE1vbiwgIDcgQXVnIDIwMjMgMDA6MTg6MjEgKzAyMDAKPj4+IEdpdWxpbyBCZW5ldHRpIDxnaXVs
-aW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPiB3cm90ZToKPj4+Cj4+Pgo+Pj4gZGlm
-ZiAtLWdpdCBhL2JvYXJkL2JhbmFuYXBpL2JhbmFuYXBpLW0yLWJlcnJ5L2Jvb3QuY21kIGIvYm9h
-cmQvYmFuYW5hcGkvYmFuYW5hcGktbTItYmVycnkvYm9vdC5jbWQKPj4+IG5ldyBmaWxlIG1vZGUg
-MTAwNjQ0Cj4+PiBpbmRleCAwMDAwMDAwMDAwLi5hODA4ZmEwNDA3Cj4+PiAtLS0gL2Rldi9udWxs
-Cj4+PiArKysgYi9ib2FyZC9iYW5hbmFwaS9iYW5hbmFwaS1tMi1iZXJyeS9ib290LmNtZAo+Pj4g
-QEAgLTAsMCArMSw3IEBACj4+PiArc2V0ZW52IGJvb3RhcmdzIGNvbnNvbGU9dHR5UzAsMTE1MjAw
-IGVhcmx5cHJpbnRrIHJvb3Q9L2Rldi9tbWNibGswcDIgcm9vdHdhaXQgZHJtLmRlYnVnPTB4ZmYK
-Pj4KPj4gSSBkcm9wcGVkIGVhcmx5cHJpbnRrIGFuZCBkcm0uZGVidWc9MHhmZiBmcm9tIHRoZXJl
-LCBhcyBpdCdzIHJlYWxseSBhCj4+IGJpdCB0b28gbXVjaCBkZWJ1Z2dpbmcgb3JpZW50ZWQuCj4+
-Cj4+IEluIGFueSBjYXNlLCBpdCdkIGJlIGdyZWF0IHRvIHVzZSBleHRsaW51eC5jb25mIGluc3Rl
-YWQgb2YgdGhpcy4KCmFuZCB5ZXMsIEkgd2lsbCBzdWJzdGl0dXRlIHdpdGggZXh0bGludXguY29u
-ZiwgaXQncyB2ZXJ5IHVzZWZ1bCBmb3IgCmRldmVsb3BpbmcvbW9kaWZ5aW5nIGF0IHJ1bnRpbWUv
-cmVib290LgoKLS0gCkdpdWxpbyBCZW5ldHRpCkNFTyZDVE9AQmVuZXR0aSBFbmdpbmVlcmluZyBz
-YXMKCj4+PiBkaWZmIC0tZ2l0IGEvY29uZmlncy9iYW5hbmFwaV9tMl9iZXJyeV9kZWZjb25maWcg
-Yi9jb25maWdzL2JhbmFuYXBpX20yX2JlcnJ5X2RlZmNvbmZpZwo+Pj4gbmV3IGZpbGUgbW9kZSAx
-MDA2NDQKPj4+IGluZGV4IDAwMDAwMDAwMDAuLjk1NjUyZTc5MzkKPj4+IC0tLSAvZGV2L251bGwK
-Pj4+ICsrKyBiL2NvbmZpZ3MvYmFuYW5hcGlfbTJfYmVycnlfZGVmY29uZmlnCj4+PiBAQCAtMCww
-ICsxLDM3IEBACj4+PiArQlIyX2FybT15Cj4+PiArQlIyX2NvcnRleF9hNz15Cj4+PiArQlIyX1RP
-T0xDSEFJTl9FWFRFUk5BTD15Cj4+PiArQlIyX1RBUkdFVF9HRU5FUklDX0lTU1VFPSJXZWxjb21l
-IHRvIEJhbmFuYXBpIE0yIEJlcnJ5Igo+Pj4gK0JSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9
-InN1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCIKPj4+ICtCUjJfUk9PVEZTX1BPU1RfU0NSSVBU
-X0FSR1M9Ii1jIGJvYXJkL2JhbmFuYXBpL2JhbmFuYXBpLW0yLWJlcnJ5L2dlbmltYWdlLmNmZyIK
-Pj4+ICtCUjJfTElOVVhfS0VSTkVMPXkKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJT
-SU9OPXkKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEuMzgi
-Cj4+PiArQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InN1bnhpIgo+Pj4gK0JSMl9MSU5VWF9L
-RVJORUxfRFRTX1NVUFBPUlQ9eQo+Pj4gK0JSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1F
-PSJzdW44aS12NDAtYmFuYW5hcGktbTItYmVycnkiCj4+PiArQlIyX1BBQ0tBR0VfS01TQ1VCRT15
-Cj4+PiArQlIyX1BBQ0tBR0VfTUVTQTNEPXkKPj4+ICtCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElV
-TV9EUklWRVJfTElNQT15Cj4+PiArQlIyX1BBQ0tBR0VfTUVTQTNEX09QRU5HTF9FR0w9eQo+Pj4g
-K0JSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfRVM9eQo+Pj4gK0JSMl9QQUNLQUdFX0hUT1A9eQo+
-Pgo+PiBJIGRyb3BwZWQga21zY3ViZSwgbWVzYTNkIGFuZCBodG9wLCBiZWNhdXNlIHRoZXkgZG9u
-J3QgcXVhbGlmeSBmb3IgYQo+PiBtaW5pbWFsIGNvbmZpZ3VyYXRpb24uCj4+Cj4+IEFwcGxpZWQg
-d2l0aCB0aG9zZSBjaGFuZ2VzLgo+IAo+IFRoYW5rIHlvdSBUaG9tYXMsIEnigJl2ZSBmb3Jnb3R0
-ZW4gYWxsIHRob3NlIHBvaW50cyBiZWNhdXNlIEkgd2FzIGRlYnVnZ2luZyBMaW1hIG9uIFY0MC4K
-PiAKPiBCZXN0IHJlZ2FyZHMKPiBHaXVsaW8KPiAKPj4KPj4gQmVzdCByZWdhcmRzLAo+Pgo+PiBU
-aG9tYXMKPj4gLS0KPj4gVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxp
-bgo+PiBFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwo+
-PiBodHRwczovL2Jvb3RsaW4uY29tCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On Fri, 19 Aug 2022 11:17:30 -0400
+Ben Wolsieffer <ben.wolsieffer@hefring.com> wrote:
+
+> +# Disable FDPIC if enabled by default in toolchain
+> +ifeq ($(BR2_BINFMT_FDPIC),y)
+> +UBOOT_MAKE_OPTS += KCFLAGS=-mno-fdpic
+> +endif
+
+This this one and the same change in the linux/ package, I'm not a
+super super fan, even if I admit I'm not sure I have a better solution
+to offer. I tend to not like very much this kind of super arch-specific
+CFLAGS customization sprinkled in different places.
+
+My initial thought when looking at this was "could it be done directly
+by the toolchain-wrapper"? Indeed, we already have some logic to detect
+if the code being built is from the kernel (__KERNEL__ is defined) or
+U-Boot (__UBOOT__ is defined).
+
+Another concern is what about other bootloaders or piece of
+freestanding code that also shouldn't be built -mfdpic?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
