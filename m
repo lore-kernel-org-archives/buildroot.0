@@ -4,62 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57B15E7735F
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 07:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 928F9E77360
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 07:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE3DD83D15;
-	Sat, 30 Sep 2023 07:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE3DD83D15
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3602480CBB;
+	Sat, 30 Sep 2023 07:54:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3602480CBB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 05rpfa0lnPUC; Sat, 30 Sep 2023 07:54:35 +0000 (UTC)
+	with ESMTP id nDzvULb-zSPI; Sat, 30 Sep 2023 07:54:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0558883D4A;
-	Sat, 30 Sep 2023 07:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0558883D4A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B17E21BF681
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3527280D20;
+	Sat, 30 Sep 2023 07:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3527280D20
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CCDE91BF86B
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 07:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D8AD403D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id A396842DFD
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 07:54:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D8AD403D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A396842DFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UJVFfVNwcTsd for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 07:54:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K4sYZkNGgglQ for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 07:54:31 +0000 (UTC)
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
  [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 209FC41CD8
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 07:54:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 209FC41CD8
-Received: by mail.gandi.net (Postfix) with ESMTPA id CE6D340003;
- Sat, 30 Sep 2023 07:54:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1CAD542DFC
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 07:54:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CAD542DFC
+Received: by mail.gandi.net (Postfix) with ESMTPA id E521440005;
+ Sat, 30 Sep 2023 07:54:28 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>
-Date: Sat, 30 Sep 2023 09:54:16 +0200
-Message-ID: <20230930075426.513345-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 30 Sep 2023 09:54:17 +0200
+Message-ID: <20230930075426.513345-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230930075426.513345-1-thomas.petazzoni@bootlin.com>
+References: <20230930075426.513345-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1696060468;
+ d=bootlin.com; s=gm1; t=1696060469;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=YAt46w0eX8Pbf19gCN5niHR4qbfH3QogiO6Bu2D/RGM=;
- b=Rt3vamlRXc+7JQ7PfElJnVjz0QsTm4IL+FK/7Fq59DUwFLELs1qFix00elm1o8Ng//ECHv
- JOspM6ownxXovNbIZ0LA2l14CmzxzrxILoAElOYkro5Ue0rfLbiym4jdwy/RFM7XCclEv8
- 7Du4fuVAxDpeMAHG83oWp3JnHiiCleWHISBe4rOMwRwBxHOWI9/7FdEP6ASZ9D/j3wPVYn
- nhKShsLDJcSEs4c1ge7odnfP4wO/5Ss4i5yO7ofXSfj77dDC4KxFl6ehw4LCcegp56TB92
- i01qFM14xANaVWu02v3fHhU8C+Bp5T9KYnjR28pD/fa2UTWz0se5riKNBDbKtw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FocqeQ6yTz9nL13027iUmERuzq7MS49cdTLN/1JfF9w=;
+ b=cmLThh9Zo4tpwqkjbOYsJDlm77izZPvRKDmLH6VFNOUCKpNTYwEypoFrnwr+DsX/TDB0IC
+ +AI84m3wryoFd5yBHhanR5/OsisZX84AO9PKQkjGG9U9PYW/0OEcmaEqXRylwyfRHZ3YCh
+ g8fvw8ahPVegW0Zh0EPRBkhi4TPDo3dxNR1zcNUT31xFH5fBcQNiM7sXkIALxtSCiMYhLW
+ mdmwlwKp/21qYOmKvz4T0C5sC1jdTLXWx075pnd0TtbGnFw1LT9L5vmTvApeCZasBLpbcD
+ rgTa+PItnyYz/nNCMwnwXu7ypB8Js3iYhlgWgiaMO9UcdtPTpnRe/RS3CHPXrQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Rt3vamlR
-Subject: [Buildroot] [PATCH v2 0/7] Move gcc target libs installation to
- target package
+ header.s=gm1 header.b=cmLThh9Z
+Subject: [Buildroot] [PATCH v2 1/7] package/gcc/gcc-final: rework
+ installation of libgcc_s/libatomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,7 +76,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
  Henri Roosen <henri.roosen@ginzinger.com>,
  Stefan Mayrhofer <stefan.mayrhofer@ginzinger.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -82,51 +86,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+The installation of libgcc_s/libatomic (which have to go in /lib) is
+handled differently than all the other libraries (which go in
+/usr/lib). For consistency, and in preparation for additional changes
+in this area, handle both in a more consistent manner, with a new
+HOST_GCC_FINAL_LIBS that looks like HOST_GCC_FINAL_USR_LIBS.
 
-Currently, the gcc runtime libraries installed in
-STAGING_DIR/TARGET_DIR are installed by host-gcc-final, a host
-package. It works of course, but isn't very clean. But more
-importantly, it prevents us from having a sane handling of licensing
-for gcc. Indeed, the host gcc components are GPLv3, but the target
-components of gcc are GPLv3 with the important linking exception.
+Consequently, the hook HOST_GCC_FINAL_INSTALL_USR_LIBS is renamed to
+HOST_GCC_FINAL_INSTALL_LIBS, and made unconditional rather than being
+conditional on ifneq ($(HOST_GCC_FINAL_USR_LIBS),). Indeed, we now
+need to install libraries in /lib unconditionally, and if
+HOST_GCC_FINAL_USR_LIBS is empty, the loops will simply not iterate on
+any element, and they will not install anything in /usr/lib.
 
-In order to handle this, this series proposes to split the
-host-gcc-final package into a host package (which already exists) and
-a target package (which is added as part of this series). The logic
-installing the gcc runtime libraries is moved to the target gcc-final
-package. Once this is done, the series adds the relevant licensing
-information to host-gcc-initial, host-gcc-final and gcc-final.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcc/gcc-final/gcc-final.mk | 38 +++++++++++-------------------
+ 1 file changed, 14 insertions(+), 24 deletions(-)
 
-Changes from v1:
-
-- Instead of introducing a separate gcc-runtime package, keep the
-  logic in gcc-final, but with a target variant package. This was
-  suggested by Romain Naour and indeed makes a lot of sense.
-
-- Split into finer grained commits now that we're keeping things in
-  gcc-final.mk.
-
-Thomas Petazzoni (7):
-  package/gcc/gcc-final: rework installation of libgcc_s/libatomic
-  package/gcc/gcc-final: remove useless comment and empty variable
-  package/gcc/gcc-final: move to make foreach loops
-  package/gcc/gcc-final: split lib install by target/staging
-  package/gcc/gcc-final: move hook further down
-  package/gcc/gcc-final: add a target variant in charge of target
-    installation
-  package/gcc: add license information
-
- package/gcc/Config.in                         |  3 +
- package/gcc/gcc-final/gcc-final.mk            | 97 ++++++++-----------
- package/gcc/gcc-initial/gcc-initial.mk        |  2 +
- package/gcc/gcc.hash                          |  7 ++
- package/gcc/gcc.mk                            |  3 +
- toolchain/toolchain-buildroot/Config.in       |  1 +
- .../toolchain-buildroot.mk                    |  4 +-
- 7 files changed, 60 insertions(+), 57 deletions(-)
- create mode 100644 package/gcc/Config.in
-
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index aa883beb7b..0b390d1b10 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -144,25 +144,7 @@ endef
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_M68K_LIBGCC_FIXUP
+ endif
+ 
+-# Cannot use the HOST_GCC_FINAL_USR_LIBS mechanism below, because we want
+-# libgcc_s to be installed in /lib and not /usr/lib.
+-define HOST_GCC_FINAL_INSTALL_LIBGCC
+-	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libgcc_s* \
+-		$(STAGING_DIR)/lib/
+-	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libgcc_s* \
+-		$(TARGET_DIR)/lib/
+-endef
+-
+-HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBGCC
+-
+-define HOST_GCC_FINAL_INSTALL_LIBATOMIC
+-	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libatomic* \
+-		$(STAGING_DIR)/lib/
+-	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libatomic* \
+-		$(TARGET_DIR)/lib/
+-endef
+-
+-HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBATOMIC
++HOST_GCC_FINAL_LIBS = libgcc_s libatomic
+ 
+ # Handle the installation of libraries in /usr/lib
+ HOST_GCC_FINAL_USR_LIBS =
+@@ -189,8 +171,11 @@ endif
+ 
+ HOST_GCC_FINAL_USR_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_LIBS))
+ 
+-ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_STATIC_LIBS
++	for i in $(HOST_GCC_FINAL_LIBS) ; do \
++		cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/$${i}.a \
++			$(STAGING_DIR)/lib/ ; \
++	done
+ 	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
+ 		cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/$${i}.a \
+ 			$(STAGING_DIR)/usr/lib/ ; \
+@@ -199,6 +184,12 @@ endef
+ 
+ ifeq ($(BR2_STATIC_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_SHARED_LIBS
++	for i in $(HOST_GCC_FINAL_LIBS) ; do \
++		cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/$${i}.so* \
++			$(STAGING_DIR)/lib/ ; \
++		cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/$${i}.so* \
++			$(TARGET_DIR)/lib/ ; \
++	done
+ 	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
+ 		cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/$${i}.so* \
+ 			$(STAGING_DIR)/usr/lib/ ; \
+@@ -208,12 +199,11 @@ define HOST_GCC_FINAL_INSTALL_SHARED_LIBS
+ endef
+ endif
+ 
+-define HOST_GCC_FINAL_INSTALL_USR_LIBS
+-	mkdir -p $(TARGET_DIR)/usr/lib
++define HOST_GCC_FINAL_INSTALL_LIBS
++	mkdir -p $(TARGET_DIR)/lib $(TARGET_DIR)/usr/lib
+ 	$(HOST_GCC_FINAL_INSTALL_STATIC_LIBS)
+ 	$(HOST_GCC_FINAL_INSTALL_SHARED_LIBS)
+ endef
+-HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
+-endif
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBS
+ 
+ $(eval $(host-autotools-package))
 -- 
 2.41.0
 
