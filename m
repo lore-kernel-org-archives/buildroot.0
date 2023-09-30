@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 764F7E7735F
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 09:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5484E77362
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 09:25:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2971F8236F;
-	Sat, 30 Sep 2023 09:25:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2971F8236F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97E3C8235E;
+	Sat, 30 Sep 2023 09:25:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97E3C8235E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FPqPxuizPy-3; Sat, 30 Sep 2023 09:25:34 +0000 (UTC)
+	with ESMTP id goPsAYOgNu-M; Sat, 30 Sep 2023 09:25:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39E4B8235C;
-	Sat, 30 Sep 2023 09:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39E4B8235C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27DBA1BF2F9
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 09:25:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6299A83BF5;
+	Sat, 30 Sep 2023 09:25:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6299A83BF5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AE2561BF2F9
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 09:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EEAFF60BB2
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 09:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEAFF60BB2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97F9140180
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 09:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97F9140180
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WBwlhD2E0WN9 for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 09:25:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B253F60AE2
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 09:25:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B253F60AE2
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C352838BB; Sat, 30 Sep 2023 09:25:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 11:22:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0e655158627fba890c5a42074c722521ac48ef5d
-X-Git-Newrev: 01ec4a39f5ceb83c62b0040067ba53197a0a6843
-X-Patchwork-Hint: ignore
-Message-Id: <20230930092529.9C352838BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/batman-adv: update to 2023.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K3FzNYbhjgMP for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 09:25:43 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3ECDE400F9
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 09:25:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ECDE400F9
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D8D4FFF805;
+ Sat, 30 Sep 2023 09:25:39 +0000 (UTC)
+Date: Sat, 30 Sep 2023 11:25:39 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230930112539.5dc62e1d@windsurf>
+In-Reply-To: <ZNWRcJrlXwFFkUtG@waldemar-brodkorb.de>
+References: <ZNWRcJrlXwFFkUtG@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1696065940;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=BG+g2hVwnlT12c/xQeVLxicFe6wboAGbScUjGXTQq2U=;
+ b=KEzJ1nG8s68lpvIK+XeXn028iQyBwGkNYvnk6Lgpx9q1j/7zvlDitsLeBxyzp6+NSgDdWE
+ HkA/mvPkVp3w/v53sp/YzeUqhdyaw84jNjAZs3po3z3naXuc3gdEMrDL8vLJi2+W63XvFQ
+ 5uuhAMARUswq2HrmGo50jOW8+QVYMllSqhzBw8SWrx7NlePCprAC6iTG1ff/ce/U0yFJo+
+ o3sh94iTQTCxpxg5FEcpIg3LCjxA+xKQm/UWMLWMTwwWw2OXVcjhVq91xy/rrfgu8qVgQx
+ f0+bMMhI3JL3Mzj+QD/CuGc9JnCN5ilA7otwSotZ7aoxdBJEd1h6NznzuL+B6g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=KEzJ1nG8
+Subject: Re: [Buildroot] [PATCH v2] package/batman-adv: update to 2023.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,64 +76,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01ec4a39f5ceb83c62b0040067ba53197a0a6843
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 11 Aug 2023 03:40:00 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Older Batman-adv versions fail to build with kernel 6.4.x
-with following error message:
-bat_iv_ogm.c:283:18: error: implicit declaration of function 'prandom_u32_max'; did you mean 'prandom_u32_state'? [-Werror=implicit-function-declaration]
+> Older Batman-adv versions fail to build with kernel 6.4.x
+> with following error message:
+> bat_iv_ogm.c:283:18: error: implicit declaration of function 'prandom_u32_max'; did you mean 'prandom_u32_state'? [-Werror=implicit-function-declaration]
+> 
+> prandom_u32_max got removed in commit 3c202d14a9d73fb63c3dccb18feac5618c21e1c4
+> from the Linux kernel.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/205/2055ac3805d1941c148f1681a224570055dd83cd
+> 
+> For other changes in this release, see:
+> https://www.open-mesh.org/news/112
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> v1 -> v2:
+>  - move locally computed sha256 hash to the right place, mentioned
+>    by Thomas Petazzoni
+> ---
+>  package/batman-adv/batman-adv.hash | 7 ++++---
+>  package/batman-adv/batman-adv.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-prandom_u32_max got removed in commit 3c202d14a9d73fb63c3dccb18feac5618c21e1c4
-from the Linux kernel.
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.net/results/205/2055ac3805d1941c148f1681a224570055dd83cd
-
-For other changes in this release, see:
-https://www.open-mesh.org/news/112
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/batman-adv/batman-adv.hash | 7 ++++---
- package/batman-adv/batman-adv.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-index 14a92c231a..b95dfa34dd 100644
---- a/package/batman-adv/batman-adv.hash
-+++ b/package/batman-adv/batman-adv.hash
-@@ -1,7 +1,8 @@
--# From https://downloads.open-mesh.org/batman/releases/batman-adv-2022.2/batman-adv-2022.2.tar.gz.sha1
--sha1  e1829e10fc37ea674a20cb9ba1d6c1483042fbfa  batman-adv-2022.2.tar.gz
-+# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2023.1.tar.gz.sha1
-+sha1  e3d6e8d4db772156d7ad021b9a166832633a2ea5  batman-adv-2023.1.tar.gz
-+# locally computed
-+sha256  f46a7286660a5ec3506a1be7ef60b471c51ac70550597d598040479ab7b936b8  batman-adv-2022.3.tar.gz
- 
- # Hash for license files
--sha256  218ffb534fead1c9b5b0d90ec1b2fba688209cdf00e861bece1cbf469fe69953  batman-adv-2022.3.tar.gz
- sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index 75b8292ee1..5b50572d11 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BATMAN_ADV_VERSION = 2022.3
-+BATMAN_ADV_VERSION = 2023.1
- BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
- BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
- BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
