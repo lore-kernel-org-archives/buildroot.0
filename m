@@ -1,70 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DEFFE732D6
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 18:55:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BAB8E732D6
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 19:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBCEE4154D;
-	Sat, 30 Sep 2023 18:55:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBCEE4154D
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB04D41C46;
+	Sat, 30 Sep 2023 19:01:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB04D41C46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id booEs3ZTuT6K; Sat, 30 Sep 2023 18:55:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 05nsyA992iZo; Sat, 30 Sep 2023 19:01:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE7B04168D;
-	Sat, 30 Sep 2023 18:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE7B04168D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C4F341DDD;
+	Sat, 30 Sep 2023 19:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C4F341DDD
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 38FB81BF2A7
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 18:55:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6123F1BF2A7
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1DC7141955
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 18:55:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DC7141955
+ by smtp4.osuosl.org (Postfix) with ESMTP id 461FB41C62
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:01:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 461FB41C62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OoZRYh1baCeR for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 18:55:27 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D9CE041936
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 18:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9CE041936
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A60B240003;
- Sat, 30 Sep 2023 18:55:23 +0000 (UTC)
-Date: Sat, 30 Sep 2023 20:55:23 +0200
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230930205523.116e0f69@windsurf>
-In-Reply-To: <20230609174955.409551-4-romain.naour@gmail.com>
-References: <20230609174955.409551-1-romain.naour@gmail.com>
- <20230609174955.409551-4-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1696100124;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=3uJpnD6UnmcN2KK4HrGP0XSWtPgqcgIS6v3t3oLXcNU=;
- b=OSvmP+LDWbnBLziScQ4Jd48kjxhHQORoqn1JjUvq+O3deVhULZs2WtIS00FMM/f7XkYRBu
- cVOLWrJdX7+YTKWnDiyg2PiEYMf5Bed2NiM8oBrwCz8Zkt1F/v3ml4OpSlGr8fnnBRYlZS
- sIqMk4VWG+NGPD00NJA4DIrkXJyMyO5J9JwjxgTi9hwimtO3osjH8tv3BnTFiF0Jv6qjyJ
- aD6GtvXpqNDuPOHLuHPiJAVKhst/tBralNHrpUvCGyRxGp9B4XJsJqVUeujjKwE9daZOVP
- qcE7V5yPCXQ5TjVHd9OaRt9omnr3nrmETL3w9EnT/kfVmuzvwlmwS844DbypZA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OSvmP+LD
-Subject: Re: [Buildroot] [PATCH 4/4] support/testing: TestPythonPy3MakoExt:
- add a test for mako external plugin (pygmentsplugin, babel)
+ with ESMTP id 9XoTb1A9iQGU for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 19:01:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BA7C41C46
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 19:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BA7C41C46
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EBD1B83C77; Sat, 30 Sep 2023 19:01:07 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 30 Sep 2023 21:00:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c6a1d30106c556673cf55910ec54cb45876fcb27
+X-Git-Newrev: 11a46002ae11a0766a4ec9d3d8ccafe7be42c2fc
+X-Patchwork-Hint: ignore
+Message-Id: <20230930190107.EBD1B83C77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/urandom-scripts: move seedrng init
+ script to S01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,35 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  9 Jun 2023 19:49:55 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=11a46002ae11a0766a4ec9d3d8ccafe7be42c2fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Mako provide some external plugins that requires additionnal and
-> optionnal runtime dependencies.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  .../testing/tests/package/sample_python_mako_ext.py  |  3 +++
->  support/testing/tests/package/test_python_mako.py    | 12 ++++++++++++
->  2 files changed, 15 insertions(+)
->  create mode 100644 support/testing/tests/package/sample_python_mako_ext.py
+We want to initialize the kernel random number generator as soon as
+possible, as early init scripts may also need random numbers (E.G.
+syslog-ng in S01syslog-ng does).
 
-Applied to master after adding entries in the DEVELOPERS file, and
-fixing flake8 warnings. Thanks!
+Seedrng was presumably only using S20 because the previos urandom script
+used S20, which (after som moves) dates all the way back to:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+commit 8262508fc4456b5230216473ea14c897268ba791
+Author: Eric Andersen <andersen@codepoet.org>
+Date:   Fri Apr 26 22:01:43 2002 +0000
+
+    With this update, everything now works as expected.
+     -Erik
+
+Seedrng needs persistent storage, but mount -a is run before executing the
+init scripts, so S01 should be as good as S20 - Atleast with the scripts in
+upstream Buildroot.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/urandom-scripts/{S20seedrng => S01seedrng} | 0
+ package/urandom-scripts/urandom-scripts.mk         | 4 ++--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/urandom-scripts/S20seedrng b/package/urandom-scripts/S01seedrng
+similarity index 100%
+rename from package/urandom-scripts/S20seedrng
+rename to package/urandom-scripts/S01seedrng
+diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
+index 32f3e09343..89abdfff72 100644
+--- a/package/urandom-scripts/urandom-scripts.mk
++++ b/package/urandom-scripts/urandom-scripts.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20seedrng \
+-		$(TARGET_DIR)/etc/init.d/S20seedrng
++	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S01seedrng \
++		$(TARGET_DIR)/etc/init.d/S01seedrng
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
