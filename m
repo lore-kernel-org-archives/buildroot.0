@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C13BE77375
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62E74E77376
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF32B813E1;
-	Sat, 30 Sep 2023 14:40:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF32B813E1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1652A82A56;
+	Sat, 30 Sep 2023 14:40:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1652A82A56
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6mQKz51-NJBT; Sat, 30 Sep 2023 14:40:04 +0000 (UTC)
+	with ESMTP id VjmfyiJEpClC; Sat, 30 Sep 2023 14:40:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6046815CC;
-	Sat, 30 Sep 2023 14:40:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6046815CC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5414E1BF2A3
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:39:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EA8783D9D;
+	Sat, 30 Sep 2023 14:40:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EA8783D9D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AA3E1BF2A3
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDEFE40346
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:39:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDEFE40346
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4359D8184F
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:40:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4359D8184F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D-5WcPO7_efz for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 14:39:54 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AEC2040248
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEC2040248
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C643620005;
- Sat, 30 Sep 2023 14:39:50 +0000 (UTC)
-Date: Sat, 30 Sep 2023 16:39:50 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230930163950.495b182c@windsurf>
-In-Reply-To: <20230930133023.438173-1-fontaine.fabrice@gmail.com>
-References: <20230930133023.438173-1-fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mO-RsM1GdzzO for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 14:40:12 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 36525817ED
+ for <buildroot@busybox.net>; Sat, 30 Sep 2023 14:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36525817ED
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C62E51BF205;
+ Sat, 30 Sep 2023 14:40:08 +0000 (UTC)
+Date: Sat, 30 Sep 2023 16:40:08 +0200
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230930164008.15858838@windsurf>
+In-Reply-To: <20230930131506.3320394-1-francois.perrad@gadz.org>
+References: <20230930131506.3320394-1-francois.perrad@gadz.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1696084790;
+ d=bootlin.com; s=gm1; t=1696084809;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=cfjzrm1mEU5YeWFDoh10kTCnUuYurrqnGlN8Ji9XkYY=;
- b=Cxi9GqMT5PYm8vxo4/NZ1bPx/cs013hjf9yclIZ9rgD3J/tpGgJg7PanWvG1kDtc+pfYO9
- P7alpQcVePkehE5UjVaxBnnInzQxrhTigIo4Ch4HX40VdXGoQWxr4RWmzrAcpt1uBn5dDk
- US1xuTr0PXGjCpuZJsDglYON+yUE4Y2+GqM8mQEWUWez7p2uBxgCJE1QL9h/QWEc7+oF94
- N7BM274G8n2w4v/4VzLKHIr5ZzdGMneKmr4FfMy1RdAvAgavrKuqpSnQA5QmdrbxGLOnWO
- Tk8a4Z5FsfH29G4Q9rkRsPu8K7ZVbpJLw+i35Gz/xihw64l6fH1Lngv7nkK2Gg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=/E4EBXB75qbcQkZspfFXngSO56SZtlPwCtJPgiYpJQw=;
+ b=QMLwad8V99FfeK2mZkF8jzryHB3RFYrdFYc8rTzZGrJWkpIJXZtYBVuLZg5rjyrT5FEEvN
+ 3bSMrpzRIkd864g01Dpe3eZAkgerTRWbcBQBx1z0shRliqpG4RTIhWqrbBx78SAPHPZ2O0
+ z8XNt4t4yHxU5SpgRSy5u2hf+FTr6f0jn7omRBuKKgci+rB5N9bKSJMDa/WLIvHJTyGHOK
+ ZwRkxKBZIwCEOo/XR8xNb1zror0D8851vCPv+4oJ2/2BViOXu8ndFSZFiflhN2Oz63muTs
+ 77G9ffUiJjs3rMByZO4taAEbAcL3T7n2iVA9eCdDvkOhiQVRqkgyZlOcDMvyfg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Cxi9GqMT
-Subject: Re: [Buildroot] [PATCH 1/1] package/kmod: bump to version 31
+ header.s=gm1 header.b=QMLwad8V
+Subject: Re: [Buildroot] [PATCH 1/5] package/perl-convert-asn1: bump to
+ version 0.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,22 +77,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 30 Sep 2023 15:30:23 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 30 Sep 2023 15:15:02 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> LICENSE: update copyright years & switch to Perl Artistic
+> see https://metacpan.org/release/TIMLEGGE/Convert-ASN1-0.34/diff/TIMLEGGE/Convert-ASN1-0.33#LICENSE
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/kmod/kmod.hash | 2 +-
->  package/kmod/kmod.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/perl-convert-asn1/perl-convert-asn1.hash | 8 ++++----
+>  package/perl-convert-asn1/perl-convert-asn1.mk   | 4 ++--
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
-Applied to master, thanks.
+Entire series applied to master, thanks.
 
 Thomas
 -- 
