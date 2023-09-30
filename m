@@ -4,89 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74F3FE748EA
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 22:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62D28E748EA
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 22:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D70C83CC2;
-	Sat, 30 Sep 2023 22:18:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D70C83CC2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0225482022;
+	Sat, 30 Sep 2023 22:18:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0225482022
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k1xy-WqCYo5y; Sat, 30 Sep 2023 22:18:05 +0000 (UTC)
+	with ESMTP id aEVK2sJES3Ii; Sat, 30 Sep 2023 22:18:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17AB883CBD;
-	Sat, 30 Sep 2023 22:18:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17AB883CBD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB2AB1BF5F5
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 22:17:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1FC8A83C69;
+	Sat, 30 Sep 2023 22:18:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FC8A83C69
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D3A831BF5F5
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 22:17:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 802534168D
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 22:17:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 802534168D
+ by smtp3.osuosl.org (Postfix) with ESMTP id BAC2B61170
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 22:17:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAC2B61170
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AIRiI8dtfIsU for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 22:17:38 +0000 (UTC)
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3461C4015F
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 22:17:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3461C4015F
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-31f71b25a99so15179317f8f.2
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 15:17:38 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xPLe_Sm4Tu62 for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 22:17:40 +0000 (UTC)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B813761096
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 22:17:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B813761096
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-32329d935d4so10029640f8f.2
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 15:17:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696112256; x=1696717056;
+ d=1e100.net; s=20230601; t=1696112258; x=1696717058;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=E0sm5javS5N8tXpUiAC+G0weZxljWFkvTSc4tXNjv9c=;
- b=MqCfkAYhAu3ZH9+DrT9WKXM0OHanaoHyfYr6ARLXfq7y3zv2wyET2ezaSV6PE1ZYMW
- jho4+84GZ7qKYGztwRdx4MG9VLWer+KEbAha6LXB+vo1f/Eho4ohV2e95nYsTonJNyyO
- y5orLlYDxVZ+p/qoebCEkpBlLT1p9J/34UILLWNYn9oGIn4QitK78vQleQBkfjM0qoFN
- JuwB87WstAbMgjWHhoGZ4Yus4C/Iz/ZTNXATTTqkDuQQRuk1NFzzhlDOkU/p0OU9SqWK
- i1Dk0B7+Nt0/xQlusVc1yYV8nt9KfHXbtI7uzMiro07rtgT4w3WlhGDtYf5yTOAynGUj
- fFzw==
-X-Gm-Message-State: AOJu0YzA0RcnBlbdhYYtZ8R/7H/DQpnNI2/1AEV+OdniITPvLu6jGi6t
- KkFiqUbQr1HCF+rva34e5+ZzyJYmj86kTTFqpQUx3Q==
-X-Google-Smtp-Source: AGHT+IH3APoPmNXfZbvBi1EJQ38eXZmioTIKj5c3wEt6lnWyzFyrlMhRR7bEKvVWpwb223VEIui65g==
-X-Received: by 2002:adf:f083:0:b0:31d:3669:1c55 with SMTP id
- n3-20020adff083000000b0031d36691c55mr6463257wro.65.1696112256203; 
- Sat, 30 Sep 2023 15:17:36 -0700 (PDT)
+ bh=Rm4HD5LdIu5DNT6U7613RucZ7sVS0SDmGBrAyFuwKNU=;
+ b=Vtn8J8GfWg/wkDbs17Bu4Uq89+Km5+akvDVp/Jj5QkxamqCU3LROin1d19Acj31zjT
+ 1X3Mmc1fQzjP+WLLJppDqGMzk4gB6ft9G5Dcp4n1BT4H9k98r+qlmUBA0GUz2V6gRtJW
+ G2/nWYEWVs/J/KRDgJM2CkJqeTHbSwKkAtHFTSvGsuM370pBBvSAaBH05K26x4S+pmkh
+ F1/bZSuLt2CxWzL1F1Lxg6kwVGh7jQkRONzOwOOeRUCaimIqYN4T5hQhwg00bSmmVnRB
+ ZNSV5h6ajWIdF1yWMuW/C2hdfscyOP7NsZpXpADXFjtrD80K81toxy2lwDW/mkkA/Zds
+ T7gg==
+X-Gm-Message-State: AOJu0Yz6ZwlqTRPq4jpM5IJzvuyE+rxN8lDvYD3KSa0lkXc1VvobMQE4
+ u3BWrzUgpGwMrNlSiNYEwLjhMTDVf88Jt8K+LFBE6Q==
+X-Google-Smtp-Source: AGHT+IGvd6dQ8jzTqas+nXTK7dNpQGevJn0WCCNkpzvUIxD0R6hV05r3NR0QMIPTeTBdPX16GHfbcA==
+X-Received: by 2002:a5d:4652:0:b0:320:261:b87f with SMTP id
+ j18-20020a5d4652000000b003200261b87fmr6714256wrs.62.1696112257831; 
+ Sat, 30 Sep 2023 15:17:37 -0700 (PDT)
 Received: from arnoutx1.home
  (2a01cb0404ad0b005ddb2bcd94e35264.ipv6.abo.wanadoo.fr.
  [2a01:cb04:4ad:b00:5ddb:2bcd:94e3:5264])
  by smtp.gmail.com with ESMTPSA id
- z15-20020a5d4d0f000000b00324ae863ac1sm5681274wrt.35.2023.09.30.15.17.35
+ z15-20020a5d4d0f000000b00324ae863ac1sm5681274wrt.35.2023.09.30.15.17.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Sep 2023 15:17:35 -0700 (PDT)
+ Sat, 30 Sep 2023 15:17:37 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sun,  1 Oct 2023 00:16:27 +0200
-Message-ID: <20230930221727.1458825-4-arnout@mind.be>
+Date: Sun,  1 Oct 2023 00:16:29 +0200
+Message-ID: <20230930221727.1458825-6-arnout@mind.be>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230930221727.1458825-1-arnout@mind.be>
 References: <20230930221727.1458825-1-arnout@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1696112256; x=1696717056; darn=buildroot.org;
+ d=mind.be; s=google; t=1696112258; x=1696717058; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=E0sm5javS5N8tXpUiAC+G0weZxljWFkvTSc4tXNjv9c=;
- b=eJmBB/s7WrZEe5KTUQJ1hmG5XHtq5qrapsF96ymRhyiP89/Ht1mVMoqITJTaFiEgrk
- GKip4YJjad1IBPWFBBUPFaL5eBUoaIMnLt9utKTTejJTaBEzoQsQeLMyjWnxlWH75mtV
- /4T3wlPqZcMmOcUKi8UhYMngEt6ItCo0zJwzEODMJyksNFAgfpgqD8mpLjpDTX1h4B/U
- vLkRTqDP8dzvWk6rbNXH8WE1fZoXUZKMd/0tbCEXXX7LQayvD8XzFMx6g6TTsQrqkT3x
- R1Yd1uxUjevzh4IhWZmXbLcHIp6VV9713mCMh59qyqdfDLXIsENu2ZlGy9ldG/D4KDek
- n8FA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Rm4HD5LdIu5DNT6U7613RucZ7sVS0SDmGBrAyFuwKNU=;
+ b=BC9IGzF6KmTYvnI7/jkmg+Z677aDtaCyYbonzZnqt2vdH8v8mQMOnl5JORldbIALSJ
+ /ppT7ocoAUKwb1qgZ3XjVtSfepnUO6aWEKpBmv9/vNO0fFSO2c5S4z8RwAlboHy+trYo
+ /eiydXY6FYDjsk2r4CZ7X4qMY3RZHKhDmntHSUnEptNmLGf6As9Tv3UW/jnuiwS2FKDw
+ 4bvFiqrclaXq/wCfD4O91Fmnq6LA8YSEhkiO038Qf66NgaZDnnSXFGWfqMcJ2BjcwUS5
+ Ab5FmjIYVxOYV7MUe95cBbtWtSKMMxnJbN+MI8LAunENCFkI4j/GXkz/GxMCIeSl4fdL
+ HJ+A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eJmBB/s7
-Subject: [Buildroot] [PATCH 03/10] package/pkg-python.mk: split the commands
- in a target and host section
+ header.a=rsa-sha256 header.s=google header.b=BC9IGzF6
+Subject: [Buildroot] [PATCH 05/10] package/pkg-python.mk: replace
+ $(_BASE_BUILD_CMD) with $($(SETUP_TYPE)_BUILD_CMD)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,87 +107,206 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Only define the _CMDS variables that are relevant for the target resp.
-host variant. Duplicate the _BUILD_CMDS. This will allow us to
-differentiate part of the _BUILD_CMDS definition in a follow-up patch.
+The _BASE_BUILD_CMD variable is set based on the setup type, and only
+based on the setup type. Because of this, we have a large conditional
+tree in inner-python-package which makes things hard to read.
+
+Rather than conditions, it's also possible to use indirect variables.
+Concretely, we can define PKG_PYTHON_DISTUTILS_BUILD_CMD etc., and use
+$(PKG_PYTHON_$($(PKG)_SETUP_TYPE)_BUILD_CMD) instead of
+$($(PKG)_BASE_BUILD_CMD) to dispatch to the right _BUILD_CMD variable.
+
+Once we do the same for all other variables that are set in the
+condition tree, we'll be able to remove the condition tree entirely.
+
+setuptools-rust, flit and maturin didn't have their own definition of
+_BUILD_CMD but were under the setuptools resp. pep517 condition. For
+these, we have to define new variables that copy the value from
+PKG_PYTHON_SETUPTOOLS_BUILD_CMD resp. PKG_PYTHON_PEP517_BUILD_CMD.
 
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/pkg-python.mk | 47 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 33 insertions(+), 14 deletions(-)
+ package/pkg-python.mk | 50 ++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 40 insertions(+), 10 deletions(-)
 
 diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index eacf75c165..c1640d71bb 100644
+index 8e8955f3c4..5f8ef14262 100644
 --- a/package/pkg-python.mk
 +++ b/package/pkg-python.mk
-@@ -324,6 +324,7 @@ $(2)_DOWNLOAD_POST_PROCESS = cargo
- $(2)_DOWNLOAD_DEPENDENCIES = host-rustc
- endif # SETUP_TYPE
+@@ -57,7 +57,8 @@ PKG_PYTHON_DISTUTILS_ENV = \
+ 	$(PKG_PYTHON_ENV) \
+ 	LDSHARED="$(TARGET_CROSS)gcc -shared"
  
-+ifeq ($(4),target)
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
-@@ -338,20 +339,6 @@ define $(2)_BUILD_CMDS
+-PKG_PYTHON_DISTUTILS_BUILD_OPTS = \
++PKG_PYTHON_DISTUTILS_BUILD_CMD = \
++	setup.py build \
+ 	--executable=/usr/bin/python
+ 
+ PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+@@ -76,6 +77,9 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+ HOST_PKG_PYTHON_DISTUTILS_ENV = \
+ 	$(HOST_PKG_PYTHON_ENV)
+ 
++HOST_PKG_PYTHON_DISTUTILS_BUILD_CMD = \
++	setup.py build \
++
+ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR)
+ 
+@@ -86,6 +90,9 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
+ PKG_PYTHON_SETUPTOOLS_CMD = \
+ 	$(if $(wildcard $($(PKG)_BUILDDIR)/setup.py),setup.py,-c 'from setuptools import setup;setup()')
+ 
++PKG_PYTHON_SETUPTOOLS_BUILD_CMD = \
++	$(PKG_PYTHON_SETUPTOOLS_CMD) build
++
+ PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--install-headers=/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	--prefix=/usr \
+@@ -104,6 +111,9 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	$(HOST_PKG_PYTHON_ENV)
+ 
++HOST_PKG_PYTHON_SETUPTOOLS_BUILD_CMD = \
++	$(PKG_PYTHON_SETUPTOOLS_CMD) build
++
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+ 	--root=/ \
+@@ -115,16 +125,25 @@ PKG_PYTHON_SETUPTOOLS_RUST_ENV = \
+ 	$(PKG_CARGO_ENV) \
+ 	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+ 
++PKG_PYTHON_SETUPTOOLS_RUST_BUILD_CMD = \
++	$(PKG_PYTHON_SETUPTOOLS_BUILD_CMD)
++
+ # Host setuptools-rust-based packages
+ HOST_PKG_PYTHON_SETUPTOOLS_RUST_ENV = \
+ 	$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
+ 	$(HOST_PKG_CARGO_ENV) \
+ 	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)"
+ 
++HOST_PKG_PYTHON_SETUPTOOLS_RUST_BUILD_CMD = \
++	$(HOST_PKG_PYTHON_SETUPTOOLS_BUILD_CMD)
++
+ # Target pep517-based packages
+ PKG_PYTHON_PEP517_ENV = \
+ 	$(PKG_PYTHON_ENV)
+ 
++PKG_PYTHON_PEP517_BUILD_CMD = \
++	-m build -n -w
++
+ PKG_PYTHON_PEP517_INSTALL_OPTS = \
+ 	--interpreter=/usr/bin/python \
+ 	--script-kind=posix
+@@ -147,6 +166,9 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
+ HOST_PKG_PYTHON_PEP517_ENV = \
+ 	$(HOST_PKG_PYTHON_ENV)
+ 
++HOST_PKG_PYTHON_PEP517_BUILD_CMD = \
++	-m build -n -w
++
+ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
+ 	--interpreter=$(HOST_DIR)/bin/python \
+ 	--script-kind=posix \
+@@ -162,26 +184,41 @@ HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
+ PKG_PYTHON_FLIT_ENV = \
+ 	$(PKG_PYTHON_PEP517_ENV)
+ 
++PKG_PYTHON_FLIT_BUILD_CMD = \
++	$(PKG_PYTHON_PEP517_BUILD_CMD)
++
+ # Host flit packages
+ HOST_PKG_PYTHON_FLIT_ENV = \
+ 	$(HOST_PKG_PYTHON_PEP517_ENV)
+ 
++HOST_PKG_PYTHON_FLIT_BUILD_CMD = \
++	$(HOST_PKG_PYTHON_PEP517_BUILD_CMD)
++
+ # Host flit-bootstrap packages
+ HOST_PKG_PYTHON_FLIT_BOOTSTRAP_ENV = \
+ 	$(HOST_PKG_PYTHON_PEP517_ENV)
+ 
++HOST_PKG_PYTHON_FLIT_BOOTSTRAP_BUILD_CMD = \
++	-m flit_core.wheel
++
+ # Target maturin packages
+ PKG_PYTHON_MATURIN_ENV = \
+ 	$(PKG_PYTHON_PEP517_ENV) \
+ 	$(PKG_CARGO_ENV) \
+ 	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+ 
++PKG_PYTHON_MATURIN_BUILD_CMD = \
++	$(PKG_PYTHON_PEP517_BUILD_CMD)
++
+ # Host maturin packages
+ HOST_PKG_PYTHON_MATURIN_ENV = \
+ 	$(HOST_PKG_PYTHON_PEP517_ENV) \
+ 	$(HOST_PKG_CARGO_ENV) \
+ 	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)"
+ 
++HOST_PKG_PYTHON_MATURIN_BUILD_CMD = \
++	$(HOST_PKG_PYTHON_PEP517_BUILD_CMD)
++
+ ################################################################################
+ # inner-python-package -- defines how the configuration, compilation
+ # and installation of a Python package should be done, implements a
+@@ -211,37 +248,30 @@ $(2)_SETUP_TYPE_UPPER = $$(call UPPERCASE,$$($(2)_SETUP_TYPE))
+ # Distutils
+ ifeq ($$($(2)_SETUP_TYPE),distutils)
+ ifeq ($(4),target)
+-$(2)_BASE_BUILD_CMD = setup.py build $$(PKG_PYTHON_DISTUTILS_BUILD_OPTS)
+ $(2)_BASE_INSTALL_TARGET_CMD  = setup.py install --no-compile $$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS)
+ $(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS)
+ else
+-$(2)_BASE_BUILD_CMD   = setup.py build
+ $(2)_BASE_INSTALL_CMD = setup.py install $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)
+ endif
+ # Setuptools
+ else ifneq ($$(filter setuptools setuptools-rust,$$($(2)_SETUP_TYPE)),)
+ ifeq ($(4),target)
+-$(2)_BASE_BUILD_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) build
+ $(2)_BASE_INSTALL_TARGET_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install --no-compile $$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
+ $(2)_BASE_INSTALL_STAGING_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install $$(PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS)
+ else
+-$(2)_BASE_BUILD_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) build
+ $(2)_BASE_INSTALL_CMD = $$(PKG_PYTHON_SETUPTOOLS_CMD) install $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS)
+ endif
+ else ifneq ($$(filter flit maturin pep517,$$($(2)_SETUP_TYPE)),)
+ ifeq ($(4),target)
+-$(2)_BASE_BUILD_CMD = -m build -n -w
+ $(2)_BASE_INSTALL_TARGET_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS)
+ $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS)
+ else
+-$(2)_BASE_BUILD_CMD = -m build -n -w
+ $(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
+ endif
+ else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
+ ifeq ($(4),target)
+ $$(error flit-bootstrap setup type only supported for host packages)
+ else
+-$(2)_BASE_BUILD_CMD = -m flit_core.wheel
+ $(2)_BASE_INSTALL_CMD ?= $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
+ endif
+ else
+@@ -326,7 +356,7 @@ define $(2)_BUILD_CMDS
+ 		$$(PKG_PYTHON_$$($$(PKG)_SETUP_TYPE_UPPER)_ENV) \
+ 		$$($$(PKG)_ENV) \
+ 		$$(HOST_DIR)/bin/python3 \
+-		$$($$(PKG)_BASE_BUILD_CMD) \
++		$$(PKG_PYTHON_$$($$(PKG)_SETUP_TYPE_UPPER)_BUILD_CMD) \
+ 		$$($$(PKG)_BUILD_OPTS))
  endef
  endif
- 
--#
--# Host installation step. Only define it if not already defined by the
--# package .mk file.
--#
--ifndef $(2)_INSTALL_CMDS
--define $(2)_INSTALL_CMDS
--	(cd $$($$(PKG)_BUILDDIR)/; \
--		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
--		$$(HOST_DIR)/bin/python3 \
--		$$($$(PKG)_BASE_INSTALL_CMD) \
--		$$($$(PKG)_INSTALL_OPTS))
--endef
--endif
--
- #
- # Target installation step. Only define it if not already defined by
- # the package .mk file.
-@@ -380,6 +367,38 @@ define $(2)_INSTALL_STAGING_CMDS
+@@ -373,7 +403,7 @@ define $(2)_BUILD_CMDS
+ 		$$(HOST_PKG_PYTHON_$$($$(PKG)_SETUP_TYPE_UPPER)_ENV) \
+ 		$$($$(PKG)_ENV) \
+ 		$$(HOST_DIR)/bin/python3 \
+-		$$($$(PKG)_BASE_BUILD_CMD) \
++		$$(HOST_PKG_PYTHON_$$($$(PKG)_SETUP_TYPE_UPPER)_BUILD_CMD) \
+ 		$$($$(PKG)_BUILD_OPTS))
  endef
  endif
- 
-+else # host
-+
-+#
-+# Host build step. Only define it if not already defined by the package .mk
-+# file.
-+#
-+ifndef $(2)_BUILD_CMDS
-+define $(2)_BUILD_CMDS
-+	(cd $$($$(PKG)_BUILDDIR)/; \
-+		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
-+		$$(HOST_DIR)/bin/python3 \
-+		$$($$(PKG)_BASE_BUILD_CMD) \
-+		$$($$(PKG)_BUILD_OPTS))
-+endef
-+endif
-+
-+#
-+# Host installation step. Only define it if not already defined by the
-+# package .mk file.
-+#
-+ifndef $(2)_INSTALL_CMDS
-+define $(2)_INSTALL_CMDS
-+	(cd $$($$(PKG)_BUILDDIR)/; \
-+		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
-+		$$(HOST_DIR)/bin/python3 \
-+		$$($$(PKG)_BASE_INSTALL_CMD) \
-+		$$($$(PKG)_INSTALL_OPTS))
-+endef
-+endif
-+
-+endif # host / target
-+
- # Call the generic package infrastructure to generate the necessary
- # make targets
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
 -- 
 2.41.0
 
