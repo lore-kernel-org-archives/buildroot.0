@@ -4,89 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2F13E77377
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 16:06:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C9E5E77377
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 16:09:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B89742D08;
-	Sat, 30 Sep 2023 16:06:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B89742D08
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3FE6421E1;
+	Sat, 30 Sep 2023 16:09:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3FE6421E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5tZE_WSOaleB; Sat, 30 Sep 2023 16:06:56 +0000 (UTC)
+	with ESMTP id Z0sj3W8LzFtc; Sat, 30 Sep 2023 16:09:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26A9B42CEC;
-	Sat, 30 Sep 2023 16:06:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26A9B42CEC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 258621BF681
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:06:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFC4342238;
+	Sat, 30 Sep 2023 16:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFC4342238
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 43EB21BF36F
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F249760BF7
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:06:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F249760BF7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23666421E1
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:09:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23666421E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id me9ZdHkT0uzp for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 16:06:34 +0000 (UTC)
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4E8ED60BD3
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 16:06:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E8ED60BD3
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-32320381a07so10753548f8f.0
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 09:06:34 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4junVFlRz-gy for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 16:09:10 +0000 (UTC)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 97EED42238
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 16:09:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97EED42238
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-31c5cac3ae2so14464222f8f.3
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 09:09:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696089992; x=1696694792;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=1e100.net; s=20230601; t=1696090147; x=1696694947;
+ h=content-transfer-encoding:in-reply-to:references:to:from
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=/uY9+lyJBN0qEmdkYhykgvqLczd/S3/xCBJM6hJqg7Y=;
- b=LEw8fVkfDUfPJxck73hcNLq3ltCqu2efvgFpmkrw9ZpQjFi7YpMa+30Bm1l5fTSMjD
- s8nB2H5jaPu395IKkSXG+0uz6oF5ADAbpHNBGFLl7/NufixzqPzFN1Ghqrjz4VNfjoKs
- +QkZivVQ7tFjhTWoYAkBjs+ovDhhvnHGKc1BcUhUbNfqYz/gDMB6gjGw/N6Dx/BEYPcx
- E/V5LE2dSxYwyjtzJaj55XgPZPcv2Cd4iDHaewDRP3LqqDEO92gwkNOMZYG+FxTfGpa2
- m/CJDgcEwGf/NaPDewPc+4080QTPGkZQn7kNjR1K8JO8LsfUD0UdkD8L3Cv0bxJ2SAoW
- x6dw==
-X-Gm-Message-State: AOJu0YwDqswlcOuphXcUKuUCac7/Jbh+sR0qPOJGW1yvGrhDT07cu51r
- mrMHMKqvh5Yo0sXTIn3rH9wUwxGapokjHfGLogUSaA==
-X-Google-Smtp-Source: AGHT+IFFfnFARRdMamGGkOorrIq6ZKcjW7RwS/COF2cXzF/0+Jl3DgT4lcou5C096F9uQFCZAUlMJw==
-X-Received: by 2002:adf:d235:0:b0:327:b583:21a4 with SMTP id
- k21-20020adfd235000000b00327b58321a4mr76686wrh.8.1696089992278; 
- Sat, 30 Sep 2023 09:06:32 -0700 (PDT)
+ bh=ymHhE/fOAg5EHrarRnjc0bIB++vb2676zBusalIfjSk=;
+ b=sE1RWTEa/EdGQsTCJtTTkjczgjHDK5+qFfDLSegtXnCHRD64xFBw71v4VqoE086OFk
+ PLk0QYtpZSxRtKeeMZHXKaBleOZScOc5NEF677DBAmtpbx5oKzKsSuiOJ0NAwNnPDpRG
+ BXbzosS6cs4WWTJx/TX9fu2r2my+9Mi7zXVg+uHPI6/SgkFy6PZUA+RcHKECgc4PPU/a
+ xg08PicJMfLxIDc7qdbDtSNB/lVcfspKKIpgDlJ1uyuCiLymspEh/Wny6jbsTsQN1h0T
+ bs7jsu4b2Hin2WlH3r9jL90al4X3xuPaeCYkn+Nl6eDE+n2EL3bN9Gqw5H68XzhgFTWV
+ amzA==
+X-Gm-Message-State: AOJu0Yx+eCEcMLt84qAxg5AF4jNG/fXyhQdVzhZPqKEYB1BZzvSLz9ZX
+ p4q0R9SQcwu/MNAhOPb9eRUFiAy/IOjR1yOEpfH44g==
+X-Google-Smtp-Source: AGHT+IGgZBCdxc4sdfSPK/JGNordrZPw6SnKztDSye1NY304rtVrTKOE/IwhjI1TFnDd4HRK1D/cZg==
+X-Received: by 2002:adf:ce0c:0:b0:323:30bb:f19c with SMTP id
+ p12-20020adfce0c000000b0032330bbf19cmr6593333wrn.10.1696090147495; 
+ Sat, 30 Sep 2023 09:09:07 -0700 (PDT)
 Received: from ?IPV6:2a01:cb04:4ad:b00:5ddb:2bcd:94e3:5264?
  (2a01cb0404ad0b005ddb2bcd94e35264.ipv6.abo.wanadoo.fr.
  [2a01:cb04:4ad:b00:5ddb:2bcd:94e3:5264])
  by smtp.gmail.com with ESMTPSA id
- d17-20020adfe891000000b003266ece0fe2sm2374795wrm.98.2023.09.30.09.06.31
+ n3-20020adff083000000b003143867d2ebsm23935354wro.63.2023.09.30.09.09.05
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 30 Sep 2023 09:06:31 -0700 (PDT)
-Message-ID: <63b848ff-3ec5-b4ed-d381-2c30f8ded8a7@mind.be>
-Date: Sat, 30 Sep 2023 18:06:29 +0200
+ Sat, 30 Sep 2023 09:09:06 -0700 (PDT)
+Message-ID: <6e20a037-edad-e7c8-642a-05e4b262c5cd@mind.be>
+Date: Sat, 30 Sep 2023 18:09:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
 Content-Language: en-GB
 To: Angelo Compagnucci <angelo@amarulasolutions.com>, buildroot@buildroot.org
 References: <20221004110421.137795-1-angelo@amarulasolutions.com>
-In-Reply-To: <20221004110421.137795-1-angelo@amarulasolutions.com>
+ <63b848ff-3ec5-b4ed-d381-2c30f8ded8a7@mind.be>
+In-Reply-To: <63b848ff-3ec5-b4ed-d381-2c30f8ded8a7@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1696089992; x=1696694792; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=mind.be; s=google; t=1696090147; x=1696694947; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:references:to:from
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=/uY9+lyJBN0qEmdkYhykgvqLczd/S3/xCBJM6hJqg7Y=;
- b=SZN8vAl1vBEqkaAXepumV1L2VZC1phqnaf1QkGXu0MmxDpAscXU/Mi2aFCmsoix+UG
- 8+Gdx6n5055M/1TuoW2p6oBNdRlolFRIjjW9G1sVXRvkuG2oXdOIbtjctMGs51eQIroJ
- Wkqo7x1kwhjZhsXRpQkF4MEBpOHCSGyAlLz+tTH8Wj7B4YN6B9ibybv9qWgpQt64ufXL
- jVGqDMMhSmqxqp/3j7H1stObu8qAogoRUQVd3U9oJ+PQjk2xR8BHi90A9cwe3hJnq6KJ
- eOex0cLRTNqQmfLzNJZs3+AihLDWKNrp79teDaIOXwFz2wQ+YUbGmY91BwZXtzOaZAzQ
- IVMA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=ymHhE/fOAg5EHrarRnjc0bIB++vb2676zBusalIfjSk=;
+ b=Z4lnWtwT/YZCyUvovz7QS0ljnZZ1VS6r+WoyGFXygqNACJWq+peCi90dL0fB8KZ80k
+ Q08LO1XmgCQFC8ytOY0hiuzubZDeAUZn3JW1m26fog8Beftw4Yunx5fDUxsrhr1z1PdT
+ 02hSZhbKEYk4GSsNx+ANagh9o2zXoqj4Rg91yWfZim0eFvH8Yu6/EX5L3H8sEhlSmMhc
+ xWNi/pOKS43eFY53FsekXa3q5fZj1OpztYCAtsyljCShtD3RopY1MBf/HbW1yT+a7CIK
+ DDSr36fNQHjDwNjPdWTxCynpNqtUWA4NpQvj/8Vod/uTc3V/xyiWYroFGNfhwoW0ZLFl
+ bE/A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SZN8vAl1
+ header.a=rsa-sha256 header.s=google header.b=Z4lnWtwT
 Subject: Re: [Buildroot] [PATCH v4 0/5] Configure default wifi through
  kconfig
 X-BeenThere: buildroot@buildroot.org
@@ -102,49 +103,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 04/10/2022 13:04, Angelo Compagnucci wrote:
-> This series was born while adding support for a board and feeling the
-> necessity to have the networking options available in .config.
-> I understand that something like that could be done by adding an
-> overlay, but it requires a lot of boilerplate only to be able to connect
-> to a wifi network.
-
-  As you say, it's something that can easily be added in an overlay. In 
-addition, it's something that is only useful in a very specific, very small use 
-case: when you're demonstrating a board of which you use only in a single place 
-and aren't planning to move anywhere else, and when you don't want ot spend time 
-preparing a proper overlay for it.
-
-  So, I'm going to mark this series as rejected.
-
-  That said, there are some useful bits in it, which I'll comment on individually.
-
-  Regards,
-  Arnout
-
-> 
-> Angelo Compagnucci (5):
->    system: adding options for configuring wifi
->    package/wpa_supplicant: configure wifi on systemv when enabled
->    package/wpa_supplicant: configure wifi on systemd when enabled
->    package/ifupdown-scripts: add wifi configuration when enabled
->    package/initscripts: add service to load kernel modules at boot
-> 
->   package/ifupdown-scripts/ifupdown-scripts.mk |  2 +
->   package/initscripts/init.d/S11modules        | 59 ++++++++++++++++++++
->   package/wpa_supplicant/wpa_supplicant.mk     | 24 ++++++++
->   system/Config.in                             | 15 +++++
->   4 files changed, 100 insertions(+)
->   create mode 100644 package/initscripts/init.d/S11modules
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Ck9uIDMwLzA5LzIwMjMgMTg6MDYsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+Cj4KPiBP
+biAwNC8xMC8yMDIyIDEzOjA0LCBBbmdlbG8gQ29tcGFnbnVjY2kgd3JvdGU6Cj4+IFRoaXMgc2Vy
+aWVzIHdhcyBib3JuIHdoaWxlIGFkZGluZyBzdXBwb3J0IGZvciBhIGJvYXJkIGFuZCBmZWVsaW5n
+IHRoZQo+PiBuZWNlc3NpdHkgdG8gaGF2ZSB0aGUgbmV0d29ya2luZyBvcHRpb25zIGF2YWlsYWJs
+ZSBpbiAuY29uZmlnLgo+PiBJIHVuZGVyc3RhbmQgdGhhdCBzb21ldGhpbmcgbGlrZSB0aGF0IGNv
+dWxkIGJlIGRvbmUgYnkgYWRkaW5nIGFuCj4+IG92ZXJsYXksIGJ1dCBpdCByZXF1aXJlcyBhIGxv
+dCBvZiBib2lsZXJwbGF0ZSBvbmx5IHRvIGJlIGFibGUgdG8gY29ubmVjdAo+PiB0byBhIHdpZmkg
+bmV0d29yay4KPgo+IMKgQXMgeW91IHNheSwgaXQncyBzb21ldGhpbmcgdGhhdCBjYW4gZWFzaWx5
+IGJlIGFkZGVkIGluIGFuIG92ZXJsYXkuIEluIAo+IGFkZGl0aW9uLCBpdCdzIHNvbWV0aGluZyB0
+aGF0IGlzIG9ubHkgdXNlZnVsIGluIGEgdmVyeSBzcGVjaWZpYywgdmVyeSBzbWFsbCAKPiB1c2Ug
+Y2FzZTogd2hlbiB5b3UncmUgZGVtb25zdHJhdGluZyBhIGJvYXJkIG9mIHdoaWNoIHlvdSB1c2Ug
+b25seSBpbiBhIHNpbmdsZSAKPiBwbGFjZSBhbmQgYXJlbid0IHBsYW5uaW5nIHRvIG1vdmUgYW55
+d2hlcmUgZWxzZSwgYW5kIHdoZW4geW91IGRvbid0IHdhbnQgb3QgCj4gc3BlbmQgdGltZSBwcmVw
+YXJpbmcgYSBwcm9wZXIgb3ZlcmxheSBmb3IgaXQuCj4KPiDCoFNvLCBJJ20gZ29pbmcgdG8gbWFy
+ayB0aGlzIHNlcmllcyBhcyByZWplY3RlZC4KPgo+IMKgVGhhdCBzYWlkLCB0aGVyZSBhcmUgc29t
+ZSB1c2VmdWwgYml0cyBpbiBpdCwgd2hpY2ggSSdsbCBjb21tZW50IG9uIGluZGl2aWR1YWxseS4K
+CiDCoEluIGEgZGlzY3Vzc2lvbiB0aHJlYWQgb24gdjMsIHlvdSB3cm90ZSB0aGF0IGN1cnJlbnRs
+eSB0aGlzIGlzIHlvdXIgZG9jdW1lbnRhdGlvbjoKCiDCoCMgd3BhX3Bhc3NwaHJhc2UgQUNDRVNT
+UE9JTlROQU1FID4+IC9ldGMvd3BhX3N1cHBsaWNhbnQuY29uZgogwqAgwqAodHlwZSBwYXNzd29y
+ZCBhbmQgZW50ZXIpCiDCoCMgd3BhX3N1cHBsaWNhbnQgLWkgd2xhbjAgLWMgL2V0Yy93cGFfc3Vw
+cGxpY2FudC5jb25mIC1CCiDCoCMgdWRoY3BjIC1pIHdsYW4wCgoKIMKgQmFzaWNhbGx5LCByZW1v
+dmluZyB0aGUgbmVlZCBmb3IgdGhlIGxhdHRlciB0d28gc3RlcHMgaXMgd29ydGh3aGlsZSwgYnV0
+IHRoZSAKZmlyc3Qgc3RlcCBpcyBvbmx5IHJlYXNvbmFibGUgdG8gZG8gb24gdGhlIGRldmljZSBp
+dHNlbGYuCgogwqBSZWdhcmRzLAogwqBBcm5vdXQKCgo+Cj4gwqBSZWdhcmRzLAo+IMKgQXJub3V0
+Cj4KPj4KPj4gQW5nZWxvIENvbXBhZ251Y2NpICg1KToKPj4gwqDCoCBzeXN0ZW06IGFkZGluZyBv
+cHRpb25zIGZvciBjb25maWd1cmluZyB3aWZpCj4+IMKgwqAgcGFja2FnZS93cGFfc3VwcGxpY2Fu
+dDogY29uZmlndXJlIHdpZmkgb24gc3lzdGVtdiB3aGVuIGVuYWJsZWQKPj4gwqDCoCBwYWNrYWdl
+L3dwYV9zdXBwbGljYW50OiBjb25maWd1cmUgd2lmaSBvbiBzeXN0ZW1kIHdoZW4gZW5hYmxlZAo+
+PiDCoMKgIHBhY2thZ2UvaWZ1cGRvd24tc2NyaXB0czogYWRkIHdpZmkgY29uZmlndXJhdGlvbiB3
+aGVuIGVuYWJsZWQKPj4gwqDCoCBwYWNrYWdlL2luaXRzY3JpcHRzOiBhZGQgc2VydmljZSB0byBs
+b2FkIGtlcm5lbCBtb2R1bGVzIGF0IGJvb3QKPj4KPj4gwqAgcGFja2FnZS9pZnVwZG93bi1zY3Jp
+cHRzL2lmdXBkb3duLXNjcmlwdHMubWsgfMKgIDIgKwo+PiDCoCBwYWNrYWdlL2luaXRzY3JpcHRz
+L2luaXQuZC9TMTFtb2R1bGVzwqDCoMKgwqDCoMKgwqAgfCA1OSArKysrKysrKysrKysrKysrKysr
+Kwo+PiDCoCBwYWNrYWdlL3dwYV9zdXBwbGljYW50L3dwYV9zdXBwbGljYW50Lm1rwqDCoMKgwqAg
+fCAyNCArKysrKysrKwo+PiDCoCBzeXN0ZW0vQ29uZmlnLmluwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAxNSArKysrKwo+PiDCoCA0IGZp
+bGVzIGNoYW5nZWQsIDEwMCBpbnNlcnRpb25zKCspCj4+IMKgIGNyZWF0ZSBtb2RlIDEwMDY0NCBw
+YWNrYWdlL2luaXRzY3JpcHRzL2luaXQuZC9TMTFtb2R1bGVzCj4+Cl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
