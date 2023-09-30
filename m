@@ -4,65 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF5ACE77371
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:08:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30E25E77371
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:10:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B45283E28;
-	Sat, 30 Sep 2023 14:08:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B45283E28
+	by smtp1.osuosl.org (Postfix) with ESMTP id D90C083DDD;
+	Sat, 30 Sep 2023 14:10:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D90C083DDD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QfVqF9T2814i; Sat, 30 Sep 2023 14:08:50 +0000 (UTC)
+	with ESMTP id z5ur42Bksw7I; Sat, 30 Sep 2023 14:10:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5C3783E2B;
-	Sat, 30 Sep 2023 14:08:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5C3783E2B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A249D1BF36F
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:08:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A41EA83DBD;
+	Sat, 30 Sep 2023 14:10:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A41EA83DBD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BF66E1BF36F
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:10:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1585760A6F
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:08:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1585760A6F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 980C783DBD
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:10:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 980C783DBD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yq_dW2eJHiZ0 for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 14:08:35 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8DDE660A5C
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:08:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DDE660A5C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3AACEC0002;
- Sat, 30 Sep 2023 14:08:32 +0000 (UTC)
-Date: Sat, 30 Sep 2023 16:08:31 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230930160831.11292fee@windsurf>
-In-Reply-To: <20230930132822.436857-1-fontaine.fabrice@gmail.com>
-References: <20230930132822.436857-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1696082912;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=n/W/dAFTdlskEexuZd04U54W3GwXGlzT0TrpJuYbVy4=;
- b=f4p8W3Su4SHA12IXmMsgmWduOxGi1aBJnjm7J/wrQOhnQUPZT6msVhNCGADZU5J7vJqRuj
- 1vHg5JzHSuPgSoXHXO6JZoEWs46wba+VUDVP6ulFo11MHuejlpVVQUw0dZHQ2MZi6tuXvg
- yxL4ZVrRzyenSPVsDXzS/3iKmYaB+DT8BAPlvWGznak5II3wonk90CQs8m4pr4+ufqTwE/
- CUBD56kO+2T95UeB+Qa6IqDLyJw8dWg34bDWPmWGV/M2yLZ3iTER006Rj1BS+0VhzsF4wV
- rqw3J+s8Vc3Ed8RIl5kATKBm5V6Lv4E3yYGQiFX0RKK27H6CgTZZnGgYQXYJng==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=f4p8W3Su
-Subject: Re: [Buildroot] [PATCH 1/1] package/open-iscsi: fix musl build
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mQZD05JLHly9 for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 14:10:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80A6B83CFC
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:10:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80A6B83CFC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6B49983A28; Sat, 30 Sep 2023 14:10:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 30 Sep 2023 16:09:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ea8fc3182797e3691705a9c45e83a16496367904
+X-Git-Newrev: 27fd001ce4054e367b371d910ca947e84fcfb7bf
+X-Patchwork-Hint: ignore
+Message-Id: <20230930141036.6B49983A28@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/association.html: move
+ buildroot-association to Gitlab
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,33 +57,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: TIAN Yuanhao <tianyuanhao3@163.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2292878213402530178=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 30 Sep 2023 15:28:22 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+--===============2292878213402530178==
+Content-Type: text/plain
 
-> ++#ifndef GLOB_ONLYDIR
-> ++#define GLOB_ONLYDIR	0x100
-> ++#endif
+commit: https://git.buildroot.net/buildroot/commit/?id=27fd001ce4054e367b371d910ca947e84fcfb7bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-But musl doesn't support this flag, so isn't that wrong? musl will most
-likely ignore it. What is the impact on the application if the glob
-also matches files, not just directories? Perhaps it breaks the
-application behavior. Are you sure we can just blindly do this
-workaround?
+The buildroot-association repository used to be hosted on Github, then
+was closed for some banking issues. We're now making it public again,
+but on Gitlab like the rest of Buildroot.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ docs/website/association.html | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/docs/website/association.html b/docs/website/association.html
+index 0215f85874..0c2306f348 100644
+--- a/docs/website/association.html
++++ b/docs/website/association.html
+@@ -32,21 +32,21 @@
+ 	  </ul>
+ 
+ 	  <p>The bylaws of the association are available
+-	  in <a href="https://raw.githubusercontent.com/buildroot/buildroot-association/master/statuts_fr.txt">French</a>
++	  in <a href="https://gitlab.com/buildroot.org/buildroot-association/-/raw/master/statuts_fr.txt">French</a>
+ 	  (official) and
+-	  in <a href="https://github.com/buildroot/buildroot-association/blob/master/statutes_en.txt">English</a>
++	  in <a href="https://gitlab.com/buildroot.org/buildroot-association/-/raw/master/statutes_en.txt">English</a>
+ 	  (unofficial translation). The association was declared on
+ 	  March 14, 2016 to the <em>Préfecture de Haute-Garonne</em>
+ 	  (France) and is registered under the n°W313024278. See this
+-	  official <a href="https://github.com/buildroot/buildroot-association/blob/master/pdf/Recepisse_CR.pdf">receipt</a>
++	  official <a href="https://gitlab.com/buildroot.org/buildroot-association/-/raw/master/pdf/Recepisse_CR.pdf">receipt</a>
+ 	  from the French authorities.</p>
+ 
+ 	  <p>Our accounting is fully public, including the bank
+ 	  account summaries,
+-	  see <a href="https://github.com/buildroot/buildroot-association/tree/master/accounting">accounting</a>. Numerous
++	  see <a href="https://gitlab.com/buildroot.org/buildroot-association/-/tree/master/accounting">accounting</a>. Numerous
+ 	  other administrative documents related to the association
+ 	  are available on
+-	  its <a href="https://github.com/buildroot/buildroot-association/">Github
++	  its <a href="https://gitlab.com/buildroot.org/buildroot-association/">Gitlab
+ 	  repository</a></p>
+ 	</div>
+       </div>
+@@ -68,7 +68,7 @@
+ 
+ 	  <p>Once the membership fee is received, it will be listed in
+ 	  the
+-	  association <a href="https://github.com/buildroot/buildroot-association/tree/master/accounting">accounting</a>
++	  association <a href="https://gitlab.com/buildroot.org/buildroot-association/-/tree/master/accounting">accounting</a>
+ 	  files, which serve as the official list of
+ 	  members. Therefore, members accept that their name and the
+ 	  amount of their membership fee is made public.</p>
+
+--===============2292878213402530178==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2292878213402530178==--
