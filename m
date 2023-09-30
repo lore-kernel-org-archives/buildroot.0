@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FEC7E7735F
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 07:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69FD6E7735E
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 07:14:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16FF341F32;
-	Sat, 30 Sep 2023 07:13:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16FF341F32
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1802742EA4;
+	Sat, 30 Sep 2023 07:14:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1802742EA4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cg797_UoMora; Sat, 30 Sep 2023 07:13:52 +0000 (UTC)
+	with ESMTP id ROGRcgmbbTl9; Sat, 30 Sep 2023 07:14:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAA9B42EB6;
-	Sat, 30 Sep 2023 07:13:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAA9B42EB6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0BB891BF417
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D16C42EBC;
+	Sat, 30 Sep 2023 07:14:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D16C42EBC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AB311BF86B
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 07:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7AA340191
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 07:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7AA340191
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0283260F3A
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 07:13:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0283260F3A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gJF63M8Azc4K for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TOpTaU0SbIrC for <buildroot@lists.busybox.net>;
  Sat, 30 Sep 2023 07:13:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D0A040136
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13F7F60BCE
  for <buildroot@buildroot.org>; Sat, 30 Sep 2023 07:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D0A040136
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13F7F60BCE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EAC7B828DE; Sat, 30 Sep 2023 07:13:47 +0000 (UTC)
+ id F342682A17; Sat, 30 Sep 2023 07:13:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 09:11:08 +0200
+Date: Sat, 30 Sep 2023 09:11:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c7cae57af0da81492ac11c062c1cab1693b3bbed
-X-Git-Newrev: d86485b26929f2e7e1106ed5249ddfe577b3dd3e
+X-Git-Oldrev: d86485b26929f2e7e1106ed5249ddfe577b3dd3e
+X-Git-Newrev: e8eea6a9eb03046b390e66a862dddac9577b01d4
 X-Patchwork-Hint: ignore
-Message-Id: <20230930071347.EAC7B828DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-mozilla-ca: bump to version
- 20230821
+Message-Id: <20230930071347.F342682A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-net-dns: bump to version 1.40
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d86485b26929f2e7e1106ed5249ddfe577b3dd3e
+commit: https://git.buildroot.net/buildroot/commit/?id=e8eea6a9eb03046b390e66a862dddac9577b01d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-mozilla-ca/perl-mozilla-ca.hash | 6 +++---
- package/perl-mozilla-ca/perl-mozilla-ca.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-net-dns/perl-net-dns.hash | 5 +++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
-index 799a531fe6..33465ca316 100644
---- a/package/perl-mozilla-ca/perl-mozilla-ca.hash
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index f6292d242a..35f2e92eea 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
+@@ -1,5 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  2f136d096352a418e546e4afb70e7aa9  Mozilla-CA-20221114.tar.gz
--sha256  701bea67be670add5a102f9f8c879402b4983096b1cb0e20dd47d52d7a10666b  Mozilla-CA-20221114.tar.gz
+-sha256  e99cdedf9f0d60dca16f613e488c5b7f123c2fb24b3346d580cfe7da40851ac6  Net-DNS-1.39.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  a9b7b700e651cd74130edf7432f8657f  Mozilla-CA-20230821.tar.gz
-+sha256  32e1d0045299004045b9c4d16c2daae453a216208873deea2440f71260a7cda1  Mozilla-CA-20230821.tar.gz
++md5  a71e4cfe069e700fc52bacb6dbc0cdc5  Net-DNS-1.40.tar.gz
++sha256  209bbd40de8d48c1bd7aade48da237fe0a499f89d279baa2e1a99bd5ec922ddc  Net-DNS-1.40.tar.gz
  
  # computed by scancpan
- sha256  95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e  README
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
-index a124860b7a..b122798a29 100644
---- a/package/perl-mozilla-ca/perl-mozilla-ca.mk
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
-@@ -4,9 +4,9 @@
+ sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index 2626c22d64..d49a00f5f1 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOZILLA_CA_VERSION = 20221114
-+PERL_MOZILLA_CA_VERSION = 20230821
- PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
--PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
-+PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LW/LWP
- PERL_MOZILLA_CA_LICENSE = MPL-2.0
- PERL_MOZILLA_CA_LICENSE_FILES = README
- PERL_MOZILLA_CA_DISTNAME = Mozilla-CA
+-PERL_NET_DNS_VERSION = 1.39
++PERL_NET_DNS_VERSION = 1.40
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
