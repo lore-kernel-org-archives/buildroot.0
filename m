@@ -4,51 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 522E3E7737A
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 16:34:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB5CE7737A
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 16:41:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E55EE41C26;
-	Sat, 30 Sep 2023 16:34:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E55EE41C26
+	by smtp4.osuosl.org (Postfix) with ESMTP id E750941DE1;
+	Sat, 30 Sep 2023 16:41:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E750941DE1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2JAqCsDUVPZd; Sat, 30 Sep 2023 16:34:08 +0000 (UTC)
+	with ESMTP id SwaVdd9hR8eo; Sat, 30 Sep 2023 16:41:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0C0D421E3;
-	Sat, 30 Sep 2023 16:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0C0D421E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC4C041E2C;
+	Sat, 30 Sep 2023 16:41:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC4C041E2C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A70641BF2A3
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:34:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 63FB11BF3EB
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8281160EF7
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:34:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8281160EF7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EC8360F66
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:41:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EC8360F66
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eUCpd3vTEuKP for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 16:34:03 +0000 (UTC)
-X-Greylist: delayed 2040 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 30 Sep 2023 16:34:03 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EE1A60D90
-Received: from mx01.ayax.eu (mx01.ayax.eu [188.137.98.110])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2EE1A60D90
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 16:34:03 +0000 (UTC)
-Received: from [192.168.192.146] (port=52218 helo=nx64de-df6d00)
- by mx01.ayax.eu with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.92) (envelope-from <gszymaszek@short.pl>)
- id 1qmcNq-0003da-Rb; Sat, 30 Sep 2023 17:59:58 +0200
-Date: Sat, 30 Sep 2023 17:59:57 +0200
-From: Grzegorz Szymaszek <gszymaszek@short.pl>
-To: buildroot@buildroot.org
-Message-ID: <ZRhF_WeyOgEfAz6K@nx64de-df6d00>
-Mail-Followup-To: buildroot@buildroot.org
+ with ESMTP id csmlJdUveYXZ for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 16:41:19 +0000 (UTC)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com
+ [209.85.208.172])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D56F960F27
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 16:41:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D56F960F27
+Received: by mail-lj1-f172.google.com with SMTP id
+ 38308e7fff4ca-2c008042211so244967701fa.2
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 09:41:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696092076; x=1696696876;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=qI/hnNScI5Mol7BG514XhwVtM612Fgy2xCIo0ku1TfY=;
+ b=d6zdfhW/HliDPSy0iZ3/wGtRz1U227OTs1PjRH9LS8QlDsyTuPn5W4XlJd/2IZjrX2
+ Bd7LeQyQI/atiekqFGrosilgxMQ1UsSTTyCZANUY/7mdT49VkYSTYKf54GmQWw+MWeAq
+ w9clW75GZa0LuuSieZwDPBUp9lq+fTXDfImiUxtHIc0TliN1OZnpPcNp0d56KtO864qG
+ g2YucOKStq6NNig7dpU5af+baXg4N+L+MzZdH5cBwf4DNoFnQJQn9mZdZY74BqWPAfvz
+ SvuOxX4eWQZMGeUjTDHcbVYW4QS8qMOzi4uGf6mQCrXsjYSBUvlnQWy7X74v6gqseynS
+ Xbsg==
+X-Gm-Message-State: AOJu0Yyv+W7leRBBEtLzE7vTQ5fohkYPnyhG9UqUOR9NCFK9bAfyFe8J
+ 5yIedzsvSzB6SplnhcUxDJGNsFMKfUg=
+X-Google-Smtp-Source: AGHT+IGNFGx1+YSlxblQbiEfI4OhhwknpnIlNh5W9MzxLsk7BHBYZe2KNe1JUy7fOA8arJaUCFwKzA==
+X-Received: by 2002:a2e:88cf:0:b0:2b6:ea3b:f082 with SMTP id
+ a15-20020a2e88cf000000b002b6ea3bf082mr6730374ljk.38.1696092076050; 
+ Sat, 30 Sep 2023 09:41:16 -0700 (PDT)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com.
+ [209.85.167.43]) by smtp.gmail.com with ESMTPSA id
+ d21-20020a2e8915000000b002c00c076840sm4561960lji.133.2023.09.30.09.41.15
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 30 Sep 2023 09:41:15 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id
+ 2adb3069b0e04-5041bb9ce51so23418896e87.1
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 09:41:15 -0700 (PDT)
+X-Received: by 2002:a19:ee12:0:b0:503:cca:e52f with SMTP id
+ g18-20020a19ee12000000b005030ccae52fmr5807032lfb.51.1696092075686; Sat, 30
+ Sep 2023 09:41:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-Subject: [Buildroot] [PATCH] board/stm32mp157: remove hardcoded device tree
- names from post-image.sh
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Sat, 30 Sep 2023 18:41:04 +0200
+X-Gmail-Original-Message-ID: <CACXRmJgnxXirm83N6AV0qmzHiEO_xwZfmaE-jrE08dQERgucaA@mail.gmail.com>
+Message-ID: <CACXRmJgnxXirm83N6AV0qmzHiEO_xwZfmaE-jrE08dQERgucaA@mail.gmail.com>
+To: 20230413142927.3137190-1-aperez@igalia.com, 
+ Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+Subject: [Buildroot] Fwd: package/webkitgtk: allow both X11 and Wayland
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,76 +86,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grzegorz Szymaszek <gszymaszek@short.pl>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0163119507387522272=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The post-image.sh script is used in several STM32MP157-based board
-configs. It had hardcoded device tree file names for the supported
-boards which were used for matching the expected TF-A binary name.
-Replace this mechanism with a pair of grep and sed that build the TF-A
-binary name from the device tree file name. For example, if
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES contained
-DTB_FILE_NAME=stm32mp157c-dk2.dtb, the appropriate TF-A file would be
-named tf-a-stm32mp157c-dk2.stm32.
+--===============0163119507387522272==
+Content-Type: multipart/alternative; boundary="000000000000ad81a606069635b7"
 
-Since the Bash Here Strings are removed with this change, I took the
-opportunity to remove the only other non-POSIX command, "local", and
-then I was able to change the shebang to plain /bin/sh, with -eu for
-simpler error handling.
+--000000000000ad81a606069635b7
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Grzegorz Szymaszek <gszymaszek@short.pl>
----
- .../common/stm32mp157/post-image.sh           | 23 ++++++++-----------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+Hi Adrian,
 
-diff --git a/board/stmicroelectronics/common/stm32mp157/post-image.sh b/board/stmicroelectronics/common/stm32mp157/post-image.sh
-index 363c3127cf..fe3becae86 100755
---- a/board/stmicroelectronics/common/stm32mp157/post-image.sh
-+++ b/board/stmicroelectronics/common/stm32mp157/post-image.sh
-@@ -1,4 +1,4 @@
--#!/usr/bin/env bash
-+#!/bin/sh -eu
- 
- #
- # atf_image extracts the ATF binary image from DTB_FILE_NAME that appears in
-@@ -8,22 +8,19 @@
- #
- atf_image()
- {
--	local ATF_VARIABLES="$(sed -n 's/^BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="\([\/a-zA-Z0-9_=. \-]*\)"$/\1/p' ${BR2_CONFIG})"
--
--	if grep -Eq "DTB_FILE_NAME=stm32mp157c-dk2.dtb" <<< ${ATF_VARIABLES}; then
--		echo "tf-a-stm32mp157c-dk2.stm32"
--	elif grep -Eq "DTB_FILE_NAME=stm32mp157a-dk1.dtb" <<< ${ATF_VARIABLES}; then
--                echo "tf-a-stm32mp157a-dk1.stm32"
--	elif grep -Eq "DTB_FILE_NAME=stm32mp157a-avenger96.dtb" <<< ${ATF_VARIABLES}; then
--                echo "tf-a-stm32mp157a-avenger96.stm32"
--	fi
-+	ATF_VARIABLES="$(sed -n 's/^BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="\([\/a-zA-Z0-9_=. \-]*\)"$/\1/p' ${BR2_CONFIG})"
-+	# make sure DTB_FILE_NAME is set
-+	printf '%s\n' "${ATF_VARIABLES}" | grep -Eq 'DTB_FILE_NAME=[0-9A-Za-z_\-]*'
-+	# extract the value
-+	DTB_FILE_NAME="$(printf '%s\n' "${ATF_VARIABLES}" | sed 's/.*DTB_FILE_NAME=\([a-zA-Z0-9_\-]*\)\.dtb.*/\1/')"
-+	echo "tf-a-${DTB_FILE_NAME}.stm32"
- }
- 
- main()
- {
--	local ATFBIN="$(atf_image)"
--	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
--	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+	ATFBIN="$(atf_image)"
-+	GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
-+	GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
- 	sed -e "s/%ATFBIN%/${ATFBIN}/" \
- 		board/stmicroelectronics/common/stm32mp157/genimage.cfg.template > ${GENIMAGE_CFG}
--- 
-2.40.1
+
+This patch has been merged and can be dropped from patchwork:
+https://patchwork.ozlabs.org/project/buildroot/patch/20230413142927.3137190-1-aperez@igalia.com/
+
+Merged in commit:
+https://github.com/buildroot/buildroot/commit/a23251d3f738b44eab40375fc8822e0358d70517
+
+Note that the added -DENABLE_GLES2 flag is in the meantime dropped in
+webkitgtk 2.42, see my new bump series:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=375404
+
+I also explicitly added the -DUSE_OPENGL_OR_ES flag since it depends on
+GLES and EGL which is not necessarily selected for X11.
+
+Kr,
+
+Thomas Devoogdt
+
+--000000000000ad81a606069635b7
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Hi Adrian,<div dir=3D"auto"><br></div><div dir=3D"auto"><=
+br></div><div dir=3D"auto">This patch has been merged and can be dropped fr=
+om patchwork:=C2=A0</div><div dir=3D"auto"><a href=3D"https://patchwork.ozl=
+abs.org/project/buildroot/patch/20230413142927.3137190-1-aperez@igalia.com/=
+" rel=3D"noreferrer noreferrer" target=3D"_blank">https://patchwork.ozlabs.=
+org/project/buildroot/patch/20230413142927.3137190-1-aperez@igalia.com/</a>=
+</div><div dir=3D"auto"><br></div><div dir=3D"auto">Merged in commit:</div>=
+<div dir=3D"auto"><a href=3D"https://github.com/buildroot/buildroot/commit/=
+a23251d3f738b44eab40375fc8822e0358d70517" rel=3D"noreferrer noreferrer" tar=
+get=3D"_blank">https://github.com/buildroot/buildroot/commit/a23251d3f738b4=
+4eab40375fc8822e0358d70517</a><br></div><div dir=3D"auto"><br></div><div di=
+r=3D"auto">Note that the added -DENABLE_GLES2 flag is in the meantime dropp=
+ed in webkitgtk 2.42, see my new bump series:</div><div dir=3D"auto"><a hre=
+f=3D"https://patchwork.ozlabs.org/project/buildroot/list/?series=3D375404" =
+rel=3D"noreferrer noreferrer" target=3D"_blank">https://patchwork.ozlabs.or=
+g/project/buildroot/list/?series=3D375404</a><br></div><div dir=3D"auto"><b=
+r></div><div dir=3D"auto">I also explicitly added the -DUSE_OPENGL_OR_ES fl=
+ag since it depends on GLES and EGL which is not necessarily selected for X=
+11.=C2=A0</div><div dir=3D"auto"><br></div><div dir=3D"auto">Kr,</div><div =
+dir=3D"auto"><br></div><div dir=3D"auto">Thomas Devoogdt=C2=A0</div></div>
+
+--000000000000ad81a606069635b7--
+
+--===============0163119507387522272==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0163119507387522272==--
