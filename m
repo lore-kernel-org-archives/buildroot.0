@@ -4,46 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0449E748A1
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 19:27:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E77F5E748A1
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 19:28:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 547074219D;
-	Sat, 30 Sep 2023 19:27:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 547074219D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 907AD4208E;
+	Sat, 30 Sep 2023 19:28:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 907AD4208E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OL4B-TyLNOVm; Sat, 30 Sep 2023 19:27:42 +0000 (UTC)
+	with ESMTP id SrYlAu4fExje; Sat, 30 Sep 2023 19:28:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05670421B7;
-	Sat, 30 Sep 2023 19:27:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05670421B7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A8BE1BF48D
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:27:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64AA842179;
+	Sat, 30 Sep 2023 19:28:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64AA842179
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E7331BF48D
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D1ACF41E45
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:27:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1ACF41E45
+ by smtp2.osuosl.org (Postfix) with ESMTP id 150334021C
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:28:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 150334021C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0UIYIfX_Tjma for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 19:27:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8806042152
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 19:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8806042152
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73D1283CB4; Sat, 30 Sep 2023 19:27:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4ke-diZSwNDZ for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 19:28:12 +0000 (UTC)
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com
+ [IPv6:2607:f8b0:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 24C3F4013B
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 19:28:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24C3F4013B
+Received: by mail-pf1-x42c.google.com with SMTP id
+ d2e1a72fcca58-690d8fb3b7eso13798196b3a.1
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 12:28:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696102091; x=1696706891;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=voOCzxZksolVO6V19GC2R/bukwtH1IT66HzUYRH/8rE=;
+ b=qYIesjNwQBk+fk8L/WA/+fcnEeg/FI29nPBfNbbIpy5gu0YWiJ2QxXunEAY2qQc63M
+ SSGfjgmM9xSTcn94Ya3orPzvgtYXIO+XvgSbLWUnOn5PK4UnrHCIhMBFGYX0UUMHc03N
+ jF2zIlnUvYn//iNFl7wz69tJ2g7Ni/H8iHSGv5Li+vud4MBmfaYszTy32J1l2csO2dNk
+ Gbd007xiHhxfx2H+/vvGrFbIxv7mWD4J7TRfkeD5HukUas1w1XqpNaKIfooSebvUFJ67
+ WGa60tHaLvyCgHJ5+DuwpeHgnq981GzSpfE0d5tlJjiR7KGT0AMVQZOmBpPxhcozHunv
+ dEKQ==
+X-Gm-Message-State: AOJu0YziUVSu6HOayST/kkFsjJ4PnKM9BZVueKzURBp8hUf03jkO9C9B
+ A8UJlubnA5v9OqBJe4E4gMn6fbDZ8QM=
+X-Google-Smtp-Source: AGHT+IHNMFib6hrwNSgKTTomqgSVmOUkkMkQdQWn+H9SL2yH2gUdww1nhz1P6SOxrf0mMss1CJfsDA==
+X-Received: by 2002:a05:6a00:198d:b0:68f:a661:d037 with SMTP id
+ d13-20020a056a00198d00b0068fa661d037mr8641128pfl.3.1696102091489; 
+ Sat, 30 Sep 2023 12:28:11 -0700 (PDT)
+Received: from localhost ([2400:4051:e000:9e00:ff94:191c:6a3d:8b35])
+ by smtp.gmail.com with ESMTPSA id
+ j3-20020aa783c3000000b006933c582ed8sm6198838pfn.20.2023.09.30.12.28.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 Sep 2023 12:28:11 -0700 (PDT)
+From: Takumi Takahashi <takumiiinn@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 21:27:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b8c492068bc80f04b8d96df79e7f98b2879877c6
-X-Git-Newrev: 3a6e9d2f3fbc1da8b55bc89c5bd9dc0978b0d83c
-X-Patchwork-Hint: ignore
-Message-Id: <20230930192724.73D1283CB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libucontext: new package
+Date: Sun,  1 Oct 2023 04:28:07 +0900
+Message-ID: <20230930192807.863843-1-takumiiinn@gmail.com>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1696102091; x=1696706891; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=voOCzxZksolVO6V19GC2R/bukwtH1IT66HzUYRH/8rE=;
+ b=CZFEoqtfIi9ak3gB3Jw7fDSuU9xeLmWKYtF0wS+al2gwwR48ugIhBwo/cUk3rWER4d
+ ZafTFdoqi3QJbbaQVWK/+V9wf4vhvI6R1dSLtVFltKwieDR9q/hLcJIUsmGcLCbwmJCD
+ I6pKMbclXvJjDqcnmTQzuZhOXCkBJUMi3mC1HaoazzZtv9LLMJsdR5X2CoO4RDj4MFZ8
+ vBrWzLL2ms6aKEwsR9sHhJhaJPwh+7t3qazHUUQTWe3OyHw9nglf8i/kJS0uEwkujIq7
+ b9J2QegwNp5hJVLoewRuXBzULUjLRt9FvlQ3XmGUpDnoMq+pbh+6MQ4mjh6xkb0uokhR
+ F6Tg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=CZFEoqtf
+Subject: [Buildroot] [PATCH] package/iso-codes: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,128 +93,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Takumi Takahashi <takumiiinn@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a6e9d2f3fbc1da8b55bc89c5bd9dc0978b0d83c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ISO language, territory, currency, script codes and their translations.
 
-This package provides a ucontext.h C API on musl libc.
-
-Architecture support table based on:
-https://github.com/kaniini/libucontext/tree/libucontext-1.2#supported-features
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+https://salsa.debian.org/iso-codes-team/iso-codes
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/libucontext/Config.in        | 33 +++++++++++++++++++++++++++++++++
- package/libucontext/libucontext.hash |  4 ++++
- package/libucontext/libucontext.mk   | 17 +++++++++++++++++
- 5 files changed, 56 insertions(+)
+ package/Config.in                |  1 +
+ package/iso-codes/Config.in      |  7 +++++++
+ package/iso-codes/iso-codes.hash |  3 +++
+ package/iso-codes/iso-codes.mk   | 17 +++++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/iso-codes/Config.in
+ create mode 100644 package/iso-codes/iso-codes.hash
+ create mode 100644 package/iso-codes/iso-codes.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c297deedbe..9c1e84fb4b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1413,6 +1413,7 @@ F:	package/fxdiv/
- F:	package/gensio/
- F:	package/lua-std-debug/
- F:	package/lua-std-normalize/
-+F:	package/libucontext/
- F:	package/lilv/
- F:	package/lv2/
- F:	package/neon-2-sse/
 diff --git a/package/Config.in b/package/Config.in
-index 58a7cfb914..b494d8ff83 100644
+index 58a7cfb914..d4a7a451fd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2142,6 +2142,7 @@ menu "Other"
- 	source "package/libtpl/Config.in"
- 	source "package/libubox/Config.in"
- 	source "package/libuci/Config.in"
-+	source "package/libucontext/Config.in"
- 	source "package/libunwind/Config.in"
- 	source "package/liburcu/Config.in"
- 	source "package/liburing/Config.in"
-diff --git a/package/libucontext/Config.in b/package/libucontext/Config.in
+@@ -2262,6 +2262,7 @@ menu "Miscellaneous"
+ 	source "package/gr-osmosdr/Config.in"
+ 	source "package/gsettings-desktop-schemas/Config.in"
+ 	source "package/haveged/Config.in"
++	source "package/iso-codes/Config.in"
+ 	source "package/linux-syscall-support/Config.in"
+ 	source "package/mobile-broadband-provider-info/Config.in"
+ 	source "package/netdata/Config.in"
+diff --git a/package/iso-codes/Config.in b/package/iso-codes/Config.in
 new file mode 100644
-index 0000000000..84a6e89f23
+index 0000000000..ebc7cbdbbb
 --- /dev/null
-+++ b/package/libucontext/Config.in
-@@ -0,0 +1,33 @@
-+config BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	default y if BR2_aarch64_be
-+	default y if BR2_arm
-+	default y if BR2_armeb
-+	default y if BR2_m68k
-+	default y if BR2_mips
-+	default y if BR2_mipsel
-+	default y if BR2_mips64
-+	default y if BR2_mips64el
-+	default y if BR2_or1k
-+	default y if BR2_powerpc
-+	default y if BR2_powerpc64
-+	default y if BR2_powerpc64le
-+	default y if BR2_riscv && BR2_RISCV_32
-+	default y if BR2_riscv && BR2_RISCV_64
-+	default y if BR2_s390x
-+	default y if BR2_sh4
-+	default y if BR2_sh4eb
-+	default y if BR2_sh4a
-+	default y if BR2_sh4aeb
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+	depends on BR2_TOOLCHAIN_USES_MUSL
-+
-+config BR2_PACKAGE_LIBUCONTEXT
-+	bool "libucontext"
-+	depends on BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
++++ b/package/iso-codes/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ISO_CODES
++	bool "iso-codes"
 +	help
-+	  Ucontext implementation featuring glibc-compatible ABI.
++	  ISO language, territory, currency, script codes
++	  and their translations.
 +
-+	  https://github.com/kaniini/libucontext
-diff --git a/package/libucontext/libucontext.hash b/package/libucontext/libucontext.hash
++	  https://salsa.debian.org/iso-codes-team/iso-codes
+diff --git a/package/iso-codes/iso-codes.hash b/package/iso-codes/iso-codes.hash
 new file mode 100644
-index 0000000000..a8e1e23e36
+index 0000000000..476189c805
 --- /dev/null
-+++ b/package/libucontext/libucontext.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  937fba9d0beebd7cf957b79979b19fe3a29bb9c4bfd25e869477d7154bbf8fd3  libucontext-1.2.tar.gz
-+# License files, locally calculated
-+sha256  ecf4be354bbb6ccebdf150d1a8f2b3caeb10cf7c8a580f278a30799372f9e037  LICENSE
-diff --git a/package/libucontext/libucontext.mk b/package/libucontext/libucontext.mk
++++ b/package/iso-codes/iso-codes.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  b83b54b9d7dd6eb877380b3ec46f370b05daf2cbfa131c612f03598d654c0ef8  iso-codes-v4.15.0.tar.gz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/iso-codes/iso-codes.mk b/package/iso-codes/iso-codes.mk
 new file mode 100644
-index 0000000000..75c4f9b9e4
+index 0000000000..ecd1ce8612
 --- /dev/null
-+++ b/package/libucontext/libucontext.mk
++++ b/package/iso-codes/iso-codes.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# libucontext
++# iso-codes
 +#
 +################################################################################
 +
-+LIBUCONTEXT_VERSION = 1.2
-+LIBUCONTEXT_SITE = $(call github,kaniini,libucontext,libucontext-$(LIBUCONTEXT_VERSION))
-+LIBUCONTEXT_LICENSE = ISC
-+LIBUCONTEXT_LICENSE_FILES = LICENSE
-+LIBUCONTEXT_INSTALL_STAGING = YES
++ISO_CODES_VERSION = 4.15.0
++ISO_CODES_SOURCE = iso-codes-v$(ISO_CODES_VERSION).tar.gz
++ISO_CODES_SITE = https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v$(ISO_CODES_VERSION)
++ISO_CODES_LICENSE = LGPL-2.1
++ISO_CODES_LICENSE_FILES = COPYING
++ISO_CODES_DEPENDENCIES = host-pkgconf
++ISO_CODES_INSTALL_STAGING = YES
 +
-+LIBUCONTEXT_CONF_OPTS = \
-+	-Dfreestanding=false \
-+	-Dexport_unprefixed=true
++ISO_CODES_AUTORECONF = YES
 +
-+$(eval $(meson-package))
++$(eval $(autotools-package))
+-- 
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
