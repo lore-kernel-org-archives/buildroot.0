@@ -1,54 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA666E77371
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 13:02:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7CDBE77371
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5274340108;
-	Sat, 30 Sep 2023 13:02:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5274340108
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F4D083DB8;
+	Sat, 30 Sep 2023 14:08:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F4D083DB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p8FxIvDMjN5t; Sat, 30 Sep 2023 13:02:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B80v_Ooul_nm; Sat, 30 Sep 2023 14:08:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74BD740571;
-	Sat, 30 Sep 2023 13:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74BD740571
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ECEAA1BF3EB
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:02:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BDB4583DFA;
+	Sat, 30 Sep 2023 14:08:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDB4583DFA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C1E4D1BF3EB
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A031A400A6
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:02:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A031A400A6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A06D83DB6
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A06D83DB6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JgTCNJj1m9Cv for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 13:02:10 +0000 (UTC)
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A566540571
- for <buildroot@uclibc.org>; Sat, 30 Sep 2023 13:02:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A566540571
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qmZbj-00077R-AD
- for buildroot@uclibc.org; Sat, 30 Sep 2023 15:02:07 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sat, 30 Sep 2023 15:01:21 +0200
-Message-ID: <pan$d090$49e00687$ce7072d2$1615a8cb@ID-313208.user.individual.net>
-References: <20230923114713.1466381-1-bernd@kuhls.net>
- <20230923114713.1466381-2-bernd@kuhls.net>
- <20230930144927.57fe951f__30987.6495086186$1696078194$gmane$org@windsurf>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
-Subject: Re: [Buildroot] [PATCH 2/2] package/alsa-utils: bump version to
- 1.2.10
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cm9spwM1olXD for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 14:08:14 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 350A383CFC
+ for <buildroot@buildroot.net>; Sat, 30 Sep 2023 14:08:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 350A383CFC
+Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 6BD4BC6D6F
+ for <buildroot@buildroot.net>; Sat, 30 Sep 2023 13:56:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5453C240004;
+ Sat, 30 Sep 2023 13:56:31 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qmaSM-00EyYq-OV; Sat, 30 Sep 2023 15:56:30 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Nicola Di Lieto <nicola.dilieto@gmail.com>
+References: <ZRaC5SeWgdBvobmu@einstein.dilieto.eu>
+Date: Sat, 30 Sep 2023 15:56:30 +0200
+In-Reply-To: <ZRaC5SeWgdBvobmu@einstein.dilieto.eu> (Nicola Di Lieto's message
+ of "Fri, 29 Sep 2023 09:55:17 +0200")
+Message-ID: <87msx3aho1.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] uacme: fix build with
+ BR2_PACKAGE_MBEDTLS_COMPRESSION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,40 +65,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sat, 30 Sep 2023 14:49:27 +0200 schrieb Thomas Petazzoni via buildroot:
+>>>>> "Nicola" == Nicola Di Lieto <nicola.dilieto@gmail.com> writes:
 
-> I think there's still an unfixed issue with this version bump:
-> 
-> aplaymidi.c:34:10: fatal error: alsa/ump_msg.h: No such file or
-> directory
->    34 | #include <alsa/ump_msg.h>
->       |          ^~~~~~~~~~~~~~~~
+ > Fixes:
+ > http://autobuild.buildroot.net/results/2083eca8030e3f7ed8df388a7c29bc5d672b9512/
 
-Hi Thomas,
+ > Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 
-yes, I saw that error as well but left it for the moment due to time 
-constraints. To fix it we propably should unconditionally enable 
-BR2_PACKAGE_ALSA_LIB_RAWMIDI in the alsa-utils package.
+It is a bit unfortunate that mbedtls does not provide a .pc file.
 
-This is necessary due to the, imho, weird way the buildroot package 
-handles its suboptions. First all binaries are built, and we need the new 
-dependency for this, but, by the ALSA_UTILS_INSTALL_TARGET_CMDS hook, only 
-the enabled binaries are copied to $TARGET.
+Committed after extending the commit message to explain the situation,
+thanks.
 
-One could argue that this problem should be reported upstream so they 
-provide a fix for this to avoid the new dependency, but again, time 
-constraints on my side...
-
-Otoh what about removing all these detailed suboptions in alsa-utils and 
-let users, if needed, remove what they do not want by a post-build script?
-
-Regards, Bernd
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
