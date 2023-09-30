@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 679DCE77363
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 15:33:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DCC2E77363
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 15:38:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 204324158F;
-	Sat, 30 Sep 2023 15:33:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 204324158F
+	by smtp2.osuosl.org (Postfix) with ESMTP id D93A3415AF;
+	Sat, 30 Sep 2023 15:38:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D93A3415AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XXIg1dcQp90J; Sat, 30 Sep 2023 15:33:16 +0000 (UTC)
+	with ESMTP id zXG0liP8F0Yf; Sat, 30 Sep 2023 15:38:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0AE04159C;
-	Sat, 30 Sep 2023 15:33:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0AE04159C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6E2511BF5AE
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 15:33:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07EE14159B;
+	Sat, 30 Sep 2023 15:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07EE14159B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3265F1BF5F6
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 15:38:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 474AC4158C
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 15:33:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 474AC4158C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1943D41F12
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 15:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1943D41F12
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oPnmB7QtENhq for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 15:33:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4151B40B22
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 15:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4151B40B22
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29E9483B43; Sat, 30 Sep 2023 15:33:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rViuUdztGnkt for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 15:38:40 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9624441EE8
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 15:38:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9624441EE8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2C1521C0003;
+ Sat, 30 Sep 2023 15:38:37 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qmc3B-00F1hk-Ge; Sat, 30 Sep 2023 17:38:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 17:32:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f71774feace10324692758a01bfc59af1f5e9263
-X-Git-Newrev: 68969dcbf00535bab3d8010a3e7e15572acbd3f0
-X-Patchwork-Hint: ignore
-Message-Id: <20230930153312.29E9483B43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board: add Orangepi Zero3 support
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230930151502.650185-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 30 Sep 2023 17:38:37 +0200
+In-Reply-To: <20230930151502.650185-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 30 Sep 2023 17:15:02 +0200")
+Message-ID: <875y3racxu.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/gcc/gcc-final: only install
+ libgcc_s for shared library builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,158 +63,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68969dcbf00535bab3d8010a3e7e15572acbd3f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Add initial support for Orangepi Zero3 board:
-- U-Boot 2021.07 fork by Orangepi
-- Linux 6.1.31 fork by Orangepi
-- Default packages from buildroot
+ > In commit
+ > 55e83008fc82cf621d94d60ab4401a4848880bc2 ("package/gcc/gcc-final:
+ > rework installation of libgcc_s/libatomic"), we reworked the libgcc_s
+ > installation. In the previous code, libgcc_s was installed to
+ > STAGING_DIR/TARGET_DIR unconditionally, but a "-cp" command was used,
+ > which means that any failure was ignored. As we are now more picky, it
+ > has become clear that this in fact wasn't entirely correct: libgcc_s
+ > only exists for shared builds. For static builds, only libgcc.a is
+ > available, but it doesn't need to be installed to STAGING_DIR (for
+ > some reason, and as it was never installed by Buildroot, it has always
+ > worked without libgcc.a in STAGING_DIR).
 
-Enable CONFIG_MFD_AC200 as it is used directly by other module,
-resulting in build failure when disabled.
+ > So long story short: we change the code to only install libgcc_s when
+ > BR2_STATIC_LIBS is disabled. This fixes the following build failure on
+ > BR2_STATIC_LIBS=y builds:
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Tested-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                                 |  2 ++
- board/orangepi/orangepi-zero3/linux.config |  1 +
- board/orangepi/orangepi-zero3/readme.txt   | 34 ++++++++++++++++++
- configs/orangepi_zero3_defconfig           | 57 ++++++++++++++++++++++++++++++
- 4 files changed, 94 insertions(+)
+ > cp -dpf
+ > /home/thomas/buildroot/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/lib*/libgcc_s*
+ > /home/thomas/buildroot/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/
+ > cp: cannot stat
+ > '/home/thomas/buildroot/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/lib*/libgcc_s*':
+ > No such file or directory
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e65c436157..989f355031 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1963,8 +1963,10 @@ F:	package/ecryptfs-utils/
- N:	Marcin Niestroj <m.niestroj@grinn-global.com>
- F:	board/grinn/
- F:	board/orangepi/orangepi-zero-plus/
-+F:	board/orangepi/orangepi-zero3/
- F:	configs/grinn_*
- F:	configs/orangepi_zero_plus_defconfig
-+F:	configs/orangepi_zero3_defconfig
- F:	package/argparse/
- F:	package/dt-utils/
- F:	package/easydbus/
-diff --git a/board/orangepi/orangepi-zero3/linux.config b/board/orangepi/orangepi-zero3/linux.config
-new file mode 100644
-index 0000000000..09b7a93a5a
---- /dev/null
-+++ b/board/orangepi/orangepi-zero3/linux.config
-@@ -0,0 +1 @@
-+CONFIG_MFD_AC200=y
-diff --git a/board/orangepi/orangepi-zero3/readme.txt b/board/orangepi/orangepi-zero3/readme.txt
-new file mode 100644
-index 0000000000..4872a363e7
---- /dev/null
-+++ b/board/orangepi/orangepi-zero3/readme.txt
-@@ -0,0 +1,34 @@
-+Intro
-+=====
-+
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the Orangepi Zero3. With the current configuration
-+it will bring-up the board, and allow access through the serial console.
-+
-+Orangepi Zero3 link:
-+http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Zero-3.html
-+
-+This configuration uses Orangepi's fork of U-Boot and Linux kernel.
-+
-+How to build
-+============
-+
-+    $ make orangepi_zero3_defconfig
-+    $ make
-+
-+Note: you will need access to the internet to download the required
-+sources.
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+  $ sudo sync
-+
-+Insert the micro SDcard in your Orangepi Zero3 and power it up. The console
-+is on the serial line, 115200 8N1.
-diff --git a/configs/orangepi_zero3_defconfig b/configs/orangepi_zero3_defconfig
-new file mode 100644
-index 0000000000..51a6efd3ed
---- /dev/null
-+++ b/configs/orangepi_zero3_defconfig
-@@ -0,0 +1,57 @@
-+BR2_aarch64=y
-+BR2_cortex_a53=y
-+BR2_ARM_FPU_VFPV4=y
-+
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_h616"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,orangepi-xunlong,u-boot-orangepi,6fe17fac388aad17490cf386578b7532975e567f)/u-boot-orangepi-6fe17fac388aad17490cf386578b7532975e567f.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero3"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,orangepi-xunlong,linux-orangepi,3495b5ee0594566c9fed930b96b1cae90600412e)/linux-orangepi-3495b5ee0594566c9fed930b96b1cae90600412e.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="linux_sunxi64"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h616-orangepi-zero3"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero3/linux.config"
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero3"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="180M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# host tools
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+
-+# image scripts
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ > Reported-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
