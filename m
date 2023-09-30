@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7822AE77371
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 12:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B073AE77372
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 12:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01DD083E07;
-	Sat, 30 Sep 2023 12:42:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01DD083E07
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6864B83C59;
+	Sat, 30 Sep 2023 12:44:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6864B83C59
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FOhgD9QEtvbj; Sat, 30 Sep 2023 12:42:48 +0000 (UTC)
+	with ESMTP id hMfUrGquWTq9; Sat, 30 Sep 2023 12:44:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 377A783DFA;
-	Sat, 30 Sep 2023 12:42:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 377A783DFA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 367981BF397
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 12:42:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F1D681489;
+	Sat, 30 Sep 2023 12:44:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F1D681489
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E8521BF397
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 12:44:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0EA4C83DF7
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 12:42:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EA4C83DF7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09DF440108
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 12:44:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09DF440108
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EkFBzZSEqNv8 for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 12:42:43 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7287F83DF2
- for <buildroot@busybox.net>; Sat, 30 Sep 2023 12:42:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7287F83DF2
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 38BA020003;
- Sat, 30 Sep 2023 12:42:41 +0000 (UTC)
-Date: Sat, 30 Sep 2023 14:42:40 +0200
-To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-Message-ID: <20230930144240.6b7b793c@windsurf>
-In-Reply-To: <20221002082651.29673-1-guillaume.bressaix@gmail.com>
-References: <20221002082651.29673-1-guillaume.bressaix@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1696077761;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=IcTvbAlJrSWjFhUgEbZLtMdrcuTADW+84OezS5U6hFs=;
- b=Y9YD8E3LQsk7fOZxrK0C4eBBv85RnaKCD+NQn3Mva3g9Y5GuEmX+oBNnDR4aNv3o7PHIHu
- Ds/ADP5XznDZB/Xr3szu+r5HZt16gfF4pE3B0J8OxrA9zCyQJJhVsA1sOk9qFrSCKWo9mP
- +1FQP6cyblmDJ58kqFe+r/J01gPZ0yvqVFa5tDGyvrWu01f0+Zf8wZGhwomgohuIy3pj50
- FrBdF7IX3PrlL18qEJGMSxzeqH2TqGw4VDiZdDr0elW7diAoFT7qVO9DH5GKqYOiuqNIt1
- 9NGz/x+yzHv512K9rFC6eTK/rqMIOcGZYpr2G+x1OZoVdbKgg949TveNk/9teA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Y9YD8E3L
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/python-scipy: bump version
- to 1.9.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LPMsxJgdgRbp for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 12:44:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6382400A6
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 12:44:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6382400A6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BF7C7839A1; Sat, 30 Sep 2023 12:44:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 30 Sep 2023 14:43:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 42127f01bc08211e1dbba2cac7425488dee7dc3a
+X-Git-Newrev: 7a14ef1d24a43bf14b760b76870b30927e1bbb84
+X-Patchwork-Hint: ignore
+Message-Id: <20230930124406.BF7C7839A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gtkmm3: bump to version 3.24.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,49 +57,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  2 Oct 2022 10:26:51 +0200
-"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7a14ef1d24a43bf14b760b76870b30927e1bbb84
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> scipy.tar.xz is no longer released.
-> 
-> A new "python.h" missing header build time failure arised,
-> it is fixed with a new -I cflag.
-> 
-> New runtime/linking errors appeared on architectures that need
-> libatomic, an -latomic linker flag solves them
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> 
-> ---
-> Scipy is expected to move to a meson build infrastructure
-> by the next release
-> Once 1.9.2 is out, we know we already have my V3-1.9.1 patch
-> serie that builds "fine" with meson, it involved a minor tweak
-> (hopefuly solved by this time). The test script no longer did pass though,
-> this serie is not 100% ready to go
-> ---
->  package/python-scipy/python-scipy.hash |  2 +-
->  package/python-scipy/python-scipy.mk   | 13 +++++++++++--
->  2 files changed, 12 insertions(+), 3 deletions(-)
+https://gitlab.gnome.org/GNOME/gtkmm/-/blob/3.24.8/NEWS
 
-Thanks Guillaume for the patch, and sorry for the very long delay. In
-the mean time, James has posted a more recent update, which uses the
-meson infrastructure, so we've applied that as commit
-42127f01bc08211e1dbba2cac7425488dee7dc3a.
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gtkmm3/gtkmm3.hash | 4 ++--
+ package/gtkmm3/gtkmm3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
+index c54862de67..9bfd68e027 100644
+--- a/package/gtkmm3/gtkmm3.hash
++++ b/package/gtkmm3/gtkmm3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.7.sha256sum
+-sha256  1d7a35af9c5ceccacb244ee3c2deb9b245720d8510ac5c7e6f4b6f9947e6789c  gtkmm-3.24.7.tar.xz
++# From https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.8.sha256sum
++sha256  d2940c64922e5b958554b23d4c41d1839ea9e43e0d2e5b3819cfb46824a098c4  gtkmm-3.24.8.tar.xz
+ # Locally computed
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
+diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
+index f5a2fee6b9..f4fc54849c 100644
+--- a/package/gtkmm3/gtkmm3.mk
++++ b/package/gtkmm3/gtkmm3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GTKMM3_VERSION_MAJOR = 3.24
+-GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).7
++GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).8
+ GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
+ GTKMM3_SITE = https://download.gnome.org/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
+ GTKMM3_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
