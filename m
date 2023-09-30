@@ -1,59 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7CDBE77371
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:08:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F4F3E7735F
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 16:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F4D083DB8;
-	Sat, 30 Sep 2023 14:08:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F4D083DB8
+	by smtp4.osuosl.org (Postfix) with ESMTP id F28B740260;
+	Sat, 30 Sep 2023 16:49:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F28B740260
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B80v_Ooul_nm; Sat, 30 Sep 2023 14:08:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MSLoAjDnN0_w; Sat, 30 Sep 2023 16:49:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDB4583DFA;
-	Sat, 30 Sep 2023 14:08:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDB4583DFA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C1E4D1BF3EB
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:08:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE08A40332;
+	Sat, 30 Sep 2023 16:49:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE08A40332
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 433051BF5AE
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A06D83DB6
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:08:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A06D83DB6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 28415423EB
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:49:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28415423EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cm9spwM1olXD for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 14:08:14 +0000 (UTC)
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 350A383CFC
- for <buildroot@buildroot.net>; Sat, 30 Sep 2023 14:08:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 350A383CFC
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 6BD4BC6D6F
- for <buildroot@buildroot.net>; Sat, 30 Sep 2023 13:56:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5453C240004;
- Sat, 30 Sep 2023 13:56:31 +0000 (UTC)
-Received: from peko by dell.home with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qmaSM-00EyYq-OV; Sat, 30 Sep 2023 15:56:30 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Nicola Di Lieto <nicola.dilieto@gmail.com>
-References: <ZRaC5SeWgdBvobmu@einstein.dilieto.eu>
-Date: Sat, 30 Sep 2023 15:56:30 +0200
-In-Reply-To: <ZRaC5SeWgdBvobmu@einstein.dilieto.eu> (Nicola Di Lieto's message
- of "Fri, 29 Sep 2023 09:55:17 +0200")
-Message-ID: <87msx3aho1.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Piy49qYEQ9Vh for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 16:49:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E8FBB42424
+ for <buildroot@uclibc.org>; Sat, 30 Sep 2023 16:49:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8FBB42424
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id D811883C19; Sat, 30 Sep 2023 16:49:10 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Sat, 30 Sep 2023 16:49:10 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: unspecified
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: thomas.petazzoni@bootlin.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-15628-163-8m0QcAWiqD@https.bugs.busybox.net/>
+In-Reply-To: <bug-15628-163@https.bugs.busybox.net/>
+References: <bug-15628-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] uacme: fix build with
- BR2_PACKAGE_MBEDTLS_COMPRESSION
+Subject: [Buildroot] [Bug 15628] Missing dependencies in
+ BR2_PACKAGE_PYTHON_MAKO
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,26 +74,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Nicola" == Nicola Di Lieto <nicola.dilieto@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=15628
 
- > Fixes:
- > http://autobuild.buildroot.net/results/2083eca8030e3f7ed8df388a7c29bc5d672b9512/
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
- > Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-It is a bit unfortunate that mbedtls does not provide a .pc file.
-
-Committed after extending the commit message to explain the situation,
-thanks.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+Fixed by
+https://gitlab.com/buildroot.org/buildroot/-/commit/2b506cb2dd031f2bdecc3c90111e31e145211d75
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
