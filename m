@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10E8DE7735F
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 16:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5023E7737A
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 16:49:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A52F42238;
-	Sat, 30 Sep 2023 16:48:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A52F42238
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C69D42279;
+	Sat, 30 Sep 2023 16:49:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C69D42279
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TMFJiylzvV6B; Sat, 30 Sep 2023 16:48:52 +0000 (UTC)
+	with ESMTP id U0mwdfT0ez23; Sat, 30 Sep 2023 16:49:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9A3F42241;
-	Sat, 30 Sep 2023 16:48:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9A3F42241
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 377741BF5AE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9306642409;
+	Sat, 30 Sep 2023 16:49:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9306642409
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 409DA1BF86C
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 123C340327
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BFBB82111
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:48:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 123C340327
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BFBB82111
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rbno7ogY0soM for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 72h8cEq4g6wX for <buildroot@lists.busybox.net>;
  Sat, 30 Sep 2023 16:48:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DD534017A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08CC182110
  for <buildroot@buildroot.org>; Sat, 30 Sep 2023 16:48:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DD534017A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08CC182110
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A38783C18; Sat, 30 Sep 2023 16:48:48 +0000 (UTC)
+ id E53B683C1A; Sat, 30 Sep 2023 16:48:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 18:48:26 +0200
+Date: Sat, 30 Sep 2023 18:48:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: adb3f5a3e0d5bd6df60c91c46a03a2ff9c867dbb
-X-Git-Newrev: 411a3deb1a4850f4eeff3faebdb87b8ef544d650
+X-Git-Oldrev: 164801997e526bf7f7ba8006cd1702e013536ca7
+X-Git-Newrev: adb3f5a3e0d5bd6df60c91c46a03a2ff9c867dbb
 X-Patchwork-Hint: ignore
-Message-Id: <20230930164849.0A38783C18@busybox.osuosl.org>
+Message-Id: <20230930164848.E53B683C1A@busybox.osuosl.org>
 Subject: [Buildroot] [git commit] package/python-mako: add optional runtime
- dependency on python-babel
+ dependency on python-pygments
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,34 +64,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=411a3deb1a4850f4eeff3faebdb87b8ef544d650
+commit: https://git.buildroot.net/buildroot/commit/?id=adb3f5a3e0d5bd6df60c91c46a03a2ff9c867dbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some extensions of python-mako use python-babel, if they are used,
-python-babel must be added as a runtime dependency.
+Some extensions of python-mako use python-pygments, if they are used,
+python-pygments must be added as a runtime dependency.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-mako/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/python-mako/Config.in | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/package/python-mako/Config.in b/package/python-mako/Config.in
-index 2e1094189f..7bba31943e 100644
+index e6a10c9c2e..2e1094189f 100644
 --- a/package/python-mako/Config.in
 +++ b/package/python-mako/Config.in
-@@ -17,4 +17,11 @@ config BR2_PACKAGE_PYTHON_MAKO_EXT_PYGMENTPLUGIN
- 	  Provide python-pygments support for
- 	  mako.ext.pygmentplugin
+@@ -7,3 +7,14 @@ config BR2_PACKAGE_PYTHON_MAKO
+ 	  for maximum performance.
  
-+config BR2_PACKAGE_PYTHON_MAKO_EXT_BABELPLUGIN
-+	bool "mako extension babelplugin"
-+	select BR2_PACKAGE_PYTHON_BABEL # runtime
-+	help
-+	  Provide python-babel support for
-+	  mako.ext.babelplugin
+ 	  https://pypi.python.org/pypi/Mako
 +
- endif
++if BR2_PACKAGE_PYTHON_MAKO
++
++config BR2_PACKAGE_PYTHON_MAKO_EXT_PYGMENTPLUGIN
++	bool "mako extension pygmentplugin"
++	select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
++	help
++	  Provide python-pygments support for
++	  mako.ext.pygmentplugin
++
++endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
