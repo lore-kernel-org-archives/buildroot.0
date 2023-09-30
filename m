@@ -4,67 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10CBEE77373
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 13:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8BE2E77373
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:08:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5C4383DEA;
-	Sat, 30 Sep 2023 13:58:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5C4383DEA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 751C183DB6;
+	Sat, 30 Sep 2023 14:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 751C183DB6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2fSAA--7_EvP; Sat, 30 Sep 2023 13:58:36 +0000 (UTC)
+	with ESMTP id Tkhuq2XZVCIJ; Sat, 30 Sep 2023 14:08:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B142883DBE;
-	Sat, 30 Sep 2023 13:58:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B142883DBE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C581A1BF2F9
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:58:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A73D983DE8;
+	Sat, 30 Sep 2023 14:08:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A73D983DE8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DBE911BF3EB
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98AAA41DDD
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:58:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98AAA41DDD
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4482607B0
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4482607B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PZwx6-Q5r9Vf for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 13:58:31 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 287B641E2C
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 13:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 287B641E2C
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb04:4ad:b00:e4d1:b92:e94d:73af])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id D193CB00583;
- Sat, 30 Sep 2023 15:58:25 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Sep 2023 15:58:25 +0200
-Date: Sat, 30 Sep 2023 15:58:25 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20230930135825.GC2579@scaer>
-References: <20230930082507.517920-1-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230930082507.517920-1-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mgJr_SY-5YAq for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 14:08:10 +0000 (UTC)
+Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 444646068F
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 444646068F
+Received: from smtpclient.apple ([151.44.13.68])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id madaqacCWhzS9madbqKKyX; Sat, 30 Sep 2023 16:08:07 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Sat, 30 Sep 2023 16:08:05 +0200
+Message-Id: <1373B8FB-F147-4BE3-AF64-74E305661340@benettiengineering.com>
+References: <20230930132145.GB2579@scaer>
+In-Reply-To: <20230930132145.GB2579@scaer>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailer: iPhone Mail (21A351)
+X-CMAE-Envelope: MS4xfLEDYs2LPlxS0jM6ePbYU/MgN2PKNkaJIN6HfRr5yLRF6SFtjTcJbiGywailpirBuCGpPzJvTt7/lGe2zXyAnPcXi47n0tXaDPkua1P/8h3tcmeUS6Xe
+ chiOvHI6VbsU2t6e7khHF7PCEWUsS0ahiA00CGSdSmCTY7/Ns0cuhmv5Fqzjs+hdTgAO1MVmCOCNE8gl5uSLxEbpbwsrCSj/6qo4ydLxiwdsG3IY3DUKAd1W
+ fG4mUUKBwodiWUXHCeZOUGDhIhsTXSJdOaxDKjUGh8hdaeF8A+hNGFmpchDNQZVq
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696082308;
- bh=AU0NnWnaOlPVWBntEF6fkUznmFXmsC3Bl7FlF5uEZLk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=B8+WlPstPjt6llwMPLhCZxEJCjikMsv6lKLoJfhQIlkLN6arZmJJ8VlnsIwbJdTmI
- h7Ki4S02BYLvqIi3kQM0hvT9TpUQzF977Q45wuXvCZJy1GK4TsGbz48KVuMTSZfDyt
- slZYHfZ4Tdg/2IyMU/kSWBNirpFkHwEyG1BepGtSCjoWwtEB8pMaCt7eWdS/1E9kUs
- 8+zzhgcdUv3QhIBZdqUJVNhWbkzb0G3ApHCFXOg+4Hiucdv/RLY3V7dVS7wuQt5eRR
- ZROHd16fD90jWS/Jomd27Ak0WgrogS1O7anoQYfZZmKddKMkf8tzXUTIvV+9WI5CJk
- osApaVIksZUGg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=B8+WlPst
-Subject: Re: [Buildroot] [PATCH 1/3] docs/website: move Git repository to
- Gitlab
+ d=aruba.it; s=a1; 
+ t=1696082887; bh=Euons3nc+ROeA3IwBcG4MuYg7Fw1GL3A2z4CvaOt7Xo=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=CLXDk5ntqkOlrxByiH8u2zQAuY/Jffzr2QQcos5CaoCj0c/8/qIntIeCrnqIYAhBs
+ 1vkj6Ig1OhMFtIlQ0C58MvG9m+2Q3djd/1th+OxauewJbA79HcDxXqxURQekVIMvtd
+ 9A1RQOA63pCfuJbNhoa3RgH+hR5hl/d/ixMfJvgCoYJ6U/GE5PRGVKtxkZIAU6amVI
+ H1P6QYqySdQypMBV2VrrkGDvOZ0Qke9712xe5BMnL72wPsfsjN5M0M3evDdmh8WJTU
+ ybTldCdOETQ+lHS/lmvo4kIcxpci4y2vC1kuChXkvVEuWVzSQRQWG8yFYaHsQYL+4P
+ be4XGh+YrrxsA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=CLXDk5nt
+Subject: Re: [Buildroot] New maintainer on board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,98 +73,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot ML <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
-
-On 2023-09-30 10:25 +0200, Thomas Petazzoni via buildroot spake thusly:
-> We're now using Gitlab as our official Git repository, so let's update
-> the website accordingly. Gitlab only provides https:// access, so drop
-> the explanation about the Git native protocol being more efficient
-> than HTTP (also because that's no longer true).
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Whole series applied with a minor fix in the last patch.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/website/download.html | 26 +++-----------------------
->  1 file changed, 3 insertions(+), 23 deletions(-)
-> 
-> diff --git a/docs/website/download.html b/docs/website/download.html
-> index c1fd38998c..7d7b405a61 100644
-> --- a/docs/website/download.html
-> +++ b/docs/website/download.html
-> @@ -124,14 +124,14 @@
->  	  <div class="panel panel-success">
->  	    <div class="panel-heading">Repository</div>
->  	    <div class="panel-body">
-> -	      <P>The buildroot repository can be browsed online through cgit at
-> -		<a href="http://git.buildroot.net/buildroot/">http://git.buildroot.net/buildroot</a>.
-> +	      <P>The buildroot repository can be browsed online at
-> +		<a href="https://gitlab.com/buildroot.org/buildroot/">https://gitlab.com/buildroot.org/buildroot/</a>.
->  		To grab a copy of the repository use</p>
->  
->  
->  	      <div class="input-group" style="width: 100%;">
->  		<input class="form-control" style="width: 85%;" id="giturl"
-> -		       value="git clone git://git.buildroot.net/buildroot" type="text" readonly></input>
-> +		       value="git clone https://gitlab.com/buildroot.org/buildroot.git" type="text" readonly></input>
->  		<span class="input-group-button">
->  		  <button class="btn pull-right" type="button" data-clipboard-target="#giturl"
->  			  data-toggle="tooltip" data-placement="bottom" data-trigger="manual" title="Copied!">
-> @@ -140,26 +140,6 @@
->  		</span>
->  	      </div><br>
->  
-> -	      <p>
-> -		Or if you're behind a firewall blocking git:
-> -	      </p>
-> -
-> -	      <div class="input-group" style="width: 100%;">
-> -		<input class="form-control" style="width: 85%;" id="giturlhttps"
-> -		       value="git clone https://git.buildroot.net/buildroot" type="text" readonly></input>
-> -		<span class="input-group-button">
-> -		  <button class="btn pull-right" type="button" data-clipboard-target="#giturlhttps"
-> -			  data-toggle="tooltip" data-placement="bottom" data-trigger="click" title="Copied!">
-> -		    <img class="clippy" src="images/clippy.svg" alt="Copy to clipboard" width="13">
-> -		  </button>
-> -		</span>
-> -	      </div><br>
-> -
-> -	      <p>
-> -
-> -		Please use the native git protocol if at all possible, as it's a lot
-> -		more efficient than HTTP.
-> -
->  	      <p>
->  
->  		If you are not already familiar with using Git, we recommend you visit <a
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Q29tcGxpbWVudHMgUm9tYWluIQpMb29rIGZvcndhcmQgZm9yIHlvdSB0byBjb21taXQgc29tZSBv
+ZiBteSBwYXRjaGVzIDotKQoKS2luZCByZWdhcmRzCkdpdWxpbyBCZW5ldHRpCgo+IElsIGdpb3Ju
+byAzMCBzZXQgMjAyMywgYWxsZSBvcmUgMTU6MjIsIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4u
+MTk5OEBmcmVlLmZyPiBoYSBzY3JpdHRvOgo+IAo+IO+7v0hlbGxvIEFsbCwKPiAKPiBSb21haW4g
+aGFzIGJlZW4gY29udHJpYnV0aW5nIHRvIEJ1aWxkcm9vdCBmb3IgbW9yZSBhIGRlY2FkZSBub3cs
+IGFuZCBoZQo+IGhhcyBkb25lIHF1aXRlIGEgbG90IG9mIHdvcmsgaW4gdmFyaW91cyBwbGFjZXMg
+aW4gQnVpbGRyb290LCBhbmQgaGFzCj4gYmVlbiBoZWxwaW5nIGR1cmluZyB0aGUgZGV2ZWxvcHBl
+cnMgZGF5cyBhbmQgaGFja2F0aG9ucy4KPiAKPiBIZSBoYXMgYWdyZWVkIHRvIGpvaW4gdGhlIG1h
+aW50YWluZXJzIHRlYW0sIGFuZCBmdXJ0aGVyIGhpcyBpbXBsaWNhdGlvbgo+IGluIHRoZSBwcm9q
+ZWN0Lgo+IAo+IFRoZSBtb3N0IGFzdHV0ZSBvZiB5b3Ugd2lsbCBoYXZlIG5vdGljZWQgdGhhdCBS
+b21haW4gaGFzIGJlZW4gcXVpY2sgdG8KPiB0YWtlIGhpcyBuZXcgZHV0aWVzIHRvIGhlYXJ0LCBh
+bmQgYWxyZWFkeSBwdXNoZWQgc2lnbmlmaWNhbnQgY2hhbmdlcyB0bwo+IHRoZSB0b29sY2hhaW4g
+YmVmb3JlIEkgY291bGQgZmluaXNoIHRoaXMgZW1haWwhIDotKQo+IAo+IFdlbGNvbWUgb24gYm9h
+cmQgUm9tYWluLCBsZXQgdGhlIEZvcmNlIGJlIHdpdGggeW91IQo+IAo+IFJlZ2FyZHMsCj4gWWFu
+biBFLiBNT1JJTi4KPiAKPiAtLQo+IC4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0t
+LS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCj4gfCAgWWFubiBF
+LiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3Mn
+IGNvbnNwaXJhY3k6IHwKPiB8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8
+IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAo+IHwgKzMzIDU2MSAwOTkg
+NDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJl
+IGlzIG5vICB8Cj4gfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwg
+SFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKPiAnLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
+LS0tJwo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4g
+YnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
