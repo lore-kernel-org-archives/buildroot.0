@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48969E748A1
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 19:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0449E748A1
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 19:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D93EA42139;
-	Sat, 30 Sep 2023 19:27:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93EA42139
+	by smtp4.osuosl.org (Postfix) with ESMTP id 547074219D;
+	Sat, 30 Sep 2023 19:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 547074219D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HrWyxiBx3R8S; Sat, 30 Sep 2023 19:27:28 +0000 (UTC)
+	with ESMTP id OL4B-TyLNOVm; Sat, 30 Sep 2023 19:27:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD8EF42179;
-	Sat, 30 Sep 2023 19:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD8EF42179
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05670421B7;
+	Sat, 30 Sep 2023 19:27:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05670421B7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA53C1BF48D
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:27:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1A8BE1BF48D
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C101141E45
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:27:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C101141E45
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1ACF41E45
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 19:27:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1ACF41E45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2HAcgDw_ZKMW for <buildroot@lists.busybox.net>;
+ with ESMTP id 0UIYIfX_Tjma for <buildroot@lists.busybox.net>;
  Sat, 30 Sep 2023 19:27:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AF3042179
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8806042152
  for <buildroot@buildroot.org>; Sat, 30 Sep 2023 19:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF3042179
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8806042152
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D77583CB6; Sat, 30 Sep 2023 19:27:24 +0000 (UTC)
+ id 73D1283CB4; Sat, 30 Sep 2023 19:27:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 21:27:10 +0200
+Date: Sat, 30 Sep 2023 21:27:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3a6e9d2f3fbc1da8b55bc89c5bd9dc0978b0d83c
-X-Git-Newrev: 6ea2a27f9047696ce1c463ad55fb4a78df136954
+X-Git-Oldrev: b8c492068bc80f04b8d96df79e7f98b2879877c6
+X-Git-Newrev: 3a6e9d2f3fbc1da8b55bc89c5bd9dc0978b0d83c
 X-Patchwork-Hint: ignore
-Message-Id: <20230930192724.7D77583CB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libunwind: add libucontext support
+Message-Id: <20230930192724.73D1283CB4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libucontext: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +63,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ea2a27f9047696ce1c463ad55fb4a78df136954
+commit: https://git.buildroot.net/buildroot/commit/?id=3a6e9d2f3fbc1da8b55bc89c5bd9dc0978b0d83c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We can expand the list of supported musl architectures by
-letting libucontext provide required context API's.
+This package provides a ucontext.h C API on musl libc.
 
-Use the following table to determine which architectures require
-libucontext for BR2_PACKAGE_LIBUNWIND_MUSL_CONTEXT_REQUIRED:
-https://github.com/libunwind/libunwind/tree/v1.6.2#libc-requirements
-
-Enable BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS if we have
-BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS or if context is not required
-by checking for !BR2_PACKAGE_LIBUNWIND_MUSL_CONTEXT_REQUIRED.
-
-Select BR2_PACKAGE_LIBUCONTEXT when selecting BR2_PACKAGE_LIBUNWIND
-if we have BR2_PACKAGE_LIBUNWIND_MUSL_CONTEXT_REQUIRED.
+Architecture support table based on:
+https://github.com/kaniini/libucontext/tree/libucontext-1.2#supported-features
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/libunwind/Config.in    | 19 ++++++++++++++++++-
- package/libunwind/libunwind.mk |  4 ++++
- 2 files changed, 22 insertions(+), 1 deletion(-)
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/libucontext/Config.in        | 33 +++++++++++++++++++++++++++++++++
+ package/libucontext/libucontext.hash |  4 ++++
+ package/libucontext/libucontext.mk   | 17 +++++++++++++++++
+ 5 files changed, 56 insertions(+)
 
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index dfd0df30fa..08f7f879c9 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -1,3 +1,17 @@
-+config BR2_PACKAGE_LIBUNWIND_MUSL_CONTEXT_REQUIRED
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c297deedbe..9c1e84fb4b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1413,6 +1413,7 @@ F:	package/fxdiv/
+ F:	package/gensio/
+ F:	package/lua-std-debug/
+ F:	package/lua-std-normalize/
++F:	package/libucontext/
+ F:	package/lilv/
+ F:	package/lv2/
+ F:	package/neon-2-sse/
+diff --git a/package/Config.in b/package/Config.in
+index 58a7cfb914..b494d8ff83 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2142,6 +2142,7 @@ menu "Other"
+ 	source "package/libtpl/Config.in"
+ 	source "package/libubox/Config.in"
+ 	source "package/libuci/Config.in"
++	source "package/libucontext/Config.in"
+ 	source "package/libunwind/Config.in"
+ 	source "package/liburcu/Config.in"
+ 	source "package/liburing/Config.in"
+diff --git a/package/libucontext/Config.in b/package/libucontext/Config.in
+new file mode 100644
+index 0000000000..84a6e89f23
+--- /dev/null
++++ b/package/libucontext/Config.in
+@@ -0,0 +1,33 @@
++config BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
 +	bool
-+	default y
-+	depends on !BR2_ARM_CPU_HAS_ARM
-+	depends on !BR2_aarch64
-+	depends on !BR2_aarch64_be
-+	depends on !BR2_mips
-+	depends on !BR2_mipsel
-+	depends on !BR2_mips64
-+	depends on !BR2_mips64el
-+	depends on !BR2_riscv
-+	depends on !BR2_x86_64
++	default y if BR2_aarch64
++	default y if BR2_aarch64_be
++	default y if BR2_arm
++	default y if BR2_armeb
++	default y if BR2_m68k
++	default y if BR2_mips
++	default y if BR2_mipsel
++	default y if BR2_mips64
++	default y if BR2_mips64el
++	default y if BR2_or1k
++	default y if BR2_powerpc
++	default y if BR2_powerpc64
++	default y if BR2_powerpc64le
++	default y if BR2_riscv && BR2_RISCV_32
++	default y if BR2_riscv && BR2_RISCV_64
++	default y if BR2_s390x
++	default y if BR2_sh4
++	default y if BR2_sh4eb
++	default y if BR2_sh4a
++	default y if BR2_sh4aeb
++	default y if BR2_i386
++	default y if BR2_x86_64
 +	depends on BR2_TOOLCHAIN_USES_MUSL
 +
- # libunwind is only available for a certain subset of the
- # architectures (as visible in the list of architectures supported
- # with the glibc C library below).
-@@ -17,7 +31,8 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_MUSL && \
--		(BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || BR2_x86_64)
-+		(!BR2_PACKAGE_LIBUNWIND_MUSL_CONTEXT_REQUIRED || \
-+		 BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS)
- 
- config BR2_PACKAGE_LIBUNWIND
- 	bool "libunwind"
-@@ -27,6 +42,8 @@ config BR2_PACKAGE_LIBUNWIND
- 	# forcefully links against libgcc_s, only available in dynamic
- 	# linking configurations
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBUCONTEXT if BR2_TOOLCHAIN_USES_MUSL && \
-+		BR2_PACKAGE_LIBUNWIND_MUSL_CONTEXT_REQUIRED
- 	help
- 	  C API to determine the call-chain of a program.
- 
-diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-index 9cd587d0a3..afc17f7b25 100644
---- a/package/libunwind/libunwind.mk
-+++ b/package/libunwind/libunwind.mk
-@@ -16,4 +16,8 @@ LIBUNWIND_CONF_OPTS = \
- 	--disable-tests \
- 	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cxx-exceptions,--disable-cxx-exceptions)
- 
-+ifeq ($(BR2_PACKAGE_LIBUCONTEXT),y)
-+LIBUNWIND_DEPENDENCIES += libucontext
-+endif
++config BR2_PACKAGE_LIBUCONTEXT
++	bool "libucontext"
++	depends on BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
++	help
++	  Ucontext implementation featuring glibc-compatible ABI.
 +
- $(eval $(autotools-package))
++	  https://github.com/kaniini/libucontext
+diff --git a/package/libucontext/libucontext.hash b/package/libucontext/libucontext.hash
+new file mode 100644
+index 0000000000..a8e1e23e36
+--- /dev/null
++++ b/package/libucontext/libucontext.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256  937fba9d0beebd7cf957b79979b19fe3a29bb9c4bfd25e869477d7154bbf8fd3  libucontext-1.2.tar.gz
++# License files, locally calculated
++sha256  ecf4be354bbb6ccebdf150d1a8f2b3caeb10cf7c8a580f278a30799372f9e037  LICENSE
+diff --git a/package/libucontext/libucontext.mk b/package/libucontext/libucontext.mk
+new file mode 100644
+index 0000000000..75c4f9b9e4
+--- /dev/null
++++ b/package/libucontext/libucontext.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# libucontext
++#
++################################################################################
++
++LIBUCONTEXT_VERSION = 1.2
++LIBUCONTEXT_SITE = $(call github,kaniini,libucontext,libucontext-$(LIBUCONTEXT_VERSION))
++LIBUCONTEXT_LICENSE = ISC
++LIBUCONTEXT_LICENSE_FILES = LICENSE
++LIBUCONTEXT_INSTALL_STAGING = YES
++
++LIBUCONTEXT_CONF_OPTS = \
++	-Dfreestanding=false \
++	-Dexport_unprefixed=true
++
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
