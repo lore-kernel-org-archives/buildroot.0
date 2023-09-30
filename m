@@ -4,64 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5288E77373
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 13:22:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD869E77371
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 13:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F14240C16;
-	Sat, 30 Sep 2023 13:22:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F14240C16
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8733340A7E;
+	Sat, 30 Sep 2023 13:23:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8733340A7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j1-SukxpnueK; Sat, 30 Sep 2023 13:21:59 +0000 (UTC)
+	with ESMTP id 6Tp07FSh5n8R; Sat, 30 Sep 2023 13:23:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49A574151E;
-	Sat, 30 Sep 2023 13:21:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49A574151E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E90FA1BF5A3
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:21:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 858E440B0E;
+	Sat, 30 Sep 2023 13:23:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 858E440B0E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 68B131BF5A3
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BDFAF4206C
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:21:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDFAF4206C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 517F660ADD
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:23:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 517F660ADD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9P8R0ItkoVnL for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 13:21:53 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9057141EB7
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 13:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9057141EB7
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb04:4ad:b00:e4d1:b92:e94d:73af])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id B5AC1B0037C;
- Sat, 30 Sep 2023 15:21:45 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Sep 2023 15:21:45 +0200
-Date: Sat, 30 Sep 2023 15:21:45 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Buildroot ML <buildroot@buildroot.org>
-Message-ID: <20230930132145.GB2579@scaer>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xP2HUr--mv-k for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 13:23:26 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 01A8460A92
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 13:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01A8460A92
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 225161BF204;
+ Sat, 30 Sep 2023 13:23:24 +0000 (UTC)
+Date: Sat, 30 Sep 2023 15:23:23 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20230930152323.2f4febd0@windsurf>
+In-Reply-To: <20230930132145.GB2579@scaer>
+References: <20230930132145.GB2579@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696080110;
- bh=JGKLJueFzgdybcy77Zo1KmCcME2G9GKBhIT5qJj0EI0=;
- h=Date:From:To:Cc:Subject:From;
- b=qUIXdOiuJqWOJ2omLhjXH4LGZOhQQUCWkLQymxm8x/pYnY1CJ8uwUDUUzdmVqygnQ
- W9Y1JJvI7FLo/0WXoyLFq86o8QITSSCEnYAZueZeIbz1jwIIoPnQIhYy23mobbk/w2
- NaHGfmse4RT7kgX3MtVy0t45t7CUCpNttKPqO71WyMdYWmw0YrV5R8M1mjw5RevFuo
- Fpuer8FjUTOmPsA0p6G2BWTQSUAcsfBVre8LMaGfrdc9OUdAV3pZeC2brSGleTPbAn
- g7NminK0kxbq14/DY1zruO978/kQsZhaW4tlwI6Y+LxQ/FXmoIIINogpbbz0qGS7Pk
- tdrOE1xlYQgPw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=qUIXdOiu
-Subject: [Buildroot] New maintainer on board
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1696080204;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=VOhc2+S/Xtt+YTscfuUVPWhEPqxBK/7CloqkgAKcPFo=;
+ b=VrCrlXXHBBhAP7z0aI3eM/qiDZPZ75gEhZV2JlzabHyZxKoz3x9qj4RvwVpLaHjXk/zkCg
+ wt4zICmMLE49qnKX+9nAr/4dTgGQTuUcbJnhD5ucnvvvkDnApPa3Ae3pH88JTCGLT98/5X
+ Yj6bg4EKCXeGx/2VaH+gPZiXNuWO2DRizyR/dffZrXkO9jnKO+F3sULme+/ZzXcMAgQG2e
+ J3ZMZJ39qL03Hb/1UxeLtymX+TmpSYVjHThCGRTvcFurEFaW6Bwt4IvAuCm9GkyYmJnWDI
+ t1FQcjZCVE0jXmzUD3ddYvSMjyM8UUo/OxJSSMV2Eyxyby3C1kmEBpbAo0O3pw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VrCrlXXH
+Subject: Re: [Buildroot] New maintainer on board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,37 +74,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@smile.fr>,
+ Buildroot ML <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All,
+On Sat, 30 Sep 2023 15:21:45 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Romain has been contributing to Buildroot for more a decade now, and he
-has done quite a lot of work in various places in Buildroot, and has
-been helping during the developpers days and hackathons.
+> Welcome on board Romain, let the Force be with you!
 
-He has agreed to join the maintainers team, and further his implication
-in the project.
+Welcome on board Romain, may the push be with you!
 
-The most astute of you will have noticed that Romain has been quick to
-take his new duties to heart, and already pushed significant changes to
-the toolchain before I could finish this email! :-)
-
-Welcome on board Romain, let the Force be with you!
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
