@@ -4,66 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55B89E7735F
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 09:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E89B8E7735F
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 09:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BBC983D44;
-	Sat, 30 Sep 2023 09:01:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BBC983D44
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8107683D95;
+	Sat, 30 Sep 2023 09:22:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8107683D95
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sometUuGh_Rk; Sat, 30 Sep 2023 09:01:00 +0000 (UTC)
+	with ESMTP id SlioKK-uFF5a; Sat, 30 Sep 2023 09:21:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD8E183C7B;
-	Sat, 30 Sep 2023 09:00:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD8E183C7B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9EF9A83DA4;
+	Sat, 30 Sep 2023 09:21:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EF9A83DA4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8131E1BF397
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 09:00:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A35EF1BF2F9
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 09:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69E0D83C7B
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 09:00:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69E0D83C7B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C40483DA4
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 09:21:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C40483DA4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rju1e3S-EzX9 for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 09:00:57 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EADFE83C78
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 09:00:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EADFE83C78
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb04:4ad:b00:e4d1:b92:e94d:73af])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E9769B0059A;
- Sat, 30 Sep 2023 11:00:51 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Sep 2023 11:00:51 +0200
-Date: Sat, 30 Sep 2023 11:00:51 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ with ESMTP id JOCMlXDTT5VS for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 09:21:53 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD0EA83D95
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 09:21:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD0EA83D95
+Received: by mail.gandi.net (Postfix) with ESMTPA id 24F6340006;
+ Sat, 30 Sep 2023 09:21:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <20230930090051.GA2579@scaer>
-References: <20230926154703.160448-1-yann.morin.1998@free.fr>
+Date: Sat, 30 Sep 2023 11:21:47 +0200
+Message-ID: <20230930092150.526483-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230926154703.160448-1-yann.morin.1998@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696064454;
- bh=RK1YECt4D0wzXbJBeySAHAcqFRvnQryKza4GPVTxIyI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=fg8KbyKhMZdYCuwyalViyaPdIVgNr5alOzGJc7ZZph4fPdS8Qda9K+BGdnR9HdjPM
- tJpjOfqHWa+/aSaHKoyM65ab3Mm3dxpLdGCp6rXoa9mwG5MDez7t2P4L/kn2yZ+cBe
- NZ75g/Ree9RnCNPSOYNdeq5M7fBRpz0xmQtc6cK2OojWI1Xp8/Tl0iZeJIgz6wnjje
- A56Ep4kVr/wmcudf6VKYWzHgrzGTedHVVFU2kYhwuIUN7asWgPMQArTQlvGbc443lT
- Frjd0MzKFmLMjoum3i8kRq/X03VUEJGgG24KTikGwA6SgTwapX761ISEG3QE5VpMJB
- BJV5ImXojVXpg==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1696065711;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=SQZbH1eYH8fyq16kw7dfQyC/ycVbIRuiVfv4EXKAQUM=;
+ b=AiIaV7b8hTmT4O885LX6vkeos4FCLTQ1CuVv41T40q9/MZ6suMr4SGm1puy1X8SOA1q2dq
+ AIfrup6TmRxIiciI51L8F+jJrddXdpFdYenPDSdvwIrYSBjCFIGC6O+oT94npXeI9zgKB/
+ wJ/DIhQsnRE6SMC9+R4HhqR+qGaMiAamCsKuZ/+lub2Kow8i/r25fWrRL8elPTe9PvQ2UM
+ pYy8alLjiquVMpWMJXiEBZq6RiYSZP1iiAxgL6W1aM/l3r64iFbSTOuVIBx1VQFD+Lw2Tq
+ VN4l/NVcXFAZv8qi//+EuRodygEtEJff5haas4g6d+zk9T+kF2U47F5TRGA6Dw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fg8KbyKh
-Subject: Re: [Buildroot] [PATCH] support/runtime-test: fix weston test
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AiIaV7b8
+Subject: [Buildroot] [PATCH] docs/website/association.html: move
+ buildroot-association to Gitlab
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,102 +71,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
-
-On 2023-09-26 17:47 +0200, Yann E. MORIN spake thusly:
-> The weston runtime test uses the CRC of the framebuffer to detect that
-> "something" is being drawned on the framebuffer. This requires that the
-> sampling of the CRC happens does not happen too early after trigerring
-> an action, or the rendering may be not be finishe, either:
-> 
->   - weston may not have had time to initialise, or
->   - the test application may not have started rednering,
-> 
-> The sequence of rendering that has been observed yields this sequence of
-> CRCs (elided for brevity):
-> 
->   - boot:
->     - alternating between 0x4c4126bf and 0x5d2f9aa5: console cursor
->       blinking
-> 
->   - start weston:
->     - 0x4c4126bf: weston switches to an clearted vt)
->       ...
->     - 0xe54b7895: weston is starting
->       ...
->     - 0xe54b7895: wayland socket appears!
->       ...
->     - 0x6bf28bdf: weston is ready
->       ...
-> 
->   - start weston-simple-egl:
->     - 0x6bf28bdf: application is starting
->       ...
->     - 0xNNNNNNNN: random CRCs while the application renders
->       ...
-> 
->   - stop weston-simple-egl:
->     - 0xNNNNNNNN: izero, one, or two random CRCs while the application
->         renders before it handles SIGTERM
->     - 0x6bf28bdf: application is stopped
->       ...
-> 
->   - stop weston:
->     - 0x6bf28bdf: a few CRC identical to when weston was started, while
->         weston is processing SIGTERM
->     - ocillating between 0x4c4126bf and 0x5d2f9aa5: console cursor
->         blinking, back to initial vt, weston dead.
-> 
-> So, we need to wait "enough" after each action. Moreover, when the
-> wayland socket appears, weston may not have stabilised yet, so we also
-> need to wait after the socket appears.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Julien Olivain <ju.o@free.fr>
-
-Applied to master after fixing the typoes, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/testing/tests/package/test_weston.py | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/support/testing/tests/package/test_weston.py b/support/testing/tests/package/test_weston.py
-> index 276788c649..df1b7a4135 100644
-> --- a/support/testing/tests/package/test_weston.py
-> +++ b/support/testing/tests/package/test_weston.py
-> @@ -78,6 +78,7 @@ class TestWeston(infra.basetest.BRTest):
->          wayland_socket = "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}"
->          cmd = f"while [ ! -e \"{wayland_socket}\" ] ; do sleep 1 ; done"
->          self.assertRunOk(cmd, timeout=10)
-> +        time.sleep(4)
->  
->      def stop_weston(self):
->          cmd = "killall weston && sleep 3"
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIGJ1aWxkcm9vdC1hc3NvY2lhdGlvbiByZXBvc2l0b3J5IHVzZWQgdG8gYmUgaG9zdGVkIG9u
+IEdpdGh1YiwgdGhlbgp3YXMgY2xvc2VkIGZvciBzb21lIGJhbmtpbmcgaXNzdWVzLiBXZSdyZSBu
+b3cgbWFraW5nIGl0IHB1YmxpYyBhZ2FpbiwKYnV0IG9uIEdpdGxhYiBsaWtlIHRoZSByZXN0IG9m
+IEJ1aWxkcm9vdC4KClNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRh
+enpvbmlAYm9vdGxpbi5jb20+Ci0tLQogZG9jcy93ZWJzaXRlL2Fzc29jaWF0aW9uLmh0bWwgfCAx
+MiArKysrKystLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDYgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvZG9jcy93ZWJzaXRlL2Fzc29jaWF0aW9uLmh0bWwgYi9kb2Nz
+L3dlYnNpdGUvYXNzb2NpYXRpb24uaHRtbAppbmRleCAwMjE1Zjg1ODc0Li5kYTczM2M1MDEzIDEw
+MDY0NAotLS0gYS9kb2NzL3dlYnNpdGUvYXNzb2NpYXRpb24uaHRtbAorKysgYi9kb2NzL3dlYnNp
+dGUvYXNzb2NpYXRpb24uaHRtbApAQCAtMzIsMjEgKzMyLDIxIEBACiAJICA8L3VsPgogCiAJICA8
+cD5UaGUgYnlsYXdzIG9mIHRoZSBhc3NvY2lhdGlvbiBhcmUgYXZhaWxhYmxlCi0JICBpbiA8YSBo
+cmVmPSJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vYnVpbGRyb290L2J1aWxkcm9v
+dC1hc3NvY2lhdGlvbi9tYXN0ZXIvc3RhdHV0c19mci50eHQiPkZyZW5jaDwvYT4KKwkgIGluIDxh
+IGhyZWY9Imh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC1hc3NvY2lh
+dGlvbi8tL3Jhdy9tYXN0ZXIvc3RhdHV0c19mci50eHQiPkZyZW5jaDwvYT4KIAkgIChvZmZpY2lh
+bCkgYW5kCi0JICBpbiA8YSBocmVmPSJodHRwczovL2dpdGh1Yi5jb20vYnVpbGRyb290L2J1aWxk
+cm9vdC1hc3NvY2lhdGlvbi9ibG9iL21hc3Rlci9zdGF0dXRlc19lbi50eHQiPkVuZ2xpc2g8L2E+
+CisJICBpbiA8YSBocmVmPSJodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJv
+b3QtYXNzb2NpYXRpb24vLS9yYXcvbWFzdGVyL3N0YXR1dGVzX2VuLnR4dCI+RW5nbGlzaDwvYT4K
+IAkgICh1bm9mZmljaWFsIHRyYW5zbGF0aW9uKS4gVGhlIGFzc29jaWF0aW9uIHdhcyBkZWNsYXJl
+ZCBvbgogCSAgTWFyY2ggMTQsIDIwMTYgdG8gdGhlIDxlbT5QcsOpZmVjdHVyZSBkZSBIYXV0ZS1H
+YXJvbm5lPC9lbT4KIAkgIChGcmFuY2UpIGFuZCBpcyByZWdpc3RlcmVkIHVuZGVyIHRoZSBuwrBX
+MzEzMDI0Mjc4LiBTZWUgdGhpcwotCSAgb2ZmaWNpYWwgPGEgaHJlZj0iaHR0cHM6Ly9naXRodWIu
+Y29tL2J1aWxkcm9vdC9idWlsZHJvb3QtYXNzb2NpYXRpb24vYmxvYi9tYXN0ZXIvcGRmL1JlY2Vw
+aXNzZV9DUi5wZGYiPnJlY2VpcHQ8L2E+CisJICBvZmZpY2lhbCA8YSBocmVmPSJodHRwczovL2dp
+dGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QtYXNzb2NpYXRpb24vLS9yYXcvbWFzdGVy
+L3BkZi9SZWNlcGlzc2VfQ1IucGRmIj5yZWNlaXB0PC9hPgogCSAgZnJvbSB0aGUgRnJlbmNoIGF1
+dGhvcml0aWVzLjwvcD4KIAogCSAgPHA+T3VyIGFjY291bnRpbmcgaXMgZnVsbHkgcHVibGljLCBp
+bmNsdWRpbmcgdGhlIGJhbmsKIAkgIGFjY291bnQgc3VtbWFyaWVzLAotCSAgc2VlIDxhIGhyZWY9
+Imh0dHBzOi8vZ2l0aHViLmNvbS9idWlsZHJvb3QvYnVpbGRyb290LWFzc29jaWF0aW9uL3RyZWUv
+bWFzdGVyL2FjY291bnRpbmciPmFjY291bnRpbmc8L2E+LiBOdW1lcm91cworCSAgc2VlIDxhIGhy
+ZWY9Imh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC1hc3NvY2lhdGlv
+bi8tL3RyZWUvbWFzdGVyL2FjY291bnRpbmciPmFjY291bnRpbmc8L2E+LiBOdW1lcm91cwogCSAg
+b3RoZXIgYWRtaW5pc3RyYXRpdmUgZG9jdW1lbnRzIHJlbGF0ZWQgdG8gdGhlIGFzc29jaWF0aW9u
+CiAJICBhcmUgYXZhaWxhYmxlIG9uCi0JICBpdHMgPGEgaHJlZj0iaHR0cHM6Ly9naXRodWIuY29t
+L2J1aWxkcm9vdC9idWlsZHJvb3QtYXNzb2NpYXRpb24vIj5HaXRodWIKKwkgIGl0cyA8YSBocmVm
+PSJodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QtYXNzb2NpYXRpb24v
+Ij5HaXRodWIKIAkgIHJlcG9zaXRvcnk8L2E+PC9wPgogCTwvZGl2PgogICAgICAgPC9kaXY+CkBA
+IC02OCw3ICs2OCw3IEBACiAKIAkgIDxwPk9uY2UgdGhlIG1lbWJlcnNoaXAgZmVlIGlzIHJlY2Vp
+dmVkLCBpdCB3aWxsIGJlIGxpc3RlZCBpbgogCSAgdGhlCi0JICBhc3NvY2lhdGlvbiA8YSBocmVm
+PSJodHRwczovL2dpdGh1Yi5jb20vYnVpbGRyb290L2J1aWxkcm9vdC1hc3NvY2lhdGlvbi90cmVl
+L21hc3Rlci9hY2NvdW50aW5nIj5hY2NvdW50aW5nPC9hPgorCSAgYXNzb2NpYXRpb24gPGEgaHJl
+Zj0iaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290LWFzc29jaWF0aW9u
+Ly0vdHJlZS9tYXN0ZXIvYWNjb3VudGluZyI+YWNjb3VudGluZzwvYT4KIAkgIGZpbGVzLCB3aGlj
+aCBzZXJ2ZSBhcyB0aGUgb2ZmaWNpYWwgbGlzdCBvZgogCSAgbWVtYmVycy4gVGhlcmVmb3JlLCBt
+ZW1iZXJzIGFjY2VwdCB0aGF0IHRoZWlyIG5hbWUgYW5kIHRoZQogCSAgYW1vdW50IG9mIHRoZWly
+IG1lbWJlcnNoaXAgZmVlIGlzIG1hZGUgcHVibGljLjwvcD4KLS0gCjIuNDEuMAoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
