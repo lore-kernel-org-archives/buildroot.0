@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D90FAE77371
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 12:38:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE0A1E77372
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 12:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F0CD832B0;
-	Sat, 30 Sep 2023 12:38:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F0CD832B0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8231E83C6D;
+	Sat, 30 Sep 2023 12:38:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8231E83C6D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rfaj8v3PuJxd; Sat, 30 Sep 2023 12:38:09 +0000 (UTC)
+	with ESMTP id xIfRWa7zmBoz; Sat, 30 Sep 2023 12:38:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6ADC383C62;
-	Sat, 30 Sep 2023 12:38:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ADC383C62
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DE7983C72;
+	Sat, 30 Sep 2023 12:38:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DE7983C72
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5E2681BF3EB
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 12:38:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6EAB31BF3EB
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 12:38:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01C3260DF0
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 12:38:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01C3260DF0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4787460DF0
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 12:38:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4787460DF0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xnBFAfwkppEp for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 12:38:06 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B777660D90
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 12:38:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B777660D90
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 800CC20002;
- Sat, 30 Sep 2023 12:38:00 +0000 (UTC)
-Date: Sat, 30 Sep 2023 14:37:59 +0200
+ with ESMTP id Cy7a2Gljbnch for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 12:38:54 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CFD5360D90
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 12:38:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFD5360D90
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B6E37240004;
+ Sat, 30 Sep 2023 12:38:49 +0000 (UTC)
+Date: Sat, 30 Sep 2023 14:38:49 +0200
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230930143759.6f6019c1@windsurf>
-In-Reply-To: <20230626181531.2312002-1-james.hilliard1@gmail.com>
+Message-ID: <20230930143849.6ef63fe4@windsurf>
+In-Reply-To: <20230626181531.2312002-2-james.hilliard1@gmail.com>
 References: <20230626181531.2312002-1-james.hilliard1@gmail.com>
+ <20230626181531.2312002-2-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1696077482;
+ d=bootlin.com; s=gm1; t=1696077531;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Y382X5iZRxEX6dGcFXbEI2Y2nUREIcxaEdXWUDD5HV0=;
- b=UaUYSe61wqZKHwy5svzdZYr+1mRNDZ6Y9lX593owOjfp8UiepqeGFQnpayt5kAXtt+P5ef
- +idFiBhtXrlXHbDM6jMEpBtKJnNDyuhfcBLNYCbOSxkFFGJMWU4Dy0plQk3ZlBsnX1Px7R
- Hm5zTXTkJtwmB2fpT305XQUKcd0B8LCHbIsRiomA0wXTHG0npdALMfew4ztpq5+q+wsYdF
- hB6ccA/uu2g+ATYxUxEGTlcrZPcK+lCO11nnxDPFVAgz8sYhm+Y8BTTe7w1uHJvQTS0f+Z
- ZM8S44zymAd4vY3QQu3n7wLVkTKoL3QrOZ5RDNSCToj8fRFXLd5RKNjuPsJTiw==
+ bh=ZIpaYO+inOHc+s9iia58JsU6WinH1Ua00J0W5pPQM5E=;
+ b=oY7vgeApGV1/R6aPpOVIJiIIK0T8l41UkSqqQNqXPF5XLy1GhOITSTSHOKDjA0pL0wpGt6
+ 41+mPqOkqdDaMEVTnLtzmoTMF4C5JhJP9v4GRSx+mqgOyDyVnduHElGluyTD/a7QBGnJmc
+ 9VzqV2KEyYPEh5JPOkQd+cePdjh/+r2LWmbmXLnhYfp4d1JnjC+OoZIxTb6m5PIjC9Q375
+ SeFr2mxee8A4wJu4jfHaOvuQMeFYxFTo1sL9evTuha9AS3wnV3YH0DUPLFbznzT7y5VrAs
+ qfjkWO4q5OCBLCxinQnxInO25XWde0YJSUOkVGYucV8yggScP3tJvqo7mGuncw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UaUYSe61
-Subject: Re: [Buildroot] [PATCH 1/5] package/python-numpy: bump to version
- 1.25.0
+ header.s=gm1 header.b=oY7vgeAp
+Subject: Re: [Buildroot] [PATCH 2/5] package/python-pythran: bump to version
+ 0.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,21 +91,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 26 Jun 2023 12:15:27 -0600
+On Mon, 26 Jun 2023 12:15:28 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Migrate to meson package infrastructure.
-> 
-> License has changed due to date update:
-> https://github.com/numpy/numpy/commit/c1ffdbc0c29d48ece717acb5bfbf811c935b41f6
-> 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-numpy/python-numpy.hash |  6 ++---
->  package/python-numpy/python-numpy.mk   | 31 ++++++++++++--------------
->  2 files changed, 17 insertions(+), 20 deletions(-)
+>  package/python-pythran/python-pythran.hash | 4 ++--
+>  package/python-pythran/python-pythran.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+This was bumped separately in commit
+cfde8aec04f67fd5d50c7fbd1ec73166fed0fbfb, so I've marked this patch as
+not applicable.
 
 Thomas
 -- 
