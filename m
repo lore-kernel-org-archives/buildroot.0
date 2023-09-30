@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44D5EE7736D
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 10:50:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 360E0E7736D
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 10:50:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF67682020;
-	Sat, 30 Sep 2023 10:50:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF67682020
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF43482091;
+	Sat, 30 Sep 2023 10:50:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF43482091
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Uoebtm04Mj7W; Sat, 30 Sep 2023 10:49:59 +0000 (UTC)
+	with ESMTP id eSedVmFols9U; Sat, 30 Sep 2023 10:50:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B905282022;
-	Sat, 30 Sep 2023 10:49:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B905282022
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D8B971BF471
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1829A82263;
+	Sat, 30 Sep 2023 10:50:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1829A82263
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F23FC1BF86B
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 10:49:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0A0742268
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBD2B83D7F
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 10:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0A0742268
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBD2B83D7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 39xvGOQW5nPg for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dUzWUdqKif0O for <buildroot@lists.busybox.net>;
  Sat, 30 Sep 2023 10:49:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D24E42163
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9244E83D79
  for <buildroot@buildroot.org>; Sat, 30 Sep 2023 10:49:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D24E42163
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9244E83D79
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7576A8393E; Sat, 30 Sep 2023 10:49:03 +0000 (UTC)
+ id 7E5B083940; Sat, 30 Sep 2023 10:49:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 12:29:21 +0200
+Date: Sat, 30 Sep 2023 12:34:50 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 6c0c84343d7e23a0956ca58d1397b0e283465748
-X-Git-Newrev: 162ea55cee34f06a82eb651a99422d5acb162a8d
+X-Git-Oldrev: 162ea55cee34f06a82eb651a99422d5acb162a8d
+X-Git-Newrev: 9cbf9db69111a72346c7b9419222f10d939a09a2
 X-Patchwork-Hint: ignore
-Message-Id: <20230930104903.7576A8393E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libyang: security
- bump to version 2.1.111
+Message-Id: <20230930104903.7E5B083940@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/nodejs: fix
+ parallel build further
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,57 +58,70 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6553512514349447048=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=162ea55cee34f06a82eb651a99422d5acb162a8d
+--===============6553512514349447048==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9cbf9db69111a72346c7b9419222f10d939a09a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Fix CVE-2023-26916: libyang from v2.0.164 to v2.1.30 was discovered to
-  contain a NULL pointer dereference via the function lys_parse_mem at
-  lys_parse_mem.c.
-- Fix CVE-2023-26917: libyang from v2.0.164 to v2.1.30 was discovered to
-  contain a NULL pointer dereference via the function
-  lysp_stmt_validate_value at lys_parse_mem.c.
+Commit 84c24ab1b5a7 (package/nodejs: fix parallel build) made use of
+BR2_JLEVEL to set the number of jobs nodejs should use instead of using
+the number of CPUs (+2).
 
-https://github.com/CESNET/libyang/releases/tag/v2.1.55
-https://github.com/CESNET/libyang/releases/tag/v2.1.80
-https://github.com/CESNET/libyang/releases/tag/v2.1.111
+However, BR2_JLEVEL can be set to 0 by the user, to let Buildroot detect
+the number of CPUs (+1), and stores it in PARALLEL_JOBS, and leaves
+BR2_JLEVEL untouched, so 0.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 799512e14935af57c6e685c45fa5e99b04274b4f)
+Thus, we can end up spawning a build by passing -j0 to ninja, which it
+interprets as "no -limit yolo" and does not limit the number oj jobs it
+spawns, which usually ends up in an OOM somewhere...
+
+Fix this by using PARALLEL_JOBS.
+
+Reported-by: Cédric & Co
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit d574e2a4f440903a0e32de6deb8275b1f385da2e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libyang/libyang.hash | 2 +-
- package/libyang/libyang.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nodejs/nodejs.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
-index 26a28d6eed..3658b20e4e 100644
---- a/package/libyang/libyang.hash
-+++ b/package/libyang/libyang.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  761cfd959342b147f6a43a84c931c7fde68dd3a1ad540a0e5302288b204f073d  libyang-2.1.30.tar.gz
-+sha256  3e52b922fcf371933ad7de1686ad83504e3358236e7817b5af795b0db52fa221  libyang-2.1.111.tar.gz
- sha256  0b7ec43747d211a1e49c53588b0822062947bab6bdcc95238578beab34cba5bb  LICENSE
-diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
-index f160035c09..5533c7c68e 100644
---- a/package/libyang/libyang.mk
-+++ b/package/libyang/libyang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index ff32ae6c13..e07d79091a 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -47,7 +47,7 @@ HOST_NODEJS_MAKE_OPTS = \
+ 	LDFLAGS.host="$(HOST_LDFLAGS)" \
+ 	NO_LOAD=cctest.target.mk \
+ 	PATH=$(@D)/bin:$(BR_PATH) \
+-	JOBS=$(BR2_JLEVEL)
++	JOBS=$(PARALLEL_JOBS)
  
--LIBYANG_VERSION = 2.1.30
-+LIBYANG_VERSION = 2.1.111
- LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
- LIBYANG_LICENSE = BSD-3-Clause
- LIBYANG_LICENSE_FILES = LICENSE
+ NODEJS_MAKE_OPTS = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+@@ -55,7 +55,7 @@ NODEJS_MAKE_OPTS = \
+ 	PATH=$(@D)/bin:$(BR_PATH) \
+ 	LDFLAGS="$(NODEJS_LDFLAGS)" \
+ 	LD="$(TARGET_CXX)" \
+-	JOBS=$(BR2_JLEVEL)
++	JOBS=$(PARALLEL_JOBS)
+ 
+ # nodejs's build system uses python which can be a symlink to an unsupported
+ # python version (e.g. python 3.10 with nodejs 14.18.1). We work around this by
+
+--===============6553512514349447048==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6553512514349447048==--
