@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F703E77374
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:25:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 158B2E77374
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 14:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB37C81E9B;
-	Sat, 30 Sep 2023 14:25:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB37C81E9B
+	by smtp1.osuosl.org (Postfix) with ESMTP id C143181EA3;
+	Sat, 30 Sep 2023 14:25:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C143181EA3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uJMwXbY8Fz-m; Sat, 30 Sep 2023 14:25:16 +0000 (UTC)
+	with ESMTP id vKUFZlcN8xu0; Sat, 30 Sep 2023 14:25:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 991B781F03;
-	Sat, 30 Sep 2023 14:25:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 991B781F03
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 086471BF2A3
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF63B81F29;
+	Sat, 30 Sep 2023 14:25:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF63B81F29
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 701851BF2A3
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:24:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E407F83DBE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44D0B41B4C
  for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 14:24:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E407F83DBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44D0B41B4C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uWmSRbBaZ48W for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dPWIRntfC8-i for <buildroot@lists.busybox.net>;
  Sat, 30 Sep 2023 14:24:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E35DF82331
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2A0C41F12
  for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:24:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E35DF82331
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2A0C41F12
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFCDF83B07; Sat, 30 Sep 2023 14:24:16 +0000 (UTC)
+ id BE64383B08; Sat, 30 Sep 2023 14:24:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 16:24:04 +0200
+Date: Sat, 30 Sep 2023 16:24:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e1308d2ec36493208e9bad97e76c15d43c16ed6b
-X-Git-Newrev: 317a77b854394fe08dc66ea54d2585cb68347f47
+X-Git-Oldrev: 98920213b0c121227312b4d89dbf4d424d7025e6
+X-Git-Newrev: 2fcb021cc2e6d90616f10a540593abd7a90a9cd6
 X-Patchwork-Hint: ignore
-Message-Id: <20230930142416.CFCDF83B07@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-lwp-protocol-https: bump to
- version 6.11
+Message-Id: <20230930142416.BE64383B08@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-http-date: bump to version
+ 6.06
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,63 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=317a77b854394fe08dc66ea54d2585cb68347f47
+commit: https://git.buildroot.net/buildroot/commit/?id=2fcb021cc2e6d90616f10a540593abd7a90a9cd6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LICENSE: switch to Perl Artistic
-see https://metacpan.org/release/OALDERS/LWP-Protocol-https-6.11/diff/OALDERS/LWP-Protocol-https-6.10#LICENSE
+LICENSE: update copyright dates & switch to Perl Artistic
+see https://metacpan.org/release/TIMLEGGE/Convert-ASN1-0.34/diff/TIMLEGGE/Convert-ASN1-0.33#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-lwp-protocol-https/Config.in                    | 1 -
- package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash | 8 ++++----
- package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 7 deletions(-)
+ package/perl-http-date/perl-http-date.hash | 8 ++++----
+ package/perl-http-date/perl-http-date.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-lwp-protocol-https/Config.in b/package/perl-lwp-protocol-https/Config.in
-index 9793b6f5d0..fa429a2ce0 100644
---- a/package/perl-lwp-protocol-https/Config.in
-+++ b/package/perl-lwp-protocol-https/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PERL_LWP_PROTOCOL_HTTPS
- 	bool "perl-lwp-protocol-https"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_PERL_IO_SOCKET_SSL # runtime
--	select BR2_PACKAGE_PERL_MOZILLA_CA # runtime
- 	select BR2_PACKAGE_PERL_NET_HTTP # runtime
- 	select BR2_PACKAGE_PERL_LIBWWW_PERL # runtime
- 	help
-diff --git a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
-index a3c011fe84..7304a4cb34 100644
---- a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
-+++ b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
+diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
+index b278423002..a6f7701829 100644
+--- a/package/perl-http-date/perl-http-date.hash
++++ b/package/perl-http-date/perl-http-date.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  cf64e4bc57a9266ac4343cdf0808c5c8  LWP-Protocol-https-6.10.tar.gz
--sha256  cecfc31fe2d4fc854cac47fce13d3a502e8fdfe60c5bc1c09535743185f2a86c  LWP-Protocol-https-6.10.tar.gz
+-md5  2ecbb3aedf6aef062605191813ca3027  HTTP-Date-6.05.tar.gz
+-sha256  365d6294dfbd37ebc51def8b65b81eb79b3934ecbc95a2ec2d4d827efe6a922b  HTTP-Date-6.05.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  6615a250c8963a2333ea6d0fbbec306b  LWP-Protocol-https-6.11.tar.gz
-+sha256  0132ddbf03661565ca85050f2a5094fb9263cbbc3ccb1a4d9c41ac9bb083b917  LWP-Protocol-https-6.11.tar.gz
++md5  60462359bfeb1e6d14602508cfd07885  HTTP-Date-6.06.tar.gz
++sha256  7b685191c6acc3e773d1fc02c95ee1f9fae94f77783175f5e78c181cc92d2b52  HTTP-Date-6.06.tar.gz
  
  # computed by scancpan
--sha256  294e73f9bd40ea600e9478cd57489a7da72558a83c6a66f37a82e4e0d5a706d9  LICENSE
-+sha256  e4def55436b2bd99fe2cdbf546a72ad5958327e28831db9b5adb497c6bd580ba  LICENSE
-diff --git a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
-index 0663820b2e..960de52f0b 100644
---- a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
-+++ b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
+-sha256  305b71c4d2fd6380585689c5f1c620737a36a318ce0f9c772badce0fe293a44e  LICENSE
++sha256  6186a79a305a0e62c5087f9737b4f66fa5793fa1b396da0126e3c8722c460245  LICENSE
+diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
+index 43583be303..2f1aeb7da0 100644
+--- a/package/perl-http-date/perl-http-date.mk
++++ b/package/perl-http-date/perl-http-date.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PERL_LWP_PROTOCOL_HTTPS_VERSION = 6.10
-+PERL_LWP_PROTOCOL_HTTPS_VERSION = 6.11
- PERL_LWP_PROTOCOL_HTTPS_SOURCE = LWP-Protocol-https-$(PERL_LWP_PROTOCOL_HTTPS_VERSION).tar.gz
- PERL_LWP_PROTOCOL_HTTPS_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
--PERL_LWP_PROTOCOL_HTTPS_LICENSE = Artistic or GPL-1.0+
-+PERL_LWP_PROTOCOL_HTTPS_LICENSE = Artistic-1.0-Perl or GPL-1.0+
- PERL_LWP_PROTOCOL_HTTPS_LICENSE_FILES = LICENSE
- PERL_LWP_PROTOCOL_HTTPS_DISTNAME = LWP-Protocol-https
+-PERL_HTTP_DATE_VERSION = 6.05
++PERL_HTTP_DATE_VERSION = 6.06
+ PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
+ PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+-PERL_HTTP_DATE_LICENSE = Artistic or GPL-1.0+
++PERL_HTTP_DATE_LICENSE = Artistic-1.0-Perl or GPL-1.0+
+ PERL_HTTP_DATE_LICENSE_FILES = LICENSE
+ PERL_HTTP_DATE_DISTNAME = HTTP-Date
  
 _______________________________________________
 buildroot mailing list
