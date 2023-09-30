@@ -1,54 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0976EE77373
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 13:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 145C2E77371
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 13:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5D0D408B0;
-	Sat, 30 Sep 2023 13:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5D0D408B0
+	by smtp1.osuosl.org (Postfix) with ESMTP id A446482137;
+	Sat, 30 Sep 2023 13:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A446482137
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mFMDXssGRTIO; Sat, 30 Sep 2023 13:43:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VxU8c-1Q6U0N; Sat, 30 Sep 2023 13:47:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A722740C0A;
-	Sat, 30 Sep 2023 13:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A722740C0A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 448041BF2F9
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:43:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C91478233E;
+	Sat, 30 Sep 2023 13:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C91478233E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 64D7C1BF2F9
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:47:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DDB760D6E
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:43:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DDB760D6E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BA97418AD
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:47:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA97418AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dSagN6ueb33m for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 13:43:01 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D63FC60D58
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 13:43:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D63FC60D58
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6737B1C0007;
- Sat, 30 Sep 2023 13:42:57 +0000 (UTC)
-Received: from peko by dell.home with local (Exim 4.94.2)
- (envelope-from <peko@48ers.dk>)
- id 1qmaFE-00Ey6p-LK; Sat, 30 Sep 2023 15:42:56 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tfN2SRRs_GVT for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 13:47:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37CCB4188D
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 13:47:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37CCB4188D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 201DC839FF; Sat, 30 Sep 2023 13:47:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 15:42:34 +0200
-Message-Id: <20230930134234.3567570-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/urandom-scripts: move seedrng init
- script to S01
+Date: Sat, 30 Sep 2023 15:45:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 952e320a1b30b41c26fc547ec500e99520d869ea
+X-Git-Newrev: 683446ed9f133d00c85ddfcf44094bcb3baeab56
+X-Patchwork-Hint: ignore
+Message-Id: <20230930134756.201DC839FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: fix
+ docs/manual/adding-packages-meson.txt reference
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,58 +57,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We want to initialize the kernel random number generator as soon as
-possible, as early init scripts may also need random numbers (E.G.
-syslog-ng in S01syslog-ng does).
+commit: https://git.buildroot.net/buildroot/commit/?id=683446ed9f133d00c85ddfcf44094bcb3baeab56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Seedrng was presumably only using S20 because the previos urandom script
-used S20, which (after som moves) dates all the way back to:
+Commit 32cec3be976 (docs/manual: rename *.txt as *.adoc) renamed the manual
+files but forgot to update the reference in the DEVELOPERS file, causing
+check-package to warn:
 
-commit 8262508fc4456b5230216473ea14c897268ba791
-Author: Eric Andersen <andersen@codepoet.org>
-Date:   Fri Apr 26 22:01:43 2002 +0000
-
-    With this update, everything now works as expected.
-     -Erik
-
-Seedrng needs persistent storage, but mount -a is run before executing the
-init scripts, so S01 should be as good as S20 - Atleast with the scripts in
-upstream Buildroot.
+WARNING: 'docs/manual/adding-packages-meson.txt' doesn't match any file, line 851
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/urandom-scripts/{S20seedrng => S01seedrng} | 0
- package/urandom-scripts/urandom-scripts.mk         | 4 ++--
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename package/urandom-scripts/{S20seedrng => S01seedrng} (100%)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/urandom-scripts/S20seedrng b/package/urandom-scripts/S01seedrng
-similarity index 100%
-rename from package/urandom-scripts/S20seedrng
-rename to package/urandom-scripts/S01seedrng
-diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
-index 32f3e09343..89abdfff72 100644
---- a/package/urandom-scripts/urandom-scripts.mk
-+++ b/package/urandom-scripts/urandom-scripts.mk
-@@ -5,8 +5,8 @@
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a027958331..e65c436157 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -848,7 +848,7 @@ F:	package/bayer2rgb-neon/
+ F:	package/gstreamer1/gst1-plugins-bayer2rgb-neon/
  
- define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20seedrng \
--		$(TARGET_DIR)/etc/init.d/S20seedrng
-+	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S01seedrng \
-+		$(TARGET_DIR)/etc/init.d/S01seedrng
- endef
- 
- $(eval $(generic-package))
--- 
-2.30.2
-
+ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-F:	docs/manual/adding-packages-meson.txt
++F:	docs/manual/adding-packages-meson.adoc
+ F:	package/adwaita-icon-theme/
+ F:	package/darkhttpd/
+ F:	package/eudev/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
