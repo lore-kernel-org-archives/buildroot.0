@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E51E77371
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 13:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0A6BE77373
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 13:56:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E56680AE5;
-	Sat, 30 Sep 2023 13:54:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E56680AE5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6083E83DAE;
+	Sat, 30 Sep 2023 13:56:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6083E83DAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8nP5SeZ7AkwD; Sat, 30 Sep 2023 13:54:43 +0000 (UTC)
+	with ESMTP id 9lbO1tu5mvlD; Sat, 30 Sep 2023 13:56:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AE8683D02;
-	Sat, 30 Sep 2023 13:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AE8683D02
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B8A621BF2F9
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:54:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 963F383D98;
+	Sat, 30 Sep 2023 13:56:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 963F383D98
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F07C1BF2F9
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:56:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A14CB40C0A
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:54:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A14CB40C0A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 777E583DAC
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 13:56:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 777E583DAC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XxEHOiRsJCK4 for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 13:54:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QNJMtBSbResT for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 13:56:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D2CD4047B
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 13:54:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D2CD4047B
+ by smtp1.osuosl.org (Postfix) with ESMTP id C00AD83D98
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 13:56:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C00AD83D98
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66FFE83A09; Sat, 30 Sep 2023 13:54:39 +0000 (UTC)
+ id AB88D83A24; Sat, 30 Sep 2023 13:56:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 30 Sep 2023 15:54:11 +0200
+Date: Sat, 30 Sep 2023 15:55:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 683446ed9f133d00c85ddfcf44094bcb3baeab56
-X-Git-Newrev: 6fa4131de5a5a5b156eb110d5f40ac602f6c1d87
+X-Git-Oldrev: 314e52add434b5ba612d68be3d57c425a2975282
+X-Git-Newrev: 72c9362103b2f5157b82249280d7250a80db592c
 X-Patchwork-Hint: ignore
-Message-Id: <20230930135439.66FFE83A09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdbus-cpp: add support to build
- the host stub generator
+Message-Id: <20230930135603.AB88D83A24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website: remove mention of snapshot
+ tarballs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,76 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fa4131de5a5a5b156eb110d5f40ac602f6c1d87
+commit: https://git.buildroot.net/buildroot/commit/?id=72c9362103b2f5157b82249280d7250a80db592c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a host option to build the xml2cpp-codegen part of the
-sdbus-cpp package for use in creating adaptor and proxy
-implementations from the D-Bus IDL.
+In a Git era, those snapshot tarballs are no longer relevant, so drop
+it.
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in.host           |  1 +
- package/sdbus-cpp/Config.in.host | 11 +++++++++++
- package/sdbus-cpp/sdbus-cpp.mk   |  9 +++++++++
- 3 files changed, 21 insertions(+)
+ docs/website/download.html | 24 ------------------------
+ 1 file changed, 24 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 387a28cff2..09dbf8308d 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -99,6 +99,7 @@ menu "Host utilities"
- 	source "package/rustc/Config.in.host"
- 	source "package/s6-rc/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
-+	source "package/sdbus-cpp/Config.in.host"
- 	source "package/sdbusplus/Config.in.host"
- 	source "package/sentry-cli/Config.in.host"
- 	source "package/sloci-image/Config.in.host"
-diff --git a/package/sdbus-cpp/Config.in.host b/package/sdbus-cpp/Config.in.host
-new file mode 100644
-index 0000000000..d62a65ae84
---- /dev/null
-+++ b/package/sdbus-cpp/Config.in.host
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_HOST_SDBUS_CPP
-+	bool "host sdbus-c++"
-+	depends on BR2_HOST_GCC_AT_LEAST_7
-+	help
-+	  sdbus-c++ is a high-level C++ D-Bus library for Linux
-+	  designed to provide expressive, easy-to-use API in modern C++.
-+
-+	  This will build the stub code generator for the adaptor and
-+	  proxy interfaces from D-Bus IDL.
-+
-+	  https://github.com/Kistler-Group/sdbus-cpp
-diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
-index 52e5c50cd2..2a6b67d6e3 100644
---- a/package/sdbus-cpp/sdbus-cpp.mk
-+++ b/package/sdbus-cpp/sdbus-cpp.mk
-@@ -12,4 +12,13 @@ SDBUS_CPP_DEPENDENCIES = host-pkgconf systemd
- SDBUS_CPP_LICENSE = LGPL-2.1+ with exception (headers)
- SDBUS_CPP_LICENSE_FILES = COPYING COPYING-LGPL-Exception
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 7d7b405a61..91ad4c7547 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -162,30 +162,6 @@ git pull
+ 	  </div>
+ 	</div>
  
-+# Host build for sdbus-c++-xml2cpp
-+HOST_SDBUS_CPP_DEPENDENCIES = host-pkgconf host-systemd
-+HOST_SDBUS_CPP_CONF_OPTS = \
-+	-DBUILD_CODE_GEN=ON \
-+	-DBUILD_DOC=OFF \
-+	-DBUILD_TESTS=OFF \
-+	-DBUILD_LIBSYSTEMD=OFF
-+
- $(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+-	<div class="col-sm-5">
+-	  <div class="panel panel-default	">
+-	    <div class="panel-heading">Tarballs</div>
+-	    <div class="panel-body">
+-	      You can also obtain daily snapshots of the latest Buildroot source tree if you
+-	      want to follow development, but cannot or do not wish to use Git.
+-
+-	      <ul>
+-		<li>You can download the
+-		  <a href="downloads/snapshots/buildroot-snapshot.tar.bz2">latest snapshot
+-		  </a> or view recent <a href="downloads/snapshots/">daily snapshots</a>.
+-		</li>
+-
+-		<li>You can also <a href="http://git.buildroot.net/buildroot">browse the
+-		    source tree online</a>.
+-		</li>
+-	      </ul>
+-
+-	      <p>
+-		Older versions can be downloaded from <a href="/downloads/">the release archive</a>.
+-	      </p>
+-	    </div>
+-	  </div>
+-	</div>
+       </div>
+     </div>
+   </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
