@@ -4,91 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFB08E748E7
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 21:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B657E748E7
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 21:31:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80461610B6;
-	Sat, 30 Sep 2023 21:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80461610B6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7441260D90;
+	Sat, 30 Sep 2023 21:31:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7441260D90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1shxqt2Ti4Kd; Sat, 30 Sep 2023 21:22:02 +0000 (UTC)
+	with ESMTP id Nw1LhWRsO42e; Sat, 30 Sep 2023 21:31:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 924E1610BE;
-	Sat, 30 Sep 2023 21:22:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 924E1610BE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EFC261BF2CE
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 21:21:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84767610AD;
+	Sat, 30 Sep 2023 21:31:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84767610AD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 014461BF5AE
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 21:31:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C603041C3B
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 21:21:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C603041C3B
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE58F82114
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 21:31:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE58F82114
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eaKggHRXDC3v for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 21:21:55 +0000 (UTC)
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 571D941C36
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 21:21:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 571D941C36
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-32336a30d18so7129946f8f.2
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:21:54 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wQWXhRMv4Oat for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 21:31:29 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6AE8882111
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 21:31:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AE8882111
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40666aa674fso6477095e9.0
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 14:31:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696108912; x=1696713712;
+ d=1e100.net; s=20230601; t=1696109487; x=1696714287;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=4J2Zrqg5u5MEXYDn/4XVZtE/ZIy5NqFtxOuHBgcptL0=;
- b=mLqkJ3wuT+YXdIX+zsdgGCpryO1LuIz/TpYgbuQwtq8Zh7hoZR1MFkGGI/DD5ESOHv
- H8fyTZ1Feo/xL2YPcgbhhTidT/18vu++KB2awF9nn2WYHwSIsxhN5l06semvvYo8qQMm
- rmFdkQPuK4EmkKol6wxmZpNpTtME0FjMbG//0OiVOgAZxZfElH0LGYaoXywddwdsX8d1
- bMNJdb/PjmtwhZamKUQ+3NijmXVYiDB+cLIRRHLXr77Nyh/FgZnMSbxQKH2EBORlQgnu
- Mp7lz41oKFc5o0Z3flAJwHF4CIUiPQVXscn7ztvDfWnqbYCStHqpRzOZavNfZ6VXWFot
- SFfg==
-X-Gm-Message-State: AOJu0Ywl+O2x3IuoMM59moDdXXc+xnPeSplQ6cqQeUurnaixm1oPUTA9
- G51OSJOIF6tZZIrgp2o4P7Oweg==
-X-Google-Smtp-Source: AGHT+IFH9UBqAuAHsY2u1ljZ1duTxhJrNZYD8uU8TGt/ZhzYNjqII8oCOgZbw/3A0tD1b7FeCTpNdw==
-X-Received: by 2002:adf:f989:0:b0:31c:8c93:61e3 with SMTP id
- f9-20020adff989000000b0031c8c9361e3mr6048366wrr.60.1696108912220; 
- Sat, 30 Sep 2023 14:21:52 -0700 (PDT)
-Received: from ?IPV6:2a01:cb04:4ad:b00:5ddb:2bcd:94e3:5264?
- (2a01cb0404ad0b005ddb2bcd94e35264.ipv6.abo.wanadoo.fr.
- [2a01:cb04:4ad:b00:5ddb:2bcd:94e3:5264])
+ bh=GAXgaHfQ/4GF8exIrBITfm+A/he02Tj+EbgwI//VDmc=;
+ b=xUd//h48KH8sLU2Ead1ZBxg8FyE9ho2+0pKi/Ohg1we9AyIFBpO3dksHSBO7NicFO+
+ b1fJTU8wC35Pi6T/GJSUeGZVrCbgqPXghkr5FThEt0wXg5sxSIDEgBKmdhq5ta8qO2LM
+ Xnwof6kk7wKgDD5/RVPvWzhIvVDRRvpImNZSrfdzT6P74sWFgigtDyo6/ULA0gROxxOP
+ 08BLo0caOua7Wr2k9sMUKCgijtTIqd6Va0gN3RwQxi+fIMZnU7P8kZR69fCKCpStckM6
+ WqHdBXv4WZDlMpaLXGYz6rqlbae8MZQ3iSaBAjknk9Px80yorIi6+bVJWTP5UtwAMBL4
+ pKhA==
+X-Gm-Message-State: AOJu0Yw9T/p548htK2B8XCEFiwULyMuxptM2GBkZT692sD3F//AjVUOb
+ GWe3/7dApMvk3nmK9E4VpgJtJA==
+X-Google-Smtp-Source: AGHT+IFlgS3ewOASlvjL/invKakNuKA/eB6vcCxM7CoOURDZU0At8xpkjOrv3l05t1/feqi5MwZ1Ig==
+X-Received: by 2002:a1c:7209:0:b0:3fb:b3aa:1c8a with SMTP id
+ n9-20020a1c7209000000b003fbb3aa1c8amr7119618wmc.16.1696109487394; 
+ Sat, 30 Sep 2023 14:31:27 -0700 (PDT)
+Received: from ?IPV6:2a01:cb04:4ad:b00:ca7:5da6:8101:5ca6?
+ (2a01cb0404ad0b000ca75da681015ca6.ipv6.abo.wanadoo.fr.
+ [2a01:cb04:4ad:b00:ca7:5da6:8101:5ca6])
  by smtp.gmail.com with ESMTPSA id
- d29-20020adfa41d000000b003197869bcd7sm19357104wra.13.2023.09.30.14.21.50
+ m24-20020a7bca58000000b004063977eccesm4118875wml.42.2023.09.30.14.31.26
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 30 Sep 2023 14:21:51 -0700 (PDT)
-Message-ID: <b984b03a-67a0-57c6-a9d0-d2a54a24585c@mind.be>
-Date: Sat, 30 Sep 2023 23:21:49 +0200
+ Sat, 30 Sep 2023 14:31:27 -0700 (PDT)
+Message-ID: <05475a91-00fc-3dd2-5ab8-0b122fdc0bc9@smile.fr>
+Date: Sat, 30 Sep 2023 23:31:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-GB
-To: Raphael Pavlidis <raphael.pavlidis@gmail.com>, buildroot@buildroot.org
-References: <20220904125854.20486-1-raphael.pavlidis@gmail.com>
-In-Reply-To: <20220904125854.20486-1-raphael.pavlidis@gmail.com>
+ Thunderbird/102.15.1
+Content-Language: fr
+To: Jesse Taube <mr.bossman075@gmail.com>, buildroot@buildroot.org
+References: <20221217051337.3778405-1-Mr.Bossman075@gmail.com>
+ <20221217051337.3778405-3-Mr.Bossman075@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20221217051337.3778405-3-Mr.Bossman075@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1696108912; x=1696713712; darn=buildroot.org;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1696109487; x=1696714287;
+ darn=buildroot.org; 
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=4J2Zrqg5u5MEXYDn/4XVZtE/ZIy5NqFtxOuHBgcptL0=;
- b=fHB6LLiib/kM4G8OLP3Xgt3+i0iDszpZaLDA0901UGNSWU4koDDbawiAfv5mVR0IME
- FQmKsYPpQ1XT+UcQBYl5vg0ZwB3B8THW+GrQzYtcgj5NQo2JGg+y/dum9lurozSoncSq
- I1jAd7qWy1fADLgTaGNfRha9IuigOILKBWXK/nRMeCc7awlNLG9V6XwSNvNBBPmugUTo
- 3w2rejY9XsjbvXaKhLC3fNkraieAlEByCtCnPb4qAl0gyqwmtz7oCYnM6FbS/OJEFW6N
- 7/k93Ks8AQ1JKKt2Ee9gLqp2nRN+BpVLLOJxYeRgoWkKuuuRM8A7F5DZ9itFuqZzgYzB
- C+Ww==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fHB6LLii
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/nvidia-persistenced: new
- package
+ bh=GAXgaHfQ/4GF8exIrBITfm+A/he02Tj+EbgwI//VDmc=;
+ b=L/0VLB0O3o7vzBFePVYdaUX689617KutldNf4iPWW2nYMrgg9aAs3vP6KhcBhBYYlx
+ 0WKGJpRuQ4e5dKJnxK67PdRB8S+gRgB/qMyTnzoxj+LLC0o2BzVpD+XwyemdEx0IS5ng
+ vmtID4t8tK72KfIqCDZXXQNFsrC4UGRTKsLxu1mUDPX8Jdiue04vwg/oL/lOkEzlJofU
+ zm2l+SFpRYS83BzubVBavh2r3aLa1E9CXI8JJGiDc6ap3EWIXJ+9xI6Dz1v/cYrEIrpe
+ xs77aAWqMah7ffwvIyNwBxxJEHl5w6bopIoqz/jyNQFlTbsySwKYL7MrJR4ggg3OLzQJ
+ K/jw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=L/0VLB0O
+Subject: Re: [Buildroot] [PATCH v2 2/4] package/uclibc: Add RISC-V 32-bit
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,178 +104,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Mark Corbin <mark@dibsco.co.uk>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Charles Lohr <lohr85@gmail.com>,
+ Yimin Gu <ustcymgu@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 04/09/2022 14:58, Raphael Pavlidis wrote:
-> NVIDIA driver persistence daemon.
-> 
-> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-
-  Applied to master, thanks, with a number of changes:
-
-      - disable on BR2_STATIC_LIBS;
-      - only depend on tirpc if toolchain doesn't have RPC;
-      - use unstripped binary - the strip support in the makefile is utterly
-        broken (and we anyway strip in target-finalize);
-      - define NVIDIA_PERSISTENCED_USERS directly rather than with another
-        variable;
-      - install all the systemd stuff in
-        NVIDIA_PERSISTENCED_INSTALL_INIT_SYSTEMD.
-
-  See the actual commit [1] for details.
-
-  Regards,
-  Arnout
-
-[1] 
-https://gitlab.com/buildroot.org/buildroot/-/commit/d41386a8ac176f3df73418359d097ee16f02df95
-
-
-
-> ---
-> Changes v2 -> v3:
->    - DEVELOPERS: add Raphael Pavlids for nvidia-persistenced
-> 
-> Changes v1 -> v2:
->    - fix typo in Config.in
-> 
->   DEVELOPERS                                    |  3 ++
->   package/Config.in                             |  1 +
->   package/nvidia-persistenced/Config.in         | 13 +++++
->   .../nvidia-persistenced.conf                  |  1 +
->   .../nvidia-persistenced.hash                  |  3 ++
->   .../nvidia-persistenced.mk                    | 49 +++++++++++++++++++
->   6 files changed, 70 insertions(+)
->   create mode 100644 package/nvidia-persistenced/Config.in
->   create mode 100644 package/nvidia-persistenced/nvidia-persistenced.conf
->   create mode 100644 package/nvidia-persistenced/nvidia-persistenced.hash
->   create mode 100644 package/nvidia-persistenced/nvidia-persistenced.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d2bd0d809a..ff58fb240d 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2506,6 +2506,9 @@ F:	support/testing/tests/package/test_python_jmespath.py
->   F:	support/testing/tests/package/test_python_rsa.py
->   F:	support/testing/tests/package/test_python_s3transfer.py
->   
-> +N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
-> +F:	package/nvidia-persistenced/
-> +
->   N:	Refik Tuzakli <tuzakli.refik@gmail.com>
->   F:	package/freescale-imx/
->   F:	package/paho-mqtt-cpp/
-> diff --git a/package/Config.in b/package/Config.in
-> index d1c098c48f..41f34908ba 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -543,6 +543,7 @@ endmenu
->   	source "package/neard/Config.in"
->   	source "package/nvidia-driver/Config.in"
->   	source "package/nvidia-modprobe/Config.in"
-> +	source "package/nvidia-persistenced/Config.in"
->   	source "package/nvme/Config.in"
->   	source "package/ofono/Config.in"
->   	source "package/ola/Config.in"
-> diff --git a/package/nvidia-persistenced/Config.in b/package/nvidia-persistenced/Config.in
-> new file mode 100644
-> index 0000000000..6ade2a5ceb
-> --- /dev/null
-> +++ b/package/nvidia-persistenced/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_NVIDIA_PERSISTENCED
-> +	bool "nvidia-persistenced"
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc
-> +	select BR2_PACKAGE_LIBTIRPC
-> +	help
-> +	  NVIDIA driver persistence daemon.
-> +
-> +	  https://github.com/NVIDIA/nvidia-persistenced
-> +
-> +comment "nvidia-persistenced needs a toolchain w/ threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/nvidia-persistenced/nvidia-persistenced.conf b/package/nvidia-persistenced/nvidia-persistenced.conf
-> new file mode 100644
-> index 0000000000..48f24cfb1d
-> --- /dev/null
-> +++ b/package/nvidia-persistenced/nvidia-persistenced.conf
-> @@ -0,0 +1 @@
-> +u nvidia-persistenced - 'NVIDIA Persistence Daemon'
-> diff --git a/package/nvidia-persistenced/nvidia-persistenced.hash b/package/nvidia-persistenced/nvidia-persistenced.hash
-> new file mode 100644
-> index 0000000000..06c71b35f5
-> --- /dev/null
-> +++ b/package/nvidia-persistenced/nvidia-persistenced.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256  b84fb8eb86127a725d0134a2c64a64e7844e125dece137e7fe8adf8a33cbe817  nvidia-persistenced-515.48.07.tar.gz
-> +sha256  279d814320adc07ca5a4ee101a0b428ddf22a6f3513b8c051f9eb7be47b2e797  COPYING
-> diff --git a/package/nvidia-persistenced/nvidia-persistenced.mk b/package/nvidia-persistenced/nvidia-persistenced.mk
-> new file mode 100644
-> index 0000000000..2a34d3608d
-> --- /dev/null
-> +++ b/package/nvidia-persistenced/nvidia-persistenced.mk
-> @@ -0,0 +1,49 @@
-> +################################################################################
-> +#
-> +# nvidia-persistenced
-> +#
-> +################################################################################
-> +
-> +NVIDIA_PERSISTENCED_VERSION = 515.48.07
-> +NVIDIA_PERSISTENCED_SITE = $(call github,NVIDIA,nvidia-persistenced,$(NVIDIA_PERSISTENCED_VERSION))
-> +NVIDIA_PERSISTENCED_LICENSE = MIT
-> +NVIDIA_PERSISTENCED_LICENSE_FILES = COPYING
-> +
-> +NVIDIA_PERSISTENCED_DEPENDENCIES = host-pkgconf libtirpc
-> +
-> +define NVIDIA_PERSISTENCED_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		OUTPUTDIR=. ./nvidia-persistenced
-> +endef
-> +
-> +define NVIDIA_PERSISTENCED_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/nvidia-persistenced \
-> +		$(TARGET_DIR)/usr/bin/nvidia-persistenced
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
-> +define NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_SYSTEMD_SYSUSERS
-> +	$(INSTALL) -D -m 0644 $(NVIDIA_PERSISTENCED_PKGDIR)/nvidia-persistenced.conf \
-> +		$(TARGET_DIR)/usr/lib/sysusers.d/nvidia-persistenced.conf
-> +endef
-> +NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_HOOKS += NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_SYSTEMD_SYSUSERS
-> +else
-> +NVIDIA_PERSISTENCED_SYSTEMD_USERS = \
-> +	nvidia-persistenced -1 nvidia-persistenced -1 * - - - NVIDIA Persistence Daemon
-> +endif
-> +
-> +define NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_SYSTEMD_SERVICE
-> +	$(INSTALL) -D -m 0644 $(@D)/init/systemd/nvidia-persistenced.service.template \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/nvidia-persistenced.service
-> +	$(SED) 's/__USER__/nvidia-persistenced/g' \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/nvidia-persistenced.service
-> +endef
-> +NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_HOOKS += NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_SYSTEMD_SERVICE
-> +endif # BR2_PACKAGE_SYSTEMD
-> +
-> +define NVIDIA_PERSISTENCED_USERS
-> +	$(NVIDIA_PERSISTENCED_SYSTEMD_USERS)
-> +endef
-> +
-> +$(eval $(generic-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpMZSAxNy8xMi8yMDIyIMOgIDA2OjEzLCBKZXNzZSBUYXViZSBhIMOpY3JpdMKgOgo+
+IEZyb206IFlpbWluIEd1IDx1c3RjeW1ndUBnbWFpbC5jb20+Cj4gCj4gcmlzY3YzMiBjYW4gYmUg
+YnVpbHQgd2l0aCBvciB3aXRob3V0IE1NVS4gVGhpcyBwYXRjaCBhZGRzIHN1cHBvcnQgZm9yCj4g
+YnVpbGRpbmcgdUNsaWJjIGZvciByaXNjdjMyLiBUaGUgcGF0Y2ggaXMgYmFzZWQgb24gdGhlCj4g
+ZXhpc3RpbmcgcmlzY3Y2NCBzdXBwb3J0Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IFlpbWluIEd1IDx1
+c3RjeW1ndUBnbWFpbC5jb20+Cj4gQ2M6IEplc3NlIFRhdWJlIDxNci5Cb3NzbWFuMDc1QGdtYWls
+LmNvbT4KPiBTaWduZWQtb2ZmLWJ5OiBKZXNzZSBUYXViZSA8TXIuQm9zc21hbjA3NUBnbWFpbC5j
+b20+Cj4gLS0tCj4gIC4uLi91Y2xpYmMvMDAwMS1SSVNDLVYtMzItYml0LXN1cHBvcnQucGF0Y2gg
+ICB8IDE0NSArKysrKysrKysrKysrKysrKysKPiAgcGFja2FnZS91Y2xpYmMvQ29uZmlnLmluICAg
+ICAgICAgICAgICAgICAgICAgIHwgICAyICsKPiAgMiBmaWxlcyBjaGFuZ2VkLCAxNDcgaW5zZXJ0
+aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS91Y2xpYmMvMDAwMS1SSVNDLVYt
+MzItYml0LXN1cHBvcnQucGF0Y2gKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS91Y2xpYmMvMDAw
+MS1SSVNDLVYtMzItYml0LXN1cHBvcnQucGF0Y2ggYi9wYWNrYWdlL3VjbGliYy8wMDAxLVJJU0Mt
+Vi0zMi1iaXQtc3VwcG9ydC5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAw
+MDAwMDAwMC4uNzFmYjQwMTUxOQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3VjbGli
+Yy8wMDAxLVJJU0MtVi0zMi1iaXQtc3VwcG9ydC5wYXRjaAoKU2luY2UgdGhlbiB0aGlzIHBhdGNo
+IGhhcyBiZWVuIG1lcmdlZCBpbiB1Q2xpYmMtbmcgcmVwb3NpdG9yeSBhbmQgcmVsZWFzZWQgd2l0
+aAp2MS4wLjQzLgoKaHR0cHM6Ly9jZ2l0LnVjbGliYy1uZy5vcmcvY2dpL2NnaXQvdWNsaWJjLW5n
+LmdpdC9jb21taXQvP2lkPTBhNTQ2NmQ4ZDUzYmM4MDQ1ZmY1NmZmNzZjYzE4ODBhYTg1NzYxYzIK
+ClNvLCBBRkFJSyB0aGlzIHBhdGNoIGNhbiBiZSByZW1vdmVkIGZyb20gdGhpcyBzZXJpZXMuCgpC
+ZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gQEAgLTAsMCArMSwxNDUgQEAKPiArRnJvbSA1MzdiMmVm
+NjM1MGZkZjc2MDRkNTliYzJhNTAzODhjYjk4MDQ1ZDdmIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAw
+MQo+ICtGcm9tOiBZaW1pbiBHdSA8dXN0Y3ltZ3UgYXQgZ21haWwuY29tPgo+ICtEYXRlOiBNb24s
+IDEgQXVnIDIwMjIgMTU6MjI6NDAgKzA5MDAKPiArU3ViamVjdDogW1BBVENIXSB1Y2xpYmM6IFJJ
+U0MtViAzMi1iaXQgc3VwcG9ydAo+ICsKPiArQWRkZWQgMzItYml0IFJJU0MtViBzdXBwb3J0LiBX
+aXRoIHRoZXNlIGNoYW5nZXMsIGVsZjJmbHQgcGF0Y2gKPiArNjA1NTUyNTA4MmQxLCBhbmQga2Vy
+bmVsIHBhdGNoIDcwMGIyZjBjZTM3MSwgbm8gTU1VIHJ2MzIgYnVpbGRyb290Cj4gK3N5c3RlbSBj
+YW4gd29yayB3aXRob3V0IGFueSBub3RpY2FibGUgcHJvYmxlbS4gCj4gKwo+ICtUaGVyZSdzIG5v
+IHN1YnN0YW50aWFsIGNvZGUgY2hhbmdlIGV4Y2VwdCBkZWZpbmF0aW9ucyBhbmQgY29uZmlnCj4g
+K29wdGlvbnMuIAo+ICsKPiArU2lnbmVkLW9mZi1ieTogWWltaW4gR3UgPHVzdGN5bWd1IGF0IGdt
+YWlsLmNvbT4KPiArLS0tCj4gKyBSdWxlcy5tYWsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgfCAgMiArKwo+ICsgZXh0cmEvQ29uZmlncy9Db25maWcuaW4gICAgICAgICAgICAgICAg
+ICAgIHwgIDkgKysrKysrKysrCj4gKyBleHRyYS9Db25maWdzL0NvbmZpZy5yaXNjdjMyICAgICAg
+ICAgICAgICAgfCAxNCArKysrKysrKysrKysrKwo+ICsgbGliYy9zeXNkZXBzL2xpbnV4L3Jpc2N2
+MzIgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICsgbGliYy9zeXNkZXBzL2xpbnV4L3Jpc2N2NjQv
+Yml0cy93b3Jkc2l6ZS5oIHwgIDMgKystCj4gKyBsaWJjL3N5c2RlcHMvbGludXgvcmlzY3Y2NC9z
+eXMvYXNtLmggICAgICAgfCAgNiArKysrKy0KPiArIDYgZmlsZXMgY2hhbmdlZCwgMzMgaW5zZXJ0
+aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiArIGNyZWF0ZSBtb2RlIDEwMDY0NCBleHRyYS9Db25m
+aWdzL0NvbmZpZy5yaXNjdjMyCj4gKyBjcmVhdGUgbW9kZSAxMjAwMDAgbGliYy9zeXNkZXBzL2xp
+bnV4L3Jpc2N2MzIKPiArCj4gK2RpZmYgLS1naXQgYS9SdWxlcy5tYWsgYi9SdWxlcy5tYWsKPiAr
+aW5kZXggM2ZiNjRjNzI4Li43MWExNGZjMzggMTAwNjQ0Cj4gKy0tLSBhL1J1bGVzLm1hawo+ICsr
+KysgYi9SdWxlcy5tYWsKPiArQEAgLTMwNSw2ICszMDUsNyBAQCBpZm5lcSAoJChUQVJHRVRfQVJD
+SCksYzZ4KQo+ICsgaWZuZXEgKCQoVEFSR0VUX0FSQ0gpLGg4MzAwKQo+ICsgaWZuZXEgKCQoVEFS
+R0VUX0FSQ0gpLGFyYykKPiArIGlmbmVxICgkKFRBUkdFVF9BUkNIKSxhYXJjaDY0KQo+ICsraWZu
+ZXEgKCQoVEFSR0VUX0FSQ0gpLHJpc2N2MzIpCj4gKyBDUFVfQ0ZMQUdTLXkgKz0gLW1zb2Z0LWZs
+b2F0Cj4gKyBlbmRpZgo+ICsgZW5kaWYKPiArQEAgLTMxNiw2ICszMTcsNyBAQCBlbmRpZgo+ICsg
+ZW5kaWYKPiArIGVuZGlmCj4gKyBlbmRpZgo+ICsrZW5kaWYKPiArIAo+ICsgaWZlcSAoJChUQVJH
+RVRfQVJDSCksYWFyY2g2NCkKPiArIENQVV9DRkxBR1MteSArPSAtZnRscy1tb2RlbD1pbml0aWFs
+LWV4ZWMKPiArZGlmZiAtLWdpdCBhL2V4dHJhL0NvbmZpZ3MvQ29uZmlnLmluIGIvZXh0cmEvQ29u
+Zmlncy9Db25maWcuaW4KPiAraW5kZXggYTU4Y2ViMjY1Li41ZTZhZjgwMGQgMTAwNjQ0Cj4gKy0t
+LSBhL2V4dHJhL0NvbmZpZ3MvQ29uZmlnLmluCj4gKysrKyBiL2V4dHJhL0NvbmZpZ3MvQ29uZmln
+LmluCj4gK0BAIC0zOSw2ICszOSw3IEBAIGNob2ljZQo+ICsgCWRlZmF1bHQgVEFSR0VUX29yMWsg
+aWYgREVTSVJFRF9UQVJHRVRfQVJDSCA9ICJvcjFrIgo+ICsgCWRlZmF1bHQgVEFSR0VUX3Bvd2Vy
+cGMgaWYgREVTSVJFRF9UQVJHRVRfQVJDSCA9ICJwb3dlcnBjIgo+ICsgCWRlZmF1bHQgVEFSR0VU
+X3Jpc2N2NjQgaWYgREVTSVJFRF9UQVJHRVRfQVJDSCA9ICJyaXNjdjY0Igo+ICsrCWRlZmF1bHQg
+VEFSR0VUX3Jpc2N2MzIgaWYgREVTSVJFRF9UQVJHRVRfQVJDSCA9ICJyaXNjdjMyIgo+ICsgCWRl
+ZmF1bHQgVEFSR0VUX3NoIGlmIERFU0lSRURfVEFSR0VUX0FSQ0ggPSAic2giCj4gKyAJZGVmYXVs
+dCBUQVJHRVRfc3BhcmMgaWYgREVTSVJFRF9UQVJHRVRfQVJDSCA9ICJzcGFyYyIKPiArIAlkZWZh
+dWx0IFRBUkdFVF9zcGFyYzY0IGlmIERFU0lSRURfVEFSR0VUX0FSQ0ggPSAic3BhcmM2NCIKPiAr
+QEAgLTEyNSw2ICsxMjYsOSBAQCBjb25maWcgVEFSR0VUX3Bvd2VycGMKPiArIGNvbmZpZyBUQVJH
+RVRfcmlzY3Y2NAo+ICsgCWJvb2wgInJpc2N2NjQiCj4gKyAKPiArK2NvbmZpZyBUQVJHRVRfcmlz
+Y3YzMgo+ICsrCWJvb2wgInJpc2N2MzIiCj4gKysKPiArIGNvbmZpZyBUQVJHRVRfc2gKPiArIAli
+b29sICJzdXBlcmgiCj4gKyAKPiArQEAgLTI0MCw2ICsyNDQsMTAgQEAgaWYgVEFSR0VUX3Jpc2N2
+NjQKPiArIHNvdXJjZSAiZXh0cmEvQ29uZmlncy9Db25maWcucmlzY3Y2NCIKPiArIGVuZGlmCj4g
+KyAKPiArK2lmIFRBUkdFVF9yaXNjdjMyCj4gKytzb3VyY2UgImV4dHJhL0NvbmZpZ3MvQ29uZmln
+LnJpc2N2MzIiCj4gKytlbmRpZgo+ICsrCj4gKyBpZiBUQVJHRVRfc2gKPiArIHNvdXJjZSAiZXh0
+cmEvQ29uZmlncy9Db25maWcuc2giCj4gKyBlbmRpZgo+ICtAQCAtNTM4LDYgKzU0Niw3IEBAIGNv
+bmZpZyBVQ0xJQkNfSEFTX0xJTlVYVEhSRUFEUwo+ICsgCXNlbGVjdCBVQ0xJQkNfSEFTX1JFQUxU
+SU1FCj4gKyAJZGVwZW5kcyBvbiAhVEFSR0VUX2FhcmNoNjQgJiYgXAo+ICsgCQkgICAhVEFSR0VU
+X3Jpc2N2NjQgJiYgXAo+ICsrCQkgICAhVEFSR0VUX3Jpc2N2MzIgJiYgXAo+ICsgCQkgICAhVEFS
+R0VUX21ldGFnCj4gKyAJaGVscAo+ICsgCSAgSWYgeW91IHdhbnQgdG8gY29tcGlsZSB1Q2xpYmMg
+d2l0aCBMaW51eHRocmVhZHMgc3VwcG9ydCwgdGhlbiBhbnN3ZXIgWS4KPiArZGlmZiAtLWdpdCBh
+L2V4dHJhL0NvbmZpZ3MvQ29uZmlnLnJpc2N2MzIgYi9leHRyYS9Db25maWdzL0NvbmZpZy5yaXNj
+djMyCj4gK25ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gK2luZGV4IDAwMDAwMDAwMC4uMzA0ZDMwZjcw
+Cj4gKy0tLSAvZGV2L251bGwKPiArKysrIGIvZXh0cmEvQ29uZmlncy9Db25maWcucmlzY3YzMgo+
+ICtAQCAtMCwwICsxLDE0IEBACj4gKysjCj4gKysjIEZvciBhIGRlc2NyaXB0aW9uIG9mIHRoZSBz
+eW50YXggb2YgdGhpcyBjb25maWd1cmF0aW9uIGZpbGUsCj4gKysjIHNlZSBleHRyYS9jb25maWcv
+S2NvbmZpZy1sYW5ndWFnZS50eHQKPiArKyMKPiArKwo+ICsrY29uZmlnIFRBUkdFVF9BUkNICj4g
+KysJc3RyaW5nCj4gKysJZGVmYXVsdCAicmlzY3YzMiIKPiArKwo+ICsrY29uZmlnIEZPUkNFX09Q
+VElPTlNfRk9SX0FSQ0gKPiArKwlib29sCj4gKysJZGVmYXVsdCB5Cj4gKysJc2VsZWN0IEFSQ0hf
+TElUVExFX0VORElBTgo+ICsrCXNlbGVjdCBBUkNIX0hBU19NTVUKPiArZGlmZiAtLWdpdCBhL2xp
+YmMvc3lzZGVwcy9saW51eC9yaXNjdjMyIGIvbGliYy9zeXNkZXBzL2xpbnV4L3Jpc2N2MzIKPiAr
+bmV3IGZpbGUgbW9kZSAxMjAwMDAKPiAraW5kZXggMDAwMDAwMDAwLi4xMTY3N2VmMDUKPiArLS0t
+IC9kZXYvbnVsbAo+ICsrKysgYi9saWJjL3N5c2RlcHMvbGludXgvcmlzY3YzMgo+ICtAQCAtMCww
+ICsxIEBACj4gKytyaXNjdjY0Cj4gK1wgTm8gbmV3bGluZSBhdCBlbmQgb2YgZmlsZQo+ICtkaWZm
+IC0tZ2l0IGEvbGliYy9zeXNkZXBzL2xpbnV4L3Jpc2N2NjQvYml0cy93b3Jkc2l6ZS5oIGIvbGli
+Yy9zeXNkZXBzL2xpbnV4L3Jpc2N2NjQvYml0cy93b3Jkc2l6ZS5oCj4gK2luZGV4IDY3YTE2YmE2
+Mi4uMWZjNjQ5YWFkIDEwMDY0NAo+ICstLS0gYS9saWJjL3N5c2RlcHMvbGludXgvcmlzY3Y2NC9i
+aXRzL3dvcmRzaXplLmgKPiArKysrIGIvbGliYy9zeXNkZXBzL2xpbnV4L3Jpc2N2NjQvYml0cy93
+b3Jkc2l6ZS5oCj4gK0BAIC0yNSw1ICsyNSw2IEBACj4gKyAjaWYgX19yaXNjdl94bGVuID09IDY0
+Cj4gKyAjIGRlZmluZSBfX1dPUkRTSVpFX1RJTUU2NF9DT01QQVQzMiAxCj4gKyAjZWxzZQo+ICst
+IyBlcnJvciAicnYzMmktYmFzZWQgdGFyZ2V0cyBhcmUgbm90IHN1cHBvcnRlZCIKPiArKyMgZGVm
+aW5lIF9fV09SRFNJWkVfVElNRTY0X0NPTVBBVDMyIDEKPiArKy8vICMgd2FybmluZyAicnYzMmkt
+YmFzZWQgdGFyZ2V0cyBhcmUgZXhwZXJpbWVudGFsIgo+ICsgI2VuZGlmCj4gK2RpZmYgLS1naXQg
+YS9saWJjL3N5c2RlcHMvbGludXgvcmlzY3Y2NC9zeXMvYXNtLmggYi9saWJjL3N5c2RlcHMvbGlu
+dXgvcmlzY3Y2NC9zeXMvYXNtLmgKPiAraW5kZXggZGRiODRiNjgzLi4zYzk0YzlhNzAgMTAwNjQ0
+Cj4gKy0tLSBhL2xpYmMvc3lzZGVwcy9saW51eC9yaXNjdjY0L3N5cy9hc20uaAo+ICsrKysgYi9s
+aWJjL3N5c2RlcHMvbGludXgvcmlzY3Y2NC9zeXMvYXNtLmgKPiArQEAgLTI2LDcgKzI2LDExIEBA
+Cj4gKyAjIGRlZmluZSBSRUdfUyBzZAo+ICsgIyBkZWZpbmUgUkVHX0wgbGQKPiArICNlbGlmIF9f
+cmlzY3ZfeGxlbiA9PSAzMgo+ICstIyBlcnJvciAicnYzMmktYmFzZWQgdGFyZ2V0cyBhcmUgbm90
+IHN1cHBvcnRlZCIKPiArKyMgZGVmaW5lIFBUUkxPRyAyCj4gKysjIGRlZmluZSBTWlJFRyAgICA0
+Cj4gKysjIGRlZmluZSBSRUdfUyBzdwo+ICsrIyBkZWZpbmUgUkVHX0wgbHcKPiArKy8vICMgd2Fy
+bmluZyAicnYzMmktYmFzZWQgdGFyZ2V0cyBhcmUgZXhwZXJpbWVudGFsIgo+ICsgI2Vsc2UKPiAr
+ICMgZXJyb3IgX19yaXNjdl94bGVuIG11c3QgZXF1YWwgMzIgb3IgNjQKPiArICNlbmRpZgo+ICst
+LSAKPiArMi4zNy4xCj4gKwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3VjbGliYy9Db25maWcuaW4g
+Yi9wYWNrYWdlL3VjbGliYy9Db25maWcuaW4KPiBpbmRleCAyNTU1NDg3ZjA2Li5hMWU5MzA1Y2Ew
+IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvdWNsaWJjL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2Uv
+dWNsaWJjL0NvbmZpZy5pbgo+IEBAIC0xNyw2ICsxNyw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9V
+Q0xJQkNfQVJDSF9TVVBQT1JUUwo+ICAJZGVmYXVsdCB5IGlmIEJSMl9wb3dlcnBjCj4gIAkjIHNl
+ZSBsaWJjL3N5c2RlcHMvbGludXgvcmlzY3Y2NC9zeXMvYXNtLmgKPiAgCWRlZmF1bHQgeSBpZiBC
+UjJfUklTQ1ZfNjQgJiYgKEJSMl9SSVNDVl9BQklfTFA2NCB8fCBCUjJfUklTQ1ZfQUJJX0xQNjRE
+KQo+ICsJZGVmYXVsdCB5IGlmIEJSMl9SSVNDVl8zMgo+ICAJZGVmYXVsdCB5IGlmIEJSMl9zaDQK
+PiAgCWRlZmF1bHQgeSBpZiBCUjJfc2g0ZWIKPiAgCWRlZmF1bHQgeSBpZiBCUjJfc3BhcmMKPiBA
+QCAtMTM4LDYgKzEzOSw3IEBAIGNvbmZpZyBCUjJfVUNMSUJDX1RBUkdFVF9BUkNICj4gIAlkZWZh
+dWx0ICJpMzg2IgkgICBpZiBCUjJfaTM4Ngo+ICAJZGVmYXVsdCAieDg2XzY0IiAgIGlmIEJSMl94
+ODZfNjQKPiAgCWRlZmF1bHQgInJpc2N2NjQiICBpZiBCUjJfUklTQ1ZfNjQKPiArCWRlZmF1bHQg
+InJpc2N2MzIiICBpZiBCUjJfUklTQ1ZfMzIKPiAgCj4gIGNvbmZpZyBCUjJfVUNMSUJDX01JUFNf
+QUJJCj4gIAlzdHJpbmcKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
