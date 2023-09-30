@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA6EDE77376
-	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 15:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0065E77376
+	for <buildroot@archiver.kernel.org>; Sat, 30 Sep 2023 16:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FA8B42208;
-	Sat, 30 Sep 2023 15:59:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FA8B42208
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DF19418DD;
+	Sat, 30 Sep 2023 16:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DF19418DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3wFgTH_3CwkR; Sat, 30 Sep 2023 15:59:16 +0000 (UTC)
+	with ESMTP id O9j7TPQSrYmH; Sat, 30 Sep 2023 16:00:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2AAD341D7F;
-	Sat, 30 Sep 2023 15:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AAD341D7F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3BE531BF5A3
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 15:58:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96B7C41D7D;
+	Sat, 30 Sep 2023 16:00:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96B7C41D7D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2436F1BF5A3
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:00:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14DC183D7F
- for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 15:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14DC183D7F
+ by smtp3.osuosl.org (Postfix) with ESMTP id EAD5560BD3
+ for <buildroot@lists.busybox.net>; Sat, 30 Sep 2023 16:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAD5560BD3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lsrOrRq9csJQ for <buildroot@lists.busybox.net>;
- Sat, 30 Sep 2023 15:58:30 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C7BAE83D79
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 15:58:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7BAE83D79
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 78AFA60007;
- Sat, 30 Sep 2023 15:58:26 +0000 (UTC)
-Date: Sat, 30 Sep 2023 17:58:25 +0200
-To: Brandon Maier via buildroot <buildroot@buildroot.org>
-Message-ID: <20230930175825.3b184230@windsurf>
-In-Reply-To: <20230921215633.34828-4-brandon.maier@collins.com>
-References: <20230921215633.34828-1-brandon.maier@collins.com>
- <20230921215633.34828-4-brandon.maier@collins.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KTJFz3MRGPk5 for <buildroot@lists.busybox.net>;
+ Sat, 30 Sep 2023 16:00:21 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CB85C606E6
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 16:00:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB85C606E6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B5F9EC0005;
+ Sat, 30 Sep 2023 16:00:18 +0000 (UTC)
+Date: Sat, 30 Sep 2023 18:00:18 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <20230930180018.58d273f5@windsurf>
+In-Reply-To: <20230927144237.66777-1-romain.naour@smile.fr>
+References: <20230927144237.66777-1-romain.naour@smile.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1696089506;
+ d=bootlin.com; s=gm1; t=1696089618;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=HDlvgNoBHNh+Enc8Va1LutsDp3alOG3vv4VAAN1yDRY=;
- b=jXXYVpbQrtm1vqpzq1ZryNoWL5jVvTaSu5ALnTnP27rk1OOww5sKTBF3p2oz8kwTZhN07S
- lsZ2yMhMegqaCKc26kfA8W0vo2CEOeAafE4BLAOTygBvFuwr6SiFjQ6KrQg5Wj/hSdMoEG
- SUkpclTrc98cobMA52Sm/2+a0fTOBBATM4DRsUdXEUvWdC5+tq4W1mwfyAH4SlkGXFAn2A
- YSUIRDxotlA3yZh2tG3BusEOYRE+lVip1AdpbLtzMYdA5opMw3hlAhbtrZNH53GdsIxON1
- EF7yzNOt37Gl22WjNGEO84ZEUxFxfQ0DQKAf6sg4Zcrm72uBJ+HVz8BncjaC6w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=bwSuqCxDe0szPQFIxKAIXXtTd6tJ/9R/8BqlzJofiA0=;
+ b=pBG5l/5JDLgi+uCGvFNyfgusJq3SrYLdIQK/6H2ZbGlZRelpEkim9noI3jZ9mgBi7Q6Mst
+ bQhGeji6jAbknEJzTQRLC8axGENF9GnM5HzE6y/FT9fgrxvwsrBkvOoM2R+kEPOu6aaCzZ
+ NOzfhUZx3VUTIZl3cplC+WYWbTsy2v/A95bGZCrlXoDiCAtpu+gNXbSKMk4p9+8QpEfgjs
+ 3oKf41P/hYwnF8Yl7FReWzjywxN+WtwBZqivW3nsBy8i125Ej/2tsLqpiMb5brHBCNk+AZ
+ JozkthZyudpZ11CQGYBfNh2XwPOo5ZQkZnDVsUcPmWUH/KidCnaihrVpx6wtZw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jXXYVpbQ
-Subject: Re: [Buildroot] [PATCH 4/4] configs/ls1046a-frwy: new defconfig
+ header.s=gm1 header.b=pBG5l/5J
+Subject: Re: [Buildroot] [PATCH] configs/freescale_imx8mpevk_defconfig: bump
+ to version lf-6.1.22-2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,36 +77,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maeva Manuel <maeva.manuel@oss.nxp.com>,
- Gilles Talis <gilles.talis@gmail.com>, Fabio Estevam <festevam@gmail.com>,
- Stephane Viau <stephane.viau@oss.nxp.com>,
- Brandon Maier <brandon.maier@collins.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 21 Sep 2023 21:56:33 +0000
-Brandon Maier via buildroot <buildroot@buildroot.org> wrote:
+On Wed, 27 Sep 2023 16:42:37 +0200
+Romain Naour <romain.naour@smile.fr> wrote:
 
-> This is a development platform for the NXP LS1046A SoC.
+> Update the linux-imx kernel to be aligned with the NXP BSP
+> LF6.1.22_2.0.0 (same release used in meta-freescale [1]).
 > 
-> The config is heavily based on the ls1028ardb_defconfig.
+> Add BR2_TARGET_UBOOT_NEEDS_GNUTLS=y and BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+> since they are new dependencies for building mkeficapsule u-boot tool.
 > 
-> see https://www.nxp.com/design/software/qoriq-developer-resources/ls1046a-freeway-board:FRWY-LS1046A
+> The uboot-imx doesn't use the default imx8mp-evk devicetree anymore due
+> to commit [2]:
 > 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+> "Change to use imx8mp-evk-revb4.dtb and imx8mp-ddr4-evk-revb4.dtb
+>  as default kernel DTB for iMX8MP re-design EVK board. Old EVK
+>  board is EOL, to boot old EVK, user can switch to old DTB manually."
+> 
+> Since the freescale_imx8mpevk_defconfig only install imx8mp-evk.dtb in
+> the final image, the boot stop with:
+> 
+>   Booting from mmc ...
+>   Failed to load 'imx8mp-evk-revb4.dtb'
+>   WARN: Cannot load the DT
+> 
+> Add a u-boot defconfig fragment to revert this change [2] and use the
+> imx8mp-evk.dtb by default.
+> 
+> Runtime tested on i.MX 8M Plus EVK REV B2.
+> 
+> [1] https://github.com/Freescale/meta-freescale/commit/e6b1b6725cd1d44550ba473ff6a80c1b80663965
+> [2] https://github.com/nxp-imx/uboot-imx/commit/a60e787a6e35b9c14c391e03d41468e4ad63d598
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 > ---
->  DEVELOPERS                                    |  2 +
->  board/freescale/ls1046a-frwy/genimage.cfg     | 29 ++++++
->  board/freescale/ls1046a-frwy/readme.txt       | 90 +++++++++++++++++++
->  .../boot/extlinux/extlinux.conf               |  4 +
->  configs/ls1046a-frwy_defconfig                | 61 +++++++++++++
->  5 files changed, 186 insertions(+)
->  create mode 100644 board/freescale/ls1046a-frwy/genimage.cfg
->  create mode 100644 board/freescale/ls1046a-frwy/readme.txt
->  create mode 100644 board/freescale/ls1046a-frwy/rootfs_overlay/boot/extlinux/extlinux.conf
->  create mode 100644 configs/ls1046a-frwy_defconfig
+>  board/freescale/imx8mpevk/uboot-fragment.config |  3 +++
+>  configs/freescale_imx8mpevk_defconfig           | 11 +++++++----
+>  2 files changed, 10 insertions(+), 4 deletions(-)
+>  create mode 100644 board/freescale/imx8mpevk/uboot-fragment.config
 
 Applied to master, thanks.
 
