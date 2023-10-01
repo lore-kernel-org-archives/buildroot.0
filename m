@@ -4,81 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 579E0E748EE
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 16:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00345E748EE
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 16:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 606AA81FB5;
-	Sun,  1 Oct 2023 16:36:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 606AA81FB5
+	by smtp1.osuosl.org (Postfix) with ESMTP id AED398135F;
+	Sun,  1 Oct 2023 16:38:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AED398135F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JuHvzzcEDeaM; Sun,  1 Oct 2023 16:36:50 +0000 (UTC)
+	with ESMTP id cVlYSPbKxG0H; Sun,  1 Oct 2023 16:37:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82BFA81E1E;
-	Sun,  1 Oct 2023 16:36:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82BFA81E1E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CF2031BF909
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:36:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE09481AF6;
+	Sun,  1 Oct 2023 16:37:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE09481AF6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 923241BF5A2
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:37:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3FEC418D5
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3FEC418D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B98460BB6
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:37:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B98460BB6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dA6dIQzpgvmu for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 16:36:34 +0000 (UTC)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com
- [209.85.208.180])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3B8A1418A1
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 16:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B8A1418A1
-Received: by mail-lj1-f180.google.com with SMTP id
- 38308e7fff4ca-2c12fc235fbso29091601fa.0
- for <buildroot@buildroot.org>; Sun, 01 Oct 2023 09:36:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696178192; x=1696782992;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=RM1SiMes4CZrwFa/FstTTbJd76vBLAN/fl6xbgkJIrA=;
- b=SXqKFUCuNLRoyqkLzcxx4vwkzgGuGz7/ifXDin+TsVAkfuECHUI49voLIhFEZQOMuZ
- Usqi2XjOYJXz8+t4Z8yBdIQFPY01Y2UM/12VtUliKrol6xixo9lhqJ3NQUNahzZ96tPK
- ws9x8bO3lxkj8+c/8ZHU9GA4p+QQdIK7lGvW52yfziBJdNAXOq9wyjPDZ4yHOo6Hzt2d
- Bo9tOT8do0C1D/+HML/UtRUBn7iTZZ5EEfr5rC/C3PpCfIPZO89XxbXpKyOXUCTEmxwn
- 5dzIeU1s9VoOnjUbA+9ViB3lqQw31pdEWjFimN4rmpxzn2lYvjk/2b6qYwxWk5Wgat88
- Osyg==
-X-Gm-Message-State: AOJu0YwGiFaagV3QzuEllANWO3oEecdZXU4vrfukDURR6kipxiTq8A8m
- cnCLIj+1Fg5KBKPkjlo9XNXjUgjnEq+0FCMb
-X-Google-Smtp-Source: AGHT+IHkokRTcp7pSwWW0XUROPq4HcWtdMHhajBLaMcvCOcDZIe3PTLPWUzON9v7qtYwZLmBd67/Gw==
-X-Received: by 2002:a2e:8ecb:0:b0:2c1:795d:2e4c with SMTP id
- e11-20020a2e8ecb000000b002c1795d2e4cmr7322517ljl.2.1696178191715; 
- Sun, 01 Oct 2023 09:36:31 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com.
- [209.85.167.47]) by smtp.gmail.com with ESMTPSA id
- a24-20020a05651c011800b002b9de06f119sm4728806ljb.67.2023.10.01.09.36.31
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 01 Oct 2023 09:36:31 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id
- 2adb3069b0e04-50306b2920dso2875411e87.0
- for <buildroot@buildroot.org>; Sun, 01 Oct 2023 09:36:31 -0700 (PDT)
-X-Received: by 2002:ac2:464f:0:b0:500:96dd:f95a with SMTP id
- s15-20020ac2464f000000b0050096ddf95amr7000418lfo.24.1696178191204; Sun, 01
- Oct 2023 09:36:31 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O8POHBBOHnE3 for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 16:37:55 +0000 (UTC)
+Received: from smtpdh18-1.aruba.it (smtpdh18-1.aruba.it [62.149.155.132])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DDF5D60B79
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 16:37:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDF5D60B79
+Received: from [192.168.50.162] ([146.241.127.78])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id mzS4qqzCMx6WlmzS4qB2OO; Sun, 01 Oct 2023 18:37:52 +0200
+Message-ID: <741cc519-4d75-41ca-8bac-8b6318a36ab3@benettiengineering.com>
+Date: Sun, 1 Oct 2023 18:37:52 +0200
 MIME-Version: 1.0
-References: <20230929075844.1145939-1-thomas.devoogdt@barco.com>
- <20230929075844.1145939-2-thomas.devoogdt@barco.com> <87v8bq5yc4.fsf@48ers.dk>
-In-Reply-To: <87v8bq5yc4.fsf@48ers.dk>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Sun, 1 Oct 2023 18:36:20 +0200
-X-Gmail-Original-Message-ID: <CACXRmJiqq=PqKqL-hwsCXDYKUGbjes80HygLQ9veAV-xpROkJA@mail.gmail.com>
-Message-ID: <CACXRmJiqq=PqKqL-hwsCXDYKUGbjes80HygLQ9veAV-xpROkJA@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH v3 2/4] package/webkitgtk: make gbm support
- optional
+User-Agent: Mozilla Thunderbird
+To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+References: <20230922211816.13469-1-giulio.benetti@benettiengineering.com>
+ <5e9b4a43-e16c-b2d5-09b7-cb1582a4b513@smile.fr>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <5e9b4a43-e16c-b2d5-09b7-cb1582a4b513@smile.fr>
+X-CMAE-Envelope: MS4xfFWpvMuwA4NkmQpQkG0PAVeTXBhVyvWIoRmbvoaavruPCEYptD0KCAWQDH2YOd8kICHtMgYwEhbp54zoWMDnPwKfgokWSI5PD5YDNpbLpJsyaWpKXrT9
+ Tmx3rJs177s33v9mjjSZGAbw2wmX7jgivuat3NYd8AMWuar89INQmMWgxqzoOjn0Ftynf0nbulSwBFTVjk38wqGJf6HNY5te64ZDJLIIvV9Tzq3XoU9o9pPU
+ 4XCdZRC7NMnKQkmhghXRDq35T9GfcQX4K+gmsf3h22Y6MEl3DWL7PotftOhpZc/1+YvwE4P8BiKAeqrUDRD4wkWYEk4cCsEp3tgBYVfVgJ05UJXB5Zwtns42
+ qpQHEi756Yt6V2OcMKdVH5uQVxZ1PEANQjI3o5F5TYdF/HzmDGTX831AAlPm4jKPNCxminR0tRUZzqEFCuaQBNTdoa1FBDKS6LbRddoBYS3JbOKnraD17YZg
+ mbTc560fND65PHQkBSNX6MCq1hRxKpaO/2Aagg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1696178272; bh=huMji/6HCF0t8UOB0iMpBsIESBND+4VSZACM+6OPZ8M=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=iAcTYwBUjTtRVBjmkT1EHCeKb+V+Ev1UNNZgAZ7nyDUUV+EAD/+x3tsCe+EpURqVK
+ UohfPcpEjwZEEI9hw3HGZLZNYaO62HrtLrZ3p6hgAiaX8oSvAq+mHdhud1bLe1VzmT
+ VIa5erYeEvfTtlRaWxGUizlj/zwwSuE7oPVcvyB4WaKCAYC9YIKPQUWqTErBlq7BOe
+ pMMRwx2c23VsTPURZC8YtjzI4C3QdtQ/wr5FS9SjTDnIRHDCytwZ7mFi9nRRchieSn
+ 5OD+ToLL1wqkgS+sUKNehRYqqdiFXzNTpx0wFUaST3hooSmfhZTxSaakj7qnqRSUtP
+ B4KYveztuk1xQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=iAcTYwBU
+Subject: Re: [Buildroot] [PATCH v5] package/apache: add option to disable
+ server
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,63 +78,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?Q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>,
+ Bernd Kuhls <bernd@kuhls.net>,
+ Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>,
+ James Autry <jautry@tekvox.com>, Matthew Maron <matthewm@tekvox.com>,
+ Jim Reinhart <jimr@tekvox.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter, all,
-
-The USE_GBM flag is only useful if USE_OPENGL_OR_ES is set, otherwise,
-the flag is ignored.
-But if USE_OPENGL_OR_ES has been set, then the default is that USE_GBM
-is also set, and that is what this commit avoids.
-
-About USE_OPENGL_OR_ES, yes, we only should enable it if we support
-it. It's a bit unclear to me what the exact dependencies are to enable
-it.
-According to this
-https://github.com/WebKit/WebKit/blob/e92f5f33fd267fc387efd7099bb6970e24e71afd/Source/cmake/OptionsGTK.cmake#L337,
-a fully functional EGL implementation is required. The flag
-USE_OPENGL_OR_ES on the other hand implies that libgl or libgles is
-sufficient,
-but this commit
-https://github.com/WebKit/WebKit/commit/cfe917fec45bf72c371087ece034feee8454f1b4,
-indicates that libgles is exclusively required.
-I also saw that mesa's libgles implementation depends on libegl
-(https://docs.mesa3d.org/opengles.html), so by this reason,
-I've added in a follow-up commit/bump, the USE_OPENGL_OR_ES under the
-libgles condition.
-
-Kr,
-
-Thomas
-
-Op zo 1 okt 2023 om 14:20 schreef Peter Korsgaard <peter@korsgaard.com>:
->
-> >>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
->
->  > From: Thomas Devoogdt <thomas@devoogdt.com>
->  > This was added upstream in commit:
->
->  > https://github.com/WebKit/WebKit/commit/22e4c0386605d84f42f2d46fd20bdc46e3078498
->
-> This talks about gbm AND libdrm, but you don't seem to handle libdrm
-> here?
->
->  > The 'USE_OPENGL_OR_ES' flag is default ON, which will enable 'USE_GBM',
->
-> Should we then not disable USE_OPENGL_OR_ES and only enable it if we
-> have opengl?
->
-> --
-> Bye, Peter Korsgaard
->
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgUm9tYWluLAoKT24gMDEvMTAvMjMgMTU6MzIsIFJvbWFpbiBOYW91ciB3cm90ZToKPiBIZWxs
+byBHaXVsaW8sCj4gCj4gTGUgMjIvMDkvMjAyMyDDoCAyMzoxOCwgR2l1bGlvIEJlbmV0dGkgYSDD
+qWNyaXTCoDoKPj4gRnJvbTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpK3Rla3ZveEBi
+ZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+Pgo+PiBPdGhlciBwYWNrYWdlcyAoZS5nLiBtb25nb29z
+ZSkgY2FuIHVzZSBodGRpZ2VzdCBhbmQgaHRwYXNzd2QsIGJ1dCB0aG9zZQo+PiBhcmUgb25seSBh
+dmFpbGFibGUgd2l0aCBhcGFjaGUuCj4+Cj4+IFdlIGRvbid0IHdhbnQgdG8gYnVpbGQgdGhlIHdo
+b2xlIGFwYWNoZSBzZXJ2ZXIganVzdCBmb3IgdGhvc2UgdG9vbHMsIHNvCj4+IHdlIGFkZCBhbiBv
+cHRpb24gdG8gZGlzYWJsZSB0aGUgc2VydmVyOyBpdCBpcyBlbmFibGVkIGJ5IGRlZmF1bHQgZm9y
+Cj4+IGxlZ2FjeSBwdXJwb3NlcyAoc28gdGhhdCBleGlzdGluZyAoZGVmKWNvbmZpZ3Mgc3RpbGwg
+d29yaykuCj4+Cj4+IEhvd2V2ZXIsIHRoZXJlIGlzIG5vIHdheSB0byB0ZWxsIHRoZSBhcGFjaGUg
+YnVpbGRzeXN0ZW0gdG8gb25seSBidWlsZAo+PiB0aG9zZSB0d28gdG9vbHMsIHNvIHdlIGhhdmUg
+dG8gcHJvdmlkZSBjdXN0b20gYnVpbGQgYW5kIGluc3RhbGwKPj4gY29tbWFuZHMuCj4+Cj4+IENj
+OiBKaW0gUmVpbmhhcnQgPGppbXJAdGVrdm94LmNvbT4KPj4gQ2M6IEphbWVzIEF1dHJ5IDxqYXV0
+cnlAdGVrdm94LmNvbT4KPj4gQ2M6IE1hdHRoZXcgTWFyb24gPG1hdHRoZXdtQHRla3ZveC5jb20+
+Cj4+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aSt0ZWt2b3hA
+YmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KPj4gLS0tCj4+IFYxLT5WMjoKPj4gKiBIaWRlICJFeHRl
+cm5hbCBBcGFjaGUgbW9kdWxlcyIgaWYgQlIyX1BBQ0tBR0VfQVBBQ0hFX1VUSUxTX09OTFkgaXMg
+ZW5hYmxlZAo+PiBWMi0+VjM6Cj4+IGFzIHN1Z2dlc3RlZCBieSBBcm5vdXQ6Cj4+ICogY2hhbmdl
+IG5lZ2F0aXZlIG9wdGlvbiBCUjJfUEFDS0FHRV9BUEFDSEVfVVRJTFNfT05MWSB0byBCUjJfUEFD
+S0FHRV9BUEFDSEVfREFFTU9OCj4+ICogc2V0IGEgY29tbW9uIEFQQUNIRV9DT05GX09QVFMgYW5k
+IG9ubHkgYWRkIHNwZWNpZmljIG9wdGlvbnMgZm9yCj4+ICAgIEJSMl9QQUNLQUdFX0FQQUNIRV9E
+QUVNT04gZW5hYmxlZCBvciBub3QKPj4gVjMtPlY0Ogo+PiAqIGRyb3AgLS13aXRoLXN0YXRpYy0q
+IG9wdGlvbnMgYXMgc3VnZ2VzdGVkIGJ5IEFybm91dAo+PiBWNC0+VjU6Cj4+IGFzIHN1Z2dlc3Rl
+ZCBieSBZYW5uOgo+PiAqIGRyb3AgQlIyX1BBQ0tBR0VfQVBBQ0hFIGNoZWNrIGluIHBhY2thZ2Uv
+Q29uZmlnLmluIGZvcgo+PiAgICBwYWNrYWdlL21vZHNlY3VyaXR5Mi9Db25maWcuaW4KPj4gKiBt
+YWtlIEJSMl9QQUNLQUdFX1BIUF9TQVBJX0FQQUNIRSBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0FQ
+QUNIRV9EQUVNT04KPj4gKiBpbXByb3ZlIGNvbW1pdCBsb2cKPj4gLS0tCj4+ICAgcGFja2FnZS9D
+b25maWcuaW4gICAgICAgICAgICAgIHwgIDIgLS0KPj4gICBwYWNrYWdlL2FwYWNoZS9Db25maWcu
+aW4gICAgICAgfCAgOSArKysrKysrKysKPj4gICBwYWNrYWdlL2FwYWNoZS9hcGFjaGUubWsgICAg
+ICAgfCAyMCArKysrKysrKysrKysrKysrKy0tLQo+PiAgIHBhY2thZ2UvbW9kc2VjdXJpdHkyL0Nv
+bmZpZy5pbiB8ICAyICstCj4+ICAgcGFja2FnZS9waHAvQ29uZmlnLmluICAgICAgICAgIHwgIDIg
+Ky0KPj4gICA1IGZpbGVzIGNoYW5nZWQsIDI4IGluc2VydGlvbnMoKyksIDcgZGVsZXRpb25zKC0p
+Cj4+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmlu
+Cj4+IGluZGV4IGNjOTliZTM5ZmIuLmRiNmNmNDMyZTMgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2Uv
+Q29uZmlnLmluCj4+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4+IEBAIC0yMjc5LDExICsyMjc5
+LDkgQEAgbWVudSAiTmV0d29ya2luZyBhcHBsaWNhdGlvbnMiCj4+ICAgCXNvdXJjZSAicGFja2Fn
+ZS9hbGZyZWQvQ29uZmlnLmluIgo+PiAgIAlzb3VyY2UgInBhY2thZ2UvYW9ldG9vbHMvQ29uZmln
+LmluIgo+PiAgIAlzb3VyY2UgInBhY2thZ2UvYXBhY2hlL0NvbmZpZy5pbiIKPj4gLWlmIEJSMl9Q
+QUNLQUdFX0FQQUNIRQo+PiAgIG1lbnUgIkV4dGVybmFsIEFwYWNoZSBtb2R1bGVzIgo+PiAgIAlz
+b3VyY2UgInBhY2thZ2UvbW9kc2VjdXJpdHkyL0NvbmZpZy5pbiIKPj4gICBlbmRtZW51Cj4+IC1l
+bmRpZgo+PiAgIAlzb3VyY2UgInBhY2thZ2UvYXJndXMvQ29uZmlnLmluIgo+PiAgIAlzb3VyY2Ug
+InBhY2thZ2UvYXJwLXNjYW4vQ29uZmlnLmluIgo+PiAgIAlzb3VyY2UgInBhY2thZ2UvYXJwdGFi
+bGVzL0NvbmZpZy5pbiIKPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXBhY2hlL0NvbmZpZy5pbiBi
+L3BhY2thZ2UvYXBhY2hlL0NvbmZpZy5pbgo+PiBpbmRleCAyNzAyOTZiY2U0Li41ZTllNGM1Zjlk
+IDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL2FwYWNoZS9Db25maWcuaW4KPj4gKysrIGIvcGFja2Fn
+ZS9hcGFjaGUvQ29uZmlnLmluCj4+IEBAIC0xNyw2ICsxNywxNCBAQCBjb25maWcgQlIyX1BBQ0tB
+R0VfQVBBQ0hFCj4+ICAgCj4+ICAgaWYgQlIyX1BBQ0tBR0VfQVBBQ0hFCj4+ICAgCj4+ICtjb25m
+aWcgQlIyX1BBQ0tBR0VfQVBBQ0hFX0RBRU1PTgo+PiArCWJvb2wgImFwYWNoZS1kYWVtb24iCj4+
+ICsJZGVmYXVsdCB5Cj4+ICsJaGVscAo+PiArCSAgUHJvdmlkZSBlbnRpcmUgQXBhY2hlIGRhZW1v
+biwgb3RoZXJ3aXNlIG9ubHkgaHRkaWdlc3QgYW5kIGh0cGFzc3dkCj4+ICsJICB3aWxsIGJlIGJ1
+aWx0IGFuZCBpbnN0YWxsZWQuCj4+ICsKPj4gK2lmIEJSMl9QQUNLQUdFX0FQQUNIRV9EQUVNT04K
+Pj4gICBjaG9pY2UKPj4gICAJcHJvbXB0ICJNdWx0aS1Qcm9jZXNzaW5nIE1vZHVsZSAoTVBNKSIK
+Pj4gICAJZGVmYXVsdCBCUjJfUEFDS0FHRV9BUEFDSEVfTVBNX1dPUktFUgo+PiBAQCAtNDAsNiAr
+NDgsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfQVBBQ0hFX01QTV9XT1JLRVIKPj4gICAJICBJbXBs
+ZW1lbnRzIGEgaHlicmlkIG11bHRpLXRocmVhZGVkIG11bHRpLXByb2Nlc3Mgd2ViIHNlcnZlcgo+
+IAo+IFdoYXQgYWJvdXQgYXBwYXJtb3IgcGFja2FnZT8KPiBwYWNrYWdlL2FwcGFybW9yL2FwcGFy
+bW9yLm1rOmlmZXEgKCQoQlIyX1BBQ0tBR0VfQVBBQ0hFKSx5KQo+IAo+IGl0IHNlZW1zIHdlIG5l
+ZWQgdG8gdXNlIEJSMl9QQUNLQUdFX0FQQUNIRV9EQUVNT04gd2l0aCB0aGlzIGNoYW5nZS4KCnlv
+dSdyZSB0b3RhbGx5IHJpZ2h0LiBKdXN0IHNlbnQgdjYgd2l0aCB0aGF0IGNoYW5nZToKaHR0cHM6
+Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIzMTAwMTE2
+MzYyOS4yNjM1NDgwLTEtZ2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbS8KClRo
+YW5rIHlvdSEKCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQ0VPJkNUT0BCZW5ldHRp
+IEVuZ2luZWVyaW5nIHNhcwoKPiBCZXN0IHJlZ2FyZHMsCj4gUm9tYWluCj4gCj4gCj4+ICAgCj4+
+ICAgZW5kY2hvaWNlCj4+ICtlbmRpZgo+PiAgIAo+PiAgIGVuZGlmCj4+ICAgCj4+IGRpZmYgLS1n
+aXQgYS9wYWNrYWdlL2FwYWNoZS9hcGFjaGUubWsgYi9wYWNrYWdlL2FwYWNoZS9hcGFjaGUubWsK
+Pj4gaW5kZXggMzIwYTZhZDIwZS4uOTk0ODQyYjQ1NSAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9h
+cGFjaGUvYXBhY2hlLm1rCj4+ICsrKyBiL3BhY2thZ2UvYXBhY2hlL2FwYWNoZS5tawo+PiBAQCAt
+MTIsOCArMTIsNiBAQCBBUEFDSEVfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKPj4gICBBUEFDSEVf
+Q1BFX0lEX1ZFTkRPUiA9IGFwYWNoZQo+PiAgIEFQQUNIRV9DUEVfSURfUFJPRFVDVCA9IGh0dHBf
+c2VydmVyCj4+ICAgQVBBQ0hFX1NFTElOVVhfTU9EVUxFUyA9IGFwYWNoZQo+PiAtIyBOZWVkZWQg
+Zm9yIG1vZF9waHAKPj4gLUFQQUNIRV9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPj4gICAjIFdlIGhh
+dmUgYSBwYXRjaCB0b3VjaGluZyBjb25maWd1cmUuaW4gYW5kIE1ha2VmaWxlLmluLAo+PiAgICMg
+c28gd2UgbmVlZCB0byBhdXRvcmVjb25mOgo+PiAgIEFQQUNIRV9BVVRPUkVDT05GID0gWUVTCj4+
+IEBAIC0zMiwxMCArMzAsMTYgQEAgQVBBQ0hFX01QTSA9IHdvcmtlcgo+PiAgIGVuZGlmCj4+ICAg
+Cj4+ICAgQVBBQ0hFX0NPTkZfT1BUUyA9IFwKPj4gLQktLXN5c2NvbmZkaXI9L2V0Yy9hcGFjaGUy
+IFwKPj4gICAJLS13aXRoLWFwcj0kKFNUQUdJTkdfRElSKS91c3IgXAo+PiAgIAktLXdpdGgtYXBy
+LXV0aWw9JChTVEFHSU5HX0RJUikvdXNyIFwKPj4gICAJLS13aXRoLXBjcmU9JChTVEFHSU5HX0RJ
+UikvdXNyL2Jpbi9wY3JlMi1jb25maWcgXAo+PiArCj4+ICtpZmVxICgkKEJSMl9QQUNLQUdFX0FQ
+QUNIRV9EQUVNT04pLHkpCj4+ICsjIE5lZWRlZCBmb3IgbW9kX3BocAo+PiArQVBBQ0hFX0lOU1RB
+TExfU1RBR0lORyA9IFlFUwo+PiArCj4+ICtBUEFDSEVfQ09ORl9PUFRTICs9IFwKPj4gKwktLXN5
+c2NvbmZkaXI9L2V0Yy9hcGFjaGUyIFwKPj4gICAJLS1lbmFibGUtaHR0cCBcCj4+ICAgCS0tZW5h
+YmxlLWRiZCBcCj4+ICAgCS0tZW5hYmxlLXByb3h5IFwKPj4gQEAgLTEyMSw1ICsxMjUsMTUgQEAg
+ZGVmaW5lIEFQQUNIRV9JTlNUQUxMX0lOSVRfU1lTVEVNRAo+PiAgIAkkKElOU1RBTEwpIC1EIC1t
+IDY0NCBwYWNrYWdlL2FwYWNoZS9hcGFjaGUuc2VydmljZSBcCj4+ICAgCQkkKFRBUkdFVF9ESVIp
+L3Vzci9saWIvc3lzdGVtZC9zeXN0ZW0vYXBhY2hlLnNlcnZpY2UKPj4gICBlbmRlZgo+PiArZWxz
+ZQo+PiArZGVmaW5lIEFQQUNIRV9CVUlMRF9DTURTCj4+ICsJJChUQVJHRVRfTUFLRV9FTlYpICQo
+TUFLRSkgLUMgJChARCkvc3VwcG9ydCBodGRpZ2VzdCBodHBhc3N3ZAo+PiArZW5kZWYKPj4gKwo+
+PiArZGVmaW5lIEFQQUNIRV9JTlNUQUxMX1RBUkdFVF9DTURTCj4+ICsJJChJTlNUQUxMKSAtbSAw
+NzU1IC1EICQoQEQpL3N1cHBvcnQvaHRkaWdlc3QgJChUQVJHRVRfRElSKS91c3IvYmluL2h0ZGln
+ZXN0Cj4+ICsJJChJTlNUQUxMKSAtbSAwNzU1IC1EICQoQEQpL3N1cHBvcnQvaHRwYXNzd2QgJChU
+QVJHRVRfRElSKS91c3IvYmluL2h0cGFzc3dkCj4+ICtlbmRlZgo+PiArZW5kaWYKPj4gICAKPj4g
+ICAkKGV2YWwgJChhdXRvdG9vbHMtcGFja2FnZSkpCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21v
+ZHNlY3VyaXR5Mi9Db25maWcuaW4gYi9wYWNrYWdlL21vZHNlY3VyaXR5Mi9Db25maWcuaW4KPj4g
+aW5kZXggZmIxYmZjOTYwZS4uNDBjNWZjNTViYyAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9tb2Rz
+ZWN1cml0eTIvQ29uZmlnLmluCj4+ICsrKyBiL3BhY2thZ2UvbW9kc2VjdXJpdHkyL0NvbmZpZy5p
+bgo+PiBAQCAtMSw2ICsxLDYgQEAKPj4gICBjb25maWcgQlIyX1BBQ0tBR0VfTU9EU0VDVVJJVFky
+Cj4+ICAgCWJvb2wgIm1vZHNlY3VyaXR5MiIKPj4gLQlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0FQ
+QUNIRQo+PiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfQVBBQ0hFX0RBRU1PTgo+PiAgIAlzZWxl
+Y3QgQlIyX1BBQ0tBR0VfTElCWE1MMgo+PiAgIAlzZWxlY3QgQlIyX1BBQ0tBR0VfUENSRTIKPj4g
+ICAJaGVscAo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9waHAvQ29uZmlnLmluIGIvcGFja2FnZS9w
+aHAvQ29uZmlnLmluCj4+IGluZGV4IDY5YjQyNjhjMWQuLjNhOWUzN2RhYjYgMTAwNjQ0Cj4+IC0t
+LSBhL3BhY2thZ2UvcGhwL0NvbmZpZy5pbgo+PiArKysgYi9wYWNrYWdlL3BocC9Db25maWcuaW4K
+Pj4gQEAgLTM2LDcgKzM2LDcgQEAgaWYgQlIyX1BBQ0tBR0VfUEhQCj4+ICAgCj4+ICAgY29uZmln
+IEJSMl9QQUNLQUdFX1BIUF9TQVBJX0FQQUNIRQo+PiAgIAlib29sICJBcGFjaGUgaW50ZXJmYWNl
+Igo+PiAtCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfQVBBQ0hFCj4+ICsJZGVwZW5kcyBvbiBCUjJf
+UEFDS0FHRV9BUEFDSEVfREFFTU9OCj4+ICAgCWhlbHAKPj4gICAJICBBcGFjaGUgbW9kdWxlCj4+
+ICAgCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
