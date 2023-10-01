@@ -4,68 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9112DE748EE
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 16:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C547CE748E9
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 16:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1025982012;
-	Sun,  1 Oct 2023 16:06:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1025982012
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7AB7D80E71;
+	Sun,  1 Oct 2023 16:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AB7D80E71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qEKA1xfQ5mk5; Sun,  1 Oct 2023 16:06:10 +0000 (UTC)
+	with ESMTP id Bu51qdKCokrV; Sun,  1 Oct 2023 16:09:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06D1782015;
-	Sun,  1 Oct 2023 16:06:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06D1782015
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2A17D1BF4D7
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:06:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C43C581004;
+	Sun,  1 Oct 2023 16:09:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C43C581004
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A086A1BF5A0
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 010A641929
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:06:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 010A641929
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A71581004
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:09:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A71581004
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mPtGK0rlyFvM for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 16:06:05 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4B1C641904
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 16:06:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B1C641904
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb04:4ad:b00:7d3f:173d:28ec:8590])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id F3C49B0054E;
- Sun,  1 Oct 2023 18:05:59 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 01 Oct 2023 18:05:59 +0200
-Date: Sun, 1 Oct 2023 18:05:59 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Knight <james.d.knight@live.com>
-Message-ID: <20231001160559.GM2579@scaer>
-References: <20230505043002.1956-1-james.d.knight@live.com>
- <SN4P221MB06825C5F564A59CA4DE16C09A0729@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WUmIi2je7E32 for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 16:09:53 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6E70B80E71
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 16:09:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E70B80E71
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-406619b53caso18692185e9.1
+ for <buildroot@buildroot.org>; Sun, 01 Oct 2023 09:09:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696176591; x=1696781391;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=pHuPzAOe9GaOcSXIXWvNhRnpGhbpk1Tq4a9pNKsBr1w=;
+ b=txwDtyQXs6iK2VD1/oIl5+IzSNMs+FUHfMB5oE01oBhU6K68fdtpwjTwiIjAy6wjlB
+ inHjUxgMFunyYot38G2BJ2cjEG3LMD/sypHeCVs1ilvhBJKbyrP0yI7o1jcqeGa7E9Pa
+ PCMKHpgN8ix0VxBBJXGj+3LFkANqu41LjR717DuAXCpQJ+iVh4pC8S3JXVXdmV35YRHQ
+ 4E2rvnxs+He8blTiE2hm1A0Ql/zWs6RxvYICpb0Vh4q8vO37/dmTAp4pMZoQH9qiocZ2
+ aKC9/pxuTlwxhy1tOrc26HkN/VGV/A8UMn6rYFZy/vQXnL+jt/dqVqqLu5fu78OId9w1
+ jjrA==
+X-Gm-Message-State: AOJu0YyKYho/IBeJ+VELpPJFN2Hgm29Rt7kQlIBsmYrhXVefF5ICG3qw
+ ZxCzm4y0682WPj2K3fknKzBdZQ==
+X-Google-Smtp-Source: AGHT+IFiSjTXr9u3Isse6XZpweBH2WzGqo5NJFWpP7HUBb5ZrUCqSmdKjvXqu/12hHchqSwo2r6Wcg==
+X-Received: by 2002:a7b:cbc6:0:b0:405:75f0:fd31 with SMTP id
+ n6-20020a7bcbc6000000b0040575f0fd31mr7778405wmi.31.1696176591407; 
+ Sun, 01 Oct 2023 09:09:51 -0700 (PDT)
+Received: from ?IPV6:2a01:cb04:4ad:b00:5ddb:2bcd:94e3:5264?
+ (2a01cb0404ad0b005ddb2bcd94e35264.ipv6.abo.wanadoo.fr.
+ [2a01:cb04:4ad:b00:5ddb:2bcd:94e3:5264])
+ by smtp.gmail.com with ESMTPSA id
+ 3-20020a05600c020300b004063cced50bsm5556274wmi.23.2023.10.01.09.09.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 01 Oct 2023 09:09:50 -0700 (PDT)
+Message-ID: <e21a20c2-9639-4608-4a4e-d9131e31318f@mind.be>
+Date: Sun, 1 Oct 2023 18:09:48 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <SN4P221MB06825C5F564A59CA4DE16C09A0729@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696176362;
- bh=Yl5lKpiHGEUsryUY8Iz+Bf7dEIb660vC9jJVl59yokk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=L8wXhwWJ2zfFWQsL0jzD3X7b/oEaZYgAOTk+X2m/DPNnde1ZUcPL6D2KL2SifuIJ7
- NICKim5V0947WaSRcOI/FoMklq52LORSGed0zD7tmOQhPt397NFaJRG8LFl8ZdwNpb
- hLnwtQn8YPjMCDGxthmeWmn32KFioy9Um2yx/wn4MQlo53IXYNzG2xP69YC7cWKL/Q
- fdZgjpCcAKOTq3DwZBFzQNZqj7wne1VWvoZR32huq8a0uFYDQwWJgrUhN3qZHfV/j4
- l0+ZyE6RJeM6bLQcHkM7Gcr0rkNkf0mxUcPAfnxXKB7UtBsuK6lvPCTXg8ifjmoV7e
- aE7WlMlWBBxsQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=L8wXhwWJ
-Subject: Re: [Buildroot] [PATCH 2/2] package/skeleton-init-systemd: flexible
- reinstalls
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20221016193014.3384022-1-james.hilliard1@gmail.com>
+In-Reply-To: <20221016193014.3384022-1-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1696176591; x=1696781391; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=pHuPzAOe9GaOcSXIXWvNhRnpGhbpk1Tq4a9pNKsBr1w=;
+ b=EXraALHi94DXfZIvNK54SL0DTi4qXXGybXHKDjLkOSQvGQfZmEKskTC6qtdLBNeoom
+ XmfctxM8MSHhVR2USztC6oDKm/Y+Zrhwu+tBED8MMyeOwBr/VTGdzomcQnbC2Rh16/6y
+ QPNQJaVegUV9/xV3wF0BDAZ3PIeW4+XzQQBJA5emZR3RtGsXOvccFgUEqVGvEeDEsmnz
+ aANWRd7K/r7145IZbw+sFcoaNUOFQTjyk05rEJxYUHE/8MJLzXwJOenYwcZdlDcHHk6w
+ tTFqUvLjF8J09DKqGeHAKMR1A2cqy9TNXF2IOpZwNhMuHWL4HXR7lRcqHfYb/NOmELNV
+ kvew==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=EXraALHi
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/Makefile.in: set
+ --shuffle=none for MAKE1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,120 +100,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
 
-On 2023-05-05 00:30 -0400, James Knight spake thusly:
-> The following commit tweaks the `skeleton-init-systemd` package to
-> gracefully handle if a user invokes a reinstall for the package (e.g.
-> when performing development tweaks to the initial skeleton).
+
+On 16/10/2022 21:30, James Hilliard wrote:
+> Make 4.4 introduces a shuffle mode which randomizes prerequisites
+> in order to better flush out issues with parallel builds, as this
+> mode randomizes prerequisites even when using -j1 builds we must
+> also explicitely mark parallel incompatible builds by setting
+> --shuffle=none which disables goals prerequisites randomization
+> for the parallel incompatible package when running in shuffle mode.
 > 
-> Signed-off-by: James Knight <james.d.knight@live.com>
-> ---
-> Only a suggestion; feel free to drop.
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-I've spent a bit of time on this, and was about to apply...
+  Applied to master with a slightly extended commit message, thanks.
 
-However, there are a few "issues" I noticed with it, mostly that
-/etc/fstab should not be used with systemd, but mount units should be
-used, and so /etc/fstab should only contain this one line, so it does
-not make much sense to have it "reinstallable".
-
-Also, with BR2_PER_PACKAGE_DIRECTORIES=y, when the "final" target is
-aggregated there is no guarantee that the modified file gets used in
-this case. Indeed, assuming the following dependency chain (simplified
-for the sake of the explanation):
-
-    S <-- A <-- target/
-     `<-- Z <--'
-
-I.e. A depends on S (the skeleton), Z also depends on S, and the target
-is aggreagated from A and Z, and S. When you first build, Z inherits the
-fstab from S, and because it sorts after S, that the one that gets used.
-
-If you rebuild S, Z will not get rebuild, so will not get the new fstab.
-And thus when you assemble target after the rebuild, you still get the
-old file from Z, not the new one from S.
-
-(there are more complex cases, the above is just a trivial example).
-
-Finally, the only guarantee Buildroot really offers is fof a full build
-from scratch.
-
-And last, reinstalling a skeleton package is very rare, so fixing it is
-not worth the effort, considering all the above.
-
-So I just decided to drop it.
-
-Regards,
-Yann E. MORIN.
+  Regards,
+  Arnout
 
 > ---
->  .../skeleton-init-systemd.mk                   | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
+> Changes v1 -> v2:
+>    - use --shuffle=none to disable shuffle for MAKE1
+> ---
+>   package/Makefile.in | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> index 4076821c0c0429cf90681f4b16be114c44bde282..18ae91f2eea30277805ee82791c62d53f24dca1e 100644
-> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> @@ -18,13 +18,23 @@ SKELETON_INIT_SYSTEMD_PROVIDES = skeleton
->  ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
->  
->  define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
-> -	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
-> +	if ! grep -q "/dev/root" $(TARGET_DIR)/etc/fstab; then \
-> +		echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab; \
-> +	else \
-> +		sed -i "s|/dev/root.*|/dev/root / auto rw 0 1|g" \
-> +			$(TARGET_DIR)/etc/fstab; \
-> +	fi
->  endef
->  
->  else
->  
->  define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
-> -	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
-> +	if ! grep -q "/dev/root" $(TARGET_DIR)/etc/fstab; then \
-> +		echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab; \
-> +	else \
-> +		sed -i "s|/dev/root.*|/dev/root / auto ro 0 1|g" \
-> +			$(TARGET_DIR)/etc/fstab; \
-> +	fi
->  endef
->  
->  # On a R/O rootfs, /var is a tmpfs filesystem. So, at build time, we
-> @@ -78,9 +88,9 @@ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
->  	mkdir -p $(TARGET_DIR)/home
->  	mkdir -p $(TARGET_DIR)/srv
->  	mkdir -p $(TARGET_DIR)/var
-> -	ln -s ../run $(TARGET_DIR)/var/run
-> +	ln -sf ../run $(TARGET_DIR)/var/run
->  	# prevent install scripts to create var/lock as directory
-> -	ln -s ../run/lock $(TARGET_DIR)/var/lock
-> +	ln -sf ../run/lock $(TARGET_DIR)/var/lock
->  	install -D -m644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d/legacy.conf
->  	$(SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW)
->  endef
-> -- 
-> 2.40.1.windows.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 43d214bcbe..c69c201c46 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -17,7 +17,9 @@ else
+>   PARALLEL_JOBS := $(BR2_JLEVEL)
+>   endif
+>   
+> -MAKE1 := $(HOSTMAKE) -j1
+> +# Only build one job at a time, *and* to not randomise goals and
+> +# prerequisites ordering in make 4.4+
+> +MAKE1 := $(HOSTMAKE) -j1 $(if $(findstring --shuffle,$(MAKEFLAGS)),--shuffle=none)
+>   override MAKE = $(HOSTMAKE) \
+>   	$(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
