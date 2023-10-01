@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41CDAE78480
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 18:48:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 443B9E78480
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 18:49:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F238382101;
-	Sun,  1 Oct 2023 18:48:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F238382101
+	by smtp1.osuosl.org (Postfix) with ESMTP id F31D18212E;
+	Sun,  1 Oct 2023 18:49:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F31D18212E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9UG5vqfEAM0x; Sun,  1 Oct 2023 18:48:48 +0000 (UTC)
+	with ESMTP id ulPysHPSNUvz; Sun,  1 Oct 2023 18:49:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF48282150;
-	Sun,  1 Oct 2023 18:48:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF48282150
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 959661BF8A8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5286282158;
+	Sun,  1 Oct 2023 18:48:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5286282158
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AA8661BF5AA
  for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 18:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F9B482148
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92414400AF
  for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 18:48:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F9B482148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92414400AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qIqf_adXhnbD for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UGqrJfL8nk_y for <buildroot@lists.busybox.net>;
  Sun,  1 Oct 2023 18:48:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E70C820F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE1C940453
  for <buildroot@buildroot.org>; Sun,  1 Oct 2023 18:48:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E70C820F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE1C940453
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E61B83F32; Sun,  1 Oct 2023 18:48:12 +0000 (UTC)
+ id AE9A383F4E; Sun,  1 Oct 2023 18:48:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Oct 2023 20:24:43 +0200
+Date: Sun, 1 Oct 2023 20:31:26 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 7c3e9fbe121fb80863f4d3ca0b137e2d6818fff0
-X-Git-Newrev: 057beeb6afa46fdbe72368254bd5b2a97d611362
+X-Git-Oldrev: 59989e79d6ccc1bafe2d64a70a31a6360c4e5817
+X-Git-Newrev: 2b3b8967bfa58cb0dd67ad3c7da29c9498a9c670
 X-Patchwork-Hint: ignore
-Message-Id: <20231001184812.8E61B83F32@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] unifdef: add missing
- license
+Message-Id: <20231001184812.AE9A383F4E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/php: bump version
+ to 8.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=057beeb6afa46fdbe72368254bd5b2a97d611362
+commit: https://git.buildroot.net/buildroot/commit/?id=2b3b8967bfa58cb0dd67ad3c7da29c9498a9c670
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The COPYING also contains a BSD-3-Clause license. The BSD-3-Clause
-applies to "manual page unifdef.1 and the portability support code in
-the FreeBSD subdirectory". The BSD-2-Clause applies to everything else.
+Changelog: https://www.php.net/ChangeLog-8.php#8.2.11
+Release notes: https://www.php.net/releases/8_2_11.php
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Reviewed-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d8cea23ce4c2462000a3dd01304ba613a39253d5)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3686d9fc17aa1ad200d03d6dc1004c71026dbde0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/unifdef/unifdef.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/unifdef/unifdef.mk b/package/unifdef/unifdef.mk
-index 7d10595d1b..fd74455894 100644
---- a/package/unifdef/unifdef.mk
-+++ b/package/unifdef/unifdef.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/php/php.hash b/package/php/php.hash
+index b8ff7ccc5c..e5f94a5e05 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  561dc4acd5386e47f25be76f2c8df6ae854756469159248313bcf276e282fbb3  php-8.2.10.tar.xz
++sha256  29af82e4f7509831490552918aad502697453f0869a579ee1b80b08f9112c5b8  php-8.2.11.tar.xz
  
- UNIFDEF_VERSION = 2.12
- UNIFDEF_SITE = https://dotat.at/prog/unifdef
--UNIFDEF_LICENSE = BSD-2-Clause
-+UNIFDEF_LICENSE = BSD-2-Clause, BSD-3-Clause
- UNIFDEF_LICENSE_FILES = COPYING
+ # License file
+ sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 6c70de2742..88493b4e0f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define HOST_UNIFDEF_BUILD_CMDS
+-PHP_VERSION = 8.2.10
++PHP_VERSION = 8.2.11
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
