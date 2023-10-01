@@ -4,62 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59653E748E9
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 11:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B42C6E748E9
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 11:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA16F42FD2;
-	Sun,  1 Oct 2023 11:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA16F42FD2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D2F141684;
+	Sun,  1 Oct 2023 11:40:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D2F141684
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J7DO7xZdVFjb; Sun,  1 Oct 2023 11:24:37 +0000 (UTC)
+	with ESMTP id 1YUSIXyCUimV; Sun,  1 Oct 2023 11:40:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B38CB42FDD;
-	Sun,  1 Oct 2023 11:24:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B38CB42FDD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8F4431BF5A0
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 11:24:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2A1241725;
+	Sun,  1 Oct 2023 11:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2A1241725
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 75C671BF27A
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 11:40:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 76839405E9
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 11:24:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76839405E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D90361004
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 11:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D90361004
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 71eAjAP3MwuQ for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 11:24:33 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EC81840574
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 11:24:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC81840574
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DDE5460003;
- Sun,  1 Oct 2023 11:24:28 +0000 (UTC)
-Received: from peko by dell.home with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qmuYm-00GJKB-6d; Sun, 01 Oct 2023 13:24:28 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: "Frager, Neal" <neal.frager@amd.com>
-References: <20230904100443.1613306-1-neal.frager@amd.com>
- <20230922145236.027dc287@booty>
- <CH2PR12MB50040897854080471200F9E0F0FFA@CH2PR12MB5004.namprd12.prod.outlook.com>
- <20230922155735.43ddc356@booty>
- <CH2PR12MB5004C65AFCE251505428888AF0FFA@CH2PR12MB5004.namprd12.prod.outlook.com>
- <MN0PR12MB60045761B225083426E7B1A1A0FFA@MN0PR12MB6004.namprd12.prod.outlook.com>
- <CH2PR12MB5004761ED87FCAC8E37E9667F0FEA@CH2PR12MB5004.namprd12.prod.outlook.com>
- <20230925045944.6a88abd4@booty>
- <7AD8C3E2-4A82-434F-8C3D-6B9B5E53E798@amd.com>
-Date: Sun, 01 Oct 2023 13:24:28 +0200
-In-Reply-To: <7AD8C3E2-4A82-434F-8C3D-6B9B5E53E798@amd.com> (Neal Frager's
- message of "Mon, 25 Sep 2023 03:43:21 +0000")
-Message-ID: <877co67fgz.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FESizEs_0sKf for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 11:40:02 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7C94660A92
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 11:40:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C94660A92
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 5E0AA3520D2A; Sun,  1 Oct 2023 13:39:58 +0200 (CEST)
+Date: Sun, 1 Oct 2023 13:39:58 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <ZRlajuI6BnIemOoO@waldemar-brodkorb.de>
+References: <20221217051337.3778405-1-Mr.Bossman075@gmail.com>
+ <20221217051337.3778405-5-Mr.Bossman075@gmail.com>
+ <603887d9-3c48-b7de-3e5d-a472e6c08ed2@smile.fr>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v3 1/6] package/binutils-bare-metal: new
- package
+Content-Disposition: inline
+In-Reply-To: <603887d9-3c48-b7de-3e5d-a472e6c08ed2@smile.fr>
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1696160398; bh=uSIYHVYVoBGheQ8lbJ5VKpSXC9c03Riz3VBNCInAkZo=;
+ h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+ b=geqX7wH/r7VL9XnCsQMqFmhCK2zsXsHuHfiDi+plnnBCaWcffxRoXLlWUQO1wEwIy
+ 7ay/YTKCd/8f/G7PL/h/56e4bqvNWOJAZSVClnUzvVE9o9TPo6db+xEBqf4DIJv2M1
+ 2UoWqFaijCQP5eICW6vbFB+4EnoI7mqtXpDoNletMOlgvv7nKVKCCYVnWnYn8h1S30
+ bgJEYhVKqI5qbLbNthBk4rXWqXYckR2KY4UpfUt14K2nN1FYg78D3xXAisCZRKXBsJ
+ xepwwnBmjDshsme0uaC+LptcvkTRWCo3RdroNNVtTAkxNxD6ot+Eud1LOgRS/dlaV4
+ Uayz1w+88+XVg==
+Subject: Re: [Buildroot] [PATCH v2 4/4]
+ configs/qemu_riscv32_nommu_virt_defconfig: New defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,77 +70,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Simek, Michal" <michal.simek@amd.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>, "Erkiaga Elorza,
- Ibai" <ibai.erkiaga-elorza@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Reply-To: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
+Cc: Mark Corbin <mark@dibsco.co.uk>, Jesse Taube <mr.bossman075@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@gmail.com>, Charles Lohr <lohr85@gmail.com>,
+ Yimin Gu <ustcymgu@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Frager," == Frager, Neal <neal.frager@amd.com> writes:
-
-Hello,
-
- >>> Is this ok for both of you?
- >> 
- >> I'm OK with the whole approach, except for the sentence "I do not
- >> believe there is currently any organized effort to upstream any of
- >> these patches"... which is probably already clear to the recipients
- >> of this message, and thus is not going to be solved in this thread,
- >> however I just want to be sure my position is clear. I'd also like to
- >> stress that I appreciate a lot the work you are doing to properly
- >> support the pmufw in Buildroot. Thanks!
- >> 
- >> Luca
-
- > Your position is very clear.  And I can assure you that both Ibai and I agree with it.
-
- > It would be much better if all of these binutils and gcc patches for
- > microblaze go upstream, and both Ibai and I have pushed for it
- > internally at AMD / Xilinx.
-
- > The only thing I can say is that change is always possible.
- > Yesterday, we could not build a zynqmp pmufw, versal plm or versal
- > psmfw in buildroot.  Today, we have submitted a solution to change
- > that.
-
- > Tomorrow (figurative meaning the future), we hope to get all these
- > binutils and gcc patches upstream, so the upstream toolchain matches
- > the AMD Xilinx distributed toolchain.
-
- > One step at a time.
-
-Sure! Sorry, I am somewhat late to the review game here. I wonder how
-this fits with Luca's zynqmp-pmufw-builder?
-
-E.G. today the setup is that the pmufw is built outside Buildroot and we
-just point the u-boot package to where it can fetch the prebuilt
-firmware binary - This is nice in the sense that it is fast and simple,
-but makes is somewhat annoying to make modifications to the firmware.
-
-This series instead goes to the other extreme, E.G. we build the entire
-microblaze toolchain from scratch and then use it to build the firmware
-and use it in the u-boot package - This is nice because it is all in
-Buildroot and we have it all under control, but also brings quite some
-build time overhead for building the toolchain before building the
-(small) toolchain. You can naturally "solve" it by using two defconfigs,
-E.G. one that builds the pmufw and another that uses the prebuilt one,
-but it isn't very handy either.
-
-Would an in between option not be more interesting, E.G. use (or
-download) a prebuilt microblaze toolchain and use that to build the
-firmware? That would still give the flexibility to easily tweak the
-firmware, but not the overhead of building the toolchain every time?
-
-I guess the problems with that are what to do about the meta-xilinx
-patches and where/who wants to host a prebuilt one?
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgUm9tYWluLAoKUm9tYWluIE5hb3VyIHdyb3RlLAoKPiBIZWxsbywKPiAKPiBMZSAxNy8xMi8y
+MDIyIMOgIDA2OjEzLCBKZXNzZSBUYXViZSBhIMOpY3JpdMKgOgo+ID4gQWRkIFJJU0MtViAzMi1i
+aXQgbm9tbXUgZGVmY29uZmlnIGZvciBRRU1VIHZpcnQgbWFjaGluZSB3aXRoIE1NVQo+ID4gZGlz
+YWJsZWQuCj4gPiAKPiA+IFVubGlrZSBxZW11X3Jpc2N2MzJfdmlydCwgcWVtdV9yaXNjdjMyX25v
+bW11X3ZpcnQgZG9lcyBub3QgdXNlIE9wZW5TQkksCj4gPiBzaW5jZSB0aGUga2VybmVsIGlzIHJ1
+bm5pbmcgaW4gbWFjaGluZSBtb2RlIChNLW1vZGUpLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBK
+ZXNzZSBUYXViZSA8TXIuQm9zc21hbjA3NUBnbWFpbC5jb20+Cj4gPiBDYzogWWltaW4gR3UgPHVz
+dGN5bWd1QGdtYWlsLmNvbT4KPiAKPiBJIHJlYmFzZWQgdGhlIGVsZjJmbHQgcGF0Y2ggZm9yIHJp
+c2MzMiBbMV0gb24gdG9wIG9mIGVsZjJmbHQgMjAyMy4wOSByZWxlYXNlLAo+IHRoZW4gSSBlbmFi
+bGVkIHRoZSByaXNjMzIgdWNsaWJjLW5nIHN1cHBvcnQgWzJdIHdpdGhvdXQgcGF0Y2hpbmcgaXQg
+c2luY2Ugd2UgdXNlCj4gdGhlIGxhdGVzdCByZWxlYXNlICh2MS4wLjQ0KSBjb250YWluaW5nIHRo
+aXMgY29tbWl0IFszXS4KPiAKPiBCdXQgdGhlIHN5c3RlbSBkb2Vzbid0IGJvb3QgZHVlIHRvIGEg
+cmVsb2MgaXNzdWU6Cj4gCj4gYmluZm10X2ZsYXQ6IHJlbG9jIG91dHNpZGUgcHJvZ3JhbSAweGZm
+ZjdiNmRjICgwIC0gMHg5Y2VjMC8weDhhMTgwKSwga2lsbGluZyBzaCEKPiBTdGFydGluZyBpbml0
+OiAvYmluL3NoIGV4aXN0cyBidXQgY291bGRuJ3QgZXhlY3V0ZSBpdCAoZXJyb3IgLTgpCj4gCj4g
+VGhpcyBpc3N1ZSBtYXkgYmUgcmVsYXRlZCB0byB0aGUgdG9vbGNoYWluIHVzZWQgdG8gYnVpbGQg
+dGhpcyBkZWZjb25maWcgKGdjYwo+IDEyLjMuMCBhbmQgYmludXRpbHMgMi40MCkgdGhhdCBpcyBu
+ZXdlciB0aGFuIHRoZSB0b29sY2hhaW4gdXNlZCBhdCB0aGUgdGltZSB0aGlzCj4gc2VyaWVzIHdh
+cyB0ZXN0ZWQuCgpDYW4geW91IHNoYXJlIHlvdXIgZWxmMmZsdCBwYXRjaCwgcGxlYXNlLiAKCmJl
+c3QgcmVnYXJkcwogV2FsZGVtYXIKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
