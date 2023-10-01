@@ -1,69 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FEE8E748ED
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 14:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDCDEE748E9
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 14:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4302400DC;
-	Sun,  1 Oct 2023 14:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4302400DC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C6A241753;
+	Sun,  1 Oct 2023 14:20:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C6A241753
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cICXYDTge9FW; Sun,  1 Oct 2023 14:20:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15C4641769;
+	Sun,  1 Oct 2023 14:20:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15C4641769
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D5BF1BF5AA
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 14:20:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 477C340545
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 14:20:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 477C340545
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tEtJylfvLQpT; Sun,  1 Oct 2023 14:09:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4DDB40129;
-	Sun,  1 Oct 2023 14:09:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4DDB40129
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0869E1BF5AA
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 14:09:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A390A82084
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 14:09:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A390A82084
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H9f15TXz0Rpo for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 14:09:18 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01FBD82082
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 14:09:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01FBD82082
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 6B6233520D2D; Sun,  1 Oct 2023 16:09:14 +0200 (CEST)
-Date: Sun, 1 Oct 2023 16:09:14 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <ZRl9ikAM2+k82PiI@waldemar-brodkorb.de>
-References: <20221217051337.3778405-1-Mr.Bossman075@gmail.com>
- <20221217051337.3778405-5-Mr.Bossman075@gmail.com>
- <603887d9-3c48-b7de-3e5d-a472e6c08ed2@smile.fr>
- <ZRlajuI6BnIemOoO@waldemar-brodkorb.de>
- <3f01b947-21f8-d573-a8fe-b7ca6d044170@smile.fr>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AaT7uldsruE5 for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 14:20:30 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D45140004
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 14:20:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D45140004
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 771181C0004;
+ Sun,  1 Oct 2023 14:20:26 +0000 (UTC)
+Received: from peko by dell.home with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qmxJ3-00Gc7t-Pl; Sun, 01 Oct 2023 16:20:25 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun,  1 Oct 2023 16:20:24 +0200
+Message-Id: <20231001142024.3959758-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="ARPFnjOPhPxQE4af"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3f01b947-21f8-d573-a8fe-b7ca6d044170@smile.fr>
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1696169354; bh=JCx+2hUG5Amo1guwuIIpM906sGpGYcw+5Temqg4WSJE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cbgsmKsIQ0FZiYPACmoolY/AFzJvdICV0taT0WdFJ20qaeMos4J+Z4zu+gsNN6cT4
- v3YVnPImSWZGdr/9lcbfB3PZ1TFf8+Dy76w5wmH7xaS3H5UaF7tFSnJKVsAlMpAZy0
- VV92KRnsPbaFM2jq7qE1+Oj2semgbGWP3T2OB/BU9YeVhDz7AdfLWYHUT4ccREtSna
- PNF9xII7QHMPoejUBiygzsjZPdWV1zoa6/8paIMOOCCg8QKlxHNaxcN5msaFsfW8eQ
- QHD1KXZEsYKpy0zmRMdQ4ZkQsY83jQM39HEnPmGhqxmGTHR0shEdzhjGwGp3IyDzZR
- agZf4N9G1jVqQ==
-Subject: Re: [Buildroot] [PATCH v2 4/4]
- configs/qemu_riscv32_nommu_virt_defconfig: New defconfig
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH] package/cups: add upstream security fix for
+ CVE-2023-4504
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,126 +60,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mark Corbin <mark@dibsco.co.uk>, Jesse Taube <mr.bossman075@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@gmail.com>, Charles Lohr <lohr85@gmail.com>,
- Yimin Gu <ustcymgu@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Olivier Schonken <olivier.schonken@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fixes CVE-2023-4504: Postscript Parsing Heap Overflow
 
---ARPFnjOPhPxQE4af
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+https://github.com/OpenPrinting/cups/security/advisories/GHSA-pf5r-86w9-678h
+https://takeonme.org/cves/CVE-2023-4504.html
 
-Hi Romain,
-Romain Naour wrote,
+There is a 2.4.7 release with this fix, but upstream unfortunately broke
+!gnutls builds, so backport the security fix instead:
 
-> Hi Waldemar,
-> 
-> Le 01/10/2023 à 13:39, Waldemar Brodkorb a écrit :
-> > Hi Romain,
-> > 
-> > Romain Naour wrote,
-> > 
-> >> Hello,
-> >>
-> >> Le 17/12/2022 à 06:13, Jesse Taube a écrit :
-> >>> Add RISC-V 32-bit nommu defconfig for QEMU virt machine with MMU
-> >>> disabled.
-> >>>
-> >>> Unlike qemu_riscv32_virt, qemu_riscv32_nommu_virt does not use OpenSBI,
-> >>> since the kernel is running in machine mode (M-mode).
-> >>>
-> >>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> >>> Cc: Yimin Gu <ustcymgu@gmail.com>
-> >>
-> >> I rebased the elf2flt patch for risc32 [1] on top of elf2flt 2023.09 release,
-> >> then I enabled the risc32 uclibc-ng support [2] without patching it since we use
-> >> the latest release (v1.0.44) containing this commit [3].
-> >>
-> >> But the system doesn't boot due to a reloc issue:
-> >>
-> >> binfmt_flat: reloc outside program 0xfff7b6dc (0 - 0x9cec0/0x8a180), killing sh!
-> >> Starting init: /bin/sh exists but couldn't execute it (error -8)
-> >>
-> >> This issue may be related to the toolchain used to build this defconfig (gcc
-> >> 12.3.0 and binutils 2.40) that is newer than the toolchain used at the time this
-> >> series was tested.
-> > 
-> > Can you share your elf2flt patch, please. 
-> 
-> Sure, It the initial patch from Jesse Taube but without the relocation part that
-> was part of riscv64 commit:
-> 
-> https://github.com/uclinux-dev/elf2flt/commit/c5c8043c4d79a1cdd9bd359a542e6fdf3b04d5a1
-> 
-> I hope this can help.
+https://github.com/OpenPrinting/cups/issues/762
 
-See attached patch I am using, there is one change missing in your
-patch.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...raster-interpret.c-Fix-CVE-2023-4504.patch | 45 +++++++++++++++++++
+ package/cups/cups.mk                          |  3 ++
+ 2 files changed, 48 insertions(+)
+ create mode 100644 package/cups/0005-raster-interpret.c-Fix-CVE-2023-4504.patch
 
-best regards
- Waldemar
-
---ARPFnjOPhPxQE4af
-Content-Type: text/x-diff; charset=utf-8
-Content-Disposition: attachment; filename="0001-riscv32.patch"
-
-diff -Nur elf2flt-v2023.04.orig/elf2flt.c elf2flt-v2023.04/elf2flt.c
---- elf2flt-v2023.04.orig/elf2flt.c	2023-09-04 11:29:05.952417209 +0200
-+++ elf2flt-v2023.04/elf2flt.c	2023-09-04 11:30:05.371065966 +0200
-@@ -81,7 +81,7 @@
- #include <elf/v850.h>
- #elif defined(TARGET_xtensa)
- #include <elf/xtensa.h>
--#elif defined(TARGET_riscv64)
-+#elif defined(TARGET_riscv64) || defined(TARGET_riscv32)
- #include <elf/riscv.h>
- #endif
+diff --git a/package/cups/0005-raster-interpret.c-Fix-CVE-2023-4504.patch b/package/cups/0005-raster-interpret.c-Fix-CVE-2023-4504.patch
+new file mode 100644
+index 0000000000..d1dff4e1fa
+--- /dev/null
++++ b/package/cups/0005-raster-interpret.c-Fix-CVE-2023-4504.patch
+@@ -0,0 +1,45 @@
++From 2431caddb7e6a87f04ac90b5c6366ad268b6ff31 Mon Sep 17 00:00:00 2001
++From: Zdenek Dohnal <zdohnal@redhat.com>
++Date: Wed, 20 Sep 2023 14:45:17 +0200
++Subject: [PATCH] raster-interpret.c: Fix CVE-2023-4504
++
++We didn't check for end of buffer if it looks there is an escaped
++character - check for NULL terminator there and if found, return NULL
++as return value and in `ptr`, because a lone backslash is not
++a valid PostScript character.
++
++Upstream: https://github.com/OpenPrinting/cups/commit/2431caddb7e6a87f04ac90b5c6366ad268b6ff31
++[Peter: drop CHANGES hunk]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ cups/raster-interpret.c | 14 +++++++++++++-
++ 1 file changed, 14 insertions(+), 1 deletion(-)
++
++diff --git a/cups/raster-interpret.c b/cups/raster-interpret.c
++index 6fcf731b5..b8655c8c6 100644
++--- a/cups/raster-interpret.c
+++++ b/cups/raster-interpret.c
++@@ -1116,7 +1116,19 @@ scan_ps(_cups_ps_stack_t *st,		/* I  - Stack */
++ 
++ 	    cur ++;
++ 
++-            if (*cur == 'b')
+++	   /*
+++	    * Return NULL if we reached NULL terminator, a lone backslash
+++	    * is not a valid character in PostScript.
+++	    */
+++
+++	    if (!*cur)
+++	    {
+++	      *ptr = NULL;
+++
+++	      return (NULL);
+++	    }
+++
+++	    if (*cur == 'b')
++ 	      *valptr++ = '\b';
++ 	    else if (*cur == 'f')
++ 	      *valptr++ = '\f';
++-- 
++2.30.2
++
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index a3bb2f8dfc..4bc5eeedee 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -13,6 +13,9 @@ CUPS_CPE_ID_VENDOR = openprinting
+ CUPS_SELINUX_MODULES = cups
+ CUPS_INSTALL_STAGING = YES
  
-@@ -127,6 +127,8 @@
- #define ARCH	"xtensa"
- #elif defined(TARGET_riscv64)
- #define ARCH	"riscv64"
-+#elif defined(TARGET_riscv32)
-+#define ARCH	"riscv32"
- #else
- #error "Don't know how to support your CPU architecture??"
- #endif
-@@ -822,7 +824,7 @@
- 					goto good_32bit_resolved_reloc_update_text;
- 				default:
- 					goto bad_resolved_reloc;
--#elif defined(TARGET_riscv64)
-+#elif defined(TARGET_riscv64) || defined(TARGET_riscv32)
- 				case R_RISCV_NONE:
- 				case R_RISCV_32_PCREL:
- 				case R_RISCV_ADD8:
-diff -Nur elf2flt-v2023.04.orig/ld-elf2flt.c elf2flt-v2023.04/ld-elf2flt.c
---- elf2flt-v2023.04.orig/ld-elf2flt.c	2023-09-04 11:28:59.072573514 +0200
-+++ elf2flt-v2023.04/ld-elf2flt.c	2023-09-04 11:29:32.507813592 +0200
-@@ -327,7 +327,7 @@
- 	/* riscv adds a global pointer symbol to the linker file with the
- 	   "RISCV_GP:" prefix. Remove the prefix for riscv64 architecture and
- 	   the entire line for other architectures. */
--	if (streq(TARGET_CPU, "riscv64"))
-+	if (streq(TARGET_CPU, "riscv64") || streq(TARGET_CPU, "riscv32"))
- 		append_sed(&sed, "^RISCV_GP:", "");
- 	else
- 		append_sed(&sed, "^RISCV_GP:", NULL);
-
---ARPFnjOPhPxQE4af
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
++# 0005-raster-interpret.c-Fix-CVE-2023-4504.patch
++CUPS_IGNORE_CVES += CVE-2023-4504
++
+ # Using autoconf, not autoheader, so we cannot use AUTORECONF = YES.
+ define CUPS_RUN_AUTOCONF
+ 	cd $(@D); $(AUTOCONF) -f
+-- 
+2.30.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---ARPFnjOPhPxQE4af--
