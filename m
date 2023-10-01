@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C942E748E9
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 09:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA120E748ED
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 09:19:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1292E820CF;
-	Sun,  1 Oct 2023 09:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1292E820CF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CCA881F7C;
+	Sun,  1 Oct 2023 09:19:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CCA881F7C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xKcX-qU87s0D; Sun,  1 Oct 2023 09:18:15 +0000 (UTC)
+	with ESMTP id LY7YYVLQGVCM; Sun,  1 Oct 2023 09:19:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59095820A2;
-	Sun,  1 Oct 2023 09:18:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59095820A2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12BD41BF5AA
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 09:18:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D221E81F6C;
+	Sun,  1 Oct 2023 09:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D221E81F6C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0275E1BF5A6
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 09:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ECE49820A2
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 09:18:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECE49820A2
+ by smtp4.osuosl.org (Postfix) with ESMTP id CDE6E402C0
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 09:19:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDE6E402C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JhZAxcAVZ_sM for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 09:18:11 +0000 (UTC)
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CB6AD8208A
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 09:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB6AD8208A
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-79f96f83270so505615339f.1
- for <buildroot@buildroot.org>; Sun, 01 Oct 2023 02:18:11 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UKgA0yicO_IS for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 09:19:52 +0000 (UTC)
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ABFF94028B
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 09:19:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABFF94028B
+Received: by mail-io1-xd36.google.com with SMTP id
+ ca18e2360f4ac-79fe612beabso266350539f.3
+ for <buildroot@buildroot.org>; Sun, 01 Oct 2023 02:19:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696151890; x=1696756690;
+ d=1e100.net; s=20230601; t=1696151991; x=1696756791;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=IDP9zuGBlOk+OMqOci1Tf61AtdF8ohikZaLZlZtev1A=;
- b=N+NBk0iCK4ADp8Yeg4TP4wJBU/K22H+4so97zhUuhaSZpHjjxGVp3iYkH2c79H/1lM
- FM227Fi8hIzFVkd29gRqobHOZO9fSKw++1azdcSi5k4PvGpcCvLWpxUQLF27zQy3ku2C
- I0jc/jdogqnWB92wDtKyTvQMSj1LgUC0NvkR1H/0XCB6KIJJ7kUq95As7g8q0NI4M/DC
- 33l0ZiuY5mryRpJmMppVxe+GXnX5SX8gMj0wmOCo7TlgafaGa0imLJHJCZmxU4IGJYtW
- KLWEQcfVplGvsTh2XuNgtG8HFzOVge4me06o101E2/z51+NC7b7Al3/SrPtPCfrm2TGw
- iGfw==
-X-Gm-Message-State: AOJu0Yyi6DCCCEKreQSOTg4JtJfMcZUs7iB1pgz0yFw5IbDU9KYE7Jww
- s2Zd3FxjkSbcRLuE790HHf6aXwM2xc6cMw==
-X-Google-Smtp-Source: AGHT+IF9Xbn+A7PfdG/OeF89dXgWI1hAy4IQAy6GTuncPd2DQIGc9uPt6D7wtjgBA93EeyXtxOtigg==
-X-Received: by 2002:a05:6e02:1446:b0:34f:41ba:7c87 with SMTP id
- p6-20020a056e02144600b0034f41ba7c87mr11702282ilo.4.1696151890351; 
- Sun, 01 Oct 2023 02:18:10 -0700 (PDT)
+ bh=65hXgXMp9AHuQmzHkiT20nTb++MW0bzvdS1NZmst2Uo=;
+ b=wuPxiKlBbztsvB2JmKMKHgvp8kPUzY0h1CM2xus7TgMvqTuvSKPKEC2OFQXyOG9Lve
+ 0Xt3VVrZviVJ1VT5h5z9LOzxW5NS7QD0gjycK/2tge7eX+EHlr0NqQmjHTHcehT+dreE
+ TgZFdJ+MRKkhYpLUUwjdygsxva8+MEph9K5+51d4wFmRMPiGhBSuv/N9dl+Gep/YMFhx
+ j2TxJ5mKEK5Lv7rLDCPvy/Y52vFa7x98AYzjuFde0pozaXo7gVNErXQzWZx7/J/xAkVe
+ ztrNJrbVrQKt8l5pffngxxvcU2jp3hN1Ed1FEB+/WLuQ5YMjEkGzpJPaf8WFUqjxU1bL
+ mpJQ==
+X-Gm-Message-State: AOJu0YyZ2ozLeFh9jK5TmB7gRy+LHWrITe7dgqk0W/R160mamiS3yFVL
+ w1TLcpOwE8bDZtCCPVEZHUpjDTrQtdAd4Q==
+X-Google-Smtp-Source: AGHT+IES/vJbeuae4m9O4e+aywE25652fm0+p+SXQ4VgKtUAoo0hurwBJkSYNeJu2ddi051niGLIfQ==
+X-Received: by 2002:a6b:d002:0:b0:79f:c9ad:19ce with SMTP id
+ x2-20020a6bd002000000b0079fc9ad19cemr8417602ioa.15.1696151991250; 
+ Sun, 01 Oct 2023 02:19:51 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-152-19.hlrn.qwest.net.
  [71.33.152.19]) by smtp.gmail.com with ESMTPSA id
- v8-20020a927a08000000b0034f3d5e171dsm5593552ilc.9.2023.10.01.02.18.09
+ g2-20020a05663811c200b0042ff466c9bdsm6287565jas.127.2023.10.01.02.19.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Oct 2023 02:18:09 -0700 (PDT)
+ Sun, 01 Oct 2023 02:19:50 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Oct 2023 03:18:02 -0600
-Message-Id: <20231001091802.1771968-1-james.hilliard1@gmail.com>
+Date: Sun,  1 Oct 2023 03:19:43 -0600
+Message-Id: <20231001091943.1772441-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696151890; x=1696756690; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1696151991; x=1696756791; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=IDP9zuGBlOk+OMqOci1Tf61AtdF8ohikZaLZlZtev1A=;
- b=fKRJXJz/yVDBGIINQEfotod1gIlLcefW89+9+dg5Bna3d/vY2s4RwASdr50rnyn6dM
- nS5dOUfUv2lQvHmiLTZ3OTm5fzfX1/3GX5DVsdPNo3EReuR3mXZHRD5McQoflGaudMIr
- TtbtcMQ3KNTQJXjkJzWLQQ6ckNwBsI0mPF5hWIbkHwzXQEEpnsL6MMvmEt7mgmNaYXyG
- vtEy4N8lXxTZhjZEGi9reH/unrNcyM49nJD59XfbSHSDeY/RK+xP1LJPfFdF3KCZrz7z
- P0gQk7AxQVC9HJVlFmOjSoFKDgOUkyjpLvmWQbySyylBDIKRIQ/5A2A60d+lo6DMm1rz
- W0sQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=65hXgXMp9AHuQmzHkiT20nTb++MW0bzvdS1NZmst2Uo=;
+ b=V89HrM+HQXAc5exsXy/pmYVcDIDS9tQwFjaByaIOT/85oHyguCFiS6DnIsaBji7ZgY
+ YIqQZtXKQReRXKPze5gclf3EXuO9BxZsBAljmeSbmyZek7WjgsIGUlSrAbohxRIT9dVc
+ mNQBqmsphnQjxzwwFiVzwXz5iG2qG1tKJMn5Eq9feuj8T5HU2UZJt2milj0jU4h9Nsun
+ Mj36ozRJHyNpw6vpl8R08ZjE52Ie+ulKJsmv/q7vE+/bepw6Gj0yCSoEUgex3FISP2n1
+ lbFeZguaGwDdbgBheroAXaK9H0CqcQSUf269Z4UnuiAUPeuz7Qvc3tD1uJFBftjYV0o4
+ 8caA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=fKRJXJz/
-Subject: [Buildroot] [PATCH 1/1] package/python-pygame: switch from
- distutils to setuptools
+ header.a=rsa-sha256 header.s=20230601 header.b=V89HrM+H
+Subject: [Buildroot] [PATCH 1/1] package/python-pyxb: switch from distutils
+ to setuptools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,9 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Julien Boibessot <julien.boibessot@armadeus.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -106,22 +104,21 @@ distutils will be dropped with python 3.12.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pygame/python-pygame.mk | 2 +-
+ package/python-pyxb/python-pyxb.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
-index 600dd9e743..84fd6df4e2 100644
---- a/package/python-pygame/python-pygame.mk
-+++ b/package/python-pygame/python-pygame.mk
-@@ -10,7 +10,7 @@ PYTHON_PYGAME_VERSION = d61ea8eabd56
- PYTHON_PYGAME_SOURCE = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
- PYTHON_PYGAME_SITE = https://bitbucket.org/pygame/pygame
- PYTHON_PYGAME_SITE_METHOD = hg
--PYTHON_PYGAME_SETUP_TYPE = distutils
-+PYTHON_PYGAME_SETUP_TYPE = setuptools
- PYTHON_PYGAME_LICENSE = LGPL-2.1+
- PYTHON_PYGAME_LICENSE_FILES = LGPL
+diff --git a/package/python-pyxb/python-pyxb.mk b/package/python-pyxb/python-pyxb.mk
+index 6af10b51e7..8015bc874a 100644
+--- a/package/python-pyxb/python-pyxb.mk
++++ b/package/python-pyxb/python-pyxb.mk
+@@ -9,6 +9,6 @@ PYTHON_PYXB_SOURCE = PyXB-$(PYTHON_PYXB_VERSION).tar.gz
+ PYTHON_PYXB_SITE = https://pypi.python.org/packages/e3/09/4fdb190ea2b7cb43d6d3e745276ee69f4d6181be70fcbfda7df3c5f72f0e
+ PYTHON_PYXB_LICENSE = Apache-2.0
+ PYTHON_PYXB_LICENSE_FILES = LICENSE
+-PYTHON_PYXB_SETUP_TYPE = distutils
++PYTHON_PYXB_SETUP_TYPE = setuptools
  
+ $(eval $(python-package))
 -- 
 2.34.1
 
