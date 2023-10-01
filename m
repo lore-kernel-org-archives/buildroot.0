@@ -4,84 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDA2DE748F3
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 09:26:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3348E748E9
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 09:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FE5E83C71;
-	Sun,  1 Oct 2023 09:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FE5E83C71
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66B6183DFA;
+	Sun,  1 Oct 2023 09:44:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66B6183DFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U0aBCO9X4KFA; Sun,  1 Oct 2023 09:26:07 +0000 (UTC)
+	with ESMTP id dkRauSkkW_4b; Sun,  1 Oct 2023 09:44:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D644083C73;
-	Sun,  1 Oct 2023 09:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D644083C73
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF30083DF1;
+	Sun,  1 Oct 2023 09:44:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF30083DF1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A43C61BF32E
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 09:26:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9082B1BF2EA
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 09:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7BFB3416CE
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 09:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BFB3416CE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67F1B41D73
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 09:44:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67F1B41D73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1HOSDSuVzCxz for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 09:26:03 +0000 (UTC)
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com
- [IPv6:2607:f8b0:4864:20::836])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 27BA7414E2
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 09:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27BA7414E2
-Received: by mail-qt1-x836.google.com with SMTP id
- d75a77b69052e-41997112ff0so1390621cf.0
- for <buildroot@buildroot.org>; Sun, 01 Oct 2023 02:26:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696152362; x=1696757162;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=GecuigZltqh3bTA0bkUqxlt83EXBFMHSqiS7RL+RqNU=;
- b=V7InOJy/3Y55KwBBC8U5p6ySeQcGXikr7lrm0wQVh/yA9bXBZP2t5LgIe5AbNiEI2z
- +G98YQRPGcFk5QGQVJxtcETpEv0HqURaxeO2FSUVbAHQSUvNek8tAFBmt5PIz1H7cCWA
- yJ+Qf1DvbaoanYWdob0MMt8miInONQNAn8/PAj8oEWHXIgJtorC2lz6VLyGIqvVV61Ww
- k82OS7pBsSSTGcx1elub3Lxveh1ieqpncrAYjKOfbZyJzYeegJrKFhS56CWIGsitMA0q
- IN9kiprVo+34rXnv1FokudjcR6AzhBtAmI6Gm5ST6OwQkq7N6Gl0EETgJnXPXJ37wW5D
- LJzQ==
-X-Gm-Message-State: AOJu0Yw/QfXdk6Vq9sgo6fMXB48ukvr7mSf09+s7gBfbJywdNjGd8lli
- blAd+dykGySobYBYxHGGgz/bCITL9p4aZR233/24bmWrqpreYQ==
-X-Google-Smtp-Source: AGHT+IEahYjlva91NwK5bNm6GzYVlg+j8+TxrHsanMfXRmhcUc3pyXgTUVtS6UwQCEepyIR+Gc7Yamg3BZvgedtJTkg=
-X-Received: by 2002:a05:622a:342:b0:418:1aed:ad5f with SMTP id
- r2-20020a05622a034200b004181aedad5fmr10189954qtw.7.1696152361852; Sun, 01 Oct
- 2023 02:26:01 -0700 (PDT)
+ with ESMTP id V50AKL0g6DfY for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 09:44:16 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D8B8D41D6D
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 09:44:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8B8D41D6D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DA8D9FF809;
+ Sun,  1 Oct 2023 09:44:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qmszi-00GHP6-Nw; Sun, 01 Oct 2023 11:44:10 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun,  1 Oct 2023 11:44:08 +0200
+Message-Id: <20231001094408.3880093-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230930221727.1458825-1-arnout@mind.be>
- <CADvTj4qkFQXKXQp_brP2RJ-0KZCMd6U44xEuPY6pYLRtpaOFrA@mail.gmail.com>
- <4ea102e8-0fb6-b158-c96a-b1d9d6004925@mind.be>
- <CADvTj4r8Wnn1x2=f=VMpou6v0TyNi6=4O51zx80zdnc+WAOc-g@mail.gmail.com>
-In-Reply-To: <CADvTj4r8Wnn1x2=f=VMpou6v0TyNi6=4O51zx80zdnc+WAOc-g@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 1 Oct 2023 03:25:49 -0600
-Message-ID: <CADvTj4qbB82Kft5vCNpoNbfKar5PM7WfAgB2mJwRV1UmCy4M-g@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696152362; x=1696757162; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=GecuigZltqh3bTA0bkUqxlt83EXBFMHSqiS7RL+RqNU=;
- b=k/iiwl1vJtgX/EvyDKCmYOJlkbHZI6luIk3thGsFneDMPIvAMi9DRfiptWB29Sdxjz
- qNAU2hiZHsoyHtUHxwru62jTBaO4RqimPMOJpycF47Xddc0riwRIOJZ7Qd+LEueMaMZ1
- rIM3qfLbGVKhmm2G7lZpaIFmA8+MJkX37WwGYfdXPCE0NaHTUJ2Ppucl8Rs04+ZrgclR
- n9VlaKcT8prDORqrifnYuc8XSAZtXVPyqVNZECnztjxw3WtU82hvE0Yhuv946kZNFPIn
- n7cT/PwT18xI07PFFNErSPz0yqqRSaeleZP0vDXBaxt2azIwNWQG4YS6F8gRKCsmnBh6
- ANkg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=k/iiwl1v
-Subject: Re: [Buildroot] package/pkg-python.mk: refactor setup-type variables
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH] package/gnuplot: unbreak !gd builds since 5.4.9
+ bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,34 +60,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Signed-off-by : Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Michael Fischer <mf@go-sys.de>,
+ Anthony Viallard <viallard@syscom-instruments.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCBPY3QgMSwgMjAyMyBhdCAyOjQx4oCvQU0gSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhp
-bGxpYXJkMUBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gT24gU3VuLCBPY3QgMSwgMjAyMyBhdCAyOjIx
-4oCvQU0gQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPiB3cm90ZToKPiA+Cj4g
-PiA+IFdlIGNhbiBwcm9iYWJseSBkcm9wIGRpc3R1dGlscyBzZXR1cCB0eXBlIGFzIHdlbGwgYXMg
-d2Ugc2hvdWxkIGJlIGFibGUgdG8KPiA+ID4gaW5zdGVhZCBqdXN0IHVzZSBzZXR1cHRvb2xzIGZv
-ciBhbnkgcGFja2FnZXMgdXNpbmcgdGhhdC4KPiA+Cj4gPiAgIFRoYXQncyBhIGJpdCBhIGxvbmdl
-ci10ZXJtIHByb2plY3QuCj4KPiBJIG9ubHkgc2VlIDQgcGFja2FnZXMgc3RpbGwgdXNpbmcgZGlz
-dHV0aWxzIHN0aWxsIHNvIGFzc3VtaW5nIHRoZXkgd29yayBvayB1bmRlcgo+IHNldHVwdG9vbHMg
-dGhpcyBtYXkgYWN0dWFsbHkgYmUgcXVpdGUgc2ltcGxlLgo+Cj4gSSdsbCB0cnkgYW5kIHRlc3Qg
-aWYgdGhvc2UgYnVpbGQgdW5kZXIgc2V0dXB0b29scyBhbmQgbWlncmF0ZSB0aGVtIGlmIHRoZXkg
-ZG8uCj4KClllYWgsIHRoZXkgYWxsIHNlZW0gdG8gYnVpbGQgZmluZSB1bmRlciBzZXR1cHRvb2xz
-LCBJIHNlbnQgcGF0Y2hlcwptaWdyYXRpbmcgdGhvc2UKc28gd2Ugc2hvdWxkIGJlIGdvb2QgdG8g
-cmVtb3ZlIG91ciBkaXN0dXRpbHMgaW5mcmFzdHJ1Y3R1cmUgYW55IHRpbWUgYWZ0ZXIgdGhvc2UK
-YXJlIG1lcmdlZCBJIHRoaW5rLgoKaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0
-L2J1aWxkcm9vdC9wYXRjaC8yMDIzMTAwMTA5MTYxNi4xNzcxNzI1LTEtamFtZXMuaGlsbGlhcmQx
-QGdtYWlsLmNvbS8KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9v
-dC9wYXRjaC8yMDIzMTAwMTA5MTgwMi4xNzcxOTY4LTEtamFtZXMuaGlsbGlhcmQxQGdtYWlsLmNv
-bS8KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8y
-MDIzMTAwMTA5MTk0My4xNzcyNDQxLTEtamFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbS8KaHR0cHM6
-Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIzMTAwMTA5
-MjEwOS4xNzcyNjU4LTEtamFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbS8KX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+Fixes:
+http://autobuild.buildroot.net/results/5676609b6331b645f2e557aca67afe4c3a087433/
+
+Fix a build failure for --without-gd builds since the bump to 5.4.9 with
+commit 6dc3d3c3606 (package/gnuplot: bump version to 5.4.9):
+
+In file included from term.h:298,
+                 from term.c:1211:
+../term/post.trm:4016:11: error: expected declaration specifiers or '...' before string constant
+ 4016 |     fputs("%%%%BeginImage\n", gppsfile);
+
+Add a patch fixing that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-unbreak-HAVE_DEFLATE_ENCODER-builds.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/gnuplot/0002-term-post.trm-unbreak-HAVE_DEFLATE_ENCODER-builds.patch
+
+diff --git a/package/gnuplot/0002-term-post.trm-unbreak-HAVE_DEFLATE_ENCODER-builds.patch b/package/gnuplot/0002-term-post.trm-unbreak-HAVE_DEFLATE_ENCODER-builds.patch
+new file mode 100644
+index 0000000000..c3edb39cc6
+--- /dev/null
++++ b/package/gnuplot/0002-term-post.trm-unbreak-HAVE_DEFLATE_ENCODER-builds.patch
+@@ -0,0 +1,51 @@
++From 84002a5bd7f4cb10e9beffab88ae55b4e982bcea Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sun, 1 Oct 2023 10:20:31 +0200
++Subject: [PATCH] term/post.trm: unbreak !HAVE_DEFLATE_ENCODER builds
++
++Commit 2f2cf617808 (post: handle RGBA images (only current use is to render
++a pixmap)) added an extra '}' outside the HAVE_DEFLATE_ENCODER (gd support)
++conditional, leading to build breakage:
++
++In file included from term.h:298,
++                 from term.c:1211:
++../term/post.trm:4016:11: error: expected declaration specifiers or '...' before string constant
++ 4016 |     fputs("%%%%BeginImage\n", gppsfile);
++
++http://autobuild.buildroot.net/results/5676609b6331b645f2e557aca67afe4c3a087433/build-end.log
++
++Fix it by dropping the extra { } added by the above commit.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Upstream: https://sourceforge.net/p/gnuplot/gnuplot-main/merge-requests/28/
++---
++ term/post.trm | 5 ++---
++ 1 file changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/term/post.trm b/term/post.trm
++index 186eb9d3c..100811b86 100644
++--- a/term/post.trm
+++++ b/term/post.trm
++@@ -4000,17 +4000,16 @@ PS_image (unsigned int M, unsigned int N, coordval *image, gpiPoint *corner, t_i
++ 	cscale = 1.0;
++ 
++ #ifdef HAVE_DEFLATE_ENCODER
++-    if (ps_params->level3) {
+++    if (ps_params->level3)
++ 	encoded_image = (void *)PS_encode_png_image(M, N, image, color_mode,
++ 					    bits_per_component, max_colors, cscale,
++ 					    &num_encoded_bytes);
++-    } else {
+++    else
++ #endif
++ 	encoded_image = PS_encode_image(M, N, image, color_mode,
++ 					bits_per_component, max_colors, cscale,
++ 					(ps_params->level1 ? PS_ASCII_HEX : PS_ASCII85),
++ 					&num_encoded_bytes);
++-    }
++ 
++ 
++     fputs("%%%%BeginImage\n", gppsfile);
++-- 
++2.30.2
++
+-- 
+2.30.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
