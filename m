@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E794E78486
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 19:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D3ADE78492
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 20:36:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25BEA81FA1;
-	Sun,  1 Oct 2023 19:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25BEA81FA1
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB02B41DA9;
+	Sun,  1 Oct 2023 20:36:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB02B41DA9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iic4aSA4jpx8; Sun,  1 Oct 2023 19:55:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GnpGxtbjFNEi; Sun,  1 Oct 2023 20:36:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EB4782041;
-	Sun,  1 Oct 2023 19:55:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EB4782041
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E73201BF48D
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 19:55:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E71D141DA6;
+	Sun,  1 Oct 2023 20:36:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E71D141DA6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4236F1BF298
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 20:36:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDC2282041
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 19:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDC2282041
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B7DA41DA6
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 20:36:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B7DA41DA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K2eb4csGkCoI for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 19:55:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE71A81FA1
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 19:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE71A81FA1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BA4383F9E; Sun,  1 Oct 2023 19:55:16 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 1 Oct 2023 21:52:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33d0a13c3b7b86cbbff3dddb4c39ad41cae1c1c0
-X-Git-Newrev: 80e94c76169fd15d2433b18a9e54d6a4f3c4ff18
-X-Patchwork-Hint: ignore
-Message-Id: <20231001195516.9BA4383F9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmodplug: use a full-length hash
- as version
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W_P5-YgfDPW3 for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 20:36:01 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1D32D41DA4
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 20:36:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D32D41DA4
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 25A521C0002;
+ Sun,  1 Oct 2023 20:35:57 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qn1OI-000K3z-BU; Sun, 01 Oct 2023 20:42:06 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230924204349.1543942-1-fontaine.fabrice@gmail.com>
+ <877co8emdk.fsf@48ers.dk>
+Date: Sun, 01 Oct 2023 20:42:06 +0200
+In-Reply-To: <877co8emdk.fsf@48ers.dk> (Peter Korsgaard's message of "Fri, 29
+ Sep 2023 22:48:55 +0200")
+Message-ID: <875y3q89s1.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/neon: drop patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +63,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80e94c76169fd15d2433b18a9e54d6a4f3c4ff18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Commit 369ff9a88ff8 (package/libmodplug: update to git version)
-improperly used a short hash as version, so switch to the full-length
-hash.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> Patches (and so autoreconf) are not needed since bump to version 0.32.4
+ >> in commit f39ac8336e9cd933de50970a657e32a8d9601c67 and
+ >> https://github.com/notroj/neon/commit/9924d4d31525f8b61e37076b18004c603fd01761
 
-Github use the full-length hash when it creates the top-level directory
-of the generated archive, so the hash of the archive does not in fact
-change, only its filename. This is perfectly fine fine our handling of
-s.b.o.
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libmodplug/libmodplug.hash | 2 +-
- package/libmodplug/libmodplug.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Committed, thanks.
 
-diff --git a/package/libmodplug/libmodplug.hash b/package/libmodplug/libmodplug.hash
-index 01ff71014c..8aaf500a3a 100644
---- a/package/libmodplug/libmodplug.hash
-+++ b/package/libmodplug/libmodplug.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  d145910ca10c3ecab0019d45be7e31ea6be1d1ee951ef0e1f747c9752d20f043  libmodplug-d1b97ed.tar.gz
-+sha256  d145910ca10c3ecab0019d45be7e31ea6be1d1ee951ef0e1f747c9752d20f043  libmodplug-d1b97ed0020bc620a059d3675d1854b40bd2608d.tar.gz
- sha256  49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e  COPYING
-diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
-index 735d0e704d..c5d2463fdb 100644
---- a/package/libmodplug/libmodplug.mk
-+++ b/package/libmodplug/libmodplug.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMODPLUG_VERSION = d1b97ed
-+LIBMODPLUG_VERSION = d1b97ed0020bc620a059d3675d1854b40bd2608d
- LIBMODPLUG_SITE = $(call github,Konstanty,libmodplug,$(LIBMODPLUG_VERSION))
- LIBMODPLUG_INSTALL_STAGING = YES
- LIBMODPLUG_LICENSE = Public Domain
+Committed to 2023.02.x and 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
