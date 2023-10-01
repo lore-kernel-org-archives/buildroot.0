@@ -4,66 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8196EE78482
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 19:07:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67BDFE78480
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 19:08:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CE3481EFE;
-	Sun,  1 Oct 2023 19:07:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CE3481EFE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F8C981099;
+	Sun,  1 Oct 2023 19:08:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F8C981099
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lhd3VF7OBnXz; Sun,  1 Oct 2023 19:07:03 +0000 (UTC)
+	with ESMTP id TIc1D2BzmtPH; Sun,  1 Oct 2023 19:07:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27E5781E74;
-	Sun,  1 Oct 2023 19:07:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27E5781E74
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B1DD1BF588
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 19:07:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56CEA81E74;
+	Sun,  1 Oct 2023 19:07:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56CEA81E74
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 40B5B1BF588
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 19:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EFA260C15
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 19:07:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EFA260C15
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BC5640467
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 19:07:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BC5640467
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XU_5gx24Nb-D for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 19:06:59 +0000 (UTC)
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A688560BEB
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 19:06:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A688560BEB
-Received: from [192.168.50.162] ([146.241.127.78])
- by Aruba Outgoing Smtp  with ESMTPSA
- id n1mKqxcTs8jsqn1mKq47hW; Sun, 01 Oct 2023 21:06:56 +0200
-Message-ID: <cbec2537-52d8-4396-8503-06d584abf8ac@benettiengineering.com>
-Date: Sun, 1 Oct 2023 21:06:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D09UWxrsP-TT for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 19:07:54 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B3D2C40383
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 19:07:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3D2C40383
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.localdomain ([89.144.223.100]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N5mGH-1rg9Ma2sXr-017EKt for <buildroot@buildroot.org>; Sun, 01 Oct 2023
+ 21:07:51 +0200
+From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-References: <20231001190101.2640495-1-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20231001190101.2640495-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfBC+R3Jo+YvBUI1MIXP7GVlNyUKoxPEYHxMX1J5rwB0RFlM7PzQhHMp5PGc4I5kfxtbismbfFBUrp296XQ0D6vlNJMKo3sBqpyQN9QdSGxEEzyxz70HY
- u49jYHk6gGj8/ThfLt1c8o1ixwHiYTF2UArXqs4Tr/7NIPcDqHaP66AvkBbPzfEpWbjWrxuc3N6Ald9mbyzrhAivhXTAXYWXwn0QHBJHPraeAdy73Pri6mih
- NkQ3AmQn+tuTJsIzkVEkSA==
+Date: Sun,  1 Oct 2023 21:06:39 +0200
+Message-ID: <20231001190639.1391551-2-dalang@gmx.at>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:J3oBwx532gLovMHQBKsyAGLGXDaWIY+yeXdoHt9vE/C2I9PVLiI
+ yaYqCHuTLjRb4tVM+caa6yc45FlvNTfKvf5N93S/7MAu+8rdsjL9lB/1nX9vO3/rZTrG4zY
+ tDwxdXqj0+2l42R2/i2TuSNGHl+jM/SMBAcVjCAwqqkFKum1uSueZ/2sL9BCrGveYJX+O5U
+ qUkZuBEuWHeLow+tqDy2A==
+UI-OutboundReport: notjunk:1;M01:P0:tqLwsHxpcDc=;+i9Rde3ZXJVaXOn2/1+ULoDNSem
+ N8SewM8cmniknc3862u9nPSKdup6G0QtrPZfcmIjIjzVmtoJp3mjmugFZ2DgJqVt5PfUVuqvW
+ wyfB0wEo6eEFAQ76KOlNapKiuTh8VsTx1RPrN9ONGFUbd53W2Jabv2l2V3Q4H8HCtYI2HBZxV
+ X2WuppPEFqHi0yenWALJGemfWlSkp5ZSqPfgtPdLkBUF2jsFMnkZ5UaWso7a1WYuaPJtdjqfI
+ sFq4y0EDIPf1pHIKXD+B1NVfJBWNii45g6yq9Gc2rT2ebydkP8gfkbbwq0pVzgk3lIOBROOSY
+ xbn8tjYBF3tsIayBusawM++wOp9iQalxC+y/xVcljD3pOG1mpR+d2M4Er3nRi2x/x1f9XwVKX
+ rB0kAvvhnCoNHXWRf0eetrf+zQrP3NKmvWTWgukl57zjPDH60YG0tsIoRDO25BhefXNb1HL2S
+ uo1zWFzPhSYVPPal8rJVAoYeJoUiQPTjqzVjUq//0opTTKa4fjpqNC5UBhKu+U5AvgSY4Qtrm
+ 3tH4XDZxXHE9fmR7q6P32oyULab+jU2koOUAeNzBTusCYoKfXaYJmdNcPpqs3gmQ/PjsDAohL
+ rFm8/lQ0eUY3E32nv/sLHJds7ZTjj1+EuuWiEr4xgAWI4oRIpM4hY76ui3CtxgYVBx9kgu3ix
+ gTnNndDY5+hjNfxxgK/Eti5VFOm/fg8CNXu2+3M2tTmpvGbGWJbsDR7FvYlADE2rJtv1D5ts5
+ FJkTifJV5Lsg6RzXf8OI04yAX3afua1QC4JDtsgchT2bcqPAS2MT8sQOcG2h6RpkUP6go9VoK
+ E7u7hWbNsKmnRsAkPMcCIJtXS9NMJHWQI6vVysOr5K5RZNzeUsx5Y87K27IuXWyjGVVe8h7L5
+ NBe4a7/+92J9ZYSqKfzI6mDe8w7EX4Tsua5/E9D+xfBFrHhVwqyHS5h4cVDRZFh7ZkzLKFpft
+ GAcvjcZskBsz2GGkDJrcByl6BnY=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1696187216; bh=nn2Q1XYfBEM41UQBjo218yGridrmXvLCROYsQegEq5M=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=XaNDT4pwtD92x0KZfenUIS0bkutYNgcp2GEZ9WBKIJVCmQEb77tuLurQolkwOWFjV
- C3NJ3UtNSiLCMG7RYh6PcVA3vzmcwqDKP64Fa72rkwkiZpZx0V72BqlBjnSOaQPmsq
- BcufiqFswbGRGMipB6HuQbxUt51jc8qCpAoI9MuJ6hFQGvSl957asRna5iw50idTXB
- 8B07MaAJkVs39rZH+AxO6Y+yv+labsQZN0PiiGj0/TNHXvdxvHWYFQHeoSMrfZGOll
- ESCH7GzlyNg+WsFO3EniYr9rIdrbZp23YszgMW3hlh6IgvERgpd0ETQSzDsvFLBBQI
- TcpRpArbOQKaA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=XaNDT4pw
-Subject: Re: [Buildroot] [PATCH v2] package/wilc-driver: fix build failure
- with Linux 6.3+
+ d=gmx.at; s=s31663417; 
+ t=1696187271; x=1696792071; i=dalang@gmx.at;
+ bh=w33va8vfaonROVHPI7+RwMv7J0Z3uO6DHX++JogE7qI=;
+ h=X-UI-Sender-Class:From:To:Subject:Date;
+ b=McNffdKui9W2+D6Y9myHtmkl3PiEu4yPvlAdwEcyB1oR6URGKXPL2onIvfbcQcc1jKXI7yZF5Ds
+ BAy9tMPqUDqEzNTOhCnYNazYs7enFTdJrms6B/UwgXmkXxHqvFjWTlF07sA4LxNXDqN3m01X8yyeC
+ uo/3kOL3f1UrqSWCd0U4IpbIhmr3sfSHhzS2Lu+AltW+3FjTsDp1afCi5Hc+w+Oak12eO865gzXL6
+ tdVoUS2a9OWSUKj5jcLp39FyfMxP4yM6zdqQ/LGtCztBDicDvY3ndPj9hMzlOC/bVLXm1X8W0/xZ3
+ l4HnnE1Jq2BUtfeRc8zxD92w8dc9rO9V81aw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
+ header.a=rsa-sha256 header.s=s31663417 header.b=McNffdKu
+Subject: [Buildroot] [PATCH] package/netsnmp: security bump to version 5.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,126 +89,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kris Bahnsen <kris@embeddedTS.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/10/23 21:01, Giulio Benetti wrote:
-> Add local patches pending upstream to fix build failure on Linux 6.3+
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/3b954399aa3ffab9609da1fc381f38f28bd8eb9f
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+CVE-2022-44792 handle_ipDefaultTTL in agent/mibgroup/ip-mib/ip_scalars.c
+in Net-SNMP 5.8 through 5.9.3 has a NULL Pointer Exception bug that can
+be used by a remote attacker (who has write access) to cause the
+instance to crash via a crafted UDP packet, resulting in Denial of
+Service.
 
+CVE-2022-44793 handle_ipv6IpForwarding in
+agent/mibgroup/ip-mib/ip_scalars.c in Net-SNMP 5.4.3 through 5.9.3 has a
+NULL Pointer Exception bug that can be used by a remote attacker to
+cause the instance to crash via a crafted UDP packet, resulting in
+Denial of Service.
+
+The pgp key was changed [0] as the old one expired [1].
+
+[0]: https://sourceforge.net/p/net-snmp/htdocs/ci/90a6d98aae21fcdff06b5be139eb4d44ae96a9de/
+[1]: https://github.com/net-snmp/net-snmp/issues/595
+
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 ---
-V1->V2:
-* update Linux 6.3 gpio patch as suggested by Peter
+ package/netsnmp/netsnmp.hash | 6 +++---
+ package/netsnmp/netsnmp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> ---
->   .../wilc-driver/0006-Support-Linux-6.3.patch  | 43 +++++++++++++++++++
->   .../wilc-driver/0007-Support-Linux-6.4.patch  | 36 ++++++++++++++++
->   2 files changed, 79 insertions(+)
->   create mode 100644 package/wilc-driver/0006-Support-Linux-6.3.patch
->   create mode 100644 package/wilc-driver/0007-Support-Linux-6.4.patch
-> 
-> diff --git a/package/wilc-driver/0006-Support-Linux-6.3.patch b/package/wilc-driver/0006-Support-Linux-6.3.patch
-> new file mode 100644
-> index 0000000000..f5a92027da
-> --- /dev/null
-> +++ b/package/wilc-driver/0006-Support-Linux-6.3.patch
-> @@ -0,0 +1,43 @@
-> +From 14b5eccf4145e7a5afc8bc65a15f26ac691f98d8 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Wed, 27 Sep 2023 10:54:18 +0200
-> +Subject: [PATCH] Support Linux 6.3
-> +
-> +With Linux 6.3 commit:
-> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=40fc56ee608cdb20022c225ac6f1e4b7ba63f8f1
-> +function of_get_named_gpio_flags() has been dropped but it was only a
-> +wrapper to call of_get_named_gpio() if the flags passed was NULL and this
-> +is the case. So let's use of_get_named_gpio() in place of
-> +of_get_named_gpio_flags() since of_get_named_gpio() never changed
-> +after its adding in Linux version 3.1.
-> +
-> +Upstream: https://github.com/embeddedTS/wilc3000-external-module/pull/4
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + power.c | 6 ++----
-> + 1 file changed, 2 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/power.c b/power.c
-> +index 6c59e0b..6ab8d63 100644
-> +--- a/power.c
-> ++++ b/power.c
-> +@@ -25,13 +25,11 @@ int wilc_of_parse_power_pins(struct wilc *wilc)
-> + 	const struct wilc_power_gpios *gpios = &default_gpios[0];
-> + 	int ret;
-> +
-> +-	power->gpios.reset = of_get_named_gpio_flags(of, "reset-gpios", 0,
-> +-						     NULL);
-> ++	power->gpios.reset = of_get_named_gpio(of, "reset-gpios", 0);
-> + 	if (!gpio_is_valid(power->gpios.reset))
-> + 		power->gpios.reset = gpios->reset;
-> +
-> +-	power->gpios.chip_en = of_get_named_gpio_flags(of, "chip_en-gpios", 0,
-> +-						       NULL);
-> ++	power->gpios.chip_en = of_get_named_gpio(of, "chip_en-gpios", 0);
-> + 	if (!gpio_is_valid(power->gpios.chip_en))
-> + 		power->gpios.chip_en = gpios->chip_en;
-> +
-> +--
-> +2.34.1
-> +
-> diff --git a/package/wilc-driver/0007-Support-Linux-6.4.patch b/package/wilc-driver/0007-Support-Linux-6.4.patch
-> new file mode 100644
-> index 0000000000..8339cc3cb6
-> --- /dev/null
-> +++ b/package/wilc-driver/0007-Support-Linux-6.4.patch
-> @@ -0,0 +1,36 @@
-> +From 94fc4594659494b8c5cbdf1a719aea4d66d3398d Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Wed, 27 Sep 2023 11:20:50 +0200
-> +Subject: [PATCH] Support Linux 6.4
-> +
-> +With Linux 6.4 commit:
-> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1aaba11da9aa7d7d6b52a74d45b31cac118295a1
-> +class_create() doesn't require first argument THIS_MODULE anymore so let's
-> +drop first argument if Linux version >= 6.4
-> +
-> +Upstream: https://github.com/embeddedTS/wilc3000-external-module/pull/5
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + bt.c | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/bt.c b/bt.c
-> +index 48a5302..a752457 100644
-> +--- a/bt.c
-> ++++ b/bt.c
-> +@@ -135,7 +135,11 @@ static void wilc_bt_create_device(void)
-> + 	ret = alloc_chrdev_region(&chc_dev_no, 0, 1, "atmel");
-> + 	if (ret < 0)
-> + 		return;
-> ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 4, 0)
-> ++	chc_dev_class = class_create("atmel");
-> ++#else
-> + 	chc_dev_class = class_create(THIS_MODULE, "atmel");
-> ++#endif
-> + 	if (IS_ERR(chc_dev_class)) {
-> + 		unregister_chrdev_region(chc_dev_no, 1);
-> + 		return;
-> +--
-> +2.34.1
-> +
-
+diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
+index e1e9d10898..7898941271 100644
+--- a/package/netsnmp/netsnmp.hash
++++ b/package/netsnmp/netsnmp.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature at
+-# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.3/net-snmp-5.9.3.tar.gz.asc
+-# using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
+-sha256  2097f29b7e1bf3f1300b4bae52fa2308d0bb8d5d3998dbe02f9462a413a2ef0a  net-snmp-5.9.3.tar.gz
++# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.4/net-snmp-5.9.4.tar.gz.asc
++# using key 6E6718AEF1EB5C65C32D1B2A356BC0B552D53CAB
++sha256  8b4de01391e74e3c7014beb43961a2d6d6fa03acc34280b9585f4930745b0544  net-snmp-5.9.4.tar.gz
+ 
+ # Hash for license file
+ sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index c7df49f947..b0c35aa894 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETSNMP_VERSION = 5.9.3
++NETSNMP_VERSION = 5.9.4
+ NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
+ NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
+ NETSNMP_LICENSE = Various BSD-like
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
