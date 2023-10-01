@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D1BAE748ED
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 10:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22B27E748E9
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 10:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84E10408E4;
-	Sun,  1 Oct 2023 10:38:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84E10408E4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DB3341E49;
+	Sun,  1 Oct 2023 10:42:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DB3341E49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MUd5UOTbW2vg; Sun,  1 Oct 2023 10:38:54 +0000 (UTC)
+	with ESMTP id qODiSv3Pj0Jb; Sun,  1 Oct 2023 10:42:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 491B5417DE;
-	Sun,  1 Oct 2023 10:38:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 491B5417DE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 820041BF2CE
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 10:38:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2748F41E4E;
+	Sun,  1 Oct 2023 10:42:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2748F41E4E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1806D1BF2CE
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 10:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A1A6417DE
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 10:38:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A1A6417DE
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5C508216C
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 10:42:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5C508216C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l-WhHCKxwEgY for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 10:38:49 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 94761408E4
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 10:38:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94761408E4
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb04:4ad:b00:7d3f:173d:28ec:8590])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6E836B00571;
- Sun,  1 Oct 2023 12:38:44 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 01 Oct 2023 12:38:44 +0200
-Date: Sun, 1 Oct 2023 12:38:44 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Knight <james.d.knight@live.com>
-Message-ID: <20231001103844.GK2579@scaer>
-References: <SN4P221MB0682E582104B524681EBE0C9A0729@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <SN4P221MB0682E582104B524681EBE0C9A0729@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696156726;
- bh=KAJ9hDSL0HmnEncsv2uugbtck0+DGdqu+KRgYEpqc5Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cC2W9xCbqNIjyMIMdJfjDlURNJtA1AbEmzzbrzCL3/pEMuXGdYQ/VpXoWNvBqmdai
- fq8ryetWZQw4LcEhBmf/6MAk+cI8FqQo8jDxEVxzjKpbO5XDutMfPobiUAzfwg0Hkm
- eluAL3QWAwrPepH4ww8um+9yrsmaHJRvIeOwYkm6PM6L+i6xAKRHNDWvndzhbKcFjO
- a+kOE4zOKUeI2uA1Ka4m7UBq9mEz8QCfw3xbrherTfwLxWRsNRrM6uct/7ViJ/gn8k
- HYWI2vFLXYv2eyBEG5vQ/KjGxhC7XpD3OgTve/sSWAZrNNMRlvo5Th/wd8oVOmHPpA
- ws/fMjM7vfARw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=cC2W9xCb
-Subject: Re: [Buildroot] [PATCH 1/2] package/skeleton-init-systemd: copy
- over etc-factory content
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z8uFy3FOktFU for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 10:42:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C727282166
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 10:42:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C727282166
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B434683DA6; Sun,  1 Oct 2023 10:42:37 +0000 (UTC)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Sun, 1 Oct 2023 12:03:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 14c4bd7bf8150283e158c50df87c77d63bb1b73c
+X-Git-Newrev: 96aab3f078e8c6c571f0c1ca6dc252ee83897dfd
+X-Patchwork-Hint: ignore
+Message-Id: <20231001104237.B434683DA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glibc: enable for m68k with MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,84 +56,256 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=96aab3f078e8c6c571f0c1ca6dc252ee83897dfd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-05-05 00:30 -0400, James Knight spake thusly:
-> The systemd package will prepare the folder `/usr/share/factory/etc/`,
-> which holds a series of default configuration files for a runtime
-> state [1]. For example, the etc-factory repository holds the default
-> template for `/etc/pam.d/system-auth` which is required in a default
-> environment configured to use systemd with SELinux. Without this file
-> prepared, login attempts will fail with the message:
-> 
->     ... buildroot login[242]: PAM _pam_load_conf_file: unable to open config for system-auth
->     ...
-> 
-> To avoid this, when preparing the initial skeleton structure for systemd
-> environments, copy over fallback configurations defined in etc-factory
-> into the target's `etc` folder. If a file is already prepared at this
-> state, these template files will be ignored.
+For qemu-system-m68k with emulates Q800 machine we need to add patches
+for glibc to let it compile and run on m68k cpu m68040.
+See here for discussions about the issue:
+https://sourceware.org/bugzilla/show_bug.cgi?id=30740
 
-Why is that not listed in the systemd tmpfiles, so that it is installed
-when running systemd-tmpfiles, either at runtime by systemd on a r/w
-filesystem, or at buildtime with BR2_INIT_SYSTEMD_POPULATE_TMPFILES ?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ ...-build-with-mcpu-68040-or-higher-BZ-30740.patch | 57 +++++++++++++
+ ...mpn_lshift-and-__mpn_rshift-for-non-68020.patch | 47 +++++++++++
+ ...8K_SCALE_AVAILABLE-on-__mpn_lshift-and-__.patch | 93 ++++++++++++++++++++++
+ package/glibc/Config.in                            |  1 +
+ 4 files changed, 198 insertions(+)
 
-Also, none of our runtime tests for systemd exhibits this login issue:
-
-    support/testing/tests/init/test_systemd.py
-    support/testing/tests/init/test_systemd_selinux.py
-
-Could you try to add a bit more explanations and context, please?
-
-Regards,
-Yann E. MORIN.
-
-> [1]: https://www.freedesktop.org/software/systemd/man/file-hierarchy.html
-> 
-> Signed-off-by: James Knight <james.d.knight@live.com>
-> ---
->  package/skeleton-init-systemd/skeleton-init-systemd.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> index fb15552f99eafcc90bc5fa9dfcee3ad465492b81..4076821c0c0429cf90681f4b16be114c44bde282 100644
-> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> @@ -68,6 +68,13 @@ SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_CREATE_TMPFI
->  endif  # BR2_INIT_SYSTEMD_POPULATE_TMPFILES
->  
->  define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
-> +	if [ -d $(TARGET_DIR)/usr/share/factory/etc ]; then \
-> +		rsync -av --ignore-existing --remove-source-files \
-> +			$(TARGET_DIR)/usr/share/factory/etc/ $(TARGET_DIR)/etc/; \
-> +		rm -rf $(TARGET_DIR)/usr/share/factory/etc/; \
-> +		rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/factory; \
-> +	fi
-> +
->  	mkdir -p $(TARGET_DIR)/home
->  	mkdir -p $(TARGET_DIR)/srv
->  	mkdir -p $(TARGET_DIR)/var
-> -- 
-> 2.40.1.windows.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/glibc/0001-m68k-Fix-build-with-mcpu-68040-or-higher-BZ-30740.patch b/package/glibc/0001-m68k-Fix-build-with-mcpu-68040-or-higher-BZ-30740.patch
+new file mode 100644
+index 0000000000..61f48e5893
+--- /dev/null
++++ b/package/glibc/0001-m68k-Fix-build-with-mcpu-68040-or-higher-BZ-30740.patch
+@@ -0,0 +1,57 @@
++From b85880633f69b737050c22eede858f8c13bb2248 Mon Sep 17 00:00:00 2001
++From: Adhemerval Zanella <adhemerval.zanella@linaro.org>
++Date: Fri, 18 Aug 2023 14:59:51 -0300
++Subject: [PATCH] m68k: Fix build with -mcpu=68040 or higher (BZ 30740)
++
++GCC currently does not define __mc68020__ for -mcpu=68040 or higher,
++which memcpy/memmove assumptions.  Since this memory copy optimization
++seems only intended for m68020, disable for other m680X0 variants.
++
++Checked on a build for m68k-linux-gnu target mc68020 and mc68040.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=b85880633f69b737050c22eede858f8c13bb2248
++---
++ sysdeps/m68k/m680x0/m68020/wordcopy.S |  1 -
++ sysdeps/m68k/wordcopy.c               | 21 +++++++++++++++++++++
++ 2 files changed, 21 insertions(+), 1 deletion(-)
++ delete mode 100644 sysdeps/m68k/m680x0/m68020/wordcopy.S
++ create mode 100644 sysdeps/m68k/wordcopy.c
++
++diff --git a/sysdeps/m68k/m680x0/m68020/wordcopy.S b/sysdeps/m68k/m680x0/m68020/wordcopy.S
++deleted file mode 100644
++index 4fb1a4518f..0000000000
++--- a/sysdeps/m68k/m680x0/m68020/wordcopy.S
+++++ /dev/null
++@@ -1 +0,0 @@
++-/* Empty, not needed.  */
++diff --git a/sysdeps/m68k/wordcopy.c b/sysdeps/m68k/wordcopy.c
++new file mode 100644
++index 0000000000..f12d5b7803
++--- /dev/null
+++++ b/sysdeps/m68k/wordcopy.c
++@@ -0,0 +1,21 @@
+++/* Definitions for memory copy functions.  Motorola 680X0 version
+++   Copyright (C) 2023 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library.  If not, see
+++   <https://www.gnu.org/licenses/>.  */
+++
+++#ifndef __mc68020__
+++# include <string/wordcopy.c>
+++#endif
++-- 
++2.39.2
++
+diff --git a/package/glibc/0002-m68k-fix-__mpn_lshift-and-__mpn_rshift-for-non-68020.patch b/package/glibc/0002-m68k-fix-__mpn_lshift-and-__mpn_rshift-for-non-68020.patch
+new file mode 100644
+index 0000000000..256da58d66
+--- /dev/null
++++ b/package/glibc/0002-m68k-fix-__mpn_lshift-and-__mpn_rshift-for-non-68020.patch
+@@ -0,0 +1,47 @@
++From 464fd8249e8b791248cab7b0e0cd91757435fa9e Mon Sep 17 00:00:00 2001
++From: Andreas Schwab <schwab@linux-m68k.org>
++Date: Thu, 17 Aug 2023 17:15:34 +0200
++Subject: [PATCH] m68k: fix __mpn_lshift and __mpn_rshift for non-68020
++
++From revision 03f3d275d0d6 in the gmp repository.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=464fd8249e8b791248cab7b0e0cd91757435fa9e
++---
++ sysdeps/m68k/m680x0/lshift.S | 4 ++--
++ sysdeps/m68k/m680x0/rshift.S | 4 ++--
++ 2 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/sysdeps/m68k/m680x0/lshift.S b/sysdeps/m68k/m680x0/lshift.S
++index 2aee10348e..4240738959 100644
++--- a/sysdeps/m68k/m680x0/lshift.S
+++++ b/sysdeps/m68k/m680x0/lshift.S
++@@ -77,8 +77,8 @@ L(Lnormal:)
++ #else /* not mc68000 */
++ 	movel	R(s_size),R(d0)
++ 	asll	#2,R(d0)
++-	addl	R(s_size),R(s_ptr)
++-	addl	R(s_size),R(res_ptr)
+++	addl	R(d0),R(s_ptr)
+++	addl	R(d0),R(res_ptr)
++ #endif
++ 	movel	MEM_PREDEC(s_ptr),R(d2)
++ 	movel	R(d2),R(d0)
++diff --git a/sysdeps/m68k/m680x0/rshift.S b/sysdeps/m68k/m680x0/rshift.S
++index d16bca9307..d56a2b4a44 100644
++--- a/sysdeps/m68k/m680x0/rshift.S
+++++ b/sysdeps/m68k/m680x0/rshift.S
++@@ -127,8 +127,8 @@ L(Lspecial:)
++ #else /* not mc68000 */
++ 	movel	R(s_size),R(d0)
++ 	asll	#2,R(d0)
++-	addl	R(s_size),R(s_ptr)
++-	addl	R(s_size),R(res_ptr)
+++	addl	R(d0),R(s_ptr)
+++	addl	R(d0),R(res_ptr)
++ #endif
++ 
++ 	clrl	R(d0)			/* initialize carry */
++-- 
++2.39.2
++
+diff --git a/package/glibc/0003-m68k-Use-M68K_SCALE_AVAILABLE-on-__mpn_lshift-and-__.patch b/package/glibc/0003-m68k-Use-M68K_SCALE_AVAILABLE-on-__mpn_lshift-and-__.patch
+new file mode 100644
+index 0000000000..2ea190eb5a
+--- /dev/null
++++ b/package/glibc/0003-m68k-Use-M68K_SCALE_AVAILABLE-on-__mpn_lshift-and-__.patch
+@@ -0,0 +1,93 @@
++From 87ced255bdf2681f5bf6c89d7121e59f6f342161 Mon Sep 17 00:00:00 2001
++From: Adhemerval Zanella <adhemerval.zanella@linaro.org>
++Date: Fri, 18 Aug 2023 14:49:31 -0300
++Subject: [PATCH] m68k: Use M68K_SCALE_AVAILABLE on __mpn_lshift and
++ __mpn_rshift
++
++This patch adds a new macro, M68K_SCALE_AVAILABLE, similar to gmp
++scale_available_p (mpn/m68k/m68k-defs.m4) that expand to 1 if a
++scale factor can be used in addressing modes.  This is used
++instead of __mc68020__ for some optimization decisions.
++
++Checked on a build for m68k-linux-gnu target mc68020 and mc68040.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=87ced255bdf2681f5bf6c89d7121e59f6f342161
++---
++ sysdeps/m68k/m680x0/lshift.S | 6 +++---
++ sysdeps/m68k/m680x0/rshift.S | 8 ++++----
++ sysdeps/m68k/m680x0/sysdep.h | 7 +++++++
++ 3 files changed, 14 insertions(+), 7 deletions(-)
++
++diff --git a/sysdeps/m68k/m680x0/lshift.S b/sysdeps/m68k/m680x0/lshift.S
++index 4240738959..74de90380b 100644
++--- a/sysdeps/m68k/m680x0/lshift.S
+++++ b/sysdeps/m68k/m680x0/lshift.S
++@@ -57,9 +57,9 @@ ENTRY(__mpn_lshift)
++ 	bne	L(Lnormal)
++ 	cmpl	R(s_ptr),R(res_ptr)
++ 	bls	L(Lspecial)		/* jump if s_ptr >= res_ptr */
++-#if (defined (__mc68020__) || defined (__NeXT__) || defined(mc68020))
+++#if M68K_SCALE_AVAILABLE
++ 	lea	MEM_INDX1(s_ptr,s_size,l,4),R(a2)
++-#else /* not mc68020 */
+++#else
++ 	movel	R(s_size),R(d0)
++ 	asll	#2,R(d0)
++ 	lea	MEM_INDX(s_ptr,d0,l),R(a2)
++@@ -71,7 +71,7 @@ L(Lnormal:)
++ 	moveql	#32,R(d5)
++ 	subl	R(cnt),R(d5)
++ 
++-#if (defined (__mc68020__) || defined (__NeXT__) || defined(mc68020))
+++#if M68K_SCALE_AVAILABLE
++ 	lea	MEM_INDX1(s_ptr,s_size,l,4),R(s_ptr)
++ 	lea	MEM_INDX1(res_ptr,s_size,l,4),R(res_ptr)
++ #else /* not mc68000 */
++diff --git a/sysdeps/m68k/m680x0/rshift.S b/sysdeps/m68k/m680x0/rshift.S
++index d56a2b4a44..d398d0287e 100644
++--- a/sysdeps/m68k/m680x0/rshift.S
+++++ b/sysdeps/m68k/m680x0/rshift.S
++@@ -56,9 +56,9 @@ ENTRY(__mpn_rshift)
++ 	bne	L(Lnormal)
++ 	cmpl	R(res_ptr),R(s_ptr)
++ 	bls	L(Lspecial)		/* jump if res_ptr >= s_ptr */
++-#if (defined (__mc68020__) || defined (__NeXT__) || defined(mc68020))
+++#if M68K_SCALE_AVAILABLE
++ 	lea	MEM_INDX1(res_ptr,s_size,l,4),R(a2)
++-#else /* not mc68020 */
+++#else
++ 	movel	R(s_size),R(d0)
++ 	asll	#2,R(d0)
++ 	lea	MEM_INDX(res_ptr,d0,l),R(a2)
++@@ -121,10 +121,10 @@ L(Lend:)
++ 
++ 	cfi_restore_state
++ L(Lspecial:)
++-#if (defined (__mc68020__) || defined (__NeXT__) || defined(mc68020))
+++#if M68K_SCALE_AVAILABLE
++ 	lea	MEM_INDX1(s_ptr,s_size,l,4),R(s_ptr)
++ 	lea	MEM_INDX1(res_ptr,s_size,l,4),R(res_ptr)
++-#else /* not mc68000 */
+++#else
++ 	movel	R(s_size),R(d0)
++ 	asll	#2,R(d0)
++ 	addl	R(d0),R(s_ptr)
++diff --git a/sysdeps/m68k/m680x0/sysdep.h b/sysdeps/m68k/m680x0/sysdep.h
++index b31e101273..bee5b3391c 100644
++--- a/sysdeps/m68k/m680x0/sysdep.h
+++++ b/sysdeps/m68k/m680x0/sysdep.h
++@@ -37,3 +37,10 @@
++   OP " " SRC "(" PC "), " DST
++ 
++ #endif	/* __ASSEMBLER__ */
+++
+++# if defined __mc68020__ || defined __mc68030__ || defined __mc68040__	      \
+++     || defined __mc68060__
+++#  define M68K_SCALE_AVAILABLE 1
+++# else
+++#  define M68K_SCALE_AVAILABLE 0
+++# endif
++-- 
++2.39.2
++
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index d894507b89..81c64083f4 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	default y if BR2_aarch64
+ 	default y if BR2_aarch64_be
+ 	default y if BR2_i386
++	default y if BR2_m68k_m68k
+ 	default y if BR2_mips
+ 	default y if BR2_mipsel
+ 	default y if BR2_mips64
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
