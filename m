@@ -4,83 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC2A1E748F0
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 03:12:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0EEFE748F3
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 03:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40F3382862;
-	Sun,  1 Oct 2023 03:12:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40F3382862
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B1EB81F2C;
+	Sun,  1 Oct 2023 03:30:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B1EB81F2C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Le7XxSeHMz0a; Sun,  1 Oct 2023 03:12:18 +0000 (UTC)
+	with ESMTP id N49QVuKGdueK; Sun,  1 Oct 2023 03:30:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DC2F82215;
-	Sun,  1 Oct 2023 03:12:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DC2F82215
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87D6281E97;
+	Sun,  1 Oct 2023 03:30:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87D6281E97
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 00A451BF8A8
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 03:12:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 79D1F1BF5F5
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 03:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6B7E41E7E
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 03:12:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6B7E41E7E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 51C0B4086B
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 03:29:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51C0B4086B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i3WDDXmcI3HU for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 03:12:12 +0000 (UTC)
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com
- [IPv6:2607:f8b0:4864:20::c2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CDE0641E74
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 03:12:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDE0641E74
-Received: by mail-oo1-xc2c.google.com with SMTP id
- 006d021491bc7-57de6e502fcso3387992eaf.3
- for <buildroot@buildroot.org>; Sat, 30 Sep 2023 20:12:11 -0700 (PDT)
+ with ESMTP id p3d-6_RGO6QS for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 03:29:58 +0000 (UTC)
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com
+ [IPv6:2607:f8b0:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7035D40650
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 03:29:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7035D40650
+Received: by mail-ot1-x32b.google.com with SMTP id
+ 46e09a7af769-6c4bf619b57so8091983a34.1
+ for <buildroot@buildroot.org>; Sat, 30 Sep 2023 20:29:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696129930; x=1696734730;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=aCqqcLyPdPmgyCFflE4XEL32zAJ/cMWSIfvd9FAqABQ=;
- b=SJrSui54UJdqG0wqxUqegYvSEWDayZcnJx9IIcOR4J8p5BQWB2WRbIJMJ5GIkPVCMR
- bv6S/24ia0kkTf3rq8SyQi6ICnKUFLFadtQ/nLUqV03Q6ph8Zxh2uSJ+rq23F1ETFwfo
- 4GDNo26CvTNIq8Dm7G2/y6sO9Mt+ggkpMJilBLh8NzGxjSRBKdaQAbOf+4QOTctd94QI
- I+WiQBrP8DcEqO833hJUnVrbi5ubvHxk6b9VUx6dqGKpMYFXs1My1AvtONCRtXllDyHZ
- Jtk87Vc/jIzA19LfdOr0MomPh1OlwUhfhnxhuc/hdCA4jrFhtG7q9MiQuEOWPo5ClSuf
- 36Zg==
-X-Gm-Message-State: AOJu0YyBETrdm6s3fh63BjcsAg3R2O+390EaTSqy3IkJV65s0ScSpOhw
- JiYBmW9l+XpzjWsfuPpHqzAcjStAGmc19A4TrDs=
-X-Google-Smtp-Source: AGHT+IEHulGl3OoJdNCNJNi/T7jT0jMbJKxVwAZDpND7Fqi1z4z44Y0oXmE2qijBSQNmMDhdC3CS1+P2C6P65uKltqc=
-X-Received: by 2002:a05:6358:93a7:b0:135:57d0:d171 with SMTP id
- h39-20020a05635893a700b0013557d0d171mr8995605rwb.15.1696129930574; Sat, 30
- Sep 2023 20:12:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230930190610.752987-1-takumiiinn@gmail.com>
- <20230930214108.387cefce@windsurf>
-In-Reply-To: <20230930214108.387cefce@windsurf>
+ d=1e100.net; s=20230601; t=1696130997; x=1696735797;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=bswLeC08Fijnm1eDSvnsgi/dtc7NI7sNBVgqWs3Gt/Y=;
+ b=rLlGmLS6p3V9Ma83fDqTox+XD43u9lPFVUl/wvIgpDSHHWdk6csLonu7W3w5zDp5tH
+ jAePA/wzLe+MgrOhzg3OvOg9iv8/rmGfhtyLgAi1BOd/eHqFybI6fouoNYSnbFpSqL9k
+ 6cfsP1UD8w5AhtQGF1PmyBkViHo1UpClsPagna/XtZNfVyx6eIVs5ZT/F5++7/676kGU
+ kYXFbR6nveT0R1zSEwhzRfRAGMKv7qgjukSvsDsVx/vhTccOqnYFLqNtnuWux7TG+GpQ
+ RoTtThYhKnxwLeGRZaCv0JKVQwBiKBW/NC0+eX4iETrn/dXXEKUSgzLPzA9/+CcmSht+
+ JG8w==
+X-Gm-Message-State: AOJu0Yzsm2+nnu/xGVGVMKkqt3gnmUk6kwNIEQhqOEvS8I1AJuRJcghx
+ SoLnBvm/PSA5bnY3Nm0iT2TjEaaeiiQJug==
+X-Google-Smtp-Source: AGHT+IHyhLmBxtyAyX3izbgzAEWjrZAr+RYCd2MMXw/EMWIxzWEQ5vUxSkSaODAK8W+DM0NX9R31bw==
+X-Received: by 2002:a9d:4b11:0:b0:6bd:a82:8edb with SMTP id
+ q17-20020a9d4b11000000b006bd0a828edbmr9012846otf.10.1696130997333; 
+ Sat, 30 Sep 2023 20:29:57 -0700 (PDT)
+Received: from localhost ([2400:4051:e000:9e00:976f:4611:4b54:1f71])
+ by smtp.gmail.com with ESMTPSA id
+ v1-20020a62a501000000b0068be4ce33easm8710608pfm.96.2023.09.30.20.29.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 Sep 2023 20:29:56 -0700 (PDT)
 From: Takumi Takahashi <takumiiinn@gmail.com>
-Date: Sun, 1 Oct 2023 12:11:34 +0900
-Message-ID: <CAP+4GiLB7gD4ZLRkYnXAkgVmCqCEAQQG2=Dzy1ZnjqOD5++ZDw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Sun,  1 Oct 2023 12:29:44 +0900
+Message-ID: <20231001032945.12820-1-takumiiinn@gmail.com>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696129930; x=1696734730; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=aCqqcLyPdPmgyCFflE4XEL32zAJ/cMWSIfvd9FAqABQ=;
- b=i5CdSP3LvDBCZzm1wjcPpf5W2Uh8nrE+VxmG0QdYv+VyeYMJMJ7xchz5MngylhUgU8
- gMX1qHOARt+kd+vlVh+IOabZZd2IgyYu6EPvWBoTdAtV4HSPP5SWrMTY4v4j0iIYXb/e
- EaRf+GTyfp8iwLPCBSTFgz1sWN63xUdxvzA/tgu6C/PMk9RO7+zOx56oy5QX40FUWIdP
- SQk7uRwh7lq5zbrsyzq2khfN/CAsL5+vUA/MtxND2DxcYOXx6tOmOy+rb/P2hW3KytM8
- pWE5akzYIWTlaMhXkvuDP6n35ZebC9AxqAvNeozQ62390tzAjEFBOOUQAYOUuVs1346G
- zZ9g==
+ d=gmail.com; s=20230601; t=1696130997; x=1696735797; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=bswLeC08Fijnm1eDSvnsgi/dtc7NI7sNBVgqWs3Gt/Y=;
+ b=IfBLVx6CtxcWGDSpsNWKrop/GVzAHNrxANU20Yi8vuGBXiIqAy57UhGiAN+wSuez/d
+ kb2U4Aqj2tMG047MhsgQk9p46FDfrnDPswPvgvyEQE1B0eKKzfuu4x27Os0h+86AFDQd
+ u5W2lYzEMHlKVRb5dsnam9VdqxERflghIFjf1qKIH9tM3+DwQ/HJxSlntJwpM+XxBao6
+ l6ZmVEYMRa1TI5zsQuclE5fz7GRarmYaBUchXKGXw/HSxU38mPGYtCtehB2cRDTRTm57
+ WMxAVJN31VznQ5T25vsnqRiTR9oEv9YYCDCjmHyVXIBY4a21YLLnXyG6J33WngLu1IN9
+ Tsmw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=i5CdSP3L
-Subject: Re: [Buildroot] [PATCH] package/python-pygments: support host
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=IfBLVx6C
+Subject: [Buildroot] [PATCH] package/python-pygments: support host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,44 +93,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Mauro Condarelli <mc5686@mclink.it>, Takumi Takahashi <takumiiinn@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLgoKVGhhbmsgeW91IGZvciB5b3VyIHJldmlldy4KCj4gSG93ZXZlciwgY291
-bGQgeW91IGNsYXJpZnkgb24gd2h5IHlvdSBuZWVkIGEgaG9zdCB2YXJpYW50IG9mIHRoaXMKPiBw
-YWNrYWdlLCBhbmQgaG93IGl0IGdldHMgdXNlZD8KPgo+IEFsc28sIHdlIHJlcXVpcmUgYWxsIHBh
-dGNoZXMgdG8gaGF2ZSBhIFNpZ25lZC1vZmYtYnkgbGluZSBmcm9tIHRoZWlyCj4gYXV0aG9yLiBX
-aXRob3V0IHRoaXMsIHdlIGNhbm5vdCBhcHBseSBwYXRjaGVzIHRoYXQgYXJlIGNvbnRyaWJ1dGVk
-Lgo+IENvdWxkIHlvdSBzZW5kIGEgbmV3IHZlcnNpb24gdGhhdCAoMSkgaGFzIGFuIGV4cGxhbmF0
-aW9uIG9mIHdoeSB5b3UKPiBuZWVkIGEgaG9zdCBwYWNrYWdlIGFuZCB3aGF0IHVzZXMgaXQgYW5k
-ICgyKSBoYXMgeW91ciBTaWduZWQtb2ZmLWJ5Cj4gbGluZT8KCigxKQoKVGhlIHJlYXNvbiB0aGlz
-IHBhdGNoIGlzIG5lZWRlZCBpcyBiZWNhdXNlIGd0ay1kb2MgcmVxdWlyZXMgcHlnbWVudHMuClRo
-ZSBmaW5hbCBnb2FsIGlzIHRvIHN1Ym1pdCBhIHBhdGNoIGZvciBsaWdodGRtLCBidXQgc2luY2Ug
-Z3RrLWRvYyBpcwpyZXF1aXJlZCB0byBidWlsZCBsaWdodGRtLCBweWdtZW50cyB3aWxsIGFsc28g
-YmUgcmVxdWlyZWQuCgpTaG91bGQgSSBpbmNsdWRlIHRoZSBhYm92ZSByZWFzb24gaW4gdGhlIGNv
-bW1pdCBsb2c/Ckkgd291bGQgYXBwcmVjaWF0ZSBhbnkgYWRkaXRpb25hbCBhZHZpY2UuCgooMikK
-ClNvcnJ5LCBJIGZvcmdvdCB0byBpbmNsdWRlIGBTaWduZWQtb2ZmLWJ5YC4KTmV4dCB2ZXJzaW9u
-IHdpbGwgaW5jbHVkZSBgU2lnbmVkLW9mZi1ieWAuCgpUaGFuayB5b3UuCgpUYWt1bWkKCjIwMjPl
-ubQxMOaciDHml6Uo5pelKSA0OjQxIFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlA
-Ym9vdGxpbi5jb20+Ogo+Cj4gSGVsbG8gVGFrdW1pLAo+Cj4gT24gU3VuLCAgMSBPY3QgMjAyMyAw
-NDowNjoxMCArMDkwMAo+IFRha3VtaSBUYWthaGFzaGkgPHRha3VtaWlpbm5AZ21haWwuY29tPiB3
-cm90ZToKPgo+ID4gLS0tCj4gPiAgcGFja2FnZS9weXRob24tcHlnbWVudHMvcHl0aG9uLXB5Z21l
-bnRzLm1rIHwgMSArCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4KPiBUaGFu
-a3MgZm9yIHlvdXIgcGF0Y2guCj4KPiBIb3dldmVyLCBjb3VsZCB5b3UgY2xhcmlmeSBvbiB3aHkg
-eW91IG5lZWQgYSBob3N0IHZhcmlhbnQgb2YgdGhpcwo+IHBhY2thZ2UsIGFuZCBob3cgaXQgZ2V0
-cyB1c2VkPwo+Cj4gQWxzbywgd2UgcmVxdWlyZSBhbGwgcGF0Y2hlcyB0byBoYXZlIGEgU2lnbmVk
-LW9mZi1ieSBsaW5lIGZyb20gdGhlaXIKPiBhdXRob3IuIFdpdGhvdXQgdGhpcywgd2UgY2Fubm90
-IGFwcGx5IHBhdGNoZXMgdGhhdCBhcmUgY29udHJpYnV0ZWQuCj4gQ291bGQgeW91IHNlbmQgYSBu
-ZXcgdmVyc2lvbiB0aGF0ICgxKSBoYXMgYW4gZXhwbGFuYXRpb24gb2Ygd2h5IHlvdQo+IG5lZWQg
-YSBob3N0IHBhY2thZ2UgYW5kIHdoYXQgdXNlcyBpdCBhbmQgKDIpIGhhcyB5b3VyIFNpZ25lZC1v
-ZmYtYnkKPiBsaW5lPwo+Cj4gQmVzdCByZWdhcmRzLAo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMg
-UGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5k
-IEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKPiBodHRwczovL2Jvb3RsaW4uY29tCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+The reason this patch is needed is because gtk-doc requires pygments.
+The final goal is to submit a patch for lightdm, but since gtk-doc is
+required to build lightdm, pygments will also be required.
+
+Signed-off-by: Takumi Takahashi <takumiiinn@gmail.com>
+---
+ package/python-pygments/python-pygments.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
+index f151f0061b..e6d5ba25f5 100644
+--- a/package/python-pygments/python-pygments.mk
++++ b/package/python-pygments/python-pygments.mk
+@@ -14,3 +14,4 @@ PYTHON_PYGMENTS_CPE_ID_PRODUCT = pygments
+ PYTHON_PYGMENTS_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
+-- 
+2.42.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
