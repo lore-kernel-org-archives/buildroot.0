@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9781E748ED
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 12:35:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F7C0E748ED
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 12:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 496A640A67;
-	Sun,  1 Oct 2023 12:35:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 496A640A67
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42E4E400EF;
+	Sun,  1 Oct 2023 12:41:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42E4E400EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jfeyJyGFyys9; Sun,  1 Oct 2023 12:35:56 +0000 (UTC)
+	with ESMTP id Mk6drYH7KbmR; Sun,  1 Oct 2023 12:41:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75899405BC;
-	Sun,  1 Oct 2023 12:35:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75899405BC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DE58A1BF5A0
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 12:35:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 79651402A7;
+	Sun,  1 Oct 2023 12:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79651402A7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C7C901BF479
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 12:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C559D82052
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 12:35:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C559D82052
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9FED94095B
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 12:40:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FED94095B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QgM9FwEEyLYp for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 12:35:53 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD66182035
- for <buildroot@busybox.net>; Sun,  1 Oct 2023 12:35:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD66182035
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D7BE240003;
- Sun,  1 Oct 2023 12:35:49 +0000 (UTC)
-Received: from peko by dell.home with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qmvfo-00GMfY-QZ; Sun, 01 Oct 2023 14:35:48 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0WGMNpv2GepN for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 12:40:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 576F640905
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 12:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 576F640905
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4404E81EA4; Sun,  1 Oct 2023 12:40:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <fperrad@gmail.com>
-References: <20231001103215.3333968-1-francois.perrad@gadz.org>
-Date: Sun, 01 Oct 2023 14:35:48 +0200
-In-Reply-To: <20231001103215.3333968-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Sun, 1 Oct 2023 12:32:15 +0200")
-Message-ID: <87msx25xln.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/lua-mqtt: bump to version 0.3.1
+To: buildroot@buildroot.org
+Date: Sun, 1 Oct 2023 14:37:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: de38484ec31437e3f2f0d7c0fa46f2f30d0a8fbb
+X-Git-Newrev: 4111a8db7fdfa8c2f1012cad38849d3fec41b5b3
+X-Patchwork-Hint: ignore
+Message-Id: <20231001124056.4404E81EA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-mqtt: bump to version 0.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,20 +56,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4111a8db7fdfa8c2f1012cad38849d3fec41b5b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lua-mqtt/lua-mqtt.hash | 4 ++--
+ package/lua-mqtt/lua-mqtt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lua-mqtt/lua-mqtt.hash b/package/lua-mqtt/lua-mqtt.hash
+index 62f8f350fa..fecd4dbbdd 100644
+--- a/package/lua-mqtt/lua-mqtt.hash
++++ b/package/lua-mqtt/lua-mqtt.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  1b5ec0aebb2d41700762e3d6f542517c55b8cf44e323c53d55a47f19e22b664a  lua-mqtt-0.3.0-1.src.rock
+-sha256  c8d12c868b979f5b9592eec503fc3de54e9feb92163f3cfc50a141ee2bcccc25  lua-mqtt-0.3.0/COPYRIGHT
++sha256  0444119ab5a1230e38e35f3948db19e8dc6310991b419ca75e6660588f2d95f7  lua-mqtt-0.3.1-1.src.rock
++sha256  c8d12c868b979f5b9592eec503fc3de54e9feb92163f3cfc50a141ee2bcccc25  lua-mqtt-0.3.1/COPYRIGHT
+diff --git a/package/lua-mqtt/lua-mqtt.mk b/package/lua-mqtt/lua-mqtt.mk
+index ff889237e4..a000ffdb16 100644
+--- a/package/lua-mqtt/lua-mqtt.mk
++++ b/package/lua-mqtt/lua-mqtt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_MQTT_VERSION = 0.3.0-1
++LUA_MQTT_VERSION = 0.3.1-1
+ LUA_MQTT_LICENSE = MIT
+ LUA_MQTT_LICENSE_FILES = $(LUA_MQTT_SUBDIR)/COPYRIGHT
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
