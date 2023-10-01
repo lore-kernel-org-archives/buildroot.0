@@ -4,86 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79481E748E9
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 16:52:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A97EE748E9
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 16:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D36381EF6;
-	Sun,  1 Oct 2023 16:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D36381EF6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2836E8169B;
+	Sun,  1 Oct 2023 16:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2836E8169B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M-ewug0WNT_J; Sun,  1 Oct 2023 16:52:31 +0000 (UTC)
+	with ESMTP id CxPnmlnTJjkZ; Sun,  1 Oct 2023 16:52:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8496A81E1E;
-	Sun,  1 Oct 2023 16:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8496A81E1E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E73F21BF4D7
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:52:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 739CA81FCB;
+	Sun,  1 Oct 2023 16:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 739CA81FCB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7390E1BF4D7
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:52:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0AF381EF4
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0AF381EF4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D8A960D7B
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 16:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D8A960D7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0yoOVBuzUGsG for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h_PrzENsIv2j for <buildroot@lists.busybox.net>;
  Sun,  1 Oct 2023 16:52:28 +0000 (UTC)
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B79B68169B
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 16:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B79B68169B
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-504a7f9204eso6003474e87.3
- for <buildroot@buildroot.org>; Sun, 01 Oct 2023 09:52:27 -0700 (PDT)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5968560BD6
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 16:52:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5968560BD6
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-406618d080eso17913455e9.2
+ for <buildroot@buildroot.org>; Sun, 01 Oct 2023 09:52:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696179145; x=1696783945;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=PHOFTt5Vb6KhTSkXOScnWSynTaRTD1uXGv+m/2ttoRk=;
- b=gAUZj34q2zJq/D1u6jp0vDnvpkIxxEkp8JhwUM6sYVnnbU3pS2JqP2AdLxDRG+F4fa
- 7rzeVyBakcRkxA0Zht+bwHOcKZr6IlhBrcYrg0/peXlQAW3yWNXxKRulZLmt3asEruYF
- 3mXx9s2m+rEWpDZ0q1OFnQqXTW9DdaN23mcohHpc0mlhps6jUuaLMndPQfBK7g5hcTM3
- OJQvYyPIwLrAOUVVWxWWiyDTz9sVheO1mJsLnAN3USYeYKxw/gYvLw7cvobCAQv6WuBm
- PbQ1Nh3i9VEASlBZ/DUQWC42NOc6nzpd5OCqBl4do9omPxA9gXsW2HiBa5EG2yK7TLRt
- 8Hzw==
-X-Gm-Message-State: AOJu0YzHLAyTy0KPidFFOIuKlC5Dv+UKzhhsMlk0UR6pnfylRmtMxD/i
- u7dBWg+/b9a6ml1RGSpsocmCzjp2FDE+iYY6
-X-Google-Smtp-Source: AGHT+IGE+tW0sGbTTOWr4CoReu16L4/cPdAm2TYwJH3Fpx7Hev3yWLo9b+qDfwwISF32sMIPpbMMmA==
-X-Received: by 2002:a05:6512:3a90:b0:4fe:19ef:8791 with SMTP id
- q16-20020a0565123a9000b004fe19ef8791mr9239949lfu.38.1696179144964; 
- Sun, 01 Oct 2023 09:52:24 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1696179146; x=1696783946;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=fFIL8mec9j6mS9TYRZ8G384VL8cVz3iBg5eZy75dIhc=;
+ b=XlbSzOHMIIyPzuvjrAXqFLud9z+SoNrYlPWRw8vV5HVUCkqvWIfa9Ch54kmzaeVAsm
+ cXvv6B78ae7wd0ns+U+q8EDJRJVXszqAmGyeXQSCVBbFagZxu58HVXSYVO/tnrAxxMXq
+ JhnZfMeAbQ8jnF/hwwsMRSOFzxmCj6c4WOGf6nuC+bsoeNOO6WOr0HsQwFaAGtbTvED/
+ nfSAgVPOaP+b0G/HdtS2e4sLqlQTQjGF0y9kuhPeVa1nv4Ytbwq56NnarMuwoMTEiSY0
+ /EUpVKZNpMf+u4YeSpambKce5CQAYXdxYV786RpkB6raoLY9Cuzf78r9W17k8uFF5YzV
+ n3rA==
+X-Gm-Message-State: AOJu0Yw4pf/vOQxreqvkYD47uIN+RTGDai1BolaqHW/550zgiK9TVySc
+ WlgjXnZLsxsAzUD/iio5uN01ipFHxfz1rW3D
+X-Google-Smtp-Source: AGHT+IE5uAlSL3wbnbjrbEuHD/RKQ1u2YgZsofvHYoBEwl78oygpNyu8jNScFwVL+XcA1UsVSRLx1g==
+X-Received: by 2002:a05:600c:364f:b0:406:3977:eccd with SMTP id
+ y15-20020a05600c364f00b004063977eccdmr8313223wmq.33.1696179145715; 
+ Sun, 01 Oct 2023 09:52:25 -0700 (PDT)
 Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
  [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- n20-20020a1c7214000000b003fee567235bsm5599068wmc.1.2023.10.01.09.52.24
+ n20-20020a1c7214000000b003fee567235bsm5599068wmc.1.2023.10.01.09.52.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Oct 2023 09:52:24 -0700 (PDT)
+ Sun, 01 Oct 2023 09:52:25 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Oct 2023 18:52:10 +0200
-Message-ID: <20231001165218.1960930-1-thomas.devoogdt@barco.com>
+Date: Sun,  1 Oct 2023 18:52:11 +0200
+Message-ID: <20231001165218.1960930-2-thomas.devoogdt@barco.com>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231001165218.1960930-1-thomas.devoogdt@barco.com>
+References: <20231001165218.1960930-1-thomas.devoogdt@barco.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696179145; x=1696783945; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=PHOFTt5Vb6KhTSkXOScnWSynTaRTD1uXGv+m/2ttoRk=;
- b=f4rn29SqZTaNsTCepPqcBnKXjN/bDjBoiaYhZDxF5jhtapeTN49sLoXHtqm3qNg3zR
- PVgFg/sKgzGNG8bSbkynAfbPzIrOHLk+ZGUk3yEm0vRoIuKA+lQbBfAe5Ab1/leZ3Z9r
- T3Ze2K+5TDkl7/xYqc/IVU97zr1IoGs2yYQkedh5OVmvayH47FriNVXgAaPkiv+xCmYL
- 9PF5CHQmBSeneSQPT65NPl1283D7PZGGqUZiAtupBXcoQ0KVrZk0bJ5PpFFMk1QSSFyv
- 9Ou7BD1Gg5CehJ4sZ9nHHQxcDewDAlLV58gueN4FM0UIVVgNwE6mNdh3uzMy+bSfPFA5
- Z8cg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1696179146; x=1696783946; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=fFIL8mec9j6mS9TYRZ8G384VL8cVz3iBg5eZy75dIhc=;
+ b=TB8jvdoN5hqYj+kozlp3phtYPgePopJ4e+9bzEMEjRrJ8h8zI0JxhvogiAhj/2mFAY
+ Zy3pSEzwD8wamSBifQtoqQV5QTaf1UgmcrCTv0SwJkur/XfIotbTpXojptYcWrXjjZK4
+ uRZTQSVp3mSfPu8n7dWo0bRSa2mt+8K/A0izXMWRNcbtxYmo5Zxj/AlTv66eBV9WCNOB
+ n7ySx8BzQyBXgSr3v1y4PlxDlj+oRRR2WsYBGs5qw9IyBAwbAgGYU7rFwfbTd20+FbCT
+ kNgFT6UjdyBUjcH137DFGrLpcZ91TKc0VyfsVae2mZNXNFsOAl3h2UvwRQU7Mlq1Rqoi
+ Jqyw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=f4rn29Sq
-Subject: [Buildroot] [PATCH v4 1/3] package/webkitgtk: make gbm support
- optional
+ header.a=rsa-sha256 header.s=20230601 header.b=TB8jvdoN
+Subject: [Buildroot] [PATCH v4 2/3] package/webkitgtk: select wpebackend-fdo
+ if wayland target is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +99,6 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas@devoogdt.com>,
  "Yann E . MORIN" <yann.morin@orange.com>,
  Thomas Devoogdt <thomas.devoogdt@barco.com>
 Content-Type: text/plain; charset="us-ascii"
@@ -104,40 +106,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas@devoogdt.com>
+libwep & wpebackend-fdo are mandatory if ENABLE_WAYLAND_TARGET and EGL_FOUND
+https://github.com/WebKit/WebKit/blob/2e35890b1fa9da39ffaa88e0acd973beb55d4ad2/Source/cmake/OptionsGTK.cmake#L388-L400
 
-This was added upstream in commit:
+egl is mandatory if ENABLE_WAYLAND_TARGET
+https://github.com/WebKit/WebKit/blob/2e35890b1fa9da39ffaa88e0acd973beb55d4ad2/Source/cmake/OptionsGTK.cmake#L462-L473
 
-https://github.com/WebKit/WebKit/commit/22e4c0386605d84f42f2d46fd20bdc46e3078498
-
-The 'USE_OPENGL_OR_ES' flag is default ON, which will enable 'USE_GBM',
-so ensure that we unset 'USE_GBM' if we don't have libgbm.
+So wpebackend-fdo (-> libwpe) has to be selected if BR2_PACKAGE_LIBGTK3_WAYLAND.
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
-v2,3,4: no change
+v2: n/a
+v3,4: no change (added from another patch serie)
 ---
- package/webkitgtk/webkitgtk.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/webkitgtk/Config.in    | 1 +
+ package/webkitgtk/webkitgtk.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 927792b1e4..cb10784133 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -53,6 +53,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_WEBP
+ 	select BR2_PACKAGE_WEBP_DEMUX
+ 	select BR2_PACKAGE_WOFF2
++	select BR2_PACKAGE_WPEBACKEND_FDO if BR2_PACKAGE_LIBGTK3_WAYLAND
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
 diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index bb6df3d592..88bdfae27b 100644
+index 88bdfae27b..9c68fe73cf 100644
 --- a/package/webkitgtk/webkitgtk.mk
 +++ b/package/webkitgtk/webkitgtk.mk
-@@ -88,6 +88,13 @@ else
- WEBKITGTK_CONF_OPTS += -DENABLE_GLES2=OFF
+@@ -115,7 +115,7 @@ ifeq ($(BR2_PACKAGE_LIBGTK3_X11):$(BR2_PACKAGE_LIBGTK3_WAYLAND):$(BR2_PACKAGE_LI
+ WEBKITGTK_DEPENDENCIES += libegl
  endif
  
-+ifeq ($(BR2_PACKAGE_HAS_LIBGBM),y)
-+WEBKITGTK_CONF_OPTS += -DUSE_GBM=ON
-+WEBKITGTK_DEPENDENCIES += libgbm
-+else
-+WEBKITGTK_CONF_OPTS += -DUSE_GBM=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- WEBKITGTK_CONF_OPTS += -DENABLE_X11_TARGET=ON
- WEBKITGTK_DEPENDENCIES += libgl \
+-ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND)$(BR2_PACKAGE_WPEBACKEND_FDO),yy)
++ifeq ($(BR2_PACKAGE_WPEBACKEND_FDO),y)
+ WEBKITGTK_CONF_OPTS += -DUSE_WPE_RENDERER=ON
+ WEBKITGTK_DEPENDENCIES += wpebackend-fdo
+ else
 -- 
 2.42.0
 
