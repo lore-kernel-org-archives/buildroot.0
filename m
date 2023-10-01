@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59CA9E78482
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 18:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8506CE78482
+	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 18:58:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B43F8213E;
-	Sun,  1 Oct 2023 18:57:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B43F8213E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 267EB820FC;
+	Sun,  1 Oct 2023 18:58:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 267EB820FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uLycTwTOS3jd; Sun,  1 Oct 2023 18:57:40 +0000 (UTC)
+	with ESMTP id RSNpgYtbboZD; Sun,  1 Oct 2023 18:58:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4402D8210D;
-	Sun,  1 Oct 2023 18:57:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4402D8210D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 839A71BF8A8
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 18:57:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EA33810CC;
+	Sun,  1 Oct 2023 18:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EA33810CC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C2221BF5AA
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 18:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B99C40453
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 18:57:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B99C40453
+ by smtp1.osuosl.org (Postfix) with ESMTP id 160EB810CC
+ for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 18:58:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 160EB810CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gpFYMmbdJCxz for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 18:57:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F68940383
- for <buildroot@buildroot.org>; Sun,  1 Oct 2023 18:57:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F68940383
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B5DE83F5F; Sun,  1 Oct 2023 18:57:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JVtWFLeUxBCH for <buildroot@lists.busybox.net>;
+ Sun,  1 Oct 2023 18:58:15 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8F48D8105C
+ for <buildroot@buildroot.org>; Sun,  1 Oct 2023 18:58:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F48D8105C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F1DC120004;
+ Sun,  1 Oct 2023 18:58:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qn1dp-000Kju-Us; Sun, 01 Oct 2023 20:58:09 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 1 Oct 2023 20:54:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d249ed0bcd976b37424f8b46f2b7e0ef3fac0528
-X-Git-Newrev: 603fa625b14c849ef42262c7b755276fa9231c25
-X-Patchwork-Hint: ignore
-Message-Id: <20231001185722.8B5DE83F5F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: needs >= GCC 9
+To: Daniel Lang <dalang@gmx.at>
+References: <20231001181141.1275330-3-dalang@gmx.at>
+Date: Sun, 01 Oct 2023 20:58:09 +0200
+In-Reply-To: <20231001181141.1275330-3-dalang@gmx.at> (Daniel Lang's message
+ of "Sun, 1 Oct 2023 20:11:42 +0200")
+Message-ID: <8734yui30e.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/enlightenment: security bump to
+ version 0.25.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,55 +63,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=603fa625b14c849ef42262c7b755276fa9231c25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
 
-Raise the minimal GCC version to 9.3, which is required since wpewebkit-2.40.0 [1].
-Similar to commit 09af6d8bfd8ece6b021b877aaf5cbd36a78ffad9,
-we do check on >= GCC 9, because we can't check on >= GCC 9.3.
+ > This is a bugfix release which fixes a CVE.
+ > See:
+ > https://www.enlightenment.org/news/2022-09-15-enlightenment-0.25.4
 
-[1] https://github.com/WebKit/WebKit/commit/f9c142d9b5b8c48fe310bc6d3620e634901b2930
+ > CVE-2022-37706 "enlightenment_sys in Enlightenment before 0.25.4 allows
+ > local users to gain privileges because it is setuid root, and the system
+ > library function mishandles pathnames that begin with a /dev/..
+ > substring."
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wpewebkit/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ > Hashes were never part of the online news page, therefore mark them as
+ > locally computed.
 
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index f1d38c7cad..81b66f8429 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -16,12 +16,12 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 
--comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
-+comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 9, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
- 		|| !BR2_HOST_GCC_AT_LEAST_4_9
- 
- comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
-@@ -37,7 +37,7 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
+ > Signed-off-by: Daniel Lang <dalang@gmx.at>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
