@@ -4,84 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E4EAE7490C
-	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 19:17:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D24CAE784BA
+	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 19:52:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0725D41780;
-	Mon,  2 Oct 2023 19:17:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0725D41780
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4531F418B8;
+	Mon,  2 Oct 2023 19:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4531F418B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xbOG2omn0bpp; Mon,  2 Oct 2023 19:17:12 +0000 (UTC)
+	with ESMTP id E6YuM6ldYfVQ; Mon,  2 Oct 2023 19:52:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE275417A4;
-	Mon,  2 Oct 2023 19:17:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE275417A4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 52D011BF3DD
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 19:17:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54723417A5;
+	Mon,  2 Oct 2023 19:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54723417A5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DDC431BF336
+ for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 19:52:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A872417A4
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 19:17:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A872417A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id B444060B8F
+ for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 19:52:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B444060B8F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id afs5D1xOpYip for <buildroot@lists.busybox.net>;
- Mon,  2 Oct 2023 19:17:08 +0000 (UTC)
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com
- [IPv6:2607:f8b0:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E8EB041780
- for <buildroot@buildroot.org>; Mon,  2 Oct 2023 19:17:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8EB041780
-Received: by mail-pf1-x429.google.com with SMTP id
- d2e1a72fcca58-69101022969so86990b3a.3
- for <buildroot@buildroot.org>; Mon, 02 Oct 2023 12:17:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696274227; x=1696879027;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=tcLCrM2bL+LRfyKSkA69Fziwr2vFmdwsVY+jeqT2FcU=;
- b=xLrpmknVtX3M+UJ6UGDpAUigAqOm7WerTO/d5a2dNa3ylu7u3IkY7Me5uuiLTeGz89
- ZBDxROpjNvMlgcfw4frBJFqK/waQnj4TScZIVuWPKY/X6CyPX13Gz9ryaK2oaTJCcuzd
- Xl5fDVHfWZrwDh8rulj6+9adYngWmWdGX0q7Dlzd1e4AdFQyaP2AF19bCaBzwWQVuG5u
- 8+0mBHaJf9FNKvUBoJPIJkYN1A7NWq6Lcchsw1xMgZj81x1vp3D8CRC1K71Lr+GRBDLP
- +OCsVX0awuIdLYjwZdQIa2u+7s0ycSMszyI32EJ3lD7RIwSA/JStKFvbfkNUetzrEaH2
- eEGA==
-X-Gm-Message-State: AOJu0YzmfMNd2233SKjZAy6demHMhHpfHEicA0HtWYldDV+WJKLm+zbh
- vZnB+1sqSCxwq46hQyyI67ueUGcQr9SGNUg80XNFLApC
-X-Google-Smtp-Source: AGHT+IH1gHkrYocSuEareSUUJWY8wiw/dOpsWUt+yyznjqkuB6Xkm8qJUebGuaNoiqZYfUOjySWINQ==
-X-Received: by 2002:a05:6a00:15c7:b0:690:fa09:61d3 with SMTP id
- o7-20020a056a0015c700b00690fa0961d3mr16140310pfu.15.1696274226792; 
- Mon, 02 Oct 2023 12:17:06 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- z13-20020aa791cd000000b00694d420e25esm4305187pfa.157.2023.10.02.12.17.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Oct 2023 12:17:06 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sXzK_ny86S0Y for <buildroot@lists.busybox.net>;
+ Mon,  2 Oct 2023 19:52:04 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E4D8A60AB7
+ for <buildroot@buildroot.org>; Mon,  2 Oct 2023 19:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4D8A60AB7
+Received: from fli4l.lan.fli4l (p4fd6c587.dip0.t-ipconnect.de [79.214.197.135])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EC6D2A4C031A
+ for <buildroot@buildroot.org>; Mon,  2 Oct 2023 21:51:59 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49920)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qnOxT-0006Z1-0n
+ for buildroot@buildroot.org; Mon, 02 Oct 2023 21:51:59 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon,  2 Oct 2023 12:17:04 -0700
-Message-ID: <20231002191704.57123-1-christian@aperture.us>
-X-Mailer: git-send-email 2.42.0
+Date: Mon,  2 Oct 2023 21:51:59 +0200
+Message-Id: <20231002195159.3053254-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1696274227; x=1696879027; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tcLCrM2bL+LRfyKSkA69Fziwr2vFmdwsVY+jeqT2FcU=;
- b=j1zXoigth1ssiV9+q4A6pwv4WWb2u99OiHkIXliAgyJmAwEwiBPsYs3sRrnjsbzPeC
- GJwjik6WF+i3pfXodAIyo6Ns8mTI2TYx9U+RXaWxN3jvKV3VGMI7HaVnlLi9jcsyaekJ
- obCLIqD7yPjauygLQ8fQFGjRsRlvGsQu+lyoaJQlruy3wxIiyahfggz4+ICkI6Q4dqvg
- uUWyCn4aj/tzKR6hviVSVaimvyu4UNNSR8Kyl5ISZ/0GD9wVXcjk6ZNLUCDCwmn/LzBO
- GqIzfHM0Nvq3+kftehbAl9XdNeHHThAtsXKIPOkYPwxnA85Xr/EpANh0bsU4Nnr3EKA3
- D6PQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=j1zXoigt
-Subject: [Buildroot] [PATCH v1 1/1] package/amlogic-boot-fip: fix typo in
- Config.in.host
+ d=kuhls.net; 
+ s=kas202306131828; t=1696276319;
+ bh=yAZ/hG17BJW+91xteJGtJLSloKgXuG5kcMRZ5ZHlHVM=;
+ h=From:To:Subject:Date:From;
+ b=gunmDIo7R3l98xAYEuoGu2xK8ozd/kY63ZKuxGUG3atWuzEO1Yc9U+mO/npYmn/tO
+ 78mmZ0CrqOxNS+Hug3rZINDYnPJm0oeIfQ/GTHxqu2RyO+PT69wbQsUIn8eUw5Qk1F
+ Q28me/2pyDFm3R9XCQvh4RW9caxHIO+4ZwCc8Ggb/9zQd69RbyXYzxL+MNwHZLfQwc
+ USzXulk0th1sQABMVlTsXZCCFYrvvn6lEu61Am/Xn+8Vc84MbmqWpPVsTr3bu4sF9b
+ RamSnR3KGjM5CbUkHk9nL3mKYq3b1yyDHlq4X2kRJDqCxML7wpbf3JRW226vuzUXMV
+ 3imtgNrGq8IQQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=gunmDIo7
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: fix cross build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,36 +74,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
----
- package/amlogic-boot-fip/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes build error
 
-diff --git a/package/amlogic-boot-fip/Config.in.host b/package/amlogic-boot-fip/Config.in.host
-index d72bac568e..bccc6296d1 100644
---- a/package/amlogic-boot-fip/Config.in.host
-+++ b/package/amlogic-boot-fip/Config.in.host
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_HOST_AMLOGIC_BOOT_FIP
- 	bool "host amlogic-boot-fip"
- 	depends on BR2_HOSTARCH = "x86_64"
- 	help
--	  Firmware Image Pacakge (FIP) sources used to sign Amlogic
-+	  Firmware Image Package (FIP) sources used to sign Amlogic
- 	  u-boot binaries in LibreELEC images
+Building dns library in /home/bernd/buildroot/br4/output/build/dhcp-4.4.3-
+P1/bind/bind-9.11.36/lib/dns
+./gen: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.38' not found 
+(required by ./gen)
+make[4]: *** [Makefile:601: include/dns/enumtype.h] Error 1
+make[3]: *** [Makefile:595: include] Error 2
+
+with this defconfig
+
+BR2_x86_64=y
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_DHCP=y
+
+Please note that this build error only occurs when the target and the
+host system have the same arch. For example this defconfig builds fine:
+
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_DHCP=y
+
+on a Debian 12 x86_64 host using glibc-2.36:
+
+$ /lib/ld-linux.so.2  --version
+ld.so (Debian GLIBC 2.36-9+deb12u1) stable release version 2.36.
+
+The error occurs since buildroot commit 34f8d874ee which bumped glibc
+from 2.37 to 2.38.
+
+This patch is inspired by the Yocto Project:
+https://patchwork.yoctoproject.org/project/oe/patch/20230715212159.3265080-1-raj.khem@gmail.com/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/dhcp/dhcp.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 7be40191c8..094d361e45 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -32,6 +32,9 @@ DHCP_CONF_ENV = \
+ 	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
  
- 	  https://github.com/LibreELEC/amlogic-boot-fip
+ DHCP_BIND_EXTRA_CONFIG = \
++	--build=$(GNU_HOST_NAME) \
++	--host=$(GNU_TARGET_NAME) \
++	--target=$(GNU_TARGET_NAME) \
+ 	BUILD_CC='$(HOSTCC)' \
+ 	BUILD_CFLAGS='$(HOST_CFLAGS)' \
+ 	BUILD_CPPFLAGS='$(HOST_CPPFLAGS)' \
 -- 
-2.42.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
