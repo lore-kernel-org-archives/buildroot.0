@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7603BE784B6
-	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 14:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4976DE784B6
+	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 14:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D22461261;
-	Mon,  2 Oct 2023 14:31:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D22461261
+	by smtp3.osuosl.org (Postfix) with ESMTP id F36126125D;
+	Mon,  2 Oct 2023 14:32:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F36126125D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e9w2-4hgJmeQ; Mon,  2 Oct 2023 14:31:58 +0000 (UTC)
+	with ESMTP id gfxVv6vNKL38; Mon,  2 Oct 2023 14:32:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D35F60F8F;
-	Mon,  2 Oct 2023 14:31:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D35F60F8F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E146612AB;
+	Mon,  2 Oct 2023 14:32:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E146612AB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0700C1BF947
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 14:31:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3006B1BF947
+ for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 14:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4EBB6106E
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 14:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4EBB6106E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 175116109C
+ for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 14:31:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 175116109C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zCwFHEdFiJXQ for <buildroot@lists.busybox.net>;
- Mon,  2 Oct 2023 14:31:29 +0000 (UTC)
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6F94860A9B
- for <buildroot@buildroot.org>; Mon,  2 Oct 2023 14:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F94860A9B
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-99c3c8adb27so2363161166b.1
- for <buildroot@buildroot.org>; Mon, 02 Oct 2023 07:31:29 -0700 (PDT)
+ with ESMTP id aCC4iyfM25Rx for <buildroot@lists.busybox.net>;
+ Mon,  2 Oct 2023 14:31:31 +0000 (UTC)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A549260F8F
+ for <buildroot@buildroot.org>; Mon,  2 Oct 2023 14:31:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A549260F8F
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-533d31a8523so19363775a12.1
+ for <buildroot@buildroot.org>; Mon, 02 Oct 2023 07:31:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696257087; x=1696861887;
+ d=1e100.net; s=20230601; t=1696257088; x=1696861888;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=FFF9vEOnlLVKYHMTCWIdHhBTwmSoFYhyfSbN2MOxu8Y=;
- b=jtfAYdTbrnh9NhC3lww37kR7+8s7/a8Hw2EfTORpnm7Ofy1tEFTU3PKSmJS1sPlHMj
- IPVi6I1bXvs9Tft6LMA9Xf1+s48Bgs4c7xCBmSS42vgHluq3lrBnDVdjhXzMD/W8u45m
- P3M2tplI9Dbmkj6synpkMxe8sXZEqfud8b4l+kctJSuidMEkVuQHfppl/f5qTc5IXMTg
- n5+aGpmZTcfCd7JFKBaJAr7eRvOwbHmynuNfqCKwVrxCeHtohHjk9veXwBA7puaneiZj
- GCESaeJPkwIqUaQchsHzvcT/H7quIF/hDBILHqCQvm2Yw91F75Ce3FopzciHuLrozWGT
- rPAw==
-X-Gm-Message-State: AOJu0YxiHRThzHpxNHA8p7jtWFr6UGih63FumtyEkVv1xGn3T/KLh4lY
- Z+ujc7b9nFRnNZoNzR7WQErB0kIRZ+8DguByO5mpXcJr
-X-Google-Smtp-Source: AGHT+IHwrJbeD5PSP7XcTHkPojOCvW76VWAIRrF3od/9wMOjZWZbWKlsWZJd9fgMkL7D22FxmBrcgg==
-X-Received: by 2002:a17:906:51:b0:9ad:e101:3f9e with SMTP id
- 17-20020a170906005100b009ade1013f9emr8417229ejg.39.1696257087310; 
- Mon, 02 Oct 2023 07:31:27 -0700 (PDT)
+ bh=V0VZNS2o4t6O/IxAVV4Y74qPTKfsRrnLAasLxngk3AE=;
+ b=lhqjWTq3NJ/P9dd6mtTu6u9M6dyIYXwzCxUcuEz5d9gbDkD8Q2rlA/kAwCnj9tQeDH
+ 2QkLaX2aL5I4V9WalZUUXqOm/ZiOFS0bADyp8IEV0THTLAQztHNoWDOmIT5YCa/QEY86
+ ftRhCO3VUhCpRiK+HvvNeCbM2bb7LyMfck2SW45+h0jgvtTvDT6LV00UJy1a6nqRXWOk
+ 0+ltB1+SWcS48Nvs5fBuQq33B6brpY9c9VMaA2UMDwksEyxNB1DbfXu3TzqujXzBWNUm
+ CJFgesNQ6eCY/0OwtaUgjzyoP959An0MjcaX7E9ecqOA5yfSCOAq0S97yZ9wa0ijZByQ
+ mFbw==
+X-Gm-Message-State: AOJu0YyV5IxoRhhZgl8nsMG0tj7UF7ZS8gizKXniAOGUmubnZMnKvbwd
+ JQpCpdT89Xs8if3QQK7M59gzHLR+Rb4xFEcBuUPv+4Mn
+X-Google-Smtp-Source: AGHT+IFdxHjGhAfy7MYKkmZtCfENiaf+J9m5QURnCi0tPsNkWY7PA538+D5NP0VwFj0H75Bf2ZtzcQ==
+X-Received: by 2002:a17:906:209e:b0:9a5:874a:9745 with SMTP id
+ 30-20020a170906209e00b009a5874a9745mr12541123ejq.26.1696257088161; 
+ Mon, 02 Oct 2023 07:31:28 -0700 (PDT)
 Received: from fedora.. (146-241-223-149.dyn.eolo.it. [146.241.223.149])
  by smtp.gmail.com with ESMTPSA id
- n19-20020a170906165300b009a1c05bd672sm16917735ejd.127.2023.10.02.07.31.26
+ n19-20020a170906165300b009a1c05bd672sm16917735ejd.127.2023.10.02.07.31.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Mon, 02 Oct 2023 07:31:27 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon,  2 Oct 2023 08:31:21 -0600
-Message-ID: <20231002143122.257820-3-adam.duskett@amarulasolutions.com>
+Date: Mon,  2 Oct 2023 08:31:22 -0600
+Message-ID: <20231002143122.257820-4-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231002143122.257820-1-adam.duskett@amarulasolutions.com>
 References: <20231002143122.257820-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1696257087; x=1696861887;
+ d=amarulasolutions.com; s=google; t=1696257088; x=1696861888;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=FFF9vEOnlLVKYHMTCWIdHhBTwmSoFYhyfSbN2MOxu8Y=;
- b=RDaq+YFw1oVTkNhzNvRxY6e9yB+mYadWPKd0hpM7/0qv+qqm65YAJvaUbbWt+XmxY0
- GU+V4Qeea7dxeWYrJxeG+L7jbvIHg0Nbn+FDjA41zvOYymQJbHizn6wFu2FcuBYphtEv
- wzxuNXLyqaTSCbKuNQRdrwNCn5LFFsW67uFRs=
+ bh=V0VZNS2o4t6O/IxAVV4Y74qPTKfsRrnLAasLxngk3AE=;
+ b=L/RhkrEGFOGpzDLlZ/mrBysg/Q+3V821Axnh8jBtAAocDEHloI+ULHHFWo8MZXEfVS
+ SAEyo68snbiCAh7KjYv416BJDtP+dALjBnvPsTLJ6pTUvFZUeB01sJekwSqAf+LOICPp
+ +VYEm0pvozPzfYutaqiIy6ge12yZ1WMgZMCk8=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=RDaq+YFw
-Subject: [Buildroot] [PATCH 3/4] package/flutter-pi: bump version to
- d62e84350d2869b3ec1dfb1af21bfe234c4b817f
+ header.b=L/RhkrEG
+Subject: [Buildroot] [PATCH 4/4] package/flutter-pi: enable vulkan support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,32 +103,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/flutter-pi/flutter-pi.hash | 2 +-
- package/flutter-pi/flutter-pi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/flutter-pi/flutter-pi.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/flutter-pi/flutter-pi.hash b/package/flutter-pi/flutter-pi.hash
-index f7148963a4..6cd7116cd7 100644
---- a/package/flutter-pi/flutter-pi.hash
-+++ b/package/flutter-pi/flutter-pi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e4af79c8f53c15913f52a83a221f099a2a750d023a0bc4560d0db6f15def79a2  flutter-pi-d62e84350d2869b3ec1dfb1af21bfe234c4b817f-br1.tar.gz
-+sha256  1fb5f4faebebd8b78294aae05eb9a57c3ca80228972d7ffe1f5b9dfc264cfb0e  flutter-pi-4e9b44bcb332547c05b728687edf895847eb0aa9-br1.tar.gz
- sha256  b34df9d3e1b4e5d1ba70b1740ec74b69f1189b44efd0c96b898b074ef8db1c70  LICENSE
 diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
-index 27f140c177..dc825c95a2 100644
+index dc825c95a2..d297ada747 100644
 --- a/package/flutter-pi/flutter-pi.mk
 +++ b/package/flutter-pi/flutter-pi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -24,7 +24,6 @@ FLUTTER_PI_CONF_OPTS = \
+ 	-DENABLE_TESTS=OFF \
+ 	-DENABLE_TSAN=OFF \
+ 	-DENABLE_UBSAN=OFF \
+-	-DENABLE_VULKAN=OFF \
+ 	-DFILESYSTEM_LAYOUT=meta-flutter \
+ 	-DLINT_EGL_HEADERS=OFF \
+ 	-DTRY_BUILD_GSTREAMER_AUDIO_PLAYER_PLUGIN=OFF \
+@@ -82,4 +81,11 @@ else
+ FLUTTER_PI_CONF_OPTS += -DENABLE_SESSION_SWITCHING=OFF
+ endif
  
--FLUTTER_PI_VERSION = d62e84350d2869b3ec1dfb1af21bfe234c4b817f
-+FLUTTER_PI_VERSION = 4e9b44bcb332547c05b728687edf895847eb0aa9
- FLUTTER_PI_SITE = https://github.com/ardera/flutter-pi.git
- FLUTTER_PI_SITE_METHOD = git
- FLUTTER_PI_LICENSE = MIT
++ifeq ($(BR2_PACKAGE_VULKAN_LOADER),y)
++FLUTTER_PI_DEPENDENCIES += vulkan-loader
++FLUTTER_PI_CONF_OPTS += -DENABLE_VULKAN=ON
++else
++FLUTTER_PI_CONF_OPTS += -DENABLE_VULKAN=OFF
++endif
++
+ $(eval $(cmake-package))
 -- 
 2.41.0
 
