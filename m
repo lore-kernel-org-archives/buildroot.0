@@ -4,69 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C86B5E776C2
-	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 20:43:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C73E776C2
+	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 20:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 51E5E40530;
-	Mon,  2 Oct 2023 20:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51E5E40530
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E003416F8;
+	Mon,  2 Oct 2023 20:51:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E003416F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6SQ5Hure7ELo; Mon,  2 Oct 2023 20:43:45 +0000 (UTC)
+	with ESMTP id Z_H7O9eGnp9f; Mon,  2 Oct 2023 20:51:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84A77416F6;
-	Mon,  2 Oct 2023 20:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84A77416F6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 66E6C1BF5F8
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 20:43:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2225F40B56;
+	Mon,  2 Oct 2023 20:51:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2225F40B56
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 953911BF5F8
+ for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 20:51:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D395610D7
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 20:43:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D395610D7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68E1681947
+ for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 20:51:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68E1681947
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TkC2Mz6guu9p for <buildroot@lists.busybox.net>;
- Mon,  2 Oct 2023 20:43:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZcB7cdDcDFJa for <buildroot@lists.busybox.net>;
+ Mon,  2 Oct 2023 20:51:49 +0000 (UTC)
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 30EE06103A
- for <buildroot@buildroot.org>; Mon,  2 Oct 2023 20:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30EE06103A
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2A19B818D0
+ for <buildroot@buildroot.org>; Mon,  2 Oct 2023 20:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A19B818D0
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:71b1:17da:abc1:f019])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 95A3360132;
- Mon,  2 Oct 2023 22:43:28 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 2A9B960134;
+ Mon,  2 Oct 2023 22:51:45 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 02 Oct 2023 22:43:28 +0200
-Date: Mon, 2 Oct 2023 22:43:28 +0200
+ Mon, 02 Oct 2023 22:51:44 +0200
+Date: Mon, 2 Oct 2023 22:51:44 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20231002204328.GC2957@scaer>
-References: <20230802111447.41714-1-thomas@devoogdt.com>
- <20230806141506.GS421096@scaer> <20231002173310.GA2957@scaer>
- <CACXRmJgyWvL4jr7-mtWJgCCYGFE3ookcU3TwoNE5bHFLjXaM6Q@mail.gmail.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20231002205144.GD2957@scaer>
+References: <20231002195159.3053254-1-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <CACXRmJgyWvL4jr7-mtWJgCCYGFE3ookcU3TwoNE5bHFLjXaM6Q@mail.gmail.com>
+In-Reply-To: <20231002195159.3053254-1-bernd@kuhls.net>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696279416;
- bh=0SUda+6xmcxVJWWs8fpMNzcssmhi5NVmgpFl/YQukYo=;
+ d=free.fr; s=smtp-20201208; t=1696279907;
+ bh=bZHcknVC5CHLmKpymEgk5sfo+6XoJiTG7Nhrap10m3Y=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=c3ZOrhcxAHi37WHybWb9oiiBbVXyXkIKMY9dXvmwslOObXgwSEZQc4yr+JQqcCsqR
- 3QXpe7glTE76jBNhWd0SYKG4yu050u+SytjO7ONN5FfVTQpFPUpCfJ/abtflW2ti2v
- Na1Tn14EknKS+DSY9Ry11GKB1d2U0Zv2mKO65oS+lLTC5xde0YtdhYfGzTwi3CBaCu
- Gfk4t2aTXoSHnrWzHyzIvLyvRh66szJlZaqaXVC85bIbOg0zw9wX1TMeuQ8++sKffA
- M6i/KC1/XP/v9bIH1ZINe8SPTgbaFoTyoeEcypHMS56vSY2OWDFAYzv24jX3nTY4YB
- R0CZsPTvarm/A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=ALfW6J39hJjbTdq3faHZAQF9cGcP/Uj47iyZJJwSQNf1VRWnS8MIW10wD/x3JbyQL
+ VNMuy6lfs0EeEHLDrGu7ThjLXngct1XEZCJlpQY/dpFPTjQp0vJeYywbTi8qAlJM22
+ JTgPxcuZ+ewW4oVnLPorXiTtKkkhhspZHmiXqhqr4+JpG2qH9h4GMJOzbjNNUE5iWS
+ hEasr1Za1RPnce8CWlkrwygESP1XVu2Bp4WVYzXvJ8zKMSClNQ0ptsihFuKeMPwK3E
+ +NX53/judAl0S5qNIFlc2iApX4tAs+dCihpNNmYUhG6vyeV29mWAtRncd4gHLA3+k/
+ cqR29AkeCWMbA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=c3ZOrhcx
-Subject: Re: [Buildroot] [PATCH v6 1/4] pkg-cmake: add option to select the
- Ninja generator
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ALfW6J39
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: fix cross build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,77 +75,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>, John Keeping <john@metanate.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org,
- Adrian Perez de Castro <aperez@igalia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhvbWFzLCBBbGwsCgpPbiAyMDIzLTEwLTAyIDIyOjI2ICswMjAwLCBUaG9tYXMgRGV2b29nZHQg
-c3Bha2UgdGh1c2x5Ogo+IEkgd2lsbCBjaGVjayB3aGF0IEkgY2FuIGRvLiBBIHF1aWNrIHNlYXJj
-aCBnaXZlcyBtZSB0aGlzIGZsYWc6Cj4gWzFdaHR0cHM6Ly9jbWFrZS5vcmcvY21ha2UvaGVscC9s
-YXRlc3QvdmFyaWFibGUvQ01BS0VfU0tJUF9JTlNUQUxMX0FMTF9ERVBFTkRFTkNZLmh0bWwgLAo+
-IHdoaWNoIGlzIHByb2JhYmx5IHdoYXQgd2Ugd2FudC4gT3RoZXJ3aXNlIEkgZG9uJ3Qgc2VlIG11
-Y2ggYWRkaXRpb25hbCBpbnN0YWxsIG9wdGlvbnMuCgpJZiBJIHVuZGVyc3Rvb2QgaXQgcHJvcGVy
-bHksIHRoaXMgbWFrZXMgJ2luc3RhbGwnIGJlaGF2ZSBhcwonaW5zdGFsbC9mYXN0JyBieSBkZWZh
-dWx0LCBzbyBsb29rcyBsaWtlIHdlIHNob3VsZCBpbmRlZWQgYmUgcGFzc2luZwp0aGlzIG9wdGlv
-biBpbnN0ZWFkLiBJZiB0aGF0IGRvZXMgbm90IG1ha2Ugc2Vuc2UgZm9yIHRoZSBuaW5qYSBjYXNl
-LAp0aGVuIHdlJ2Qgc2V0IGl0IG9ubHkgZm9yIHRoZSBtYWtlZmlsZXMgY2FzZS4KCj4gQW5kIGNh
-bGxpbmcgdGhlIG1ha2UgaW5zdGFsbC9mYXN0IHRhcmdldAo+IGRpcmVjdGx5IGlzIG5vdCB2ZXJ5
-IGdlbmVyYXRvciBnZW5lcmljLgoKSWYgd2UgcmVpbnN0YXRlICdpbnN0YWxsL2Zhc3QnIGFzIGl0
-IHdhcyBwcmV2aW91c2x5LCB3ZSdkIGRvIHRoYXQgb25seQpmb3IgdGhlIG1ha2VmaWVscyBjYXNl
-LCBvZiBjb3Vyc2UuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiBLciwKPiBUaG9tYXPCoAo+
-IE9wIG1hIDIgb2t0LiAyMDIzIDE5OjMzIHNjaHJlZWYgWWFubiBFLiBNT1JJTiA8IFsyXXlhbm4u
-bW9yaW4uMTk5OEBmcmVlLmZyPjoKPiAKPiAgIFRob21hcywgQWxsLAo+IAo+ICAgT24gMjAyMy0w
-OC0wNiAxNjoxNSArMDIwMCwgWWFubiBFLiBNT1JJTiBzcGFrZSB0aHVzbHk6Cj4gICA+IE9uIDIw
-MjMtMDgtMDIgMTM6MTQgKzAyMDAsIFRob21hcyBEZXZvb2dkdCBzcGFrZSB0aHVzbHk6Cj4gICA+
-ID4gRnJvbTogVGhvbWFzIERldm9vZ2R0IDwgWzNddGhvbWFzLmRldm9vZ2R0QGJhcmNvLmNvbT4K
-PiAgID4gPiBDbWFrZSBzdXBwb3J0cyBtdWx0aXBsZSBnZW5lcmF0b3JzLiBOaW5qYSBpcyBhIHNt
-YWxsIGJ1aWxkIHN5c3RlbSB3aXRoIGEKPiAgID4gPiBmb2N1cyBvbiBzcGVlZC4gSXQgaXMgbWFp
-bmx5IHVzZWQgd2l0aCB0aGUgbWVzb24gYnVpbGQgc3lzdGVtLCBidXQgYWxzbwo+ICAgPiA+IGNt
-YWtlIGhhcyB2ZXJ5IGdvb2Qgc3VwcG9ydCBmb3IgaXQuIFRoaXMgYWRkcyBvcHRpb25hbCBzdXBw
-b3J0IGZvciB0aGUKPiAgID4gPiBOaW5qYSBidWlsZCBzeXN0ZW0uCj4gICBbLS1TTklQLS1dCj4g
-ICA+IFBsZWFzZSByZXZpZXcgdGhlIG5ldyBjb2RlLiBJZiBJIGJyb2tlIHNvbWV0aGluZywgcGxl
-YXNlIHNlbmQgZm9sbG93dXAKPiAgID4gZml4dXAgcGF0Y2hlcyB3aXRoIGFwcHJvcHJpYXRlIGV4
-cGxhbmF0aW9ucyAodGhlcmUncyBhIGtpbmQgb2YgZMOpasOgLXZ1Cj4gICA+IGhlcmUuLi4pCj4g
-Cj4gICBXaGlsZSByZXZpZXdpbmcgYW5vdGhlciBwYXRjaCwgSSBub3cgbm90aWNlZCB0aGF0IHdl
-IGRpZCBsb3NlIHNvbWV0aGluZwo+ICAgd2l0aCB0aGUgaW50cm9kdWN0aW9uIG9mIHRoaXMgbmlu
-amEgYmFja2VuZC4gdGhhdCBJIHRvdGFsbHkgbWlzc2VkIHdoZW4KPiAgIEkgYXBwbGllZCBpdC4K
-PiAKPiAgIEluZGVlZCwgcHJldmlvdXNseSwgdGhlIGluc3RhbGwgc3RlcCB3YXMgZG9uZSB3aXRo
-IHRoZSBpbnN0YWxsL2Zhc3QKPiAgIHJ1bGU6Cj4gCj4gICDCoCDCoCAkKDIpX0lOU1RBTExfU1RB
-R0lOR19PUFRTwqAgwqAgwqAgPz0gREVTVERJUj0kJChTVEFHSU5HX0RJUikgaW5zdGFsbC9mYXN0
-Cj4gICDCoCDCoCAkKDIpX0lOU1RBTExfVEFSR0VUX09QVFPCoCDCoCDCoCDCoD89IERFU1RESVI9
-JCQoVEFSR0VUX0RJUikgaW5zdGFsbC9mYXN0Cj4gCj4gICBCdXQgdGhpcyBnb3QgcmVtb3ZlZCB3
-aXRoIHlvdXIgcGF0Y2gsIHdpdGggbm90aGluZyB0byByZXBsYWNlIGl0Lgo+IAo+ICAgU2VlIGNv
-bW1pdCBkZmNjMThmODRiMGQgKHBrZy1jbWFrZTogU2tpcCBjb21waWxhdGlvbiBpbiBpbnN0YWxs
-YXRpb24KPiAgIHN0ZXApIGZvciB0aGUgcmF0aW9uYWxlIG9mIHVzaW5nIGluc3RhbGwvZmFzdC4K
-PiAKPiAgIENvdWxkIHlvdSBsb29rIGludG8gcmVzdG9yaW5nIHRoaXMsIHBsZWFzZT8KPiAKPiAg
-IFJlZ2FyZHMsCj4gICBZYW5uIEUuIE1PUklOLgo+IAo+ICAgLS0KPiAgIC4tLS0tLS0tLS0tLS0t
-LS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
-LS0tLS0tLS0uCj4gICB8wqAgWWFubiBFLiBNT1JJTsKgIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwg
-LyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cj4gICB8ICszMyA2NjIgMzc2
-IDA1NiB8IFNvZnR3YXJlwqAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR07CoCDCoCDCoHzCoCBfX1/C
-oCDCoCDCoCDCoCDCoCDCoAo+ICAgwqAgwqB8Cj4gICB8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0t
-LS0tLS0tLi0tLS0tLS06wqAgWMKgIEFHQUlOU1TCoCDCoCDCoCB8wqAgXGUvwqAgVGhlcmUgaXMg
-bm/CoCB8Cj4gICB8IFs0XWh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8g
-XCBIVE1MIE1BSUzCoCDCoCB8wqAgwqB2wqAgwqBjb25zcGlyYWN5LsKgIHwKPiAgICctLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0t
-LS0tLS0tLS0tLS0tLS0nCj4gCj4gTGlua3M6Cj4gMS4gaHR0cHM6Ly9jbWFrZS5vcmcvY21ha2Uv
-aGVscC9sYXRlc3QvdmFyaWFibGUvQ01BS0VfU0tJUF9JTlNUQUxMX0FMTF9ERVBFTkRFTkNZLmh0
-bWwKPiAyLiBtYWlsdG86eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnIKPiAzLiBtYWlsdG86dGhvbWFz
-LmRldm9vZ2R0QGJhcmNvLmNvbQo+IDQuIGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8KCi0t
-IAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0t
-LS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBF
-bWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2
-NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19f
-ICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06
-ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4u
-aXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGly
-YWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0t
-LS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+Bernd, All,
+
+On 2023-10-02 21:51 +0200, Bernd Kuhls spake thusly:
+> Fixes build error
+> 
+> Building dns library in /home/bernd/buildroot/br4/output/build/dhcp-4.4.3-
+> P1/bind/bind-9.11.36/lib/dns
+> ./gen: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.38' not found 
+> (required by ./gen)
+> make[4]: *** [Makefile:601: include/dns/enumtype.h] Error 1
+> make[3]: *** [Makefile:595: include] Error 2
+> 
+> with this defconfig
+> 
+> BR2_x86_64=y
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> BR2_PACKAGE_DHCP=y
+> 
+> Please note that this build error only occurs when the target and the
+> host system have the same arch. For example this defconfig builds fine:
+> 
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> BR2_PACKAGE_DHCP=y
+> 
+> on a Debian 12 x86_64 host using glibc-2.36:
+> 
+> $ /lib/ld-linux.so.2  --version
+> ld.so (Debian GLIBC 2.36-9+deb12u1) stable release version 2.36.
+> 
+> The error occurs since buildroot commit 34f8d874ee which bumped glibc
+> from 2.37 to 2.38.
+> 
+> This patch is inspired by the Yocto Project:
+> https://patchwork.yoctoproject.org/project/oe/patch/20230715212159.3265080-1-raj.khem@gmail.com/
+
+That patch has an important tidbit of inoormation that yours is missing,
+and that is important to get: this is passing the configure options to
+the internal bind.
+
+Indeed, I was very puzzled why passing the same --build, --host, and
+--target as pkg-autotools already does, would fix the issue.
+
+But indeed, isch dhcp internally configure a bundled bind, and messes
+when doing so.
+
+So your patch looks like it is correct.
+
+However, I would challenge it on other grounds: ISC decided to stop
+maintaing dhcp starting end of 2022, almost a year ago, when they
+released the last version of dhcp.
+
+Should we just drop that package now and be done with it?
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/dhcp/dhcp.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+> index 7be40191c8..094d361e45 100644
+> --- a/package/dhcp/dhcp.mk
+> +++ b/package/dhcp/dhcp.mk
+> @@ -32,6 +32,9 @@ DHCP_CONF_ENV = \
+>  	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
+>  
+>  DHCP_BIND_EXTRA_CONFIG = \
+> +	--build=$(GNU_HOST_NAME) \
+> +	--host=$(GNU_TARGET_NAME) \
+> +	--target=$(GNU_TARGET_NAME) \
+>  	BUILD_CC='$(HOSTCC)' \
+>  	BUILD_CFLAGS='$(HOST_CFLAGS)' \
+>  	BUILD_CPPFLAGS='$(HOST_CPPFLAGS)' \
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
