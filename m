@@ -1,83 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E75B7E7849A
-	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 13:56:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C702CE784B5
+	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 14:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 42131418FD;
-	Mon,  2 Oct 2023 13:56:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42131418FD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55BEA60FA2;
+	Mon,  2 Oct 2023 14:18:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55BEA60FA2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ndtOFFlYXHsU; Mon,  2 Oct 2023 13:56:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9OKsppLxTv73; Mon,  2 Oct 2023 14:18:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24A9141ADE;
-	Mon,  2 Oct 2023 13:56:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24A9141ADE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B3F71BF283
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 13:56:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B57C660F89;
+	Mon,  2 Oct 2023 14:18:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B57C660F89
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 91B481BF410
+ for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 14:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 805A4418FD
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 13:56:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 805A4418FD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B3E460F89
+ for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 14:18:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B3E460F89
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1v3IOigQWsJ5 for <buildroot@lists.busybox.net>;
- Mon,  2 Oct 2023 13:56:06 +0000 (UTC)
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EFDC441E41
- for <buildroot@buildroot.org>; Mon,  2 Oct 2023 13:56:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFDC441E41
-Received: by mail-lf1-x12d.google.com with SMTP id
- 2adb3069b0e04-50567477b29so5441978e87.3
- for <buildroot@buildroot.org>; Mon, 02 Oct 2023 06:56:05 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3C5Muar_mGoQ for <buildroot@lists.busybox.net>;
+ Mon,  2 Oct 2023 14:18:19 +0000 (UTC)
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com
+ [IPv6:2607:f8b0:4864:20::f42])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03C8B6068B
+ for <buildroot@buildroot.org>; Mon,  2 Oct 2023 14:18:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03C8B6068B
+Received: by mail-qv1-xf42.google.com with SMTP id
+ 6a1803df08f44-668d9c1f70fso7712386d6.3
+ for <buildroot@buildroot.org>; Mon, 02 Oct 2023 07:18:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696254963; x=1696859763;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=nXKItotBcwAxvhflMROJzZYatRa6agKBm5bI142cGJ4=;
- b=mJdjP+Xbj+nedWdap6iKsjNhsa8+ivU79rub1Tk3APXGDtRFGf6IjDP7EsFt5bfBi1
- amOVBrLWzleJxRZDCGA8aMgWPWRDBgw/MxOompRQ2APJARJdKJR4MBSSmkjLWwnnVPZa
- CDdK9wIKz08UmzRo1FDT4cN0LI5NKSfX8ePBjRN2O5i0ARImcYT08sSdB/rJXkb2JwmA
- NzIpXbsiZ8vCu3DDa1ZnF0DQ7EMDUKEvkJhQxOJp6Qj3nXJFhCo+P6oWDVc7OEZk4VqJ
- oqkd/cHaO1ITUTJhPyRN8yheZiryTZ22jlnXVfYH6anLXb5AEJNCogsKtRpCrhWpwIjY
- cj8A==
-X-Gm-Message-State: AOJu0YxHBzG3BL7mGPQBjsVVEtI6r5AXj8VzU8EqE6uReRnJKpqD/Zlj
- olS9UtAo4wxUJ8iUN+dWwZHV+FcytUYV95d47QE=
-X-Google-Smtp-Source: AGHT+IEywVXUNgKtPczMTWqGn7HCnP1Wf7Ao1rhiNGJiWhDhPHPxU1vKc84zffW850HTHMA9LK9H2qVyGMo10zGQWyE=
-X-Received: by 2002:a05:6512:3095:b0:500:b56d:e11a with SMTP id
- z21-20020a056512309500b00500b56de11amr11311652lfd.43.1696254963102; Mon, 02
- Oct 2023 06:56:03 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1696256298; x=1696861098;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=FQtD9Wjfkx0j6M9G+eF7uM5FMAXW3MTnxtSd7VTMB40=;
+ b=g1Fdz0/z0fqurKiXT7W1EOOW1SA+JGgYAiTwYTDlIw2LLtoaf51Gv5T4RRzdMfN2Oc
+ S2rlBCHnuGuvvYkWmHxpFaYr/xiJagnEXXxa6sWUZFMZxLmzQe8BLhVYWCm3OXIHOtS3
+ Yw0NSF6Jf0NobLVuP9NdebiOnw1+hp/FMFgpR/H1o4QYB+FJ+Pgy/YjJrlSSmZgneuyn
+ GN5m76RE+cTISR9ds51Syk7B7Fhfw4STWtTGgo1tTZ5TowfvbAWZUHuJEb22afZeP2iT
+ j28AJTXzpicttJNEXt6WgmqCjDwmrif1Kb2fIsCcuBPw2cWuRiJdV+SxoSd847YwQ9/1
+ 0BVw==
+X-Gm-Message-State: AOJu0Yz0WuG3Q87h0KBrVtYRp7RoGKkMwDay2v9IAzQF5bQGpWU7thQz
+ a90aBLpE3Q2NYJV3TwUEr71c9w==
+X-Google-Smtp-Source: AGHT+IEchAkKM/FI2gLvfXHrl0IH046cKqt5QBmryDyAblGq4Rq8y01LSdQlQfrcoPWhOGAkLoyzZQ==
+X-Received: by 2002:a0c:e383:0:b0:65d:31e:b80f with SMTP id
+ a3-20020a0ce383000000b0065d031eb80fmr14026334qvl.35.1696256297458; 
+ Mon, 02 Oct 2023 07:18:17 -0700 (PDT)
+Received: from dell-precision-5540 ([50.212.55.89])
+ by smtp.gmail.com with ESMTPSA id
+ oj2-20020a056214440200b0065af4977ea3sm7756049qvb.24.2023.10.02.07.18.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 02 Oct 2023 07:18:17 -0700 (PDT)
+Date: Mon, 2 Oct 2023 10:18:08 -0400
+From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZRrRIKvNZ92GhIkH@dell-precision-5540>
+References: <20220819151734.926106-1-Ben.Wolsieffer@hefring.com>
+ <20230930221218.023aa2c5@windsurf>
 MIME-Version: 1.0
-References: <20231002135147.2707988-1-julien.boibessot@armadeus.com>
-In-Reply-To: <20231002135147.2707988-1-julien.boibessot@armadeus.com>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 2 Oct 2023 15:55:51 +0200
-Message-ID: <CAPi7W82neHWtun3WS8ZO1jOaEfWarwEnSvQdXLV9qHx=r7=cLw@mail.gmail.com>
-To: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Content-Disposition: inline
+In-Reply-To: <20230930221218.023aa2c5@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696254963; x=1696859763; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=nXKItotBcwAxvhflMROJzZYatRa6agKBm5bI142cGJ4=;
- b=cun5GxIyK1ia1UcBt0XNChmDvvpakq/FYjOSpEXCtySbqsbAhhpgnBsaB1nHXME2hc
- IheM3rb+5MIPagtNz+xo9Pe//BBZPTnsCb/mrHK9xGbG2+tJ4TNU2/nUzY/Dh3qq0iR8
- j5HsdH0BxtAVJPAEBQMeDcP2pvnO3siqGnWDrUH/bFkQeQeV50UOe7vxogQzhiaRpCme
- XcKQhp0/sxXRyLAAHN7HT+FXBJlpvwjtNQ12V59H8sreaHT63hiGmvPK1BxMzrJBevP3
- 7cN8tmChdX2lHslQhCthEck1Kix0xkFqbRyLO17zfU7IyV6JtkiGAIdMs8Whvm/g3jbc
- QlbQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cun5GxIy
-Subject: Re: [Buildroot] [PATCH 1/1] package/ltris: bump to version 1.2.7
+ d=hefring-com.20230601.gappssmtp.com; s=20230601; t=1696256298; x=1696861098;
+ darn=buildroot.org; 
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=FQtD9Wjfkx0j6M9G+eF7uM5FMAXW3MTnxtSd7VTMB40=;
+ b=2vJ5jYGET/grrgKwzkijrMUJMMRdhQbkZF+0LaeKy/qfgd0Lc0ScgHB3qZ+oZlC4Wr
+ AcuDZ0VczShznvKEMEpnafMxBA/c2B6WTOhkD/0C6BjN/Hy4naESLdZunqgrnpJV+L9f
+ K6t4MVxJgkj08/NMsYrBUAuXwF+fO2d7LjvA9Y6em7ZzAYbses3Hu44843tmTo9PfWQ6
+ r1q9VjGsd6ihqD8Di3PfAe9JkNbutURMcqVkgqfCQuLvw6W0q9RZCN5x6rju3feGj3oQ
+ cy3/2Ez6fPU9wmufdNmeQDvsZ6nuEs1DM7YhkGTy5lXWF7DqwQSbtrUzfBUN/KEsaeKE
+ BeZA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=hefring-com.20230601.gappssmtp.com
+ header.i=@hefring-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=2vJ5jYGE
+Subject: Re: [Buildroot] [PATCH v3 0/8] Add support for FDPIC binaries on ARM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,218 +98,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5328909726767896615=="
+Cc: Vladimir Murzin <vladimir.murzin@arm.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5328909726767896615==
-Content-Type: multipart/alternative; boundary="00000000000086384d0606bc2241"
+Hi Thomas,
 
---00000000000086384d0606bc2241
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Sat, Sep 30, 2023 at 10:12:18PM +0200, Thomas Petazzoni wrote:
+> Hello Ben,
+> 
+> On Fri, 19 Aug 2022 11:17:25 -0400
+> Ben Wolsieffer <ben.wolsieffer@hefring.com> wrote:
+> 
+> > Ben Wolsieffer (8):
+> >   Revert "arch: drop now useless support for FDPIC"
+> >   arch: don't enable FDPIC binaries by default
+> >   arch: make FDPIC dependent on toolchain support
+> >   arch/arm: add support for FDPIC
+> >   boot/uboot: pass -mno-fdpic if FDPIC is enabled
+> >   linux: pass -mno-fdpic if FDPIC is enabled
+> >   package/uclibc: enable NPTL on no-MMU ARM w/ FDPIC
+> >   package/pkg-autotools: patch libtool to support ARM FDPIC
+> 
+> Thanks for submitting this, and as Yann said already many months ago,
+> sorry for the delay.
+> 
+> To be honest, we're not entirely sure we want to merge this without a
+> really active user of it. The changes are not too complicated, but it's
+> another fairly special use-case to support, and we would really like to
+> have someone using it "for real" before we merge this.
+> 
+> Also, Waldemar pointed out a number of small issues he encountered
+> while testing this. There's not been activity on this topic for a year,
+> so we're not sure how committed you are to pushing this and more
+> importantly maintaining this.
+> 
+> Could you provide more details on whether you're actually using this in
+> a project/product? Or is anyone else using this, or going to use it?
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 
-Hello Julien,
+No problem about the delay, we haven't had a chance to work on this
+again until recently either. We are actively using this feature now on a
+custom platform based around Emcraft's STM32F746 SOM [1]. I have a
+version of these patches locally that addresses most of the feedback
+from the first submission, and I just need to fix a few more things
+before submitting it again.
 
-Le lun. 2 oct. 2023 =C3=A0 15:52, Julien BOIBESSOT <julien.boibessot@armade=
-us.com>
-a =C3=A9crit :
+Thanks, Ben
 
-> Latest release. Asked by autobuild.buildroot.net.
-> Remove integrated fix.
->
-
-You forgot to update .checkpackageignore
-
-
->
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> ---
->  .../ltris/0001-fix-build-with-gcc-4.8.patch   | 20 -------------------
->  package/ltris/ltris.hash                      |  2 +-
->  package/ltris/ltris.mk                        |  2 +-
->  3 files changed, 2 insertions(+), 22 deletions(-)
->  delete mode 100644 package/ltris/0001-fix-build-with-gcc-4.8.patch
->
-> diff --git a/package/ltris/0001-fix-build-with-gcc-4.8.patch
-> b/package/ltris/0001-fix-build-with-gcc-4.8.patch
-> deleted file mode 100644
-> index d6bbf6a946..0000000000
-> --- a/package/ltris/0001-fix-build-with-gcc-4.8.patch
-> +++ /dev/null
-> @@ -1,20 +0,0 @@
-> -Fix build with gcc 4.8
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://sourceforge.net/p/lgames/patches/28]
-> -Index: ltris/src/bowl.c
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> ---- ltris/src/bowl.c   (r=C3=A9vision 421)
-> -+++ ltris/src/bowl.c   (copie de travail)
-> -@@ -828,9 +828,10 @@
-> - */
-> - void bowl_init_block_masks()
-> - {
-> -+      int i;
-> -       int masksize =3D sizeof(block_masks[0].mask); // same for all
-> -
-> --      for (int i =3D 0; i < 7; i++) {
-> -+      for (i =3D 0; i < 7; i++) {
-> -               block_masks[i].rx =3D 2;
-> -               block_masks[i].ry =3D 2;
-> -               memset(block_masks[i].mask, 0, masksize );
-> diff --git a/package/ltris/ltris.hash b/package/ltris/ltris.hash
-> index f696e3af17..abe6853d9b 100644
-> --- a/package/ltris/ltris.hash
-> +++ b/package/ltris/ltris.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  a7bc6c5fc6539b88505077a1b4580edc9b179ce0a6b829c58fbd9416cf456195
-> ltris-1.2.tar.gz
-> +sha256  1291c6a642d06b9ee153ac0a2e7855a2c983e839c618f1a294df04d829525cb0
-> ltris-1.2.7.tar.gz
->  sha256  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34
-> COPYING
-> diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
-> index 9b59613417..98902de44c 100644
-> --- a/package/ltris/ltris.mk
-> +++ b/package/ltris/ltris.mk
-> @@ -5,7 +5,7 @@
->
->  ########################################################################=
-########
->
->  LTRIS_SITE =3D http://downloads.sourceforge.net/lgames/ltris
-> -LTRIS_VERSION =3D 1.2
-> +LTRIS_VERSION =3D 1.2.7
->  LTRIS_LICENSE =3D GPL-2.0+
->  LTRIS_LICENSE_FILES =3D COPYING
->
-> --
-> 2.25.1
->
-
-Best Regards,
-
-Fabrice
-
---00000000000086384d0606bc2241
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hello Julien,<br></div><br><div class=3D"=
-gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0lun. 2 oct. 2023=
- =C3=A0=C2=A015:52, Julien BOIBESSOT &lt;<a href=3D"mailto:julien.boibessot=
-@armadeus.com">julien.boibessot@armadeus.com</a>&gt; a =C3=A9crit=C2=A0:<br=
-></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;=
-border-left:1px solid rgb(204,204,204);padding-left:1ex">Latest release. As=
-ked by <a href=3D"http://autobuild.buildroot.net" rel=3D"noreferrer" target=
-=3D"_blank">autobuild.buildroot.net</a>.<br>
-Remove integrated fix.<br></blockquote><div><br></div><div>You forgot to up=
-date .checkpackageignore<br></div><div>=C2=A0</div><blockquote class=3D"gma=
-il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
-04,204);padding-left:1ex">
-<br>
-Signed-off-by: Julien BOIBESSOT &lt;<a href=3D"mailto:julien.boibessot@arma=
-deus.com" target=3D"_blank">julien.boibessot@armadeus.com</a>&gt;<br>
----<br>
-=C2=A0.../ltris/0001-fix-build-with-gcc-4.8.patch=C2=A0 =C2=A0| 20 --------=
------------<br>
-=C2=A0package/ltris/ltris.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 +-<br>
-=C2=A0package/ltris/<a href=3D"http://ltris.mk" rel=3D"noreferrer" target=
-=3D"_blank">ltris.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 +-<br>
-=C2=A03 files changed, 2 insertions(+), 22 deletions(-)<br>
-=C2=A0delete mode 100644 package/ltris/0001-fix-build-with-gcc-4.8.patch<br=
->
-<br>
-diff --git a/package/ltris/0001-fix-build-with-gcc-4.8.patch b/package/ltri=
-s/0001-fix-build-with-gcc-4.8.patch<br>
-deleted file mode 100644<br>
-index d6bbf6a946..0000000000<br>
---- a/package/ltris/0001-fix-build-with-gcc-4.8.patch<br>
-+++ /dev/null<br>
-@@ -1,20 +0,0 @@<br>
--Fix build with gcc 4.8<br>
--<br>
--Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice@gma=
-il.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
--[Upstream status: <a href=3D"https://sourceforge.net/p/lgames/patches/28" =
-rel=3D"noreferrer" target=3D"_blank">https://sourceforge.net/p/lgames/patch=
-es/28</a>]<br>
--Index: ltris/src/bowl.c<br>
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D<br>
----- ltris/src/bowl.c=C2=A0 =C2=A0(r=C3=A9vision 421)<br>
--+++ ltris/src/bowl.c=C2=A0 =C2=A0(copie de travail)<br>
--@@ -828,9 +828,10 @@<br>
-- */<br>
-- void bowl_init_block_masks() <br>
-- {<br>
--+=C2=A0 =C2=A0 =C2=A0 int i;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0int masksize =3D sizeof(block_masks[0].mask); /=
-/ same for all<br>
-- <br>
---=C2=A0 =C2=A0 =C2=A0 for (int i =3D 0; i &lt; 7; i++) {<br>
--+=C2=A0 =C2=A0 =C2=A0 for (i =3D 0; i &lt; 7; i++) {<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0block_masks[i].rx =
-=3D 2;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0block_masks[i].ry =
-=3D 2;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0memset(block_masks[=
-i].mask, 0, masksize );<br>
-diff --git a/package/ltris/ltris.hash b/package/ltris/ltris.hash<br>
-index f696e3af17..abe6853d9b 100644<br>
---- a/package/ltris/ltris.hash<br>
-+++ b/package/ltris/ltris.hash<br>
-@@ -1,3 +1,3 @@<br>
-=C2=A0# Locally computed:<br>
--sha256=C2=A0 a7bc6c5fc6539b88505077a1b4580edc9b179ce0a6b829c58fbd9416cf456=
-195=C2=A0 ltris-1.2.tar.gz<br>
-+sha256=C2=A0 1291c6a642d06b9ee153ac0a2e7855a2c983e839c618f1a294df04d829525=
-cb0=C2=A0 ltris-1.2.7.tar.gz<br>
-=C2=A0sha256=C2=A0 67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a8=
-7c4b6c34=C2=A0 COPYING<br>
-diff --git a/package/ltris/<a href=3D"http://ltris.mk" rel=3D"noreferrer" t=
-arget=3D"_blank">ltris.mk</a> b/package/ltris/<a href=3D"http://ltris.mk" r=
-el=3D"noreferrer" target=3D"_blank">ltris.mk</a><br>
-index 9b59613417..98902de44c 100644<br>
---- a/package/ltris/<a href=3D"http://ltris.mk" rel=3D"noreferrer" target=
-=3D"_blank">ltris.mk</a><br>
-+++ b/package/ltris/<a href=3D"http://ltris.mk" rel=3D"noreferrer" target=
-=3D"_blank">ltris.mk</a><br>
-@@ -5,7 +5,7 @@<br>
-=C2=A0#####################################################################=
-###########<br>
-<br>
-=C2=A0LTRIS_SITE =3D <a href=3D"http://downloads.sourceforge.net/lgames/ltr=
-is" rel=3D"noreferrer" target=3D"_blank">http://downloads.sourceforge.net/l=
-games/ltris</a><br>
--LTRIS_VERSION =3D 1.2<br>
-+LTRIS_VERSION =3D 1.2.7<br>
-=C2=A0LTRIS_LICENSE =3D GPL-2.0+<br>
-=C2=A0LTRIS_LICENSE_FILES =3D COPYING<br>
-<br>
--- <br>
-2.25.1<br></blockquote><div><br></div><div>Best Regards,</div><div><br></di=
-v><div>Fabrice <br></div></div></div>
-
---00000000000086384d0606bc2241--
-
---===============5328909726767896615==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+[1] https://emcraft.com/products/700
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5328909726767896615==--
