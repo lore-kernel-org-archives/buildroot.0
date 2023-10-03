@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E7ADE75455
-	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 12:34:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E564E75457
+	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 12:37:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95DC441722;
-	Tue,  3 Oct 2023 12:34:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95DC441722
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F772420A0;
+	Tue,  3 Oct 2023 12:37:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F772420A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KTPZK-W5NXFv; Tue,  3 Oct 2023 12:34:36 +0000 (UTC)
+	with ESMTP id rQdLpq2hBK4c; Tue,  3 Oct 2023 12:37:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 758BC417A5;
-	Tue,  3 Oct 2023 12:34:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 758BC417A5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9123E1BF352
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:34:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E28B4209B;
+	Tue,  3 Oct 2023 12:37:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E28B4209B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 752C01BF352
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:37:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6AF79823DD
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:34:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AF79823DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5ABB6403C6
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:37:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ABB6403C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5DcCPah3Ei6b for <buildroot@lists.busybox.net>;
- Tue,  3 Oct 2023 12:34:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yjZBm1_yJ_Iv for <buildroot@lists.busybox.net>;
+ Tue,  3 Oct 2023 12:37:01 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 59022823AA
- for <buildroot@buildroot.org>; Tue,  3 Oct 2023 12:34:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59022823AA
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6AE19403C4
+ for <buildroot@buildroot.org>; Tue,  3 Oct 2023 12:37:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AE19403C4
 Received: from fli4l.lan.fli4l (p54a1b0e1.dip0.t-ipconnect.de [84.161.176.225])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7CD2FA4C00A8;
- Tue,  3 Oct 2023 14:34:30 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46754)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 98959A4C1040
+ for <buildroot@buildroot.org>; Tue,  3 Oct 2023 14:36:59 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44690)
  by fli4l.lan.fli4l with esmtp (Exim 4.96.1)
- (envelope-from <bernd@kuhls.net>) id 1qnebe-0001EG-0Y;
- Tue, 03 Oct 2023 14:34:30 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qnee3-0001el-19
+ for buildroot@buildroot.org; Tue, 03 Oct 2023 14:36:59 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  3 Oct 2023 14:34:30 +0200
-Message-Id: <20231003123430.2693572-1-bernd@kuhls.net>
+Date: Tue,  3 Oct 2023 14:36:59 +0200
+Message-Id: <20231003123659.2704273-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1696336470;
- bh=u4HB54qiBRBoonJD8K+2/hbcRd3jZ9NuuYBmDyM29/o=;
- h=From:To:Cc:Subject:Date:From;
- b=aWWneqevJulN6iKQe3KFUtf4/pR7R/exsMtFCgwpx6RBVUxE6F1uwEQ6j4bT7wj9b
- JcApAJKKKIlnWUc4tgNQBYQ7vcChFGZKD1v3wZ+ipfHZJfPlF8NJWnm5erOh2vFxSA
- uzcx2aWaK7KE/SvS+aLW5gDTi+F5EYlwLueI7KKxDKyYcGXLoMFVjMR9RBHCM0oS3H
- Y4RGhTkQxLH7T8ISHLbrFRF6EZbVobzwcZFqNMC+ZEHGFQ1fItI6V9rRkW7y41+6nI
- cOP3oBuG5ZhQXOl67Pg64tQCrzRkdI8TPibUp6hMr8lKSxPPQ9qubewIgICoqNmgzO
- AAQYQNbfruJhw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202306131828; t=1696336619;
+ bh=l/nN6SesLYAhItZLojX6oRGLzjoTt7JRoPrDfk2D4Lc=;
+ h=From:To:Subject:Date:From;
+ b=0G6ARG0kYWo+nCCh4DHCvMRsOZC2P5o8pT2XBkMP5l4JWqmKbbW3StraL9syCOsL1
+ +HVdNq3VgN6s+op/Ls3rEmOZdzatwdnC1icbohtSSCO+cX0DN670hZ+GrEqsqaHW17
+ ntFoWI+jxkpiXpqbeH2d6h9Q4FY0saqvMdRUFdf0pr5EQWDjrgcmF8qfil1x8D5d4h
+ jv5I2/wBMmPEjtDtEsZlOuvkP/trOOgOB9szUdUCyjTJmaph7IhPknaUx2mvWPE41W
+ Swl1WbXlQ5/Tod8z4q58xNsf2Ldxm/RD4DTbo5CNgLHLbtTd9JAkQhNCsacgs6tQMm
+ cxs/spd0ducag==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=aWWneqev
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.13.1
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=0G6ARG0k
+Subject: [Buildroot] [PATCH 1/1] package/libsndfile: bump to version 1.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,90 +74,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Spenser Gilliland <spenser@gillilanding.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch which was backported from upstream and is now included
-in this release.
+Release notes:
+https://github.com/libsndfile/libsndfile/releases/tag/1.2.1
+https://github.com/libsndfile/libsndfile/releases/tag/1.2.2
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...02-VP8-disallow-thread-count-changes.patch | 38 -------------------
- package/libvpx/libvpx.hash                    |  2 +-
- package/libvpx/libvpx.mk                      |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
- delete mode 100644 package/libvpx/0002-VP8-disallow-thread-count-changes.patch
+ package/libsndfile/libsndfile.hash | 2 +-
+ package/libsndfile/libsndfile.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvpx/0002-VP8-disallow-thread-count-changes.patch b/package/libvpx/0002-VP8-disallow-thread-count-changes.patch
-deleted file mode 100644
-index d625255a9f..0000000000
---- a/package/libvpx/0002-VP8-disallow-thread-count-changes.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 3fbd1dca6a4d2dad332a2110d646e4ffef36d590 Mon Sep 17 00:00:00 2001
--From: James Zern <jzern@google.com>
--Date: Mon, 25 Sep 2023 18:55:59 -0700
--Subject: [PATCH] VP8: disallow thread count changes
--
--Currently allocations are done at encoder creation time. Going from
--threaded to non-threaded would cause a crash.
--
--Bug: chromium:1486441
--Change-Id: Ie301c2a70847dff2f0daae408fbef1e4d42e73d4
--
--Fixes CVE-2023-5217: https://www.cve.org/CVERecord?id=CVE-2023-5217
--
--Upstream: https://github.com/webmproject/libvpx/commit/3fbd1dca6a4d2dad332a2110d646e4ffef36d590
--Upstream: https://chromium.googlesource.com/webm/libvpx/+/3fbd1dca6a4d2dad332a2110d646e4ffef36d590
--
--[Bernd: Removed patch for test/encode_api_test.cc]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- vp8/encoder/onyx_if.c   | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/vp8/encoder/onyx_if.c b/vp8/encoder/onyx_if.c
--index c65afc643bf..c5e9970c3cc 100644
----- a/vp8/encoder/onyx_if.c
--+++ b/vp8/encoder/onyx_if.c
--@@ -1447,6 +1447,11 @@ void vp8_change_config(VP8_COMP *cpi, VP8_CONFIG *oxcf) {
--   last_h = cpi->oxcf.Height;
--   prev_number_of_layers = cpi->oxcf.number_of_layers;
-- 
--+  if (cpi->initial_width) {
--+    // TODO(https://crbug.com/1486441): Allow changing thread counts; the
--+    // allocation is done once in vp8_create_compressor().
--+    oxcf->multi_threaded = cpi->oxcf.multi_threaded;
--+  }
--   cpi->oxcf = *oxcf;
-- 
--   switch (cpi->oxcf.Mode) {
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index c88e6840cf..7cda8cc2eb 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
+diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
+index be3ba41dc6..94d6f96335 100644
+--- a/package/libsndfile/libsndfile.hash
++++ b/package/libsndfile/libsndfile.hash
 @@ -1,4 +1,4 @@
- # Locally computed:
--sha256  cb2a393c9c1fae7aba76b950bb0ad393ba105409fe1a147ccd61b0aaa1501066  libvpx-1.13.0.tar.gz
-+sha256  00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14  libvpx-1.13.1.tar.gz
- sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
- sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index b558c41981..ec2e39a74f 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
+ # Locally calculated after checking pgp signature
+-sha256  0e30e7072f83dc84863e2e55f299175c7e04a5902ae79cfb99d4249ee8f6d60a  libsndfile-1.2.0.tar.xz
++sha256  3799ca9924d3125038880367bf1468e53a1b7e3686a934f098b7e1d286cdb80e  libsndfile-1.2.2.tar.xz
+ # Locally calculated
+ sha256  ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140  COPYING
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index d8d1725444..89eb4f3c1d 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVPX_VERSION = 1.13.0
-+LIBVPX_VERSION = 1.13.1
- LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
- LIBVPX_LICENSE = BSD-3-Clause
- LIBVPX_LICENSE_FILES = LICENSE PATENTS
+-LIBSNDFILE_VERSION = 1.2.0
++LIBSNDFILE_VERSION = 1.2.2
+ LIBSNDFILE_SOURCE = libsndfile-$(LIBSNDFILE_VERSION).tar.xz
+ LIBSNDFILE_SITE = https://github.com/libsndfile/libsndfile/releases/download/$(LIBSNDFILE_VERSION)
+ LIBSNDFILE_INSTALL_STAGING = YES
 -- 
 2.39.2
 
