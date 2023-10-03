@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46F8CE75453
-	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 12:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06464E75453
+	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 12:24:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F3A34208B;
-	Tue,  3 Oct 2023 12:22:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F3A34208B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 679A5420A4;
+	Tue,  3 Oct 2023 12:24:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 679A5420A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id URkbwdJ-vliQ; Tue,  3 Oct 2023 12:22:09 +0000 (UTC)
+	with ESMTP id XU47T5cfzujW; Tue,  3 Oct 2023 12:24:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F3E9420AA;
-	Tue,  3 Oct 2023 12:22:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F3E9420AA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4EB351BF352
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:22:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 696C7420AA;
+	Tue,  3 Oct 2023 12:24:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 696C7420AA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 331791BF352
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:24:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 27D2E61168
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:22:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27D2E61168
+ by smtp1.osuosl.org (Postfix) with ESMTP id 195568269C
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:24:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 195568269C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lf6_R4JCHGIM for <buildroot@lists.busybox.net>;
- Tue,  3 Oct 2023 12:22:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hCRroJIR1URk for <buildroot@lists.busybox.net>;
+ Tue,  3 Oct 2023 12:24:09 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1BDB061148
- for <buildroot@buildroot.org>; Tue,  3 Oct 2023 12:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BDB061148
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F2C7882695
+ for <buildroot@buildroot.org>; Tue,  3 Oct 2023 12:24:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2C7882695
 Received: from fli4l.lan.fli4l (p54a1b0e1.dip0.t-ipconnect.de [84.161.176.225])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 269D3A4C00A8
- for <buildroot@buildroot.org>; Tue,  3 Oct 2023 14:22:01 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38528)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CA78EA4C00A8;
+ Tue,  3 Oct 2023 14:24:06 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57310)
  by fli4l.lan.fli4l with esmtp (Exim 4.96.1)
- (envelope-from <bernd@kuhls.net>) id 1qnePY-0007Wb-2y
- for buildroot@buildroot.org; Tue, 03 Oct 2023 14:22:00 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qneRa-0007su-1p;
+ Tue, 03 Oct 2023 14:24:06 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  3 Oct 2023 14:22:00 +0200
-Message-Id: <20231003122200.2677353-1-bernd@kuhls.net>
+Date: Tue,  3 Oct 2023 14:24:06 +0200
+Message-Id: <20231003122406.2678498-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1696335721;
- bh=3cpdIqphuhnzUVRHG8L981dpPsatz5NpkyufqpqeIHI=;
- h=From:To:Subject:Date:From;
- b=MTpgLM2gxeAm4A8uZtsjvbP7IJadPd+moMK7cbIP2g6L2Bxpg3ELh1mZkKfiSSkuY
- GNldEN9tYcwliJuusP9hXXVO2AMG7sJUhxYOihuKKm2a/8bm4s64cj3p9DqsCLyQz4
- 8N2sLClPMtLPI4AT4purM9hFcjZ6hi33ia7NkMG+xWLjvFfHOJWt361EkzN5pAmtO0
- WduMQg54czaiASzbPy7gaH2FM50id/m7RnrWrls0nY4x7PIHbyvV4Y72UWj0l+nmwu
- 3kUeuPwCN2rK0D8aD8VvOxYvISlPsQZ7rG3zdqFKJCVtKpuxeD/5PDW9i2qW6PPz1n
- QheadeO701hYA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202306131828; t=1696335846;
+ bh=w2hZ1iYG8hULRr9m0SwRFPLp/o+iO2MvrDsxL/2wP+g=;
+ h=From:To:Cc:Subject:Date:From;
+ b=b8p/HpVPekcOGK0KtmCVnI03erpHdbj6PNLvteHCF7AWQl6Uj7vJc1bfHDB9TnHB2
+ J6wrxquImWZsVFGAOPRW6Y2/fNWKq/bwYYFfTT2SbIMchax1MpmXXgmBWfQiBhZ7tX
+ NC7TUZExRuV2jbK+J06aXd8HR+aR3b+P7iJvg6R+N2/89EzC3Fuha/9cjMClzIMS7Y
+ 8EEB2MATL8HH71MZa/avHCP9VNnov8XHOGGxHyt+gDSaQVf7OzsgcubjJKGD8cj0qd
+ VPGhHATEHlsaPg2nE1/GtnfjBkTg3U4o6e00FJPrlzsb8c/b6559bHOkCqhLJ8S92h
+ NQaUBxhiI+XUA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=MTpgLM2g
-Subject: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 23.3
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=b8p/HpVP
+Subject: [Buildroot] [PATCH 1/1] package/wireless-regdb: bump version to
+ 2023.09.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,43 +75,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Dimitrios Siganos <dimitris@siganos.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-http://stellarium.org/release/2023/09/25/stellarium-23.3.html
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/stellarium/stellarium.hash | 2 +-
- package/stellarium/stellarium.mk   | 2 +-
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index e0ee61d2b6..a2f511a283 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index b4e8dcaf54..71f92aaf91 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
 @@ -1,4 +1,4 @@
- # From https://github.com/Stellarium/stellarium/releases
--sha256  3aee154d0de3ed484e3e6fee027cf73e6dd0a677b3ea1af348b225ac02339008  stellarium-23.2.tar.xz
-+sha256  179420e9e9f11278b78dc54e14458452c92055cc8923538748c8a0f961714fc2  stellarium-23.3.tar.xz
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256  f254d08ab3765aeae2b856222e11a95d44aef519a6663877c71ef68fae4c8c12  wireless-regdb-2023.05.03.tar.xz
++sha256  26d4c2a727cc59239b84735aad856b7c7d0b04e30aa5c235c4f7f47f5f053491  wireless-regdb-2023.09.01.tar.xz
  # Locally computed
- sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index 43c99413dd..94ad4e1352 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
+ sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index db9c7f42d5..e9003ce2e6 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STELLARIUM_VERSION = 23.2
-+STELLARIUM_VERSION = 23.3
- STELLARIUM_SOURCE = stellarium-$(STELLARIUM_VERSION).tar.xz
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
+-WIRELESS_REGDB_VERSION = 2023.05.03
++WIRELESS_REGDB_VERSION = 2023.09.01
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 -- 
 2.39.2
 
