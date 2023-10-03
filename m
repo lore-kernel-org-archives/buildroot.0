@@ -1,68 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42A35E748E9
-	for <buildroot@archiver.kernel.org>; Sun,  1 Oct 2023 13:19:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 644EBE7544B
+	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 11:13:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF6A3404E0;
-	Sun,  1 Oct 2023 13:19:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF6A3404E0
+	by smtp4.osuosl.org (Postfix) with ESMTP id E029C41FBD;
+	Tue,  3 Oct 2023 11:13:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E029C41FBD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s5ME_SLDFpOB; Sun,  1 Oct 2023 13:19:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2aGshm6E_PWS; Tue,  3 Oct 2023 11:13:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3352D402E4;
-	Sun,  1 Oct 2023 13:19:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3352D402E4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 588DC41FBF;
+	Tue,  3 Oct 2023 11:13:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 588DC41FBF
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A31D71BF39F
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 13:18:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E0A31BF3EA
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 11:13:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AE9560E55
- for <buildroot@lists.busybox.net>; Sun,  1 Oct 2023 13:18:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AE9560E55
+ by smtp3.osuosl.org (Postfix) with ESMTP id 653D060E53
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 11:13:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 653D060E53
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7OnFAYb9T6G1 for <buildroot@lists.busybox.net>;
- Sun,  1 Oct 2023 13:18:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7DCAE60E17
- for <buildroot@uclibc.org>; Sun,  1 Oct 2023 13:18:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DCAE60E17
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 6B19C822A2; Sun,  1 Oct 2023 13:18:57 +0000 (UTC)
-From: bugzilla@busybox.net
+ with ESMTP id jgPzQh7J8vzt for <buildroot@lists.busybox.net>;
+ Tue,  3 Oct 2023 11:13:13 +0000 (UTC)
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2144B60BEE
+ for <buildroot@uclibc.org>; Tue,  3 Oct 2023 11:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2144B60BEE
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qndKw-0003xn-50
+ for buildroot@uclibc.org; Tue, 03 Oct 2023 13:13:10 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Sun, 01 Oct 2023 13:18:57 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Outdated package
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: radio.m0krx@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15811-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15811] New: imx233_olinuxino defconfig snagging on
- python2
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Tue, 03 Oct 2023 13:12:10 +0200
+Message-ID: <pan$e4c2e$65ef9aa7$60d9f1ab$55fd2db7@ID-313208.user.individual.net>
+References: <20231002195159.3053254-1-bernd@kuhls.net>
+ <20231002205144.GD2957__28552.5928296678$1696279934$gmane$org@scaer>
+Mime-Version: 1.0
+User-Agent: Pan/0.154 (Izium; 517acf4)
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: fix cross build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,30 +63,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15811
+Am Mon, 2 Oct 2023 22:51:44 +0200 schrieb Yann E. MORIN:
 
-            Bug ID: 15811
-           Summary: imx233_olinuxino defconfig snagging on python2
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: radio.m0krx@gmail.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+> So your patch looks like it is correct.
+> 
+> However, I would challenge it on other grounds: ISC decided to stop
+> maintaing dhcp starting end of 2022, almost a year ago, when they
+> released the last version of dhcp.
+> 
+> Should we just drop that package now and be done with it?
 
-Basic defconfig build fails.  libftd not able to build due to python2
-dependency.  I kicked the u-boot version to 2022.1 and it seems to have fixed
-the issue.
+Hi Yann,
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+my patch follows Peter's intention:
+"If it is dead upstream and hard to fix then that naturally makes it 
+harder to do, but the intention is to fix it."
+http://lists.busybox.net/pipermail/buildroot/2022-April/640709.html
+
+The ISC dhcp package is also used in current Debian releases:
+https://tracker.debian.org/pkg/isc-dhcp
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
