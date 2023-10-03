@@ -4,71 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B45CCE7543D
-	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 10:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0F16E7543D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 10:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5314682276;
-	Tue,  3 Oct 2023 10:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5314682276
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CB0F817C0;
+	Tue,  3 Oct 2023 10:01:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CB0F817C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NmAyAWUwcZiN; Tue,  3 Oct 2023 10:00:38 +0000 (UTC)
+	with ESMTP id eWXodpwKKFGL; Tue,  3 Oct 2023 10:01:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A7DC82278;
-	Tue,  3 Oct 2023 10:00:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A7DC82278
+	by smtp1.osuosl.org (Postfix) with ESMTP id D711081518;
+	Tue,  3 Oct 2023 10:01:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D711081518
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 42E7D1BF34D
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 10:00:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 907241BF34D
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 10:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1AD1B40650
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 10:00:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AD1B40650
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68B4741E62
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 10:01:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68B4741E62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zyxgRquq-Ymb for <buildroot@lists.busybox.net>;
- Tue,  3 Oct 2023 10:00:33 +0000 (UTC)
-X-Greylist: delayed 903 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 03 Oct 2023 10:00:32 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C545B405C8
-Received: from sender3-of-o59.zoho.com (sender3-of-o59.zoho.com
- [136.143.184.59])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C545B405C8
- for <buildroot@buildroot.org>; Tue,  3 Oct 2023 10:00:32 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; t=1696326325; cv=none; 
+ with ESMTP id qBZEFe2os1Dz for <buildroot@lists.busybox.net>;
+ Tue,  3 Oct 2023 10:01:28 +0000 (UTC)
+Received: from sender3-of-o58.zoho.com (sender3-of-o58.zoho.com
+ [136.143.184.58])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 22F2641E61
+ for <buildroot@buildroot.org>; Tue,  3 Oct 2023 10:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22F2641E61
+ARC-Seal: i=1; a=rsa-sha256; t=1696326383; cv=none; 
  d=zohomail.com; s=zohoarc; 
- b=e9xjdR5gFOnJ1P0o+QKfftqZX4wWWf5WQmInbz5ARW/vdHI5Sf/ngiiQX0FNcOZG3It2tsTo2xe4CmTZE7Td/XW1su3/Au/QwYb+3lGIsu0bOEd7OmV1NCfRa5L5t4V3uOlXOEOihWfbQZhj0uim0gyTO/dL/hG20r9RNsHWFKg=
+ b=Se/Sv5gX0FZ5NTaDfKTCxo72ADBRC2ysSCd536E6eqQ0+oK2i2yMGzMI3KZAQs2rlxLNEgDjB8F27Cf0//4QjObulqIl/QdZte4RnidsKhnpIHYo3YmWgWVEWHFmitRrzNdDo2FVBAfGRUxdbp5y/Ay/IRMAB8fYj2VhoAWmgz4=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
- s=zohoarc; t=1696326325;
+ s=zohoarc; t=1696326383;
  h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To;
  bh=MA+SfXylA5LAPESQvO4TlVijK08yQm1LDb2xSyIueIQ=; 
- b=TKUW1QvZcAzWjR/6fWlhHe6An1aLRGOAw9nDvqFeXMZ4rpNJLTSo0lGOPB20XaU2ItjnN0CKr6zb64s4X1y0j6G5+YUtvpvRG07+B6Uauw627eSkJ5Zpkm7JgsmoUCb+6daIOqN1uIWOpcl0XoY4Cw/gt+FqihZxvIGMExfowmU=
+ b=aFfutOe/SQqxBfrt85xYpCPXGQVNKUZe27mkwRM/GVR0a9vjxUE9MaP6/wU/1jLpGiL+agdsba5X06/EJFSJcDLsX5wVsSC2uLIp568bYrh8On/JhPF3hSTXRyKbVqkbHRKSKJXmDQ57PGDDrs7gBrZIjrzfZFTAGN5LnjdCbmw=
 ARC-Authentication-Results: i=1; mx.zohomail.com; dkim=pass  header.i=fsck.pl;
  spf=pass  smtp.mailfrom=enki@fsck.pl;
  dmarc=pass header.from=<enki@fsck.pl>
 Received: from newton.shill.gq (193.93.205.86 [193.93.205.86]) by
- mx.zohomail.com with SMTPS id 1696326324877400.1507956373173;
- Tue, 3 Oct 2023 02:45:24 -0700 (PDT)
+ mx.zohomail.com with SMTPS id 1696326380803395.4384288770101;
+ Tue, 3 Oct 2023 02:46:20 -0700 (PDT)
 From: Maciej Grela <enki@fsck.pl>
 To: buildroot@buildroot.org
-Message-ID: <20231003094501.61914-1-enki@fsck.pl>
-Date: Tue,  3 Oct 2023 11:44:57 +0200
+Message-ID: <20231003094612.62025-1-enki@fsck.pl>
+Date: Tue,  3 Oct 2023 11:46:09 +0200
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-ZohoMailClient: External
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; t=1696326325; 
+ c=relaxed/relaxed; t=1696326383; 
  s=zoho; d=fsck.pl; i=enki@fsck.pl;
  h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
  bh=MA+SfXylA5LAPESQvO4TlVijK08yQm1LDb2xSyIueIQ=;
- b=hC3N20lr1RtKpaNUAaWxYvwx+wF+HDq/rPWy+x7PsaFWw9eD9tNwUaK8tXejJ0+k
- z5Womz0FN1u77FNe4cLe4FFP6QNXnbtk8wU/lA1/LT1yMouyerHb8ByVlNWpU1/ZgEb
- ZfQwokWC4/Hyei6iGffmFB/w7typ0dCOqU8ZNoVA=
+ b=XLBA7xdhHEzGysGk9eRAAEA+5DYv4SXKs2xc2rO8pmIIlrkoqc4EiNXLvCYo+KvP
+ v0esaPPXdqRfCvadAo+PPOnYsmT6UQkIEJNpnkygKnXXKuu17nfUCa8fh1w+QdnIVAM
+ e/PwRlauBgLMMUMaB4U11ltT+DmfwnCksvS4tHQs=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=fsck.pl header.i=enki@fsck.pl
- header.a=rsa-sha256 header.s=zoho header.b=hC3N20lr
+ header.a=rsa-sha256 header.s=zoho header.b=XLBA7xdh
 Subject: [Buildroot] [PATCH 0/3] Support for D-Link DNS-320L
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
