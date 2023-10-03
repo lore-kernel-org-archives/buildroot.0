@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C11EE75455
-	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 12:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E7ADE75455
+	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 12:34:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9528420A9;
-	Tue,  3 Oct 2023 12:32:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9528420A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95DC441722;
+	Tue,  3 Oct 2023 12:34:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95DC441722
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TVv6LjWdPKzF; Tue,  3 Oct 2023 12:32:14 +0000 (UTC)
+	with ESMTP id KTPZK-W5NXFv; Tue,  3 Oct 2023 12:34:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9ED484212B;
-	Tue,  3 Oct 2023 12:32:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ED484212B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 758BC417A5;
+	Tue,  3 Oct 2023 12:34:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 758BC417A5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 594C11BF352
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:32:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9123E1BF352
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FBB98235A
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:32:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FBB98235A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AF79823DD
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 12:34:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AF79823DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RTQF7gNFzqo5 for <buildroot@lists.busybox.net>;
- Tue,  3 Oct 2023 12:32:11 +0000 (UTC)
+ with ESMTP id 5DcCPah3Ei6b for <buildroot@lists.busybox.net>;
+ Tue,  3 Oct 2023 12:34:32 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2AC7382373
- for <buildroot@buildroot.org>; Tue,  3 Oct 2023 12:32:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AC7382373
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 59022823AA
+ for <buildroot@buildroot.org>; Tue,  3 Oct 2023 12:34:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59022823AA
 Received: from fli4l.lan.fli4l (p54a1b0e1.dip0.t-ipconnect.de [84.161.176.225])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B85FCA4C00A8
- for <buildroot@buildroot.org>; Tue,  3 Oct 2023 14:32:08 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44858)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7CD2FA4C00A8;
+ Tue,  3 Oct 2023 14:34:30 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46754)
  by fli4l.lan.fli4l with esmtp (Exim 4.96.1)
- (envelope-from <bernd@kuhls.net>) id 1qneZM-0000pY-1Z
- for buildroot@buildroot.org; Tue, 03 Oct 2023 14:32:08 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qnebe-0001EG-0Y;
+ Tue, 03 Oct 2023 14:34:30 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  3 Oct 2023 14:32:08 +0200
-Message-Id: <20231003123208.2688289-1-bernd@kuhls.net>
+Date: Tue,  3 Oct 2023 14:34:30 +0200
+Message-Id: <20231003123430.2693572-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1696336328;
- bh=mb3jxXo/+Q0qUmyyrHwAp/C1HqTvtyFQXuD9lMysClY=;
- h=From:To:Subject:Date:From;
- b=crBYyiKmaTZiGexTQwS3mXYu52V4WF+s+/MCbC0rlq0D03lPPcivpFBfYCwW5kdnr
- HUlfLPY2Blj1AEu+nKnf841m3FARglwypDUMVNYwMJP+yiaZH9gqJvC3WJ8AtXDYWg
- BMqNBnGfMwLzAvX/HaMMEwdrDeZzrM0B6aH3e92yaPim3c4g/u6g0dBkwiSkuf05ep
- Jz8wWh0v5BrUPNYPd3O0lZHE1F0a0+Wf6vDQb6chivSMOsEHatnNC2jqpBIYWAhE8v
- l2pXdTIBVf4ukiqPnZaE20aop5spr1IlivWH99Ok/hK/bGJK0gaGZGi9VL2aznZnQZ
- bjX1jHeNv/byA==
+ s=kas202306131828; t=1696336470;
+ bh=u4HB54qiBRBoonJD8K+2/hbcRd3jZ9NuuYBmDyM29/o=;
+ h=From:To:Cc:Subject:Date:From;
+ b=aWWneqevJulN6iKQe3KFUtf4/pR7R/exsMtFCgwpx6RBVUxE6F1uwEQ6j4bT7wj9b
+ JcApAJKKKIlnWUc4tgNQBYQ7vcChFGZKD1v3wZ+ipfHZJfPlF8NJWnm5erOh2vFxSA
+ uzcx2aWaK7KE/SvS+aLW5gDTi+F5EYlwLueI7KKxDKyYcGXLoMFVjMR9RBHCM0oS3H
+ Y4RGhTkQxLH7T8ISHLbrFRF6EZbVobzwcZFqNMC+ZEHGFQ1fItI6V9rRkW7y41+6nI
+ cOP3oBuG5ZhQXOl67Pg64tQCrzRkdI8TPibUp6hMr8lKSxPPQ9qubewIgICoqNmgzO
+ AAQYQNbfruJhw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=crBYyiKm
-Subject: [Buildroot] [PATCH 1/1] package/mpg123: bump version to 1.32.3
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=aWWneqev
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,79 +74,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Spenser Gilliland <spenser@gillilanding.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch which was applied upstream:
-https://github.com/madebr/mpg123/commit/e1e6aa201a88d9d7f91c806b71270dd0013c6ca6
+Removed patch which was backported from upstream and is now included
+in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/mpg123/0001-mpg123-buildfix.patch | 24 -----------------------
- package/mpg123/mpg123.hash                |  6 +++---
- package/mpg123/mpg123.mk                  |  2 +-
- 3 files changed, 4 insertions(+), 28 deletions(-)
- delete mode 100644 package/mpg123/0001-mpg123-buildfix.patch
+ ...02-VP8-disallow-thread-count-changes.patch | 38 -------------------
+ package/libvpx/libvpx.hash                    |  2 +-
+ package/libvpx/libvpx.mk                      |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
+ delete mode 100644 package/libvpx/0002-VP8-disallow-thread-count-changes.patch
 
-diff --git a/package/mpg123/0001-mpg123-buildfix.patch b/package/mpg123/0001-mpg123-buildfix.patch
+diff --git a/package/libvpx/0002-VP8-disallow-thread-count-changes.patch b/package/libvpx/0002-VP8-disallow-thread-count-changes.patch
 deleted file mode 100644
-index cc731ea967..0000000000
---- a/package/mpg123/0001-mpg123-buildfix.patch
+index d625255a9f..0000000000
+--- a/package/libvpx/0002-VP8-disallow-thread-count-changes.patch
 +++ /dev/null
-@@ -1,24 +0,0 @@
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://sourceforge.net/p/mpg123/bugs/353/
+@@ -1,38 +0,0 @@
+-From 3fbd1dca6a4d2dad332a2110d646e4ffef36d590 Mon Sep 17 00:00:00 2001
+-From: James Zern <jzern@google.com>
+-Date: Mon, 25 Sep 2023 18:55:59 -0700
+-Subject: [PATCH] VP8: disallow thread count changes
 -
--diff -Nur mpg123-1.31.3.orig/src/libmpg123/getcpuflags.h mpg123-1.31.3/src/libmpg123/getcpuflags.h
----- mpg123-1.31.3.orig/src/libmpg123/getcpuflags.h	2023-03-15 09:02:58.000000000 +0100
--+++ mpg123-1.31.3/src/libmpg123/getcpuflags.h	2023-08-07 15:57:19.444106173 +0200
--@@ -44,6 +44,8 @@
+-Currently allocations are done at encoder creation time. Going from
+-threaded to non-threaded would cause a crash.
+-
+-Bug: chromium:1486441
+-Change-Id: Ie301c2a70847dff2f0daae408fbef1e4d42e73d4
+-
+-Fixes CVE-2023-5217: https://www.cve.org/CVERecord?id=CVE-2023-5217
+-
+-Upstream: https://github.com/webmproject/libvpx/commit/3fbd1dca6a4d2dad332a2110d646e4ffef36d590
+-Upstream: https://chromium.googlesource.com/webm/libvpx/+/3fbd1dca6a4d2dad332a2110d646e4ffef36d590
+-
+-[Bernd: Removed patch for test/encode_api_test.cc]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- vp8/encoder/onyx_if.c   | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/vp8/encoder/onyx_if.c b/vp8/encoder/onyx_if.c
+-index c65afc643bf..c5e9970c3cc 100644
+---- a/vp8/encoder/onyx_if.c
+-+++ b/vp8/encoder/onyx_if.c
+-@@ -1447,6 +1447,11 @@ void vp8_change_config(VP8_COMP *cpi, VP8_CONFIG *oxcf) {
+-   last_h = cpi->oxcf.Height;
+-   prev_number_of_layers = cpi->oxcf.number_of_layers;
 - 
-- unsigned int getcpuflags(struct cpuflags* cf);
+-+  if (cpi->initial_width) {
+-+    // TODO(https://crbug.com/1486441): Allow changing thread counts; the
+-+    // allocation is done once in vp8_create_compressor().
+-+    oxcf->multi_threaded = cpi->oxcf.multi_threaded;
+-+  }
+-   cpi->oxcf = *oxcf;
 - 
--+#if ((defined OPT_X86) || (defined OPT_X86_64) || (defined OPT_NEON) || (defined OPT_NEON64)) && (defined OPT_MULTI)
--+
-- #ifdef WANT_GETCPUFLAGS
-- #include <string.h>
-- // Wrapper needed for ignorant clang memory sanitizer that chokes
--@@ -55,8 +57,6 @@
-- }
-- #endif
-- 
---#if ((defined OPT_X86) || (defined OPT_X86_64) || (defined OPT_NEON) || (defined OPT_NEON64)) && (defined OPT_MULTI)
---
-- // We really evaluate the CPU flags.
-- #define OPT_CPU_FLAGS
-- 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 39ded93fb9..0fe4699606 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/mpg123/files/mpg123/1.31.3/
--sha1  c41b98e4c5ac55a5b3787b5aa309a71a6d458145  mpg123-1.31.3.tar.bz2
-+# From https://sourceforge.net/projects/mpg123/files/mpg123/1.32.3/
-+sha1  3a94848a620db7917c757cb21e261c711e44618f  mpg123-1.32.3.tar.bz2
- # Locally calculated
--sha256  1ca77d3a69a5ff845b7a0536f783fee554e1041139a6b978f6afe14f5814ad1a  mpg123-1.31.3.tar.bz2
-+sha256  2d9913a57d4ee8f497a182c6e82582602409782a4fb481e989feebf4435867b4  mpg123-1.32.3.tar.bz2
- # License file
- sha256  c22482728a634a8dfdb4ff72a96d4c1ed64cd8f3e79335c401751ac591609366  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 5ec5590267..4de5f99bdf 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
+-   switch (cpi->oxcf.Mode) {
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index c88e6840cf..7cda8cc2eb 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  cb2a393c9c1fae7aba76b950bb0ad393ba105409fe1a147ccd61b0aaa1501066  libvpx-1.13.0.tar.gz
++sha256  00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14  libvpx-1.13.1.tar.gz
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
+ sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index b558c41981..ec2e39a74f 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPG123_VERSION = 1.31.3
-+MPG123_VERSION = 1.32.3
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = https://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_INSTALL_STAGING = YES
+-LIBVPX_VERSION = 1.13.0
++LIBVPX_VERSION = 1.13.1
+ LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
+ LIBVPX_LICENSE = BSD-3-Clause
+ LIBVPX_LICENSE_FILES = LICENSE PATENTS
 -- 
 2.39.2
 
