@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10316E8FDB4
-	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 20:36:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57E4CE8FDB4
+	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 20:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B24F560ECE;
-	Tue,  3 Oct 2023 20:36:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B24F560ECE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0207F611BC;
+	Tue,  3 Oct 2023 20:36:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0207F611BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pe_u3EdzTD9h; Tue,  3 Oct 2023 20:36:00 +0000 (UTC)
+	with ESMTP id n40dKKbtnk9q; Tue,  3 Oct 2023 20:36:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE25661204;
-	Tue,  3 Oct 2023 20:35:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE25661204
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 73F031BF578
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 20:35:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 434E46116D;
+	Tue,  3 Oct 2023 20:36:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 434E46116D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DB641BF3D2
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 20:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C4B540897
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 20:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C4B540897
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0468A408D9
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 20:36:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0468A408D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vJE0QXr4hbeT for <buildroot@lists.busybox.net>;
- Tue,  3 Oct 2023 20:35:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FEE9408E4
- for <buildroot@buildroot.org>; Tue,  3 Oct 2023 20:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FEE9408E4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7BDCA84171; Tue,  3 Oct 2023 20:35:42 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 3 Oct 2023 22:35:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d4443343aa6ddd8f7eca40ffdcf8decb4c290f0
-X-Git-Newrev: 24c8e0440bdd9035f1e7b23a0f90a130473a751e
-X-Patchwork-Hint: ignore
-Message-Id: <20231003203542.7BDCA84171@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/udpcast: bump to version 20230924
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q5Yu9KtQXGZG for <buildroot@lists.busybox.net>;
+ Tue,  3 Oct 2023 20:36:50 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B4FDD404B1
+ for <buildroot@buildroot.org>; Tue,  3 Oct 2023 20:36:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4FDD404B1
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:c4b3:c81e:8436:9d13])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 0F14D78034D;
+ Tue,  3 Oct 2023 22:36:47 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 03 Oct 2023 22:36:46 +0200
+Date: Tue, 3 Oct 2023 22:36:46 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francis Laniel <flaniel@linux.microsoft.com>
+Message-ID: <20231003203646.GG2957@scaer>
+References: <20231003152101.40980-1-flaniel@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20231003152101.40980-1-flaniel@linux.microsoft.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1696365409;
+ bh=1D/cqzQgqu00Rfy+QVjdWz2Evq0SdL9ETddwQHU/yHw=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=MC6XxbR8KQRSUjYBhx6pCJFKPeS7PpfZGecz4IpPuAJZj8JhusXVITqEt0T+H0nOM
+ QTXKpE9yKYCVsClXgPUuEkg+7YuZi9zcorxAEwf+/fssTEYNecw5ze4biL5y5egY1d
+ 3Fm19yns/3wQ/JF8DCEMBuxpF+FMcG/Z1Qe240BAn4T1tfbubzaTg82C6plTjgJ8EF
+ QsJ3VRLi9k6I1Bvd9T6Ov0pF7hyVtaWLkdXSZ+MoRmUAzsgSXYVV+80j1xJYYDUuR7
+ n3pKKeO4nKzSk6tgMm5bbs+3I9AeK2boBPbiMuoz7xy231BKWFh4orzBHAKpnDB3ES
+ yamTsSJSHXhWg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=MC6XxbR8
+Subject: Re: [Buildroot] [PATCH 1/1] package/tbb: bump to version 2021.10.0.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +75,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24c8e0440bdd9035f1e7b23a0f90a130473a751e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Francis, All,
 
-https://udpcast.linux.lu/mailman3/hyperkitty/list/udpcast@udpcast.linux.lu/thread/BXBS6HOFXCMOF3LKCOVWXDPRD43S6B3Z
+On 2023-10-03 18:21 +0300, Francis Laniel spake thusly:
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/udpcast/udpcast.hash | 2 +-
- package/udpcast/udpcast.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
-index 9ce91330fd..aca098d982 100644
---- a/package/udpcast/udpcast.hash
-+++ b/package/udpcast/udpcast.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  a3cebee7a87ecf1bca0645f125be78fbd7b37846a4da82fecef96b92cc64d050  udpcast-20211207.tar.gz
-+sha256  17b5cd8b1e54f7e2e53357ac02ee86e4198bf704096987a03a3b5c402a0ecea1  udpcast-20230924.tar.gz
- sha256  422befd3503b1f39a6027017f639874c1f274e37ec60ba3174894646b584ccbc  COPYING
-diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-index 4ea73e20c7..64a0bfbd37 100644
---- a/package/udpcast/udpcast.mk
-+++ b/package/udpcast/udpcast.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UDPCAST_VERSION = 20211207
-+UDPCAST_VERSION = 20230924
- UDPCAST_SITE = http://www.udpcast.linux.lu/download
- UDPCAST_DEPENDENCIES = host-m4
- UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/tbb/tbb.hash | 2 +-
+>  package/tbb/tbb.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
+> index 579581cfe4..1caf81c5c5 100644
+> --- a/package/tbb/tbb.hash
+> +++ b/package/tbb/tbb.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  eee380323bb7ce864355ed9431f85c43955faaae9e9bce35c62b372d7ffd9f8b  tbb-2021.8.0.tar.gz
+> +sha256  eee380323bb7ce864355ed9431f85c43955faaae9e9bce35c62b372d7ffd9f8b  tbb-2021.10.0.tar.gz
+>  sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
+> diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
+> index c3e06a4e6d..75cca5e99d 100644
+> --- a/package/tbb/tbb.mk
+> +++ b/package/tbb/tbb.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+> 
+> -TBB_VERSION = 2021.8.0
+> +TBB_VERSION = 2021.10.0
+>  TBB_SITE = $(call github,01org,tbb,v$(TBB_VERSION))
+>  TBB_INSTALL_STAGING = YES
+>  TBB_LICENSE = Apache-2.0
+> --
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
