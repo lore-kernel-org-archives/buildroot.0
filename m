@@ -1,69 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C73E776C2
-	for <buildroot@archiver.kernel.org>; Mon,  2 Oct 2023 20:51:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98E46E75424
+	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 05:21:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E003416F8;
-	Mon,  2 Oct 2023 20:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E003416F8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0535740907;
+	Tue,  3 Oct 2023 05:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0535740907
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z_H7O9eGnp9f; Mon,  2 Oct 2023 20:51:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BoXhmVvVUhU9; Tue,  3 Oct 2023 05:21:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2225F40B56;
-	Mon,  2 Oct 2023 20:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2225F40B56
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B67E40914;
+	Tue,  3 Oct 2023 05:21:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B67E40914
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 953911BF5F8
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 20:51:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2A7B61BF34B
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 05:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68E1681947
- for <buildroot@lists.busybox.net>; Mon,  2 Oct 2023 20:51:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68E1681947
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03A4E81F8B
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 05:21:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03A4E81F8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZcB7cdDcDFJa for <buildroot@lists.busybox.net>;
- Mon,  2 Oct 2023 20:51:49 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2A19B818D0
- for <buildroot@buildroot.org>; Mon,  2 Oct 2023 20:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A19B818D0
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:71b1:17da:abc1:f019])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 2A9B960134;
- Mon,  2 Oct 2023 22:51:45 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 02 Oct 2023 22:51:44 +0200
-Date: Mon, 2 Oct 2023 22:51:44 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231002205144.GD2957@scaer>
-References: <20231002195159.3053254-1-bernd@kuhls.net>
+ with ESMTP id epPF7T1mtA9h for <buildroot@lists.busybox.net>;
+ Tue,  3 Oct 2023 05:21:29 +0000 (UTC)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8A8F281F86
+ for <buildroot@busybox.net>; Tue,  3 Oct 2023 05:21:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A8F281F86
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-991c786369cso71733366b.1
+ for <buildroot@busybox.net>; Mon, 02 Oct 2023 22:21:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696310487; x=1696915287;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0MNg7G1+aSMRjgdGZjsQSMcnWwfytl8Stp6wK3WnUvw=;
+ b=preMcel8DJi7QlrjxjlnNCsExuW0y9Aj6tE0xFkS6xncOhFSM4FCB/mrH0PS9bf9H8
+ XZDUj8tVBjUNTBmqROzUY9m821QPB6cdiqbxN32xozRm9A9u3dajJHlPCe+it1S3ojVs
+ GHiQZwW/GGrZbF/FE90eVgYC7RgkbVIeTiEZ5Bl56SwNRp5aIHFqgKP8H3pjS3C6Zcse
+ WZK7GlzzP8A6HJ7wX9UOBtIAohewpjzL8mBlqrtX71BIkcM0+I6H60q35qeFsjvwOggd
+ 4s4u8Z2PN5Dblx9Mvk1QI4sTv1UuV/UPU9BAOxMmb2NhV4gevpJdI6zJdYuNt9TmClHf
+ xBBw==
+X-Gm-Message-State: AOJu0Yy+X2x3b7/qxRQOCYAZ3BDeshFsI3D3dOVlcY1cp6t45ysxZxmT
+ J/r/pQGjcfeSk4ezpOWgBTTLM8uHc4c=
+X-Google-Smtp-Source: AGHT+IEi8jKHMM33QJgd2G/k28XzyS1y8PgYKnJsM7+vOKzKLSSMMABZYAQNph7H8Mh+Z0pMXfMbWw==
+X-Received: by 2002:a17:906:311b:b0:9a2:28dc:4168 with SMTP id
+ 27-20020a170906311b00b009a228dc4168mr10760833ejx.61.1696310487199; 
+ Mon, 02 Oct 2023 22:21:27 -0700 (PDT)
+Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ g12-20020a170906594c00b00997e99a662bsm403180ejr.20.2023.10.02.22.21.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 02 Oct 2023 22:21:26 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Tue,  3 Oct 2023 07:21:20 +0200
+Message-Id: <20231003052120.3594513-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231002195159.3053254-1-bernd@kuhls.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696279907;
- bh=bZHcknVC5CHLmKpymEgk5sfo+6XoJiTG7Nhrap10m3Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ALfW6J39hJjbTdq3faHZAQF9cGcP/Uj47iyZJJwSQNf1VRWnS8MIW10wD/x3JbyQL
- VNMuy6lfs0EeEHLDrGu7ThjLXngct1XEZCJlpQY/dpFPTjQp0vJeYywbTi8qAlJM22
- JTgPxcuZ+ewW4oVnLPorXiTtKkkhhspZHmiXqhqr4+JpG2qH9h4GMJOzbjNNUE5iWS
- hEasr1Za1RPnce8CWlkrwygESP1XVu2Bp4WVYzXvJ8zKMSClNQ0ptsihFuKeMPwK3E
- +NX53/judAl0S5qNIFlc2iApX4tAs+dCihpNNmYUhG6vyeV29mWAtRncd4gHLA3+k/
- cqR29AkeCWMbA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1696310487; x=1696915287; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0MNg7G1+aSMRjgdGZjsQSMcnWwfytl8Stp6wK3WnUvw=;
+ b=C4EpgxGo1IsofcQbVGtThlFvLbQ5aJ9JslRRdPdXIkCii8+x9bwjm/fuKe4ATFGTZA
+ dOklKb0a/OaxhjYoW63D2kpLFrr5PGhOf3P8wN903pH9hsM6lIhBCMhhOp8V9A6xCMyN
+ 91t+fHUkA5WKFw29hN4PpnwbPvxquS+4iTzjXXSiNZvkqF6rbKsvBoE7cU8KP/NARSXH
+ ZuvUPNPAw8EVG0TKVu1hg3E+lEJuGN5XY1AsHlopT6p3xClP20ywrSUNBqpzHcpXmKGk
+ rQWZfPctUhztxs0nlG4UbztjaPL5o7GZpv/Sz6PDhVdKEzc8jaucK5vwqW6RdN8K84fF
+ BoYg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ALfW6J39
-Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: fix cross build
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=C4EpgxGo
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
+ and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,102 +94,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
+ configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2023-10-02 21:51 +0200, Bernd Kuhls spake thusly:
-> Fixes build error
-> 
-> Building dns library in /home/bernd/buildroot/br4/output/build/dhcp-4.4.3-
-> P1/bind/bind-9.11.36/lib/dns
-> ./gen: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.38' not found 
-> (required by ./gen)
-> make[4]: *** [Makefile:601: include/dns/enumtype.h] Error 1
-> make[3]: *** [Makefile:595: include] Error 2
-> 
-> with this defconfig
-> 
-> BR2_x86_64=y
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-> BR2_PACKAGE_DHCP=y
-> 
-> Please note that this build error only occurs when the target and the
-> host system have the same arch. For example this defconfig builds fine:
-> 
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-> BR2_PACKAGE_DHCP=y
-> 
-> on a Debian 12 x86_64 host using glibc-2.36:
-> 
-> $ /lib/ld-linux.so.2  --version
-> ld.so (Debian GLIBC 2.36-9+deb12u1) stable release version 2.36.
-> 
-> The error occurs since buildroot commit 34f8d874ee which bumped glibc
-> from 2.37 to 2.38.
-> 
-> This patch is inspired by the Yocto Project:
-> https://patchwork.yoctoproject.org/project/oe/patch/20230715212159.3265080-1-raj.khem@gmail.com/
-
-That patch has an important tidbit of inoormation that yours is missing,
-and that is important to get: this is passing the configure options to
-the internal bind.
-
-Indeed, I was very puzzled why passing the same --build, --host, and
---target as pkg-autotools already does, would fix the issue.
-
-But indeed, isch dhcp internally configure a bundled bind, and messes
-when doing so.
-
-So your patch looks like it is correct.
-
-However, I would challenge it on other grounds: ISC decided to stop
-maintaing dhcp starting end of 2022, almost a year ago, when they
-released the last version of dhcp.
-
-Should we just drop that package now and be done with it?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/dhcp/dhcp.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index 7be40191c8..094d361e45 100644
-> --- a/package/dhcp/dhcp.mk
-> +++ b/package/dhcp/dhcp.mk
-> @@ -32,6 +32,9 @@ DHCP_CONF_ENV = \
->  	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
->  
->  DHCP_BIND_EXTRA_CONFIG = \
-> +	--build=$(GNU_HOST_NAME) \
-> +	--host=$(GNU_TARGET_NAME) \
-> +	--target=$(GNU_TARGET_NAME) \
->  	BUILD_CC='$(HOSTCC)' \
->  	BUILD_CFLAGS='$(HOST_CFLAGS)' \
->  	BUILD_CPPFLAGS='$(HOST_CPPFLAGS)' \
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index d817e1dd1..3294748b1 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.38"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.55"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -45,7 +45,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 88967e70c..6b46794df 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.38"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.55"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -45,7 +45,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
