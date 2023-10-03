@@ -4,77 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28479E7542D
-	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 07:15:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FC58E7542D
+	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 07:17:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A897F610DD;
-	Tue,  3 Oct 2023 07:15:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A897F610DD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3832660A5F;
+	Tue,  3 Oct 2023 07:17:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3832660A5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0n3Qr0ax7pZX; Tue,  3 Oct 2023 07:15:57 +0000 (UTC)
+	with ESMTP id bIZRQRAeLIEJ; Tue,  3 Oct 2023 07:17:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFB0560F0D;
-	Tue,  3 Oct 2023 07:15:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFB0560F0D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 08F411BF3A1
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 07:15:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32BE660769;
+	Tue,  3 Oct 2023 07:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32BE660769
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B5991BF86C
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 07:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5D2240931
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 07:15:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5D2240931
+ by smtp3.osuosl.org (Postfix) with ESMTP id 349EE60769
+ for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 07:17:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 349EE60769
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XLdKoJE-S5uo for <buildroot@lists.busybox.net>;
- Tue,  3 Oct 2023 07:15:45 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CC7AE4093E
- for <buildroot@buildroot.org>; Tue,  3 Oct 2023 07:15:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC7AE4093E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BF6AD60004;
- Tue,  3 Oct 2023 07:15:40 +0000 (UTC)
-Date: Tue, 3 Oct 2023 09:15:39 +0200
-To: "Frager, Neal" <neal.frager@amd.com>, "thomas.petazzoni@bootlin.com"
- <thomas.petazzoni@bootlin.com>
-Message-ID: <20231003091539.5e26d558@booty>
-In-Reply-To: <CH2PR12MB50046780037DB7AF933A119FF0C6A@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20230904100443.1613306-1-neal.frager@amd.com>
- <20230922145236.027dc287@booty>
- <CH2PR12MB50040897854080471200F9E0F0FFA@CH2PR12MB5004.namprd12.prod.outlook.com>
- <20230922155735.43ddc356@booty>
- <CH2PR12MB5004C65AFCE251505428888AF0FFA@CH2PR12MB5004.namprd12.prod.outlook.com>
- <MN0PR12MB60045761B225083426E7B1A1A0FFA@MN0PR12MB6004.namprd12.prod.outlook.com>
- <CH2PR12MB5004761ED87FCAC8E37E9667F0FEA@CH2PR12MB5004.namprd12.prod.outlook.com>
- <20230925045944.6a88abd4@booty>
- <7AD8C3E2-4A82-434F-8C3D-6B9B5E53E798@amd.com>
- <877co67fgz.fsf@48ers.dk>
- <CH2PR12MB50046780037DB7AF933A119FF0C6A@CH2PR12MB5004.namprd12.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id loruOR0rSZBn for <buildroot@lists.busybox.net>;
+ Tue,  3 Oct 2023 07:17:45 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 14A26605B5
+ for <buildroot@buildroot.org>; Tue,  3 Oct 2023 07:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14A26605B5
+Received: from fli4l.lan.fli4l (p4fd6c587.dip0.t-ipconnect.de [79.214.197.135])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E7B69A4C031A
+ for <buildroot@buildroot.org>; Tue,  3 Oct 2023 09:17:42 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48450)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qnZf4-0007Gh-20
+ for buildroot@buildroot.org; Tue, 03 Oct 2023 09:17:42 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Tue,  3 Oct 2023 09:17:41 +0200
+Message-Id: <20231003071742.300900-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1696317341;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JX4K2vPOq/3FMZUHGBZGJMFC1Lbih7PHGlLJU/kx+aI=;
- b=LuQHbTZ5jlilvCbcpM6RkCeUjqDI4E4Px1pDCpe7rA+Gdrc1N7KTmoOQA8ffFllxlLPrJn
- ibdyCa7SLz/oE0+CysmeFmCwOpLwOPUxGlNTcxUwCaQ2G1K3y94dZ5OzMHSFSN99spqQp7
- d85GE9VPtucm9UC6+ZfN4VYqUZkC3yAnH44acuvu4vqN9vqj+3xaJmhPg7QQfkvjGFkQx6
- /vqZME49Vftn+rq4mokMBqq7u/KdPEmEIMC8fIex52urPgYjCsMxniBA3t0tz9A9FkTx/Y
- siPuJe/ZZW0pv8hOmYclIbKy4VBKUCFzKrLkncFLvfYtAemwIBJ7Ppmv97sFZA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LuQHbTZ5
-Subject: Re: [Buildroot] [PATCH v3 1/6] package/binutils-bare-metal: new
- package
+ d=kuhls.net; 
+ s=kas202306131828; t=1696317462;
+ bh=RHvtWl95FesooJ1ckn3czVTl7o9SllhIRXzklHWuAeY=;
+ h=From:To:Subject:Date:From;
+ b=Ik+jm4nB3J51yKP5WvECAN9XE79h6IoYQCuERE27pMDn015AqwjUd6uwaqHucajF5
+ LxC6g7r+iMeEe00exMt5/QFuqss/mAaW70U0TeCWhmTr5/2L9wMtu8ZsjBwPKa70/V
+ OdD6Cl572hlsel0eBtnuM4NRtpMFPVFgOdmSx5OptN2yZ4YyIsWK9sRVo4vqSqg1dY
+ UoI94AbJVWHw8HhZnrGMr60yJzB6Ni7/sdTPMj5Hd7EuhOUqIvp73OCqUjnM5UttDf
+ iPyVqDceQnsFxXYrjPVKe2TiF7rh5/WT7GqV9jbE2mPwVmmmuTMW9cKTJnjuFb9Wag
+ CUX8noCCpc/sA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=Ik+jm4nB
+Subject: [Buildroot] [PATCH 1/2] package/kodi-pvr-hts: bump version to
+ 20.6.3-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,87 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>, "Simek,
- Michal" <michal.simek@amd.com>, "Erkiaga Elorza,
- Ibai" <ibai.erkiaga-elorza@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal, Peter,
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sun, 1 Oct 2023 16:11:23 +0000
-"Frager, Neal" <neal.frager@amd.com> wrote:
-
-> Hello Peter,
-> 
->  >>> Is this ok for both of you?  
->  >>
->  >> I'm OK with the whole approach, except for the sentence "I do not  >> believe there is currently any organized effort to upstream any of  >> these patches"... which is probably already clear to the recipients  >> of this message, and thus is not going to be solved in this thread,  >> however I just want to be sure my position is clear. I'd also like to  >> stress that I appreciate a lot the work you are doing to properly  >> support the pmufw in Buildroot. Thanks!
->  >>
->  >> Luca  
-> 
->  > Your position is very clear.  And I can assure you that both Ibai and I agree with it.  
-> 
->  > It would be much better if all of these binutils and gcc patches for  > microblaze go upstream, and both Ibai and I have pushed for it  > internally at AMD / Xilinx.  
-> 
->  > The only thing I can say is that change is always possible.
->  > Yesterday, we could not build a zynqmp pmufw, versal plm or versal  > psmfw in buildroot.  Today, we have submitted a solution to change  > that.  
-> 
->  > Tomorrow (figurative meaning the future), we hope to get all these  > binutils and gcc patches upstream, so the upstream toolchain matches  > the AMD Xilinx distributed toolchain.  
-> 
->  > One step at a time.  
-> 
-> > Sure! Sorry, I am somewhat late to the review game here. I wonder how this fits with Luca's zynqmp-pmufw-builder?  
-> 
-> From my view, we can continue maintaining Luca's zynqmp-pmufw-builder in parallel.  Buildroot will still offer the option to accept a pre-built pmufw binary without needing to build a microblaze toolchain, so if users prefer to build the pmufw outside of buildroot (to have a faster buildroot build perhaps), this capability will still be available.
-
-As Neal wrote, if/when Buildroot will be able to build a pmufw on its
-own (with the proposed approach, or a downloaded toolchain, or
-both), zynqmp-pmufw-builder can continue existing even though the use
-cases for it will be reduced. I have no plan to stop maintaining it for
-the foreseeable future.
-
-> > E.G. today the setup is that the pmufw is built outside Buildroot and we just point the u-boot package to where it can fetch the prebuilt firmware binary - This is nice in the sense that it is fast and simple, but makes is somewhat annoying to make modifications to the firmware.  
-> 
-> > This series instead goes to the other extreme, E.G. we build the entire microblaze toolchain from scratch and then use it to build the firmware and use it in the u-boot package - This is nice because it is all in Buildroot and we have it all under control, but also brings quite some build time overhead for building the toolchain before building the  
-> (small) toolchain. You can naturally "solve" it by using two defconfigs, E.G. one that builds the pmufw and another that uses the prebuilt one, but it isn't very handy either.
-
-I think the approach taken here by Neal and Ibai is valuable,
-especially as it would allow Buildroot defconfigs to be self-standing.
-Additionally it is already proving useful as it prompted "the
-community" (mostly Neal -- thanks about that) to upstream patches
-needed to support Microblaze in binutils and gcc, that are currently
-downstream.
-
-> > Would an in between option not be more interesting, E.G. use (or  
-> download) a prebuilt microblaze toolchain and use that to build the firmware? That would still give the flexibility to easily tweak the firmware, but not the overhead of building the toolchain every time?
-> 
-> > I guess the problems with that are what to do about the meta-xilinx patches and where/who wants to host a prebuilt one?  
-> 
-> This is a good point.  As for the meta-xilinx patches, Ibai and I have started going through them and have even started upstreaming a few.  The majority of the meta-xilinx patches are actually for enabling 64-bit microblaze support, which is not available in the upstream gnu binutils or gcc.  Since we do not need 64-bit microblaze for the zynqmp pmufw or the versal plm and psmfw applications, we can easily skip these patches.
-> 
-> Our current objective is to get all microblaze 32-bit bug fix and feature support patches (such as the barrel shift instructions used by the pmufw) upstreamed.  Since this appears to be a small subset of the overall meta-xilinx patches, we hope to be able to enable the use of the upstream gnu binutils and gcc, so that the meta-xilinx patches will no longer be needed for our use case of building the zynqmp pmufw, versal plm and versal psmfw applications.
-> 
-> However, in order to achieve what you are asking for, we would still need someone to host a pre-built microblaze compiler somewhere, if we would want to go this route.  At the moment, it is not in the AMD Xilinx plan to host the toolchains somewhere outside of a Petalinux or Vitis download.
-> 
-> If the upstream toolchain included all the necessary meta-xilinx patches, could bootlin potentially host a pre-built toolchain somewhere?
-
-I fyou are thinking about toolchains.bootlin.com, I am not the
-maintainer of those toolchains but I think the idea is to only have
-Linux toolchains there, not bare metal ones, thus newlib is not
-supported. Also I'm pretty sure downstream feature patches are
-absolutely not welcome there.
-
-Luca
-
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index 7b55eb88fd..c9fe1cfe6a 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e77bd87f1f4d1abc06e32d0347a0bb635bc129bec43a07864cb8a9e6b0e4d374  kodi-pvr-hts-20.6.2-Nexus.tar.gz
++sha256  8febdacb795eb724456f88af5c55a6e0a5393447f673b2be72d1ca9276479cdd  kodi-pvr-hts-20.6.3-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index d32ce87388..04de82dc64 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_HTS_VERSION = 20.6.2-Nexus
++KODI_PVR_HTS_VERSION = 20.6.3-Nexus
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+ KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
