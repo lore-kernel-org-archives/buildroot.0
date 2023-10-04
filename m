@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 644EBE7544B
-	for <buildroot@archiver.kernel.org>; Tue,  3 Oct 2023 11:13:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 545C6E7C4EC
+	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 19:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E029C41FBD;
-	Tue,  3 Oct 2023 11:13:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E029C41FBD
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3BD041ED9;
+	Wed,  4 Oct 2023 19:17:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3BD041ED9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2aGshm6E_PWS; Tue,  3 Oct 2023 11:13:17 +0000 (UTC)
+	with ESMTP id vj33-lfRLC9K; Wed,  4 Oct 2023 19:17:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 588DC41FBF;
-	Tue,  3 Oct 2023 11:13:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 588DC41FBF
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA03641F39;
+	Wed,  4 Oct 2023 19:17:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA03641F39
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7E0A31BF3EA
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 11:13:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E80D51BF41F
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 19:17:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 653D060E53
- for <buildroot@lists.busybox.net>; Tue,  3 Oct 2023 11:13:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 653D060E53
+ by smtp3.osuosl.org (Postfix) with ESMTP id C19AD61493
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 19:17:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C19AD61493
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jgPzQh7J8vzt for <buildroot@lists.busybox.net>;
- Tue,  3 Oct 2023 11:13:13 +0000 (UTC)
+ with ESMTP id GA0ECjJysk1a for <buildroot@lists.busybox.net>;
+ Wed,  4 Oct 2023 19:17:19 +0000 (UTC)
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2144B60BEE
- for <buildroot@uclibc.org>; Tue,  3 Oct 2023 11:13:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2144B60BEE
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1796C61492
+ for <buildroot@uclibc.org>; Wed,  4 Oct 2023 19:17:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1796C61492
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qndKw-0003xn-50
- for buildroot@uclibc.org; Tue, 03 Oct 2023 13:13:10 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qo7Mw-0000xd-IN
+ for buildroot@uclibc.org; Wed, 04 Oct 2023 21:17:14 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Tue, 03 Oct 2023 13:12:10 +0200
-Message-ID: <pan$e4c2e$65ef9aa7$60d9f1ab$55fd2db7@ID-313208.user.individual.net>
-References: <20231002195159.3053254-1-bernd@kuhls.net>
- <20231002205144.GD2957__28552.5928296678$1696279934$gmane$org@scaer>
+Date: Wed, 04 Oct 2023 21:16:48 +0200
+Message-ID: <pan$5491d$c81839cd$9be354ce$80faa444@ID-313208.user.individual.net>
+References: <20230729180250.1494674-1-bernd@kuhls.net>
+ <b15fa589-68d1-5c5c-0389-2bad2c05b2de__40810.1815659151$1696153825$gmane$org@smile.fr>
 Mime-Version: 1.0
 User-Agent: Pan/0.154 (Izium; 517acf4)
-Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: fix cross build
+Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: rework dri3 handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,25 +63,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Mon, 2 Oct 2023 22:51:44 +0200 schrieb Yann E. MORIN:
+Hi Romain,
 
-> So your patch looks like it is correct.
-> 
-> However, I would challenge it on other grounds: ISC decided to stop
-> maintaing dhcp starting end of 2022, almost a year ago, when they
-> released the last version of dhcp.
-> 
-> Should we just drop that package now and be done with it?
+Am Sun, 1 Oct 2023 11:49:54 +0200 schrieb Romain Naour:
 
-Hi Yann,
+> I'm able to reproduce this build issue.
+> But I can't find any autobuilder link.
 
-my patch follows Peter's intention:
-"If it is dead upstream and hard to fix then that naturally makes it 
-harder to do, but the intention is to fix it."
-http://lists.busybox.net/pipermail/buildroot/2022-April/640709.html
+I do not know the reason for this, maybe the combination is too seldom?
 
-The ISC dhcp package is also used in current Debian releases:
-https://tracker.debian.org/pkg/isc-dhcp
+> Have you tested on other driver than the Intel drivers ?
+
+Yes, the current situation looks like this:
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS
+- broken without "-Ddri3=enabled"
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+- has "select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7"
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+- has "select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7"
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
+- broken without "-Ddri3=enabled"
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+- broken without "-Ddri3=enabled"
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+- has "select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7"
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
+- has "select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7"
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+- has "select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7"
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+- has "select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7"
+
+config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
+- has "select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7"
+
+config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+- has "select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7"
+
+Yes, I tested all drivers based on the defconfig
+
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+
+with only the tested driver additionally enabled and also found more 
+broken drivers:
+
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+- also broken, fixed by this patch
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
+- also broken, fixed by this patch
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+- also broken, fixed by this patch
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+- also broken, fixed by this patch
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+- also broken, fixed by this patch
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+- also broken, fixed by this patch
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
+- also broken, fixed by this patch
+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
+- also broken, fixed by this patch
+config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
+- also broken, fixed by this patch
+
+The result is: All drivers are broken without "-Ddri3=enabled".
 
 Regards, Bernd
 
