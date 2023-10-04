@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA39CE7B5F5
-	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 11:47:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D309E7B5F5
+	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 11:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E579613CB;
-	Wed,  4 Oct 2023 11:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E579613CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 107B860017;
+	Wed,  4 Oct 2023 11:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 107B860017
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ADWFRH1WN9Cb; Wed,  4 Oct 2023 11:47:23 +0000 (UTC)
+	with ESMTP id 8NLGgoJO7P7S; Wed,  4 Oct 2023 11:47:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BB14613F3;
-	Wed,  4 Oct 2023 11:47:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BB14613F3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7CDA1BF861
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 11:47:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6AF2D600B8;
+	Wed,  4 Oct 2023 11:47:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AF2D600B8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E5CC41BF861
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 11:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A17DF40BFA
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 11:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A17DF40BFA
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCFDA61404
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 11:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCFDA61404
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7QHbT2NKJx6W for <buildroot@lists.busybox.net>;
- Wed,  4 Oct 2023 11:47:20 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CFF8F4019D
- for <buildroot@buildroot.org>; Wed,  4 Oct 2023 11:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFF8F4019D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 565F820004;
- Wed,  4 Oct 2023 11:47:15 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qo0LR-001wVk-H2; Wed, 04 Oct 2023 13:47:13 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0cgMDujBvHXx for <buildroot@lists.busybox.net>;
+ Wed,  4 Oct 2023 11:47:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 20D10613F3
+ for <buildroot@buildroot.org>; Wed,  4 Oct 2023 11:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20D10613F3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0E781841EF; Wed,  4 Oct 2023 11:47:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20231003123430.2693572-1-bernd@kuhls.net>
-Date: Wed, 04 Oct 2023 13:47:13 +0200
-In-Reply-To: <20231003123430.2693572-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Tue, 3 Oct 2023 14:34:30 +0200")
-Message-ID: <877co2fw3i.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.13.1
+To: buildroot@buildroot.org
+Date: Wed, 4 Oct 2023 13:45:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 850efb92b56253cace2ba8bce94df0afe347037a
+X-Git-Newrev: 5d2f4004d27d3937fd8a4a6d5ed244379ecc0fad
+X-Patchwork-Hint: ignore
+Message-Id: <20231004114740.0E781841EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdeflate: bump version to 1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,25 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Spenser Gilliland <spenser@gillilanding.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5d2f4004d27d3937fd8a4a6d5ed244379ecc0fad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Removed patch which was backported from upstream and is now included
- > in this release.
+Release notes:
+https://github.com/ebiggers/libdeflate/blob/master/NEWS.md
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libdeflate/libdeflate.hash | 2 +-
+ package/libdeflate/libdeflate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-You forgot to drop the _IGNORE_CVES entry for that patch.
-
-Committed after fixing that, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libdeflate/libdeflate.hash b/package/libdeflate/libdeflate.hash
+index c6a50efbfc..8609f5ab02 100644
+--- a/package/libdeflate/libdeflate.hash
++++ b/package/libdeflate/libdeflate.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  225d982bcaf553221c76726358d2ea139bb34913180b20823c782cede060affd  libdeflate-1.18.tar.gz
++sha256  27bf62d71cd64728ff43a9feb92f2ac2f2bf748986d856133cc1e51992428c25  libdeflate-1.19.tar.gz
+ sha256  5d246dd2537307b80fed9ba5fdddf5d0fe7a8f023393a071182b9daed56b40fe  COPYING
+diff --git a/package/libdeflate/libdeflate.mk b/package/libdeflate/libdeflate.mk
+index 00de2e82a9..3000a58407 100644
+--- a/package/libdeflate/libdeflate.mk
++++ b/package/libdeflate/libdeflate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDEFLATE_VERSION = 1.18
++LIBDEFLATE_VERSION = 1.19
+ LIBDEFLATE_SITE = $(call github,ebiggers,libdeflate,v$(LIBDEFLATE_VERSION))
+ LIBDEFLATE_LICENSE = MIT
+ LIBDEFLATE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
