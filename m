@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF269E7C4C2
-	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 14:24:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05880E7C4C2
+	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 14:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AB8B60B3F;
-	Wed,  4 Oct 2023 14:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AB8B60B3F
+	by smtp3.osuosl.org (Postfix) with ESMTP id B416161427;
+	Wed,  4 Oct 2023 14:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B416161427
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MzsdT8a36BZo; Wed,  4 Oct 2023 14:24:28 +0000 (UTC)
+	with ESMTP id 7BG3Fputq4m4; Wed,  4 Oct 2023 14:24:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D41CD61450;
-	Wed,  4 Oct 2023 14:24:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D41CD61450
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5A93D1BF47F
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 14:23:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64E9C61441;
+	Wed,  4 Oct 2023 14:24:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64E9C61441
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 006781BF47F
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 14:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3335841ED7
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE564826B0
  for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 14:23:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3335841ED7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE564826B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gKRhVbUGfQvh for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KIjOLn4Qa3ow for <buildroot@lists.busybox.net>;
  Wed,  4 Oct 2023 14:23:25 +0000 (UTC)
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BB83541F53
- for <buildroot@buildroot.org>; Wed,  4 Oct 2023 14:23:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB83541F53
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-9b275afb6abso221683066b.1
- for <buildroot@buildroot.org>; Wed, 04 Oct 2023 07:23:24 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6363B82628
+ for <buildroot@buildroot.org>; Wed,  4 Oct 2023 14:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6363B82628
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-5384975e34cso3978381a12.0
+ for <buildroot@buildroot.org>; Wed, 04 Oct 2023 07:23:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696429402; x=1697034202;
+ d=1e100.net; s=20230601; t=1696429403; x=1697034203;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=xsw9F3NoHCqGqmjxUInNe+v7G1lDncfSJBIigZd+xr4=;
- b=c03eU6oSYN0Io/ut5NV2FQXhp2x0FiTlIot3qyi7Rkq4FSMzUE35QL3uY2umTdjzA9
- qVeQ1zuvFXJncrz0Oy8eHaA4GO9SUGkOeldEyfSHtPTTwB0dNVJ3fGOb8yIDJd4Qvhf3
- yyzTS5TjMkap+vmVJr+qHgwtcrw1yLWLFDZt4xYBLi5Vb2cHyGrugrhNrApK1dRgp3pF
- 7gQL6D/ybmHTl87rUMowgn9FDomjE4kETO8c8LCLptmQwBdbzWHAMIQWLrSUwR7o84iP
- +lpw5hjfZrWvUC6baaoaYhvBWi1haab+yg+VlUlXZmJbjCJmLN3m6pPEliT9satBA6L0
- 8aBA==
-X-Gm-Message-State: AOJu0YxzjsbBkVeWCfqfrds5eOrh4vNY86Nn/3ZxuypwZVgYpnlghNia
- 4Gb0a9PgB7DJ3uWjXeyzj8/r23mbhow4noo+YzjvTw==
-X-Google-Smtp-Source: AGHT+IGGFYFQSWFaGEh32Rwz+So4jO4yuKy17oPLcBGs34F5FArpWirZxj6Ip9bbfIllXgDXnByB0Q==
-X-Received: by 2002:a17:907:74a:b0:9ad:93c8:c483 with SMTP id
- xc10-20020a170907074a00b009ad93c8c483mr4999176ejb.2.1696429402489; 
- Wed, 04 Oct 2023 07:23:22 -0700 (PDT)
+ bh=I1OL0V21Ch14FWuztAcXzz/7NLtXoO8OzqD8siWpFhM=;
+ b=WI8ZfyFPRbonOWIVtemU5tGE10UKX6WjWYQOV5rhaLq3X/qkpm5K2i6WAu7WgFWZ1h
+ W1wtEcgZ2ZpUrmWYXqvzR3K0adlgLN/wMHhzdKrnkyHNx13MShHJTRBP7aT3H4aWH3hn
+ 5woFpS53aVDP6dim94eXabNnSlw3I6YC/eQqxrCvpT4GQ60HLgL54S/0V02QQWd7yOpF
+ IhmM7pXPnvMP8iCI6R88wIU+kEsKQT2ybTrz6/VOCcGtHXD8O2lxeVifb3SCHfJIUdx8
+ Nz2nVxax/AWCNj29PRY7LVtLGa8X/C6JOOwejtkEMrrud+dv2iyOUg/xPFxEqTzMJNmW
+ ZgRw==
+X-Gm-Message-State: AOJu0Yyyibpzop+b2cR+3xO3G0XhML7GvG/O3v6WScXcwfJMZ7TAnBFD
+ 5xDbQa8eRWCvYToC8dX4AkRCcZcZBtC4Dt15QgKAdw==
+X-Google-Smtp-Source: AGHT+IEB374nRRC+QHRf1YqMAuSqGkUgt89UKFUeUCNEJLUhWZw3MN1DTvatkj6SFJpfASh+CjZJ+Q==
+X-Received: by 2002:a17:906:76d2:b0:9a9:f14a:22fa with SMTP id
+ q18-20020a17090676d200b009a9f14a22famr2235185ejn.16.1696429403352; 
+ Wed, 04 Oct 2023 07:23:23 -0700 (PDT)
 Received: from localhost.localdomain ([79.132.253.132])
  by smtp.gmail.com with ESMTPSA id
- dv7-20020a170906b80700b009a5f7fb51dcsm2851805ejb.42.2023.10.04.07.23.21
+ dv7-20020a170906b80700b009a5f7fb51dcsm2851805ejb.42.2023.10.04.07.23.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Wed, 04 Oct 2023 07:23:22 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed,  4 Oct 2023 16:23:00 +0200
-Message-ID: <20231004142303.203520-5-thomas.perale@essensium.com>
+Date: Wed,  4 Oct 2023 16:23:01 +0200
+Message-ID: <20231004142303.203520-6-thomas.perale@essensium.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231004142303.203520-1-thomas.perale@essensium.com>
 References: <20231004142303.203520-1-thomas.perale@essensium.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=essensium.com; s=google; t=1696429402; x=1697034202; darn=buildroot.org;
+ d=essensium.com; s=google; t=1696429403; x=1697034203; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=xsw9F3NoHCqGqmjxUInNe+v7G1lDncfSJBIigZd+xr4=;
- b=gTNjSmtNAFQFj0PfvMJq/Pzi+qqDNkXth+FJ8s0RjZj3JCLr/RGzebgPO/aopmC1z5
- eDiaWKTcajVbhykyh31gGFExDIjqpwIIEBpik8zQoFhSeHzbZKOWxQL+f6vvSZ0tsaV/
- ixaPXkINkcmLmRy9+TZfRdcNniKZ38/SG5xyAbc2Wp6ff47YandbwKiWKmnexj2xhRx8
- z7hbjXnHPb9FsJW9OSw5n0RRH3WHXe8VgnQwsnLYtON/UZRHRE4Eb94gQjNvhraIhXs1
- wAqvophT33AqBbDq83U7hOPkZMD0Ej4nozB65tOpPJy5AgTTpQEFZ//J4VeN1NLDeqzA
- HwdQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=I1OL0V21Ch14FWuztAcXzz/7NLtXoO8OzqD8siWpFhM=;
+ b=Ex+qEwDNtmaUxzhaXFgcd8CWDdG3R2wJPUrVSMfxtUTDGcAOSXM6IheDDel/jpoR9W
+ RWt+Ddpah5jPmu+M1IwgJeFgmMbfq+ku27OY6zoxaUn4pNoDWCHus5gqPSHNsMlOmlTr
+ EZlKJvBsyrlIEYrrwlIkwDnExWDR5X560EraVjlm66Ldr1J/U2+WelFwSKANfUtklhWb
+ kiPZlXPI1pw94eg93soIdaVGAdZOIlfy890NZfjJVh5Tal+jp0dUOXt+0Ri4VrCX0S7P
+ MdpWq9QyhsyGP449gh1kTgM90KUSK0q4oPx3WdLim1pBMkIaI2chilQmad2RE/wND0a6
+ ZyGQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=gTNjSmtN
-Subject: [Buildroot] [PATCH 4/6] package/pkg-golang: select go compiler
+ header.a=rsa-sha256 header.s=google header.b=Ex+qEwDN
+Subject: [Buildroot] [PATCH 5/6] package/go/go-bin: new go provider
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,313 +111,138 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Thomas Perale <thomas.perale@mind.be>
 
-Select the 'go' virtual package in every package built by the Go
-compiler. This maintains the correct dependencies in 'menuconfig'.
-The same pattern is currently used for Rust packages.
+This package provides a pre-built version for the host-go virtual
+package introduced in the previous commits.
+
+host-go-bin install a pre-built version of the Go compiler.
+
+The menuconfig entry for host-go is updated to expose the host-go-bin
+provider. The dependencies are set as such as if host-go-bin does not
+support the host architecture it will automatically fall back to
+host-go-src and vice-versa.
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/balena-engine/Config.in        | 1 +
- package/cni-plugins/Config.in          | 1 +
- package/containerd/Config.in           | 1 +
- package/crucible/Config.in             | 1 +
- package/delve/Config.in                | 1 +
- package/delve/Config.in.host           | 1 +
- package/docker-cli/Config.in           | 1 +
- package/docker-compose/Config.in       | 1 +
- package/docker-engine/Config.in        | 1 +
- package/embiggen-disk/Config.in        | 1 +
- package/flannel/Config.in              | 1 +
- package/gitlab-runner/Config.in        | 1 +
- package/gocryptfs/Config.in            | 1 +
- package/mender-artifact/Config.in.host | 1 +
- package/mender-connect/Config.in       | 1 +
- package/mender/Config.in               | 1 +
- package/moby-buildkit/Config.in        | 1 +
- package/moby-buildkit/Config.in.host   | 1 +
- package/nerdctl/Config.in              | 1 +
- package/runc/Config.in                 | 1 +
- package/runc/Config.in.host            | 1 +
- package/tinifier/Config.in             | 1 +
- package/wtfutil/Config.in              | 1 +
- 23 files changed, 23 insertions(+)
+ package/go/Config.in.host        | 15 ++++++++++++---
+ package/go/go-bin/Config.in.host | 14 ++++++++++++++
+ package/go/go-bin/go-bin.hash    |  8 ++++++++
+ package/go/go-bin/go-bin.mk      | 19 +++++++++++++++++++
+ 4 files changed, 53 insertions(+), 3 deletions(-)
+ create mode 100644 package/go/go-bin/Config.in.host
+ create mode 100644 package/go/go-bin/go-bin.hash
+ create mode 100644 package/go/go-bin/go-bin.mk
 
-diff --git a/package/balena-engine/Config.in b/package/balena-engine/Config.in
-index 02f694515e..5966b33f58 100644
---- a/package/balena-engine/Config.in
-+++ b/package/balena-engine/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_BALENA_ENGINE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime
-+	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_IPTABLES # runtime
- 	select BR2_PACKAGE_UTIL_LINUX # runtime
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES # runtime
-diff --git a/package/cni-plugins/Config.in b/package/cni-plugins/Config.in
-index 25e6ff534d..6d4ca0a5b4 100644
---- a/package/cni-plugins/Config.in
-+++ b/package/cni-plugins/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_CNI_PLUGINS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  Container Networking Interface plugins.
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 742d484420..b3906fbae5 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -30,11 +30,11 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+ 	bool
+ 	default y
+-	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
  
-diff --git a/package/containerd/Config.in b/package/containerd/Config.in
-index e69dd6768a..e92764f304 100644
---- a/package/containerd/Config.in
-+++ b/package/containerd/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_CONTAINERD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
- 	depends on BR2_USE_MMU # util-linux
-+	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN # runtime dependency
- 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-diff --git a/package/crucible/Config.in b/package/crucible/Config.in
-index b27eb31ae5..1e1b29c3df 100644
---- a/package/crucible/Config.in
-+++ b/package/crucible/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CRUCIBLE
- 	bool "crucible"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
+ config BR2_PACKAGE_HOST_GO
+ 	bool "host go compiler"
+-	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
  	help
- 	  Crucible is a One-Time-Programmable (OTP) fusing tool for the
- 	  i.MX family.
-diff --git a/package/delve/Config.in b/package/delve/Config.in
-index 9428e4016a..288dc1ea15 100644
---- a/package/delve/Config.in
-+++ b/package/delve/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_DELVE_ARCH_SUPPORTS
- 	default y if BR2_x86_64
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
+ 	  Compiler for the Go language
  
- config BR2_PACKAGE_DELVE
- 	bool "delve"
-diff --git a/package/delve/Config.in.host b/package/delve/Config.in.host
-index dab5ca8914..0938ab0659 100644
---- a/package/delve/Config.in.host
-+++ b/package/delve/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_DELVE
- 	bool "host delve"
- 	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  Delve is a debugger for the Go programming language.
+@@ -44,7 +44,8 @@ if BR2_PACKAGE_HOST_GO
  
-diff --git a/package/docker-cli/Config.in b/package/docker-cli/Config.in
-index 6f187c9d22..52e7f7c871 100644
---- a/package/docker-cli/Config.in
-+++ b/package/docker-cli/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER_CLI
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_HOST_GO
+ choice
+ 	prompt "Go compiler variant"
+-	default BR2_PACKAGE_HOST_GO_SRC
++	default BR2_PACKAGE_HOST_GO_SRC if BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS
++	default BR2_PACKAGE_HOST_GO_BIN if BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
  	help
- 	  Docker is a platform to build, ship,
- 	  and run applications as lightweight containers.
-diff --git a/package/docker-compose/Config.in b/package/docker-compose/Config.in
-index 59128f7a19..f3560e402b 100644
---- a/package/docker-compose/Config.in
-+++ b/package/docker-compose/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_DOCKER_COMPOSE
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_DOCKER_CLI
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  Multi-container applications with the Docker CLI.
+ 	  Select a Go compiler variant.
  
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 570b2ff681..a6d8f64a1c 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
- 	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
- 	select BR2_PACKAGE_CONTAINERD # runtime dependency
-+	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_IPTABLES # runtime dependency
- 	select BR2_PACKAGE_LIBSECCOMP
- 	help
-diff --git a/package/embiggen-disk/Config.in b/package/embiggen-disk/Config.in
-index 667d71c86e..c323fb1b6d 100644
---- a/package/embiggen-disk/Config.in
-+++ b/package/embiggen-disk/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_EMBIGGEN_DISK
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
- 	depends on BR2_USE_MMU # util-linux
-+	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_UTIL_LINUX # sfdisk
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES # sfdisk
- 	help
-diff --git a/package/flannel/Config.in b/package/flannel/Config.in
-index eb8d798f48..f37cfaa9cc 100644
---- a/package/flannel/Config.in
-+++ b/package/flannel/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_FLANNEL
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  Flannel is a virtual network that gives a subnet to each
- 	  host for use with container runtimes.
-diff --git a/package/gitlab-runner/Config.in b/package/gitlab-runner/Config.in
-index 4289613ab9..cfe8c941bc 100644
---- a/package/gitlab-runner/Config.in
-+++ b/package/gitlab-runner/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_GITLAB_RUNNER
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
- 	select BR2_PACKAGE_CA_CERTIFICATES # runtime
- 	select BR2_PACKAGE_GIT # runtime
-+	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_LIBCURL # runtime
- 	select BR2_PACKAGE_LIBCURL_CURL # runtime
- 	select BR2_PACKAGE_LIBCURL_FORCE_TLS # runtime
-diff --git a/package/gocryptfs/Config.in b/package/gocryptfs/Config.in
-index 2630cafdcf..2c70b9b21b 100644
---- a/package/gocryptfs/Config.in
-+++ b/package/gocryptfs/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_GOCRYPTFS
- 	bool "gocryptfs"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  gocryptfs is an encrypted FUSE overlay filesystem.
+@@ -52,9 +53,16 @@ choice
  
-diff --git a/package/mender-artifact/Config.in.host b/package/mender-artifact/Config.in.host
-index c7be0ed261..39353b23e7 100644
---- a/package/mender-artifact/Config.in.host
-+++ b/package/mender-artifact/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_MENDER_ARTIFACT
- 	bool "host mender-artifact"
- 	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
+ config BR2_PACKAGE_HOST_GO_SRC
+ 	bool "host go (source)"
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS
  	help
- 	  The mender-artifact tool is a CLI implementation of the
- 	  Mender artifacts library.
-diff --git a/package/mender-connect/Config.in b/package/mender-connect/Config.in
-index 0845910880..d478e468c2 100644
---- a/package/mender-connect/Config.in
-+++ b/package/mender-connect/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_MENDER_CONNECT
- 	depends on BR2_USE_WCHAR # libglib2 -> gettext
- 	depends on BR2_USE_MMU # dbus -> fork()
- 	select BR2_PACKAGE_DBUS # runtime
-+	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_MENDER # runtime
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index 7d768cebec..4831548f76 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_MENDER
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
-diff --git a/package/moby-buildkit/Config.in b/package/moby-buildkit/Config.in
-index 93c852bcdb..1a0b599097 100644
---- a/package/moby-buildkit/Config.in
-+++ b/package/moby-buildkit/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_MOBY_BUILDKIT
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  BuildKit is a toolkit for converting source code to build
- 	  artifacts in an efficient, expressive and repeatable manner.
-diff --git a/package/moby-buildkit/Config.in.host b/package/moby-buildkit/Config.in.host
-index a3b18548f8..d4eb0d74c3 100644
---- a/package/moby-buildkit/Config.in.host
-+++ b/package/moby-buildkit/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_MOBY_BUILDKIT
- 	bool "host moby-buildkit"
- 	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  BuildKit is a toolkit for converting source code to build
- 	  artifacts in an efficient expressive and repeatable manner.
-diff --git a/package/nerdctl/Config.in b/package/nerdctl/Config.in
-index 969b9bb40e..062b36ab85 100644
---- a/package/nerdctl/Config.in
-+++ b/package/nerdctl/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_NERDCTL
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_CONTAINERD # runtime
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  Docker-compatible CLI for containerd, controlling runc.
+ 	  This package will build the go compiler for the host.
  
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index fe527b1954..73eac72527 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_RUNC
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  runC is a CLI tool for spawning and running containers
- 	  according to the OCI specification.
-diff --git a/package/runc/Config.in.host b/package/runc/Config.in.host
-index 4b2555e029..78193cb499 100644
---- a/package/runc/Config.in.host
-+++ b/package/runc/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_RUNC
- 	bool "host runc"
- 	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  runC is a CLI tool for spawning and running containers
- 	  according to the OCI specification.
-diff --git a/package/tinifier/Config.in b/package/tinifier/Config.in
-index fbadfe6bd9..eae8b8f499 100644
---- a/package/tinifier/Config.in
-+++ b/package/tinifier/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TINIFIER
- 	bool "tinifier"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  CLI tool for images compressing
++config BR2_PACKAGE_HOST_GO_BIN
++	bool "host go (pre-built)"
++	depends on BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
++	help
++	  This package will install pre-built versions of the compiler
++
+ endchoice
  
-diff --git a/package/wtfutil/Config.in b/package/wtfutil/Config.in
-index 8c3efcea5d..3fd8c41bab 100644
---- a/package/wtfutil/Config.in
-+++ b/package/wtfutil/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_WTFUTIL
- 	bool "wtfutil"
- 	depends on BR2_USE_MMU  # fork()
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
- 	help
- 	  WTF is the personal information dashboard for your terminal.
+ config BR2_PACKAGE_PROVIDES_HOST_GO
+@@ -64,5 +72,6 @@ config BR2_PACKAGE_PROVIDES_HOST_GO
  
+ endif
+ 
++source "package/go/go-bin/Config.in.host"
+ source "package/go/go-bootstrap-stage1/Config.in.host"
+ source "package/go/go-bootstrap-stage2/Config.in.host"
+diff --git a/package/go/go-bin/Config.in.host b/package/go/go-bin/Config.in.host
+new file mode 100644
+index 0000000000..b259afa197
+--- /dev/null
++++ b/package/go/go-bin/Config.in.host
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH
++	string "Translate the HOSTARCH into the architecture name used by the Go compiler"
++	default armv6l   if BR2_HOSTARCH = "arm"
++	default arm64    if BR2_HOSTARCH = "aarch64"
++	default ppc64le  if BR2_HOSTARCH = "powerpc64le"
++	default s390x    if BR2_HOSTARCH = "s390x"
++	default 386      if BR2_HOSTARCH = "x86"
++	default amd64    if BR2_HOSTARCH = "x86_64"
++	default ""
++
++config BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
++	bool
++	default y
++	depends on BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH != ""
+diff --git a/package/go/go-bin/go-bin.hash b/package/go/go-bin/go-bin.hash
+new file mode 100644
+index 0000000000..3952014f44
+--- /dev/null
++++ b/package/go/go-bin/go-bin.hash
+@@ -0,0 +1,8 @@
++# sha256 checksum from https://go.dev/dl/
++sha256  b93850666cdadbd696a986cf7b03111fe99db8c34a9aaa113d7c96d0081e1901  go1.21.1.linux-386.tar.gz
++sha256  b3075ae1ce5dab85f89bc7905d1632de23ca196bd8336afd93fa97434cfa55ae  go1.21.1.linux-amd64.tar.gz
++sha256  7da1a3936a928fd0b2602ed4f3ef535b8cd1990f1503b8d3e1acc0fa0759c967  go1.21.1.linux-arm64.tar.gz
++sha256  f3716a43f59ae69999841d6007b42c9e286e8d8ce470656fb3e70d7be2d7ca85  go1.21.1.linux-armv6l.tar.gz
++sha256  eddf018206f8a5589bda75252b72716d26611efebabdca5d0083ec15e9e41ab7  go1.21.1.linux-ppc64le.tar.gz
++sha256  a83b3e8eb4dbf76294e773055eb51397510ff4d612a247bad9903560267bba6d  go1.21.1.linux-s390x.tar.gz
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go-bin/go-bin.mk b/package/go/go-bin/go-bin.mk
+new file mode 100644
+index 0000000000..6c5c1b6485
+--- /dev/null
++++ b/package/go/go-bin/go-bin.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# go-bin
++#
++################################################################################
++
++GO_BIN_SITE = https://go.dev/dl
++GO_BIN_LICENSE = BSD-3-Clause
++GO_BIN_LICENSE_FILES = LICENSE
++
++HOST_GO_BIN_PROVIDES = host-go
++
++HOST_GO_BIN_SOURCE = go$(GO_VERSION).linux-$(call qstrip, $(BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH)).tar.gz
++
++define HOST_GO_BIN_INSTALL_CMDS
++	$(GO_BINARIES_INSTALL)
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.42.0
 
