@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D658E7C4C4
-	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 14:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A327E7C4C2
+	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 14:24:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7BE461424;
-	Wed,  4 Oct 2023 14:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7BE461424
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51FA66141F;
+	Wed,  4 Oct 2023 14:24:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51FA66141F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UffdbICR0ysC; Wed,  4 Oct 2023 14:24:02 +0000 (UTC)
+	with ESMTP id Or2c0o9OugSg; Wed,  4 Oct 2023 14:24:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9506561427;
-	Wed,  4 Oct 2023 14:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9506561427
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 886751BF47F
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 14:23:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24F616144A;
+	Wed,  4 Oct 2023 14:24:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24F616144A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EEAC81BF47F
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 14:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F9C960B1C
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 14:23:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F9C960B1C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D42A041F8E
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 14:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D42A041F8E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tAF7ErFi5pMu for <buildroot@lists.busybox.net>;
- Wed,  4 Oct 2023 14:23:23 +0000 (UTC)
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DB9F860B33
- for <buildroot@buildroot.org>; Wed,  4 Oct 2023 14:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB9F860B33
-Received: by mail-ed1-x52b.google.com with SMTP id
- 4fb4d7f45d1cf-538e8eca9c1so1086651a12.3
- for <buildroot@buildroot.org>; Wed, 04 Oct 2023 07:23:22 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ScvnXrFaMA4w for <buildroot@lists.busybox.net>;
+ Wed,  4 Oct 2023 14:23:24 +0000 (UTC)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F0A6F41ED7
+ for <buildroot@buildroot.org>; Wed,  4 Oct 2023 14:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0A6F41ED7
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-9ae75ece209so410052166b.3
+ for <buildroot@buildroot.org>; Wed, 04 Oct 2023 07:23:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1696429401; x=1697034201;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=QNv8kYmhAuMX3kHqzWLMdBbziQqYGvzBiZJf/suay1M=;
- b=toXTRbkcrQ3oM7NLWoeHxgHYB88YJMfMkn4jqd/BrfIyJB575jea+DL21XaqQoFIKy
- 2VhMhi4y5xjwK2KVu4bcyVJQlQ/xnuTbiVU6kzTu2ho2vSmzOZ8jBJ3muG7SGay/qg1T
- 4OjrJuw3Vicqdvy56nOaad6fOpg+tOpfy88NOQ5Wl6n+w2PJfuokV/7n3/Z66jEVoXlR
- SirHBgp19PgNOmGkWmHTsKBB4QD8XQbGIkbAcZE38AFlWKILQufiHnMGZXSA+vvzz0PX
- mTcYGmMnwVtQvvM8WRDZnfBmPnDMcqD1Q34EinQppuOwzLU3Z33N6kgd6fRgiTPAXcVd
- d+Qw==
-X-Gm-Message-State: AOJu0YwUczAUjPRk8O69GGOZK2kYAM/KSwGzEFNpjsoI99jV5vusYd87
- 2jDfjtn9jiWLOwzIyUbYj/iKaknHPpaLbsVS2hhOFg==
-X-Google-Smtp-Source: AGHT+IFYnOWaDjFzWG9pqOsI2FOKI5hOZbbMNRjU2VRoi4kVRF5SlmBf7VwkErBHypfoEkdEy6/PRA==
-X-Received: by 2002:a17:906:5a66:b0:9ae:5120:5141 with SMTP id
- my38-20020a1709065a6600b009ae51205141mr2198254ejc.37.1696429400677; 
- Wed, 04 Oct 2023 07:23:20 -0700 (PDT)
+ bh=ZcC7nIlIuy5yp6RRQOU46wRgqrmeC85w75pUj7J1qKw=;
+ b=dGhtLvY7mNQ59N5pCXK2Lz8J9iUVPF9/1TSV/CfTTdYYniT7FZtaMQ/b6Syr3RrF25
+ nVYofUCBx5xr3NtrcEb2f7wJHxsxscBsSANQjUOmhL6zIRYf+g14Ok2wSQTba4TZ/wOv
+ jZwGDaysgSgGACVAuz41ydRCxpN29nVeubTD8i7RizEFnrn0xD9SRZ2fYwOKrQPh++C5
+ TBBtWYbeI/ftYiMEOltkVvXZoNTD0acIEVmG2BFMcRI9Y38hT5f7/NM1BK/qWlFSYtmc
+ SA8HzasJ79ktxoj/wxECIKLjbmaspIokZ+UMjnJompZODG4VYOs2yxvad0Wvv8JytYT5
+ eoHw==
+X-Gm-Message-State: AOJu0YzWBiT8ySZvmzm+sCsUKY6uYki9CvGzn6fP0KtX5y9yWGDerbK/
+ ssyw2f8m+HWQiNgQqP3EwnCq6LYRGd4OcnYmxyTibg==
+X-Google-Smtp-Source: AGHT+IH/6iRMikWazcp+KobpBp/wTPWt+ZhNJ069865hxlVR5a1sGJFmq6vkLrtIMP65pJ37zXY1jA==
+X-Received: by 2002:a17:906:3d22:b0:9a1:c44d:7056 with SMTP id
+ l2-20020a1709063d2200b009a1c44d7056mr2184832ejf.26.1696429401517; 
+ Wed, 04 Oct 2023 07:23:21 -0700 (PDT)
 Received: from localhost.localdomain ([79.132.253.132])
  by smtp.gmail.com with ESMTPSA id
  dv7-20020a170906b80700b009a5f7fb51dcsm2851805ejb.42.2023.10.04.07.23.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Oct 2023 07:23:20 -0700 (PDT)
+ Wed, 04 Oct 2023 07:23:21 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed,  4 Oct 2023 16:22:58 +0200
-Message-ID: <20231004142303.203520-3-thomas.perale@essensium.com>
+Date: Wed,  4 Oct 2023 16:22:59 +0200
+Message-ID: <20231004142303.203520-4-thomas.perale@essensium.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231004142303.203520-1-thomas.perale@essensium.com>
 References: <20231004142303.203520-1-thomas.perale@essensium.com>
@@ -73,17 +73,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=QNv8kYmhAuMX3kHqzWLMdBbziQqYGvzBiZJf/suay1M=;
- b=SjRRo9XuPZl7psgWzDEYJImsXAw3Ed9n9xSZynBKqTJJ1G5itM94WJV3IGW/pqfjy2
- f0TqbrDITedPKZh/IgvCIHPJc7Zb224UijCMIz4JjnDsB64vi1pF/zBdplUQMknhGWhF
- e0YjmXitvyxnSVZXzjoR2dkoceU3Nu+s14uTph679dA1TVRntqbKSuzJNL89gks4I5kP
- wsg4b09Ocxq5G6AxtFh21R1eFNXB8BCTHDPzIkpHPq6Y+pdj4TyG4I7TPNJqPcGGCkDF
- em0eSI9qwcEwxenJNsFNeJklKZ9DIxMsjbrS3eyXGBn2275W7MWqyrV5Lj3mccGq2gzM
- 5zwA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=ZcC7nIlIuy5yp6RRQOU46wRgqrmeC85w75pUj7J1qKw=;
+ b=gGJYS2l6IpYEmi7HccVWqX5GiiAbprK0QjOBnpB+9+S4IxsAMbltnhlk40dp14sXIR
+ ay7N7SAsR6OE6PYDWU7G5zO94oVwuDWs2POn1NH3yYfWODWdbAvz9GzEWi/Iqw6yY08G
+ 4vdOBGe2GIxwV/iJPjOg8/TuK7hC0kiizlI7zPo+wGk38uiyXXaPGXDkjV3TrADAc8b0
+ rlwgOpVQa8zwGCIYyH2ZAYkrakhnP1xSJqxdhOrPE090ioXtZSDxR6PUR6N229iLarAN
+ 7X3jlWfYYgXqRGt7Qq4Qo2Eh5HTndmvIOCdALZts3i7Q4gNIHMycn/9AoHYdZBDKLPUr
+ R6CQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=SjRRo9Xu
-Subject: [Buildroot] [PATCH 2/6] package/go: new subdirectory for go variants
+ header.a=rsa-sha256 header.s=google header.b=gGJYS2l6
+Subject: [Buildroot] [PATCH 3/6] package/go: make host package a virtual
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,261 +112,179 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Thomas Perale <thomas.perale@mind.be>
 
-Move every go compiler-related packages into a newly created
-package/go/ subdirectory. All the common variables are kept in
-package/go/go.mk and package/go/Config.in.host.
+Turn host-go into a virtual package, which has two providers:
 
-This subdirectory structure move the GO_VERSION variable in common in
-the package/go/go.mk file. In the next commits host-go will be turned
-into a virtual-package and the common GO_VERSION force the providers to
-use the same Go compiler version.
-Also, the subdirectory structure force the evaluation of the common
-GO_VERSION before the providers access it.
+ - host-go-src, which build host-go from source based on the same logic
+   that was previously used in package/go/go/go.mk, now moved in
+   package/go/go-src/go-src.mk to remove any ambiguity on the role of
+   the package.
+
+ - host-go-bin, which will be introduced in the next commit and installs
+   a pre-built Go compiler.
+
+The usage of a virtual package enables the support for pre-built Go
+compiler which reduce the build time for of host-go.
+A similar solution is proposed for host-rust.
+
+By default, host-go is built from sources to keep the same behaviour as
+the former version.
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
  .checkpackageignore                           |  2 +-
- DEVELOPERS                                    |  2 -
- package/Config.in.host                        |  2 -
- package/go/Config.in.host                     |  3 ++
- .../go-bootstrap-stage1/Config.in.host        |  0
- .../go-bootstrap-stage1.hash                  |  0
- .../go-bootstrap-stage1.mk                    |  0
- .../go-bootstrap-stage2/Config.in.host        |  0
- .../go-bootstrap-stage2.hash                  |  0
- .../go-bootstrap-stage2.mk                    |  0
- package/go/go.mk                              | 40 +-------------
+ package/go/Config.in.host                     | 32 +++++++++++++++++++
  ...explicit-option-for-crosscompilation.patch |  0
  ...ldvcs-false-when-building-go-bootstr.patch |  0
- package/go/{ => go}/go.hash                   |  0
- package/go/go/go.mk                           | 53 +++++++++++++++++++
- 15 files changed, 59 insertions(+), 43 deletions(-)
- rename package/{ => go}/go-bootstrap-stage1/Config.in.host (100%)
- rename package/{ => go}/go-bootstrap-stage1/go-bootstrap-stage1.hash (100%)
- rename package/{ => go}/go-bootstrap-stage1/go-bootstrap-stage1.mk (100%)
- rename package/{ => go}/go-bootstrap-stage2/Config.in.host (100%)
- rename package/{ => go}/go-bootstrap-stage2/go-bootstrap-stage2.hash (100%)
- rename package/{ => go}/go-bootstrap-stage2/go-bootstrap-stage2.mk (100%)
- rename package/go/{ => go}/0001-build.go-explicit-option-for-crosscompilation.patch (100%)
- rename package/go/{ => go}/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch (100%)
- rename package/go/{ => go}/go.hash (100%)
- create mode 100644 package/go/go/go.mk
+ package/go/{go/go.hash => go-src/go-src.hash} |  0
+ package/go/{go/go.mk => go-src/go-src.mk}     | 25 ++++++++-------
+ package/go/go.mk                              |  2 ++
+ 7 files changed, 48 insertions(+), 13 deletions(-)
+ rename package/go/{go => go-src}/0001-build.go-explicit-option-for-crosscompilation.patch (100%)
+ rename package/go/{go => go-src}/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch (100%)
+ rename package/go/{go/go.hash => go-src/go-src.hash} (100%)
+ rename package/go/{go/go.mk => go-src/go-src.mk} (68%)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 28de1745e4..becaf6a9fc 100644
+index becaf6a9fc..ca4b2a8afb 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
 @@ -514,7 +514,7 @@ package/glorytun/0002-aegis256.c-fix-aarch64-build-with-uclibc.patch Upstream
  package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch Upstream
  package/gnupg/0001-build-Always-use-EXTERN_UNLESS_MAIN_MODULE-pattern.patch Upstream
  package/gnuplot/0001-configure-add-without-demo-option.patch Upstream
--package/go/0001-build.go-explicit-option-for-crosscompilation.patch Upstream
-+package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch Upstream
+-package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch Upstream
++package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch Upstream
  package/gob2/0001-dont-include-from-prefix.patch Upstream
  package/gobject-introspection/0001-disable-tests.patch Upstream
  package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch Upstream
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4681b2a21f..b9c7b4f1a9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -586,8 +586,6 @@ F:	package/docker-engine/
- F:	package/embiggen-disk/
- F:	package/fuse-overlayfs/
- F:	package/go/
--F:	package/go-bootstrap-stage1/
--F:	package/go-bootstrap-stage2/
- F:	package/gocryptfs/
- F:	package/mbpfan/
- F:	package/moby-buildkit/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index c80842c33a..3a8e613fa3 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -44,8 +44,6 @@ menu "Host utilities"
- 	source "package/genpart/Config.in.host"
- 	source "package/gnupg/Config.in.host"
- 	source "package/go/Config.in.host"
--	source "package/go-bootstrap-stage1/Config.in.host"
--	source "package/go-bootstrap-stage2/Config.in.host"
- 	source "package/google-breakpad/Config.in.host"
- 	source "package/gptfdisk/Config.in.host"
- 	source "package/imagemagick/Config.in.host"
 diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index b87b862cec..277d75e2b6 100644
+index 277d75e2b6..742d484420 100644
 --- a/package/go/Config.in.host
 +++ b/package/go/Config.in.host
-@@ -31,3 +31,6 @@ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
- 	bool
+@@ -32,5 +32,37 @@ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
  	default y
  	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS
+ 
++config BR2_PACKAGE_HOST_GO
++	bool "host go compiler"
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS
++	help
++	  Compiler for the Go language
 +
-+source "package/go/go-bootstrap-stage1/Config.in.host"
-+source "package/go/go-bootstrap-stage2/Config.in.host"
-diff --git a/package/go-bootstrap-stage1/Config.in.host b/package/go/go-bootstrap-stage1/Config.in.host
++	  https://go.dev
++
++if BR2_PACKAGE_HOST_GO
++
++choice
++	prompt "Go compiler variant"
++	default BR2_PACKAGE_HOST_GO_SRC
++	help
++	  Select a Go compiler variant.
++
++	  Default to 'host-go-src'.
++
++config BR2_PACKAGE_HOST_GO_SRC
++	bool "host go (source)"
++	help
++	  This package will build the go compiler for the host.
++
++endchoice
++
++config BR2_PACKAGE_PROVIDES_HOST_GO
++	string
++	# Default to host-go-src
++	default "host-go-src" if BR2_PACKAGE_HOST_GO_SRC
++
++endif
++
+ source "package/go/go-bootstrap-stage1/Config.in.host"
+ source "package/go/go-bootstrap-stage2/Config.in.host"
+diff --git a/package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch
 similarity index 100%
-rename from package/go-bootstrap-stage1/Config.in.host
-rename to package/go/go-bootstrap-stage1/Config.in.host
-diff --git a/package/go-bootstrap-stage1/go-bootstrap-stage1.hash b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.hash
+rename from package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch
+rename to package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch
+diff --git a/package/go/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch b/package/go/go-src/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
 similarity index 100%
-rename from package/go-bootstrap-stage1/go-bootstrap-stage1.hash
-rename to package/go/go-bootstrap-stage1/go-bootstrap-stage1.hash
-diff --git a/package/go-bootstrap-stage1/go-bootstrap-stage1.mk b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
+rename from package/go/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
+rename to package/go/go-src/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
+diff --git a/package/go/go/go.hash b/package/go/go-src/go-src.hash
 similarity index 100%
-rename from package/go-bootstrap-stage1/go-bootstrap-stage1.mk
-rename to package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
-diff --git a/package/go-bootstrap-stage2/Config.in.host b/package/go/go-bootstrap-stage2/Config.in.host
-similarity index 100%
-rename from package/go-bootstrap-stage2/Config.in.host
-rename to package/go/go-bootstrap-stage2/Config.in.host
-diff --git a/package/go-bootstrap-stage2/go-bootstrap-stage2.hash b/package/go/go-bootstrap-stage2/go-bootstrap-stage2.hash
-similarity index 100%
-rename from package/go-bootstrap-stage2/go-bootstrap-stage2.hash
-rename to package/go/go-bootstrap-stage2/go-bootstrap-stage2.hash
-diff --git a/package/go-bootstrap-stage2/go-bootstrap-stage2.mk b/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk
-similarity index 100%
-rename from package/go-bootstrap-stage2/go-bootstrap-stage2.mk
-rename to package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 6f080be5c0..21051a2050 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -5,14 +5,7 @@
+rename from package/go/go/go.hash
+rename to package/go/go-src/go-src.hash
+diff --git a/package/go/go/go.mk b/package/go/go-src/go-src.mk
+similarity index 68%
+rename from package/go/go/go.mk
+rename to package/go/go-src/go-src.mk
+index 8e3780eb29..07809ecb3e 100644
+--- a/package/go/go/go.mk
++++ b/package/go/go-src/go-src.mk
+@@ -1,21 +1,22 @@
+ ################################################################################
+ #
+-# go
++# go-src
+ #
  ################################################################################
  
- GO_VERSION = 1.21.1
 -GO_SITE = https://storage.googleapis.com/golang
 -GO_SOURCE = go$(GO_VERSION).src.tar.gz
++GO_SRC_SITE = https://storage.googleapis.com/golang
++GO_SRC_SOURCE = go$(GO_VERSION).src.tar.gz
  
 -GO_LICENSE = BSD-3-Clause
 -GO_LICENSE_FILES = LICENSE
 -GO_CPE_ID_VENDOR = golang
--
++GO_SRC_LICENSE = BSD-3-Clause
++GO_SRC_LICENSE_FILES = LICENSE
++GO_SRC_CPE_ID_VENDOR = golang
+ 
 -HOST_GO_DEPENDENCIES = host-go-bootstrap-stage2
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
- HOST_GO_ROOT = $(HOST_DIR)/lib/go
-@@ -96,15 +89,6 @@ else
- HOST_GO_CGO_ENABLED = 0
- endif
++HOST_GO_SRC_PROVIDES = host-go
++HOST_GO_SRC_DEPENDENCIES = host-go-bootstrap-stage2
+ 
+ ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
  
 -HOST_GO_CROSS_ENV = \
--	CC_FOR_TARGET="$(TARGET_CC)" \
--	CXX_FOR_TARGET="$(TARGET_CXX)" \
--	GOOS="linux" \
--	GOARCH=$(GO_GOARCH) \
--	$(if $(GO_GO386),GO386=$(GO_GO386)) \
--	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
--	GO_ASSUME_CROSSCOMPILING=1
--
- else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- # host-go can still be used to build packages for the host. No need to set all
- # the arch stuff since we will not be cross-compiling.
-@@ -123,27 +107,7 @@ HOST_GO_HOST_ENV = \
- 	CGO_CXXFLAGS="$(HOST_CXXFLAGS)" \
- 	CGO_LDFLAGS="$(HOST_LDFLAGS)"
++HOST_GO_SRC_CROSS_ENV = \
+ 	CC_FOR_TARGET="$(TARGET_CC)" \
+ 	CXX_FOR_TARGET="$(TARGET_CXX)" \
+ 	GOOS="linux" \
+@@ -28,7 +29,7 @@ endif
  
--# The go build system is not compatible with ccache, so use
--# HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
+ # The go build system is not compatible with ccache, so use
+ # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
 -HOST_GO_MAKE_ENV = \
--	GO111MODULE=off \
--	GOCACHE=$(HOST_GO_HOST_CACHE) \
--	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE2_ROOT) \
--	GOROOT_FINAL=$(HOST_GO_ROOT) \
--	GOROOT="$(@D)" \
--	GOBIN="$(@D)/bin" \
--	GOOS=linux \
--	CC=$(HOSTCC_NOCCACHE) \
--	CXX=$(HOSTCXX_NOCCACHE) \
--	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
--	$(HOST_GO_CROSS_ENV)
--
--define HOST_GO_BUILD_CMDS
--	cd $(@D)/src && \
--		$(HOST_GO_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
--endef
--
--define HOST_GO_INSTALL_CMDS
-+define GO_BINARIES_INSTALL
- 	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_ROOT)/bin/go
- 	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_ROOT)/bin/gofmt
++HOST_GO_SRC_MAKE_ENV = \
+ 	GO111MODULE=off \
+ 	GOCACHE=$(HOST_GO_HOST_CACHE) \
+ 	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE2_ROOT) \
+@@ -41,12 +42,12 @@ HOST_GO_MAKE_ENV = \
+ 	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
+ 	$(HOST_GO_CROSS_ENV)
  
-@@ -165,4 +129,4 @@ define HOST_GO_INSTALL_CMDS
+-define HOST_GO_BUILD_CMDS
++define HOST_GO_SRC_BUILD_CMDS
+ 	cd $(@D)/src && \
+-		$(HOST_GO_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
++		$(HOST_GO_SRC_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
+ endef
+ 
+-define HOST_GO_INSTALL_CMDS
++define HOST_GO_SRC_INSTALL_CMDS
+ 	$(GO_BINARIES_INSTALL)
+ endef
+ 
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 21051a2050..42ea218e6c 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -129,4 +129,6 @@ define GO_BINARIES_INSTALL
  	find $(HOST_GO_ROOT) -type f -exec touch -r $(@D)/bin/go {} \;
  endef
  
--$(eval $(host-generic-package))
-+include $(sort $(wildcard package/go/*/*.mk))
-diff --git a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch
-similarity index 100%
-rename from package/go/0001-build.go-explicit-option-for-crosscompilation.patch
-rename to package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch
-diff --git a/package/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch b/package/go/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-similarity index 100%
-rename from package/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-rename to package/go/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-diff --git a/package/go/go.hash b/package/go/go/go.hash
-similarity index 100%
-rename from package/go/go.hash
-rename to package/go/go/go.hash
-diff --git a/package/go/go/go.mk b/package/go/go/go.mk
-new file mode 100644
-index 0000000000..8e3780eb29
---- /dev/null
-+++ b/package/go/go/go.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# go
-+#
-+################################################################################
++$(eval $(host-virtual-package))
 +
-+GO_SITE = https://storage.googleapis.com/golang
-+GO_SOURCE = go$(GO_VERSION).src.tar.gz
-+
-+GO_LICENSE = BSD-3-Clause
-+GO_LICENSE_FILES = LICENSE
-+GO_CPE_ID_VENDOR = golang
-+
-+HOST_GO_DEPENDENCIES = host-go-bootstrap-stage2
-+
-+ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
-+
-+HOST_GO_CROSS_ENV = \
-+	CC_FOR_TARGET="$(TARGET_CC)" \
-+	CXX_FOR_TARGET="$(TARGET_CXX)" \
-+	GOOS="linux" \
-+	GOARCH=$(GO_GOARCH) \
-+	$(if $(GO_GO386),GO386=$(GO_GO386)) \
-+	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
-+	GO_ASSUME_CROSSCOMPILING=1
-+
-+endif
-+
-+# The go build system is not compatible with ccache, so use
-+# HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
-+HOST_GO_MAKE_ENV = \
-+	GO111MODULE=off \
-+	GOCACHE=$(HOST_GO_HOST_CACHE) \
-+	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE2_ROOT) \
-+	GOROOT_FINAL=$(HOST_GO_ROOT) \
-+	GOROOT="$(@D)" \
-+	GOBIN="$(@D)/bin" \
-+	GOOS=linux \
-+	CC=$(HOSTCC_NOCCACHE) \
-+	CXX=$(HOSTCXX_NOCCACHE) \
-+	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
-+	$(HOST_GO_CROSS_ENV)
-+
-+define HOST_GO_BUILD_CMDS
-+	cd $(@D)/src && \
-+		$(HOST_GO_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
-+endef
-+
-+define HOST_GO_INSTALL_CMDS
-+	$(GO_BINARIES_INSTALL)
-+endef
-+
-+$(eval $(host-generic-package))
+ include $(sort $(wildcard package/go/*/*.mk))
 -- 
 2.42.0
 
