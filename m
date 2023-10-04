@@ -4,59 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E02C6E7C4E1
-	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 16:18:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 145EFE7C4E7
+	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 17:38:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57E1F42202;
-	Wed,  4 Oct 2023 16:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57E1F42202
+	by smtp4.osuosl.org (Postfix) with ESMTP id 899AB420F2;
+	Wed,  4 Oct 2023 17:38:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 899AB420F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sqGX6_d6rxVE; Wed,  4 Oct 2023 16:18:16 +0000 (UTC)
+	with ESMTP id wN02fBaxi6vc; Wed,  4 Oct 2023 17:38:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23DA94220B;
-	Wed,  4 Oct 2023 16:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23DA94220B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6BEFC1BF423
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 16:18:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F57A4222B;
+	Wed,  4 Oct 2023 17:38:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F57A4222B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C7BB1BF38D
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 17:38:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5071B4220B
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 16:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5071B4220B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36011404A8
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 17:38:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36011404A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xSJA6YG2d-u0 for <buildroot@lists.busybox.net>;
- Wed,  4 Oct 2023 16:18:12 +0000 (UTC)
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 014B842202
- for <buildroot@buildroot.org>; Wed,  4 Oct 2023 16:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 014B842202
-Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 340F45C8A7D;
- Wed,  4 Oct 2023 18:18:08 +0200 (CEST)
-From: Stefan Agner <stefan@agner.ch>
-To: buildroot@buildroot.org
-Date: Wed,  4 Oct 2023 18:17:36 +0200
-Message-ID: <4642abb656bb8e63ff759d6f2ab6eafeb2e3d39d.1696436249.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.42.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nGGY_xnndtoz for <buildroot@lists.busybox.net>;
+ Wed,  4 Oct 2023 17:38:16 +0000 (UTC)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0782040012
+ for <buildroot@buildroot.org>; Wed,  4 Oct 2023 17:38:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0782040012
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-9adb9fa7200so31091566b.0
+ for <buildroot@buildroot.org>; Wed, 04 Oct 2023 10:38:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696441094; x=1697045894;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Bg7etsCJNT0Xp0VIPnD96JWnMU2GFp58/BBliZ6SlCI=;
+ b=UCUGjGurQxRHeZBVosD06zvdD8lRufLB6Kk+m/k/e+4SAQkjL9S8yy9OnRQ72qhuGT
+ rZ07F513Z4JIVVavNwsyMq6uNXi03KOdIM16zhv0CNiFsVAAHT9cNFBsnT2HZve8k3av
+ hrwo3Nr7d6Jk5P+N/1LbSHnqMxHFoRarH2PyezLeilphByhuLaDPC3RFDTVRFGij9E/B
+ /mI+1+crYMCIF5Gw2TbGukTS0Sjl5coFOXcOeS9kK7p9DuD52R2As9krthy6yHoalxZg
+ LvdbUgxewwy3WIfbmz0YY5qmYPTxi319wUi8E3DCPUUA6lTTjpJ//S4pt1sf3vYplhrF
+ Lg3w==
+X-Gm-Message-State: AOJu0YxwQCJL1NNdZdZTvoh9QkomYSqYOaAzyljavYtxfGNKYUGXcW6H
+ RORs1J7ePfd57pFBo9O4TFXU3U8ZUlVdjRItKFV+Cw==
+X-Google-Smtp-Source: AGHT+IHXWfwKRMXJrm+QHkwm5PYY2zVUI9iMOfdAUICZBs/Cr8VLgJ7o5GRjLiT76IowjMfGD6LWTg==
+X-Received: by 2002:a17:907:c0d:b0:9ae:5a56:be32 with SMTP id
+ ga13-20020a1709070c0d00b009ae5a56be32mr286145ejc.38.1696441093770; 
+ Wed, 04 Oct 2023 10:38:13 -0700 (PDT)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com.
+ [209.85.218.43]) by smtp.gmail.com with ESMTPSA id
+ pj7-20020a170906d78700b00977eec7b7e8sm3180413ejb.68.2023.10.04.10.38.12
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 04 Oct 2023 10:38:13 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id
+ a640c23a62f3a-9b2cee40de8so26361366b.1
+ for <buildroot@buildroot.org>; Wed, 04 Oct 2023 10:38:12 -0700 (PDT)
+X-Received: by 2002:a17:906:c414:b0:9b8:9217:73f5 with SMTP id
+ u20-20020a170906c41400b009b8921773f5mr314744ejz.32.1696441092584; Wed, 04 Oct
+ 2023 10:38:12 -0700 (PDT)
 MIME-Version: 1.0
+References: <4642abb656bb8e63ff759d6f2ab6eafeb2e3d39d.1696436249.git.stefan@agner.ch>
+In-Reply-To: <4642abb656bb8e63ff759d6f2ab6eafeb2e3d39d.1696436249.git.stefan@agner.ch>
+Date: Wed, 4 Oct 2023 10:38:01 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2oAsEoD0znjap3nqh5wXvg21b4YFjLnCustovxHKfA=vA@mail.gmail.com>
+Message-ID: <CA+h8R2oAsEoD0znjap3nqh5wXvg21b4YFjLnCustovxHKfA=vA@mail.gmail.com>
+To: Stefan Agner <stefan@agner.ch>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1696436288;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=Mem7wpP2VaM/LTmz9gSD1ZMIOqOntWKWIVgn9ulkevI=;
- b=zrKlOZMqY4LPtcmokeSnzfEyx4VlG4V+E3tMaLY1MIUS8Zn/qECW2Dr7V4lp/sZusGOO7U
- aSBBEz7jghG2m4in+UN9lgMyvs115bLiZzStEEkMrplYMlTmMGJ32GNtk42Se0s3tKzLXi
- QtsmwHOPTTn/SsyZ6uVyGZSSce4qjaU=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=zrKlOZMq
-Subject: [Buildroot] [PATCH] package/containerd: add control for additional
- build tags
+ d=aperture.us; s=google; t=1696441094; x=1697045894; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Bg7etsCJNT0Xp0VIPnD96JWnMU2GFp58/BBliZ6SlCI=;
+ b=XS8gGdO9rTEu2y34ZIDN2eOBl2J53EeKfW9+cawQnZYghZK10X2UmXE05o74QAyg3X
+ 3sLkBrewbA3qiqg+UD+NnlMM1E+J12H4EUMTmdtw/nfuR5qOs1AwvtBiPY6OlxvOSpcC
+ d11IMdVbUKyhaVIO5ayIY6wS5N4avVvtKH+a2Wdrh8x1MRXswl1KhdwDolhlTynBnG2r
+ RYKw/V3a9acXi1RAH6SSHx9cKCcDa7UL532K10QApsc+OfB0eR1mfy3S2xM2ZZp0ingB
+ +SAnYgyH0gZWyiU2tAse1/hnEnzBr3MHfog8wwh7gSw4/w4TqmCtzIm1Sy8NsvTWtvYm
+ VXAA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
+ header.a=rsa-sha256 header.s=google header.b=XS8gGdO9
+Subject: Re: [Buildroot] [PATCH] package/containerd: add control for
+ additional build tags
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,96 +103,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stefan Agner <stefan@agner.ch>, christian@aperture.us
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable the AUFS snapshotter by default. AUFS support has been deprecated
-since v1.5 and won't be available with containerd v2.0.
-
-Add configuration option for the ZFS snapshotter and add the proper
-runtime dependencies.
-
-Add configuration option for Kubernetes CRI support. Note that CRI
-support requires a writeable /etc or an appropriate containerd
-configuration.
-
-Signed-off-by: Stefan Agner <stefan@agner.ch>
----
- package/containerd/Config.in     | 22 ++++++++++++++++++++++
- package/containerd/containerd.mk | 13 +++++++++++++
- 2 files changed, 35 insertions(+)
-
-diff --git a/package/containerd/Config.in b/package/containerd/Config.in
-index e69dd6768a..ceec5752df 100644
---- a/package/containerd/Config.in
-+++ b/package/containerd/Config.in
-@@ -26,6 +26,28 @@ config BR2_PACKAGE_CONTAINERD_DRIVER_BTRFS
- 	help
- 	  Build the btrfs snapshot driver for containerd.
- 
-+config BR2_PACKAGE_CONTAINERD_DRIVER_DEVMAPPER
-+	bool "devmapper snapshot driver"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-+	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_STATIC_LIBS # lvm2
-+	select BR2_PACKAGE_LVM2
-+	help
-+	  Build the devmapper snapshot driver for containerd.
-+
-+config BR2_PACKAGE_CONTAINERD_DRIVER_ZFS
-+	bool "zfs snapshot driver"
-+	depends on BR2_LINUX_KERNEL # zfs
-+	depends on BR2_PACKAGE_HAS_UDEV # zfs
-+	select BR2_PACKAGE_ZFS
-+	help
-+	  Build the zfs snapshot driver for containerd.
-+
-+config BR2_PACKAGE_CONTAINERD_CRI
-+	bool "Build Kubernetes CRI support"
-+	help
-+	  Build containerd with Kubernetes CRI support.
-+
- endif
- 
- comment "containerd needs a glibc or musl toolchain w/ threads"
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 0591400709..f5a93f5f91 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -24,6 +24,7 @@ CONTAINERD_BUILD_TARGETS = \
- 	cmd/ctr
- 
- CONTAINERD_INSTALL_BINS = $(notdir $(CONTAINERD_BUILD_TARGETS))
-+CONTAINERD_TAGS = no_aufs
- 
- ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
- CONTAINERD_DEPENDENCIES += libapparmor
-@@ -41,6 +42,18 @@ else
- CONTAINERD_TAGS += no_btrfs
- endif
- 
-+ifneq ($(BR2_PACKAGE_CONTAINERD_DRIVER_DEVMAPPER),y)
-+CONTAINERD_TAGS += no_devmapper
-+endif
-+
-+ifneq ($(BR2_PACKAGE_CONTAINERD_DRIVER_ZFS),y)
-+CONTAINERD_TAGS += no_zfs
-+endif
-+
-+ifneq ($(BR2_PACKAGE_CONTAINERD_CRI),y)
-+CONTAINERD_TAGS += no_cri
-+endif
-+
- define CONTAINERD_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 $(@D)/containerd.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/containerd.service
--- 
-2.42.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgU3RlZmFuLAoKCk9uIFdlZCwgT2N0IDQsIDIwMjMgYXQgOToxOOKAr0FNIFN0ZWZhbiBBZ25l
+ciA8c3RlZmFuQGFnbmVyLmNoPiB3cm90ZToKPgo+IERpc2FibGUgdGhlIEFVRlMgc25hcHNob3R0
+ZXIgYnkgZGVmYXVsdC4gQVVGUyBzdXBwb3J0IGhhcyBiZWVuIGRlcHJlY2F0ZWQKPiBzaW5jZSB2
+MS41IGFuZCB3b24ndCBiZSBhdmFpbGFibGUgd2l0aCBjb250YWluZXJkIHYyLjAuCj4KPiBBZGQg
+Y29uZmlndXJhdGlvbiBvcHRpb24gZm9yIHRoZSBaRlMgc25hcHNob3R0ZXIgYW5kIGFkZCB0aGUg
+cHJvcGVyCj4gcnVudGltZSBkZXBlbmRlbmNpZXMuCj4KPiBBZGQgY29uZmlndXJhdGlvbiBvcHRp
+b24gZm9yIEt1YmVybmV0ZXMgQ1JJIHN1cHBvcnQuIE5vdGUgdGhhdCBDUkkKPiBzdXBwb3J0IHJl
+cXVpcmVzIGEgd3JpdGVhYmxlIC9ldGMgb3IgYW4gYXBwcm9wcmlhdGUgY29udGFpbmVyZAo+IGNv
+bmZpZ3VyYXRpb24uCgpPdmVyYWxsIHRoaXMgbG9va3MgZ29vZCwgYnV0IGNvdWxkIHlvdSBwb3Nz
+aWJseSBzcGxpdCB0aGlzIGludG8Kc2VwYXJhdGUgY29tbWl0cz8gSSB0aGluayBpdCBtYWtlcyBz
+ZW5zZSB0byBoYXZlIHRocmVlOgoKIC0gcGFja2FnZS9kb2NrZXItZW5naW5lOiBkcm9wIGF1ZnMg
+c25hcHNob3R0ZXIKIC0gcGFja2FnZS9kb2NrZXItZW5naW5lOiBhZGQgemZzIHNuYXBzaG90dGVy
+CiAtIHBhY2thZ2UvZG9ja2VyLWVuZ2luZTogYWRkIG9wdGlvbiBmb3IgazhzIGNyaSBzdXBwb3J0
+CgpUaGFua3MhCkNocmlzdGlhbiBTdGV3YXJ0Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
