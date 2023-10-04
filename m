@@ -4,66 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72BAFE8FDD4
-	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 07:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FA57E7B5E2
+	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 09:59:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07D6C82A3B;
-	Wed,  4 Oct 2023 07:03:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07D6C82A3B
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFF0381F99;
+	Wed,  4 Oct 2023 09:59:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFF0381F99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ahwMeipIAUeE; Wed,  4 Oct 2023 07:03:54 +0000 (UTC)
+	with ESMTP id RFvG1JEl7PQ7; Wed,  4 Oct 2023 09:59:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BA5082A29;
-	Wed,  4 Oct 2023 07:03:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BA5082A29
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DACA81F81;
+	Wed,  4 Oct 2023 09:59:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DACA81F81
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 658E91BF281
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 07:03:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8AA611BF276
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 09:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3EFDA414B6
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 07:03:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EFDA414B6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 714354019D
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 09:59:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 714354019D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7ttyai8lezry for <buildroot@lists.busybox.net>;
- Wed,  4 Oct 2023 07:03:50 +0000 (UTC)
-X-Greylist: delayed 306 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 04 Oct 2023 07:03:49 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D34DE409DB
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D34DE409DB
- for <buildroot@buildroot.org>; Wed,  4 Oct 2023 07:03:49 +0000 (UTC)
-Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue109
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1MDQqe-1qwDJS2ila-00AWK0; Wed, 04
- Oct 2023 08:58:36 +0200
-From: Laurent Vivier <laurent@vivier.eu>
-To: buildroot@buildroot.org
-Date: Wed,  4 Oct 2023 08:58:35 +0200
-Message-ID: <20231004065835.2190872-1-laurent@vivier.eu>
-X-Mailer: git-send-email 2.41.0
+ with ESMTP id wded3-utYmhb for <buildroot@lists.busybox.net>;
+ Wed,  4 Oct 2023 09:59:31 +0000 (UTC)
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9DD5240134
+ for <buildroot@buildroot.org>; Wed,  4 Oct 2023 09:59:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DD5240134
+Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
+ by mail.kmu-office.ch (Postfix) with ESMTPSA id B414B5C2CC1;
+ Wed,  4 Oct 2023 11:59:26 +0200 (CEST)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:NqUbcy7XgCLxnt2LBj30KJ7wmYg6iNhR3XOJn8vEZHyRAtb+XCC
- 58c2oR+hqezaiaxT3LwzJsuNwiOWgkRKUtlMFsWqqlPrie08/KzvCPvRi9s4lmQ1ADIR/MH
- 2M9hsTEs5+dH9vjbvQNQu4jlDl+Rt1C4kSj2yHEg5HVELMalweoHz8wsilBI7xoxrz9Bq5v
- E7Rp2C6100yJ+IbcUE5sQ==
-UI-OutboundReport: notjunk:1;M01:P0:MSo/0ElmIbs=;OgJ9UIlLkifLaXPAWjvWBBrM6TM
- 6G+L3dCXpDgf/PHqLLTrhw5F1t5n9gtDWccop8UzjA1FIpTMybPvT7WIFoMtIdwmOywSIh1S5
- ykSmBcpdL+a9H8o+vz95h6dkbs38apmunEhr7ZCiENRMilRkXUSnOz4B6v66qmVgG0zVeKPjm
- 2JhZTN8iYeABkDUYsZgWTjKg1Q2xmYUpTmgDwkHesYQn67NhMekABSJw4D9oY7ZeXWJDVNjHO
- HjbsgVco7zO7AVrqUbDrka21DEwraqB9W6vJywT1uO+5jVHNwAEn/hW8x2PyyjTdXYsAljSbH
- tYkJmh2Z2+XwazcnQ03pb0gFvFbOrMNGE3cpMqhbuHscBx0dWNU92ShaJw5v3WpWWrKVXWzgR
- ZZKlLU2qceY8LXKQ73Cmi0M4Dpvb8w9ZbMp8rb0dfzmXf+quixplCoegdI31KLnE2dnNeCFON
- lUVEb2kSwca7gZ6OhnLZPS9bvdJkVXCijBOFOdxUk3zv/FttBCmW2bdDJwhIei5ado+o4OvYp
- 1k8soBagtrqb1zbaWK41DNdhw7CQ/5Hz0XHTJ53H6DfXl/9oStQd/czCQFPIKadMjNqjVFNlw
- RugcWyRa5nmhE6nbdcFQ4T57TbhduCyPpWbZOS1IoLhLrUZTe4lvMFTQzYt3ikQrUwpLyi+xt
- FxUgn0ql84MJMzyG8eYdq8DHoU18i27FQyLe3rnctxlY2NDqMLY0OaR0Nq6TxGI/thq19Z2Aw
- mjaoIu4nvpBUh2h8smvOgHJKjJ7A2V2qYFAZG4HgavQMG+VahowBIkIJv7vxwygEgjgqf5lI+
- Beon/UujdUDnVzb4zq893Z5QK+9H0rLH1+V8FRXghAbZVlZNir75MKdVJhMNwnkwm3ljwhZKw
- Y7BpviqBwBPf0vg==
-Subject: [Buildroot] [PATCH] package/petitboot: bump to version 1.14
+Date: Wed, 04 Oct 2023 11:59:26 +0200
+From: Stefan Agner <stefan@agner.ch>
+To: Christian Stewart <christian@aperture.us>
+In-Reply-To: <CA+h8R2p24q9AZRvkwacX3oOzuS2T7ZAENm7yNKj70Rfe0xuF0Q@mail.gmail.com>
+References: <20230727232235.449788-1-christian@aperture.us>
+ <b73fb293249bcf48f42ebaed0f78f1c1@agner.ch>
+ <CA+h8R2r3sxFvPN5QFt9szw638M_9o=WRC3a8pUQ1O2KrGMvrkw@mail.gmail.com>
+ <08DC739C-F115-4DB2-9F9A-0CD6E9BFEA42@agner.ch>
+ <CA+h8R2rbhvCt60Fhwi1qGv0PocZsS0rA3fVQoukDP2KhPrkjdQ@mail.gmail.com>
+ <23f2b3bd59cb6d860ea52b566eacfdb8@agner.ch>
+ <CA+h8R2o9eAVZBrzU1E8wbh_eoQfhWv+0JsH11_N4hrkPKqKCXg@mail.gmail.com>
+ <eb94fb2be140a706ce4797df9cb56d63@agner.ch> <87r0mgay0o.fsf@48ers.dk>
+ <CA+h8R2p24q9AZRvkwacX3oOzuS2T7ZAENm7yNKj70Rfe0xuF0Q@mail.gmail.com>
+Message-ID: <c614a21b7b4b92432b86c44985840266@agner.ch>
+X-Sender: stefan@agner.ch
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=agner.ch; s=dkim; t=1696413566;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=hgxCQTMlzCCzuAjTQ4RRhyZD2smvcWMIOXdoBvInO48=;
+ b=bNIPC2oapXXzZSy2nbp5JDRUAOpY5BvIUg8yhJXfImMXP+jTPL2mhHW8wD8HcNLUzizheA
+ 136vUoepg2jAfn2i5s5DhoU/gjS0lHjYQB7OtgY1FoiFY8v+nvJg3QsyS0Z7oLUZACGUQS
+ u9JismnxsilKQ0DpO44yPeHFhjzVBms=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
+ header.a=rsa-sha256 header.s=dkim header.b=bNIPC2oa
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/containerd: bump version to
+ v1.6.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,44 +79,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Reza Arbab <arbab@linux.ibm.com>, Laurent Vivier <laurent@vivier.eu>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
----
- package/petitboot/petitboot.hash | 2 +-
- package/petitboot/petitboot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/petitboot/petitboot.hash b/package/petitboot/petitboot.hash
-index bf7bf56a6751..a9a21f2c1b69 100644
---- a/package/petitboot/petitboot.hash
-+++ b/package/petitboot/petitboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b42ae4fb2a81e9cf68f727c3f54c6312788c654bd97628ec9ba61b19a68990e6  petitboot-v1.13.tar.gz
-+sha256  fa2367370d3ce5dd9910ab08a0832071e2508c8bf75cfec6d3b9807fbefc507a  petitboot-v1.14.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-index 8d220f88f45a..0992111cb1ec 100644
---- a/package/petitboot/petitboot.mk
-+++ b/package/petitboot/petitboot.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PETITBOOT_VERSION = 1.13
-+PETITBOOT_VERSION = 1.14
- PETITBOOT_SOURCE = petitboot-v$(PETITBOOT_VERSION).tar.gz
- PETITBOOT_SITE = https://github.com/open-power/petitboot/releases/download/v$(PETITBOOT_VERSION)
- PETITBOOT_DEPENDENCIES = elfutils ncurses udev host-bison host-flex lvm2
--- 
-2.41.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMjAyMy0xMC0wMiAyMDoyOCwgQ2hyaXN0aWFuIFN0ZXdhcnQgd3JvdGU6Cj4gSGkgUGV0ZXIs
+Cj4gCj4gaHR0cHM6Ly9naXRodWIuY29tL2NvbnRhaW5lcmQvY29udGFpbmVyZC9pc3N1ZXMvOTEz
+OSNpc3N1ZWNvbW1lbnQtMTczNjQ3NzUzNAo+IAo+IE9uIFNhdCwgU2VwIDMwLCAyMDIzIGF0IDE6
+MDPigK9BTSBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IHdyb3RlOgo+PiBJ
+ZiBjcmkgaXMgb25seSBuZWVkZWQgZm9yIHdoZW4gY29udGFpbmVyZCBpcyB1c2VkIHdpdGgga3Vi
+ZXJuZXRlcywgdGhlbgo+PiBwZXJoYXBzIHdlIHNob3VsZCBkaXNhYmxlIGl0IGJ5IGRlZmF1bHQg
+c28gb3RoZXIgcGVvcGxlIGRvbid0IG5lZWQgdG8KPj4gZGVidWcgdGhlIHNhbWUgaXNzdWUuCj4g
+Cj4gSSB0aGluayB3ZSBjYW4gc2FmZWx5IGRpc2FibGUgY3JpIG9uIHRoZSBkZWZhdWx0IGNvbmZp
+Zy4KCkF0IHRoYXQgcG9pbnQgd2UgY2FuIGFsc28gcGFzcyB0aGUgbm9fY3JpIGJ1aWxkIHRhZy4K
+CkknbGwgY3JlYXRlIGEgUFIgdG8gZG8ganVzdCB0aGF0LgoKLS0KU3RlZmFuCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
