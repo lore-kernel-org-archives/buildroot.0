@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AD67E7B614
-	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 13:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2737E7B614
+	for <buildroot@archiver.kernel.org>; Wed,  4 Oct 2023 13:13:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2A696058D;
-	Wed,  4 Oct 2023 13:13:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2A696058D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B4AD60AD0;
+	Wed,  4 Oct 2023 13:13:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B4AD60AD0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tfjNK4xR4GYy; Wed,  4 Oct 2023 13:13:18 +0000 (UTC)
+	with ESMTP id W0l186T9RfWk; Wed,  4 Oct 2023 13:13:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F19AB60AD0;
-	Wed,  4 Oct 2023 13:13:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F19AB60AD0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 475F160E1B;
+	Wed,  4 Oct 2023 13:13:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 475F160E1B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A1351BF2BC
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 13:13:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 888491BF2BC
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 13:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5077D820C7
- for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 13:13:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5077D820C7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6211A820C7
+ for <buildroot@lists.busybox.net>; Wed,  4 Oct 2023 13:13:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6211A820C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nX7y_P0reQi5 for <buildroot@lists.busybox.net>;
- Wed,  4 Oct 2023 13:13:14 +0000 (UTC)
-Received: from sender3-of-o59.zoho.com (sender3-of-o59.zoho.com
- [136.143.184.59])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 932DF82033
- for <buildroot@buildroot.org>; Wed,  4 Oct 2023 13:13:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 932DF82033
-ARC-Seal: i=1; a=rsa-sha256; t=1696425190; cv=none; 
+ with ESMTP id A4MtKGXMSbXD for <buildroot@lists.busybox.net>;
+ Wed,  4 Oct 2023 13:13:20 +0000 (UTC)
+Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com
+ [136.143.188.50])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4FDDA82033
+ for <buildroot@buildroot.org>; Wed,  4 Oct 2023 13:13:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FDDA82033
+ARC-Seal: i=1; a=rsa-sha256; t=1696425196; cv=none; 
  d=zohomail.com; s=zohoarc; 
- b=VDLd++d8uVDTjHvXf9HZiz8DSLy8Q0EE3lEvpQtlbn8V+AAhCq4hZsi/PgxXP/DACToYa3OmHE60S3pzxaqLK+XZo0dvfTRpMWCG8ajHtdpSGmCHIkiq06FKpF6exQikqnxsUjIMxOM4ZttJc/s+bbWz3tkxqxjkZnyVTpU3eYg=
+ b=eN4lePRZmMBbf5Z9rHN9ajmV6DqCAnYJ6IExp4dbNqeJ/aU+9BZZOcSwJmh1rZXANqBJYL4bC3SJ/VzPHerq7PTsZZgqAF99EBJNuIwNqlKGwkI/CE57433xyfvn7+aLHJgmdmDWO8LbGZu3nR5vxoOSw41zX6inxPpgfQOgE64=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
- s=zohoarc; t=1696425190;
+ s=zohoarc; t=1696425196;
  h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To;
- bh=MiYrv7zKSRSBpKVutXJ8mX303vUDVQ9En8514EW/3eI=; 
- b=LzyBE3ASubbI5PScSNYCyVYDuh//qxVGuqZDLyi5M7mO4RniTcGWbRpLBlBo7aLUi41z8Ns5jMtp0r3kc6ERAaSur52u/HcaV1Qa1u3TzjSBS0jz05Q83fOtWVrhOugIcS2B0n3XwrLlqy5onU83Xd43GIToo/NVUtmTvuJVrRA=
+ bh=BgGUOBdunBYYSicKf/VU+TtrT5dBHeXhYUm/NxlWKvo=; 
+ b=Jv0C9FpJ1eoKViDakrh5sVaFzyrR0aAwALBtIibBBEpYIHC1j7oJhzXEd6x8WMgfvpSZPixnJXyDhFxLHBIb65GQcjfUzoMDSwJrhltl2Q8wRak1J/+Da/MYma3plmnqEktx00BrSPF5TxbesfpYyfm0Jd/iL4aCV7B14udg7I8=
 ARC-Authentication-Results: i=1; mx.zohomail.com; dkim=pass  header.i=fsck.pl;
  spf=pass  smtp.mailfrom=enki@fsck.pl;
  dmarc=pass header.from=<enki@fsck.pl>
 Received: from newton.shill.gq (193.93.205.86 [193.93.205.86]) by
- mx.zohomail.com with SMTPS id 1696425188754527.0224870852974;
- Wed, 4 Oct 2023 06:13:08 -0700 (PDT)
+ mx.zohomail.com with SMTPS id 1696425194059377.4388370796805;
+ Wed, 4 Oct 2023 06:13:14 -0700 (PDT)
 From: Maciej Grela <enki@fsck.pl>
 To: buildroot@buildroot.org
-Message-ID: <20231004131256.2113233-1-enki@fsck.pl>
-Date: Wed,  4 Oct 2023 15:12:52 +0200
+Message-ID: <20231004131256.2113233-2-enki@fsck.pl>
+Date: Wed,  4 Oct 2023 15:12:53 +0200
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231003094612.62025-2-enki@fsck.pl>
 References: <20231003094612.62025-2-enki@fsck.pl>
 MIME-Version: 1.0
 X-ZohoMailClient: External
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; t=1696425190; 
+ c=relaxed/relaxed; t=1696425196; 
  s=zoho; d=fsck.pl; i=enki@fsck.pl;
- h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
- bh=MiYrv7zKSRSBpKVutXJ8mX303vUDVQ9En8514EW/3eI=;
- b=dpq4XBzra4dCpHsdd3W+Eh/VaNRhUlxGkqyJUIK2CfHM8azt8X0R6rUx5ZbBNq/d
- LReXdL1pgRCnpGeZtU/EEcfhDeB+Dwx7szDDHmHopHtIXiTmDLy5sE1zHfF/IcPDCTc
- vbPTfYJgHGRjoZk6/hGNq1uAk2Zr8LKngNbJFDHU=
+ h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+ bh=BgGUOBdunBYYSicKf/VU+TtrT5dBHeXhYUm/NxlWKvo=;
+ b=ZXG9hWnUvDjtjIQXyF6ovPd2F6x/jSLumlT9OPCQNBfMRszsZAJ8qf/MVUidxEpS
+ M9ZbJL2BdtTeSUn/8GUHzAcVPraw46LswWNVB26iYxjLnT0v/XkNoCUiZNhGaq3iPhR
+ A9GA9Rf9INOTfhMtBysV4AYZCA67RYS2sk4cHcww=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=fsck.pl header.i=enki@fsck.pl
- header.a=rsa-sha256 header.s=zoho header.b=dpq4XBzr
-Subject: [Buildroot] [PATCH v2 0/3] Support for D-Link DNS-320L
+ header.a=rsa-sha256 header.s=zoho header.b=ZXG9hWnU
+Subject: [Buildroot] [PATCH v2 1/3] package/iniparser: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,72 +81,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maciej Grela <enki@fsck.pl>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Maciej Grela <enki@fsck.pl>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpUaGlzIGlzIGEgc2hvcnQgcGF0Y2hzZXQgdG8gc3VwcG9ydCBhIEQtTGluayBETlMt
-MzIwTCBOQVMuClRoZXJlIGFyZSB0d28gZGV2aWNlLXNwZWNpZmljIHBhY2thZ2VzIHdoaWNoIGFy
-ZSByZXF1aXJlZCBmb3IgcHJvcGVyCnN5c3RlbSBtYW5hZ2VtZW50IG9uIHRoZSBkZXZpY2UgYXMg
-d2VsbCBhcyBhIG91dC1vZi10cmVlIERUUy4KSSBhbSBnb2luZyB0byBzZW5kIGl0IHVwc3RyZWFt
-IHdoZW4gSSBsZWFybiBtb3JlIGFib3V0IGRldmljZSB0cmVlcy4KSSBoYXZlIGFkZGVkIG15c2Vs
-ZiBhcyBhIG1haW50YWluZXIgdG8gdGhlIERFVkVMT1BFUlMgZmlsZSBmb3IgYWxsCnJlbGV2YW50
-IHBhcnRzLgoKVGhlIHBhY2thZ2VzIGhhdmUgYmVlbiBjaGVja2VkIHdpdGggbm8gaXNzdWVzIGRl
-dGVjdGVkOgoK4p6cICBidWlsZHJvb3QgZ2l0OihtYXN0ZXIpIOKclyB1dGlscy9kb2NrZXItcnVu
-IG1ha2UgY2hlY2stcGFja2FnZQozODkyNzEgbGluZXMgcHJvY2Vzc2VkCjAgd2FybmluZ3MgZ2Vu
-ZXJhdGVkCgpBbiBleGFtcGxlIGJvb3QgbG9nIGlzIHByZXNlbnRlZCBiZWxvdzoKaHR0cHM6Ly9n
-aXN0LmdpdGh1Yi5jb20vZW5raXVzei80ODJmYWI2OGVmN2E2MzBjOGNmYWFkNmYxM2Y2MzkxOQoK
-VGhlIHBhY2thZ2VzIGJ1aWxkIHN1Y2Nlc3NmdWxseSB1c2luZyB0ZXN0LXBrZzoKCuKenCAgYnVp
-bGRyb290IGdpdDoobWFzdGVyKSDinJcgY2F0IGluaXBhcnNlci5jb25maWcKQlIyX1BBQ0tBR0Vf
-SU5JUEFSU0VSPXkK4p6cICBidWlsZHJvb3QgZ2l0OihtYXN0ZXIpIOKclyB1dGlscy90ZXN0LXBr
-ZyAtLWNvbmZpZyBpbmlwYXJzZXIuY29uZmlnIC1wIGluaXBhcnNlcgogICAgICAgICAgICAgICAg
-ICAgIGJvb3RsaW4tYXJtdjUtdWNsaWJjIFsxLzZdOiBPSwogICAgICAgICAgICAgICAgICAgICBi
-b290bGluLWFybXY3LWdsaWJjIFsyLzZdOiBPSwogICAgICAgICAgICAgICAgICAgYm9vdGxpbi1h
-cm12N20tdWNsaWJjIFszLzZdOiBPSwogICAgICAgICAgICAgICAgICAgICBib290bGluLXg4Ni02
-NC1tdXNsIFs0LzZdOiBPSwogICAgICAgICAgICAgICAgICAgICAgYnItYXJtLWZ1bGwtc3RhdGlj
-IFs1LzZdOiBPSwogICAgICAgICAgICAgICAgICAgICAgICAgICAgc291cmNlcnktYXJtIFs2LzZd
-OiBPSwo2IGJ1aWxkcywgMCBza2lwcGVkLCAwIGJ1aWxkIGZhaWxlZCwgMCBsZWdhbC1pbmZvIGZh
-aWxlZCwgMCBzaG93LWluZm8gZmFpbGVkCuKenCAgYnVpbGRyb290IGdpdDoobWFzdGVyKSDinJcK
-CuKenCAgYnVpbGRyb290IGdpdDoobWFzdGVyKSDinJcgY2F0IGRuczMyMGwtZGFlbW9uLmNvbmZp
-ZwpCUjJfUEFDS0FHRV9ETlMzMjBMX0RBRU1PTj15CuKenCAgYnVpbGRyb290IGdpdDoobWFzdGVy
-KSDinJcgdXRpbHMvdGVzdC1wa2cgLS1jb25maWcgZG5zMzIwbC1kYWVtb24uY29uZmlnIC1wIGRu
-czMyMGwtZGFlbW9uCiAgICAgICAgICAgICAgICAgICAgYm9vdGxpbi1hcm12NS11Y2xpYmMgWzEv
-Nl06IE9LCiAgICAgICAgICAgICAgICAgICAgIGJvb3RsaW4tYXJtdjctZ2xpYmMgWzIvNl06IE9L
-CiAgICAgICAgICAgICAgICAgICBib290bGluLWFybXY3bS11Y2xpYmMgWzMvNl06IFNLSVBQRUQK
-ICAgICAgICAgICAgICAgICAgICAgYm9vdGxpbi14ODYtNjQtbXVzbCBbNC82XTogT0sKICAgICAg
-ICAgICAgICAgICAgICAgIGJyLWFybS1mdWxsLXN0YXRpYyBbNS82XTogT0sKICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHNvdXJjZXJ5LWFybSBbNi82XTogT0sKNiBidWlsZHMsIDEgc2tpcHBl
-ZCwgMCBidWlsZCBmYWlsZWQsIDAgbGVnYWwtaW5mbyBmYWlsZWQsIDAgc2hvdy1pbmZvIGZhaWxl
-ZArinpwgIGJ1aWxkcm9vdCBnaXQ6KG1hc3Rlcikg4pyXCgotLS0KY2hhbmdlcyB2MSAtPiB2MjoK
-LSBkb24ndCBidWlsZCBpbmlwYXJzZXIgb24gdGhlIGhvc3QKLSBwcm9wZXJseSBoYW5kbGUgYnVp
-bGRpbmcgc3RhdGljIGFuZCBzaGFyZWQgaW5pcGFyc2VyIGluIGFsbCBjb21ib3MKLSBkaXNhYmxl
-IGRuczMyMGwtZGFlbW9uIG9uIHBsYXRmb3JtcyB3aXRob3V0IGZvcmsoKQotIEROUy0zMjBMIGlz
-IG1hbnVmYWN0dXJlZCBieSBELUxpbmsgbm90IE5ldGdlYXIsIGNoYW5nZSBjb21taXQgc3VtbWFy
-aWVzIHRvIHJlZmxlY3QgdGhhdAoKTWFjaWVqIEdyZWxhICgzKToKICBwYWNrYWdlL2luaXBhcnNl
-cjogbmV3IHBhY2thZ2UKICBwYWNrYWdlL2RuczMyMGwtZGFlbW9uOiBuZXcgcGFja2FnZQogIGJv
-YXJkL2QtbGluay9kbnMzMjBsOiBuZXcgYm9hcmQKCiBERVZFTE9QRVJTICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgfCAgIDYgKwogYm9hcmQvZC1saW5rL2RuczMyMGwvZHRzL2tp
-cmt3b29kLWRuczMyMGwuZHRzIHwgMjE4ICsrKysrKysrKysrKysrKysrKwogY29uZmlncy9kbnMz
-MjBsX2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgICAgIHwgIDE2ICsrCiBwYWNrYWdlL0NvbmZp
-Zy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKwogcGFja2FnZS9kbnMzMjBs
-LWRhZW1vbi9Db25maWcuaW4gICAgICAgICAgICAgIHwgICA4ICsKIHBhY2thZ2UvZG5zMzIwbC1k
-YWVtb24vUzUwZG5zMzIwbC1kYWVtb24gICAgICB8ICAzNyArKysKIHBhY2thZ2UvZG5zMzIwbC1k
-YWVtb24vZG5zMzIwbC1kYWVtb24uaGFzaCAgICB8ICAgMSArCiBwYWNrYWdlL2RuczMyMGwtZGFl
-bW9uL2RuczMyMGwtZGFlbW9uLm1rICAgICAgfCAgMzEgKysrCiBwYWNrYWdlL2luaXBhcnNlci9D
-b25maWcuaW4gICAgICAgICAgICAgICAgICAgfCAgIDYgKwogcGFja2FnZS9pbmlwYXJzZXIvaW5p
-cGFyc2VyLmhhc2ggICAgICAgICAgICAgIHwgICAyICsKIHBhY2thZ2UvaW5pcGFyc2VyL2luaXBh
-cnNlci5tayAgICAgICAgICAgICAgICB8ICA1NiArKysrKwogMTEgZmlsZXMgY2hhbmdlZCwgMzgz
-IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9kLWxpbmsvZG5zMzIwbC9k
-dHMva2lya3dvb2QtZG5zMzIwbC5kdHMKIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2RuczMy
-MGxfZGVmY29uZmlnCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9kbnMzMjBsLWRhZW1vbi9D
-b25maWcuaW4KIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2RuczMyMGwtZGFlbW9uL1M1MGRu
-czMyMGwtZGFlbW9uCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9kbnMzMjBsLWRhZW1vbi9k
-bnMzMjBsLWRhZW1vbi5oYXNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9kbnMzMjBsLWRh
-ZW1vbi9kbnMzMjBsLWRhZW1vbi5tawogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvaW5pcGFy
-c2VyL0NvbmZpZy5pbgogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvaW5pcGFyc2VyL2luaXBh
-cnNlci5oYXNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9pbmlwYXJzZXIvaW5pcGFyc2Vy
-Lm1rCgotLSAKMi4zOS4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+iniparser is a required dependency of dns320l-daemon
+
+Signed-off-by: Maciej Grela <enki@fsck.pl>
+---
+ package/Config.in                |  1 +
+ package/iniparser/Config.in      |  6 ++++
+ package/iniparser/iniparser.hash |  2 ++
+ package/iniparser/iniparser.mk   | 56 ++++++++++++++++++++++++++++++++
+ 4 files changed, 65 insertions(+)
+ create mode 100644 package/iniparser/Config.in
+ create mode 100644 package/iniparser/iniparser.hash
+ create mode 100644 package/iniparser/iniparser.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 009f7ba186..228e9eb1e3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2085,6 +2085,7 @@ menu "Other"
+ 	source "package/gtest/Config.in"
+ 	source "package/gumbo-parser/Config.in"
+ 	source "package/highway/Config.in"
++	source "package/iniparser/Config.in"
+ 	source "package/jemalloc/Config.in"
+ 	source "package/lapack/Config.in"
+ 	source "package/libabseil-cpp/Config.in"
+diff --git a/package/iniparser/Config.in b/package/iniparser/Config.in
+new file mode 100644
+index 0000000000..4932869943
+--- /dev/null
++++ b/package/iniparser/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_INIPARSER
++	bool "iniparser"
++	help
++	  ini file parser
++
++	  https://github.com/ndevilla/iniparser
+diff --git a/package/iniparser/iniparser.hash b/package/iniparser/iniparser.hash
+new file mode 100644
+index 0000000000..a745062fcd
+--- /dev/null
++++ b/package/iniparser/iniparser.hash
+@@ -0,0 +1,2 @@
++# From https://github.com/ndevilla/iniparser/releases
++sha256  960daa800dd31d70ba1bacf3ea2d22e8ddfc2906534bf328319495966443f3ae  iniparser-4.1.tar.gz
+diff --git a/package/iniparser/iniparser.mk b/package/iniparser/iniparser.mk
+new file mode 100644
+index 0000000000..f3f74601f3
+--- /dev/null
++++ b/package/iniparser/iniparser.mk
+@@ -0,0 +1,56 @@
++################################################################################
++#
++# iniparser
++#
++################################################################################
++
++INIPARSER_VERSION = 4.1
++INIPARSER_SITE = $(call github,ndevilla,iniparser,v$(INIPARSER_VERSION))
++INIPARSER_INSTALL_STAGING = YES
++INIPARSER_LICENSE = MIT
++INIPARSER_LICENSE_FILES = LICENSE
++INIPARSER_SO_TARGET = libiniparser.so.1
++INIPARSER_A_TARGET = libiniparser.a
++INIPARSER_BUILD_TARGETS =
++INIPARSER_STAGING_INSTALL_TGTS =
++INIPARSER_TARGET_INSTALL_TGTS =
++
++INIPARSER_CONFIGURE_OPTS = $(TARGET_CONFIGURE_OPTS)
++
++ifeq ($(BR2_STATIC_LIBS),y)
++INIPARSER_BUILD_TARGETS = $(INIPARSER_A_TARGET)
++INIPARSER_STAGING_INSTALL_TGTS = $(INIPARSER_A_TARGET)
++INIPARSER_TARGET_INSTALL_TGTS = $(INIPARSER_A_TARGET)
++else ifeq ($(BR2_SHARED_LIBS),y)
++INIPARSER_LINK_SO = y
++
++INIPARSER_BUILD_TARGETS = $(INIPARSER_SO_TARGET)
++INIPARSER_STAGING_INSTALL_TGTS = $(INIPARSER_SO_TARGET)
++
++INIPARSER_TARGET_INSTALL_TGTS = $(INIPARSER_SO_TARGET)
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++INIPARSER_LINK_SO = y
++
++INIPARSER_BUILD_TARGETS = $(INIPARSER_A_TARGET) $(INIPARSER_SO_TARGET)
++INIPARSER_STAGING_INSTALL_TGTS = $(INIPARSER_A_TARGET) $(INIPARSER_SO_TARGET)
++
++# Don't install static libs on target
++INIPARSER_TARGET_INSTALL_TGTS = $(INIPARSER_SO_TARGET)
++endif
++
++define INIPARSER_BUILD_CMDS
++	$(INIPARSER_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(INIPARSER_BUILD_TARGETS)
++endef
++
++define INIPARSER_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/src/iniparser.h $(@D)/src/dictionary.h $(STAGING_DIR)/usr/include/
++	$(foreach target,$(INIPARSER_STAGING_INSTALL_TGTS),$(INSTALL) -D -m 0755 $(@D)/$(target) $(STAGING_DIR)/usr/lib/)
++	$(if $(INIPARSER_LINK_SO),ln -s -r $(STAGING_DIR)/usr/lib/$(INIPARSER_SO_TARGET) $(STAGING_DIR)/usr/lib/libiniparser.so)
++endef
++
++define INIPARSER_INSTALL_TARGET_CMDS
++	$(foreach target,$(INIPARSER_TARGET_INSTALL_TGTS),$(INSTALL) -D -m 0755 $(@D)/$(target) $(TARGET_DIR)/usr/lib/)
++	$(if $(INIPARSER_LINK_SO),ln -s -r $(TARGET_DIR)/usr/lib/$(INIPARSER_SO_TARGET) $(TARGET_DIR)/usr/lib/libiniparser.so)
++endef
++
++$(eval $(generic-package))
+-- 
+2.39.2
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
