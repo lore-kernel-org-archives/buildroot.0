@@ -4,66 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66885E92734
-	for <buildroot@archiver.kernel.org>; Thu,  5 Oct 2023 20:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD3E9E9370C
+	for <buildroot@archiver.kernel.org>; Thu,  5 Oct 2023 20:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FFCB42491;
-	Thu,  5 Oct 2023 20:00:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FFCB42491
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67AA1428BA;
+	Thu,  5 Oct 2023 20:07:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67AA1428BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q3BaWXXKyQlh; Thu,  5 Oct 2023 20:00:22 +0000 (UTC)
+	with ESMTP id xyaJ5w4rgCkl; Thu,  5 Oct 2023 20:07:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBF2542886;
-	Thu,  5 Oct 2023 20:00:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBF2542886
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1A351BF40E
- for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 20:00:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34738428BC;
+	Thu,  5 Oct 2023 20:07:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34738428BC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E42E1BF2B6
+ for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 20:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A733D40280
- for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 20:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A733D40280
+ by smtp1.osuosl.org (Postfix) with ESMTP id 378C281ED3
+ for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 20:07:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 378C281ED3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0jn7y46Iv3Vb for <buildroot@lists.busybox.net>;
- Thu,  5 Oct 2023 20:00:17 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A99BC400C6
- for <buildroot@buildroot.org>; Thu,  5 Oct 2023 20:00:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A99BC400C6
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:c5c9:a1ea:cbf9:9051])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id DA70319F54D;
- Thu,  5 Oct 2023 22:00:12 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 05 Oct 2023 22:00:12 +0200
-Date: Thu, 5 Oct 2023 22:00:12 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Message-ID: <20231005200012.GC2552@scaer>
-References: <20231005144250.43169-1-tomi.valkeinen@ideasonboard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WiWpsZmYvwwO for <buildroot@lists.busybox.net>;
+ Thu,  5 Oct 2023 20:07:06 +0000 (UTC)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B750A81EC9
+ for <buildroot@buildroot.org>; Thu,  5 Oct 2023 20:07:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B750A81EC9
+Received: by mail-ed1-x534.google.com with SMTP id
+ 4fb4d7f45d1cf-51e28cac164so5470171a12.1
+ for <buildroot@buildroot.org>; Thu, 05 Oct 2023 13:07:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696536424; x=1697141224;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=5SmdelAGmvVMuyGpI9oHf/KfBMhCr0YbMzDxWUcyb3s=;
+ b=hQn125lqVgcqHbh4B3Ls/v//8HvhjfGUp657JSQuWTTOwF+/Hz+kjQyxSXXhGvOqJ2
+ XjMTaxpHVGzw9II5fV1WRMPRXCITKKsxNUyN0kAQTI5FBfaysXrO9KJgEDsGuIO1wjzB
+ SIO680wn9ONnwGQlaCaMP9gGicO8uDd+0mc8JNPwNqc0j4+Q+z4crIpZT4ZVaaTVJH7E
+ 3QQmsSJLCBEWdhzDwBIOcsArIigLzrbCDMo+agu5UaMJ+WfqKZNtc1EJx4ICHXG+MBMI
+ sjWcuP6johRF4Wxx9pQO2TXiBlMPFuOOYhnMnTnSHzUHt8OGBjIB8eaBMFmDabxmHThq
+ Gz+g==
+X-Gm-Message-State: AOJu0YxXN21jlC275TOc/2JjeI6n1sBOyHUPxWkpursBZtyC0JbQHpSn
+ 0/UyL1Ibp4IBzatwlPKLI1clNA==
+X-Google-Smtp-Source: AGHT+IHzGt8mVQ00Y7xEm1YoxNKyw7E5DNrVbGATfhaPMw7gC56942AlSJD5OjCSZzbI3gpTqDDEUA==
+X-Received: by 2002:a05:6402:3584:b0:52b:db44:79e3 with SMTP id
+ y4-20020a056402358400b0052bdb4479e3mr2204124edc.4.1696536423785; 
+ Thu, 05 Oct 2023 13:07:03 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ n17-20020a05640204d100b00533dd4d2947sm1539152edw.74.2023.10.05.13.07.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 05 Oct 2023 13:07:03 -0700 (PDT)
+Message-ID: <f958dc30-66b2-c698-b158-5792639094d9@mind.be>
+Date: Thu, 5 Oct 2023 22:07:01 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231005144250.43169-1-tomi.valkeinen@ideasonboard.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696536016;
- bh=gw8Ckfw0Zq0y6yDi+dSXqBwP7Zg8NA2iivoBLzjparM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=AT2QARds76TZGcrsVMCj1vEw+pJsKgklPfS589K+1XUFRSyFVkUE18HlmDEbefRhu
- HpHuUabyhPrdxU8U3V2ltX0uAeNKN4yQuDXttgK4iifomOsoc1i9lAE1pmh/X9YYH1
- X8sgtrB015AcccwaaPxPzOAAvIklek3kX4QehxM0o4qR9udZrhOQKc46fWSj5pkzoG
- kmEVnZXuaWTYwmb5KgTcC0xM6BqO712M+KcPgQ5HLU7IhN/c+MIMZwoiiah4zKi3qj
- bxhtp8LAl2TjPgt2mjBqp3OenVZOrkGfrXLw4qAZxmVmo2msTGLTviasTzB5+69JLN
- NHMZSCKmy0fig==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=AT2QARds
-Subject: Re: [Buildroot] [PATCH 1/1] package/rwmem: bumb to latest version
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ James Knight <james.d.knight@live.com>
+References: <20230505043002.1956-1-james.d.knight@live.com>
+ <SN4P221MB06825C5F564A59CA4DE16C09A0729@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
+ <20231001160559.GM2579@scaer>
+In-Reply-To: <20231001160559.GM2579@scaer>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1696536424; x=1697141224; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=5SmdelAGmvVMuyGpI9oHf/KfBMhCr0YbMzDxWUcyb3s=;
+ b=BtLhSOVW8BAdf6eL7vB2GXDPJF5fMB4tF+U/9h8xg/pqXlAZdaVLNF34G9Ed+DQdx+
+ h3LNiz52HQR6aobpjYv2QMwto0cvILu93TEdRvWUvTdDMfHpQjQN9aQX8I+oMN+7EVf6
+ s1JeJWDqRj7xJl+jA/1q2wpJGUehaxyBBXAWOJi/HpIBH/QNRop6cjPYCWXHBxy3lN70
+ pTQ4/i03uNIskocbhI5PMyUyF5B8FIXaFkKULXiI0DEwfWawV42zVqXvmlvGZXlU0cpk
+ /LOE0JVA2fyK2huqUXRvtSEkSL5TLXWnEsPAKrvbRUTvFrYVqTc9fdISkAWBUALWWhEs
+ MB5w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=BtLhSOVW
+Subject: Re: [Buildroot] [PATCH 2/2] package/skeleton-init-systemd: flexible
+ reinstalls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,93 +103,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tomi, All,
 
-On 2023-10-05 17:42 +0300, Tomi Valkeinen spake thusly:
-> Bumb rwmem to the latest version. The main reason to bumb is to get a
-> fix for a compilation issue present when compiling with gcc-13 (need to
-> include <cstdint>).
+
+On 01/10/2023 18:05, Yann E. MORIN wrote:
+> James, All,
 > 
-> As the project has moved to C++20, we need to adjust the Config.in
-> accordingly.
+> On 2023-05-05 00:30 -0400, James Knight spake thusly:
+>> The following commit tweaks the `skeleton-init-systemd` package to
+>> gracefully handle if a user invokes a reinstall for the package (e.g.
+>> when performing development tweaks to the initial skeleton).
+>>
+>> Signed-off-by: James Knight <james.d.knight@live.com>
+>> ---
+>> Only a suggestion; feel free to drop.
 > 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/rwmem/Config.in  | 6 +++---
->  package/rwmem/rwmem.hash | 2 +-
->  package/rwmem/rwmem.mk   | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+> I've spent a bit of time on this, and was about to apply...
 > 
-> diff --git a/package/rwmem/Config.in b/package/rwmem/Config.in
-> index cd9a7f78f1..690b034070 100644
-> --- a/package/rwmem/Config.in
-> +++ b/package/rwmem/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_RWMEM
->  	bool "rwmem"
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR # fmt
->  	select BR2_PACKAGE_FMT
-> @@ -10,6 +10,6 @@ config BR2_PACKAGE_RWMEM
->  
->  	  https://github.com/tomba/rwmem
->  
-> -comment "rwmem needs a toolchain w/ C++, wchar, gcc >= 5"
-> +comment "rwmem needs a toolchain w/ C++, wchar, gcc >= 10"
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
-> diff --git a/package/rwmem/rwmem.hash b/package/rwmem/rwmem.hash
-> index 9becbc5b21..da74002cb4 100644
-> --- a/package/rwmem/rwmem.hash
-> +++ b/package/rwmem/rwmem.hash
-> @@ -1,2 +1,2 @@
-> -sha256  55d28f029c0cd5c21d3e1c89371e2905d5217f571ef5389ed0fce163804d1c4a  rwmem-c8291705c82bb0686be9adf6a427a2b72114719a.tar.gz
-> +sha256  e6cb76b77869aef9ec4a2c31d0d80af0182a5f9c9c3ae06225c8fb2f8266379f  rwmem-c89bc9ad9a8f2359f358c510db57b7678eb156d1.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-> diff --git a/package/rwmem/rwmem.mk b/package/rwmem/rwmem.mk
-> index 24c4e92efc..d6ef05193b 100644
-> --- a/package/rwmem/rwmem.mk
-> +++ b/package/rwmem/rwmem.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -RWMEM_VERSION = c8291705c82bb0686be9adf6a427a2b72114719a
-> +RWMEM_VERSION = c89bc9ad9a8f2359f358c510db57b7678eb156d1
->  RWMEM_SITE = $(call github,tomba,rwmem,$(RWMEM_VERSION))
->  RWMEM_LICENSE = GPL-2.0
->  RWMEM_LICENSE_FILES = LICENSE
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> However, there are a few "issues" I noticed with it, mostly that
+> /etc/fstab should not be used with systemd, but mount units should be
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  Really? The mount unit man page [1] says:
+
+"In general, configuring mount points through /etc/fstab is the preferred 
+approach to manage mounts for humans. For tooling, writing mount units should be 
+preferred over editing /etc/fstab."
+
+I'm not sure if the skeleton counts as tooling or as a human. Hm, probably 
+tooling, indeed.
+
+
+> used, and so /etc/fstab should only contain this one line, so it does
+
+  Well, no, if we say that the skeleton is tooling, it shouldn't contain that 
+line at all; instead, there should be a mount unit to remount rw (and no mount 
+unit at all for ro).
+
+> not make much sense to have it "reinstallable".
+[snip]
+>> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+>> index 4076821c0c0429cf90681f4b16be114c44bde282..18ae91f2eea30277805ee82791c62d53f24dca1e 100644
+>> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
+>> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+>> @@ -18,13 +18,23 @@ SKELETON_INIT_SYSTEMD_PROVIDES = skeleton
+>>   ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+>>   
+>>   define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+>> -	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+
+  The original here _was_ already "reinstallable" because it just overwrites 
+fstab. If there is any other package that writes fstab, it's wrong anyway. 
+Unless it's done in the overlay or post-build-script, but the overlay/script 
+anyway still gets applied after rebuild.
+
+>> +	if ! grep -q "/dev/root" $(TARGET_DIR)/etc/fstab; then \
+>> +		echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab; \
+>> +	else \
+>> +		sed -i "s|/dev/root.*|/dev/root / auto rw 0 1|g" \
+>> +			$(TARGET_DIR)/etc/fstab; \
+>> +	fi
+>>   endef
+>>   
+>>   else
+>>   
+>>   define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+>> -	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
+>> +	if ! grep -q "/dev/root" $(TARGET_DIR)/etc/fstab; then \
+>> +		echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab; \
+>> +	else \
+>> +		sed -i "s|/dev/root.*|/dev/root / auto ro 0 1|g" \
+>> +			$(TARGET_DIR)/etc/fstab; \
+>> +	fi
+>>   endef
+>>   
+>>   # On a R/O rootfs, /var is a tmpfs filesystem. So, at build time, we
+>> @@ -78,9 +88,9 @@ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
+>>   	mkdir -p $(TARGET_DIR)/home
+>>   	mkdir -p $(TARGET_DIR)/srv
+>>   	mkdir -p $(TARGET_DIR)/var
+>> -	ln -s ../run $(TARGET_DIR)/var/run
+>> +	ln -sf ../run $(TARGET_DIR)/var/run
+
+  IMHO this part is simply a good idea.
+
+  Regards,
+  Arnout
+
+[1] https://www.freedesktop.org/software/systemd/man/systemd.mount.html
+
+
+
+>>   	# prevent install scripts to create var/lock as directory
+>> -	ln -s ../run/lock $(TARGET_DIR)/var/lock
+>> +	ln -sf ../run/lock $(TARGET_DIR)/var/lock
+>>   	install -D -m644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d/legacy.conf
+>>   	$(SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW)
+>>   endef
+>> -- 
+>> 2.40.1.windows.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
