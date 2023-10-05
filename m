@@ -4,59 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2104E784A9
-	for <buildroot@archiver.kernel.org>; Thu,  5 Oct 2023 06:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3168EE7B61F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Oct 2023 06:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 691B6815AD;
-	Thu,  5 Oct 2023 06:25:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 691B6815AD
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE8228234A;
+	Thu,  5 Oct 2023 06:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE8228234A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H-J2QVVfgJ8a; Thu,  5 Oct 2023 06:25:10 +0000 (UTC)
+	with ESMTP id cMsKL7D58JDH; Thu,  5 Oct 2023 06:25:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2424E8148D;
-	Thu,  5 Oct 2023 06:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2424E8148D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1D6E41BF25B
- for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 06:25:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3AD698234B;
+	Thu,  5 Oct 2023 06:25:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AD698234B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1894A1BF25B
+ for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 06:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA8586F521
- for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 06:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA8586F521
+ by smtp1.osuosl.org (Postfix) with ESMTP id F3D4D814B3
+ for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 06:25:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3D4D814B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id US5bEcehauYl for <buildroot@lists.busybox.net>;
- Thu,  5 Oct 2023 06:25:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lOGhdD5W2fVi for <buildroot@lists.busybox.net>;
+ Thu,  5 Oct 2023 06:25:08 +0000 (UTC)
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp3.osuosl.org (Postfix) with ESMTP id C21636F529
- for <buildroot@buildroot.org>; Thu,  5 Oct 2023 06:25:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C21636F529
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0207181416
+ for <buildroot@buildroot.org>; Thu,  5 Oct 2023 06:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0207181416
 Received: from pwmachine.numericable.fr (unknown [82.77.158.143])
- by linux.microsoft.com (Postfix) with ESMTPSA id 1824520B74C0;
- Wed,  4 Oct 2023 23:25:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1824520B74C0
+ by linux.microsoft.com (Postfix) with ESMTPSA id 7CF1F20B74C3;
+ Wed,  4 Oct 2023 23:25:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7CF1F20B74C3
 From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-Date: Thu,  5 Oct 2023 09:24:57 +0300
-Message-Id: <20231005062458.8973-1-flaniel@linux.microsoft.com>
+Date: Thu,  5 Oct 2023 09:24:58 +0300
+Message-Id: <20231005062458.8973-2-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231005062458.8973-1-flaniel@linux.microsoft.com>
+References: <20231005062458.8973-1-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=linux.microsoft.com; 
- s=default; t=1696487106;
- bh=I72iboPW66cVyXhgCm9PB/6P9Ix8HEXkAY3GsYZcrTw=;
- h=From:To:Cc:Subject:Date:From;
- b=MvINLgdpmJql6p1Zr7zmZ0MbYrUuN+RsvWO9D9VoFLNm8RmRvrDgNr6NZinB+o3DB
- 2/klCw2LDXnnQenUCCJABVnZtGoXMJ7xM+F+p5W6gRARv3APVo2qNbPyEl9Rxm0b3E
- OW9xprCTUD9AVF6iwHAlxhCQjsB8JMq+wgi6T2sU=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=default; t=1696487107;
+ bh=4naR8WGlmE5BvKOIAoLyBxhveGW+l1PPbyM8t8W1ZYw=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=Gceb1vOIlwC6E4w9ebJ2fHAXBR/bLJkosmUEZdAuN1/JFrwxhRNniVuJREtrHqjqk
+ Xg9Eyam8Ea4FtGwVJvV+pqScQFXbHXn1cGk2t9a8ZSDV9cdqI3y7kX2d9Bka4LxaeB
+ BRXmdq9LpHaPfHUaMTpX4CdsArFmMIlXcTp/hI54=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=linux.microsoft.com
  header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
- header.b=MvINLgdp
-Subject: [Buildroot] [PATCH 0/1] package/tbb: fixes hash
+ header.b=Gceb1vOI
+Subject: [Buildroot] [PATCH 1/1] package/tbb: fixes hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,23 +76,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi.
-
-
-Sorry, I got mixed up while bumping tbb and the whole sysdig stuff and actually
-forgot to update the hash in the previous commit.
-Lesson learnt, I will clearly double check before sending next patches.
-The present patch fixes the situation with the correct (locally computed) hash.
-
-Francis Laniel (1):
-  package/tbb: fixes hash
-
+Fixes: 74b50d553eaf ("package/tbb: bump to version 2021.10.0.")
+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+---
  package/tbb/tbb.hash | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Best regards and again sorry for the disturbance.
---
+diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
+index 1caf81c5c5..085d54109a 100644
+--- a/package/tbb/tbb.hash
++++ b/package/tbb/tbb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  eee380323bb7ce864355ed9431f85c43955faaae9e9bce35c62b372d7ffd9f8b  tbb-2021.10.0.tar.gz
++sha256  487023a955e5a3cc6d3a0d5f89179f9b6c0ae7222613a7185b0227ba0c83700b  tbb-2021.10.0.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
+-- 
 2.34.1
 
 _______________________________________________
