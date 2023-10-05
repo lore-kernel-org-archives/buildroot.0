@@ -1,60 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1481DE92705
-	for <buildroot@archiver.kernel.org>; Thu,  5 Oct 2023 14:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07034E71D4F
+	for <buildroot@archiver.kernel.org>; Thu,  5 Oct 2023 16:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4943D4047B;
-	Thu,  5 Oct 2023 14:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4943D4047B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8274642849;
+	Thu,  5 Oct 2023 16:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8274642849
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rFuwzmQYTnL6; Thu,  5 Oct 2023 14:43:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CqknJHV4CDiW; Thu,  5 Oct 2023 16:17:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89E5D40C27;
-	Thu,  5 Oct 2023 14:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89E5D40C27
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7E8531BF3C9
- for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 14:43:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BE9F4284C;
+	Thu,  5 Oct 2023 16:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BE9F4284C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C21FA1BF40E
+ for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 16:17:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 578B640C27
- for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 14:43:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 578B640C27
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B3FD8338B
+ for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 16:17:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B3FD8338B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jkmiUr0E5b3Q for <buildroot@lists.busybox.net>;
- Thu,  5 Oct 2023 14:43:03 +0000 (UTC)
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com
- [213.167.242.64])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6600E4047B
- for <buildroot@buildroot.org>; Thu,  5 Oct 2023 14:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6600E4047B
-Received: from desky.lan (91-157-153-81.elisa-laajakaista.fi [91.157.153.81])
- by perceval.ideasonboard.com (Postfix) with ESMTPSA id 26D309C4;
- Thu,  5 Oct 2023 16:41:11 +0200 (CEST)
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E8VjNn4-_tYA for <buildroot@lists.busybox.net>;
+ Thu,  5 Oct 2023 16:17:42 +0000 (UTC)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 510E883386
+ for <buildroot@buildroot.org>; Thu,  5 Oct 2023 16:17:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 510E883386
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-3248e90f032so1196710f8f.1
+ for <buildroot@buildroot.org>; Thu, 05 Oct 2023 09:17:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696522660; x=1697127460;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=BvSEUqT0sIVD8XWSW8PxOj2rp5VoAqQWzt51Yo1lXVY=;
+ b=iKlZZ3Avl9tFVrGy9EgrII1hPkgNyPZuPgGdwByXTah7k2CCw0zaXTa4pj2r4SpI1t
+ bYIDRRyYbZ0QupnNg1d1aD448alZlmTIKUQ9xk3+QgmgTFTVvo4+RjRrFtUWBgXYSaeV
+ Qmxp/h4DHQbxUO7ydH77HpiArgk/WkztzN4OQDqkhZXgdFvVRgaqD/ZatFob/FypUTAH
+ 9b5x65nAYWA23aVeD81CD92R3x58P0uqH1mwdLUF38Zq9R/wxBNSafA0uk4Kt0F8QF4O
+ 5znDVpO0PkLydcdjEIEKXeNYsyzM/fHkZs7O85wqxyzRH7XKUoBFsPzbzBBCcT32utM7
+ HG6w==
+X-Gm-Message-State: AOJu0YyQeZuo+aHfNQHSgoeUnYc8qP0zriSkLQa1fGt7ikqb46LrCKct
+ vFf/oYjPM4mrxhrcTagTywTa7wn7wMc=
+X-Google-Smtp-Source: AGHT+IG+SzoFGcMXMMkCJf6Pp4tUSnmloMm4nZg8K7YXhnJxfqSnZ+Y4YtnjRB2zmUGAS1GRbR4v/A==
+X-Received: by 2002:a5d:4d02:0:b0:317:6fb5:bafc with SMTP id
+ z2-20020a5d4d02000000b003176fb5bafcmr4766962wrt.65.1696522659988; 
+ Thu, 05 Oct 2023 09:17:39 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b44:b00:c5c9:a1ea:cbf9:9051])
+ by smtp.gmail.com with ESMTPSA id
+ s10-20020a5d510a000000b00324887a13f7sm2133890wrt.0.2023.10.05.09.17.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 05 Oct 2023 09:17:39 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu,  5 Oct 2023 17:42:50 +0300
-Message-Id: <20231005144250.43169-1-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu,  5 Oct 2023 18:17:38 +0200
+Message-Id: <cover.1696522656.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=ideasonboard.com; s=mail; t=1696516871;
- bh=BgoKUnbX5CvY3LBYSKseVZHPaRC4mnGHOY8+QdAC9e4=;
- h=From:To:Cc:Subject:Date:From;
- b=dqyC8CD4welmPHbIu+hjQDB4jG5CKpJeWEUR1O1HPzA3VvYKLdbNWkTHuHwmjkDCV
- JW/GbuM2kanLzWwhUlIqDaiOES8E+xfoEQVxCnMv/+L4mPK+mIBIojjGw1ztfdv6A3
- /tlCIyOHoz713OT5+KJXaAJ/l0fCOmGph9GbGOj4=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com
- header.a=rsa-sha256 header.s=mail header.b=dqyC8CD4
-Subject: [Buildroot] [PATCH 1/1] package/rwmem: bumb to latest version
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1696522660; x=1697127460; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=BvSEUqT0sIVD8XWSW8PxOj2rp5VoAqQWzt51Yo1lXVY=;
+ b=nZVxei6AdSvYngvsJh18202OyjIRrS1SPdufSQXh+qC6nsljfG4I8qlJMHszC/wCX3
+ BLNuvU4iiRByML62ryor/yoRcG4RaPbSnVE9I0Sw50AwbJaHAKFhL6vErxGdUslmK7Wd
+ ro1YWd7QkYDnVZUPSW9DXN5Lz3UUUWyxuEoe+BWm7/iEnoCRkBq2WThCw1eyqn+BWoEC
+ fr6ZQnsKTu5cDwe8SRfUDcPumkrdJa7HAxJqRPlzFIfM53JrvKG6k1fSCpYjuvSYnnyp
+ 5zigfIGnaot6IBc00fnMizPpsME1IqLxh/lPmmx5LfTDU3oHTmeDBWSg6GaGjKq65Gpq
+ u0hQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=nZVxei6A
+Subject: [Buildroot] [PATCH 0/2 v2] support/runtime-test: extend graphic
+ testing for weston + flutter (branch yem/flutter)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,72 +94,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Julien Olivain <ju.o@free.fr>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bumb rwmem to the latest version. The main reason to bumb is to get a
-fix for a compilation issue present when compiling with gcc-13 (need to
-include <cstdint>).
+Hello All!
 
-As the project has moved to C++20, we need to adjust the Config.in
-accordingly.
+This little two-patch series extends the runtime tests with a helper to
+allow easily testing that a graphical application properly renders
+something, and converts the weston test to use it, and finally extends
+the flutter test to use it.
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
----
- package/rwmem/Config.in  | 6 +++---
- package/rwmem/rwmem.hash | 2 +-
- package/rwmem/rwmem.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Canges v1 -> v2:
+  - fix flutter test
 
-diff --git a/package/rwmem/Config.in b/package/rwmem/Config.in
-index cd9a7f78f1..690b034070 100644
---- a/package/rwmem/Config.in
-+++ b/package/rwmem/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_RWMEM
- 	bool "rwmem"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # fmt
- 	select BR2_PACKAGE_FMT
-@@ -10,6 +10,6 @@ config BR2_PACKAGE_RWMEM
- 
- 	  https://github.com/tomba/rwmem
- 
--comment "rwmem needs a toolchain w/ C++, wchar, gcc >= 5"
-+comment "rwmem needs a toolchain w/ C++, wchar, gcc >= 10"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
-diff --git a/package/rwmem/rwmem.hash b/package/rwmem/rwmem.hash
-index 9becbc5b21..da74002cb4 100644
---- a/package/rwmem/rwmem.hash
-+++ b/package/rwmem/rwmem.hash
-@@ -1,2 +1,2 @@
--sha256  55d28f029c0cd5c21d3e1c89371e2905d5217f571ef5389ed0fce163804d1c4a  rwmem-c8291705c82bb0686be9adf6a427a2b72114719a.tar.gz
-+sha256  e6cb76b77869aef9ec4a2c31d0d80af0182a5f9c9c3ae06225c8fb2f8266379f  rwmem-c89bc9ad9a8f2359f358c510db57b7678eb156d1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/rwmem/rwmem.mk b/package/rwmem/rwmem.mk
-index 24c4e92efc..d6ef05193b 100644
---- a/package/rwmem/rwmem.mk
-+++ b/package/rwmem/rwmem.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RWMEM_VERSION = c8291705c82bb0686be9adf6a427a2b72114719a
-+RWMEM_VERSION = c89bc9ad9a8f2359f358c510db57b7678eb156d1
- RWMEM_SITE = $(call github,tomba,rwmem,$(RWMEM_VERSION))
- RWMEM_LICENSE = GPL-2.0
- RWMEM_LICENSE_FILES = LICENSE
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      support/runtime-test: add helper to test graphics rendering
+      suport/runtime-test: extend flutter test to check rendering is happening
+
+ support/testing/tests/graphics_base.py             | 39 ++++++++++++++
+ support/testing/tests/package/test_flutter.py      | 35 ++++++++++---
+ .../flutter-gallery.service                        |  1 -
+ support/testing/tests/package/test_weston.py       | 61 ++++------------------
+ 4 files changed, 78 insertions(+), 58 deletions(-)
+ create mode 100644 support/testing/tests/graphics_base.py
+ delete mode 120000 support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
