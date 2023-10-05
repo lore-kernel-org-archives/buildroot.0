@@ -4,50 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F238E92731
-	for <buildroot@archiver.kernel.org>; Thu,  5 Oct 2023 19:43:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3D74E92734
+	for <buildroot@archiver.kernel.org>; Thu,  5 Oct 2023 19:54:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C88541BD7;
-	Thu,  5 Oct 2023 19:43:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C88541BD7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57C88403ED;
+	Thu,  5 Oct 2023 19:54:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57C88403ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f7oQMn2tozBm; Thu,  5 Oct 2023 19:43:28 +0000 (UTC)
+	with ESMTP id ZjZq59FObg_r; Thu,  5 Oct 2023 19:54:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11C9341BF0;
-	Thu,  5 Oct 2023 19:43:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11C9341BF0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE9C51BF312
- for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 19:43:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2D3740350;
+	Thu,  5 Oct 2023 19:54:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2D3740350
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 253CF1BF40E
+ for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 19:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8C4660FB2
- for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 19:43:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8C4660FB2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C0FE40280
+ for <buildroot@lists.busybox.net>; Thu,  5 Oct 2023 19:54:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C0FE40280
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xlmiSA-Kbkhn for <buildroot@lists.busybox.net>;
- Thu,  5 Oct 2023 19:43:23 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 104B860F94
- for <buildroot@buildroot.org>; Thu,  5 Oct 2023 19:43:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 104B860F94
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E4C0D60005;
- Thu,  5 Oct 2023 19:43:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@48ers.dk>)
- id 1qoUFe-004Nmr-EC; Thu, 05 Oct 2023 21:43:14 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PlucvJ7JumTR for <buildroot@lists.busybox.net>;
+ Thu,  5 Oct 2023 19:54:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDD14400C6
+ for <buildroot@buildroot.org>; Thu,  5 Oct 2023 19:54:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDD14400C6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DA29D84251; Thu,  5 Oct 2023 19:54:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu,  5 Oct 2023 21:43:12 +0200
-Message-Id: <20231005194313.1044692-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/{glibc,
+Date: Thu, 5 Oct 2023 21:54:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 07a03a8549b0e1ed92993311be337c7a382b6446
+X-Git-Newrev: 8519de517e222c36108f0b573585de3057865ba7
+X-Patchwork-Hint: ignore
+Message-Id: <20231005195451.DA29D84251@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{glibc,
  localedef}: security bump to version
  glibc-2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701
 X-BeenThere: buildroot@buildroot.org
@@ -61,12 +58,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8519de517e222c36108f0b573585de3057865ba7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following security issues:
 
@@ -91,6 +90,7 @@ Fixes the following security issues:
   privileges.  This flaw was introduced in glibc 2.34.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/glibc/glibc.hash       | 2 +-
  package/glibc/glibc.mk         | 2 +-
@@ -134,9 +134,6 @@ index 650b319a25..ed6d4b4968 100644
  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
  LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
  HOST_LOCALEDEF_DL_SUBDIR = glibc
--- 
-2.30.2
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
