@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4E38E81E09
-	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 15:33:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0BC7E81E0B
+	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 15:33:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CD8983C52;
-	Fri,  6 Oct 2023 15:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CD8983C52
+	by smtp1.osuosl.org (Postfix) with ESMTP id A671C83C5F;
+	Fri,  6 Oct 2023 15:33:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A671C83C5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oFPey4MmtFWq; Fri,  6 Oct 2023 15:33:07 +0000 (UTC)
+	with ESMTP id w8pm3jgy9Uxv; Fri,  6 Oct 2023 15:33:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5B7F83C50;
-	Fri,  6 Oct 2023 15:33:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5B7F83C50
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 792381BF997
- for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 15:32:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 573C283C59;
+	Fri,  6 Oct 2023 15:33:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 573C283C59
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04DD11BF32D
+ for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 15:32:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B1A342CCF
- for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 15:32:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B1A342CCF
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0C0C42628
+ for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 15:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0C0C42628
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id So1C-LgmOGuK for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M0qlQQk5wzUq for <buildroot@lists.busybox.net>;
  Fri,  6 Oct 2023 15:32:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 95A7C42CB8
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB34842E84
  for <buildroot@buildroot.org>; Fri,  6 Oct 2023 15:32:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95A7C42CB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB34842E84
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8081484300; Fri,  6 Oct 2023 15:32:23 +0000 (UTC)
+ id A8F6D842FC; Fri,  6 Oct 2023 15:32:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 6 Oct 2023 17:31:12 +0200
+Date: Fri, 6 Oct 2023 17:31:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65dfac5d11596583e4e31ce83a05045a5c9a2ce6
-X-Git-Newrev: 4c66ee3cda45bebf9044d09f0d2ceec2ea4298cd
+X-Git-Oldrev: 4cbc2af604e73780c0c6b5c093c55c2f7ee2c4e3
+X-Git-Newrev: 0fd6954fcb2b922ff95779420a36e99229e75f92
 X-Patchwork-Hint: ignore
-Message-Id: <20231006153223.8081484300@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: move to
- package/nodejs/nodejs
+Message-Id: <20231006153223.A8F6D842FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nodejs/nodejs-bin: new provider of
+ host-nodejs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,397 +64,179 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c66ee3cda45bebf9044d09f0d2ceec2ea4298cd
+commit: https://git.buildroot.net/buildroot/commit/?id=0fd6954fcb2b922ff95779420a36e99229e75f92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Later we will change host-nodejs into a virtual package with the option
-to download the binary, or to build from source. Those two
-implementations will share version etc., so we want them in a
-subdirectory in order to guarantee order of inclusion.
+This package downloads the pre-built version of nodejs, if the host
+platform supports it.
 
-As a preparatory step, move the existing, single nodejs implementation
-down into a subdirectory.
+Reuse the variables defined in nodejs.mk.
 
-The definitions in nodejs.mk that will later be shared between the
-source and binary variants of the package stay in
-package/nodejs/nodejs.mk; the rest moves down to
-package/nodejs/nodejs/nodejs.mk.
+For the definition of BR2_PACKAGE_PROVIDES_HOST_NODEJS, take care of
+defaulting to host-nodejs-bin if host-nodejs is not selected at all.
+This makes sure that in the future we will be able to run 'make
+foo-source' for a package that uses nodejs vendoring, and it will use
+the prebuilt nodejs to perform the vendoring.
 
-The hash file will be shared between the implementations and therefore
-stays in package/nodejs/nodejs.hash. package/nodejs/nodejs/nodejs.hash
-is a symlink to it.
-
-The Config.in and Config.in.host don't move. The two implementations
-will only have blind options.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Arnout:
+ - update to 16.20.0 to match nodejs.mk - including hashes;
+ - add HOST_NODEJS_BIN_ACTUAL_SOURCE_TARBALL + hash;
+ - move to package/nodejs/nodejs-bin;
+ - drop DEVELOPERS change, it's already covered by package/nodejs;
+ - re-order the series;
+ - immediately add it as a virtual package provider;
+ - add prompt and helpt text to choice;
+ - select host-nodejs-bin as provider if host-nodejs is not selected at
+   all.
+]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/nodejs/nodejs.mk                           | 253 +--------------------
- .../0001-add-qemu-wrapper-support.patch            |   0
- ...002-check-if-uclibc-has-backtrace-support.patch |   0
- ...3-include-obj-name-in-shared-intermediate.patch |   0
- ...l-modules-cjs-loader.js-adjust-default-pa.patch |   0
- package/nodejs/nodejs/nodejs.hash                  |   1 +
- package/nodejs/{ => nodejs}/nodejs.mk              |  27 +--
- package/nodejs/{ => nodejs}/v8-qemu-wrapper.in     |   0
- 8 files changed, 5 insertions(+), 276 deletions(-)
+ package/nodejs/Config.in.host             | 46 ++++++++++++++++++++++++++-----
+ package/nodejs/nodejs-bin/nodejs-bin.hash |  1 +
+ package/nodejs/nodejs-bin/nodejs-bin.mk   | 37 +++++++++++++++++++++++++
+ package/nodejs/nodejs.hash                |  8 ++++--
+ 4 files changed, 83 insertions(+), 9 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index b8e57e567d..16e85b7ab9 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -7,231 +7,12 @@
- NODEJS_VERSION = 16.20.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
--NODEJS_DEPENDENCIES = \
--	host-ninja \
--	host-pkgconf \
--	host-python3 \
--	host-qemu \
--	c-ares \
--	libuv \
--	nghttp2 \
--	zlib \
--	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
--HOST_NODEJS_DEPENDENCIES = \
--	host-icu \
--	host-libopenssl \
--	host-ninja \
--	host-pkgconf \
--	host-python3 \
--	host-zlib
--NODEJS_INSTALL_STAGING = YES
+diff --git a/package/nodejs/Config.in.host b/package/nodejs/Config.in.host
+index 72b498dada..a8ab89176c 100644
+--- a/package/nodejs/Config.in.host
++++ b/package/nodejs/Config.in.host
+@@ -1,12 +1,18 @@
++config BR2_PACKAGE_HOST_NODEJS_BIN_ARCH_SUPPORTS
++	bool
++	default y if BR2_HOSTARCH = "aarch64"
++	default y if BR2_HOSTARCH = "arm"
++	default y if BR2_HOSTARCH = "ppc64le"
++	default y if BR2_HOSTARCH = "x86_64"
 +
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
- NODEJS_CPE_ID_VENDOR = nodejs
- NODEJS_CPE_ID_PRODUCT = node.js
+ comment "host nodejs needs a host gcc >= 8"
++	depends on !BR2_PACKAGE_HOST_NODEJS_BIN_ARCH_SUPPORTS
+ 	depends on !BR2_HOST_GCC_AT_LEAST_8
  
--NODEJS_CONF_OPTS = \
--	--shared-zlib \
--	--shared-cares \
--	--shared-libuv \
--	--shared-nghttp2 \
--	--without-dtrace \
--	--without-etw \
--	--cross-compiling \
--	--dest-os=linux \
--	--ninja
--
--HOST_NODEJS_MAKE_OPTS = \
--	$(HOST_CONFIGURE_OPTS) \
--	CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
--	LDFLAGS.host="$(HOST_LDFLAGS)" \
--	NO_LOAD=cctest.target.mk \
--	PATH=$(@D)/bin:$(BR_PATH) \
--	JOBS=$(PARALLEL_JOBS)
--
--NODEJS_MAKE_OPTS = \
--	$(TARGET_CONFIGURE_OPTS) \
--	NO_LOAD=cctest.target.mk \
--	PATH=$(@D)/bin:$(BR_PATH) \
--	LDFLAGS="$(NODEJS_LDFLAGS)" \
--	LD="$(TARGET_CXX)" \
--	JOBS=$(PARALLEL_JOBS)
--
--# nodejs's build system uses python which can be a symlink to an unsupported
--# python version (e.g. python 3.10 with nodejs 14.18.1). We work around this by
--# forcing host-python3 early in the PATH, via a python->python3 symlink.
--define NODEJS_PYTHON3_SYMLINK
--	mkdir -p $(@D)/bin
--	ln -sf $(HOST_DIR)/bin/python3 $(@D)/bin/python
--endef
--HOST_NODEJS_PRE_CONFIGURE_HOOKS += NODEJS_PYTHON3_SYMLINK
--NODEJS_PRE_CONFIGURE_HOOKS += NODEJS_PYTHON3_SYMLINK
--
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--NODEJS_DEPENDENCIES += openssl
--NODEJS_CONF_OPTS += --shared-openssl
--else
--NODEJS_CONF_OPTS += --without-ssl
--endif
--
--ifeq ($(BR2_PACKAGE_ICU),y)
--NODEJS_DEPENDENCIES += icu
--NODEJS_CONF_OPTS += --with-intl=system-icu
--else
--NODEJS_CONF_OPTS += --with-intl=none
--endif
--
--ifneq ($(BR2_PACKAGE_NODEJS_NPM),y)
--NODEJS_CONF_OPTS += --without-npm
--endif
--
--define HOST_NODEJS_CONFIGURE_CMDS
--	cd $(@D); \
--		$(HOST_CONFIGURE_OPTS) \
--		PATH=$(@D)/bin:$(BR_PATH) \
--		PYTHON=$(HOST_DIR)/bin/python3 \
--		$(HOST_DIR)/bin/python3 configure.py \
--		--prefix=$(HOST_DIR) \
--		--without-dtrace \
--		--without-etw \
--		--shared-openssl \
--		--shared-openssl-includes=$(HOST_DIR)/include \
--		--shared-openssl-libpath=$(HOST_DIR)/lib \
--		--shared-zlib \
--		--no-cross-compiling \
--		--with-intl=system-icu \
--		--ninja
--endef
--
--HOST_NODEJS_CXXFLAGS = $(HOST_CXXFLAGS)
--
--define HOST_NODEJS_BUILD_CMDS
--	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
--		$(MAKE) -C $(@D) \
--		$(HOST_NODEJS_MAKE_OPTS)
--endef
--
--ifeq ($(BR2_PACKAGE_HOST_NODEJS_COREPACK),y)
--define HOST_NODEJS_ENABLE_COREPACK
--	$(COREPACK) enable
--endef
--endif
--
--define HOST_NODEJS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
--		$(MAKE) -C $(@D) install \
--		$(HOST_NODEJS_MAKE_OPTS)
--	$(HOST_NODEJS_ENABLE_COREPACK)
--endef
--
--ifeq ($(BR2_i386),y)
--NODEJS_CPU = ia32
--else ifeq ($(BR2_x86_64),y)
--NODEJS_CPU = x64
--else ifeq ($(BR2_mips),y)
--NODEJS_CPU = mips
--else ifeq ($(BR2_mipsel),y)
--NODEJS_CPU = mipsel
--else ifeq ($(BR2_arm),y)
--NODEJS_CPU = arm
--# V8 needs to know what floating point ABI the target is using.
--NODEJS_ARM_FP = $(GCC_TARGET_FLOAT_ABI)
--# it also wants to know which FPU to use, but only has support for
--# vfp, vfpv3, vfpv3-d16 and neon.
--ifeq ($(BR2_ARM_FPU_VFPV2),y)
--NODEJS_ARM_FPU = vfp
--# vfpv4 is a superset of vfpv3
--else ifeq ($(BR2_ARM_FPU_VFPV3)$(BR2_ARM_FPU_VFPV4),y)
--NODEJS_ARM_FPU = vfpv3
--# vfpv4-d16 is a superset of vfpv3-d16
--else ifeq ($(BR2_ARM_FPU_VFPV3D16)$(BR2_ARM_FPU_VFPV4D16),y)
--NODEJS_ARM_FPU = vfpv3-d16
--else ifeq ($(BR2_ARM_FPU_NEON),y)
--NODEJS_ARM_FPU = neon
--endif
--else ifeq ($(BR2_aarch64),y)
--NODEJS_CPU = arm64
--endif
--
--# MIPS architecture specific options
--ifeq ($(BR2_mips)$(BR2_mipsel),y)
--ifeq ($(BR2_MIPS_CPU_MIPS32R6),y)
--NODEJS_MIPS_ARCH_VARIANT = r6
--NODEJS_MIPS_FPU_MODE = fp64
--else ifeq ($(BR2_MIPS_CPU_MIPS32R2),y)
--NODEJS_MIPS_ARCH_VARIANT = r2
--else ifeq ($(BR2_MIPS_CPU_MIPS32),y)
--NODEJS_MIPS_ARCH_VARIANT = r1
--endif
--endif
--
--NODEJS_LDFLAGS = $(TARGET_LDFLAGS)
--
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--NODEJS_LDFLAGS += -latomic
--endif
--
--# V8's JIT infrastructure requires binaries such as mksnapshot and
--# mkpeephole to be run in the host during the build. However, these
--# binaries must have the same bit-width as the target (e.g. a x86_64
--# host targeting ARMv6 needs to produce a 32-bit binary). To work around this
--# issue, cross-compile the binaries for the target and run them on the
--# host with QEMU, much like gobject-introspection.
--define NODEJS_INSTALL_V8_QEMU_WRAPPER
--	$(INSTALL) -D -m 755 $(NODEJS_PKGDIR)/v8-qemu-wrapper.in \
--		$(@D)/out/Release/v8-qemu-wrapper
--	$(SED) "s%@QEMU_USER@%$(QEMU_USER)%g" \
--		$(@D)/out/Release/v8-qemu-wrapper
--	$(SED) "s%@TOOLCHAIN_HEADERS_VERSION@%$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)%g" \
--		$(@D)/out/Release/v8-qemu-wrapper
--	$(SED) "s%@QEMU_USERMODE_ARGS@%$(call qstrip,$(BR2_PACKAGE_HOST_QEMU_USER_MODE_ARGS))%g" \
--		$(@D)/out/Release/v8-qemu-wrapper
--endef
--NODEJS_PRE_CONFIGURE_HOOKS += NODEJS_INSTALL_V8_QEMU_WRAPPER
--
--define NODEJS_WRAPPER_FIXUP
--	$(SED) "s%@MAYBE_WRAPPER@%'<(PRODUCT_DIR)/v8-qemu-wrapper',%g" $(@D)/node.gyp
--	$(SED) "s%@MAYBE_WRAPPER@%'<(PRODUCT_DIR)/v8-qemu-wrapper',%g" $(@D)/tools/v8_gypfiles/v8.gyp
--endef
--NODEJS_PRE_CONFIGURE_HOOKS += NODEJS_WRAPPER_FIXUP
--
--# Do not run the qemu-wrapper for the host build.
--define HOST_NODEJS_WRAPPER_FIXUP
--	$(SED) "s%@MAYBE_WRAPPER@%%g" $(@D)/node.gyp
--	$(SED) "s%@MAYBE_WRAPPER@%%g" $(@D)/tools/v8_gypfiles/v8.gyp
--endef
--HOST_NODEJS_PRE_CONFIGURE_HOOKS += HOST_NODEJS_WRAPPER_FIXUP
--
--define NODEJS_CONFIGURE_CMDS
--	(cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) \
--		PATH=$(@D)/bin:$(BR_PATH) \
--		LDFLAGS="$(NODEJS_LDFLAGS)" \
--		LD="$(TARGET_CXX)" \
--		PYTHON=$(HOST_DIR)/bin/python3 \
--		$(HOST_DIR)/bin/python3 configure.py \
--		--prefix=/usr \
--		--dest-cpu=$(NODEJS_CPU) \
--		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
--		$(if $(NODEJS_ARM_FPU),--with-arm-fpu=$(NODEJS_ARM_FPU)) \
--		$(if $(NODEJS_MIPS_ARCH_VARIANT),--with-mips-arch-variant=$(NODEJS_MIPS_ARCH_VARIANT)) \
--		$(if $(NODEJS_MIPS_FPU_MODE),--with-mips-fpu-mode=$(NODEJS_MIPS_FPU_MODE)) \
--		$(NODEJS_CONF_OPTS) \
--	)
--endef
--
--define NODEJS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
--		$(MAKE) -C $(@D) \
--		$(NODEJS_MAKE_OPTS)
--endef
--
--#
--# Build the list of modules to install.
--#
--NODEJS_MODULES_LIST= $(call qstrip,\
--	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
--
- NODEJS_BIN_ENV = $(TARGET_CONFIGURE_OPTS) \
- 	LDFLAGS="$(NODEJS_LDFLAGS)" \
- 	LD="$(TARGET_CXX)" \
-@@ -250,34 +31,4 @@ PNPM = $(NODEJS_BIN_ENV) $(HOST_DIR)/bin/pnpm
- YARN = $(NODEJS_BIN_ENV) $(HOST_DIR)/bin/yarn
- endif
+ config BR2_PACKAGE_HOST_NODEJS
+ 	bool "host nodejs"
+-	depends on BR2_HOST_GCC_AT_LEAST_8
+-	select BR2_PACKAGE_HOST_PYTHON3
+-	select BR2_PACKAGE_HOST_PYTHON3_BZIP2
+-	select BR2_PACKAGE_HOST_PYTHON3_SSL
++	depends on BR2_PACKAGE_HOST_NODEJS_BIN_ARCH_SUPPORTS || \
++		BR2_HOST_GCC_AT_LEAST_8
+ 	help
+ 	  Event-driven I/O server-side JavaScript environment based on
+ 	  V8.
+@@ -15,6 +21,30 @@ config BR2_PACKAGE_HOST_NODEJS
  
--#
--# We can only call NPM if there's something to install.
--#
--ifneq ($(NODEJS_MODULES_LIST),)
--NODEJS_DEPENDENCIES += host-nodejs
--define NODEJS_INSTALL_MODULES
--	# If you're having trouble with module installation, adding -d to the
--	# npm install call below and setting npm_config_rollback=false can both
--	# help in diagnosing the problem.
--	$(NPM) install -g $(NODEJS_MODULES_LIST)
--endef
+ if BR2_PACKAGE_HOST_NODEJS
+ 
++choice
++	prompt "host nodejs variant"
++	default BR2_PACKAGE_HOST_NODEJS_BIN if BR2_PACKAGE_HOST_NODEJS_BIN_ARCH_SUPPORTS
++	default BR2_PACKAGE_HOST_NODEJS_SRC
++	help
++	  Select a nodejs variant - built from source or
++	  pre-built.
++
++config BR2_PACKAGE_HOST_NODEJS_BIN
++	bool "pre-built version"
++	depends on BR2_PACKAGE_HOST_NODEJS_BIN_ARCH_SUPPORTS
++
++config BR2_PACKAGE_HOST_NODEJS_SRC
++	bool "compile from source"
++	depends on BR2_HOST_GCC_AT_LEAST_8
++	select BR2_PACKAGE_HOST_PYTHON3
++	select BR2_PACKAGE_HOST_PYTHON3_BZIP2
++	select BR2_PACKAGE_HOST_PYTHON3_SSL
++
++comment "host nodejs from source needs a host gcc >= 8"
++	depends on !BR2_HOST_GCC_AT_LEAST_8
++
++endchoice
++
+ config BR2_PACKAGE_HOST_NODEJS_COREPACK
+ 	bool "Corepack"
+ 	help
+@@ -28,8 +58,10 @@ config BR2_PACKAGE_HOST_NODEJS_COREPACK
+ 	  what currently happens with npm, which is shipped by Node.js
+ 	  by default.
+ 
++endif
++
+ config BR2_PACKAGE_PROVIDES_HOST_NODEJS
+ 	string
+-	default "host-nodejs-src"
+-
 -endif
--
--define NODEJS_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
--		$(MAKE) -C $(@D) install \
--		DESTDIR=$(STAGING_DIR) \
--		$(NODEJS_MAKE_OPTS)
--endef
--
--define NODEJS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
--		$(MAKE) -C $(@D) install \
--		DESTDIR=$(TARGET_DIR) \
--		$(NODEJS_MAKE_OPTS)
--	$(NODEJS_INSTALL_MODULES)
--endef
--
--# node.js configure is a Python script and does not use autotools
--$(eval $(generic-package))
--$(eval $(host-generic-package))
-+include $(sort $(wildcard package/nodejs/*/*.mk))
-diff --git a/package/nodejs/0001-add-qemu-wrapper-support.patch b/package/nodejs/nodejs/0001-add-qemu-wrapper-support.patch
-similarity index 100%
-rename from package/nodejs/0001-add-qemu-wrapper-support.patch
-rename to package/nodejs/nodejs/0001-add-qemu-wrapper-support.patch
-diff --git a/package/nodejs/0002-check-if-uclibc-has-backtrace-support.patch b/package/nodejs/nodejs/0002-check-if-uclibc-has-backtrace-support.patch
-similarity index 100%
-rename from package/nodejs/0002-check-if-uclibc-has-backtrace-support.patch
-rename to package/nodejs/nodejs/0002-check-if-uclibc-has-backtrace-support.patch
-diff --git a/package/nodejs/0003-include-obj-name-in-shared-intermediate.patch b/package/nodejs/nodejs/0003-include-obj-name-in-shared-intermediate.patch
-similarity index 100%
-rename from package/nodejs/0003-include-obj-name-in-shared-intermediate.patch
-rename to package/nodejs/nodejs/0003-include-obj-name-in-shared-intermediate.patch
-diff --git a/package/nodejs/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch b/package/nodejs/nodejs/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
-similarity index 100%
-rename from package/nodejs/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
-rename to package/nodejs/nodejs/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
-diff --git a/package/nodejs/nodejs/nodejs.hash b/package/nodejs/nodejs/nodejs.hash
++	default "host-nodejs-src" if BR2_PACKAGE_HOST_NODEJS_SRC
++	# default to host-nodejs-bin so it's used if nothing is set explicitly
++	default "host-nodejs-bin" if !BR2_PACKAGE_HOST_NODEJS_SRC
+diff --git a/package/nodejs/nodejs-bin/nodejs-bin.hash b/package/nodejs/nodejs-bin/nodejs-bin.hash
 new file mode 120000
 index 0000000000..0c3ac2ce77
 --- /dev/null
-+++ b/package/nodejs/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs-bin/nodejs-bin.hash
 @@ -0,0 +1 @@
 +../nodejs.hash
 \ No newline at end of file
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs/nodejs.mk
-similarity index 88%
-copy from package/nodejs/nodejs.mk
-copy to package/nodejs/nodejs/nodejs.mk
-index b8e57e567d..24cd4ded1f 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs/nodejs.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 16.20.0
--NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
--NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
-+# version etc. already defined in package/nodejs/nodejs.mk
+diff --git a/package/nodejs/nodejs-bin/nodejs-bin.mk b/package/nodejs/nodejs-bin/nodejs-bin.mk
+new file mode 100644
+index 0000000000..bf603e573c
+--- /dev/null
++++ b/package/nodejs/nodejs-bin/nodejs-bin.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# nodejs-bin
++#
++################################################################################
 +
- NODEJS_DEPENDENCIES = \
- 	host-ninja \
- 	host-pkgconf \
-@@ -25,10 +24,6 @@ HOST_NODEJS_DEPENDENCIES = \
- 	host-python3 \
- 	host-zlib
- NODEJS_INSTALL_STAGING = YES
--NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
--NODEJS_LICENSE_FILES = LICENSE
--NODEJS_CPE_ID_VENDOR = nodejs
--NODEJS_CPE_ID_PRODUCT = node.js
++NODEJS_BIN_VERSION = $(NODEJS_COMMON_VERSION)
++NODEJS_BIN_SITE = $(NODEJS_COMMON_SITE)
++NODEJS_BIN_SOURCE = node-v$(NODEJS_BIN_VERSION)-linux-$(NODEJS_BIN_ARCH).tar.xz
++HOST_NODEJS_BIN_ACTUAL_SOURCE_TARBALL = node-v$(NODEJS_BIN_VERSION).tar.xz
++NODEJS_BIN_DL_SUBDIR = nodejs
++
++NODEJS_BIN_LICENSE = $(NODEJS_LICENSE)
++NODEJS_BIN_LICENSE_FILES = $(NODEJS_LICENSE_FILES)
++NODEJS_BIN_CPE_ID_VENDOR = $(NODEJS_CPE_ID_VENDOR)
++NODEJS_BIN_CPE_ID_PRODUCT = $(NODEJS_CPE_ID_PRODUCT)
++
++HOST_NODEJS_BIN_PROVIDES = host-nodejs
++
++ifeq ($(HOSTARCH),aarch64)
++NODEJS_BIN_ARCH = arm64
++else ifeq ($(HOSTARCH),arm)
++# We assume that if someone does a build on ARM, it will be on an
++# ARMv7 machine
++NODEJS_BIN_ARCH = armv7l
++else ifeq ($(HOSTARCH),ppc64le)
++NODEJS_BIN_ARCH = ppc64le
++else ifeq ($(HOSTARCH),x86_64)
++NODEJS_BIN_ARCH = x64
++endif
++
++define HOST_NODEJS_BIN_INSTALL_CMDS
++	rsync -a --exclude=CHANGELOG.md --exclude=LICENSE --exclude=README.md \
++		$(@D)/* $(HOST_DIR)/
++endef
++
++$(eval $(host-generic-package))
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 6ab4c53e79..eaf41f6437 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,9 @@
+-# From https://nodejs.org/dist/v16.20.0/SHASUMS256.txt
++# From https://nodejs.org/dist/v16.20.0/SHASUMS256.txt.asc
++sha256  aca4794ca60f2e17689a700eeaa95d7adcd5fd01cdd2e4f9d596ac41b600b796  node-v16.20.0-linux-arm64.tar.xz
++sha256  5b79addab37bbdc31b442f8e648efad0b5d3aa5f3e0d682f23f4db483408eb2a  node-v16.20.0-linux-armv7l.tar.xz
++sha256  b439a8f874e8c2fad287ba75a3229407551f5ff9eb41e45e43e9bf67f184f618  node-v16.20.0-linux-ppc64le.tar.xz
++sha256  dff21020b555cc165a1ac36da7d4f6c810b35409c94e00afc51d5d370aae47ae  node-v16.20.0-linux-x64.tar.xz
+ sha256  e0990f992234e40a51fe11f92c3816c93a77e1b081145d3dd762cd1026345349  node-v16.20.0.tar.xz
  
- NODEJS_CONF_OPTS = \
- 	--shared-zlib \
-@@ -232,24 +227,6 @@ endef
- NODEJS_MODULES_LIST= $(call qstrip,\
- 	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
- 
--NODEJS_BIN_ENV = $(TARGET_CONFIGURE_OPTS) \
--	LDFLAGS="$(NODEJS_LDFLAGS)" \
--	LD="$(TARGET_CXX)" \
--	npm_config_arch=$(NODEJS_CPU) \
--	npm_config_target_arch=$(NODEJS_CPU) \
--	npm_config_build_from_source=true \
--	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
--	npm_config_prefix=$(TARGET_DIR)/usr \
--	npm_config_cache=$(BUILD_DIR)/.npm-cache
--
--# Define various packaging tools for other packages to use
--NPM = $(NODEJS_BIN_ENV) $(HOST_DIR)/bin/npm
--ifeq ($(BR2_PACKAGE_HOST_NODEJS_COREPACK),y)
--COREPACK = $(NODEJS_BIN_ENV) $(HOST_DIR)/bin/corepack
--PNPM = $(NODEJS_BIN_ENV) $(HOST_DIR)/bin/pnpm
--YARN = $(NODEJS_BIN_ENV) $(HOST_DIR)/bin/yarn
--endif
--
- #
- # We can only call NPM if there's something to install.
- #
-diff --git a/package/nodejs/v8-qemu-wrapper.in b/package/nodejs/nodejs/v8-qemu-wrapper.in
-similarity index 100%
-rename from package/nodejs/v8-qemu-wrapper.in
-rename to package/nodejs/nodejs/v8-qemu-wrapper.in
+-# Hash for license file
++# Locally calculated
+ sha256  ba325815d3df8819bebaf37cad67d6e1f82271e1e4a1189b53abd28e261977d6  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
