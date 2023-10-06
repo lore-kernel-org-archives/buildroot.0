@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73404E94101
-	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 19:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84DFDE94101
+	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 19:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C28040607;
-	Fri,  6 Oct 2023 19:12:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C28040607
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F27A40607;
+	Fri,  6 Oct 2023 19:12:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F27A40607
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QX0IWHbWWaTk; Fri,  6 Oct 2023 19:12:46 +0000 (UTC)
+	with ESMTP id FDtf0BPgqpqt; Fri,  6 Oct 2023 19:12:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 190BD43004;
-	Fri,  6 Oct 2023 19:12:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 190BD43004
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A97B41BF317
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64EF542EC2;
+	Fri,  6 Oct 2023 19:12:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64EF542EC2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D69F71BF997
  for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 19:11:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 82A006FA7F
- for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 19:11:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82A006FA7F
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9C69417B1
+ for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 19:11:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9C69417B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y-ewXyyTg6PM for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YdAinDNwpahF for <buildroot@lists.busybox.net>;
  Fri,  6 Oct 2023 19:11:06 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 28BC86FA60
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EE5A9418CD
  for <buildroot@buildroot.org>; Fri,  6 Oct 2023 19:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28BC86FA60
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A931C0005;
- Fri,  6 Oct 2023 19:11:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE5A9418CD
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 27F82240008;
+ Fri,  6 Oct 2023 19:11:03 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peko@48ers.dk>)
- id 1qoqDx-00AHbH-Iw; Fri, 06 Oct 2023 21:10:57 +0200
+ id 1qoqDz-00AHbk-I2; Fri, 06 Oct 2023 21:10:59 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Oct 2023 21:10:44 +0200
-Message-Id: <20231006191049.2450822-7-peter@korsgaard.com>
+Date: Fri,  6 Oct 2023 21:10:48 +0200
+Message-Id: <20231006191049.2450822-11-peter@korsgaard.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231006191049.2450822-1-peter@korsgaard.com>
 References: <20231006191049.2450822-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH 07/12] package/gst1-libav: bump to version 1.22.6
+Subject: [Buildroot] [PATCH 11/12] package/gst-omx: bump to version 1.22.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,33 +68,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index c3e84a17d2..251e924792 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+index d4a95c631a..5878991b5b 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ b/package/gstreamer1/gst-omx/gst-omx.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.22.2.tar.xz.sha256sum
--sha256  fcaaf9878fe8f3bc82317ef13a1558824cb68df1f8968c6797f556c5e33bcffd  gst-libav-1.22.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.22.6.tar.xz.sha256sum
-+sha256  7789e6408388a25f23cbf948cfc5c6230d735bbcd8b7f37f4a01c9e348a1e3a7  gst-libav-1.22.6.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 0306db42c0..23d4a29799 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.2.tar.xz.sha256sum
+-sha256  1b0c57f2cc4ddeec5e7f0c436e502f06665c4e93c73261855b94e04fc94337b2  gst-omx-1.22.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.6.tar.xz.sha256sum
++sha256  223833c42518ad7eb1923bb4dd3726809f59a66d6e9aaaa69cb29ad0750c8758  gst-omx-1.22.6.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index 87f162f715..3d2ba90290 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_LIBAV_VERSION = 1.22.2
-+GST1_LIBAV_VERSION = 1.22.6
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_LICENSE = LGPL-2.1+
+-GST_OMX_VERSION = 1.22.2
++GST_OMX_VERSION = 1.22.6
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ 
 -- 
 2.30.2
 
