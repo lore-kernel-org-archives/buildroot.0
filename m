@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1396E94105
-	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 19:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AE6EE94101
+	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 19:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A4BC43010;
-	Fri,  6 Oct 2023 19:13:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A4BC43010
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3155343014;
+	Fri,  6 Oct 2023 19:13:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3155343014
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ky5llydmKo2f; Fri,  6 Oct 2023 19:13:10 +0000 (UTC)
+	with ESMTP id t0oAMcvFGtlK; Fri,  6 Oct 2023 19:13:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBDDE42FC8;
-	Fri,  6 Oct 2023 19:13:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBDDE42FC8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 23FB91BF317
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A94E43011;
+	Fri,  6 Oct 2023 19:13:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A94E43011
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 96DD51BF317
  for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 19:11:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDAF340A67
- for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 19:11:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDAF340A67
+ by smtp3.osuosl.org (Postfix) with ESMTP id 700F36FA60
+ for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 19:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 700F36FA60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3UTY9zKib2XC for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n1zLu6qi-o9B for <buildroot@lists.busybox.net>;
  Fri,  6 Oct 2023 19:11:07 +0000 (UTC)
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8433F42E9C
- for <buildroot@buildroot.org>; Fri,  6 Oct 2023 19:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8433F42E9C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BABA520005;
- Fri,  6 Oct 2023 19:11:04 +0000 (UTC)
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 204976FA81
+ for <buildroot@buildroot.org>; Fri,  6 Oct 2023 19:11:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 204976FA81
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7DAA620004;
+ Fri,  6 Oct 2023 19:11:03 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peko@48ers.dk>)
- id 1qoqE0-00AHbq-2U; Fri, 06 Oct 2023 21:11:00 +0200
+ id 1qoqDy-00AHbT-J4; Fri, 06 Oct 2023 21:10:58 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Oct 2023 21:10:49 +0200
-Message-Id: <20231006191049.2450822-12-peter@korsgaard.com>
+Date: Fri,  6 Oct 2023 21:10:46 +0200
+Message-Id: <20231006191049.2450822-9-peter@korsgaard.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231006191049.2450822-1-peter@korsgaard.com>
 References: <20231006191049.2450822-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH 12/12] package/gstreamer1-editing-services: bump
- to version 1.22.6
+Subject: [Buildroot] [PATCH 09/12] package/gst1-rtsp-server: bump to version
+ 1.22.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,35 +69,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gstreamer1-editing-services.hash                          | 4 ++--
- .../gstreamer1-editing-services.mk                            | 2 +-
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 0cdb18ea5d..11e93b8b65 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.2.tar.xz.sha256sum
--sha256  453b1464fc3857de269a7cb0ebd966afe02171d97bef672a0b8a0a6d43e0cebf  gst-editing-services-1.22.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.6.tar.xz.sha256sum
-+sha256  748d423672c597f876e130804fb984848f5b4b89efd78a506cb17f7646795301  gst-editing-services-1.22.6.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 9fdc877db0..bea59f256b 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index c98d10d79c..521a91ddd7 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+@@ -1,4 +1,4 @@
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.2.tar.xz.sha256sum
+-sha256  2be4aecfb88710100ea7115ed0216403e8094344ebf146094271b8d4d73828bf  gst-rtsp-server-1.22.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.6.tar.xz.sha256sum
++sha256  0ae33a8b50443b62f11581a9181e906b41cd3877b2d799dbea72912c3eda4bb3  gst-rtsp-server-1.22.6.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index 6f5fc4f7aa..46d7606b1d 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.2
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.6
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+-GST1_RTSP_SERVER_VERSION = 1.22.2
++GST1_RTSP_SERVER_VERSION = 1.22.6
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.1+
 -- 
 2.30.2
 
