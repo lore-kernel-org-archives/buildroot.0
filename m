@@ -4,67 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F353AE94115
-	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 20:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A608EE94115
+	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 20:16:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E64760F37;
-	Fri,  6 Oct 2023 20:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E64760F37
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21C8E6FABB;
+	Fri,  6 Oct 2023 20:16:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21C8E6FABB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0w3SwPJvpA1W; Fri,  6 Oct 2023 20:09:15 +0000 (UTC)
+	with ESMTP id 1qYzK5sOV584; Fri,  6 Oct 2023 20:15:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A26B260FA4;
-	Fri,  6 Oct 2023 20:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A26B260FA4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C31081BF2B5
- for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 20:09:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 194696FABC;
+	Fri,  6 Oct 2023 20:15:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 194696FABC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 07D221BF2B5
+ for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 20:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BF3F83BC7
- for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 20:09:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BF3F83BC7
+ by smtp2.osuosl.org (Postfix) with ESMTP id D539640114
+ for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 20:15:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D539640114
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3xVc9_gWYavd for <buildroot@lists.busybox.net>;
- Fri,  6 Oct 2023 20:09:11 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4BEB083BC0
- for <buildroot@buildroot.org>; Fri,  6 Oct 2023 20:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BEB083BC0
-Received: from webmail.free.fr (unknown [172.20.246.2])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id opY_p-6fSefw for <buildroot@lists.busybox.net>;
+ Fri,  6 Oct 2023 20:15:54 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6A732400AF
+ for <buildroot@buildroot.org>; Fri,  6 Oct 2023 20:15:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A732400AF
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 21B415FE03;
- Fri,  6 Oct 2023 22:09:07 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:56562])
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id A373EB0057C;
+ Fri,  6 Oct 2023 22:15:51 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41492])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 06 Oct 2023 22:09:07 +0200
+ with HTTP (HTTP/1.0 POST); Fri, 06 Oct 2023 22:15:51 +0200
 MIME-Version: 1.0
-Date: Fri, 06 Oct 2023 22:09:07 +0200
+Date: Fri, 06 Oct 2023 22:15:51 +0200
 From: Julien Olivain <ju.o@free.fr>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-In-Reply-To: <20230926154703.160448-1-yann.morin.1998@free.fr>
-References: <20230926154703.160448-1-yann.morin.1998@free.fr>
+In-Reply-To: <f57167b1488b3c5ad76362dd8bca1b12d281aa19.1696522656.git.yann.morin.1998@free.fr>
+References: <cover.1696522656.git.yann.morin.1998@free.fr>
+ <f57167b1488b3c5ad76362dd8bca1b12d281aa19.1696522656.git.yann.morin.1998@free.fr>
 User-Agent: Webmail Free/1.6.3
-Message-ID: <ba14bf4c30a93426a052d846729ec05c@free.fr>
+Message-ID: <4b6283fd3a4f2c41d17a0be305e5b055@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696622948;
- bh=EgM+T2nhfQG4SVSVIVKXpS3fuLgrYAJhgEnoZRnssmk=;
+ d=free.fr; s=smtp-20201208; t=1696623352;
+ bh=/KF+DARxBfRrWvtlLLIsiKVwmvM0yR/22BdllP9px84=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=eyaUOJZ+qWwDQP4qqILBd2aNsCuX8nOq99GXNl0xu4uOl+cNMvqKEW45B6sHDS+Dx
- SKpZvYGaxPp3kuNSIk7MaDP/nitilIrCvmYPG3dYSydYS9UW7lTxDdFoBdruHGCGyK
- gDtI7sEogXnEQZLHP4uNSnvOZMiBSGnCHIcw42P9fYs6zWq2LTpR9Nt/bt7h9WRtmn
- BeKWlo3uPhXTYNV/7PymesbfOdQkJrIA3pcXzF54I1WSpbGtwVl2Y0r7OvwUm9v8eo
- 3wop8BcS1lcY7s0nzO5lZWuW+7wtoquHEOhxc+mfVCNdc5j15VCSs2qIZNVQiz7NOr
- k7z8DkZAbg+bA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=cRh7U9CZTRrrWMTXQy7PkzCaVDzqaNT5N0s4+5tjioi5kdB5LBefr/7m+1CRitRli
+ 05VoJWk8JYM4sKbztfIQH3n+MrnycN7o1fJiqTdVzBWGYR2Lli4z2VTg8fFpet+yXc
+ mE1byX8G//I5FTx/YXLSCqwleDXw1yPcoEqNnzH3nE1St0hta7Dc5imczUcGnpMzPC
+ ABrj/O5peXdC9/g65bWe/6cBMZwONcrDqnBJ7LpFsfJjRIkeVXd0shbgnTmXbJLBuB
+ N5Mglr/fl8ToGhXSV4TCyvbhkaajQrlPGDq+Ng61XkPEAtSpiNvNQif/6Dlyr5OjEl
+ 1YZ/pr5wY3pyg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=eyaUOJZ+
-Subject: Re: [Buildroot] [PATCH] support/runtime-test: fix weston test
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cRh7U9CZ
+Subject: Re: [Buildroot] [PATCH 1/2 v2] support/runtime-test: add helper to
+ test graphics rendering
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,88 +86,228 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Yann,
 
-On 26/09/2023 17:47, Yann E. MORIN wrote:
-> The weston runtime test uses the CRC of the framebuffer to detect that
-> "something" is being drawned on the framebuffer. This requires that the
-> sampling of the CRC happens does not happen too early after trigerring
-> an action, or the rendering may be not be finishe, either:
+Thanks for this patch!
+
+On 05/10/2023 18:17, Yann E. MORIN wrote:
+> In 4edb0e3456ef (support/testing/tests/package/test_weston.py: new
+> runtime test), the weston test was introduced, and thus was the first
+> that needed to test that rendering was happening.
 > 
->   - weston may not have had time to initialise, or
->   - the test application may not have started rednering,
+> Now we also have a test for a flutter application, and we'll want to
+> have it test the rendering too.
 > 
-> The sequence of rendering that has been observed yields this sequence 
-> of
-> CRCs (elided for brevity):
+> Move the corresponding code to a helper that can be reused by other
+> tests, rather than duplicate (or reinvent) it.
 > 
->   - boot:
->     - alternating between 0x4c4126bf and 0x5d2f9aa5: console cursor
->       blinking
-> 
->   - start weston:
->     - 0x4c4126bf: weston switches to an clearted vt)
->       ...
->     - 0xe54b7895: weston is starting
->       ...
->     - 0xe54b7895: wayland socket appears!
->       ...
->     - 0x6bf28bdf: weston is ready
->       ...
-> 
->   - start weston-simple-egl:
->     - 0x6bf28bdf: application is starting
->       ...
->     - 0xNNNNNNNN: random CRCs while the application renders
->       ...
-> 
->   - stop weston-simple-egl:
->     - 0xNNNNNNNN: izero, one, or two random CRCs while the application
->         renders before it handles SIGTERM
->     - 0x6bf28bdf: application is stopped
->       ...
-> 
->   - stop weston:
->     - 0x6bf28bdf: a few CRC identical to when weston was started, while
->         weston is processing SIGTERM
->     - ocillating between 0x4c4126bf and 0x5d2f9aa5: console cursor
->         blinking, back to initial vt, weston dead.
-> 
-> So, we need to wait "enough" after each action. Moreover, when the
-> wayland socket appears, weston may not have stabilised yet, so we also
-> need to wait after the socket appears.
+> Switch weston to using that new helper.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > Cc: Julien Olivain <ju.o@free.fr>
 > ---
->  support/testing/tests/package/test_weston.py | 1 +
->  1 file changed, 1 insertion(+)
+>  support/testing/tests/graphics_base.py       | 39 +++++++++++++
+>  support/testing/tests/package/test_weston.py | 61 ++++----------------
+>  2 files changed, 49 insertions(+), 51 deletions(-)
+>  create mode 100644 support/testing/tests/graphics_base.py
 > 
+> diff --git a/support/testing/tests/graphics_base.py 
+> b/support/testing/tests/graphics_base.py
+> new file mode 100644
+> index 0000000000..15a4c00bb2
+> --- /dev/null
+> +++ b/support/testing/tests/graphics_base.py
+> @@ -0,0 +1,39 @@
+> +class GraphicsBase:
+
+For those graphics tests (llvmpipe/swrast Mesa3D, VKMS) to work
+properly, there is some common mandatory configurations which
+will always be needed. I am mainly thinking about:
+
+     BR2_PACKAGE_LIBDRM=y
+     BR2_PACKAGE_MESA3D=y
+     BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+     BR2_PACKAGE_MESA3D_LLVM=y
+     BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+     BR2_PACKAGE_MESA3D_OPENGL_ES=y
+
+The Kernel will also always need at least:
+
+     CONFIG_DEBUG_FS=y
+     CONFIG_DRM_VKMS=y
+
+In term of cpu architecture and emulated machine, there is no
+mandatory requirements, but to achieve decent test execution speed, a
+fast "machines" that also allow SMP and higher amount of memory are
+recommended. armv5-7 machines can be limited in maximum amount of
+memory and slow to execute Mesa3D. So x86_64 pc, Aarch64 or RISC-V 64bit
+virt will generally be architectures/machines of choice.
+
+Do you think it would be relevant to provide some base reference
+Buildroot+Kernel configs or templates, and the emulator startup
+command line in this base class?
+
+> +    def get_n_fb_crc(self, *, count=10, uniq=False, timeout=-1):
+> +        """
+> +        Return count DRM CRC from the framebuffer. If uniq is True,
+> +        only unique CRCs are returned (which may be less than the
+> +        requested cont).
+> +        Returns a possibly empty list of integers.
+> +        Set timeout to -1 for no timeout, or to a positive number for
+> +        a timeout of that many seconds.
+> +        """
+> +        # DRM CRCs are exposed through a sysfs pseudo file
+> +        try:
+> +            self.debugfs_mounted
+> +        except AttributeError:
+> +            # Note: some init system (e.g. systemd) may have this 
+> already
+> +            # mounted, so check beforehand
+> +            self.assertRunOk("mountpoint /sys/kernel/debug/ || mount 
+> -t debugfs none /sys/kernel/debug/")
+> +            self.debugfs_mounted = True
+> +
+> +        # The first column is the frame number, the second column is 
+> the
+> +        # CRC measure. We use "head" to get the needed CRC count.
+> +        disp_crc_path = "/sys/kernel/debug/dri/0/crtc-0/crc/data"
+> +        cmd = f"head -{count} {disp_crc_path}"
+> +
+> +        # The DRM CRC sysfs pseudo file lines are terminated by '\n'
+> +        # and '\0'. We remove the '\0' to have a text-only output.
+> +        cmd += " | tr -d '\\000'"
+> +
+> +        # Finally, we drop the frame counter, and keep only the second
+> +        # column (CRC values)
+> +        cmd += " | cut -f 2 -d ' '"
+> +
+> +        if uniq:
+> +            cmd += " | sort -u"
+> +
+> +        output, exit_code = self.emulator.run(cmd, timeout=timeout)
+> +        self.assertTrue(exit_code == 0, f"'{cmd}' failed with exit 
+> code {exit_code}")
+> +
+> +        return [int(crc, 16) for crc in output]
 > diff --git a/support/testing/tests/package/test_weston.py 
 > b/support/testing/tests/package/test_weston.py
-> index 276788c649..df1b7a4135 100644
+> index df1b7a4135..f37a73565f 100644
 > --- a/support/testing/tests/package/test_weston.py
 > +++ b/support/testing/tests/package/test_weston.py
-> @@ -78,6 +78,7 @@ class TestWeston(infra.basetest.BRTest):
->          wayland_socket = "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}"
->          cmd = f"while [ ! -e \"{wayland_socket}\" ] ; do sleep 1 ; 
-> done"
->          self.assertRunOk(cmd, timeout=10)
-> +        time.sleep(4)
-
-I was wondering if it would be relevant to add a BRTest.sleep() method
-for sleeping on the host test controller, that would adjust the sleep
-time with BRTest.timeout_multiplier.
-
-Since those sleep times are meant to adjust the host test controller
-with emulator execution speed, I believe it would also make sense to
-multiply those sleep time as same as timeout_multiplier for pexect
-timeouts. (Maybe timeout_multiplier will need to be renamed to
-something else like speed_multiplier).
-
-What do you think?
-
+> @@ -2,9 +2,10 @@ import os
+>  import time
 > 
->      def stop_weston(self):
->          cmd = "killall weston && sleep 3"
+>  import infra.basetest
+> +from ..graphics_base import GraphicsBase
+> 
+> 
+> -class TestWeston(infra.basetest.BRTest):
+> +class TestWeston(infra.basetest.BRTest, GraphicsBase):
+>      config = \
+>          """
+>          BR2_aarch64=y
+> @@ -36,31 +37,6 @@ class TestWeston(infra.basetest.BRTest):
+>                  
+> infra.filepath("tests/package/test_weston/linux-vkms.fragment")
+>               )
+> 
+> -    def gen_read_disp_crcs_cmd(self, count=1):
+> -        # DRM CRCs are exposed through a sysfs pseudo file, one 
+> measure
+> -        # per line. The first column is the frame number, the second
+> -        # column is the CRC measure. We use "head" to get the needed
+> -        # CRC count.
+> -        disp_crc_path = "/sys/kernel/debug/dri/0/crtc-0/crc/data"
+> -        cmd = f"head -{count} {disp_crc_path}"
+> -
+> -        # The DRM CRC sysfs pseudo file lines are terminated by '\n'
+> -        # and '\0'. We remove the '\0' to have a text-only output.
+> -        cmd += " | tr -d '\\000'"
+> -
+> -        # Finally, we drop the frame counter, and keep only the second
+> -        # column (CRC values)
+> -        cmd += " | cut -f 2 -d ' '"
+> -
+> -        return cmd
+> -
+> -    def gen_count_unique_disp_crcs_cmd(self, count=10):
+> -        # We get the command generating one CRC per line...
+> -        cmd = self.gen_read_disp_crcs_cmd(count)
+> -        # ...then count the number of unique values
+> -        cmd += " | uniq | wc -l"
+> -        return cmd
+> -
+>      def start_weston(self):
+>          self.assertRunOk("export XDG_RUNTIME_DIR=/tmp")
+> 
+> @@ -106,25 +82,14 @@ class TestWeston(infra.basetest.BRTest):
+>          # Check a simple info client can communicate with the 
+> compositor
+>          self.assertRunOk("wayland-info", timeout=10)
+> 
+> -        # This test will use the Kernel VKMS DRM Display CRC support,
+> -        # which is exposed in debugfs. See:
+> -        # 
+> https://docs.kernel.org/gpu/drm-uapi.html#display-crc-support
+> -        self.assertRunOk("mount -t debugfs none /sys/kernel/debug/")
+> -
+>          # We get 10 consecutive DRM frame CRCs and count how many
+>          # unique CRCs we have. Since weston is supposed to run idle,
+>          # we should have 10 times the same display CRC.
+> -        cmd = self.gen_count_unique_disp_crcs_cmd()
+> -        output, exit_code = self.emulator.run(cmd)
+> -        self.assertEqual(exit_code, 0)
+> -        self.assertEqual(int(output[0]), 1)
+> +        self.assertTrue(len(self.get_n_fb_crc(uniq=True)) == 1)
+> 
+>          # We save the CRC value of an empty weston desktop for
+>          # later...
+> -        cmd = self.gen_read_disp_crcs_cmd()
+> -        output, exit_code = self.emulator.run(cmd)
+> -        self.assertEqual(exit_code, 0)
+> -        weston_desktop_crc = int(output[0], 16)
+> +        weston_desktop_crc = self.get_n_fb_crc(count=1)[0]
+> 
+>          # We start the weston-simple-egl in background...  Every
+>          # rendered frame is supposed to be different (as the triangle
+> @@ -138,10 +103,8 @@ class TestWeston(infra.basetest.BRTest):
+>          # display something, we are now supposed to measure a
+>          # different display CRC than the one we measured when the
+>          # desktop was empty.
+> -        cmd = self.gen_read_disp_crcs_cmd()
+> -        output, exit_code = self.emulator.run(cmd)
+> -        self.assertEqual(exit_code, 0)
+> -        self.assertNotEqual(int(output[0], 16), weston_desktop_crc)
+> +        crc = self.get_n_fb_crc(count=1)[0]
+> +        self.assertNotEqual(crc, weston_desktop_crc)
+> 
+>          # While weston-simple-egl is running, we check the VKMS DRM
+>          # CRCs are now changing. We get many CRCs, one per display
+> @@ -152,10 +115,8 @@ class TestWeston(infra.basetest.BRTest):
+>          # remain very permissive to slow emulation situations.
+>          # Increase timeout, as the command is expected to run about 
+> 5s,
+>          # which is the default timeout.
+> -        cmd = self.gen_count_unique_disp_crcs_cmd(300)
+> -        output, exit_code = self.emulator.run(cmd, timeout=10)
+> -        self.assertEqual(exit_code, 0)
+> -        self.assertGreaterEqual(int(output[0]), 5)
+> +        crcs = self.get_n_fb_crc(count=300, timeout=10)
+> +        self.assertGreaterEqual(len(crcs), 5)
+> 
+>          # We stop weston-simple-egl, and sleep a bit to let Weston do
+>          # its cleanup and desktop repaint refresh...
+> @@ -165,10 +126,8 @@ class TestWeston(infra.basetest.BRTest):
+>          # After we stopped the application, we should have the initial
+>          # weston desktop background. The CRC we measure now should be
+>          # the same as the one we saved earlier.
+> -        cmd = self.gen_read_disp_crcs_cmd()
+> -        output, exit_code = self.emulator.run(cmd)
+> -        self.assertEqual(exit_code, 0)
+> -        self.assertEqual(int(output[0], 16), weston_desktop_crc)
+> +        crc = self.get_n_fb_crc(count=1)[0]
+> +        self.assertEqual(crc, weston_desktop_crc)
+> 
+>          self.stop_weston()
+> 
 > --
 > 2.25.1
 
