@@ -1,85 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0F7CE936FC
-	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 11:11:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 256DDE81DEB
+	for <buildroot@archiver.kernel.org>; Fri,  6 Oct 2023 11:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50EEF41DE4;
-	Fri,  6 Oct 2023 11:11:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50EEF41DE4
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF74B60F76;
+	Fri,  6 Oct 2023 11:42:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF74B60F76
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BQhVI5FsgFMt; Fri,  6 Oct 2023 11:11:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z7A983MToIIf; Fri,  6 Oct 2023 11:42:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5C3B41DED;
-	Fri,  6 Oct 2023 11:11:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5C3B41DED
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13AD160EF2;
+	Fri,  6 Oct 2023 11:42:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13AD160EF2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 169C21BF38B
- for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 11:11:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D781D1BF4E3
+ for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 11:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F147C82768
- for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 11:11:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F147C82768
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA66183B6F
+ for <buildroot@lists.busybox.net>; Fri,  6 Oct 2023 11:42:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA66183B6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LXSrdMUmbKid for <buildroot@lists.busybox.net>;
- Fri,  6 Oct 2023 11:11:36 +0000 (UTC)
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com
- [IPv6:2607:f8b0:4864:20::b35])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 889BA82438
- for <buildroot@buildroot.org>; Fri,  6 Oct 2023 11:11:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 889BA82438
-Received: by mail-yb1-xb35.google.com with SMTP id
- 3f1490d57ef6-d90da64499cso2200951276.0
- for <buildroot@buildroot.org>; Fri, 06 Oct 2023 04:11:36 -0700 (PDT)
+ with ESMTP id ol8DuTJ4jqQK for <buildroot@lists.busybox.net>;
+ Fri,  6 Oct 2023 11:42:35 +0000 (UTC)
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 76E7883B5E
+ for <buildroot@buildroot.org>; Fri,  6 Oct 2023 11:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76E7883B5E
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-504b84d59cbso2681387e87.3
+ for <buildroot@buildroot.org>; Fri, 06 Oct 2023 04:42:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696590695; x=1697195495;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=sgJUawckDTz5STYjRplnp98XGx7v6xfZlXZ3M/nNThU=;
- b=KAdXW4OLpXJjCge3+ZBns1N5zoxQD82jvwAKb9ow9/iIUVz1WAxz+W2l1WHBvX75DE
- JKKHvK6WLzDdXp3GS9+ibMYTpGt+gLlfzcrlfQVjeRck5BPgx3tkXlxbqmNdGYpSzVTz
- jMlzj4lDiNcfAzfj/9dryfdaIZc9swx1GLCltxoa1ZFh1neRFKwMFk7ZXsrWzckEB5Ig
- Y7UZ8kW29MmXC7s1tsl4upazypX3jSD6Xqxxzf0a8whxOMCs6ds9GGVlyHP1vhW4AzbR
- 3j8FunZIpYPapNrJ89aBwfCoa/P5vYNBmLewbgKvkjfp+RJX2y/fPlmNxMtnKkVPt309
- 5J6w==
-X-Gm-Message-State: AOJu0YwhJIYEnrdC70Bpjohf8LO/nRiWsA4AEz9OrcrQR+ZqXEotFuvk
- sckIRWBkJtaOoFZMpJ+iXZz3ZwKEy13U8ITY0xwDbwKobF8=
-X-Google-Smtp-Source: AGHT+IGabg2wwZ1+WWn1/k38Z8Po5eohUpAMikytKNwiRQcKf2IR7tl/neYhE8Bhk5CvssqFTn1V+hhrgHkQ/PimV9U=
-X-Received: by 2002:a25:acd2:0:b0:d4a:d2e2:afe0 with SMTP id
- x18-20020a25acd2000000b00d4ad2e2afe0mr8087115ybd.14.1696590695329; Fri, 06
- Oct 2023 04:11:35 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1696592553; x=1697197353;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=/apvXQe0z2VJ+EBCb9ANvO1mYMCqOM1Pa3bLxgqPRFk=;
+ b=rfnHrrrA01+XLjgUSSR1rpWJht63gm1V12WcXDK2nWzTj9avkztmrpYerqsE9cH1Ui
+ AVcJmfoorSUCmXFMWnaf7HZdFTtXlNLgImDj+GzamcTRF5aripO4F2hCuBWKtyDqqLf3
+ vQxCa7GxgdPAXvnrGzxCCLZajbvO65yAKbRBwT8RY+i1ezAAw0mEf+ivwRFmqOTiVKHL
+ TmzAQ/Kf5Ip9rvv61UFTS8u4Tg3C2XjQUK3SeYTzeOvINVXKhjK2z6Pvi7XybM/nKNHd
+ oiPREGu7PvLAGdDfyFU+QDeRjtZsATtvfzhEI4doJUAfPk1FJbRjXMvkGhNRCr9Shwg/
+ XHkw==
+X-Gm-Message-State: AOJu0YwuxRdsxg7QuIdQp5BuoPjWtJLo/gJYVB7yxEw1rZcP0UhU4L9l
+ 15GUulIiD7RjsQMQ2uOFhq8/5t67Ozw=
+X-Google-Smtp-Source: AGHT+IFP5xteb5dd/e+1F0rofTEQ5xA7toSbRSEzwFxmpdgZryODUWjdgZteL0N3Vikn6VKkutwCrA==
+X-Received: by 2002:a05:6512:3488:b0:4fd:fd97:a77b with SMTP id
+ v8-20020a056512348800b004fdfd97a77bmr5762093lfr.50.1696592552518; 
+ Fri, 06 Oct 2023 04:42:32 -0700 (PDT)
+Received: from gmail.com (83-233-6-197.cust.bredband2.com. [83.233.6.197])
+ by smtp.gmail.com with ESMTPSA id
+ f15-20020a056512092f00b00502ae64f46asm272782lft.126.2023.10.06.04.42.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 06 Oct 2023 04:42:31 -0700 (PDT)
+Date: Fri, 6 Oct 2023 13:46:09 +0200
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+To: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>
+Message-ID: <ZR_zgRyH8g13D2y4@gmail.com>
+References: <20230918084825.786715-1-marcus.folkesson@gmail.com>
 MIME-Version: 1.0
-References: <cover.1696522656.git.yann.morin.1998@free.fr>
- <33ee4b08c20f9c4566cfe82c648f01599cab70b5.1696522656.git.yann.morin.1998@free.fr>
-In-Reply-To: <33ee4b08c20f9c4566cfe82c648f01599cab70b5.1696522656.git.yann.morin.1998@free.fr>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 6 Oct 2023 13:11:23 +0200
-Message-ID: <CAFSsvmoFOWqWunvi0bv6q_N+LXBVfB8QjNs0_hfQzQLOwwOKVg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <20230918084825.786715-1-marcus.folkesson@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696590695; x=1697195495; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=sgJUawckDTz5STYjRplnp98XGx7v6xfZlXZ3M/nNThU=;
- b=K7d4DxCdVr9FZQzOPagUWTCDPHlTLEm4vJt120T/5kkn8Fn+AJmzQ7UdIUy9KwTsFl
- +jWcZoaUV9yMzYFNjZze/uIpVhWBuy4VZfte3IVXaTgJua4bS7TgEl58MQemmoWq85lb
- 7tCD6WsfiayEeEKkR+ceNH96+Kh2B/QD9jLmawYpPaBSI/kjPsIjlqeDXTMTjgnN1Mb4
- sm6mnW86SamApgZuQC97HCiUfZB2/b90XsW9NueDiBGoskeXhaTT+fxNgczZNT7u6E3q
- TWBOg/2nOXzknsUpGkP14hDlzcY5wds1irl7R6W8d5/emt1CxSA2M8FYFmMIXxW27Cor
- qUlQ==
+ d=gmail.com; s=20230601; t=1696592553; x=1697197353; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=/apvXQe0z2VJ+EBCb9ANvO1mYMCqOM1Pa3bLxgqPRFk=;
+ b=lrPaDqOnRVJHAGXbJ8BvarmNGqND7slIT8E1yEgpue5/Fmeok00W7PWU2wicBO4nf9
+ 20aAHkOKambOLzvolj5WgcNa3lcI87LpsbVBidxcmtzcZpb8s6h9CK306zrDj7DiQOqF
+ qOAidZYr9ENzvJbrKM3JWepj5Zy2srFL8244nsbBD1/SrlEnJ5yzSi9w5VIcCPSl7f5m
+ sCTeovNYdm4gORfhPRcnShTRtMf0TFtoG5a7TKlKjapy8bxd5RWQetdhUGf7EtvY3qkI
+ HtaEs0q0bBH9DCQYbGOYShQSmwaZW/VREHmb3Um0+OC5wG7ZVzLNv1Y5xGAc+PAMvYz6
+ K6/A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=K7d4DxCd
-Subject: Re: [Buildroot] [PATCH 2/2 v2] suport/runtime-test: extend flutter
- test to check rendering is happening
+ header.a=rsa-sha256 header.s=20230601 header.b=lrPaDqOn
+Subject: Re: [Buildroot] [PATCH v3] package/criu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,310 +95,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2966291925262370527=="
+Content-Type: multipart/mixed; boundary="===============6050209783335439246=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2966291925262370527==
-Content-Type: multipart/alternative; boundary="000000000000b973a306070a4d11"
 
---000000000000b973a306070a4d11
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--===============6050209783335439246==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="MirNQ5KRK9WC1pDd"
+Content-Disposition: inline
 
-Looks good to me!
 
-Reviewed-by: Adam Duskett <aduskett@gmail.com>
+--MirNQ5KRK9WC1pDd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Oct 5, 2023 at 6:17=E2=80=AFPM Yann E. MORIN <yann.morin.1998@free.=
-fr>
-wrote:
 
-> Commit 7f0af11cee31 (support/testing/tests/package/test_flutter.py: new
-> runtime test) added a simple test that just checked that the systemd
-> unit launching the application, was active.
->
-> It is perfectly possible, from a systemd perspective, that the unit is
-> active, while the application actually crashes.
->
-> Instead, what we need to check, is that the application does actually
-> render "something"; we don't really care what, as long as we know it is
-> actually rendering, thus the graphical stack is working and the
-> aplication stack is running.
->
-> Extend the flutter runtime test to also check that the framebuffer is
-> modified by the application when it is running, similarly to what we do
-> in the weston test.
->
-> We drop the activation of the unit and start it manually, as we want to
-> check the state of the CRC before, while, and after the application
-> runs.
->
-> We also need to disable the blinking cursor on the console, or we would
-> not be able to detect whether a change in CRC is due to the application
-> starting rendering, or to the cursor blinking. We tell the kernel to
-> disable the cursor with the appropriate kernel command line parameter.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
->
-> ---
-> Changes v1 -> v2:
->   - don't mistake blinking cursor for application start  (Adam)
->   - properly terminate application  (Adam)
-> ---
->  support/testing/tests/package/test_flutter.py | 35 +++++++++++++++----
->  .../flutter-gallery.service                   |  1 -
->  2 files changed, 29 insertions(+), 7 deletions(-)
->  delete mode 120000
-> support/testing/tests/package/test_flutter/overlay/etc/systemd/system/mul=
-ti-user.target.wants/flutter-gallery.service
->
-> diff --git a/support/testing/tests/package/test_flutter.py
-> b/support/testing/tests/package/test_flutter.py
-> index a3e98a43e5..515c95409f 100644
-> --- a/support/testing/tests/package/test_flutter.py
-> +++ b/support/testing/tests/package/test_flutter.py
-> @@ -1,8 +1,11 @@
->  import os
-> +import time
->  import infra.basetest
->
-> +from ..graphics_base import GraphicsBase
->
-> -class TestFlutter(infra.basetest.BRTest):
-> +
-> +class TestFlutter(infra.basetest.BRTest, GraphicsBase):
->      config =3D f"""
->          BR2_aarch64=3Dy
->          BR2_TOOLCHAIN_EXTERNAL=3Dy
-> @@ -39,7 +42,7 @@ class TestFlutter(infra.basetest.BRTest):
->          self.emulator.boot(
->              arch=3D"aarch64",
->              kernel=3Dkern,
-> -            kernel_cmdline=3D["root=3D/dev/vda console=3DttyAMA0"],
-> +            kernel_cmdline=3D["root=3D/dev/vda console=3DttyAMA0
-> vt.global_cursor_default=3D0"],
->              options=3D["-M", "virt",
->                       "-cpu", "cortex-a57",
->                       "-m", "512M",
-> @@ -48,7 +51,27 @@ class TestFlutter(infra.basetest.BRTest):
->                       "-vnc", "none",
->                       "-drive", f"file=3D{img},if=3Dvirtio,format=3Draw"]=
-)
->          self.emulator.login()
-> -        cmd =3D "systemctl is-active flutter-gallery"
-> -        output, exit_code =3D self.emulator.run(cmd, 10)
-> -        self.assertEqual(exit_code, 0)
-> -        self.assertEqual(output[0], "active")
-> +
-> +        # Get the CRC from the current ramebuffer
-> +        empty_crc =3D self.get_n_fb_crc(count=3D1)[0]
-> +
-> +        # Start the gallery App. It can take a bit of time to start,
-> +        # so lets try a few times. 600 samples should cover about 10s
-> +        # @60Hz (although, the rendering could be much slower on slow
-> +        # machines)
-> +        self.assertRunOk("systemctl start flutter-gallery", timeout=3D10=
-)
-> +        for i in range(600):
-> +            gallery_crc =3D self.get_n_fb_crc(count=3D1)[0]
-> +            if gallery_crc !=3D empty_crc:
-> +                break
-> +            time.sleep(1)
-> +        self.assertNotEqual(gallery_crc, empty_crc, "gallery app did not
-> render anything on screen")
-> +
-> +        # Stop the application, and check it restored the framebuffer
-> content
-> +        self.assertRunOk("systemctl stop flutter-gallery", timeout=3D10)
-> +        for i in range(600):
-> +            gallery_crc =3D self.get_n_fb_crc(count=3D1)[0]
-> +            if gallery_crc =3D=3D empty_crc:
-> +                break
-> +            time.sleep(1)
-> +        self.assertEqual(gallery_crc, empty_crc, "gallery app did not
-> stop rendering")
-> diff --git
-> a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/m=
-ulti-user.target.wants/flutter-gallery.service
-> b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/m=
-ulti-user.target.wants/flutter-gallery.service
-> deleted file mode 120000
-> index 40993fb16c..0000000000
-> ---
-> a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/m=
-ulti-user.target.wants/flutter-gallery.service
-> +++ /dev/null
-> @@ -1 +0,0 @@
-> -../../../../usr/lib/systemd/system/flutter-gallery.service
-> \ No newline at end of file
-> --
-> 2.25.1
->
->
+Julien, do you have the posibility to run test-pkg on this patch?
 
---000000000000b973a306070a4d11
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I still get wierd errors (related to host-libzlib (?) ) for the
+bootlin-armv7-glibc toolchain.
 
-<div dir=3D"ltr"><div>Looks good to me!</div><div><br></div><div>Reviewed-b=
-y: Adam Duskett &lt;<a href=3D"mailto:aduskett@gmail.com">aduskett@gmail.co=
-m</a>&gt;</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gma=
-il_attr">On Thu, Oct 5, 2023 at 6:17=E2=80=AFPM Yann E. MORIN &lt;<a href=
-=3D"mailto:yann.morin.1998@free.fr">yann.morin.1998@free.fr</a>&gt; wrote:<=
-br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
-x;border-left:1px solid rgb(204,204,204);padding-left:1ex">Commit 7f0af11ce=
-e31 (support/testing/tests/package/test_flutter.py: new<br>
-runtime test) added a simple test that just checked that the systemd<br>
-unit launching the application, was active.<br>
-<br>
-It is perfectly possible, from a systemd perspective, that the unit is<br>
-active, while the application actually crashes.<br>
-<br>
-Instead, what we need to check, is that the application does actually<br>
-render &quot;something&quot;; we don&#39;t really care what, as long as we =
-know it is<br>
-actually rendering, thus the graphical stack is working and the<br>
-aplication stack is running.<br>
-<br>
-Extend the flutter runtime test to also check that the framebuffer is<br>
-modified by the application when it is running, similarly to what we do<br>
-in the weston test.<br>
-<br>
-We drop the activation of the unit and start it manually, as we want to<br>
-check the state of the CRC before, while, and after the application<br>
-runs.<br>
-<br>
-We also need to disable the blinking cursor on the console, or we would<br>
-not be able to detect whether a change in CRC is due to the application<br>
-starting rendering, or to the cursor blinking. We tell the kernel to<br>
-disable the cursor with the appropriate kernel command line parameter.<br>
-<br>
-Signed-off-by: Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr"=
- target=3D"_blank">yann.morin.1998@free.fr</a>&gt;<br>
-Cc: Adam Duskett &lt;<a href=3D"mailto:aduskett@gmail.com" target=3D"_blank=
-">aduskett@gmail.com</a>&gt;<br>
-<br>
----<br>
-Changes v1 -&gt; v2:<br>
-=C2=A0 - don&#39;t mistake blinking cursor for application start=C2=A0 (Ada=
-m)<br>
-=C2=A0 - properly terminate application=C2=A0 (Adam)<br>
----<br>
-=C2=A0support/testing/tests/package/test_flutter.py | 35 +++++++++++++++---=
--<br>
-=C2=A0.../flutter-gallery.service=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 -<br>
-=C2=A02 files changed, 29 insertions(+), 7 deletions(-)<br>
-=C2=A0delete mode 120000 support/testing/tests/package/test_flutter/overlay=
-/etc/systemd/system/multi-user.target.wants/flutter-gallery.service<br>
-<br>
-diff --git a/support/testing/tests/package/test_flutter.py b/support/testin=
-g/tests/package/test_flutter.py<br>
-index a3e98a43e5..515c95409f 100644<br>
---- a/support/testing/tests/package/test_flutter.py<br>
-+++ b/support/testing/tests/package/test_flutter.py<br>
-@@ -1,8 +1,11 @@<br>
-=C2=A0import os<br>
-+import time<br>
-=C2=A0import infra.basetest<br>
-<br>
-+from ..graphics_base import GraphicsBase<br>
-<br>
--class TestFlutter(infra.basetest.BRTest):<br>
-+<br>
-+class TestFlutter(infra.basetest.BRTest, GraphicsBase):<br>
-=C2=A0 =C2=A0 =C2=A0config =3D f&quot;&quot;&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0BR2_aarch64=3Dy<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0BR2_TOOLCHAIN_EXTERNAL=3Dy<br>
-@@ -39,7 +42,7 @@ class TestFlutter(infra.basetest.BRTest):<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0self.emulator.boot(<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arch=3D&quot;aarch64&quot;,=
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0kernel=3Dkern,<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 kernel_cmdline=3D[&quot;root=3D/=
-dev/vda console=3DttyAMA0&quot;],<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 kernel_cmdline=3D[&quot;root=3D/=
-dev/vda console=3DttyAMA0 vt.global_cursor_default=3D0&quot;],<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0options=3D[&quot;-M&quot;, =
-&quot;virt&quot;,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 &quot;-cpu&quot;, &quot;cortex-a57&quot;,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 &quot;-m&quot;, &quot;512M&quot;,<br>
-@@ -48,7 +51,27 @@ class TestFlutter(infra.basetest.BRTest):<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 &quot;-vnc&quot;, &quot;none&quot;,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 &quot;-drive&quot;, f&quot;file=3D{img},if=3Dvirtio,format=3Draw&quot;]=
-)<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0self.emulator.login()<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 cmd =3D &quot;systemctl is-active flutter-gall=
-ery&quot;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 output, exit_code =3D self.emulator.run(cmd, 1=
-0)<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.assertEqual(exit_code, 0)<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.assertEqual(output[0], &quot;active&quot;=
-)<br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # Get the CRC from the current ramebuffer<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 empty_crc =3D self.get_n_fb_crc(count=3D1)[0]<=
-br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # Start the gallery App. It can take a bit of =
-time to start,<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # so lets try a few times. 600 samples should =
-cover about 10s<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # @60Hz (although, the rendering could be much=
- slower on slow<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # machines)<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.assertRunOk(&quot;systemctl start flutter=
--gallery&quot;, timeout=3D10)<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 for i in range(600):<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 gallery_crc =3D self.get_n_fb_cr=
-c(count=3D1)[0]<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if gallery_crc !=3D empty_crc:<b=
-r>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 break<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 time.sleep(1)<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.assertNotEqual(gallery_crc, empty_crc, &q=
-uot;gallery app did not render anything on screen&quot;)<br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # Stop the application, and check it restored =
-the framebuffer content<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.assertRunOk(&quot;systemctl stop flutter-=
-gallery&quot;, timeout=3D10)<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 for i in range(600):<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 gallery_crc =3D self.get_n_fb_cr=
-c(count=3D1)[0]<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if gallery_crc =3D=3D empty_crc:=
-<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 break<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 time.sleep(1)<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 self.assertEqual(gallery_crc, empty_crc, &quot=
-;gallery app did not stop rendering&quot;)<br>
-diff --git a/support/testing/tests/package/test_flutter/overlay/etc/systemd=
-/system/multi-user.target.wants/flutter-gallery.service b/support/testing/t=
-ests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.want=
-s/flutter-gallery.service<br>
-deleted file mode 120000<br>
-index 40993fb16c..0000000000<br>
---- a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system=
-/multi-user.target.wants/flutter-gallery.service<br>
-+++ /dev/null<br>
-@@ -1 +0,0 @@<br>
--../../../../usr/lib/systemd/system/flutter-gallery.service<br>
-\ No newline at end of file<br>
--- <br>
-2.25.1<br>
-<br>
-</blockquote></div></div>
+bootlin-x86-64-musl is 'OK' though.
 
---000000000000b973a306070a4d11--
+Thanks,
+Marcus
 
---===============2966291925262370527==
+
+--MirNQ5KRK9WC1pDd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmUf830ACgkQiIBOb1ld
+UjII9Q/7B1Vh7qu5THbMNsyAe9oU5WZQ5sNqctibROHAd2a2TaY+BwMiJhyMKh/V
+gKDiVLijak/WI/gf+qup/ZjVHL8en5RBDjhwEs5gpkEz+LKxUP7VWzjPrJJ7zkYL
+/fQLclPsJ8PccQ6jgTtedA5lmeCNtrQ3vgsVKPjSAlpVDoxMjfp6VtIPW8DICrPG
+Jdt93nSxNwafDP6Yy2J1I0sa59T5iDB6Kzu+/YGAijodlry9qh51z91VB6HiZABH
+c5Z5rJr3tSgmCUu6v9AAFTKMAh1SdHbjdtC5FDuNnDgwOVGE77in1vYzWTQ9th3V
+84SD/ZsmJxiv09hJmMsUvxw9FakVQKG2IygmGtfSifY2nXCbXFCxWF5hfdyW/wlX
+a1YQrNIZR8n5XZzXgiEGj9QHHrrPPb7y0wo1O9ad8OHPh2GITJdpkA383sUMwqTP
+jvvd5suouIbgGDEXN5imkVRrLyZUkPuzacZca9Hv7KjN6kWwIzARhZeU45kf6Gcl
+3GLh0LvnIyUk8TQmbQGaR2bbcencoMr9eXY55Szv13myIc0gk6RzwJTTne8BnRNv
+oLkS+5g3rhIwFOa6daty1xYlrZ1TPWIfiSs9E9PGSt9HM0BnCuWw/fxL9d3ES4xZ
+LZcsG78c762J4r+mSpGli9YnbrdrXWohAQOWwdRrHY0RAvuXtjw=
+=ic8F
+-----END PGP SIGNATURE-----
+
+--MirNQ5KRK9WC1pDd--
+
+--===============6050209783335439246==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -405,4 +155,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2966291925262370527==--
+--===============6050209783335439246==--
