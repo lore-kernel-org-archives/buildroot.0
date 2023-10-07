@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C927E95A6A
-	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 20:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C72AE95A6A
+	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 20:41:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 055A0408FD;
-	Sat,  7 Oct 2023 20:40:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 055A0408FD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31EDB41769;
+	Sat,  7 Oct 2023 20:41:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31EDB41769
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ywpf4uNZ1OUF; Sat,  7 Oct 2023 20:40:18 +0000 (UTC)
+	with ESMTP id Cf4XXhIfqk4k; Sat,  7 Oct 2023 20:41:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2ED7402F4;
-	Sat,  7 Oct 2023 20:40:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2ED7402F4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 72BA41BF3BD
- for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 20:40:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1DE341772;
+	Sat,  7 Oct 2023 20:41:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1DE341772
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BC911BF3BD
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 20:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4BD8082299
- for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 20:40:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BD8082299
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7342441772
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 20:41:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7342441772
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FeelBV-aKb50 for <buildroot@lists.busybox.net>;
- Sat,  7 Oct 2023 20:40:15 +0000 (UTC)
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 10F068220B
- for <buildroot@buildroot.org>; Sat,  7 Oct 2023 20:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10F068220B
-Received: by mail-ed1-x52f.google.com with SMTP id
- 4fb4d7f45d1cf-52bd9ddb741so5742993a12.0
- for <buildroot@buildroot.org>; Sat, 07 Oct 2023 13:40:14 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s_Ds-I0voFJK for <buildroot@lists.busybox.net>;
+ Sat,  7 Oct 2023 20:41:37 +0000 (UTC)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1774D41769
+ for <buildroot@buildroot.org>; Sat,  7 Oct 2023 20:41:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1774D41769
+Received: by mail-ed1-x529.google.com with SMTP id
+ 4fb4d7f45d1cf-533d31a8523so5961765a12.1
+ for <buildroot@buildroot.org>; Sat, 07 Oct 2023 13:41:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696711213; x=1697316013;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=1e100.net; s=20230601; t=1696711295; x=1697316095;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=5LOK5SQWHPcgFxNRoILkjTkMbpZK49114xYP+crYX/w=;
- b=T0b8Opm4voIVdvMPt9inIncWTOcrxy8+/mKSn/Hbt8ty66MQ7VZ2T3bRt/BQz3xFF7
- eplJjnt2SI3TpLqRMEvHocQHPLcbWKJes2C1zyovFt7v7qXIFraaruU2Hf4mIam25xvc
- 3GkjEBo4q9r+zDQmSrFsI5FodhjCdGmA3VJpCu5oebbyQ/2SuX5n9ryUkoIfxItbI1pw
- LP0Mtiw+2uDSqtXnMC5Ckl1RsVh9eHCXf6xnMCNGWW0fUg/IAM7x2ZxEtLYA7uOQOky2
- z1sqEqWLlYsLtsA95C5T2dZBUrZr0FBjGm2dd5g9ADZBOkE2QQ6VmwqDZopMUp4jlIND
- S4pA==
-X-Gm-Message-State: AOJu0YzCGTZ4bNGdhbgl3RWYBFcuW3sRx2Dja23+fDaI4SOLdhXAN51f
- 5KwFlgIB0G+//cxvsKvVcbv4XLsniqvdKj7FPTc=
-X-Google-Smtp-Source: AGHT+IE0SVYuq/eSsLImTEhpnc5B8MXa2Jn18PzvpXFpLztSGMcJcN3/HyFkuMdc1TOnQVHN7OEOpw==
-X-Received: by 2002:a17:906:2d2:b0:9ad:8ef8:a7e8 with SMTP id
- 18-20020a17090602d200b009ad8ef8a7e8mr10739770ejk.25.1696711212959; 
- Sat, 07 Oct 2023 13:40:12 -0700 (PDT)
+ bh=XkeAyNVJqDvpL+beKPERexvxqxvxp2BP5tUTJPQ7EHQ=;
+ b=vBkHSa+V1Yw8sBaL8h5pOkiRFmOMCy1tzG/t0TDD2CXQeH8yZDL3wLw6NW0NsSQXVJ
+ sVrdbFA4k8qSC9ZPZZ0eGB74T23DDcD4hkY+GfyStAKIrU5Z46bzINsaZt38z9p1YViN
+ 0dcZKbwsY7HA7MvBcazA+i8qRuojf+0a4jDn5F+Ohm4t6QAGfgi2T47caC2Vmz8WJ2FG
+ 8Eyw1j7jqxjthe0w0xCjeBM4zo1185rC9GEnh8eDyPL+Ar0R8EjOtW6DhKuuAHpUPIPz
+ IkoB8LF5Yi/fC3f7z3dCFDSuWEFq2rEgwVu/RmG51XV7aAQ3j8wNhxzajQHcaycJbPoJ
+ jnlw==
+X-Gm-Message-State: AOJu0YzVnN+YETATvUMcnIJ+gr+YOwD8tUSfJlPvmVrOucwD+pdx4YVY
+ ShGOHTTXsJxx0Ec/DoAq8Dkoo0Vnyc+2j6XoYj0=
+X-Google-Smtp-Source: AGHT+IHVwujV//uk9xu0ufFB09XLtIKSoBWy32mvxvo0r4s+AadLhWhpZRXnTupfPdx5shtu8epLHA==
+X-Received: by 2002:a50:ee91:0:b0:51e:53eb:88a3 with SMTP id
+ f17-20020a50ee91000000b0051e53eb88a3mr9624914edr.25.1696711294974; 
+ Sat, 07 Oct 2023 13:41:34 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- q15-20020a170906360f00b0099d804da2e9sm4719516ejb.225.2023.10.07.13.40.11
+ o26-20020a056402039a00b00538538f1fcesm4230587edv.47.2023.10.07.13.41.34
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 07 Oct 2023 13:40:12 -0700 (PDT)
-Message-ID: <b69f465b-2faf-02a9-20d9-ba8ff6f9c6e5@mind.be>
-Date: Sat, 7 Oct 2023 22:40:10 +0200
+ Sat, 07 Oct 2023 13:41:34 -0700 (PDT)
+Message-ID: <013b2509-3af4-6130-6327-e4c52efaaa69@mind.be>
+Date: Sat, 7 Oct 2023 22:41:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
 Content-Language: en-GB
-To: Angelo Compagnucci <angelo@amarulasolutions.com>, buildroot@buildroot.org
-References: <20221004110421.137795-1-angelo@amarulasolutions.com>
- <20221004110421.137795-6-angelo@amarulasolutions.com>
-In-Reply-To: <20221004110421.137795-6-angelo@amarulasolutions.com>
+To: buildroot@buildroot.org
+References: <20231007203633.2415431-1-arnout@mind.be>
+ <20231007203633.2415431-2-arnout@mind.be>
+In-Reply-To: <20231007203633.2415431-2-arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1696711213; x=1697316013; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:to
+ d=mind.be; s=google; t=1696711295; x=1697316095; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=5LOK5SQWHPcgFxNRoILkjTkMbpZK49114xYP+crYX/w=;
- b=YWElHThmjKqpwHwRI0gGSKcFPwUSwHlDec5cMfgxehwaXs4QmXW/311YWrhGKurK52
- xN62scYSVReR5g4zh0sw+BfL327jmYZkhTC3UHJHtfHo1Q0XAAidVgChsJNn/PvZ0S9b
- 2q0W4YL8iZ7tInBlIO3Z3U/J/ExhtQMArOdAKxpVg0LaAD/c9f7nF+nn2DmZOU2rT0ad
- 9xftP+B0fbuyhq8ZaE0Hry0kSo/y5ZAid5a+3ausHMPMpwzbp+mEKn9RIsenKOGaf36u
- 3zgDIzNgx+25endhbxNUmjSsRYEVjpcsheUIzvzRQQ2XcYzFF7rxCryRHiKtnSOZthpF
- IW4g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=XkeAyNVJqDvpL+beKPERexvxqxvxp2BP5tUTJPQ7EHQ=;
+ b=H8akPjk7bQn2lxmI4PEIg2X8NLxmGSuRtlh8YpOQTt6bDbUx4XNnRDu+wm4oR0W+P+
+ nUJ3Ozankvp6pJGFD8TOg+rR6+LXhav8Avb/VXnPN+xEFs5j5fQLQ0HU7vIgfR1aeu02
+ HEOO8MAma7ZW/b9QrYqAMo5QbbrovI3a0d66OARe8JXWlxNuDkGAB2YcpeLIY8ugPCHF
+ COT/+FBWhqTw0EICVZso2FnRJqphemQ/rSmwqQKLZHlLXAkV8ioH6WmLRVE06aKeJRIJ
+ HLmojaTfdjdbcAqzjIgiRpf2yntm266Y4F7FZT8AbDr0OUq2gSDK7k3cVxgv0EOb+jcx
+ /G3g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YWElHThm
-Subject: Re: [Buildroot] [PATCH v4 5/5] package/initscripts: add service to
+ header.a=rsa-sha256 header.s=google header.b=H8akPjk7
+Subject: Re: [Buildroot] [PATCH 2/2] package/initscripts: add service to
  load kernel modules at boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -103,6 +103,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -110,7 +111,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 04/10/2022 13:04, Angelo Compagnucci wrote:
+On 07/10/2023 22:36, Arnout Vandecappelle wrote:
+> From: Angelo Compagnucci <angelo@amarulasolutions.com>
+> 
 > In cases where no hotplug is available (by choice or by the lack of a
 > proper hotplug method for a device), this service can be used to load
 > kernel module drivers by reading the /etc/modules-load.d/*.conf files.
@@ -119,68 +122,63 @@ On 04/10/2022 13:04, Angelo Compagnucci wrote:
 > init on par with systemd features.
 > 
 > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> [Arnout:
+>   - add exception for missing DAEMON variable;
+>   - fix shellcheck warnings
+> ]
+> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 > ---
-> v2:
-> * Moved script to initscripts (Arnout)
-> * Moved script to S11modules, after S10[mu]dev (Andreas)
-> * Use /etc/modules-load.d/ to share the same setup with systemd (me)
-> v4:
-> * Select only .conf file (Peter)
-> * Better ouput: printing module name only when loaded successfully,
->    print a FAIL when at least one module fails (Peter)
-> 
->   package/initscripts/init.d/S11modules | 59 +++++++++++++++++++++++++++
->   1 file changed, 59 insertions(+)
->   create mode 100644 package/initscripts/init.d/S11modules
-> 
-> diff --git a/package/initscripts/init.d/S11modules b/package/initscripts/init.d/S11modules
-> new file mode 100644
-> index 0000000000..dcc2e79135
-> --- /dev/null
-> +++ b/package/initscripts/init.d/S11modules
-> @@ -0,0 +1,59 @@
-> +#!/bin/sh
-> +
-> +MODULES_DIR="/etc/modules-load.d/"
 
-  The script was failing check-package because there's no DAEMON variable. Of 
-course, it's not appropriate to have a DAEMON variable in this init script 
-because there's no daemon to start...
+  I forgot the patch history.
 
-  On option would be to set a dummy DAEMON variable, but that would be rather 
-pointless. So instead, I used the check-package exception comment to avoid it. 
-However, that feature didn't exist yet for global checks (done in the after() 
-function). So I added that feature to check-package.
-
-  Because the change became a bit too big to apply directly, I resent. Of 
-course, stupid me forgot to add versioning information :-(
-
-> +
-> +[ -z "$(ls -A ${MODULES_DIR} 2> /dev/null)" ] && exit 0
-> +
-> +load_unload() {
-> +	for module_file in $(ls -1 ${MODULES_DIR}/*.conf); do
-
-  This (and a few other lines) triggered a shellcheck warning. I fixed those. 
-Could you test with the patch I sent?
+v2:
+* Moved script to initscripts (Arnout)
+* Moved script to S11modules, after S10[mu]dev (Andreas)
+* Use /etc/modules-load.d/ to share the same setup with systemd (me)
+v4:
+* Select only .conf file (Peter)
+* Better ouput: printing module name only when loaded successfully,
+   print a FAIL when at least one module fails (Peter)
+v5 (Arnout):
+* Fix shellcheck warnings
+* Add exception for missing DAEMON variable
 
   Regards,
   Arnout
 
-> +		while read module args; do
+>   package/initscripts/init.d/S11modules | 62 +++++++++++++++++++++++++++
+>   1 file changed, 62 insertions(+)
+>   create mode 100644 package/initscripts/init.d/S11modules
+> 
+> diff --git a/package/initscripts/init.d/S11modules b/package/initscripts/init.d/S11modules
+> new file mode 100644
+> index 0000000000..ab9b93dae3
+> --- /dev/null
+> +++ b/package/initscripts/init.d/S11modules
+> @@ -0,0 +1,62 @@
+> +#!/bin/sh
+> +
+> +MODULES_DIR="/etc/modules-load.d/"
+> +
+> +[ -z "$(ls -A ${MODULES_DIR} 2> /dev/null)" ] && exit 0
+> +
+> +load_unload() {
+> +	for module_file in "${MODULES_DIR}"/*.conf; do
+> +		while read -r module args; do
 > +
 > +			case "$module" in
 > +				""|"#"*) continue ;;
 > +			esac
 > +
 > +			if [ "$1" = "load" ]; then
-> +				modprobe -q ${module} ${args} >/dev/null && \
+> +				# shellcheck disable=SC2086  # We need word splitting for args
+> +				modprobe -q "${module}" ${args} >/dev/null && \
 > +					printf '%s ' "$module" || RET='FAIL'
 > +			else
-> +				rmmod ${module} >/dev/null
+> +				rmmod "${module}" >/dev/null
 > +			fi
 > +
-> +		done < ${module_file}
+> +		done < "${module_file}"
 > +	done
 > +
 > +	RET='OK'
@@ -218,6 +216,8 @@ Could you test with the patch I sent?
 > +		echo "Usage: $0 {start|stop|restart|reload}"
 > +		exit 1
 > +esac
+> +
+> +# check-package Ignore missing DAEMON Variables
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
