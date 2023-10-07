@@ -4,66 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18532E95A60
-	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 10:28:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A7F0E95A60
+	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 10:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6EEA540AA3;
-	Sat,  7 Oct 2023 10:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EEA540AA3
+	by smtp2.osuosl.org (Postfix) with ESMTP id E39E540AFF;
+	Sat,  7 Oct 2023 10:47:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E39E540AFF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gizAkwmKWY1j; Sat,  7 Oct 2023 10:28:56 +0000 (UTC)
+	with ESMTP id o37hgZxlL3dp; Sat,  7 Oct 2023 10:47:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64A2D4013F;
-	Sat,  7 Oct 2023 10:28:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64A2D4013F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F54A1BF419
- for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 10:28:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1EA0840A74;
+	Sat,  7 Oct 2023 10:47:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EA0840A74
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 00F961BF419
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 10:47:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F26B083B4A
- for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 10:28:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F26B083B4A
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE49C40A74
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 10:47:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE49C40A74
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gACqSTqHandb for <buildroot@lists.busybox.net>;
- Sat,  7 Oct 2023 10:28:52 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AC15983B48
- for <buildroot@buildroot.org>; Sat,  7 Oct 2023 10:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC15983B48
-Received: from fli4l.lan.fli4l (p54a1bb33.dip0.t-ipconnect.de [84.161.187.51])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id BA83FA4C0A40
- for <buildroot@buildroot.org>; Sat,  7 Oct 2023 12:28:50 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55334)
- by fli4l.lan.fli4l with esmtp (Exim 4.96.1)
- (envelope-from <bernd@kuhls.net>) id 1qp4YE-0001Nh-1Q
- for buildroot@buildroot.org; Sat, 07 Oct 2023 12:28:50 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aprBQQErJhvb for <buildroot@lists.busybox.net>;
+ Sat,  7 Oct 2023 10:47:51 +0000 (UTC)
+X-Greylist: delayed 334 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 07 Oct 2023 10:47:50 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C022F400E7
+Received: from aposti.net (aposti.net [89.234.176.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C022F400E7
+ for <buildroot@buildroot.org>; Sat,  7 Oct 2023 10:47:50 +0000 (UTC)
+From: Paul Cercueil <paul@crapouillou.net>
 To: buildroot@buildroot.org
-Date: Sat,  7 Oct 2023 12:28:50 +0200
-Message-Id: <20231007102850.1303053-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sat,  7 Oct 2023 12:42:05 +0200
+Message-Id: <20231007104205.12608-1-paul@crapouillou.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1696674530;
- bh=o8vSU1qKcxt7UqW+Gb7Glqy91xApFc02+5rTPAaEpKc=;
- h=From:To:Subject:Date:From;
- b=lKZJ4rJR57WJ0XIiZq8gyf8comM+rbFjgPp/LZ1Xehjr8q91wFoEhQOsUtZki0+qG
- besj7Wy7ytW/fgQOjDbP7HqYqAJJsp0pb+JX7LCq0Bn3jPHKSIgLl9p6Uonnv/9yhs
- w+8fqxWa5HASba2X8sZ/LR2XWabNf7nwePSHhdbiOfFEnv783/VQvrfTB6eAg8p/us
- i9slXTpCfQYQcSrN5gvLsRjyDyzhZGU/qAgHQBxfX4kWFfgUMfRJFaSKXh8fX14+qA
- h/dJj8Yo5gfDEg+wFQfSbEAJtG92rROLr+oAwAv/vXwzfk+EjPFfaoFyFn7gDmh0M8
- H2A+sFBm0NzsA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=lKZJ4rJR
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.15.x / 6.{1,
- 5}.x series
+ d=crapouillou.net; s=mail; t=1696675332;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=5aybNYAp/qhsmPDhC0oB8by09fF3GMCotDc7tKZHQ+4=;
+ b=OHIha3fx3rwgRJ4l4pGFxAvNHOP9ZUOVPt2ObwL05qKWwdCeTQbYsmFlPeXOYbvafRwde2
+ ihYsRqvXR26y5adL1D8LqrfsRq3hJ5fj4AJoHpMYxBiwFI1lBj5fizEjkKUsd+9lEAFX4l
+ vF7WD9l9BdiDtv2tSI6yIc0V8EEkzPk=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
+ header.a=rsa-sha256 header.s=mail header.b=OHIha3fx
+Subject: [Buildroot] [PATCH] package/lightning: fix build on mips64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,66 +65,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Paul Cercueil <paul@crapouillou.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+Grab commit 90f5c78f47dfb1ae4b953b0e30c7ef72a6438396 from upstream to
+fix the build on mips64 and mips64el.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8dcc493e2e..a6b4967a8c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.5.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.5.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index bdd27eb600..dfcc87802b 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  8cf10379f7df8ea731e09bff3d0827414e4b643dd41dc99d0af339669646ef95  linux-6.5.5.tar.xz
--sha256  a87e241ec15d53452c4efe219713a3769d88cc436b5b98cf6efb262c4aff15c0  linux-6.1.55.tar.xz
-+sha256  78e36d4214547051c24df2140f4ce09428d6c515ad9a71b38b28e8094a95d2f6  linux-6.5.6.tar.xz
-+sha256  9edefdde32c2298389dcd19566402332b3c2016f5ada17e5820f500b908d478c  linux-6.1.56.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  ef845e7934897b88e4448378ea9daacac19e07f156fe904844fab0a7d8ff5ddd  linux-5.15.133.tar.xz
-+sha256  f37182aecb57ed6853d01e1074d3a60a653331e35f3115728381e08be050b9d3  linux-5.15.134.tar.xz
- sha256  183a4507b0ebec7816a79ceba6253aa7ad345e25b0fcd4e834ee154be9a993ab  linux-5.10.197.tar.xz
- sha256  2e775970521ea7ff6eb613fc85a6e34cec73feaeb67b88a77a2fbd4f75483df0  linux-5.4.257.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d1023a15e6..e2e2655964 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -408,9 +408,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.295"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.257"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.197"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.133"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.55"	if BR2_KERNEL_HEADERS_6_1
--	default "6.5.5"		if BR2_KERNEL_HEADERS_6_5
-+	default "5.15.134"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.56"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.5.6"		if BR2_KERNEL_HEADERS_6_5
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ .../0001-Fix-build-on-mips64el.patch          | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/lightning/0001-Fix-build-on-mips64el.patch
+
+diff --git a/package/lightning/0001-Fix-build-on-mips64el.patch b/package/lightning/0001-Fix-build-on-mips64el.patch
+new file mode 100644
+index 0000000000..b3f087bb9e
+--- /dev/null
++++ b/package/lightning/0001-Fix-build-on-mips64el.patch
+@@ -0,0 +1,65 @@
++From 90f5c78f47dfb1ae4b953b0e30c7ef72a6438396 Mon Sep 17 00:00:00 2001
++From: Paul Cercueil <paul@crapouillou.net>
++Date: Thu, 5 Oct 2023 14:24:13 +0200
++Subject: [PATCH] Fix build on mips64el
++
++The "cvt_offset" field may be used for anything non-ARM in
++jit_fallback.c, so enable this field on anything non-ARM. Worst case
++scenario, this field is not used and it only occupies 4 bytes of RAM.
++
++Besides, when building for mips64el with the N32 ABI, the __WORDSIZE
++ends up being 32 and not 64 (which may be a problem in itself), which
++caused some more issues as the movi_d_w() macro referenced by
++jit_mips.c was not defined anywhere.
++
++This caused Buildroot's CI to fail when building on mips64el:
++http://autobuild.buildroot.net/results/f951d91d2ca4647170a52499a243d45d13d3bced/
++
++Upstream: http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=90f5c78f47dfb1ae4b953b0e30c7ef72a6438396
++Signed-off-by: Paul Cercueil <paul@crapouillou.net>
++---
++ include/lightning/jit_private.h | 5 +----
++ lib/lightning.c                 | 4 ++--
++ 2 files changed, 3 insertions(+), 6 deletions(-)
++
++diff --git a/include/lightning/jit_private.h b/include/lightning/jit_private.h
++index 5052a36..9f8caf6 100644
++--- a/include/lightning/jit_private.h
+++++ b/include/lightning/jit_private.h
++@@ -555,10 +555,7 @@ struct jit_function {
++     jit_int32_t		*regoff;
++     jit_regset_t	 regset;
++     jit_int32_t		 stack;
++-#if defined(__i386__) || defined(__x86_64__) || \
++-    defined(__powerpc__) || defined(__sparc__) || \
++-    defined(__s390__) || defined(__s390x__) || \
++-    defined(__hppa__) || defined(__alpha__)
+++#if !defined(__arm__)
++     jit_int32_t		 cvt_offset;	/* allocai'd offset for x87<->xmm or
++ 					 * fpr<->gpr transfer using the stack */
++ #endif
++diff --git a/lib/lightning.c b/lib/lightning.c
++index d5ea330..39c4fc2 100644
++--- a/lib/lightning.c
+++++ b/lib/lightning.c
++@@ -4285,7 +4285,7 @@ static void _htoni_ul(jit_state_t*, jit_int32_t, jit_word_t);
++ #endif
++ #  define movi_f_w(r0, i0)		_movi_f_w(_jit, r0, i0)
++ static void _movi_f_w(jit_state_t*, jit_int32_t, jit_float32_t);
++-#if __WORDSIZE == 32
+++#if __WORDSIZE == 32 && !(defined(__mips__) && NEW_ABI)
++ #  define movi_d_ww(r0, r1, i0)		_movi_d_ww(_jit, r0, r1, i0)
++ static void _movi_d_ww(jit_state_t*, jit_int32_t, jit_int32_t, jit_float64_t);
++ #else
++@@ -4569,7 +4569,7 @@ _movi_f_w(jit_state_t *_jit, jit_int32_t r0, jit_float32_t i0)
++     movi(r0, data.i);
++ }
++ 
++-#if __WORDSIZE == 32
+++#if __WORDSIZE == 32 && !(defined(__mips__) && NEW_ABI)
++ static void
++ _movi_d_ww(jit_state_t *_jit, jit_int32_t r0, jit_int32_t r1, jit_float64_t i0)
++ {
++-- 
++2.40.1
++
 -- 
-2.39.2
+2.40.1
 
 _______________________________________________
 buildroot mailing list
