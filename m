@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16A83E95A62
-	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 19:22:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C67FFE95A65
+	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 19:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CDF183C0B;
-	Sat,  7 Oct 2023 19:22:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CDF183C0B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DB5E83C0B;
+	Sat,  7 Oct 2023 19:22:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DB5E83C0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hY7CYWKQiv2I; Sat,  7 Oct 2023 19:22:28 +0000 (UTC)
+	with ESMTP id VtdcIWhJNeru; Sat,  7 Oct 2023 19:22:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9777983BE1;
-	Sat,  7 Oct 2023 19:22:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9777983BE1
+	by smtp1.osuosl.org (Postfix) with ESMTP id C51D183BD9;
+	Sat,  7 Oct 2023 19:22:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C51D183BD9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7CD391BF25B
- for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 19:22:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2EA131BF25B
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 19:22:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5612783BE1
- for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 19:22:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5612783BE1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05F5C83C02
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 19:22:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05F5C83C02
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VMiLmgR8p4c4 for <buildroot@lists.busybox.net>;
- Sat,  7 Oct 2023 19:22:24 +0000 (UTC)
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E94A783BD9
- for <buildroot@busybox.net>; Sat,  7 Oct 2023 19:22:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E94A783BD9
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-3226b8de467so3073801f8f.3
- for <buildroot@busybox.net>; Sat, 07 Oct 2023 12:22:23 -0700 (PDT)
+ with ESMTP id fGAQw64VJ3np for <buildroot@lists.busybox.net>;
+ Sat,  7 Oct 2023 19:22:32 +0000 (UTC)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 13F4883BE1
+ for <buildroot@busybox.net>; Sat,  7 Oct 2023 19:22:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13F4883BE1
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-406618d0991so29387345e9.2
+ for <buildroot@busybox.net>; Sat, 07 Oct 2023 12:22:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696706542; x=1697311342;
+ d=1e100.net; s=20230601; t=1696706550; x=1697311350;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=QFFKPh7kVcf1EnFgF2oi4BrCT5wFKb/NNQcCKwCgM7I=;
- b=cYEQK9NsjWDZkMP3o7fE0SX04w0h2mX15wSmIsZqCVBgWf/NNG05RDM2YH9cyknkXs
- NYeRmeZtwldUQ+5k/ybABJw2HG2N2ylbqqLM8TRW5UnZrJrh3Q8AyjlHIcFA4Pf6IUYf
- 5VLaE/iQzaPP6m98+t/FLeissviDdI0OTsj472G10nMBI5SUoU7YFSSrCknRbG30IdUP
- 7O/0QXHoXn82HPezNhyCJC+qALsNdplX/FDLOHmR1v5hrRgYm1S/Yg5dzM/ewVy6Aoel
- APfLLM219qWVPdxoFSLPapVPSllStmqAfUL5Nux2kjl3WfPZG9zUwdyCmioOppvtMWlI
- Xg/g==
-X-Gm-Message-State: AOJu0Yyh73/CJ4ZcTN2j6Ykoq3JEcF1zqdiwMMykFtotOf+Tkx+7CvFU
- k+T/UsErb0bdmmLec5xiEzPo7d/gpnQ=
-X-Google-Smtp-Source: AGHT+IF24ySW9YRHuo0Vr8FFwMYQDO7cJr579jv1V1tOcsED6yloDnqTzv7xgo4b5Z0PORWbkFJOJg==
-X-Received: by 2002:a5d:4c8c:0:b0:328:2e73:5bc1 with SMTP id
- z12-20020a5d4c8c000000b003282e735bc1mr10103617wrs.9.1696706541548; 
- Sat, 07 Oct 2023 12:22:21 -0700 (PDT)
+ bh=+iuHeTuY9+Ix5YHJ0VieBfqc0/yjVn4PQ4B/RbI40qg=;
+ b=SICR6gPEN2OVMNmxXcG/eOq2PHzuL+VsTM2eAXbi+hZPx3ZH2OrPVWrnJPacuc9VZm
+ 7jiNn1DHF5WNupzmvzdvZ1tuUTRaw6q4N77e8Jj+YJTSPLafl3AKTLC3cKH6Xy+34y+4
+ sqV7cm2N3XTic3iaT9DtkQkTN43MV9thdIsVWtSGbzRi9Rj9Swj+eDVSON+/pjCgPyNX
+ FBATlHsHIFYxTgn4IaAWMbS1HYf98y1QFlhCqCw/jnuEvk7i+55RlMYwfR4ggPFoc0sJ
+ DpALLOVhNBaaGubi5gOC4HqU7bebgxT24gJzF3Rwg479ugaGVaVoJrzY4dmw4gPFM/z8
+ H7IQ==
+X-Gm-Message-State: AOJu0YwsYT7oICJBquKvcQUX6u+fGl3cHcjB2GI5mxBOY8CvfpCWigil
+ VNQx0O/64zqALDR2CsQ9xLEExId2Vas=
+X-Google-Smtp-Source: AGHT+IHj91JHENr/EX/J70Zg2LrV71/ok85JLY2XZY5U4b4pl4sGITq7c82/1yartWXz6ISo5Ml3yQ==
+X-Received: by 2002:a05:600c:4751:b0:406:8491:ec2 with SMTP id
+ w17-20020a05600c475100b0040684910ec2mr9662270wmo.15.1696706549961; 
+ Sat, 07 Oct 2023 12:22:29 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- q15-20020a5d574f000000b00323384e04e8sm4931461wrw.111.2023.10.07.12.22.20
+ z19-20020a7bc7d3000000b0040641a9d49bsm6774637wmk.17.2023.10.07.12.22.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Oct 2023 12:22:21 -0700 (PDT)
+ Sat, 07 Oct 2023 12:22:29 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Sat,  7 Oct 2023 21:22:14 +0200
-Message-Id: <20231007192214.3670075-1-francois.perrad@gadz.org>
+Date: Sat,  7 Oct 2023 21:22:25 +0200
+Message-Id: <20231007192225.3670096-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696706542; x=1697311342; darn=busybox.net;
+ d=gmail.com; s=20230601; t=1696706550; x=1697311350; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=QFFKPh7kVcf1EnFgF2oi4BrCT5wFKb/NNQcCKwCgM7I=;
- b=LBL44abgadjPLsyULYr1XoMocbRlKPf7UXur34a5xfYBa9fJBLBtThaKmBRryrJcGy
- r/sOsm2obXF9IkyMGMk93uUIqI8IJ2liJJltTLvzYPsGm8BsJthFfPEBxj8SQuZraTWS
- kt07s7CN1F0SIorbTRNKoEhC2CCTQyKnoxYKrCUbDsxnzSiAPrqQ1dOOHhCLhoQpGL/M
- j+PC25X2Gk3U666UK8LtkSuciBUXqgH7oBBrpciA+HIwh/KUT5lj7bvd59+IGhfDGAM/
- Vu+ps+2rJzQV7+6malbCkMxyuMKWe8iSj05djDgUsYs7X0c1Xw4FR8f0sAGhg7KS5mwX
- 8m5w==
+ bh=+iuHeTuY9+Ix5YHJ0VieBfqc0/yjVn4PQ4B/RbI40qg=;
+ b=QSYhPwYE6/OymE57wasEh7+uJFsPtP+K5RtdOTzuce2Mb6jyE0Lut88ZBz9RY24u91
+ nYCnHPGQRoBSTTQWq/48kpsboM/RrJMf57RWqa/FzQlgfwqzr+MAOilkDisnm+9/ayQb
+ HZKpRqV3fK8mtEGBZIzVLHmIYZ3UpHAdVtCbOci4iU6Cry4Vtl6s/U9U/t14325WJfgr
+ MfYN2da0nhQUD1PT83ci1obxJfrya/8KOsePvg3Ra7iOnC8eeOEa+kqSOFLswcSY2hhu
+ 6QLZhE4dCUZ26XO/YZB1LGGFs6Fg4Z01QHW2yC8ppdsYKGMBMo3u9298bfhw8ELZpvjj
+ p6Og==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=LBL44abg
-Subject: [Buildroot] [PATCH] package/libsoup: bump to version 2.74.3
+ header.a=rsa-sha256 header.s=20230601 header.b=QSYhPwYE
+Subject: [Buildroot] [PATCH] package/mbedtls: bump to version 2.28.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,34 +100,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libsoup/libsoup.hash | 4 ++--
- package/libsoup/libsoup.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mbedtls/mbedtls.hash | 2 +-
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-index 2f44e63d7..5f687068a 100644
---- a/package/libsoup/libsoup.hash
-+++ b/package/libsoup/libsoup.hash
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 6aa6d0235..d0cd0b210 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
 @@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libsoup/2.74/libsoup-2.74.2.sha256sum
--sha256  f0a427656e5fe19e1df71c107e88dfa1b2e673c25c547b7823b6018b40d01159  libsoup-2.74.2.tar.xz
-+# From https://download.gnome.org/sources/libsoup/2.74/libsoup-2.74.3.sha256sum
-+sha256  e4b77c41cfc4c8c5a035fcdc320c7bc6cfb75ef7c5a034153df1413fa1d92f13  libsoup-2.74.3.tar.xz
+ # From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.4:
+-sha256  578c4dcd15bbff3f5cd56aa07cd4f850fc733634e3d5947be4f7157d5bfd81ac  mbedtls-2.28.4.tar.gz
++sha256  849e86b626e42ded6bf67197b64aa771daa54e2a7e2868dc67e1e4711959e5e3  mbedtls-2.28.5.tar.gz
  # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 026ea3a8b..81bf42cab 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -5,7 +5,7 @@
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 62eda6ec9..1b941e04f 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBSOUP_VERSION_MAJOR = 2.74
--LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).2
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).3
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPL-2.0+
+-MBEDTLS_VERSION = 2.28.4
++MBEDTLS_VERSION = 2.28.5
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
 -- 
 2.39.2
 
