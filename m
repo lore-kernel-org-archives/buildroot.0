@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71D4DE95A61
-	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 08:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72D8AE95A60
+	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 09:26:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FD3E83C4A;
-	Sat,  7 Oct 2023 08:57:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FD3E83C4A
+	by smtp1.osuosl.org (Postfix) with ESMTP id F197F83C69;
+	Sat,  7 Oct 2023 09:26:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F197F83C69
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iF7CmgN-_uBN; Sat,  7 Oct 2023 08:57:38 +0000 (UTC)
+	with ESMTP id 9sW_oQ3AHvUn; Sat,  7 Oct 2023 09:26:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7800283C4E;
-	Sat,  7 Oct 2023 08:57:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7800283C4E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E6D91BF41B
- for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 08:57:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 571D383C67;
+	Sat,  7 Oct 2023 09:26:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 571D383C67
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DCA211BF25B
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 09:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 46C3D41D98
- for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 08:57:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46C3D41D98
+ by smtp2.osuosl.org (Postfix) with ESMTP id B585C40445
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 09:26:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B585C40445
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gz76nvZ2f2Xm for <buildroot@lists.busybox.net>;
- Sat,  7 Oct 2023 08:57:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yRq6iaqSi11T for <buildroot@lists.busybox.net>;
+ Sat,  7 Oct 2023 09:26:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 608A742D18
- for <buildroot@uclibc.org>; Sat,  7 Oct 2023 08:57:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 608A742D18
+ by smtp2.osuosl.org (Postfix) with ESMTP id E43574037E
+ for <buildroot@uclibc.org>; Sat,  7 Oct 2023 09:26:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E43574037E
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 4EAC083FDA; Sat,  7 Oct 2023 08:57:35 +0000 (UTC)
+ id CD78584108; Sat,  7 Oct 2023 09:26:52 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 07 Oct 2023 08:57:35 +0000
+Date: Sat, 07 Oct 2023 09:26:52 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,7 +47,7 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2023.08
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stsp2@yandex.ru
+X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: INVALID
 X-Bugzilla-Priority: P5
@@ -55,7 +55,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15814-163-TWGg3xbs9t@https.bugs.busybox.net/>
+Message-ID: <bug-15814-163-EhoL9GIe6C@https.bugs.busybox.net/>
 In-Reply-To: <bug-15814-163@https.bugs.busybox.net/>
 References: <bug-15814-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -80,17 +80,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15814
 
---- Comment #2 from stsp <stsp2@yandex.ru> ---
-> Have you actually tried to enable a package written in C++?
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+stsp, All,
 
-Of course!
-Even if BR2_INSTALL_LIBSTDCPP is enabled,
-with bootlin tool-chain there is still no
-host g++ so the compilation fails.
+> with bootlin tool-chain there is still no
+> host g++
 
-> No, because it is already working as expected.
+The Bootlin tolchains are cross toolchains; they compile for the target, not
+for the host. The host C++ compiler is not provided by the cross toolchain.
 
-I think this is a premature judgement.
+The host toolchain (of which g++ is part) is to be provided by the distribution
+you use on your host system; Buildroot does not handle it at all: it is
+expected to be present. Install the C++ part of the toolchain from your
+distribution; if that does not exist, ask your distribution to package it.
+
+> so the compilation fails.
+
+What exactly fails? Please provide a log of the failing build.
+
+> I think this is a premature judgement.
+
+Maybe... Does not look like it, though: the Bootlin toolchains are widely
+used, and I know for a fact that they do support C++ for the target, for
+using that daily.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
