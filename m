@@ -4,68 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B288CD610E
-	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 17:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0063EE95A60
+	for <buildroot@archiver.kernel.org>; Sat,  7 Oct 2023 08:52:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E282981F8B;
-	Mon,  9 Oct 2023 17:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E282981F8B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DDA683C4E;
+	Sat,  7 Oct 2023 08:52:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DDA683C4E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DvYQ9RCWovZl; Mon,  9 Oct 2023 17:25:30 +0000 (UTC)
+	with ESMTP id fqNOtau-dSeT; Sat,  7 Oct 2023 08:52:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3151481F8F;
-	Mon,  9 Oct 2023 17:25:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3151481F8F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D9961BF2A1
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 17:25:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CAC4683C43;
+	Sat,  7 Oct 2023 08:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAC4683C43
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04CE41BF33B
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 08:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0641781F8B
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 17:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0641781F8B
+ by smtp2.osuosl.org (Postfix) with ESMTP id D215040382
+ for <buildroot@lists.busybox.net>; Sat,  7 Oct 2023 08:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D215040382
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0DsOgdNo62IO for <buildroot@lists.busybox.net>;
- Mon,  9 Oct 2023 17:25:25 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B410C81F8F
- for <buildroot@buildroot.org>; Mon,  9 Oct 2023 17:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B410C81F8F
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:d143:e10c:f714:dfc9])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 7A31560132;
- Mon,  9 Oct 2023 19:25:19 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 09 Oct 2023 19:25:19 +0200
-Date: Mon, 9 Oct 2023 19:25:19 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231009172519.GF14234@scaer>
-References: <20231009170428.2836853-1-adam.duskett@amarulasolutions.com>
- <20231009170428.2836853-2-adam.duskett@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KV_GQ4J2GHOk for <buildroot@lists.busybox.net>;
+ Sat,  7 Oct 2023 08:52:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9CD24037E
+ for <buildroot@uclibc.org>; Sat,  7 Oct 2023 08:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9CD24037E
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id D68F681F8A; Sat,  7 Oct 2023 08:52:32 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Sat, 07 Oct 2023 08:52:32 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2023.08
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status cc resolution
+Message-ID: <bug-15814-163-F627IXFUUd@https.bugs.busybox.net/>
+In-Reply-To: <bug-15814-163@https.bugs.busybox.net/>
+References: <bug-15814-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231009170428.2836853-2-adam.duskett@amarulasolutions.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696872322;
- bh=aJl9Xr1Mf5XroUPRDLXejkdhgson3hQPGtBhUsfiG/s=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CxGc2/zxRkW2+Gyh2JWXMs5rj6k2lgSOUKmo/fbxCHJwLvoM6ATUyRs1anYI6M3uz
- 9Pbe79+L6wEZPXxpxoHJnTRJ7rz4i+Weupxar+HlFsgaj3L8GiW2Hc3k2Sy5WkNGHG
- cXlso0ccsTq3A1p1EwqQyPdGTRVisNI0OO1a3xWifJHMf7iIgMsQjNLL8V92ItATcW
- QbFtNLx5oQIztW02GjzZDQ9vzx6GSEQIULwppu9rCkFgYtz+aKzGQJ+SeQsAlo/l8c
- AgYLZKoEWMN/3PBK6SuvR2iDoRJFABAWWEEwZIYNLwucINOCr/Nxh9rJdNg4JJXw0K
- D7NpxxocSsdLA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CxGc2/zx
-Subject: Re: [Buildroot] [PATCH v4 2/2] package/refpolicy/Config.in: depend
- on merged usr when selecting upstream
+Subject: [Buildroot] [Bug 15814] C++ not supported by bootlin toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,91 +73,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Antoine Tenart <atenart@kernel.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adam, All,
+https://bugs.busybox.net/show_bug.cgi?id=15814
 
-On 2023-10-09 19:04 +0200, Adam Duskett spake thusly:
-> Refpolicy contexts expect a merged /usr file system. In fact, there
-> are no references to /bin, /sbin, /lib, or /lib64 at all.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-There is a file in the refpolicy upstream tree, 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+                 CC|                            |yann.morin.1998@free.fr
+         Resolution|---                         |INVALID
 
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+stsp, All,
 
-which cntains (abbreviated)
+> So it seems the config doesn't allow to
+> enable C++ support together with selecting
+> bootlin toolchain.
 
-    # This file can is used to configure base path aliases as in:
-    # /aliased_path /original_path_as_configured_in_file_contexts
-    # where original_path_as_configured_in_file_contexts is a base
-    # path being used in the main file_contexts configuration file.
-    /bin /usr/bin
-    /lib /usr/lib
-    [...]
+Have you actually tried to enable a package written in C++?
 
-So, to me, it looks like it means something like:  treat paths that
-starts with /lib as if they were starting with /sur/lib, and then check
-the context associated with the new path.
+The symbols you reference are just intermediate symbols, that ultimately
+select BR2_INSTALL_LIBSTDCPP, which is the one symbol that represents
+whether C++ is available in the toolchain. All Bootlin toolchains with
+C++ support do select that symbol.
 
-But maybe that no longer works? Or maybe we need to take action to make
-that work?
+> Is there anything that can be done with that?
 
-Matter for more thoughts...
-
-> However, if a user
-> wants to go through the trouble of creating a policy that works with a
-> non-merged system, they should be free to do so. As such, only select
-> BR2_ROOTFS_MERGED_USR if using BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION.
-
-This last sentence is still incorrect now: not seelct, but depends on.
-;-)
+No, because it is already working as expected.
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
-> v3 -> v4: Remove accidental removal of upstream patch in this patch.
-> 
->  package/refpolicy/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-> index 0e72b895df..d2fe391d8d 100644
-> --- a/package/refpolicy/Config.in
-> +++ b/package/refpolicy/Config.in
-> @@ -36,9 +36,13 @@ choice
->  
->  config BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
->  	bool "Upstream version"
-> +	depends on BR2_ROOTFS_MERGED_USR
->  	help
->  	  Use the refpolicy as provided by Buildroot.
->  
-> +comment "Upstream refpolicy requires a merged /usr filesystem"
-> +	depends on !BR2_ROOTFS_MERGED_USR
-> +
->  config BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
->  	bool "Custom git repository"
->  	help
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
