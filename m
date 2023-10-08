@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9091FE95A67
-	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 15:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 081EDE95A67
+	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 16:00:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36C71402E0;
-	Sun,  8 Oct 2023 15:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36C71402E0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83B4640342;
+	Sun,  8 Oct 2023 16:00:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83B4640342
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YjvRWEVnce4p; Sun,  8 Oct 2023 15:59:55 +0000 (UTC)
+	with ESMTP id 5SARnZeMKnwd; Sun,  8 Oct 2023 16:00:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41C0A402CE;
-	Sun,  8 Oct 2023 15:59:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41C0A402CE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 331F71BF25B
- for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 15:59:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78BE14093A;
+	Sun,  8 Oct 2023 16:00:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78BE14093A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 78C891BF25B
+ for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 15:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CD7160E02
- for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 15:59:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CD7160E02
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5217C40342
+ for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 15:59:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5217C40342
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Df9PZAAMiFnN for <buildroot@lists.busybox.net>;
- Sun,  8 Oct 2023 15:59:51 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 26A3660E8B
- for <buildroot@buildroot.org>; Sun,  8 Oct 2023 15:59:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26A3660E8B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9A4FE60002;
- Sun,  8 Oct 2023 15:59:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9yaIcVVd7V_E for <buildroot@lists.busybox.net>;
+ Sun,  8 Oct 2023 15:59:56 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C33AD4031D
+ for <buildroot@buildroot.org>; Sun,  8 Oct 2023 15:59:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C33AD4031D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 69D90FF806;
+ Sun,  8 Oct 2023 15:59:52 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qpWBy-00D171-Bm; Sun, 08 Oct 2023 17:59:42 +0200
+ id 1qpWC3-00D17a-FN; Sun, 08 Oct 2023 17:59:47 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20231006081205.1793625-1-peter@korsgaard.com>
-Date: Sun, 08 Oct 2023 17:59:42 +0200
-In-Reply-To: <20231006081205.1793625-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 6 Oct 2023 10:12:04 +0200")
-Message-ID: <87pm1pds0h.fsf@48ers.dk>
+References: <20231006062449.1481741-1-peter@korsgaard.com>
+Date: Sun, 08 Oct 2023 17:59:47 +0200
+In-Reply-To: <20231006062449.1481741-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 6 Oct 2023 08:24:49 +0200")
+Message-ID: <87lecdds0c.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH-2023.02.x] package/{glibc,
+Subject: Re: [Buildroot] [PATCH-2023.08.x] package/{glibc,
  localedef}: security bump to version
- glibc-2.36-118-g22955ad85186ee05834e47e665056148ca07699c
+ glibc-2.37-45-gb4e23c75aea756b4bddc4abcf27a1c6dca8b6bd3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,6 +73,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+ > Fixes the following security issues:
  >   CVE-2023-4911: If a tunable of the form NAME=NAME=VAL is passed in the
  >   environment of a setuid program and NAME is valid, it may result in a
  >   buffer overflow, which could be exploited to achieve escalated
@@ -80,7 +81,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed to 2023.02.x, thanks.
+Committed to 2023.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
