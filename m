@@ -4,91 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15A7BE95A67
-	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 09:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3141CE95A67
+	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 09:40:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22A676100E;
-	Sun,  8 Oct 2023 09:32:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22A676100E
+	by smtp3.osuosl.org (Postfix) with ESMTP id B812C60F0A;
+	Sun,  8 Oct 2023 09:40:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B812C60F0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1xiZ2ZsxaMuV; Sun,  8 Oct 2023 09:32:50 +0000 (UTC)
+	with ESMTP id sp9zdxCQ5Ulk; Sun,  8 Oct 2023 09:40:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1960960648;
-	Sun,  8 Oct 2023 09:32:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1960960648
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E90261BF3D9
- for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 09:32:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2C3B60E85;
+	Sun,  8 Oct 2023 09:40:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2C3B60E85
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BA391BF3D9
+ for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 09:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFBA8821B9
- for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 09:32:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFBA8821B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id D74D94159C
+ for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 09:40:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D74D94159C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AimMDXaFHV-Q for <buildroot@lists.busybox.net>;
- Sun,  8 Oct 2023 09:32:43 +0000 (UTC)
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5BE7A821B8
- for <buildroot@buildroot.org>; Sun,  8 Oct 2023 09:32:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BE7A821B8
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-9936b3d0286so640132966b.0
- for <buildroot@buildroot.org>; Sun, 08 Oct 2023 02:32:42 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2ZPvOzp0KPXg for <buildroot@lists.busybox.net>;
+ Sun,  8 Oct 2023 09:40:16 +0000 (UTC)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 47FF7400E1
+ for <buildroot@buildroot.org>; Sun,  8 Oct 2023 09:40:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47FF7400E1
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-9b2cee55056so652631566b.3
+ for <buildroot@buildroot.org>; Sun, 08 Oct 2023 02:40:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696757561; x=1697362361;
+ d=1e100.net; s=20230601; t=1696758014; x=1697362814;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=9xYH8UbCAdM8jYwBCWWrCvHgQnc/ofYVs3Vepnb+3/c=;
- b=p5Wa8CXPcCKfqvPR4iawk+7cRDyZ4IFq5on+LA6jPH/BiZklB/P6f4bLsw1KBxhZmc
- wqn8q3JfoWNmsgaxE2+T5KoYMx24Xf5SpbCSj2Pl64tiOxI5Yl3QpAA/Lp03IX8lBQnU
- MAvpdA1/T3SO8lPLdHXsTEe1LENirqqJ5t0MbLhoYyaeJSB3mtHBA2YPEubqyay/ZV4Y
- p66NVGQZFSbpfIzF06u0lnDpdlDLfmBfixxM9PDOPUd81C9zonCAs/zhI7GvBfAN+AZk
- j8FjMwxMF5xiHEwGiWdEtDk5IaNxHfibVTDrDwutYkN4y6mwgGhCmZUKZGbh3svGHpth
- /A7g==
-X-Gm-Message-State: AOJu0YyMYjYa0djeDwMS1AdBdFodSHewopCZrNohlU7kzlS0ElxFM2oq
- n+m6HlQj4+5A8ga5vTGu3FI+wg==
-X-Google-Smtp-Source: AGHT+IH7pqSXcPAKLom/PTexLyVbwyBjoOJGhX+5GrY7ebnviXYAd60WVj4BtPqJp2EgYKevFYCrzA==
-X-Received: by 2002:a17:906:53d2:b0:9ad:e2c8:1741 with SMTP id
- p18-20020a17090653d200b009ade2c81741mr11287265ejo.58.1696757560854; 
- Sun, 08 Oct 2023 02:32:40 -0700 (PDT)
+ bh=LULAenMoYOvd+tMV6GtpzJT2A6OVVXEhbTwPV4WA66Y=;
+ b=gsodzy15yPzxXJvY035j8LFw4FM4cKS/aPBf0dVTGzFIGRQptJoCytrwYMHhBPVbk1
+ GYb3ZM1j36kJsfLu9uq+tbN4+Pt640hpcEf3tmePvC533cVDp5sVYM71QcW/ZDw60vcu
+ qkD4WfPINZvthWIHyAnNsOJ3fhbQ1/hrjXFBG2cfD3PjzyUUfFbJ6NGNiNnbaZiyqAQ2
+ SGuzGGS0OptEBLz7ngiGOE4T9xXksikPBQqmUTVOOJ6noWitp3K/fboQ/JKO9f5P8hSm
+ 84DIRGImcdJ/RKtQfh/FyO6hAETByWexrqbD9o9kDKIT5+uyv9aBUHbUERbuETyhl5Ea
+ vJhQ==
+X-Gm-Message-State: AOJu0Yy26xJZnKkQ09eU8sAd2dm2KhX7p9SEO9Hyy6UW6sjD2H3WqgUR
+ HTJhFr9QNiktgUWb/S0y/TcHPA==
+X-Google-Smtp-Source: AGHT+IG4RCkCjaJK5R2mpyRkTF0GfvPRfWduz4mIC6wKSW+uWnrqmLJyOzvaJeCYIKmqC2wT1Zbp5A==
+X-Received: by 2002:a17:906:5342:b0:9ad:ef08:1f32 with SMTP id
+ j2-20020a170906534200b009adef081f32mr11700044ejo.37.1696758014024; 
+ Sun, 08 Oct 2023 02:40:14 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- t25-20020a1709063e5900b0098f33157e7dsm5251532eji.82.2023.10.08.02.32.39
+ n2-20020a1709061d0200b009a0955a7ad0sm5256695ejh.128.2023.10.08.02.40.13
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 08 Oct 2023 02:32:40 -0700 (PDT)
-Message-ID: <f53be617-ff47-0675-edc8-ae5a36a67716@mind.be>
-Date: Sun, 8 Oct 2023 11:32:38 +0200
+ Sun, 08 Oct 2023 02:40:13 -0700 (PDT)
+Message-ID: <3e9f019b-a8ad-e856-3ed9-6fec0c119f83@mind.be>
+Date: Sun, 8 Oct 2023 11:40:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
 Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <20231007205749.443600-1-yann.morin.1998@free.fr>
-In-Reply-To: <20231007205749.443600-1-yann.morin.1998@free.fr>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>
+References: <20231007181926.7115-1-adam.duskett@amarulasolutions.com>
+ <20231007193422.GG2552@scaer>
+In-Reply-To: <20231007193422.GG2552@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1696757561; x=1697362361; darn=buildroot.org;
+ d=mind.be; s=google; t=1696758014; x=1697362814; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=9xYH8UbCAdM8jYwBCWWrCvHgQnc/ofYVs3Vepnb+3/c=;
- b=WT4B17oB89kzwM80q2VHx1eyfzfxtB9hl/kNH+BqdEYudYHz6nsoZtwmjgaGIj1SoP
- sWDpZ3avIbJkpe8JvPsm4ZyJnFASZT3xy+R+mNvSXWYumHTTfWQsWj9aE04ZT+lKD+1m
- KfqFSBJ7CpIzHbe1ZhBkpgtIvesyif+jOw5YnBalHxvAxwBTVCAijndSWJZShMYURvkk
- v8J/l0F4wbdabZUlp8uIcFI2ic6llSK3R+UnLDt+MczlrYFVPL+kUmun1vdB7cRy4HKu
- XBeuoTIzQKFlaY20X7GjKVH3w3GUMXjaJ8FUS29HPA56q8Uf/fn5zz/p7GmF3DWvrOfv
- HM4Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=LULAenMoYOvd+tMV6GtpzJT2A6OVVXEhbTwPV4WA66Y=;
+ b=ZG5vNCu+Ucf03oiLrMmAfXjajZSaeg1I2pD607rqjHM4MaBagEqBbdY0SwlHyba5x3
+ cHDIwKOZQ6Wtg77qrLNbHwD9R0iwlblkS5zulpvKqdFoistSEpVK5a4uJ/QeOqFMdYrr
+ ph3lecrCcaiHj8wFpOa0Eiq056uqut4oKfMC7rf4phUSlyz9SgV7prCNa3rYo1HTj8M7
+ BR7kaUrBwJGqK29ga2/owjg2Ag8ueml7e8CUQxdzjUq0aER/OsE+CtZLX5elJIkb+3H8
+ LoglqwpTiKwSAo+TnlMiIscpkimFfgbvavP5qxSOcPs+mv/yvk9n4Rz4fyk6czwH4IF7
+ D4hA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=WT4B17oB
-Subject: Re: [Buildroot] [PATCH] support/bootlin-toolchains: don't depend on
- non-existent gcc version
+ header.a=rsa-sha256 header.s=google header.b=ZG5vNCu+
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/refpolicy/Config.in: force
+ merged usr when selecting upstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,7 +104,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Vincent Fazio <vfazio@xes-inc.com>
+Cc: Antoine Tenart <atenart@kernel.org>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -110,102 +112,89 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 07/10/2023 22:57, Yann E. MORIN wrote:
-> Commit a0d2a5cfec0a (support/scripts/gen-bootlin-toolchains: generate
-> BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard) added a negative dependency to the
-> gcc version required by the configured architecture.
+On 07/10/2023 21:34, Yann E. MORIN wrote:
+> Adam, All,
 > 
-> However, when the toolchain is using the latest gcc version currently
-> known to Buildroot, this generates a dependency on a non-existing gcc
-> version. For example, a toolchain using gcc 13, the most recent version
-> currently known to Buildroot, this would generate a dependency against
-> BR2_ARCH_NEEDS_GCC_AT_LEAST_14, which does not exist yet.
+> On 2023-10-07 20:19 +0200, Adam Duskett spake thusly:
+>> Refpolicy contexts expect a merged /usr file system. In fact, there
+>> are no references to /bin, /sbin, /lib, or /lib64 at all. However, if a user
+>> wants to go through the trouble of creating a policy that works with a
+>> non-merged system, they should be free to do so. As such, only select
+>> BR2_ROOTFS_MERGED_USR if using BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
+>>
+>> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+>> ---
+>>   package/refpolicy/Config.in | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+>> index 0e72b895df..f1f3c7e64d 100644
+>> --- a/package/refpolicy/Config.in
+>> +++ b/package/refpolicy/Config.in
+>> @@ -36,6 +36,7 @@ choice
+>>   
+>>   config BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
+>>   	bool "Upstream version"
+>> +	select BR2_ROOTFS_MERGED_USR
+> 
+> I wonder if this is the proper solution. I would have rather though of
+> depends on rather than select:
 
-  That means, however, that if we add GCC 14, we need to remember to add the 
-condition to the Bootlin toolchains again... Of course, that can easily be 
-solved by regenerating them, but we don't currently do that when adding a new 
-GCC version.
+  I agree. I don't think anything in the system/Config.in menu should be 
+select'ed by packages.
 
-  So really, I would feel more comfortable just adding the symbols for GCC 14 
-support already.
+  Currently we do select BR2_TARGET_TZ_INFO, and I'm not even sure if that is 
+such a good idea.
+
+
+>      diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+>      index 0e72b895df..c413c1244b 100644
+>      --- a/package/refpolicy/Config.in
+>      +++ b/package/refpolicy/Config.in
+>      @@ -32,13 +32,17 @@ if BR2_PACKAGE_REFPOLICY
+> 
+>       choice
+>       	prompt "Refpolicy version"
+>       -	default BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
+>       +	default BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION if BR2_ROOTFS_MERGED_USR
+
+  This is not great however... If merged /usr is not selected, it will default 
+to git, which is not exactly a good default. But there's not much we can do 
+about that I guess.
 
   Regards,
   Arnout
 
 > 
-> This dependency is in practice a no-op, because the symbol is missing,
-> so Kconfig evaluates it to false, and since it is negated, the
-> dependency is fulfilled. Still, this is spurious and semantically
-> incorrect.
+>       config BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
+>       	bool "Upstream version"
+>      +	depends on BR2_ROOTFS_MERGED_USR
+>       	help
+>       	  Use the refpolicy as provided by Buildroot.
 > 
-> We fix that by extracting the most recent gcc version that an
-> architecture may require, and use that to decide whether the guard is
-> needed for the toolchain.
+>      +comment "upstream refpolicy needs merged /usr"
+>      +	depends on !BR2_ROOTFS_MERGED_USR
+>      +
+>       config BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
+>       	bool "Custom git repository"
+>       	help
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->   support/scripts/gen-bootlin-toolchains | 19 ++++++++++++++++---
->   1 file changed, 16 insertions(+), 3 deletions(-)
+> Not totally sure either ways, though...
 > 
-> diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-> index 4344221213..3b5f65515d 100755
-> --- a/support/scripts/gen-bootlin-toolchains
-> +++ b/support/scripts/gen-bootlin-toolchains
-> @@ -305,7 +305,7 @@ class Toolchain:
->           return os.path.join(BASE_URL, self.arch, "fragments",
->                               self.fname_prefix + ".frag")
->   
-> -    def gen_config_in_options(self, f):
-> +    def gen_config_in_options(self, f, latest_gcc):
->           f.write("config %s\n" % self.option_name)
->           f.write("\tbool \"%s %s %s %s\"\n" %
->                   (self.arch, self.libc, self.variant, self.version))
-> @@ -339,7 +339,8 @@ class Toolchain:
->                   assert m, "Cannot get gcc version for toolchain %s" % self.fname_prefix
->                   selects.append("BR2_TOOLCHAIN_GCC_AT_LEAST_%s" % m[1])
->                   # respect the GCC requirement for the selected CPU/arch tuning
-> -                depends.append("!BR2_ARCH_NEEDS_GCC_AT_LEAST_%s" % str(int(m[1]) + 1))
-> +                if int(m[1]) + 1 <= latest_gcc:
-> +                    depends.append("!BR2_ARCH_NEEDS_GCC_AT_LEAST_%s" % str(int(m[1]) + 1))
->   
->               # kernel headers version
->               if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HEADERS_"):
-> @@ -462,6 +463,17 @@ class Toolchain:
->               (self.arch, self.libc, self.variant, self.version, self.option_name)
->   
->   
-> +def get_latest_gcc():
-> +    match = "config BR2_ARCH_NEEDS_GCC_AT_LEAST_"
-> +    with open("arch/Config.in", "r") as f:
-> +        latest = sorted([
-> +            int(line[len(match):].strip().split("_")[0])
-> +            for line in f.readlines()
-> +            if line.startswith(match)
-> +        ])[-1]
-> +    return latest
-> +
-> +
->   def get_toolchains():
->       toolchains = list()
->       for arch, details in arches.items():
-> @@ -494,6 +506,7 @@ def get_toolchains():
->   
->   
->   def gen_config_in_options(toolchains, fpath):
-> +    latest_gcc = get_latest_gcc()
->       with open(fpath, "w") as f:
->           f.write(AUTOGENERATED_COMMENT)
->   
-> @@ -520,7 +533,7 @@ def gen_config_in_options(toolchains, fpath):
->           f.write("\tprompt \"Bootlin toolchain variant\"\n")
->   
->           for toolchain in toolchains:
-> -            toolchain.gen_config_in_options(f)
-> +            toolchain.gen_config_in_options(f, latest_gcc)
->   
->           f.write("endchoice\n")
->           f.write("endif\n")
+> Regards,
+> Yann E. MORIN.
+> 
+>>   	help
+>>   	  Use the refpolicy as provided by Buildroot.
+>>   
+>> -- 
+>> 2.41.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
