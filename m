@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3218E95A8E
-	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 21:29:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57FC7E95A67
+	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 21:29:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE96B820F8;
-	Sun,  8 Oct 2023 21:29:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE96B820F8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CCC5821A4;
+	Sun,  8 Oct 2023 21:29:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CCC5821A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dVYPQbeqMuBw; Sun,  8 Oct 2023 21:29:12 +0000 (UTC)
+	with ESMTP id WhCIpBhDvWG5; Sun,  8 Oct 2023 21:29:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A11C2821D6;
-	Sun,  8 Oct 2023 21:29:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A11C2821D6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C2BA821DA;
+	Sun,  8 Oct 2023 21:29:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C2BA821DA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E7D6A1BF2C8
- for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 21:27:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EB2741BF2C8
+ for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 21:27:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 068376101A
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD48060EE2
  for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 21:27:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 068376101A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD48060EE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rj6PlI6955rz for <buildroot@lists.busybox.net>;
- Sun,  8 Oct 2023 21:27:55 +0000 (UTC)
+ with ESMTP id nOCwAINQLuhU for <buildroot@lists.busybox.net>;
+ Sun,  8 Oct 2023 21:27:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7212F60EE2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43A3C60FC9
  for <buildroot@buildroot.org>; Sun,  8 Oct 2023 21:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7212F60EE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43A3C60FC9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FA83843FA; Sun,  8 Oct 2023 21:27:53 +0000 (UTC)
+ id 28984843FE; Sun,  8 Oct 2023 21:27:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Oct 2023 23:17:41 +0200
+Date: Sun, 8 Oct 2023 23:17:38 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: dadc84b7c9952f1c0b1c9b1b680db6ccf0c6c6b3
-X-Git-Newrev: e57c04d9204736f331cb522d441f9981065b79c3
+X-Git-Oldrev: 8943eb4a309fae575c2845cf0ec488746badb041
+X-Git-Newrev: 5b570f6c74a9427212562fc430810400cd510c84
 X-Patchwork-Hint: ignore
-Message-Id: <20231008212753.4FA83843FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/go: security bump
- to version 1.20.9
+Message-Id: <20231008212753.28984843FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/go: fix
+ go-bootstrap when parent dir contains invalid .git
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,127 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e57c04d9204736f331cb522d441f9981065b79c3
+commit: https://git.buildroot.net/buildroot/commit/?id=5b570f6c74a9427212562fc430810400cd510c84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes CVE-2023-39323: Line directives ("//line") can be used to bypass the
-restrictions on "//go:cgo_" directives, allowing blocked linker and compiler
-flags to be passed during compilation.  This can result in unexpected
-execution of arbitrary code when running "go build".
+Building host-go within docker fails:
 
-go1.20.9 (released 2023-10-05) includes one security fixes to the cmd/go
-package, as well as bug fixes to the go command and the linker.
+error obtaining VCS status: exit status 128
+	Use -buildvcs=false to disable VCS stamping.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1da113559fc7a6f7f420c9026c1f4102bd7ac81d)
+Reproduction of the issue:
+
+mkdir go-issue-61620
+cd ./go-issue-61620
+wget https://go.dev/dl/go1.19.11.src.tar.gz
+mkdir go-bootstrap
+tar -xf go1.19.11.src.tar.gz -C ./go-bootstrap --strip-components=1
+cd ./go-bootstrap/src/
+bash make.bash
+cd ../../
+wget https://go.dev/dl/go1.20.6.src.tar.gz
+mkdir go
+tar -xf go1.20.6.src.tar.gz -C ./go/ --strip-components=1
+printf "gitdir: ../../does/not/exist/.git" > ./.git
+cd ./go/src/
+GOROOT_BOOTSTRAP=$(pwd)/../../go-bootstrap/ bash make.bash
+
+The error only occurs when the .git that git detects in the parent directory of
+the GOROOT_BOOTSTRAP is invalid or not present causing errors when running `git`
+commands within GOROOT_BOOTSTRAP.
+
+Report: https://lists.buildroot.org/pipermail/buildroot/2023-July/671344.html
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/4725186525
+Upstream issue: https://github.com/golang/go/issues/61620
+Upstream PR: https://github.com/golang/go/pull/61621
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bc8e70a08ba083d978c828e31442a7645c9099d7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...t-buildvcs-false-when-building-go-bootstr.patch | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 19405982ba..ac603e6e3b 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  38d71714fa5279f97240451956d8e47e3c1b6a5de7cb84137949d62b5dd3182e  go1.20.8.src.tar.gz
-+sha256  4923920381cd71d68b527761afefa523ea18c5831b4795034c827e18b685cdcf  go1.20.9.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index c1e9f2f8f6..d75c1afa9e 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.20.8
-+GO_VERSION = 1.20.9
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+diff --git a/package/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch b/package/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
+new file mode 100644
+index 0000000000..e7158a2b3f
+--- /dev/null
++++ b/package/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
+@@ -0,0 +1,73 @@
++From 6b05378097c6a386ed9912d2471976dc39504e86 Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@aperture.us>
++Date: Thu, 27 Jul 2023 21:28:47 -0700
++Subject: [PATCH] cmd/dist: set buildvcs=false when building go-bootstrap
++
++When building go-bootstrap as part of the make.bash process, the cmd/dist
++invokes the bootstrap Go compiler to build the go_bootstrap tool:
++
++${GOROOT_BOOTSTRAP}/bin/go install -tags=math_big_pure_go compiler_bootstrap purego bootstrap/cmd/...
++
++If there is an invalid .git directory in a parent of ${GOROOT_BOOTSTRAP},
++make.bash will fail. Reproduction of the issue:
++
++  mkdir go-issue-61620
++  cd ./go-issue-61620
++  wget https://go.dev/dl/go1.19.11.src.tar.gz
++  mkdir go-bootstrap
++  tar -xf go1.19.11.src.tar.gz -C ./go-bootstrap --strip-components=1
++  cd ./go-bootstrap/src/
++  bash make.bash
++  cd ../../
++  wget https://go.dev/dl/go1.20.6.src.tar.gz
++  mkdir go
++  tar -xf go1.20.6.src.tar.gz -C ./go/ --strip-components=1
++  printf "gitdir: ../../does/not/exist/.git" > ./.git
++  cd ./go/src/
++  GOROOT_BOOTSTRAP=$(pwd)/../../go-bootstrap/ bash make.bash
++
++The build fails with the following error:
++
++  Building Go toolchain1 using [snip]/go-1.19.10.
++  error obtaining VCS status: exit status 128
++    Use -buildvcs=false to disable VCS stamping.
++  go tool dist: FAILED: [snip]/go-1.19.10/bin/go install -tags=math_big_pure_go \
++    compiler_bootstrap purego bootstrap/cmd/...: exit status 1
++
++This change unconditionally sets -buildvcs=false when compiling go-bootstrap. We
++don't need the revision information in those binaries anyway. Setting this flag
++was previously not done as we were unsure if the go-bootstrap compiler would be
++new enough to support the buildvcs build flag. Since Go 1.20.x, Go 1.19.x is the
++minimum version for go-bootstrap, and supports -buildvcs=false. We can now set
++-buildvcs=false without worrying about compatibility.
++
++Related: https://github.com/golang/go/issues/54852
++Fixes: https://github.com/golang/go/issues/61620
++
++---
++
++Upstream PR: https://github.com/golang/go/pull/61621
++
++Signed-off-by: Christian Stewart <christian@aperture.us>
++
++---
++ src/cmd/dist/buildtool.go | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
++index a528d7aa76..3b411d6ebb 100644
++--- a/src/cmd/dist/buildtool.go
+++++ b/src/cmd/dist/buildtool.go
++@@ -221,6 +221,9 @@ func bootstrapBuildTools() {
++ 	cmd := []string{
++ 		pathf("%s/bin/go", goroot_bootstrap),
++ 		"install",
+++		// Fixes cases where an invalid .git is present in a parent of GOROOT_BOOTSTRAP.
+++		// See: https://github.com/golang/go/issues/61620
+++		"-buildvcs=false",
++ 		"-tags=math_big_pure_go compiler_bootstrap purego",
++ 	}
++ 	if vflag > 0 {
++-- 
++2.41.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
