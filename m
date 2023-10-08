@@ -4,47 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95FB0E95A67
-	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 16:01:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A04E4E95A82
+	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 16:01:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3973D418C4;
-	Sun,  8 Oct 2023 16:01:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3973D418C4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B892418D7;
+	Sun,  8 Oct 2023 16:01:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B892418D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ODLHwQycPiEl; Sun,  8 Oct 2023 16:01:40 +0000 (UTC)
+	with ESMTP id fhYR8zvpYbDv; Sun,  8 Oct 2023 16:01:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 266DB41930;
-	Sun,  8 Oct 2023 16:01:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 266DB41930
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 41BF81BF422
+	by smtp4.osuosl.org (Postfix) with ESMTP id 032A1418C5;
+	Sun,  8 Oct 2023 16:01:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 032A1418C5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E58EB1BF422
  for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 16:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C2628203F
- for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 16:01:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C2628203F
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDA1C40BFC
+ for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 16:01:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDA1C40BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pffacWtGbwi4 for <buildroot@lists.busybox.net>;
- Sun,  8 Oct 2023 16:01:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kK3xnIvjUEHK for <buildroot@lists.busybox.net>;
+ Sun,  8 Oct 2023 16:01:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F4EC82039
- for <buildroot@buildroot.org>; Sun,  8 Oct 2023 16:01:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F4EC82039
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0923408F1
+ for <buildroot@buildroot.org>; Sun,  8 Oct 2023 16:01:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0923408F1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F1C28435A; Sun,  8 Oct 2023 16:01:17 +0000 (UTC)
+ id BBDF88435A; Sun,  8 Oct 2023 16:01:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 8 Oct 2023 18:00:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: edfbc27fac56ccedc9e67684ca491c232f2a93d3
-X-Git-Newrev: 1316b4ef313cf5257a8cde39179b3e438f88318e
+Date: Sun, 8 Oct 2023 17:59:22 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 6374f0c527c3a15e8c7041551453ce447d9e309a
+X-Git-Newrev: 03b44ac6d6a681e64cef2312187cccbd0b5b7958
 X-Patchwork-Hint: ignore
-Message-Id: <20231008160117.2F1C28435A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: security bump to version 1.21.2
+Message-Id: <20231008160116.BBDF88435A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/{glibc,
+ localedef}: security bump to version
+ glibc-2.37-45-gb4e23c75aea756b4bddc4abcf27a1c6dca8b6bd3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,46 +64,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1316b4ef313cf5257a8cde39179b3e438f88318e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=03b44ac6d6a681e64cef2312187cccbd0b5b7958
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fixes CVE-2023-39323: Line directives ("//line") can be used to bypass the
-restrictions on "//go:cgo_" directives, allowing blocked linker and compiler
-flags to be passed during compilation.  This can result in unexpected
-execution of arbitrary code when running "go build".
+Fixes the following security issues:
 
-go1.21.2 (released 2023-10-05) includes one security fixes to the cmd/go
-package, as well as bug fixes to the compiler, the go command, the linker,
-the runtime, and the runtime/metrics package.
+  CVE-2023-4911: If a tunable of the form NAME=NAME=VAL is passed in the
+  environment of a setuid program and NAME is valid, it may result in a
+  buffer overflow, which could be exploited to achieve escalated
+  privileges.  This flaw was introduced in glibc 2.34.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/glibc/glibc.hash       | 2 +-
+ package/glibc/glibc.mk         | 2 +-
+ package/localedef/localedef.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index be8af438b3..a2ec6b5923 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  bfa36bf75e9a1e9cbbdb9abcf9d1707e479bd3a07880a8ae3564caee5711cb99  go1.21.1.src.tar.gz
-+sha256  45e59de173baec39481854490d665b726cec3e5b159f6b4172e5ec7780b2c201  go1.21.2.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 6f080be5c0..2c32e90817 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index ab310498b8..2b8f49ea6b 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  7129dfadea29e8f20865186a7fdec3dc3e65d055a81dc8fc399189491bba493c  glibc-2.37-43-g94ef70136587c40a357f775677997c753b3de56c.tar.gz
++sha256  19d874f03dadbccaca8ae88a0e96d38435066badfe6ed606c2ad1e525454dece  glibc-2.37-45-gb4e23c75aea756b4bddc4abcf27a1c6dca8b6bd3.tar.gz
  
--GO_VERSION = 1.21.1
-+GO_VERSION = 1.21.2
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 666d9e4a8c..319028b058 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.37-43-g94ef70136587c40a357f775677997c753b3de56c
++GLIBC_VERSION = 2.37-45-gb4e23c75aea756b4bddc4abcf27a1c6dca8b6bd3
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index d368121a1a..18f040d7c2 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.37-43-g94ef70136587c40a357f775677997c753b3de56c
++LOCALEDEF_VERSION = 2.37-45-gb4e23c75aea756b4bddc4abcf27a1c6dca8b6bd3
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
