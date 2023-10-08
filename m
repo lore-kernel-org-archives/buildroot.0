@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5803EE95A82
-	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 18:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16236E95A67
+	for <buildroot@archiver.kernel.org>; Sun,  8 Oct 2023 18:30:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 026C440864;
-	Sun,  8 Oct 2023 18:30:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 026C440864
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FBA341743;
+	Sun,  8 Oct 2023 18:30:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FBA341743
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w7mkq0F5yO54; Sun,  8 Oct 2023 18:30:10 +0000 (UTC)
+	with ESMTP id k3gv5tzUa424; Sun,  8 Oct 2023 18:30:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4712041701;
-	Sun,  8 Oct 2023 18:30:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4712041701
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A97041BF8A8
- for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 18:29:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B9C5417BF;
+	Sun,  8 Oct 2023 18:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B9C5417BF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 20C3D1BF3AD
+ for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 18:29:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 834A640B5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDC1A40853
  for <buildroot@lists.busybox.net>; Sun,  8 Oct 2023 18:29:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 834A640B5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDC1A40853
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vv4JnyNN1amx for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1KiyA-9taIpS for <buildroot@lists.busybox.net>;
  Sun,  8 Oct 2023 18:29:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36CED4014B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2EAB5403CC
  for <buildroot@buildroot.org>; Sun,  8 Oct 2023 18:29:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36CED4014B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EAB5403CC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 253DD843AA; Sun,  8 Oct 2023 18:29:52 +0000 (UTC)
+ id 19FAC843A9; Sun,  8 Oct 2023 18:29:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 8 Oct 2023 20:15:13 +0200
+Date: Sun, 8 Oct 2023 20:12:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10c637ab06d935bbce4c833c4ab9695cdb32b6c8
-X-Git-Newrev: 083e65a67c84f83a3403c92c51d89f8c94907c55
+X-Git-Oldrev: 4c185a42fdad1b48f61286edf65421818d43fd79
+X-Git-Newrev: 10c637ab06d935bbce4c833c4ab9695cdb32b6c8
 X-Patchwork-Hint: ignore
-Message-Id: <20231008182952.253DD843AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add systemd tests for
- factory and overlayfs
+Message-Id: <20231008182952.19FAC843A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/skeleton-init-systemd: add option
+ to use overlayfs on /var
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,324 +59,297 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7207371032097533833=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=083e65a67c84f83a3403c92c51d89f8c94907c55
+--===============7207371032097533833==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=10c637ab06d935bbce4c833c4ab9695cdb32b6c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Systemd requires /var to be writeable [1]. With read-only rootfs, we
+need a solution that makes sure /var is writeable. We already have a
+solution using a factory, with systemd-tmpfiles. This approach has a few
+limitations:
+
+- The behaviour of what happens when the rootfs is updated and the
+  contents of the factory /var changes are not very intuitive.
+
+- systemd-tmpfiles is not started super early in the boot, so there's a
+  relatively long time that /var is not writeable. There is also no easy
+  way in systemd to express dependencies on the subdirectories of /var
+  to have been populated from the factory.
+
+- The contents of /var is duplicated. If it is big, the rootfs size
+  increases unnecessarily and it takes a long time before the copying is
+  done. This is also not done atomically.
+
+This commit adds an alternative using an overlay filesystem that has the
+following characteristics:
+
+-   Don't depend on anything being available, except the
+    API File Systems [2]. In other words, this can be done very early in
+    the boot process. This is useful because /var is meant to be
+    available before normal and even some early services are running.
+
+-   Be a clean drop-in, that can be trivially added / removed.
+
+-   Make sure that overlayfs is available in the kernel.
+
+-   Units are (partially) reusable for custom solutions. This goal is
+    actually not fully reached yet: for that the service file should be
+    converted into a template, and the mount unit should use a specifier
+    for all repeated references to /var.
+
+Mounting the overlay is slightly acrobatic and requires a few steps:
+
+- First, we have to make sure the directories for overlayfs's upper,
+  lower and work directories are available on a tmpfs. Note that
+  "upper" and "work" must be on the same filesystem.
+
+- The writeable overlay upper directory must be mounted.
+
+- The original contents of /var must be bind-mounted to the overlay
+  lower directory.
+
+- Finally, the overlay must be mounted on /var.
+
+For the overlayfs directories, we create a tree on /run. Since there is
+no standard name convention for this, we create a new directory
+"/run/buildroot" with subdirectory "mounts" for everything
+mount-related. Below that, a subdirectory is created for every mount
+point that needs helper directories. Thus, we arrive to
+/run/buildroot/mounts/var as the base directory for the overlay. Below
+this, the directories lower, upper and work are created.
+
+The bind-mount of /var is done in the same service as the one creating
+the overlay lower, upper and work directories. Creating those
+directories can't be done in a mount unit, and bind-mounting /var in a
+mount unit would create a circular dependency. Indeed, if we had a mount
+unit to do the bind mount, then it sould look like:
+    # run-buildroot-mounts-var-lower.mount
+    [Mount]
+    What=/var
+    Where=/run/buildroot/mounts/var/lower
+    Options=bind
+
+and then the var.mount unit would need to have a dependency on that
+unit:
+    # var.mount
+    [Unit]
+    After=run-buildroot-mounts-var-lower.mount
+    [Mount]
+    Where=/var
+
+However, the What=/var of the first unit automatically adds an implicit
+dependency on /var, and since there is a unit providing Where=/var, we
+would have run-buildroot-mounts-var-lower.mount depend on var.mount, but
+we need var.mount to depend on run-buildroot-mounts-var-lower.mount, so
+this is a circular dependency. There is no way to tell systemd no to add
+the implicit dependency. So we do the bind mont manually in the service
+unit that prepares the overlay structure.
+
+For the writeable upper layer, we don't need to do anything. In the
+default configuration, the upper layer is supposed to be a tmpfs, and
+/run/buildroot/mounts/var/upper is already a tmpfs so it can serve as
+is. To make it persistent, we suggest to the user to mount a writeable,
+persistent filesystem on /run/buildroot/mounts/var. The
+RequiresMountsFor dependency in the prepare-var-overlay service makes
+sure that that mount is performed before the overlay is started. Using
+/run/buildroot/mounts/var/upper as the mount point sounds more logical
+at first, but since the work directory is supposed to be on the same
+filesystem as the upper directory, this wouldn't work very well.
+
+As example, consider using /dev/sdc1 as upper layer for var, this can be
+achieved by adding the following line to fstab:
+
+/dev/sdc1	/run/buildroot/mounts/var	ext4	defaults
+
+Systemd will convert this into a mount unit with all the proper
+dependencies.
+
+Norbert provided some systemd units as a starting point, and that was
+quite a huge help in understanding how to fit all those things together.
+
+[1] - https://www.freedesktop.org/wiki/Software/systemd/APIFileSystems/
+
+Co-authored-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Jérémy Rosen <jeremy.rosen@smile.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 [Arnout:
- - use a simple mount unit for
-   TestInitSystemSystemdRoFullOverlayfsVarBacking;
- - change the test of TestInitSystemSystemdRoFullOverlayfsVarBacking to
-   check that the exact expected mount was performed;
- - add a test of var backing with fstab instead of mount unit.
+ - Merge commit messages from Yann and from Norbert.
+ - Remove the run-buildroot-mounts-var.mount unit; instead, just reuse
+   the existing tmpfs for the upper layer in the default case.
+ - Update the help text to explain how to mount a custom upper layer
+   with fstab.
 ]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- .../testing/conf/overlayfs-kernel-fragment.config  |   1 +
- .../systemd/system/run-buildroot-mounts-var.mount  |  13 ++
- support/testing/tests/init/test_systemd.py         | 233 ++++++++++++++++++++-
- 3 files changed, 238 insertions(+), 9 deletions(-)
+ .../skeleton-init-systemd/{ => factory}/var.mount  |  0
+ .../overlayfs/prepare-var-overlay.service          | 19 ++++++++++++++++
+ package/skeleton-init-systemd/overlayfs/var.mount  | 14 ++++++++++++
+ .../skeleton-init-systemd/skeleton-init-systemd.mk | 25 ++++++++++++++++++---
+ system/Config.in                                   | 26 ++++++++++++++++------
+ 5 files changed, 74 insertions(+), 10 deletions(-)
 
-diff --git a/support/testing/conf/overlayfs-kernel-fragment.config b/support/testing/conf/overlayfs-kernel-fragment.config
+diff --git a/package/skeleton-init-systemd/var.mount b/package/skeleton-init-systemd/factory/var.mount
+similarity index 100%
+rename from package/skeleton-init-systemd/var.mount
+rename to package/skeleton-init-systemd/factory/var.mount
+diff --git a/package/skeleton-init-systemd/overlayfs/prepare-var-overlay.service b/package/skeleton-init-systemd/overlayfs/prepare-var-overlay.service
 new file mode 100644
-index 0000000000..9122238993
+index 0000000000..281aa0efb5
 --- /dev/null
-+++ b/support/testing/conf/overlayfs-kernel-fragment.config
-@@ -0,0 +1 @@
-+CONFIG_OVERLAY_FS=y
-diff --git a/support/testing/tests/init/systemd-overlay-mount-unit/usr/lib/systemd/system/run-buildroot-mounts-var.mount b/support/testing/tests/init/systemd-overlay-mount-unit/usr/lib/systemd/system/run-buildroot-mounts-var.mount
-new file mode 100644
-index 0000000000..520cd6d9da
---- /dev/null
-+++ b/support/testing/tests/init/systemd-overlay-mount-unit/usr/lib/systemd/system/run-buildroot-mounts-var.mount
-@@ -0,0 +1,13 @@
++++ b/package/skeleton-init-systemd/overlayfs/prepare-var-overlay.service
+@@ -0,0 +1,19 @@
 +[Unit]
-+Description=Variable permanent storage overlay
++Description=Variable storage overlay setup
 +ConditionPathIsSymbolicLink=!/var
 +DefaultDependencies=no
-+After=local-fs-pre.target
++RequiresMountsFor=/run/buildroot/mounts/var
++
++[Service]
++Type=oneshot
++RemainAfterExit=yes
++ExecStart=/usr/bin/mkdir -p /run/buildroot/mounts/var/lower /run/buildroot/mounts/var/upper /run/buildroot/mounts/var/work
++
++# Ideally, we would like to use a systemd mount unit to manage the bind
++# mount. Unfortunately, that creates a circular dependency: such a unit
++# would have What=/var while var.mount has Where=/var so that introduces
++# an implicit dependency from that unit to var.mount, but var.mount
++# would have an explicit dependency to be ordered after that unit.
++# So we handle the bind mount manually.
++ExecStart=/usr/bin/mount -n -o bind,private /var /run/buildroot/mounts/var/lower
++ExecStop=/usr/bin/umount -l /run/buildroot/mounts/var/lower
+diff --git a/package/skeleton-init-systemd/overlayfs/var.mount b/package/skeleton-init-systemd/overlayfs/var.mount
+new file mode 100644
+index 0000000000..812e6ce7bf
+--- /dev/null
++++ b/package/skeleton-init-systemd/overlayfs/var.mount
+@@ -0,0 +1,14 @@
++[Unit]
++Description=Variable storage overlay
++Documentation=man:file-hierarchy(7)
++ConditionPathIsSymbolicLink=!/var
++DefaultDependencies=no
++After=prepare-var-overlay.service
++BindsTo=prepare-var-overlay.service
 +
 +[Mount]
-+# Rather than creating an actual writable partition, we just create
-+# another tmpfs. For tmpfs, the What is not relevant - but we use it in
-+# the test to distinguish it from other tmpfses
-+What=other-var-backing-store
-+Where=/run/buildroot/mounts/var
-+Type=tmpfs
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index ddc32b0838..79061a86d7 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -1,7 +1,15 @@
- import infra.basetest
-+import re
- from tests.init.base import InitSystemBase as InitSystemBase
- 
- 
-+# In the following tests, the read-only cases use the default settings,
-+# which historically used both a factory to populate a tmpfs on /var,
-+# and pre-populated /var at buildtime. Since these are the default
-+# settings, and they proved to generate a system that ultimately boots,
-+# we still want to keep testing that. See later, below, for the
-+# specialised test cases.
++What=overlay_var
++Where=/var
++Type=overlay
++Options=lowerdir=/run/buildroot/mounts/var/lower,upperdir=/run/buildroot/mounts/var/upper,workdir=/run/buildroot/mounts/var/work,redirect_dir=on,index=on,xino=on
++LazyUnmount=true
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index fb15552f99..b312fe33e4 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -33,7 +33,7 @@ endef
+ # a real (but empty) directory, and the "factory files" will be copied
+ # back there by the tmpfiles.d mechanism.
+ ifeq ($(BR2_INIT_SYSTEMD_VAR_FACTORY),y)
+-define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
++define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR_FACTORY
+ 	rm -rf $(TARGET_DIR)/usr/share/factory/var
+ 	mv $(TARGET_DIR)/var $(TARGET_DIR)/usr/share/factory/var
+ 	mkdir -p $(TARGET_DIR)/var
+@@ -52,11 +52,30 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 			|| exit 1; \
+ 		fi; \
+ 	done >$(TARGET_DIR)/usr/lib/tmpfiles.d/00-buildroot-var.conf
+-	$(INSTALL) -D -m 0644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/var.mount \
++	$(INSTALL) -D -m 0644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/factory/var.mount \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/var.mount
+ endef
+-SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
++SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR_FACTORY
+ endif  # BR2_INIT_SYSTEMD_VAR_FACTORY
 +
- class InitSystemSystemdBase(InitSystemBase):
-     config = \
-         """
-@@ -17,7 +25,10 @@ class InitSystemSystemdBase(InitSystemBase):
-         """
++ifeq ($(BR2_INIT_SYSTEMD_VAR_OVERLAYFS),y)
++
++define SKELETON_INIT_SYSTEMD_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
++endef
++
++define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR_OVERLAYFS
++	$(INSTALL) -D -m 0644 \
++		$(SKELETON_INIT_SYSTEMD_PKGDIR)/overlayfs/prepare-var-overlay.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/prepare-var-overlay.service
++	$(INSTALL) -D -m 0644 \
++		$(SKELETON_INIT_SYSTEMD_PKGDIR)/overlayfs/var.mount \
++		$(TARGET_DIR)/usr/lib/systemd/system/var.mount
++endef
++SKELETON_INIT_SYSTEMD_POST_INSTALL_TARGET_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR_OVERLAYFS
++
++endif  # BR2_INIT_SYSTEMD_VAR_OVERLAYFS
++
+ endif  # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
  
-     def check_systemd(self, fs):
--        self.start_emulator(fs)
-+        if "BR2_LINUX_KERNEL=y" in self.config:
-+            self.start_emulator(fs, "zImage", "vexpress-v2p-ca9")
-+        else:
-+            self.start_emulator(fs)
-         self.check_init("/lib/systemd/systemd")
+ ifeq ($(BR2_INIT_SYSTEMD_POPULATE_TMPFILES),y)
+diff --git a/system/Config.in b/system/Config.in
+index c017d3797a..25485c2486 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -167,6 +167,14 @@ choice
+ 	  Select how Buildroot provides a read-write /var when the
+ 	  rootfs is not remounted read-write.
  
-         # Test all units are OK
-@@ -40,19 +51,12 @@ class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
-         """
-         BR2_SYSTEM_DHCP="eth0"
-         # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
--        BR2_ROOTFS_OVERLAY="{}"
-         BR2_TARGET_ROOTFS_SQUASHFS=y
--        """.format(infra.filepath("tests/init/systemd-factory"))
-+        """
++	  Note: Buildroot uses a tmpfs, either as a mount point or as
++	  the upper of an overlayfs, so as to at least make the system
++	  bootable out of the box; mounting a filesystem from actual
++	  storage is left to the integration, as it is too specific and
++	  may need preparatory work like partitionning a device and/or
++	  formatting a filesystem first, which falls out of the scope
++	  of Buildroot.
++
+ config BR2_INIT_SYSTEMD_VAR_FACTORY
+ 	bool "build a factory to populate a tmpfs"
+ 	help
+@@ -179,17 +187,21 @@ config BR2_INIT_SYSTEMD_VAR_FACTORY
+ 	  It probably does not play very well with triggering a call
+ 	  to systemd-tmpfiles at build time (below).
  
-     def test_run(self):
-         self.check_systemd("squashfs")
- 
--        # This one must be executed on the target, to check that
--        # the factory feature works as expected
--        out, exit_code = self.emulator.run("cat /var/foo/bar")
--        self.assertEqual(exit_code, 0)
--        self.assertEqual(out[0], "foobar")
+-	  Note: Buildroot mounts a tmpfs on /var to at least make the
+-	  system bootable out of the box; mounting a filesystem from
+-	  actual storage is left to the integration, as it is too
+-	  specific and may need preparatory work like partitionning a
+-	  device and/or formatting a filesystem first, so that falls
+-	  out of the scope of Buildroot.
 -
+ 	  To use persistent storage, provide a systemd dropin for the
+ 	  var.mount unit, that overrides the What and Type, and possibly
+ 	  the Options and After, fields.
  
- class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-@@ -191,3 +195,214 @@ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
- 
-     def test_run(self):
-         self.check_systemd("ext2")
++config BR2_INIT_SYSTEMD_VAR_OVERLAYFS
++	bool "mount an overlayfs backed by a tmpfs"
++	select BR2_INIT_SYSTEMD_POPULATE_TMPFILES
++	help
++	  Mount an overlayfs on /var, with the upper as a tmpfs.
 +
++	  To use a persistent storage, provide either a mount unit or a
++	  fstab line to mount it on /run/buildroot/mounts/var, e.g.
 +
-+# The following tests are all about read-only rootfs, and exercise either
-+# using an un-populated factory for /var, or an overlaysfs ontop of a
-+# pre-populated /var. They all specialise the TestInitSystemSystemdRo*
-+# test cases above.
++	  /dev/sdc1    /run/buildroot/mounts/var    ext4    defaults
 +
-+
-+# Helper class for factory-based tests
-+class InitSystemSystemdBaseFactory():
-+    config = \
-+        """
-+        # BR2_INIT_SYSTEMD_POPULATE_TMPFILES is not set
-+        BR2_ROOTFS_OVERLAY="{}"
-+        """.format(infra.filepath("tests/init/systemd-factory"))
-+
-+    def test_run(self):
-+        super().test_run()
-+
-+        # This one must be executed on the target, to check that
-+        # the factory feature works as expected
-+        out, exit_code = self.emulator.run("cat /var/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(out[0], "foobar")
-+
-+        # /var/foo/bar is from the /var factory
-+        _, exit_code = self.emulator.run("test -e /usr/share/factory/var/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+
-+        # We can write in /var/foo/bar
-+        _, exit_code = self.emulator.run("echo barfoo >/var/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        # ... and it contains the new content
-+        out, exit_code = self.emulator.run("cat /var/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(out[0], "barfoo")
-+        # ... but the factory is umodified
-+        out, exit_code = self.emulator.run("cat /usr/share/factory/var/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(out[0], "foobar")
-+
-+
-+class TestInitSystemSystemdRoNetworkdFactory(
-+    InitSystemSystemdBaseFactory,
-+    TestInitSystemSystemdRoNetworkd,
-+):
-+    config = InitSystemSystemdBaseFactory.config + \
-+        TestInitSystemSystemdRoNetworkd.config
-+
-+
-+class TestInitSystemSystemdRoIfupdownFactory(
-+    InitSystemSystemdBaseFactory,
-+    TestInitSystemSystemdRoIfupdown,
-+):
-+    config = InitSystemSystemdBaseFactory.config + \
-+        TestInitSystemSystemdRoIfupdown.config
-+
-+
-+class TestInitSystemSystemdRoIfupdownDbusbrokerFactory(
-+    InitSystemSystemdBaseFactory,
-+    TestInitSystemSystemdRoIfupdownDbusbroker,
-+):
-+    config = InitSystemSystemdBaseFactory.config + \
-+        TestInitSystemSystemdRoIfupdownDbusbroker.config
-+
-+
-+class TestInitSystemSystemdRoIfupdownDbusbrokerDbusFactory(
-+    InitSystemSystemdBaseFactory,
-+    TestInitSystemSystemdRoIfupdownDbusbrokerDbus,
-+):
-+    config = InitSystemSystemdBaseFactory.config + \
-+        TestInitSystemSystemdRoIfupdownDbusbrokerDbus.config
-+
-+
-+class TestInitSystemSystemdRoFullFactory(
-+    InitSystemSystemdBaseFactory,
-+    TestInitSystemSystemdRoFull,
-+):
-+    config = InitSystemSystemdBaseFactory.config + \
-+        TestInitSystemSystemdRoFull.config
-+
-+
-+# Helper class for overlayfs-based tests
-+class InitSystemSystemdBaseOverlayfs():
-+    config = \
-+        """
-+        # BR2_INIT_SYSTEMD_VAR_FACTORY is not set
-+        BR2_INIT_SYSTEMD_VAR_OVERLAYFS=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        """.format(infra.filepath("tests/init/systemd-factory"),
-+                   infra.filepath("conf/overlayfs-kernel-fragment.config"))
-+
-+    def test_run(self):
-+        super().test_run()
-+
-+        # This one must be executed on the target, to check that
-+        # the tmpfiles pre-populate works as expected
-+        out, exit_code = self.emulator.run("cat /var/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(out[0], "foobar")
-+
-+        # /var/foo/bar is from the pre-populated /var, so it should
-+        # not be present in the upper of the overlay
-+        _, exit_code = self.emulator.run("test -e /run/buildroot/mounts/var/upper/foo/bar")
-+        self.assertNotEqual(exit_code, 0)
-+
-+        # We can write in /var/foo/bar
-+        _, exit_code = self.emulator.run("echo barfoo >/var/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        # ... and it contains the new content
-+        out, exit_code = self.emulator.run("cat /var/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(out[0], "barfoo")
-+        # ... and it to appears in the upper
-+        _, exit_code = self.emulator.run("test -e /run/buildroot/mounts/var/upper/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        # ... with the new content
-+        out, exit_code = self.emulator.run("cat /run/buildroot/mounts/var/upper/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(out[0], "barfoo")
-+        # ... while the lower still has the oldcontent
-+        out, exit_code = self.emulator.run("cat /run/buildroot/mounts/var/lower/foo/bar")
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(out[0], "foobar")
-+
-+
-+class TestInitSystemSystemdRoNetworkdOverlayfs(
-+    InitSystemSystemdBaseOverlayfs,
-+    TestInitSystemSystemdRoNetworkd,
-+):
-+    config = InitSystemSystemdBaseOverlayfs.config + \
-+        TestInitSystemSystemdRoNetworkd.config
-+
-+
-+class TestInitSystemSystemdRoIfupdownOverlayfs(
-+    InitSystemSystemdBaseOverlayfs,
-+    TestInitSystemSystemdRoIfupdown,
-+):
-+    config = InitSystemSystemdBaseOverlayfs.config + \
-+        TestInitSystemSystemdRoIfupdown.config
-+
-+
-+class TestInitSystemSystemdRoIfupdownDbusbrokerOverlayfs(
-+    InitSystemSystemdBaseOverlayfs,
-+    TestInitSystemSystemdRoIfupdownDbusbroker,
-+):
-+    config = InitSystemSystemdBaseOverlayfs.config + \
-+        TestInitSystemSystemdRoIfupdownDbusbroker.config
-+
-+
-+class TestInitSystemSystemdRoIfupdownDbusbrokerDbusOverlayfs(
-+    InitSystemSystemdBaseOverlayfs,
-+    TestInitSystemSystemdRoIfupdownDbusbrokerDbus,
-+):
-+    config = InitSystemSystemdBaseOverlayfs.config + \
-+        TestInitSystemSystemdRoIfupdownDbusbrokerDbus.config
-+
-+
-+class TestInitSystemSystemdRoFullOverlayfs(
-+    InitSystemSystemdBaseOverlayfs,
-+    TestInitSystemSystemdRoFull,
-+):
-+    config = InitSystemSystemdBaseOverlayfs.config + \
-+        TestInitSystemSystemdRoFull.config
-+
-+
-+class InitSystemSystemdBaseOverlayfsVarBacking(InitSystemBase):
-+    @classmethod
-+    def gen_config(cls, overlaydir: str) -> str:
-+        return re.sub(
-+            r'^\s*BR2_ROOTFS_OVERLAY="(.*)"$',
-+            'BR2_ROOTFS_OVERLAY="\\1 {}"'.format(infra.filepath(overlaydir)),
-+            TestInitSystemSystemdRoFullOverlayfs.config,
-+            flags=re.MULTILINE,
-+        )
-+
-+    def check_var_mounted(self):
-+        self.assertRunOk("grep '^other-var-backing-store /run/buildroot/mounts/var tmpfs' /proc/mounts")
-+
-+
-+class TestInitSystemSystemdRoFullOverlayfsVarBackingMountUnit(
-+    TestInitSystemSystemdRoFullOverlayfs,
-+    InitSystemSystemdBaseOverlayfsVarBacking,
-+):
-+    config = InitSystemSystemdBaseOverlayfsVarBacking.gen_config(
-+        'tests/init/systemd-overlay-mount-unit',
-+    )
-+
-+    def test_run(self):
-+        super().test_run()
-+        self.check_var_mounted()
-+
-+
-+class TestInitSystemSystemdRoFullOverlayfsVarBackingFstab(
-+    TestInitSystemSystemdRoFullOverlayfs,
-+    InitSystemSystemdBaseOverlayfsVarBacking,
-+):
-+    config = InitSystemSystemdBaseOverlayfsVarBacking.gen_config(
-+        'tests/init/systemd-overlay-fstab',
-+    )
-+
-+    def test_run(self):
-+        super().test_run()
-+        self.check_var_mounted()
+ config BR2_INIT_SYSTEMD_VAR_NONE
+ 	bool "do nothing"
+ 	help
+
+--===============7207371032097533833==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7207371032097533833==--
