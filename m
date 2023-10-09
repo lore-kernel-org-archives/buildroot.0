@@ -4,84 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7929E95A8E
-	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 13:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A01FE95A8E
+	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 14:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E4B161184;
-	Mon,  9 Oct 2023 13:11:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E4B161184
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA35C6104D;
+	Mon,  9 Oct 2023 14:22:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA35C6104D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5sLCYd0o5P3C; Mon,  9 Oct 2023 13:11:40 +0000 (UTC)
+	with ESMTP id l_pgwPk33cbh; Mon,  9 Oct 2023 14:22:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A81C6119F;
-	Mon,  9 Oct 2023 13:11:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A81C6119F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0F3CB1BF33F
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 13:11:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1229B61142;
+	Mon,  9 Oct 2023 14:22:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1229B61142
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 017011BF314
+ for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 14:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA32081BB0
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 13:11:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA32081BB0
+ by smtp4.osuosl.org (Postfix) with ESMTP id DAC0B41989
+ for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 14:22:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAC0B41989
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h76xyMXXyxcN for <buildroot@lists.busybox.net>;
- Mon,  9 Oct 2023 13:11:36 +0000 (UTC)
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A322F81B8A
- for <buildroot@buildroot.org>; Mon,  9 Oct 2023 13:11:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A322F81B8A
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-53447d0241eso8098447a12.3
- for <buildroot@buildroot.org>; Mon, 09 Oct 2023 06:11:36 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w5RenjHcWD3L for <buildroot@lists.busybox.net>;
+ Mon,  9 Oct 2023 14:22:47 +0000 (UTC)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 680AF41951
+ for <buildroot@buildroot.org>; Mon,  9 Oct 2023 14:22:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 680AF41951
+Received: by mail-ed1-x52f.google.com with SMTP id
+ 4fb4d7f45d1cf-5334f9a56f6so7937165a12.3
+ for <buildroot@buildroot.org>; Mon, 09 Oct 2023 07:22:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696857094; x=1697461894;
+ d=1e100.net; s=20230601; t=1696861365; x=1697466165;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=vWqu8XG7sIBLQZmUXCG4de5eiSRDGNuqLBQz1pk06SY=;
- b=e4xagKX0tZchtQxSFSs6YbOKKeaVRPWh5sNRr7ZvsfCFwxaPfDMZ687adznufaR8yK
- P3YozzD+Vo+c68SnmGe0WTVzbZ0AbJAShq1rBpJX4Um9YkqVNS9WUpFliG3FWcf8lPYn
- dMDEMws/xsiK4cYfk/0SH1fWdNKHL2lvuOFcqTwgU3C+xALSjn2KIRt50ftj+AS8dTf4
- QwnxNsllMZPqTNjRvsLMV8SW7U/IRQ2HBBiJYrcU4R5hMC/K7EfDLMFkb+dqBN7ixEIK
- A/GUGoWcVguh9L6Ftx657KS1PSzcjRR0nTTn0K9UoJovrtbWAQ/Y25oxj8fJ2w9mFUL+
- U1Vg==
-X-Gm-Message-State: AOJu0Yz/nST2YsiHl0/rMX9yRIxBT7nF1hZw3f4m4AlMWR4cOA/8WbdM
- myCtFszJ0conk2sG6EnH51rcgEHdcv4=
-X-Google-Smtp-Source: AGHT+IHleRvXPl3ykfvORJny1fcpJyz7/eT1ignb6nAh2ioytIyQskD9dRLgVAF1CzyiHI+b53REaQ==
-X-Received: by 2002:aa7:cd7a:0:b0:532:bf2a:8cbc with SMTP id
- ca26-20020aa7cd7a000000b00532bf2a8cbcmr12881422edb.16.1696857092818; 
- Mon, 09 Oct 2023 06:11:32 -0700 (PDT)
-Received: from lanodev2.. ([80.120.136.76]) by smtp.gmail.com with ESMTPSA id
- b11-20020aa7c90b000000b00536246d1eadsm6069903edt.41.2023.10.09.06.11.32
+ bh=MTONiaATtK/vtP47KRw/E9+t5UO2nh66/pDHf5LxKKc=;
+ b=TnFclestsDZxl+QrwnIPUqb4T/6qNsPo0W5QWFqhV0VM4KryW2NCKsK8oqblbSJ7LV
+ bm0U7QpKMAg5WxnJ/4HctPr9nKQCt6o1kG9v0ujrtgQk9RXh5dtDgtHSj0fWZXkzEtJu
+ t5lcZb0WtQV0A/6TI8RdTGiu+qHjMKdZZxK5lDJ3Q7IHcrAt+dXFYQH+rGOnThHVTNif
+ QJva3tsVNTkRyZsVUBNy1iiNpE5lSJSgiNB5kT/QqOzGSgJEyK/dTCfFXQtt1KMn9OIw
+ fqaUWKSy8wQHXqgK0r4JSKLAiBeJm6w+qnukwaDntix4Ur3FGJZnalpr2Vqb+0uYNVpG
+ 4i+Q==
+X-Gm-Message-State: AOJu0YztzHxZHTsvWHzQHPF66/nYwZ3GyB/05QWKcmk7XK5TWPVFgJag
+ rc0sCTuAfTDpSGPds6z7S8O+b62zO0CJGqbCfpGNyg==
+X-Google-Smtp-Source: AGHT+IEmSdDgXe7S+nECcToxvf9b88YoxvF7+aTVxSZd7MB1MtE5p6YWGk9EVE0VlBEsUdDpx/p+HA==
+X-Received: by 2002:a17:906:d9:b0:9a1:c991:a521 with SMTP id
+ 25-20020a17090600d900b009a1c991a521mr14440841eji.4.1696861364427; 
+ Mon, 09 Oct 2023 07:22:44 -0700 (PDT)
+Received: from localhost.localdomain ([2001:b07:6467:4426:3fb7:fc38:9be:dc4c])
+ by smtp.gmail.com with ESMTPSA id
+ g7-20020a1709067c4700b0099c53c4407dsm6856509ejp.78.2023.10.09.07.22.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 09 Oct 2023 06:11:32 -0700 (PDT)
-From: Norbert Lange <nolange79@gmail.com>
-To: buildroot@buildroot.org,
-	peter@korsgaard.com
-Date: Mon,  9 Oct 2023 15:11:20 +0200
-Message-Id: <20231009131120.134257-1-nolange79@gmail.com>
-X-Mailer: git-send-email 2.39.2
+ Mon, 09 Oct 2023 07:22:43 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Mon,  9 Oct 2023 16:22:33 +0200
+Message-ID: <20231009142233.1773833-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696857094; x=1697461894; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1696861365; x=1697466165;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vWqu8XG7sIBLQZmUXCG4de5eiSRDGNuqLBQz1pk06SY=;
- b=jY2MCr08PAfCaMmaVympvqeXHSC7EX1bThd94MnFtwJZOWwhwskyvfgsYR+2EJ7zVX
- cSCqmKgzSYI9a1x3zBMX9Dx4vkOfX9cMakz4rGGE0arbT16zXql2gIClA7mbITB/fGGS
- T1U7W02RUv0LhuMrOxB0xwLdBk48A2K37Te8GA1T2DUyJgQLefcpJZFvRdYWHF5F5n/T
- LETg8HZ6wc0gL8gBdKAd7/IPKOy1dLW7sTf6s1oU7ACJw93tECze9XqxKCOz4CNvHeNQ
- e0yfq+XWPzEdC2AcxcxxtybVGl1IXpY1G+FZoVLoMb73AyNq+tONcYXqFtB2Qw/7tdBe
- o4dA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jY2MCr08
-Subject: [Buildroot] [PATCH v2] package/util-linux: fix build with old glibc
+ bh=MTONiaATtK/vtP47KRw/E9+t5UO2nh66/pDHf5LxKKc=;
+ b=Ruu8yCOaYnvdL8/ZxvVRBSY1U+oL+SCAnbC0O3SYm1njW0lYhgW7YmWgvWtqOV1VBr
+ XhIv4d7iKFG1V3W3c754au+vhdZGZny3lB5psaSfqKlIa0ncNlzky9pdvS8Xopntt0UB
+ xuQA3CZpzozspibrsiWn6SLjxwNdD5uEjSQs0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=Ruu8yCOa
+Subject: [Buildroot] [PATCH 1/1] package/sysvinit: bump version to 3.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,192 +92,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The build still fails if newer kernel versions are mixed with older
-glibc versions (Kernel 6.1 and glibc 2.28 for example).
-
-Apply upstream fix [1], see bug report [2].
-
-[1] - https://github.com/schubi2/util-linux/commit/8d67fc4e66816791aaadf0b03940b96c6dc3d92c
-[2] - https://github.com/util-linux/util-linux/issues/2448
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-Still cant build util-linux, neither on master nor on 2023.08.x
+ package/sysvinit/sysvinit.hash | 2 +-
+ package/sysvinit/sysvinit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-v1->v2:
-*   rebase using the commit in upstream master
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- .../0001-libmount-fix-statx-includes.patch    | 127 ++++++++++++++++++
- .../0001-libmount-fix-statx-includes.patch    |   1 +
- package/util-linux/util-linux.mk              |   2 +-
- 3 files changed, 129 insertions(+), 1 deletion(-)
- create mode 100644 package/util-linux/0001-libmount-fix-statx-includes.patch
- create mode 120000 package/util-linux/util-linux-libs/0001-libmount-fix-statx-includes.patch
-
-diff --git a/package/util-linux/0001-libmount-fix-statx-includes.patch b/package/util-linux/0001-libmount-fix-statx-includes.patch
-new file mode 100644
-index 0000000000..60cde1a63e
---- /dev/null
-+++ b/package/util-linux/0001-libmount-fix-statx-includes.patch
-@@ -0,0 +1,127 @@
-+From 8d67fc4e66816791aaadf0b03940b96c6dc3d92c Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Wed, 23 Aug 2023 11:50:37 +0200
-+Subject: [PATCH] libmount: fix statx() includes
-+
-+Using sys/stat.h and linux/stat is too tricky.h together. It seems
-+better to rely on libc and use sys/stat.h only. Users affected
-+by old libc must update to use recent util-linux.
-+
-+Fixes: https://github.com/util-linux/util-linux/issues/2448
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+Signed-off-by: Norbert Lange <nolange79@gmail.com>
-+---
-+ configure.ac              | 5 ++---
-+ include/fileutils.h       | 4 ++--
-+ libmount/src/hook_mount.c | 2 +-
-+ libmount/src/utils.c      | 2 +-
-+ meson.build               | 5 ++---
-+ 5 files changed, 8 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 27c379a78be..aa4b3bc1c64 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -333,7 +333,6 @@ AC_CHECK_HEADERS([ \
-+ 	linux/nsfs.h \
-+ 	linux/pr.h \
-+ 	linux/raw.h \
-+-	linux/stat.h \
-+ 	linux/securebits.h \
-+ 	linux/tiocl.h \
-+ 	linux/version.h \
-+@@ -527,7 +526,6 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-+ ])
-+ 
-+ AC_CHECK_TYPES([struct mount_attr], [], [], [[#include <linux/mount.h>]])
-+-AC_CHECK_TYPES([struct statx], [], [], [[#include <linux/stat.h>]])
-+ AC_CHECK_TYPES([enum fsconfig_command], [], [], [[#include <linux/mount.h>]])
-+ 
-+ AC_CHECK_MEMBERS([struct termios.c_line],,,
-+@@ -536,8 +534,9 @@ AC_CHECK_MEMBERS([struct termios.c_line],,,
-+ AC_CHECK_MEMBERS([struct stat.st_mtim.tv_nsec],,,
-+     [[#include <sys/stat.h>]])
-+ 
-++AC_CHECK_TYPES([struct statx], [], [], [[#include <sys/stat.h>]])
-+ AC_CHECK_MEMBERS([struct statx.stx_mnt_id],,,
-+-    [[#include <linux/stat.h>]])
-++    [[#include <sys/stat.h>]])
-+ 
-+ AC_CHECK_DECLS([_NL_TIME_WEEK_1STDAY],[],[],[[#include <langinfo.h>]])
-+ 
-+diff --git a/include/fileutils.h b/include/fileutils.h
-+index a5fe517266f..538eab0b74e 100644
-+--- a/include/fileutils.h
-++++ b/include/fileutils.h
-+@@ -94,13 +94,13 @@ static inline int close_range(unsigned int first, unsigned int last, int flags)
-+ #  define HAVE_CLOSE_RANGE 1
-+ # endif	/* SYS_close_range */
-+ 
-+-# if !defined(HAVE_STATX) && defined(HAVE_STRUCT_STATX) && defined(SYS_statx) && defined(HAVE_LINUX_STAT_H)
-+-#  include <linux/stat.h>
-++# if !defined(HAVE_STATX) && defined(HAVE_STRUCT_STATX) && defined(SYS_statx)
-+ static inline int statx(int fd, const char *restrict path, int flags,
-+ 		    unsigned int mask, struct statx *stx)
-+ {
-+ 	return syscall(SYS_statx, fd, path, flags, mask, stx);
-+ }
-++#  define HAVE_STATX 1
-+ # endif /* SYS_statx */
-+ 
-+ #endif	/* HAVE_SYS_SYSCALL_H */
-+diff --git a/libmount/src/hook_mount.c b/libmount/src/hook_mount.c
-+index 056338c4914..0ebb8299853 100644
-+--- a/libmount/src/hook_mount.c
-++++ b/libmount/src/hook_mount.c
-+@@ -294,7 +294,7 @@ static int hook_create_mount(struct libmnt_context *cxt,
-+ 		/* cleanup after fail (libmount may only try the FS type) */
-+ 		close_sysapi_fds(api);
-+ 
-+-#if defined(HAVE_STRUCT_STATX) && defined(HAVE_STRUCT_STATX_STX_MNT_ID)
-++#if defined(HAVE_STATX) && defined(HAVE_STRUCT_STATX) && defined(HAVE_STRUCT_STATX_STX_MNT_ID)
-+ 	if (!rc && cxt->fs) {
-+ 		struct statx st;
-+ 
-+diff --git a/libmount/src/utils.c b/libmount/src/utils.c
-+index 1d3f4abcece..3817b392711 100644
-+--- a/libmount/src/utils.c
-++++ b/libmount/src/utils.c
-+@@ -111,7 +111,7 @@ static int safe_stat(const char *target, struct stat *st, int nofollow)
-+ 
-+ 	memset(st, 0, sizeof(struct stat));
-+ 
-+-#if defined(AT_STATX_DONT_SYNC) && defined (HAVE_STRUCT_STATX)
-++#if defined(HAVE_STATX) && defined(HAVE_STRUCT_STATX) && defined(AT_STATX_DONT_SYNC)
-+ 	{
-+ 		int rc;
-+ 		struct statx stx = { 0 };
-+diff --git a/meson.build b/meson.build
-+index 9a36c9157cc..d412ff38203 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -84,7 +84,7 @@ have_mountfd_api = cc.sizeof('struct mount_attr', prefix : '#include <linux/moun
-+ conf.set('HAVE_STRUCT_MOUNT_ATTR', have_mountfd_api ? 1 : false)
-+ conf.set('HAVE_MOUNTFD_API', have_mountfd_api ? 1 : false)
-+ 
-+-have_struct_statx = cc.sizeof('struct statx', prefix : '#include <linux/stat.h>') > 0
-++have_struct_statx = cc.sizeof('struct statx', prefix : '#include <sys/stat.h>') > 0
-+ conf.set('HAVE_STRUCT_STATX', have_struct_statx ? 1 : false)
-+ 
-+ build_libmount = not get_option('build-libmount').disabled()
-+@@ -182,7 +182,6 @@ headers = '''
-+         linux/nsfs.h
-+         linux/mount.h
-+         linux/pr.h
-+-        linux/stat.h
-+         linux/securebits.h
-+         linux/tiocl.h
-+         linux/version.h
-+@@ -645,7 +644,7 @@ have = cc.has_member('struct stat', 'st_mtim.tv_nsec',
-+ conf.set('HAVE_STRUCT_STAT_ST_MTIM_TV_NSEC', have ? 1 : false)
-+ 
-+ have = cc.has_member('struct statx', 'stx_mnt_id',
-+-                     prefix : '#include <linux/stat.h>')
-++                     prefix : '#include <sys/stat.h>')
-+ conf.set('HAVE_STRUCT_STATX_STX_MNT_ID', have ? 1 : false)
-+ 
-+ # replacement for AC_STRUCT_TIMEZONE
-diff --git a/package/util-linux/util-linux-libs/0001-libmount-fix-statx-includes.patch b/package/util-linux/util-linux-libs/0001-libmount-fix-statx-includes.patch
-new file mode 120000
-index 0000000000..bc21ebedb7
---- /dev/null
-+++ b/package/util-linux/util-linux-libs/0001-libmount-fix-statx-includes.patch
-@@ -0,0 +1 @@
-+../0001-libmount-fix-statx-includes.patch
-\ No newline at end of file
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index ed9512c33c..fbfe579364 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -31,7 +31,7 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
+diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
+index f81e55fc44..67b0ab38f0 100644
+--- a/package/sysvinit/sysvinit.hash
++++ b/package/sysvinit/sysvinit.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  b05c3677bb698afe64c997968b00c49b2a9bd320ce963523230ee7ea41197757  sysvinit-2.99.tar.xz
++sha256  2a621fe6e4528bc91308b74867ddaaebbdf7753f02395c0c5bae817bd2b7e3a5  sysvinit-3.04.tar.xz
  
- UTIL_LINUX_CPE_ID_VENDOR = kernel
+ # Hash for license files:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 1bf10deb63..b7fe39ca43 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# 0001-libmount-ifdef-statx-call.patch
-+# 0001-libmount-fix-statx-includes.patch
- UTIL_LINUX_AUTORECONF = YES
- 
- UTIL_LINUX_INSTALL_STAGING = YES
+-SYSVINIT_VERSION = 2.99
++SYSVINIT_VERSION = 3.04
+ SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
+ SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
+ SYSVINIT_LICENSE = GPL-2.0+
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
