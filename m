@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF98DE95A9E
-	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 15:50:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21CB0CD6102
+	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 16:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BDBA6129D;
-	Mon,  9 Oct 2023 15:50:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BDBA6129D
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA9AA61249;
+	Mon,  9 Oct 2023 16:18:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA9AA61249
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9rHGl0CWBfZO; Mon,  9 Oct 2023 15:50:27 +0000 (UTC)
+	with ESMTP id jdUARrwvezrf; Mon,  9 Oct 2023 16:18:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F85A61156;
-	Mon,  9 Oct 2023 15:50:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F85A61156
+	by smtp3.osuosl.org (Postfix) with ESMTP id F097A6126D;
+	Mon,  9 Oct 2023 16:18:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F097A6126D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DEAD81BF364
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:50:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5224E1BF328
+ for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 16:18:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3B78410E4
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:50:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3B78410E4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3691441937
+ for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 16:18:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3691441937
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hnqlwcaTKM5N for <buildroot@lists.busybox.net>;
- Mon,  9 Oct 2023 15:50:23 +0000 (UTC)
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 59FFC409F3
- for <buildroot@buildroot.org>; Mon,  9 Oct 2023 15:50:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59FFC409F3
-Received: by mail-il1-x131.google.com with SMTP id
- e9e14a558f8ab-351437112c1so19287845ab.3
- for <buildroot@buildroot.org>; Mon, 09 Oct 2023 08:50:23 -0700 (PDT)
+ with ESMTP id O9aNFeaAVwZM for <buildroot@lists.busybox.net>;
+ Mon,  9 Oct 2023 16:18:28 +0000 (UTC)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A39EE4191C
+ for <buildroot@buildroot.org>; Mon,  9 Oct 2023 16:18:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A39EE4191C
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-9b29186e20aso808992466b.2
+ for <buildroot@buildroot.org>; Mon, 09 Oct 2023 09:18:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696866622; x=1697471422;
+ d=1e100.net; s=20230601; t=1696868305; x=1697473105;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8GHDPBJEfy0x0fQKbcvlYMfxDXszJIfuzIjQPQRJ7Fc=;
- b=sY5jBSWcIxrstgsqpCSI7fuRufs2zyTc5sMSaJTFxl1fyEvR9Y2oKk8SWIMgCjeKYZ
- 8H0E/OFoQzW7RtIM/sRvC4mJx7jmtQBpWnxS6NGFemlSVsKEAa2X5dSkpkzvqoW00WW5
- uW1DdW7YKmnUAr4snNV+XL0nFhifbj28mEBAK9JT717Ji2O37RqLrbYI1ob+G/neV4Vm
- R4PyVLhaIOIRNYzqhY0+Ie8nbJklAsML/VGeFJT7HlDlJ2oUoDU6pxoqGcml1M2C9psu
- fXlC0Z+U0CIf5eOeUVjKcjWmV9pq+y9CeJWhfciUb6jjIWz/nDJi0j2BfQ7VjBS5wnq5
- u2Sg==
-X-Gm-Message-State: AOJu0YzU7SDU0GyoqGK6TaeOBGH3tr2i7k1qLN4JCxvIc1sVfSed2QBo
- nagGQQjVBS6s5RhSRzpZ/FFRsxJndFbsuw==
-X-Google-Smtp-Source: AGHT+IGlDOa5LXPAzaKoZfFfqn0K7KDqfvWFqaB/C85tnxbwO721DTBdqKvUoaNNtY3pza5SVtCoGw==
-X-Received: by 2002:a05:6e02:1808:b0:348:ac7f:69a2 with SMTP id
- a8-20020a056e02180800b00348ac7f69a2mr20640527ilv.15.1696866621772; 
- Mon, 09 Oct 2023 08:50:21 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-152-19.hlrn.qwest.net.
- [71.33.152.19]) by smtp.gmail.com with ESMTPSA id
- v13-20020a92c80d000000b0034e2572bb50sm2972955iln.13.2023.10.09.08.50.20
+ bh=tHj9kzxoiOt23ZTj96eLovWUaZVxwiWYKu3gW8GnPzI=;
+ b=w2Gf8jTVXm29PGinOjXddsCXdKaOdgsuwL9blWXVdbKjyP29r8f8wJjC0bafLxyKbn
+ Gb9FqCyV3VPUVcwSKb1Sou3EG7Mb+kJJW9CE10Q+V0fxZisbFm0aVZhm80ysN16rdk/9
+ drhrVYoc6iBg3gKo2amMJExmKgkSckhb7ky6ryMu3mqM2eafpQbsP4LPEvXUo89f9KFE
+ goxmUkTUIukFbiCqBV8liVBvdrFpofBbXMdgqgowLJ6uwGWqWwM3Q7OJYMHVZgNbMcsP
+ ql5hS013O+PJN9ElHQ8y9rWbjteb6nJt5egbESUxRF5sfqPyWTHcR49LzDjyiBQJwQP4
+ leCA==
+X-Gm-Message-State: AOJu0YzrVuG82MiJGd2fPQA+eC5iND+B+cmc/41+/ZCsiRBhEZQ+WNON
+ tefjD3vOB+oZDTV5G5OlOYFCpjWUCPVeC6oApDvcAg==
+X-Google-Smtp-Source: AGHT+IFy1P7h39oWqdHqZ5LOBL+IFxc0eH/OwE1qzMG/psPP+8qOa61uGysrAs3zx3M5M8zozpRkOA==
+X-Received: by 2002:a17:906:31c7:b0:9ae:673a:88c8 with SMTP id
+ f7-20020a17090631c700b009ae673a88c8mr14543671ejf.21.1696868305412; 
+ Mon, 09 Oct 2023 09:18:25 -0700 (PDT)
+Received: from localhost.localdomain ([2001:b07:6467:4426:3fb7:fc38:9be:dc4c])
+ by smtp.gmail.com with ESMTPSA id
+ n17-20020a170906379100b009b957d5237asm6859583ejc.80.2023.10.09.09.18.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 09 Oct 2023 08:50:20 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Mon, 09 Oct 2023 09:18:25 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon,  9 Oct 2023 09:50:18 -0600
-Message-Id: <20231009155018.1310642-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Mon,  9 Oct 2023 18:18:17 +0200
+Message-ID: <20231009161817.2832969-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1696866622; x=1697471422; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1696868305; x=1697473105;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8GHDPBJEfy0x0fQKbcvlYMfxDXszJIfuzIjQPQRJ7Fc=;
- b=Tk/EmArEsKcejgFyIMYYJMFDOIeVcWLMwr0DIYRFBe5t5uGAu0dtSMicGs+i7gIYl4
- uxErAMMKRaPTpDK/dx17Z1VCNqnKhO3VaTJJwpXawrxFgvReHLCBUOgQ6G99QqHV9MR2
- 0OH6PvPruXSc2hVKy8GOJ87DYt//99Pd9q1lt0gfj8WmwRotTdD8GuMANIxJqGyR/4T7
- 5jf+oDU1cm7f1NFQESUwEmYk5CLX13M3khmmyL9CpuEfdTAbMGDmoiFIFZCAymZFoheC
- mJ5sKVhGymarIq+Ez2924ji9oB/MxSJo5Opbxt32/82rmouegAd4iLjc95cazrayuG1h
- KXrw==
+ bh=tHj9kzxoiOt23ZTj96eLovWUaZVxwiWYKu3gW8GnPzI=;
+ b=GB8sconPn7x9IEOXhC3UIQuC0fXSUEsrd4r/Yv9BBTiv9ZoDEQm2Sz61kWq0zaJoEw
+ 4HrTAOX7WiJsKR1ZwL+V4N/CROLff7AI/ZA87qMzI8sWGjyl22Mk7begjUBmk2VfJxM2
+ RhIzhNzfxfja4luDr6tYo5leCZ+YbwaMSzBkk=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Tk/EmArE
-Subject: [Buildroot] [PATCH 1/1] package/libubootenv: bump to version 0.3.5
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=GB8sconP
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic: Auto-install selinux
+ modules only for upstream refpolicy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,126 +93,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch which is now upstream.
+The description of REFPOLICY_CUSTOM_GIT states:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+The custom refpolicy must define the full policy explicitly,
+and must be a fork of the original refpolicy, to have the
+same build system.  When this is selected, only the custom
+policy definition are taken into account and all the modules
+of the policy are built into the binary policy.
+
+Currently, if a user definess their own policy, a package containing a selinux
+directory would add to their custom policy, which is not what they would want.
+Disable applying selinux policies in selinux/ directories for custom git
+refpolicies.
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- ...-fix-bug-when-SPI-flash-write-size-s.patch | 71 -------------------
- package/libubootenv/libubootenv.hash          |  2 +-
- package/libubootenv/libubootenv.mk            |  2 +-
- 3 files changed, 2 insertions(+), 73 deletions(-)
- delete mode 100644 package/libubootenv/0002-Revert-fw_setenv-fix-bug-when-SPI-flash-write-size-s.patch
+ package/pkg-generic.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libubootenv/0002-Revert-fw_setenv-fix-bug-when-SPI-flash-write-size-s.patch b/package/libubootenv/0002-Revert-fw_setenv-fix-bug-when-SPI-flash-write-size-s.patch
-deleted file mode 100644
-index 414cb3d205..0000000000
---- a/package/libubootenv/0002-Revert-fw_setenv-fix-bug-when-SPI-flash-write-size-s.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From 35bbc4d8155ed86ca7200e060dad98bdfbce684d Mon Sep 17 00:00:00 2001
--From: Stefano Babic <sbabic@denx.de>
--Date: Thu, 15 Jun 2023 16:54:46 +0200
--Subject: [PATCH] Revert "fw_setenv: fix bug when SPI flash write size !=
-- sector size"
--
--This reverts commit 44ecc1c216007272a6f99a104a71c9d410969d9e.
--
--mtd writesize was errouneously interpreted as maximum allowed size, but
--it is the minimum size. The patch raises performance issues because on
--NOR flashes single bytes are written.
--
--Signed-off-by: Stefano Babic <sbabic@denx.de>
--Upstream: https://github.com/sbabic/libubootenv/commit/9f17a00ee56dc5cfb1d9b51e6639d67b64cb3309
--Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-----
-- src/uboot_env.c | 29 +++++++++--------------------
-- 1 file changed, 9 insertions(+), 20 deletions(-)
--
--diff --git a/src/uboot_env.c b/src/uboot_env.c
--index c5eefe7..76e2619 100644
----- a/src/uboot_env.c
--+++ b/src/uboot_env.c
--@@ -712,8 +712,6 @@ static int mtdwrite(struct uboot_flash_env *dev, void *data)
-- 		sectors = dev->envsectors ? dev->envsectors : 1;
-- 		buf = data;
-- 		while (count > 0) {
---			int blockcount;
---
-- 			erase.start = start;
-- 
-- 			skip = is_nand_badblock(dev, start);
--@@ -744,26 +742,17 @@ static int mtdwrite(struct uboot_flash_env *dev, void *data)
-- 				ret =-EIO;
-- 				goto devwrite_out;
-- 			}
---
---			blockcount = blocksize;
---
---			/* writesize can be different than the sector size. */
---
---			while (blockcount > 0) {
---				if (lseek(dev->fd, start, SEEK_SET) < 0) {
---					ret =-EIO;
---					goto devwrite_out;
---				}
---				if (write(dev->fd, buf, dev->mtdinfo.writesize) != dev->mtdinfo.writesize) {
---					ret =-EIO;
---					goto devwrite_out;
---				}
---
---				blockcount -= dev->mtdinfo.writesize;
---				start += dev->mtdinfo.writesize;
---				buf += dev->mtdinfo.writesize;
--+			if (lseek(dev->fd, start, SEEK_SET) < 0) {
--+				ret =-EIO;
--+				goto devwrite_out;
--+			}
--+			if (write(dev->fd, buf, blocksize) != blocksize) {
--+				ret =-EIO;
--+				goto devwrite_out;
-- 			}
-- 			MTDLOCK(dev, &erase);
--+			start += dev->sectorsize;
--+			buf += blocksize;
-- 			count -= blocksize;
-- 			ret += blocksize;
-- 		}
---- 
--2.41.0
--
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index b881994bfd..887ad6843d 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  78faadcfac67e50273e5d4e95e6cf6fee3d486ce9dc568d1fe25312271a88768  libubootenv-0.3.4.tar.gz
-+sha256  dc27ddcb377e259d898256e90449bc3128437660cacc33dc75f6630d3e52c44e  libubootenv-0.3.5.tar.gz
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSES/MIT.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index b4c9588107..e5f5e9b15a 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6e944dd6b7..28595a105c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1237,8 +1237,11 @@ KEEP_PYTHON_PY_FILES += $$($(2)_KEEP_PY_FILES)
+ ifneq ($$($(2)_SELINUX_MODULES),)
+ PACKAGES_SELINUX_MODULES += $$($(2)_SELINUX_MODULES)
+ endif
++
++ifeq ($(BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION),y)
+ PACKAGES_SELINUX_EXTRA_MODULES_DIRS += \
+ 	$$(if $$(wildcard $$($(2)_PKGDIR)/selinux),$$($(2)_PKGDIR)/selinux)
++endif
  
--LIBUBOOTENV_VERSION = 0.3.4
-+LIBUBOOTENV_VERSION = 0.3.5
- LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1+, MIT, CC0-1.0
- LIBUBOOTENV_LICENSE_FILES = LICENSES/CC0-1.0.txt \
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
 -- 
-2.34.1
+2.41.0
 
 _______________________________________________
 buildroot mailing list
