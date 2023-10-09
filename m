@@ -4,103 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E14D3E95A96
-	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 15:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF98DE95A9E
+	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 15:50:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97E1F61329;
-	Mon,  9 Oct 2023 15:20:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97E1F61329
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BDBA6129D;
+	Mon,  9 Oct 2023 15:50:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BDBA6129D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LNE1-wTUHL8l; Mon,  9 Oct 2023 15:20:09 +0000 (UTC)
+	with ESMTP id 9rHGl0CWBfZO; Mon,  9 Oct 2023 15:50:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C79326130A;
-	Mon,  9 Oct 2023 15:20:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C79326130A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 23D8D1BF364
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:20:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F85A61156;
+	Mon,  9 Oct 2023 15:50:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F85A61156
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DEAD81BF364
+ for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F15AA819B4
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:19:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F15AA819B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3B78410E4
+ for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:50:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3B78410E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uXmrjBAYJ3pF for <buildroot@lists.busybox.net>;
- Mon,  9 Oct 2023 15:19:58 +0000 (UTC)
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DC3758176B
- for <buildroot@buildroot.org>; Mon,  9 Oct 2023 15:19:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC3758176B
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 399Eiwtp006006; Mon, 9 Oct 2023 15:19:56 GMT
-Received: from ppma11.dal12v.mail.ibm.com
- (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
- by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tmkj917qq-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 09 Oct 2023 15:19:56 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
- by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id
- 399DqdJg023064; Mon, 9 Oct 2023 15:18:22 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
- by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tkmc199y6-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 09 Oct 2023 15:18:22 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com
- [10.241.53.100])
- by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 399FILNP60883220
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 9 Oct 2023 15:18:21 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 417B358058;
- Mon,  9 Oct 2023 15:18:21 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 27DC358057;
- Mon,  9 Oct 2023 15:18:19 +0000 (GMT)
-Received: from arbab-laptop.localdomain (unknown [9.61.33.25])
- by smtpav01.dal12v.mail.ibm.com (Postfix) with SMTP;
- Mon,  9 Oct 2023 15:18:18 +0000 (GMT)
-Received: by arbab-laptop.localdomain (Postfix, from userid 152845)
- id 908BB2A37A75; Mon,  9 Oct 2023 10:17:48 -0500 (CDT)
-From: Reza Arbab <arbab@linux.ibm.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hnqlwcaTKM5N for <buildroot@lists.busybox.net>;
+ Mon,  9 Oct 2023 15:50:23 +0000 (UTC)
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 59FFC409F3
+ for <buildroot@buildroot.org>; Mon,  9 Oct 2023 15:50:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59FFC409F3
+Received: by mail-il1-x131.google.com with SMTP id
+ e9e14a558f8ab-351437112c1so19287845ab.3
+ for <buildroot@buildroot.org>; Mon, 09 Oct 2023 08:50:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696866622; x=1697471422;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8GHDPBJEfy0x0fQKbcvlYMfxDXszJIfuzIjQPQRJ7Fc=;
+ b=sY5jBSWcIxrstgsqpCSI7fuRufs2zyTc5sMSaJTFxl1fyEvR9Y2oKk8SWIMgCjeKYZ
+ 8H0E/OFoQzW7RtIM/sRvC4mJx7jmtQBpWnxS6NGFemlSVsKEAa2X5dSkpkzvqoW00WW5
+ uW1DdW7YKmnUAr4snNV+XL0nFhifbj28mEBAK9JT717Ji2O37RqLrbYI1ob+G/neV4Vm
+ R4PyVLhaIOIRNYzqhY0+Ie8nbJklAsML/VGeFJT7HlDlJ2oUoDU6pxoqGcml1M2C9psu
+ fXlC0Z+U0CIf5eOeUVjKcjWmV9pq+y9CeJWhfciUb6jjIWz/nDJi0j2BfQ7VjBS5wnq5
+ u2Sg==
+X-Gm-Message-State: AOJu0YzU7SDU0GyoqGK6TaeOBGH3tr2i7k1qLN4JCxvIc1sVfSed2QBo
+ nagGQQjVBS6s5RhSRzpZ/FFRsxJndFbsuw==
+X-Google-Smtp-Source: AGHT+IGlDOa5LXPAzaKoZfFfqn0K7KDqfvWFqaB/C85tnxbwO721DTBdqKvUoaNNtY3pza5SVtCoGw==
+X-Received: by 2002:a05:6e02:1808:b0:348:ac7f:69a2 with SMTP id
+ a8-20020a056e02180800b00348ac7f69a2mr20640527ilv.15.1696866621772; 
+ Mon, 09 Oct 2023 08:50:21 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-152-19.hlrn.qwest.net.
+ [71.33.152.19]) by smtp.gmail.com with ESMTPSA id
+ v13-20020a92c80d000000b0034e2572bb50sm2972955iln.13.2023.10.09.08.50.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 09 Oct 2023 08:50:20 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  9 Oct 2023 10:17:29 -0500
-Message-Id: <20231009151729.2223963-9-arbab@linux.ibm.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20231009151729.2223963-1-arbab@linux.ibm.com>
-References: <20231009151729.2223963-1-arbab@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5WBFjIdB3z9sZBsWa9d53W5vmJ8zOJ3v
-X-Proofpoint-GUID: 5WBFjIdB3z9sZBsWa9d53W5vmJ8zOJ3v
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Date: Mon,  9 Oct 2023 09:50:18 -0600
+Message-Id: <20231009155018.1310642-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-09_13,2023-10-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 adultscore=0
- spamscore=0 mlxscore=0 clxscore=1015 impostorscore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310090126
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=9fFchYENiANiBJY/hcvTeRIROlXAS9M5NM8HIJXwGEk=;
- b=llkBbYTDYp6L2jl4VCQ/J9Y/wYC2SE7J9fLtfocBbprNnGDgz+hJUoLVIgpz0Dusg/vt
- dxsZETfuXJkGtyxUw/DzDDExVhrJ3ougJVpSCdgkbXyB4irYdTH8uG6pYw9y+tt/ttxG
- bZebazErhec5DOnVERXYDagtl7RmunTJYej5k1hgeHgoPfUTIl89o59/QNVDnCEjlw13
- X2dpcyAdZJ5i8dZdUCYkKXmd5FBDeVUlZYhJfH9vOBOEb6AF8K2D/jngIDFqaHTU+SEE
- ofxVI8xLJOmheQg771iB5Zee05hI8ap24sCQbeHXg8Ilc4EmcfkBqoZND7HVh385k9lK Og== 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
- header.a=rsa-sha256 header.s=pp1 header.b=llkBbYTD
-Subject: [Buildroot] [PATCH v3 8/8] package/petitboot: prefer UTF-8 support
+ d=gmail.com; s=20230601; t=1696866622; x=1697471422; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8GHDPBJEfy0x0fQKbcvlYMfxDXszJIfuzIjQPQRJ7Fc=;
+ b=Tk/EmArEsKcejgFyIMYYJMFDOIeVcWLMwr0DIYRFBe5t5uGAu0dtSMicGs+i7gIYl4
+ uxErAMMKRaPTpDK/dx17Z1VCNqnKhO3VaTJJwpXawrxFgvReHLCBUOgQ6G99QqHV9MR2
+ 0OH6PvPruXSc2hVKy8GOJ87DYt//99Pd9q1lt0gfj8WmwRotTdD8GuMANIxJqGyR/4T7
+ 5jf+oDU1cm7f1NFQESUwEmYk5CLX13M3khmmyL9CpuEfdTAbMGDmoiFIFZCAymZFoheC
+ mJ5sKVhGymarIq+Ez2924ji9oB/MxSJo5Opbxt32/82rmouegAd4iLjc95cazrayuG1h
+ KXrw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Tk/EmArE
+Subject: [Buildroot] [PATCH 1/1] package/libubootenv: bump to version 0.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,109 +93,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Laurent Vivier <laurent@vivier.eu>, Joel Stanley <joel@jms.id.au>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The petitboot UI looks much nicer in a Unicode locale:
+Drop patch which is now upstream.
 
-* Items in the language selection submenu use multibyte Unicode
-  characters. In other locales, they say "Unable to display text in this
-  locale".
-
-* The combination of TERM=linux with a UTF-8 locale is required to
-  trigger a special-case workaround in ncurses code[1]. Without
-  this, line-drawing characters in the menu look like q's.
-
-Add a reminder that a UTF-8 locale should be generated for things to
-look right. Assume C.UTF-8 by default, allowing $LANG to be overridden
-(by /etc/default/petitboot or otherwise) if something else is desired.
-
-[1] https://invisible-island.net/ncurses/ncurses.faq.html#no_line_drawing
-
-Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/petitboot/Config.in      | 8 ++++++--
- package/petitboot/S15pb-discover | 1 +
- package/petitboot/pb-console     | 1 +
- package/petitboot/shell_profile  | 3 +++
- 4 files changed, 11 insertions(+), 2 deletions(-)
+ ...-fix-bug-when-SPI-flash-write-size-s.patch | 71 -------------------
+ package/libubootenv/libubootenv.hash          |  2 +-
+ package/libubootenv/libubootenv.mk            |  2 +-
+ 3 files changed, 2 insertions(+), 73 deletions(-)
+ delete mode 100644 package/libubootenv/0002-Revert-fw_setenv-fix-bug-when-SPI-flash-write-size-s.patch
 
-diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-index 0f965e71e628..a449ed87872c 100644
---- a/package/petitboot/Config.in
-+++ b/package/petitboot/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_PETITBOOT
- 	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # lvm2
- 	depends on BR2_USE_WCHAR # elfutils
-+	depends on BR2_ENABLE_LOCALE
- 	depends on !BR2_STATIC_LIBS # elfutils, lvm2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, lvm2
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_PETITBOOT
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_LVM2 # devmapper
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_WCHAR
- 	# run-time dependencies
- 	select BR2_PACKAGE_KEXEC if !BR2_PACKAGE_KEXEC_LITE
- 	select BR2_PACKAGE_KEXEC_LITE if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
-@@ -20,12 +22,14 @@ config BR2_PACKAGE_PETITBOOT
- 	help
- 	  Petitboot is a small kexec-based bootloader
+diff --git a/package/libubootenv/0002-Revert-fw_setenv-fix-bug-when-SPI-flash-write-size-s.patch b/package/libubootenv/0002-Revert-fw_setenv-fix-bug-when-SPI-flash-write-size-s.patch
+deleted file mode 100644
+index 414cb3d205..0000000000
+--- a/package/libubootenv/0002-Revert-fw_setenv-fix-bug-when-SPI-flash-write-size-s.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 35bbc4d8155ed86ca7200e060dad98bdfbce684d Mon Sep 17 00:00:00 2001
+-From: Stefano Babic <sbabic@denx.de>
+-Date: Thu, 15 Jun 2023 16:54:46 +0200
+-Subject: [PATCH] Revert "fw_setenv: fix bug when SPI flash write size !=
+- sector size"
+-
+-This reverts commit 44ecc1c216007272a6f99a104a71c9d410969d9e.
+-
+-mtd writesize was errouneously interpreted as maximum allowed size, but
+-it is the minimum size. The patch raises performance issues because on
+-NOR flashes single bytes are written.
+-
+-Signed-off-by: Stefano Babic <sbabic@denx.de>
+-Upstream: https://github.com/sbabic/libubootenv/commit/9f17a00ee56dc5cfb1d9b51e6639d67b64cb3309
+-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+----
+- src/uboot_env.c | 29 +++++++++--------------------
+- 1 file changed, 9 insertions(+), 20 deletions(-)
+-
+-diff --git a/src/uboot_env.c b/src/uboot_env.c
+-index c5eefe7..76e2619 100644
+---- a/src/uboot_env.c
+-+++ b/src/uboot_env.c
+-@@ -712,8 +712,6 @@ static int mtdwrite(struct uboot_flash_env *dev, void *data)
+- 		sectors = dev->envsectors ? dev->envsectors : 1;
+- 		buf = data;
+- 		while (count > 0) {
+--			int blockcount;
+--
+- 			erase.start = start;
+- 
+- 			skip = is_nand_badblock(dev, start);
+-@@ -744,26 +742,17 @@ static int mtdwrite(struct uboot_flash_env *dev, void *data)
+- 				ret =-EIO;
+- 				goto devwrite_out;
+- 			}
+--
+--			blockcount = blocksize;
+--
+--			/* writesize can be different than the sector size. */
+--
+--			while (blockcount > 0) {
+--				if (lseek(dev->fd, start, SEEK_SET) < 0) {
+--					ret =-EIO;
+--					goto devwrite_out;
+--				}
+--				if (write(dev->fd, buf, dev->mtdinfo.writesize) != dev->mtdinfo.writesize) {
+--					ret =-EIO;
+--					goto devwrite_out;
+--				}
+--
+--				blockcount -= dev->mtdinfo.writesize;
+--				start += dev->mtdinfo.writesize;
+--				buf += dev->mtdinfo.writesize;
+-+			if (lseek(dev->fd, start, SEEK_SET) < 0) {
+-+				ret =-EIO;
+-+				goto devwrite_out;
+-+			}
+-+			if (write(dev->fd, buf, blocksize) != blocksize) {
+-+				ret =-EIO;
+-+				goto devwrite_out;
+- 			}
+- 			MTDLOCK(dev, &erase);
+-+			start += dev->sectorsize;
+-+			buf += blocksize;
+- 			count -= blocksize;
+- 			ret += blocksize;
+- 		}
+--- 
+-2.41.0
+-
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index b881994bfd..887ad6843d 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  78faadcfac67e50273e5d4e95e6cf6fee3d486ce9dc568d1fe25312271a88768  libubootenv-0.3.4.tar.gz
++sha256  dc27ddcb377e259d898256e90449bc3128437660cacc33dc75f6630d3e52c44e  libubootenv-0.3.5.tar.gz
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
+ sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSES/MIT.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index b4c9588107..e5f5e9b15a 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+	  NOTE: petitboot needs a working UTF-8 locale (BR2_GENERATE_LOCALE)
-+
- 	  http://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
- 
--comment "petitboot needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, udev /dev management"
-+comment "petitboot needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library, threads, udev /dev management"
- 	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-+	depends on !BR2_USE_WCHAR || !BR2_ENABLE_LOCALE || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) || \
- 		!BR2_PACKAGE_HAS_UDEV
-diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
-index a37e33521f1a..15b428ce0e42 100644
---- a/package/petitboot/S15pb-discover
-+++ b/package/petitboot/S15pb-discover
-@@ -15,6 +15,7 @@ start() {
- 	# shellcheck disable=SC2174 # only apply -m to deepest dir
- 	mkdir -p -m 0775 /var/log/petitboot
- 	chown root:petitgroup /var/log/petitboot
-+	export LANG="${LANG:-C.UTF-8}"
- 
- 	# shellcheck disable=SC2086 # we need the word splitting
- 	start-stop-daemon -S -q -b -m -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-diff --git a/package/petitboot/pb-console b/package/petitboot/pb-console
-index eea40163d02f..55e5462f0457 100644
---- a/package/petitboot/pb-console
-+++ b/package/petitboot/pb-console
-@@ -13,6 +13,7 @@ start() {
- 	# shellcheck disable=SC2174 # only apply -m to deepest dir
- 	mkdir -p -m 0775 /var/log/petitboot
- 	chown root:petitgroup /var/log/petitboot
-+	export LANG="${LANG:-C.UTF-8}"
- 
- 	# shellcheck disable=SC2086 # we need the word splitting
- 	start-stop-daemon -S -q -x "/usr/libexec/petitboot/$DAEMON" \
-diff --git a/package/petitboot/shell_profile b/package/petitboot/shell_profile
-index 1ca5e6364dba..6bbe49e6d113 100644
---- a/package/petitboot/shell_profile
-+++ b/package/petitboot/shell_profile
-@@ -1,2 +1,5 @@
-+[ -r "/etc/default/petitboot" ] && . "/etc/default/petitboot"
- export ENV="/home/petituser/.shrc"
-+export LANG="${LANG:-C.UTF-8}"
-+
- exec /usr/libexec/petitboot/pb-console
+-LIBUBOOTENV_VERSION = 0.3.4
++LIBUBOOTENV_VERSION = 0.3.5
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1+, MIT, CC0-1.0
+ LIBUBOOTENV_LICENSE_FILES = LICENSES/CC0-1.0.txt \
 -- 
-2.39.3
+2.34.1
 
 _______________________________________________
 buildroot mailing list
