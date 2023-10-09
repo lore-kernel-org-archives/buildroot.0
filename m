@@ -4,66 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D357E95A95
-	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 15:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D54A2E95A95
+	for <buildroot@archiver.kernel.org>; Mon,  9 Oct 2023 15:12:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7B03612BB;
-	Mon,  9 Oct 2023 15:06:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7B03612BB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 809006129D;
+	Mon,  9 Oct 2023 15:12:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 809006129D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ztFi8EZRc7J8; Mon,  9 Oct 2023 15:06:42 +0000 (UTC)
+	with ESMTP id g3J_gCrC2zny; Mon,  9 Oct 2023 15:12:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E81A9612B4;
-	Mon,  9 Oct 2023 15:06:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E81A9612B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id B87C361284;
+	Mon,  9 Oct 2023 15:12:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B87C361284
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2AF231BF364
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:06:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 80D6E1BF364
+ for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:12:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 054E36126D
- for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:06:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 054E36126D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5ADED61284
+ for <buildroot@lists.busybox.net>; Mon,  9 Oct 2023 15:12:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ADED61284
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HlFfWMGokJLg for <buildroot@lists.busybox.net>;
- Mon,  9 Oct 2023 15:06:32 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F245361283
- for <buildroot@buildroot.org>; Mon,  9 Oct 2023 15:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F245361283
+ with ESMTP id XdKVP1KS-hkN for <buildroot@lists.busybox.net>;
+ Mon,  9 Oct 2023 15:12:04 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 52CA061274
+ for <buildroot@buildroot.org>; Mon,  9 Oct 2023 15:12:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52CA061274
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:d143:e10c:f714:dfc9])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 01B1160135;
- Mon,  9 Oct 2023 17:06:27 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8F9EF5FFAF;
+ Mon,  9 Oct 2023 17:12:00 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 09 Oct 2023 17:06:27 +0200
-Date: Mon, 9 Oct 2023 17:06:27 +0200
+ Mon, 09 Oct 2023 17:12:00 +0200
+Date: Mon, 9 Oct 2023 17:12:00 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231009150627.GC14234@scaer>
-References: <20231009143122.1775787-1-adam.duskett@amarulasolutions.com>
+Message-ID: <20231009151200.GD14234@scaer>
+References: <20231009080612.23347-1-adam.duskett@amarulasolutions.com>
+ <20231009080612.23347-2-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231009143122.1775787-1-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20231009080612.23347-2-adam.duskett@amarulasolutions.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1696863990;
- bh=i5y3Zs3h6UlymsFQ0jHJ9Z62YuiGMU+VQ5ThIm2ltkE=;
+ d=free.fr; s=smtp-20201208; t=1696864322;
+ bh=K79gWSG9dd0+rMLEqGnBbwHG8mlrBXljOtI3rMfbFE0=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=YD14U/m8c5gzNnDa3bpnQ9IBoom/aPeONmCJ7IB+1AU4BN+RgMw0Wh22ckBZEuwXv
- hyClIhohssgt9dvKQY0Vj9+MLc09E+CmWBLCOZJaeHeYbAUtZTF2UqKozakm9O777K
- tsIHP743tCILXtB1CmcAd6V747vI4zOPaZ8Ew/QZ+kJnFGy+6kDtmxRy2oUBrLQoGj
- 978pg9v7WVARhqvDGk3x5f0maPpGp7h9MK42V3T6dZ1cz3YVix4gdEmst5kCoRWJYF
- px2kemOXRTADzBTGyGhAqHMXLwXHcpSmdmp9t8O1/HwBT8ZXe0iEPvTb+jWZWx4Fmq
- Kxj8M6GNvzK2g==
+ b=HRjQAbNjEeXJRszRXAsUaVEPtY+JUZZ0FufQmvxpDIjz3bcKW/DWZT5V9JmDAn/1O
+ eYK1NqFBvbCkcnJTLsEQW4g/sLaNp0XazNif18XgQXS2yYtfRWPuQHR/19SeTJuOHE
+ ASc6kKSOYp96zPJIeYJNb+O5DgX13HFmA+8hXBgbxtZpQTiIYSnUkiYuQJ/sOkzAou
+ kGYmWZN9fQ8iumLS6nntDWqk/eJJI16Dvyj9tCwBuLCAzRIBcDTQxmdVXOI0hpotZd
+ rotW0JnYno9J7Jwpo8jcvy3NNft1vvvXq4j4BHZWgX2TwUN7CPEYex5Sui1Ct8L290
+ R6eAbTarpZ6BQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YD14U/m8
-Subject: Re: [Buildroot] [PATCH 1/2] package/firewalld: bump version to 2.0.1
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HRjQAbNj
+Subject: Re: [Buildroot] [PATCH v3 2/2] package/refpolicy/Config.in: depend
+ on merged usr when selecting upstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,41 +85,94 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Adam, All,
 
-On 2023-10-09 16:31 +0200, Adam Duskett spake thusly:
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Thanks for the quick respin. :-)
 
-Both patches applied to master, thanks.
+On 2023-10-09 10:06 +0200, Adam Duskett spake thusly:
+> Refpolicy contexts expect a merged /usr file system. In fact, there
+> are no references to /bin, /sbin, /lib, or /lib64 at all. However, if a user
+> wants to go through the trouble of creating a policy that works with a
+> non-merged system, they should be free to do so. As such, only select
+> BR2_ROOTFS_MERGED_USR if using BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION.
+
+That last sentence is now incorrect. It could have been fixed when
+applying, but...
+
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+> v2 -> v3: Depends on, do not select BR2_ROOTFS_MERGED_USR [Yann]
+> 
+>  ...ount-dbus-interface-must-be-optional.patch | 33 -------------------
+
+... why is this patch removed? From the description of that patch, it
+does not look to be related to merged-usr at all...
+
+If that is due to the version bump, then it should have been part of the
+patch bumpng the version...
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/firewalld/firewalld.hash | 2 +-
->  package/firewalld/firewalld.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/refpolicy/Config.in                   |  4 +++
+>  2 files changed, 4 insertions(+), 33 deletions(-)
+>  delete mode 100644 package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
 > 
-> diff --git a/package/firewalld/firewalld.hash b/package/firewalld/firewalld.hash
-> index d8be3f7ba0..53bfed0347 100644
-> --- a/package/firewalld/firewalld.hash
-> +++ b/package/firewalld/firewalld.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  3be5a3caa36d1026c5b72d3f61dd963dccd953791b04af03d9946b24bef8391e  firewalld-1.3.2.tar.gz
-> +sha256  61022eec66fa7ea0561924dfe65d17bab5ec512b3559198a05048a32264612d1  firewalld-2.0.1.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
-> index 13edba6d24..6b2813e54d 100644
-> --- a/package/firewalld/firewalld.mk
-> +++ b/package/firewalld/firewalld.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch b/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+> deleted file mode 100644
+> index adec7d98d0..0000000000
+> --- a/package/refpolicy/2.20221101/0001-mount-dbus-interface-must-be-optional.patch
+> +++ /dev/null
+> @@ -1,33 +0,0 @@
+> -From 6c6be65ccf0891391681d4662cc11f508c0f4aeb Mon Sep 17 00:00:00 2001
+> -From: Adam Duskett <aduskett@gmail.com>
+> -Date: Mon, 24 Apr 2023 14:24:49 -0700
+> -Subject: [PATCH] mount: dbus interface must be optional
+> -
+> -If DBus isn't built, the build process fails due to mount.te always using a
+> -dbus interface even if the dbus module. Fix this by setting the dbus interface
+> -as optional.
+> -
+> -Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> -Upstream: https://github.com/SELinuxProject/refpolicy/commit/207b09a656c2c3ac5c286d3f7eef085325e35408
+> ----
+> - policy/modules/system/mount.te | 4 +++-
+> - 1 file changed, 3 insertions(+), 1 deletion(-)
+> -
+> -diff --git a/policy/modules/system/mount.te b/policy/modules/system/mount.te
+> -index d028723..af84af0 100644
+> ---- a/policy/modules/system/mount.te
+> -+++ b/policy/modules/system/mount.te
+> -@@ -145,7 +145,9 @@ selinux_getattr_fs(mount_t)
+> - 
+> - userdom_use_all_users_fds(mount_t)
+> - 
+> --dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
+> -+optional_policy(`
+> -+	dbus_dontaudit_write_system_bus_runtime_named_sockets(mount_t)
+> -+')
+> - 
+> - ifdef(`distro_redhat',`
+> - 	optional_policy(`
+> --- 
+> -2.40.0
+> -
+> diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+> index 0e72b895df..d2fe391d8d 100644
+> --- a/package/refpolicy/Config.in
+> +++ b/package/refpolicy/Config.in
+> @@ -36,9 +36,13 @@ choice
 >  
-> -FIREWALLD_VERSION = 1.3.2
-> +FIREWALLD_VERSION = 2.0.1
->  FIREWALLD_SITE = $(call github,firewalld,firewalld,v$(FIREWALLD_VERSION))
->  FIREWALLD_LICENSE = GPL-2.0
->  FIREWALLD_LICENSE_FILES = COPYING
+>  config BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
+>  	bool "Upstream version"
+> +	depends on BR2_ROOTFS_MERGED_USR
+>  	help
+>  	  Use the refpolicy as provided by Buildroot.
+>  
+> +comment "Upstream refpolicy requires a merged /usr filesystem"
+> +	depends on !BR2_ROOTFS_MERGED_USR
+> +
+>  config BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
+>  	bool "Custom git repository"
+>  	help
 > -- 
 > 2.41.0
 > 
