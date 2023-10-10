@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64662CD98C0
-	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 20:53:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6747CD98C0
+	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 20:53:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DCBA60A81;
-	Tue, 10 Oct 2023 20:53:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DCBA60A81
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89995811AA;
+	Tue, 10 Oct 2023 20:53:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89995811AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kt2qpsiKaiMH; Tue, 10 Oct 2023 20:53:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3at15Y-0MK6N; Tue, 10 Oct 2023 20:53:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E40E6148A;
-	Tue, 10 Oct 2023 20:53:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E40E6148A
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5E5781882;
+	Tue, 10 Oct 2023 20:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5E5781882
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 647A61BF969
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:53:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D4DF21BF389
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:53:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F25A61492
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F25A61492
+ by smtp3.osuosl.org (Postfix) with ESMTP id A94F76148B
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:53:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A94F76148B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fpPAnn7MvHrp for <buildroot@lists.busybox.net>;
+ with ESMTP id p4baBwxF3FcG for <buildroot@lists.busybox.net>;
  Tue, 10 Oct 2023 20:53:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BD9D61480
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7622461486
  for <buildroot@buildroot.org>; Tue, 10 Oct 2023 20:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BD9D61480
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7622461486
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35D68844E8; Tue, 10 Oct 2023 20:53:04 +0000 (UTC)
+ id 5F4DF844EB; Tue, 10 Oct 2023 20:53:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 10 Oct 2023 22:45:38 +0200
+Date: Tue, 10 Oct 2023 22:47:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7490cac62d42370a0a954d44ec34537e81234dd9
-X-Git-Newrev: 1c6c4c0767f81295ec6167d7132bc542973e0409
+X-Git-Oldrev: 26762e30090585e8c64333d3ffe4249e7a0b0f43
+X-Git-Newrev: cef841bf7d428a92b5af41b6ea21d7f8ae004526
 X-Patchwork-Hint: ignore
-Message-Id: <20231010205304.35D68844E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/setools: bump version to 4.4.3
+Message-Id: <20231010205304.5F4DF844EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libebml: bump to version 1.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,147 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c6c4c0767f81295ec6167d7132bc542973e0409
+commit: https://git.buildroot.net/buildroot/commit/?id=cef841bf7d428a92b5af41b6ea21d7f8ae004526
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+- Drop patch (already in version)
+- C++14 is required since
+  https://github.com/Matroska-Org/libebml/commit/4159caf84c18f64137e6cdb5f15c5e76d0bb0976
+
+https://github.com/Matroska-Org/libebml/blob/release-1.4.4/NEWS.md
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/setools/setools.hash | 2 +-
- package/setools/setools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...riate-header-files-for-std-numeric_limits.patch | 40 ----------------------
+ package/libebml/Config.in                          |  6 ++--
+ package/libebml/libebml.hash                       |  2 +-
+ package/libebml/libebml.mk                         |  2 +-
+ package/libmatroska/Config.in                      |  6 ++--
+ 6 files changed, 10 insertions(+), 47 deletions(-)
 
-diff --git a/package/setools/setools.hash b/package/setools/setools.hash
-index c353e1f609..6a61fc2809 100644
---- a/package/setools/setools.hash
-+++ b/package/setools/setools.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  998d12d01852feed1889110a4ca81090a47a2d9b47368e4dfe2b94d68696c813  setools-4.4.2.tar.gz
-+sha256  29f5e7d98764a6942b2e32c8aa44da6a618882818c79599ade967ece0cf1dace  setools-4.4.3.tar.gz
- sha256  0e58d74751e394f39748c7b7b4039d6a883b5def9711160668ba962b52e69e01  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index b80d25a6b9..efb3869e5b 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 539a571172..d746cde45e 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -650,7 +650,6 @@ package/libdnet/0001-python-makefile.patch Upstream
+ package/libdrm/0001-tests-meson.build-disable-nouveau-tests-for-static-b.patch Upstream
+ package/libdvbcsa/0001-altivec-powerpc64.patch Upstream
+ package/libeXosip2/0001-src-eXtl_dtls.c-fix-build-with-libressl-3.4.1.patch Upstream
+-package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch Upstream
+ package/libedit/0001-check-bsd-functions-in-libbsd.patch Upstream
+ package/libevent/0001-Don-t-define-BIO_get_init-for-LibreSSL-3-5.patch Upstream
+ package/libfcgi/0001-link-against-math.patch Upstream
+diff --git a/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch b/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
+deleted file mode 100644
+index c7e789c02e..0000000000
+--- a/package/libebml/0001-include-appropriate-header-files-for-std-numeric_limits.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From f0bfd53647961e799a43d918c46cf3b6bff89806 Mon Sep 17 00:00:00 2001
+-From: Moritz Bunkus <mo@bunkus.online>
+-Date: Sat, 27 Feb 2021 20:36:52 +0100
+-Subject: [PATCH] include appropriate header files for std::numeric_limits
+-
+-Fixes #80.
+-
+-[Retrieved (and updated to remove ChangeLog update) from:
+-https://github.com/Matroska-Org/libebml/commit/f0bfd53647961e799a43d918c46cf3b6bff89806]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- ChangeLog                 | 4 ++++
+- src/EbmlString.cpp        | 1 +
+- src/EbmlUnicodeString.cpp | 1 +
+- 3 files changed, 6 insertions(+)
+-
+-diff --git a/src/EbmlString.cpp b/src/EbmlString.cpp
+-index 27e55fd..4c05fcf 100644
+---- a/src/EbmlString.cpp
+-+++ b/src/EbmlString.cpp
+-@@ -34,6 +34,7 @@
+-   \author Steve Lhomme     <robux4 @ users.sf.net>
+- */
+- #include <cassert>
+-+#include <limits>
+- 
+- #include "ebml/EbmlString.h"
+- 
+-diff --git a/src/EbmlUnicodeString.cpp b/src/EbmlUnicodeString.cpp
+-index 496a16a..99fc073 100644
+---- a/src/EbmlUnicodeString.cpp
+-+++ b/src/EbmlUnicodeString.cpp
+-@@ -36,6 +36,7 @@
+- */
+- 
+- #include <cassert>
+-+#include <limits>
+- 
+- #include "ebml/EbmlUnicodeString.h"
+- 
+diff --git a/package/libebml/Config.in b/package/libebml/Config.in
+index a00b894358..b770154af7 100644
+--- a/package/libebml/Config.in
++++ b/package/libebml/Config.in
+@@ -2,11 +2,13 @@ config BR2_PACKAGE_LIBEBML
+ 	bool "libebml"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	help
+ 	  Access library for the EBML (Extensible Binary Meta
+ 	  Language, a binary derivative of XML) format.
+ 
+ 	  http://matroska.org
+ 
+-comment "libebml needs a toolchain w/ C++, wchar"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++comment "libebml needs a toolchain w/ C++, wchar, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
+index 32ca1e3dd3..c83fde32ab 100644
+--- a/package/libebml/libebml.hash
++++ b/package/libebml/libebml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  41c7237ce05828fb220f62086018b080af4db4bb142f31bec0022c925889b9f2  libebml-1.4.2.tar.xz
++sha256  82dc5f83356cc9340aee76ed7512210b3a4edf5f346bc9c2c7044f55052687a7  libebml-1.4.4.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL
+diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
+index 056cf888e1..c85638c03e 100644
+--- a/package/libebml/libebml.mk
++++ b/package/libebml/libebml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SETOOLS_VERSION = 4.4.2
-+SETOOLS_VERSION = 4.4.3
- SETOOLS_SITE = $(call github,SELinuxProject,setools,$(SETOOLS_VERSION))
- SETOOLS_DEPENDENCIES = libselinux libsepol python-setuptools host-bison host-flex host-python-cython host-swig
- SETOOLS_INSTALL_STAGING = YES
+-LIBEBML_VERSION = 1.4.2
++LIBEBML_VERSION = 1.4.4
+ LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
+ LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
+ LIBEBML_INSTALL_STAGING = YES
+diff --git a/package/libmatroska/Config.in b/package/libmatroska/Config.in
+index ec0e8415d7..b2e4354df5 100644
+--- a/package/libmatroska/Config.in
++++ b/package/libmatroska/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBMATROSKA
+ 	bool "libmatroska"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libebml
+ 	select BR2_PACKAGE_LIBEBML
+ 	help
+ 	  Extensible open standard audio/video container format access
+@@ -9,5 +10,6 @@ config BR2_PACKAGE_LIBMATROSKA
+ 
+ 	  http://matroska.org
+ 
+-comment "libmatroska needs a toolchain w/ C++, wchar"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++comment "libmatroska needs a toolchain w/ C++, wchar, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
