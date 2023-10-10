@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 001E3CD98C2
-	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 20:54:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 786C0CD98C0
+	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 20:54:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7FB981CDC;
-	Tue, 10 Oct 2023 20:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7FB981CDC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30ABB82289;
+	Tue, 10 Oct 2023 20:54:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30ABB82289
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pWpsPoTMTuBH; Tue, 10 Oct 2023 20:54:08 +0000 (UTC)
+	with ESMTP id nwjFvsPhWqsD; Tue, 10 Oct 2023 20:54:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 032AB81882;
-	Tue, 10 Oct 2023 20:54:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 032AB81882
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D915C1BF389
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:53:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7703482293;
+	Tue, 10 Oct 2023 20:54:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7703482293
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F7F41BF389
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:53:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B300461480
+ by smtp4.osuosl.org (Postfix) with ESMTP id 700D041D6C
  for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:53:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B300461480
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 700D041D6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b6qEOF4NZXDV for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 81DsKYdKgtZS for <buildroot@lists.busybox.net>;
  Tue, 10 Oct 2023 20:53:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 605F261483
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8897341BED
  for <buildroot@buildroot.org>; Tue, 10 Oct 2023 20:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 605F261483
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8897341BED
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4CD5A844EA; Tue, 10 Oct 2023 20:53:04 +0000 (UTC)
+ id 76B51844E9; Tue, 10 Oct 2023 20:53:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 10 Oct 2023 22:47:00 +0200
+Date: Tue, 10 Oct 2023 22:50:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d701d420a155300a3ce77cbb08b0a98bb06b4452
-X-Git-Newrev: 26762e30090585e8c64333d3ffe4249e7a0b0f43
+X-Git-Oldrev: c26939ea3f477fd34c09d872e4b1b3de358904a6
+X-Git-Newrev: 33b9225dff45079ff41dc56cde8084ad7937818c
 X-Patchwork-Hint: ignore
-Message-Id: <20231010205304.4CD5A844EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mbedtls: bump to version 2.28.5
+Message-Id: <20231010205304.76B51844E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sysvinit: bump version to 3.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26762e30090585e8c64333d3ffe4249e7a0b0f43
+commit: https://git.buildroot.net/buildroot/commit/?id=33b9225dff45079ff41dc56cde8084ad7937818c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/mbedtls/mbedtls.hash | 2 +-
- package/mbedtls/mbedtls.mk   | 2 +-
+ package/sysvinit/sysvinit.hash | 2 +-
+ package/sysvinit/sysvinit.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 6aa6d0235d..d0cd0b2105 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.4:
--sha256  578c4dcd15bbff3f5cd56aa07cd4f850fc733634e3d5947be4f7157d5bfd81ac  mbedtls-2.28.4.tar.gz
-+sha256  849e86b626e42ded6bf67197b64aa771daa54e2a7e2868dc67e1e4711959e5e3  mbedtls-2.28.5.tar.gz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 62eda6ec99..1b941e04f4 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
+diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
+index f81e55fc44..67b0ab38f0 100644
+--- a/package/sysvinit/sysvinit.hash
++++ b/package/sysvinit/sysvinit.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  b05c3677bb698afe64c997968b00c49b2a9bd320ce963523230ee7ea41197757  sysvinit-2.99.tar.xz
++sha256  2a621fe6e4528bc91308b74867ddaaebbdf7753f02395c0c5bae817bd2b7e3a5  sysvinit-3.04.tar.xz
+ 
+ # Hash for license files:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 1bf10deb63..b7fe39ca43 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBEDTLS_VERSION = 2.28.4
-+MBEDTLS_VERSION = 2.28.5
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
+-SYSVINIT_VERSION = 2.99
++SYSVINIT_VERSION = 3.04
+ SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
+ SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
+ SYSVINIT_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
