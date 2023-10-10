@@ -1,85 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6104CD8CB7
-	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 19:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B10ABCD8CB4
+	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 20:00:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03C8D40544;
-	Tue, 10 Oct 2023 19:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03C8D40544
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3142F613C8;
+	Tue, 10 Oct 2023 20:00:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3142F613C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ox_eNXnYIvTE; Tue, 10 Oct 2023 19:52:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Smz8uDjvlXz1; Tue, 10 Oct 2023 20:00:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 819CC405B7;
-	Tue, 10 Oct 2023 19:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 819CC405B7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2CD281BF2CD
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 19:52:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 923B660F51;
+	Tue, 10 Oct 2023 20:00:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 923B660F51
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EA1321BF20B
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 19:59:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 055C5401D5
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 19:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 055C5401D5
+ by smtp1.osuosl.org (Postfix) with ESMTP id D06DE817A5
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 19:59:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D06DE817A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CLEvsIUw0rAp for <buildroot@lists.busybox.net>;
- Tue, 10 Oct 2023 19:52:31 +0000 (UTC)
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 86ED3400B9
- for <buildroot@buildroot.org>; Tue, 10 Oct 2023 19:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86ED3400B9
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-99c1c66876aso1098356866b.2
- for <buildroot@buildroot.org>; Tue, 10 Oct 2023 12:52:31 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gezxuMixA49o for <buildroot@lists.busybox.net>;
+ Tue, 10 Oct 2023 19:59:58 +0000 (UTC)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 60FDE8177A
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 19:59:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60FDE8177A
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-9b2cee55056so1104825366b.3
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 12:59:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696967549; x=1697572349;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Kc4iisFBMLtat0nOGE4bLcsIcGtOVScogLMWLid9eiU=;
- b=GcV8bMOStRij+GkcllDFLnsUdTDlrry0IQlQI/SPV1bYsGb28K7/eLCMLr2KrZvpvH
- iLxLs2s0ab5JJqdqABWP75b/iGIZP5ja5yYKwcdSc6BAG6VxU0802rhBdYSwQ2NM6k8m
- b7fY8YL8TElj+blvs9ZHP89rTexxqq5SQbp2uAH01YOwqVg2KIF1YEqXtmUo5X4nAhWc
- +BxbtBS76b8CUgMxzQggF0/QlgtSFA00hkQy2u+Kslepc/YMcFTAihN96g/MNVzCrFUJ
- WEUyJBghMyazrEza0+MOgTDUCvs3LPqEOTMd4o6qSrvExwtbBpjvSSv4KBxgW+yw5XV8
- 5Zmw==
-X-Gm-Message-State: AOJu0YxFc8aeBj/m2oWSB5Q/YsGXPevfIMzApmdBejSBCFcui5r2DS9Y
- 2FHfnU2szjEThMl7WtH61xo1WBUy1o2r26jyp55VThzZsJg9G6OlE1g=
-X-Google-Smtp-Source: AGHT+IGw2Fl1w2nRWY1cGGWN/oOf4a5f1m/HJyqI0kz0kV/Gc3YoX6uENlgjNxp+xk3zoicp5Lj8CneF1P/kt7TyFmw=
-X-Received: by 2002:a17:906:319a:b0:9a5:9f8d:770 with SMTP id
- 26-20020a170906319a00b009a59f8d0770mr17440459ejy.46.1696967549282; Tue, 10
- Oct 2023 12:52:29 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1696967996; x=1697572796;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=x34DpTbv4/5sFBJOKGTQuQw9Hen1KT3gc+QHSao+Zck=;
+ b=qSIdl6hTmBnhxLOCavYrlTGMFk0BedXRejsPs2qwXAaAmKxq5/wZ85TrL6jt+7VF+W
+ 5FjL/6Qn8oK/Fz6QSIostyN+O8eVAC2ZwrwAkLUv3dZLDuaJlzCKLE6abAObQEQJSmi2
+ IufPIxMba1vyvAFUL0DQWcOyV4Oeagqd8SCP2N9CNRLwlBBe6jRjzhl8hLdXgR1PnGbF
+ SMqXKNUowIYrpRoMm8tPKD8i7aIENU51FRyYK42t01CoZ86WV4ToLiug9OLXOkaqFiF/
+ Z0xF9E7RZg/rcMh5sq7jN5sIxluKKVSJphMtnt0ehIK+rgCpNVtHNA+VCaPGOpKG8LI2
+ FpJQ==
+X-Gm-Message-State: AOJu0YzwEFztKRxcMyIYEozq7N2XSh+VqPGZotxgp1Zs+5Bg3xDpNY5y
+ +L++dxsIeoolpa+c0BIfBZHk7g==
+X-Google-Smtp-Source: AGHT+IEcM/qEAagUUZp5X0Q3TiwUfGymAb/x5V+hro0pjF7L2S/3gn3oQuzetthAngCbTAsy8cGJLA==
+X-Received: by 2002:a17:906:1db2:b0:9ae:65a5:b6fa with SMTP id
+ u18-20020a1709061db200b009ae65a5b6famr14624159ejh.32.1696967996124; 
+ Tue, 10 Oct 2023 12:59:56 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ p26-20020a1709060dda00b0098921e1b064sm8865674eji.181.2023.10.10.12.59.55
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 10 Oct 2023 12:59:55 -0700 (PDT)
+Message-ID: <4aaccdae-a9d8-6fea-8efb-99cdacf359b4@mind.be>
+Date: Tue, 10 Oct 2023 21:59:53 +0200
 MIME-Version: 1.0
-References: <4fa235baaa88440e806f3c5f8f8bcb58@physiomed.de>
- <94908e37-932a-4626-8fcb-c39d3293fe38@benettiengineering.com>
- <5ea9bca9-6e26-ad12-6bd0-c131a3281460@mind.be>
- <CAMdwsN-jxks4PzNd5dSZufgWVRSkBKMNMVzrTUv5ermh8TyY1A@mail.gmail.com>
-In-Reply-To: <CAMdwsN-jxks4PzNd5dSZufgWVRSkBKMNMVzrTUv5ermh8TyY1A@mail.gmail.com>
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Tue, 10 Oct 2023 21:52:18 +0200
-Message-ID: <CAHDQB6PpKpX_1nZtRaX_evWxa35GfOyXa4gVF2qvFKOJR0cyVQ@mail.gmail.com>
-To: Jesse Van Gavere <jesseevg@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Content-Language: en-GB
+To: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
+References: <20230115125253.280257-1-nolange79@gmail.com>
+ <20230115125253.280257-5-nolange79@gmail.com>
+In-Reply-To: <20230115125253.280257-5-nolange79@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1696967549; x=1697572349;
- darn=buildroot.org; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=Kc4iisFBMLtat0nOGE4bLcsIcGtOVScogLMWLid9eiU=;
- b=ZDCLCh8/eob4bM7pyd/uJ8j4uHBwFnj2eGn3PFUwktCoJd/KmvxvCffJTceVfE9Yc3
- 90VTZaufJV+RTdQrbOA5wvIoyc6kREb8Dpzk+/CumvJi/KZRnQsAMFzDufbLCUX8S76y
- IAOHAZdNnwdtnueE+s47Jq8Q+uSs5a2j6rHzQ=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=ZDCLCh8/
-Subject: Re: [Buildroot] Future buildroot with QtQuick/QML Support
+ d=mind.be; s=google; t=1696967996; x=1697572796; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=x34DpTbv4/5sFBJOKGTQuQw9Hen1KT3gc+QHSao+Zck=;
+ b=VOCAYPJrp/bzHu2/IdSBsvKqnTIqPhMxZHcKPtkNIviAEQ6oYc69Ao0QspT8OUBEOw
+ mncjS620fq3BguraW7cmPobqd0RsC5OSd9D2JAuvF4gTs9/QUeB8bjCBHSO3f8DDOPxu
+ ixNzrCBoL3av6IZDUTrzxogeRCL9DGfs4GKOIsNydc18JzA7qTuc0wAm/0MuqJm9Fw4R
+ XGOr/qIG0y0D193Yv6eJevGBEUWCfNTxHQWJxmyWsxo3BBJkc9gEBspHoScLOR3EZ69/
+ Q5bxAoyXHqMpV4v3UYT83g5hCt9npZp2PwJGIGdymKp9hikbtbHfIrpdvzIaV0SZOXyS
+ 1ADg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=VOCAYPJr
+Subject: Re: [Buildroot] [PATCH 4/7] system: add systemd generator for /var
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,338 +100,145 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- =?UTF-8?Q?Sch=C3=A4ffner=2C_Florian?= <florian.schaeffner@physiomed.de>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============1188754780245114506=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Romain Naour <romain.naour@smile.fr>,
+ =?UTF-8?Q?Je=cc=81re=cc=81my_Rosen?= <jeremy.rosen@smile.fr>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1188754780245114506==
-Content-Type: multipart/alternative; boundary="000000000000f88aa70607620b4d"
-
---000000000000f88aa70607620b4d
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-I can see about porting the package tomorrow! No worries!
-
-Adam Duskett
-
-Senior Embedded Systems Developer
-
-M. +1208-515-8102
-
-adam.duskett@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions BV
-
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-
-T. +31 (0)85 111 9170
-info@amarulasolutions.com
-
-www.amarulasolutions.com
-
-
-
-On Tue, Oct 10, 2023 at 8:55=E2=80=AFPM Jesse Van Gavere <jesseevg@gmail.co=
-m> wrote:
-
-> Hi,
->
-> Op di 10 okt 2023 om 20:24 schreef Arnout Vandecappelle <arnout@mind.be>:
-> >
-> >
-> >
-> > On 10/10/2023 15:18, Giulio Benetti wrote:
-> > > Hello Florian,
-> > >
-> > > On 10/10/23 14:59, Sch=C3=A4ffner, Florian wrote:
-> > >> Hello,
-> > >>
-> > >> our application is built in the development environment with Qt 6 an=
-d
-> > >> QtQuick/QML. Now i tried, but wasn=E2=80=99t able to setup a working
-> buildroot for our
-> > >> application to run on a embedded device.
-> > >>
-> > >> I found the conversation about qt6 and QML Support on the buildroot
-> mailing
-> > >> list and that it seems to be not possible to setup a buildroot for
-> our needs
-> > >> with Qt6 and QML support.
-> > >>
-> > >>
-> https://lore.kernel.org/buildroot/f22ce06d-d9cf-c561-7455-19dce724c158@be=
-nettiengineering.com/
-> > >>
-> > >> If I understood the answer from Giulio Benetti correctly, there is
-> currently
-> > >> no chance to make this configuration work for our embedded board wit=
-h
-> buildroot?
-> > >>
-> > >> Can you please tell me if there will be support for this in the next
-> major
-> > >> buildroot version? Or is it not planned or foreseeable when a QML
-> support is
-> > >> possible with buildroot?
-> >
-> >   Buildroot is a volunteer project - nothing is "planned" unless someon=
-e
-> goes
-> > through the effort of contributing it.
-> >
-> > > as I can see from Buildroot patchork at the moment there is no pendin=
-g
-> > > patches to add features, but this doesn't mean it won't be added.
-> > >
-> > > Which modules would you be interested in most of all?
-> >
-> >   If you're not able or willing to develop the Qt6 QML support yourself=
-,
-> you may
-> > want to hire some help to do it. At the bottom of the "support" page on
-> the
-> > website [1] some companies are mentioned that can provide that help (I
-> work for
-> > one of them). Or you can find a freelancer - like Giulio.
-> >
-> >   You can also ask the original contributor of Qt6 (Jesse, added in Cc)
-> if they
-> > perhaps have some PoC for QML already. Or perhaps their employer would =
-be
-> > willing to share the cost of developing it.
->
-> I do have a working POC to build QML with a plan for supporting
-> QtQuick, which I very much wanted to get upstreamed, however I've been
-> swamped with other non-buildroot work sadly.
-> That said, it should be very doable to add this support with not too much
-> work.
-> In a nutshell:
-> You need to add qtshadertools because of the qsb tool it builds, this
-> is a dependency for qtdeclarative to build QtQuick
-> This patch will be important:
->
-> http://patchwork.ozlabs.org/project/buildroot/patch/20230808172231.111469=
-6-1-jesse.vangavere@scioteq.com/
-> The tricky thing there is that the host qt package does not build the
-> GUI by default, however since qt6 certain tools need to be built
-> through the host package, qsb is one of those, and to actually build
-> qsb through the qtshadertools package you need GUI support in the host
-> build, Thomas has provided some valuable feedback there how a proper
-> follow up patch could look like to add this functionality the right
-> way.
->
-> Once that's done QML/QtQuick will be quite trivial to add, I already
-> have a qt6declarative package you could work with and (with some
-> refreshing of my memory) I could provide you the necessary config
-> options to add QtQuick alongside it.
->
-> As said I don't have the time myself at the moment to do it right, and
-> I don't have a timeline for when I'll be able to do so, but if you're
-> willing to continue on the work I have to get it merged in, I'll
-> gladly help out where I can with some of my initial work and what I
-> know of how to get it all working, the finishing touches and testing
-> will be up to you however :)
->
-> >
-> >   Regards,
-> >   Arnout
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---000000000000f88aa70607620b4d
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">I can see about porting the package tomorrow! No worries!<=
-div><br></div><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmai=
-l=3D"gmail_signature"><div dir=3D"ltr"><span><p dir=3D"ltr" style=3D"line-h=
-eight:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"f=
-ont-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);background-col=
-or:transparent;vertical-align:baseline;white-space:pre-wrap">Adam Duskett</=
-span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:=
-0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubun=
-tu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;verti=
-cal-align:baseline;white-space:pre-wrap">Senior Embedded Systems Developer<=
-/span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top=
-:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubu=
-ntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vert=
-ical-align:baseline;white-space:pre-wrap">M. +1208-515-8102</span></p><p di=
-r=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bot=
-tom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,=
-monospace;color:rgb(0,0,0);background-color:transparent;vertical-align:base=
-line;white-space:pre-wrap"><a href=3D"mailto:adam.duskett@amarulasolutions.=
-com" target=3D"_blank">adam.duskett@amarulasolutions.com</a></span></p><p d=
-ir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bo=
-ttom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;=
-,monospace;color:rgb(0,0,0);background-color:transparent;vertical-align:bas=
-eline;white-space:pre-wrap">__________________________________</span></p><p=
- dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-=
-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quo=
-t;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-align:b=
-aseline;white-space:pre-wrap"><br></span><span style=3D"font-size:10pt;font=
--family:Ubuntu,sans-serif;color:rgb(0,0,0);background-color:transparent;ver=
-tical-align:baseline;white-space:pre-wrap">Amarula Solutions BV</span></p><=
-p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin=
--bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&qu=
-ot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-align:=
-baseline;white-space:pre-wrap">Joop Geesinkweg 125, 1114 AB, Amsterdam, NL<=
-/span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top=
-:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubu=
-ntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vert=
-ical-align:baseline;white-space:pre-wrap">T. +31 (0)85 111 9170</span><span=
- style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;colo=
-r:rgb(0,0,0);background-color:transparent;vertical-align:baseline;white-spa=
-ce:pre-wrap"><br></span><span style=3D"font-size:10pt;font-family:&quot;Ubu=
-ntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vert=
-ical-align:baseline;white-space:pre-wrap"><a href=3D"mailto:info@amarulasol=
-utions.com" target=3D"_blank">info@amarulasolutions.com</a></span></p><p di=
-r=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bot=
-tom:0pt"><a href=3D"http://www.amarulasolutions.com/" target=3D"_blank"><sp=
-an style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;co=
-lor:rgb(0,0,0);background-color:transparent;vertical-align:baseline;white-s=
-pace:pre-wrap">www.amarulasolutions.com</span></a></p><div><br></div></span=
-></div></div></div><br></div><br><div class=3D"gmail_quote"><div dir=3D"ltr=
-" class=3D"gmail_attr">On Tue, Oct 10, 2023 at 8:55=E2=80=AFPM Jesse Van Ga=
-vere &lt;<a href=3D"mailto:jesseevg@gmail.com">jesseevg@gmail.com</a>&gt; w=
-rote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0p=
-x 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi,<br>
-<br>
-Op di 10 okt 2023 om 20:24 schreef Arnout Vandecappelle &lt;<a href=3D"mail=
-to:arnout@mind.be" target=3D"_blank">arnout@mind.be</a>&gt;:<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; On 10/10/2023 15:18, Giulio Benetti wrote:<br>
-&gt; &gt; Hello Florian,<br>
-&gt; &gt;<br>
-&gt; &gt; On 10/10/23 14:59, Sch=C3=A4ffner, Florian wrote:<br>
-&gt; &gt;&gt; Hello,<br>
-&gt; &gt;&gt;<br>
-&gt; &gt;&gt; our application is built in the development environment with =
-Qt 6 and<br>
-&gt; &gt;&gt; QtQuick/QML. Now i tried, but wasn=E2=80=99t able to setup a =
-working buildroot for our<br>
-&gt; &gt;&gt; application to run on a embedded device.<br>
-&gt; &gt;&gt;<br>
-&gt; &gt;&gt; I found the conversation about qt6 and QML Support on the bui=
-ldroot mailing<br>
-&gt; &gt;&gt; list and that it seems to be not possible to setup a buildroo=
-t for our needs<br>
-&gt; &gt;&gt; with Qt6 and QML support.<br>
-&gt; &gt;&gt;<br>
-&gt; &gt;&gt; <a href=3D"https://lore.kernel.org/buildroot/f22ce06d-d9cf-c5=
-61-7455-19dce724c158@benettiengineering.com/" rel=3D"noreferrer" target=3D"=
-_blank">https://lore.kernel.org/buildroot/f22ce06d-d9cf-c561-7455-19dce724c=
-158@benettiengineering.com/</a><br>
-&gt; &gt;&gt;<br>
-&gt; &gt;&gt; If I understood the answer from Giulio Benetti correctly, the=
-re is currently<br>
-&gt; &gt;&gt; no chance to make this configuration work for our embedded bo=
-ard with buildroot?<br>
-&gt; &gt;&gt;<br>
-&gt; &gt;&gt; Can you please tell me if there will be support for this in t=
-he next major<br>
-&gt; &gt;&gt; buildroot version? Or is it not planned or foreseeable when a=
- QML support is<br>
-&gt; &gt;&gt; possible with buildroot?<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0Buildroot is a volunteer project - nothing is &quot;planne=
-d&quot; unless someone goes<br>
-&gt; through the effort of contributing it.<br>
-&gt;<br>
-&gt; &gt; as I can see from Buildroot patchork at the moment there is no pe=
-nding<br>
-&gt; &gt; patches to add features, but this doesn&#39;t mean it won&#39;t b=
-e added.<br>
-&gt; &gt;<br>
-&gt; &gt; Which modules would you be interested in most of all?<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0If you&#39;re not able or willing to develop the Qt6 QML s=
-upport yourself, you may<br>
-&gt; want to hire some help to do it. At the bottom of the &quot;support&qu=
-ot; page on the<br>
-&gt; website [1] some companies are mentioned that can provide that help (I=
- work for<br>
-&gt; one of them). Or you can find a freelancer - like Giulio.<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0You can also ask the original contributor of Qt6 (Jesse, a=
-dded in Cc) if they<br>
-&gt; perhaps have some PoC for QML already. Or perhaps their employer would=
- be<br>
-&gt; willing to share the cost of developing it.<br>
-<br>
-I do have a working POC to build QML with a plan for supporting<br>
-QtQuick, which I very much wanted to get upstreamed, however I&#39;ve been<=
-br>
-swamped with other non-buildroot work sadly.<br>
-That said, it should be very doable to add this support with not too much w=
-ork.<br>
-In a nutshell:<br>
-You need to add qtshadertools because of the qsb tool it builds, this<br>
-is a dependency for qtdeclarative to build QtQuick<br>
-This patch will be important:<br>
-<a href=3D"http://patchwork.ozlabs.org/project/buildroot/patch/202308081722=
-31.1114696-1-jesse.vangavere@scioteq.com/" rel=3D"noreferrer" target=3D"_bl=
-ank">http://patchwork.ozlabs.org/project/buildroot/patch/20230808172231.111=
-4696-1-jesse.vangavere@scioteq.com/</a><br>
-The tricky thing there is that the host qt package does not build the<br>
-GUI by default, however since qt6 certain tools need to be built<br>
-through the host package, qsb is one of those, and to actually build<br>
-qsb through the qtshadertools package you need GUI support in the host<br>
-build, Thomas has provided some valuable feedback there how a proper<br>
-follow up patch could look like to add this functionality the right<br>
-way.<br>
-<br>
-Once that&#39;s done QML/QtQuick will be quite trivial to add, I already<br=
->
-have a qt6declarative package you could work with and (with some<br>
-refreshing of my memory) I could provide you the necessary config<br>
-options to add QtQuick alongside it.<br>
-<br>
-As said I don&#39;t have the time myself at the moment to do it right, and<=
-br>
-I don&#39;t have a timeline for when I&#39;ll be able to do so, but if you&=
-#39;re<br>
-willing to continue on the work I have to get it merged in, I&#39;ll<br>
-gladly help out where I can with some of my initial work and what I<br>
-know of how to get it all working, the finishing touches and testing<br>
-will be up to you however :)<br>
-<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0Regards,<br>
-&gt;=C2=A0 =C2=A0Arnout<br>
-&gt;<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div>
-
---000000000000f88aa70607620b4d--
-
---===============1188754780245114506==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1188754780245114506==--
+ICBIaSBOb3JiZXJ0LAoKICBJJ20gbm90IGVudGlyZWx5IHN1cmUgYWJvdXQgdGhpcyBvbmUsIGJ1
+dCBub3QgY29tcGxldGVseSBhZ2FpbnN0IGl0IGVpdGhlci4gClNpbmNlIEkgZG8gaGF2ZSBhIGZl
+dyBjb21tZW50cyBiZWxvdywgSSd2ZSBtYXJrZWQgYXMgQ2hhbmdlcyBSZXF1ZXN0ZWQuCgpPbiAx
+NS8wMS8yMDIzIDEzOjUyLCBOb3JiZXJ0IExhbmdlIHdyb3RlOgo+IFRoaXMgY29tbWl0IGFkZHMg
+YW4gYWx0ZXJuYXRpdmUgdGhhdCBoYXMgdGhlIGZvbGxvd2luZyBjaGFyYWN0ZXJpc3RpY3M6Cgog
+IFRoaXMgY29tbWl0IGFkZHMgYW4gYWx0ZXJuYXRpdmUgL3ZhciBtYW5hZ2VtZW50IG1ldGhvZCB0
+aGF0IGhhcyB0aGUgZm9sbG93aW5nIApjaGFyYWN0ZXJpc3RpY3M6Cgo+IAo+IC0gICBEb250IGRl
+cGVuZCBvbiBhbnl0aGluZyBiZWluZyBhdmFpbGFibGUsIGV4Y2VwdCB0aGUKPiAgICAgIEFQSSBG
+aWxlIFN5c3RlbXMgWzFdLgo+IAo+IC0gICBCZSBhIGNsZWFuIGRyb3AtaW4sIHRoYXQgY2FuIGJl
+IHRyaXZpYWxseSBhZGRlZCAvIHJlbW92ZWQuCj4gCj4gLSAgIFJ1bnMgYmVmb3JlIHN5c3RlbWQg
+bG9hZHMgaXRzIGNvbmZpZ3VyYXRpb24uCj4gCj4gICAgICBDb3VsZCBiZSBleHRlbmRlZCB0byBo
+YW5kbGUgbW9yZSB0cmlja3kgcGF0aHMgbGlrZSAvZXRjLgoKICBXZWxsLCBmb3IgL2V0YyB0aGVy
+ZSBpcyBubyByZWFsIHJlYXNvbiBmb3IgaXQgdG8gYmUgd3JpdGVhYmxlIChidXQgbm90IApwZXJz
+aXN0ZW50KSwgaXMgdGhlcmU/IFRoZXJlIGFyZSBzb21lIGRlYnVnZ2luZyBzaXR1YXRpb25zIHdo
+ZXJlIGl0IGNvdWxkIGJlIAp1c2VmdWwsIGJ1dCB0aGVuIEkgdGhpbmsgeW91IGNvdWxkIGp1c3Qg
+YXMgd2VsbCB1c2UgdGhlIG92ZXJsYXlmcyBhcHByb2FjaC4KCgogIFdoYXQgaXMgbWlzc2luZyBo
+ZXJlIHN0aWxsIGlzIHdoeSB5b3UnZCBwcmVmZXIgdGhpcyBvdmVyIHRoZSBvdmVybGF5IGFwcHJv
+YWNoLiAKVGhhdCdzIGV4cGxhaW5lZCBpbiB0aGUgaGVscCB0ZXh0IHRob3VnaC4gTm90IHRoYXQg
+SSByZWFsbHkgYmVsaWV2ZSB0aGVyZSdzIGEgCmdvb2QgcmVhc29uIHRob3VnaCAtIHNlZSBiZWxv
+dy4KCgo+IEZvciBtb3JlIGV4cGxhaW5hdGlvbiwgc2VlIHRoZSBjb21taXQgaW50cm9kdWNpbmcg
+dGhlIG92ZXJsYXkgbWV0aG9kLgoKICBUaGF0J3MgY29tbWl0IDEwYzYzN2FiMDZkOTM1YmJjZTRj
+ODMzYzRhYjk2OTVjZGIzMmI2Yzggbm93LiBJIHB1dCBtb3N0IG9mIHlvdXIgCmV4cGxhbmF0aW9u
+IGluIHRoZSBjb21taXQgbWVzc2FnZSBzbyB0aGlzIHJlZmVyZW5jZSBzaG91bGQgc3RpbGwgYXBw
+bHkuCgogIGV4cGxhaW5hdGlvbiAtPiBleHBsYW5hdGlvbgoKPiAKPiBUaGUgaW1wbGVtZW50YXRp
+b24gZG9lc250IGZvY3VzIG9uIGJlaW5nIGV4cGFuZGFibGUgYnV0IHNpbXBsZSwKCiAgZG9lc24n
+dAoKPiBpbiB0aGUgZnV0dXJlIHRoZXJlIGNvdWxkIGJlIGFuIGF0dGVtcHQgdG8gc291cmNlIHNo
+ZWxsIHNjcmlwdHMKPiBmb3IgY29uZmlndXJhdGlvbi4KPiBTbyB0aGF0IG11bHRpcGxlIHBhdGhz
+IGNhbiBiZSBjb3ZlcmVkICgvZXRjKSwKPiBvciB0aGUgbW91bnRzIGFuZCBoYW5kbGluZyBzcGVj
+aWZpZWQKPiAoZG8tbm90aGluZywgY29weS1vdmVyIG9yIG92ZXJsYXkgb3JpZ2luYWwgY29udGVu
+dHMpLgoKICBJIGRvbid0IHRoaW5rIGl0IG1ha2VzIHNlbnNlIHRvIHJlZmVyIHRvIGFuIHVucHJv
+dmVuIHRoZW9yZXRpY2FsIGV4dGVuc2lvbiAKbGlrZSB0cnlpbmcgZm9yIHNvbWUga2luZCBvZiBo
+YWxmLWJha2VkIHdyaXRlYWJsZSBvdmVybGF5IHdpdGhvdXQgdXNpbmcgCm92ZXJsYXlmcy4gV2Vs
+bCwgSSBzaG91bGRuJ3QgYmUgdGFsa2luZywgbXkgY3VycmVudCBwcm9qZWN0IGlzIGluIGZhY3Qg
+ZG9pbmcgCmV4YWN0bHkgdGhhdCAtIGJ1dCBsZXQgbWUgdGVsbCB5b3UsIGl0J3MgaGFsZiBiYWtl
+ZCA6LSkKCgo+IFRoZSBpbnRlbnQgaXMgdG8gaGF2ZSBhIGRpcmVjdCByZXBsYWNlbWVudCBmb3Ig
+dGhlIHZhciBmYWN0b3J5IG1ldGhvZC4KPiAKPiBbMV0gLSBodHRwczovL3d3dy5mcmVlZGVza3Rv
+cC5vcmcvd2lraS9Tb2Z0d2FyZS9zeXN0ZW1kL0FQSUZpbGVTeXN0ZW1zLwo+IAo+IENjOiBZYW5u
+IEUuIE1PUklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KPiBDYzogUm9tYWluIE5hb3VyIDxy
+b21haW4ubmFvdXJAc21pbGUuZnI+Cj4gQ2M6IEplzIFyZcyBbXkgUm9zZW4gPGplcmVteS5yb3Nl
+bkBzbWlsZS5mcj4KPiBTaWduZWQtb2ZmLWJ5OiBOb3JiZXJ0IExhbmdlIDxub2xhbmdlNzlAZ21h
+aWwuY29tPgo+IC0tLQo+ICAgLi4uL2dlbmVyYXRvci9ici1tb3VudC1nZW5lcmF0b3IgICAgICAg
+ICAgICAgIHwgMTkgKysrKysrKysrKysrKysrKysrKwo+ICAgLi4uL3NrZWxldG9uLWluaXQtc3lz
+dGVtZC5tayAgICAgICAgICAgICAgICAgIHwgMTAgKysrKysrKysrLQo+ICAgc3lzdGVtL0NvbmZp
+Zy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTMgKysrKysrKysrKysrKwo+ICAg
+MyBmaWxlcyBjaGFuZ2VkLCA0MSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gICBjcmVh
+dGUgbW9kZSAxMDA3NTUgcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvZ2VuZXJhdG9yL2Jy
+LW1vdW50LWdlbmVyYXRvcgo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3NrZWxldG9uLWluaXQt
+c3lzdGVtZC9nZW5lcmF0b3IvYnItbW91bnQtZ2VuZXJhdG9yIGIvcGFja2FnZS9za2VsZXRvbi1p
+bml0LXN5c3RlbWQvZ2VuZXJhdG9yL2JyLW1vdW50LWdlbmVyYXRvcgo+IG5ldyBmaWxlIG1vZGUg
+MTAwNzU1Cj4gaW5kZXggMDAwMDAwMDAwMC4uZmQxMDY1OWMxYwo+IC0tLSAvZGV2L251bGwKPiAr
+KysgYi9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9nZW5lcmF0b3IvYnItbW91bnQtZ2Vu
+ZXJhdG9yCj4gQEAgLTAsMCArMSwxOSBAQAo+ICsjIS9iaW4vc2gKPiArc2V0IC1lCj4gKyMgU1BE
+WC1MaWNlbnNlLUlkZW50aWZpZXI6IE1JVAoKICBUaGUgTUlUIGxpY2Vuc2Ugc3VnZ2VzdCB0aGF0
+IHlvdSBjb3BpZWQgdGhpcyBmcm9tIHNvbWV3aGVyZSBlbHNlLiBJZiBzbywgeW91IAptdXN0IHJl
+ZmVyIHRvIHRoZSBvcmlnaW5hbCAtIGF0IGxlYXN0IHRvIHRoZSBvcmlnaW5hbCBhdXRob3IsIGFz
+IHJlcXVpcmVkIGJ5IHRoZSAKTUlUIGxpY2Vuc2UuCgo+ICsjIE5vdGU6IGRvaW5nIGhlYXZ5IHN0
+dWZmIGhlcmUgaXMgbm90IHJlY29tbWVuZGVkLCBidXQgdGhpcyB3YXkKPiArIyB0aGUgb3JkZXJp
+bmcgaXMgZ3VhcmFudGVlZC4gQmUgcXVpY2sgYWJvdXQgZXZlcnl0aGluZy4KPiArIyBLbm93IHRo
+YXQgdGhlIGdlbmVyYXRvciBjYW4gYmUgcnVuIGFnYWluIGxhdGVyLgo+ICsKPiArWyAiJHtTWVNU
+RU1EX0lOX0lOSVRSRC0wfSIgPSAxIF0gJiYgZXhpdAoKICBJIGRvbid0IGxpa2UgdGhpcyByZWR1
+bmRhbnQgZGVmYXVsdCBvZiAwIG11Y2guIEJ1dCB0aGF0J3MganVzdCBtaW5vci4KCj4gK2dyZXAg
+J150bXBmc19icl92YXIgL3ZhciB0bXBmcycgL3Byb2Mvc2VsZi9tb3VudHMgPi9kZXYvbnVsbCAm
+JiBleGl0CgogIFdoeSA+L2Rldi9udWxsIGluc3RlYWQgb2YgZ3JlcCAtcT8KCj4gKwo+ICtUTVBN
+T1VOVD0vcnVuLy5ici8udG1wdmFyCj4gK3RyYXAgInVtb3VudCAtbCAkVE1QTU9VTlQgfHwgOjsg
+cm1kaXIgJFRNUE1PVU5UIHx8IDoiIDAKPiArCj4gK21rZGlyIC1tNzU1IC1wICRUTVBNT1VOVAo+
+ICttb3VudCAtbiAtdCB0bXBmcyAtbyBub3N1aWQsbm9kZXYsc2l6ZT01MCUgdG1wZnNfYnJfdmFy
+ICRUTVBNT1VOVCA+ICsKPiArY3AgLXIgLXAgL3Zhci8uICRUTVBNT1VOVAo+ICsjIHRoaXMgaXMg
+YSBzaGFyZWQgbW91bnQgc28gLS1tb3ZlIHdvbnQgd29yawoKICAidGhpcyIgc2VlbXMgdG8gcmVm
+ZXIgdG8gL3J1bi8uYnIvLnRtcHZhciwgd2hpY2ggaXMgX25vdF8gYSBzaGFyZWQgbW91bnQgKGFu
+ZCAKaXQncyBhbnl3YXkgbm90IHJlbGV2YW50IGlmIGl0IGlzKS4gL3J1biBpcyBhIHNoYXJlZCBt
+b3VudCBhbmQgdGhhdCBpcyB0aGUgCnJlYXNvbiB5b3UgY2FuJ3QgLS1tb3ZlIGl0LgoKICBBbmQg
+cGVyaGFwcyBhZGQgInNvIGluc3RlYWQsIGJpbmQtbW91bnQgYW5kIHVubW91bnQgJFRNUE1PVU5U
+IGFmdGVyd2FyZHMgKGluIAp0aGUgdHJhcCBoYW5kbGVyKS4iCgo+ICttb3VudCAtbiAtLWJpbmQg
+JFRNUE1PVU5UIC92YXIKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3Rl
+bWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1rIGIvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3Rl
+bWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1rCj4gaW5kZXggZjQzMWVjNDYxMi4uYjliODQ5MmY1
+OCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9za2VsZXRvbi1p
+bml0LXN5c3RlbWQubWsKPiArKysgYi9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9za2Vs
+ZXRvbi1pbml0LXN5c3RlbWQubWsKPiBAQCAtNjksMTEgKzY5LDE5IEBAIGRlZmluZSBTS0VMRVRP
+Tl9JTklUX1NZU1RFTURfUE9TVF9JTlNUQUxMX1ZBUl9PVkVSTEFZRlMKPiAgIAkJJChUQVJHRVRf
+RElSKS91c3IvbGliL3N5c3RlbWQvc3lzdGVtL2JyLWJpbmRtb3VudC1ydW5ALnNlcnZpY2UKPiAg
+IAkkKElOU1RBTEwpIC1EIC1tIDA2NDQgJChTS0VMRVRPTl9JTklUX1NZU1RFTURfUEtHRElSKS9v
+dmVybGF5ZnMvYnItb3ZlcmxheS1wcmVwYXJlQC5zZXJ2aWNlIFwKPiAgIAkJJChUQVJHRVRfRElS
+KS91c3IvbGliL3N5c3RlbWQvc3lzdGVtL2JyLW92ZXJsYXktcHJlcGFyZUAuc2VydmljZQo+IC0J
+IyAvdmFyIG1vdW50IGdldHMgcHVsbGVkIGluIGF1dG9tYXRpY2FsbHkgYnkgYmFzaWMudGFyZ2V0
+Cj4gKwkjIHZhci5tb3VudCBnZXRzIHB1bGxlZCBpbiBhdXRvbWF0aWNhbGx5IGJ5IGJhc2ljLnRh
+cmdldAoKICBJZiB5b3UncmUgYW55d2F5IGdvaW5nIHRvIGNvcnJlY3QgdGhpcyBjb21tZW50LCBj
+b3JyZWN0IGl0IGNvcnJlY3RseSA6LSkgSXQncyAKcHVsbGVkIGluIGJ5IGxvY2FsLWZzLnRhcmdl
+dCwgbm90IGJhc2ljLnRhcmdldC4KCj4gICBlbmRlZgo+ICAgU0tFTEVUT05fSU5JVF9TWVNURU1E
+X1BPU1RfSU5TVEFMTF9UQVJHRVRfSE9PS1MgKz0gU0tFTEVUT05fSU5JVF9TWVNURU1EX1BPU1Rf
+SU5TVEFMTF9WQVJfT1ZFUkxBWUZTCj4gICBlbmRpZiAgIyBCUjJfSU5JVF9TWVNURU1EX1ZBUl9P
+VkVSTEFZRlMKPiAgIAo+ICtpZmVxICgkKEJSMl9JTklUX1NZU1RFTURfVkFSX0dFTkVSQVRPUiks
+eSkKPiArZGVmaW5lIFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9QT1NUX0lOU1RBTExfVkFSX0dFTkVS
+QVRPUgo+ICsJJChJTlNUQUxMKSAtRCAtbSAwNzU1ICQoU0tFTEVUT05fSU5JVF9TWVNURU1EX1BL
+R0RJUikvZ2VuZXJhdG9yL2JyLW1vdW50LWdlbmVyYXRvciBcCj4gKwkJJChUQVJHRVRfRElSKS91
+c3IvbGliL3N5c3RlbWQvc3lzdGVtLWdlbmVyYXRvcnMvYnItdmFyLW1vdW50LWdlbmVyYXRvcgoK
+ICBQbGVhc2Uga2VlcCB0aGUgc2FtZSBuYW1lIGluIFBLR0RJUi4gSSBrbm93IHRoZSBpbnRlbnRp
+b24gaXMgdG8ga2VlcCBpdCAKZ2VuZXJhbCBzbyBpdCBjYW4gYmUgdXNlZCBmb3Igb3RoZXIgdGhp
+bmdzIChlLmcuIC9ldGMpLCBidXQgaXQgX2lzbid0XyBnZW5lcmFsIApzbyBkb24ndCB0cnkgcHJl
+dGVuZGluZyBpdCBpcy4KCj4gK2VuZGVmCj4gK1NLRUxFVE9OX0lOSVRfU1lTVEVNRF9QT1NUX0lO
+U1RBTExfVEFSR0VUX0hPT0tTICs9IFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9QT1NUX0lOU1RBTExf
+VkFSX0dFTkVSQVRPUgo+ICtlbmRpZiAgIyBCUjJfSU5JVF9TWVNURU1EX1ZBUl9HRU5FUkFUT1IK
+PiArCj4gICBlbmRpZiAgIyBCUjJfVEFSR0VUX0dFTkVSSUNfUkVNT1VOVF9ST09URlNfUlcKPiAg
+IAo+ICAgaWZlcSAoJChCUjJfSU5JVF9TWVNURU1EX1BPUFVMQVRFX1RNUEZJTEVTKSx5KQo+IGRp
+ZmYgLS1naXQgYS9zeXN0ZW0vQ29uZmlnLmluIGIvc3lzdGVtL0NvbmZpZy5pbgo+IGluZGV4IGNk
+ZjM4M2QwZDQuLjE0ZmVmYmYyODMgMTAwNjQ0Cj4gLS0tIGEvc3lzdGVtL0NvbmZpZy5pbgo+ICsr
+KyBiL3N5c3RlbS9Db25maWcuaW4KPiBAQCAtMjAwLDYgKzIwMCwxOSBAQCBjb25maWcgQlIyX0lO
+SVRfU1lTVEVNRF9WQVJfT1ZFUkxBWUZTCj4gICAJICBFeGVjU3RhcnQ9Cj4gICAJICBFeGVjU3Rh
+cnQ9L2Jpbi9tb3VudCAtLW1ha2UtcHJpdmF0ZSAtbiAvZGV2L3NkYzEgJHtPVkVSTEFZX0RJUn0K
+PiAgIAo+ICtjb25maWcgQlIyX0lOSVRfU1lTVEVNRF9WQVJfR0VORVJBVE9SCj4gKwlib29sICJ1
+c2UgYSBzeXN0ZW1kIGdlbmVyYXRvciB0byBtb3VudCBhbmQgcG9wdWxhdGUgYSB0bXBmcyIKPiAr
+CWhlbHAKPiArCSAgTW91bnQgYW4gdG1wZnMgb24gL3Zhciwgd2l0aCB0aGUgdGhlIG9yaWdpbmFs
+IGNvbnRlbnRzIGNvcGllZC4KPiArCj4gKwkgIFRoZSBsb2dpYyBpcyBjb250YWluZWQgaW4gYSBz
+eXN0ZW1kIGdlbmVyYXRvciwgdG8gZW5zdXJlIHRoaXMKPiArCSAgaXMgZG9uZSBlYXJseSBhbmQg
+b3JkZXJlZCBiZWZvcmUgYW55dGhpbmcgY2FuIGFjY2VzcyAvdmFyLgo+ICsKPiArCSAgVW5saWtl
+IHRoZSB2YXIgZmFjdG9yeSwgbm90aGluZyBuZWVkcyB0byBiZSBwcmVwYXJlZCBhbmQKPiArCSAg
+dGhlIHBvcHVsYXRpbmcgaGFwcGVucyBiZWZvcmUgYW55IHVuaXQgYWNjZXNzZXMgL3Zhci4KCiAg
+V2VsbCwgbm90aGluZyBpcyBfYWxsb3dlZF8gdG8gYWNjZXNzIC92YXIgYmVmb3JlIGxvY2FsLWZz
+LXByZS50YXJnZXQsIGV4YWN0bHkgCmJlY2F1c2UgL3ZhciBtYXkgYmUgbW91bnRlZCAoYW5kIG1v
+dW50aW5nIHNvbWV0aGluZyBkZXBlbmRzIG9uIGxvY2FsLWZzLnRhcmdldCkuIApJZiB5b3UgZG8g
+bmVlZCB0byBhY2Nlc3MgL3ZhciwgeW91IG5lZWQgdG8gZG8gc3BlY2lhbCBtYWdpYyBsaWtlIGpv
+dXJuYWxkIGRvZXMgCmFuZCB3YWl0IHdpdGggdXNpbmcgaXQgdW50aWwgaXQgZ2V0cyBtb3VudGVk
+LgoKICBEbyB5b3UgaGF2ZSBhbiBhY3R1YWwgcHJvdmVuIHVzZSBjYXNlIG9mIHNvbWV0aGluZyB0
+aGF0IHJlcXVpcmVzIC92YXIgYmVmb3JlIApsb2NhbC1mcy1wcmUudGFyZ2V0IChhbmQgdGhhdCBp
+c24ndCBhbiB1bmFjY2VwdGFibGUgaGFjayk/Cgo+ICsJICBVbmxpa2UgdGhlIHZhciBmYWN0b3J5
+LCBpdCBkb2VzIG5vdCBuZWVkIGFuIG92ZXJsYXlmcy4KCiAgSWYgdGhpcyBpcyB0aGUgb25seSBy
+ZWFzb24sIHRoZW4gSSBkb24ndCB0aGluayBpdCdzIHdvcnRoIHRoZSBib3RoZXIgdG8gCnJlcGxh
+Y2UgdGhlIGZhY3RvcnkuCgoKICBSZWdhcmRzLAogIEFybm91dAoKPiArCj4gICBjb25maWcgQlIy
+X0lOSVRfU1lTVEVNRF9WQVJfTk9ORQo+ICAgCWJvb2wgImRvIG5vdGhpbmciCj4gICAJaGVscApf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
