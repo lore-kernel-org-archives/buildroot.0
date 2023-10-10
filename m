@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 708F7CD80A2
-	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 10:48:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3804CD80A2
+	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 10:48:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1148E416AD;
-	Tue, 10 Oct 2023 10:48:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1148E416AD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96F09417CD;
+	Tue, 10 Oct 2023 10:48:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96F09417CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 26vK5rQ2rLbO; Tue, 10 Oct 2023 10:48:19 +0000 (UTC)
+	with ESMTP id RaQtvsHSiNtx; Tue, 10 Oct 2023 10:48:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02B56417C5;
-	Tue, 10 Oct 2023 10:48:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02B56417C5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00EDB1BF2C0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C0DF416C5;
+	Tue, 10 Oct 2023 10:48:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C0DF416C5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AE0411BF2C0
  for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 10:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEAD881F5C
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 10:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEAD881F5C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88691605BA
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 10:47:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88691605BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LzqGFIZ2NiZ8 for <buildroot@lists.busybox.net>;
- Tue, 10 Oct 2023 10:47:48 +0000 (UTC)
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 692AE81F47
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nVBwhSngnuFY for <buildroot@lists.busybox.net>;
+ Tue, 10 Oct 2023 10:47:49 +0000 (UTC)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 10D3D605B7
  for <buildroot@buildroot.org>; Tue, 10 Oct 2023 10:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 692AE81F47
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-9b6559cbd74so1000890566b.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10D3D605B7
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-99bdeae1d0aso999539366b.1
  for <buildroot@buildroot.org>; Tue, 10 Oct 2023 03:47:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696934866; x=1697539666;
+ d=1e100.net; s=20230601; t=1696934867; x=1697539667;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=mFPrkHvkU6NHEGDruRNzoBNTJPA2RCBFaT2DUvT9FxE=;
- b=c8UTB+HKsirc8UsZebTazwr0QW2n1FkU8Ar9x92PtvMt8I1NHyS+daPKlESN6NiA61
- P0qqAl0jpUDFcdSCP+wI53QLD6wUzlltRMjVKT9kAZerOTkPcebLiEKwlooykBsbluRO
- cTHvPxmU9SMgYgliTLKlkP0jNarApMm96DT0njLR2xnHMY+Jjulx9NbhLqeNa+dn4reT
- rsPQfMRKbjxiM+chaPLfc8w/u6k1coJlSuagLg29UXP0errLVT9722GMoiImHFywZ+PZ
- 2ZCbcr3y3OHgIfOaCfpPWH9zJtDYV9W4X9oy8cv6rIMyzXkzTkuLWjsw+0oWDBrphx34
- urUQ==
-X-Gm-Message-State: AOJu0Yw5+ssPiMKtrKDOEkJzaDJ6PEmDMrwPy/7+cQ/k+HCAEnPDwksE
- rUKzvZNdYtsjjZ1QQAt4UakwFfo+ipSKbmugbEvJgQ==
-X-Google-Smtp-Source: AGHT+IFxs2clZXjJNXMEnWAiuOWnuJ/yus+0RyiTlBuoMqiQvOzGK3eHH9vjALPQL0XHi46c7DiWHQ==
-X-Received: by 2002:a17:907:7891:b0:9b9:325f:9be9 with SMTP id
- ku17-20020a170907789100b009b9325f9be9mr14116602ejc.73.1696934866006; 
+ bh=YJ5qxESJVkTT2DX4YM/tewvLPQsXEMv4I4Z7cJ2ym7A=;
+ b=Zes5BPUOOeXzpt+2Kq6z9Kqq9J7TIs+4tujoKMyV+hRsMiAVGYpSidmnj4U+YGoAZR
+ FaJp6c6NSfebxxupTSdNo7GMF9kT0Lo2jguIqMlNzqH6ldbNCNpm+C75fDCwMFyD0GSk
+ YXkZuY2soshgTERPxMoHnbYIEV9ex63OItiB1gYe51fdF2YrMKlRc5HIFW2ftI6Ca5tF
+ bBLS5fvZrgJkwm3D3Ndqubl8jyY+fmxQEXa9DSJPAWfF9wcqucRnWvXrJkRnIzjMVqHW
+ SQDUQnH7n09/eIw6L5sZx9U4kboKfkF3+N9vp4CPVNhW+ubucZRkamSdsH/ORDla8gWk
+ eCCw==
+X-Gm-Message-State: AOJu0Yz7pPw704htymzJmJX8LkqHjPD8f2L2ahQ6r6mQPGHY9IfOGl48
+ WucUHaO+XE1piKBsH1L6nsRlIaxkON7fZ9hmLqU0sg==
+X-Google-Smtp-Source: AGHT+IHKhhHF3zs9Vku2aoOXrJjxJQXyo1hx4YSHK3+PY8tdBfO82LFLZ2joe6AcWSj7t10N55UKnQ==
+X-Received: by 2002:a17:906:224c:b0:9ae:3c2f:5a99 with SMTP id
+ 12-20020a170906224c00b009ae3c2f5a99mr18157105ejr.51.1696934866927; 
  Tue, 10 Oct 2023 03:47:46 -0700 (PDT)
 Received: from localhost.localdomain ([2001:b07:6467:4426:3fb7:fc38:9be:dc4c])
  by smtp.gmail.com with ESMTPSA id
- g20-20020a17090613d400b009b96e88759bsm8492578ejc.13.2023.10.10.03.47.45
+ g20-20020a17090613d400b009b96e88759bsm8492578ejc.13.2023.10.10.03.47.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 10 Oct 2023 03:47:45 -0700 (PDT)
+ Tue, 10 Oct 2023 03:47:46 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Oct 2023 12:47:34 +0200
-Message-ID: <20231010104735.882133-3-adam.duskett@amarulasolutions.com>
+Date: Tue, 10 Oct 2023 12:47:35 +0200
+Message-ID: <20231010104735.882133-4-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231010104735.882133-1-adam.duskett@amarulasolutions.com>
 References: <20231010104735.882133-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1696934866; x=1697539666;
+ d=amarulasolutions.com; s=google; t=1696934867; x=1697539667;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=mFPrkHvkU6NHEGDruRNzoBNTJPA2RCBFaT2DUvT9FxE=;
- b=UZJCLGLcXwUb0JW6nXC/cIGVoYM2XJFr11kXsW9MfxSrAqV2Dny/6akSJ6M9SUk7jE
- tBNBQ9UtBGXl+3iCzXdxVaSad2+YZOJfwcUv82a6hEBMTqqQBB/Zh945WYCzXOjE/Vyx
- JABNqcR8LpIS/qxyjCaLM3jJIe+gS99I/xIO8=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=YJ5qxESJVkTT2DX4YM/tewvLPQsXEMv4I4Z7cJ2ym7A=;
+ b=kd94jLAVjTbQu7zt8RgRV/SqbYA6q7Jh1fQ3Gr4YWmMVblM41JRrgKB3n5PvM/ZW9P
+ qnDBXeh6BJjmMQjuRiQtL7oYgw8eGEzxdJoKIlt5J1JS8URW6tnxu4x3XjsNlHhIxu6s
+ K8ckSV/lGrTapUNQOKOptZ46PSM3KpCrvvV9M=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=UZJCLGLc
-Subject: [Buildroot] [PATCH v3 3/4] package/openrc: add bash-completion
- support
+ header.b=kd94jLAV
+Subject: [Buildroot] [PATCH v3 4/4] package/openrc: add split-user support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,28 +103,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Also, introduce a new test in support/testing/tests/init/test_openrc.py that
+ensures split-user support works properly.
+
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
+V2 -> V3: Fixed inverse logic [Yann.]
+
  package/openrc/openrc.mk | 6 ++++++
  1 file changed, 6 insertions(+)
 
 diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index e55057249d..9682296807 100644
+index 9682296807..442731f900 100644
 --- a/package/openrc/openrc.mk
 +++ b/package/openrc/openrc.mk
-@@ -20,6 +20,12 @@ OPENRC_CONF_OPTS = \
- 	-Drootprefix=/ \
- 	-Dbranding="\"Buildroot $(BR2_VERSION_FULL)\""
+@@ -40,6 +40,12 @@ else
+ OPENRC_CONF_OPTS += -Dpam=false
+ endif
  
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+OPENRC_CONF_OPTS += -Dbash-completions=true
++ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++OPENRC_CONF_OPTS += -Dsplit-usr=false
 +else
-+OPENRC_CONF_OPTS += -Dbash-completions=false
++OPENRC_CONF_OPTS += -Dsplit-usr=true
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- OPENRC_CONF_OPTS += -Dselinux=enabled
- OPENRC_DEPENDENCIES += libselinux
+ define OPENRC_INSTALL_SYSV_RCS_SCRIPT
+ 	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/sysv-rcs \
+ 		$(TARGET_DIR)/etc/init.d/sysv-rcs
 -- 
 2.41.0
 
