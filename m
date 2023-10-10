@@ -4,66 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0D5FCD80CD
-	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 13:22:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC576CD8C8F
+	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 14:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1796C41B97;
-	Tue, 10 Oct 2023 13:22:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1796C41B97
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47E5241B3C;
+	Tue, 10 Oct 2023 14:34:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47E5241B3C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x2PAVIhihgoj; Tue, 10 Oct 2023 13:22:20 +0000 (UTC)
+	with ESMTP id wifiBF2J9U43; Tue, 10 Oct 2023 14:34:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3C11409B1;
-	Tue, 10 Oct 2023 13:22:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3C11409B1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E42F61BF3DF
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 13:22:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CE0C41528;
+	Tue, 10 Oct 2023 14:34:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CE0C41528
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1750C1BF86D
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 14:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDA8681EC0
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 13:22:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDA8681EC0
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4F4740B5E
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 14:34:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4F4740B5E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vnGaB6wdR4XM for <buildroot@lists.busybox.net>;
- Tue, 10 Oct 2023 13:22:11 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8040981EBF
- for <buildroot@buildroot.org>; Tue, 10 Oct 2023 13:22:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8040981EBF
-Received: from houde.tangerine ([185.213.154.234]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.168]) with ESMTPSA (Nemesis) id
- 1N4i3j-1rXTIm0p4Z-011mlt; Tue, 10 Oct 2023 15:17:03 +0200
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-To: buildroot@buildroot.org
-Date: Tue, 10 Oct 2023 15:16:26 +0200
-Message-ID: <20231010131626.1128436-2-thomas.claveirole@green-communications.fr>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231010131626.1128436-1-thomas.claveirole@green-communications.fr>
-References: <20231010131626.1128436-1-thomas.claveirole@green-communications.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4MPABBoEWs8x for <buildroot@lists.busybox.net>;
+ Tue, 10 Oct 2023 14:34:31 +0000 (UTC)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com
+ [209.85.208.180])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 151E740ACB
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 14:34:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 151E740ACB
+Received: by mail-lj1-f180.google.com with SMTP id
+ 38308e7fff4ca-2c1807f3400so70081451fa.1
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 07:34:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1696948469; x=1697553269;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=hUKOUDZAOMT7YXblLl7OemnljgQU4gt0GIkZSAfXKHY=;
+ b=LChglPJKL1b2DFXmBlcfn+ZeFVwWhUzlkKjFhChgyJU7dYhA7lT6Vi45F9iXRpfUjh
+ J7b2FXZEjuutwnFuIYZrYEIlp2zOZgJsj4NNR4BX4J5Y6xs304duPkdhspsv7J2o08si
+ tBfsF2wtrsEUVJ+YfucnlhAheFqV4EAT3VVFkXjfPtq9Dgw89dLJw438OPLcPclLQ1Uo
+ 64qOIe6eIkvThSeLE3WFH/RHUfm6NF1yL9kZHD5cHoMaK6vfwjWG8S6mbpOet6wn4rd2
+ /wM/LtNtNnVrTC9CKwFvyrvMUypK1p9JEvAPAcBjVjVtjSg4CNYQ4Rr9CC2Tiz5TbaDV
+ 58IQ==
+X-Gm-Message-State: AOJu0Yx3VrmdylGsrHMvvqBhXz7Y5mE9eUjsUkVMTIC/U6CsJOlqIwiY
+ ZFrX+zIzhZOmWk1Nfw647arwX36GcsH0tQ==
+X-Google-Smtp-Source: AGHT+IEPwa9vbyVDB4DKy1s02EEfhgOeIidaK82A5akLDr/XT7EJpJUbjG5v0XWq7IS1m6rdNdKHJg==
+X-Received: by 2002:a05:651c:1699:b0:2c1:6d1c:2cef with SMTP id
+ bd25-20020a05651c169900b002c16d1c2cefmr11602983ljb.14.1696948468390; 
+ Tue, 10 Oct 2023 07:34:28 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com.
+ [209.85.167.51]) by smtp.gmail.com with ESMTPSA id
+ g1-20020a2eb0c1000000b002b70a8478ddsm2453127ljl.44.2023.10.10.07.34.27
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 10 Oct 2023 07:34:28 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id
+ 2adb3069b0e04-5056ca2b6d1so6956245e87.1
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 07:34:27 -0700 (PDT)
+X-Received: by 2002:a05:6512:1245:b0:504:20a5:7375 with SMTP id
+ fb5-20020a056512124500b0050420a57375mr13053205lfb.29.1696948467782; Tue, 10
+ Oct 2023 07:34:27 -0700 (PDT)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:DhfRk0C1SNQK7O3MH4VJhju9kj/9MeCVa/NT26RHE9Wjdbcd46/
- PaV1zulFVoldzvf30ia8VNeFIotkU92IV5rdQ0DWZaCB+8v0sVHLsyI0Aembx1kuLiAXHTR
- hRiOKwqBDQhZ88CtbjTzGEzB8E7HDk+WuKLtLryDECC8kRQZsxE6TXVuNv8Ol1rUwmAusEO
- w+FEANd7GeRM8+kBrAJtQ==
-UI-OutboundReport: notjunk:1;M01:P0:zg4nwKexEFk=;DLDaf3wnbK+nHFdYzCplpKtXO+y
- vULI5oCUzj72AAbjmeWAnG0zbj64y8Nz6TRVuTxfbVPB+4c3Kle7r0i9LAtDjKGZOVgPaAOYX
- UPxMj2DgmNpoJLsVpFm1eM1Sw8wAQaN7V4ah7WgBRJ8uy4/4+siPKptlo8mfVVEBn6KkNQZgj
- 6NHIef/9wYbMjoGn+lAutGJJsPvRVLVxmrA9gXzRLsGj92hCmseejRpr5CTi6s7nWT5nM+eao
- 8DbUj8o9VvFwOq6nhpZwd7Lv+z2vv7uTm22rwDIhH+sulh++9gBttzIn26NK7kgcThWKCwEw9
- zC3cvY1jqeLqZ01yJxgNvMoDm0/tZMnkT2AXVtALWmp+0Tm7ZYeQ+mM3QG7ZwxfQtG60T+5yg
- dervTn/RFgxHShsJS5TVmO3pNWkU7DrmilAn/7o5u8AfUr6tMLvUthGer0GSmnpUDzbZqbjwM
- t9ElfDuruicoMXAWkPHsp9mYfaS5ZM/dGHBzgMsGtUylCA1w9DmsoulTWSucg4oy96KgXRKl/
- 4/UOPzi6pmRUWMzH+4nBZwWB9b0DrBgFWEG4nYryODOvX1YjdiExtAAnDuPd5rVc0d4FPp42b
- gurHaKk24IWD1twQEnLyiKghN1vDHTRICPXZoWeOh+lxCBLvXGPbsqCIo157PGNgFIMJYkii7
- xUGc1VaCjWHU4JqsbnKG4TM+rsMiff8gn8A6zTgj3QIVLqQ3c4kPoK3uGOqMBWw9hueAeQ2fy
- 5BtjtK5Fv8ovx/f3Naof64YMbISx2tYBU8OsvlYZ+v97kotrvBAKdx+NU2qbj+8sauSB31NV3
- 5++1bu4zeGIFT+uukR8or4VCaMOLhjD1yjfVixz2tBbLYeUNZzVFovv3BjHOuqu9xXqZCT8PT
- RScAh88gZ3Gb74A==
-Subject: [Buildroot] [PATCH 2/2] package/vuejs-router: bump to version 4.2.5
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Tue, 10 Oct 2023 16:34:16 +0200
+X-Gmail-Original-Message-ID: <CACXRmJhWoMKh+8BC3Brf5YYcNfS0VS8s-+_z1-0bmRoaO2T95Q@mail.gmail.com>
+Message-ID: <CACXRmJhWoMKh+8BC3Brf5YYcNfS0VS8s-+_z1-0bmRoaO2T95Q@mail.gmail.com>
+To: buildroot@buildroot.org
+Subject: Re: [Buildroot] [PATCH] package/opengl/libegl: remove
+ BR2_PACKAGE_HAS_LIBEGL_WAYLAND
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,44 +86,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
- Johan Oudinet <johan.oudinet@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- package/vuejs-router/vuejs-router.hash | 2 +-
- package/vuejs-router/vuejs-router.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas, Yann, All,
 
-diff --git a/package/vuejs-router/vuejs-router.hash b/package/vuejs-router/vuejs-router.hash
-index d9468e722d..f87d18f7ed 100644
---- a/package/vuejs-router/vuejs-router.hash
-+++ b/package/vuejs-router/vuejs-router.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b044e304367baaaf60fd2ee6880fb02d4e9875bc4321a4e2672a60ad4c5c55b2  vue-router-4.2.0.tgz
-+sha256  61dc033860c42a2f3af046d461ef14348b1fe9094b27d107f7be6d1420d39b11  vue-router-4.2.5.tgz
- sha256  91a2845c4db44e7497b514b98634a674c737986ad0db81599307cf733bf850b2  LICENSE
-diff --git a/package/vuejs-router/vuejs-router.mk b/package/vuejs-router/vuejs-router.mk
-index 2737134919..7f73fed5d5 100644
---- a/package/vuejs-router/vuejs-router.mk
-+++ b/package/vuejs-router/vuejs-router.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VUEJS_ROUTER_VERSION = 4.2.0
-+VUEJS_ROUTER_VERSION = 4.2.5
- VUEJS_ROUTER_SOURCE = vue-router-$(VUEJS_ROUTER_VERSION).tgz
- VUEJS_ROUTER_SITE = https://registry.npmjs.org/vue-router/-
- VUEJS_ROUTER_LICENSE = MIT
--- 
-2.42.0
+What is the status of this patch? It seems useful to have
+libegl/libgbm support in mesa without pulling in Wayland. Especially
+for WebKitGTK,
 
+Kr,
+
+Thomas Devoogdt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
