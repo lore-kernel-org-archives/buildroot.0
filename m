@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21A0ECD80A3
-	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 10:52:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2531DCD80A2
+	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 10:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2723440971;
-	Tue, 10 Oct 2023 10:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2723440971
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5D194098A;
+	Tue, 10 Oct 2023 10:52:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5D194098A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yuyI6giZ9SaJ; Tue, 10 Oct 2023 10:52:36 +0000 (UTC)
+	with ESMTP id jpyu8x9tlQOV; Tue, 10 Oct 2023 10:52:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEF924092D;
-	Tue, 10 Oct 2023 10:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEF924092D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB8921BF2C0
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 10:52:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E52B410AF;
+	Tue, 10 Oct 2023 10:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E52B410AF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 371FF1BF2C0
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 10:52:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C25BE4154A
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 10:52:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C25BE4154A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1125960FD2
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 10:52:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1125960FD2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oh7m5x1PoT6B for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X3IMrC9O9tC8 for <buildroot@lists.busybox.net>;
  Tue, 10 Oct 2023 10:52:18 +0000 (UTC)
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 708694098F
- for <buildroot@buildroot.org>; Tue, 10 Oct 2023 10:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 708694098F
-Received: by mail-ed1-x52f.google.com with SMTP id
- 4fb4d7f45d1cf-532c81b9adbso9603868a12.1
- for <buildroot@buildroot.org>; Tue, 10 Oct 2023 03:52:18 -0700 (PDT)
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B6D8A612C7
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 10:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6D8A612C7
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-51e28cac164so14134430a12.1
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 03:52:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696935136; x=1697539936;
+ d=1e100.net; s=20230601; t=1696935135; x=1697539935;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=mFPrkHvkU6NHEGDruRNzoBNTJPA2RCBFaT2DUvT9FxE=;
- b=B4vYr7WcLkZ62xHfzPKWeR2HmnzF2evWxikY+sJ72IlYIBK1/W0te2JuHxyZkzjTCv
- eXpjRaiOAlMyICj5YjxC4AmCFfVEUXYqjdlYFQMFWScsa4Wz6DLkp5PPDUuxPzEoA3Fu
- KDYMNZn7uKDfQBql/UKX068/7y+vh1OZDEVobMnVGc20/h5/SjYcBunerO6E6QNU6t8A
- spVgcAA3zndzgSSMw+OAzc/OBmneJyVRNN6eEdOpAxHSQjeFsI9I8ijeL9Zq6PmPTGm4
- oeTD1SNgqOWE38A7SDigorsO1hzJbX9ZEQmW4l3IRtgGSG6M3OdZqf6tJISAdPV5HsEH
- n/wQ==
-X-Gm-Message-State: AOJu0YxtdHyqIS+YBpfIufE9r7vaLbHvjU+zwLqvBmxHnzJn0kFm50hK
- a2BDUs1a5V5xDec0oroIxADqzUfTSkuI82mBFbjEiw==
-X-Google-Smtp-Source: AGHT+IFhQnQFJNbOLnVQT8r9PiGDHmHDRSIzbe0/559hiuhBpwZoLeYvnUvrzlv5DU+bXwkGaPesBw==
-X-Received: by 2002:a17:906:cc0b:b0:9ba:3f5c:1eb3 with SMTP id
- ml11-20020a170906cc0b00b009ba3f5c1eb3mr884652ejb.38.1696935136393; 
- Tue, 10 Oct 2023 03:52:16 -0700 (PDT)
+ bh=VF4CN7hT2oEBPo9JGol5W3PrwMLoVs18tOyg72JOrtM=;
+ b=To69W6sFhXiyjXzTrb+yWTIAy0uzUyEAiDNknLgyKqEh3V5P2NUoBi91J+i0MpyiL9
+ y8SK2peuasx0lTnBJ6nl4kXOB5Gq/vBKcROqLTzQiwGBR8Z579zYpZIyUtEMVYLbTjdI
+ wNbVuqnPPfxuduwb3OQW/SPw7+X4svpsPG616i1Xvu8BTNo2VThvxT5O0iKvruf7976q
+ HRp3sRJ6yZO92TvkppBg+geyK6mzNddF7z0mwksTdEsXOhJYS09bGM/EA05eC2WEYAg2
+ Mhe9nLZzxCdcndKhZ6zf/cG97+1q/uz81bM3AkpPK612lZVNf9PpD1o/MPBhHr2aagvS
+ I/rQ==
+X-Gm-Message-State: AOJu0Yz7ZvtHpxFcIRuOJtblg21UJ1+3IUNQFWa7e8x7VWfKUQLg4xOC
+ LpGxLNNoBUpSu6i5oFHunP22VKoflOi5zkwTP5Ql6g==
+X-Google-Smtp-Source: AGHT+IGjfwwaBYDirIfJoJOFYgygWsctHMy4GHnHMnY2dehMI+QM0Hr4bHTW9HJ9x8ufCWm4qkB6BA==
+X-Received: by 2002:a17:907:8b8c:b0:9a9:f0e6:904e with SMTP id
+ tb12-20020a1709078b8c00b009a9f0e6904emr12837703ejc.16.1696935135510; 
+ Tue, 10 Oct 2023 03:52:15 -0700 (PDT)
 Received: from localhost.localdomain ([2001:b07:6467:4426:3fb7:fc38:9be:dc4c])
  by smtp.gmail.com with ESMTPSA id
- i8-20020a17090671c800b009a198078c53sm8216961ejk.214.2023.10.10.03.52.15
+ i8-20020a17090671c800b009a198078c53sm8216961ejk.214.2023.10.10.03.52.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 10 Oct 2023 03:52:16 -0700 (PDT)
+ Tue, 10 Oct 2023 03:52:15 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Oct 2023 12:52:02 +0200
-Message-ID: <20231010105203.883450-3-adam.duskett@amarulasolutions.com>
+Date: Tue, 10 Oct 2023 12:52:01 +0200
+Message-ID: <20231010105203.883450-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231010105203.883450-1-adam.duskett@amarulasolutions.com>
 References: <20231010105203.883450-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1696935136; x=1697539936;
+ d=amarulasolutions.com; s=google; t=1696935135; x=1697539935;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=mFPrkHvkU6NHEGDruRNzoBNTJPA2RCBFaT2DUvT9FxE=;
- b=GX5I2WRPN8Qc1NZYmrIdGIFvZqHg3akY4BZPVWAnICSr8xa9Wh6Fc8alkco9c3jd+c
- xRmWhX8lmHXDs64r0U9L2pJ4mlHmxlw7e4ct6IgjfLpE0LbWuK+XbfWpUd9DzrWwQEg2
- BOfd+0wq0iGj70FmyZ1co8VMrZUsJEEnwW+PQ=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=VF4CN7hT2oEBPo9JGol5W3PrwMLoVs18tOyg72JOrtM=;
+ b=poR3Vb+KrEySVx6MIEyXzbODelnom1uON2MUM3DBxdpPVj7cRbPrZYS+cyvXmkdPdx
+ I8Rs+X2fLBunKXwtg3Oi1ubbOwsahzfHayxZt3LY1MdrwLZfRplVSsWvjv3U3Rv3ZMNj
+ 5zzwWjNrJS6Wzf5vociB+4Vk/gd29+MuTw/Fw=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=GX5I2WRP
-Subject: [Buildroot] [PATCH v4 3/4] package/openrc: add bash-completion
- support
+ header.b=poR3Vb+K
+Subject: [Buildroot] [PATCH v4 2/4] package/openrc: add linux-pam support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,26 +105,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/openrc/openrc.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/openrc/openrc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index e55057249d..9682296807 100644
+index 234fa6de2f..e55057249d 100644
 --- a/package/openrc/openrc.mk
 +++ b/package/openrc/openrc.mk
-@@ -20,6 +20,12 @@ OPENRC_CONF_OPTS = \
- 	-Drootprefix=/ \
- 	-Dbranding="\"Buildroot $(BR2_VERSION_FULL)\""
+@@ -27,6 +27,13 @@ else
+ OPENRC_CONF_OPTS += -Dselinux=disabled
+ endif
  
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+OPENRC_CONF_OPTS += -Dbash-completions=true
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++OPENRC_CONF_OPTS += -Dpam=true
++OPENRC_DEPENDENCIES += linux-pam
 +else
-+OPENRC_CONF_OPTS += -Dbash-completions=false
++OPENRC_CONF_OPTS += -Dpam=false
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- OPENRC_CONF_OPTS += -Dselinux=enabled
- OPENRC_DEPENDENCIES += libselinux
+ define OPENRC_INSTALL_SYSV_RCS_SCRIPT
+ 	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/sysv-rcs \
+ 		$(TARGET_DIR)/etc/init.d/sysv-rcs
 -- 
 2.41.0
 
