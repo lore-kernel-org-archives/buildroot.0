@@ -4,93 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DF15CD8CB2
-	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 18:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6126CD8CAF
+	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 18:50:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9093F40B22;
-	Tue, 10 Oct 2023 18:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9093F40B22
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C96540012;
+	Tue, 10 Oct 2023 18:50:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C96540012
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OPVKV6oY8MBw; Tue, 10 Oct 2023 18:24:10 +0000 (UTC)
+	with ESMTP id Q6uMqjVsk3Xj; Tue, 10 Oct 2023 18:50:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6E9640734;
-	Tue, 10 Oct 2023 18:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6E9640734
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03CD91BF2B0
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 18:24:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A862A40385;
+	Tue, 10 Oct 2023 18:50:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A862A40385
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 867641BF2B0
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 18:50:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D179182289
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 18:24:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D179182289
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F7F940385
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 18:50:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F7F940385
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cH9BCzLxU1h4 for <buildroot@lists.busybox.net>;
- Tue, 10 Oct 2023 18:24:08 +0000 (UTC)
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8FEDB82278
- for <buildroot@buildroot.org>; Tue, 10 Oct 2023 18:24:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FEDB82278
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-9b1ebc80d0aso1017101966b.0
- for <buildroot@buildroot.org>; Tue, 10 Oct 2023 11:24:07 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S7-zHsrJOh6i for <buildroot@lists.busybox.net>;
+ Tue, 10 Oct 2023 18:50:44 +0000 (UTC)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3247740012
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 18:50:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3247740012
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-40537481094so56011365e9.0
+ for <buildroot@buildroot.org>; Tue, 10 Oct 2023 11:50:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696962245; x=1697567045;
- h=content-transfer-encoding:in-reply-to:cc:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=W6jm9kYYdqjTUCna1kPw2xvyzy2VNwBg6trw3YEBK4o=;
- b=am5ZKEYNB2qrewoPXhsvtTJ+nKG+COq0bjcAihSPomdfZOQNPQM05QHlJtli8aJvPZ
- KIExP6QdPjIimFtqYUVR6dSlfEJcXrnglp4K0PqzlBxg2feSHamqLrdYneaYsuUxttbq
- +tSjE6HcNJRBIsrr5RDENjzJ0zyrEF8zpOutQ6FCaLILketkpuiUNKmo2ttTOq0Wk/KP
- P0g2N+pDDzOd5M/N7Lednoa1OzKxW2CHsNgkUpt44X4ZOnocp9V34wRv/YyQTy9PfLZb
- Mv4CLQYuw2ql/m6j9R9gKeN4voNHIzjqExrL3ehS78BM6grnH+Ald3W30uZ+LG3QNW5m
- qzCg==
-X-Gm-Message-State: AOJu0Yysfvea1n/lk+9tAwJP9Q63DYIZrHu4INi/MDCGBScRMl/u6yZA
- CRyzjLHFC813SpsEzOzIa2DZYsYA9krhUmrKkaY=
-X-Google-Smtp-Source: AGHT+IGdTeM/RIZrYDx712Q3gK3ID9bvLvjSPyzjg3x/q1hKbi4V7fBdedEZOrZFhM918nCt7xoZqQ==
-X-Received: by 2002:a17:907:2cef:b0:9ae:6355:5ef4 with SMTP id
- hz15-20020a1709072cef00b009ae63555ef4mr16349047ejc.3.1696962245557; 
- Tue, 10 Oct 2023 11:24:05 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ d=1e100.net; s=20230601; t=1696963842; x=1697568642;
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=E844VMtWiGICxcWZ9wgTBUq7sdlFReVoLfxlsbgdlwc=;
+ b=BGzQsYLUqiMh81sGFHV/kOgJ52yKN7Yc48CSfBsuTeVDedXBIH8oqqrClx5K0NYGPn
+ 697TD4jcASOnhoYHVyqUFhiYeseNq1BL4obnqiCatLxDFquXkCEQNTxaZpdQkbQgcV3D
+ IAJLhKNmiRTYs6M4QUyjY3sg76RESZhx11cIgPcQM+UDAfY+c9uY6f7aJcjGjQqGzQmo
+ +CpJPJ4yBhbq9FtWCF8iSai/9ExXE3O8f0rRWnJRWZpn3+r2KzSL85DDpclquS+1xVjr
+ 9cCwSBZwrxuFiQ3cciJJo9sv4owJexyggMP/lCXZ962xYpebFBXKm1rN9mvH1lP2JFtM
+ Eo/g==
+X-Gm-Message-State: AOJu0YydsiSjVnWE7Qd1xB94WHkmabymNWUshzqCyNW4BnL7K6Ko23eI
+ dFeUwUvLf0aHNHgVQHzXKJLda4zNfbvwdA==
+X-Google-Smtp-Source: AGHT+IEZo5pFL5BYqP/nXq/sVC8/i+PjGbZZF8j7+NRKdqsytWUzy1Su9+gbnHnH/AJMUMxGTWFK2g==
+X-Received: by 2002:a05:600c:22cf:b0:401:4542:5edd with SMTP id
+ 15-20020a05600c22cf00b0040145425eddmr16743261wmg.34.1696963841878; 
+ Tue, 10 Oct 2023 11:50:41 -0700 (PDT)
+Received: from effi.fritz.box
+ (p200300d19749b000922b34fffe35b24f.dip0.t-ipconnect.de.
+ [2003:d1:9749:b000:922b:34ff:fe35:b24f])
  by smtp.gmail.com with ESMTPSA id
- j17-20020a170906831100b0098e78ff1a87sm8638669ejx.120.2023.10.10.11.24.04
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 10 Oct 2023 11:24:04 -0700 (PDT)
-Message-ID: <5ea9bca9-6e26-ad12-6bd0-c131a3281460@mind.be>
-Date: Tue, 10 Oct 2023 20:24:02 +0200
+ 12-20020a05600c024c00b0040531f5c51asm14989759wmj.5.2023.10.10.11.50.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 10 Oct 2023 11:50:41 -0700 (PDT)
+Message-ID: <c604e3e874577b85498bac2c2ad4d6a25c7c9cf3.camel@gmail.com>
+From: Stefan Nickl <stefan.nickl@gmail.com>
+To: Mike Davies <busybox_mail@rovoreed.com>, buildroot@buildroot.org
+Date: Tue, 10 Oct 2023 20:50:40 +0200
+In-Reply-To: <b8ccd688c2c755964b5aff6ecfd7ff53a6c6e8fa.camel@rovoreed.com>
+References: <2209e11a-bda9-5193-9b4d-20a5f0fa34e3@linatsea.fr>
+ <b8ccd688c2c755964b5aff6ecfd7ff53a6c6e8fa.camel@rovoreed.com>
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- =?UTF-8?Q?Sch=c3=a4ffner=2c_Florian?= <florian.schaeffner@physiomed.de>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <4fa235baaa88440e806f3c5f8f8bcb58@physiomed.de>
- <94908e37-932a-4626-8fcb-c39d3293fe38@benettiengineering.com>
-In-Reply-To: <94908e37-932a-4626-8fcb-c39d3293fe38@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1696962245; x=1697567045; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:cc:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=W6jm9kYYdqjTUCna1kPw2xvyzy2VNwBg6trw3YEBK4o=;
- b=ClMH5UplGlEUc5vB2uQtdwTdnf8/GNuhcktoAV5Xvo2nqLLHP76TD2FSQO/WCBvV+h
- fbFiuwfPs0Ot77lxLImqimFXV/mh62kUI7FDF7drXMGiEqDamBaRMabA5CcoHWADy/Jo
- g22/JV8PhyH7HoMvLJeZ4hctafIx1lkrxHCd3WryXTqy8xChjGVAB7B+Z4BymMXwcg/a
- i6ySXjzDfNZPW1Jhxsk3nbev1hfd99eCN1W5Sok6A3pjmHRm4d60ezlSn5Ok4NkBfISO
- xpANUNVwEz2BL4WFu2wPZVXUS4aCswogBBdYNVsps0oBY7yca3pSdqKBzFtbCT2ulp0a
- zdTQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ClMH5Upl
-Subject: Re: [Buildroot] Future buildroot with QtQuick/QML Support
+ d=gmail.com; s=20230601; t=1696963842; x=1697568642; darn=buildroot.org;
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=E844VMtWiGICxcWZ9wgTBUq7sdlFReVoLfxlsbgdlwc=;
+ b=f1B/GAL1PB5g8HW901QXiQAwrAonL2Zfm9NpwQkoqvIqV1BLg2Mj0MHC208RZwh+p0
+ Uw0jk7KIMr6ViP7tCpUG0+HNtU/1YEAcS+J/UmMTHtrVccr9KuyClUuUfhEVSI67BZ+B
+ LzTI1nln7XIRqPvlW3dnHqvQRQ4DkfVL9JU9PSIeBYv01QNDai/iJ+KB7nbd5TLUtxzz
+ v4VlAhWiDGzoUD3A81DsM8RyghRKFSFpMEUtUzQ8vyrVlvZJL9PCh5OX/tVuH3IcZq7X
+ /Ht3LIbynxhtPAl/cXLFBRC/y7GmhbzGLWMygG/LvSPIxJTtcRAt1hnOEY4f7HS7qwDs
+ lYeA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=f1B/GAL1
+Subject: Re: [Buildroot] candidate packages : ros2 and wxwidgets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,46 +99,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxMC8xMC8yMDIzIDE1OjE4LCBHaXVsaW8gQmVuZXR0aSB3cm90ZToKPiBIZWxsbyBGbG9y
-aWFuLAo+IAo+IE9uIDEwLzEwLzIzIDE0OjU5LCBTY2jDpGZmbmVyLCBGbG9yaWFuIHdyb3RlOgo+
-PiBIZWxsbywKPj4KPj4gb3VyIGFwcGxpY2F0aW9uIGlzIGJ1aWx0IGluIHRoZSBkZXZlbG9wbWVu
-dCBlbnZpcm9ubWVudCB3aXRoIFF0IDYgYW5kIAo+PiBRdFF1aWNrL1FNTC4gTm93IGkgdHJpZWQs
-IGJ1dCB3YXNu4oCZdCBhYmxlIHRvIHNldHVwIGEgd29ya2luZyBidWlsZHJvb3QgZm9yIG91ciAK
-Pj4gYXBwbGljYXRpb24gdG8gcnVuIG9uIGEgZW1iZWRkZWQgZGV2aWNlLgo+Pgo+PiBJIGZvdW5k
-IHRoZSBjb252ZXJzYXRpb24gYWJvdXQgcXQ2IGFuZCBRTUwgU3VwcG9ydCBvbiB0aGUgYnVpbGRy
-b290IG1haWxpbmcgCj4+IGxpc3QgYW5kIHRoYXQgaXQgc2VlbXMgdG8gYmUgbm90IHBvc3NpYmxl
-IHRvIHNldHVwIGEgYnVpbGRyb290IGZvciBvdXIgbmVlZHMgCj4+IHdpdGggUXQ2IGFuZCBRTUwg
-c3VwcG9ydC4KPj4KPj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290L2YyMmNlMDZk
-LWQ5Y2YtYzU2MS03NDU1LTE5ZGNlNzI0YzE1OEBiZW5ldHRpZW5naW5lZXJpbmcuY29tLwo+Pgo+
-PiBJZiBJIHVuZGVyc3Rvb2QgdGhlIGFuc3dlciBmcm9tIEdpdWxpbyBCZW5ldHRpIGNvcnJlY3Rs
-eSwgdGhlcmUgaXMgY3VycmVudGx5IAo+PiBubyBjaGFuY2UgdG8gbWFrZSB0aGlzIGNvbmZpZ3Vy
-YXRpb24gd29yayBmb3Igb3VyIGVtYmVkZGVkIGJvYXJkIHdpdGggYnVpbGRyb290Pwo+Pgo+PiBD
-YW4geW91IHBsZWFzZSB0ZWxsIG1lIGlmIHRoZXJlIHdpbGwgYmUgc3VwcG9ydCBmb3IgdGhpcyBp
-biB0aGUgbmV4dCBtYWpvciAKPj4gYnVpbGRyb290IHZlcnNpb24/IE9yIGlzIGl0IG5vdCBwbGFu
-bmVkIG9yIGZvcmVzZWVhYmxlIHdoZW4gYSBRTUwgc3VwcG9ydCBpcyAKPj4gcG9zc2libGUgd2l0
-aCBidWlsZHJvb3Q/CgogIEJ1aWxkcm9vdCBpcyBhIHZvbHVudGVlciBwcm9qZWN0IC0gbm90aGlu
-ZyBpcyAicGxhbm5lZCIgdW5sZXNzIHNvbWVvbmUgZ29lcyAKdGhyb3VnaCB0aGUgZWZmb3J0IG9m
-IGNvbnRyaWJ1dGluZyBpdC4KCj4gYXMgSSBjYW4gc2VlIGZyb20gQnVpbGRyb290IHBhdGNob3Jr
-IGF0IHRoZSBtb21lbnQgdGhlcmUgaXMgbm8gcGVuZGluZwo+IHBhdGNoZXMgdG8gYWRkIGZlYXR1
-cmVzLCBidXQgdGhpcyBkb2Vzbid0IG1lYW4gaXQgd29uJ3QgYmUgYWRkZWQuCj4gCj4gV2hpY2gg
-bW9kdWxlcyB3b3VsZCB5b3UgYmUgaW50ZXJlc3RlZCBpbiBtb3N0IG9mIGFsbD8KCiAgSWYgeW91
-J3JlIG5vdCBhYmxlIG9yIHdpbGxpbmcgdG8gZGV2ZWxvcCB0aGUgUXQ2IFFNTCBzdXBwb3J0IHlv
-dXJzZWxmLCB5b3UgbWF5IAp3YW50IHRvIGhpcmUgc29tZSBoZWxwIHRvIGRvIGl0LiBBdCB0aGUg
-Ym90dG9tIG9mIHRoZSAic3VwcG9ydCIgcGFnZSBvbiB0aGUgCndlYnNpdGUgWzFdIHNvbWUgY29t
-cGFuaWVzIGFyZSBtZW50aW9uZWQgdGhhdCBjYW4gcHJvdmlkZSB0aGF0IGhlbHAgKEkgd29yayBm
-b3IgCm9uZSBvZiB0aGVtKS4gT3IgeW91IGNhbiBmaW5kIGEgZnJlZWxhbmNlciAtIGxpa2UgR2l1
-bGlvLgoKICBZb3UgY2FuIGFsc28gYXNrIHRoZSBvcmlnaW5hbCBjb250cmlidXRvciBvZiBRdDYg
-KEplc3NlLCBhZGRlZCBpbiBDYykgaWYgdGhleSAKcGVyaGFwcyBoYXZlIHNvbWUgUG9DIGZvciBR
-TUwgYWxyZWFkeS4gT3IgcGVyaGFwcyB0aGVpciBlbXBsb3llciB3b3VsZCBiZSAKd2lsbGluZyB0
-byBzaGFyZSB0aGUgY29zdCBvZiBkZXZlbG9waW5nIGl0LgoKICBSZWdhcmRzLAogIEFybm91dAoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+On Wed, 2022-06-29 at 15:29 +0100, Mike Davies wrote:
+> I have spent many hours (over 100 so far) trying to get ROS2 built as
+> part of buildroot. I have been using the recommended ROS source build
+> route of using rosdep/colcon etc., to build ROS2 Galactic and more
+> recently Humble
+> 
+> Starting with buildroot-2022.02 I have had to add 41 new packages, and
+> alter an existing 6 packages - either adding host builds or changing
+> configuration options.
+> 
+> So far I have managed to build 157 of the 340 odd components. I can get
+> code onto the target, but it doesn't do a lot because so many
+> components are missing.
+> 
+> Alas, I have got to the stage where I think it is no longer possible to
+> progress, or at least, it is going to take vastly more time than I am
+> willing to take.
+
+Hey Mike,
+I just found this old thread and wondered if you could share the work
+you've done so far.
+I'm interested in using ROS2 in an embedded system with buildroot and
+cross-compilation to aarch64. I don't need a full ros distribution,
+just enable some basic C/C++ programs on the target to talk with other
+ros nodes on the network via topics, services and actions.
+Maybe having just a very stripped-down version of ROS2 in buildroot
+would be useful for others as well.
+
+Thanks,
+Stefan
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
