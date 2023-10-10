@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DCEDCD8CB6
-	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 20:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20BAFCD8CB4
+	for <buildroot@archiver.kernel.org>; Tue, 10 Oct 2023 20:36:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1F8560FE8;
-	Tue, 10 Oct 2023 20:36:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1F8560FE8
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7B6461513;
+	Tue, 10 Oct 2023 20:36:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7B6461513
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pi2e0z045uRg; Tue, 10 Oct 2023 20:36:26 +0000 (UTC)
+	with ESMTP id AYtJDigc3Rl3; Tue, 10 Oct 2023 20:36:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 197EB6F576;
-	Tue, 10 Oct 2023 20:36:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 197EB6F576
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B77901BF389
- for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:36:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7CBB6F5B1;
+	Tue, 10 Oct 2023 20:36:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7CBB6F5B1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 01B311BF389
+ for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:36:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E61F4184D
+ by smtp4.osuosl.org (Postfix) with ESMTP id CDD0241DCE
  for <buildroot@lists.busybox.net>; Tue, 10 Oct 2023 20:36:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E61F4184D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDD0241DCE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0m_3La7K_G04 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NfJVl3LCULpA for <buildroot@lists.busybox.net>;
  Tue, 10 Oct 2023 20:36:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91FC84183C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EB7941EA3
  for <buildroot@buildroot.org>; Tue, 10 Oct 2023 20:36:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91FC84183C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EB7941EA3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7FCB6844B2; Tue, 10 Oct 2023 20:36:22 +0000 (UTC)
+ id 68100844AF; Tue, 10 Oct 2023 20:36:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 10 Oct 2023 22:34:29 +0200
+Date: Tue, 10 Oct 2023 22:00:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 23c5fe7909cc5ee3222331fb822496b580163e04
-X-Git-Newrev: 7490cac62d42370a0a954d44ec34537e81234dd9
+X-Git-Oldrev: 96785cd8143d5905c7692b8b06864736c1178619
+X-Git-Newrev: d9ac23c6d669f1d7d0ee6da8ccdae511a673235a
 X-Patchwork-Hint: ignore
-Message-Id: <20231010203622.7FCB6844B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: create the /boot directory
+Message-Id: <20231010203622.68100844AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/skeleton-init-systemd: fix
+ var.mount options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +64,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7490cac62d42370a0a954d44ec34537e81234dd9
+commit: https://git.buildroot.net/buildroot/commit/?id=d9ac23c6d669f1d7d0ee6da8ccdae511a673235a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The gpt-auto-generator can generate the boot.mount unit, which reports
-an error if this directory can't be created (if / is read-only). There
-is no reason not to create this directory, even if the platform doesn't
-actually have a boot partition that can be mounted there.
+The mode should reflect the mount directory,
+and 755 is the default - so drop the mount option.
 
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/systemd/systemd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/skeleton-init-systemd/factory/var.mount | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 824c811c0c..13cd41f75b 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -621,6 +621,7 @@ define SYSTEMD_INSTALL_IMAGES_CMDS
- endef
- 
- define SYSTEMD_PERMISSIONS
-+	/boot d 700 0 0 - - - - -
- 	/var/spool d 755 0 0 - - - - -
- 	/var/lib d 755 0 0 - - - - -
- 	/var/lib/private d 700 0 0 - - - - -
+diff --git a/package/skeleton-init-systemd/factory/var.mount b/package/skeleton-init-systemd/factory/var.mount
+index e97accef93..a681ab0c54 100644
+--- a/package/skeleton-init-systemd/factory/var.mount
++++ b/package/skeleton-init-systemd/factory/var.mount
+@@ -12,4 +12,4 @@ After=swap.target
+ What=tmpfs
+ Where=/var
+ Type=tmpfs
+-Options=mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m
++Options=nosuid,nodev,size=50%%,nr_inodes=1m
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
