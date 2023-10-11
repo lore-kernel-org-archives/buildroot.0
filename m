@@ -4,83 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A04DDCD98F8
-	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 07:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9792DCD98F6
+	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 07:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D17540A73;
-	Wed, 11 Oct 2023 07:28:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D17540A73
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42C8F417DB;
+	Wed, 11 Oct 2023 07:35:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42C8F417DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O6M-d54A3pF4; Wed, 11 Oct 2023 07:28:08 +0000 (UTC)
+	with ESMTP id KULhYue7tMXO; Wed, 11 Oct 2023 07:35:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3847E40A8B;
-	Wed, 11 Oct 2023 07:28:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3847E40A8B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DBBBC1BF391
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 07:28:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7965241181;
+	Wed, 11 Oct 2023 07:35:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7965241181
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 302091BF391
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 07:35:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C19E840377
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 07:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C19E840377
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0968560BF0
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 07:35:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0968560BF0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RQRLIFZFr13i for <buildroot@lists.busybox.net>;
- Wed, 11 Oct 2023 07:28:02 +0000 (UTC)
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D790440289
- for <buildroot@buildroot.org>; Wed, 11 Oct 2023 07:28:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D790440289
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-9b9faf05f51so847352766b.2
- for <buildroot@buildroot.org>; Wed, 11 Oct 2023 00:28:01 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h9_noWpoJVtJ for <buildroot@lists.busybox.net>;
+ Wed, 11 Oct 2023 07:35:17 +0000 (UTC)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9CE9D60B6C
+ for <buildroot@buildroot.org>; Wed, 11 Oct 2023 07:35:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CE9D60B6C
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-9ae7383b7ecso136229666b.0
+ for <buildroot@buildroot.org>; Wed, 11 Oct 2023 00:35:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697009279; x=1697614079;
+ d=1e100.net; s=20230601; t=1697009715; x=1697614515;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=gju7U/KfFUjngzSf0BhtPMGcVrynaKo5OMYAZGGqS4U=;
- b=LhGeYAt+mnGM5rBp6KotS+HY7I5xjmcpKu03GqqzsT5dHc2zDpk8wgi9N1AiSNCJMv
- V4EAyQaBJVmVJWVDxNH46czENAPgA04vTuZmHE0+d9dzYB6fIehmbBpVAGORAHVYak/d
- nljpWLqSlNNG3lNUbmUEbfwjNaACTKUmKG43EXwZB2fqYmwseBkM2/up9QBzz3ZOF6Y7
- RlV0+apODTg5DsH8C89Z7izENOzN2BcBdB2mq7QZfDcwFWYJcpa/CXg73+fG+gq3P0/7
- JMoVw/fwLZ3gvZsHi4ww3bmgIVcPX2z0dh/JBQ4IWt80qfSbODkV6D8rIkN9Ar89szVH
- fsPQ==
-X-Gm-Message-State: AOJu0Yy9BA7SIHkY2526ggm+M+XWoKaIkUa5+mkX3bxfc++mLWCkjEm/
- ZQAoVFYOgmLr7rtWRDG2Jjy9mIcxjkM=
-X-Google-Smtp-Source: AGHT+IFBNjZy1BjPTAAjT04op7xWVUvZ45cZEfOSjkDibgjZX0cuRO2xpmHtvj+9nrpFEe8kx9wWCg==
-X-Received: by 2002:a17:906:9b:b0:9ba:3434:482c with SMTP id
- 27-20020a170906009b00b009ba3434482cmr4370208ejc.31.1697009279219; 
- Wed, 11 Oct 2023 00:27:59 -0700 (PDT)
-Received: from development2.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- s10-20020a170906354a00b00997cce73cc7sm9398468eja.29.2023.10.11.00.27.58
+ bh=zEcrcjP140V4s8IPTX+On/jJcFW6eWY1Ljm65fl8BPM=;
+ b=RF8tLYefajXAo6MEqxIfOF229XzPqYsmMNNMtfcU8vd8xeJHuqwEXi9+JohLZTdtgD
+ cvN8ToLnXeGSsgmnrkrEA8nrWxRDyCFN5GasFBSW6fJI4uJ3W5Pu+xSE+YgltVTJDoiv
+ TA/CshZWk+0uy7rhR8wlH987DAtWTBl62uMqehZAHAeBE1Ou1NMskD0XdW22xIgClUaY
+ WmXMbIXxkhtXhyxjtslrDJZheptTS0xun1BTOSpkkHCox4Tk4+R2Pd3Hv2N4KkTJ5V4s
+ tAq+TJXRodIYxj0Lt4iixIqADkj+N7p3zP3pOhK/z9GDcbyBL8uRhj/40M+D1IXFpswu
+ JIDg==
+X-Gm-Message-State: AOJu0YwyH2LT3rhLWMO/dNckYFA0xs26tqIu5wwD32p/rloo+A6dSEL0
+ rjzkIuWZChBBjLP1jpJWiW0DqxLmmQPaCgqwBG0=
+X-Google-Smtp-Source: AGHT+IEHhAHEyWPINSvcI8OxE+HE6WV8yfm0hV8tWKRuiu128d07xT5KFWw/GjkkyvNKzYsh7kY0Vw==
+X-Received: by 2002:a17:906:cc14:b0:9bb:a243:e6fb with SMTP id
+ ml20-20020a170906cc1400b009bba243e6fbmr2410380ejb.3.1697009715437; 
+ Wed, 11 Oct 2023 00:35:15 -0700 (PDT)
+Received: from localhost.localdomain (ip-89-177-240-140.bb.vodafone.cz.
+ [89.177.240.140]) by smtp.gmail.com with ESMTPSA id
+ c12-20020a170906694c00b009b8a4f9f20esm9436859ejs.102.2023.10.11.00.35.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Oct 2023 00:27:58 -0700 (PDT)
+ Wed, 11 Oct 2023 00:35:15 -0700 (PDT)
+From: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>
 To: buildroot@buildroot.org
-Date: Wed, 11 Oct 2023 09:27:01 +0200
-Message-Id: <20231011072701.1014328-1-yegorslists@googlemail.com>
+Date: Wed, 11 Oct 2023 09:35:05 +0200
+Message-Id: <20231011073506.687039-1-sairon@sairon.cz>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1697009279; x=1697614079; darn=buildroot.org; 
+ d=sairon.cz; s=google; t=1697009715; x=1697614515; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gju7U/KfFUjngzSf0BhtPMGcVrynaKo5OMYAZGGqS4U=;
- b=SF5gy+PAWD/l/dQNxF1/nGeqxd32niZrmmWt53wL3fs+6fJgsB+G9jsd8ENL1xFnLh
- 3Q/WaaO4f04wGdzzot4ZBL2Pjvk3QRQ5Y9wdjy9oMlnZnF5AQ4hcvK8ZZS9dvk5J8uor
- gJHPHBYthHX6bsWXDq+QkppQyNgFeSYVoTP0Y0vwlchYJwMGlY+Gtb4e/tTmVsiZre1r
- MjuRXu5MFeWLbNiHRYluL+U5rOhVdo2jXM0BhMew1BAiQuMg2lh2TzhTrad2jama1I0W
- XSsBmJYuz/udP3RJeNbFpA+GwzLSV2unjZj4eZwJlI0DklTrTcnuoCbGkxWURZAQHPTM
- M5gQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SF5gy+PA
-Subject: [Buildroot] [PATCH] python-configobj: new package
+ bh=zEcrcjP140V4s8IPTX+On/jJcFW6eWY1Ljm65fl8BPM=;
+ b=Jlck4RRr0z4QMJYbwXcPVU4BJg2Y1gGetJjLssRmHwTb24cowLSMsiMpSBjnE/WL6S
+ u8hN1TYncwZavrGKUGQvfzbwec/6VhIMIPfopMbGwX7Qi9ln4sXrTpRUvx2+/28aguhk
+ bP/zYzpDqFOBZ1QDvbsUxT/Y6bKQfcdXi7okT7HBdjkh5PzU+WdwvY3OlgmeXpba5Q7q
+ iUxIGb1fn6B9myQNNn8ck4BKFwDLa7Yp5ZVWv4YeRhoFRW42o5hNlkVoLRrPEU9ubS/o
+ h+VYw1aKVF6daE4YA5WLuhiWIaylOycwt21Qfm35pyhE6QyFw/ThnrYalx7k9UcfCJi7
+ dtMw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz
+ header.a=rsa-sha256 header.s=google header.b=Jlck4RRr
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to 8.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,112 +93,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-python-configobj package was removed in
-8d264a96172cfa1c1f515d1160b921c013fa3bd7 because of the missing support
-for Python 3.x.
-
-Meanwhile, this problem was fixed, hence readd the package.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- Config.in.legacy                               |  6 ------
- package/Config.in                              |  1 +
- package/python-configobj/Config.in             |  7 +++++++
- package/python-configobj/python-configobj.hash |  5 +++++
- package/python-configobj/python-configobj.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+), 6 deletions(-)
- create mode 100644 package/python-configobj/Config.in
- create mode 100644 package/python-configobj/python-configobj.hash
- create mode 100644 package/python-configobj/python-configobj.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index ca80279212..b817e80e55 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -724,12 +724,6 @@ config BR2_PACKAGE_PYTHON_DIALOG
- 	help
- 	  Package was removed together with python 2.7 support.
- 
--config BR2_PACKAGE_PYTHON_CONFIGOBJ
--	bool "python-configobj removed"
--	select BR2_LEGACY
--	help
--	  Package was removed together with python 2.7 support.
--
- config BR2_PACKAGE_PYTHON_YIELDFROM
- 	bool "python-yieldfrom removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 009f7ba186..1327a13f4e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1026,6 +1026,7 @@ menu "External python modules"
- 	source "package/python-colorama/Config.in"
- 	source "package/python-colorlog/Config.in"
- 	source "package/python-colorzero/Config.in"
-+	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-constantly/Config.in"
- 	source "package/python-construct/Config.in"
-diff --git a/package/python-configobj/Config.in b/package/python-configobj/Config.in
-new file mode 100644
-index 0000000000..365aa17fcb
---- /dev/null
-+++ b/package/python-configobj/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_CONFIGOBJ
-+	bool "python-configobj"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Config file reading, writing and validation.
-+
-+	  https://github.com/DiffSK/configobj
-diff --git a/package/python-configobj/python-configobj.hash b/package/python-configobj/python-configobj.hash
-new file mode 100644
-index 0000000000..682dc987f1
---- /dev/null
-+++ b/package/python-configobj/python-configobj.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/configobj/json
-+md5  8dda7b31bb3aea87ecfe3b7a87812b17  configobj-5.0.8.tar.gz
-+sha256  6f704434a07dc4f4dc7c9a745172c1cad449feb548febd9f7fe362629c627a97  configobj-5.0.8.tar.gz
-+# Locally computed sha256 checksums
-+sha256  0d95e648469a711f5ec1e59e6d4492150ec65d968c1ea6c6d96154a92879997a  LICENSE
-diff --git a/package/python-configobj/python-configobj.mk b/package/python-configobj/python-configobj.mk
-new file mode 100644
-index 0000000000..fe1776f79f
---- /dev/null
-+++ b/package/python-configobj/python-configobj.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-configobj
-+#
-+################################################################################
-+
-+PYTHON_CONFIGOBJ_VERSION = 5.0.8
-+PYTHON_CONFIGOBJ_SOURCE = configobj-$(PYTHON_CONFIGOBJ_VERSION).tar.gz
-+PYTHON_CONFIGOBJ_SITE = https://files.pythonhosted.org/packages/cb/87/17d4c6d634c044ab08b11c0cd2a8a136d103713d438f8792d7be2c5148fb
-+PYTHON_CONFIGOBJ_SETUP_TYPE = setuptools
-+PYTHON_CONFIGOBJ_LICENSE = BSD-3-Clause
-+PYTHON_CONFIGOBJ_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Rml4ZXMgZm9sbG93aW5nIHR3byB2dWxuZXJhYmlsaXRpZXM6CgoqIENWRS0yMDIzLTM4NTQ1OiBT
+T0NLUzUgaGVhcCBidWZmZXIgb3ZlcmZsb3cKICBodHRwczovL2N1cmwuc2UvZG9jcy9DVkUtMjAy
+My0zODU0NS5odG1sCiogQ1ZFLTIwMjMtMzg1NDY6IGNvb2tpZSBpbmplY3Rpb24gd2l0aCBub25l
+IGZpbGUKICBodHRwczovL2N1cmwuc2UvZG9jcy9DVkUtMjAyMy0zODU0Ni5odG1sCgpTaWduZWQt
+b2ZmLWJ5OiBKYW4gxIxlcm3DoWsgPHNhaXJvbkBzYWlyb24uY3o+Ci0tLQogcGFja2FnZS9saWJj
+dXJsL2xpYmN1cmwuaGFzaCB8IDQgKystLQogcGFja2FnZS9saWJjdXJsL2xpYmN1cmwubWsgICB8
+IDIgKy0KIDIgZmlsZXMgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoK
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliY3VybC9saWJjdXJsLmhhc2ggYi9wYWNrYWdlL2xpYmN1
+cmwvbGliY3VybC5oYXNoCmluZGV4IDM3MWQyMGE2MzIuLmVjZDVkNjM5MDkgMTAwNjQ0Ci0tLSBh
+L3BhY2thZ2UvbGliY3VybC9saWJjdXJsLmhhc2gKKysrIGIvcGFja2FnZS9saWJjdXJsL2xpYmN1
+cmwuaGFzaApAQCAtMSw1ICsxLDUgQEAKICMgTG9jYWxseSBjYWxjdWxhdGVkIGFmdGVyIGNoZWNr
+aW5nIHBncCBzaWduYXR1cmUKLSMgaHR0cHM6Ly9jdXJsLnNlL2Rvd25sb2FkL2N1cmwtOC4zLjAu
+dGFyLnh6LmFzYworIyBodHRwczovL2N1cmwuc2UvZG93bmxvYWQvY3VybC04LjQuMC50YXIueHou
+YXNjCiAjIHNpZ25lZCB3aXRoIGtleSAyN0VERUFGMjJGM0FCQ0VCNTBEQjlBMTI1Q0M5MDhGREI3
+MUUxMkMyCi1zaGEyNTYgIDM3NmQ2Mjc3NjdkNmM0ZjA1MTA1YWI2ZDQ5N2IwZDlhYmE3MTExNzcw
+ZGQ5ZDk5NTIyNTQ3ODIwOWMzN2VhNjMgIGN1cmwtOC4zLjAudGFyLnh6CitzaGEyNTYgIDE2YzYy
+YTljNGFmMGY3MDNkMjhiZGE2ZDdiYmYzN2JhNDcwNTVhZDM0MTRkNzBkZWM2M2UyZTYzMzZmMmE4
+MmQgIGN1cmwtOC40LjAudGFyLnh6CiBzaGEyNTYgIGIxZDdmZWI5NDllYTUwMjM1NTIwMjlmYmUw
+YmY1ZGI0ZjIzYzJmODVlOWI4ZTUxZTE4NTM2ZjBlY2JmOWM1MjQgIENPUFlJTkcKZGlmZiAtLWdp
+dCBhL3BhY2thZ2UvbGliY3VybC9saWJjdXJsLm1rIGIvcGFja2FnZS9saWJjdXJsL2xpYmN1cmwu
+bWsKaW5kZXggZGQ0Y2Y0M2M2YS4uYmQzMzFhNTVhYSAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJj
+dXJsL2xpYmN1cmwubWsKKysrIGIvcGFja2FnZS9saWJjdXJsL2xpYmN1cmwubWsKQEAgLTQsNyAr
+NCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1MSUJDVVJMX1ZFUlNJT04gPSA4
+LjMuMAorTElCQ1VSTF9WRVJTSU9OID0gOC40LjAKIExJQkNVUkxfU09VUkNFID0gY3VybC0kKExJ
+QkNVUkxfVkVSU0lPTikudGFyLnh6CiBMSUJDVVJMX1NJVEUgPSBodHRwczovL2N1cmwuc2UvZG93
+bmxvYWQKIExJQkNVUkxfREVQRU5ERU5DSUVTID0gaG9zdC1wa2djb25mIFwKLS0gCjIuMzQuMQoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
