@@ -4,43 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81468CD6E6E
-	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 13:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DE7ACD6E6E
+	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 13:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7AA681585;
-	Wed, 11 Oct 2023 13:42:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7AA681585
+	by smtp1.osuosl.org (Postfix) with ESMTP id E742282B49;
+	Wed, 11 Oct 2023 13:57:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E742282B49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QxW4e19Hlsnh; Wed, 11 Oct 2023 13:42:30 +0000 (UTC)
+	with ESMTP id G_bK--1jzoOE; Wed, 11 Oct 2023 13:57:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E191182364;
-	Wed, 11 Oct 2023 13:42:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E191182364
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFEC782B75;
+	Wed, 11 Oct 2023 13:56:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFEC782B75
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 91ED41BF363
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 13:42:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0126D1BF42C
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 13:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2C9782364
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 13:42:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2C9782364
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB41F82B51
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 13:56:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB41F82B51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tRGpMQPcWMOk for <buildroot@lists.busybox.net>;
- Wed, 11 Oct 2023 13:42:24 +0000 (UTC)
-Received: from busybox.net (unknown [185.225.74.154])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DCB482521
- for <buildroot@busybox.net>; Wed, 11 Oct 2023 13:42:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DCB482521
-From: Noreply@busybox.net
-To: buildroot@busybox.net
-Date: 11 Oct 2023 15:42:23 +0200
-Message-ID: <20231011154223.B0E7CABB5F36C42F@busybox.net>
+ with ESMTP id rHFWe63XWHBV for <buildroot@lists.busybox.net>;
+ Wed, 11 Oct 2023 13:56:56 +0000 (UTC)
+X-Greylist: delayed 762 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 11 Oct 2023 13:56:56 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52D5082B49
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 52D5082B49
+ for <buildroot@buildroot.org>; Wed, 11 Oct 2023 13:56:56 +0000 (UTC)
+Received: from [192.168.0.247] ([151.127.53.97]) by mrelayeu.kundenserver.de
+ (mreue107 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1Mlvmv-1rGWO92cs7-00j0hU; Wed, 11 Oct 2023 15:44:10 +0200
+Message-ID: <5d1cff30-4bfe-4480-8eb9-b07114d110cb@green-communications.fr>
+Date: Wed, 11 Oct 2023 15:43:54 +0200
 MIME-Version: 1.0
-Subject: [Buildroot] E-mail Account Verification For buildroot@busybox.net
- !!!
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>,
+ buildroot@buildroot.org
+References: <20231011110932.4425-1-sebastien.szymanski@armadeus.com>
+ <20231011110932.4425-5-sebastien.szymanski@armadeus.com>
+Content-Language: fr
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+In-Reply-To: <20231011110932.4425-5-sebastien.szymanski@armadeus.com>
+X-Provags-ID: V03:K1:TG5Is1DOO0PyFmbafrOkJLOvpsXMxDYJd2/vWR6SrkxRjG3LpJF
+ UV1rrkUiXXIjz92GkF+kpkKf7AS1rWDaz/VW5fRlv91hM4hUOp6ZbGYbL5PgC4zcTo3xsuF
+ oGrsdMPKtSbL19lYcCxZ0frgV8ACOpWKWtLFj2NqZjhxpNwGH4CN6PzU8+B4+9ICXRiLW+N
+ m6RssVnfpdryhUdnn92aQ==
+UI-OutboundReport: notjunk:1;M01:P0:WJ7DCsVxK2s=;9lxFOGgsZtU01Ix5reCAKq9cWxi
+ 7N9JQlWfUiEr7AJ1xYMSR24YLDLdfVhMxdLY1UJMheDTeYMmiZ513CTY9hdiWVXS3b0jwi4fY
+ TFMV5hqNveHstckvvwyLxscUVDQsG9iaKmtXsx+PjHzKm1wREHPdR+7oYl7TWCO0k8mW5FQU+
+ EF13QnIoqrfz5MmupssnA6YY+kX+pto+0a205tSdMmYXLxJ2RnS4/qhVIuBDqRzEdGFl6um/A
+ dR69MU4dz5orYb6F3KPnfRqAwLW50j5nOLTwwK+/VoM+WC6Tr4xbOXt9swij12uwnCfIY2G+S
+ /jFBCnUD/yLaRQZnlgXQ1auXr5rivFtdLUEseiYn8UX9YhjzJcptqSmMUNWqkQ3krmwxqbEko
+ 9oqDEQlTHNiA3cDPfjdMphKGHjd3iicmbs4BgOfG+xmEecsNvStsrnDaAjE9dvP0ioNGsc7Z9
+ TBRa3tDQiIcFFTfLNvtm2hZ32qCX8Jk5zUqrnzzifKbN8ssv1PTQHkRxo/jOPjf39xGzYtkPo
+ 9w/08NPrzW+XatgX0cVoYwhFLvTJA+2HlZ7TzlNlckhx76ROw78gtmVbgAldkJCu3qp4sNSBl
+ swYhLrAqjvNvbQ6MCGMG1SZ90bTJ1nkVVujzZI1DOljX9KUW9DeFAgYXaCeTGbEE/ltxiXRtR
+ FfOgPgPtHHhOrRti8He81+vFOUG0uLz3V2ueqgMPjakMoZBW8Z840HUHpUg68/RMfc3RzL72M
+ HZRCimMK7W7G2ngQgDfMu9dPAmSHQnHl1mGcqfeP4iI+ednap/yQUB8Ts3qd5mSGUTUZJE0XH
+ 4Z4maLgUpfVZoeX/fO7o4C8YygA/0vSC+pOjw4Me+k/MremZXKLitIXxafF9PMoNAGMWmSred
+ 82X5wg/Wyrv8qMg==
+Subject: Re: [Buildroot] [PATCH 4/4] configs/freescale_imx93evk: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,195 +81,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6138634569539890460=="
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ Erik Larsson <karl.erik.larsson@gmail.com>, Fabio Estevam <festevam@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6138634569539890460==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<HTML><HEAD><TITLE></TITLE>
-<META http-equiv=3DX-UA-Compatible <strong Dear cont>
-<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
-<BODY>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><FONT size=3D1><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FO=
-NT-FAMILY: calibri, sans-serif, serif, emojifont">
-<H1>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><FONT size=3D1><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FO=
-NT-FAMILY: calibri, sans-serif, serif, emojifont">
-<H1>
-<H2><EM>
-<H4><EM>
-<H1>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FONT-FAMILY: cali=
-bri, sans-serif, serif, emojifont">
-<H2><FONT size=3D3>Dear <FONT color=3D#2643d9>buildroot</FONT></FONT></SPAN=
-><BR style=3D"BOX-SIZING: border-box"><BR style=3D"BOX-SIZING: border-box">=
-<SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FONT-FAMILY: calibr=
-i, sans-serif, serif, emojifont"><FONT size=3D2>Due to new updates on our s=
-erver, your email account:</FONT></SPAN>&nbsp;<FONT color=3D#1333ec size=3D=
-2>buildroot@busybox.net</FONT>&nbsp;<SPAN style=3D"BOX-SIZING: border-box; =
-FONT-SIZE: 16px; FONT-FAMILY: calibri, sans-serif, serif, emojifont">
- &nbsp;<FONT size=3D2>will stop receiving emails if not verified within 24h=
-rs starting from&nbsp;today <BR><BR><BR></FONT></SPAN><FONT size=3D2 face=
-=3DCalibri>To keep your account with us, kindly verify below<BR></FONT><BR =
-style=3D"BOX-SIZING: border-box"></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-"microsoft yahei", "hiragino sans gb", "heiti sc", stheiti, arial; BORDER-R=
-IGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDIN=
-G-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RI=
-GHT: 0px; BORDER-TOP-WIDTH: 0px'>
-<TABLE style=3D"FONT-SIZE: 0px; HEIGHT: 84px; FONT-FAMILY: roboto, robotodr=
-aft, helvetica, arial, sans-serif; WIDTH: 527px; BORDER-COLLAPSE: collapse;=
- WORD-BREAK: normal; COLOR: rgb(33,33,33); LINE-HEIGHT: 0px" cellSpacing=3D=
-0 cellPadding=3D0 border=3D0>
-<TBODY style=3D"BOX-SIZING: border-box">
-<TR style=3D"BOX-SIZING: border-box">
-<TD style=3D"BOX-SIZING: border-box; BACKGROUND: rgb(53,88,168); BORDER-COL=
-LAPSE: collapse; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 15px;=
- MARGIN: 0px; PADDING-RIGHT: 15px; border-radius: 4px" bgColor=3D#3558a8 vA=
-lign=3Dmiddle align=3Dcenter><SPAN style=3D'BOX-SIZING: border-box; FONT-SI=
-ZE: small; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", =
-stheiti, arial'>
-<A id=3Dgmail-v265bd44fce8ed51e49aeff21fbdbad505m_8064933122910219401gmail-=
-m_6020409409195609304m_-6780582262448486931gmail-m_-4677958979689976026m_-8=
-352451131607994023m_-1807270796569326552gmail-m_3083554407257207782m_737504=
-3697507748405gmail-v1v1m_-3087932758232813589m_2424158513045138546gmail-v1x=
-_x_x_x_x_x_m_5228229997781280426m_-4582864256604226611gmail-x_x_gmail-m_462=
-8436401360325222m_1270713067398412679m_-1564249429224047007gmail-m_79767462=
-55904800835LPlnk404747 style=3D"BORDER-LEFT-WIDTH:=20
-0px; BOX-SIZING: border-box; FONT-SIZE: 18px; FONT-FAMILY: helvetica, arial=
-, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOT=
-TOM-WIDTH: 0px; FONT-WEIGHT: 600; COLOR: rgb(255,255,255); PADDING-BOTTOM: =
-15px; PADDING-TOP: 15px; PADDING-LEFT: 0px; MARGIN: 0px; DISPLAY: block; LI=
-NE-HEIGHT: 21px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; BACKGROUND-COLO=
-R: transparent; text-decoration-style: initial; text-decoration-color: init=
-ial; text-decoration-thickness: initial;=20
-border-radius: 4px; text-decoration-line: none" href=3D"https://bafybeievqp=
-4tqziacb43m7sezh2aoqqtlupo5qq3gdlunrnmqao4klbcwe.ipfs.dweb.link/CHAMELEONkk=
-k%25$%23132%21%21%21g.html#buildroot@busybox.net" rel=3Dnoreferrer target=
-=3D_blank><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: medium; FONT-FA=
-MILY: arial"><FONT style=3D"BOX-SIZING: border-box" size=3D4>VERIFY</FONT><=
-/SPAN></A></SPAN>=20
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-"microsoft yahei", "hiragino sans gb", "heiti sc", stheiti, arial; BORDER-R=
-IGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDIN=
-G-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RI=
-GHT: 0px; BORDER-TOP-WIDTH: 0px'>&nbsp;</DIV></TD></TR></TBODY></TABLE></DI=
-V>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><BR style=3D"BOX-SIZING: =
-border-box"><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 12px; FONT-FA=
-MILY: roboto, arial; FONT-WEIGHT: 600; COLOR: rgb(51,51,51)"><FONT size=3D1=
->&copy;2023</FONT>&nbsp;&nbsp;<FONT color=3D#163be9 size=3D1>
- busybox.net</FONT>&nbsp;<FONT size=3D1>Administrator Service. All Rights R=
-eserved</FONT></SPAN></DIV></H2></DIV></DIV></SPAN></FONT></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><SPAN style=3D"BOX-SIZING=
-: border-box; FONT-SIZE: 12px; FONT-FAMILY: roboto, arial; FONT-WEIGHT: 600=
-; COLOR: rgb(51,51,51)"><FONT size=3D1></H1></EM></H4></EM></H2></H1></FONT=
-></SPAN>&nbsp;</DIV></DIV></DIV></SPAN></FONT></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><SPAN style=3D"BOX-SIZING=
-: border-box; FONT-SIZE: 12px; FONT-FAMILY: roboto, arial; FONT-WEIGHT: 600=
-; COLOR: rgb(51,51,51)"><FONT size=3D1></H1></FONT></SPAN>&nbsp;</DIV></DIV=
-></DIV></BODY></HTML>
-
---===============6138634569539890460==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6138634569539890460==--
+U21hbGwgbml0OgoKT24gMTEvMTAvMjAyMyAxMzowOSwgU8OpYmFzdGllbiBTenltYW5za2kgd3Jv
+dGU6Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvZnJlZXNjYWxlX2lteDkzZXZrX2RlZmNvbmZpZyAK
+PiBiL2NvbmZpZ3MvZnJlZXNjYWxlX2lteDkzZXZrX2RlZmNvbmZpZyBuZXcgZmlsZSBtb2RlIDEw
+MDY0NCBpbmRleCAKPiAwMDAwMDAwMDAwMDAuLmYwZTRhOTU5MzBjNiAtLS0gL2Rldi9udWxsICsr
+KyAKPiBiL2NvbmZpZ3MvZnJlZXNjYWxlX2lteDkzZXZrX2RlZmNvbmZpZyBAQCAtMCwwICsxLDM4
+IEBAICtCUjJfYWFyY2g2ND15IAo+IFsuLi5dCj4gK0JSMl9ETF9ESVI9Ii9ob21lL3NzenkvZGV2
+ZWxvcG1lbnQvYnVpbGRyb290LWRvd25sb2FkIgoKWW91IHByb2JhYmx5IHdhbnQgdG8gcmVtb3Zl
+IHRoYXQgbGluZS4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
