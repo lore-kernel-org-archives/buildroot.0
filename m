@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A23BACD6E56
-	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 09:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95661CD6E53
+	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 09:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 223F1415D1;
-	Wed, 11 Oct 2023 09:23:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 223F1415D1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3ECB54059B;
+	Wed, 11 Oct 2023 09:23:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ECB54059B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O-7VBSjqFQp7; Wed, 11 Oct 2023 09:23:12 +0000 (UTC)
+	with ESMTP id KGX2yofbcsqp; Wed, 11 Oct 2023 09:23:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 17BAD4059B;
-	Wed, 11 Oct 2023 09:23:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17BAD4059B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95B9A4169C;
+	Wed, 11 Oct 2023 09:23:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95B9A4169C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D5D421BF2C7
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:23:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6524C1BF2C7
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:23:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AEC624059B
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:23:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEC624059B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B33B4169C
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:23:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B33B4169C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3ta7W_DKq-Rz for <buildroot@lists.busybox.net>;
- Wed, 11 Oct 2023 09:23:09 +0000 (UTC)
+ with ESMTP id H_yaqFLCQN1V for <buildroot@lists.busybox.net>;
+ Wed, 11 Oct 2023 09:23:27 +0000 (UTC)
 Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
  [IPv6:2a00:1450:4864:20::635])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C7370403C0
- for <buildroot@buildroot.org>; Wed, 11 Oct 2023 09:23:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7370403C0
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 726084059B
+ for <buildroot@buildroot.org>; Wed, 11 Oct 2023 09:23:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 726084059B
 Received: by mail-ej1-x635.google.com with SMTP id
- a640c23a62f3a-9b9a494cc59so1097822066b.3
- for <buildroot@buildroot.org>; Wed, 11 Oct 2023 02:23:08 -0700 (PDT)
+ a640c23a62f3a-9b275afb6abso152130366b.1
+ for <buildroot@buildroot.org>; Wed, 11 Oct 2023 02:23:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697016186; x=1697620986;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=3rHwbevEB0o7vFnLSuFfowsH/NaAtuDEiXXlAWlgMS0=;
- b=Xgl4EtMjbAwh3CJK3URU6Nqmwqc3jSWnBCU51DDrbICo9jes5uDz+ANjnNcUXcSffo
- Al/NPZ7YBx0UslR3fHSVHYfcrt28UoLQPBWXKkx/HkalmstbmCBl4FE92EwEpA7HxGB0
- XxA40UFE7iho1Xj9X2rLJU1DVYpIyYZd/U1EDS2ZL2G1eEHvG0iQfj7R+Y3cfE8213Qf
- LcEMfScQFAf/5Usi3TJqWyuWm64ygeUeOL1s+h434TdYLa1nEOMMAes04mQ5s2mwMpHK
- 5mc7PdoMGf0rpMTvYBK5sxLXcMyBVDNOHC0v+wZe0qit4r0zR6ZY1GzMlRblqGtYFuL+
- hLmg==
-X-Gm-Message-State: AOJu0Yz4M0+NClrpPft8H8L5m0LIbE6yx4UEek7dxPEUbLYjFVVV1IuC
- tGDODFW1kJ9rbWC0lrIsFpquWq9PGlFUoGzCvQaOlA==
-X-Google-Smtp-Source: AGHT+IEUp0pOMgoL7uftoZvV8hZc0Iv1cc7S+tZ93C3lwuagL3bbtl7lIBe8nXln0LXKztwjAL2Eww==
-X-Received: by 2002:a17:906:1d:b0:9ae:505d:310b with SMTP id
- 29-20020a170906001d00b009ae505d310bmr18320883eja.39.1697016186569; 
- Wed, 11 Oct 2023 02:23:06 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1697016205; x=1697621005;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=sAjMJ8jVkVUIqrWgVCZQ67dIPaHyKr4VKjR2u5Iozhs=;
+ b=CrHiH5l9CafPz/RhagguEkk2t+/g2wMShwUzSdyVwKgaH35/vrxv9LCaM1QfdHoCl+
+ GvEYDNtLljnywQGzrQe/reKh2seRAfRL2dnbjwQJyMoazfRSoBMVGPdRw+QKm7vUkAfZ
+ kX8I1q92deop8PgrxIpiuWhbwpUBkrSNWie8GdVyYQ3oOBktwumyFbhASdCWM5CEDRmO
+ WmK/gIq314lQN8+M3nzay0VV7U0QbA59fAgu25zsBrDQLy+p/fau+ACwxcpZEZARzpBQ
+ OdqXQ9jPKUwgSlcj9Y58dGURTYZa2rdtzHYwe+y/sZJMqS4HJRUm4dm4srMLnJz8dSMs
+ yAow==
+X-Gm-Message-State: AOJu0Yzddp0xDBwFvSVJ+YLZeNJ7MdPo8zl23vsGf29xq0hFxcfyBwYk
+ vbMdz9agXSJUxwJSu3MOWkLwEWrDlAJtzMqvTi26+w==
+X-Google-Smtp-Source: AGHT+IHB8zzON40+tu9VZMd9gUESo2hLgiZj2WAJLm3wNYO95/Dpy6LqPRKDgh+URonT/IsuJ2tPJQ==
+X-Received: by 2002:a17:907:2d09:b0:9aa:206d:b052 with SMTP id
+ gs9-20020a1709072d0900b009aa206db052mr15398756ejc.27.1697016185027; 
+ Wed, 11 Oct 2023 02:23:05 -0700 (PDT)
 Received: from localhost.localdomain ([2001:b07:6467:4426:3fb7:fc38:9be:dc4c])
  by smtp.gmail.com with ESMTPSA id
- rp19-20020a170906d97300b009b95b46bbd1sm9535825ejb.133.2023.10.11.02.23.05
+ rp19-20020a170906d97300b009b95b46bbd1sm9535825ejb.133.2023.10.11.02.23.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Oct 2023 02:23:06 -0700 (PDT)
+ Wed, 11 Oct 2023 02:23:04 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Oct 2023 11:22:50 +0200
-Message-ID: <20231011092250.3739529-2-adam.duskett@amarulasolutions.com>
+Date: Wed, 11 Oct 2023 11:22:49 +0200
+Message-ID: <20231011092250.3739529-1-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231011092250.3739529-1-adam.duskett@amarulasolutions.com>
-References: <20231011092250.3739529-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1697016186; x=1697620986;
+ d=amarulasolutions.com; s=google; t=1697016205; x=1697621005;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=3rHwbevEB0o7vFnLSuFfowsH/NaAtuDEiXXlAWlgMS0=;
- b=cmrSS7/Tahuny8rHTPkdhEhwFcEOXKQV0HeRYfJU0fGeK+L33rFPSpzvMJCE8MNSJP
- gpLNVWH12iHWfuuHbvLFUOY3NeCucaBozLvKCXMfhCofo4eiRFZ1+tZM6U5szmdXVV78
- ou4nY8PHPcTBloUOcC5oJ7d2CbSbKkmBU/KMs=
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=sAjMJ8jVkVUIqrWgVCZQ67dIPaHyKr4VKjR2u5Iozhs=;
+ b=SmxjeDPwKH5VMrTik3H42D/1QOeEFZQ90fScPcinvpUuEZkc/R2rk7CZ5NGjeisM1D
+ RPE0L1I8Ta6dIamYQDKzCyifWI+C1LAANo2SIkcu9ImIBsZnjZdkcanagEUEwrRVEVUK
+ bCh1ByYOsFxEGrxpD1TRyW/l1LR+Tz2qt29AI=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=cmrSS7/T
-Subject: [Buildroot] [PATCH 2/2]
- support/testing/tests/package/test_firewalld.py: new test
+ header.b=SmxjeDPw
+Subject: [Buildroot] [PATCH 1/2] package/firewalld: enable missing kernel
+ config options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,130 +99,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This test case runs firewalld using both system and sysvinit.
-
-run `firewalld-cmd --state` and ensure the output is "running" with a return
-code of 0.
+Firewalld requires IPV6 to function. We also should enable the
+other dependencies such as networking support to ensure all other
+options in the giant list of kernel config options are selected
+properly.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- DEVELOPERS                                    |  1 +
- .../testing/tests/package/test_firewalld.py   | 94 +++++++++++++++++++
- 2 files changed, 95 insertions(+)
- create mode 100644 support/testing/tests/package/test_firewalld.py
+ package/firewalld/firewalld.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3fffc4346c..349f609e64 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -37,6 +37,7 @@ F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-+F:	support/testing/tests/package/test_firewalld.py
- F:	support/testing/tests/package/test_flutter.py
+diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
+index 188550d449..23ba1e6c2a 100644
+--- a/package/firewalld/firewalld.mk
++++ b/package/firewalld/firewalld.mk
+@@ -72,9 +72,16 @@ define FIREWALLD_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S46firewalld
+ endef
  
- N:	Adam Heinrich <adam@adamh.cz>
-diff --git a/support/testing/tests/package/test_firewalld.py b/support/testing/tests/package/test_firewalld.py
-new file mode 100644
-index 0000000000..4b0282d3e4
---- /dev/null
-+++ b/support/testing/tests/package/test_firewalld.py
-@@ -0,0 +1,94 @@
-+"""Test firewalld for both systemd and sysvinit."""
-+import os
-+import infra.basetest
-+
-+
-+class TestFirewalldSystemd(infra.basetest.BRTest):
-+    """Build the kernel as firewalld requires several the nftable options."""
-+
-+    __test__ = True
-+    config: str = """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_PER_PACKAGE_DIRECTORIES=y
-+        BR2_INIT_SYSTEMD=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.57"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_FIREWALLD=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        kernel_file = os.path.join(self.builddir, "images", "zImage")
-+        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-+        self.emulator.boot(arch="armv7",
-+                           kernel=kernel_file,
-+                           kernel_cmdline=["console=ttyAMA0,115200"],
-+                           options=[
-+                               "-initrd", cpio_file,
-+                               "-dtb", dtb_file,
-+                               "-M", "vexpress-a9"
-+                           ])
-+        # It takes quite some time for the system to boot with firewalld,
-+        self.emulator.timeout_multiplier *= 10
-+        self.emulator.login()
-+        cmd = "firewall-cmd --state"
-+        output, exit_code = self.emulator.run(cmd, timeout=10)
-+        self.assertIn("running", output[0])
-+        self.assertEqual(exit_code, 0)
-+
-+
-+class TestFirewalldSysVInit(infra.basetest.BRTest):
-+    """Build the kernel as firewalld requires several nftable options."""
-+
-+    __test__ = True
-+    config: str = """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_PER_PACKAGE_DIRECTORIES=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.57"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_FIREWALLD=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        kernel_file = os.path.join(self.builddir, "images", "zImage")
-+        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-+        self.emulator.boot(arch="armv7",
-+                           kernel=kernel_file,
-+                           kernel_cmdline=["console=ttyAMA0,115200"],
-+                           options=[
-+                               "-initrd", cpio_file,
-+                               "-dtb", dtb_file,
-+                               "-M", "vexpress-a9"
-+                           ])
-+        # It takes quite some time for the system to boot with firewalld.
-+        self.emulator.timeout_multiplier *= 10
-+        self.emulator.login()
-+        cmd = "firewall-cmd --state"
-+        output, exit_code = self.emulator.run(cmd, timeout=10)
-+        self.assertIn("running", output[0])
-+        self.assertEqual(exit_code, 0)
++# Firewalld needs ipv6
+ # Firewalld requires almost every single nftable option selected.
+ define FIREWALLD_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INET_DIAG)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IPV6)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_FILTER)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_IPTABLES)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MANGLE)
 -- 
 2.41.0
 
