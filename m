@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF87FCD6E43
-	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 08:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC441CD6E49
+	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 09:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E244416A6;
-	Wed, 11 Oct 2023 08:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E244416A6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E2FF416A6;
+	Wed, 11 Oct 2023 09:00:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E2FF416A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LUw3T137ldHX; Wed, 11 Oct 2023 08:52:57 +0000 (UTC)
+	with ESMTP id rEKuB9rURp3N; Wed, 11 Oct 2023 09:00:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97D4C415ED;
-	Wed, 11 Oct 2023 08:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97D4C415ED
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 44C1A1BF32C
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 08:52:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE1DE415A3;
+	Wed, 11 Oct 2023 09:00:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE1DE415A3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E134E1BF32C
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E5E9822E7
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 08:52:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E5E9822E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9B3A402A8
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:00:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9B3A402A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id drGaFbWPRSAB for <buildroot@lists.busybox.net>;
- Wed, 11 Oct 2023 08:52:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50CBF81EDD
- for <buildroot@buildroot.org>; Wed, 11 Oct 2023 08:52:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50CBF81EDD
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3CD09844F2; Wed, 11 Oct 2023 08:52:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eBXPvoOa8knz for <buildroot@lists.busybox.net>;
+ Wed, 11 Oct 2023 09:00:26 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 442E3415C8
+ for <buildroot@buildroot.org>; Wed, 11 Oct 2023 09:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 442E3415C8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9679840005;
+ Wed, 11 Oct 2023 09:00:23 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qqV4j-000rn2-Nv; Wed, 11 Oct 2023 11:00:17 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Oct 2023 10:40:17 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33b9225dff45079ff41dc56cde8084ad7937818c
-X-Git-Newrev: 30dd60ba7eb3e6da4f0ae91b3b08f8aa8fb8d786
-X-Patchwork-Hint: ignore
-Message-Id: <20231011085253.3CD09844F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: security bump to 8.4.0
+References: <20231001142024.3959758-1-peter@korsgaard.com>
+Date: Wed, 11 Oct 2023 11:00:17 +0200
+In-Reply-To: <20231001142024.3959758-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 1 Oct 2023 16:20:24 +0200")
+Message-ID: <87edi1cz4u.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/cups: add upstream security fix for
+ CVE-2023-4504
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,66 +63,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8459634152586529985=="
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8459634152586529985==
-Content-Type: text/plain
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30dd60ba7eb3e6da4f0ae91b3b08f8aa8fb8d786
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fixes CVE-2023-4504: Postscript Parsing Heap Overflow
+ > https://github.com/OpenPrinting/cups/security/advisories/GHSA-pf5r-86w9-678h
+ > https://takeonme.org/cves/CVE-2023-4504.html
 
-Fixes following two vulnerabilities:
+ > There is a 2.4.7 release with this fix, but upstream unfortunately broke
+ > !gnutls builds, so backport the security fix instead:
 
-* CVE-2023-38545: SOCKS5 heap buffer overflow
-  https://curl.se/docs/CVE-2023-38545.html
-* CVE-2023-38546: cookie injection with none file
-  https://curl.se/docs/CVE-2023-38546.html
+ > https://github.com/OpenPrinting/cups/issues/762
 
-Signed-off-by: Jan Čermák <sairon@sairon.cz>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 371d20a632..ecd5d63909 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.3.0.tar.xz.asc
-+# https://curl.se/download/curl-8.4.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  376d627767d6c4f05105ab6d497b0d9aba7111770dd9d995225478209c37ea63  curl-8.3.0.tar.xz
-+sha256  16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d  curl-8.4.0.tar.xz
- sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index dd4cf43c6a..bd331a55aa 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 8.3.0
-+LIBCURL_VERSION = 8.4.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+Committed, thanks.
 
---===============8459634152586529985==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8459634152586529985==--
