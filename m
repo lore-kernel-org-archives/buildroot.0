@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0CF7CD6E4F
-	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 09:05:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA01CCD6E4D
+	for <buildroot@archiver.kernel.org>; Wed, 11 Oct 2023 09:05:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A45C74185A;
-	Wed, 11 Oct 2023 09:05:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A45C74185A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 777804186E;
+	Wed, 11 Oct 2023 09:05:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 777804186E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rLUvTgX4k5IK; Wed, 11 Oct 2023 09:05:05 +0000 (UTC)
+	with ESMTP id ko__kl7GkqRK; Wed, 11 Oct 2023 09:05:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 045F2416C8;
-	Wed, 11 Oct 2023 09:05:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 045F2416C8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 22C0D1BF98E
+	by smtp2.osuosl.org (Postfix) with ESMTP id A261841854;
+	Wed, 11 Oct 2023 09:05:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A261841854
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 487791BF362
  for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D6B3782393
- for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:04:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6B3782393
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F1F3611C2
+ for <buildroot@lists.busybox.net>; Wed, 11 Oct 2023 09:04:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F1F3611C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TESfPpk9vw6u for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PY4PGjDzlpNE for <buildroot@lists.busybox.net>;
  Wed, 11 Oct 2023 09:04:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F02CE82392
- for <buildroot@buildroot.org>; Wed, 11 Oct 2023 09:04:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F02CE82392
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1568260BF7
+ for <buildroot@buildroot.org>; Wed, 11 Oct 2023 09:04:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1568260BF7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD25E844F6; Wed, 11 Oct 2023 09:04:36 +0000 (UTC)
+ id 03F5E84522; Wed, 11 Oct 2023 09:04:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 11 Oct 2023 10:59:52 +0200
+Date: Wed, 11 Oct 2023 11:00:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 30dd60ba7eb3e6da4f0ae91b3b08f8aa8fb8d786
-X-Git-Newrev: b9d9497019f0caa3388f51c458a2469fdeefd146
+X-Git-Oldrev: 14e2374592284ba61384782ced095ea01ab4dfc5
+X-Git-Newrev: 40c3696131a2b93ea3da2556352dc79c19ac2e9c
 X-Patchwork-Hint: ignore
-Message-Id: <20231011090436.DD25E844F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cups: add upstream security fix
- for CVE-2023-4504
+Message-Id: <20231011090437.03F5E84522@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-plugins-good: security bump
+ to version 1.22.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,90 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9d9497019f0caa3388f51c458a2469fdeefd146
+commit: https://git.buildroot.net/buildroot/commit/?id=40c3696131a2b93ea3da2556352dc79c19ac2e9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2023-4504: Postscript Parsing Heap Overflow
+Fixes CVE-2023-37327: Heap-based buffer overflow in the FLAC parser when
+handling malformed image tags in GStreamer versions before 1.22.4 / 1.20.7.
 
-https://github.com/OpenPrinting/cups/security/advisories/GHSA-pf5r-86w9-678h
-https://takeonme.org/cves/CVE-2023-4504.html
-
-There is a 2.4.7 release with this fix, but upstream unfortunately broke
-!gnutls builds, so backport the security fix instead:
-
-https://github.com/OpenPrinting/cups/issues/762
+https://gstreamer.freedesktop.org/security/sa-2023-0001.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0005-raster-interpret.c-Fix-CVE-2023-4504.patch | 45 ++++++++++++++++++++++
- package/cups/cups.mk                               |  3 ++
- 2 files changed, 48 insertions(+)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups/0005-raster-interpret.c-Fix-CVE-2023-4504.patch b/package/cups/0005-raster-interpret.c-Fix-CVE-2023-4504.patch
-new file mode 100644
-index 0000000000..d1dff4e1fa
---- /dev/null
-+++ b/package/cups/0005-raster-interpret.c-Fix-CVE-2023-4504.patch
-@@ -0,0 +1,45 @@
-+From 2431caddb7e6a87f04ac90b5c6366ad268b6ff31 Mon Sep 17 00:00:00 2001
-+From: Zdenek Dohnal <zdohnal@redhat.com>
-+Date: Wed, 20 Sep 2023 14:45:17 +0200
-+Subject: [PATCH] raster-interpret.c: Fix CVE-2023-4504
-+
-+We didn't check for end of buffer if it looks there is an escaped
-+character - check for NULL terminator there and if found, return NULL
-+as return value and in `ptr`, because a lone backslash is not
-+a valid PostScript character.
-+
-+Upstream: https://github.com/OpenPrinting/cups/commit/2431caddb7e6a87f04ac90b5c6366ad268b6ff31
-+[Peter: drop CHANGES hunk]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cups/raster-interpret.c | 14 +++++++++++++-
-+ 1 file changed, 14 insertions(+), 1 deletion(-)
-+
-+diff --git a/cups/raster-interpret.c b/cups/raster-interpret.c
-+index 6fcf731b5..b8655c8c6 100644
-+--- a/cups/raster-interpret.c
-++++ b/cups/raster-interpret.c
-+@@ -1116,7 +1116,19 @@ scan_ps(_cups_ps_stack_t *st,		/* I  - Stack */
-+ 
-+ 	    cur ++;
-+ 
-+-            if (*cur == 'b')
-++	   /*
-++	    * Return NULL if we reached NULL terminator, a lone backslash
-++	    * is not a valid character in PostScript.
-++	    */
-++
-++	    if (!*cur)
-++	    {
-++	      *ptr = NULL;
-++
-++	      return (NULL);
-++	    }
-++
-++	    if (*cur == 'b')
-+ 	      *valptr++ = '\b';
-+ 	    else if (*cur == 'f')
-+ 	      *valptr++ = '\f';
-+-- 
-+2.30.2
-+
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index a3bb2f8dfc..4bc5eeedee 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -13,6 +13,9 @@ CUPS_CPE_ID_VENDOR = openprinting
- CUPS_SELINUX_MODULES = cups
- CUPS_INSTALL_STAGING = YES
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 604e74b57d..1b315ac1cc 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.22.2.tar.xz.sha256sum
+-sha256  7c8cc59425f2b232f60ca7d13e56edd615da4f711e73dd01a7cffa46e6bc0cdd  gst-plugins-good-1.22.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.22.6.tar.xz.sha256sum
++sha256  b3b07fe3f1ce7fe93aa9be7217866044548f35c4a7792280eec7e108a32f9817  gst-plugins-good-1.22.6.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 41f4c727f3..4c6188c097 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0005-raster-interpret.c-Fix-CVE-2023-4504.patch
-+CUPS_IGNORE_CVES += CVE-2023-4504
-+
- # Using autoconf, not autoheader, so we cannot use AUTORECONF = YES.
- define CUPS_RUN_AUTOCONF
- 	cd $(@D); $(AUTOCONF) -f
+-GST1_PLUGINS_GOOD_VERSION = 1.22.2
++GST1_PLUGINS_GOOD_VERSION = 1.22.6
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
