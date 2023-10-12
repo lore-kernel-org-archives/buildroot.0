@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65419CDB46E
-	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 19:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5C7FCDB46E
+	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 19:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5B2740223;
-	Thu, 12 Oct 2023 19:45:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5B2740223
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3ED6F4056F;
+	Thu, 12 Oct 2023 19:46:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ED6F4056F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zUsOT72gatOh; Thu, 12 Oct 2023 19:45:36 +0000 (UTC)
+	with ESMTP id 9FnFZWXmCg9Z; Thu, 12 Oct 2023 19:46:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0CD7B403C7;
-	Thu, 12 Oct 2023 19:45:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CD7B403C7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2686D1BF5B4
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 19:45:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CB8040AD9;
+	Thu, 12 Oct 2023 19:46:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CB8040AD9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A2AC61BF5B4
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 19:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F416860A79
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 19:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F416860A79
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C9184056F
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 19:46:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C9184056F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n2m2xUa0Eyhy for <buildroot@lists.busybox.net>;
- Thu, 12 Oct 2023 19:45:31 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BE8F460A70
- for <buildroot@buildroot.org>; Thu, 12 Oct 2023 19:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE8F460A70
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7805E1BF208;
- Thu, 12 Oct 2023 19:45:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qr1cV-003lFB-Je; Thu, 12 Oct 2023 21:45:19 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ccNY8Wta5CNO for <buildroot@lists.busybox.net>;
+ Thu, 12 Oct 2023 19:46:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 979C440AD9
+ for <buildroot@buildroot.org>; Thu, 12 Oct 2023 19:46:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 979C440AD9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8422084627; Thu, 12 Oct 2023 19:46:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Daniel Lang <dalang@gmx.at>
-References: <20230930054253.486201-2-dalang@gmx.at>
-Date: Thu, 12 Oct 2023 21:45:19 +0200
-In-Reply-To: <20230930054253.486201-2-dalang@gmx.at> (Daniel Lang's message of
- "Sat, 30 Sep 2023 07:42:52 +0200")
-Message-ID: <87lec78w1c.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/gtkmm3: bump to version 3.24.8
+To: buildroot@buildroot.org
+Date: Thu, 12 Oct 2023 21:44:43 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 339c49c24134404f5da3d17e8e7a6a03302f158b
+X-Git-Newrev: 789b30afd044e435aaf3d3488bd92ea5ee0d5eca
+X-Patchwork-Hint: ignore
+Message-Id: <20231012194627.8422084627@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/gtkmm3: bump to
+ version 3.24.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,21 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Knight <james.knight@collins.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=789b30afd044e435aaf3d3488bd92ea5ee0d5eca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
- > https://gitlab.gnome.org/GNOME/gtkmm/-/blob/3.24.8/NEWS
- > Signed-off-by: Daniel Lang <dalang@gmx.at>
+https://gitlab.gnome.org/GNOME/gtkmm/-/blob/3.24.8/NEWS
 
-Committed to 2023.08.x, thanks.
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7a14ef1d24a43bf14b760b76870b30927e1bbb84)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gtkmm3/gtkmm3.hash | 4 ++--
+ package/gtkmm3/gtkmm3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
+index c54862de67..9bfd68e027 100644
+--- a/package/gtkmm3/gtkmm3.hash
++++ b/package/gtkmm3/gtkmm3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.7.sha256sum
+-sha256  1d7a35af9c5ceccacb244ee3c2deb9b245720d8510ac5c7e6f4b6f9947e6789c  gtkmm-3.24.7.tar.xz
++# From https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.8.sha256sum
++sha256  d2940c64922e5b958554b23d4c41d1839ea9e43e0d2e5b3819cfb46824a098c4  gtkmm-3.24.8.tar.xz
+ # Locally computed
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
+diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
+index f5a2fee6b9..f4fc54849c 100644
+--- a/package/gtkmm3/gtkmm3.mk
++++ b/package/gtkmm3/gtkmm3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GTKMM3_VERSION_MAJOR = 3.24
+-GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).7
++GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).8
+ GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
+ GTKMM3_SITE = https://download.gnome.org/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
+ GTKMM3_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
