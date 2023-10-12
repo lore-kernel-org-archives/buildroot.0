@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5420BCDB46E
-	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 10:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73D2DCDB46E
+	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 10:32:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBBA860FC6;
-	Thu, 12 Oct 2023 10:32:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBBA860FC6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16B98614A3;
+	Thu, 12 Oct 2023 10:32:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16B98614A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nwXFA4HS8Rl8; Thu, 12 Oct 2023 10:32:41 +0000 (UTC)
+	with ESMTP id 7dE7ly6jsKcw; Thu, 12 Oct 2023 10:32:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E67661282;
-	Thu, 12 Oct 2023 10:32:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E67661282
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE7EB1BF2B9
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 10:32:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C86160A77;
+	Thu, 12 Oct 2023 10:32:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C86160A77
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A31FC1BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 10:32:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97FD28223A
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 10:32:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97FD28223A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CA9460FE7
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 10:32:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA9460FE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 74vtTwHhZbWo for <buildroot@lists.busybox.net>;
- Thu, 12 Oct 2023 10:32:28 +0000 (UTC)
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3C5B682211
- for <buildroot@buildroot.org>; Thu, 12 Oct 2023 10:32:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C5B682211
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-9ae7383b7ecso421509566b.0
- for <buildroot@buildroot.org>; Thu, 12 Oct 2023 03:32:28 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AUiEj1qwX8AS for <buildroot@lists.busybox.net>;
+ Thu, 12 Oct 2023 10:32:30 +0000 (UTC)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 90A9060E2F
+ for <buildroot@buildroot.org>; Thu, 12 Oct 2023 10:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90A9060E2F
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-9ba1eb73c27so130668966b.3
+ for <buildroot@buildroot.org>; Thu, 12 Oct 2023 03:32:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697106746; x=1697711546;
+ d=1e100.net; s=20230601; t=1697106748; x=1697711548;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=3KUCLyGQes6xxheYEJK7gtrJveDd5gkiwIgAmPsE1l4=;
- b=Z6e+vLH78oTwSYm2YeHUoKkeUbGftSNh1nm1lQYfd47iXQ+fAiT79WTLXrH2g13x+c
- mmSDxSQigxMQZBaPEfvmdr8WmoEYzRjtDUdoZmYWr8T/0N2gMBDs3dtb6wk+mE6zXGcB
- 5TB7FEGaYciG3HRXb2y1lln5ymVLT6k9imLW4oy8HR9WsMMTGNIp2peeUmt/RHVSgKUX
- ylTBYSZQoJ5KpoehZufwWFLZOgrsXJAE5bXyA1OmxQ12TAAHE9YOIftmoBxyyFuNzwrU
- XEe7WN/+UiaszTpU97+UoufvLk+bw/J5YMuQvcv3j5+g7EWNjrkGv3kKkcuFuXTnZtqO
- wmeQ==
-X-Gm-Message-State: AOJu0Yz7P58ayxIDBJGWHUAAPYxs63hLtp3LnMMVdeiUmS6/Pait9/2A
- 3pVeQzIajvYljUasEie/BZEX5+vSQGqGLiQKDyIQwA==
-X-Google-Smtp-Source: AGHT+IEysTi26L4Wp/r8dHlZNs+Uw4/IbAuyNAguUyXJix/lqczKY6tvpBNAdsbNpeYWwRKfmUmg+A==
-X-Received: by 2002:a17:906:748d:b0:9ae:5513:e475 with SMTP id
- e13-20020a170906748d00b009ae5513e475mr18999674ejl.9.1697106746118; 
- Thu, 12 Oct 2023 03:32:26 -0700 (PDT)
+ bh=AEZUzilz3poSj08kISaboOesZhc2zEgZRSY/AToDpCc=;
+ b=RZMxskeFEoGIcgtMi+vafyZ7igO+b+vtyWB4GfTAHYx+CuIT8FP6Vi6I/GZ3VNXUHL
+ 5vnVmjeiXypstq+HRWICgf91QIuMuY/HT/zWJJtRZdfj+dp/dkprCH1abmVtZMQ+jBQd
+ 3jp0FQ0GV4lhyIWqfVf8uVSUHh839PrrRi+TAU5weDJqV+zlJUJvMJRdkDtyYY1AOGFC
+ yyj37mmpxz4nSeb/Yb8FvO7fKSewiq9UfM2AHv5znGBZ86T7Ar3ble1ozxsoV6QNVVWu
+ 9UKS1VGL1k84/eOwjcWtbWOp7yWDJmP5JFPpJfslx62sNKGfpnqozLet/wGIUGtv0hij
+ M/Jg==
+X-Gm-Message-State: AOJu0Yw+s4a1VAWb3Tz1b8Znei+Ve/BIqcTWOrkBPBEjTUY4Qzlfxl8y
+ wvg0R75mFFDCOs9gzvfQ1ZzLH/sr4iV8S4Nv3SdSyQ==
+X-Google-Smtp-Source: AGHT+IHuIqgtDdeiIeNH7br6Bq75lHzj1Zjs04cg+msvNK3jXCjoYFU5Ozobc/2Fl46XNcy1XyeRqg==
+X-Received: by 2002:a17:906:10dc:b0:9ae:6ffd:be12 with SMTP id
+ v28-20020a17090610dc00b009ae6ffdbe12mr23534098ejv.76.1697106748414; 
+ Thu, 12 Oct 2023 03:32:28 -0700 (PDT)
 Received: from localhost.localdomain ([2001:b07:6467:4426:3fb7:fc38:9be:dc4c])
  by smtp.gmail.com with ESMTPSA id
- gx13-20020a170906f1cd00b009ad8d444be4sm10847131ejb.43.2023.10.12.03.32.23
+ gx13-20020a170906f1cd00b009ad8d444be4sm10847131ejb.43.2023.10.12.03.32.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 12 Oct 2023 03:32:25 -0700 (PDT)
+ Thu, 12 Oct 2023 03:32:28 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 12 Oct 2023 12:31:58 +0200
-Message-ID: <20231012103210.2915871-2-adam.duskett@amarulasolutions.com>
+Date: Thu, 12 Oct 2023 12:31:59 +0200
+Message-ID: <20231012103210.2915871-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231012103210.2915871-1-adam.duskett@amarulasolutions.com>
 References: <20231012103210.2915871-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1697106746; x=1697711546;
+ d=amarulasolutions.com; s=google; t=1697106748; x=1697711548;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=3KUCLyGQes6xxheYEJK7gtrJveDd5gkiwIgAmPsE1l4=;
- b=nK3+1WT+EhOKaab6eDQC7xpswlIw9qozCDxt6QFBvQT/iY8BxUMZXbbHrgGIGIb50d
- gI//VnSKLnc1PfyIBxu9pvOa3pXAt1OxfLEjJBkAoH2bjtOaQZYtK0TGX/7W8VD5nhEe
- cyZTlvZ28RrtqaRhErHFkkmUgsyi9MC56rNWM=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=AEZUzilz3poSj08kISaboOesZhc2zEgZRSY/AToDpCc=;
+ b=kwUmwCaXQovcVeppN8B9Fbec+LHGyshkNQR5ZL72MHWkI874nqj1OkPeTJkQosh47S
+ WVkYXmFs9aGcKaDp7vgNVvcjrArdOb9phOg9cb9HbN+cuU9gr8Aw/OaaaKSw9fHBAib0
+ y3ndZKFfkaLcxoQ8AHu7vDaUfBfJuuSShwYY0=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=nK3+1WT+
-Subject: [Buildroot] [PATCH 01/12] package/refpolicy/selinux: Add buildroot
- base policy
+ header.b=kwUmwCaX
+Subject: [Buildroot] [PATCH 02/12] package/busybox/selinux: Add buildroot
+ busybox policy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,117 +106,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This policy is the first in several that supports running Buildroot in
-enforcing mode without any denials. This is a generic set of Buildroot-specific
-permissions that are tied to the enabled repolicy modules enabled when a user
-selects the upstream version of refpolicy.
+This is a minimal selinux policy required to run busybox in enforcing mode
+without denials. It is based off of the applets that Buildroot selects by
+default.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- DEVELOPERS                             |  1 +
- package/refpolicy/selinux/buildroot.fc |  0
- package/refpolicy/selinux/buildroot.if |  1 +
- package/refpolicy/selinux/buildroot.te | 67 ++++++++++++++++++++++++++
- 4 files changed, 69 insertions(+)
- create mode 100644 package/refpolicy/selinux/buildroot.fc
- create mode 100644 package/refpolicy/selinux/buildroot.if
- create mode 100644 package/refpolicy/selinux/buildroot.te
+ DEVELOPERS                                   |  1 +
+ package/busybox/selinux/buildroot-busybox.fc |  1 +
+ package/busybox/selinux/buildroot-busybox.if |  1 +
+ package/busybox/selinux/buildroot-busybox.te | 16 ++++++++++++++++
+ 4 files changed, 19 insertions(+)
+ create mode 100644 package/busybox/selinux/buildroot-busybox.fc
+ create mode 100644 package/busybox/selinux/buildroot-busybox.if
+ create mode 100644 package/busybox/selinux/buildroot-busybox.te
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3fffc4346c..e863d06535 100644
+index e863d06535..c206f5262f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -37,6 +37,7 @@ F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-+F:	package/refpolicy/selinux/
- F:	support/testing/tests/package/test_flutter.py
+@@ -32,6 +32,7 @@ F:	package/vulkan-loader/
+ F:	package/vulkan-tools/
  
- N:	Adam Heinrich <adam@adamh.cz>
-diff --git a/package/refpolicy/selinux/buildroot.fc b/package/refpolicy/selinux/buildroot.fc
+ N:	Adam Duskett <adam.duskett@amarulasolutions.com>
++F:	package/busybox/selinux/
+ F:	package/depot-tools/
+ F:	package/flutter-engine/
+ F:	package/flutter-gallery/
+diff --git a/package/busybox/selinux/buildroot-busybox.fc b/package/busybox/selinux/buildroot-busybox.fc
 new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/package/refpolicy/selinux/buildroot.if b/package/refpolicy/selinux/buildroot.if
-new file mode 100644
-index 0000000000..acf797e604
+index 0000000000..6785e466f3
 --- /dev/null
-+++ b/package/refpolicy/selinux/buildroot.if
++++ b/package/busybox/selinux/buildroot-busybox.fc
 @@ -0,0 +1 @@
-+## <summary>Buildroot rules</summary>
-diff --git a/package/refpolicy/selinux/buildroot.te b/package/refpolicy/selinux/buildroot.te
++/lib/libbusybox*	--	gen_context(system_u:object_r:lib_t,s0)
+diff --git a/package/busybox/selinux/buildroot-busybox.if b/package/busybox/selinux/buildroot-busybox.if
 new file mode 100644
-index 0000000000..1e004452ae
+index 0000000000..60ea4b190d
 --- /dev/null
-+++ b/package/refpolicy/selinux/buildroot.te
-@@ -0,0 +1,67 @@
-+policy_module(buildroot, 1.0.0)
++++ b/package/busybox/selinux/buildroot-busybox.if
+@@ -0,0 +1 @@
++## <summary>Buildroot busybox rules</summary>
+diff --git a/package/busybox/selinux/buildroot-busybox.te b/package/busybox/selinux/buildroot-busybox.te
+new file mode 100644
+index 0000000000..e7d0f510b9
+--- /dev/null
++++ b/package/busybox/selinux/buildroot-busybox.te
+@@ -0,0 +1,16 @@
++policy_module(buildroot-busybox, 1.0.0)
 +
-+#============= chkpwd_t ==============
-+allow chkpwd_t tmpfs_t:dir search;
++#============= init_tmpfs_t ==============
++allow init_tmpfs_t self:file { lock open read write };
 +
 +#============= getty_t ==============
-+allow getty_t device_t:chr_file { getattr ioctl open read setattr write };
-+allow getty_t getty_runtime_t:file watch;
-+allow getty_t init_runtime_t:dir read;
-+allow getty_t init_runtime_t:sock_file write;
-+allow getty_t init_tmpfs_t:file { lock open read write };
-+allow getty_t init_t:unix_stream_socket connectto;
-+allow getty_t proc_t:filesystem getattr;
-+allow getty_t sysctl_kernel_t:dir search;
-+allow getty_t sysctl_kernel_t:file { open read };
-+allow getty_t sysctl_t:dir search;
-+allow getty_t tmpfs_t:dir search;
-+allow getty_t var_t:lnk_file read;
++allow getty_t local_login_t:file { lock open read write };
++allow getty_t local_login_t:process { noatsecure rlimitinh siginh };
++allow getty_t security_t:filesystem getattr;
++allow getty_t selinux_config_t:dir search;
 +
 +#============= local_login_t ==============
-+allow local_login_t bin_t:file execute;
-+allow local_login_t device_t:chr_file { ioctl open read relabelfrom relabelto write };
-+allow local_login_t init_tmpfs_t:file { lock open read write };
-+allow local_login_t proc_t:filesystem getattr;
-+allow local_login_t var_log_t:file { create lock open read write };
-+allow local_login_t var_run_t:dir { add_name write };
-+allow local_login_t var_run_t:file { create lock open read write };
++allow local_login_t device_t:chr_file { getattr setattr };
++allow local_login_t shadow_t:file { getattr open read };
++allow local_login_t sysadm_t:process { noatsecure siginh rlimitinh };
 +
-+#============= semanage_t ==============
-+allow semanage_t tmpfs_t:dir search;
-+
-+#============= syslogd_t ==============
-+allow syslogd_t device_t:chr_file { open read write };
-+allow syslogd_t self:capability audit_control;
-+allow syslogd_t self:netlink_audit_socket nlmsg_write;
-+allow syslogd_t tmpfs_t:dir { add_name search write };
-+allow syslogd_t tmpfs_t:file { append create getattr open };
-+allow syslogd_t var_t:dir { add_name write };
-+allow syslogd_t var_t:file { append create };
-+allow syslogd_t var_t:lnk_file read;
-+
-+#============= sysadm_t ==============
-+allow sysadm_t device_t:chr_file { ioctl open read write };
-+allow sysadm_t kernel_t:fd use;
-+allow sysadm_t kernel_t:system module_request;
-+allow sysadm_t node_t:tcp_socket node_bind;
-+allow sysadm_t self:capability { audit_control audit_write};
-+allow sysadm_t self:netlink_audit_socket { nlmsg_read nlmsg_write };
-+allow sysadm_t selinux_config_t:file watch;
-+allow sysadm_t tmpfs_t:dir watch;
-+allow sysadm_t unlabeled_t:file { execute map read };
-+allow sysadm_t unlabeled_t:lnk_file read;
-+allow sysadm_t var_t:dir watch;
-+
-+#============= klogd_t ==============
-+allow klogd_t device_t:chr_file { read write };
-+allow klogd_t selinux_config_t:dir search;
-+
-+#============= ifconfig_t ==============
-+allow ifconfig_t device_t:chr_file { getattr ioctl read write };
-+allow ifconfig_t proc_t:filesystem getattr;
-+allow ifconfig_t root_t:chr_file { read write };
-+allow ifconfig_t sysctl_kernel_t:dir search;
-+allow ifconfig_t sysctl_kernel_t:file { open read };
-+
-+#============= kernel_t ==============
-+allow kernel_t sysadm_t:process transition;
 -- 
 2.41.0
 
