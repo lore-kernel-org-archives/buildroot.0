@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E94ACDB46E
-	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 07:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87514CDB47E
+	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 10:32:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80BCC8228E;
-	Thu, 12 Oct 2023 07:53:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80BCC8228E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A72A60E19;
+	Thu, 12 Oct 2023 10:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A72A60E19
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kPjXdCTkXn90; Thu, 12 Oct 2023 10:32:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46F5560E2F;
+	Thu, 12 Oct 2023 10:32:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46F5560E2F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B74BE1BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 10:32:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D7368223A
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 10:32:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D7368223A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N3_dypB3gOs3; Thu, 12 Oct 2023 07:53:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B089D82289;
-	Thu, 12 Oct 2023 07:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B089D82289
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C30FF1BF95C
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 07:53:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A85C41909
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 07:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A85C41909
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r4L-fE_Hcft0 for <buildroot@lists.busybox.net>;
- Thu, 12 Oct 2023 07:53:24 +0000 (UTC)
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com
- [IPv6:2607:f8b0:4864:20::82f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 79659418B6
- for <buildroot@buildroot.org>; Thu, 12 Oct 2023 07:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79659418B6
-Received: by mail-qt1-x82f.google.com with SMTP id
- d75a77b69052e-418201cb9e9so4306161cf.0
- for <buildroot@buildroot.org>; Thu, 12 Oct 2023 00:53:24 -0700 (PDT)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0ItrOPLwp9rZ for <buildroot@lists.busybox.net>;
+ Thu, 12 Oct 2023 10:32:25 +0000 (UTC)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2981382211
+ for <buildroot@buildroot.org>; Thu, 12 Oct 2023 10:32:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2981382211
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-9b2cee40de8so158264666b.1
+ for <buildroot@buildroot.org>; Thu, 12 Oct 2023 03:32:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697097203; x=1697702003;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1697106743; x=1697711543;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=nl6xsVyb+gwHMB/1VFO0vORlrwIbVwpET2qBZrmUE2k=;
- b=djTVPmByEmxl/u3o2d9pb+5SouCJHj/GE4qiMWz9g8Qplra6N0Qw98dfOk6IdOdqp0
- yiMjC9HTspvMlvjpw5/3JfINOSyXG6xQgF5gwHTTDInfZZj13zI8YVh/p+FInpS82JJj
- i3O3OblyfVw5IJ59iw17jo+0qOLm73DcK2hZToaBZwqjdppDGZaYRyJVCmAOCCD3G2dL
- 2NRtK7CCDuJJ03yeQeM3tWokPRnc92SzEEsn7SP/SP3+t2dGSi/cnDYCarSfqls5x1iJ
- SshGwK2e6UL/a7QFm+JQOYUtehZHyDCOhloChf5xJk+B+87vDH0Moj+J6H+4ZcVsaVtE
- nFUA==
-X-Gm-Message-State: AOJu0YzeTiNn24C/Mx9/R2e8MhdZ0L7L7A3OTAc730gXEpYJDfK5aC+h
- tgHvSoPjGiHJUp5UG9C25c1TWCNPZ0kVpkbipeY=
-X-Google-Smtp-Source: AGHT+IG+4Eqwbcn+KPPKG7P3vy4r6eveY6smmJb4M0V2prK7iujsuSYk2o9jV6dFskglYSbppQryk5fcsWWdBRI0UJU=
-X-Received: by 2002:ac8:59ce:0:b0:417:b901:98ff with SMTP id
- f14-20020ac859ce000000b00417b90198ffmr29028307qtf.54.1697097203144; Thu, 12
- Oct 2023 00:53:23 -0700 (PDT)
+ bh=n+nJ0re5f7vC3XxPovunTt8KaEtQduLSQXitPdzIShk=;
+ b=d0s3Ggo+L7Vy0Wo5Fr0MwleeBbgL4SRNG6VsaOvDlhdiL/kvuIRhm2BcPvMbu2QLUp
+ ynzqddYcAhgM8IFW92lr202yLFOj/DQsOVc3oq8GMnn7yNPGZg5Mdje5EjFlp9FJRDfw
+ OkdWmy0FhcBgFFNTRb1DJjYAjNDK5KgyxwfjWxii/LlEiADTgJDZaxw5vF87ahy0Wmcp
+ FqwdDVfsMBuhnvxwS+dmZAQQ+SPAWkEMRrIDMNoKWmmlZW0fr690Arq7D/eFir6SytCD
+ DzYb64RrjgYPCi/q5Nfrzev42NIRxkeHBB3k9zz7a3WtYnG/KViDsua8Z0kNrK7xay23
+ Tejg==
+X-Gm-Message-State: AOJu0YzYBBCkBA3BV+8UhNNMFydZZD5gJdZ4uOVJgI7b3CMXzgx2w07z
+ 9TnITtN31iTzIwYY6RygJvfrzyijmkfx4PmwPlr0rQ==
+X-Google-Smtp-Source: AGHT+IFUKp8JRs0oair0rTpgqaPhY4H6IBwlwgS/PGjK7gz9pjrHQVqlxU4Iu2NNV00/9P9aVWFvJA==
+X-Received: by 2002:a17:906:3097:b0:9b2:b30f:deb with SMTP id
+ 23-20020a170906309700b009b2b30f0debmr18836330ejv.4.1697106742720; 
+ Thu, 12 Oct 2023 03:32:22 -0700 (PDT)
+Received: from localhost.localdomain ([2001:b07:6467:4426:3fb7:fc38:9be:dc4c])
+ by smtp.gmail.com with ESMTPSA id
+ gx13-20020a170906f1cd00b009ad8d444be4sm10847131ejb.43.2023.10.12.03.32.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 12 Oct 2023 03:32:22 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Thu, 12 Oct 2023 12:31:57 +0200
+Message-ID: <20231012103210.2915871-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230115125253.280257-1-nolange79@gmail.com>
- <20230115125253.280257-4-nolange79@gmail.com>
- <42d44a84-66e8-65f5-8e06-92f95b381291@mind.be>
-In-Reply-To: <42d44a84-66e8-65f5-8e06-92f95b381291@mind.be>
-From: Norbert Lange <nolange79@gmail.com>
-Date: Thu, 12 Oct 2023 09:53:12 +0200
-Message-ID: <CADYdroNrwWX59uF11nXN=81GAM0nKWd=E1LQqY1ZMuBkkyWjLw@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697097203; x=1697702003; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=nl6xsVyb+gwHMB/1VFO0vORlrwIbVwpET2qBZrmUE2k=;
- b=HRPwOnGbrGeUOXKaPC4DlOXOne7E49SGXYPjCtL80ygh6uNrY/6DhwnWc/2ok14D9o
- zuW1zCes3UP21bO+iaEsowq8xtZHQA0MiSlUPNf+FQs8H/2JOUtrNMec8ilNDVkDLpvA
- 1+FxxmAsduxmW0XAv4nlEt3yfmC1jbcqvi8zahMQpHC6aJKaxI4fai2oW4/Yl4ShZCzr
- dtItON8VTe0RnHiJ/CqfrYNCARB1Xx3vn8qCRkXmAhK2M66JHwmdhxhNlzqbWYv4JPNC
- 09Xm4MUHoq5VZkISYSTBY1YWvzWk6cuR90Qy1Ymz4e5rBbXu1Q3ADhJSZUiPxKzMgOV0
- 10Kg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HRPwOnGb
-Subject: Re: [Buildroot] [PATCH 3/7] package/skeleton-init-systemd: force
- permissions for buildroot runtime dirs
+ d=amarulasolutions.com; s=google; t=1697106743; x=1697711543;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=n+nJ0re5f7vC3XxPovunTt8KaEtQduLSQXitPdzIShk=;
+ b=TIPkCn2Cm5xRMXAvborhzMI8tDm9HGTuKxyjP3X+okjTrD5XNPCAII8oJtKP0So7ss
+ Ar15Fxj0y/IHp4MGQ2sVC2vZJG92/ID91W2nxBNrSK/t/ss1dHpCXsWDO6SfVTEwvPu0
+ FcktQR3j8tNulse2S9zyDmZHmhTny01tK8Pao=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=TIPkCn2C
+Subject: [Buildroot] [PATCH 00/12] SELinux: Basic config enforcing mode
+ support.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,98 +93,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Marek Belisko <marek.belisko@open-nandra.com>,
+ Antoine Tenart <atenart@kernel.org>, Sen Hastings <sen@phobosdpl.com>,
+ Norbert Lange <nolange79@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Di., 10. Okt. 2023 um 21:32 Uhr schrieb Arnout Vandecappelle
-<arnout@mind.be>:
->
->   Hi Norbert,
->
->   Obviously, this doesn't apply any more because I committed a different tree.
-> However...
->
-> On 15/01/2023 13:52, Norbert Lange wrote:
-> > A previous commit introduced /run/.br and /tmp/.br and a few
-> > subdirectories.
-> > Add a tmpfile to ensure the existance, ownership and permissions.
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > ---
-> >   package/skeleton-init-systemd/00-buildroot.conf        | 7 +++++++
-> >   package/skeleton-init-systemd/skeleton-init-systemd.mk | 1 +
-> >   2 files changed, 8 insertions(+)
-> >   create mode 100644 package/skeleton-init-systemd/00-buildroot.conf
-> >
-> > diff --git a/package/skeleton-init-systemd/00-buildroot.conf b/package/skeleton-init-systemd/00-buildroot.conf
-> > new file mode 100644
-> > index 0000000000..a4c7bf0576
-> > --- /dev/null
-> > +++ b/package/skeleton-init-systemd/00-buildroot.conf
-> > @@ -0,0 +1,7 @@
-> > +# Create buildroot API directories and fix permissions
-> > +
-> > +d /run/.br 0755 root root -
-> > +d /tmp/.br 0755 root root -
->
->   I don't think this tmp directory is used anywhere?
+SELinux support in Buildroot is currently outstanding! However, one last major
+issue remains: Enforcing mode needs to work out of the box correctly, without
+denials, at least with a minimal defconfig.
 
-Not yet, these would reserve the paths. One usage would
-be to use /tmp/.br as base for overlay "upper" dirs, reusing
-the /tmp filesystem instead of mounting an extra tmpfs.
-Using /run for anything else but small files is a bad idea,
-as I mentioned in response to the commit
-"package/skeleton-init-systemd: add option to use overlayfs on /var".
+This patch series seeks to remedy this problem with a basic set of policies in
+several commonly selected packages to allow a user who wishes to use SELinux in
+enforcing mode the ability to do so without having to spend several hours
+writing the same policy that everyone who wishes to do the same thing would
+have to do.
 
->
-> > +z /run/.br/bnd 0700 root root -
-> > +z /run/.br/ovl 0700 root root -
->
->   What's the point of doing this? These directories are created by the overlay
-> service file. systemd-tmpfiles is started after local-fs.target and the /var
-> overlay mount comes before, so it's the overlay service file that has to create
-> them. You could say "hey maybe there's some other service that makes use of
-> those directories" - but if so, that's another service that is going to come
-> before local-fs.target, so it _also_ has to create those directories itself...
+The packages I have selected are based on the pc_x86_64_bios_defconfig with all
+of the selinux packages selected because it was the most straightforward option
+I had to create a small, bootable system in Virtual Manager with ssh support to
+quickly build out a policy that didn't generate any denials in
+/var/log/audit.log.
 
-Not all overlays/services have to be enabled, you generally should use
-tmpfiles.d
-to ensure owner/mode of some sort of protected files.
-Prevents hijacking.
+I want to address Yann's questions from a previous discussion on IRC:
+  Q) What will be the maintenance effort?
+  A) Minimal after this patch series. As you will see, most policies are only a
+     few lines long!
 
-Think of mounting an overlay on-demand, running an system update,
-testing said update then "commiting" the (merged) overlay to a blockdevice.
-if anything breaks, you reboot and you are running the unmodified working
-system.
+  Q) How much time will we invest when we bump a package or add a dependency?
+  A) Usually none! If a package bump/new dependency requires new permissions to
+     the SELinux policy, this is a good thing! We should step back and question
+     why a package previously accessing only files and libraries suddenly needs
+     to (e.g.), change permissions on a /dev/ device!
 
->
->   There's a bit of a problem with systemd-tmpfiles, that it doesn't allow to
-> specify dependencies/ordering. That's in fact one of the reasons the factory
-> approach doesn't work so well. systemd-tmpfiles only works for services after
-> sysinit.target, really - and therefore doesn't work for anything related to
-> local filesystems.
->
->   IMHO it would have been better to put tmpfile blocks in service definitions.
-> But that's not the world we live in :-)
+Note: This series depends on the following pending patches:
+https://patchwork.ozlabs.org/project/buildroot/patch/20231009161817.2832969-1-adam.duskett@amarulasolutions.com/
+https://patchwork.ozlabs.org/project/buildroot/patch/20231009143440.1776155-1-adam.duskett@amarulasolutions.com/
+https://patchwork.ozlabs.org/project/buildroot/patch/20231009170428.2836853-1-adam.duskett@amarulasolutions.com/
 
-That's not what they are for. tmpfiles.d should set up the filesystem whether
-services are enabled or not. Erases a whole set of problems.
+Thank you for considering and reviewing this series!
 
->
->   So, I've marked as Rejected, but feel free to argue my points.
+Adam
 
-The argument would be to create & protect paths buildroot services could be
-using.
+Adam Duskett (12):
+  package/refpolicy/selinux: Add buildroot base policy
+  package/busybox/selinux: Add buildroot busybox policy
+  package/sysvinit/selinux: Add buildroot sysvinit policy
+  package/systemd/selinux: Add buildroot systemd selinux policy
+  package/openssh/selinux: Add buildroot openssh policy
+  package/audit/selinux: Add buildroot audit policy
+  package/polkit/selinux: Add buildroot polkit policy
+  package/restorecond/selinux: Add buildroot restorecond policy
+  package/acpid/selinux: Add buildroot acpid policy
+  package/network-manager/selinux: Add buildroot network-manager policy
+  package/iptables/selinux: Add buildroot iptables policy
+  package/kmod/selinux: Add buildroot kmod policy
 
->
->   Regards,
->   Arnout
->
+ DEVELOPERS                                    | 12 ++++
+ package/acpid/selinux/buildroot-acpid.fc      |  0
+ package/acpid/selinux/buildroot-acpid.if      |  1 +
+ package/acpid/selinux/buildroot-acpid.te      | 10 +++
+ package/audit/selinux/buildroot-audit.fc      |  0
+ package/audit/selinux/buildroot-audit.if      |  1 +
+ package/audit/selinux/buildroot-audit.te      | 13 ++++
+ package/busybox/selinux/buildroot-busybox.fc  |  1 +
+ package/busybox/selinux/buildroot-busybox.if  |  1 +
+ package/busybox/selinux/buildroot-busybox.te  | 16 +++++
+ .../iptables/selinux/buildroot-iptables.fc    |  0
+ .../iptables/selinux/buildroot-iptables.if    |  1 +
+ .../iptables/selinux/buildroot-iptables.te    |  5 ++
+ package/kmod/selinux/buildroot-kmod.fc        |  0
+ package/kmod/selinux/buildroot-kmod.if        |  1 +
+ package/kmod/selinux/buildroot-kmod.te        |  4 ++
+ .../selinux/buildroot-network-manager.fc      |  0
+ .../selinux/buildroot-network-manager.if      |  1 +
+ .../selinux/buildroot-network-manager.te      |  4 ++
+ package/openssh/selinux/buildroot-openssh.fc  |  0
+ package/openssh/selinux/buildroot-openssh.if  |  1 +
+ package/openssh/selinux/buildroot-openssh.te  | 23 +++++++
+ package/polkit/selinux/buildroot-polkit.fc    |  0
+ package/polkit/selinux/buildroot-polkit.if    |  1 +
+ package/polkit/selinux/buildroot-polkit.te    |  5 ++
+ package/refpolicy/selinux/buildroot.fc        |  0
+ package/refpolicy/selinux/buildroot.if        |  1 +
+ package/refpolicy/selinux/buildroot.te        | 67 +++++++++++++++++++
+ .../selinux/buildroot-restorecond.fc          |  0
+ .../selinux/buildroot-restorecond.if          |  1 +
+ .../selinux/buildroot-restorecond.te          | 13 ++++
+ package/systemd/selinux/buildroot-systemd.fc  |  0
+ package/systemd/selinux/buildroot-systemd.if  |  1 +
+ package/systemd/selinux/buildroot-systemd.te  | 66 ++++++++++++++++++
+ .../sysvinit/selinux/buildroot-sysvinit.fc    |  0
+ .../sysvinit/selinux/buildroot-sysvinit.if    |  1 +
+ .../sysvinit/selinux/buildroot-sysvinit.te    |  8 +++
+ 37 files changed, 259 insertions(+)
+ create mode 100644 package/acpid/selinux/buildroot-acpid.fc
+ create mode 100644 package/acpid/selinux/buildroot-acpid.if
+ create mode 100644 package/acpid/selinux/buildroot-acpid.te
+ create mode 100644 package/audit/selinux/buildroot-audit.fc
+ create mode 100644 package/audit/selinux/buildroot-audit.if
+ create mode 100644 package/audit/selinux/buildroot-audit.te
+ create mode 100644 package/busybox/selinux/buildroot-busybox.fc
+ create mode 100644 package/busybox/selinux/buildroot-busybox.if
+ create mode 100644 package/busybox/selinux/buildroot-busybox.te
+ create mode 100644 package/iptables/selinux/buildroot-iptables.fc
+ create mode 100644 package/iptables/selinux/buildroot-iptables.if
+ create mode 100644 package/iptables/selinux/buildroot-iptables.te
+ create mode 100644 package/kmod/selinux/buildroot-kmod.fc
+ create mode 100644 package/kmod/selinux/buildroot-kmod.if
+ create mode 100644 package/kmod/selinux/buildroot-kmod.te
+ create mode 100644 package/network-manager/selinux/buildroot-network-manager.fc
+ create mode 100644 package/network-manager/selinux/buildroot-network-manager.if
+ create mode 100644 package/network-manager/selinux/buildroot-network-manager.te
+ create mode 100644 package/openssh/selinux/buildroot-openssh.fc
+ create mode 100644 package/openssh/selinux/buildroot-openssh.if
+ create mode 100644 package/openssh/selinux/buildroot-openssh.te
+ create mode 100644 package/polkit/selinux/buildroot-polkit.fc
+ create mode 100644 package/polkit/selinux/buildroot-polkit.if
+ create mode 100644 package/polkit/selinux/buildroot-polkit.te
+ create mode 100644 package/refpolicy/selinux/buildroot.fc
+ create mode 100644 package/refpolicy/selinux/buildroot.if
+ create mode 100644 package/refpolicy/selinux/buildroot.te
+ create mode 100644 package/restorecond/selinux/buildroot-restorecond.fc
+ create mode 100644 package/restorecond/selinux/buildroot-restorecond.if
+ create mode 100644 package/restorecond/selinux/buildroot-restorecond.te
+ create mode 100644 package/systemd/selinux/buildroot-systemd.fc
+ create mode 100644 package/systemd/selinux/buildroot-systemd.if
+ create mode 100644 package/systemd/selinux/buildroot-systemd.te
+ create mode 100644 package/sysvinit/selinux/buildroot-sysvinit.fc
+ create mode 100644 package/sysvinit/selinux/buildroot-sysvinit.if
+ create mode 100644 package/sysvinit/selinux/buildroot-sysvinit.te
 
-Regards, Norbert
+-- 
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
