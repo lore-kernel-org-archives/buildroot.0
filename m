@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4563ACDB46E
-	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 16:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37FBCCDB46E
+	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 16:33:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CB52826A4;
-	Thu, 12 Oct 2023 16:32:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CB52826A4
+	by smtp1.osuosl.org (Postfix) with ESMTP id D999182139;
+	Thu, 12 Oct 2023 16:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D999182139
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hdvdr5NBWxD2; Thu, 12 Oct 2023 16:32:33 +0000 (UTC)
+	with ESMTP id HgYx62K8lHwP; Thu, 12 Oct 2023 16:33:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B51778266D;
-	Thu, 12 Oct 2023 16:32:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B51778266D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 93FD01BF2F8
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:32:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 331BB821B1;
+	Thu, 12 Oct 2023 16:33:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 331BB821B1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7500D1BF2F8
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DF37402D7
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:32:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DF37402D7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E6F6821B1
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:33:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E6F6821B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 79ZqsQi1hdrh for <buildroot@lists.busybox.net>;
- Thu, 12 Oct 2023 16:32:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5019240018
- for <buildroot@buildroot.org>; Thu, 12 Oct 2023 16:32:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5019240018
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3880A84616; Thu, 12 Oct 2023 16:32:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f9pkWOxPK4xD for <buildroot@lists.busybox.net>;
+ Thu, 12 Oct 2023 16:33:38 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1836582139
+ for <buildroot@buildroot.org>; Thu, 12 Oct 2023 16:33:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1836582139
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1BB0F1C0002;
+ Thu, 12 Oct 2023 16:33:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qqycr-003g3i-QI; Thu, 12 Oct 2023 18:33:29 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 12 Oct 2023 18:31:39 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: ede5bd5859e27b2e2d81464e671836a8df7a4c94
-X-Git-Newrev: 5567239034016358b250d2d314ff141111508d7c
-X-Patchwork-Hint: ignore
-Message-Id: <20231012163223.3880A84616@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x]
- board/qemu/aarch64-virt/linux.config: enable base ACPI support
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <ZNWRcJrlXwFFkUtG@waldemar-brodkorb.de>
+ <20230930112539.5dc62e1d@windsurf>
+Date: Thu, 12 Oct 2023 18:33:29 +0200
+In-Reply-To: <20230930112539.5dc62e1d@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Sat, 30 Sep 2023 11:25:39 +0200")
+Message-ID: <87y1g794x2.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2] package/batman-adv: update to 2023.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +63,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5567239034016358b250d2d314ff141111508d7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-When testing the virt machine with EDK2, the buildroot 6.1 kernel
-will not boot as it has no base ACPI support. Whilst you can run
-qemu with the -no-acpi option, it would help if basic ACPI support
-was there as otherwise there is no output from the kernel post the
-ACPI BIOS initialisation.
+ > On Fri, 11 Aug 2023 03:40:00 +0200
+ > Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b1f9c511626e2a91f99ed6113ff29a504a717711)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/qemu/aarch64-virt/linux.config | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ >> Older Batman-adv versions fail to build with kernel 6.4.x
+ >> with following error message:
+ >> bat_iv_ogm.c:283:18: error: implicit declaration of function 'prandom_u32_max'; did you mean 'prandom_u32_state'? [-Werror=implicit-function-declaration]
+ >> 
+ >> prandom_u32_max got removed in commit 3c202d14a9d73fb63c3dccb18feac5618c21e1c4
+ >> from the Linux kernel.
+ >> 
+ >> Fixes:
+ >> - http://autobuild.buildroot.net/results/205/2055ac3805d1941c148f1681a224570055dd83cd
+ >> 
+ >> For other changes in this release, see:
+ >> https://www.open-mesh.org/news/112
+ >> 
+ >> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ >> ---
+ >> v1 -> v2:
+ >> - move locally computed sha256 hash to the right place, mentioned
+ >> by Thomas Petazzoni
+ >> ---
+ >> package/batman-adv/batman-adv.hash | 7 ++++---
+ >> package/batman-adv/batman-adv.mk   | 2 +-
+ >> 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
-index f9763b73b7..971b9fcf86 100644
---- a/board/qemu/aarch64-virt/linux.config
-+++ b/board/qemu/aarch64-virt/linux.config
-@@ -12,8 +12,7 @@ CONFIG_SCHED_AUTOGROUP=y
- CONFIG_PROFILING=y
- CONFIG_ARCH_VEXPRESS=y
- CONFIG_COMPAT=y
--CONFIG_FW_CFG_SYSFS=y
--CONFIG_FW_CFG_SYSFS_CMDLINE=y
-+CONFIG_ACPI=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_BLK_DEV_BSGLIB=y
-@@ -34,6 +33,8 @@ CONFIG_PCI=y
- CONFIG_PCI_HOST_GENERIC=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_FW_CFG_SYSFS=y
-+CONFIG_FW_CFG_SYSFS_CMDLINE=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_CHR_DEV_SG=y
+ > Applied to master, thanks.
+
+Committed to 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
