@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DE4CDB46E
-	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 16:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFA13CDB46E
+	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 16:47:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59109405BE;
-	Thu, 12 Oct 2023 16:42:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59109405BE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 72970405BE;
+	Thu, 12 Oct 2023 16:47:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72970405BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TYKXr-H0r3D2; Thu, 12 Oct 2023 16:42:28 +0000 (UTC)
+	with ESMTP id gjj8XPhjuPAb; Thu, 12 Oct 2023 16:47:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A8D841532;
-	Thu, 12 Oct 2023 16:42:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A8D841532
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B45061BF2F8
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:42:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C0F92400DC;
+	Thu, 12 Oct 2023 16:47:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0F92400DC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E01E81BF2F8
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A06E41499
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:42:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A06E41499
+ by smtp3.osuosl.org (Postfix) with ESMTP id B719060644
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:47:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B719060644
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CSW_P8W0p_YH for <buildroot@lists.busybox.net>;
- Thu, 12 Oct 2023 16:41:59 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26ADD414C6
- for <buildroot@buildroot.org>; Thu, 12 Oct 2023 16:41:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26ADD414C6
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 13C4384623; Thu, 12 Oct 2023 16:41:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q_j1fiV65HB9 for <buildroot@lists.busybox.net>;
+ Thu, 12 Oct 2023 16:47:48 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 41FD160608
+ for <buildroot@buildroot.org>; Thu, 12 Oct 2023 16:47:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41FD160608
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 12046FF80A;
+ Thu, 12 Oct 2023 16:47:43 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qqyqX-003gaW-KA; Thu, 12 Oct 2023 18:47:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 12 Oct 2023 18:39:42 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 7704baa480556638ce51b42a5df087d9a56555fb
-X-Git-Newrev: 52369b5b7a2098594457d2f020f0ac5723e2b95e
-X-Patchwork-Hint: ignore
-Message-Id: <20231012164159.13C4384623@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] boot/grub2: fix incompat
- e2fsprogs feature use
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230916135435.113400-1-fontaine.fabrice@gmail.com>
+ <87edigaro0.fsf@48ers.dk>
+Date: Thu, 12 Oct 2023 18:47:37 +0200
+In-Reply-To: <87edigaro0.fsf@48ers.dk> (Peter Korsgaard's message of "Sat, 30
+ Sep 2023 12:20:31 +0200")
+Message-ID: <87pm1j949i.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/linux-pam: needs gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,176 +63,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: =?utf-8?Q?Herv=C3=A9?= Codina <herve.codina@bootlin.com>,
+ Karoly Kasza <kaszak@gmail.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52369b5b7a2098594457d2f020f0ac5723e2b95e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-With bump of package/e2fsprogs to 1.47.0 [1] a freshly generated
-ext4 fs has unfortunately different default features enabled
-(e.g. metadata_csum_seed). This and some other newer fs features
-(e.g. large_dir) are however not supported by our grub2.
-Thus, newly generated ext-based rootfs won't be recognized by grub2
-and are therefore not bootable/usable from grub2 anymore. This is
-an issue already known to other Linux derivates [2],[3],[4].
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> linux-pam raises the following build failure with gcc 4.8 since bump to
+ >> version 1.5.3 in commit f8147e27cdac8f998ec6644a09ce4e8d62b6433c and
+ >> https://github.com/linux-pam/linux-pam/commit/8f9816b57e3a475fc2d2cbb106c188b778098f85:
 
-This commit introduces two additional upstream patches to
-package/grub2 which adds EXT4_FEATURE_INCOMPAT_CSUM_SEED and
-EXT4_FEATURE_INCOMPAT_LARGEDIR to the EXT2_DRIVER_IGNORED_INCOMPAT
-list of ignored incompatible ext features, allowing grub2 to
-use ext filesystems with these newer default feature sets.
+ >> pam_access.c: In function 'pam_sm_authenticate':
+ >> pam_access.c:1084:13: error: 'for' loop initial declarations are only allowed in C99 mode
+ >> for (int i = 0; filename_list[i] != NULL; i++) {
+ >> ^
 
-[1] https://git.buildroot.net/buildroot/commit/?id=6a21733f839478d902f3eab287a82b456e55f708
-[2] https://bugs.launchpad.net/ubuntu/+source/grub2/+bug/1844012
-[3] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1031325
-[4] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1030939
+ >> Those build failures could be fixed by adding -std=c99 but then the
+ >> build will fails because stdadtomic.h is mandatory since
+ >> https://github.com/linux-pam/linux-pam/commit/a35e092e24ee7632346a0e1b4a203c04d4cd2c62
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9c25f1b51eeb988449ad0f1f524283ef5361ee4d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...xt2-Ignore-checksum-seed-incompat-feature.patch | 61 ++++++++++++++++++++++
- ...xt2-Ignore-the-large_dir-incompat-feature.patch | 60 +++++++++++++++++++++
- 2 files changed, 121 insertions(+)
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/9b2ba987d2c873f4a7caea72707acb655279d16b
 
-diff --git a/boot/grub2/0019-fs-ext2-Ignore-checksum-seed-incompat-feature.patch b/boot/grub2/0019-fs-ext2-Ignore-checksum-seed-incompat-feature.patch
-new file mode 100644
-index 0000000000..9a913e2279
---- /dev/null
-+++ b/boot/grub2/0019-fs-ext2-Ignore-checksum-seed-incompat-feature.patch
-@@ -0,0 +1,61 @@
-+From 7fd5feff97c4b1f446f8fcf6d37aca0c64e7c763 Mon Sep 17 00:00:00 2001
-+From: Javier Martinez Canillas <javierm@redhat.com>
-+Date: Fri, 11 Jun 2021 21:36:16 +0200
-+Subject: [PATCH] fs/ext2: Ignore checksum seed incompat feature
-+
-+This incompat feature is used to denote that the filesystem stored its
-+metadata checksum seed in the superblock. This is used to allow tune2fs
-+changing the UUID on a mounted metdata_csum filesystem without having
-+to rewrite all the disk metadata. However, the GRUB doesn't use the
-+metadata checksum at all. So, it can just ignore this feature if it
-+is enabled. This is consistent with the GRUB filesystem code in general
-+which just does a best effort to access the filesystem's data.
-+
-+The checksum seed incompat feature has to be removed from the ignore
-+list if the support for metadata checksum verification is added to the
-+GRUB ext2 driver later.
-+
-+Suggested-by: Eric Sandeen <esandeen@redhat.com>
-+Suggested-by: Lukas Czerner <lczerner@redhat.com>
-+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-+Reviewed-by: Lukas Czerner <lczerner@redhat.com>
-+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
-+Upstream: 7fd5feff97c4b1f446f8fcf6d37aca0c64e7c763
-+Signed-off-by: Jens Maus <mail@jens-maus.de>
-+---
-+ grub-core/fs/ext2.c | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/grub-core/fs/ext2.c b/grub-core/fs/ext2.c
-+index e7dd78e66..4953a1591 100644
-+--- a/grub-core/fs/ext2.c
-++++ b/grub-core/fs/ext2.c
-+@@ -103,6 +103,7 @@ GRUB_MOD_LICENSE ("GPLv3+");
-+ #define EXT4_FEATURE_INCOMPAT_64BIT		0x0080
-+ #define EXT4_FEATURE_INCOMPAT_MMP		0x0100
-+ #define EXT4_FEATURE_INCOMPAT_FLEX_BG		0x0200
-++#define EXT4_FEATURE_INCOMPAT_CSUM_SEED		0x2000
-+ #define EXT4_FEATURE_INCOMPAT_ENCRYPT          0x10000
-+ 
-+ /* The set of back-incompatible features this driver DOES support. Add (OR)
-+@@ -123,10 +124,15 @@ GRUB_MOD_LICENSE ("GPLv3+");
-+  * mmp:            Not really back-incompatible - was added as such to
-+  *                 avoid multiple read-write mounts. Safe to ignore for this
-+  *                 RO driver.
-++ * checksum seed:  Not really back-incompatible - was added to allow tools
-++ *                 such as tune2fs to change the UUID on a mounted metadata
-++ *                 checksummed filesystem. Safe to ignore for now since the
-++ *                 driver doesn't support checksum verification. However, it
-++ *                 has to be removed from this list if the support is added later.
-+  */
-+ #define EXT2_DRIVER_IGNORED_INCOMPAT ( EXT3_FEATURE_INCOMPAT_RECOVER \
-+-				     | EXT4_FEATURE_INCOMPAT_MMP)
-+-
-++				     | EXT4_FEATURE_INCOMPAT_MMP \
-++				     | EXT4_FEATURE_INCOMPAT_CSUM_SEED)
-+ 
-+ #define EXT3_JOURNAL_MAGIC_NUMBER	0xc03b3998U
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/boot/grub2/0020-fs-ext2-Ignore-the-large_dir-incompat-feature.patch b/boot/grub2/0020-fs-ext2-Ignore-the-large_dir-incompat-feature.patch
-new file mode 100644
-index 0000000000..43b182f968
---- /dev/null
-+++ b/boot/grub2/0020-fs-ext2-Ignore-the-large_dir-incompat-feature.patch
-@@ -0,0 +1,60 @@
-+From 2e9fa73a040462b81bfbfe56c0bc7ad2d30b446b Mon Sep 17 00:00:00 2001
-+From: Theodore Ts'o <tytso@mit.edu>
-+Date: Tue, 30 Aug 2022 22:41:59 -0400
-+Subject: [PATCH] fs/ext2: Ignore the large_dir incompat feature
-+
-+Recently, ext4 added the large_dir feature, which adds support for
-+a 3 level htree directory support.
-+
-+The GRUB supports existing file systems with htree directories by
-+ignoring their existence, and since the index nodes for the hash tree
-+look like deleted directory entries (by design), the GRUB can simply do
-+a brute force O(n) linear search of directories. The same is true for
-+3 level deep htrees indicated by large_dir feature flag.
-+
-+Hence, it is safe for the GRUB to ignore the large_dir incompat feature.
-+
-+Fixes: https://savannah.gnu.org/bugs/?61606
-+
-+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
-+Upstream: 2e9fa73a040462b81bfbfe56c0bc7ad2d30b446b
-+Signed-off-by: Jens Maus <mail@jens-maus.de>
-+---
-+ grub-core/fs/ext2.c | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/grub-core/fs/ext2.c b/grub-core/fs/ext2.c
-+index 0989e26e1..e1cc5e62a 100644
-+--- a/grub-core/fs/ext2.c
-++++ b/grub-core/fs/ext2.c
-+@@ -104,6 +104,7 @@ GRUB_MOD_LICENSE ("GPLv3+");
-+ #define EXT4_FEATURE_INCOMPAT_MMP		0x0100
-+ #define EXT4_FEATURE_INCOMPAT_FLEX_BG		0x0200
-+ #define EXT4_FEATURE_INCOMPAT_CSUM_SEED		0x2000
-++#define EXT4_FEATURE_INCOMPAT_LARGEDIR		0x4000 /* >2GB or 3 level htree */
-+ #define EXT4_FEATURE_INCOMPAT_ENCRYPT          0x10000
-+ 
-+ /* The set of back-incompatible features this driver DOES support. Add (OR)
-+@@ -129,10 +130,17 @@ GRUB_MOD_LICENSE ("GPLv3+");
-+  *                 checksummed filesystem. Safe to ignore for now since the
-+  *                 driver doesn't support checksum verification. However, it
-+  *                 has to be removed from this list if the support is added later.
-++ * large_dir:      Not back-incompatible given that the GRUB ext2 driver does
-++ *                 not implement EXT2_FEATURE_COMPAT_DIR_INDEX. If the GRUB
-++ *                 eventually supports the htree feature (aka dir_index)
-++ *                 it should support 3 level htrees and then move
-++ *                 EXT4_FEATURE_INCOMPAT_LARGEDIR to
-++ *                 EXT2_DRIVER_SUPPORTED_INCOMPAT.
-+  */
-+ #define EXT2_DRIVER_IGNORED_INCOMPAT ( EXT3_FEATURE_INCOMPAT_RECOVER \
-+ 				     | EXT4_FEATURE_INCOMPAT_MMP \
-+-				     | EXT4_FEATURE_INCOMPAT_CSUM_SEED)
-++				     | EXT4_FEATURE_INCOMPAT_CSUM_SEED \
-++				     | EXT4_FEATURE_INCOMPAT_LARGEDIR)
-+ 
-+ #define EXT3_JOURNAL_MAGIC_NUMBER	0xc03b3998U
-+ 
-+-- 
-+2.34.1
-+
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ > Committed, thanks.
+
+Committed to 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
