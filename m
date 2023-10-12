@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54965CDB46E
-	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 16:40:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CBAACDB47E
+	for <buildroot@archiver.kernel.org>; Thu, 12 Oct 2023 16:42:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E75F781470;
-	Thu, 12 Oct 2023 16:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E75F781470
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8AFB140018;
+	Thu, 12 Oct 2023 16:42:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AFB140018
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dyHCAdm614vC; Thu, 12 Oct 2023 16:40:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WeABCn8hYzML; Thu, 12 Oct 2023 16:42:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CA25815CD;
-	Thu, 12 Oct 2023 16:40:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CA25815CD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E108D1BF2F8
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:40:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2A3C402D7;
+	Thu, 12 Oct 2023 16:42:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2A3C402D7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 499A81BF2F8
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C41AB817A7
- for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C41AB817A7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2EBC8414CD
+ for <buildroot@lists.busybox.net>; Thu, 12 Oct 2023 16:42:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EBC8414CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WeUMU3oX9mg2 for <buildroot@lists.busybox.net>;
- Thu, 12 Oct 2023 16:40:40 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9733A815CD
- for <buildroot@buildroot.org>; Thu, 12 Oct 2023 16:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9733A815CD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EC6F92000C;
- Thu, 12 Oct 2023 16:40:36 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qqyje-003gJp-8d; Thu, 12 Oct 2023 18:40:30 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U_6myiY0DnUp for <buildroot@lists.busybox.net>;
+ Thu, 12 Oct 2023 16:41:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F58441499
+ for <buildroot@buildroot.org>; Thu, 12 Oct 2023 16:41:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F58441499
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0762D84622; Thu, 12 Oct 2023 16:41:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Jens Maus via buildroot <buildroot@buildroot.org>
-References: <20230917200134.1251786-1-mail@jens-maus.de>
- <20230922184842.152406-1-mail@jens-maus.de> <87il7sasu8.fsf@48ers.dk>
-Date: Thu, 12 Oct 2023 18:40:30 +0200
-In-Reply-To: <87il7sasu8.fsf@48ers.dk> (Peter Korsgaard's message of "Sat, 30
- Sep 2023 11:55:11 +0200")
-Message-ID: <87ttqv94ld.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] boot/grub2: fix incompat e2fsprogs
- feature use
+To: buildroot@buildroot.org
+Date: Thu, 12 Oct 2023 18:33:11 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 5567239034016358b250d2d314ff141111508d7c
+X-Git-Newrev: 7704baa480556638ce51b42a5df087d9a56555fb
+X-Patchwork-Hint: ignore
+Message-Id: <20231012164159.0762D84622@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/batman-adv:
+ update to 2023.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,49 +57,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jens Maus <mail@jens-maus.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7704baa480556638ce51b42a5df087d9a56555fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
->>>>> "Jens" == Jens Maus via buildroot <buildroot@buildroot.org> writes:
- >> With bump of package/e2fsprogs to 1.47.0 [1] a freshly generated
- >> ext4 fs has unfortunately different default features enabled
- >> (e.g. metadata_csum_seed). This and some other newer fs features
- >> (e.g. large_dir) are however not supported by our grub2.
- >> Thus, newly generated ext-based rootfs won't be recognized by grub2
- >> and are therefore not bootable/usable from grub2 anymore. This is
- >> an issue already known to other Linux derivates [2],[3],[4].
+Older Batman-adv versions fail to build with kernel 6.4.x
+with following error message:
+bat_iv_ogm.c:283:18: error: implicit declaration of function 'prandom_u32_max'; did you mean 'prandom_u32_state'? [-Werror=implicit-function-declaration]
 
- >> This commit introduces two additional upstream patches to
- >> package/grub2 which adds EXT4_FEATURE_INCOMPAT_CSUM_SEED and
- >> EXT4_FEATURE_INCOMPAT_LARGEDIR to the EXT2_DRIVER_IGNORED_INCOMPAT
- >> list of ignored incompatible ext features, allowing grub2 to
- >> use ext filesystems with these newer default feature sets.
+prandom_u32_max got removed in commit 3c202d14a9d73fb63c3dccb18feac5618c21e1c4
+from the Linux kernel.
 
- >> [1] https://git.buildroot.net/buildroot/commit/?id=6a21733f839478d902f3eab287a82b456e55f708
- >> [2] https://bugs.launchpad.net/ubuntu/+source/grub2/+bug/1844012
- >> [3] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1031325
- >> [4] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1030939
+Fixes:
+ - http://autobuild.buildroot.net/results/205/2055ac3805d1941c148f1681a224570055dd83cd
 
- >> Signed-off-by: Jens Maus <mail@jens-maus.de>
+For other changes in this release, see:
+https://www.open-mesh.org/news/112
 
- >> ---
- >> Changes v1 -> v2:
- >> - added Signed-off-by and Upstream link in patches (Arnout)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 01ec4a39f5ceb83c62b0040067ba53197a0a6843)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/batman-adv/batman-adv.hash | 7 ++++---
+ package/batman-adv/batman-adv.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
- > Committed, thanks.
-
- > Hopefully other bootloaders will not have similar issues.
-
-Committed to 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
+index 14a92c231a..b95dfa34dd 100644
+--- a/package/batman-adv/batman-adv.hash
++++ b/package/batman-adv/batman-adv.hash
+@@ -1,7 +1,8 @@
+-# From https://downloads.open-mesh.org/batman/releases/batman-adv-2022.2/batman-adv-2022.2.tar.gz.sha1
+-sha1  e1829e10fc37ea674a20cb9ba1d6c1483042fbfa  batman-adv-2022.2.tar.gz
++# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2023.1.tar.gz.sha1
++sha1  e3d6e8d4db772156d7ad021b9a166832633a2ea5  batman-adv-2023.1.tar.gz
++# locally computed
++sha256  f46a7286660a5ec3506a1be7ef60b471c51ac70550597d598040479ab7b936b8  batman-adv-2022.3.tar.gz
+ 
+ # Hash for license files
+-sha256  218ffb534fead1c9b5b0d90ec1b2fba688209cdf00e861bece1cbf469fe69953  batman-adv-2022.3.tar.gz
+ sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index 75b8292ee1..5b50572d11 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BATMAN_ADV_VERSION = 2022.3
++BATMAN_ADV_VERSION = 2023.1
+ BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
+ BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
+ BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
