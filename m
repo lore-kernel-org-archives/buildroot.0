@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF547CDB482
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45117CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:47:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A7C86F555;
-	Fri, 13 Oct 2023 14:47:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A7C86F555
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2542616B5;
+	Fri, 13 Oct 2023 14:47:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2542616B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I82mt0sXXAcA; Fri, 13 Oct 2023 14:47:12 +0000 (UTC)
+	with ESMTP id X8pLaY72W9ah; Fri, 13 Oct 2023 14:47:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B66460B8C;
-	Fri, 13 Oct 2023 14:47:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B66460B8C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25B296F555;
+	Fri, 13 Oct 2023 14:47:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25B296F555
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ED4801BF33A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F016A1BF33A
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EBB2381EC0
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBB2381EC0
+ by smtp1.osuosl.org (Postfix) with ESMTP id C4DB7814B3
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4DB7814B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RTjO3MgcyF4l for <buildroot@lists.busybox.net>;
+ with ESMTP id odP6QmcTRvH4 for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DBCDA81E68
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0F4B81E67
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBCDA81E68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0F4B81E67
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC23D846D2; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
+ id BD25E847A6; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 16:41:21 +0200
+Date: Fri, 13 Oct 2023 16:39:00 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ec4bbdeaf86fdc10babef276ed605742050e48e7
-X-Git-Newrev: 3038bcc6c1532123fbcc8e22a4e684aaadd94723
+X-Git-Oldrev: fe1dd05d4cc5f23eb27ea64ad87aab2508a4ce70
+X-Git-Newrev: ec4bbdeaf86fdc10babef276ed605742050e48e7
 X-Patchwork-Hint: ignore
-Message-Id: <20231013144605.CC23D846D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-generic.mk:
- fix rule order for reinstall/rebuild/reconfigure
+Message-Id: <20231013144605.BD25E847A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/tar: security
+ bump to version 1.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3038bcc6c1532123fbcc8e22a4e684aaadd94723
+commit: https://git.buildroot.net/buildroot/commit/?id=ec4bbdeaf86fdc10babef276ed605742050e48e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The reinstall, rebuild and reconfigure commands rely on the
-left-to-right order of evaluation of the dependencies to make sure that
-the stamp files are removed before attempting to rebuild. However, this
-order of evaluation is not guaranteed. In particular, if top-level
-parallel build is enabled, they are executed in parallel and the stamp
-file may not have been removed yet when it is evaluated to decide if
-rebuild has to be done.
+- Fix CVE-2022-48303: GNU Tar through 1.34 has a one-byte out-of-bounds
+  read that results in use of uninitialized memory for a conditional
+  jump. Exploitation to change the flow of control has not been
+  demonstrated. The issue occurs in from_header in list.c via a V7
+  archive in which mtime has approximately 11 whitespace characters.
+- Update hash of COPYING (http replaced by https)
 
-Since make 4.4, it is possible to reproduce this issue by passing
-`--shuffle=reverse` to the make commandline.
+https://lists.gnu.org/archive/html/info-gnu/2023-07/msg00005.html
 
-To solve this, add a .WAIT directive between the clean and
-install/build/configure dependencies. .WAIT was introduced in make 4.4
-as well. It makes sure that the dependencies on the left are evaluated
-before the dependencies on the right - exactly what we want here.
-
-Earlier versions of make don't know about .WAIT, so we need to add a
-.PHONY dependency to effectively ignore it.
-
-Note that this doesn't fix the problem for make versions earlier than
-4.4. However, the issue isn't really that important: reinstall, rebuild
-and reconfigure are development tools, they're not fully reliable to
-begin with, and it's anyway less likely that someone uses `make -j` when
-doing a reinstall/rebuild/reconfigure.
-
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-Reported-by: James Hilliard <james.hilliard1@gmail.com>
-(cherry picked from commit 7e3105d5c8bd9ab31e728af9732a67d203c0a2e4)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d4d483451f0a305781b94b96c15a6cf4b489cd84)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile               | 3 +++
- package/pkg-generic.mk | 6 +++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/tar/tar.hash | 6 +++---
+ package/tar/tar.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index a7b7729946..67d3f3105a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1270,4 +1270,7 @@ include docs/manual/manual.mk
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+index 1914a9f3b4..108a95ee62 100644
+--- a/package/tar/tar.hash
++++ b/package/tar/tar.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking signature
+-sha256  63bebd26879c5e1eea4352f0d03c991f966aeb3ddeb3c7445c902568d5411d28  tar-1.34.tar.xz
+-sha256  51337b19c71df92cd4f51c50efe4dc6ddc267d31fd54679be9e9bc2e6ce8132b  tar-1.34.cpio.gz
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  4d62ff37342ec7aed748535323930c7cf94acf71c3591882b26a7ea50f3edc16  tar-1.35.tar.xz
++sha256  c77a38fcf25b21fd8209d20d35638744344ded239cfc7df80138bf46d3c6b16d  tar-1.35.cpio.gz
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 690a5952ba..eea112ebc7 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- .PHONY: $(noconfig_targets)
- 
-+# .WAIT was introduced in make 4.4. For older make, define it as phony.
-+.PHONY: .WAIT
-+
- endif #umask / $(CURDIR) / $(O)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 82187d7db9..1796f29b1f 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1057,17 +1057,17 @@ endif
- 			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
- 			rm -f $$($(2)_TARGET_INSTALL_HOST)
- 
--$(1)-reinstall:		$(1)-clean-for-reinstall $(1)
-+$(1)-reinstall:		$(1)-clean-for-reinstall .WAIT $(1)
- 
- $(1)-clean-for-rebuild: $(1)-clean-for-reinstall
- 			rm -f $$($(2)_TARGET_BUILD)
- 
--$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
-+$(1)-rebuild:		$(1)-clean-for-rebuild .WAIT $(1)
- 
- $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
- 			rm -f $$($(2)_TARGET_CONFIGURE)
- 
--$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
-+$(1)-reconfigure:	$(1)-clean-for-reconfigure .WAIT $(1)
- 
- # define the PKG variable for all targets, containing the
- # uppercase package variable prefix
+-TAR_VERSION = 1.34
++TAR_VERSION = 1.35
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
+ # busybox installs in /bin, so we need tar to install as well in /bin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
