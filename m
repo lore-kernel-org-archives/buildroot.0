@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7719CDB483
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 15:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23AA4CDB484
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 15:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6785460BC7;
-	Fri, 13 Oct 2023 15:04:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6785460BC7
+	by smtp3.osuosl.org (Postfix) with ESMTP id D26E46F576;
+	Fri, 13 Oct 2023 15:05:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D26E46F576
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5cd8aQ7g9IF7; Fri, 13 Oct 2023 15:04:49 +0000 (UTC)
+	with ESMTP id YaweXNkcDGg3; Fri, 13 Oct 2023 15:05:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5870560C1F;
-	Fri, 13 Oct 2023 15:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5870560C1F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 020511BF2C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A29460BEE;
+	Fri, 13 Oct 2023 15:05:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A29460BEE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E3F31BF997
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:04:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D031080E3A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D031080E3A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 163FF4049A
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:04:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 163FF4049A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id un7uU2hCO6UB for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 15:04:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TyVPfWrk2svT for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 15:04:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB15180C2A
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 15:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB15180C2A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F44C40543
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 15:04:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F44C40543
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6DF5847B5; Fri, 13 Oct 2023 15:04:45 +0000 (UTC)
+ id EE5FC847B8; Fri, 13 Oct 2023 15:04:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 16:57:51 +0200
+Date: Fri, 13 Oct 2023 17:03:52 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: cf2aef7992e423f89334257310a3bb867c997e24
-X-Git-Newrev: 7590babc70e7994ebdb940d257734925aef511a0
+X-Git-Oldrev: 880ddba3f39d95f3953610a9b4f18c8a4f8dd275
+X-Git-Newrev: 90e5c7cdb83c9b50f1ec60c75fdc56baa73e1bb1
 X-Patchwork-Hint: ignore
-Message-Id: <20231013150445.C6DF5847B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/wpewebkit: needs
- >= GCC 9
+Message-Id: <20231013150445.EE5FC847B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libmodplug: use a
+ full-length hash as version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7590babc70e7994ebdb940d257734925aef511a0
+commit: https://git.buildroot.net/buildroot/commit/?id=90e5c7cdb83c9b50f1ec60c75fdc56baa73e1bb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Raise the minimal GCC version to 9.3, which is required since wpewebkit-2.40.0 [1].
-Similar to commit 09af6d8bfd8ece6b021b877aaf5cbd36a78ffad9,
-we do check on >= GCC 9, because we can't check on >= GCC 9.3.
+Commit 369ff9a88ff8 (package/libmodplug: update to git version)
+improperly used a short hash as version, so switch to the full-length
+hash.
 
-[1] https://github.com/WebKit/WebKit/commit/f9c142d9b5b8c48fe310bc6d3620e634901b2930
+Github use the full-length hash when it creates the top-level directory
+of the generated archive, so the hash of the archive does not in fact
+change, only its filename. This is perfectly fine fine our handling of
+s.b.o.
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 603fa625b14c849ef42262c7b755276fa9231c25)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 80e94c76169fd15d2433b18a9e54d6a4f3c4ff18)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libmodplug/libmodplug.hash | 2 +-
+ package/libmodplug/libmodplug.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 7a8dc557c3..ea2159945d 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -16,12 +16,12 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+diff --git a/package/libmodplug/libmodplug.hash b/package/libmodplug/libmodplug.hash
+index 01ff71014c..8aaf500a3a 100644
+--- a/package/libmodplug/libmodplug.hash
++++ b/package/libmodplug/libmodplug.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d145910ca10c3ecab0019d45be7e31ea6be1d1ee951ef0e1f747c9752d20f043  libmodplug-d1b97ed.tar.gz
++sha256  d145910ca10c3ecab0019d45be7e31ea6be1d1ee951ef0e1f747c9752d20f043  libmodplug-d1b97ed0020bc620a059d3675d1854b40bd2608d.tar.gz
+ sha256  49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e  COPYING
+diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
+index 735d0e704d..c5d2463fdb 100644
+--- a/package/libmodplug/libmodplug.mk
++++ b/package/libmodplug/libmodplug.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 4.9"
-+comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 9, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
- 		|| !BR2_HOST_GCC_AT_LEAST_4_9
- 
- comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
-@@ -37,7 +37,7 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	depends on BR2_USE_WCHAR # icu, libsoup
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
+-LIBMODPLUG_VERSION = d1b97ed
++LIBMODPLUG_VERSION = d1b97ed0020bc620a059d3675d1854b40bd2608d
+ LIBMODPLUG_SITE = $(call github,Konstanty,libmodplug,$(LIBMODPLUG_VERSION))
+ LIBMODPLUG_INSTALL_STAGING = YES
+ LIBMODPLUG_LICENSE = Public Domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
