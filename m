@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7266CDB483
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 15:22:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E096CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 15:22:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72E046F5C8;
-	Fri, 13 Oct 2023 15:22:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72E046F5C8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 193B9610F1;
+	Fri, 13 Oct 2023 15:22:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 193B9610F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q5uR11hJy2Rg; Fri, 13 Oct 2023 15:22:16 +0000 (UTC)
+	with ESMTP id 3szEmqZ3gl32; Fri, 13 Oct 2023 15:22:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 532E360F0B;
-	Fri, 13 Oct 2023 15:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 532E360F0B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 725EA1BF37E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0988661048;
+	Fri, 13 Oct 2023 15:22:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0988661048
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 73A901BF997
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:21:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5797E81BD9
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:21:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5797E81BD9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C7CE40102
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:21:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C7CE40102
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DcLNMuYTmztR for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1meZ3gw1Q8dm for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 15:21:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E7FC81CA7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21BBA4053F
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 15:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E7FC81CA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21BBA4053F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BA53848AE; Fri, 13 Oct 2023 15:21:34 +0000 (UTC)
+ id 0FF6A84898; Fri, 13 Oct 2023 15:21:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 17:18:33 +0200
+Date: Fri, 13 Oct 2023 17:17:18 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: ddf9ad1065b11c387d9d43e00675c11425dbc51c
-X-Git-Newrev: 1f2a2b833830e91a5d8f4ce7cc908038e637927b
+X-Git-Oldrev: e31a049bbc74d59cc39554a7d02fd9a152354cdb
+X-Git-Newrev: ddf9ad1065b11c387d9d43e00675c11425dbc51c
 X-Patchwork-Hint: ignore
-Message-Id: <20231013152134.2BA53848AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/efl: bump to
- version 1.26.3
+Message-Id: <20231013152134.0FF6A84898@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/netsnmp: security
+ bump to version 5.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f2a2b833830e91a5d8f4ce7cc908038e637927b
+commit: https://git.buildroot.net/buildroot/commit/?id=ddf9ad1065b11c387d9d43e00675c11425dbc51c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-This is a bug-fix release.
+CVE-2022-44792 handle_ipDefaultTTL in agent/mibgroup/ip-mib/ip_scalars.c
+in Net-SNMP 5.8 through 5.9.3 has a NULL Pointer Exception bug that can
+be used by a remote attacker (who has write access) to cause the
+instance to crash via a crafted UDP packet, resulting in Denial of
+Service.
 
-See: https://www.enlightenment.org/news/2022-09-16-efl-1.26.3
+CVE-2022-44793 handle_ipv6IpForwarding in
+agent/mibgroup/ip-mib/ip_scalars.c in Net-SNMP 5.4.3 through 5.9.3 has a
+NULL Pointer Exception bug that can be used by a remote attacker to
+cause the instance to crash via a crafted UDP packet, resulting in
+Denial of Service.
+
+The pgp key was changed [0] as the old one expired [1].
+
+[0]: https://sourceforge.net/p/net-snmp/htdocs/ci/90a6d98aae21fcdff06b5be139eb4d44ae96a9de/
+[1]: https://github.com/net-snmp/net-snmp/issues/595
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6037f9387a108f2dfc0add56a07073ee96f5f240)
+(cherry picked from commit 868603755c16296ae2a61845891edeafc36e48ca)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/netsnmp/netsnmp.hash | 6 +++---
+ package/netsnmp/netsnmp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 8d50400eb7..72ff3199d0 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
-@@ -1,5 +1,5 @@
--# From https://www.enlightenment.org/news/2022-01-03-efl-1.26.1
--sha256  86a9677e3d48dd0c13a399ebb417bd417bd8d150d6b06cc491bc92275c88a642  efl-1.26.1.tar.xz
-+# From https://www.enlightenment.org/news/2022-09-16-efl-1.26.3
-+sha256  d9f83aa0fd9334f44deeb4e4952dc0e5144683afac786feebce6030951617d15  efl-1.26.3.tar.xz
+diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
+index e1e9d10898..7898941271 100644
+--- a/package/netsnmp/netsnmp.hash
++++ b/package/netsnmp/netsnmp.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature at
+-# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.3/net-snmp-5.9.3.tar.gz.asc
+-# using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
+-sha256  2097f29b7e1bf3f1300b4bae52fa2308d0bb8d5d3998dbe02f9462a413a2ef0a  net-snmp-5.9.3.tar.gz
++# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.4/net-snmp-5.9.4.tar.gz.asc
++# using key 6E6718AEF1EB5C65C32D1B2A356BC0B552D53CAB
++sha256  8b4de01391e74e3c7014beb43961a2d6d6fa03acc34280b9585f4930745b0544  net-snmp-5.9.4.tar.gz
  
- sha256  d666b6b2df9f5b791f85c299c65516cb55528b02a807603de246f65f4918ae22  COMPLIANCE
- sha256  5bceb52d65debe420bc520f2992807740dc928b7fdc3c2e9a74b5889177ddf4c  COPYING
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index d4a16475e5..29b3b1955a 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
+ # Hash for license file
+ sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 15bc318e36..ae85f2697f 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EFL_VERSION = 1.26.1
-+EFL_VERSION = 1.26.3
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = https://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
+-NETSNMP_VERSION = 5.9.3
++NETSNMP_VERSION = 5.9.4
+ NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
+ NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
+ NETSNMP_LICENSE = Various BSD-like
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
