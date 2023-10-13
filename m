@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D93ACDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 244DACDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:57:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D630241897;
-	Fri, 13 Oct 2023 18:57:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D630241897
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9CBC4188E;
+	Fri, 13 Oct 2023 18:57:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9CBC4188E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B9KCmK82kSOy; Fri, 13 Oct 2023 18:57:26 +0000 (UTC)
+	with ESMTP id 80RJJpLE8QPX; Fri, 13 Oct 2023 18:57:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9100C4193B;
-	Fri, 13 Oct 2023 18:57:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9100C4193B
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4D6441938;
+	Fri, 13 Oct 2023 18:57:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4D6441938
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C27401BF2BA
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C5F091BF2BA
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84D2442068
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDEC442073
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84D2442068
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDEC442073
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2iWAhwQxOFTK for <buildroot@lists.busybox.net>;
+ with ESMTP id QgQdBanjqdjC for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 18:46:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B907E41529
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB05441FB4
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B907E41529
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB05441FB4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB6DA848DF; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+ id EA61184FC9; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:24:48 +0200
+Date: Fri, 13 Oct 2023 20:44:30 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: e7f646b715649ab851b420af024d8cd4f60e8c17
-X-Git-Newrev: 5d99a2a05054adef3b6e6a6a7aa9df7a3b84cb34
+X-Git-Oldrev: 43133fafaec135de86b4f21700d747984ca38aa7
+X-Git-Newrev: 1dedb69aef6b1d495eb255fa4a3d6917913df13c
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184633.BB6DA848DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python3: bump
- version to 3.11.6
+Message-Id: <20231013184633.EA61184FC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libcue: security
+ bump to version 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d99a2a05054adef3b6e6a6a7aa9df7a3b84cb34
+commit: https://git.buildroot.net/buildroot/commit/?id=1dedb69aef6b1d495eb255fa4a3d6917913df13c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Release notes: https://www.python.org/downloads/release/python-3116/
+Fixes the following security issue:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+CVE-2023-43641: Out-of-bounds array access in track_set_index
+https://github.com/lipnitsk/libcue/security/advisories/GHSA-5982-x7hv-r9cj
+
+For more details, see the github writeup:
+https://github.blog/2023-10-09-coordinated-disclosure-1-click-rce-on-gnome-cve-2023-43641/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 337485b232dd452937fd2f96de0a596c968f4b47)
+(cherry picked from commit 3aee3a326d37ae5ddaf99bbc7bcf26a5c1ea7b2a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libcue/libcue.hash | 2 +-
+ package/libcue/libcue.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 1a0fee3290..39a16c1f71 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-3115/
--md5  393856f1b7713aa8bba4b642ab9985d3  Python-3.11.5.tar.xz
-+# From https://www.python.org/downloads/release/python-3116/
-+md5  d0c5a1a31efe879723e51addf56dd206  Python-3.11.6.tar.xz
- # Locally computed
--sha256  85cd12e9cf1d6d5a45f17f7afe1cebe7ee628d3282281c492e86adf636defa3f  Python-3.11.5.tar.xz
-+sha256  0fab78fa7f133f4f38210c6260d90d7c0d5c7198446419ce057ec7ac2e6f5f38  Python-3.11.6.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index cfe5e1ee6e..b9c5054a21 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libcue/libcue.hash b/package/libcue/libcue.hash
+index 93ae2dacdb..47fe906e1a 100644
+--- a/package/libcue/libcue.hash
++++ b/package/libcue/libcue.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f27bc3ebb2e892cd9d32a7bee6d84576a60f955f29f748b9b487b173712f1200  libcue-2.2.1.tar.gz
++sha256  cc1b3a65c60bd88b77a1ddd1574042d83cf7cc32b85fe9481c99613359eb7cfe  libcue-2.3.0.tar.gz
+ sha256  c388d36583fa54e13b6d73ad924d0b68d073ed8a5771e17cb49104705df4504f  LICENSE
+diff --git a/package/libcue/libcue.mk b/package/libcue/libcue.mk
+index 3edb4f3b69..7ef27f5a17 100644
+--- a/package/libcue/libcue.mk
++++ b/package/libcue/libcue.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.11
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-LIBCUE_VERSION = 2.2.1
++LIBCUE_VERSION = 2.3.0
+ LIBCUE_SITE = $(call github,lipnitsk,libcue,v$(LIBCUE_VERSION))
+ LIBCUE_LICENSE = GPL-2.0, BSD-2-Clause (rem.c)
+ LIBCUE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
