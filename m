@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96BDBCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:55:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7585CDB482
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45F7641498;
-	Fri, 13 Oct 2023 18:55:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45F7641498
+	by smtp2.osuosl.org (Postfix) with ESMTP id 71FFC4184D;
+	Fri, 13 Oct 2023 18:56:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71FFC4184D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2MtNtIJ-QpNJ; Fri, 13 Oct 2023 18:55:47 +0000 (UTC)
+	with ESMTP id hZL74mgiesqE; Fri, 13 Oct 2023 18:56:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2BC4E4184F;
-	Fri, 13 Oct 2023 18:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BC4E4184F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1445A4190E;
+	Fri, 13 Oct 2023 18:56:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1445A4190E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 929571BF2BA
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A85401BF2BA
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF2CC41FBF
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF2CC41FBF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B8A241FF4
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B8A241FF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dkd5gLOFLurB for <buildroot@lists.busybox.net>;
+ with ESMTP id qh_LIrVzBPLR for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 18:46:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0AC042074
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0FB042071
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0AC042074
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0FB042071
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97838848DF; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+ id C4D4784FED; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:19:01 +0200
+Date: Fri, 13 Oct 2023 20:25:29 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 718fcd47eda9586dcd2919d07fbd2ec652100cb9
-X-Git-Newrev: ba99b48bd80a338e3b89388e289f46b4ae12f64d
+X-Git-Oldrev: 5d99a2a05054adef3b6e6a6a7aa9df7a3b84cb34
+X-Git-Newrev: 2424d3501241e62ba6d4e6722442757ba307eb70
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184633.97838848DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gst-omx: bump to
- version 1.22.6
+Message-Id: <20231013184633.C4D4784FED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/wireless-regdb:
+ bump version to 2023.09.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba99b48bd80a338e3b89388e289f46b4ae12f64d
+commit: https://git.buildroot.net/buildroot/commit/?id=2424d3501241e62ba6d4e6722442757ba307eb70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6339e7f4132230e086a8efc5e266c21fbc3ef3c6)
+(cherry picked from commit 29b6e170b7337c47444a8ef34529eabc2c59567f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
- package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index d4a95c631a..5878991b5b 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.2.tar.xz.sha256sum
--sha256  1b0c57f2cc4ddeec5e7f0c436e502f06665c4e93c73261855b94e04fc94337b2  gst-omx-1.22.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.6.tar.xz.sha256sum
-+sha256  223833c42518ad7eb1923bb4dd3726809f59a66d6e9aaaa69cb29ad0750c8758  gst-omx-1.22.6.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index 87f162f715..3d2ba90290 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index b4e8dcaf54..71f92aaf91 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256  f254d08ab3765aeae2b856222e11a95d44aef519a6663877c71ef68fae4c8c12  wireless-regdb-2023.05.03.tar.xz
++sha256  26d4c2a727cc59239b84735aad856b7c7d0b04e30aa5c235c4f7f47f5f053491  wireless-regdb-2023.09.01.tar.xz
+ # Locally computed
+ sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index db9c7f42d5..e9003ce2e6 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST_OMX_VERSION = 1.22.2
-+GST_OMX_VERSION = 1.22.6
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
+-WIRELESS_REGDB_VERSION = 2023.05.03
++WIRELESS_REGDB_VERSION = 2023.09.01
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
