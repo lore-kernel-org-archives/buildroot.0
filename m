@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30F1ACDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48633CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:49:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DA46041467;
-	Fri, 13 Oct 2023 18:49:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA46041467
+	by smtp2.osuosl.org (Postfix) with ESMTP id E41DE41867;
+	Fri, 13 Oct 2023 18:49:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E41DE41867
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QHI8aSC6zbYj; Fri, 13 Oct 2023 18:49:11 +0000 (UTC)
+	with ESMTP id hpQH27xbSfj3; Fri, 13 Oct 2023 18:49:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECDD341868;
-	Fri, 13 Oct 2023 18:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECDD341868
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E0941BF995
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6A1B41451;
+	Fri, 13 Oct 2023 18:49:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6A1B41451
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 58C741BF997
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 13E3081BC2
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13E3081BC2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2FA1E4097F
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FA1E4097F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AycI731regg2 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wKAwAUBxxaan for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1A32881B0A
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5A9C417B0
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A32881B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5A9C417B0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 028A284897; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
+ id 9C1F684C4A; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:09:01 +0200
+Date: Fri, 13 Oct 2023 20:18:22 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 010cd4640f0ed025dd9b1455b840975bd6202377
-X-Git-Newrev: a2cbf289d452d621fc089343105346625fb77bb6
+X-Git-Oldrev: 7c83c55df6354bdc059744fa856314627a4d6739
+X-Git-Newrev: 3e167b8c65d79567cce3801b18f2e7e27a762d1c
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184521.028A284897@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/mbedtls: bump to
- version 2.28.4
+Message-Id: <20231013184521.9C1F684C4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/gst1-rtsp-server:
+ bump to version 1.22.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2cbf289d452d621fc089343105346625fb77bb6
+commit: https://git.buildroot.net/buildroot/commit/?id=3e167b8c65d79567cce3801b18f2e7e27a762d1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7dc2462a8e511629e1ea300f32aa43ee1ec74fa1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7a0cbea0e35ef6f62c0b073fd0724e02235921fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 2281bd5fe5..6aa6d0235d 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index c98d10d79c..521a91ddd7 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.3:
--sha256  bdf7c5bbdc338da3edad89b2885d4f8668f9a6fffeba6ec17a60333e36dade6f  mbedtls-2.28.3.tar.gz
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.4:
-+sha256  578c4dcd15bbff3f5cd56aa07cd4f850fc733634e3d5947be4f7157d5bfd81ac  mbedtls-2.28.4.tar.gz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 8f09fd72a8..62eda6ec99 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.2.tar.xz.sha256sum
+-sha256  2be4aecfb88710100ea7115ed0216403e8094344ebf146094271b8d4d73828bf  gst-rtsp-server-1.22.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.6.tar.xz.sha256sum
++sha256  0ae33a8b50443b62f11581a9181e906b41cd3877b2d799dbea72912c3eda4bb3  gst-rtsp-server-1.22.6.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index 6f5fc4f7aa..46d7606b1d 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBEDTLS_VERSION = 2.28.3
-+MBEDTLS_VERSION = 2.28.4
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
+-GST1_RTSP_SERVER_VERSION = 1.22.2
++GST1_RTSP_SERVER_VERSION = 1.22.6
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
