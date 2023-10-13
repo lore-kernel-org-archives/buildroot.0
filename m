@@ -4,55 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0F23CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:35:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96486CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98C7E60FDF;
-	Fri, 13 Oct 2023 14:35:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98C7E60FDF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43F9960FDF;
+	Fri, 13 Oct 2023 14:36:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43F9960FDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ulZvJrcVzsRT; Fri, 13 Oct 2023 14:35:57 +0000 (UTC)
+	with ESMTP id YTLgavGGpszt; Fri, 13 Oct 2023 14:36:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDB7060F1F;
-	Fri, 13 Oct 2023 14:35:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDB7060F1F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8886560F1F;
+	Fri, 13 Oct 2023 14:36:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8886560F1F
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8754C1BF2F8
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:35:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F8531BF2F8
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E4B3821B1
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:35:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E4B3821B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 78EF1821FD
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78EF1821FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RSN29Z6K2z1N for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 14:35:54 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 157F48139F
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:35:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 157F48139F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 63D2FE0010;
- Fri, 13 Oct 2023 14:35:50 +0000 (UTC)
+ with ESMTP id gc6ApvF5JfBQ for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 14:36:28 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1846D821B1
+ for <buildroot@busybox.net>; Fri, 13 Oct 2023 14:36:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1846D821B1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 26C7F240003
+ for <buildroot@busybox.net>; Fri, 13 Oct 2023 14:36:24 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qrJGR-007Izq-Rq; Fri, 13 Oct 2023 16:35:43 +0200
+ (envelope-from <peter@korsgaard.com>) id 1qrJH0-007J3M-El
+ for buildroot@busybox.net; Fri, 13 Oct 2023 16:36:18 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-References: <20230929075844.1145939-1-thomas.devoogdt@barco.com>
- <87zg125yr2.fsf@48ers.dk>
-Date: Fri, 13 Oct 2023 16:35:43 +0200
-In-Reply-To: <87zg125yr2.fsf@48ers.dk> (Peter Korsgaard's message of "Sun, 01
- Oct 2023 14:10:57 +0200")
-Message-ID: <87a5sm614w.fsf@48ers.dk>
+To: buildroot@busybox.net
+References: <20210817083930.3718711-1-herve.codina@bootlin.com>
+ <20210817083930.3718711-11-herve.codina@bootlin.com>
+ <1bc18a02-9cf3-0cd1-cf8a-e716ceb78b9a@korsgaard.com>
+Date: Fri, 13 Oct 2023 16:36:18 +0200
+In-Reply-To: <1bc18a02-9cf3-0cd1-cf8a-e716ceb78b9a@korsgaard.com> (Peter
+ Korsgaard's message of "Sun, 1 Oct 2023 14:56:19 +0200")
+Message-ID: <875y3a613x.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v3 1/4] package/webkitgtk: require GCC 9 for
- the 2.40.x series
+Subject: Re: [Buildroot] [PATCH v3 10/16] Makefile: breaks hardlinks in
+ global {TARGET, HOST}_DIR on per-package build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,9 +65,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org,
- Thomas Devoogdt <thomas.devoogdt@barco.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -74,17 +72,28 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
->>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
- >> Raise the minimal GCC version to 9.3, which is required since webkitgtk-2.40.0 [1].
- >> Similar to commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4,
- >> we do check on >= GCC 9, because we can't check on >= GCC 9.3.
+ > On 17/08/2021 10.39, Herve Codina wrote:
+ > Hi,
 
- >> [1] https://github.com/WebKit/WebKit/commit/f9c142d9b5b8c48fe310bc6d3620e634901b2930
+ > Sorry, very old patch.
 
- >> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
- > Committed, thanks. What about wpewebkit? This seems to be common code,
- > so we presumably need GCC 9 there as well?
+ >> Without this patch, a make <pkg>_rebuild detects overwrites. Indeed, in
+ >> target_finalize steps some modifications are done on installed files (ie
+ >> strip or TARGET_FINALIZE_HOOKS for instance).
+ >> In order to avoid these modifications seen from per-package
+ >> {TARGET,HOST}_DIR
+ >> and so been analyzed as some overwrites, global {TARGET,HOST}_DIR is built
+ >> using a full copy of the involved per-package files instead of hardlinks.
+ >> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+ >> Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ >> ---
+ >> Changes v1 to v2:
+ >> - Added 'Reviewed-by: Yann E. MORIN'
+
+ > We have similar issues if you have a post-build script making changes
+ > with sed or similar, so committed to master after fixing it up (the 
+ > logic was in the mean time moved to package/pkg-utils.mk), thanks.
 
 Committed to 2023.02.x and 2023.08.x, thanks.
 
