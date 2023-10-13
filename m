@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F826CDB483
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 10:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CF09CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 10:26:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFF8561503;
-	Fri, 13 Oct 2023 10:25:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF8561503
+	by smtp3.osuosl.org (Postfix) with ESMTP id 42B4761504;
+	Fri, 13 Oct 2023 10:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42B4761504
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id saDq4puahtoq; Fri, 13 Oct 2023 10:25:49 +0000 (UTC)
+	with ESMTP id w5-leNWjFOkc; Fri, 13 Oct 2023 10:26:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFE196F514;
-	Fri, 13 Oct 2023 10:25:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFE196F514
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8ADAA1BF997
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81C2561513;
+	Fri, 13 Oct 2023 10:26:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81C2561513
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A26981BF99A
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 10:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62F8940580
+ by smtp3.osuosl.org (Postfix) with ESMTP id 86FC861518
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 10:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62F8940580
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86FC861518
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kxSti8Xr1D-o for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fb4IdAA9maPm for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AAEB640571
+ by smtp3.osuosl.org (Postfix) with ESMTP id A299B6F531
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAEB640571
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A299B6F531
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9AF87846EE; Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
+ id 8B9D5846E4; Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 12:23:35 +0200
+Date: Fri, 13 Oct 2023 12:13:47 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 13967f09637198c32599b8f2c17d0f946820e85c
-X-Git-Newrev: 4cb43fc95700b648933587001a4e29f968b065fb
+X-Git-Oldrev: fd28c24131fc5471de3ef6776c11ace91f139987
+X-Git-Newrev: 46ec2b32f74797f2f1c81a2445679b5b97ab7d63
 X-Patchwork-Hint: ignore
-Message-Id: <20231013102537.9AF87846EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] boot/at91bootstrap:
- disable PIE and stack-protector build flags
+Message-Id: <20231013102537.8B9D5846E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/urandom-scripts:
+ move seedrng init script to S01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cb43fc95700b648933587001a4e29f968b065fb
+commit: https://git.buildroot.net/buildroot/commit/?id=46ec2b32f74797f2f1c81a2445679b5b97ab7d63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The toolchain wrapper automatically adds Position Independent
-Execution and stack protector flags in the build process when selected
-in the configuration. at91bootstrap being freestanding code, it
-doesn't support these, so we have to disable them.
+We want to initialize the kernel random number generator as soon as
+possible, as early init scripts may also need random numbers (E.G.
+syslog-ng in S01syslog-ng does).
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1351222486b93b72c00057fb3401d40967025164)
+Seedrng was presumably only using S20 because the previos urandom script
+used S20, which (after som moves) dates all the way back to:
+
+commit 8262508fc4456b5230216473ea14c897268ba791
+Author: Eric Andersen <andersen@codepoet.org>
+Date:   Fri Apr 26 22:01:43 2002 +0000
+
+    With this update, everything now works as expected.
+     -Erik
+
+Seedrng needs persistent storage, but mount -a is run before executing the
+init scripts, so S01 should be as good as S20 - Atleast with the scripts in
+upstream Buildroot.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 11a46002ae11a0766a4ec9d3d8ccafe7be42c2fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/urandom-scripts/{S20seedrng => S01seedrng} | 0
+ package/urandom-scripts/urandom-scripts.mk         | 4 ++--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index 1a084756fd..385957b5d4 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -32,8 +32,14 @@ endef
- AT91BOOTSTRAP_POST_PATCH_HOOKS += AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
- endif
+diff --git a/package/urandom-scripts/S20seedrng b/package/urandom-scripts/S01seedrng
+similarity index 100%
+rename from package/urandom-scripts/S20seedrng
+rename to package/urandom-scripts/S01seedrng
+diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
+index 32f3e09343..89abdfff72 100644
+--- a/package/urandom-scripts/urandom-scripts.mk
++++ b/package/urandom-scripts/urandom-scripts.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
-+# The at91bootstrap Makefile doesn't support customizing
-+# CFLAGS/LDFLAGS, so we cheat and pass our custom flags through CC and
-+# LD.
- define AT91BOOTSTRAP_BUILD_CMDS
--	$(MAKE1) CROSS_COMPILE=$(TARGET_CROSS) -C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
-+	$(MAKE1) CROSS_COMPILE=$(TARGET_CROSS) \
-+		CC="$(TARGET_CC) -fno-stack-protector" \
-+		LD="$(TARGET_CC) -fno-PIE" \
-+		-C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
+ define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20seedrng \
+-		$(TARGET_DIR)/etc/init.d/S20seedrng
++	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S01seedrng \
++		$(TARGET_DIR)/etc/init.d/S01seedrng
  endef
  
- define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
