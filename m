@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC74CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7792CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:52:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EAF7F40CAA;
-	Fri, 13 Oct 2023 18:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAF7F40CAA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 918B04188A;
+	Fri, 13 Oct 2023 18:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 918B04188A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U1QBKrz-Xa4G; Fri, 13 Oct 2023 18:52:15 +0000 (UTC)
+	with ESMTP id sNzxOvrs6lIa; Fri, 13 Oct 2023 18:52:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE29241490;
-	Fri, 13 Oct 2023 18:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE29241490
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B08621BF2BA
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A5144182A;
+	Fri, 13 Oct 2023 18:52:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5144182A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 167BC1BF2BA
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9798E42071
+ by smtp2.osuosl.org (Postfix) with ESMTP id F011441814
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9798E42071
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F011441814
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ea0D9tgbWaOO for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 18:46:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XHMwRtn0VTDD for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4A2641529
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4A2641529
+ by smtp2.osuosl.org (Postfix) with ESMTP id 176A241468
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 176A241468
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C9AD384FC9; Fri, 13 Oct 2023 18:46:32 +0000 (UTC)
+ id 0BDC784FC9; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 17:44:35 +0200
+Date: Fri, 13 Oct 2023 20:12:57 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 056e5618b30953ca18a9a5734c9c361e28b8890d
-X-Git-Newrev: e5d9ea090d844cc960f5dd385402882f5c87e2a2
+X-Git-Oldrev: 6543b632735196dffd14cf4a233e62d547861a39
+X-Git-Newrev: 5f56122cd00b023a0c9f97762b8026c4cb86d921
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184632.C9AD384FC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] DEVELOPERS: add Thomas
- Petazzoni for nodejs
+Message-Id: <20231013184633.0BDC784FC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libcurl: security
+ bump to 8.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,35 +58,67 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4616568693404532517=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5d9ea090d844cc960f5dd385402882f5c87e2a2
+--===============4616568693404532517==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5f56122cd00b023a0c9f97762b8026c4cb86d921
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 65dfac5d11596583e4e31ce83a05045a5c9a2ce6)
+Fixes following two vulnerabilities:
+
+* CVE-2023-38545: SOCKS5 heap buffer overflow
+  https://curl.se/docs/CVE-2023-38545.html
+* CVE-2023-38546: cookie injection with none file
+  https://curl.se/docs/CVE-2023-38546.html
+
+Signed-off-by: Jan Čermák <sairon@sairon.cz>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 30dd60ba7eb3e6da4f0ae91b3b08f8aa8fb8d786)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 98b92db483..bdfd3ff3ef 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2839,6 +2839,7 @@ F:	package/msmtp/
- F:	package/musl/
- F:	package/musl-fts/
- F:	package/ne10/
-+F:	package/nodejs/
- F:	package/pkg-python.mk
- F:	package/pkg-autotools.mk
- F:	package/pkg-generic.mk
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 371d20a632..ecd5d63909 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.3.0.tar.xz.asc
++# https://curl.se/download/curl-8.4.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  376d627767d6c4f05105ab6d497b0d9aba7111770dd9d995225478209c37ea63  curl-8.3.0.tar.xz
++sha256  16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d  curl-8.4.0.tar.xz
+ sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index dd4cf43c6a..bd331a55aa 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 8.3.0
++LIBCURL_VERSION = 8.4.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+
+--===============4616568693404532517==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4616568693404532517==--
