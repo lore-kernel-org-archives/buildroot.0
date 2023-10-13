@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17FFBCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA55CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 32D96414EA;
-	Fri, 13 Oct 2023 18:47:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32D96414EA
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0A6040182;
+	Fri, 13 Oct 2023 18:47:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0A6040182
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G5VIMt81J8KS; Fri, 13 Oct 2023 18:47:33 +0000 (UTC)
+	with ESMTP id JZ8Mg4kLNcBA; Fri, 13 Oct 2023 18:47:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE92F40BFC;
-	Fri, 13 Oct 2023 18:47:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE92F40BFC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5AE451BF2BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1D0041832;
+	Fri, 13 Oct 2023 18:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1D0041832
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EB47D1BF2BA
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70AA94018B
+ by smtp4.osuosl.org (Postfix) with ESMTP id B289C41529
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70AA94018B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B289C41529
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kZjaeYLfxsQw for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id odBefOVcCy4J for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 18:45:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF0C1401D8
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF0C1401D8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0167341F8B
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:45:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0167341F8B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0D0D84C4A; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
+ id 045B484C4D; Fri, 13 Oct 2023 18:45:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:21:58 +0200
+Date: Fri, 13 Oct 2023 20:44:22 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: d982e4b6daadc3840733386f2a04bfe28be2c482
-X-Git-Newrev: 0f95c3b4c2ee8f70d4288e3205db7510a4abc589
+X-Git-Oldrev: bc0f65857ef6cb3c82a364ebfa5867a3fa3bc350
+X-Git-Newrev: d4ad6cefeeac80f093e57ada976d0c05b1caa4c0
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184521.C0D0D84C4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] {linux,
- linux-headers}: bump 5.15.x / 6.{1, 5}.x series
+Message-Id: <20231013184522.045B484C4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libcue: security
+ bump to version 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f95c3b4c2ee8f70d4288e3205db7510a4abc589
+commit: https://git.buildroot.net/buildroot/commit/?id=d4ad6cefeeac80f093e57ada976d0c05b1caa4c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes the following security issue:
+
+CVE-2023-43641: Out-of-bounds array access in track_set_index
+https://github.com/lipnitsk/libcue/security/advisories/GHSA-5982-x7hv-r9cj
+
+For more details, see the github writeup:
+https://github.blog/2023-10-09-coordinated-disclosure-1-click-rce-on-gnome-cve-2023-43641/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 003cdd5de31dd6558b02d0a719bc779bb1fc8db5)
-[Peter: drop 6.5.x bump]
+(cherry picked from commit 3aee3a326d37ae5ddaf99bbc7bcf26a5c1ea7b2a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libcue/libcue.hash | 2 +-
+ package/libcue/libcue.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index cac7fba207..9330900b13 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  9626ec84a39ecb009bf11a271dd520941159c165d4e62f82e3a77b79d20ff27d  linux-6.4.16.tar.xz
--sha256  a87e241ec15d53452c4efe219713a3769d88cc436b5b98cf6efb262c4aff15c0  linux-6.1.55.tar.xz
-+sha256  9edefdde32c2298389dcd19566402332b3c2016f5ada17e5820f500b908d478c  linux-6.1.56.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  ef845e7934897b88e4448378ea9daacac19e07f156fe904844fab0a7d8ff5ddd  linux-5.15.133.tar.xz
-+sha256  f37182aecb57ed6853d01e1074d3a60a653331e35f3115728381e08be050b9d3  linux-5.15.134.tar.xz
- sha256  183a4507b0ebec7816a79ceba6253aa7ad345e25b0fcd4e834ee154be9a993ab  linux-5.10.197.tar.xz
- sha256  2e775970521ea7ff6eb613fc85a6e34cec73feaeb67b88a77a2fbd4f75483df0  linux-5.4.257.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a0bdbe8555..d106e99f98 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -404,8 +404,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.295"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.257"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.197"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.133"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.55"	if BR2_KERNEL_HEADERS_6_1
-+	default "5.15.134"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.56"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.4.16"	if BR2_KERNEL_HEADERS_6_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/package/libcue/libcue.hash b/package/libcue/libcue.hash
+index 93ae2dacdb..47fe906e1a 100644
+--- a/package/libcue/libcue.hash
++++ b/package/libcue/libcue.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f27bc3ebb2e892cd9d32a7bee6d84576a60f955f29f748b9b487b173712f1200  libcue-2.2.1.tar.gz
++sha256  cc1b3a65c60bd88b77a1ddd1574042d83cf7cc32b85fe9481c99613359eb7cfe  libcue-2.3.0.tar.gz
+ sha256  c388d36583fa54e13b6d73ad924d0b68d073ed8a5771e17cb49104705df4504f  LICENSE
+diff --git a/package/libcue/libcue.mk b/package/libcue/libcue.mk
+index 3edb4f3b69..7ef27f5a17 100644
+--- a/package/libcue/libcue.mk
++++ b/package/libcue/libcue.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCUE_VERSION = 2.2.1
++LIBCUE_VERSION = 2.3.0
+ LIBCUE_SITE = $(call github,lipnitsk,libcue,v$(LIBCUE_VERSION))
+ LIBCUE_LICENSE = GPL-2.0, BSD-2-Clause (rem.c)
+ LIBCUE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
