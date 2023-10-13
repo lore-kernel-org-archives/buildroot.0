@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B974BCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:49:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CE75CDB482
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6AC1E4018B;
-	Fri, 13 Oct 2023 18:49:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AC1E4018B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0DB0E4181E;
+	Fri, 13 Oct 2023 18:50:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB0E4181E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zKQNd_pYvRam; Fri, 13 Oct 2023 18:49:52 +0000 (UTC)
+	with ESMTP id uNt4QyJPWXvR; Fri, 13 Oct 2023 18:50:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C63241497;
-	Fri, 13 Oct 2023 18:49:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C63241497
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5DF431BF2BA
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA98041450;
+	Fri, 13 Oct 2023 18:50:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA98041450
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2152B1BF2BA
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AD4281B0A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D7AD6F64E
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AD4281B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D7AD6F64E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hSkWl59gT3dD for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 18:45:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0wZIqrdAn9lW for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E064A81E02
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16B266F642
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E064A81E02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16B266F642
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D79FA84C49; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
+ id EADE984C4A; Fri, 13 Oct 2023 18:45:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:25:43 +0200
+Date: Fri, 13 Oct 2023 17:42:36 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 5fb0d39752307f1051329d3b13f5804273f67bdd
-X-Git-Newrev: 58bf67263b52c9fffbaaeebea22fbb635ef032cf
+X-Git-Oldrev: 1f2a2b833830e91a5d8f4ce7cc908038e637927b
+X-Git-Newrev: 620fb8fb0f7e2d8c3d3d18960bae69b820551422
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184521.D79FA84C49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/wireless-regdb:
- bump version to 2023.09.01
+Message-Id: <20231013184520.EADE984C4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/exim: security
+ bump version to 4.96.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58bf67263b52c9fffbaaeebea22fbb635ef032cf
+commit: https://git.buildroot.net/buildroot/commit/?id=620fb8fb0f7e2d8c3d3d18960bae69b820551422
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
+Fixes CVE-2023-42114, CVE-2023-42115, CVE-2023-42116:
+https://exim.org/static/doc/security/CVE-2023-zdi.txt
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 29b6e170b7337c47444a8ef34529eabc2c59567f)
+(cherry picked from commit 657d10b34b1ba2fc3478a3cfad7ac7fcf4ce1094)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index b4e8dcaf54..71f92aaf91 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  f254d08ab3765aeae2b856222e11a95d44aef519a6663877c71ef68fae4c8c12  wireless-regdb-2023.05.03.tar.xz
-+sha256  26d4c2a727cc59239b84735aad856b7c7d0b04e30aa5c235c4f7f47f5f053491  wireless-regdb-2023.09.01.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index db9c7f42d5..e9003ce2e6 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index 2336aaa5c6..6cdeea0614 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  299a56927b2eb3477daafd3c5bda02bc67e5c4e5898a7aeaf2740875278cf1a3  exim-4.96.tar.xz
++sha256  93ac0755c317e1fdbbea8ccb70a868876bdf3148692891c72ad0fe816767033d  exim-4.96.1.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  6b863661465a0b9897c1b71875c5196a1903cf560dd85de45b08242b9731edb2bc10eb56945d62e477e5d15cc7a8d493915bff2ca81689673a8091c66f62c89e  exim-4.96.tar.xz
++sha512  ef1a0e57c59cdf4e915b3ac5dcdbc69f565b14dd92b0527f6796b2c46a9ec34f991f9790fb4171c99417f7e482cdd62d77e780cc71fab227c8bed876103f7fdd  exim-4.96.1.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index b84a51d6de..f5695d048d 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2023.05.03
-+WIRELESS_REGDB_VERSION = 2023.09.01
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-EXIM_VERSION = 4.96
++EXIM_VERSION = 4.96.1
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
