@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53A0BCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:55:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 742C3CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFF294191C;
-	Fri, 13 Oct 2023 18:55:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFF294191C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 277184190F;
+	Fri, 13 Oct 2023 18:55:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 277184190F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oaNL6rsoV7qd; Fri, 13 Oct 2023 18:55:19 +0000 (UTC)
+	with ESMTP id ecpUeGzD2eud; Fri, 13 Oct 2023 18:55:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C46E341891;
-	Fri, 13 Oct 2023 18:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C46E341891
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1BFB41498;
+	Fri, 13 Oct 2023 18:55:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1BFB41498
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1D9DB1BF2BA
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 81A391BF2BA
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8248142079
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4D2C41FED
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8248142079
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4D2C41FED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uXFQnJCb5sxn for <buildroot@lists.busybox.net>;
+ with ESMTP id 0N3rFUIpUMt7 for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B49841FED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D5FA41FBF
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B49841FED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D5FA41FBF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F43A84FED; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+ id F1943848DF; Fri, 13 Oct 2023 18:46:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:17:35 +0200
+Date: Fri, 13 Oct 2023 20:10:36 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: b1e2cd3e25f9f1d96d932ee1a17a8285cb58f2cd
-X-Git-Newrev: d157536698faafa7ba3eb1212307102a82d9cdbd
+X-Git-Oldrev: 0b4c5daf4a3ca3018cf263dd8d407e10768cac41
+X-Git-Newrev: 6543b632735196dffd14cf4a233e62d547861a39
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184633.4F43A84FED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- package/gst1-plugins-ugly: security bump to version 1.22.6
+Message-Id: <20231013184632.F1943848DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/mbedtls: security
+ bump to version 2.28.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d157536698faafa7ba3eb1212307102a82d9cdbd
+commit: https://git.buildroot.net/buildroot/commit/?id=6543b632735196dffd14cf4a233e62d547861a39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes the following security issues:
+Fixes the following security issue:
 
-ZDI-CAN-21443: Heap-based buffer overflow in the RealMedia file demuxer when
-handling malformed files in GStreamer versions before 1.22.5 / 1.20.7.
+CVE-2023-43615: Buffer overread in TLS stream cipher suites
+https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2023-10-1/
 
-https://gstreamer.freedesktop.org/security/sa-2023-0004.html
-
-ZDI-CAN-21444: Heap-based buffer overflow in the RealMedia file demuxer when
-handling malformed files in GStreamer versions before 1.22.5 / 1.20.7.
-
-https://gstreamer.freedesktop.org/security/sa-2023-0005.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7f2571f594cc87fc7543b5476eeda1bdda4d7264)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 26762e30090585e8c64333d3ffe4249e7a0b0f43)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mbedtls/mbedtls.hash | 2 +-
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index ed781df686..f55dd7b3a0 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.2.tar.xz.sha256sum
--sha256  8f30f44db0bd063709bf6fbe55138e3a98af0abcb61c360f35582bbe10e80691  gst-plugins-ugly-1.22.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.6.tar.xz.sha256sum
-+sha256  3e31454c98cb2f7f6d2d355eceb933a892fa0f1dc09bc36c9abc930d8e29ca48  gst-plugins-ugly-1.22.6.tar.xz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index f1566b058e..ee3bd1b551 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 6aa6d0235d..d0cd0b2105 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.4:
+-sha256  578c4dcd15bbff3f5cd56aa07cd4f850fc733634e3d5947be4f7157d5bfd81ac  mbedtls-2.28.4.tar.gz
++sha256  849e86b626e42ded6bf67197b64aa771daa54e2a7e2868dc67e1e4711959e5e3  mbedtls-2.28.5.tar.gz
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 62eda6ec99..1b941e04f4 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_UGLY_VERSION = 1.22.2
-+GST1_PLUGINS_UGLY_VERSION = 1.22.6
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+-MBEDTLS_VERSION = 2.28.4
++MBEDTLS_VERSION = 2.28.5
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
