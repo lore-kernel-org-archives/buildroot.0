@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD53CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91769CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69D4260B8C;
-	Fri, 13 Oct 2023 14:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69D4260B8C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4069960F90;
+	Fri, 13 Oct 2023 14:46:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4069960F90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K3SaoiYY8jKA; Fri, 13 Oct 2023 14:46:21 +0000 (UTC)
+	with ESMTP id 9WehjymMc53P; Fri, 13 Oct 2023 14:46:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFCB8610D6;
-	Fri, 13 Oct 2023 14:46:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFCB8610D6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0BBCA1BF997
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BA346F56D;
+	Fri, 13 Oct 2023 14:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BA346F56D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E2FC1BF99A
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E730641DBA
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAC8E4049A
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E730641DBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAC8E4049A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pKc-jOc_fTAu for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 14:46:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vp1ueGkwzPNj for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E506B41E46
+ by smtp2.osuosl.org (Postfix) with ESMTP id A937840137
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E506B41E46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A937840137
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5553847A3; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
+ id 92F3F847A0; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 16:43:05 +0200
+Date: Fri, 13 Oct 2023 16:32:02 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 3038bcc6c1532123fbcc8e22a4e684aaadd94723
-X-Git-Newrev: cf2aef7992e423f89334257310a3bb867c997e24
+X-Git-Oldrev: 4cb43fc95700b648933587001a4e29f968b065fb
+X-Git-Newrev: 2055dc5ae57298aa6aa4e81b985affa5577c7e01
 X-Patchwork-Hint: ignore
-Message-Id: <20231013144605.D5553847A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/Makefile.in: set
- --shuffle=none for MAKE1
+Message-Id: <20231013144605.92F3F847A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/linux-tools: fix
+ SysV init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf2aef7992e423f89334257310a3bb867c997e24
+commit: https://git.buildroot.net/buildroot/commit/?id=2055dc5ae57298aa6aa4e81b985affa5577c7e01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Make 4.4 introduces a shuffle mode which randomizes prerequisites
-in order to better flush out issues with parallel builds. On the other
-hand, we use MAKE1 to build packages that are known to be broken with
-parallel build. For these, passing the shuffle option would be
-counter-productive and lead to spurious build failures.
+This commit fixes the S10hyperv SysV init script which expects binaries
+to be locate in /sbin while they are installed in /usr/sbin. Please
+note, that the systemd init scripts correctly reference them.
+Furthermore, the SysV init script did not check for an actual HyperV
+environment to be present, which is also corrected. In addition, this
+commit also fixes check-package warnings regarding a missing DAEMON
+definition.
 
-The --shuffle=none option exists to turn off shuffling again. We can't
-add this option unconditionally, however, because Make < 4.4 doesn't
-know it. Therefore, conditionally pass --shuffle=none only if there is a
-shuffle option in MAKEFLAGS.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit f664d7dc24c70ef08ced78d5d3f50a8ad673ea02)
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+[Peter: drop from .checkpackageignore]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 14c4bd7bf8150283e158c50df87c77d63bb1b73c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .checkpackageignore           | 1 -
+ package/linux-tools/S10hyperv | 8 ++++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index d70aded82b..7e6ae19559 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -17,7 +17,9 @@ else
- PARALLEL_JOBS := $(BR2_JLEVEL)
- endif
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4faa3a8b8f..dbff352d3b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -93,7 +93,6 @@ package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch Sob
+ package/libiio/S99iiod Shellcheck Variables
+ package/libmad/0001-mips-h-constraint-removal.patch Sob
+ package/lighttpd/S50lighttpd EmptyLastLine Indent Shellcheck Variables
+-package/linux-tools/S10hyperv Variables
+ package/linuxptp/S65ptp4l Indent Shellcheck
+ package/linuxptp/S66phc2sys Indent Shellcheck
+ package/lirc-tools/S25lircd Indent Variables
+diff --git a/package/linux-tools/S10hyperv b/package/linux-tools/S10hyperv
+index 32887d1b6c..be9ed2c5df 100644
+--- a/package/linux-tools/S10hyperv
++++ b/package/linux-tools/S10hyperv
+@@ -2,14 +2,18 @@
  
--MAKE1 := $(HOSTMAKE) -j1
-+# Only build one job at a time, *and* to not randomise goals and
-+# prerequisites ordering in make 4.4+
-+MAKE1 := $(HOSTMAKE) -j1 $(if $(findstring --shuffle,$(MAKEFLAGS)),--shuffle=none)
- override MAKE = $(HOSTMAKE) \
- 	$(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
+ PROGS="@PROGS@"
+ PIDDIR="/var/run"
++DAEMON="hyperv"
  
+ # shellcheck source=/dev/null
+-[ -r "/etc/default/hyperv" ] && . "/etc/default/hyperv"
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++# only continue if we are in a HyperV platform
++[ -e "/sys/bus/vmbus" ] || exit 0
+ 
+ start_one() {
+ 	printf 'Starting %s: ' "$1"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -b -m -S -q -p "$PIDDIR/$1.pid" -x "/sbin/$1" -- -n
++	start-stop-daemon -b -m -S -q -p "$PIDDIR/$1.pid" -x "/usr/sbin/$1" -- -n
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
