@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6312FCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CB2ACDB482
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:47:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C21A41450;
-	Fri, 13 Oct 2023 18:47:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C21A41450
+	by smtp2.osuosl.org (Postfix) with ESMTP id B6F7E41450;
+	Fri, 13 Oct 2023 18:47:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6F7E41450
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F0eECBxa7P1H; Fri, 13 Oct 2023 18:47:05 +0000 (UTC)
+	with ESMTP id A7f30V7DHQRl; Fri, 13 Oct 2023 18:47:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3EBD40BFC;
-	Fri, 13 Oct 2023 18:47:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3EBD40BFC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0FFDF1BF2BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id B185F40182;
+	Fri, 13 Oct 2023 18:47:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B185F40182
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B65F1BF995
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D7C16F652
+ by smtp1.osuosl.org (Postfix) with ESMTP id D90C281E22
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:45:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D7C16F652
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D90C281E22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SQYjJ7D3Mu98 for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 18:45:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OwPNInzSrZob for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C98366F66E
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5C4681BC2
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C98366F66E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5C4681BC2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD73C84C4C; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
+ id A24F084C4D; Fri, 13 Oct 2023 18:45:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:24:52 +0200
+Date: Fri, 13 Oct 2023 20:18:46 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 0f95c3b4c2ee8f70d4288e3205db7510a4abc589
-X-Git-Newrev: 5fb0d39752307f1051329d3b13f5804273f67bdd
+X-Git-Oldrev: 3e167b8c65d79567cce3801b18f2e7e27a762d1c
+X-Git-Newrev: 73075f6684c3eeef0ecdab582b9b4dea47bd9973
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184521.CD73C84C4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/python3: bump
- version to 3.11.6
+Message-Id: <20231013184521.A24F084C4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/gst1-rtsp-vaapi:
+ bump to version 1.22.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fb0d39752307f1051329d3b13f5804273f67bdd
+commit: https://git.buildroot.net/buildroot/commit/?id=73075f6684c3eeef0ecdab582b9b4dea47bd9973
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Release notes: https://www.python.org/downloads/release/python-3116/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 337485b232dd452937fd2f96de0a596c968f4b47)
+(cherry picked from commit 688dcef3d7d2f72119320280dd63726787b1486b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 1a0fee3290..39a16c1f71 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-3115/
--md5  393856f1b7713aa8bba4b642ab9985d3  Python-3.11.5.tar.xz
-+# From https://www.python.org/downloads/release/python-3116/
-+md5  d0c5a1a31efe879723e51addf56dd206  Python-3.11.6.tar.xz
- # Locally computed
--sha256  85cd12e9cf1d6d5a45f17f7afe1cebe7ee628d3282281c492e86adf636defa3f  Python-3.11.5.tar.xz
-+sha256  0fab78fa7f133f4f38210c6260d90d7c0d5c7198446419ce057ec7ac2e6f5f38  Python-3.11.6.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index cfe5e1ee6e..b9c5054a21 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index 2fdec4e83f..53dbe97ca9 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.22.2.tar.xz.sha256sum
+-sha256  d2e642f9745f97d9f73a7f5085e7659a9a31fe209b774e6e45dae041b435df06  gstreamer-vaapi-1.22.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.22.6.tar.xz.sha256sum
++sha256  d9ba2fc26bef98c78e982c599f585d46bbb65fe122da89c2d7ab41f468a52c7b  gstreamer-vaapi-1.22.6.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index cae239094a..46a5839450 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.11
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-GST1_VAAPI_VERSION = 1.22.2
++GST1_VAAPI_VERSION = 1.22.6
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
