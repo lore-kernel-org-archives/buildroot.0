@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91769CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C6B8CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4069960F90;
-	Fri, 13 Oct 2023 14:46:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4069960F90
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD16A610D6;
+	Fri, 13 Oct 2023 14:46:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD16A610D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9WehjymMc53P; Fri, 13 Oct 2023 14:46:34 +0000 (UTC)
+	with ESMTP id bRjFRpMFe2DD; Fri, 13 Oct 2023 14:46:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BA346F56D;
-	Fri, 13 Oct 2023 14:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BA346F56D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E2FC1BF99A
+	by smtp3.osuosl.org (Postfix) with ESMTP id E53876F5A1;
+	Fri, 13 Oct 2023 14:46:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E53876F5A1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 12ED31BF99D
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAC8E4049A
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFF0281F05
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAC8E4049A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFF0281F05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vp1ueGkwzPNj for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qMP5KhVSfbhd for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A937840137
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA3EA814B3
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A937840137
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA3EA814B3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92F3F847A0; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
+ id A9022847A4; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 16:32:02 +0200
+Date: Fri, 13 Oct 2023 16:36:00 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 4cb43fc95700b648933587001a4e29f968b065fb
-X-Git-Newrev: 2055dc5ae57298aa6aa4e81b985affa5577c7e01
+X-Git-Oldrev: 18a767beca20833760f7cc7ebf179b20ea85e9e6
+X-Git-Newrev: 71132ca41bc1b99374f406267d985be50aca9679
 X-Patchwork-Hint: ignore
-Message-Id: <20231013144605.92F3F847A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/linux-tools: fix
- SysV init script
+Message-Id: <20231013144605.A9022847A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-utils.mk:
+ break hardlinks in global {TARGET, HOST}_DIR on per-package build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,64 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2055dc5ae57298aa6aa4e81b985affa5577c7e01
+commit: https://git.buildroot.net/buildroot/commit/?id=71132ca41bc1b99374f406267d985be50aca9679
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This commit fixes the S10hyperv SysV init script which expects binaries
-to be locate in /sbin while they are installed in /usr/sbin. Please
-note, that the systemd init scripts correctly reference them.
-Furthermore, the SysV init script did not check for an actual HyperV
-environment to be present, which is also corrected. In addition, this
-commit also fixes check-package warnings regarding a missing DAEMON
-definition.
+Without this patch, a make <pkg>_rebuild detects overwrites. Indeed, in
+target_finalize steps some modifications are done on installed files (ie
+strip or TARGET_FINALIZE_HOOKS for instance).
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-[Peter: drop from .checkpackageignore]
+In order to avoid these modifications seen from per-package {TARGET,HOST}_DIR
+and so been analyzed as some overwrites, global {TARGET,HOST}_DIR is built
+using a full copy of the involved per-package files instead of hardlinks.
+
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 14c4bd7bf8150283e158c50df87c77d63bb1b73c)
+(cherry picked from commit 21d52e52d8dee0940d28b3a38551eb183be37813)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore           | 1 -
- package/linux-tools/S10hyperv | 8 ++++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/pkg-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 4faa3a8b8f..dbff352d3b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -93,7 +93,6 @@ package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch Sob
- package/libiio/S99iiod Shellcheck Variables
- package/libmad/0001-mips-h-constraint-removal.patch Sob
- package/lighttpd/S50lighttpd EmptyLastLine Indent Shellcheck Variables
--package/linux-tools/S10hyperv Variables
- package/linuxptp/S65ptp4l Indent Shellcheck
- package/linuxptp/S66phc2sys Indent Shellcheck
- package/lirc-tools/S25lircd Indent Variables
-diff --git a/package/linux-tools/S10hyperv b/package/linux-tools/S10hyperv
-index 32887d1b6c..be9ed2c5df 100644
---- a/package/linux-tools/S10hyperv
-+++ b/package/linux-tools/S10hyperv
-@@ -2,14 +2,18 @@
- 
- PROGS="@PROGS@"
- PIDDIR="/var/run"
-+DAEMON="hyperv"
- 
- # shellcheck source=/dev/null
--[ -r "/etc/default/hyperv" ] && . "/etc/default/hyperv"
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+# only continue if we are in a HyperV platform
-+[ -e "/sys/bus/vmbus" ] || exit 0
- 
- start_one() {
- 	printf 'Starting %s: ' "$1"
- 	# shellcheck disable=SC2086 # we need the word splitting
--	start-stop-daemon -b -m -S -q -p "$PIDDIR/$1.pid" -x "/sbin/$1" -- -n
-+	start-stop-daemon -b -m -S -q -p "$PIDDIR/$1.pid" -x "/usr/sbin/$1" -- -n
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 530638566c..bdbdf20c23 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -217,7 +217,7 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ define per-package-rsync
+ 	mkdir -p $(3)
+ 	$(foreach pkg,$(1),\
+-		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
++		rsync -a \
+ 			$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+ 			$(3)$(sep))
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
