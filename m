@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC1CCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53A0BCDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 261E14191B;
-	Fri, 13 Oct 2023 18:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 261E14191B
+	by smtp2.osuosl.org (Postfix) with ESMTP id EFF294191C;
+	Fri, 13 Oct 2023 18:55:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFF294191C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5k0slFXZkOy7; Fri, 13 Oct 2023 18:55:05 +0000 (UTC)
+	with ESMTP id oaNL6rsoV7qd; Fri, 13 Oct 2023 18:55:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3DA141915;
-	Fri, 13 Oct 2023 18:55:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3DA141915
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0689B1BF995
+	by smtp2.osuosl.org (Postfix) with ESMTP id C46E341891;
+	Fri, 13 Oct 2023 18:55:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C46E341891
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D9DB1BF2BA
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F51241468
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F51241468
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8248142079
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8248142079
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AvmQMydf0F7u for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uXFQnJCb5sxn for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC31341490
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B49841FED
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC31341490
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B49841FED
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CF62184FC9; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+ id 4F43A84FED; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:28:56 +0200
+Date: Fri, 13 Oct 2023 20:17:35 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 2424d3501241e62ba6d4e6722442757ba307eb70
-X-Git-Newrev: d2cc929ce7b813d6a13a181b5515dbdd2a18c1c5
+X-Git-Oldrev: b1e2cd3e25f9f1d96d932ee1a17a8285cb58f2cd
+X-Git-Newrev: d157536698faafa7ba3eb1212307102a82d9cdbd
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184633.CF62184FC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
- linux-headers}: bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1, 5}.x series
+Message-Id: <20231013184633.4F43A84FED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/gst1-plugins-ugly: security bump to version 1.22.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,79 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2cc929ce7b813d6a13a181b5515dbdd2a18c1c5
+commit: https://git.buildroot.net/buildroot/commit/?id=d157536698faafa7ba3eb1212307102a82d9cdbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes the following security issues:
+
+ZDI-CAN-21443: Heap-based buffer overflow in the RealMedia file demuxer when
+handling malformed files in GStreamer versions before 1.22.5 / 1.20.7.
+
+https://gstreamer.freedesktop.org/security/sa-2023-0004.html
+
+ZDI-CAN-21444: Heap-based buffer overflow in the RealMedia file demuxer when
+handling malformed files in GStreamer versions before 1.22.5 / 1.20.7.
+
+https://gstreamer.freedesktop.org/security/sa-2023-0005.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d71743b7360c19d7555529077a47fb14eba8d234)
-[Peter: drop 6.5.x bump]
+(cherry picked from commit 7f2571f594cc87fc7543b5476eeda1bdda4d7264)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ced11e6917..b5b486cc3e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index ed781df686..f55dd7b3a0 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.2.tar.xz.sha256sum
+-sha256  8f30f44db0bd063709bf6fbe55138e3a98af0abcb61c360f35582bbe10e80691  gst-plugins-ugly-1.22.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.6.tar.xz.sha256sum
++sha256  3e31454c98cb2f7f6d2d355eceb933a892fa0f1dc09bc36c9abc930d8e29ca48  gst-plugins-ugly-1.22.6.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index f1566b058e..ee3bd1b551 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.1.56" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.1.57" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e66a6cdb7d..f52ca6bad1 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  9edefdde32c2298389dcd19566402332b3c2016f5ada17e5820f500b908d478c  linux-6.1.56.tar.xz
-+sha256  f9ebfe3ddc5152d87b37e33be30e31875d137433be10a57ce29d2eae7b6e91b1  linux-6.1.57.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  f37182aecb57ed6853d01e1074d3a60a653331e35f3115728381e08be050b9d3  linux-5.15.134.tar.xz
--sha256  183a4507b0ebec7816a79ceba6253aa7ad345e25b0fcd4e834ee154be9a993ab  linux-5.10.197.tar.xz
--sha256  2e775970521ea7ff6eb613fc85a6e34cec73feaeb67b88a77a2fbd4f75483df0  linux-5.4.257.tar.xz
-+sha256  14835e629e237f136cfed484fdb533c95242429809bdcdb2a2d66dfcb7447170  linux-5.15.135.tar.xz
-+sha256  2b141fce994364fbbf137b01e7910d3518b8cdbdf18f1811b48470ab4ce2fa05  linux-5.10.198.tar.xz
-+sha256  39701815a7a1b5ea4253db18e9327a45926a944499628d032da63c1bb6ea623e  linux-5.4.258.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  b732c2e4f08576a9dd5bb14213cead3835acbb101a91aaba3d6ace302fd538ac  linux-4.19.295.tar.xz
--sha256  555ce40f1df4c0f4a74cbefcaad0c67108615860968720faabe51cdee2df1478  linux-4.14.326.tar.xz
-+sha256  636166769dc232d18f399f40c22107c289aab8702e752301588e64ab582860ae  linux-4.19.296.tar.xz
-+sha256  bff085d8832dd5c3d717beeebdff78a0b678f0a2307f83acf22764dabdcb0a5a  linux-4.14.327.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3d76d2eda1..61ff9a6739 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -384,12 +384,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.326"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.295"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.257"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.197"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.134"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.56"	if BR2_KERNEL_HEADERS_6_1
-+	default "4.14.327"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.296"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.258"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.198"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.135"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.57"	if BR2_KERNEL_HEADERS_6_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-GST1_PLUGINS_UGLY_VERSION = 1.22.2
++GST1_PLUGINS_UGLY_VERSION = 1.22.6
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
