@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB0CCDB482
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A2B5CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8E2341468;
-	Fri, 13 Oct 2023 18:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8E2341468
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC13D418AC;
+	Fri, 13 Oct 2023 18:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC13D418AC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XkJDCkwk9mGG; Fri, 13 Oct 2023 18:51:45 +0000 (UTC)
+	with ESMTP id KaErAtb-lfSV; Fri, 13 Oct 2023 18:52:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D708541831;
-	Fri, 13 Oct 2023 18:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D708541831
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5AF2418C2;
+	Fri, 13 Oct 2023 18:51:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5AF2418C2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6B6601BF2BA
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C614C1BF995
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4419881BC0
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4419881BC0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BC7B81E22
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BC7B81E22
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sYSRp1s34vPK for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 18:46:24 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC33381B8A
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC33381B8A
-Received: from fli4l.lan.fli4l (p54a1b15c.dip0.t-ipconnect.de [84.161.177.92])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4AD75A4C027D
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 20:45:56 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49950)
- by fli4l.lan.fli4l with esmtp (Exim 4.96.1)
- (envelope-from <bernd@kuhls.net>) id 1qrNAZ-0005se-2p
- for buildroot@buildroot.org; Fri, 13 Oct 2023 20:45:56 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTP id zSOdwc1rPpsw for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFE7081BC0
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFE7081BC0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D55CF84FCB; Fri, 13 Oct 2023 18:46:32 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:45:53 +0200
-Message-Id: <20231013184554.337101-3-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231013184554.337101-1-bernd@kuhls.net>
-References: <20231013184554.337101-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1697222756;
- bh=bzA2gF45QG0HnPmFEAC/MLhfFo1TktSdQyGrdC2twlg=;
- h=From:To:Subject:Date:In-Reply-To:References:From;
- b=V4Pu4b0TpaRanpfjhyyr9G9CPA0L2VHcjo+rCSQQZGM6JoDb5pRU1hdbP6hOry0R3
- dqnollZW6dqjvLueTpcRG6nctC+fDuTHr4g36pQDzaklJYu7uA/BXk/+ntaIMQhgux
- ZRKd7xQyodIEMjZx77kUPQETEQzh9CpId8HiBWUx0OmTt2pR/WypOeodNUpAPYSbX3
- 3O7GxDEC0UbYJKIrKyD9W5NZraJWPoUx9bO5ZH0tIuk6YztTbnGh6hQnwV1yWvFlr5
- SGK/vUV6He6B+w9mxcOSOG3gc408nkFhs3Au2EyOtHTn9QGhET4lI+HEFaRrbQlUDZ
- DTSSWaG/IqUvw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=V4Pu4b0T
-Subject: [Buildroot] [PATCH 3/4] package/alsa-utils: Fix musl build
+Date: Fri, 13 Oct 2023 20:10:23 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: e5d9ea090d844cc960f5dd385402882f5c87e2a2
+X-Git-Newrev: 8032a566d5922f8b5a11a70b3b1351866cc4e016
+X-Patchwork-Hint: ignore
+Message-Id: <20231013184632.D55CF84FCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/mbedtls: bump to
+ 2.28.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,123 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/bce/bce46fd8aab9ef4918228e8cfc5f8b5abe71e859/
+commit: https://git.buildroot.net/buildroot/commit/?id=8032a566d5922f8b5a11a70b3b1351866cc4e016
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This musl-related autobuilder error occured when building alsa-lib and
-is fixed by
-https://patchwork.ozlabs.org/project/buildroot/patch/20230927052204.231589-1-bernd@kuhls.net/
-
-When continuing the build of this defconfig we see a build error with
-alsa-utils which is fixed by this patch.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8941de8454b3a3b780241790c6470f54df5f2e4f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0009-topology-include-locale.h.patch      | 33 +++++++++++++++++++
- ...nhlt-dmic-info.c-include-sys-types.h.patch | 33 +++++++++++++++++++
- package/alsa-utils/Config.in                  |  1 +
- 3 files changed, 67 insertions(+)
- create mode 100644 package/alsa-utils/0009-topology-include-locale.h.patch
- create mode 100644 package/alsa-utils/0010-nhlt-dmic-info.c-include-sys-types.h.patch
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/alsa-utils/0009-topology-include-locale.h.patch b/package/alsa-utils/0009-topology-include-locale.h.patch
-new file mode 100644
-index 0000000000..14a059cbf6
---- /dev/null
-+++ b/package/alsa-utils/0009-topology-include-locale.h.patch
-@@ -0,0 +1,33 @@
-+From 8c229270f6bae83b705a03714c46067a7aa57b02 Mon Sep 17 00:00:00 2001
-+From: Michael Opdenacker <michael.opdenacker@bootlin.com>
-+Date: Tue, 19 Sep 2023 13:14:29 +0200
-+Subject: [PATCH] topology: include locale.h
-+
-+This solves an issue compiling with the musl libc.
-+
-+Fixes: https://github.com/alsa-project/alsa-utils/issues/239
-+Signed-off-by: Michael Opdenacker <michael.opdenacker@bootlin.com>
-+Signed-off-by: Jaroslav Kysela <perex@perex.cz>
-+
-+Upstream: https://github.com/alsa-project/alsa-utils/commit/8c229270f6bae83b705a03714c46067a7aa57b02
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ topology/topology.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/topology/topology.c b/topology/topology.c
-+index 1840ffe..5d03a8b 100644
-+--- a/topology/topology.c
-++++ b/topology/topology.c
-+@@ -32,6 +32,7 @@
-+ #include <sys/stat.h>
-+ #include <getopt.h>
-+ #include <assert.h>
-++#include <locale.h>
-+ 
-+ #include <alsa/asoundlib.h>
-+ #include <alsa/topology.h>
-+-- 
-+2.39.2
-+
-diff --git a/package/alsa-utils/0010-nhlt-dmic-info.c-include-sys-types.h.patch b/package/alsa-utils/0010-nhlt-dmic-info.c-include-sys-types.h.patch
-new file mode 100644
-index 0000000000..b5f8489703
---- /dev/null
-+++ b/package/alsa-utils/0010-nhlt-dmic-info.c-include-sys-types.h.patch
-@@ -0,0 +1,33 @@
-+From 0925ad7f09b2dc77015784f9ac2f5e34dd0dd5c3 Mon Sep 17 00:00:00 2001
-+From: Michael Opdenacker <michael.opdenacker@bootlin.com>
-+Date: Tue, 19 Sep 2023 13:14:30 +0200
-+Subject: [PATCH] nhlt-dmic-info.c: include sys/types.h
-+
-+This fixes an issue compiling with the musl libc.
-+
-+Fixes: https://github.com/alsa-project/alsa-utils/issues/238
-+Signed-off-by: Michael Opdenacker <michael.opdenacker@bootlin.com>
-+Signed-off-by: Jaroslav Kysela <perex@perex.cz>
-+
-+Upstream: https://github.com/alsa-project/alsa-utils/commit/0925ad7f09b2dc77015784f9ac2f5e34dd0dd5c3
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ nhlt/nhlt-dmic-info.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/nhlt/nhlt-dmic-info.c b/nhlt/nhlt-dmic-info.c
-+index 3f6c64d..331555a 100644
-+--- a/nhlt/nhlt-dmic-info.c
-++++ b/nhlt/nhlt-dmic-info.c
-+@@ -33,6 +33,7 @@
-+ #include <fcntl.h>
-+ #include <getopt.h>
-+ #include <sys/stat.h>
-++#include <sys/types.h>
-+ #include <arpa/inet.h>
-+ 
-+ int debug = 0;
-+-- 
-+2.39.2
-+
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index 3429d0b406..be222501b9 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -65,6 +65,7 @@ config BR2_PACKAGE_ALSA_UTILS_APLAY
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 876cd7b77e..2281bd5fe5 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.2:
+-sha256  bc55232bf71fd66045122ba9050a29ea7cb2e8f99b064a9e6334a82f715881a0  mbedtls-2.28.2.tar.gz
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.3:
++sha256  bdf7c5bbdc338da3edad89b2885d4f8668f9a6fffeba6ec17a60333e36dade6f  mbedtls-2.28.3.tar.gz
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 7a605ac5b1..8f09fd72a8 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_ALSA_UTILS_APLAYMIDI
- 	bool "aplaymidi"
-+	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
- 	select BR2_PACKAGE_ALSA_LIB_SEQ
- 
- config BR2_PACKAGE_ALSA_UTILS_ARECORDMIDI
--- 
-2.39.2
-
+-MBEDTLS_VERSION = 2.28.2
++MBEDTLS_VERSION = 2.28.3
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
