@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FC05CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 10:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F826CDB483
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 10:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B605F61504;
-	Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B605F61504
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFF8561503;
+	Fri, 13 Oct 2023 10:25:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF8561503
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hg7quVuDjYdI; Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
+	with ESMTP id saDq4puahtoq; Fri, 13 Oct 2023 10:25:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03FAB61726;
-	Fri, 13 Oct 2023 10:25:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03FAB61726
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFE196F514;
+	Fri, 13 Oct 2023 10:25:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFE196F514
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D2C71BF349
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 10:24:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8ADAA1BF997
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 10:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B7CD41FCB
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 10:24:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B7CD41FCB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62F8940580
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 10:25:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62F8940580
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eTYHONPmTpQ1 for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 10:24:31 +0000 (UTC)
+ with ESMTP id kxSti8Xr1D-o for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FF0D41FCC
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 10:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FF0D41FCC
+ by smtp4.osuosl.org (Postfix) with ESMTP id AAEB640571
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAEB640571
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D613846D8; Fri, 13 Oct 2023 10:24:31 +0000 (UTC)
+ id 9AF87846EE; Fri, 13 Oct 2023 10:25:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 12:23:59 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: e785e38dcc0d717f9f265a4aba8ad29b0a3d3c1b
-X-Git-Newrev: 67c5936f4249b8edcda8de9e70146d332730524a
+Date: Fri, 13 Oct 2023 12:23:35 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 13967f09637198c32599b8f2c17d0f946820e85c
+X-Git-Newrev: 4cb43fc95700b648933587001a4e29f968b065fb
 X-Patchwork-Hint: ignore
-Message-Id: <20231013102431.2D613846D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] boot/at91bootstrap:
+Message-Id: <20231013102537.9AF87846EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] boot/at91bootstrap:
  disable PIE and stack-protector build flags
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67c5936f4249b8edcda8de9e70146d332730524a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4cb43fc95700b648933587001a4e29f968b065fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 The toolchain wrapper automatically adds Position Independent
 Execution and stack protector flags in the build process when selected
