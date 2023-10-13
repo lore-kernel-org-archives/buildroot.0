@@ -4,84 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D312BCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 21:08:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03F7DCDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 21:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49D0060F99;
-	Fri, 13 Oct 2023 21:08:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49D0060F99
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B40160F0B;
+	Fri, 13 Oct 2023 21:08:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B40160F0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hMJ4PFtX_gkm; Fri, 13 Oct 2023 21:08:42 +0000 (UTC)
+	with ESMTP id gb8g9gOD4IfT; Fri, 13 Oct 2023 21:08:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55FD060F28;
-	Fri, 13 Oct 2023 21:08:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55FD060F28
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D51501BF3C0
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 21:08:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1AB860FB5;
+	Fri, 13 Oct 2023 21:08:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1AB860FB5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D1951BF3C0
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 21:08:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD05A81F4A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 21:08:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD05A81F4A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06FFD60F28
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 21:08:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06FFD60F28
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UMPxnmfI6Si6 for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 21:08:38 +0000 (UTC)
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA95681F41
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 21:08:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA95681F41
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-405361bba99so24965805e9.2
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:08:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697231316; x=1697836116;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=d0wz56eMPCvEZwONNkXm+9D4uVQdLmH1hLxVRea2Ems=;
- b=lX0ASQyz6qhavRz+FMbkUX752kF+tJYibWWhZKawiM5vudwOaeE4OnykaMVwU3IwLg
- vgjE86BCtNh3dyG0RL8y9TMkSifSWsqacZqA3EwcEzz9RHDXoQ/6Xoe3cn0PVqlhrMAX
- DLC3ZdMxwDXKMqHark+K/PK4V2jWIQLeAQ85HTLLxJzbWyWwRXnWRtO4d9yzuxIBmOBV
- i+G4n1cxdP/1BSqvYFVf/qSoYsjIIwrMtqZP95Al9F2gqnGWI5Xqdkf3L9r/0WTBv+Zo
- Lq3DKiWBfc5zseQFbElQG1O6TyEmHMjkZhq3AhiMmbjzzg2hIZ6V3axanb8sS+MIu9gi
- qEKw==
-X-Gm-Message-State: AOJu0YzZRBq7mxmwMRfZlcQqzYe/onKsoWOrMXtpwT1apXavMYAOk+N0
- tSI0N6BZJXv+vYoDiOHXXjvNkMgJTLU=
-X-Google-Smtp-Source: AGHT+IFmXhLbDQ/+W7XdG8AfTMlMuwLLLLDt6HlaZw7o4m0f8ZlabfC7F8Jdd+WZ4oZVRO2nb5wfAg==
-X-Received: by 2002:a05:600c:2218:b0:406:535a:f558 with SMTP id
- z24-20020a05600c221800b00406535af558mr25746116wml.10.1697231316208; 
- Fri, 13 Oct 2023 14:08:36 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m9-20020a05600c4f4900b00407754b998dsm120639wmq.27.2023.10.13.14.08.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Oct 2023 14:08:35 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YXMScw6vwz1Z for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 21:08:46 +0000 (UTC)
+Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DEEBF60F88
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 21:08:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEEBF60F88
+Received: from localhost.localdomain ([146.241.127.78])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id rPOkqOJuYfJOlrPOkq5PxC; Fri, 13 Oct 2023 23:08:42 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 23:08:30 +0200
-Message-ID: <20231013210830.143696-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+Date: Fri, 13 Oct 2023 23:08:41 +0200
+Message-Id: <20231013210841.153788-2-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231013210841.153788-1-giulio.benetti@benettiengineering.com>
+References: <20231013210841.153788-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697231316; x=1697836116; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=d0wz56eMPCvEZwONNkXm+9D4uVQdLmH1hLxVRea2Ems=;
- b=Z+1KsZBuquukBVBMpfYH3Id0AaovH663xkDLCTZFL72rNikgg6Vpq2OPrqMdXX/wyQ
- lZwMSIfVF0y4E/z3QV6kzOMTgI2yg22kTq9JdFeZVdUoiQieKAQ1zrLPD+wV0oJXOicW
- gi0ZWGGDU/6AbeWzmw4pi4HJCMi27t/extdcUW23qVPqEFaE82ppGKiNQXV+Ux3uXcj8
- bq58vTKui+A+ZHk9jprkAxDPoB6w9p5kuyzOzsS8BNJtAYnYvNOimkO46l7R7sxXFqkt
- YqWYOkH3KAKBIwdiQfWJwj7VmKgGmQqmeWcIpZ1PuFVCVZjlPyZKrv9L7ajAQ5PQLxXU
- LM6Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Z+1KsZBu
-Subject: [Buildroot] [PATCH 1/1] package/mutt: fix libgpgme static build
+X-CMAE-Envelope: MS4xfMvoDhHwK2FwXF02jecPkaslaW4+n1pFOces/H26qxyUuNcnTnINRzytmHw5FkJ9z5D9tyii4WCsege7XdziOsr5YtqVualuszVfr0ikq9kGqgvtYHX0
+ 9OF7kyh0J70JBcHXHkTMGl6SizmZVyq3q/3M7KcbYR+zBnzL9IJLVKCDLm2F1w84gEY+qVkMOzk9lwauH7myfbw6UsarlDyQnq9gk3y/31fj4LMchSvrV4jD
+ hND3R1MFZBmWhdzgcTjY+3Z9GbKoyxCFpz8d7gTZ19G4oej8oMoY/dMgdkEHbLd4iiDtysRo8FMW1Z66vkFxjk7HdqqqGiavbJgjCJ4t33+4iIIrMh/lWWIo
+ iIoNd0iz
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1697231322; bh=wtHx+yFYeMvHImTx+Qxp5OeG+oFF+pO6OSdMIfKjsyg=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=YcL/bj58w7ekWlPXn0jpRIrAo1aLliMKrh33JW+4hPX2kEuSYOswHOg6EmrWmaGa1
+ F1cIidSqiRlreJ4r6X+wdPLBzEV2wEGjaIgsdO9CG8cYKzsi1KRIxtX+tSm6ZwhGnT
+ 0An2Wq/bQ+U7CrDfXjmi67AGjKCt5S+ldPAhADe2lvgmvIC1aAwrwd960BYh4mUl8z
+ e+gzp3zbBoR7Sv728yO1mD94PK8/u/Ju3htWMhjHYbkF5RmHB0dMQ2UJIk2oY27lcL
+ 9sltX/rFli3VTvBGauzaDO9bhjjSWx2noiKbc57TWbsT1G3KQ6OXRlAEdg5YweIVJO
+ HDiGPlh8fKaag==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=YcL/bj58
+Subject: [Buildroot] [PATCH 2/2] board/bananapi/bananapi-m2-ultra: switch to
+ use extlinux.conf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,47 +75,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Lothar Felten <lothar.felten@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following static build failure with libgpgme raised since at
-least bump to version 2.2.9 in commit
-7a2afdb7b1180bed3b6ad92c22c908805467ead3:
+While switching bump Linux version to 6.1.57 and U-Boot version to
+2023.10.
 
-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/sh4a-buildroot-linux-musl/11.3.0/../../../../sh4a-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-11/output-1/host/sh4a-buildroot-linux-musl/sysroot/usr/lib/libgpgme.a(assuan-support.o): in function `my_usleep':
-assuan-support.c:(.text+0x260): undefined reference to `__assuan_usleep'
-
-Fixes:
- - http://autobuild.buildroot.org/results/0680dbc95601fcd8cdf07b926ea5e9be2079c7bf
- - http://autobuild.buildroot.org/results/b4f2d1ad77fb8b97accc4150d8249de145cb9cf4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/mutt/mutt.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ board/bananapi/bananapi-m2-ultra/boot.cmd      |  7 -------
+ board/bananapi/bananapi-m2-ultra/extlinux.conf |  4 ++++
+ board/bananapi/bananapi-m2-ultra/genimage.cfg  | 18 ------------------
+ board/bananapi/bananapi-m2-ultra/post-build.sh |  5 +++++
+ configs/bananapi_m2_ultra_defconfig            |  9 ++++-----
+ 5 files changed, 13 insertions(+), 30 deletions(-)
+ delete mode 100644 board/bananapi/bananapi-m2-ultra/boot.cmd
+ create mode 100644 board/bananapi/bananapi-m2-ultra/extlinux.conf
+ create mode 100755 board/bananapi/bananapi-m2-ultra/post-build.sh
 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 09f547a091..2fe7b92b38 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -40,7 +40,11 @@ MUTT_CONF_OPTS += \
+diff --git a/board/bananapi/bananapi-m2-ultra/boot.cmd b/board/bananapi/bananapi-m2-ultra/boot.cmd
+deleted file mode 100644
+index 9c24eabff6..0000000000
+--- a/board/bananapi/bananapi-m2-ultra/boot.cmd
++++ /dev/null
+@@ -1,7 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-mmc dev 0
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-r40-bananapi-m2-ultra.dtb
+-
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/bananapi/bananapi-m2-ultra/extlinux.conf b/board/bananapi/bananapi-m2-ultra/extlinux.conf
+new file mode 100644
+index 0000000000..f5f35c1d8f
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-ultra/extlinux.conf
+@@ -0,0 +1,4 @@
++label Bananapi M2 Ultra linux
++  kernel /boot/zImage
++  devicetree /boot/sun8i-r40-bananapi-m2-ultra.dtb
++  append console=ttyS0,115200n8 root=/dev/mmcblk0p1 rootwait
+diff --git a/board/bananapi/bananapi-m2-ultra/genimage.cfg b/board/bananapi/bananapi-m2-ultra/genimage.cfg
+index 88324f1f24..92c8677545 100644
+--- a/board/bananapi/bananapi-m2-ultra/genimage.cfg
++++ b/board/bananapi/bananapi-m2-ultra/genimage.cfg
+@@ -1,15 +1,3 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"sun8i-r40-bananapi-m2-ultra.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+ image sdcard.img {
+ 	hdimage {
+ 	}
+@@ -21,12 +9,6 @@ image sdcard.img {
+ 		size = 1016K # 1MB - 8KB
+ 	}
  
- # Force the path to "gpgrt-config" (from the libgpg-error package) to
- # avoid using the one on host, if present.
--MUTT_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
-+MUTT_GPGRT_CONFIG = $(STAGING_DIR)/usr/bin/gpgrt-config
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MUTT_GPGRT_CONFIG += --static
-+endif
-+MUTT_CONF_ENV += GPGRT_CONFIG="$(MUTT_GPGRT_CONFIG)"
- else
- MUTT_CONF_OPTS += --disable-gpgme
- endif
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
+diff --git a/board/bananapi/bananapi-m2-ultra/post-build.sh b/board/bananapi/bananapi-m2-ultra/post-build.sh
+new file mode 100755
+index 0000000000..1f5ff6a611
+--- /dev/null
++++ b/board/bananapi/bananapi-m2-ultra/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+diff --git a/configs/bananapi_m2_ultra_defconfig b/configs/bananapi_m2_ultra_defconfig
+index 0f267021f8..6b2ba13e41 100644
+--- a/configs/bananapi_m2_ultra_defconfig
++++ b/configs/bananapi_m2_ultra_defconfig
+@@ -2,21 +2,23 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Ultra"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/bananapi/bananapi-m2-ultra/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-ultra/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.57"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-r40-bananapi-m2-ultra"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m2_berry"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+@@ -27,6 +29,3 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m2-ultra/boot.cmd"
 -- 
-2.42.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
