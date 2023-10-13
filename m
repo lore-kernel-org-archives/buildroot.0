@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03F50CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF547CDB482
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE2B66F545;
-	Fri, 13 Oct 2023 14:47:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE2B66F545
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A7C86F555;
+	Fri, 13 Oct 2023 14:47:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A7C86F555
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 34a2O9I0Z-Td; Fri, 13 Oct 2023 14:46:59 +0000 (UTC)
+	with ESMTP id I82mt0sXXAcA; Fri, 13 Oct 2023 14:47:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 877FE6F5B1;
-	Fri, 13 Oct 2023 14:46:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 877FE6F5B1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 168211BF33A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B66460B8C;
+	Fri, 13 Oct 2023 14:47:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B66460B8C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ED4801BF33A
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4CD741DBA
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4CD741DBA
+ by smtp1.osuosl.org (Postfix) with ESMTP id EBB2381EC0
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBB2381EC0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L7jw3vuVqn8u for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RTjO3MgcyF4l for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B21BE41BC5
+ by smtp1.osuosl.org (Postfix) with ESMTP id DBCDA81E68
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B21BE41BC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBCDA81E68
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FA7A846D2; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
+ id CC23D846D2; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 16:35:33 +0200
+Date: Fri, 13 Oct 2023 16:41:21 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 2055dc5ae57298aa6aa4e81b985affa5577c7e01
-X-Git-Newrev: 18a767beca20833760f7cc7ebf179b20ea85e9e6
+X-Git-Oldrev: ec4bbdeaf86fdc10babef276ed605742050e48e7
+X-Git-Newrev: 3038bcc6c1532123fbcc8e22a4e684aaadd94723
 X-Patchwork-Hint: ignore
-Message-Id: <20231013144605.9FA7A846D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/webkitgtk:
- require GCC 9 for the 2.40.x series
+Message-Id: <20231013144605.CC23D846D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-generic.mk:
+ fix rule order for reinstall/rebuild/reconfigure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18a767beca20833760f7cc7ebf179b20ea85e9e6
+commit: https://git.buildroot.net/buildroot/commit/?id=3038bcc6c1532123fbcc8e22a4e684aaadd94723
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Raise the minimal GCC version to 9.3, which is required since webkitgtk-2.40.0 [1].
-Similar to commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4,
-we do check on >= GCC 9, because we can't check on >= GCC 9.3.
+The reinstall, rebuild and reconfigure commands rely on the
+left-to-right order of evaluation of the dependencies to make sure that
+the stamp files are removed before attempting to rebuild. However, this
+order of evaluation is not guaranteed. In particular, if top-level
+parallel build is enabled, they are executed in parallel and the stamp
+file may not have been removed yet when it is evaluated to decide if
+rebuild has to be done.
 
-[1] https://github.com/WebKit/WebKit/commit/f9c142d9b5b8c48fe310bc6d3620e634901b2930
+Since make 4.4, it is possible to reproduce this issue by passing
+`--shuffle=reverse` to the make commandline.
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit de38484ec31437e3f2f0d7c0fa46f2f30d0a8fbb)
+To solve this, add a .WAIT directive between the clean and
+install/build/configure dependencies. .WAIT was introduced in make 4.4
+as well. It makes sure that the dependencies on the left are evaluated
+before the dependencies on the right - exactly what we want here.
+
+Earlier versions of make don't know about .WAIT, so we need to add a
+.PHONY dependency to effectively ignore it.
+
+Note that this doesn't fix the problem for make versions earlier than
+4.4. However, the issue isn't really that important: reinstall, rebuild
+and reconfigure are development tools, they're not fully reliable to
+begin with, and it's anyway less likely that someone uses `make -j` when
+doing a reinstall/rebuild/reconfigure.
+
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Reported-by: James Hilliard <james.hilliard1@gmail.com>
+(cherry picked from commit 7e3105d5c8bd9ab31e728af9732a67d203c0a2e4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Makefile               | 3 +++
+ package/pkg-generic.mk | 6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 23c0bf41db..d47d6a8c1b 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -16,12 +16,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+diff --git a/Makefile b/Makefile
+index a7b7729946..67d3f3105a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1270,4 +1270,7 @@ include docs/manual/manual.mk
  
--comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 8, host gcc >= 4.9"
-+comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 9, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
- 		!BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
+ .PHONY: $(noconfig_targets)
  
-@@ -32,7 +32,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	depends on BR2_USE_WCHAR # icu, libsoup
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
++# .WAIT was introduced in make 4.4. For older make, define it as phony.
++.PHONY: .WAIT
++
+ endif #umask / $(CURDIR) / $(O)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 82187d7db9..1796f29b1f 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1057,17 +1057,17 @@ endif
+ 			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
+ 			rm -f $$($(2)_TARGET_INSTALL_HOST)
+ 
+-$(1)-reinstall:		$(1)-clean-for-reinstall $(1)
++$(1)-reinstall:		$(1)-clean-for-reinstall .WAIT $(1)
+ 
+ $(1)-clean-for-rebuild: $(1)-clean-for-reinstall
+ 			rm -f $$($(2)_TARGET_BUILD)
+ 
+-$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
++$(1)-rebuild:		$(1)-clean-for-rebuild .WAIT $(1)
+ 
+ $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
+ 			rm -f $$($(2)_TARGET_CONFIGURE)
+ 
+-$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
++$(1)-reconfigure:	$(1)-clean-for-reconfigure .WAIT $(1)
+ 
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
