@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F8E2CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 13:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34F82CDB482
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 13:57:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E109242081;
-	Fri, 13 Oct 2023 13:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E109242081
+	by smtp4.osuosl.org (Postfix) with ESMTP id C74AD41EB0;
+	Fri, 13 Oct 2023 13:57:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C74AD41EB0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vw_22iPQA294; Fri, 13 Oct 2023 13:56:30 +0000 (UTC)
+	with ESMTP id pG3aPKp5mGhD; Fri, 13 Oct 2023 13:57:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E92A4207B;
-	Fri, 13 Oct 2023 13:56:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E92A4207B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0169F1BF995
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 13:56:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A07C41FEA;
+	Fri, 13 Oct 2023 13:57:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A07C41FEA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7024B1BF995
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 13:57:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD6C441FE0
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 13:56:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD6C441FE0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4940660644
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 13:57:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4940660644
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8kn0hCHZ1-V2 for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 13:56:13 +0000 (UTC)
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 625F940875
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 13:56:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 625F940875
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-9be02fcf268so26051666b.3
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 06:56:13 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7HXzhlbWgz4t for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 13:57:43 +0000 (UTC)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 98D3B600B9
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 13:57:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98D3B600B9
+Received: by mail-ej1-x62a.google.com with SMTP id
+ a640c23a62f3a-9ada2e6e75fso372702366b.2
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 06:57:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697205371; x=1697810171;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=qKpSPwVE7bu+haU+2iX/931Szw27/jLMSTaprY34Cqw=;
- b=pF1JlDNoz+IxB1eKjPzPhvQ5AiQ5TNsSRLBDbDC4pIOhzFP74q81a7s0ejA1hucorM
- 9/tkG+P9Eklb5dXiy4IpqJif5jYAihKI3spyOskKVD8d8rL1rK0jDMy31f+L1jiohEN+
- KX+GP4NbvyvsToBu8LG2SBr74hiCvLGZIsHdUoqT6CbGqhmujHUsvFu0c5bBHptYwjfF
- U3lK8r5dxDGtYgs2Yggc5lhFc670U0qtSlgCt80yp9t2KG/w9UCtaBWS/oVB4lJHBa+Q
- 7rL+CcH5X/KYaBpPGNUW/B6yJnMsrIwSR1pLcqHQzR+oeix55W4miMsdeMKz/HxAH4+Z
- SqVw==
-X-Gm-Message-State: AOJu0YxAZM/8pfAsfoaa7XmuXTTGjcpS3SDwoOiO/Q9ZXzCG6mTuKdJY
- Gl8c8ET/90CIplfgaSW0RljNNlm988kSpVz/Pq+Hlw==
-X-Google-Smtp-Source: AGHT+IG+hr3AzLFjS3oCWkUFYpnDYa2X9jG/2MybSbsay0Yo7/23G34epGO1el9+m87u/Xv+CS5r8Q==
-X-Received: by 2002:a17:906:23e9:b0:9b2:c583:cd71 with SMTP id
- j9-20020a17090623e900b009b2c583cd71mr25455534ejg.50.1697205370883; 
- Fri, 13 Oct 2023 06:56:10 -0700 (PDT)
-Received: from fedora.amarulasolutions.com
- ([2001:b07:6467:4426:3fb7:fc38:9be:dc4c])
- by smtp.gmail.com with ESMTPSA id
- e27-20020a170906045b00b009b655c43710sm12406706eja.24.2023.10.13.06.56.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Oct 2023 06:56:10 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 15:56:06 +0200
-Message-ID: <20231013135606.3382121-2-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231013135606.3382121-1-adam.duskett@amarulasolutions.com>
-References: <20231013135606.3382121-1-adam.duskett@amarulasolutions.com>
+ d=1e100.net; s=20230601; t=1697205462; x=1697810262;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=SsDqStHWxLN6ncp+4aGp8ojOnhC+EhZwto/OIEBzWMQ=;
+ b=LhP6IO+TZ28/bQO6Oe2/KXZz8h6pmRZ7IKug/Tke1NKG21UzcEKW0EozNm8LEDOTdw
+ WEHdvx5Qp+4Ea/1Gi1yyt93lQtqnlzOFhhbvzLb/BdB3VvEjyuld2JttgXAW1TiS7veY
+ YRzQqeLFbr2opx5BmMIH8qPkzsoYgM9MS7zi2f9fkM9tLRgpHvGPcYEpno5kSVqcxw4H
+ J9pdMThBXTqIk9xQAr/TJLYwHriIN2Uk3NfUHww0dJp1GDzEUM7WWGbABsBmbcWiIMC3
+ 9iNXYqOf36OcG5WkWvBGAJ0IQ8U8M6EX0eHy7vefDROeEgdGbZFZSPmmXC5vqAdrEjym
+ BLBQ==
+X-Gm-Message-State: AOJu0YwVIOhPA+aW/5IyP+z16DPleZ77/CGtgAYAVizfKq23x2ey75oG
+ whNIInMQGPgL2PFnTV2/Bf2fXZMXKY2ehqDkyr6FAg==
+X-Google-Smtp-Source: AGHT+IEBh1lyUpxs985dCl636XXEyDGC7VDdwm3EbhuplA4BBJ1KyLjuJs1aeT5MjHbTHxM3m5RwSNImwtWyd3FaUSw=
+X-Received: by 2002:a17:906:30d6:b0:9ad:a59f:331a with SMTP id
+ b22-20020a17090630d600b009ada59f331amr22924410ejb.57.1697205461503; Fri, 13
+ Oct 2023 06:57:41 -0700 (PDT)
 MIME-Version: 1.0
+References: <4fa235baaa88440e806f3c5f8f8bcb58@physiomed.de>
+ <94908e37-932a-4626-8fcb-c39d3293fe38@benettiengineering.com>
+ <5ea9bca9-6e26-ad12-6bd0-c131a3281460@mind.be>
+ <CAMdwsN-jxks4PzNd5dSZufgWVRSkBKMNMVzrTUv5ermh8TyY1A@mail.gmail.com>
+ <CAHDQB6PpKpX_1nZtRaX_evWxa35GfOyXa4gVF2qvFKOJR0cyVQ@mail.gmail.com>
+ <0df9596a80db41b88f9b83c5c254ea97@physiomed.de>
+In-Reply-To: <0df9596a80db41b88f9b83c5c254ea97@physiomed.de>
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Fri, 13 Oct 2023 15:57:29 +0200
+Message-ID: <CAHDQB6MZjHG9EyUgugCbWgRQ=N0f0319817w4cb41DEvtRwSCg@mail.gmail.com>
+To: =?UTF-8?Q?Sch=C3=A4ffner=2C_Florian?= <florian.schaeffner@physiomed.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1697205371; x=1697810171;
+ d=amarulasolutions.com; s=google; t=1697205462; x=1697810262;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=qKpSPwVE7bu+haU+2iX/931Szw27/jLMSTaprY34Cqw=;
- b=fYXfocMgklANKijP8+RDfTvVkxEhRmkysZuVLoHmrKdiKWd0mgURhKmgJDaXvALOv8
- WFSAKC12zmkhHPB2uR0eIoFC2pA8Rzx0mySdZt8p/0qZ5jyQA6foTK5VgetLKclnaAwO
- qOamjnKjtO5O11pkkYjIwFgRtvTO9EcodboWQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=SsDqStHWxLN6ncp+4aGp8ojOnhC+EhZwto/OIEBzWMQ=;
+ b=NZiG8GiZF6Ex0KZiR1BgVadjhko6l5/Xb7ZUuIg1871FCSzT69U7e0/7cEKKJVNjth
+ y/jrJy5uA1rXVULxVStVXXFDKvHXgAuLWOABXtjqUcMUvI/i240JHJdiRncG1nZnLbxY
+ AYz5RdZPLljSFc9/eom18VOjtTRPcL5w6Q9B0=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=fYXfocMg
-Subject: [Buildroot] [PATCH 2/2] package/qt6/qt6shadertools: new package
+ header.b=NZiG8GiZ
+Subject: Re: [Buildroot] Future buildroot with QtQuick/QML Support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,155 +93,513 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Jesse Van Gavere <jesseevg@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============4713333127969824444=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Based off of previous work by Jesse Van Gavere found here:
-https://patchwork.ozlabs.org/project/buildroot/patch/20230808172231.1114696-1-jesse.vangavere@scioteq.com/
+--===============4713333127969824444==
+Content-Type: multipart/alternative; boundary="000000000000a4f3e00607997013"
 
-Changes:
-  - Select BR2_PACKAGE_HOST_QT6BASE_GUI
-  - Select BR2_PACKAGE_QT6BASE_GUI
-  - Add host-qt6base to HOST_QT6SHADERTOOLS_DEPENDENCIES
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- DEVELOPERS                                    |  1 +
- package/qt6/Config.in                         |  1 +
- package/qt6/qt6shadertools/Config.in          | 14 ++++++
- .../qt6/qt6shadertools/qt6shadertools.hash    | 13 +++++
- package/qt6/qt6shadertools/qt6shadertools.mk  | 49 +++++++++++++++++++
- 5 files changed, 78 insertions(+)
- create mode 100644 package/qt6/qt6shadertools/Config.in
- create mode 100644 package/qt6/qt6shadertools/qt6shadertools.hash
- create mode 100644 package/qt6/qt6shadertools/qt6shadertools.mk
+--000000000000a4f3e00607997013
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3fffc4346c..bdc1463e83 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -37,6 +37,7 @@ F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-+F:	package/qt6/qt6shadertools/
- F:	support/testing/tests/package/test_flutter.py
- 
- N:	Adam Heinrich <adam@adamh.cz>
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 276a0217ab..b7e95a6885 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -47,6 +47,7 @@ source "package/qt6/qt6base/Config.in"
- source "package/qt6/qt6core5compat/Config.in"
- source "package/qt6/qt6serialbus/Config.in"
- source "package/qt6/qt6serialport/Config.in"
-+source "package/qt6/qt6shadertools/Config.in"
- source "package/qt6/qt6svg/Config.in"
- 
- endif
-diff --git a/package/qt6/qt6shadertools/Config.in b/package/qt6/qt6shadertools/Config.in
-new file mode 100644
-index 0000000000..423c686444
---- /dev/null
-+++ b/package/qt6/qt6shadertools/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_QT6SHADERTOOLS
-+	bool "qt6shadertools"
-+	select BR2_PACKAGE_HOST_QT6BASE
-+	select BR2_PACKAGE_QT6BASE_GUI
-+	select BR2_PACKAGE_HOST_QT6BASE_GUI
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  The Qt Shader Tools module builds on the SPIR-V Open
-+	  Source Ecosystem as described at the Khronos SPIR-V web
-+	  site.
-+
-+	  https://doc.qt.io/qt-6/qtshadertools-index.html
-diff --git a/package/qt6/qt6shadertools/qt6shadertools.hash b/package/qt6/qt6shadertools/qt6shadertools.hash
-new file mode 100644
-index 0000000000..803a083518
---- /dev/null
-+++ b/package/qt6/qt6shadertools/qt6shadertools.hash
-@@ -0,0 +1,13 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtshadertools-everywhere-src-6.4.3.tar.xz.sha256
-+sha256  c648b74ce3e769a20bd62792a589c540bceacfedf2f38fc7273d2c39782768f8  qtshadertools-everywhere-src-6.4.3.tar.xz
-+
-+# Hashes for license files
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-+sha256  c7d81f456bf5488fec8b2d249eec6b02e70bbdc353c373cd5a077e898345e943  src/3rdparty/SPIRV-Cross/KHRONOS-LICENSE.txt
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/SPIRV-Cross/LICENSE
-+sha256  5b1050253c0b933016f0538bce3354bb062e42b4d59d1082c0d0f9eca9b439c7  src/3rdparty/glslang/LICENSE.txt
-diff --git a/package/qt6/qt6shadertools/qt6shadertools.mk b/package/qt6/qt6shadertools/qt6shadertools.mk
-new file mode 100644
-index 0000000000..4cc6d6fcbf
---- /dev/null
-+++ b/package/qt6/qt6shadertools/qt6shadertools.mk
-@@ -0,0 +1,49 @@
-+################################################################################
-+#
-+# qt6shadertools
-+#
-+################################################################################
-+
-+QT6SHADERTOOLS_VERSION = $(QT6_VERSION)
-+QT6SHADERTOOLS_SITE = $(QT6_SITE)
-+QT6SHADERTOOLS_SOURCE = qtshadertools-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SHADERTOOLS_VERSION).tar.xz
-+QT6SHADERTOOLS_INSTALL_STAGING = YES
-+QT6SHADERTOOLS_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+QT6SHADERTOOLS_CMAKE_BACKEND = ninja
-+
-+QT6SHADERTOOLS_LICENSE = \
-+	GPL-3.0-only WITH Qt-GPL-exception-1.0, \
-+	GPL-2.0-only or LGPL-3.0-only, \
-+	GFDL-1.3-no-invariants-only, \
-+	Apache-2.0 or MIT, \
-+	BSD-3-Clause, \
-+	BSD-2-Clause, \
-+	Apache-2.0, \
-+	GPL-3.0-or-later WITH Bison-Exception-2.2
-+
-+QT6SHADERTOOLS_LICENSE_FILES = \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GFDL-1.3-no-invariants-only.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt \
-+	src/3rdparty/SPIRV-Cross/KHRONOS-LICENSE.txt \
-+	src/3rdparty/SPIRV-Cross/LICENSE \
-+	src/3rdparty/glslang/LICENSE.txt
-+
-+QT6SHADERTOOLS_CONF_OPTS = \
-+	-DBUILD_WITH_PCH=OFF \
-+	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6SHADERTOOLS_DEPENDENCIES = \
-+	host-pkgconf \
-+	qt6base \
-+	host-qt6shadertools
-+
-+HOST_QT6SHADERTOOLS_DEPENDENCIES = host-qt6base
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
--- 
-2.41.0
+Jesse;
+
+I have submitted an initial patch series to add the qt6shadertools package
+to buildroot. Could you please test it and let me know if it works for you?
+https://patchwork.ozlabs.org/project/buildroot/list/?series=3D377514
+
+Thanks!
+
+Adam Duskett
+
+Senior Embedded Systems Developer
+
+M. +1208-515-8102
+
+adam.duskett@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions BV
+
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+
+T. +31 (0)85 111 9170
+info@amarulasolutions.com
+
+www.amarulasolutions.com
+
+
+
+On Fri, Oct 13, 2023 at 1:24=E2=80=AFPM Sch=C3=A4ffner, Florian <
+florian.schaeffner@physiomed.de> wrote:
+
+> Hello all,
+>
+>
+>
+> thank you all for your support and offers. It would be great to give
+> something back, but i=E2=80=99m afraid that i=E2=80=99m not able to finis=
+h your work Jesse.
+> Sadly by now i was just a user of the given configurations that could be
+> downloaded. I=E2=80=99ll try to use Qt5 or hire some help. Thanks again f=
+or your
+> support.
+>
+> Kind regards
+>
+> Florian
+>
+>
+>
+> *Von:* Adam Duskett <adam.duskett@amarulasolutions.com>
+> *Gesendet:* Dienstag, 10. Oktober 2023 21:52
+> *An:* Jesse Van Gavere <jesseevg@gmail.com>
+> *Cc:* Arnout Vandecappelle <arnout@mind.be>; Giulio Benetti <
+> giulio.benetti@benettiengineering.com>; Sch=C3=A4ffner, Florian <
+> florian.schaeffner@physiomed.de>; buildroot@buildroot.org
+> *Betreff:* Re: [Buildroot] Future buildroot with QtQuick/QML Support
+>
+>
+>
+> I can see about porting the package tomorrow! No worries!
+>
+>
+>
+> Adam Duskett
+>
+> Senior Embedded Systems Developer
+>
+> M. +1208-515-8102
+>
+> adam.duskett@amarulasolutions.com
+>
+> __________________________________
+>
+>
+> Amarula Solutions BV
+>
+> Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+>
+> T. +31 (0)85 111 9170
+> info@amarulasolutions.com
+>
+> www.amarulasolutions.com
+>
+>
+>
+>
+>
+>
+>
+> On Tue, Oct 10, 2023 at 8:55=E2=80=AFPM Jesse Van Gavere <jesseevg@gmail.=
+com>
+> wrote:
+>
+> Hi,
+>
+> Op di 10 okt 2023 om 20:24 schreef Arnout Vandecappelle <arnout@mind.be>:
+> >
+> >
+> >
+> > On 10/10/2023 15:18, Giulio Benetti wrote:
+> > > Hello Florian,
+> > >
+> > > On 10/10/23 14:59, Sch=C3=A4ffner, Florian wrote:
+> > >> Hello,
+> > >>
+> > >> our application is built in the development environment with Qt 6 an=
+d
+> > >> QtQuick/QML. Now i tried, but wasn=E2=80=99t able to setup a working
+> buildroot for our
+> > >> application to run on a embedded device.
+> > >>
+> > >> I found the conversation about qt6 and QML Support on the buildroot
+> mailing
+> > >> list and that it seems to be not possible to setup a buildroot for
+> our needs
+> > >> with Qt6 and QML support.
+> > >>
+> > >>
+> https://lore.kernel.org/buildroot/f22ce06d-d9cf-c561-7455-19dce724c158@be=
+nettiengineering.com/
+> > >>
+> > >> If I understood the answer from Giulio Benetti correctly, there is
+> currently
+> > >> no chance to make this configuration work for our embedded board wit=
+h
+> buildroot?
+> > >>
+> > >> Can you please tell me if there will be support for this in the next
+> major
+> > >> buildroot version? Or is it not planned or foreseeable when a QML
+> support is
+> > >> possible with buildroot?
+> >
+> >   Buildroot is a volunteer project - nothing is "planned" unless someon=
+e
+> goes
+> > through the effort of contributing it.
+> >
+> > > as I can see from Buildroot patchork at the moment there is no pendin=
+g
+> > > patches to add features, but this doesn't mean it won't be added.
+> > >
+> > > Which modules would you be interested in most of all?
+> >
+> >   If you're not able or willing to develop the Qt6 QML support yourself=
+,
+> you may
+> > want to hire some help to do it. At the bottom of the "support" page on
+> the
+> > website [1] some companies are mentioned that can provide that help (I
+> work for
+> > one of them). Or you can find a freelancer - like Giulio.
+> >
+> >   You can also ask the original contributor of Qt6 (Jesse, added in Cc)
+> if they
+> > perhaps have some PoC for QML already. Or perhaps their employer would =
+be
+> > willing to share the cost of developing it.
+>
+> I do have a working POC to build QML with a plan for supporting
+> QtQuick, which I very much wanted to get upstreamed, however I've been
+> swamped with other non-buildroot work sadly.
+> That said, it should be very doable to add this support with not too much
+> work.
+> In a nutshell:
+> You need to add qtshadertools because of the qsb tool it builds, this
+> is a dependency for qtdeclarative to build QtQuick
+> This patch will be important:
+>
+> http://patchwork.ozlabs.org/project/buildroot/patch/20230808172231.111469=
+6-1-jesse.vangavere@scioteq.com/
+> The tricky thing there is that the host qt package does not build the
+> GUI by default, however since qt6 certain tools need to be built
+> through the host package, qsb is one of those, and to actually build
+> qsb through the qtshadertools package you need GUI support in the host
+> build, Thomas has provided some valuable feedback there how a proper
+> follow up patch could look like to add this functionality the right
+> way.
+>
+> Once that's done QML/QtQuick will be quite trivial to add, I already
+> have a qt6declarative package you could work with and (with some
+> refreshing of my memory) I could provide you the necessary config
+> options to add QtQuick alongside it.
+>
+> As said I don't have the time myself at the moment to do it right, and
+> I don't have a timeline for when I'll be able to do so, but if you're
+> willing to continue on the work I have to get it merged in, I'll
+> gladly help out where I can with some of my initial work and what I
+> know of how to get it all working, the finishing touches and testing
+> will be up to you however :)
+>
+> >
+> >   Regards,
+> >   Arnout
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+>
+
+--000000000000a4f3e00607997013
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Jesse;<div><br></div><div>I have submitted an initial patc=
+h series to add the qt6shadertools package to buildroot. Could you please t=
+est it and let me know if it works for you?</div><div><a href=3D"https://pa=
+tchwork.ozlabs.org/project/buildroot/list/?series=3D377514">https://patchwo=
+rk.ozlabs.org/project/buildroot/list/?series=3D377514</a><br></div><div><br=
+></div><div>Thanks!</div><div><br clear=3D"all"><div><div dir=3D"ltr" class=
+=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><s=
+pan><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;m=
+argin-bottom:0pt"><span style=3D"font-size:10pt;font-family:Ubuntu,sans-ser=
+if;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;wh=
+ite-space:pre-wrap">Adam Duskett</span></p><p dir=3D"ltr" style=3D"line-hei=
+ght:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"fon=
+t-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);=
+background-color:transparent;vertical-align:baseline;white-space:pre-wrap">=
+Senior Embedded Systems Developer</span></p><p dir=3D"ltr" style=3D"line-he=
+ight:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"fo=
+nt-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0)=
+;background-color:transparent;vertical-align:baseline;white-space:pre-wrap"=
+>M. +1208-515-8102</span></p><p dir=3D"ltr" style=3D"line-height:1.79999999=
+99999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;fo=
+nt-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-col=
+or:transparent;vertical-align:baseline;white-space:pre-wrap"><a href=3D"mai=
+lto:adam.duskett@amarulasolutions.com" target=3D"_blank">adam.duskett@amaru=
+lasolutions.com</a></span></p><p dir=3D"ltr" style=3D"line-height:1.7999999=
+999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;f=
+ont-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-co=
+lor:transparent;vertical-align:baseline;white-space:pre-wrap">_____________=
+_____________________</span></p><p dir=3D"ltr" style=3D"line-height:1.79999=
+99999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt=
+;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-=
+color:transparent;vertical-align:baseline;white-space:pre-wrap"><br></span>=
+<span style=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0=
+);background-color:transparent;vertical-align:baseline;white-space:pre-wrap=
+">Amarula Solutions BV</span></p><p dir=3D"ltr" style=3D"line-height:1.7999=
+999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10p=
+t;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background=
+-color:transparent;vertical-align:baseline;white-space:pre-wrap">Joop Geesi=
+nkweg 125, 1114 AB, Amsterdam, NL</span></p><p dir=3D"ltr" style=3D"line-he=
+ight:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"fo=
+nt-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0)=
+;background-color:transparent;vertical-align:baseline;white-space:pre-wrap"=
+>T. +31 (0)85 111 9170</span><span style=3D"font-size:10pt;font-family:&quo=
+t;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent=
+;vertical-align:baseline;white-space:pre-wrap"><br></span><span style=3D"fo=
+nt-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0)=
+;background-color:transparent;vertical-align:baseline;white-space:pre-wrap"=
+><a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info@amarul=
+asolutions.com</a></span></p><p dir=3D"ltr" style=3D"line-height:1.79999999=
+99999998;margin-top:0pt;margin-bottom:0pt"><a href=3D"http://www.amarulasol=
+utions.com/" target=3D"_blank"><span style=3D"font-size:10pt;font-family:&q=
+uot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transpare=
+nt;vertical-align:baseline;white-space:pre-wrap">www.amarulasolutions.com</=
+span></a></p><div><br></div></span></div></div></div><br></div></div><br><d=
+iv class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Oct =
+13, 2023 at 1:24=E2=80=AFPM Sch=C3=A4ffner, Florian &lt;<a href=3D"mailto:f=
+lorian.schaeffner@physiomed.de">florian.schaeffner@physiomed.de</a>&gt; wro=
+te:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px =
+0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div class=
+=3D"msg2333670405935691736">
+
+
+
+
+
+<div lang=3D"DE" style=3D"overflow-wrap: break-word;">
+<div class=3D"m_2333670405935691736WordSection1">
+<p class=3D"MsoNormal"><span>Hello all,<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span><u></u>=C2=A0<u></u></span></p>
+<p class=3D"MsoNormal"><span>thank you all for your support and offers. It =
+would be great to give something back, but i=E2=80=99m afraid that i=E2=80=
+=99m not able to finish your work Jesse. Sadly by now i was just a user of =
+the given configurations
+ that could be downloaded. I=E2=80=99ll try to use Qt5 or hire some help. T=
+hanks again for your support.<br>
+<br>
+Kind regards<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span>Florian<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span><u></u>=C2=A0<u></u></span></p>
+<div style=3D"border-right:none;border-bottom:none;border-left:none;border-=
+top:1pt solid rgb(225,225,225);padding:3pt 0cm 0cm">
+<p class=3D"MsoNormal"><b>Von:</b> Adam Duskett &lt;<a href=3D"mailto:adam.=
+duskett@amarulasolutions.com" target=3D"_blank">adam.duskett@amarulasolutio=
+ns.com</a>&gt;
+<br>
+<b>Gesendet:</b> Dienstag, 10. Oktober 2023 21:52<br>
+<b>An:</b> Jesse Van Gavere &lt;<a href=3D"mailto:jesseevg@gmail.com" targe=
+t=3D"_blank">jesseevg@gmail.com</a>&gt;<br>
+<b>Cc:</b> Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be" targe=
+t=3D"_blank">arnout@mind.be</a>&gt;; Giulio Benetti &lt;<a href=3D"mailto:g=
+iulio.benetti@benettiengineering.com" target=3D"_blank">giulio.benetti@bene=
+ttiengineering.com</a>&gt;; Sch=C3=A4ffner, Florian &lt;<a href=3D"mailto:f=
+lorian.schaeffner@physiomed.de" target=3D"_blank">florian.schaeffner@physio=
+med.de</a>&gt;; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank=
+">buildroot@buildroot.org</a><br>
+<b>Betreff:</b> Re: [Buildroot] Future buildroot with QtQuick/QML Support<u=
+></u><u></u></p>
+</div>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<div>
+<p class=3D"MsoNormal">I can see about porting the package tomorrow! No wor=
+ries!<u></u><u></u></p>
+<div>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+</div>
+<div>
+<div>
+<div>
+<p style=3D"margin:0cm"><span style=3D"font-size:10pt;font-family:Ubuntu,sa=
+ns-serif;color:black">Adam Duskett</span><u></u><u></u></p>
+<p style=3D"margin:0cm"><span style=3D"font-size:10pt;font-family:&quot;Ubu=
+ntu Mono&quot;;color:black">Senior Embedded Systems Developer</span><u></u>=
+<u></u></p>
+<p style=3D"margin:0cm"><span style=3D"font-size:10pt;font-family:&quot;Ubu=
+ntu Mono&quot;;color:black">M. +1208-515-8102</span><u></u><u></u></p>
+<p style=3D"margin:0cm"><a href=3D"mailto:adam.duskett@amarulasolutions.com=
+" target=3D"_blank"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu =
+Mono&quot;">adam.duskett@amarulasolutions.com</span></a><u></u><u></u></p>
+<p style=3D"margin:0cm"><span style=3D"font-size:10pt;font-family:&quot;Ubu=
+ntu Mono&quot;;color:black">__________________________________</span><u></u=
+><u></u></p>
+<p style=3D"margin:0cm"><span style=3D"font-size:10pt;font-family:&quot;Ubu=
+ntu Mono&quot;;color:black"><br>
+</span><span style=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:bl=
+ack">Amarula Solutions BV</span><u></u><u></u></p>
+<p style=3D"margin:0cm"><span style=3D"font-size:10pt;font-family:&quot;Ubu=
+ntu Mono&quot;;color:black">Joop Geesinkweg 125, 1114 AB, Amsterdam, NL</sp=
+an><u></u><u></u></p>
+<p style=3D"margin:0cm"><span style=3D"font-size:10pt;font-family:&quot;Ubu=
+ntu Mono&quot;;color:black">T. +31 (0)85 111 9170<br>
+</span><a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank"><span=
+ style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;">info@amarulas=
+olutions.com</span></a><u></u><u></u></p>
+<p style=3D"margin:0cm"><a href=3D"http://www.amarulasolutions.com/" target=
+=3D"_blank"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quo=
+t;;color:black">www.amarulasolutions.com</span></a><u></u><u></u></p>
+<div>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+</div>
+</div>
+</div>
+</div>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+</div>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<div>
+<div>
+<p class=3D"MsoNormal">On Tue, Oct 10, 2023 at 8:55=E2=80=AFPM Jesse Van Ga=
+vere &lt;<a href=3D"mailto:jesseevg@gmail.com" target=3D"_blank">jesseevg@g=
+mail.com</a>&gt; wrote:<u></u><u></u></p>
+</div>
+<blockquote style=3D"border-top:none;border-right:none;border-bottom:none;b=
+order-left:1pt solid rgb(204,204,204);padding:0cm 0cm 0cm 6pt;margin:5pt 0c=
+m 5pt 4.8pt">
+<p class=3D"MsoNormal">Hi,<br>
+<br>
+Op di 10 okt 2023 om 20:24 schreef Arnout Vandecappelle &lt;<a href=3D"mail=
+to:arnout@mind.be" target=3D"_blank">arnout@mind.be</a>&gt;:<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt; On 10/10/2023 15:18, Giulio Benetti wrote:<br>
+&gt; &gt; Hello Florian,<br>
+&gt; &gt;<br>
+&gt; &gt; On 10/10/23 14:59, Sch=C3=A4ffner, Florian wrote:<br>
+&gt; &gt;&gt; Hello,<br>
+&gt; &gt;&gt;<br>
+&gt; &gt;&gt; our application is built in the development environment with =
+Qt 6 and<br>
+&gt; &gt;&gt; QtQuick/QML. Now i tried, but wasn=E2=80=99t able to setup a =
+working buildroot for our<br>
+&gt; &gt;&gt; application to run on a embedded device.<br>
+&gt; &gt;&gt;<br>
+&gt; &gt;&gt; I found the conversation about qt6 and QML Support on the bui=
+ldroot mailing<br>
+&gt; &gt;&gt; list and that it seems to be not possible to setup a buildroo=
+t for our needs<br>
+&gt; &gt;&gt; with Qt6 and QML support.<br>
+&gt; &gt;&gt;<br>
+&gt; &gt;&gt; <a href=3D"https://lore.kernel.org/buildroot/f22ce06d-d9cf-c5=
+61-7455-19dce724c158@benettiengineering.com/" target=3D"_blank">
+https://lore.kernel.org/buildroot/f22ce06d-d9cf-c561-7455-19dce724c158@bene=
+ttiengineering.com/</a><br>
+&gt; &gt;&gt;<br>
+&gt; &gt;&gt; If I understood the answer from Giulio Benetti correctly, the=
+re is currently<br>
+&gt; &gt;&gt; no chance to make this configuration work for our embedded bo=
+ard with buildroot?<br>
+&gt; &gt;&gt;<br>
+&gt; &gt;&gt; Can you please tell me if there will be support for this in t=
+he next major<br>
+&gt; &gt;&gt; buildroot version? Or is it not planned or foreseeable when a=
+ QML support is<br>
+&gt; &gt;&gt; possible with buildroot?<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0Buildroot is a volunteer project - nothing is &quot;planne=
+d&quot; unless someone goes<br>
+&gt; through the effort of contributing it.<br>
+&gt;<br>
+&gt; &gt; as I can see from Buildroot patchork at the moment there is no pe=
+nding<br>
+&gt; &gt; patches to add features, but this doesn&#39;t mean it won&#39;t b=
+e added.<br>
+&gt; &gt;<br>
+&gt; &gt; Which modules would you be interested in most of all?<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0If you&#39;re not able or willing to develop the Qt6 QML s=
+upport yourself, you may<br>
+&gt; want to hire some help to do it. At the bottom of the &quot;support&qu=
+ot; page on the<br>
+&gt; website [1] some companies are mentioned that can provide that help (I=
+ work for<br>
+&gt; one of them). Or you can find a freelancer - like Giulio.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0You can also ask the original contributor of Qt6 (Jesse, a=
+dded in Cc) if they<br>
+&gt; perhaps have some PoC for QML already. Or perhaps their employer would=
+ be<br>
+&gt; willing to share the cost of developing it.<br>
+<br>
+I do have a working POC to build QML with a plan for supporting<br>
+QtQuick, which I very much wanted to get upstreamed, however I&#39;ve been<=
+br>
+swamped with other non-buildroot work sadly.<br>
+That said, it should be very doable to add this support with not too much w=
+ork.<br>
+In a nutshell:<br>
+You need to add qtshadertools because of the qsb tool it builds, this<br>
+is a dependency for qtdeclarative to build QtQuick<br>
+This patch will be important:<br>
+<a href=3D"http://patchwork.ozlabs.org/project/buildroot/patch/202308081722=
+31.1114696-1-jesse.vangavere@scioteq.com/" target=3D"_blank">http://patchwo=
+rk.ozlabs.org/project/buildroot/patch/20230808172231.1114696-1-jesse.vangav=
+ere@scioteq.com/</a><br>
+The tricky thing there is that the host qt package does not build the<br>
+GUI by default, however since qt6 certain tools need to be built<br>
+through the host package, qsb is one of those, and to actually build<br>
+qsb through the qtshadertools package you need GUI support in the host<br>
+build, Thomas has provided some valuable feedback there how a proper<br>
+follow up patch could look like to add this functionality the right<br>
+way.<br>
+<br>
+Once that&#39;s done QML/QtQuick will be quite trivial to add, I already<br=
+>
+have a qt6declarative package you could work with and (with some<br>
+refreshing of my memory) I could provide you the necessary config<br>
+options to add QtQuick alongside it.<br>
+<br>
+As said I don&#39;t have the time myself at the moment to do it right, and<=
+br>
+I don&#39;t have a timeline for when I&#39;ll be able to do so, but if you&=
+#39;re<br>
+willing to continue on the work I have to get it merged in, I&#39;ll<br>
+gladly help out where I can with some of my initial work and what I<br>
+know of how to get it all working, the finishing touches and testing<br>
+will be up to you however :)<br>
+<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0Regards,<br>
+&gt;=C2=A0 =C2=A0Arnout<br>
+&gt;<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" target=
+=3D"_blank">https://lists.buildroot.org/mailman/listinfo/buildroot</a><u></=
+u><u></u></p>
+</blockquote>
+</div>
+</div>
+</div>
+
+</div></blockquote></div>
+
+--000000000000a4f3e00607997013--
+
+--===============4713333127969824444==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4713333127969824444==--
