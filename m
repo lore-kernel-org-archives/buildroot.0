@@ -4,54 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D948CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:39:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA3BCCDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:42:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA00F605B1;
-	Fri, 13 Oct 2023 14:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA00F605B1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45DE4605B1;
+	Fri, 13 Oct 2023 14:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45DE4605B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tMmcPy_FQ5hA; Fri, 13 Oct 2023 14:39:33 +0000 (UTC)
+	with ESMTP id CzOdJeDImvDp; Fri, 13 Oct 2023 14:42:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD25A60687;
-	Fri, 13 Oct 2023 14:39:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD25A60687
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97E7B60687;
+	Fri, 13 Oct 2023 14:42:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97E7B60687
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13E271BF33A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:39:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 50C2F1BF33A
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DED5A405D7
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:39:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DED5A405D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 34F73405A9
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:42:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34F73405A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8lFbE9ftm-Kc for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 14:39:29 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8B059405A9
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:39:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B059405A9
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3AC2320009;
- Fri, 13 Oct 2023 14:39:25 +0000 (UTC)
+ with ESMTP id lFOCD6Lav2kP for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 14:41:59 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C8B874049A
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:41:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8B874049A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 58DDE1C0007;
+ Fri, 13 Oct 2023 14:41:54 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qrJJv-007JPu-RM; Fri, 13 Oct 2023 16:39:19 +0200
+ id 1qrJMK-007Jfq-Rz; Fri, 13 Oct 2023 16:41:48 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231001142356.908755-1-fontaine.fabrice@gmail.com>
-Date: Fri, 13 Oct 2023 16:39:19 +0200
-In-Reply-To: <20231001142356.908755-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 1 Oct 2023 16:23:56 +0200")
-Message-ID: <87sf6e4meg.fsf@48ers.dk>
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+References: <20221018034605.800593-1-james.hilliard1@gmail.com>
+ <dfe9844e-5208-4d19-3af9-0faf8c0a5abf@mind.be>
+Date: Fri, 13 Oct 2023 16:41:48 +0200
+In-Reply-To: <dfe9844e-5208-4d19-3af9-0faf8c0a5abf@mind.be> (Arnout
+ Vandecappelle via buildroot's message of "Sun, 1 Oct 2023 18:05:19
+ +0200")
+Message-ID: <87o7h24mab.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/tar: security bump to version
- 1.35
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix rule order
+ for re{install, build, configure}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +65,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
 
- > - Fix CVE-2022-48303: GNU Tar through 1.34 has a one-byte out-of-bounds
- >   read that results in use of uninitialized memory for a conditional
- >   jump. Exploitation to change the flow of control has not been
- >   demonstrated. The issue occurs in from_header in list.c via a V7
- >   archive in which mtime has approximately 11 whitespace characters.
- > - Update hash of COPYING (http replaced by https)
+ >  Hi James,
+ > On 18/10/2022 05:46, James Hilliard wrote:
+ >> These command rely on the clean operations being first so that the
+ >> stamp files being deleted will rebuild the targets.
+ >> The execution ordering of the clean and rebuild operations may
+ >> change, for example if --shuffle=reversed is set.
+ >> To ensure the evaluation order is always correct use double colon
+ >> rules to make the evaluation order explicit as per make docs:
+ >> The double-colon rules for a target are executed in the order they
+ >> appear in the makefile.
 
- > https://lists.gnu.org/archive/html/info-gnu/2023-07/msg00005.html
+ >  As noted in earlier discussions, this feels a bit hackish and it's
+ >  not clear if this behaviour is going to be kept in future versions of
+ > make.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >  Since make 4.4, however, there's a better solution: it introduced a
+ >  .WAIT phony target that enforces the ordering of dependencies. So I
+ > instead made a commit[1] that uses that approach.
 
 Committed to 2023.02.x and 2023.08.x, thanks.
 
