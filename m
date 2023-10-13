@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBAE1CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:37:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31A6CCDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:38:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 540BC6103C;
-	Fri, 13 Oct 2023 14:37:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 540BC6103C
+	by smtp3.osuosl.org (Postfix) with ESMTP id B93DF6068F;
+	Fri, 13 Oct 2023 14:38:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B93DF6068F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7Jh52uhasqXc; Fri, 13 Oct 2023 14:37:31 +0000 (UTC)
+	with ESMTP id qIjANSc4i9Hu; Fri, 13 Oct 2023 14:38:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 997C56F521;
-	Fri, 13 Oct 2023 14:37:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 997C56F521
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2D7CB1BF33A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:37:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D90860687;
+	Fri, 13 Oct 2023 14:38:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D90860687
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EBD41BF33A
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:38:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06CB641F3F
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:37:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06CB641F3F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35E4061045
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:38:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35E4061045
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KZd0fFLIB5Hk for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 14:37:24 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 15CCB41FE3
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15CCB41FE3
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BACF40004;
- Fri, 13 Oct 2023 14:37:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uC1UZbPn0RUN for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 14:38:24 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 47AB660687
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:38:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47AB660687
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D64C1C0003;
+ Fri, 13 Oct 2023 14:38:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qrJHu-007J7j-0n; Fri, 13 Oct 2023 16:37:14 +0200
+ id 1qrJIt-007JJk-Gg; Fri, 13 Oct 2023 16:38:15 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: <yann.morin@orange.com>
-References: <a9774109676af0756f842322eb9baf0a7bacdf48.1695641648.git.yann.morin@orange.com>
- <87il7q5s0o.fsf@48ers.dk>
-Date: Fri, 13 Oct 2023 16:37:13 +0200
-In-Reply-To: <87il7q5s0o.fsf@48ers.dk> (Peter Korsgaard's message of "Sun, 01
- Oct 2023 16:36:23 +0200")
-Message-ID: <871qdy612e.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20231001100009.468927-1-fontaine.fabrice@gmail.com>
+Date: Fri, 13 Oct 2023 16:38:15 +0200
+In-Reply-To: <20231001100009.468927-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 1 Oct 2023 12:00:09 +0200")
+Message-ID: <87wmvq4mg8.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCHv2] package/go: fix installation
+Subject: Re: [Buildroot] [PATCH 1/1] package/syslog-ng: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +62,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>,
- buildroot@buildroot.org
+Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
->>>>>   <yann.morin@orange.com> writes:
- >> From: "Yann E. MORIN" <yann.morin@orange.com>
- >> When building for a target architecture that go does not support, the
- >> isntallation fails with:
+ > Fox the following build failure with libressl raised since bump to
+ > version 4.1.1 in commit 683563da8095c2eb69e677402b9bef7217ae90d9 and
+ > https://github.com/syslog-ng/syslog-ng/commit/bc05f28a4b511ac9090195280163a7f822712ceb:
 
- >> $ make host-go
- >> [...]
- >> ln -sf ../lib/go/bin/go /home/nyma7486/dev/work/5GCroCo/O/pouet/per-package/host-go/host/bin/
- >> ln: failed to create symbolic link '/home/nyma7486/dev/work/5GCroCo/O/pouet/per-package/host-go/host/bin/': No such file or directory
+ > lib/transport/tls-context.c: In function 'tls_context_setup_cmd_context':
+ > lib/transport/tls-context.c:320:3: error: unknown type name 'SSL_CONF_CTX'; did you mean 'SSL_AEAD_CTX'?
+ >   320 |   SSL_CONF_CTX *ssl_conf_ctx = SSL_CONF_CTX_new();
+ >       |   ^~~~~~~~~~~~
+ >       |   SSL_AEAD_CTX
 
- >> Indeed, the HOST_DIR/bin is not guaranteed to exist when we install a
- >> host package, so it needs to be explicitly created before we can create
- >> entries in there.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/dc4d60d752e579ef054915eee3d7e3e73c25929b
 
- >> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
- >> Cc: Christian Stewart <christian@aperture.us>
- >> Cc: Anisse Astier <anisse@astier.eu>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- >> ---
- >> Changes v1 -> v2:
- >> - drop surious hunk
-
- > Committed, thanks.
-
-Committed to 2023.02.x and 2023.08.x, thanks.
+Committed to 2023.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
