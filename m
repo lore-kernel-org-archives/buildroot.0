@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72ABCCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 06:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A46CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 06:22:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 274ED82331;
-	Fri, 13 Oct 2023 06:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 274ED82331
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33B8B81364;
+	Fri, 13 Oct 2023 06:22:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33B8B81364
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Angn6TGobqpx; Fri, 13 Oct 2023 06:22:13 +0000 (UTC)
+	with ESMTP id 5aVeic0DEinb; Fri, 13 Oct 2023 06:22:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7905081DA0;
-	Fri, 13 Oct 2023 06:22:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7905081DA0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3098281DA0;
+	Fri, 13 Oct 2023 06:22:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3098281DA0
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6CC341BF3C8
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C4F4D1BF3C8
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5441E81364
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5441E81364
+ by smtp1.osuosl.org (Postfix) with ESMTP id A100B81DA0
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A100B81DA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0txL6MHKQ_gW for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 06:22:09 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA87081EAC
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 06:22:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA87081EAC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A58A1C0004;
- Fri, 13 Oct 2023 06:22:06 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qrBYd-006uzs-RT; Fri, 13 Oct 2023 08:21:59 +0200
+ with ESMTP id BiVhFf_fnZUk for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E4ACE81364
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 06:22:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4ACE81364
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D26978468D; Fri, 13 Oct 2023 06:22:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230929161208.1106775-1-fontaine.fabrice@gmail.com>
-Date: Fri, 13 Oct 2023 08:21:59 +0200
-In-Reply-To: <20230929161208.1106775-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 29 Sep 2023 18:12:07 +0200")
-Message-ID: <87bkd36nzs.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/powertop: picutils is optional,
- not mandatory
+To: buildroot@buildroot.org
+Date: Fri, 13 Oct 2023 08:05:09 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 5b1a3bd2c3314b2cc2b1b9ba13b62fe5b88c5b33
+X-Git-Newrev: 5a594e2cf854cfa747fd1d51f193c458ff942e7c
+X-Patchwork-Hint: ignore
+Message-Id: <20231013062252.D26978468D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/pipewire: fix
+ typo in Kconfig comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +57,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Steven Noonan <steven@uplinklabs.net>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a594e2cf854cfa747fd1d51f193c458ff942e7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
- > pciutils is optional, not mandatory since version 2.1 and the addition
- > of the package in commit 0adc0e24eed72efca0097c7567319f07b8af6d94 and
- > https://github.com/fenrus75/powertop/commit/98ca605e7cf856795facc4a3a4f9c5b9baf1cab1
+"NTPL" should read "NPTL" (Native POSIX Threads Library).
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b9300f70b26f15d4cc58c0d5cff17f86b6e43bf6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pipewire/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2023.02.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 4929e5d3d1..9d2de6c866 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -60,7 +60,7 @@ comment "pipewire v4l2 support needs udev and a toolchain w/ headers >= 3.18"
+ 
+ endif
+ 
+-comment "pipewire needs a toolchain w/ dynamic library, NTPL, gcc >= 5"
++comment "pipewire needs a toolchain w/ dynamic library, NPTL, gcc >= 5"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
