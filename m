@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95B65CDB482
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 06:24:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70344CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 06:24:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5161482883;
-	Fri, 13 Oct 2023 06:24:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5161482883
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2385581364;
+	Fri, 13 Oct 2023 06:24:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2385581364
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rbul9fCVOVSu; Fri, 13 Oct 2023 06:24:12 +0000 (UTC)
+	with ESMTP id 0H2z25FVXZxo; Fri, 13 Oct 2023 06:24:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 996D482211;
-	Fri, 13 Oct 2023 06:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 996D482211
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 632401BF995
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0808B827FD;
+	Fri, 13 Oct 2023 06:24:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0808B827FD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 56E4B1BF3C8
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BB8941C3C
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BB8941C3C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3079060A7A
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3079060A7A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yUyljUtkHCrj for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TWkHu-MZnYu7 for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A59441C3B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26BC960E80
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A59441C3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26BC960E80
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A80F8468E; Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
+ id 248C08468B; Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 08:20:31 +0200
+Date: Fri, 13 Oct 2023 08:21:42 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 7f420077e0d4664feb7fc5fdc6fcba29b48b27c3
-X-Git-Newrev: fb3aef53d22aed75f31d1c8327cad8150a8b34fa
+X-Git-Oldrev: fb3aef53d22aed75f31d1c8327cad8150a8b34fa
+X-Git-Newrev: f8483dbae4c72491792d6efb9b5cdacc485b8eb9
 X-Patchwork-Hint: ignore
-Message-Id: <20231013062253.1A80F8468E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/gnu-efi: disable
- on mips64el
+Message-Id: <20231013062253.248C08468B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/powertop:
+ picutils is optional, not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,63 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb3aef53d22aed75f31d1c8327cad8150a8b34fa
+commit: https://git.buildroot.net/buildroot/commit/?id=f8483dbae4c72491792d6efb9b5cdacc485b8eb9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-The gnu-efi package was enabled on mips64el by commit
-11b347c03ab0b38389ec11b48f63236a3b4d6547 ("package/gnu-efi: add
-mips64el support"). However, it has been failing to build for a long
-time, and nobody bothered fixing it:
+pciutils is optional, not mandatory since version 2.1 and the addition
+of the package in commit 0adc0e24eed72efca0097c7567319f07b8af6d94 and
+https://github.com/fenrus75/powertop/commit/98ca605e7cf856795facc4a3a4f9c5b9baf1cab1
 
-gnu-efi-3.0.15//gnuefi/crt0-efi-mips64el.S:71: Error: cannot represent BFD_RELOC_16 relocation in this object file format
-
-Even reverting back to gnu-efi 3.0.10, which was the version used at
-the time of 11b347c03ab0b38389ec11b48f63236a3b4d6547, does not fix the
-issue. We tested updating to the latest gnu-efi version, 3.0.17, and
-the problem still exists.
-
-Since EFI on MIPS is extremely niche, we don't really want to invest
-the time to fix this issue, so let's disable it again. If someone
-cares enough, it can be fixed and re-enabled.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/d5938edcf50ebb7fdcec148d73f402845079779d/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr:
+  - one item per multi-line in _DEPENDENCIES
+  - reorder _DEPENDENCIES
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 13b0e6bbf3b1473993972fff8e4590a28749d823)
+(cherry picked from commit bcfcc07413c9e5222ad82552208c7b17ffb17105)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnu-efi/Config.in  | 1 -
- package/gnu-efi/gnu-efi.mk | 2 --
- 2 files changed, 3 deletions(-)
+ package/powertop/Config.in   |  1 -
+ package/powertop/powertop.mk | 10 ++++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnu-efi/Config.in b/package/gnu-efi/Config.in
-index 8e35fddbcb..d456a23837 100644
---- a/package/gnu-efi/Config.in
-+++ b/package/gnu-efi/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
- 	default y if BR2_aarch64
- 	default y if BR2_aarch64_be
- 	default y if BR2_i386
--	default y if BR2_mips64el
- 	default y if BR2_x86_64
+diff --git a/package/powertop/Config.in b/package/powertop/Config.in
+index 0f323a7bfb..fd88a3d0eb 100644
+--- a/package/powertop/Config.in
++++ b/package/powertop/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_POWERTOP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_PCIUTILS
+ 	select BR2_PACKAGE_LIBNL
+ 	help
+ 	  A tool to diagnose issues with power consumption and power
+diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
+index c3e8d2549c..e035868fa9 100644
+--- a/package/powertop/powertop.mk
++++ b/package/powertop/powertop.mk
+@@ -6,10 +6,16 @@
  
- config BR2_PACKAGE_GNU_EFI
-diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
-index 93b5888370..686a14be01 100644
---- a/package/gnu-efi/gnu-efi.mk
-+++ b/package/gnu-efi/gnu-efi.mk
-@@ -24,8 +24,6 @@ else ifeq ($(BR2_arm)$(BR2_armeb),y)
- GNU_EFI_PLATFORM = arm
- else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
- GNU_EFI_PLATFORM = aarch64
--else ifeq ($(BR2_mips64el),y)
--GNU_EFI_PLATFORM = mips64el
- endif
- 
- GNU_EFI_MAKE_OPTS = \
+ POWERTOP_VERSION = 2.13
+ POWERTOP_SITE = https://01.org/sites/default/files/downloads
+-POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-pkgconf \
+-	$(TARGET_NLS_DEPENDENCIES)
+ POWERTOP_LICENSE = GPL-2.0
+ POWERTOP_LICENSE_FILES = COPYING
++
++POWERTOP_DEPENDENCIES = \
++	host-pkgconf \
++	libnl \
++	ncurses \
++	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
++	$(TARGET_NLS_DEPENDENCIES)
++
+ POWERTOP_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ # 0001-dont-force-stack-smashing-protection.patch
+ POWERTOP_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
