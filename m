@@ -4,56 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96486CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:36:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBAE1CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:37:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43F9960FDF;
-	Fri, 13 Oct 2023 14:36:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43F9960FDF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 540BC6103C;
+	Fri, 13 Oct 2023 14:37:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 540BC6103C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YTLgavGGpszt; Fri, 13 Oct 2023 14:36:32 +0000 (UTC)
+	with ESMTP id 7Jh52uhasqXc; Fri, 13 Oct 2023 14:37:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8886560F1F;
-	Fri, 13 Oct 2023 14:36:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8886560F1F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F8531BF2F8
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:36:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 997C56F521;
+	Fri, 13 Oct 2023 14:37:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 997C56F521
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D7CB1BF33A
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78EF1821FD
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:36:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78EF1821FD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06CB641F3F
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:37:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06CB641F3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gc6ApvF5JfBQ for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 14:36:28 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1846D821B1
- for <buildroot@busybox.net>; Fri, 13 Oct 2023 14:36:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1846D821B1
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 26C7F240003
- for <buildroot@busybox.net>; Fri, 13 Oct 2023 14:36:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KZd0fFLIB5Hk for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 14:37:24 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 15CCB41FE3
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15CCB41FE3
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BACF40004;
+ Fri, 13 Oct 2023 14:37:20 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1qrJH0-007J3M-El
- for buildroot@busybox.net; Fri, 13 Oct 2023 16:36:18 +0200
+ (envelope-from <peter@korsgaard.com>)
+ id 1qrJHu-007J7j-0n; Fri, 13 Oct 2023 16:37:14 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@busybox.net
-References: <20210817083930.3718711-1-herve.codina@bootlin.com>
- <20210817083930.3718711-11-herve.codina@bootlin.com>
- <1bc18a02-9cf3-0cd1-cf8a-e716ceb78b9a@korsgaard.com>
-Date: Fri, 13 Oct 2023 16:36:18 +0200
-In-Reply-To: <1bc18a02-9cf3-0cd1-cf8a-e716ceb78b9a@korsgaard.com> (Peter
- Korsgaard's message of "Sun, 1 Oct 2023 14:56:19 +0200")
-Message-ID: <875y3a613x.fsf@48ers.dk>
+To: <yann.morin@orange.com>
+References: <a9774109676af0756f842322eb9baf0a7bacdf48.1695641648.git.yann.morin@orange.com>
+ <87il7q5s0o.fsf@48ers.dk>
+Date: Fri, 13 Oct 2023 16:37:13 +0200
+In-Reply-To: <87il7q5s0o.fsf@48ers.dk> (Peter Korsgaard's message of "Sun, 01
+ Oct 2023 16:36:23 +0200")
+Message-ID: <871qdy612e.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v3 10/16] Makefile: breaks hardlinks in
- global {TARGET, HOST}_DIR on per-package build
+Subject: Re: [Buildroot] [PATCHv2] package/go: fix installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,6 +63,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -72,28 +72,29 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > On 17/08/2021 10.39, Herve Codina wrote:
- > Hi,
+>>>>>   <yann.morin@orange.com> writes:
+ >> From: "Yann E. MORIN" <yann.morin@orange.com>
+ >> When building for a target architecture that go does not support, the
+ >> isntallation fails with:
 
- > Sorry, very old patch.
+ >> $ make host-go
+ >> [...]
+ >> ln -sf ../lib/go/bin/go /home/nyma7486/dev/work/5GCroCo/O/pouet/per-package/host-go/host/bin/
+ >> ln: failed to create symbolic link '/home/nyma7486/dev/work/5GCroCo/O/pouet/per-package/host-go/host/bin/': No such file or directory
 
+ >> Indeed, the HOST_DIR/bin is not guaranteed to exist when we install a
+ >> host package, so it needs to be explicitly created before we can create
+ >> entries in there.
 
- >> Without this patch, a make <pkg>_rebuild detects overwrites. Indeed, in
- >> target_finalize steps some modifications are done on installed files (ie
- >> strip or TARGET_FINALIZE_HOOKS for instance).
- >> In order to avoid these modifications seen from per-package
- >> {TARGET,HOST}_DIR
- >> and so been analyzed as some overwrites, global {TARGET,HOST}_DIR is built
- >> using a full copy of the involved per-package files instead of hardlinks.
- >> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
- >> Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ >> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+ >> Cc: Christian Stewart <christian@aperture.us>
+ >> Cc: Anisse Astier <anisse@astier.eu>
+
  >> ---
- >> Changes v1 to v2:
- >> - Added 'Reviewed-by: Yann E. MORIN'
+ >> Changes v1 -> v2:
+ >> - drop surious hunk
 
- > We have similar issues if you have a post-build script making changes
- > with sed or similar, so committed to master after fixing it up (the 
- > logic was in the mean time moved to package/pkg-utils.mk), thanks.
+ > Committed, thanks.
 
 Committed to 2023.02.x and 2023.08.x, thanks.
 
