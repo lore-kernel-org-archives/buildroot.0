@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 488A0CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77029CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:54:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA2D341814;
-	Fri, 13 Oct 2023 18:54:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA2D341814
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26CB64190B;
+	Fri, 13 Oct 2023 18:54:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26CB64190B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9bFup5T3bpl8; Fri, 13 Oct 2023 18:54:37 +0000 (UTC)
+	with ESMTP id W0hh3anSZ9Gi; Fri, 13 Oct 2023 18:54:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DC6294190F;
-	Fri, 13 Oct 2023 18:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC6294190F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1276D1BF2BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id C848A41914;
+	Fri, 13 Oct 2023 18:54:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C848A41914
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C5AC91BF2BA
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF3EF4180A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D2A96F65A
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF3EF4180A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D2A96F65A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w57Bo6bwp7oP for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fa-YiQ7j_tgG for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7F874180F
+ by smtp3.osuosl.org (Postfix) with ESMTP id AACB66F66E
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7F874180F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AACB66F66E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A121584FCB; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+ id AE80284FC8; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:19:10 +0200
+Date: Fri, 13 Oct 2023 20:23:16 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ba99b48bd80a338e3b89388e289f46b4ae12f64d
-X-Git-Newrev: 440594bb9b0e477088cce9183a42b9e15dc5547b
+X-Git-Oldrev: 440594bb9b0e477088cce9183a42b9e15dc5547b
+X-Git-Newrev: e7f646b715649ab851b420af024d8cd4f60e8c17
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184633.A121584FCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- package/gstreamer1-editing-services: bump to version 1.22.6
+Message-Id: <20231013184633.AE80284FC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
+ linux-headers}: bump 5.15.x / 6.{1, 5}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=440594bb9b0e477088cce9183a42b9e15dc5547b
+commit: https://git.buildroot.net/buildroot/commit/?id=e7f646b715649ab851b420af024d8cd4f60e8c17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8c8ff426744d5c4977e06b1554185fde69a2f146)
+(cherry picked from commit 003cdd5de31dd6558b02d0a719bc779bb1fc8db5)
+[Peter: drop 6.5.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 4 ++--
+ package/linux-headers/Config.in.host | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 0cdb18ea5d..11e93b8b65 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.2.tar.xz.sha256sum
--sha256  453b1464fc3857de269a7cb0ebd966afe02171d97bef672a0b8a0a6d43e0cebf  gst-editing-services-1.22.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.6.tar.xz.sha256sum
-+sha256  748d423672c597f876e130804fb984848f5b4b89efd78a506cb17f7646795301  gst-editing-services-1.22.6.tar.xz
+diff --git a/linux/Config.in b/linux/Config.in
+index 731b4288df..ced11e6917 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 9fdc877db0..bea59f256b 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.2
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.6
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.1.55" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.1.56" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 99cb880bb7..e66a6cdb7d 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  a87e241ec15d53452c4efe219713a3769d88cc436b5b98cf6efb262c4aff15c0  linux-6.1.55.tar.xz
++sha256  9edefdde32c2298389dcd19566402332b3c2016f5ada17e5820f500b908d478c  linux-6.1.56.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  ef845e7934897b88e4448378ea9daacac19e07f156fe904844fab0a7d8ff5ddd  linux-5.15.133.tar.xz
++sha256  f37182aecb57ed6853d01e1074d3a60a653331e35f3115728381e08be050b9d3  linux-5.15.134.tar.xz
+ sha256  183a4507b0ebec7816a79ceba6253aa7ad345e25b0fcd4e834ee154be9a993ab  linux-5.10.197.tar.xz
+ sha256  2e775970521ea7ff6eb613fc85a6e34cec73feaeb67b88a77a2fbd4f75483df0  linux-5.4.257.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3a2bec1a18..3d76d2eda1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -388,8 +388,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.19.295"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.257"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.197"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.133"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.55"	if BR2_KERNEL_HEADERS_6_1
++	default "5.15.134"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.56"	if BR2_KERNEL_HEADERS_6_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
