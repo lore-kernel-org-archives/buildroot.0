@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E096CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 15:22:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43B05CDB482
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 15:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 193B9610F1;
-	Fri, 13 Oct 2023 15:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 193B9610F1
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBD61610FA;
+	Fri, 13 Oct 2023 15:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBD61610FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3szEmqZ3gl32; Fri, 13 Oct 2023 15:22:29 +0000 (UTC)
+	with ESMTP id NRB2Iy2LG1Im; Fri, 13 Oct 2023 15:25:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0988661048;
-	Fri, 13 Oct 2023 15:22:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0988661048
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 73A901BF997
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:21:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D2F7607C9;
+	Fri, 13 Oct 2023 15:25:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D2F7607C9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C04B1BF37E
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C7CE40102
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C7CE40102
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25DF8416AE
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:25:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25DF8416AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1meZ3gw1Q8dm for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 15:21:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h87I5PQGqLhv for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 15:25:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21BBA4053F
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 15:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21BBA4053F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4604B414DE
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 15:25:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4604B414DE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0FF6A84898; Fri, 13 Oct 2023 15:21:34 +0000 (UTC)
+ id 349C784905; Fri, 13 Oct 2023 15:25:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 17:17:18 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: e31a049bbc74d59cc39554a7d02fd9a152354cdb
-X-Git-Newrev: ddf9ad1065b11c387d9d43e00675c11425dbc51c
+Date: Fri, 13 Oct 2023 17:17:36 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 00855772b8b09e86fdc6c450259997a30dd16594
+X-Git-Newrev: 13fc9dcb34926e9b6310b23662920c55c96d83a1
 X-Patchwork-Hint: ignore
-Message-Id: <20231013152134.0FF6A84898@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/netsnmp: security
+Message-Id: <20231013152517.349C784905@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/netsnmp: security
  bump to version 5.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddf9ad1065b11c387d9d43e00675c11425dbc51c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=13fc9dcb34926e9b6310b23662920c55c96d83a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 CVE-2022-44792 handle_ipDefaultTTL in agent/mibgroup/ip-mib/ip_scalars.c
 in Net-SNMP 5.8 through 5.9.3 has a NULL Pointer Exception bug that can
