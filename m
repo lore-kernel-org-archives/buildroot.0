@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32C5ACDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD53CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:46:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5F7360767;
-	Fri, 13 Oct 2023 14:46:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5F7360767
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69D4260B8C;
+	Fri, 13 Oct 2023 14:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69D4260B8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A1YoKzrSc0CH; Fri, 13 Oct 2023 14:46:09 +0000 (UTC)
+	with ESMTP id K3SaoiYY8jKA; Fri, 13 Oct 2023 14:46:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14D4660B8C;
-	Fri, 13 Oct 2023 14:46:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14D4660B8C
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFCB8610D6;
+	Fri, 13 Oct 2023 14:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFCB8610D6
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E44A61BF33A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0BBCA1BF997
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CAC1641E54
+ by smtp4.osuosl.org (Postfix) with ESMTP id E730641DBA
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:46:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAC1641E54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E730641DBA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hX3T00lk9B3z for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
+ with ESMTP id pKc-jOc_fTAu for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 14:46:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C51C941DBA
+ by smtp4.osuosl.org (Postfix) with ESMTP id E506B41E46
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C51C941DBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E506B41E46
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3116847A5; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
+ id D5553847A3; Fri, 13 Oct 2023 14:46:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 16:37:03 +0200
+Date: Fri, 13 Oct 2023 16:43:05 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 71132ca41bc1b99374f406267d985be50aca9679
-X-Git-Newrev: fe1dd05d4cc5f23eb27ea64ad87aab2508a4ce70
+X-Git-Oldrev: 3038bcc6c1532123fbcc8e22a4e684aaadd94723
+X-Git-Newrev: cf2aef7992e423f89334257310a3bb867c997e24
 X-Patchwork-Hint: ignore
-Message-Id: <20231013144605.B3116847A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/go: fix
- installation
+Message-Id: <20231013144605.D5553847A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/Makefile.in: set
+ --shuffle=none for MAKE1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe1dd05d4cc5f23eb27ea64ad87aab2508a4ce70
+commit: https://git.buildroot.net/buildroot/commit/?id=cf2aef7992e423f89334257310a3bb867c997e24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-When building for a target architecture that go does not support, the
-installation fails with:
+Make 4.4 introduces a shuffle mode which randomizes prerequisites
+in order to better flush out issues with parallel builds. On the other
+hand, we use MAKE1 to build packages that are known to be broken with
+parallel build. For these, passing the shuffle option would be
+counter-productive and lead to spurious build failures.
 
-    $ make host-go
-    [...]
-    ln -sf ../lib/go/bin/go /home/nyma7486/dev/work/5GCroCo/O/pouet/per-package/host-go/host/bin/
-    ln: failed to create symbolic link '/home/nyma7486/dev/work/5GCroCo/O/pouet/per-package/host-go/host/bin/': No such file or directory
+The --shuffle=none option exists to turn off shuffling again. We can't
+add this option unconditionally, however, because Make < 4.4 doesn't
+know it. Therefore, conditionally pass --shuffle=none only if there is a
+shuffle option in MAKEFLAGS.
 
-Indeed, the HOST_DIR/bin is not guaranteed to exist when we install a
-host package, so it needs to be explicitly created before we can create
-entries in there.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Christian Stewart <christian@aperture.us>
-Cc: Anisse Astier <anisse@astier.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1db38d928292aaca493c80527008b9bd7e6db602)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit f664d7dc24c70ef08ced78d5d3f50a8ad673ea02)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/Makefile.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 01442b0f62..cc374aa44f 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -146,6 +146,7 @@ define HOST_GO_INSTALL_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_ROOT)/bin/go
- 	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_ROOT)/bin/gofmt
+diff --git a/package/Makefile.in b/package/Makefile.in
+index d70aded82b..7e6ae19559 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -17,7 +17,9 @@ else
+ PARALLEL_JOBS := $(BR2_JLEVEL)
+ endif
  
-+	mkdir -p $(HOST_DIR)/bin
- 	ln -sf ../lib/go/bin/go $(HOST_DIR)/bin/
- 	ln -sf ../lib/go/bin/gofmt $(HOST_DIR)/bin/
+-MAKE1 := $(HOSTMAKE) -j1
++# Only build one job at a time, *and* to not randomise goals and
++# prerequisites ordering in make 4.4+
++MAKE1 := $(HOSTMAKE) -j1 $(if $(findstring --shuffle,$(MAKEFLAGS)),--shuffle=none)
+ override MAKE = $(HOSTMAKE) \
+ 	$(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
  
 _______________________________________________
 buildroot mailing list
