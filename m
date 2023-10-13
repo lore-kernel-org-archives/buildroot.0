@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAD72CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 10:25:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC6C2CDB482
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 10:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D75761503;
-	Fri, 13 Oct 2023 10:25:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D75761503
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92C8261794;
+	Fri, 13 Oct 2023 10:25:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C8261794
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UXkAjryv9jps; Fri, 13 Oct 2023 10:24:59 +0000 (UTC)
+	with ESMTP id Zr9GOIEPh3Cb; Fri, 13 Oct 2023 10:25:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0671C61504;
-	Fri, 13 Oct 2023 10:24:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0671C61504
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 29C751BF349
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DA9161518;
+	Fri, 13 Oct 2023 10:25:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DA9161518
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 80CBB1BF349
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 10:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0DBFE41FCE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A19B82C3C
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 10:24:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DBFE41FCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A19B82C3C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6ij88ozky7A3 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mrgl-QXfpy-w for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 10:24:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FAA541FCB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2634C82BF4
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 10:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FAA541FCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2634C82BF4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 084E2846D3; Fri, 13 Oct 2023 10:24:31 +0000 (UTC)
+ id 141C2846D4; Fri, 13 Oct 2023 10:24:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 12:13:25 +0200
+Date: Fri, 13 Oct 2023 12:13:37 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: f8483dbae4c72491792d6efb9b5cdacc485b8eb9
-X-Git-Newrev: 814281c439af9e14eba69ad06cb93f23383c8125
+X-Git-Oldrev: 814281c439af9e14eba69ad06cb93f23383c8125
+X-Git-Newrev: bd682063d04cf77b0e430c215fad23d8b6e323ba
 X-Patchwork-Hint: ignore
-Message-Id: <20231013102431.084E2846D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/opkg-utils:
- actually install to target
+Message-Id: <20231013102431.141C2846D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/urandom-scripts:
+ move seedrng init script to S01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,36 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=814281c439af9e14eba69ad06cb93f23383c8125
+commit: https://git.buildroot.net/buildroot/commit/?id=bd682063d04cf77b0e430c215fad23d8b6e323ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Commit b9bf1c6535cb (package/opkg-utils: add opkg-utils as target pkg)
-misspelled the macro to install to target, most probably as a bad
-copy-paste from the host macro.
+We want to initialize the kernel random number generator as soon as
+possible, as early init scripts may also need random numbers (E.G.
+syslog-ng in S01syslog-ng does).
 
-Fix that.
+Seedrng was presumably only using S20 because the previos urandom script
+used S20, which (after som moves) dates all the way back to:
 
-Reported-by: Michael Hacker <mh@superbox.one>
+commit 8262508fc4456b5230216473ea14c897268ba791
+Author: Eric Andersen <andersen@codepoet.org>
+Date:   Fri Apr 26 22:01:43 2002 +0000
+
+    With this update, everything now works as expected.
+     -Erik
+
+Seedrng needs persistent storage, but mount -a is run before executing the
+init scripts, so S01 should be as good as S20 - Atleast with the scripts in
+upstream Buildroot.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8c3c741439acb817e156fe28083ba0c6a0c4c720)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 11a46002ae11a0766a4ec9d3d8ccafe7be42c2fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opkg-utils/opkg-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/urandom-scripts/{S20seedrng => S01seedrng} | 0
+ package/urandom-scripts/urandom-scripts.mk         | 4 ++--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-index ad267c5c94..384a7323ee 100644
---- a/package/opkg-utils/opkg-utils.mk
-+++ b/package/opkg-utils/opkg-utils.mk
-@@ -16,7 +16,7 @@ HOST_OPKG_UTILS_DEPENDENCIES = \
- 	host-xz
+diff --git a/package/urandom-scripts/S20seedrng b/package/urandom-scripts/S01seedrng
+similarity index 100%
+rename from package/urandom-scripts/S20seedrng
+rename to package/urandom-scripts/S01seedrng
+diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
+index 32f3e09343..89abdfff72 100644
+--- a/package/urandom-scripts/urandom-scripts.mk
++++ b/package/urandom-scripts/urandom-scripts.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
- # Nothing to build; only scripts to install.
--define OPKG_UTILS_INSTALL_CMDS
-+define OPKG_UTILS_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install-utils
+ define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20seedrng \
+-		$(TARGET_DIR)/etc/init.d/S20seedrng
++	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S01seedrng \
++		$(TARGET_DIR)/etc/init.d/S01seedrng
  endef
  
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
