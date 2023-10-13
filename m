@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B857CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 06:23:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23CDFCDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 06:23:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0501E81DA0;
-	Fri, 13 Oct 2023 06:23:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0501E81DA0
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3ABC81364;
+	Fri, 13 Oct 2023 06:23:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3ABC81364
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v9XtJl4_EdJN; Fri, 13 Oct 2023 06:23:21 +0000 (UTC)
+	with ESMTP id fGjOYyNi2Bbp; Fri, 13 Oct 2023 06:23:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2BB7181364;
-	Fri, 13 Oct 2023 06:23:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BB7181364
+	by smtp1.osuosl.org (Postfix) with ESMTP id E35F982661;
+	Fri, 13 Oct 2023 06:23:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E35F982661
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F1DF31BF99A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B2061BF3C8
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CDD4441C3C
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBD7C4173C
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDD4441C3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBD7C4173C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id thWzwGoHWbme for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 06:22:52 +0000 (UTC)
+ with ESMTP id NXJvn4vGQKRO for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 06:22:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC4A14173C
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF4E1418AB
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 06:22:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC4A14173C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF4E1418AB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C89EF8468C; Fri, 13 Oct 2023 06:22:52 +0000 (UTC)
+ id DCEED8468E; Fri, 13 Oct 2023 06:22:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 08:00:11 +0200
+Date: Fri, 13 Oct 2023 08:07:01 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 0c6524edfd0c6738ec0197fe00a73119d5ef77b8
-X-Git-Newrev: 5b1a3bd2c3314b2cc2b1b9ba13b62fe5b88c5b33
+X-Git-Oldrev: 5a594e2cf854cfa747fd1d51f193c458ff942e7c
+X-Git-Newrev: 252b6ade2c0cfa2ee37ee274547344d64d785367
 X-Patchwork-Hint: ignore
-Message-Id: <20231013062252.C89EF8468C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] board/freescale: fix i.MX
- arm-trusted-firmware for GCC12
+Message-Id: <20231013062252.DCEED8468E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/openblas: Add
+ support for RISC-V architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +63,128 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b1a3bd2c3314b2cc2b1b9ba13b62fe5b88c5b33
+commit: https://git.buildroot.net/buildroot/commit/?id=252b6ade2c0cfa2ee37ee274547344d64d785367
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-The arm-trusted-firmware package for IMX boards fails due to a GCC bug.
-See the attached patch description for detail.
+OpenBLAS RISC-V 64bit support was added in [1] and was renamed to
+"RISCV64_GENERIC" in [2]. Those commits were first included in
+OpenBLAS release v0.3.13. This support can now be enabled. With this
+commit, we can install the library and packages such as GNU Octave on
+RISC-V platforms.
 
-Fixes:
+This patch also adjusts the alignment for adding "RISCV64_GENERIC"
+in Config.in.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/5134910620
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/5134910622
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/5134910624
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/5134910627
+[1] https://github.com/OpenMathLib/OpenBLAS/commit/c167a3d6f41ed2f5680c2a72846b4c9b5d416543
+[2] https://github.com/OpenMathLib/OpenBLAS/commit/265ab484c89d10dfff2d5df678221918d7a880e3
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 977965a83a2bc8da163ce45739c55bb775db55ce)
+Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+Reviewed-by: Julien Olivain <ju.o@free.fr>
+Tested-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c789bcddf0fb17580bef0cdc45b5334a90ecdf13)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-fix-Makefile-Suppress-array-bounds-error.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ package/openblas/Config.in | 73 +++++++++++++++++++++++-----------------------
+ 1 file changed, 37 insertions(+), 36 deletions(-)
 
-diff --git a/board/freescale/common/patches/arm-trusted-firmware/0002-LF-7968-01-fix-Makefile-Suppress-array-bounds-error.patch b/board/freescale/common/patches/arm-trusted-firmware/0002-LF-7968-01-fix-Makefile-Suppress-array-bounds-error.patch
-new file mode 100644
-index 0000000000..7a7a7bbc28
---- /dev/null
-+++ b/board/freescale/common/patches/arm-trusted-firmware/0002-LF-7968-01-fix-Makefile-Suppress-array-bounds-error.patch
-@@ -0,0 +1,51 @@
-+From b2a94de52ae4a940a87d569815b19d3fa92dd32a Mon Sep 17 00:00:00 2001
-+From: Tom Hochstein <tom.hochstein@nxp.com>
-+Date: Mon, 16 May 2022 13:45:16 -0500
-+Subject: [PATCH] LF-7968-01 fix(Makefile): Suppress array-bounds error
-+
-+The array-bounds error is triggered now in cases where it was silent
-+before, causing errors like:
-+
-+```
-+plat/imx/imx8m/hab.c: In function 'imx_hab_handler':
-+plat/imx/imx8m/hab.c:64:57: error: array subscript 0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'} [-Werror=array-bounds]
-+   64 | #define HAB_RVT_CHECK_TARGET_ARM64      ((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x18))
-+      |                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+```
-+
-+The error is a false-positive and is entered as a bug [1]. The problem
-+is fixed partially in GCC 12 and fully in GCC 13 [2].
-+
-+The partial fix does not work here because the constant addresses used
-+are less than the 4kB boundary chosen for the partial fix, so suppress
-+the error until GCC is upgraded to 13.
-+
-+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578
-+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578#c39
-+
-+Upstream-Status: Inappropriate [other]
-+Signed-off-by: Tom Hochstein <tom.hochstein@nxp.com>
-+Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-+Reviewed-by: Ye Li <ye.li@nxp.com>
-+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-+Upstream: https://github.com/nxp-imx/imx-atf/commit/058bf0f104115037d03e277f079825ef3659c5b9
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index c87c3ae08..2d6b90f47 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -346,7 +346,7 @@ WARNINGS	+=		-Wshift-overflow -Wshift-sign-overflow \
-+ endif
-+ 
-+ ifneq (${E},0)
-+-ERRORS := -Werror
-++ERRORS := -Werror -Wno-error=array-bounds
-+ endif
-+ 
-+ CPPFLAGS		=	${DEFINES} ${INCLUDES} ${MBEDTLS_INC} -nostdinc	\
-+-- 
-+2.41.0
-+
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 58976e657a..26a76d29fb 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -1,55 +1,56 @@
+ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	string
+-	default "P2"           if BR2_x86_pentium2
+-	default "KATMAI"       if BR2_x86_pentium3
+-	default "NORTHWOOD"    if BR2_x86_pentium4
+-	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
+-	default "BANIAS"       if BR2_x86_pentium_m
+-	default "CORE2"        if BR2_x86_core2
+-	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont || BR2_x86_westmere
+-	default "SANDYBRIDGE"  if BR2_x86_corei7_avx
+-	default "HASWELL"      if BR2_x86_core_avx2
+-	default "ATOM"         if BR2_x86_atom
+-	default "ATHLON"       if BR2_x86_athlon || BR2_x86_athlon_4
+-	default "OPTERON"      if BR2_x86_opteron
+-	default "OPTERON_SSE3" if BR2_x86_opteron_sse3
+-	default "BARCELONA"    if BR2_x86_barcelona
+-	default "BOBCAT"       if BR2_x86_jaguar
+-	default "STEAMROLLER"  if BR2_x86_steamroller
+-	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
+-	default "POWER4"       if BR2_powerpc_power4
+-	default "POWER5"       if BR2_powerpc_power5
+-	default "POWER6"       if BR2_powerpc_power6
+-	default "POWER7"       if BR2_powerpc_power7
+-	default "POWER8"       if BR2_powerpc_power8
+-	default "PPCG4"        if BR2_powerpc_7400 || BR2_powerpc_7450
+-	default "PPC970"       if BR2_powerpc_970
+-	default "PPC440"       if BR2_powerpc_440
+-	default "PPC440FP2"    if BR2_powerpc_440fp
++	default "P2"              if BR2_x86_pentium2
++	default "KATMAI"          if BR2_x86_pentium3
++	default "NORTHWOOD"       if BR2_x86_pentium4
++	default "PRESCOTT"        if BR2_x86_prescott || BR2_x86_nocona
++	default "BANIAS"          if BR2_x86_pentium_m
++	default "CORE2"           if BR2_x86_core2
++	default "NEHALEM"         if BR2_x86_corei7 || BR2_x86_silvermont || BR2_x86_westmere
++	default "SANDYBRIDGE"     if BR2_x86_corei7_avx
++	default "HASWELL"         if BR2_x86_core_avx2
++	default "ATOM"            if BR2_x86_atom
++	default "ATHLON"          if BR2_x86_athlon || BR2_x86_athlon_4
++	default "OPTERON"         if BR2_x86_opteron
++	default "OPTERON_SSE3"    if BR2_x86_opteron_sse3
++	default "BARCELONA"       if BR2_x86_barcelona
++	default "BOBCAT"          if BR2_x86_jaguar
++	default "STEAMROLLER"     if BR2_x86_steamroller
++	default "VIAC3"           if BR2_x86_c3 || BR2_x86_c32
++	default "POWER4"          if BR2_powerpc_power4
++	default "POWER5"          if BR2_powerpc_power5
++	default "POWER6"          if BR2_powerpc_power6
++	default "POWER7"          if BR2_powerpc_power7
++	default "POWER8"          if BR2_powerpc_power8
++	default "PPCG4"           if BR2_powerpc_7400 || BR2_powerpc_7450
++	default "PPC970"          if BR2_powerpc_970
++	default "PPC440"          if BR2_powerpc_440
++	default "PPC440FP2"       if BR2_powerpc_440fp
+ 	# P5600 is built with MSA support which is only available in Codescape toolchains
+-	default "P5600"        if BR2_mips_p5600 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+-	default "SICORTEX"     if BR2_MIPS_CPU_MIPS64
++	default "P5600"           if BR2_mips_p5600 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
++	default "SICORTEX"        if BR2_MIPS_CPU_MIPS64
+ 	# I6400 is built with MSA support which is only available in Codescape toolchains
+-	default "I6400"        if BR2_mips_i6400 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
++	default "I6400"           if BR2_mips_i6400 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+ 	# OpenBLAS assumes SPARC=Sparc v9
+-	default "SPARC"        if BR2_sparc_v9
++	default "SPARC"           if BR2_sparc_v9
+ 	# Cortex-A15 always have a VFPv4
+-	default "CORTEXA15"    if (BR2_cortex_a15 && BR2_ARM_EABIHF)
++	default "CORTEXA15"       if (BR2_cortex_a15 && BR2_ARM_EABIHF)
+ 	# Cortex-A9 have an optional VFPv3, so we need to make sure it
+ 	# is available
+-	default "CORTEXA9"     if (BR2_cortex_a9 && BR2_ARM_EABIHF && \
++	default "CORTEXA9"        if (BR2_cortex_a9 && BR2_ARM_EABIHF && \
+ 				   BR2_ARM_CPU_HAS_VFPV3)
+-	default "ARMV5"        if BR2_ARM_CPU_ARMV5
++	default "ARMV5"           if BR2_ARM_CPU_ARMV5
+ 	# On ARMv6, OpenBLAS assumes that a VFP is available, and
+ 	# EABIhf is used
+-	default "ARMV6"        if (BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && \
++	default "ARMV6"           if (BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && \
+ 				   BR2_ARM_CPU_HAS_VFPV2)
+ 	# On ARMv7, OpenBLAS assumes that a full VFPv3+ is available
+ 	# (and not the more limited D16 variant), and that EABIhf is
+ 	# used.
+-	default "ARMV7"        if (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && \
++	default "ARMV7"           if (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && \
+ 				   BR2_ARM_CPU_HAS_VFPV3)
+-	default "ARMV8"        if BR2_aarch64 || BR2_aarch64_be
++	default "ARMV8"           if BR2_aarch64 || BR2_aarch64_be
++	default "RISCV64_GENERIC" if BR2_RISCV_64
+ 	help
+ 	  OpenBLAS target CPU. See TargetList.txt in the source tree for
+ 	  the possible target strings. A possible value is set
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
