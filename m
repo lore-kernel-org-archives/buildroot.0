@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23AA4CDB484
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 15:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BBEECDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 15:05:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D26E46F576;
-	Fri, 13 Oct 2023 15:05:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D26E46F576
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA28D60BAA;
+	Fri, 13 Oct 2023 15:05:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA28D60BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YaweXNkcDGg3; Fri, 13 Oct 2023 15:05:02 +0000 (UTC)
+	with ESMTP id SenwgWbOHnKc; Fri, 13 Oct 2023 15:05:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A29460BEE;
-	Fri, 13 Oct 2023 15:05:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A29460BEE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3E3F31BF997
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:04:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3837F6F58D;
+	Fri, 13 Oct 2023 15:05:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3837F6F58D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 471901BF2C1
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 163FF4049A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:04:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 163FF4049A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E6D280E92
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 15:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E6D280E92
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TyVPfWrk2svT for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dF8tJUrWIvZk for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 15:04:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F44C40543
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 15:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F44C40543
+ by smtp1.osuosl.org (Postfix) with ESMTP id E471C80DB2
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 15:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E471C80DB2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE5FC847B8; Fri, 13 Oct 2023 15:04:45 +0000 (UTC)
+ id D2FD2847B6; Fri, 13 Oct 2023 15:04:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 17:03:52 +0200
+Date: Fri, 13 Oct 2023 16:59:20 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 880ddba3f39d95f3953610a9b4f18c8a4f8dd275
-X-Git-Newrev: 90e5c7cdb83c9b50f1ec60c75fdc56baa73e1bb1
+X-Git-Oldrev: 7590babc70e7994ebdb940d257734925aef511a0
+X-Git-Newrev: 20542acda60788162fef0c3043df8ccb2d9ef610
 X-Patchwork-Hint: ignore
-Message-Id: <20231013150445.EE5FC847B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libmodplug: use a
- full-length hash as version
+Message-Id: <20231013150445.D2FD2847B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/enlightenment:
+ security bump to version 0.25.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90e5c7cdb83c9b50f1ec60c75fdc56baa73e1bb1
+commit: https://git.buildroot.net/buildroot/commit/?id=20542acda60788162fef0c3043df8ccb2d9ef610
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Commit 369ff9a88ff8 (package/libmodplug: update to git version)
-improperly used a short hash as version, so switch to the full-length
-hash.
+This is a bugfix release which fixes a CVE.
 
-Github use the full-length hash when it creates the top-level directory
-of the generated archive, so the hash of the archive does not in fact
-change, only its filename. This is perfectly fine fine our handling of
-s.b.o.
+See:
+https://www.enlightenment.org/news/2022-09-15-enlightenment-0.25.4
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 80e94c76169fd15d2433b18a9e54d6a4f3c4ff18)
+CVE-2022-37706 "enlightenment_sys in Enlightenment before 0.25.4 allows
+local users to gain privileges because it is setuid root, and the system
+library function mishandles pathnames that begin with a /dev/..
+substring."
+
+Hashes were never part of the online news page, therefore mark them as
+locally computed.
+
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 83ffe153faa97b08acbfd0d15d4ca7f77604c17a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodplug/libmodplug.hash | 2 +-
- package/libmodplug/libmodplug.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/enlightenment/enlightenment.hash | 5 +++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmodplug/libmodplug.hash b/package/libmodplug/libmodplug.hash
-index 01ff71014c..8aaf500a3a 100644
---- a/package/libmodplug/libmodplug.hash
-+++ b/package/libmodplug/libmodplug.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  d145910ca10c3ecab0019d45be7e31ea6be1d1ee951ef0e1f747c9752d20f043  libmodplug-d1b97ed.tar.gz
-+sha256  d145910ca10c3ecab0019d45be7e31ea6be1d1ee951ef0e1f747c9752d20f043  libmodplug-d1b97ed0020bc620a059d3675d1854b40bd2608d.tar.gz
- sha256  49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e  COPYING
-diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
-index 735d0e704d..c5d2463fdb 100644
---- a/package/libmodplug/libmodplug.mk
-+++ b/package/libmodplug/libmodplug.mk
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index 2d977b86f7..ed5d6b24ef 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,4 +1,5 @@
+-# From https://www.enlightenment.org/news/2022-01-03-enlightenment-0.25.1
+-sha256  2cf05fe3d96ef35e823619dbc0ac513ecabcae2186800ecd804924a637112444  enlightenment-0.25.1.tar.xz
++# From https://www.enlightenment.org/news/2022-09-15-enlightenment-0.25.4
++sha256  56db5d206b821b9a8831d26e713e410ac70b2255a6f43fcdf7c01eefde23b7a2  enlightenment-0.25.4.tar.xz
++# Locally computed
+ sha256  8d2fbc393e967cd6f5b8559d1744881a6a1ceb3ec6e1c2368c3916809ffccb8d  COPYING
+ sha256  cdc77ee1732455b203610f923fe4196046b3f7509038c48dc0b0c7e3492c23f3  src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 95670e800d..836c6e581d 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMODPLUG_VERSION = d1b97ed
-+LIBMODPLUG_VERSION = d1b97ed0020bc620a059d3675d1854b40bd2608d
- LIBMODPLUG_SITE = $(call github,Konstanty,libmodplug,$(LIBMODPLUG_VERSION))
- LIBMODPLUG_INSTALL_STAGING = YES
- LIBMODPLUG_LICENSE = Public Domain
+-ENLIGHTENMENT_VERSION = 0.25.1
++ENLIGHTENMENT_VERSION = 0.25.4
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = https://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause, OFL-1.1 (font)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
