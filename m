@@ -4,44 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 911B3CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 20:37:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A22E8CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 20:38:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D31B4208B;
-	Fri, 13 Oct 2023 20:37:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D31B4208B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2758242083;
+	Fri, 13 Oct 2023 20:38:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2758242083
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cmNQRxEHI93I; Fri, 13 Oct 2023 20:37:49 +0000 (UTC)
+	with ESMTP id aDmt3jEykjfe; Fri, 13 Oct 2023 20:38:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C72A74208F;
-	Fri, 13 Oct 2023 20:37:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C72A74208F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 77FE51BF995
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 20:37:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E82FA42092;
+	Fri, 13 Oct 2023 20:38:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E82FA42092
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 205401BF33D
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 20:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50FCE82123
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D0E060E2E
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 20:37:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50FCE82123
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D0E060E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vg_KksrEZ_np for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nXkOmMTWKmeo for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 20:37:31 +0000 (UTC)
 Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DDE36820CF
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 833BB60EF6
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 20:37:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDE36820CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 833BB60EF6
 Received: from localhost.localdomain ([146.241.127.78])
  by Aruba Outgoing Smtp  with ESMTPSA
- id rOuVqO37yfJOlrOuVq58gP; Fri, 13 Oct 2023 22:37:28 +0200
+ id rOuVqO37yfJOlrOuWq58gq; Fri, 13 Oct 2023 22:37:28 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 22:37:21 +0200
-Message-Id: <20231013203724.120389-1-giulio.benetti@benettiengineering.com>
+Date: Fri, 13 Oct 2023 22:37:23 +0200
+Message-Id: <20231013203724.120389-3-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231013203724.120389-1-giulio.benetti@benettiengineering.com>
+References: <20231013203724.120389-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-CMAE-Envelope: MS4xfDpXLKNZrU4ZFHdqMpKljQYE4rjw8jxdDYjrh3zo/Wtj/xxsWXZXEEZw4vxrXlEgv/U243bZn6fWGaVNYDpTgYECksvxdIdfMsl/IZwhKZMUz6tvzES7
  KOAN3UOYH9UYJXUcBUqnSgS3FBPBcUfn3OauTIEjRH3fSeWrH2boZNf3SAhiOnSgxevlzrgC53bOE+dYhPd+xbaQWOButo38o6FkLnSK0NdRgeflc1QZo6DR
@@ -49,18 +51,18 @@ X-CMAE-Envelope: MS4xfDpXLKNZrU4ZFHdqMpKljQYE4rjw8jxdDYjrh3zo/Wtj/xxsWXZXEEZw4vx
  husK1u2hLHw9vjY/1jzP90/hAsXv+CKQPlGnBMHF5qomIOGP1w60zoKYHg6PPfC+V+aLB5FjNSuzyUCTzHDPnR6PGn/DxQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1697229448; bh=jNNpSvHkL3PwjaU847M2orfQrU03sw2ZWvAOi2tQk/k=;
+ t=1697229448; bh=RUPKEr28qsjnfjO3Xx+l+KU+SkyPmzrVCVZvxFobASk=;
  h=From:To:Subject:Date:MIME-Version;
- b=jJ8NUrsB0XoQAB03d6sl1ivJDJ4mSLJE2PapkbTGXDt97Cq1f5QP+EbRTAiX/jRYo
- 7jEJWBLNHLZEwR0Xq1Wuy+Ej3pi1kJlQ2kJMwXYBvWjtDXFs0JR48RdtfvMBykWZlD
- vhSTQsEGkizcy4T2OwHxUiTUkpxmHA6/BntHUprgMm533iCpNA5CglM3xS3+XjZZqc
- QD9LkZPxIHTgFEQFM/D7sL7PUaKdcmxS9HlRKXXNQJHK6chpYvwmOc8Jyd03JnwAC0
- HI0r66YKeFpCYtCTNAbUNfelTJIvv8y82k8QLDUK+dedh62sRBAkP1e7C6HEpyTH50
- So0RK65BWT6Yw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=cytG3mcyVXNc+JCa1PxAv2BBy+oShRc8HMJgxugPx7/TwqfZU3slLcE8TKAeOI9at
+ XjyRIqZZJbSHlP83Y7mZXQOzxMgns74yZvmcn0qVfLPQL6P6oj94+1VJCRXsHGgVoK
+ Q6UdJbGA9tgYKhA2IrviZsFKa2i6QOPkhZ9RprU5YW3jdzG8SqwnFOjoCZnCI12TS+
+ Z8OFFbzbZSYm9i4W5DJfRkq0cBydk6Bdta770yRnfmsZ+fusXgKJJlO7nhYIrZRw+6
+ wHx4w51GTQMrf32XnSjBzpTelg1avedhPWGI2aTDzqW0xBiu/E2BW514g14xwOJHfL
+ SX9Pb7uCy73vQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=jJ8NUrsB
-Subject: [Buildroot] [PATCH v3 1/4] package/libtraceevent: new package
+ header.a=rsa-sha256 header.s=a1 header.b=cytG3mcy
+Subject: [Buildroot] [PATCH v3 3/4] package/linux-tools: add rtla
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,129 +86,111 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-Introduce the libtraceevent library, that used to be bundled with the
-trace-cmd tool. This library is now used by several tools and libraries
-such as trace-cmd, libtracefs and rtla.
+The RealTime Linux Analysis tool includes a set of commands that relies
+on the osnoise and timerlat tracers from the ftrace kernel subsystem,
+allowing to analyze the lantency sources coming from the hardware and
+the kernel itself.
 
-This package tries to install libraries in /usr/local/lib by default,
-hence the redefinition of the "prefix" variable, so that the library
-gets installed in "/usr/lib" instead.
-
-The same applies to the pkgconfig handling of the proved Makefile, which
-installs the .pc files in the /usr/local area by default, hence the
-redefinition of the pkgconfig_dir to either the correct directory within the
-staging area, or to empty value for the target to avoid installing the .pc
-in that case.
+This tool was introduced in v5.17, and relies on libtracefs and
+libtraceevent, although libtraceevent itself is already a dependency for
+libtracefs.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-[Giulio: bump version to 1.7.3 and add hash file]
+[Giulio: fix install on recent Linux versions]
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 Giulio:
 V1->V2:
-* bump to version 1.7.3
-* add hash file
+* fix install with recent Linux versions
+V2->V3:
+* deal with hwnoise presence as suggested by Yann Morin
+* change Config.in comment according to the point above
 ---
- DEVELOPERS                               |  3 +++
- package/Config.in                        |  1 +
- package/libtraceevent/Config.in          |  9 +++++++
- package/libtraceevent/libtraceevent.hash |  4 +++
- package/libtraceevent/libtraceevent.mk   | 33 ++++++++++++++++++++++++
- 5 files changed, 50 insertions(+)
- create mode 100644 package/libtraceevent/Config.in
- create mode 100644 package/libtraceevent/libtraceevent.hash
- create mode 100644 package/libtraceevent/libtraceevent.mk
+ DEVELOPERS                                |  1 +
+ package/linux-tools/Config.in             | 10 ++++++
+ package/linux-tools/linux-tool-rtla.mk.in | 40 +++++++++++++++++++++++
+ 3 files changed, 51 insertions(+)
+ create mode 100644 package/linux-tools/linux-tool-rtla.mk.in
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 06583c3c0a..e426f65cc2 100644
+index 8932c88953..86496f6cc5 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2111,6 +2111,9 @@ F:	package/postgresql/
- F:	package/protozero/
- F:	package/timescaledb/
+@@ -2114,6 +2114,7 @@ F:	package/timescaledb/
+ N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
+ F:	package/libtraceevent/
+ F:	package/libtracefs
++F:	package/linux-tools/linux-tool-rtla.mk.in
  
-+N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
-+F:	package/libtraceevent/
-+
  N:	Michael Durrant <mdurrant@arcturusnetworks.com>
  F:	board/arcturus/
- F:	configs/arcturus_ucp1020_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index f4399a6021..2b3d3e612f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -117,6 +117,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
- 	source "package/libbpf/Config.in"
-+	source "package/libtraceevent/Config.in"
- 	source "package/lmbench/Config.in"
- 	source "package/lsof/Config.in"
- 	source "package/ltp-testsuite/Config.in"
-diff --git a/package/libtraceevent/Config.in b/package/libtraceevent/Config.in
-new file mode 100644
-index 0000000000..d351e3b4de
---- /dev/null
-+++ b/package/libtraceevent/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBTRACEEVENT
-+	bool "libtraceevent"
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 451b0eeff5..4df73159be 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -102,6 +102,16 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF_NEEDS_HOST_PYTHON3
+ 
+ endif
+ 
++config BR2_PACKAGE_LINUX_TOOLS_RTLA
++	bool "rtla"
++	select BR2_PACKAGE_LINUX_TOOLS
++	select BR2_PACKAGE_LIBTRACEFS
 +	help
-+	  libtraceevent is a library that interfaces with the ftrace
-+	  subsystem in the linux kernel.
-+	  It used to be bundled directly in the trace-cmd
-+	  tool, but it was eventually extracted so that it can be used
-+	  by multiple other tools and libraries, such as libtracefs and
-+	  rtla.
-diff --git a/package/libtraceevent/libtraceevent.hash b/package/libtraceevent/libtraceevent.hash
++	  Linux 5.19 and later has 2 new tracers, osnoise and timerlat.
++	  Linux 6.3 has new tracer hwnoise. These tracers allow performing
++	  latency analysis, for which the rtla tool provides wrapper
++	  commands to visualize and extract latency traces and reports.
++
+ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+ 	bool"selftests"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
+diff --git a/package/linux-tools/linux-tool-rtla.mk.in b/package/linux-tools/linux-tool-rtla.mk.in
 new file mode 100644
-index 0000000000..15c4883afd
+index 0000000000..04b98f443d
 --- /dev/null
-+++ b/package/libtraceevent/libtraceevent.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256  097b72e0d907f3107825fb2edf0188324bf70dc9da360f6efa68dc484ffde541  libtraceevent-1.7.3.tar.gz
-+sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  GPL-2.0
-+sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LGPL-2.1
-diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
-new file mode 100644
-index 0000000000..75c23f7410
---- /dev/null
-+++ b/package/libtraceevent/libtraceevent.mk
-@@ -0,0 +1,33 @@
++++ b/package/linux-tools/linux-tool-rtla.mk.in
+@@ -0,0 +1,40 @@
 +################################################################################
 +#
-+# libtraceevent
++# rtla
 +#
 +################################################################################
 +
-+LIBTRACEEVENT_VERSION = 1.7.3
-+LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
-+LIBTRACEEVENT_INSTALL_STAGING = YES
-+LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
-+LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
++LINUX_TOOLS += rtla
 +
-+define LIBTRACEEVENT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++RTLA_DEPENDENCIES = host-pkgconf libtracefs
++RTLA_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
++	CC=$(TARGET_CC) \
++	LDFLAGS="$(TARGET_LDFLAGS)" \
++	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
++
++define RTLA_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/tracing/rtla/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not implement the rtla tool." ; \
++		echo "At least kernel 5.19 must be used." ; \
++		exit 1 ; \
++	fi
++
++	$(TARGET_MAKE_ENV) \
++	$(MAKE) $(RTLA_MAKE_OPTS) \
++	-C $(LINUX_DIR)/tools/tracing rtla
 +endef
 +
-+define LIBTRACEEVENT_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+	DESTDIR=$(STAGING_DIR) \
-+	pkgconfig_dir="/usr/lib/pkgconfig" \
-+	prefix="/usr" \
-+	install
-+endef
++# make rtla_install build and install by default documentation using rst2man
++# but it's not available in Buildroot and we don't want manual files in target
++# folder so let's simply install the resulting rtla binary and create symlinks
++# like Linux does in its tools/tracing/rtla/Makefile
++define RTLA_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(LINUX_DIR)/tools/tracing/rtla/rtla $(TARGET_DIR)/usr/bin
++	ln -sf rtla $(TARGET_DIR)/usr/bin/osnoise
++	ln -sf rtla $(TARGET_DIR)/usr/bin/timerlat
 +
-+define LIBTRACEEVENT_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+	DESTDIR=$(TARGET_DIR) \
-+	pkgconfig_dir="" \
-+	prefix="/usr" \
-+	install
++	# Check if hwnoise is provided or not
++	if grep -q hwnoise $(LINUX_DIR)/tools/tracing/rtla/Makefile; then \
++		ln -sf rtla $(TARGET_DIR)/usr/bin/hwnoise ; \
++	fi
 +endef
-+
-+$(eval $(generic-package))
 -- 
 2.34.1
 
