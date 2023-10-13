@@ -1,68 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C42CCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 20:38:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D312BCDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 21:08:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9EF342093;
-	Fri, 13 Oct 2023 20:38:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9EF342093
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g7bQncVvNQdS; Fri, 13 Oct 2023 20:38:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D68684208B;
-	Fri, 13 Oct 2023 20:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D68684208B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AAD2E1BF33D
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 20:37:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE14E60EF6
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 20:37:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE14E60EF6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49D0060F99;
+	Fri, 13 Oct 2023 21:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49D0060F99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W-2zedQ5RxkO for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 20:37:31 +0000 (UTC)
-Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D673760F0B
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 20:37:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D673760F0B
-Received: from localhost.localdomain ([146.241.127.78])
- by Aruba Outgoing Smtp  with ESMTPSA
- id rOuVqO37yfJOlrOuWq58h1; Fri, 13 Oct 2023 22:37:28 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hMJ4PFtX_gkm; Fri, 13 Oct 2023 21:08:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55FD060F28;
+	Fri, 13 Oct 2023 21:08:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55FD060F28
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D51501BF3C0
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 21:08:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD05A81F4A
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 21:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD05A81F4A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UMPxnmfI6Si6 for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 21:08:38 +0000 (UTC)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA95681F41
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 21:08:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA95681F41
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-405361bba99so24965805e9.2
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:08:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697231316; x=1697836116;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=d0wz56eMPCvEZwONNkXm+9D4uVQdLmH1hLxVRea2Ems=;
+ b=lX0ASQyz6qhavRz+FMbkUX752kF+tJYibWWhZKawiM5vudwOaeE4OnykaMVwU3IwLg
+ vgjE86BCtNh3dyG0RL8y9TMkSifSWsqacZqA3EwcEzz9RHDXoQ/6Xoe3cn0PVqlhrMAX
+ DLC3ZdMxwDXKMqHark+K/PK4V2jWIQLeAQ85HTLLxJzbWyWwRXnWRtO4d9yzuxIBmOBV
+ i+G4n1cxdP/1BSqvYFVf/qSoYsjIIwrMtqZP95Al9F2gqnGWI5Xqdkf3L9r/0WTBv+Zo
+ Lq3DKiWBfc5zseQFbElQG1O6TyEmHMjkZhq3AhiMmbjzzg2hIZ6V3axanb8sS+MIu9gi
+ qEKw==
+X-Gm-Message-State: AOJu0YzZRBq7mxmwMRfZlcQqzYe/onKsoWOrMXtpwT1apXavMYAOk+N0
+ tSI0N6BZJXv+vYoDiOHXXjvNkMgJTLU=
+X-Google-Smtp-Source: AGHT+IFmXhLbDQ/+W7XdG8AfTMlMuwLLLLDt6HlaZw7o4m0f8ZlabfC7F8Jdd+WZ4oZVRO2nb5wfAg==
+X-Received: by 2002:a05:600c:2218:b0:406:535a:f558 with SMTP id
+ z24-20020a05600c221800b00406535af558mr25746116wml.10.1697231316208; 
+ Fri, 13 Oct 2023 14:08:36 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ m9-20020a05600c4f4900b00407754b998dsm120639wmq.27.2023.10.13.14.08.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 Oct 2023 14:08:35 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 22:37:24 +0200
-Message-Id: <20231013203724.120389-4-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231013203724.120389-1-giulio.benetti@benettiengineering.com>
-References: <20231013203724.120389-1-giulio.benetti@benettiengineering.com>
+Date: Fri, 13 Oct 2023 23:08:30 +0200
+Message-ID: <20231013210830.143696-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfDpXLKNZrU4ZFHdqMpKljQYE4rjw8jxdDYjrh3zo/Wtj/xxsWXZXEEZw4vxrXlEgv/U243bZn6fWGaVNYDpTgYECksvxdIdfMsl/IZwhKZMUz6tvzES7
- KOAN3UOYH9UYJXUcBUqnSgS3FBPBcUfn3OauTIEjRH3fSeWrH2boZNf3SAhiOnSgxevlzrgC53bOE+dYhPd+xbaQWOButo38o6FkLnSK0NdRgeflc1QZo6DR
- 5aw1X10JAqAToA+K3UrOz3r1xpqT3Ck/yiU8XDQZC1D9iMDuI4Y79abRaPR8bGvJM20cPzRnjgFvJC37Teac7qs27g6UEXV1EnDLvLGhz+O6ciw3NjRLl1IX
- husK1u2hLHw9vjY/1jzP90/hAsXv+CKQPlGnBMHF5qomIOGP1w60zoKYHg6PPfC+V+aLB5FjNSuzyUCTzHDPnR6PGn/DxQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1697229448; bh=wnno1KTWOQxelG2beB5M0HK+cpnj0e7M8TMI348hSPI=;
- h=From:To:Subject:Date:MIME-Version;
- b=nUEPyIZxQUjRHhMoEykrYjEbrkZL/K036InS9dC1KratiyrGCFhRVqiS7BBaKl4/r
- l2DlrVD2DCbEvZl6QRX80hbTgKkS82IF+RLmW4EIz7lUD1T3GtiDVn/m+q3NuqZbUd
- C8M8Piv6qrFaM+rD571WjLmL0HnOkq9UwhRkO9wWSRz6VGcJL+xOucy9N0FUElIwUP
- WUhQIdgQN97eLEVxEzMw18wB9igY6AqifLhTKc9a4rC+AbZjqkwFkQ63uixywxrBsN
- ukoPKC/4pDUm70xNrsa0DFPl/RlkoF+bxQkOxLltU9/ZgfmO/y6C1y8x1DeWEohF7W
- k4TTUw/awVOcA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=nUEPyIZx
-Subject: [Buildroot] [PATCH v3 4/4] package/trace-cmd: bump to 3.1.7
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1697231316; x=1697836116; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=d0wz56eMPCvEZwONNkXm+9D4uVQdLmH1hLxVRea2Ems=;
+ b=Z+1KsZBuquukBVBMpfYH3Id0AaovH663xkDLCTZFL72rNikgg6Vpq2OPrqMdXX/wyQ
+ lZwMSIfVF0y4E/z3QV6kzOMTgI2yg22kTq9JdFeZVdUoiQieKAQ1zrLPD+wV0oJXOicW
+ gi0ZWGGDU/6AbeWzmw4pi4HJCMi27t/extdcUW23qVPqEFaE82ppGKiNQXV+Ux3uXcj8
+ bq58vTKui+A+ZHk9jprkAxDPoB6w9p5kuyzOzsS8BNJtAYnYvNOimkO46l7R7sxXFqkt
+ YqWYOkH3KAKBIwdiQfWJwj7VmKgGmQqmeWcIpZ1PuFVCVZjlPyZKrv9L7ajAQ5PQLxXU
+ LM6Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Z+1KsZBu
+Subject: [Buildroot] [PATCH 1/1] package/mutt: fix libgpgme static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,92 +93,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Pierre Floury <pierre.floury@gmail.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Fix the following static build failure with libgpgme raised since at
+least bump to version 2.2.9 in commit
+7a2afdb7b1180bed3b6ad92c22c908805467ead3:
 
-trace-cmd's dependencies 'libtracefs' and 'libtraceevent' were split
-into dedicated projects, maintained outside of trace-cmd.
+/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/sh4a-buildroot-linux-musl/11.3.0/../../../../sh4a-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-11/output-1/host/sh4a-buildroot-linux-musl/sysroot/usr/lib/libgpgme.a(assuan-support.o): in function `my_usleep':
+assuan-support.c:(.text+0x260): undefined reference to `__assuan_usleep'
 
-This release, on top of bumping the version, adds this new dependencies.
+Fixes:
+ - http://autobuild.buildroot.org/results/0680dbc95601fcd8cdf07b926ea5e9be2079c7bf
+ - http://autobuild.buildroot.org/results/b4f2d1ad77fb8b97accc4150d8249de145cb9cf4
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-[Giulio: bump to version 3.1.7]
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Giulio:
-V1->V2:
-* bump to version 3.1.7
----
- package/trace-cmd/Config.in      | 2 ++
- package/trace-cmd/trace-cmd.hash | 2 +-
- package/trace-cmd/trace-cmd.mk   | 6 ++++--
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ package/mutt/mutt.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
-index 2d0accd7ae..00b9ebbd9a 100644
---- a/package/trace-cmd/Config.in
-+++ b/package/trace-cmd/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_TRACE_CMD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # dlopen()
-+	select BR2_PACKAGE_LIBTRACEEVENT
-+	select BR2_PACKAGE_LIBTRACEFS
- 	help
- 	  Command line reader for ftrace.
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 09f547a091..2fe7b92b38 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -40,7 +40,11 @@ MUTT_CONF_OPTS += \
  
-diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-index 4d39e4d5ea..6edcaf0e1c 100644
---- a/package/trace-cmd/trace-cmd.hash
-+++ b/package/trace-cmd/trace-cmd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  a74d9ade2633b88d0ad199360d51996427e23f4835594133e456cd6e3bd3a651  trace-cmd-v2.9.7.tar.gz
-+sha256  e496d41e599f8ef3c9a74675da05f86be0d8d48d524f0182c73ab98cd16da0b0  trace-cmd-v3.1.7.tar.gz
- sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
- sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index 52bb99036c..3d4d88c964 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--TRACE_CMD_VERSION = 2.9.7
-+TRACE_CMD_VERSION = 3.1.7
- TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
- TRACE_CMD_SITE = \
- 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
- TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
- TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB LICENSES/GPL-2.0 LICENSES/LGPL-2.1
- 
--TRACE_CMD_DEPENDENCIES = host-pkgconf
-+TRACE_CMD_DEPENDENCIES = host-pkgconf libtracefs libtraceevent
- TRACE_CMD_MAKE_OPTS = prefix=/usr etcdir=/etc
- 
- ifeq ($(BR2_PACKAGE_AUDIT),y)
-@@ -34,6 +34,8 @@ ifeq ($(BR2_sparc64),y)
- TRACE_CMD_CFLAGS += -fPIC
+ # Force the path to "gpgrt-config" (from the libgpg-error package) to
+ # avoid using the one on host, if present.
+-MUTT_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
++MUTT_GPGRT_CONFIG = $(STAGING_DIR)/usr/bin/gpgrt-config
++ifeq ($(BR2_STATIC_LIBS),y)
++MUTT_GPGRT_CONFIG += --static
++endif
++MUTT_CONF_ENV += GPGRT_CONFIG="$(MUTT_GPGRT_CONFIG)"
+ else
+ MUTT_CONF_OPTS += --disable-gpgme
  endif
- 
-+TRACE_CMD_CFLAGS += $($(HOST_DIR)/bin/pkg-config --cflags libtracefs)
-+
- # trace-cmd use CPPFLAGS to add some extra flags.
- # But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
- # that causes build problems.
 -- 
-2.34.1
+2.42.0
 
 _______________________________________________
 buildroot mailing list
