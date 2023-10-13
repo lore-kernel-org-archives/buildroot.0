@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA556CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:49:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9922CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 14:58:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AC676068B;
-	Fri, 13 Oct 2023 14:49:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AC676068B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C5DB6060A;
+	Fri, 13 Oct 2023 14:58:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C5DB6060A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pdFJ1NanAFyu; Fri, 13 Oct 2023 14:49:07 +0000 (UTC)
+	with ESMTP id MhL2MgvHd3p6; Fri, 13 Oct 2023 14:58:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81B7F6F63C;
-	Fri, 13 Oct 2023 14:49:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81B7F6F63C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4E0B11BF33A
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:47:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF7C760A5A;
+	Fri, 13 Oct 2023 14:58:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF7C760A5A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A010A1BF2C7
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:58:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 150FA40543
- for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:47:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 150FA40543
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79C5982A29
+ for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 14:58:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79C5982A29
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6JxIZDmmx5km for <buildroot@lists.busybox.net>;
- Fri, 13 Oct 2023 14:47:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D510340137
- for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:47:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D510340137
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3994843FE; Fri, 13 Oct 2023 14:47:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VrtNgt4mbZr9 for <buildroot@lists.busybox.net>;
+ Fri, 13 Oct 2023 14:58:52 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 81F3D829B1
+ for <buildroot@buildroot.org>; Fri, 13 Oct 2023 14:58:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81F3D829B1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BE5D7E0005;
+ Fri, 13 Oct 2023 14:58:49 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qrJch-007KN7-Aj; Fri, 13 Oct 2023 16:58:43 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 16:33:11 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 67c5936f4249b8edcda8de9e70146d332730524a
-X-Git-Newrev: 4ede63c069d81aaabbe1960d4ff63689d2c2b67a
-X-Patchwork-Hint: ignore
-Message-Id: <20231013144706.C3994843FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/linux-tools: fix
- SysV init script
+To: Thomas Devoogdt <thomas@devoogdt.com>
+References: <20231001172905.1962565-1-thomas.devoogdt@barco.com>
+Date: Fri, 13 Oct 2023 16:58:43 +0200
+In-Reply-To: <20231001172905.1962565-1-thomas.devoogdt@barco.com> (Thomas
+ Devoogdt's message of "Sun, 1 Oct 2023 19:29:05 +0200")
+Message-ID: <87fs2e4li4.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v1] package/wpewebkit: needs >= GCC 9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,70 +62,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ede63c069d81aaabbe1960d4ff63689d2c2b67a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
 
-This commit fixes the S10hyperv SysV init script which expects binaries
-to be locate in /sbin while they are installed in /usr/sbin. Please
-note, that the systemd init scripts correctly reference them.
-Furthermore, the SysV init script did not check for an actual HyperV
-environment to be present, which is also corrected. In addition, this
-commit also fixes check-package warnings regarding a missing DAEMON
-definition.
+ > Raise the minimal GCC version to 9.3, which is required since wpewebkit-2.40.0 [1].
+ > Similar to commit 09af6d8bfd8ece6b021b877aaf5cbd36a78ffad9,
+ > we do check on >= GCC 9, because we can't check on >= GCC 9.3.
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-[Peter: drop from .checkpackageignore]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 14c4bd7bf8150283e158c50df87c77d63bb1b73c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .checkpackageignore           | 1 -
- package/linux-tools/S10hyperv | 8 ++++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ > [1] https://github.com/WebKit/WebKit/commit/f9c142d9b5b8c48fe310bc6d3620e634901b2930
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1ff0f4e0c0..526df2d781 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -825,7 +825,6 @@ package/linux-fusion/0001-fix-for-linux-4-and-above.patch Upstream
- package/linux-fusion/0002-Fix-mismatched-conversion-spec-and-value-in-printk.patch Upstream
- package/linux-fusion/0003-Fix-fusion-Unknown-symbol-tasklist_lock-err-0.patch Upstream
- package/linux-fusion/0004-Port-one-one_udp.c-to-Linux-4.1.patch Upstream
--package/linux-tools/S10hyperv Variables
- package/linux-zigbee/0001-test-serial-Remove-test-serial.patch Upstream
- package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch Upstream
- package/linuxptp/S65ptp4l Indent Shellcheck
-diff --git a/package/linux-tools/S10hyperv b/package/linux-tools/S10hyperv
-index 32887d1b6c..be9ed2c5df 100644
---- a/package/linux-tools/S10hyperv
-+++ b/package/linux-tools/S10hyperv
-@@ -2,14 +2,18 @@
- 
- PROGS="@PROGS@"
- PIDDIR="/var/run"
-+DAEMON="hyperv"
- 
- # shellcheck source=/dev/null
--[ -r "/etc/default/hyperv" ] && . "/etc/default/hyperv"
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+# only continue if we are in a HyperV platform
-+[ -e "/sys/bus/vmbus" ] || exit 0
- 
- start_one() {
- 	printf 'Starting %s: ' "$1"
- 	# shellcheck disable=SC2086 # we need the word splitting
--	start-stop-daemon -b -m -S -q -p "$PIDDIR/$1.pid" -x "/sbin/$1" -- -n
-+	start-stop-daemon -b -m -S -q -p "$PIDDIR/$1.pid" -x "/usr/sbin/$1" -- -n
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
+ > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+
+Committed to 2023.02.x and 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
