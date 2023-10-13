@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7792CDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:52:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 185A7CDB47E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Oct 2023 18:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 918B04188A;
-	Fri, 13 Oct 2023 18:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 918B04188A
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7BCC408DC;
+	Fri, 13 Oct 2023 18:52:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7BCC408DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sNzxOvrs6lIa; Fri, 13 Oct 2023 18:52:29 +0000 (UTC)
+	with ESMTP id EKR61hq_dX7x; Fri, 13 Oct 2023 18:52:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A5144182A;
-	Fri, 13 Oct 2023 18:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5144182A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 167BC1BF2BA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 862E041892;
+	Fri, 13 Oct 2023 18:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 862E041892
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 187D21BF995
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F011441814
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA11542076
  for <buildroot@lists.busybox.net>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F011441814
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA11542076
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XHMwRtn0VTDD for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UwUuA4GfaYqE for <buildroot@lists.busybox.net>;
  Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 176A241468
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0777D41FB4
  for <buildroot@buildroot.org>; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 176A241468
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0777D41FB4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BDC784FC9; Fri, 13 Oct 2023 18:46:33 +0000 (UTC)
+ id E3C5484FED; Fri, 13 Oct 2023 18:46:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Oct 2023 20:12:57 +0200
+Date: Fri, 13 Oct 2023 20:10:29 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 6543b632735196dffd14cf4a233e62d547861a39
-X-Git-Newrev: 5f56122cd00b023a0c9f97762b8026c4cb86d921
+X-Git-Oldrev: 8032a566d5922f8b5a11a70b3b1351866cc4e016
+X-Git-Newrev: 0b4c5daf4a3ca3018cf263dd8d407e10768cac41
 X-Patchwork-Hint: ignore
-Message-Id: <20231013184633.0BDC784FC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libcurl: security
- bump to 8.4.0
+Message-Id: <20231013184632.E3C5484FED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/mbedtls: bump to
+ version 2.28.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,67 +58,48 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4616568693404532517=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4616568693404532517==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5f56122cd00b023a0c9f97762b8026c4cb86d921
+commit: https://git.buildroot.net/buildroot/commit/?id=0b4c5daf4a3ca3018cf263dd8d407e10768cac41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes following two vulnerabilities:
-
-* CVE-2023-38545: SOCKS5 heap buffer overflow
-  https://curl.se/docs/CVE-2023-38545.html
-* CVE-2023-38546: cookie injection with none file
-  https://curl.se/docs/CVE-2023-38546.html
-
-Signed-off-by: Jan Čermák <sairon@sairon.cz>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 30dd60ba7eb3e6da4f0ae91b3b08f8aa8fb8d786)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7dc2462a8e511629e1ea300f32aa43ee1ec74fa1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 371d20a632..ecd5d63909 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.3.0.tar.xz.asc
-+# https://curl.se/download/curl-8.4.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  376d627767d6c4f05105ab6d497b0d9aba7111770dd9d995225478209c37ea63  curl-8.3.0.tar.xz
-+sha256  16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d  curl-8.4.0.tar.xz
- sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index dd4cf43c6a..bd331a55aa 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 2281bd5fe5..6aa6d0235d 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.3:
+-sha256  bdf7c5bbdc338da3edad89b2885d4f8668f9a6fffeba6ec17a60333e36dade6f  mbedtls-2.28.3.tar.gz
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.4:
++sha256  578c4dcd15bbff3f5cd56aa07cd4f850fc733634e3d5947be4f7157d5bfd81ac  mbedtls-2.28.4.tar.gz
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 8f09fd72a8..62eda6ec99 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 8.3.0
-+LIBCURL_VERSION = 8.4.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-
---===============4616568693404532517==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-MBEDTLS_VERSION = 2.28.3
++MBEDTLS_VERSION = 2.28.4
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4616568693404532517==--
