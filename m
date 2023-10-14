@@ -1,67 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8D31CDB465
-	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 18:45:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB32ACDB465
+	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 20:36:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7CFD81EA0;
-	Sat, 14 Oct 2023 18:45:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7CFD81EA0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 197C34019E;
+	Sat, 14 Oct 2023 20:36:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 197C34019E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p1YzyfrexDKD; Sat, 14 Oct 2023 20:36:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B290D4056E;
+	Sat, 14 Oct 2023 20:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B290D4056E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E0A11BF47E
+ for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 20:36:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4248B81C20
+ for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 20:36:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4248B81C20
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sn-eMJQrOkjZ; Sat, 14 Oct 2023 18:45:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 628368197D;
-	Sat, 14 Oct 2023 18:45:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 628368197D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E7411BF2C1
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 18:45:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06C7141721
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 18:45:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06C7141721
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Qs1PmuiEKkx for <buildroot@lists.busybox.net>;
- Sat, 14 Oct 2023 18:45:26 +0000 (UTC)
-Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D81A14171B
- for <buildroot@buildroot.org>; Sat, 14 Oct 2023 18:45:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D81A14171B
-Received: from localhost.localdomain ([146.241.127.78])
- by Aruba Outgoing Smtp  with ESMTPSA
- id rjdaq4W1N6PZFrjdaqdTIP; Sat, 14 Oct 2023 20:45:22 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X9PCWj2msAQT for <buildroot@lists.busybox.net>;
+ Sat, 14 Oct 2023 20:36:49 +0000 (UTC)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 41A1081C19
+ for <buildroot@buildroot.org>; Sat, 14 Oct 2023 20:36:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41A1081C19
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-32d569e73acso2951474f8f.1
+ for <buildroot@buildroot.org>; Sat, 14 Oct 2023 13:36:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697315807; x=1697920607;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=wbcDY+ykN9fCCpmIGU3fhfsD5ZHcealLAyWigLyNPNM=;
+ b=Otuf7LX4mNOYmtxtIsNrHxVMlgDTg2o6xK1I5/Y1+zUqQBE7T5sR8iIZoPVNLbOuLv
+ owmYevuuZHqZ+HgZwCNQqctUOqeXawyuA9/u0RpHcoAgSMYP2Rhd/OSmqozD/VosBVw3
+ 1+utMgnq5iV28K/QuNTOL7xcBBM6tDA/ZJwhMvuO+nDU9LUw/W1N0ej8SGELZ6RL1DBB
+ ZHc6ZAp4cQG8rKn/J+9qXYDjPvCP45Qey4YpaZ6YMcbD3RBIoeqtSxbwJxkWmj7+eVeq
+ um7QQWOkXpfXVyqaSGDN6bOJ+5mxkSjguEzsKvycaRP0Q/B4YI7gYD+6YZ6D9EcSOInl
+ XuFg==
+X-Gm-Message-State: AOJu0YzsRcCCSE7/AAjnNXklleLEWZbzhGQX5GJIgIRQaWnYEI6nN+1V
+ 6xkCmP0OOHeQOqE8+bG2czpH/6+pEHs=
+X-Google-Smtp-Source: AGHT+IF/EQPNuDIgH+gPqS7EnSJAIZQaV0aaWxA+RXp0a/UMBbH2Kt5NOI6w7w7gRhPpQxRjpwNNCg==
+X-Received: by 2002:a5d:6890:0:b0:32d:9d64:b429 with SMTP id
+ h16-20020a5d6890000000b0032d9d64b429mr3574675wru.21.1697315806928; 
+ Sat, 14 Oct 2023 13:36:46 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8290:3800:a426:a01d:739:9ce4])
+ by smtp.gmail.com with ESMTPSA id
+ e16-20020adff350000000b0032d96dd703bsm5746936wrp.70.2023.10.14.13.36.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 14 Oct 2023 13:36:46 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 14 Oct 2023 20:45:20 +0200
-Message-Id: <20231014184521.87527-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 14 Oct 2023 22:36:45 +0200
+Message-Id: <20231014203645.866867-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfBOYgw31In71uC9urfXiipZfR1r06++4Ta4SZuF5CIPKn7pAjmMo5LqC3mZgVElafWe1mVmev+gafMgHoBl33b/JKVYXGIVWHXwcBlVh5dPWIzG46fVQ
- K3krTAnt6HZCaPvpDHvTPa4Gcf3Bcm+fSZscfZg1oTskkn00ue4Fqa2QdvCKidQ/PAaOP9gEIWjSzgmjyMu+SAgsmIVq1NHz9oyMJWysQHUq3RtsxcLbn6fZ
- c4eO3NRkywngQ9auGEtkGOBX+c6TfXIeLQpvMKVScCJ67l+/ZQ3j/9XOpQIvvHhQtPhNho/NPfTW3WsP0qyr7ilV1H4/7I39VYaCY6RRCdUGKlLIAnH0scrW
- 1oOIswOC
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1697309122; bh=BlYk2hz4rfRycwxJyoqlw/R1zh43tG+ZQDg95LUe2BA=;
- h=From:To:Subject:Date:MIME-Version;
- b=OW4zw1k58KlC5+iW+Bx9faf20eNqllgmmguvR7+/Rjid+Gbu5GOSmBQW4Ko8HQzLL
- xtZp8TkX5WjN6yPoUKxjGgLCv+e0Lg2vxspYMOZQnZ8jHZkKN7G6KInnU89Lrfid2S
- 5SoW+zPZZ2Jq70TEVR/b3p2GdylBfi82qn5X+ZyBS8SyFUXcaIpdhgQlCmllgbe+6e
- KJ9KoH06aH5GhprCiBmO0x6iLKG7vM96gB18q6gv9Fy+hwxpsdEoWkVtxTQQxjy3JP
- Jsn+oMXwvV9mKpcGqtkSmV77S/6r7IjGjjVUmBwccWf0dUPF5uVWGKTq2+If5dQsLj
- o1yt3TZ9MH5Tg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=OW4zw1k5
-Subject: [Buildroot] [PATCH 1/2] configs/rockpro64_defconfig: bump ATF to
- 2.9, U-Boot to 2023.07 and Linux to 6.5.7
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1697315807; x=1697920607; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=wbcDY+ykN9fCCpmIGU3fhfsD5ZHcealLAyWigLyNPNM=;
+ b=KPx31pKx5BR4t+lS0M5IdXtrhYsh+3xrqthaEkF0tlhzvJI0cs7bzSPdD0hWFAgu0i
+ Rrp93XOnk4vx/l9jRGUbUGfm7k86A+7qqjNTmoytrZlPv/JByNMngDBJ0Ztt4IHKA9Lj
+ DZOh9NW6a7RK7GlZoujpqRUId+e1WKw/TrsvkbVSUZAjxx3f71cND0M0F984CqIpOrXR
+ 93vah/5xsGdjLMuazYRTG0F/Wlzhp9TyHg/fo6q+dsMQYNvT3BetdK45fBGC93Ekg40t
+ 516VDGIDfNnZF7ydrc4pYy7ryIG34nLrx44CV6bYl9bzQP2m0JiyBzyCCoQSVMmAXpvt
+ TY7w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=KPx31pKx
+Subject: [Buildroot] [PATCH] package/gcc: remoce leftover from legacy
+ PowerPC patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,78 +94,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Suniel Mahesh <sunil@amarulasolutions.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Also, since wi ith Linux commit [1] it's been defined the mmc* order
-making sd-card number to be 1 instead of 0. This prevent to boot from
-mmc0 with Linux version 5.10+ so let's change mmcblk0p4 to mmcblk1p4 in
-extlinux.conf in order to boot since we bump to Linux 6.5.7
+In commit 0c82f3f63563 (package/gcc: remove powerpc conditional patching
+logic), the macro defining the conditional patch was removed, but it was
+still referenced and expanded in the apply-patches hook.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0011c6d182774fc781fb9e115ebe8baa356029ae
+Drop that now.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
 ---
- board/pine64/rockpro64/extlinux.conf |  2 +-
- configs/rockpro64_defconfig          | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/gcc/gcc.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/board/pine64/rockpro64/extlinux.conf b/board/pine64/rockpro64/extlinux.conf
-index ea081a1f0b..83467ef43c 100644
---- a/board/pine64/rockpro64/extlinux.conf
-+++ b/board/pine64/rockpro64/extlinux.conf
-@@ -1,4 +1,4 @@
- label RK3399_ROCKPRO64 linux
-   kernel /Image
-   devicetree /rk3399-rockpro64.dtb
--  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p4 rw rootwait
-+  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
-diff --git a/configs/rockpro64_defconfig b/configs/rockpro64_defconfig
-index d39640f855..4704ac7206 100644
---- a/configs/rockpro64_defconfig
-+++ b/configs/rockpro64_defconfig
-@@ -2,13 +2,13 @@
- BR2_aarch64=y
- BR2_cortex_a72_a53=y
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 4a3b780618..9a164c8374 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -44,7 +44,6 @@ define HOST_GCC_APPLY_PATCHES
+ 			$(APPLY_PATCHES) $(@D) $${patchdir} \*.patch || exit 1; \
+ 		fi; \
+ 	done
+-	$(HOST_GCC_APPLY_POWERPC_PATCH)
+ endef
  
--# Linux headers same as kernel, a 5.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+# Linux headers same as kernel, a 6.5 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_5=y
- 
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9.0"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
-@@ -18,7 +18,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rockpro64-rk3399"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.5.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rockpro64"
+ HOST_GCC_EXCLUDES = \
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
