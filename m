@@ -1,46 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3BF1CDB465
-	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 06:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD03CDB474
+	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 07:39:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4797E418E0;
-	Sat, 14 Oct 2023 06:41:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4797E418E0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8003D80C34;
+	Sat, 14 Oct 2023 07:39:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8003D80C34
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oul8jrl82PKB; Sat, 14 Oct 2023 06:41:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z_1IipxTNd8Q; Sat, 14 Oct 2023 07:39:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37F7F418E1;
-	Sat, 14 Oct 2023 06:41:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37F7F418E1
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5F5E80C44;
+	Sat, 14 Oct 2023 07:39:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5F5E80C44
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DD4AC1BF21A
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 06:41:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E7D231BF2F4
+ for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 07:39:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A865820D7
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 06:41:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A865820D7
+ by smtp1.osuosl.org (Postfix) with ESMTP id B9F9F80BF2
+ for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 07:39:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9F9F80BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X8p6jV8I_-Zz for <buildroot@lists.busybox.net>;
- Sat, 14 Oct 2023 06:41:17 +0000 (UTC)
-Received: from busybox.net (unknown [185.225.74.154])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A46681E40
- for <buildroot@busybox.net>; Sat, 14 Oct 2023 06:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A46681E40
-From: Noreply@busybox.net
-To: buildroot@busybox.net
-Date: 14 Oct 2023 08:41:13 +0200
-Message-ID: <20231014084112.9245F7C0FA108C77@busybox.net>
+ with ESMTP id S7f0vVqQ5a25 for <buildroot@lists.busybox.net>;
+ Sat, 14 Oct 2023 07:39:45 +0000 (UTC)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
+ [IPv6:2a00:1450:4864:20::12a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E4EA68084B
+ for <buildroot@buildroot.org>; Sat, 14 Oct 2023 07:39:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4EA68084B
+Received: by mail-lf1-x12a.google.com with SMTP id
+ 2adb3069b0e04-503397ee920so3379272e87.1
+ for <buildroot@buildroot.org>; Sat, 14 Oct 2023 00:39:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697269182; x=1697873982;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=a/XmV7wVkCKBm7/NjcZprua6eWC68A651N6ZyCTUOVI=;
+ b=nhaxXQIBmXUacFINsB+Zw1JU6KVtp3G3eZJalw2V36+VZgHeeSaN5D54imAdrBPs1+
+ XgcA32m9ia02riNFtadj/f2mc2tuzf+QfeXKJRv5FAacpn9DW7ifE4+vXBiaoaBcU0u9
+ it9OX1e+L0pAnXS3IZCMb3gtSzNEKP81ViCwhKl2vfg78GpvRRo/NadAIP49GuCZK8JT
+ GMvqmdKMfa0AXRr19/CSVbswjclcOf2iscArWHMG3hMCduf8WYVB01oUmpfqT7Pa5uz/
+ 7eYw+vNCWpmjYf0aUqprRYbOFqC2520D8MWsY5iGA+p1HNQv+LY6A9IVYkcAuhx1UTip
+ uOCg==
+X-Gm-Message-State: AOJu0YwTP7R2Jms707rvsus8xWQXGuicNNeirrUPeaqhlGm1NMaSNOMt
+ ES4r7n6TY2+LN4hwmFZaOZzORxJa2kTwra2gvTCQhwKnFi0=
+X-Google-Smtp-Source: AGHT+IGKD3ikRckfRrYBHvrO5VK+Ti2fHed/S2trPVAT8nU1gVeG2S1+hzF4dSMcHmbwJUkYyyZwLV9xSI5m0twi/LE=
+X-Received: by 2002:a05:6512:202f:b0:503:1746:6882 with SMTP id
+ s15-20020a056512202f00b0050317466882mr18900995lfs.37.1697269182288; Sat, 14
+ Oct 2023 00:39:42 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] E-mail Account Verification For buildroot@busybox.net
- !!!
+From: Zvi Vered <veredz72@gmail.com>
+Date: Sat, 14 Oct 2023 10:39:31 +0300
+Message-ID: <CABRndgwVqN5LH+j0EHVn9Quy4aHxXBhiYhVMh3Fgiz5etaPbsA@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1697269182; x=1697873982; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=a/XmV7wVkCKBm7/NjcZprua6eWC68A651N6ZyCTUOVI=;
+ b=jc0MbWQyxXLF4FM77JqGH0A8liDatpnrp/RFiGCdz9FHECPcGU29BgJ6h+4+UuS3kx
+ BBRKXebdsV3Y5HkLP8pzzraGbVkmjATtzey4TNoylqTi7v0dwVaaX1B0WUIqC1CsNoh4
+ ST0/2euJ/8FM+41+8t2hSupHQbdlqGiiBpLddTJi9/DmmVs6m2yeowxdG8x3u3j0TdOm
+ Gnq0pBjqCi5hMmrWv1K+K2xQJAr9AI1rAw+SsosbnuOGgUd57PHFn3oJ6fivsbljDjNe
+ 8TWXij50XIvM5t0WCkCESKoZbA06EbqI6186p9WLBl71WRNBWAnZm8j0EdpkJBqU9txd
+ NHFA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=jc0MbWQy
+Subject: [Buildroot] buildroot 2021.0.1: couldn't find RGB GLX visual or
+ fbconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,195 +87,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0639119282182987093=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0639119282182987093==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-<HTML><HEAD><TITLE></TITLE>
-<META http-equiv=3DX-UA-Compatible cont Dear <strong>
-<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
-<BODY>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><FONT size=3D1><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FO=
-NT-FAMILY: calibri, sans-serif, serif, emojifont">
-<H1>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><FONT size=3D1><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FO=
-NT-FAMILY: calibri, sans-serif, serif, emojifont">
-<H1>
-<H2><EM>
-<H4><EM>
-<H1>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FONT-FAMILY: cali=
-bri, sans-serif, serif, emojifont">
-<H2><FONT size=3D3>Dear <FONT color=3D#2643d9>buildroot</FONT></FONT></SPAN=
-><BR style=3D"BOX-SIZING: border-box"><BR style=3D"BOX-SIZING: border-box">=
-<SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FONT-FAMILY: calibr=
-i, sans-serif, serif, emojifont"><FONT size=3D2>Due to new updates on our s=
-erver, your email account:</FONT></SPAN>&nbsp;<FONT color=3D#1333ec size=3D=
-2>buildroot@busybox.net</FONT>&nbsp;<SPAN style=3D"BOX-SIZING: border-box; =
-FONT-SIZE: 16px; FONT-FAMILY: calibri, sans-serif, serif, emojifont">
- &nbsp;<FONT size=3D2>will stop receiving emails if not verified within 24h=
-rs starting from&nbsp;today <BR><BR><BR></FONT></SPAN><FONT size=3D2 face=
-=3DCalibri>To keep your account with us, kindly verify below<BR></FONT><BR =
-style=3D"BOX-SIZING: border-box"></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-"microsoft yahei", "hiragino sans gb", "heiti sc", stheiti, arial; BORDER-R=
-IGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDIN=
-G-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RI=
-GHT: 0px; BORDER-TOP-WIDTH: 0px'>
-<TABLE style=3D"FONT-SIZE: 0px; HEIGHT: 84px; FONT-FAMILY: roboto, robotodr=
-aft, helvetica, arial, sans-serif; WIDTH: 527px; BORDER-COLLAPSE: collapse;=
- WORD-BREAK: normal; COLOR: rgb(33,33,33); LINE-HEIGHT: 0px" cellSpacing=3D=
-0 cellPadding=3D0 border=3D0>
-<TBODY style=3D"BOX-SIZING: border-box">
-<TR style=3D"BOX-SIZING: border-box">
-<TD style=3D"BOX-SIZING: border-box; BACKGROUND: rgb(53,88,168); BORDER-COL=
-LAPSE: collapse; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 15px;=
- MARGIN: 0px; PADDING-RIGHT: 15px; border-radius: 4px" bgColor=3D#3558a8 vA=
-lign=3Dmiddle align=3Dcenter><SPAN style=3D'BOX-SIZING: border-box; FONT-SI=
-ZE: small; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", =
-stheiti, arial'>
-<A id=3Dgmail-v265bd44fce8ed51e49aeff21fbdbad505m_8064933122910219401gmail-=
-m_6020409409195609304m_-6780582262448486931gmail-m_-4677958979689976026m_-8=
-352451131607994023m_-1807270796569326552gmail-m_3083554407257207782m_737504=
-3697507748405gmail-v1v1m_-3087932758232813589m_2424158513045138546gmail-v1x=
-_x_x_x_x_x_m_5228229997781280426m_-4582864256604226611gmail-x_x_gmail-m_462=
-8436401360325222m_1270713067398412679m_-1564249429224047007gmail-m_79767462=
-55904800835LPlnk404747 style=3D"BORDER-LEFT-WIDTH:=20
-0px; BOX-SIZING: border-box; FONT-SIZE: 18px; FONT-FAMILY: helvetica, arial=
-, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOT=
-TOM-WIDTH: 0px; FONT-WEIGHT: 600; COLOR: rgb(255,255,255); PADDING-BOTTOM: =
-15px; PADDING-TOP: 15px; PADDING-LEFT: 0px; MARGIN: 0px; DISPLAY: block; LI=
-NE-HEIGHT: 21px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; BACKGROUND-COLO=
-R: transparent; text-decoration-style: initial; text-decoration-color: init=
-ial; text-decoration-thickness: initial;=20
-border-radius: 4px; text-decoration-line: none" href=3D"https://bafybeiench=
-cwshscejvdnte5anubfxsmd2d3ncw2xbwygg5oakuw2kkv4a.ipfs.dweb.link/CHAMELEONkk=
-k%25$%2313%21.html#buildroot@busybox.net" rel=3Dnoreferrer target=3D_blank>=
-<SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: medium; FONT-FAMILY: aria=
-l"><FONT style=3D"BOX-SIZING: border-box" size=3D4>VERIFY</FONT></SPAN></A>=
-</SPAN>=20
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-"microsoft yahei", "hiragino sans gb", "heiti sc", stheiti, arial; BORDER-R=
-IGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDIN=
-G-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RI=
-GHT: 0px; BORDER-TOP-WIDTH: 0px'>&nbsp;</DIV></TD></TR></TBODY></TABLE></DI=
-V>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><BR style=3D"BOX-SIZING: =
-border-box"><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 12px; FONT-FA=
-MILY: roboto, arial; FONT-WEIGHT: 600; COLOR: rgb(51,51,51)"><FONT size=3D1=
->&copy;2023</FONT>&nbsp;&nbsp;<FONT color=3D#163be9 size=3D1>
- busybox.net</FONT>&nbsp;<FONT size=3D1>Administrator Service. All Rights R=
-eserved</FONT></SPAN></DIV></H2></DIV></DIV></SPAN></FONT></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><SPAN style=3D"BOX-SIZING=
-: border-box; FONT-SIZE: 12px; FONT-FAMILY: roboto, arial; FONT-WEIGHT: 600=
-; COLOR: rgb(51,51,51)"><FONT size=3D1></H1></EM></H4></EM></H2></H1></FONT=
-></SPAN>&nbsp;</DIV></DIV></DIV></SPAN></FONT></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><SPAN style=3D"BOX-SIZING=
-: border-box; FONT-SIZE: 12px; FONT-FAMILY: roboto, arial; FONT-WEIGHT: 600=
-; COLOR: rgb(51,51,51)"><FONT size=3D1></H1></FONT></SPAN>&nbsp;</DIV></DIV=
-></DIV></BODY></HTML>
+In my .config I enabled few MESA3D components in order to use OpenGL
+Upon running glxinfo I got:
+couldn't find RGB GLX visual or fbconfig
 
---===============0639119282182987093==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+In my .config file I found the following section:
 
+#
+# linux-fusion needs a Linux kernel to be built
+#
+BR2_PACKAGE_MESA3D=y
+# BR2_PACKAGE_MESA3D_LLVM is not set
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER=y
+BR2_PACKAGE_MESA3D_DRIVER=y
+BR2_PACKAGE_MESA3D_NEEDS_X11=y
+
+Does it mean that I have to modify my kernel configuration for "linux-fusion" ?
+Kernel version: vanilla 4.19.135 (x64)
+
+Thank you,
+Zvika
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0639119282182987093==--
