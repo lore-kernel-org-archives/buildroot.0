@@ -4,63 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5785CDB465
-	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 21:58:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAC0BCDB465
+	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 21:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F7D781F0C;
-	Sat, 14 Oct 2023 21:58:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F7D781F0C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A64681F9B;
+	Sat, 14 Oct 2023 21:58:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A64681F9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t8lyxG2zdHts; Sat, 14 Oct 2023 21:58:17 +0000 (UTC)
+	with ESMTP id LGIT-8RTUwoW; Sat, 14 Oct 2023 21:58:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D5A281F56;
-	Sat, 14 Oct 2023 21:58:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D5A281F56
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 52E941BF86C
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 21:57:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28F4281F8C;
+	Sat, 14 Oct 2023 21:58:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28F4281F8C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 126D51BF83E
+ for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 21:57:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CD4481F4D
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 21:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CD4481F4D
+ by smtp4.osuosl.org (Postfix) with ESMTP id DCF0F4094E
+ for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 21:57:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCF0F4094E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zkzHY2_esrN2 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j5eJawCO81di for <buildroot@lists.busybox.net>;
  Sat, 14 Oct 2023 21:57:47 +0000 (UTC)
 Received: from smtpdh17-1.aruba.it (smtpdh17-1.aruba.it [62.149.155.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 050BC81F0C
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 08E3840961
  for <buildroot@buildroot.org>; Sat, 14 Oct 2023 21:57:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 050BC81F0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08E3840961
 Received: from localhost.localdomain ([146.241.127.78])
  by Aruba Outgoing Smtp  with ESMTPSA
- id rmdiq6C0m6PZFrmdiqeJjJ; Sat, 14 Oct 2023 23:57:42 +0200
+ id rmdiq6C0m6PZFrmdjqeJjo; Sat, 14 Oct 2023 23:57:43 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Oct 2023 23:57:38 +0200
-Message-Id: <20231014215741.716289-1-giulio.benetti@benettiengineering.com>
+Date: Sat, 14 Oct 2023 23:57:41 +0200
+Message-Id: <20231014215741.716289-4-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231014215741.716289-1-giulio.benetti@benettiengineering.com>
+References: <20231014215741.716289-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfD9M1IOOcPPLG3sq8SbZvFXiEp42CM43yYPE/1CMKxV+uQCP01AII2dx9m0uk+HTYQAkvq6WlgiDCyQS3ySP9ZWV0ySWvh8pEGZcijtcmGypz2aoxSQ2
- g69MdEkeaKMyYGrME5pi83VCOUGjdJpl4ekKYICK+JVKOxi+w7ViSIO2miJPHwj1VWWzfPL/IyiqWorpP44nDXAIEadXDNPPp8qRCZAk5VpAaVFKlJkKCDPc
- K5fupeTP4K1yIt1ck4Y+YYQA29k697WnMmdab18Zw9j4gehrmDsZLKIKSOKqX+6matfa0Vx1A7VUpFWLOcKGUih8Vr7OAsEavk6RPJc3zICcanB38EIANWAd
- zmJcGScOv5ni2qHjxAOQHdMACJeUYbGF6baDZsxkEoTix34wTf1BFJSptQGaqRiTrbVLNBDqrOJ65jblp24eDN1bus6niQ==
+X-CMAE-Envelope: MS4xfDTBDC5btgH/FKL2LPsVUZ1Ix4HFQmX+D3+xwXEKQCtbu0GpEJmvNsHSQzwTYfX7iZXZnhUMmWiQCeP9tTPLEOOnJZyJI+DRvtkRiQGuLpb9T6PTb1Va
+ KnEDeezeZZsOtpY0NS1/lGZsFIk7uj7HJtnEqUlePoPWaB4sT67EbuetIUdi5/RfNbUCfUuBM3O/Fc3la5HboFcGvXsZYwkj/vjI6syqwowrn3iSL485bcEf
+ 1dWEYQ17Tf9RZLYd+Tp4dOKuuL2xv/Ft4Po/Y6o47yA9/bkwLH+d4MPechnyB6/pVmkaR0oY1R9LRNs6IuS/rwHmO9Net97gQFX8vHL9Vr8QEWr5P6jva0pp
+ L+y18cFu54Iu95JheFB13Qs21OhCC6nXf1nOn26XNB58d/H3dzwVKTTdzN+J+/SexgblWrfB0T4l4znB155J7lGmH8zu7Q==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1697320662; bh=mZCkxU6Wk3EojwsYF44XfWtsLdPmqlgnWRKq4p1DxOw=;
+ t=1697320663; bh=QbR/Nf1yVD94sNTWcwX7rMeA/DHK4QATpD6vO7to+Tk=;
  h=From:To:Subject:Date:MIME-Version;
- b=cxzBOaZctr2FPc9s3CFMxr14nw1CTJn0Ol8nRxBksj/nHigQ48/8xKES+8VzKInqO
- wHQ7XI6bCAls29nENYIuCJnHBurtsvkELPeAk/SXPbPyKZkr3pFJOz7o1RjE86cZjE
- nTa7pTj8Mndae7uHg3IJqM3hykFoXWXsRKF56mRmoeKPPFeA2mkNlG/V7Dz9A+RPso
- uYU267NzOTsdDNIn7NKuwaKwjzQKw1zpxhFpzCaOgwl23zU9ua/OdFG4akFLGj7EvP
- g+aiR031l7vzZo/75DUEuUP+kqpe3g73TyRJRJmV2YNU+GUMAGQC4PrdeJzqCEoROT
- SDjf9mawlSUmg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=VJ/mH6SX0EPHrYpGV3k0r8uG0A9a4W0Gjbgfd/CmNcn9/XOdMPDqPL9qfd8id+jej
+ //PEno2Yv3MZHCFUTY2Jn1tVD06ysPMIBsUNclp/VUHQvu8NK0E1a+WA7Pff3Rc8Vp
+ R/YcHFwG1/Pus7WEnlTJDSNwrO6RunFp7tACndr2jdYjTIHc6V0fKVeAnXBvlEWb/W
+ yKpL8rZrxmhaYlqMJwMZhkev+HjanBetfXiGy/ThakyhPiPVF/lRmrfWnhJky32RgR
+ dHoxPomFpLMoncRaQBYKFdbmsjgAnKAnMv7J4aT7zVNbqHsLBis9SWNMfFbQRwBrlt
+ ++DqX1niFP6Mw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=cxzBOaZc
-Subject: [Buildroot] [PATCH v4 1/4] package/libtraceevent: new package
+ header.a=rsa-sha256 header.s=a1 header.b=VJ/mH6SX
+Subject: [Buildroot] [PATCH v4 4/4] package/trace-cmd: bump to 3.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,177 +86,77 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-Introduce the libtraceevent library, that is used to be bundled with the
-trace-cmd tool. This library is now used by several tools and libraries
-such as trace-cmd, libtracefs and rtla.
+trace-cmd's dependencies 'libtracefs' and 'libtraceevent' were split
+into dedicated projects, maintained outside of trace-cmd.
 
-To build with meson, this package requires to disable documentation
-generation, and since this is not possible add a local patch pending
-upstream that adds -Ddoc=false support to libtraceevent.
+This release, on top of bumping the version, adds this new dependencies.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-[Giulio:
-	- bump version to 1.7.3 and add hash file
-	- move to meson build system
-]
+[Giulio: bump to version 3.1.7]
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 V1->V2:
-* bump to version 1.7.3
-* add hash file
-V3->V4:
-* switch to meson build system
+* bump to version 3.1.7
 ---
- DEVELOPERS                                    |  4 ++
- package/Config.in                             |  1 +
- ...-add-option-to-disable-documentation.patch | 51 +++++++++++++++++++
- package/libtraceevent/Config.in               |  9 ++++
- package/libtraceevent/libtraceevent.hash      |  4 ++
- package/libtraceevent/libtraceevent.mk        | 16 ++++++
- 6 files changed, 85 insertions(+)
- create mode 100644 package/libtraceevent/0001-libtraceevent-add-option-to-disable-documentation.patch
- create mode 100644 package/libtraceevent/Config.in
- create mode 100644 package/libtraceevent/libtraceevent.hash
- create mode 100644 package/libtraceevent/libtraceevent.mk
+ package/trace-cmd/Config.in      | 2 ++
+ package/trace-cmd/trace-cmd.hash | 2 +-
+ package/trace-cmd/trace-cmd.mk   | 6 ++++--
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 06583c3c0a..5506082545 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1221,6 +1221,7 @@ F:	package/libfuse3/
- F:	package/libnspr/
- F:	package/libnss/
- F:	package/libnvme/
-+F:	package/libtraceevent/
- F:	package/mali-driver/
- F:	package/minicom/
- F:	package/mmc-utils/
-@@ -2111,6 +2112,9 @@ F:	package/postgresql/
- F:	package/protozero/
- F:	package/timescaledb/
+diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
+index 2d0accd7ae..00b9ebbd9a 100644
+--- a/package/trace-cmd/Config.in
++++ b/package/trace-cmd/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_TRACE_CMD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen()
++	select BR2_PACKAGE_LIBTRACEEVENT
++	select BR2_PACKAGE_LIBTRACEFS
+ 	help
+ 	  Command line reader for ftrace.
  
-+N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
-+F:	package/libtraceevent/
+diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+index 4d39e4d5ea..6edcaf0e1c 100644
+--- a/package/trace-cmd/trace-cmd.hash
++++ b/package/trace-cmd/trace-cmd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  a74d9ade2633b88d0ad199360d51996427e23f4835594133e456cd6e3bd3a651  trace-cmd-v2.9.7.tar.gz
++sha256  e496d41e599f8ef3c9a74675da05f86be0d8d48d524f0182c73ab98cd16da0b0  trace-cmd-v3.1.7.tar.gz
+ sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
+ sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 52bb99036c..3d4d88c964 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-TRACE_CMD_VERSION = 2.9.7
++TRACE_CMD_VERSION = 3.1.7
+ TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
+ TRACE_CMD_SITE = \
+ 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
+ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+ 
+-TRACE_CMD_DEPENDENCIES = host-pkgconf
++TRACE_CMD_DEPENDENCIES = host-pkgconf libtracefs libtraceevent
+ TRACE_CMD_MAKE_OPTS = prefix=/usr etcdir=/etc
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+@@ -34,6 +34,8 @@ ifeq ($(BR2_sparc64),y)
+ TRACE_CMD_CFLAGS += -fPIC
+ endif
+ 
++TRACE_CMD_CFLAGS += $($(HOST_DIR)/bin/pkg-config --cflags libtracefs)
 +
- N:	Michael Durrant <mdurrant@arcturusnetworks.com>
- F:	board/arcturus/
- F:	configs/arcturus_ucp1020_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index f4399a6021..2b3d3e612f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -117,6 +117,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
- 	source "package/libbpf/Config.in"
-+	source "package/libtraceevent/Config.in"
- 	source "package/lmbench/Config.in"
- 	source "package/lsof/Config.in"
- 	source "package/ltp-testsuite/Config.in"
-diff --git a/package/libtraceevent/0001-libtraceevent-add-option-to-disable-documentation.patch b/package/libtraceevent/0001-libtraceevent-add-option-to-disable-documentation.patch
-new file mode 100644
-index 0000000000..ba55315175
---- /dev/null
-+++ b/package/libtraceevent/0001-libtraceevent-add-option-to-disable-documentation.patch
-@@ -0,0 +1,51 @@
-+From 62740520e25c9afbdfbd8cd8ef2e1c6b02d91915 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sat, 30 Sep 2023 22:40:17 +0200
-+Subject: [PATCH] libtraceevent: add option to disable documentation
-+
-+On some Linux environment builder(i.e. Buildroot) host asciidoc is not
-+provided since by default all man/docs are not installed to target but
-+meson.build at the moment build ascii and html documentation and
-+requires asciidoc making the building to fail. So let's add doc option
-+set to true by default to let the user to override it and not produce
-+the documentation.
-+
-+Upstream: https://patchwork.kernel.org/project/linux-trace-devel/patch/20230930204017.2528627-1-giulio.benetti@benettiengineering.com/
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ meson.build       | 3 +++
-+ meson_options.txt | 2 ++
-+ 2 files changed, 5 insertions(+)
-+
-+diff --git a/meson.build b/meson.build
-+index b61c873..9a18e02 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -45,6 +45,8 @@ if cunit_dep.found()
-+     subdir('utest')
-+ endif
-+ subdir('samples')
-++
-++if get_option('doc')
-+ subdir('Documentation')
-+ 
-+ custom_target(
-+@@ -52,3 +54,4 @@ custom_target(
-+     output: 'docs',
-+     depends: [html, man],
-+     command: ['echo'])
-++endif
-+diff --git a/meson_options.txt b/meson_options.txt
-+index b2294f6..9a40dad 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -16,3 +16,5 @@ option('man-bold-literal', type : 'boolean', value : false,
-+        description : 'enable bold literals')
-+ option('docbook-suppress-sp', type : 'boolean', value : false,
-+        description : 'docbook suppress sp')
-++option('doc', type : 'boolean', value: true,
-++       description : 'produce documentation')
-+-- 
-+2.34.1
-+
-diff --git a/package/libtraceevent/Config.in b/package/libtraceevent/Config.in
-new file mode 100644
-index 0000000000..d351e3b4de
---- /dev/null
-+++ b/package/libtraceevent/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBTRACEEVENT
-+	bool "libtraceevent"
-+	help
-+	  libtraceevent is a library that interfaces with the ftrace
-+	  subsystem in the linux kernel.
-+	  It used to be bundled directly in the trace-cmd
-+	  tool, but it was eventually extracted so that it can be used
-+	  by multiple other tools and libraries, such as libtracefs and
-+	  rtla.
-diff --git a/package/libtraceevent/libtraceevent.hash b/package/libtraceevent/libtraceevent.hash
-new file mode 100644
-index 0000000000..15c4883afd
---- /dev/null
-+++ b/package/libtraceevent/libtraceevent.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256  097b72e0d907f3107825fb2edf0188324bf70dc9da360f6efa68dc484ffde541  libtraceevent-1.7.3.tar.gz
-+sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  GPL-2.0
-+sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LGPL-2.1
-diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
-new file mode 100644
-index 0000000000..1a3dae463e
---- /dev/null
-+++ b/package/libtraceevent/libtraceevent.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libtraceevent
-+#
-+################################################################################
-+
-+LIBTRACEEVENT_VERSION = 1.7.3
-+LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
-+LIBTRACEEVENT_INSTALL_STAGING = YES
-+LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
-+LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
-+
-+LIBTRACEEVENT_CONF_OPTS = \
-+	-Ddoc=false
-+
-+$(eval $(meson-package))
+ # trace-cmd use CPPFLAGS to add some extra flags.
+ # But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
+ # that causes build problems.
 -- 
 2.34.1
 
