@@ -1,66 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AD11CDB465
-	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 18:15:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88FF7CDB465
+	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 18:45:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5114404C3;
-	Sat, 14 Oct 2023 18:15:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5114404C3
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD9AC81431;
+	Sat, 14 Oct 2023 18:45:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD9AC81431
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HHjqrjVo-s-f; Sat, 14 Oct 2023 18:15:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zPiajWCRt09h; Sat, 14 Oct 2023 18:45:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A777540A45;
-	Sat, 14 Oct 2023 18:15:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A777540A45
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03A2C8145F;
+	Sat, 14 Oct 2023 18:45:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03A2C8145F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F22E11BF2C1
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 18:15:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8A0151BF2C1
+ for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 18:45:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7C4E61122
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 18:15:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7C4E61122
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F4EF60F6E
+ for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 18:45:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F4EF60F6E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jw7g7xamW0Rc for <buildroot@lists.busybox.net>;
- Sat, 14 Oct 2023 18:15:44 +0000 (UTC)
-Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 628BB60671
- for <buildroot@buildroot.org>; Sat, 14 Oct 2023 18:15:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 628BB60671
-Received: from tarshish (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 7E7E7440855;
- Sat, 14 Oct 2023 21:15:15 +0300 (IDT)
-References: <20231013184554.337101-1-bernd@kuhls.net>
- <20231013184554.337101-3-bernd@kuhls.net>
-User-agent: mu4e 1.9.21; emacs 29.1
-To: Bernd Kuhls <bernd@kuhls.net>
-Date: Sat, 14 Oct 2023 21:13:52 +0300
-In-reply-to: <20231013184554.337101-3-bernd@kuhls.net>
-Message-ID: <87a5sl2hpy.fsf@tarshish>
+ with ESMTP id OhVHd95wwMFN for <buildroot@lists.busybox.net>;
+ Sat, 14 Oct 2023 18:45:27 +0000 (UTC)
+Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DC52560BFE
+ for <buildroot@buildroot.org>; Sat, 14 Oct 2023 18:45:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC52560BFE
+Received: from localhost.localdomain ([146.241.127.78])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id rjdaq4W1N6PZFrjdaqdTIZ; Sat, 14 Oct 2023 20:45:23 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Sat, 14 Oct 2023 20:45:21 +0200
+Message-Id: <20231014184521.87527-2-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231014184521.87527-1-giulio.benetti@benettiengineering.com>
+References: <20231014184521.87527-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfP3uFE9lBYn7ozXDCAdxlsKue+/BLqvnzFV8ZyRVBXSpTxOQOPtWnheE1y0GwoudObEadVLUMOdH8unQzjjTWhp36hFS3UmJhXFSlOQpLzpsqvRBxHIv
+ nS/jINq9xesXXKuu4ZsSKwjclIl77SwPsGJUrcUWteiNIw/hYCjCgh6glgQZzHz7sJQPZq0Th5kj8M+wkJT6oNJdsP9imR86SxXzLPctjeQOVgV/r+ofhWdw
+ u5V9FaC+M/8kIeBsv86wg2o5seL5ZUHibf+/7+EKnTxDSczp19YrwqG9vvxYyyk3sqojJkeN1U26LjK1ZBSHa3ssrOrVOycsn5IXIiFwa+JMXuMBgv+18IfN
+ /XDHo9M0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1697307315;
- bh=6TaoXlyEBlPBfl0JCaayQ1shKR70Utkmhh32Jdi/f7o=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=lten1eLK+qpuYtzQitg6E+BNn38xuWpyZwnzlXyQHd2jZcJS9s/+DjB6d+9Iyg0Ep
- fLZrEY1AyIO0jqKsOiiFYduEXN9ddlkLZAfxctb5nhBUf37u+pA6X9o6FQRLzy+HZF
- 6/d5gZljO33RQ5J4GaUPHrFmtSqWxGSQR/qs99aV9kuubo2HUFXamJzAyyaN4qfEwT
- uP9YPS6sEQv2OYrW7F9VyT7eH1AzAuVElDtzLa32LzM5E8+IWYIsQZCKQX3zxlGa1e
- D+WIAcnpNN8X7ynKjjQRx3YVXAUvfj5uvJjKtinxI1i5ItbVZvPZv5VWWEO2zv75TD
- lFAJEdbf6mYJA==
+ d=aruba.it; s=a1; 
+ t=1697309123; bh=g2FDqLK9mfVeVZF5y6K/mj0T42jMBlwSLIUdXKP1+co=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=aeV2SCzxdQajgIG2N2whbutgappGAAVvhnQE9IbPdQzE3TNCVTrUonSMlIOKiJNZj
+ Q9FuqIXJasjFuvCDzdKE2N94uMp83xIYfr/mlupp7lgU5KT+tAWOSi0wIQ4N12ihBW
+ 2LPD24XUr6oio066U8xkMTm7jkebMexk8xDaBC3D+eqZYktFZ0S6Uz58ggwpeCkA1y
+ +Av7UJ1LAozc7/o2h5mmLWM4ktDtmykuJhlbGsCPVX5KqqiCD1EMFC0tR/bNolUM1f
+ jBm3zVJIALJ5k4JKxuZ8kGb4DU9PxPg4xhMDp3sfXJqMlC7m0YEgprTykYWIk1eEWA
+ fJ89gE0fYfoBw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=lten1eLK
-Subject: Re: [Buildroot] [PATCH 3/4] package/alsa-utils: Fix musl build
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=aeV2SCzx
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add Giulio Benetti for board
+ Rockpro64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,62 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Suniel Mahesh <sunil@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Fri, Oct 13 2023, Bernd Kuhls wrote:
-
-> Fixes:
-> http://autobuild.buildroot.net/results/bce/bce46fd8aab9ef4918228e8cfc5f8b5abe71e859/
->
-> This musl-related autobuilder error occured when building alsa-lib and
-> is fixed by
-> https://patchwork.ozlabs.org/project/buildroot/patch/20230927052204.231589-1-bernd@kuhls.net/
->
-> When continuing the build of this defconfig we see a build error with
-> alsa-utils which is fixed by this patch.
->
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  .../0009-topology-include-locale.h.patch      | 33 +++++++++++++++++++
->  ...nhlt-dmic-info.c-include-sys-types.h.patch | 33 +++++++++++++++++++
->  package/alsa-utils/Config.in                  |  1 +
->  3 files changed, 67 insertions(+)
->  create mode 100644 package/alsa-utils/0009-topology-include-locale.h.patch
->  create mode 100644 package/alsa-utils/0010-nhlt-dmic-info.c-include-sys-types.h.patch
-
-[...]
-
-> diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-> index 3429d0b406..be222501b9 100644
-> --- a/package/alsa-utils/Config.in
-> +++ b/package/alsa-utils/Config.in
-> @@ -65,6 +65,7 @@ config BR2_PACKAGE_ALSA_UTILS_APLAY
->  
->  config BR2_PACKAGE_ALSA_UTILS_APLAYMIDI
->  	bool "aplaymidi"
-> +	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
-
-Is this related to the musl build fix?
-
-baruch
-
->  	select BR2_PACKAGE_ALSA_LIB_SEQ
->  
->  config BR2_PACKAGE_ALSA_UTILS_ARECORDMIDI
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 86496f6cc5..4d0b9debc5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1200,6 +1200,7 @@ F:	board/bananapi/bananapi-m2-ultra/
+ F:	board/freescale/imx6ullevk/
+ F:	board/freescale/imxrt1050evk/
+ F:	board/olimex/a*
++F:	board/pine64/rockpro64
+ F:	configs/amarula_vyasa_rk3288_defconfig
+ F:	configs/asus_tinker_rk3288_defconfig
+ F:	configs/bananapi_m2_berry_defconfig
+@@ -1208,6 +1209,7 @@ F:	configs/freescale_imx6ullevk_defconfig
+ F:	configs/imx6ullevk_defconfig
+ F:	configs/imxrt1050-evk_defconfig
+ F:	configs/olimex_a*
++F:	configs/rockpro64_defconfig
+ F:	package/at/
+ F:	package/binutils/
+ F:	package/cryptsetup/
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
