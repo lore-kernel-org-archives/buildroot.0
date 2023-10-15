@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 652E2CDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 414E6CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:33:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A81C414B5;
-	Sun, 15 Oct 2023 18:33:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A81C414B5
+	by smtp2.osuosl.org (Postfix) with ESMTP id D57194149A;
+	Sun, 15 Oct 2023 18:33:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D57194149A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PPnsqA8dkzbz; Sun, 15 Oct 2023 18:33:07 +0000 (UTC)
+	with ESMTP id sWwaOxqvPdeu; Sun, 15 Oct 2023 18:33:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2A86414B9;
-	Sun, 15 Oct 2023 18:33:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A86414B9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 77A281BF8C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id B544941493;
+	Sun, 15 Oct 2023 18:33:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B544941493
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9816C1BF947
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5090641703
+ by smtp3.osuosl.org (Postfix) with ESMTP id 71D8B61155
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:32:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5090641703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71D8B61155
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HW8-V9ba3vWR for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nAo4N0UwqqpH for <buildroot@lists.busybox.net>;
  Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65A60416D0
+ by smtp3.osuosl.org (Postfix) with ESMTP id AFB97607B4
  for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65A60416D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFB97607B4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 50B328559B; Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
+ id 9C77284C30; Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 20:19:37 +0200
+Date: Sun, 15 Oct 2023 20:32:38 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1dedb69aef6b1d495eb255fa4a3d6917913df13c
-X-Git-Newrev: fa8d1acc2d9d376de56232bf219e0b17797e4252
+X-Git-Oldrev: f72ce56f8d59cc31af934ef07f95172d0cdc00f2
+X-Git-Newrev: 0481d1100363c2ae07758d5b43b40edb029105b4
 X-Patchwork-Hint: ignore
-Message-Id: <20231015183250.50B328559B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/samba4: security
- bump version to 4.18.8
+Message-Id: <20231015183250.9C77284C30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/exim: security
+ bump version to 4.96.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa8d1acc2d9d376de56232bf219e0b17797e4252
+commit: https://git.buildroot.net/buildroot/commit/?id=0481d1100363c2ae07758d5b43b40edb029105b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Release notes: https://www.samba.org/samba/history/samba-4.18.8.html
-
-Fixes CVE-2023-3961, CVE-2023-4091, CVE-2023-4154,  CVE-2023-42669 &
-CVE-2023-42670.
+Release notes: https://seclists.org/oss-sec/2023/q4/107
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2dc61bfa768659ffa208b179967c332e6252d5ad)
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 5759ec066ae63eb8f41da3f890bf645df20047c6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index fea760c500..9843d419f0 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.18.7.tar.asc
--sha256  61559a694f6a13cdc635c2d0e302519756f5f7bee9a61ceab3dc3ceff52160f6  samba-4.18.7.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.18.8.tar.asc
-+sha256  4fb87bceaeb01d832a59046c197a044b7e8e8000581548b5d577a6cda03344d1  samba-4.18.8.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index cfa94fc141..9cf7a59d9b 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index 6cdeea0614..e784bf7521 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  93ac0755c317e1fdbbea8ccb70a868876bdf3148692891c72ad0fe816767033d  exim-4.96.1.tar.xz
++sha256  038e327e8d1e93d005bac9bb06fd22aec44d5028930d6dbe8817ad44bbfc1de6  exim-4.96.2.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  ef1a0e57c59cdf4e915b3ac5dcdbc69f565b14dd92b0527f6796b2c46a9ec34f991f9790fb4171c99417f7e482cdd62d77e780cc71fab227c8bed876103f7fdd  exim-4.96.1.tar.xz
++sha512  dc9f6a114e64ac826489edff88d50a24195b64714428e691c10a7bfb119b3ebb6455bf80cbb34dfd0a4e2e44cbde72effb009357a8e0a6065e512fe32092e3ed  exim-4.96.2.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index f5695d048d..166a4ead54 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.18.7
-+SAMBA4_VERSION = 4.18.8
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-EXIM_VERSION = 4.96.1
++EXIM_VERSION = 4.96.2
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
