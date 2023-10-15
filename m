@@ -4,84 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39BD8CDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 20:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35E34CDB482
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 20:16:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA87F81A23;
-	Sun, 15 Oct 2023 20:15:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA87F81A23
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFA1281DFC;
+	Sun, 15 Oct 2023 20:16:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFA1281DFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hEqEnWLmHgmH; Sun, 15 Oct 2023 20:15:15 +0000 (UTC)
+	with ESMTP id DWWbS0eS8uUC; Sun, 15 Oct 2023 20:16:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C66F881911;
-	Sun, 15 Oct 2023 20:15:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C66F881911
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F10E61BF83B
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:14:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25B4781BC6;
+	Sun, 15 Oct 2023 20:16:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25B4781BC6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E32151BF83B
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:16:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7435611A3
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:14:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7435611A3
+ by smtp4.osuosl.org (Postfix) with ESMTP id C93774179D
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:16:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C93774179D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xWPqjNdMhFgB for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 20:14:59 +0000 (UTC)
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BEBE860F44
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 20:14:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEBE860F44
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-32c9f2ce71aso3172066f8f.1
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 13:14:58 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dKfvvrdlkFgl for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 20:16:41 +0000 (UTC)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8D4CB41794
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 20:16:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D4CB41794
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-9bdf5829000so302888066b.0
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 13:16:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697400896; x=1698005696;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OH9K53RQOgd4rBh2cVSiCeF50eLZNtGcytE+BHz1EYQ=;
- b=Jqq7GvR1wXtTomPXt57rjYVks7vmx7/TQhHphm1mxlpnkcXo85iUeDdQBjV/NU/3i/
- ASqcFA0HcreWvoauQWQYxMYsyw5MsPx7gENTuiOkQYx9r923ErNwtzIPxDVmeYG+B/zK
- hckVSmHNVKPzln/WqJ0IIl6AsqnFRl7wMCLTAve7Bvs40FQpC7gzD5imt65nO1d0cUWL
- B+noaGjZ3y89JBNaI84WWOrflAqReooWwEplFI5o93+arwYWCx101/QOPe0938Nzu7A2
- BzRDHJAm9GIITrjnygdFWhEosTUj+m7jIIGsZvhPu/ypzD7/fLIMYkikrKM8iwuE78Ex
- H1bA==
-X-Gm-Message-State: AOJu0YxurgrKEZubSbgyuYRSqzqYe2Wbm9z7Wzh3WAINBINcSQL7Y+/Y
- lIRWlN8Fm1si5+9fYePZY2WAWBjgV9g=
-X-Google-Smtp-Source: AGHT+IHpI3kHCRfF+4Wjpdc73q7fZM89TofnE9ckDDxAZDuocyNONh1W0bQQoCkXfLpV5FKzGN6/RA==
-X-Received: by 2002:a05:6000:144a:b0:32d:82f7:e79 with SMTP id
- v10-20020a056000144a00b0032d82f70e79mr14991543wrx.15.1697400896480; 
- Sun, 15 Oct 2023 13:14:56 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- i14-20020a5d438e000000b0031fd849e797sm438247wrq.105.2023.10.15.13.14.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 15 Oct 2023 13:14:56 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 22:14:49 +0200
-Message-ID: <20231015201449.1279312-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+ d=1e100.net; s=20230601; t=1697401000; x=1698005800;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=7Qh5hJp+DrCvJqyTGc2msNSm9IRpXrz8GaHi2trfA6M=;
+ b=KFOGqeJ/zvslRSKR835k/HZ0dScrndpvLrgkyn3qXJ5teIDwNehB7JB5x8YT+ZUGKG
+ tt2LsiGKhOosviN3jPEw9EObHHfzrSN+uE/hDP/W+JmsH85PNqkP3QTCuIIdMBVpBbRx
+ 7EK9VEbjtS47pB3q0eTI7HxLeSkI4marj7jjiVKih9O8WaVYVGo06L4XBUfeygqT+Obf
+ lpx3qGkyZOENn0cl9m8Y07kI2uRBuASvjuc10+bfBVufKP2F7A1o3mJT6HrMjJaEr+rt
+ QljluavceDuPijkQhFTJM56O09B2XatzXCVypTvk2zHzW/ZYjPZWLuHzvx7JS0L+bvi6
+ r7fg==
+X-Gm-Message-State: AOJu0YyxOOfHTK8qLCQpFL2Il1HzKPFxzsLAnTuTeyqeUW5ccIeYBoC+
+ eQOAx7iQXF0J3zMF3n1fUueSBu0/MD/OirXbBtQ=
+X-Google-Smtp-Source: AGHT+IGlDHnOYbnE231L5yXXQgMPd09hduNxikqAimlMmkeghCyoezg40/8BSMWgzxxTiJl8yvFGFg==
+X-Received: by 2002:a17:907:748:b0:9bf:4915:22c8 with SMTP id
+ xc8-20020a170907074800b009bf491522c8mr2771863ejb.5.1697400999732; 
+ Sun, 15 Oct 2023 13:16:39 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ jy12-20020a170907762c00b0099d804da2e9sm2710954ejc.225.2023.10.15.13.16.39
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 15 Oct 2023 13:16:39 -0700 (PDT)
+Message-ID: <40b075d9-cffc-321a-294d-39f24ca5d5a6@mind.be>
+Date: Sun, 15 Oct 2023 22:16:37 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Content-Language: en-GB
+To: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
+References: <20231015064117.1362398-1-troglobit@gmail.com>
+ <20231015092650.392835-1-troglobit@gmail.com>
+In-Reply-To: <20231015092650.392835-1-troglobit@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697400896; x=1698005696; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OH9K53RQOgd4rBh2cVSiCeF50eLZNtGcytE+BHz1EYQ=;
- b=AJRbdnQzvp/cFdszPhcc5snfhQlPmuMTWN/6C5HWtoyI0sCYyKyH7nKYi8GX9S+//B
- HJ+Ge3pi3lebIx9K5vZPjVC8CW0ZNa6Yg5fXQmOGRSmt6ccaakHMKfoyjC1eFywsr1eG
- OVdU0pxMpvnf+1PWTf4DAX3YzqZ2xQTyfs5eJ97/6scdKbH0EEyiGeRPEGj/GhuSvbqS
- urIjAmKfsZAuxM3SlNVzrYSFwYNtfllrnYCLiGdbBIuDvvV0L4+rbujWqP+zEA7bBtqg
- ksuzzVjAPGrZ5arnrjEidxAzoIJz56sgMrokx3aQFnFHrJTCTnF/5Ao3MJ1HDr/Tnc0x
- Junw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=AJRbdnQz
-Subject: [Buildroot] [PATCH 1/1] package/libgeos: needs gcc >= 4.9
+ d=mind.be; s=google; t=1697401000; x=1698005800; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=7Qh5hJp+DrCvJqyTGc2msNSm9IRpXrz8GaHi2trfA6M=;
+ b=JhV4g6gFTuohu4QifO+NoIxYmKNeSy2uMa0Jd01yoDFFuWCqfkbrEWvvWN8Zunwk4c
+ 3lhnWQexxubS4AzyN0RS9Uka1bRxKGQche135JgStGiseZGtTNx2TN2hrj0Dr8YLmCX3
+ 6ITn8dbEtb5bxJPHFW0/oEwDN3N6o2M0mB5cFsZr9abFvN8j8S74ZzeCD+ea/1Hb3lV/
+ PcQillbFwII9/K08rYlGIlH1rTDJ2H4lNxQLQpci65DggSkQSDgBn65AaS58xr6h3l7Y
+ GWVrMCv2IDcl+eNTCBmo8JMYa6wQgJ/uMnyD0uHKcJdytvAsqM7qAuLtRewYH/42bMhU
+ YD5g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=JhV4g6gF
+Subject: Re: [Buildroot] [PATCH 1/1] package/libite: bump to v2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,55 +100,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libgeos needs gcc >= 4.9 since bump to version 3.12.0 in commit
-16727d4595dd1972a46e92bbd2260a896cc19b60 and
-https://github.com/libgeos/geos/commit/289ed4efb26a9944f4385381e1574184b1e7448e:
 
-In file included from /home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/src/algorithm/ConvexHull.cpp:30:0:
-/home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/include/geos/util.h:38:12: error: 'std::make_unique' has not been declared
- using std::make_unique;
-            ^
 
-Fixes:
- - http://autobuild.buildroot.org/results/56bb572fb1d56d45dbb950a73b9b888239fa6968
+On 15/10/2023 11:26, Joachim Wiberg wrote:
+> Changes:
+>   - New APIs introduced in v2.6.0, for details, see
+>     https://github.com/troglobit/libite/releases/tag/v2.6.0
+>   - FTBFS fix for uClibc and musl libc, v2.6.1
+>     https://github.com/troglobit/libite/releases/tag/v2.6.1
+> 
+> Packaging:
+>   - LICENSE hash changed due to bump in copyright years
+>   - Disable doxygen (html docs) in build, introduced in v2.4.1
+> 
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libgeos/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+  Applied to master, thanks.
 
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index 8411627d43..2a27c6f2a4 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEOS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
- 	help
- 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
-@@ -13,7 +14,8 @@ config BR2_PACKAGE_LIBGEOS
- 
- 	  https://trac.osgeo.org/geos
- 
--comment "libgeos needs a toolchain w/ C++, wchar, threads not binutils bug 27597"
-+comment "libgeos needs a toolchain w/ C++, wchar, gcc >= 4.9, threads not binutils bug 27597"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		   !BR2_TOOLCHAIN_HAS_THREADS || \
-+		   !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
--- 
-2.42.0
+  Regards,
+  Arnout
 
+> ---
+>   package/libite/libite.hash | 4 ++--
+>   package/libite/libite.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+> index 7dac198ab8..3abad09b0a 100644
+> --- a/package/libite/libite.hash
+> +++ b/package/libite/libite.hash
+> @@ -1,7 +1,7 @@
+>   # Upstream .sha256 from GitHub
+> -sha256  ca086adc7ebf0c2ebf2ed7a6787f9567fb802db8583576228dd5dd5ddfb7bb97  libite-2.5.3.tar.xz
+> +sha256  0185c3e76874c5821825deaf17cd45e81ce49aaa424e09de5f3665243c59026b  libite-2.6.1.tar.xz
+>   
+>   # Locally calculated
+> -sha256  20db0601195f708d68ff7907907b3cd3b25808efa8332e064b11f00c839a5d2f  LICENSE
+> +sha256  3a2b964c1772d03ab17b73a389ecce9151e0b190a9247817a2c009b16d356422  LICENSE
+>   sha256  c2882adb51555b836f35babc59f618d9ddceadcaa2d1dc80bbd4699614d2cd14  src/chomp.c
+>   sha256  bff7fa7b74324f13a24d56ebb8b49bc9c63ea01836a1c8b5a6afcbbabed62918  src/pidfile.c
+> diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+> index 1cef992e53..e4bd845487 100644
+> --- a/package/libite/libite.mk
+> +++ b/package/libite/libite.mk
+> @@ -4,12 +4,12 @@
+>   #
+>   ################################################################################
+>   
+> -LIBITE_VERSION = 2.5.3
+> +LIBITE_VERSION = 2.6.1
+>   LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
+>   LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
+>   LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+>   LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
+>   LIBITE_INSTALL_STAGING = YES
+> -LIBITE_CONF_OPTS = --without-symlink
+> +LIBITE_CONF_OPTS = --without-symlink --disable-doxygen-doc
+>   
+>   $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
