@@ -4,91 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91E9CCDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:53:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E88DCDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15F2A41499;
-	Sun, 15 Oct 2023 18:53:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15F2A41499
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4577402BC;
+	Sun, 15 Oct 2023 18:53:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4577402BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xVFT1HRyXVzJ; Sun, 15 Oct 2023 18:53:40 +0000 (UTC)
+	with ESMTP id zv1U7iwHsLWU; Sun, 15 Oct 2023 18:53:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 78FE04149E;
-	Sun, 15 Oct 2023 18:53:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78FE04149E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 80A9341497;
+	Sun, 15 Oct 2023 18:53:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80A9341497
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4E5D41BF83A
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD8CD1BF83A
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 346A46117D
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 346A46117D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9433E6117D
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9433E6117D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uie8xXy3Xz9N for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 18:53:36 +0000 (UTC)
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD70761173
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:53:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD70761173
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-9bdf5829000so296426466b.0
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 11:53:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697396014; x=1698000814;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=6z3ZyoqwD+Fwz4FTX6Oq7x+yFYaN+8N2mo61m6TewfE=;
- b=rCWMizUTemQGHnfrR4YTpg/2fhtI40UDQHXHHrxwh3MDvEGPrcQ0OanuF0dd+B2M1t
- ALtjSEMldzIErBfTjF8goh+WuNYqHgND5zM4apdDnA4J1JZSd3iZSgJt0msOHAv4g/Df
- vP4d2ZolyiqPO6PbkvDo9h86mCqAFGQUaWCnJgHDaeP9G4mhhGcJxNdIZpCzKj2WwFpZ
- DhS2hLQMx5jsAUmjw8PCYgCq8RYsrG/5r3/v9KYCNjx5HkRrn8okdo5YjpKe6NNMJMZ6
- oril5wKjFnuvlJUbN2Z6sBk2HyKnA1mQRiasEHX34zBkFgKZa+89ra6+3jWc4hs495SD
- Bj1w==
-X-Gm-Message-State: AOJu0YyIfxJVyMKwFi4nG4zWU/EjO8f3EfWWol41fixgx9JURU74kPmJ
- zQZUQAFlgylcpKn67qj4PFj7yGV2U+kMnBYNfZ0=
-X-Google-Smtp-Source: AGHT+IGzsZ91lrkQQyOmcanACBR3fPxIU1cCTl37jtRqnorGvibKXnvon/PcJC/y1JPZutVtvdn+cA==
-X-Received: by 2002:a17:907:849:b0:9be:a170:81d with SMTP id
- ww9-20020a170907084900b009bea170081dmr3818580ejb.25.1697396013838; 
- Sun, 15 Oct 2023 11:53:33 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- 26-20020a170906101a00b009929ab17be0sm2611948ejm.162.2023.10.15.11.53.32
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 15 Oct 2023 11:53:33 -0700 (PDT)
-Message-ID: <4fb78d21-73ee-d85f-8b53-12b4777c941b@mind.be>
-Date: Sun, 15 Oct 2023 20:53:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-GB
-To: Woodrow Douglass <wdouglass@carnegierobotics.com>, buildroot@buildroot.org
-References: <20221125123801.4233-1-wdouglass@carnegierobotics.com>
-In-Reply-To: <20221125123801.4233-1-wdouglass@carnegierobotics.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1697396014; x=1698000814; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=6z3ZyoqwD+Fwz4FTX6Oq7x+yFYaN+8N2mo61m6TewfE=;
- b=Xs8jraH7gwVPU3CRCaf0gVxM+15TlwaMdP6DON7J3syK2qHrMyJEsdrZzOiuOlEYwX
- BOd/YVegRsoQiy/QhmOiexWz79GG1CaqywdkB5yygG6vX5cykB/r7VT51ZfjMNEyMKny
- 9gJECZ7Q6r6oj2GC9UxVQ1VQLb31E7YPMMYe8/4UDHElQzbtpX4IFcf73Dw9pJ76KgCJ
- +XVnU5S+gVkj1Lc41UOx0taug5R8/QL0oxI8Mwm/vF5B1beHneCerhrlciDbmTjGAfnm
- NzAikkPX97e9F0XG61M5jr+nSTPSr6ZW4Ow6EVZ+aN3U7uiI/F7CsFxm38g4gZof8Dgs
- o6pw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Xs8jraH7
-Subject: Re: [Buildroot] [PATCH] Properly note many dependencies for opencv
- modules
+ with ESMTP id tBV0mKnZKlwY for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67A3361173
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67A3361173
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 474B085638; Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 15 Oct 2023 20:33:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 25e60fbe1cabb678952330a8d8d48efe7f8e5048
+X-Git-Newrev: 0aaeae26f69be2e3e0586dbb6d7243e229239f25
+X-Patchwork-Hint: ignore
+Message-Id: <20231015185349.474B085638@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cutekeyboard: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,39 +57,118 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Woodrow,
+commit: https://git.buildroot.net/buildroot/commit/?id=0aaeae26f69be2e3e0586dbb6d7243e229239f25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  The subject of the patch should always start with "package/opencv4-contrib: ..."
+CuteKeyboard is a Qt virtual keyboard plugin for embedded applications
 
-  Applied to master with that fixed, and one more fix...
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Acked-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+[Arnout:
+ - add DEVELOPERS entry;
+ - fixed the title in the .mk file;
+ - use select instead of depends on;
+ - with the above, add depends on QT5 and QT5_JSCORE.
+]
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/cutekeyboard/Config.in         | 21 +++++++++++++++++++++
+ package/cutekeyboard/cutekeyboard.hash |  3 +++
+ package/cutekeyboard/cutekeyboard.mk   | 18 ++++++++++++++++++
+ 5 files changed, 44 insertions(+)
 
-On 25/11/2022 13:38, Woodrow Douglass via buildroot wrote:
-> Also, add myself to the DEVELOPERS file
-> 
-> Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-
-[snip]
->   config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
->   	bool "face"
-> +	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECCT
-                                        ^^^^^^^^^^ OBJDETECT
-
-  This was detected by check-package (but perhaps at the time you sent this 
-patch, that feature hadn't been added to check-package yet).
-
-  Regards,
-  Arnout
-
->   	help
->   	  Face Recognition -- Face recognition techniques: Eigen, Fisher
->   	  and Local Binary Pattern Histograms LBPH methods.
-[snip]
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3fffc4346c..01e9777be6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -183,6 +183,7 @@ F:	package/apparmor/
+ F:	package/corkscrew/
+ F:	package/cups/
+ F:	package/cups-filters/
++F:	package/cutekeyboard/
+ F:	package/fail2ban/
+ F:	package/grep/
+ F:	package/htpdate/
+diff --git a/package/Config.in b/package/Config.in
+index 009f7ba186..4e489c4706 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1589,6 +1589,7 @@ menu "Graphics"
+ 	source "package/cairomm/Config.in"
+ 	source "package/cairomm1_14/Config.in"
+ 	source "package/chipmunk/Config.in"
++	source "package/cutekeyboard/Config.in"
+ 	source "package/exempi/Config.in"
+ 	source "package/exiv2/Config.in"
+ 	source "package/fltk/Config.in"
+diff --git a/package/cutekeyboard/Config.in b/package/cutekeyboard/Config.in
+new file mode 100644
+index 0000000000..bd661b0cd4
+--- /dev/null
++++ b/package/cutekeyboard/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_CUTEKEYBOARD
++	bool "cutekeyboard"
++	depends on BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
++	select BR2_PACKAGE_QT5DECLARATIVE
++	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
++	select BR2_PACKAGE_QT5QUICKCONTROLS2
++	help
++	  CuteKeyboard is a Qt virtual keyboard plugin for
++	  embedded applications.
++
++	  https://amarula.github.io/cutekeyboard/
++
++if BR2_PACKAGE_CUTEKEYBOARD
++
++config BR2_PACKAGE_CUTEKEYBOARD_EXAMPLES
++	bool "cutekeyboard examples"
++	help
++	  Compile also application example
++
++endif
+diff --git a/package/cutekeyboard/cutekeyboard.hash b/package/cutekeyboard/cutekeyboard.hash
+new file mode 100644
+index 0000000000..3d3ec2f858
+--- /dev/null
++++ b/package/cutekeyboard/cutekeyboard.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  8cbaddc5fbf479d5e20fc88228e9af5928fa5e588052ee496c2f2efbe2afc510  cutekeyboard-afacc3210b75d7e0de27dcc4c0f2bed0212cc4c7.tar.gz
++sha256  bdde6ec2ae2686623c0bb414bfb8bd731b314beff2264c602116ea60dd65964d  LICENSE
+diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
+new file mode 100644
+index 0000000000..a7b3ba7a1d
+--- /dev/null
++++ b/package/cutekeyboard/cutekeyboard.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# cutekeyboard
++#
++################################################################################
++
++CUTEKEYBOARD_VERSION = afacc3210b75d7e0de27dcc4c0f2bed0212cc4c7
++CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,$(CUTEKEYBOARD_VERSION))
++CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
++CUTEKEYBOARD_INSTALL_STAGING = YES
++CUTEKEYBOARD_LICENSE = MIT
++CUTEKEYBOARD_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_PACKAGE_CUTEKEYBOARD_EXAMPLES),y)
++CUTEKEYBOARD_CONF_OPTS += CONFIG+=BUILD_EXAMPLES
++endif
++
++$(eval $(qmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
