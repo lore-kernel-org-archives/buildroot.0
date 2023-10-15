@@ -1,68 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 006DACDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 09:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 215E5CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 11:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D729405C5;
-	Sun, 15 Oct 2023 09:35:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D729405C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5ACB681A18;
+	Sun, 15 Oct 2023 11:41:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ACB681A18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id blpMZH5GZwTF; Sun, 15 Oct 2023 09:35:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dSfbm3DsU-5d; Sun, 15 Oct 2023 11:41:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D8A6409E1;
-	Sun, 15 Oct 2023 09:35:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D8A6409E1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A8CC1BF30B
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:35:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91B0F819F8;
+	Sun, 15 Oct 2023 11:41:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91B0F819F8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D5D9E1BF29C
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 11:41:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 737F540333
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:35:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 737F540333
+ by smtp1.osuosl.org (Postfix) with ESMTP id AECA1819F8
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 11:41:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AECA1819F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8g2kGbC_0bPx for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 09:35:34 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E67C4032F
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 09:35:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E67C4032F
-Received: from fli4l.lan.fli4l (p54a1bf4b.dip0.t-ipconnect.de [84.161.191.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6B1E7A4C0C49
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 11:35:32 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47854)
- by fli4l.lan.fli4l with esmtp (Exim 4.96.1)
- (envelope-from <bernd@kuhls.net>) id 1qrxX2-0004cH-0X
- for buildroot@buildroot.org; Sun, 15 Oct 2023 11:35:32 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Uv-VqcXzlzUr for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 11:41:43 +0000 (UTC)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9100F818DC
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 11:41:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9100F818DC
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-5384975e34cso6384434a12.0
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 04:41:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697370101; x=1697974901;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/BrfOpYLtZa0Fy9J3dNR4eK8SDyM1+RtzJT3t+vpQeI=;
+ b=As0we+Ut27aBqLNozBuD05fZLGEtXXXHpEh6+RoAzI1+dD58tWy9RO1FW+ScIvhEHP
+ JbQ/ukig9wDtRvOlWMBaejG6jI+UqBHpeXzKBbLHB0UNL//4BhU+yPAqXUZ+1u/x7jFf
+ 7I+FPIxlLpYQHi76EGBJZyhQ7f0i2qdV4RPnnhGDr0glNC+JpmFTdkH+KaK0MBLvsDg6
+ 5QAip2MOs28sCHX4+wGPL0pRDnHXmfUCIDpa7AaEv0bT3EuJg4/o9Aj9qYL2QNbbj7mu
+ 9t+JA1i4QUgX2T16W+HMTWYut3vkDjtii5Sen7Q2KMx814BeOoL9Owsm+i5i5GAHDHDh
+ 3YJg==
+X-Gm-Message-State: AOJu0YwkmRM5QNzXBDTe/Gxl9Wid8UlJfWkXdGCw3ZfN0BrcKlcYvT/h
+ D/iDDxKh6PNjnyQ7LqDkdAMLE+7nJgU=
+X-Google-Smtp-Source: AGHT+IFKWyc35NN6TA6ReMcQGaqE4fcoXyCbGhFZVVGF4SdcHvESs4vxKGtKwobyafq5aCtxnn7C1g==
+X-Received: by 2002:a17:907:608d:b0:9bd:d7bd:1a52 with SMTP id
+ ht13-20020a170907608d00b009bdd7bd1a52mr6032674ejc.20.1697370101175; 
+ Sun, 15 Oct 2023 04:41:41 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:a03f:63d3:7700:b737:23f:c590:d252])
+ by smtp.gmail.com with ESMTPSA id
+ z10-20020a170906714a00b00997c1d125fasm2191165ejj.170.2023.10.15.04.41.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 15 Oct 2023 04:41:40 -0700 (PDT)
+From: Titouan Christophe <titouanchristophe@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 11:35:32 +0200
-Message-Id: <20231015093532.1139778-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sun, 15 Oct 2023 13:41:27 +0200
+Message-ID: <20231015114127.227700-1-titouanchristophe@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1697362532;
- bh=QeTYMDlwZ3nTmwqXQZlRGK6IcMMKYcaMi0NburTvF20=;
- h=From:To:Subject:Date:From;
- b=JoD5qOKx6OtjC0mUTYvw7BqTC7xkyxxlHCyENLrPyMhzf0BHsilTIAsW68GJj/ptO
- kwpttyhW9smE1QwN1uCtqYvGW0SDRqxT1axjabOcxjdHXSw806+k+dRAsHo/XoRl0o
- QXYjgGNR9HPBu3v4sEFyj8omDzo2oYGbIilUAxBgDoY51pozFwRM27oX5ocv41RqQ2
- qE0AOkBNs49gRu3217RbIpW4mU1hzaHznvlPcTymLGHe4AgT1O0mqqdjZER1P5YI4U
- rhZH70/1g6hTHeH66J/RWv9oHCc4sQf3LMccI7Er4thUQzPEywsvvmwKy3228nhxQt
- 8A9rH0UpQvmpA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=JoD5qOKx
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.19.1
+ d=gmail.com; s=20230601; t=1697370101; x=1697974901; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/BrfOpYLtZa0Fy9J3dNR4eK8SDyM1+RtzJT3t+vpQeI=;
+ b=UlToLToLx3E+y5Wvv7EBP7wyk2a2byM7HXRBoM5++q7JCsexTz61Zp+CBcmSa0VrWZ
+ th0ruvZiEHc7uCC3rJjYXfeeIuRvljajV8va69dsjK+q+ch0nuXe4iYIYdIqT2chHER0
+ P0iTIJXzWGleJck0bchud/Lyi4OgI0YoyUUTd/dy2rjNeyfH6UAjc89CnoHRJCI2vH4B
+ toylX21MvO1I6eRmhb/vCRZ8EYgi0TrCsUrBfI+gwrtu5KiWYtWLFuKg+AjB7UKzWYHh
+ B9hEMkmOGDW3F8IFzs/M5iGNQThrLl/GkSSWj8R5a9SynsFnT37DSzrETudiL06dju9H
+ VJcA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=UlToLToL
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v7.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,99 +93,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Daniel Price <daniel.price@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch 0004, not needed anymore due to upstream commit
-https://github.com/samba-team/samba/commit/a25f549e9a03010996300b04271a7909b6fbf756#diff-6e2c3d973b3ce82db7b4f67111e36116517b040ed64c28f40114d2e0d535706a
-
-Release notes:
-https://www.samba.org/samba/history/samba-4.19.0.html
-https://www.samba.org/samba/history/samba-4.19.1.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 ---
- ...-Use-perl-module-JSON-part-of-core-i.patch | 41 -------------------
- package/samba4/samba4.hash                    |  4 +-
- package/samba4/samba4.mk                      |  2 +-
- 3 files changed, 3 insertions(+), 44 deletions(-)
- delete mode 100644 package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch
+ package/redis/0001-uclibc.patch | 8 +++++---
+ package/redis/redis.hash        | 2 +-
+ package/redis/redis.mk          | 2 +-
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch b/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch
-deleted file mode 100644
-index aa55c09891..0000000000
---- a/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From bd8fc19c8383914b518a9d56f4c08fba3baeb967 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 7 May 2023 11:02:26 +0200
--Subject: [PATCH] 3rdparty/heimdal: Use perl module JSON:PP, part of core, instead
-- of JSON package
--
--Downloaded from
--https://github.com/openwrt/packages/blob/master/net/samba4/patches/105-perl-json-pp.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
--Upstream: https://github.com/heimdal/heimdal/pull/1176
-----
-- third_party/heimdal/cf/make-proto.pl | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/third_party/heimdal/cf/make-proto.pl b/third_party/heimdal/cf/make-proto.pl
--index 36a040ce6c0..ad21dbad9e1 100644
----- a/third_party/heimdal/cf/make-proto.pl
--+++ b/third_party/heimdal/cf/make-proto.pl
--@@ -4,7 +4,7 @@
-- use Getopt::Std;
-- use File::Compare;
-- 
---use JSON;
--+use JSON::PP;
-- 
-- my $comment = 0;
-- my $doxygen = 0;
--@@ -70,7 +70,7 @@ if($opt_x) {
--     my $EXP;
--     local $/;
--     open(EXP, '<', $opt_x) || die "open ${opt_x}";
---    my $obj = JSON->new->utf8->decode(<EXP>);
--+    my $obj = JSON::PP->new->utf8->decode(<EXP>);
--     close $EXP;
-- 
--     foreach my $x (keys %$obj) {
---- 
--2.25.1
--
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 9843d419f0..5e65295e4c 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.18.8.tar.asc
--sha256  4fb87bceaeb01d832a59046c197a044b7e8e8000581548b5d577a6cda03344d1  samba-4.18.8.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.19.1.tar.asc
-+sha256  ce3b7f0d18bf91aa5fd646e8bb385a3b35375b703c6e5123b02b85a1abc81879  samba-4.19.1.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9cf7a59d9b..124ce564d2 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/redis/0001-uclibc.patch b/package/redis/0001-uclibc.patch
+index 197f43e7a7..6761f9f3fe 100644
+--- a/package/redis/0001-uclibc.patch
++++ b/package/redis/0001-uclibc.patch
+@@ -12,17 +12,19 @@ Signed-off-by: Martin Bark <martin@barkynet.com>
+ Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ [Fabrice: update for 6.0.9]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Titouan: adapt to 7.2.1]
++Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+ 
+ =========================================================================
+ diff -ur old/src/config.h new/src/config.h
+ --- old/src/config.h	2012-10-26 07:20:24.000000000 -0700
+ +++ new/src/config.h	2012-10-31 13:41:51.206309564 -0700
+-@@ -62,7 +62,7 @@
++@@ -71,7 +71,7 @@
+  #endif
+  
+  /* Test for backtrace() */
+ -#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__)) || \
+ +#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__)) || \
+-     defined(__FreeBSD__) || ((defined(__OpenBSD__) || defined(__NetBSD__)) && defined(USE_BACKTRACE))\
+-  || defined(__DragonFly__)
++     defined(__FreeBSD__) || ((defined(__OpenBSD__) || defined(__NetBSD__) || defined(__sun)) && defined(USE_BACKTRACE))\
++  || defined(__DragonFly__) || (defined(__UCLIBC__) && defined(__UCLIBC_HAS_BACKTRACE__))
+  #define HAVE_BACKTRACE 1
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 69bfc1475f..b73df17790 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  ce250d1fba042c613de38a15d40889b78f7cb6d5461a27e35017ba39b07221e3  redis-7.0.11.tar.gz
++sha256  5c76d990a1b1c5f949bcd1eed90d0c8a4f70369bdbdcb40288c561ddf88967a4  redis-7.2.1.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index e5d3de8eb9..04f4697e7d 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.18.8
-+SAMBA4_VERSION = 4.19.1
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-REDIS_VERSION = 7.0.11
++REDIS_VERSION = 7.2.1
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-2.39.2
+2.42.0
 
 _______________________________________________
 buildroot mailing list
