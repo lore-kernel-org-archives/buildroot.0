@@ -4,87 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E0C7CDB482
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 09:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57542CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 09:33:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E67A404A3;
-	Sun, 15 Oct 2023 09:27:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E67A404A3
+	by smtp2.osuosl.org (Postfix) with ESMTP id C786C404A3;
+	Sun, 15 Oct 2023 09:33:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C786C404A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bCy72lX069ww; Sun, 15 Oct 2023 09:27:00 +0000 (UTC)
+	with ESMTP id nasJ04G3T_yq; Sun, 15 Oct 2023 09:33:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 341AB405CB;
-	Sun, 15 Oct 2023 09:26:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 341AB405CB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AB7591BF30B
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:26:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48D2540C53;
+	Sun, 15 Oct 2023 09:33:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48D2540C53
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AFE791BF8C7
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:33:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 910A1408FA
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 910A1408FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 80AD640BFA
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:33:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80AD640BFA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W6HUJKo0RSTv for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 09:26:56 +0000 (UTC)
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 14D99408E4
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 09:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14D99408E4
-Received: by mail-ed1-x52a.google.com with SMTP id
- 4fb4d7f45d1cf-53e855d7dacso1146347a12.0
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 02:26:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697362014; x=1697966814;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=KaUcF710O/+E6VRKSQY02v8crWEmrTHso75FkcYc6ZM=;
- b=svtjm055D9YKTGavoJwYL2FYAnfcID9Zwptln9aqwLitR6IGmH1oFHYAMUe0lCu90x
- q6UYahJrRhjjCr9PvJBZHd2rMfv3Fhf06DS8MmQEXCBoa+bGIvis7D7EE7HGKqnMaVkL
- OmidFjxnXS+vFaiQ3jtWnSqPt6ADeNb/aP1QQLP/Mzju6GsG72l9SOTyINnZFGbea+8n
- 5oeBduJtU6Fta8TO/w9JjkjESUSynyORy4Nu0FV3KMDOgnK1NZTdUny21uSc8SysLRkT
- zTdnh7gUGTKnLMIDH7BJ6kT2aL46p8lRzfm7CcWoxKQFR7Jo0I/zdphXSonoxZtaxax3
- MlxQ==
-X-Gm-Message-State: AOJu0YxgQWdKn0egr/CxUxgspnCQiDG1D3WmqDnf19BCwifINWFGuIqO
- yfbu9hax5+jCRYgr+iSex8TrUv6gPys=
-X-Google-Smtp-Source: AGHT+IG0GmCjkleijTaeDz0Yx2xoKSYoA0gynY1LgPZOXqiZPA5ctTrvWCf0nhg4YGme8KBrbzyDlQ==
-X-Received: by 2002:a05:6402:1205:b0:533:c75a:6f6 with SMTP id
- c5-20020a056402120500b00533c75a06f6mr24880511edw.12.1697362013747; 
- Sun, 15 Oct 2023 02:26:53 -0700 (PDT)
-Received: from localhost.localdomain ([98.128.186.118])
- by smtp.gmail.com with ESMTPSA id
- l16-20020a056402125000b00536159c6c45sm13484206edw.15.2023.10.15.02.26.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 15 Oct 2023 02:26:53 -0700 (PDT)
-From: Joachim Wiberg <troglobit@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jpvx-TkMdxPz for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 09:33:15 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D703840A75
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 09:33:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D703840A75
+Received: from fli4l.lan.fli4l (p54a1bf4b.dip0.t-ipconnect.de [84.161.191.75])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 22A7CA4C0C49
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 11:33:11 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45898)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.1)
+ (envelope-from <bernd@kuhls.net>) id 1qrxUk-0004D6-2h
+ for buildroot@buildroot.org; Sun, 15 Oct 2023 11:33:10 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 11:26:50 +0200
-Message-Id: <20231015092650.392835-1-troglobit@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231015064117.1362398-1-troglobit@gmail.com>
-References: <20231015064117.1362398-1-troglobit@gmail.com>
+Date: Sun, 15 Oct 2023 11:33:07 +0200
+Message-Id: <20231015093310.1138805-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697362014; x=1697966814; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=KaUcF710O/+E6VRKSQY02v8crWEmrTHso75FkcYc6ZM=;
- b=h/ErdRHKm1pNuPW0dPE80IGBfkMbVaCVQpI+cN6erE58FFk3+gpXGbtOOFAgRO+6ZH
- Z7B2FlZR9l9DD6esPawrpAnXrUm0WLkjs3ulTS5yHkh46LoTkKzz8dNCfWT93wk366TK
- +g83qNnnN37Sr6q+abuReNWWG5n0+9UDZ1wT7UzPwRnQHobuueL5JOi207KNLJwPbM+j
- pNoa7Lz9yq51AUxO7Z8/UjRZ3J1tSaD4SK9L6s4AqLfLNUEvK9Z5oXHvhk5bmi6B0uh4
- hx4oh+MGIwCm6PXOFi06bdpCjoDo0mMYzDJXkEPlCD08SYqkOSHPUQBkcqWQFy4qdtAG
- zaMQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=h/ErdRHK
-Subject: [Buildroot] [PATCH 1/1] package/libite: bump to v2.6.1
+ d=kuhls.net; 
+ s=kas202306131828; t=1697362391;
+ bh=zN2FBqQil71vPy5T8jDtrPQBOXZez/FV8Fc3xkE+e/M=;
+ h=From:To:Subject:Date:From;
+ b=xQmJnwe67Sw7PaVSNfgVaGIPyqS/TMZUJkND96LeUKMWbRuEVYhl+B0ANaJ5oxhV3
+ htRSkfz8JgS2U4vLM2sHrIb+Xe+xAtkwr081Whuh4UrKoCHmkwpiZQx6wRxISeB/pb
+ 1/x30JbIy0h5L0HJowE+7VkErO4tgVEuCjaWCri2Nc7uJpqk3xbbTkrPAooBqz4Lwb
+ PeZmkMVtJIu/RalFnVG3Bfd7ABvBuYPuTAUy+e665guBR3QJ7qi9WgneZjYO4pNC56
+ CpH1wwPybl7TviAXWf/Lm6JPoS6IWzGO1XWzehhCSMfwtm3xuPjAyfQaRMSihh22zT
+ CFA9PSGXOYq2Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=xQmJnwe6
+Subject: [Buildroot] [PATCH v2 1/4] package/alsa-lib: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,63 +74,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
- - New APIs introduced in v2.6.0, for details, see
-   https://github.com/troglobit/libite/releases/tag/v2.6.0
- - FTBFS fix for uClibc and musl libc, v2.6.1
-   https://github.com/troglobit/libite/releases/tag/v2.6.1
+Buildroot commit 227d414ded bumped alsa-lib to version 1.2.10 which
+introduced a build error with musl toolchains.
 
-Packaging:
- - LICENSE hash changed due to bump in copyright years
- - Disable doxygen (html docs) in build, introduced in v2.4.1
+Fixes:
+http://autobuild.buildroot.net/results/bce/bce46fd8aab9ef4918228e8cfc5f8b5abe71e859/
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libite/libite.hash | 4 ++--
- package/libite/libite.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+v2: no changes
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 7dac198ab8..3abad09b0a 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,7 +1,7 @@
- # Upstream .sha256 from GitHub
--sha256  ca086adc7ebf0c2ebf2ed7a6787f9567fb802db8583576228dd5dd5ddfb7bb97  libite-2.5.3.tar.xz
-+sha256  0185c3e76874c5821825deaf17cd45e81ce49aaa424e09de5f3665243c59026b  libite-2.6.1.tar.xz
- 
- # Locally calculated
--sha256  20db0601195f708d68ff7907907b3cd3b25808efa8332e064b11f00c839a5d2f  LICENSE
-+sha256  3a2b964c1772d03ab17b73a389ecce9151e0b190a9247817a2c009b16d356422  LICENSE
- sha256  c2882adb51555b836f35babc59f618d9ddceadcaa2d1dc80bbd4699614d2cd14  src/chomp.c
- sha256  bff7fa7b74324f13a24d56ebb8b49bc9c63ea01836a1c8b5a6afcbbabed62918  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index 1cef992e53..e4bd845487 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--LIBITE_VERSION = 2.5.3
-+LIBITE_VERSION = 2.6.1
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
- LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
- LIBITE_INSTALL_STAGING = YES
--LIBITE_CONF_OPTS = --without-symlink
-+LIBITE_CONF_OPTS = --without-symlink --disable-doxygen-doc
- 
- $(eval $(autotools-package))
+ ...STRING-macro-outside-PIC-ifdef-block.patch | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/alsa-lib/0002-global-h-move-__STRING-macro-outside-PIC-ifdef-block.patch
+
+diff --git a/package/alsa-lib/0002-global-h-move-__STRING-macro-outside-PIC-ifdef-block.patch b/package/alsa-lib/0002-global-h-move-__STRING-macro-outside-PIC-ifdef-block.patch
+new file mode 100644
+index 0000000000..7bd67507fd
+--- /dev/null
++++ b/package/alsa-lib/0002-global-h-move-__STRING-macro-outside-PIC-ifdef-block.patch
+@@ -0,0 +1,50 @@
++From 10bd599970acc71c92f85eb08943eb8d3d702a9c Mon Sep 17 00:00:00 2001
++From: Jaroslav Kysela <perex@perex.cz>
++Date: Wed, 6 Sep 2023 15:16:44 +0200
++Subject: [PATCH] global.h: move __STRING() macro outside !PIC ifdef block
++
++It solves the musl libc compilation issue.
++
++control.c: In function 'snd_ctl_open_conf':
++../../include/global.h:98:36: warning: implicit declaration of function '__STRING' [-Wimplicit-function-declaratio]
++   98 | #define SND_DLSYM_VERSION(version) __STRING(version)
++      |                                    ^~~~~~~~
++
++Fixes: https://github.com/alsa-project/alsa-lib/issues/350
++Signed-off-by: Jaroslav Kysela <perex@perex.cz>
++
++Upstream: https://github.com/alsa-project/alsa-lib/commit/10bd599970acc71c92f85eb08943eb8d3d702a9c
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ include/global.h | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/include/global.h b/include/global.h
++index dfe9bc2b..3ecaeee8 100644
++--- a/include/global.h
+++++ b/include/global.h
++@@ -51,6 +51,11 @@ const char *snd_asoundlib_version(void);
++ #define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
++ #endif
++ 
+++#ifndef __STRING
+++/** \brief Return 'x' argument as string */
+++#define __STRING(x)     #x
+++#endif
+++
++ #ifdef PIC /* dynamic build */
++ 
++ /** \hideinitializer \brief Helper macro for #SND_DLSYM_BUILD_VERSION. */
++@@ -71,11 +76,6 @@ struct snd_dlsym_link {
++ 
++ extern struct snd_dlsym_link *snd_dlsym_start;
++ 
++-#ifndef __STRING
++-/** \brief Return 'x' argument as string */
++-#define __STRING(x)     #x
++-#endif
++-
++ /** \hideinitializer \brief Helper macro for #SND_DLSYM_BUILD_VERSION. */
++ #define __SND_DLSYM_VERSION(prefix, name, version) _ ## prefix ## name ## version
++ /**
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
