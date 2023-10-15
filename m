@@ -4,46 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB52FCDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 20:02:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36C1FCDB485
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 20:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38422402D0;
-	Sun, 15 Oct 2023 20:02:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38422402D0
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB658414BF;
+	Sun, 15 Oct 2023 20:04:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB658414BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jI3soOgPjNOU; Sun, 15 Oct 2023 20:02:56 +0000 (UTC)
+	with ESMTP id ahFHWdaGEXv4; Sun, 15 Oct 2023 20:04:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB3EF40B22;
-	Sun, 15 Oct 2023 20:02:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB3EF40B22
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8C4C21BF489
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:02:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC905414D5;
+	Sun, 15 Oct 2023 20:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC905414D5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A83B71BF489
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:04:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6539141761
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:02:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6539141761
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C17B414D5
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:04:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C17B414D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v21NiWp_0UQR for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 20:02:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BE024175D
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 20:02:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BE024175D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1AC2A85758; Sun, 15 Oct 2023 20:02:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 22:01:05 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39e092a06ed79a98e3842f9d897c089a132eaa58
-X-Git-Newrev: 087e2cef0e96609032e80c44d54fa7c4021277d8
-X-Patchwork-Hint: ignore
-Message-Id: <20231015200243.1AC2A85758@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnvme: bump to version 1.6
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MbMQ-XCqg3I1 for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 20:04:06 +0000 (UTC)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94F50414BF
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 20:04:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F50414BF
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-9be3b66f254so247973266b.3
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 13:04:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697400244; x=1698005044;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=q8b8B3U+PxcEvQLKmF7zGgUOJvvQHvSd+ViqznzH0lc=;
+ b=Df1Odq9SqlgbE+rD9Y7CZq4uDbTUzlCyvIIK9j3aWkkDPrVp3YqVEmQBndstIh+FFj
+ h1HbYjOznqdUbDC9X8Op0geUtGw9n/w08gow/dJ3Us6JfD1f/cCn43KR68G2hrpZznXr
+ CrX9CjPCbUUzZ7pGy32wFof/m8n8BtaVnSj9e2QuiyD25nGcTI/uUPgIvSSRLnAfrISR
+ VKeY6U44jU9jIjMi68HsGFApfZFkOKJxkc3P2URH1bx47SrqYSfUpYFwizMecwE4d0x4
+ s5pjUI7tassWc3Y3P0TI1afEQ9hz/HV/fFC0+FaaYOxPFnWMaELjvq5eNhyukWLWqeT4
+ mbbQ==
+X-Gm-Message-State: AOJu0YxZqd91JxxmHit3jQZA8D9iV3B8Lp10In3TKLb4gRI5Q6iCAcoh
+ c8i5qdc8IwNX5faqoOHRENfoo1adYRDop6Es6us=
+X-Google-Smtp-Source: AGHT+IEyzxZMO5//27JIjyyqwBfpaYKmYfsOjLdqAC/Z/N+/FFIn4uLbQOoIz9BX07jPD8ffQsknIw==
+X-Received: by 2002:a17:907:7253:b0:9c4:41c9:6ac6 with SMTP id
+ ds19-20020a170907725300b009c441c96ac6mr575073ejc.33.1697400243789; 
+ Sun, 15 Oct 2023 13:04:03 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ e17-20020a170906845100b009a168ab6ee2sm2660090ejy.164.2023.10.15.13.04.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 15 Oct 2023 13:04:03 -0700 (PDT)
+Message-ID: <e785c090-20d9-0154-f8c3-e1244a127690@mind.be>
+Date: Sun, 15 Oct 2023 22:04:01 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Content-Language: en-GB
+To: Titouan Christophe <titouanchristophe@gmail.com>, buildroot@buildroot.org
+References: <20231015114615.235625-1-titouanchristophe@gmail.com>
+In-Reply-To: <20231015114615.235625-1-titouanchristophe@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1697400244; x=1698005044; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=q8b8B3U+PxcEvQLKmF7zGgUOJvvQHvSd+ViqznzH0lc=;
+ b=h8eQ2znuDSHxT4PfCEe6BoNV/zhybNj/TtVEcpgyH57jvLEvAn394IbrTuI/xRThdd
+ GZw+Jn2BpfYvR3erc8HE5oZffflC99lV8rO3LFhAAwM7WKb5Ywn/i/xihxKOwiZdHiD2
+ /H1H4XlSzESybLNKRu585v3eeZnni5tNHMm4/zqGrOMmY9EFiMONMfO907ahYfg4w/Ha
+ zmhsXVCromF2lQonoLyKbTe8co3do61ibia0AG0Br6Uk6ToJplQsUTutuqfnnewDCnPo
+ aADfyglpMQs+Af1j/cWNRJujQPJXfIc4q9pr2BWg+ZmNWgbxHk+3Kz+HefL/hqzYw7d7
+ 4VuA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=h8eQ2znu
+Subject: Re: [Buildroot] [PATCH 1/1] package/waf: bump to v2.0.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,186 +101,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=087e2cef0e96609032e80c44d54fa7c4021277d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add 2 upstream patches, one to avoid build failure due to different libc
-ioctl() prototype and one to avoid link conflict due to test unit enabled
-by default.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- .../0001-test-handle-POSIX-ioctl-prototype.patch   | 70 ++++++++++++++++++++++
- ...002-meson-make-building-tests-conditional.patch | 46 ++++++++++++++
- package/libnvme/libnvme.hash                       |  2 +-
- package/libnvme/libnvme.mk                         |  5 +-
- 4 files changed, 121 insertions(+), 2 deletions(-)
+On 15/10/2023 13:46, Titouan Christophe wrote:
+> Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 
-diff --git a/package/libnvme/0001-test-handle-POSIX-ioctl-prototype.patch b/package/libnvme/0001-test-handle-POSIX-ioctl-prototype.patch
-new file mode 100644
-index 0000000000..175cdcd7dd
---- /dev/null
-+++ b/package/libnvme/0001-test-handle-POSIX-ioctl-prototype.patch
-@@ -0,0 +1,70 @@
-+From ca47ba3119365eafac0ab25a86cab9d9a1b29bd4 Mon Sep 17 00:00:00 2001
-+From: Sam James <sam@gentoo.org>
-+Date: Sat, 30 Sep 2023 06:38:53 +0100
-+Subject: [PATCH] test: handle POSIX ioctl prototype
-+
-+glibc has the following prototype for ioctl: int ioctl(int fd, unsigned long request, ...)
-+POSIX (inc. musl) has the following for ioctl: int ioctl(int fd, int request, ...)
-+
-+Check which prototype is used in <sys/ioctl.h> to avoid a conflict and conditionally
-+define the right one for the system.
-+
-+Upstream: https://github.com/linux-nvme/libnvme/commit/ca47ba3119365eafac0ab25a86cab9d9a1b29bd4
-+
-+Bug: https://bugs.gentoo.org/914921
-+Signed-off-by: Sam James <sam@gentoo.org>
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ meson.build       | 10 ++++++++++
-+ test/ioctl/mock.c |  6 +++++-
-+ 2 files changed, 15 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 6fcf1da..2c979cc 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -230,6 +230,16 @@ conf.set(
-+     ),
-+     description: 'Is network address and service translation available'
-+ )
-++conf.set(
-++    'HAVE_GLIBC_IOCTL',
-++    cc.compiles(
-++        '''#include <sys/ioctl.h>
-++        int ioctl(int fd, unsigned long request, ...);
-++        ''',
-++        name: 'ioctl has glibc-style prototype'
-++    ),
-++    description: 'Is ioctl the glibc interface (rather than POSIX)'
-++)
-+ 
-+ if cc.has_function_attribute('fallthrough')
-+   conf.set('fallthrough', '__attribute__((__fallthrough__))')
-+diff --git a/test/ioctl/mock.c b/test/ioctl/mock.c
-+index e917244..5d2ac94 100644
-+--- a/test/ioctl/mock.c
-++++ b/test/ioctl/mock.c
-+@@ -114,7 +114,11 @@ void end_mock_cmds(void)
-+ 	} \
-+ })
-+ 
-++#ifdef HAVE_GLIBC_IOCTL
-+ int ioctl(int fd, unsigned long request, ...)
-++#else
-++int ioctl(int fd, int request, ...)
-++#endif
-+ {
-+ 	struct mock_cmds *mock_cmds;
-+ 	bool result64;
-+@@ -141,7 +145,7 @@ int ioctl(int fd, unsigned long request, ...)
-+ 		result64 = true;
-+ 		break;
-+ 	default:
-+-		fail("unexpected %s %lu", __func__, request);
-++		fail("unexpected %s %lu", __func__, (unsigned long) request);
-+ 	}
-+ 	check(mock_cmds->remaining_cmds,
-+ 	      "unexpected %s command", mock_cmds->name);
-+-- 
-+2.34.1
-+
-diff --git a/package/libnvme/0002-meson-make-building-tests-conditional.patch b/package/libnvme/0002-meson-make-building-tests-conditional.patch
-new file mode 100644
-index 0000000000..0b6d3681ca
---- /dev/null
-+++ b/package/libnvme/0002-meson-make-building-tests-conditional.patch
-@@ -0,0 +1,46 @@
-+From ff742e792725c316ba6de0800188bf36751bd1d1 Mon Sep 17 00:00:00 2001
-+From: Sam James <sam@gentoo.org>
-+Date: Sat, 30 Sep 2023 06:43:39 +0100
-+Subject: [PATCH] meson: make building tests conditional
-+
-+Just like we do for docs.
-+
-+Upstream: https://github.com/linux-nvme/libnvme/commit/ff742e792725c316ba6de0800188bf36751bd1d1
-+
-+Signed-off-by: Sam James <sam@gentoo.org>
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ meson.build       | 4 +++-
-+ meson_options.txt | 1 +
-+ 2 files changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 2c979cc..a9263b5 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -273,7 +273,9 @@ subdir('internal')
-+ subdir('ccan')
-+ subdir('src')
-+ subdir('libnvme')
-+-subdir('test')
-++if get_option('tests')
-++    subdir('test')
-++endif
-+ subdir('examples')
-+ subdir('doc')
-+ 
-+diff --git a/meson_options.txt b/meson_options.txt
-+index a1ed79f..251ae11 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -6,6 +6,7 @@ option('rstdir', type : 'string', value : '', description : 'directory for ReST
-+ 
-+ option('docs', type : 'combo', choices : ['false', 'html', 'man', 'rst', 'all'], description : 'install documentation')
-+ option('docs-build', type : 'boolean', value : false,  description : 'build documentation')
-++option('tests', type : 'boolean', value : true, description : 'build tests')
-+ 
-+ option('python', type : 'feature', value: 'auto', description : 'Generate libnvme python bindings')
-+ option('openssl', type : 'feature', value: 'auto', description : 'OpenSSL support')
-+-- 
-+2.34.1
-+
-diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
-index b869ae295a..b9e0281189 100644
---- a/package/libnvme/libnvme.hash
-+++ b/package/libnvme/libnvme.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  f73ba1edde059b2d5e7c1048ad4f895e6047bff241c94b34a7aff5894779d086  libnvme-1.5.tar.gz
-+sha256  0dd8ba8b655abe78c09833edb66632aa6bee82aebf117dd252ded968deaaeec7  libnvme-1.6.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
-index 71885e198c..38394b9931 100644
---- a/package/libnvme/libnvme.mk
-+++ b/package/libnvme/libnvme.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
- 
--LIBNVME_VERSION = 1.5
-+LIBNVME_VERSION = 1.6
- LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
- LIBNVME_LICENSE = LGPL-2.1
- LIBNVME_LICENSE_FILES = COPYING
- LIBNVME_INSTALL_STAGING = YES
- 
-+LIBNVME_CONF_OPTS += \
-+	-Dtests=false
-+
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- LIBNVME_DEPENDENCIES += python3
- LIBNVME_CONF_OPTS += -Dpython=enabled
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/waf/waf.hash | 6 +++---
+>   package/waf/waf.mk   | 2 +-
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+> index c8d464ebfb..1ad535febb 100644
+> --- a/package/waf/waf.hash
+> +++ b/package/waf/waf.hash
+> @@ -1,7 +1,7 @@
+>   # Locally computed
+> -sha1  9cc6db88ecda57067024f368722ecbf48a3bba1a  waf-2.0.24
+> -sha256  93909bca823a675f9f40af7c65b24887c3a3c0efdf411ff1978ba827194bdeb0  waf-2.0.24
+> +sha1  e310e29a44f23f80591f2aa6c2d4c30e5f1a26a8  waf-2.0.26
+> +sha256  dcec3e179f9c33a66544f1b3d7d91f20f6373530510fa6a858cddb6bfdcde14b  waf-2.0.26
+>   
+>   # The waf script also contains its license, but is renamed `waf` in the extract
+>   # step, so this is a synonym for the above, to check WAF_LICENSE
+> -sha256  93909bca823a675f9f40af7c65b24887c3a3c0efdf411ff1978ba827194bdeb0  waf
+> +sha256  dcec3e179f9c33a66544f1b3d7d91f20f6373530510fa6a858cddb6bfdcde14b  waf
+> diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+> index d98ab489ca..bffa27a926 100644
+> --- a/package/waf/waf.mk
+> +++ b/package/waf/waf.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -WAF_VERSION = 2.0.24
+> +WAF_VERSION = 2.0.26
+>   WAF_SOURCE = waf-$(WAF_VERSION)
+>   WAF_SITE = https://waf.io
+>   WAF_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
