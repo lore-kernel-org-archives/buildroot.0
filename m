@@ -4,46 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B8CFCDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 20:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 463B0CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 20:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D450581BC6;
-	Sun, 15 Oct 2023 20:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D450581BC6
+	by smtp1.osuosl.org (Postfix) with ESMTP id D49D7813C9;
+	Sun, 15 Oct 2023 20:20:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D49D7813C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wXWCuRWJwdE8; Sun, 15 Oct 2023 20:16:57 +0000 (UTC)
+	with ESMTP id Tu4sRrzWlIQ3; Sun, 15 Oct 2023 20:20:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FE8D81E14;
-	Sun, 15 Oct 2023 20:16:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FE8D81E14
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D26E11BF83B
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:16:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB926813CB;
+	Sun, 15 Oct 2023 20:20:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB926813CB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C5E881BF5A5
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:20:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC0C2611A3
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:16:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC0C2611A3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D92A402D0
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 20:20:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D92A402D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bJluZ1s-5T2k for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 20:16:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C86DD60F44
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 20:16:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C86DD60F44
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B4F4E85AB8; Sun, 15 Oct 2023 20:16:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UkHeWwPUYQ7S for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 20:20:39 +0000 (UTC)
+Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CDEE440B22
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 20:20:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDEE440B22
+Received: from localhost.localdomain ([146.241.127.78])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id s7bHq03Rzilo5s7bHqjhX1; Sun, 15 Oct 2023 22:20:35 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 22:14:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dc84952eb38bf1ef63fc8718dc2ced200a3e52dd
-X-Git-Newrev: 560f9dbc88f1dc68ba8dc4db8b9459d902786993
-X-Patchwork-Hint: ignore
-Message-Id: <20231015201648.B4F4E85AB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libite: bump to v2.6.1
+Date: Sun, 15 Oct 2023 22:20:34 +0200
+Message-Id: <20231015202034.1921882-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfOAAmPVL+Wl8bYwOLCXdaXDAtAmiJMCQvSkeJ0ljOpUCk15Cyx2SUoOiuFMJNAKxQcVWJGyCCKC319XpvEJYtc9QH0cDPh03m6FUX6Ery7YBCC/Hsxrs
+ M9gN2v4EeLoWB+xWKq7HAYUYtsoA4u02WouU7TxN6rUlqoeMrC86TG6x2/K26DZyAdFTm8qL6PtB9kpOHb0AWxGXPSQLSMAmfVCftgSZhiy8/qPfdKOVcbC3
+ 02wVvPC1k7Dw/Jx69SlE8V2l8Dp1UrN/29NfbQgVbsCwZVOx7Ruv3S3HcPpDeDa4sRRTJHpBZ/At1Ii5g4Rc55rLff6xA7nRimjnXacNc1lz+OQXHhWAXBTF
+ PBno4zhmw3G7ECV2H+TaqsOsg+4WN77OA+XJ3nFCqCeY319/kHg=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1697401235; bh=I80polV+lWi9pEi6xFGptt30yRdT8lWrxp/DAL+tQ5Q=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Cv4ctnBYDDvm4kjo1Xan44HZlhvGsDDrUvW2lw8e3t4xtZCfxkew3Q6HTCvNhPmYQ
+ YGV2FaAbeAJiDWyQJFIC0t1FwTCiLkDpSbhwnBxjsJk9wm9UeTvpDCnmtA11DoUSdd
+ SavJnLh81VnMIHA2dVVJosi9Lshg/XuRdS7rRAMBlIfNMzH29up5uBwE4X07+/UFXV
+ ECL46OLwjT/ZkdBsDp3W6IxlFYhQzD7GoBnIH37XIhx9k0nLamqV+YdEQBWnsLMaV4
+ EDYahKpktVVDasYEsceN156qgOgukrq61RJppzO51XP3URk1kVykS5PYBxDw9ADk/W
+ OeBVmxArvu4DA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=Cv4ctnBY
+Subject: [Buildroot] [PATCH] package/python-uvloop: bump version to 0.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,67 +72,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=560f9dbc88f1dc68ba8dc4db8b9459d902786993
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Changes:
- - New APIs introduced in v2.6.0, for details, see
-   https://github.com/troglobit/libite/releases/tag/v2.6.0
- - FTBFS fix for uClibc and musl libc, v2.6.1
-   https://github.com/troglobit/libite/releases/tag/v2.6.1
-
-Packaging:
- - LICENSE hash changed due to bump in copyright years
- - Disable doxygen (html docs) in build, introduced in v2.4.1
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libite/libite.hash | 4 ++--
- package/libite/libite.mk   | 4 ++--
+ package/python-uvloop/python-uvloop.hash | 4 ++--
+ package/python-uvloop/python-uvloop.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 7dac198ab8..3abad09b0a 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,7 +1,7 @@
- # Upstream .sha256 from GitHub
--sha256  ca086adc7ebf0c2ebf2ed7a6787f9567fb802db8583576228dd5dd5ddfb7bb97  libite-2.5.3.tar.xz
-+sha256  0185c3e76874c5821825deaf17cd45e81ce49aaa424e09de5f3665243c59026b  libite-2.6.1.tar.xz
- 
- # Locally calculated
--sha256  20db0601195f708d68ff7907907b3cd3b25808efa8332e064b11f00c839a5d2f  LICENSE
-+sha256  3a2b964c1772d03ab17b73a389ecce9151e0b190a9247817a2c009b16d356422  LICENSE
- sha256  c2882adb51555b836f35babc59f618d9ddceadcaa2d1dc80bbd4699614d2cd14  src/chomp.c
- sha256  bff7fa7b74324f13a24d56ebb8b49bc9c63ea01836a1c8b5a6afcbbabed62918  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index 1cef992e53..e4bd845487 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+index 69834d5243..598a3ef285 100644
+--- a/package/python-uvloop/python-uvloop.hash
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/uvloop/json
+-md5  bc5e841a1c3f6e8935eeaf9d82b5ee29  uvloop-0.17.0.tar.gz
+-sha256  0ddf6baf9cf11a1a22c71487f39f15b2cf78eb5bde7e5b45fbb99e8a9d91b9e1  uvloop-0.17.0.tar.gz
++md5  a7679334af9a39dc89f9298088d8d235  uvloop-0.18.0.tar.gz
++sha256  d5d1135beffe9cd95d0350f19e2716bc38be47d5df296d7cc46e3b7557c0d1ff  uvloop-0.18.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  377025287798f9dcd819e1f826fa5fc5e2f382528691ab0528c5cf8c8c282c27  LICENSE-APACHE
+ sha256  6dd4c399f26de043d77a2ad7e31db4cb5bf08ea8368b0a42d6e158635cc8ab62  LICENSE-MIT
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+index 147062cf7b..9c8462d972 100644
+--- a/package/python-uvloop/python-uvloop.mk
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBITE_VERSION = 2.5.3
-+LIBITE_VERSION = 2.6.1
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
- LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
- LIBITE_INSTALL_STAGING = YES
--LIBITE_CONF_OPTS = --without-symlink
-+LIBITE_CONF_OPTS = --without-symlink --disable-doxygen-doc
- 
- $(eval $(autotools-package))
+-PYTHON_UVLOOP_VERSION = 0.17.0
++PYTHON_UVLOOP_VERSION = 0.18.0
+ PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
+-PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/ba/86/6dda1760481abf244cbd3908b79a4520d757040ca9ec37a79fc0fd01e2a0
++PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/80/f9/94d2d914d351c7d5db80e102fb0d7ab3bbb798e8322ab71a9fe9f8bfa31b
+ PYTHON_UVLOOP_SETUP_TYPE = setuptools
+ PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+ PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
