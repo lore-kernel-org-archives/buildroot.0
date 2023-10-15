@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 203A0CDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47659CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:34:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B9DEE414C1;
-	Sun, 15 Oct 2023 18:33:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9DEE414C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF698414BD;
+	Sun, 15 Oct 2023 18:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF698414BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u0g1NAv4FgSe; Sun, 15 Oct 2023 18:33:49 +0000 (UTC)
+	with ESMTP id DasHX6dpEOo4; Sun, 15 Oct 2023 18:34:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A50C041497;
-	Sun, 15 Oct 2023 18:33:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A50C041497
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 49EE11BF8C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B15A4149D;
+	Sun, 15 Oct 2023 18:34:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B15A4149D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D30681BF83A
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64B8781E04
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:32:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64B8781E04
+ by smtp3.osuosl.org (Postfix) with ESMTP id A89996115C
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:32:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A89996115C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3buISsjanNTx for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HW880_rTnrkV for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 18:32:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8532A81E00
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8532A81E00
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6D0F61155
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:32:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6D0F61155
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 677EA855A9; Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
+ id E4F48855A9; Sun, 15 Oct 2023 18:32:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 20:20:54 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1a91b6a04418c4b6549bece9c607570baa0b626a
-X-Git-Newrev: 3d2cffe1a249a26ea907257a7c1cc445c680b994
+Date: Sun, 15 Oct 2023 20:24:29 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 461155fc78abc012eca7a5c42948d17ba18e25e8
+X-Git-Newrev: 3f854cea477ab977ab8fb00125f69f7208e352a3
 X-Patchwork-Hint: ignore
-Message-Id: <20231015183250.677EA855A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/nmap: fix build
- with libressl >= 3.5.0
+Message-Id: <20231015183251.E4F48855A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/rauc: bump
+ version to 1.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d2cffe1a249a26ea907257a7c1cc445c680b994
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3f854cea477ab977ab8fb00125f69f7208e352a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Bugfix release:
+https://github.com/rauc/rauc/releases/tag/v1.10.1
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 796ebbcf34298ef56ff63fc845cd97a5acb7dc8a)
+(cherry picked from commit e55770e8827567c8c4952713c9cd149012f5d68f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...g-Crypto.cc-fix-build-with-libressl-3.5.0.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/rauc/rauc.hash | 2 +-
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nmap/0002-nping-Crypto.cc-fix-build-with-libressl-3.5.0.patch b/package/nmap/0002-nping-Crypto.cc-fix-build-with-libressl-3.5.0.patch
-new file mode 100644
-index 0000000000..f2bdf5904d
---- /dev/null
-+++ b/package/nmap/0002-nping-Crypto.cc-fix-build-with-libressl-3.5.0.patch
-@@ -0,0 +1,39 @@
-+From 4ebea5c1d1a10be0d0165da3b9c0e1fa82c3db3c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 21 May 2022 17:51:37 +0200
-+Subject: [PATCH] nping/Crypto.cc: fix build with libressl >= 3.5.0
-+
-+Fix the following build failure with libressl >= 3.5.0:
-+
-+Crypto.cc: In static member function 'static int Crypto::aes128_cbc_encrypt(u8*, size_t, u8*, u8*, size_t, u8*)':
-+Crypto.cc:139:26: error: aggregate 'EVP_CIPHER_CTX ctx' has incomplete type and cannot be defined
-+  139 |           EVP_CIPHER_CTX ctx;
-+      |                          ^~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2e6eebbe2ed8305b88047bc92c19350c1ecada16
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/nmap/nmap/pull/2480
-+---
-+ nping/Crypto.cc | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/nping/Crypto.cc b/nping/Crypto.cc
-+index 850438352..9f7c88686 100644
-+--- a/nping/Crypto.cc
-++++ b/nping/Crypto.cc
-+@@ -70,7 +70,9 @@
-+ #include <openssl/evp.h>
-+ #include <openssl/err.h>
-+ 
-+-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && !defined LIBRESSL_VERSION_NUMBER
-++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && \
-++	((!defined LIBRESSL_VERSION_NUMBER) || \
-++	(defined LIBRESSL_VERSION_NUMBER && LIBRESSL_VERSION_NUMBER >= 0x30500000L))
-+ #define HAVE_OPAQUE_EVP_PKEY 1
-+ #define FUNC_EVP_MD_CTX_init EVP_MD_CTX_reset
-+ #define FUNC_EVP_MD_CTX_cleanup EVP_MD_CTX_reset
-+-- 
-+2.35.1
-+
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 3a1fa6f5f9..38fea45b8a 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d3eec057e74d41565bbdfa10ff8bb2edb38e39af2b2126f8ad1d2174ae034d47  rauc-1.10.tar.xz
++sha256  aa99164c5f54fd29b5c8456221b51f92c900884af66de3e1b7f15a25b7db98a7  rauc-1.10.1.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 9f0571402f..4211abdcc4 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 1.10
++RAUC_VERSION = 1.10.1
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
