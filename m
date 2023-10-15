@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E88DCDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBC06CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A4577402BC;
-	Sun, 15 Oct 2023 18:53:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4577402BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9587D41497;
+	Sun, 15 Oct 2023 18:54:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9587D41497
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zv1U7iwHsLWU; Sun, 15 Oct 2023 18:53:54 +0000 (UTC)
+	with ESMTP id 9VpKB8jv6yEs; Sun, 15 Oct 2023 18:54:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 80A9341497;
-	Sun, 15 Oct 2023 18:53:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80A9341497
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AD8CD1BF83A
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6FD82414BB;
+	Sun, 15 Oct 2023 18:54:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FD82414BB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2075C1BF83A
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9433E6117D
+ by smtp1.osuosl.org (Postfix) with ESMTP id EDC1C81E04
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9433E6117D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDC1C81E04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tBV0mKnZKlwY for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4ahXN7HiqtSJ for <buildroot@lists.busybox.net>;
  Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67A3361173
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68F9B81E00
  for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67A3361173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68F9B81E00
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 474B085638; Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
+ id 55B21852E0; Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 20:33:41 +0200
+Date: Sun, 15 Oct 2023 20:50:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25e60fbe1cabb678952330a8d8d48efe7f8e5048
-X-Git-Newrev: 0aaeae26f69be2e3e0586dbb6d7243e229239f25
+X-Git-Oldrev: 0aaeae26f69be2e3e0586dbb6d7243e229239f25
+X-Git-Newrev: a7736afacaefc9250f8e68825e42c8f7c229b410
 X-Patchwork-Hint: ignore
-Message-Id: <20231015185349.474B085638@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cutekeyboard: new package
+Message-Id: <20231015185349.55B21852E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opencv4-contrib: properly note
+ dependencies between modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,118 +59,209 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5599190286139981520=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0aaeae26f69be2e3e0586dbb6d7243e229239f25
+--===============5599190286139981520==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=a7736afacaefc9250f8e68825e42c8f7c229b410
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CuteKeyboard is a Qt virtual keyboard plugin for embedded applications
+Also, add myself to the DEVELOPERS file
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Acked-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-[Arnout:
- - add DEVELOPERS entry;
- - fixed the title in the .mk file;
- - use select instead of depends on;
- - with the above, add depends on QT5 and QT5_JSCORE.
-]
+Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+[Arnout: fix typo BR2_PACKAGE_OPENCV4_LIB_OBJDETECCT]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/cutekeyboard/Config.in         | 21 +++++++++++++++++++++
- package/cutekeyboard/cutekeyboard.hash |  3 +++
- package/cutekeyboard/cutekeyboard.mk   | 18 ++++++++++++++++++
- 5 files changed, 44 insertions(+)
+ DEVELOPERS                        |  4 ++++
+ package/opencv4-contrib/Config.in | 20 ++++++++++++++++++++
+ package/opencv4/opencv4.mk        |  9 ++++++---
+ 3 files changed, 30 insertions(+), 3 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3fffc4346c..01e9777be6 100644
+index 01e9777be6..57015e245e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -183,6 +183,7 @@ F:	package/apparmor/
- F:	package/corkscrew/
- F:	package/cups/
- F:	package/cups-filters/
-+F:	package/cutekeyboard/
- F:	package/fail2ban/
- F:	package/grep/
- F:	package/htpdate/
-diff --git a/package/Config.in b/package/Config.in
-index 009f7ba186..4e489c4706 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1589,6 +1589,7 @@ menu "Graphics"
- 	source "package/cairomm/Config.in"
- 	source "package/cairomm1_14/Config.in"
- 	source "package/chipmunk/Config.in"
-+	source "package/cutekeyboard/Config.in"
- 	source "package/exempi/Config.in"
- 	source "package/exiv2/Config.in"
- 	source "package/fltk/Config.in"
-diff --git a/package/cutekeyboard/Config.in b/package/cutekeyboard/Config.in
-new file mode 100644
-index 0000000000..bd661b0cd4
---- /dev/null
-+++ b/package/cutekeyboard/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_CUTEKEYBOARD
-+	bool "cutekeyboard"
-+	depends on BR2_PACKAGE_QT5
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-+	select BR2_PACKAGE_QT5QUICKCONTROLS2
-+	help
-+	  CuteKeyboard is a Qt virtual keyboard plugin for
-+	  embedded applications.
+@@ -3101,6 +3101,10 @@ F:	package/python-pyusb/
+ N:	Wojciech Niziński <niziak@spox.org>
+ F:	package/fwup/
+ 
++N:	Woodrow Douglass <wdouglass@carnegierobotics.com>
++F:	package/opencv4
++F:	package/opencv4-contrib
 +
-+	  https://amarula.github.io/cutekeyboard/
-+
-+if BR2_PACKAGE_CUTEKEYBOARD
-+
-+config BR2_PACKAGE_CUTEKEYBOARD_EXAMPLES
-+	bool "cutekeyboard examples"
-+	help
-+	  Compile also application example
-+
+ N:	Xuanhao Shi <X15000177@gmail.com>
+ F:	board/ti/am62x-sk/
+ F:	board/ti/am64x-sk/
+diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
+index 9800333035..851241ce5e 100644
+--- a/package/opencv4-contrib/Config.in
++++ b/package/opencv4-contrib/Config.in
+@@ -17,6 +17,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ALPHAMAT
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ARUCO
+ 	bool "aruco"
++	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
+ 	help
+ 	  ArUco and ChArUco Markers -- Augmented reality ArUco marker
+ 	  and "ChARUco" markers where ArUco markers embedded inside the
+@@ -29,6 +30,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BARCODE
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BGSEGM
+ 	bool "bgsegm"
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
+ 	help
+ 	  Background segmentation algorithm combining statistical
+ 	  background image estimation and per-pixel Bayesian
+@@ -43,6 +45,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BIOINSPIRED
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CCALIB
+ 	bool "ccalib"
++	select BR2_PACKAGE_OPENCV4_LIB_HIGHGUI
+ 	help
+ 	  Custom Calibration -- Patterns for 3D reconstruction,
+ 	  omnidirectional camera calibration, random pattern calibration
+@@ -71,6 +74,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
+ 	bool "dnn_objdetect"
++	select BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	help
+ 	  Object Detection using CNNs -- Implements compact CNN Model
+ 	  for object detection. Trained using Caffe but uses
+@@ -78,6 +82,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
+ 	bool "dnn_superres"
++	select BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	help
+ 	  Superresolution using CNNs -- Contains four trained
+ 	  convolutional neural networks to upscale images.
+@@ -90,12 +95,14 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM
+ 	bool "dpm"
++	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	help
+ 	  Deformable Part Model -- Felzenszwalb's Cascade with
+ 	  deformable parts object recognition code.
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
+ 	bool "face"
++	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	help
+ 	  Face Recognition -- Face recognition techniques: Eigen, Fisher
+ 	  and Local Binary Pattern Histograms LBPH methods.
+@@ -165,6 +172,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MCC
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OPTFLOW
+ 	bool "optflow"
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
+ 	help
+ 	  Optical Flow -- Algorithms for running and evaluating
+ 	  deepflow, simpleflow, sparsetodenseflow and motion
+@@ -219,6 +227,11 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM
+ 	bool "sfm"
++	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV4_LIB_IMGCODECS
++	select BR2_PACKAGE_EIGEN
++	select BR2_PACKAGE_GLOG
++	select BR2_PACKAGE_GFLAGS
+ 	help
+ 	  Structure from Motion -- This module contains algorithms
+ 	  to perform 3d reconstruction from 2d images. The core of
+@@ -231,6 +244,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STEREO
+ 	bool "stereo"
++	select BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING
+ 	help
+ 	  Stereo Correspondence -- Stereo matching done with different
+ 	  descriptors: Census / CS-Census / MCT / BRIEF / MV and dense
+@@ -244,6 +258,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STRUCTURED_LIGHT
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SUPERRES
+ 	bool "superres"
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
+ 	help
+ 	  Super Resolution
+ 
+@@ -262,12 +277,15 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TEXT
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING
+ 	bool "tracking"
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
+ 	help
+ 	  Vision Based Object Tracking -- Use and/or evaluate different
+ 	  visual object tracking techniques.
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIDEOSTAB
+ 	bool "videostab"
++	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
++	select BR2_PACKAGE_OPENCV4_LIB_PHOTO
+ 	help
+ 	  Video Stabilization
+ 
+@@ -299,6 +317,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XIMGPROC
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
+ 	bool "xobjdetect"
++	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	help
+ 	  Boosted 2D Object Detection -- Uses a Waldboost cascade and
+ 	  local binary patterns computed as integral features for 2D
+@@ -306,6 +325,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
+ 
+ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO
+ 	bool "xphoto"
++	select BR2_PACKAGE_OPENCV4_LIB_PHOTO
+ 	help
+ 	  Extra Computational Photography -- Additional photo processing
+ 	  algorithms: Color balance / Denoising / Inpainting.
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index a665793ad9..2a05de42fb 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -203,12 +203,10 @@ OPENCV4_CONF_OPTS += \
+ 	-DINSTALL_PYTHON_EXAMPLES=OFF \
+ 	-DINSTALL_TO_MANGLED_PATHS=OFF
+ 
+-# Disabled features (mostly because they are not available in Buildroot), but
+-# - eigen: OpenCV does not use it, not take any benefit from it.
++# Disabled features (mostly because they are not available in Buildroot)
+ OPENCV4_CONF_OPTS += \
+ 	-DWITH_1394=OFF \
+ 	-DWITH_CLP=OFF \
+-	-DWITH_EIGEN=OFF \
+ 	-DWITH_GDAL=OFF \
+ 	-DWITH_GPHOTO2=OFF \
+ 	-DWITH_GSTREAMER_0_10=OFF \
+@@ -284,6 +282,11 @@ OPENCV4_CONF_OPTS += \
+ 	-DBUILD_opencv_xphoto=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO),ON,OFF)
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM),y)
++OPENCV4_DEPENDENCIES += eigen glog gflags
++OPENCV4_CONF_OPTS += -DWITH_EIGEN=ON
 +endif
-diff --git a/package/cutekeyboard/cutekeyboard.hash b/package/cutekeyboard/cutekeyboard.hash
-new file mode 100644
-index 0000000000..3d3ec2f858
---- /dev/null
-+++ b/package/cutekeyboard/cutekeyboard.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  8cbaddc5fbf479d5e20fc88228e9af5928fa5e588052ee496c2f2efbe2afc510  cutekeyboard-afacc3210b75d7e0de27dcc4c0f2bed0212cc4c7.tar.gz
-+sha256  bdde6ec2ae2686623c0bb414bfb8bd731b314beff2264c602116ea60dd65964d  LICENSE
-diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
-new file mode 100644
-index 0000000000..a7b3ba7a1d
---- /dev/null
-+++ b/package/cutekeyboard/cutekeyboard.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# cutekeyboard
-+#
-+################################################################################
 +
-+CUTEKEYBOARD_VERSION = afacc3210b75d7e0de27dcc4c0f2bed0212cc4c7
-+CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,$(CUTEKEYBOARD_VERSION))
-+CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
-+CUTEKEYBOARD_INSTALL_STAGING = YES
-+CUTEKEYBOARD_LICENSE = MIT
-+CUTEKEYBOARD_LICENSE_FILES = LICENSE
-+
-+ifeq ($(BR2_PACKAGE_CUTEKEYBOARD_EXAMPLES),y)
-+CUTEKEYBOARD_CONF_OPTS += CONFIG+=BUILD_EXAMPLES
-+endif
-+
-+$(eval $(qmake-package))
+ ifeq ($(BR2_PACKAGE_OPENCV4_JPEG2000_WITH_JASPER),y)
+ OPENCV4_CONF_OPTS += -DWITH_JASPER=ON
+ OPENCV4_DEPENDENCIES += jasper
+
+--===============5599190286139981520==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5599190286139981520==--
