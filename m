@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7E49CDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 09:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9620CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 09:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 76BF540C53;
-	Sun, 15 Oct 2023 09:03:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76BF540C53
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85E1540AA2;
+	Sun, 15 Oct 2023 09:03:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85E1540AA2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id twQX_uEtLKAo; Sun, 15 Oct 2023 09:03:04 +0000 (UTC)
+	with ESMTP id NlDnjEKjw_S5; Sun, 15 Oct 2023 09:03:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6DA9840AA2;
-	Sun, 15 Oct 2023 09:03:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DA9840AA2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 847281BF2F1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 524B140C53;
+	Sun, 15 Oct 2023 09:03:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 524B140C53
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AB581BF870
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:03:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A228818C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7423D610D4
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:03:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A228818C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7423D610D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id usBaWl0QWf07 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id po9opPYFfcnJ for <buildroot@lists.busybox.net>;
  Sun, 15 Oct 2023 09:03:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7741E8188A
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC06160B6A
  for <buildroot@buildroot.org>; Sun, 15 Oct 2023 09:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7741E8188A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC06160B6A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 612A384600; Sun, 15 Oct 2023 09:03:00 +0000 (UTC)
+ id 97FB484600; Sun, 15 Oct 2023 09:03:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 10:49:15 +0200
+Date: Sun, 15 Oct 2023 10:53:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2dc61bfa768659ffa208b179967c332e6252d5ad
-X-Git-Newrev: 84cdd92f0172ccc49fd2c037caaf3a659a26194d
+X-Git-Oldrev: 796ebbcf34298ef56ff63fc845cd97a5acb7dc8a
+X-Git-Newrev: 648502bdbdcf6a8996db897af731fd2219d777d1
 X-Patchwork-Hint: ignore
-Message-Id: <20231015090300.612A384600@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: remove leftover from legacy
- PowerPC patch
+Message-Id: <20231015090300.97FB484600@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pound: force libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +62,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84cdd92f0172ccc49fd2c037caaf3a659a26194d
+commit: https://git.buildroot.net/buildroot/commit/?id=648502bdbdcf6a8996db897af731fd2219d777d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit 0c82f3f63563 (package/gcc: remove powerpc conditional patching
-logic), the macro defining the conditional patch was removed, but it was
-still referenced and expanded in the apply-patches hook.
+Force libopenssl to avoid the following build failure with libressl
+raised since bump to version 4.8 in commit
+525cb6a8fbe04a959ea6e3a21a3f6f8828d7e9dc:
 
-Drop that now.
+pound.c: In function 'main':
+pound.c:971:27: error: 'l_id' undeclared (first use in this function)
+  971 |   CRYPTO_set_id_callback (l_id);
+      |                           ^~~~
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/692db714aa8b0dcfb67fd99977fb6f33c5d4810c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/pound/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 4a3b780618..9a164c8374 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -44,7 +44,6 @@ define HOST_GCC_APPLY_PATCHES
- 			$(APPLY_PATCHES) $(@D) $${patchdir} \*.patch || exit 1; \
- 		fi; \
- 	done
--	$(HOST_GCC_APPLY_POWERPC_PATCH)
- endef
- 
- HOST_GCC_EXCLUDES = \
+diff --git a/package/pound/Config.in b/package/pound/Config.in
+index 60fafff935..aa0f103273 100644
+--- a/package/pound/Config.in
++++ b/package/pound/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_POUND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+ 	  The Pound program is a reverse proxy, load balancer and HTTPS
+ 	  front-end for Web server(s). Pound was developed to enable
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
