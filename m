@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37F3FCDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 09:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FAD4CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 09:04:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4A2940AA2;
-	Sun, 15 Oct 2023 09:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4A2940AA2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2656F40C08;
+	Sun, 15 Oct 2023 09:04:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2656F40C08
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XgmiKbpTDu2l; Sun, 15 Oct 2023 09:04:00 +0000 (UTC)
+	with ESMTP id b8Gci_aQ3CM6; Sun, 15 Oct 2023 09:04:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6DAE340BFA;
-	Sun, 15 Oct 2023 09:03:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DAE340BFA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 33D9B1BF2F1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2825440C18;
+	Sun, 15 Oct 2023 09:04:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2825440C18
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D363F1BF2F1
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:03:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B87560F48
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10EBF414C6
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 09:03:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B87560F48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10EBF414C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WYASxyCCsXcS for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eD2FzwS8toVy for <buildroot@lists.busybox.net>;
  Sun, 15 Oct 2023 09:03:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5A7C61056
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB2F14172F
  for <buildroot@buildroot.org>; Sun, 15 Oct 2023 09:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5A7C61056
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB2F14172F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3FD2851CA; Sun, 15 Oct 2023 09:03:00 +0000 (UTC)
+ id DB01F851C9; Sun, 15 Oct 2023 09:03:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 10:54:37 +0200
+Date: Sun, 15 Oct 2023 10:58:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dad81003c905c5fe33599c1676ed46108b512bc0
-X-Git-Newrev: 1c6b1ee63f614a7480ad100aceb6f5e85353326f
+X-Git-Oldrev: 3381a084330e8f48785fb472e95c01d7a9602b36
+X-Git-Newrev: b518b0f161c81582f31c79c50552b5106f693df2
 X-Patchwork-Hint: ignore
-Message-Id: <20231015090300.B3FD2851CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: bump version to 254.5
+Message-Id: <20231015090300.DB01F851C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mutt: fix libgpgme static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,45 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c6b1ee63f614a7480ad100aceb6f5e85353326f
+commit: https://git.buildroot.net/buildroot/commit/?id=b518b0f161c81582f31c79c50552b5106f693df2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All tests passed in Debian 11 with the following command:
+Fix the following static build failure with libgpgme raised since at
+least bump to version 2.2.9 in commit
+7a2afdb7b1180bed3b6ad92c22c908805467ead3:
 
-./support/testing/run-tests tests.init.test_systemd
+/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/sh4a-buildroot-linux-musl/11.3.0/../../../../sh4a-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-11/output-1/host/sh4a-buildroot-linux-musl/sysroot/usr/lib/libgpgme.a(assuan-support.o): in function `my_usleep':
+assuan-support.c:(.text+0x260): undefined reference to `__assuan_usleep'
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Acked-by: Norbert Lange <nolange79@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/0680dbc95601fcd8cdf07b926ea5e9be2079c7bf
+ - http://autobuild.buildroot.org/results/b4f2d1ad77fb8b97accc4150d8249de145cb9cf4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mutt/mutt.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 10f4bc04fa..f0c3db60e7 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  18db69c8fc33afebf95a40cfa3769df5f0e4a07bccdebd33b2fd81c8b75e7a02  systemd-254.tar.gz
-+sha256  41873783aa1c680e10d2f2626797a1c2fef8018d69b68c8c77639e140ee7846d  systemd-254.5.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
- sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 13cd41f75b..ccc0e14874 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 254
-+SYSTEMD_VERSION = 254.5
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 09f547a091..2fe7b92b38 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -40,7 +40,11 @@ MUTT_CONF_OPTS += \
+ 
+ # Force the path to "gpgrt-config" (from the libgpg-error package) to
+ # avoid using the one on host, if present.
+-MUTT_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
++MUTT_GPGRT_CONFIG = $(STAGING_DIR)/usr/bin/gpgrt-config
++ifeq ($(BR2_STATIC_LIBS),y)
++MUTT_GPGRT_CONFIG += --static
++endif
++MUTT_CONF_ENV += GPGRT_CONFIG="$(MUTT_GPGRT_CONFIG)"
+ else
+ MUTT_CONF_OPTS += --disable-gpgme
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
