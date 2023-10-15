@@ -4,47 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBC06CDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:54:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEE26CDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 19:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9587D41497;
-	Sun, 15 Oct 2023 18:54:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9587D41497
+	by smtp2.osuosl.org (Postfix) with ESMTP id 35B09402BC;
+	Sun, 15 Oct 2023 19:08:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35B09402BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9VpKB8jv6yEs; Sun, 15 Oct 2023 18:54:08 +0000 (UTC)
+	with ESMTP id Hzs2Gg_gyaQY; Sun, 15 Oct 2023 19:08:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6FD82414BB;
-	Sun, 15 Oct 2023 18:54:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FD82414BB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2075C1BF83A
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 235344149E;
+	Sun, 15 Oct 2023 19:08:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 235344149E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D01E11BF5A5
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 19:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EDC1C81E04
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:53:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDC1C81E04
+ by smtp2.osuosl.org (Postfix) with ESMTP id B43B44149E
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 19:08:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B43B44149E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4ahXN7HiqtSJ for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68F9B81E00
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68F9B81E00
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55B21852E0; Sun, 15 Oct 2023 18:53:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 20:50:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0aaeae26f69be2e3e0586dbb6d7243e229239f25
-X-Git-Newrev: a7736afacaefc9250f8e68825e42c8f7c229b410
-X-Patchwork-Hint: ignore
-Message-Id: <20231015185349.55B21852E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencv4-contrib: properly note
- dependencies between modules
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yzwsHIhzTtWH for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 19:08:01 +0000 (UTC)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B3331402BC
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 19:08:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3331402BC
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-99de884ad25so615143366b.3
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 12:08:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697396880; x=1698001680;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=QQ+61e9zQLek8MugbTlAiMDThOQuT6D2nQ19dRLKvl0=;
+ b=iUgwH8D+qouiSxETe2fdxzG8jXpnssp2R09VtIqq7x8WDLOlpcRxM3QpEE8+TFn4SU
+ Fewn6BluxJulZk7cQTrJiK8mKNg1oYBObYEwTMc990znLYUlV7sPo64xm1HFCOo7bhwR
+ CgzmwaMjw74HpImKXrq+KRyemoe2LKIlNrGOV/8kN6PkiJvHzc6WxVm4GHyvcGm0ZBzE
+ 5IzZ48pUONTe35IXeJe2AfrWAk0IIzqLao1gaJlybqU2N61RIeicsGH3OCid68DdPGgg
+ 7aSC3mFAsXJBMOR3iKyIe71zAQDEn3QGraKNBmWnWpKhBtQQx7nxcMPjeEfRN3dE/tSH
+ Dkww==
+X-Gm-Message-State: AOJu0YxzXWkrle/i2ppp8vCElF+hf26v0VLgYcN9hJs17diyi6BZEAta
+ zkcRjx0I+3tIw7bOty0Dp5/Iqg==
+X-Google-Smtp-Source: AGHT+IEnla56qnNtsMur6XSycbxXgfRdVfpLX7zH+jcF4HOpBs6j9R1hqpaFpbGuQH8E3Y50aU+phg==
+X-Received: by 2002:a17:907:774e:b0:9a5:d972:af43 with SMTP id
+ kx14-20020a170907774e00b009a5d972af43mr26818637ejc.65.1697396879684; 
+ Sun, 15 Oct 2023 12:07:59 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ a11-20020a170906670b00b009ae3d711fd9sm2624666ejp.69.2023.10.15.12.07.58
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 15 Oct 2023 12:07:58 -0700 (PDT)
+Message-ID: <fc4568f7-ab43-354a-4618-5a4dc69f6107@mind.be>
+Date: Sun, 15 Oct 2023 21:07:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Content-Language: en-GB
+To: Stefan Agner <stefan@agner.ch>, buildroot@buildroot.org
+References: <330af443072a1a0716c5890eb87216a6bfbe99e7.1669645942.git.stefan@agner.ch>
+In-Reply-To: <330af443072a1a0716c5890eb87216a6bfbe99e7.1669645942.git.stefan@agner.ch>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1697396880; x=1698001680; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=QQ+61e9zQLek8MugbTlAiMDThOQuT6D2nQ19dRLKvl0=;
+ b=WcQg5vrgPx2C5+GghZ1HQZWT4K7rxiQG0JXeEbJY5kHgDF9JPjDh1KMDLFUmjx+Mom
+ pIiLqSgkji7zvrVt2c8Zm18soABjSg/5TuFLuu1RujKlQ1FB2qOhwKop5d9zAEcieUAm
+ XOpa07PPtKMHbOhlrjF00WxiMcVQwGTYmCwgYIeYdE8gsH2LLx8XKFlxa+vCAk51/V0F
+ knGbWKKyBdqBgWryYRTVZMFSY0g67ysLxFbT0SG6TZdy+5mycAZ1d3h0tt4t7rSmNvqB
+ UlDGmXKgeyRPddBy9+sIQU2wuPfcLBlep4M2ZRsyLGvls0sDS1ax3iZIHxcSDJO+k7GT
+ wbMQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=WcQg5vrg
+Subject: Re: [Buildroot] [PATCH] package/iptables: add option to use
+ iptables with nf_tables backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,210 +102,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5599190286139981520=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5599190286139981520==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7736afacaefc9250f8e68825e42c8f7c229b410
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also, add myself to the DEVELOPERS file
+On 28/11/2022 15:33, Stefan Agner wrote:
+> Add a configuration option to let the iptables and ip6tables symlinks
+> point to the nf_tables variant.
+> 
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
+> ---
+>   package/iptables/Config.in   | 5 +++++
+>   package/iptables/iptables.mk | 9 +++++++++
+>   2 files changed, 14 insertions(+)
+> 
+> diff --git a/package/iptables/Config.in b/package/iptables/Config.in
+> index e6b12603e0..ec7fbb7eea 100644
+> --- a/package/iptables/Config.in
+> +++ b/package/iptables/Config.in
+> @@ -24,6 +24,11 @@ config BR2_PACKAGE_IPTABLES_NFTABLES
+>   	help
+>   	  Build nftables compat utilities.
+>   
+> +config BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT
+> +	bool "nftables compat as default"
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-[Arnout: fix typo BR2_PACKAGE_OPENCV4_LIB_OBJDETECCT]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- DEVELOPERS                        |  4 ++++
- package/opencv4-contrib/Config.in | 20 ++++++++++++++++++++
- package/opencv4/opencv4.mk        |  9 ++++++---
- 3 files changed, 30 insertions(+), 3 deletions(-)
+  Shouldn't this depend on BR2_PACKAGE_IPTABLES_NFTABLES ?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 01e9777be6..57015e245e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3101,6 +3101,10 @@ F:	package/python-pyusb/
- N:	Wojciech Niziński <niziak@spox.org>
- F:	package/fwup/
- 
-+N:	Woodrow Douglass <wdouglass@carnegierobotics.com>
-+F:	package/opencv4
-+F:	package/opencv4-contrib
-+
- N:	Xuanhao Shi <X15000177@gmail.com>
- F:	board/ti/am62x-sk/
- F:	board/ti/am64x-sk/
-diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
-index 9800333035..851241ce5e 100644
---- a/package/opencv4-contrib/Config.in
-+++ b/package/opencv4-contrib/Config.in
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ALPHAMAT
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_ARUCO
- 	bool "aruco"
-+	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
- 	help
- 	  ArUco and ChArUco Markers -- Augmented reality ArUco marker
- 	  and "ChARUco" markers where ArUco markers embedded inside the
-@@ -29,6 +30,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BARCODE
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BGSEGM
- 	bool "bgsegm"
-+	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
- 	help
- 	  Background segmentation algorithm combining statistical
- 	  background image estimation and per-pixel Bayesian
-@@ -43,6 +45,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_BIOINSPIRED
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_CCALIB
- 	bool "ccalib"
-+	select BR2_PACKAGE_OPENCV4_LIB_HIGHGUI
- 	help
- 	  Custom Calibration -- Patterns for 3D reconstruction,
- 	  omnidirectional camera calibration, random pattern calibration
-@@ -71,6 +74,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DATASETS
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
- 	bool "dnn_objdetect"
-+	select BR2_PACKAGE_OPENCV4_LIB_DNN
- 	help
- 	  Object Detection using CNNs -- Implements compact CNN Model
- 	  for object detection. Trained using Caffe but uses
-@@ -78,6 +82,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_OBJDETECT
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNN_SUPERRES
- 	bool "dnn_superres"
-+	select BR2_PACKAGE_OPENCV4_LIB_DNN
- 	help
- 	  Superresolution using CNNs -- Contains four trained
- 	  convolutional neural networks to upscale images.
-@@ -90,12 +95,14 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DNNS_EASILY_FOOLED
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_DPM
- 	bool "dpm"
-+	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	help
- 	  Deformable Part Model -- Felzenszwalb's Cascade with
- 	  deformable parts object recognition code.
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_FACE
- 	bool "face"
-+	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	help
- 	  Face Recognition -- Face recognition techniques: Eigen, Fisher
- 	  and Local Binary Pattern Histograms LBPH methods.
-@@ -165,6 +172,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_MCC
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_OPTFLOW
- 	bool "optflow"
-+	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
- 	help
- 	  Optical Flow -- Algorithms for running and evaluating
- 	  deepflow, simpleflow, sparsetodenseflow and motion
-@@ -219,6 +227,11 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM
- 	bool "sfm"
-+	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV4_LIB_IMGCODECS
-+	select BR2_PACKAGE_EIGEN
-+	select BR2_PACKAGE_GLOG
-+	select BR2_PACKAGE_GFLAGS
- 	help
- 	  Structure from Motion -- This module contains algorithms
- 	  to perform 3d reconstruction from 2d images. The core of
-@@ -231,6 +244,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STEREO
- 	bool "stereo"
-+	select BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING
- 	help
- 	  Stereo Correspondence -- Stereo matching done with different
- 	  descriptors: Census / CS-Census / MCT / BRIEF / MV and dense
-@@ -244,6 +258,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_STRUCTURED_LIGHT
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SUPERRES
- 	bool "superres"
-+	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
- 	help
- 	  Super Resolution
- 
-@@ -262,12 +277,15 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TEXT
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_TRACKING
- 	bool "tracking"
-+	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
- 	help
- 	  Vision Based Object Tracking -- Use and/or evaluate different
- 	  visual object tracking techniques.
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_VIDEOSTAB
- 	bool "videostab"
-+	select BR2_PACKAGE_OPENCV4_LIB_VIDEO
-+	select BR2_PACKAGE_OPENCV4_LIB_PHOTO
- 	help
- 	  Video Stabilization
- 
-@@ -299,6 +317,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XIMGPROC
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
- 	bool "xobjdetect"
-+	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	help
- 	  Boosted 2D Object Detection -- Uses a Waldboost cascade and
- 	  local binary patterns computed as integral features for 2D
-@@ -306,6 +325,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XOBJDETECT
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO
- 	bool "xphoto"
-+	select BR2_PACKAGE_OPENCV4_LIB_PHOTO
- 	help
- 	  Extra Computational Photography -- Additional photo processing
- 	  algorithms: Color balance / Denoising / Inpainting.
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index a665793ad9..2a05de42fb 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -203,12 +203,10 @@ OPENCV4_CONF_OPTS += \
- 	-DINSTALL_PYTHON_EXAMPLES=OFF \
- 	-DINSTALL_TO_MANGLED_PATHS=OFF
- 
--# Disabled features (mostly because they are not available in Buildroot), but
--# - eigen: OpenCV does not use it, not take any benefit from it.
-+# Disabled features (mostly because they are not available in Buildroot)
- OPENCV4_CONF_OPTS += \
- 	-DWITH_1394=OFF \
- 	-DWITH_CLP=OFF \
--	-DWITH_EIGEN=OFF \
- 	-DWITH_GDAL=OFF \
- 	-DWITH_GPHOTO2=OFF \
- 	-DWITH_GSTREAMER_0_10=OFF \
-@@ -284,6 +282,11 @@ OPENCV4_CONF_OPTS += \
- 	-DBUILD_opencv_xphoto=$(if $(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_XPHOTO),ON,OFF)
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM),y)
-+OPENCV4_DEPENDENCIES += eigen glog gflags
-+OPENCV4_CONF_OPTS += -DWITH_EIGEN=ON
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENCV4_JPEG2000_WITH_JASPER),y)
- OPENCV4_CONF_OPTS += -DWITH_JASPER=ON
- OPENCV4_DEPENDENCIES += jasper
+> +	help
+> +	  Use nftables compat utilities by default for iptables/ip6tables.
+> +
+>   comment "nftables compat needs a toolchain w/ wchar, dynamic library, headers >= 3.12"
+>   	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+>   		!BR2_USE_WCHAR || BR2_STATIC_LIBS
+> diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+> index a6143677d1..b53ae928af 100644
+> --- a/package/iptables/iptables.mk
+> +++ b/package/iptables/iptables.mk
+> @@ -49,6 +49,15 @@ else
+>   IPTABLES_CONF_OPTS += --disable-bpf-compiler --disable-nfsynproxy
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT),y)
+> +define IPTABLES_INSTALL_SYMLINK
+> +	ln -fs xtables-nft-multi $(TARGET_DIR)/usr/sbin/iptables
+> +	ln -fs xtables-nft-multi $(TARGET_DIR)/usr/sbin/ip6tables
 
---===============5599190286139981520==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+  This only changes the default for those two, not for a bunch of others e.g. 
+iptables-save.
 
+  To do this properly, I think it's better to send a patch upstream that adds a 
+configure option and changes the Makefile.am to install those symlinks.
+
+  Regards,
+  Arnout
+
+
+> +endef
+> +
+> +IPTABLES_POST_INSTALL_TARGET_HOOKS += IPTABLES_INSTALL_SYMLINK
+> +endif
+> +
+>   define IPTABLES_LINUX_CONFIG_FIXUPS
+>   	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
+>   	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5599190286139981520==--
