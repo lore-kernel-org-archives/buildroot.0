@@ -4,82 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A40FCCDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 17:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6413BCDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 17:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D4A04148F;
-	Sun, 15 Oct 2023 17:12:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D4A04148F
+	by smtp4.osuosl.org (Postfix) with ESMTP id D57C440888;
+	Sun, 15 Oct 2023 17:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D57C440888
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id weFzZCXgI55E; Sun, 15 Oct 2023 17:12:56 +0000 (UTC)
+	with ESMTP id 9CSW2D4CLEV4; Sun, 15 Oct 2023 17:37:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 342D741528;
-	Sun, 15 Oct 2023 17:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 342D741528
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6255940905;
+	Sun, 15 Oct 2023 17:37:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6255940905
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EADDB1BF5DD
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 17:12:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2BA9A1BF5DD
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 17:37:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D13044148F
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 17:12:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D13044148F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0492240905
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 17:37:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0492240905
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FmuT7bmN7b73 for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 17:12:50 +0000 (UTC)
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C62C3413D3
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 17:12:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C62C3413D3
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-53d82bea507so6457768a12.2
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 10:12:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697389968; x=1697994768;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=JreZZOS2uKHr9D3QXAkLgSTAimcf0CVZiGJVeGCWXEk=;
- b=gXJmlC3HoQTBJgYUPB4pPHyT8+H4WsldfqZbg04d6HJQs1uJQKBsG/3JJMrXm+0ATl
- W5RlbYFrg2LUuaWBohRspV9xKsu9an9gGOB2vlwoYOaYhhWxRkeDQTx2T+TpkH3D0g5J
- DYvNiHM3wx8IB36+8zkHo/oUrWHdEkUKMyqK4th1AvKmKZCPHNrakqRHmIcnLTO8ThMI
- zBEZXoo4KIfBkxhTkBeC/MUqnHNf3ReEKHsxKsIkR08J3988MJc2gjlb+xQSKxpd3Mjg
- huKxxfY6xMfOjbf7rd8EG5Vrq73sq6MeN9GQiT4ukcwYjW9BnWQDrUCI2cYPkw8DTrmF
- k0Aw==
-X-Gm-Message-State: AOJu0YzuTg0tfzfaUH6usk5X6KWVI++7yF7sFDG7pGwJ/UPXRrwhoika
- j2382nylxNvmEbsjV3HtdqI+xTR2Ma2x3kE1EjQ=
-X-Google-Smtp-Source: AGHT+IEn0/Svhlg5+YECcHIYEFPZz4/UjkDYjSkhd/r+yhAPkKfjXZkFKEA2gvueoqOBaOUV/rQat4bFlYdlSVx1UnE=
-X-Received: by 2002:a17:906:9c9:b0:9b2:ccd8:2d42 with SMTP id
- r9-20020a17090609c900b009b2ccd82d42mr25356302eje.32.1697389967481; Sun, 15
- Oct 2023 10:12:47 -0700 (PDT)
+ with ESMTP id loWsJbFQUwDr for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 17:37:10 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AA5BD40888
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 17:37:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA5BD40888
+Received: from fli4l.lan.fli4l (p54a1bf4b.dip0.t-ipconnect.de [84.161.191.75])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 76422A4C019E;
+ Sun, 15 Oct 2023 19:37:06 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35678)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.1)
+ (envelope-from <bernd@kuhls.net>) id 1qs534-0006qB-0C;
+ Sun, 15 Oct 2023 19:37:06 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 15 Oct 2023 19:37:06 +0200
+Message-Id: <20231015173706.408993-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20221227154300.10556-1-brandon.maier@collins.com>
-In-Reply-To: <20221227154300.10556-1-brandon.maier@collins.com>
-From: Charles Hardin <ckhardin@gmail.com>
-Date: Sun, 15 Oct 2023 10:12:36 -0700
-Message-ID: <CAN=fXj3A9VF+7B_i4emt-p=1vUo2Dq2bsRb_QuGp-j0oQ1JmWQ@mail.gmail.com>
-To: Brandon Maier <brandon.maier@collins.com>
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697389968; x=1697994768; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=JreZZOS2uKHr9D3QXAkLgSTAimcf0CVZiGJVeGCWXEk=;
- b=mpqRdU4S7tQNPfsw+GQ4mnY9JZqUwFC1iNCpHfJBInsY03ZNFydeE2mdC0WzRuVtau
- RgU46igOJVYBkDdoaUmAJUIiyZCrh4XB2NYjQjjyq18w+XJ2Sl698fkGoVdMNdcM2+s5
- tHlzlbj8q2R6VExpti8QKSWGovUSuTxEMGA9iSshWmNHHOzJc2X+epGzgWQ5zwbt8UHB
- jWXoTKSC4he90hW6UEOqFm38sx4j+i4SA5yt+XkVZEBgIC5XCLVd12EUGa20nz8etxzq
- XKBx9C+Ui2yQruGxiaIPNypDTV2u4x2CreevO3tEkDr8ki+dI1+9UPKkOzFboJKgBkap
- LN2g==
+ d=kuhls.net; 
+ s=kas202306131828; t=1697391426;
+ bh=5pOyB3LI9l/KfnvttU1t80odQAdBoYZbMt8Dderd3to=;
+ h=From:To:Cc:Subject:Date:From;
+ b=cLhAASkVyvx1n4jtTrhF1iChzqlLziysyT8uLW/UmhhQ82ebrxjlsKzaj4ppM74DA
+ yocAO/VSq+QAo3qk9LRU88wE0aXOdBRySLV+sLc9sz0JoViSoALnN4E235QMCo9mLi
+ 1Piq2ZZjvqVKdPtYlswSynSwyVvgVb2V6QEt4uwly5RpQH+fiYj7D2koDi7Qn3cPSB
+ 81ayqOASAqL9WC3gs9Ltmpxy8hmx+/SfKIMlyR5TbKSr52BU6PLZPi6WuKX/ULBqJS
+ 5x29pzRaHUkEVv61RjWI32GDCyEREbi1lLjZgX91PtHhfvjp7v2KAMQI1eZW9+kC2k
+ Q/Q28XXaYVuuw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mpqRdU4S
-Subject: Re: [Buildroot] [PATCH v2 1/1] Makefile: fix SDK relocation for
- per-package-dirs
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=cLhAASkV
+Subject: [Buildroot] [PATCH 1/1] package/exim: security bump version to
+ 4.96.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,80 +75,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCBEZWMgMjcsIDIwMjIgYXQgNzo0M+KAr0FNIEJyYW5kb24gTWFpZXIgdmlhIGJ1aWxk
-cm9vdAo8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgo+Cj4gVGhlIHJlbG9jYXRlLXNk
-ay5zaCBzY3JpcHQgZG9lcyBub3Qgd29yayBjb3JyZWN0bHkgd2hlbgo+IEJSMl9QRVJfUEFDS0FH
-RV9ESVJFQ1RPUklFUyBpcyBlbmFibGVkLiByZWxvY2F0ZS1zZGsuc2ggZXhwZWN0cwo+IGV2ZXJ5
-dGhpbmcgdG8gcG9pbnQgYXQgJEhPU1RfRElSLCBidXQgZWFjaCBwYWNrYWdlIHdpbGwgYmUgcG9p
-bnRpbmcgYXQKPiBpdHMgJChPKS9wZXItcGFja2FnZS8qL2hvc3QuCj4KPiBVc2UgdGhlIHNhbWUg
-Y29tbWFuZCBmb3Igc2NydWJpbmcgaG9zdCBwYXRocyBkdXJpbmcgdGhlIGJ1aWxkLCB0byBzY3J1
-Ygo+IHRvIHRoZSBmaW5hbCBob3N0IGRpcmVjdG9yeSBsb2NhdGlvbi4KPgo+IFNpZ25lZC1vZmYt
-Ynk6IEJyYW5kb24gTWFpZXIgPGJyYW5kb24ubWFpZXJAY29sbGlucy5jb20+CkFja2VkLWJ5OiBD
-aGFybGVzIEhhcmRpbiA8Y2toYXJkaW5AZ21haWwuY29tPgoKVGVzdGVkIGFuZCB2ZXJpZmllZCB0
-aGUgaG9zdCBwYXRocyBpbiB0aGUgc2hhc3VtIGFzIGFuIGV4YW1wbGUKCj4gLS0tCj4gdjI6Cj4g
-LSBkcm9wIG9yaWdpbmFsIGltcGxlbWVudGF0aW9uIGluIGZhdm9yIG9mIHJldXNpbmcgdGhlIGV4
-aXN0aW5nCj4gICBQUERfRklYVVBfUEFUSFMgY29kZS4KPiAtLS0KPiAgTWFrZWZpbGUgICAgICAg
-ICAgICAgICB8ICAxICsKPiAgcGFja2FnZS9wa2ctZ2VuZXJpYy5tayB8IDEyICstLS0tLS0tLS0t
-LQo+ICBwYWNrYWdlL3BrZy11dGlscy5tayAgIHwgMTUgKysrKysrKysrKysrKysrCj4gIDMgZmls
-ZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCj4KPiBkaWZmIC0t
-Z2l0IGEvTWFrZWZpbGUgYi9NYWtlZmlsZQo+IGluZGV4IDg4ZjkwY2QyZmEuLmFjMzU0MGIzNmMg
-MTAwNjQ0Cj4gLS0tIGEvTWFrZWZpbGUKPiArKysgYi9NYWtlZmlsZQo+IEBAIC01OTgsNiArNTk4
-LDcgQEAgcHJlcGFyZS1zZGs6IHdvcmxkCj4gICAgICAgICBAJChjYWxsIE1FU1NBR0UsIlJlbmRl
-cmluZyB0aGUgU0RLIHJlbG9jYXRhYmxlIikKPiAgICAgICAgIFBFUl9QQUNLQUdFX0RJUj0kKFBF
-Ul9QQUNLQUdFX0RJUikgJChUT1BESVIpL3N1cHBvcnQvc2NyaXB0cy9maXgtcnBhdGggaG9zdAo+
-ICAgICAgICAgUEVSX1BBQ0tBR0VfRElSPSQoUEVSX1BBQ0tBR0VfRElSKSAkKFRPUERJUikvc3Vw
-cG9ydC9zY3JpcHRzL2ZpeC1ycGF0aCBzdGFnaW5nCj4gKyAgICAgICAkKGNhbGwgcHBkLWZpeHVw
-LXBhdGhzLCQoQkFTRV9ESVIpKQo+ICAgICAgICAgJChJTlNUQUxMKSAtbSA3NTUgJChUT1BESVIp
-L3N1cHBvcnQvbWlzYy9yZWxvY2F0ZS1zZGsuc2ggJChIT1NUX0RJUikvcmVsb2NhdGUtc2RrLnNo
-Cj4gICAgICAgICBta2RpciAtcCAkKEhPU1RfRElSKS9zaGFyZS9idWlsZHJvb3QKPiAgICAgICAg
-IGVjaG8gJChIT1NUX0RJUikgPiAkKEhPU1RfRElSKS9zaGFyZS9idWlsZHJvb3Qvc2RrLWxvY2F0
-aW9uCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLWdlbmVyaWMubWsgYi9wYWNrYWdlL3BrZy1n
-ZW5lcmljLm1rCj4gaW5kZXggZjI0ZTAzYTMyNS4uMjEwYWYxYmJlZiAxMDA2NDQKPiAtLS0gYS9w
-YWNrYWdlL3BrZy1nZW5lcmljLm1rCj4gKysrIGIvcGFja2FnZS9wa2ctZ2VuZXJpYy5tawo+IEBA
-IC05MiwxOCArOTIsOCBAQCBlbmRpZgo+Cj4gIGlmZXEgKCQoQlIyX1BFUl9QQUNLQUdFX0RJUkVD
-VE9SSUVTKSx5KQo+Cj4gLSMgRW5zdXJlIGZpbGVzIGxpa2UgLmxhLCAucGMsIC5wcmksIC5jbWFr
-ZSwgYW5kIHNvIG9uLCBwb2ludCB0byB0aGUKPiAtIyBwcm9wZXIgc3RhZ2luZyBhbmQgaG9zdCBk
-aXJlY3RvcmllcyBmb3IgdGhlIGN1cnJlbnQgcGFja2FnZTogZmluZAo+IC0jIGFsbCB0ZXh0IGZp
-bGVzIHRoYXQgY29udGFpbiB0aGUgUFBEIHJvb3QsIGFuZCByZXBsYWNlIGl0IHdpdGggdGhlCj4g
-LSMgY3VycmVudCBwYWNrYWdlJ3MgUFBELgo+ICBkZWZpbmUgUFBEX0ZJWFVQX1BBVEhTCj4gLSAg
-ICAgICAkKFEpZ3JlcCAtLWJpbmFyeS1maWxlcz13aXRob3V0LW1hdGNoIC1sclogJyQoUEVSX1BB
-Q0tBR0VfRElSKS9bXi9dXCsvJyAkKEhPU1RfRElSKSBcCj4gLSAgICAgICB8d2hpbGUgcmVhZCAt
-ZCAnJyBmOyBkbyBcCj4gLSAgICAgICAgICAgICAgIGZpbGUgLWIgLS1taW1lLXR5cGUgIiQke2Z9
-IiB8IGdyZXAgLXEgJ150ZXh0LycgfHwgY29udGludWU7IFwKPiAtICAgICAgICAgICAgICAgcHJp
-bnRmICclc1wwJyAiJCR7Zn0iOyBcCj4gLSAgICAgICBkb25lIFwKPiAtICAgICAgIHx4YXJncyAt
-MCAtLW5vLXJ1bi1pZi1lbXB0eSBcCj4gLSAgICAgICAgICAgICAgICQoU0VEKSAnczokKFBFUl9Q
-QUNLQUdFX0RJUikvW14vXVwrLzokKFBFUl9QQUNLQUdFX0RJUikvJCgkKFBLRylfTkFNRSkvOmcn
-Cj4gKyAgICAgICAkKGNhbGwgcHBkLWZpeHVwLXBhdGhzLCQoUEVSX1BBQ0tBR0VfRElSKS8kKCQo
-UEtHKV9OQU1FKSkKPiAgZW5kZWYKPgo+ICAjIFJlbW92ZSBweXRob24ncyBwcmUtY29tcGlsZWQg
-InN5c2NvbmZpZ2RhdGEiLCBhcyBpdCBtYXkgY29udGFpbiBwYXRocyB0bwo+IGRpZmYgLS1naXQg
-YS9wYWNrYWdlL3BrZy11dGlscy5tayBiL3BhY2thZ2UvcGtnLXV0aWxzLm1rCj4gaW5kZXggMDk0
-NWU2ZWQzMS4uZjIyNTYyZmJlZCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3BrZy11dGlscy5tawo+
-ICsrKyBiL3BhY2thZ2UvcGtnLXV0aWxzLm1rCj4gQEAgLTIzMyw2ICsyMzMsMjEgQEAgZGVmaW5l
-IHByZXBhcmUtcGVyLXBhY2thZ2UtZGlyZWN0b3J5Cj4gICAgICAgICAkKGNhbGwgcGVyLXBhY2th
-Z2UtcnN5bmMsJCgxKSxob3N0LCQoSE9TVF9ESVIpKQo+ICAgICAgICAgJChjYWxsIHBlci1wYWNr
-YWdlLXJzeW5jLCQoMSksdGFyZ2V0LCQoVEFSR0VUX0RJUikpCj4gIGVuZGVmCj4gKwo+ICsjIEVu
-c3VyZSBmaWxlcyBsaWtlIC5sYSwgLnBjLCAucHJpLCAuY21ha2UsIGFuZCBzbyBvbiwgcG9pbnQg
-dG8gdGhlCj4gKyMgcHJvcGVyIHN0YWdpbmcgYW5kIGhvc3QgZGlyZWN0b3JpZXMgZm9yIHRoZSBj
-dXJyZW50IHBhY2thZ2U6IGZpbmQKPiArIyBhbGwgdGV4dCBmaWxlcyB0aGF0IGNvbnRhaW4gdGhl
-IFBQRCByb290LCBhbmQgcmVwbGFjZSBpdCB3aXRoIHRoZQo+ICsjIGN1cnJlbnQgcGFja2FnZSdz
-IFBQRC4KPiArIyAkMTogZGVzdGluYXRpb24gcm9vdCBkaXJlY3RvcnkgY29udGFpbmluZyBob3N0
-IGFuZCBzdGFnaW5nCj4gK2RlZmluZSBwcGQtZml4dXAtcGF0aHMKPiArICAgICAgICQoUSlncmVw
-IC0tYmluYXJ5LWZpbGVzPXdpdGhvdXQtbWF0Y2ggLWxyWiAnJChQRVJfUEFDS0FHRV9ESVIpL1te
-L11cKy8nICQoSE9TVF9ESVIpIFwKPiArICAgICAgIHx3aGlsZSByZWFkIC1kICcnIGY7IGRvIFwK
-PiArICAgICAgICAgICAgICAgZmlsZSAtYiAtLW1pbWUtdHlwZSAiJCR7Zn0iIHwgZ3JlcCAtcSAn
-XnRleHQvJyB8fCBjb250aW51ZTsgXAo+ICsgICAgICAgICAgICAgICBwcmludGYgJyVzXDAnICIk
-JHtmfSI7IFwKPiArICAgICAgIGRvbmUgXAo+ICsgICAgICAgfHhhcmdzIC0wIC0tbm8tcnVuLWlm
-LWVtcHR5IFwKPiArICAgICAgICAgICAgICAgJChTRUQpICdzOiQoUEVSX1BBQ0tBR0VfRElSKS9b
-Xi9dXCsvOiQoMSkvOmcnCj4gK2VuZGVmCj4gIGVuZGlmCj4KPiAgIwo+IC0tCj4gMi4zOS4wCj4K
-PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
-CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Release notes: https://seclists.org/oss-sec/2023/q4/107
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index 6cdeea0614..e784bf7521 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  93ac0755c317e1fdbbea8ccb70a868876bdf3148692891c72ad0fe816767033d  exim-4.96.1.tar.xz
++sha256  038e327e8d1e93d005bac9bb06fd22aec44d5028930d6dbe8817ad44bbfc1de6  exim-4.96.2.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  ef1a0e57c59cdf4e915b3ac5dcdbc69f565b14dd92b0527f6796b2c46a9ec34f991f9790fb4171c99417f7e482cdd62d77e780cc71fab227c8bed876103f7fdd  exim-4.96.1.tar.xz
++sha512  dc9f6a114e64ac826489edff88d50a24195b64714428e691c10a7bfb119b3ebb6455bf80cbb34dfd0a4e2e44cbde72effb009357a8e0a6065e512fe32092e3ed  exim-4.96.2.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index f5695d048d..166a4ead54 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXIM_VERSION = 4.96.1
++EXIM_VERSION = 4.96.2
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
