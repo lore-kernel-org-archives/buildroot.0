@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B07D2CDB474
-	for <buildroot@archiver.kernel.org>; Sat, 14 Oct 2023 22:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1279CCDB482
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 05:15:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30C1C8188A;
-	Sat, 14 Oct 2023 22:25:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30C1C8188A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C81F414C9;
+	Sun, 15 Oct 2023 05:15:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C81F414C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e3L-ZF9pbdGr; Sat, 14 Oct 2023 22:25:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vb05PUXuFtva; Sun, 15 Oct 2023 05:15:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6745D818C2;
-	Sat, 14 Oct 2023 22:25:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6745D818C2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3D9C91BF280
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 22:25:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F09E34151F;
+	Sun, 15 Oct 2023 05:15:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F09E34151F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F8521BF372
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 05:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14C68402DC
- for <buildroot@lists.busybox.net>; Sat, 14 Oct 2023 22:25:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14C68402DC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2868D60ECC
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 05:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2868D60ECC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sBDdM3dUV6gL for <buildroot@lists.busybox.net>;
- Sat, 14 Oct 2023 22:25:45 +0000 (UTC)
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D92994015E
- for <buildroot@buildroot.org>; Sat, 14 Oct 2023 22:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D92994015E
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4064876e8b8so36555195e9.0
- for <buildroot@buildroot.org>; Sat, 14 Oct 2023 15:25:44 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QMDkJW4IVvBN for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 05:15:51 +0000 (UTC)
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E6F0C60AA0
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 05:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6F0C60AA0
+Received: by mail-io1-xd2b.google.com with SMTP id
+ ca18e2360f4ac-79fa2dbd793so147436839f.2
+ for <buildroot@buildroot.org>; Sat, 14 Oct 2023 22:15:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697322343; x=1697927143;
+ d=1e100.net; s=20230601; t=1697346949; x=1697951749;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=CDCpd8Z/IHw3+HhzF9mbuIBaYiRFXy12ASiNZwesJo4=;
- b=SRCnTI1CAz1p4aY5jsrkY3T0TBG2BObm4Wht+BkKWnpnp8CmdRtgOd4eUTKP7gK2Y3
- GMWhxA51SqDvLA77skiKKADg5YhvtjrXpi2baX0SQ2CaNPE5SGsv8Cf8KGbwq3mxdIO/
- amVJKgKRWUngzVE8Bmm3siaCAzwddB7zNfBNm1jGFezui/G8NqR2OW1HnJddjj5+rqj9
- /eIOk/l7I2ABVCnnQ0BfCYenXVyLpMrld6VKcyJHFb7Q+xAbO2OiZ8MH+ZXSLTEQaSZ0
- DMHRZVLgN4IRy5U3HNZUOME0v/fOFXge4xGGtWSZTheD4YnJDH9F+H8UQMZfxjfsHU9U
- wWww==
-X-Gm-Message-State: AOJu0Yw77mNUAmJuae/9xbu5EtFtXLLbZkGRhyaE1NSwKAlHEgFP4L1r
- RxZEbcMtffYKxDq7J2MoTxaYuj+UBv0=
-X-Google-Smtp-Source: AGHT+IGVIm7jL/KAPNRfzTSfx3M/x9Ac+JPJdsaxU1F4Yv/bZiH7JIyajhYrNGzShKFOH5PH2/kC4g==
-X-Received: by 2002:a05:600c:2150:b0:402:8c7e:ba5 with SMTP id
- v16-20020a05600c215000b004028c7e0ba5mr25474789wml.18.1697322342560; 
- Sat, 14 Oct 2023 15:25:42 -0700 (PDT)
-Received: from scaer.home ([2a01:cb19:8290:3800:a426:a01d:739:9ce4])
- by smtp.gmail.com with ESMTPSA id
- az23-20020a05600c601700b00406447b798bsm3019107wmb.37.2023.10.14.15.25.41
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=1jJ4Ytb5KpfXiyY87UPriEtsPZbL54xKFUj/q6vOvQ4=;
+ b=nYlV5srzc3YUyUWSWhUHoFplJk2rE8N2oNFZep58aXnnOYQTjhNhHM1uM6H8imEEKQ
+ r/ktTLCh++cH92D5ZRJ06pUfM81jVhKwj/1IVoKmFFQJ4OAKfsGFBVaXQ4iVWJ7i28+r
+ rSUCFvRE6OIy2cwug7fkaV3zEr1WwGpDyyS3N0PyeTFNNhKvO2poHQOPjIFf4nwt33DM
+ de88aebFJ9BiijJUdP05KLOS359lH0QU+5xGBfZfvakuXFlQeZk+GolNLE5Hb3RkGIpU
+ uP2I5rmRmmpaNsFdKRlnj3a/+xZxE2ewwP9lC5AEtm+bj+dGv8g83dVljsD4TA09gTQ2
+ S5Rw==
+X-Gm-Message-State: AOJu0Yyp2Jdigjl6Qe9PT/glWuxNuBWFY7b0sz8vNTw17KaHg0UzJssa
+ ZGJ0QXfvNUphzyaGvQabMPu9m6gsfb0=
+X-Google-Smtp-Source: AGHT+IEnwBJoKWc8UevKzMwSeR30UAcrFS3k9oQtMMu+IDsDiy8seY9w0RFd7jD2SNmZ2sCbqkUGcA==
+X-Received: by 2002:a6b:790d:0:b0:791:2194:10a3 with SMTP id
+ i13-20020a6b790d000000b00791219410a3mr32173138iop.14.1697346948968; 
+ Sat, 14 Oct 2023 22:15:48 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-233-104.hlrn.qwest.net.
+ [71.218.233.104]) by smtp.gmail.com with ESMTPSA id
+ k23-20020a5e8917000000b0077e3acd5ea1sm5663766ioj.53.2023.10.14.22.15.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Oct 2023 15:25:42 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Sat, 14 Oct 2023 22:15:48 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 00:25:41 +0200
-Message-Id: <20231014222541.891768-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
+Date: Sat, 14 Oct 2023 23:15:44 -0600
+Message-Id: <20231015051544.429666-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697322343; x=1697927143; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1697346949; x=1697951749; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=CDCpd8Z/IHw3+HhzF9mbuIBaYiRFXy12ASiNZwesJo4=;
- b=kG5HTCIKeg+xb0dPNUay0HsRADf/OOMBX9HMkkBbbB3lF6ipCET8HPvMD84AXoivGm
- rZ2kbxu5jqn1kIOnIrWo8XlldRt3RnlO7RC+zlkc7Jw4P/dNch1s9tvEWufPame6ErlR
- sApBZwQP2LemZ/osQVg5wK7yLh5wNaHVfmAtBBpIg4g66DuBroZ6YI8hPsdrUA6u9JrE
- HXKb/3J5T8za3EbyuAJOKjLnEK+0rW1FNdEftvZOvIQRIzav/JHNkORkuLwuyx+WCZ4V
- d32izngPxB0VGxlS3H5zlUEx2S+qTaE3h5GTI2NJxtHwrytl/ADcB0bNHslS7yE2dY4M
- wv2A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=1jJ4Ytb5KpfXiyY87UPriEtsPZbL54xKFUj/q6vOvQ4=;
+ b=TaMdfVMATUfmp7yapIJiLQdADNmD6OnVVYsNyMfspY3iEKcXLCdDn2VdnGIcOpuXkK
+ fGc9/q7CEEsPQvuGW1+C39sCnn93Xu7pLqksJ7HIVOYdIzCYSBcFvFmC+KGSh4uW0xEn
+ xrleRptgngEPK+u34qhdBQdWK2gZMIIKso7wgcYxW0eYdfwdpuKSKbUUHOVTGHTzYn7V
+ wd7OFQE4objUc81dwlQNRsKk2qHh2OBcFCezfoulRk4PAMCaQe9a2NG9pcP6tLUs35gY
+ zc3pD0953kytQuShs+TXNII89Lljp5U0c0gXrVhptwOXEMopf+VDI2vTZ6Hu3JwqAF6x
+ q5rA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=kG5HTCIK
-Subject: [Buildroot] [PATCH] package/pkg-generic: drop support for
- arch-specific patches
+ header.a=rsa-sha256 header.s=20230601 header.b=TaMdfVMA
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: bump to version
+ 1.44.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,84 +94,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The last architecture-specific patch we had was removed 2015-02-14 with
-commit 9863553fe8fa (packages: all salute the passing of avr32), where
-we eventually got rid of the avr32-specific patch for fbv.
+Drop patches which are now upstream.
 
-Since then, we've only had common patches (that apply systematically),
-of conditional patches, that are applied in an ad-hoc manner with
-post-patch hooks. Currently, we even only have one such patch (for
-Linux).
+CONTRIBUTING.md hash changed due to text updates:
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/987488a7ac4a193ea6160ab65a4bb215481cafb7
 
-Since we do not advertise that possibility in the manual, and since we
-do not want to have such patches, drop the support for it.
-
-This has the potential for breaking existing br2-external trees, but
-there is a workaround for those: they can provide a pre-patch ook that
-copies the ecessary per-arch patches if needed. We document this in the
-manual.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- docs/manual/migrating.adoc | 23 +++++++++++++++++++++++
- package/pkg-generic.mk     |  4 ++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ ...option-to-set-the-mobile-broadband-p.patch | 60 -------------------
+ ...build-failure-with-Dmodem_manager-fa.patch | 38 ------------
+ package/network-manager/network-manager.hash  |  6 +-
+ package/network-manager/network-manager.mk    |  4 +-
+ 4 files changed, 5 insertions(+), 103 deletions(-)
+ delete mode 100644 package/network-manager/0001-build-meson-add-option-to-set-the-mobile-broadband-p.patch
+ delete mode 100644 package/network-manager/0002-meson.build-fix-build-failure-with-Dmodem_manager-fa.patch
 
-diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
-index 2667aeab96..21277f947b 100644
---- a/docs/manual/migrating.adoc
-+++ b/docs/manual/migrating.adoc
-@@ -100,3 +100,26 @@ change implies that:
-   to be updated appropriately;
- * the archive version suffix has been updated to +-br3+, so the hash
-   files must be updated appropriately.
-+
-+Before Buildroot 2023.11, it was possible (but undocumented and unused)
-+to apply architecture-specific patches, by prefixing the patch filename
-+with the architecture, e.g. `0001-some-changes.patch.arm` and such a
-+patch would only be applied for that architecture. With Buildroot 2023.11,
-+this is no longer supported, and such patches are now longer applied at
-+all.
-+
-+If you still need per-architecture patches, then you may provide a
-+xref:hooks[pre-patch hook] that copies the patches applicable to the
-+configured architecture, e.g.:
-+
-+----
-+define LIBFOO_ARCH_PATCHES
-+    $(foreach p,$(wildcard $(LIBFOO_PKGDIR)/*.patch.$(ARCH)), \
-+        cp -f $(p) $(patsubst %.$(ARCH),%,$(p))
-+    )
-+endef
-+LIBFOO_PRE_PATCH_HOOKS += LIBFOO_ARCH_PATCHES
-+----
-+
-+Note that no package in Buildroot has architecture-specific patches, and
-+that such patches will most probably not be accepted.
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6e944dd6b7..face2dc6d9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -252,9 +252,9 @@ $(BUILD_DIR)/%/.stamp_patched:
- 	for D in $(PATCH_BASE_DIRS); do \
- 	  if test -d $${D}; then \
- 	    if test -d $${D}/$($(PKG)_VERSION); then \
--	      $(APPLY_PATCHES) $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
-+	      $(APPLY_PATCHES) $(@D) $${D}/$($(PKG)_VERSION) \*.patch || exit 1; \
- 	    else \
--	      $(APPLY_PATCHES) $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
-+	      $(APPLY_PATCHES) $(@D) $${D} \*.patch || exit 1; \
- 	    fi; \
- 	  fi; \
- 	done; \
+diff --git a/package/network-manager/0001-build-meson-add-option-to-set-the-mobile-broadband-p.patch b/package/network-manager/0001-build-meson-add-option-to-set-the-mobile-broadband-p.patch
+deleted file mode 100644
+index 4336472e45..0000000000
+--- a/package/network-manager/0001-build-meson-add-option-to-set-the-mobile-broadband-p.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 03ba04d4784fa4fc7ec31455070fb5ecf25ade23 Mon Sep 17 00:00:00 2001
+-From: Heiko Thiery <heiko.thiery@gmail.com>
+-Date: Fri, 27 Jan 2023 22:38:42 +0100
+-Subject: [PATCH] build: meson: add option to set the
+- mobile-broadband-provider-info database
+-
+-When building network-manager in cross-compile environment meson is not able
+-to detect the right location of the mobile-broadband-provider-info
+-database by using the pkg-config module.
+-
+-By adding the option 'mobile_broadband_provider_info_database' to set the
+-correct path to the datafile this can be solved.
+-
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+-
+-https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/1519
+----
+- meson.build       | 6 +++++-
+- meson_options.txt | 1 +
+- 2 files changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 0adc42f738..84ce52c736 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -584,7 +584,10 @@ enable_modem_manager = get_option('modem_manager')
+- if enable_modem_manager
+-   mm_glib_dep = dependency('mm-glib', version: '>= 0.7.991')
+- 
+--  mobile_broadband_provider_info_database = dependency('mobile-broadband-provider-info').get_pkgconfig_variable('database')
+-+  mobile_broadband_provider_info_database = get_option('mobile_broadband_provider_info_database')
+-+  if mobile_broadband_provider_info_database == ''
+-+    mobile_broadband_provider_info_database = dependency('mobile-broadband-provider-info').get_pkgconfig_variable('database')
+-+  endif
+-   config_h.set_quoted('MOBILE_BROADBAND_PROVIDER_INFO_DATABASE', mobile_broadband_provider_info_database)
+- endif
+- 
+-@@ -1054,6 +1057,7 @@ output += '  jansson: ' + jansson_msg + '\n'
+- output += '  iptables: ' + config_h.get('IPTABLES_PATH') + '\n'
+- output += '  nft: ' + config_h.get('NFT_PATH') + '\n'
+- output += '  modemmanager-1: ' + enable_modem_manager.to_string() + '\n'
+-+output += '  mobile-broadband-provider-info-database: ' + mobile_broadband_provider_info_database + '\n'
+- output += '  ofono: ' + enable_ofono.to_string() + '\n'
+- output += '  concheck: ' + enable_concheck.to_string() + '\n'
+- output += '  libteamdctl: ' + enable_teamdctl.to_string() + '\n'
+-diff --git a/meson_options.txt b/meson_options.txt
+-index 8b1d32e645..4e359f9e92 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -32,6 +32,7 @@ option('ppp', type: 'boolean', value: true, description: 'enable PPP/PPPoE suppo
+- option('pppd', type: 'string', value: '', description: 'path to pppd binary')
+- option('pppd_plugin_dir', type: 'string', value: '', description: 'path to the pppd plugins directory')
+- option('modem_manager', type: 'boolean', value: true, description: 'Enable new ModemManager1 interface support')
+-+option('mobile_broadband_provider_info_database', type: 'string', value: '', description: 'path to the mobile-broadband-provider-info database')
+- option('ofono', type: 'boolean', value: false, description: 'Enable oFono support (experimental)')
+- option('concheck', type: 'boolean', value: true, description: 'enable connectivity checking support')
+- option('teamdctl', type: 'boolean', value: false, description: 'enable Teamd control support')
+--- 
+-2.20.1
+-
+diff --git a/package/network-manager/0002-meson.build-fix-build-failure-with-Dmodem_manager-fa.patch b/package/network-manager/0002-meson.build-fix-build-failure-with-Dmodem_manager-fa.patch
+deleted file mode 100644
+index 648be027e0..0000000000
+--- a/package/network-manager/0002-meson.build-fix-build-failure-with-Dmodem_manager-fa.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 736a2c356c1c4871e8c4e70be622c65c87d3bca8 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 21 Feb 2023 13:03:00 +0100
+-Subject: [PATCH] meson.build: fix build failure with -Dmodem_manager=false
+-
+-Fix the following build failure with -Dmodem_manager=false raised since
+-https://gitlab.freedesktop.org/ffontaine/NetworkManager/-/commit/03ba04d4784fa4fc7ec31455070fb5ecf25ade23:
+-
+-../output-1/build/network-manager-1.40.10/meson.build:1060:0: ERROR: Unknown variable "mobile_broadband_provider_info_database".
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/896879c8e8ce022556ee834216ced2f962ff279c
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/1544]
+----
+- meson.build | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 84ce52c736..b79240efc0 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -1057,7 +1057,9 @@ output += '  jansson: ' + jansson_msg + '\n'
+- output += '  iptables: ' + config_h.get('IPTABLES_PATH') + '\n'
+- output += '  nft: ' + config_h.get('NFT_PATH') + '\n'
+- output += '  modemmanager-1: ' + enable_modem_manager.to_string() + '\n'
+--output += '  mobile-broadband-provider-info-database: ' + mobile_broadband_provider_info_database + '\n'
+-+if enable_modem_manager
+-+  output += '  mobile-broadband-provider-info-database: ' + mobile_broadband_provider_info_database + '\n'
+-+endif
+- output += '  ofono: ' + enable_ofono.to_string() + '\n'
+- output += '  concheck: ' + enable_concheck.to_string() + '\n'
+- output += '  libteamdctl: ' + enable_teamdctl.to_string() + '\n'
+--- 
+-2.39.0
+-
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 895351a537..0196d68c55 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,6 +1,6 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.42/NetworkManager-1.42.0.sha256sum
+-sha256  2f6756d507bb6b46716594b67e6fe7491891e1b5b167bbafc5157dfa7753d5b4  NetworkManager-1.42.0.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.44/NetworkManager-1.44.2.sha256sum
++sha256  4b58bf3ac57e2cefb5652efd0945eb0b4bc36a63d92a61ab471d8bb2c9a420e1  NetworkManager-1.44.2.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+-sha256  cfb6c71f6df5898e1724be3debe9adac48c115b903915406c1e7dfd362b57892  CONTRIBUTING.md
++sha256  e7cf3d92bda8e5365eaf4514d572146a19e93336f7a966493778d0d0c4476fae  CONTRIBUTING.md
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 9188af29eb..f6ef923d55 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.42
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
++NETWORK_MANAGER_VERSION_MAJOR = 1.44
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
