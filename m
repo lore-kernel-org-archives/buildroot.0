@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88E22CDB47E
-	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D83FCDB47E
+	for <buildroot@archiver.kernel.org>; Sun, 15 Oct 2023 18:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3647F414BD;
-	Sun, 15 Oct 2023 18:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3647F414BD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 443E5414B4;
+	Sun, 15 Oct 2023 18:34:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 443E5414B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g6gXTGA0b9-p; Sun, 15 Oct 2023 18:34:18 +0000 (UTC)
+	with ESMTP id 0gacS5SOm87G; Sun, 15 Oct 2023 18:34:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A0CA414C8;
-	Sun, 15 Oct 2023 18:34:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A0CA414C8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D5611BF83A
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0DBD414B6;
+	Sun, 15 Oct 2023 18:34:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0DBD414B6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3822E1BF8C7
  for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:32:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E74881DFC
- for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:32:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E74881DFC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EAA861155
+ for <buildroot@lists.busybox.net>; Sun, 15 Oct 2023 18:32:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EAA861155
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KIS0s5wgK3FV for <buildroot@lists.busybox.net>;
- Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id klUDagOfEu-T for <buildroot@lists.busybox.net>;
+ Sun, 15 Oct 2023 18:32:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86DAE81E01
- for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86DAE81E01
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D0DF61159
+ for <buildroot@buildroot.org>; Sun, 15 Oct 2023 18:32:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D0DF61159
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73EFD84C30; Sun, 15 Oct 2023 18:32:50 +0000 (UTC)
+ id 10D2D855A5; Sun, 15 Oct 2023 18:32:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Oct 2023 20:23:22 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 3d2cffe1a249a26ea907257a7c1cc445c680b994
-X-Git-Newrev: 56caafceab3ec12669ccb7aa6fc8b653778064e1
+Date: Sun, 15 Oct 2023 20:26:13 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 9c442c86e5a8b82cf57f08b2b8498bf410def817
+X-Git-Newrev: 175bc20117fa13f9731a3a75f2e22a2740ac740d
 X-Patchwork-Hint: ignore
-Message-Id: <20231015183250.73EFD84C30@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/netsnmp: fix musl
- build
+Message-Id: <20231015183252.10D2D855A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/usbguard: fix
+ build with gcc >= 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,86 +63,147 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56caafceab3ec12669ccb7aa6fc8b653778064e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=175bc20117fa13f9731a3a75f2e22a2740ac740d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix the following musl build failure raised since bump to version 5.9.4
-in commit 868603755c16296ae2a61845891edeafc36e48ca:
+Fix the following build failure with gcc >= 13:
 
-large_fd_set.c: In function 'LFD_SET':
-../include/net-snmp/net-snmp-config.h:1614:30: error: unknown type name 'unknown'; did you mean 'union'?
- 1614 | #define NETSNMP_FD_MASK_TYPE unknown
-      |                              ^~~~~~~
+In file included from src/Library/Base64.cpp:23:
+src/Library/Base64.hpp:34:34: error: 'uint8_t' does not name a type
+   34 |   std::string base64Encode(const uint8_t* buffer, size_t buflen);
+      |                                  ^~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/394ebf93621c33dc2ddf370297268e6de9de7c9a
+ - http://autobuild.buildroot.org/results/1a08823020c37a73f4e4a40f47b02fca3f159748
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dad81003c905c5fe33599c1676ed46108b512bc0)
+(cherry picked from commit 05db019ea6f12c407a1ff7e8a365ba2743668d81)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch | 38 ++++++++++++++++++++++
- package/netsnmp/netsnmp.mk                         |  2 ++
- 2 files changed, 40 insertions(+)
+ ...ke-GitHub-Actions-cover-build-with-GCC-13.patch | 114 +++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
-diff --git a/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch b/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch
+diff --git a/package/usbguard/0001-Fix-build-for-GCC-13-make-GitHub-Actions-cover-build-with-GCC-13.patch b/package/usbguard/0001-Fix-build-for-GCC-13-make-GitHub-Actions-cover-build-with-GCC-13.patch
 new file mode 100644
-index 0000000000..91a00aec27
+index 0000000000..415b8e1dd1
 --- /dev/null
-+++ b/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch
-@@ -0,0 +1,38 @@
-+From a62169f1fa358be8f330ea8519ade0610fac525b Mon Sep 17 00:00:00 2001
-+From: Adam Gajda <adgajda@users.noreply.github.com>
-+Date: Mon, 2 Oct 2023 16:40:31 +0200
-+Subject: [PATCH] Fix configuration of NETSNMP_FD_MASK_TYPE
++++ b/package/usbguard/0001-Fix-build-for-GCC-13-make-GitHub-Actions-cover-build-with-GCC-13.patch
+@@ -0,0 +1,114 @@
++From 22b1e0897af977cc96af926c730ff948bd120bb5 Mon Sep 17 00:00:00 2001
++From: Sebastian Pipping <sebastian@pipping.org>
++Date: Fri, 31 Mar 2023 09:39:49 +0200
++Subject: [PATCH] Fix build for GCC 13 + make GitHub Actions cover build with
++ GCC 13 (#586)
 +
-+Upstream: https://github.com/net-snmp/net-snmp/commit/a62169f1fa358be8f330ea8519ade0610fac525b
++* include missing <cstdint>
++
++gcc 13 moved some includes around and as a result <cstdint> is no
++longer transitively included [1]. Explicitly include it for
++uint8_t.
++
++[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++
++* docker.yml: Cover openSUSE Tumbleweed with GCC 13+
++
++Based on scripts/docker/build_on_centos_8_2.Dockerfile .
++
++---------
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Co-authored-by: Khem Raj <raj.khem@gmail.com>
++Upstream: https://github.com/USBGuard/usbguard/commit/22b1e0897af977cc96af926c730ff948bd120bb5
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ configure                        | 2 +-
-+ configure.d/config_project_types | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++ .github/workflows/docker.yml                  |  1 +
++ .../build_on_opensuse_tumbleweed.Dockerfile   | 50 +++++++++++++++++++
++ src/Library/Base64.cpp                        |  1 -
++ src/Library/Base64.hpp                        |  1 +
++ 4 files changed, 52 insertions(+), 1 deletion(-)
++ create mode 100644 scripts/docker/build_on_opensuse_tumbleweed.Dockerfile
 +
-+diff --git a/configure b/configure
-+index 9f0a173d8a..945a27c663 100755
-+--- a/configure
-++++ b/configure
-+@@ -30871,7 +30871,7 @@ CFLAGS="$CFLAGS -Werror"
++diff --git a/scripts/docker/build_on_opensuse_tumbleweed.Dockerfile b/scripts/docker/build_on_opensuse_tumbleweed.Dockerfile
++new file mode 100644
++index 00000000..d0993d8c
++--- /dev/null
+++++ b/scripts/docker/build_on_opensuse_tumbleweed.Dockerfile
++@@ -0,0 +1,50 @@
+++##
+++## Copyright (c) 2023 Sebastian Pipping <sebastian@pipping.org>
+++##
+++## This program is free software; you can redistribute it and/or modify
+++## it under the terms of the GNU General Public License as published by
+++## the Free Software Foundation; either version 2 of the License, or
+++## (at your option) any later version.
+++##
+++## This program is distributed in the hope that it will be useful,
+++## but WITHOUT ANY WARRANTY; without even the implied warranty of
+++## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++## GNU General Public License for more details.
+++##
+++## You should have received a copy of the GNU General Public License
+++## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+++
+++FROM opensuse/tumbleweed:latest
+++RUN zypper --non-interactive install dnf rpm-repos-openSUSE-Tumbleweed \
+++        && \
+++    dnf install -y \
+++            asciidoc \
+++            autoconf \
+++            automake \
+++            dbus-1-glib-devel \
+++            diffutils \
+++            file \
+++            gcc-c++ \
+++            git \
+++            libgcrypt-devel \
+++            libqb-devel \
+++            libsodium-devel \
+++            libtool \
+++            libxslt \
+++            make \
+++            polkit-devel \
+++            protobuf-devel
+++ADD usbguard.tar usbguard/
+++ADD catch.tar usbguard/src/ThirdParty/Catch/
+++ADD pegtl.tar usbguard/src/ThirdParty/PEGTL/
+++WORKDIR usbguard
+++RUN git init &>/dev/null && ./autogen.sh
+++RUN ./configure --with-bundled-catch --with-bundled-pegtl || ! cat config.log
+++RUN make dist
+++RUN tar xf usbguard-*.tar.gz
+++RUN mv -v usbguard-*.*.*/ usbguard-release/
+++RUN mkdir usbguard-release/build/
+++WORKDIR usbguard-release/build/
+++RUN ../configure --with-bundled-catch --with-bundled-pegtl || ! cat config.log
+++RUN bash -c 'set -o pipefail; make V=1 "-j$(nproc)" |& tee build.log'
+++RUN ! grep -F 'include file not found' build.log
++diff --git a/src/Library/Base64.cpp b/src/Library/Base64.cpp
++index ddb28dce..0246a134 100644
++--- a/src/Library/Base64.cpp
+++++ b/src/Library/Base64.cpp
++@@ -22,7 +22,6 @@
 + 
-+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for the type of fd_set::fds_bits" >&5
-+ printf %s "checking for the type of fd_set::fds_bits... " >&6; }
-+-for type in __fd_mask __int32_t unknown; do
-++for type in __fd_mask __int32_t long\ int unknown; do
-+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+ /* end confdefs.h.  */
++ #include "Base64.hpp"
++ #include <stdexcept>
++-#include <cstdint>
 + 
-+diff --git a/configure.d/config_project_types b/configure.d/config_project_types
-+index 1b4c66b95e..a78e8ebb06 100644
-+--- a/configure.d/config_project_types
-++++ b/configure.d/config_project_types
-+@@ -66,7 +66,7 @@ netsnmp_save_CFLAGS=$CFLAGS
-+ CFLAGS="$CFLAGS -Werror"
++ namespace usbguard
++ {
++diff --git a/src/Library/Base64.hpp b/src/Library/Base64.hpp
++index 0947f214..e0c745cb 100644
++--- a/src/Library/Base64.hpp
+++++ b/src/Library/Base64.hpp
++@@ -23,6 +23,7 @@
++ #endif
 + 
-+ AC_MSG_CHECKING([for the type of fd_set::fds_bits])
-+-for type in __fd_mask __int32_t unknown; do
-++for type in __fd_mask __int32_t long\ int unknown; do
-+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-+ #include <sys/select.h>
-+ #include <stddef.h>
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index ae85f2697f..b5cda30a7b 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -40,6 +40,8 @@ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true inst
- NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
- NETSNMP_MAKE = $(MAKE1)
- NETSNMP_CONFIG_SCRIPTS = net-snmp-config
-+# We're patching configure.d/config_project_types
-+NETSNMP_AUTORECONF = YES
- 
- ifeq ($(BR2_ENDIAN),"BIG")
- NETSNMP_CONF_OPTS += --with-endianness=big
++ #include <string>
+++#include <cstdint>
++ #include <cstddef>
++ 
++ namespace usbguard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
