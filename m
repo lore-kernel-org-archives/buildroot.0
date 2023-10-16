@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE54ECDB465
-	for <buildroot@archiver.kernel.org>; Mon, 16 Oct 2023 20:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A855ECDB465
+	for <buildroot@archiver.kernel.org>; Mon, 16 Oct 2023 20:43:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50E55400F9;
-	Mon, 16 Oct 2023 20:40:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50E55400F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43B46400F9;
+	Mon, 16 Oct 2023 20:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43B46400F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B13pxenqtbn8; Mon, 16 Oct 2023 20:40:49 +0000 (UTC)
+	with ESMTP id lBQfoPGy_haX; Mon, 16 Oct 2023 20:43:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CCEE40A8B;
-	Mon, 16 Oct 2023 20:40:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CCEE40A8B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 950A01BF34A
- for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 20:40:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E48240176;
+	Mon, 16 Oct 2023 20:43:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E48240176
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F38DF1BF34A
+ for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 20:43:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6DCB740888
- for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 20:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DCB740888
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC77760F4E
+ for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 20:43:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC77760F4E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8qJ_BCsAXsod for <buildroot@lists.busybox.net>;
- Mon, 16 Oct 2023 20:40:45 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 07DA140554
- for <buildroot@buildroot.org>; Mon, 16 Oct 2023 20:40:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07DA140554
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4060b623e64so31103835e9.0
- for <buildroot@buildroot.org>; Mon, 16 Oct 2023 13:40:44 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z9j4ACz9yMjO for <buildroot@lists.busybox.net>;
+ Mon, 16 Oct 2023 20:42:58 +0000 (UTC)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B96E460F24
+ for <buildroot@buildroot.org>; Mon, 16 Oct 2023 20:42:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B96E460F24
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-40684f53ef3so53359205e9.3
+ for <buildroot@buildroot.org>; Mon, 16 Oct 2023 13:42:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697488843; x=1698093643;
+ d=1e100.net; s=20230601; t=1697488975; x=1698093775;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=DTmmAU0Ta7zVVd5oqWdhaAIQbsPVEI0DxPSTyRGfG3A=;
- b=pPj6rLgePm+a0jeNjzF+WxbzZkQX05NgjeBaO4DK2cHLRVxopbhsJY/+b5JoATcdwA
- zksGnXalFxZ6HnPWH9aPqiJjWHi7VxQshS3lgBswB2X4AlQX3oVljmtxP7oxVU1jjODv
- 6IoyeweFy7RTxHUtr83aiCOtX4CYFQi/b/KhwxcEnFsZYE3fYc1exNSbnh0/TH2Glabp
- guoUxGru6WiGT7FFOb+kbK1J9vSJFrQfIQ+AN8naW19wrRFSRqa8i4AFmgw98e8nrE4N
- jtY/V3z5U951/Jxf6xuekQQF8oTO7YNlgbz3y18aph5U+N10HR8P9oWXj3sunyrBlRvY
- 8EzA==
-X-Gm-Message-State: AOJu0YwUFwv3+4sd8Te6w+x5t/uqHd/qwDPGOcCnGmdEnL0zIDMz93i6
- GkJimrb/66jK4+9kv3F68Zu2kWHTd7A=
-X-Google-Smtp-Source: AGHT+IEt2IMqai6RbHfcZmAtCkGa27VF9zZWlbjB2w7JgTGBlRrU+HjQ/SwAVYrjvpgeXDk352Z38g==
-X-Received: by 2002:a05:600c:45d1:b0:405:19dd:ad82 with SMTP id
- s17-20020a05600c45d100b0040519ddad82mr343357wmo.16.1697488842544; 
- Mon, 16 Oct 2023 13:40:42 -0700 (PDT)
+ bh=s6ewcR1so79vc8tHpljEWIK/eEgSsjkCYZ9t+wl6KTk=;
+ b=Dl6DouCyKJ3/9cUa/BIUa+r7YIE4K7rI5Wb1fziSZhl9SYah0WvOJcHpFpxSyVpWn8
+ 2U1BAfqOtM/rThQKUZNd9xPO9pdf2ISGqS8ulPXjBOUXMtLbBrJXl3k0clWT4zPvVCK7
+ 24MOzGH5BdP7v/z9thEtixjmFvSNvx9fhtJxuLYWgdJRjxTYoHHQQs4gm6kX0WEMzZrK
+ VAEOypNBXCWThbk1d4tNOYevw2OzbrO6Yo9kz+4aejMSRCLeCmi6Xx4wm/XTCbbqsoXE
+ zI2zL6wnqUt9T1Za/mXiGns0wHwAl4BjOy97dJuUa5xYHUgvhyt+qva2psopHCAGwmvs
+ abfg==
+X-Gm-Message-State: AOJu0Yz3dZFa0rBr8JFnSF3blP+dq6IC9Homq25jm06d8UO78fMtI4vI
+ UX6t1CNFuIP8Eus68Xhv+uIbavicPSc=
+X-Google-Smtp-Source: AGHT+IHvy3Z8EbIlCz3XuggiKeJ4zh7lqiZ0kH3xWxek3CXK/98mQSrfjZb2pFkybTq6s2+IpOtSgA==
+X-Received: by 2002:a05:600c:3595:b0:3ff:ca80:eda3 with SMTP id
+ p21-20020a05600c359500b003ffca80eda3mr186192wmq.10.1697488975335; 
+ Mon, 16 Oct 2023 13:42:55 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l4-20020a05600c4f0400b00405959469afsm78219wmq.3.2023.10.16.13.40.41
+ l21-20020a05600c4f1500b003fbe4cecc3bsm8021798wmq.16.2023.10.16.13.42.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Oct 2023 13:40:41 -0700 (PDT)
+ Mon, 16 Oct 2023 13:42:54 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Oct 2023 22:40:39 +0200
-Message-ID: <20231016204039.4191-1-fontaine.fabrice@gmail.com>
+Date: Mon, 16 Oct 2023 22:42:51 +0200
+Message-ID: <20231016204251.5449-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697488843; x=1698093643; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1697488975; x=1698093775; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DTmmAU0Ta7zVVd5oqWdhaAIQbsPVEI0DxPSTyRGfG3A=;
- b=hyHQm9u8dF8/hpamaLSnfxH7CQ2d17nM2J+p7j0+uzJzsIvk44ObQ91euqwqMOgLvE
- S4IGrDOkUjPaGhQYxMUxcVV2UEblxg8DcSAi1GTILQ8QvxEC3w4TP6KIPZIqd2NJylXM
- ZszIz3mbtGLMF2BXSAbfMmQGVEws/+pTw2vLJ33is+O8wPy4JfoJdxBP52GL/AolLIIN
- xFXxSY6P65AchPkk8yOPh1IkeMqWqGCoIscgafd+xWG19GW/LsYCQ52fHtC2Zdw+7red
- Z3ecmxLpSysdq4HN/PbNfhOlGK26vsaal1F9M/dD7d6Y6umB750r487qt0SwFReuuFQ9
- 9P8A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=s6ewcR1so79vc8tHpljEWIK/eEgSsjkCYZ9t+wl6KTk=;
+ b=D3q6gJ6tgxZHkfVyEJhYTnl1CgYwAjpA3tHPyIv6dLy/mC7EyoWRDjBA13TOWqSevS
+ w9iuzPDMiMzPjI1j4Vjiq+cfxf93iAdlMpAxe32ILYkmX2XOyfZBXZKVu4YGyz4bmgN9
+ 9utKitmRObgBVt7YAXzccXaMWuZoK8JSvcz3luMQEXR7FyxNG1zI9//Pb0wrhfqJMyGQ
+ WT+37a/PD3AC0v3qv2yautVl6olQZGaAm0flQFgz1Ev0tMckdLdP8rxwz8Oi8eXGju9V
+ PKHBj6PppDVVNXqv2ZIoirzdasyMGQP/Ftvdauj/BJz7/jhh+vqUbyQCj0lXFe22OUSt
+ sLvg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=hyHQm9u8
-Subject: [Buildroot] [PATCH 1/1] package/libupnp: bump to version 1.14.18
+ header.a=rsa-sha256 header.s=20230601 header.b=D3q6gJ6t
+Subject: [Buildroot] [PATCH 1/1] package/oniguruma: bump to version 6.9.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,36 +99,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/pupnp/pupnp/blob/release-1.14.18/ChangeLog
+https://github.com/kkos/oniguruma/releases/tag/v6.9.9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/oniguruma/oniguruma.hash | 4 ++--
+ package/oniguruma/oniguruma.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index fcb231cff6..6fd4678c0d 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  025d7aee1ac5ca8f0bd99cb58b83fcfca0efab0c5c9c1d48f72667fe40788a4e  libupnp-1.14.13.tar.bz2
-+sha256  16a7cee93ce2868ae63ab1a8164dc7de43577c59983b9f61293a310d6888dceb  libupnp-1.14.18.tar.bz2
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 8c6ae005a0..f8551a2a0d 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
+diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+index 89befe7dbf..ac1d375b7a 100644
+--- a/package/oniguruma/oniguruma.hash
++++ b/package/oniguruma/oniguruma.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/kkos/oniguruma/releases/download/v6.9.8/onig-6.9.8.tar.gz.sha256
+-sha256  28cd62c1464623c7910565fb1ccaaa0104b2fe8b12bcd646e81f73b47535213e  onig-6.9.8.tar.gz
++# From https://github.com/kkos/oniguruma/releases/download/v6.9.9/onig-6.9.9.tar.gz.sha256
++sha256  60162bd3b9fc6f4886d4c7a07925ffd374167732f55dce8c491bfd9cd818a6cf  onig-6.9.9.tar.gz
+ # Hash for license file
+ sha256  70ba5469ea0bab6e18a32d7009068f996503168d27be57747e08da34337ff26f  COPYING
+diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+index e81190c0c6..1e8a119cf1 100644
+--- a/package/oniguruma/oniguruma.mk
++++ b/package/oniguruma/oniguruma.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUPNP_VERSION = 1.14.13
-+LIBUPNP_VERSION = 1.14.18
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = \
- 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
+-ONIGURUMA_VERSION = 6.9.8
++ONIGURUMA_VERSION = 6.9.9
+ ONIGURUMA_SITE = \
+ 	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
+ ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
 -- 
 2.42.0
 
