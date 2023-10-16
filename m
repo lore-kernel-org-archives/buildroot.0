@@ -1,87 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94EA5CDB465
-	for <buildroot@archiver.kernel.org>; Mon, 16 Oct 2023 17:05:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 138E0CDB465
+	for <buildroot@archiver.kernel.org>; Mon, 16 Oct 2023 18:09:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F02FE40474;
-	Mon, 16 Oct 2023 17:05:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F02FE40474
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 18fz8FTT7woZ; Mon, 16 Oct 2023 17:05:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8462404D5;
-	Mon, 16 Oct 2023 17:05:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8462404D5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF9541BF575
- for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 17:05:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B7A41611CB
- for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 17:05:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7A41611CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 546C260594;
+	Mon, 16 Oct 2023 18:09:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 546C260594
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B2j2nd9WKWPn for <buildroot@lists.busybox.net>;
- Mon, 16 Oct 2023 17:05:16 +0000 (UTC)
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
- [IPv6:2a00:1450:4864:20::344])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6C45260C20
- for <buildroot@buildroot.org>; Mon, 16 Oct 2023 17:05:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C45260C20
-Received: by mail-wm1-x344.google.com with SMTP id
- 5b1f17b1804b1-40675f06f1fso36050025e9.1
- for <buildroot@buildroot.org>; Mon, 16 Oct 2023 10:05:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697475914; x=1698080714;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Gf1TAE3NpLmX0eQkoGp9XljX2Y/YQzR6ZPSFbhi/uSs=;
- b=oL49UiTnb9XWRHWx5Ade/ldBz7SA7MHbe8BZziv+rf2pLhdhwl7uXVTHkaVvQVb4yo
- pjZIiiuxQHyA0/ssbHJISVnVBBFaGccJFGBjn7WE2hALhLlM3SPBEIesE2PPNilBLb6t
- Mmz2tWYjDAj+Ho4uY9jeK0xRbb+QYLD8Xo70GXeOLPlTnof2gRG0f5kP7jG8C1jV3dF2
- 1LunQ/Jij47gnfAX+/omcUg4tN2bcz4r1zgqbE2Ue4XRDq+pwFQb7f6z19sitqaWC+d1
- w1cbApWZUfaLQQjEGa/IvGokgEw/FtYEuL/EFWxNYuGYKb8dbdDdMN7FYQ3wuc5qJz7E
- EAAA==
-X-Gm-Message-State: AOJu0Yx5kP2j2l5UEu24kliK0CV22d/J8KfF86nPkPUM1WUl/DqVUU9/
- 8+f0C98r4jNmwaTPMSeLM7gogMmNYuNEii9qy5uHZ/8X3pY=
-X-Google-Smtp-Source: AGHT+IEyUJYSugN85FQD6UZlB8sEe3o7/jtudCkC6t5DwppQpAszKXkL/1WL0F2CvuOBFYhjljHJ1g==
-X-Received: by 2002:a05:600c:314d:b0:405:3ab3:e640 with SMTP id
- h13-20020a05600c314d00b004053ab3e640mr5593872wmo.20.1697475914135; 
- Mon, 16 Oct 2023 10:05:14 -0700 (PDT)
-Received: from localhost.localdomain (net-91-81-8-146.cust.vodafonedsl.it.
- [91.81.8.146]) by smtp.gmail.com with ESMTPSA id
- e10-20020a5d65ca000000b0032da6f17ffdsm5700905wrw.38.2023.10.16.10.05.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Oct 2023 10:05:13 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kVo95fr5SrFV; Mon, 16 Oct 2023 18:09:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 556E960838;
+	Mon, 16 Oct 2023 18:09:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 556E960838
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BC3A1BF28E
+ for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 18:09:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8B518175A
+ for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 18:09:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8B518175A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZKHe4zPAyrEj for <buildroot@lists.busybox.net>;
+ Mon, 16 Oct 2023 18:09:00 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B44FA81759
+ for <buildroot@buildroot.org>; Mon, 16 Oct 2023 18:08:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B44FA81759
+Received: from fli4l.lan.fli4l (p4fd6ced1.dip0.t-ipconnect.de [79.214.206.209])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9E6DEA4C00C8
+ for <buildroot@buildroot.org>; Mon, 16 Oct 2023 20:08:55 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59494)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
+ (envelope-from <bernd@kuhls.net>) id 1qsS1P-0000SC-0K
+ for buildroot@buildroot.org; Mon, 16 Oct 2023 20:08:55 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 16 Oct 2023 19:05:06 +0200
-Message-ID: <20231016170506.1868429-1-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.41.0
+Date: Mon, 16 Oct 2023 20:08:55 +0200
+Message-Id: <20231016180855.69848-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1697475914; x=1698080714;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Gf1TAE3NpLmX0eQkoGp9XljX2Y/YQzR6ZPSFbhi/uSs=;
- b=GUT1zHUMG9dGTrb7XlABm5JpU0Aw/P2Prp/VUXNY4OtGOCVLmjAyrJLXu61DvC5Zi2
- dBwyOtEigC7P8yY2HHpVxp+M8HwQ5Nwifyw3oHLif40nIhpcAO9TcXtCmUx7ePfGZJQ/
- UH8mRfOjOzxKg2LQ0mpt43COgNEMP2QNUKfMo=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=GUT1zHUM
-Subject: [Buildroot] [PATCH 1/1] docs/website/support.html: Add Amarula
- Solutions to the commercial support list
+ d=kuhls.net; 
+ s=kas202306131828; t=1697479735;
+ bh=EcceXu4vKUiuZX24NcaabIDnVc7NRbdgmF6RcSlYDbw=;
+ h=From:To:Subject:Date:From;
+ b=nD2arnH3KvxCmXjbPmkimABHeDnWiBBwVOs7DVRhi+HTTSWpgYliOrQ/xjwPQ9QcB
+ nqzh6oJzFBGmgSgg7UW9wUM9rPSWOglkb94tfUMTFkW/AvoMMs8YBC+DQZBYhPhJQz
+ ilFzrQbqxrO502sIBtdJCfJvxCxu6Xmn0x/anlst9bYdKkTt0W167PLts9Fo5tDlFy
+ OBYcZBjzl+Ac20JiD7o01xC1jSMmZFKLClzLRLwESt096FUpfkS6RNZtGOaNJFhkNj
+ /VmR0lBo1+rJok8pZT/nHLYoYBy47n2Rwl9eZLxW5leLYV89rMgyf0zrF0gtdlU9OK
+ DgcXRLSW9McRQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=nD2arnH3
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,37 +75,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-After talking with Thomas Petazzoni, it is agreed that Amarulasolutions should
-be added to the list of companies that can provide commercial support for
-Buildroot.
+Fixes CVE-2023-5568:
+Heap buffer overflow with freshness tokens in the Heimdal KDC in Samba 4.19
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Release notes:
+https://www.samba.org/samba/history/samba-4.19.2.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- docs/website/support.html | 3 +++
- 1 file changed, 3 insertions(+)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/website/support.html b/docs/website/support.html
-index 90231f601c..9be816f836 100644
---- a/docs/website/support.html
-+++ b/docs/website/support.html
-@@ -111,6 +111,9 @@
- 	    <a href="https://www.smile.eu/en/offers/embedded-iot">
- 	      <img src="images/smile-logo.png" style="max-width:200px; margin-right:40px;"/>
- 	    </a>
-+	    <a href="https://www.amarulasolutions.com/services/integrated-system/">
-+	      <img src="images/amarula-solutions-logo.png" style="max-width:200px; margin-right:40px;"/>
-+	    </a>
- 	  </center>
- 	</div>
-       </div>
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 5e65295e4c..06b9cecddc 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.19.1.tar.asc
+-sha256  ce3b7f0d18bf91aa5fd646e8bb385a3b35375b703c6e5123b02b85a1abc81879  samba-4.19.1.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.19.2.tar.asc
++sha256  9e63f0505e1c631f1db0b7a9349a51e925c026ca03af3fd5d812228bb597d393  samba-4.19.2.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 124ce564d2..832b128132 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.19.1
++SAMBA4_VERSION = 4.19.2
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-2.41.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
