@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AD6CCDB465
-	for <buildroot@archiver.kernel.org>; Mon, 16 Oct 2023 20:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46825CDB465
+	for <buildroot@archiver.kernel.org>; Mon, 16 Oct 2023 21:14:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D33D7402CE;
-	Mon, 16 Oct 2023 20:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D33D7402CE
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD3FF41730;
+	Mon, 16 Oct 2023 21:14:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD3FF41730
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I9Ka_R-zRhsm; Mon, 16 Oct 2023 20:55:01 +0000 (UTC)
+	with ESMTP id GsK316b5ddXN; Mon, 16 Oct 2023 21:14:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1089D402D2;
-	Mon, 16 Oct 2023 20:55:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1089D402D2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A6ED41BF34A
- for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 20:54:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2693341798;
+	Mon, 16 Oct 2023 21:14:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2693341798
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B432B1BF341
+ for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 21:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8CEE180E90
- for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 20:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CEE180E90
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D78760A62
+ for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 21:14:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D78760A62
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w4NFyz_FUCgR for <buildroot@lists.busybox.net>;
- Mon, 16 Oct 2023 20:54:57 +0000 (UTC)
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 600C280E41
- for <buildroot@buildroot.org>; Mon, 16 Oct 2023 20:54:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 600C280E41
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-32caaa1c493so4047381f8f.3
- for <buildroot@buildroot.org>; Mon, 16 Oct 2023 13:54:57 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zai7f4zSrkWI for <buildroot@lists.busybox.net>;
+ Mon, 16 Oct 2023 21:14:20 +0000 (UTC)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3931960A5E
+ for <buildroot@buildroot.org>; Mon, 16 Oct 2023 21:14:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3931960A5E
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-4054f790190so53654575e9.2
+ for <buildroot@buildroot.org>; Mon, 16 Oct 2023 14:14:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697489695; x=1698094495;
+ d=1e100.net; s=20230601; t=1697490858; x=1698095658;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OGVgAynQUvPO9ofZh0Rdrnvfa0Y2+zJnqlxBIy+X96E=;
- b=YdD5WDSW8VJVI7pYl/VeedZzvJNdag+nBT7zXDVSgHn9KVwLQSlt1NxQz+rzRLNU75
- 5yswiYeHBXSpNA3e1SyxKCjmheFY+G/vPCu96sTuVVvuA/ZpyIGdSQEwY4dhuCehDq0S
- U+hLwvG3IxTnm4LEAavbRevBVOylpLub6GHN9cdwWJl4UXvEMO6HOa2OPphmXAJUzMJd
- cxzZDrBNquVLEBHKsuNiwHczLOB8+hO5SOrR45ymLG9+X+mzb1+yCfEK32rHscAxqAW/
- YR0HUptnxxYd4feuhAV3rlRV+ChPaB4Ck3hFRu+FQ4iYJ25RocS0ZaC0T3XVS98nJpqq
- fjfg==
-X-Gm-Message-State: AOJu0YwFk7QccbyMgs/55vbtTK6SPIyBB2NGwAuWqAWn8JPKeL/EMXyq
- VcjSZzK5u56q8xZ/eg+7moDCW8I2RQs=
-X-Google-Smtp-Source: AGHT+IHX90uHKYZrHI4vEcmWRZ2aHwaexghU9wzLHJpqeHxsOYO0DmrDoMw4p/8+fdWgSDytHfcOqw==
-X-Received: by 2002:a05:6000:922:b0:32d:b081:ff32 with SMTP id
- cx2-20020a056000092200b0032db081ff32mr381686wrb.38.1697489694685; 
- Mon, 16 Oct 2023 13:54:54 -0700 (PDT)
+ bh=aG9n9uDD71wgOrAq1fhndqe4lu9rHITzwzpYsl9M7Jk=;
+ b=eyNrn3jBUob3fjOuQ+4qNAP4EgHpZ6ICtBXuoxI4UBlW4T+D8+zmfKTUckMvd9+Tnz
+ 66Br0TceOgY4bFHXlGxIUQh+3rUeqbqg088P51xNfRo0Z6jaavJy3dzMJRMfAbblmzM3
+ BhEahO0rVfqY+Cp/9KyfXGdjJEQb6d927/yow7qX4iUvg6e5uijTSbEwCK5rivggdHOG
+ ZT6//zUXcekvrEj7x2H1w9fuNi0w5qYrebq+zNrN8xGooj9Ngi54TSnFjwkv9CrHlpsy
+ zfrZKR+1cB3QUjzbnCbebqGJDPMeWuR9o1XYRcY5VWzuRT01XhCeGx8og6QJqrOCPUKh
+ 0AdQ==
+X-Gm-Message-State: AOJu0YyKZNBBj5CstCBpOv3r2ncdlD5l6iOa+GL/yueNCBEoIiBqCf10
+ rNvjA9sOa5DDorkB7VjByICYhMhtyW4=
+X-Google-Smtp-Source: AGHT+IEtM+9ikch2Curwx/RV035ITEEq3NdYsIamXSvAAOon8NqLKBBjhZCqysrYgOj6jfHUUZNBFA==
+X-Received: by 2002:a05:600c:5252:b0:405:40ab:7693 with SMTP id
+ fc18-20020a05600c525200b0040540ab7693mr223593wmb.31.1697490857576; 
+ Mon, 16 Oct 2023 14:14:17 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- n2-20020a5d51c2000000b0032da4f70756sm137461wrv.5.2023.10.16.13.54.54
+ t6-20020a5d49c6000000b0032d72f48555sm161313wrs.36.2023.10.16.14.14.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Oct 2023 13:54:54 -0700 (PDT)
+ Mon, 16 Oct 2023 14:14:17 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Oct 2023 22:54:34 +0200
-Message-ID: <20231016205434.17391-1-fontaine.fabrice@gmail.com>
+Date: Mon, 16 Oct 2023 23:14:14 +0200
+Message-ID: <20231016211414.28406-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697489695; x=1698094495; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1697490858; x=1698095658; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OGVgAynQUvPO9ofZh0Rdrnvfa0Y2+zJnqlxBIy+X96E=;
- b=DwTw24g5nYrJ3veN/oFjTc0E3Zg7Vxk4Nii950w1e9Lq8/UxBsubDRX89L9JlIsDQg
- gTpZ+SCd1ZuxD/QunvfpYAu5U6RQtBmo/GSiBM19qCzeLvV2Hebhud7vw4q780JS8bgi
- xlwH3F28TvHya8osaHpwXVwHFflVaLSvcGJd6VaD/X+pvQiiFAQ7Qbt69v+RJdRM2jPa
- a39quzKUebKgl8CsfmNe//7VbAMQzjsy5sT4AksVwHiI6icGU300O+w20pMQerL/0+I7
- UvRG1z2wQwx1QP/37CqplqZ+O6DnDExG/tqIOrBF8wk6FEMATG3PSF+JAEZm7bvm8eca
- MW1Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=aG9n9uDD71wgOrAq1fhndqe4lu9rHITzwzpYsl9M7Jk=;
+ b=gbuK2ltMf3xB5B3C242A5cEaK6jjhx8jsWNEoluLJEk4s89nbURpZvY/UJwNi3kWfG
+ aAe9j0mzj5hHjO0dTgr7r766If95kerg2dV8HoKa3LWk+XSK0RAcj1z81LIrbcoNCp/K
+ a1QMVNHtQQeT2v5kKvcAyL4FDn6QykEp43bfGg1gfZszoTFstCVvjsJu9OxCy8BBA84G
+ oXOJuj4BNxkC1J4GatZWtNOd6R4XWNQ5O/jBD+TEJnvC30FoYDwUNH0sFP60EsluCmEe
+ 8kRAdcYnFA0TfgvOQLJog4Mey4zemNcLYtAbdsxZhLLJfpO75Wzx9FaXryjZhOyqcfYr
+ qbNw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=DwTw24g5
-Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: bump to version 10.0.3
+ header.a=rsa-sha256 header.s=20230601 header.b=gbuK2ltM
+Subject: [Buildroot] [PATCH 1/1] package/samba4: fix configure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,85 +93,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: John Stile <johns@msli.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.2
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.3
+Fix the following build failure raised since bump to version 4.19.1 in
+commit a8ff60cff9402dcd04fffb67af15dfe2caab0995 and
+https://gitlab.com/samba-team/samba/-/commit/fb4bb188acfc3e88887b500a05e9e4db8b08aed3:
+
+Cross answers file /home/buildroot/autobuild/instance-1/output-1/build/samba4-4.19.1/cache.txt is incomplete
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c1fbfdab11c0521b8199f6a661987eb6076c84d2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...m.c-use-memset-instead-of-explicit_b.patch | 32 +++++++++++++++++++
- package/dhcpcd/dhcpcd.hash                    |  4 +--
- package/dhcpcd/dhcpcd.mk                      |  2 +-
- 3 files changed, 35 insertions(+), 3 deletions(-)
- create mode 100644 package/dhcpcd/0001-compat-arc4random.c-use-memset-instead-of-explicit_b.patch
+ package/samba4/samba4.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dhcpcd/0001-compat-arc4random.c-use-memset-instead-of-explicit_b.patch b/package/dhcpcd/0001-compat-arc4random.c-use-memset-instead-of-explicit_b.patch
-new file mode 100644
-index 0000000000..fba859d56d
---- /dev/null
-+++ b/package/dhcpcd/0001-compat-arc4random.c-use-memset-instead-of-explicit_b.patch
-@@ -0,0 +1,32 @@
-+From 57070736a5d00c809e6a3777ab56745ef3e5bf0f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 16 Oct 2023 19:03:41 +0200
-+Subject: [PATCH] compat/arc4random.c: use memset instead of explicit_bzero
-+ (#252)
-+
-+Use memset instead of explicit_bzero to avoid the following build
-+failure with uclibc-ng since version 10.0.3 and
-+https://github.com/NetworkConfiguration/dhcpcd/commit/837d09e34c487edaa92aa2ae71a630d84c927f8e:
-+
-+/home/fabrice/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabi/12.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../compat/arc4random.o: in function `_rs_stir_if_needed':
-+arc4random.c:(.text+0x8cc): undefined reference to `explicit_bzero'
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/NetworkConfiguration/dhcpcd/commit/57070736a5d00c809e6a3777ab56745ef3e5bf0f
-+---
-+ compat/arc4random.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/compat/arc4random.c b/compat/arc4random.c
-+index 8f28f616..fdf60527 100644
-+--- a/compat/arc4random.c
-++++ b/compat/arc4random.c
-+@@ -195,7 +195,7 @@ _rs_stir(void)
-+ 		_rs_init(rnd, sizeof(rnd));
-+ 	else
-+ 		_rs_rekey(rnd, sizeof(rnd));
-+-	explicit_bzero(rnd, sizeof(rnd));	/* discard source seed */
-++	memset(rnd, 0, sizeof(rnd));	/* discard source seed */
-+ 
-+ 	/* invalidate rs_buf */
-+ 	rs->rs_have = 0;
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index 88032f05c1..a641208af8 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,4 +1,4 @@
--# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.1
--sha256  6e9f6a5c47fcd8a763cfa26f1ca6eedf1e534992224a01d6c1ab8abb154af972  dhcpcd-10.0.1.tar.xz
-+# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.3
-+sha256  232a3f7ee41f026e644ee8c8468d4baf2d5f37ca91ade442c5a7b4bc81b3cb0f  dhcpcd-10.0.3.tar.xz
- # Locally calculated
- sha256  a7d6da3a202cdd38eaab0bcea4d25f60d002980f3785b3e896d9bf387f093ac8  LICENSE
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 82efe10ef9..f81c9de40b 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 124ce564d2..3b1c0b555d 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -118,7 +118,7 @@ SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_REMOVE_CTDB_TESTS
  
--DHCPCD_VERSION = 10.0.1
-+DHCPCD_VERSION = 10.0.3
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$(DHCPCD_VERSION)
- DHCPCD_DEPENDENCIES = host-pkgconf
+ define SAMBA4_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 package/samba4/samba4-cache.txt $(@D)/cache.txt;
+-	echo 'Checking whether fcntl supports setting/geting hints: $(if $(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13),OK,NO)' >>$(@D)/cache.txt;
++	echo 'Checking whether fcntl supports setting/getting hints: $(if $(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13),OK,NO)' >>$(@D)/cache.txt;
+ 	echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
+ 	(cd $(@D); \
+ 		$(SAMBA4_PYTHON) \
 -- 
 2.42.0
 
