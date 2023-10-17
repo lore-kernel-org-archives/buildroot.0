@@ -4,70 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DE76CDB482
-	for <buildroot@archiver.kernel.org>; Tue, 17 Oct 2023 17:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C01D1CDB474
+	for <buildroot@archiver.kernel.org>; Tue, 17 Oct 2023 17:36:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBF568219C;
-	Tue, 17 Oct 2023 17:26:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBF568219C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 750A2820F2;
+	Tue, 17 Oct 2023 17:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 750A2820F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PStTQqc49Y9v; Tue, 17 Oct 2023 17:26:55 +0000 (UTC)
+	with ESMTP id wA6NNqwmFxyE; Tue, 17 Oct 2023 17:36:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7FC382188;
-	Tue, 17 Oct 2023 17:26:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7FC382188
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 432671BF4DB
- for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 17:26:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98181820F7;
+	Tue, 17 Oct 2023 17:36:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98181820F7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A3651BF32B
+ for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 17:36:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C06A613DE
- for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 17:26:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C06A613DE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DCC64046B
+ for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 17:36:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DCC64046B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vYBbgPqMN9nF for <buildroot@lists.busybox.net>;
- Tue, 17 Oct 2023 17:26:50 +0000 (UTC)
-X-Greylist: delayed 322 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 17 Oct 2023 17:26:49 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC826613DD
-Received: from forward202a.mail.yandex.net (forward202a.mail.yandex.net
- [IPv6:2a02:6b8:c0e:500:1:45:d181:d202])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EC826613DD
- for <buildroot@buildroot.org>; Tue, 17 Oct 2023 17:26:49 +0000 (UTC)
-Received: from forward101a.mail.yandex.net (forward101a.mail.yandex.net
- [IPv6:2a02:6b8:c0e:500:1:45:d181:d101])
- by forward202a.mail.yandex.net (Yandex) with ESMTP id C945163765
- for <buildroot@buildroot.org>; Tue, 17 Oct 2023 20:21:32 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net
- (mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net
- [IPv6:2a02:6b8:c18:4601:0:640:7543:0])
- by forward101a.mail.yandex.net (Yandex) with ESMTP id 26AF560038
- for <buildroot@buildroot.org>; Tue, 17 Oct 2023 20:21:22 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net
- (smtp/Yandex) with ESMTPSA id KLo7AN5Ws0U0-OEE2cZV6; 
- Tue, 17 Oct 2023 20:21:21 +0300
-X-Yandex-Fwd: 1
-From: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?=
- <leo@yuriev.ru>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ITbVaquOarW3 for <buildroot@lists.busybox.net>;
+ Tue, 17 Oct 2023 17:36:25 +0000 (UTC)
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com
+ [IPv6:2a00:1450:4864:20::342])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0D15400F3
+ for <buildroot@buildroot.org>; Tue, 17 Oct 2023 17:36:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0D15400F3
+Received: by mail-wm1-x342.google.com with SMTP id
+ 5b1f17b1804b1-4064867903cso65465605e9.2
+ for <buildroot@buildroot.org>; Tue, 17 Oct 2023 10:36:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697564182; x=1698168982;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=863imAZxJHXZeX0LDJ2AvTjyl+TXfYKabZtds5aAHvs=;
+ b=rJmAgKd5GdB6q9WLjCkiq84wVxXPObIMMPETOKD6apfCo43iyWH78wJFxlaFvaWN2c
+ 88/g3Yu0TO/gvdxRcmWPxzFu+x7mfrikd1NCZh9/2nF10S+NdaiWqu0rfH6jA1RGzjoz
+ DFkoJZfOs13s5I2mOrdxQLG4UmG8UmjZXB/XI6scjtMYkbfxWt8TMVhiELqZzNUqwbqN
+ QGeKWMu5YGI7tU1xGmlirjblZTkuFUvbvqnBR2PfGWcO1bS19O+UEM6tfHReXqLP23a8
+ Rwi1KfaocrUezpGOltxDjaqYLCldRzzLuhDFhgS2DaMEfoAeUgRxD8fCSfT+Uxp11YrO
+ bzxw==
+X-Gm-Message-State: AOJu0YwyDtolrNEe/xNgMoE7cMRLuT15/GbDO0cdEPpvYnEM6miY2UVD
+ AhSBzLRAnXV+TdRc9DZfjRPBliPj3bMbx/cBql7ioBHNSFDX7Q==
+X-Google-Smtp-Source: AGHT+IGgbp4OvnKLbieA4RtrSvk0jSWz+chjeQVEVOwxySS6lGRQFTGqsVcRkLsMoT+0NDrMVLSgRQ==
+X-Received: by 2002:a05:600c:3c87:b0:3fe:1b4e:c484 with SMTP id
+ bg7-20020a05600c3c8700b003fe1b4ec484mr2310926wmb.5.1697564182389; 
+ Tue, 17 Oct 2023 10:36:22 -0700 (PDT)
+Received: from localhost.localdomain (net-91-81-8-146.cust.vodafonedsl.it.
+ [91.81.8.146]) by smtp.gmail.com with ESMTPSA id
+ d9-20020a05600c34c900b004063cced50bsm2412193wmq.23.2023.10.17.10.36.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 17 Oct 2023 10:36:22 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Oct 2023 20:21:07 +0300
-Message-ID: <20231017172108.142456-1-leo@yuriev.ru>
-X-Mailer: git-send-email 2.42.0
+Date: Tue, 17 Oct 2023 19:36:10 +0200
+Message-ID: <20231017173611.2881905-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yuriev.ru; s=mail; 
- t=1697563281; bh=tj2Y+X+76h2X2l/+s5Lk1L2FYkM1Woatr220gZURKLU=;
- h=Message-ID:Date:Cc:Subject:To:From;
- b=TWNQzixmaJJLPGAvViKV+4BNWCxp1oVUbAG3PLw+XsqnEoDHokQ0pMAcewiWBDe00
- 3lOBQMO4gw5jFZfNwcN1q4nS2qOUNlTT2lpnLhhEKKqob3H4Me2NHeRn/d0SvIfpT1
- X8gKKfp9v22Y+LEV6TewSAJV2lBBDEmYNoBJ4kSY=
-X-Mailman-Original-Authentication-Results: mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net;
- dkim=pass header.i=@yuriev.ru
-Subject: [Buildroot] [PATCH] package/libmdbx: bump version to 0.12.8
- "Vladimir Utkin"
+ d=amarulasolutions.com; s=google; t=1697564182; x=1698168982;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=863imAZxJHXZeX0LDJ2AvTjyl+TXfYKabZtds5aAHvs=;
+ b=dDw+h46SrGCJ47VFwKLC+/rNt3Z3S3G7oI3jao6v4BgSWuDw7Gs0GN/6GPVS2S4wIW
+ ZoQoljmQkqFc45vt+avzDr4pAJM94s9A6E+rlJV6y12WcYR6+hmMkveSoIXUBablQ4u6
+ 99lskteFsjAsn8jnjmbivTTQ3u+sr51YaaE7s=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=dDw+h46S
+Subject: [Buildroot] [PATCH 1/2] package/openjdk-bin: bump OpenJDK17 version
+ to 17.0.8.1+1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,53 +93,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C?=
- =?UTF-8?q?=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?= <leo@yuriev.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Tudor Holton <buildroot@tudorholton.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBpcyBidWdmaXggcmVsZWFzZSBvZiBzdGFibGUgbGlibWRieCBicmFuY2gsIG9uIHRoZSBk
-YXkgb2YgdGhlIDEwMHRoCmFubml2ZXJzYXJ5IG9mIHRoZSBiaXJ0aCBvZiB0aGUgb3V0c3RhbmRp
-bmcgU292aWV0IGFuZCBSdXNzaWFuIHNjaWVudGlzdAphbmQgZW5naW5lZXIgVmxhZGltaXIgRmVk
-b3JvdmljaCBVdGtpbi4KCkl0IGlzIHJlYXNvbmFibGUgdG8gYmFja3BvcnQgdGhpcyBwYXRjaCB0
-byBhbGwgYXBwbGljYWJsZSByZWxlYXNlcy9icmFuY2hlcyBvZiBCdWlsZHJvb3QuCgpUaGUgbW9z
-dCBzaWduaWZpY2FudCBmaXhlcyBvZiB2MC4xMi44OgogLSBGaXhlZCByZWdyZXNzaW9uIG9mIG1k
-YnhfcHV0KE1EQlhfTVVMVElQTEUpIGR1cmluZyBiYXRjaC9idWxrCiAgIGluc2VydGlvbiBvZiBt
-dWx0aS12YWx1ZXMgKGFrYSAiZHVwc29ydCIpLgogLSBJbXBsZW1lbnRlZCBvdmVyd3JpdGluZyBp
-biBtZGJ4X3B1dChNREJYX0NVUlJFTlQpIG9mIGFsbCBjdXJyZW50CiAgIG11bHRpLWtleSB2YWx1
-ZXMgaW4gdGhlIGFic2VuY2Ugb2YgdGhlIGZsYWcgTURCWF9OT09WRVJXUklURS4KIC0gQWRkZWQg
-dGhlIGFiaWxpdHkgdG8gdXNlIG1kYnhfY3Vyc29yX2dldChNREJYX0dFVF9NVUxUSVBMRSkgd2l0
-aG91dAogICBmaXJzdCBzZXR0aW5nIHRoZSBjdXJzb3IsIGNvbWJpbmluZyB0aGUgYmF0Y2ggZGF0
-YSBnZXR0aW5nIG9wZXJhdGlvbgogICB3aXRoIHBvc2l0aW9uaW5nIHRoZSBjdXJzb3IuCiAtIE1p
-Y3JvLW9wdGltaXphdGlvbiBhbmQgcmVmYWN0b3JpbmcgY3Vyc29yX3B1dF9ub2NoZWNrbGVuKCku
-CiAtIENsYXJpZnlpbmcgdGhlIHdvcmRpbmcgaW4gdGhlIEFQSSBkZXNjcmlwdGlvbiwgaW5jbHVk
-aW5nIGV4cGxhbmF0aW9uCiAgIGFib3V0IFNJR1NFR1YgYW5kIG5vdCBhbGxvd2luZyBkaXJlY3Qg
-ZGF0YSBjaGFuZ2VzLgoKVGhlIGNvbXBsZXRlIENoYW5nZUxvZzogaHR0cHM6Ly9naXRmbGljLnJ1
-L3Byb2plY3QvZXJ0aGluay9saWJtZGJ4L2Jsb2I/ZmlsZT1DaGFuZ2VMb2cubWQKClNpZ25lZC1v
-ZmYtYnk6INCb0LXQvtC90LjQtCDQrtGA0YzQtdCyIChMZW9uaWQgWXVyaWV2KSA8bGVvQHl1cmll
-di5ydT4KLS0tCiBwYWNrYWdlL2xpYm1kYngvbGlibWRieC5oYXNoIHwgMiArLQogcGFja2FnZS9s
-aWJtZGJ4L2xpYm1kYngubWsgICB8IDIgKy0KIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4
-Lmhhc2ggYi9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5oYXNoCmluZGV4IDBmNTkwOGNmMzguLjgy
-Y2YyOGQ2YTkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lmhhc2gKKysrIGIv
-cGFja2FnZS9saWJtZGJ4L2xpYm1kYnguaGFzaApAQCAtMSw1ICsxLDUgQEAKICMgSGFzaGVzIGZy
-b206IGh0dHBzOi8vbGlibWRieC5kcWRrZmEucnUvcmVsZWFzZS9TSEEyNTZTVU1TCi1zaGEyNTYg
-IGUxNTA1NDFjMmIwNzU1OGI5NjFlNzU0ZThlOTE3MWJmMWFhOTc0YzhlOTM2ZjYyYmQzNzU2MDZm
-N2Q1NTA2NjcgIGxpYm1kYngtYW1hbGdhbWF0ZWQtMC4xMi43LnRhci54egorc2hhMjU2ICBjNzhj
-NTZjNTM3MDhiYmZjNTE5YmY1M2ViZjUyMGQxZjA5ZDMwZWU2NDI3YTRiZWRmNzEzMzE2Njk2ZTY3
-MWQwICBsaWJtZGJ4LWFtYWxnYW1hdGVkLTAuMTIuOC50YXIueHoKIAogIyBMb2NhbGx5IGNhbGN1
-bGF0ZWQKIHNoYTI1NiAgMzEwZmUyNWM4NThhOTUxNWZjOGM4ZDdkMWYyNGE2N2M5NDk2Zjg0YTkx
-ZTBhMGU0MWVhOTk3NWIxMzcxZTU2OSAgTElDRU5TRQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJt
-ZGJ4L2xpYm1kYngubWsgYi9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5tawppbmRleCA4NGI1ODYz
-MmI2Li40Y2M2Y2JkMDhlIDEwMDY0NAotLS0gYS9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5tawor
-KysgYi9wYWNrYWdlL2xpYm1kYngvbGlibWRieC5tawpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjCiAKLUxJQk1EQlhfVkVSU0lPTiA9IDAuMTIuNworTElCTURCWF9W
-RVJTSU9OID0gMC4xMi44CiBMSUJNREJYX1NPVVJDRSA9IGxpYm1kYngtYW1hbGdhbWF0ZWQtJChM
-SUJNREJYX1ZFUlNJT04pLnRhci54egogTElCTURCWF9TSVRFID0gaHR0cHM6Ly9saWJtZGJ4LmRx
-ZGtmYS5ydS9yZWxlYXNlCiBMSUJNREJYX1NVUFBPUlRTX0lOX1NPVVJDRV9CVUlMRCA9IE5PCi0t
-IAoyLjQyLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ .checkpackageignore                                           | 2 +-
+ package/openjdk-bin/openjdk-bin.hash                          | 4 ++--
+ package/openjdk-bin/openjdk-bin.mk                            | 2 +-
+ .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch       | 0
+ package/openjdk/openjdk.hash                                  | 2 +-
+ package/openjdk/openjdk.mk                                    | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+ rename package/openjdk/{17.0.8+7 => 17.0.8.1+1}/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch (100%)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b1d0b93b32..437566a2a0 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1008,7 +1008,7 @@ package/olsr/S50olsr Indent Shellcheck Variables
+ package/omxplayer/0001-Update-Makefile-to-be-compatible-with-buildroot.patch Upstream
+ package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch Upstream
+ package/open2300/0001-fix-makefile.patch Upstream
+-package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch Upstream
++package/openjdk/17.0.8.1+1/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch Upstream
+ package/openldap/0001-fix_cross_strip.patch Upstream
+ package/openldap/0002-fix-bignum.patch Upstream
+ package/openldap/0003-disable-docs.patch Upstream
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 401e83e75e..98f12cb2b8 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,6 +1,6 @@
+ # https://github.com/adoptium/temurin17-binaries/releases
+-sha256  aa5fc7d388fe544e5d85902e68399d5299e931f9b280d358a3cbee218d6017b0  OpenJDK17U-jdk_x64_linux_hotspot_17.0.8_7.tar.gz
+-sha256  c43688163cfdcb1a6e6fe202cc06a51891df746b954c55dbd01430e7d7326d00  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8_7.tar.gz
++sha256  c25dfbc334068a48c19c44ce39ad4b8427e309ae1cfa83f23c102e78b8a6dcc0  OpenJDK17U-jdk_x64_linux_hotspot_17.0.8.1_1.tar.gz
++sha256  eefd3cf3b3dd47ff269fa5b5c10b5e096b163f4e9c1810023abdbc00dc6cc304  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8.1_1.tar.gz
+ 
+ # From https://github.com/adoptium/temurin11-binaries/releases
+ sha256  7a99258af2e3ee9047e90f1c0c1775fd6285085759501295358d934d662e01f9  OpenJDK11U-jdk_x64_linux_hotspot_11.0.20_8.tar.gz
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 616c8d917d..785ca87337 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -6,7 +6,7 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.8_7
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.8.1_1
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+ HOST_OPENJDK_BIN_VERSION_MINOR = 0.20_8
+diff --git a/package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.8.1+1/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+similarity index 100%
+rename from package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+rename to package/openjdk/17.0.8.1+1/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index ba398b84be..fcb9143748 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  643ff42dcdf8751e0fee716c1a1914ddc7348b174e871a5eb2636578a181f20d  openjdk-17.0.8+7.tar.gz
++sha256  e57251d8306911282b6f0a2f721431dab5f87c99cce0930fc062e690f7c77f04  openjdk-17.0.8.1+1.tar.gz
+ sha256  b2a37ef209ae7eaf8f34182b7c9aa3252af20a214d02970f96ce62242c805479  openjdk-11.0.20+8.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index d1a2fa23ee..068d16b770 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -6,7 +6,7 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ OPENJDK_VERSION_MAJOR = 17
+-OPENJDK_VERSION_MINOR = 0.8+7
++OPENJDK_VERSION_MINOR = 0.8.1+1
+ else
+ OPENJDK_VERSION_MAJOR = 11
+ OPENJDK_VERSION_MINOR = 0.20+8
+-- 
+2.41.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
