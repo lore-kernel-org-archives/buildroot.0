@@ -4,85 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DE4CCDB474
-	for <buildroot@archiver.kernel.org>; Tue, 17 Oct 2023 21:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2675CCDB474
+	for <buildroot@archiver.kernel.org>; Tue, 17 Oct 2023 21:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 355E5613DF;
-	Tue, 17 Oct 2023 21:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 355E5613DF
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1A0461427;
+	Tue, 17 Oct 2023 21:01:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1A0461427
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5mtH4VawuLuZ; Tue, 17 Oct 2023 21:01:25 +0000 (UTC)
+	with ESMTP id xeZRndrrDWZK; Tue, 17 Oct 2023 21:01:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8945C61406;
-	Tue, 17 Oct 2023 21:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8945C61406
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 99DAB1BF397
- for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 21:01:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAB0F612D8;
+	Tue, 17 Oct 2023 21:01:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAB0F612D8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B637B1BF397
+ for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 21:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7128E40B31
- for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 21:01:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7128E40B31
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C15661415
+ for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 21:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C15661415
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r5jjFxAT9FDK for <buildroot@lists.busybox.net>;
- Tue, 17 Oct 2023 21:01:21 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1028040424
- for <buildroot@buildroot.org>; Tue, 17 Oct 2023 21:01:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1028040424
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40806e4106dso6613485e9.1
- for <buildroot@buildroot.org>; Tue, 17 Oct 2023 14:01:20 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KccMp71Ge-1l for <buildroot@lists.busybox.net>;
+ Tue, 17 Oct 2023 21:01:23 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1A69A610C7
+ for <buildroot@buildroot.org>; Tue, 17 Oct 2023 21:01:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A69A610C7
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-32da4ffd7e5so2177962f8f.0
+ for <buildroot@buildroot.org>; Tue, 17 Oct 2023 14:01:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697576479; x=1698181279;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=OtatbA0Fn8pVE1PO5VvoVH+byO0n7c0b0nSHh9sKpBA=;
- b=mVF3A5RWG96YjoXBby62sr29IIMdBcBUIEQn5t4pzMtF2xPW3Kex93JTjCQ3q69WIJ
- gpmzktI+Tgge9RyTuwKITVpEdwNZqDNGf3NmsK4yaiTqflbKL1GQO6zea4IjTXoDcD+x
- RVS1z3Puqzz027f/4QomMPPHccw6vlfCzohOtssAOKFGPd5k2fTZlILWLxJBxWLTUJ5b
- ruyga6b/dD6SjqP73b7KXC5VzATqGYZQvc7CW7QdV9iGIJL7bMtj2gDLZ0Jtyu1ojOyG
- +9A1KapBhBX4sNs5AOQ3T1nRuvPW7icIpK0JwWVGtVj0dFnIeqEbzqsVSJqu+ArvB5Hh
- Nr8Q==
-X-Gm-Message-State: AOJu0Yzo/6pE1pPuS6MMfcEjFQ/oPjGgkVQnwcMMvdb5WfBLs8qXjC7A
- MKFkPv/yU/hbVPaGj32dggTKJi/pVPY=
-X-Google-Smtp-Source: AGHT+IGg0Gd8n50wadArfxFxaMPHYUsVaEposFkvrVEiM5/c/vaol06JVBFxGahQ01KxrrjPEwHP5g==
-X-Received: by 2002:a05:600c:1c84:b0:405:784a:d53e with SMTP id
- k4-20020a05600c1c8400b00405784ad53emr2537263wms.20.1697576478881; 
- Tue, 17 Oct 2023 14:01:18 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1697576481; x=1698181281;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=ZS54NqKHQ2DSBi2C9CaYeS0CDhzp8N0xZXmqFlM3kNA=;
+ b=QIrymX/GA+4ENM8VZv2dZUhjLemG5s+UA1utJQo3de7xNkiSrxiqhYPWpBfG2HcITc
+ jyLbcWAHU3d9IZeWqePvwJlbzebyN2BH5yCAzcl39d5NOdZO99KWXn65ZouKdOxf3a/X
+ Phd/wjIj2FXuZj0pB2CSNXeF1sVGX9LlJM/hE7vYI+QWnXzO5eTZnCMteqvaNUkMkPpf
+ OG0QTYkxfw2ogNgQ9s6m5h2O7fP38FKBuRfjyi7zkJ6E4IP5uiKRGHHwH8YoaIyFMfJb
+ x/i0OgIX6KyrI5CS4L+5ldRupEUbCzcfSkVEk37jEAxBcqucayUoefgCQgao2x4B7kOl
+ NPEw==
+X-Gm-Message-State: AOJu0Yzgf+EDVEVMtdiRJiySsVmbUxu+GZF2pJul+4ynFbxGhUf0zJzs
+ sOR204Mgs0rwTg9U1KGRAZoJ1jFdmW8=
+X-Google-Smtp-Source: AGHT+IGjhsmPpjRZ176DbxvagxLaPKxY/u/EjKxX7AL1XkgFBiOupBuN7Dqa27NJsOEymBAkFzrO5w==
+X-Received: by 2002:adf:a383:0:b0:32d:84a5:bf5f with SMTP id
+ l3-20020adfa383000000b0032d84a5bf5fmr2581000wrb.28.1697576480928; 
+ Tue, 17 Oct 2023 14:01:20 -0700 (PDT)
 Received: from scaer.home ([2a01:cb19:8290:3800:fb7f:2f7a:afad:92ed])
  by smtp.gmail.com with ESMTPSA id
- v20-20020a05600c429400b00402d34ea099sm10626753wmc.29.2023.10.17.14.01.18
+ y18-20020a5d4712000000b0031984b370f2sm565486wrq.47.2023.10.17.14.01.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Oct 2023 14:01:18 -0700 (PDT)
+ Tue, 17 Oct 2023 14:01:20 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 17 Oct 2023 23:01:17 +0200
-Message-Id: <cover.1697576472.git.yann.morin.1998@free.fr>
+Date: Tue, 17 Oct 2023 23:01:19 +0200
+Message-Id: <2b6e31b7385a7d104f7318010bdcdfbc1a2fbf25.1697576472.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1697576472.git.yann.morin.1998@free.fr>
+References: <cover.1697576472.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697576479; x=1698181279; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=OtatbA0Fn8pVE1PO5VvoVH+byO0n7c0b0nSHh9sKpBA=;
- b=CuN2qg8+9P8N37eub6//TZxcz6B6qxEfRBuLcnIY89mRRVFysR/kB8gJLRcikOdUIN
- 9j9LFWCHUdLSUAtsxo/jvuUC9huao1AukCYAB9wN2DARgcrKTTzcWSut/vlVAZpJ1Tda
- qcmatL+mPTPx6RnJMwPgc7/30JZt17AD9eEER8TMzG6uQxn6A0FmzYCgIUt8asg0XJ03
- 8xysHwEOqbNRbv89HyQoBKsii9ZH2I6Qg9M2A2sdqrr9dZT8HCAwsJjed9Hxu1Prm2u5
- AbfkP4lVekv94cxu0gGu2z5DI6bYetf9pLQ+0jy/VAGk1YsqiHOMW9Ys0a66rN5D8UwW
- WM8w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1697576481; x=1698181281; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ZS54NqKHQ2DSBi2C9CaYeS0CDhzp8N0xZXmqFlM3kNA=;
+ b=hsld/tno19vXaQ7OqeQgqf9wJiJ2QIdNoc0FMoR1HVEIh2IkOVVFSAJagyqBlGY5UE
+ zvNyE88QzA9GEgJc6EJ7PrgjBCD55cDKX7TDVtKI2mLxzDNu9bFZ5zBIzIpviiPwzbh6
+ QU1KDTTzDbmqr7do3RaEtIagaQILtA+DX4EteXOdmo4c708nZZMxR8+Qk2JugK9gZU7y
+ mC/LFNresBroq2gh4oPeBnpwPaoPH0XHNJffLpPlNsgluh7KPsntzfZ0zVzt9FLB0UbP
+ f9DUwec/cIsn5M7H2G/Ogw6N51dMq3dm6Nx/Fl+dXjllGcZ2GCo8qrBtEKR5F2VfM3vi
+ uu/A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=CuN2qg8+
-Subject: [Buildroot] [PATCH 0/2] package/pkg-utils: fix regression in size
- and build time with PPD (branch yem/rsync-copy)
+ header.a=rsa-sha256 header.s=20230601 header.b=hsld/tno
+Subject: [Buildroot] [PATCH 1/2] Revert "package/pkg-utils.mk: break
+ hardlinks in global {TARGET, HOST}_DIR on per-package build"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,40 +98,62 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Herve Codina <herve.codina@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+Commit 21d52e52d8de (package/pkg-utils.mk: break hardlinks in global
+{TARGET, HOST}_DIR on per-package build) stopped hardlink the source and
+destination when rsyncing per-package directory, on the rationale that
+modifying files in-place after the rsync would also modify the original
+file, and that break foo-rebuild and can cause issues with post-build
+scripts.
 
-This small series is a proposal to revert the huge regression in size
-and (to a lesser extend) build dtime due to not hard-linking source
-files whn preparing per-package directories, or when assembling the
-final target+host directories.
+However, what 21d52e52d8de did not envision, is that copying instead of
+hard-linking has two nasty side effects:
 
-Regards,
-Yann E. MORIN.
+  - the size increase for the build directory increase with the number
+    of packages and with the depth of th dependency chains for those
+    packages: a (relatively small) build that was previously totalling
+    ~13GiB in output/, now totals north of 122GiB, an almost 10-time
+    increase;
 
+  - the build time increases, as it takes mopre time to read+write files
+    than it takes to create a new link to a file; the same build saw a
+    increase of build time from 5min 10s to 7min 30s, a 45% increase.
 
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      Revert "package/pkg-utils.mk: break hardlinks in global {TARGET, HOST}_DIR on per-package build"
-      package/pkg-utils: teach per-package-rsync to copy or hardlink dest
+These regressions are both serious, so revert the change; we'll come up
+with a stopgap measure in follow-up commits.
 
- Makefile             |  4 ++--
- package/pkg-utils.mk | 13 +++++++++++--
- 2 files changed, 13 insertions(+), 4 deletions(-)
+This reverts commit 21d52e52d8dee0940d28b3a38551eb183be37813.
 
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Herve Codina <herve.codina@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index ba3da68a7b..5d5980b098 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -217,7 +217,7 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ define per-package-rsync
+ 	mkdir -p $(3)
+ 	$(foreach pkg,$(1),\
+-		rsync -a \
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+ 			$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+ 			$(3)$(sep))
+ endef
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
