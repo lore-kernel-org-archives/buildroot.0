@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AAE7CDB474
-	for <buildroot@archiver.kernel.org>; Tue, 17 Oct 2023 10:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34EF0CDB474
+	for <buildroot@archiver.kernel.org>; Tue, 17 Oct 2023 10:41:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B389D60E50;
-	Tue, 17 Oct 2023 10:41:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B389D60E50
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0C1260DFA;
+	Tue, 17 Oct 2023 10:41:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0C1260DFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KNO0eODINZxS; Tue, 17 Oct 2023 10:41:09 +0000 (UTC)
+	with ESMTP id Fyw69gtGwBDM; Tue, 17 Oct 2023 10:41:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F010B60F85;
-	Tue, 17 Oct 2023 10:41:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F010B60F85
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 186181BF97E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85A2D60EDF;
+	Tue, 17 Oct 2023 10:41:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85A2D60EDF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 507AE1BF97D
  for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 10:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3BAC40364
- for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 10:40:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3BAC40364
+ by smtp4.osuosl.org (Postfix) with ESMTP id 296E040902
+ for <buildroot@lists.busybox.net>; Tue, 17 Oct 2023 10:40:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 296E040902
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1kBHvFTU3jvY for <buildroot@lists.busybox.net>;
- Tue, 17 Oct 2023 10:40:27 +0000 (UTC)
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com
- [IPv6:2a00:1450:4864:20::442])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AC9D9402A7
- for <buildroot@buildroot.org>; Tue, 17 Oct 2023 10:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC9D9402A7
-Received: by mail-wr1-x442.google.com with SMTP id
- ffacd0b85a97d-3226cc3e324so5142142f8f.3
- for <buildroot@buildroot.org>; Tue, 17 Oct 2023 03:40:26 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p7fXni3svpEZ for <buildroot@lists.busybox.net>;
+ Tue, 17 Oct 2023 10:40:28 +0000 (UTC)
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com
+ [IPv6:2a00:1450:4864:20::441])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8470D417CE
+ for <buildroot@buildroot.org>; Tue, 17 Oct 2023 10:40:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8470D417CE
+Received: by mail-wr1-x441.google.com with SMTP id
+ ffacd0b85a97d-32799639a2aso4917023f8f.3
+ for <buildroot@buildroot.org>; Tue, 17 Oct 2023 03:40:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697539224; x=1698144024;
+ d=1e100.net; s=20230601; t=1697539226; x=1698144026;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=JrHqYia1Z2QgJPgzM5byw99zLPhkKuOnM5MGO+kWUgg=;
- b=OG7jVXliHXmpyEW7ErtNVhwBrA6y3zXV3kBiNeGnM4CqD8M/fiFiClEhDdLKSztJ7P
- VQxsTDKsqT3lJ158Z9BA+/axkqT4yooECaM7YffL9/IkX46xrnoUookNZNHMzG34hhP6
- lm8Rx9DhXuyya8AmRiMjtEn8HLBqwi+Z4nq8TYfsbngnMuFAEJ/d2HTYekMDeX55keTB
- NcgaYX4+jvpsjJZow13lI9hg9cMpU6WxuyLtOxZCgy89jC82Dz1OJ/m5UGbksGw7/GPk
- fVC+MA4u91E6oOJzFH3zuUQOOUj0j4dcLGdjtFA3Md72GtkRHuSF1xWj7fDkcXk1pqVZ
- CeOg==
-X-Gm-Message-State: AOJu0YxNLKZ/G7tgbD4ND4dJwDANoS3ESAldzXibhK+7qhwvuFpcTY8W
- Q+wI9U600M1FkeLIgcvjlyRvSOtj67ojJmwjCkgm4iC9/1Q=
-X-Google-Smtp-Source: AGHT+IESdsiw84N8dutEjWV7VIxlmRK6f81OF8pVfnagK9KXU2CnXQ4WM/qBU87auQZyzxi7SkYQNQ==
-X-Received: by 2002:a05:6000:136b:b0:32d:adda:e8cd with SMTP id
- q11-20020a056000136b00b0032daddae8cdmr1675381wrz.22.1697539224497; 
- Tue, 17 Oct 2023 03:40:24 -0700 (PDT)
+ bh=FfYlVftkRbMDLg6wwbStgzrOL42ROL9O8td3N+tO1Lg=;
+ b=TlITER+SgOpNgYlHRLfQg1QeQA3K5NeKC9rwsnJ83Xr8LO7dgzxl1ACZ49LvnxoY0A
+ d5+B9DubV0+SfQKCc4oj0Wbuxy1G7BpDs3UObEBE2gczOxaZlsB0vf50RRnuWqR60ReM
+ zrbwg4qZ0aC0xFFHWuZedhtvUBGW1xIpK2Is+26gxmelhAGyXRZFSDBZ/scSgKPCkiyl
+ 0/B3ecmhPaLHqh0KbZkt6+8ZkTgk1ZgLonzRV4xnNJYCxbowy0ir7e0t1/g0Sp+j/cuj
+ 8yLjS+n2pbqncIWSg+ctJ1r4nPXT2I6iZlSLAvXsuASMZqBokhedIKVB6nzwxY6OCfW+
+ WTWA==
+X-Gm-Message-State: AOJu0YyGwXpZfypGcXgvTOeaU409aOQ5584R2H983H+6IIC7qY0alkk7
+ LAmdQ3n8qqaJnPxQN9yYMw2r0LbHAMiZei8JLF2aYjb0wdk=
+X-Google-Smtp-Source: AGHT+IEKflqkt+6uIi44mKoun1zaelNjB/m/OipL6ghskWBqnMmPx0g7avbpqvkcASwTi8DMUiZb7A==
+X-Received: by 2002:adf:e301:0:b0:313:f0d7:a43 with SMTP id
+ b1-20020adfe301000000b00313f0d70a43mr1699322wrj.23.1697539226314; 
+ Tue, 17 Oct 2023 03:40:26 -0700 (PDT)
 Received: from localhost.localdomain (net-91-81-8-146.cust.vodafonedsl.it.
  [91.81.8.146]) by smtp.gmail.com with ESMTPSA id
- w17-20020a5d4b51000000b0032da4c98ab2sm1401068wrs.35.2023.10.17.03.40.23
+ w17-20020a5d4b51000000b0032da4c98ab2sm1401068wrs.35.2023.10.17.03.40.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Oct 2023 03:40:23 -0700 (PDT)
+ Tue, 17 Oct 2023 03:40:25 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Oct 2023 12:40:13 +0200
-Message-ID: <20231017104015.1492775-3-adam.duskett@amarulasolutions.com>
+Date: Tue, 17 Oct 2023 12:40:15 +0200
+Message-ID: <20231017104015.1492775-5-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231017104015.1492775-1-adam.duskett@amarulasolutions.com>
 References: <20231017104015.1492775-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1697539224; x=1698144024;
+ d=amarulasolutions.com; s=google; t=1697539226; x=1698144026;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=JrHqYia1Z2QgJPgzM5byw99zLPhkKuOnM5MGO+kWUgg=;
- b=q/WD4UQuKyAX3rgVg1JA18Tg6kELyVLj4VQfK3+zvCggYAhuFTT7OSTvMqJLKDH/Wf
- FCHxR2xCVJyxOGC7Pc1WeZVPh985ClGWIpBllSW+TxpdYkTW9Mj4uy0alaG4A6AewYur
- jTHiFpX1Giw+BjDts9s7+rJ2Uec60gnKYxC9A=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=FfYlVftkRbMDLg6wwbStgzrOL42ROL9O8td3N+tO1Lg=;
+ b=KPXS2upNPYn7QQztBrUC0tbUyj2f5uiMGi3lQKnjm3PJjVvgyan3qoPyCBRcXIjV7n
+ Y0Com4SCl+gGAjwx2ZORXiaLXqvlHARn82VvJzkrIYCpzfck2NqukAj5N3/xygvWFmPl
+ kztGmNiTjs/kmTDU2roxq3kXcIyNFELu5SjEs=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=q/WD4UQu
-Subject: [Buildroot] [PATCH 3/5] package/mender-grubenv: bump version to
- 64e32b01d1bf54784d2a290ad0469c583e843864
+ header.b=KPXS2upN
+Subject: [Buildroot] [PATCH 5/5] package/mender: bump version to 3.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,57 +102,302 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Mender grubenv now expects bios installs to be in boot/grub-mender-grubenv
-instead of boot/grub/grub-mender-grubenv.
+The artifact_info file is no longer supported. Instead, mender now expects a
+bootstrap.mender artifact created by mender-artifact in either /data/ or
+/var/lib/mender. See the following for more information:
+https://northerntech.atlassian.net/browse/MEN-2585
+https://northerntech.atlassian.net/browse/MEN-2583
 
-Also, update the LICENSE hash as the year has been updated to 2023.
+  - Remove all instances of creating or copying an artifact_info file
+    from board examples and package/mender.
+
+  - Add a generate_mender_bootstrap_artifact method to
+    board/mender/x86_64/post-image-efi.sh which creates a proper
+    bootstrap.mender file and places it in the data partition.
+
+  - Add a post-build.sh script to support/testing/tests/package/test_mender
+    with the same generate_mender_bootstrap_artifact method with one change:
+    As the rootfs.ext4 file is not yet created; we omit the optional
+    --provides "rootfs-image.checksum:${img_checksum}" argument when
+    generating the bootstrap.mender file.
+
+  - With the new bootstrap.mender requirements, one other problem needs to be
+    addressed. Currently, due to the possibility of a user creating a
+    read-only filesystem in mender.mk we link /var/run/mender to
+    /var/lib/mender. In S42mender the following happens:
+
+    """
+    # If /var/lib/mender is a symlink to /var/run/mender, and
+    #   - the filesystem is RO (i.e., we can not rm the symlink),
+    #     create the directory pointed to by the symlink.
+    #   - the filesystem is RW (i.e., we can rm the symlink),
+    #     replace the symlink with an actual directory
+    """
+
+However, with the new requirement of a bootstrap.mender file, it is likely that
+a user will generate and place the boostrap.mender file in
+$(TARGET_DIR)/var/lib/mender in a post-build script, causing subsequent rebuilds
+to fail. As such, add one new line: rm -rf $(TARGET_DIR)/var/lib/mender to
+ensure we can re-create the symlink without rebuild errors.
+
+License changes:
+
+New:
+vendor/github.com/klauspost/compress/internal/snapref/LICENSE
+vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
+
+Removed:
+vendor/github.com/klauspost/compress/internal/snapref/LICENSE
+vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
+
+Modified:
+LICENSE: Update year from 2022 to 2023
+LIC_FILES_CHKSUM.sha256: Sum of all Licenses changed
+vendor/github.com/mendersoftware/mender-artifact/LICENSE
+  - Update year from 2022 to 2023
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/mender-grubenv/mender-grubenv.hash | 4 ++--
- package/mender-grubenv/mender-grubenv.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ board/mender/x86_64/post-build.sh             |  1 -
+ board/mender/x86_64/post-image-efi.sh         | 20 +++++++++++
+ package/mender/artifact_info                  |  1 -
+ package/mender/mender.conf                    |  1 +
+ package/mender/mender.hash                    | 10 +++---
+ package/mender/mender.mk                      | 36 +++++++++----------
+ support/testing/tests/package/test_mender.py  |  3 ++
+ .../tests/package/test_mender/post-build.sh   | 24 +++++++++++++
+ 8 files changed, 72 insertions(+), 24 deletions(-)
+ delete mode 100644 package/mender/artifact_info
+ create mode 100755 support/testing/tests/package/test_mender/post-build.sh
 
-diff --git a/package/mender-grubenv/mender-grubenv.hash b/package/mender-grubenv/mender-grubenv.hash
-index 193bff073b..d44220eadd 100644
---- a/package/mender-grubenv/mender-grubenv.hash
-+++ b/package/mender-grubenv/mender-grubenv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b7a08eb3d996afb38c1a4f7c51b7eb44aec6197ff713ce75e4f39d5b448cfc82  mender-grubenv-2ac898f5924d5870f8394ad8ecd3ef1ab1422e3b.tar.gz
+diff --git a/board/mender/x86_64/post-build.sh b/board/mender/x86_64/post-build.sh
+index 23d1120d45..7ed19fa913 100755
+--- a/board/mender/x86_64/post-build.sh
++++ b/board/mender/x86_64/post-build.sh
+@@ -48,7 +48,6 @@ function main {
+     parse_args "${@}"
+     mender_fixup
+     echo "device_type=${DEVICE_TYPE}" > "${TARGET_DIR}/etc/mender/device_type"
+-    echo "artifact_name=${ARTIFACT_NAME}" > "${TARGET_DIR}/etc/mender/artifact_info"
+ }
+ 
+ main "${@}"
+diff --git a/board/mender/x86_64/post-image-efi.sh b/board/mender/x86_64/post-image-efi.sh
+index 97b9e06d21..d184378696 100755
+--- a/board/mender/x86_64/post-image-efi.sh
++++ b/board/mender/x86_64/post-image-efi.sh
+@@ -31,9 +31,28 @@ function parse_args {
+     done
+ }
+ 
++# Generate a mender bootstrap artifact.
++# See https://northerntech.atlassian.net/browse/MEN-2585
++generate_mender_bootstrap_artifact() {
++  rm -rf "${BINARIES_DIR}"/data-part
++  mkdir -p "${BINARIES_DIR}"/data-part
++  img_checksum=$(sha256sum "${BINARIES_DIR}"/rootfs.ext4 |awk '{print $1}')
++
++  "${HOST_DIR}"/bin/mender-artifact \
++    write bootstrap-artifact \
++    --artifact-name "${ARTIFACT_NAME}" \
++    --device-type "${DEVICE_TYPE}" \
++    --provides "rootfs-image.version:${ARTIFACT_NAME}" \
++    --provides "rootfs-image.checksum:${img_checksum}" \
++    --clears-provides "rootfs-image.*" \
++    --output-path "${BINARIES_DIR}"/data-part/bootstrap.mender \
++    --version 3
++}
++
+ # Create the data partition
+ function make_data_partition {
+     "${HOST_DIR}/sbin/mkfs.ext4" \
++        -d "${BINARIES_DIR}"/data-part \
+         -F \
+         -r 1 \
+         -N 0 \
+@@ -63,6 +82,7 @@ function generate_image {
+ # Main function.
+ function main {
+     parse_args "${@}"
++    generate_mender_bootstrap_artifact
+     make_data_partition
+     generate_image
+     generate_mender_image
+diff --git a/package/mender/artifact_info b/package/mender/artifact_info
+deleted file mode 100644
+index 1c84b088d0..0000000000
+--- a/package/mender/artifact_info
++++ /dev/null
+@@ -1 +0,0 @@
+-artifact_name=BUILDROOT_ARTIFACT
+diff --git a/package/mender/mender.conf b/package/mender/mender.conf
+index f89118ac1b..65b2781366 100644
+--- a/package/mender/mender.conf
++++ b/package/mender/mender.conf
+@@ -4,6 +4,7 @@
+   "RetryPollIntervalSeconds": 300,
+   "RootfsPartA": "/dev/mmcblk0p2",
+   "RootfsPartB": "/dev/mmcblk0p3",
++  "DeviceTypeFile": "/etc/mender/device_type",
+   "ServerCertificate": "/etc/mender/server.crt",
+   "ServerURL": "https://docker.mender.io",
+   "TenantToken": "dummy"
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+index d563dc534b..0e2a13f8e2 100644
+--- a/package/mender/mender.hash
++++ b/package/mender/mender.hash
+@@ -1,12 +1,12 @@
+ # Locally computed:
+-sha256  8a149b11b990beb7620b372023eec28df63cee6a1aa4132e88ecef554f080f72  mender-3.4.0.tar.gz
++sha256  12f26337407adf6bd1b4f54d2be4e5c1e3a5c8d977ad4d18fbe9ac4398da1e2d  mender-3.5.1.tar.gz
+ 
+ # Vendor licenses
+ # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+ 
+ # Apache-2.0 license.
 -sha256  1033348db7606a7e61b6484f293847cf8d7a35766efebb97e304d4bd5d7f3f6b  LICENSE
-+sha256  5232988ff3063a5132099807fcc7da9b70f0bf50a5396f763f4113a80284dff8  mender-grubenv-64e32b01d1bf54784d2a290ad0469c583e843864.tar.gz
+-sha256  1033348db7606a7e61b6484f293847cf8d7a35766efebb97e304d4bd5d7f3f6b  vendor/github.com/mendersoftware/mender-artifact/LICENSE
 +sha256  52b2497ce07650b825015e80ca7a5d40c360c04c530234ca6d950b0f98bca23a  LICENSE
-diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
-index 9b3753ad8c..b8d2867f05 100644
---- a/package/mender-grubenv/mender-grubenv.mk
-+++ b/package/mender-grubenv/mender-grubenv.mk
++sha256  52b2497ce07650b825015e80ca7a5d40c360c04c530234ca6d950b0f98bca23a  vendor/github.com/mendersoftware/mender-artifact/LICENSE
+ sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/mendersoftware/openssl/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
+ sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/github.com/mendersoftware/progressbar/LICENSE
+@@ -29,6 +29,8 @@ sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor
+ #
+ # MIT license.
+ sha256  6d2de1cde19c4d2bd8bcd9aaa1d581f4cfa3db9cf71896140330eaa2f2687685  vendor/github.com/klauspost/pgzip/LICENSE
++sha256  f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/github.com/klauspost/compress/internal/snapref/LICENSE
++sha256  f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
+ sha256  5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212  vendor/github.com/klauspost/cpuid/v2/LICENSE
+ sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/sirupsen/logrus/LICENSE
+ sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
+@@ -42,4 +44,4 @@ sha256  08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
+ # sha256 of all the vendor licenses combined
+-sha256  93d9db9b43097b174e362ac8f398aa9a37fcdde2974d0567b62bd6d1e0d22037  LIC_FILES_CHKSUM.sha256
++sha256  f6450978cef1c67078918fdebe21bbedf13a18a32537a071c755e2f2def3af16  LIC_FILES_CHKSUM.sha256
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 724295f784..f31f1db7ce 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MENDER_GRUBENV_VERSION = 2ac898f5924d5870f8394ad8ecd3ef1ab1422e3b
-+MENDER_GRUBENV_VERSION = 64e32b01d1bf54784d2a290ad0469c583e843864
- MENDER_GRUBENV_SITE = $(call github,mendersoftware,grub-mender-grubenv,$(MENDER_GRUBENV_VERSION))
- MENDER_GRUBENV_LICENSE = Apache-2.0
- MENDER_GRUBENV_LICENSE_FILES = LICENSE
-@@ -30,14 +30,14 @@ MENDER_GRUBENV_MODULES_MISSING_PC = \
- 	$(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC)),\
- 		$(MENDER_GRUBENV_MANDATORY_MODULES))
+-MENDER_VERSION = 3.4.0
++MENDER_VERSION = 3.5.1
+ MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
+ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
  
--MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/grub
-+MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot
+@@ -13,30 +13,32 @@ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
+ MENDER_LICENSE_FILES = \
+ 	LICENSE \
+ 	LIC_FILES_CHKSUM.sha256 \
++	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
++	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md \
++	vendor/github.com/davecgh/go-spew/LICENSE \
++	vendor/github.com/godbus/dbus/LICENSE \
++	vendor/github.com/gorilla/websocket/LICENSE \
++	vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
++	vendor/github.com/klauspost/compress/LICENSE \
++	vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
++	vendor/github.com/klauspost/cpuid/v2/LICENSE \
++	vendor/github.com/klauspost/pgzip/LICENSE \
++	vendor/github.com/mattn/go-isatty/LICENSE \
+ 	vendor/github.com/mendersoftware/mender-artifact/LICENSE \
+ 	vendor/github.com/mendersoftware/openssl/LICENSE \
+-	vendor/github.com/minio/sha256-simd/LICENSE \
+ 	vendor/github.com/mendersoftware/progressbar/LICENSE \
++	vendor/github.com/minio/sha256-simd/LICENSE \
+ 	vendor/github.com/pkg/errors/LICENSE \
+-	vendor/github.com/godbus/dbus/LICENSE \
+-	vendor/github.com/gorilla/websocket/LICENSE \
+-	vendor/github.com/klauspost/compress/LICENSE \
+ 	vendor/github.com/pmezard/go-difflib/LICENSE \
+-	vendor/golang.org/x/sys/LICENSE \
+-	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
+ 	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
+-	vendor/golang.org/x/term/LICENSE \
+-	vendor/github.com/davecgh/go-spew/LICENSE \
+-	vendor/github.com/klauspost/pgzip/LICENSE \
+-	vendor/github.com/klauspost/cpuid/v2/LICENSE \
+ 	vendor/github.com/sirupsen/logrus/LICENSE \
++	vendor/github.com/stretchr/objx/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+ 	vendor/github.com/ungerik/go-sysfs/LICENSE \
+ 	vendor/github.com/urfave/cli/v2/LICENSE \
+-	vendor/github.com/stretchr/objx/LICENSE \
+-	vendor/gopkg.in/yaml.v3/LICENSE \
+-	vendor/github.com/mattn/go-isatty/LICENSE \
+-	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
++	vendor/golang.org/x/sys/LICENSE \
++	vendor/golang.org/x/term/LICENSE \
++	vendor/gopkg.in/yaml.v3/LICENSE
  
- define MENDER_GRUBENV_INSTALL_I386_CFG
- 	mkdir -p $(BINARIES_DIR)/boot-part/grub
- 	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
- 		$(TARGET_DIR)/boot/grub/grub.cfg
- 	cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
--		$(TARGET_DIR)/boot/grub/grub-mender-grubenv \
-+		$(TARGET_DIR)/boot/grub-mender-grubenv \
- 		$(BINARIES_DIR)/boot-part/
- endef
- MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_I386_CFG
+ MENDER_DEPENDENCIES = host-pkgconf openssl
+ 
+@@ -65,13 +67,11 @@ define MENDER_INSTALL_CONFIG_FILES
+ 			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
+ 	)
+ 
+-	$(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/artifact_info \
+-			$(TARGET_DIR)/etc/mender/artifact_info
+-
+ 	$(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/device_type \
+ 			$(TARGET_DIR)/etc/mender/device_type
+ 
+ 	mkdir -p $(TARGET_DIR)/var/lib
++	rm -rf $(TARGET_DIR)/var/lib/mender
+ 	ln -snf /var/run/mender $(TARGET_DIR)/var/lib/mender
+ 	$(foreach f,$(MENDER_UPDATE_MODULES_FILES), \
+ 		$(INSTALL) -D -m 0755 $(@D)/support/modules/$(notdir $(f)) \
+diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
+index fdf55ed616..203a3da863 100644
+--- a/support/testing/tests/package/test_mender.py
++++ b/support/testing/tests/package/test_mender.py
+@@ -8,8 +8,11 @@ class TestMender(infra.basetest.BRTest):
+         """
+         BR2_PACKAGE_MENDER=y
+         BR2_TARGET_ROOTFS_CPIO=y
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
+         BR2_ROOTFS_OVERLAY="{}"
++        BR2_PACKAGE_HOST_MENDER_ARTIFACT=y
+         """.format(
++           infra.filepath("tests/package/test_mender/post-build.sh"),
+            # overlay to add a fake 'fw_printenv', used by Mender
+            infra.filepath("tests/package/test_mender/rootfs-overlay"))
+ 
+diff --git a/support/testing/tests/package/test_mender/post-build.sh b/support/testing/tests/package/test_mender/post-build.sh
+new file mode 100755
+index 0000000000..afc647ea74
+--- /dev/null
++++ b/support/testing/tests/package/test_mender/post-build.sh
+@@ -0,0 +1,24 @@
++#!/usr/bin/env bash
++set -e
++DEVICE_TYPE="buildroot-arm"
++ARTIFACT_NAME="RUNTIME_TEST_ARTIFACT_NAME"
++
++generate_mender_bootstrap_artifact() {
++  "${HOST_DIR}"/bin/mender-artifact \
++    write bootstrap-artifact \
++    --artifact-name "${ARTIFACT_NAME}" \
++    --device-type "${DEVICE_TYPE}" \
++    --provides "rootfs-image.version:${ARTIFACT_NAME}" \
++    --clears-provides "rootfs-image.*" \
++    --output-path "${TARGET_DIR}"/var/lib/mender/bootstrap.mender \
++    --version 3
++}
++
++function mender_fixup() {
++  rm -rf "${TARGET_DIR}"/var/lib/mender
++  mkdir -p "${TARGET_DIR}"/var/lib/mender
++}
++
++echo "device_type=${DEVICE_TYPE}" > "${TARGET_DIR}"/etc/mender/device_type
++mender_fixup
++generate_mender_bootstrap_artifact
 -- 
 2.41.0
 
