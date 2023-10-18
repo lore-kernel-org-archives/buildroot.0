@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06BD4CDB47E
-	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 09:42:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEC3ECDB47E
+	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 09:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9F4F612FC;
-	Wed, 18 Oct 2023 09:42:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9F4F612FC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6627B612E1;
+	Wed, 18 Oct 2023 09:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6627B612E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D3yJaWukBffU; Wed, 18 Oct 2023 09:42:58 +0000 (UTC)
+	with ESMTP id k6ocnhmoT5Dn; Wed, 18 Oct 2023 09:43:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19F0D60BA5;
-	Wed, 18 Oct 2023 09:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19F0D60BA5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BCDBD1BF98E
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90B1E60BBD;
+	Wed, 18 Oct 2023 09:43:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90B1E60BBD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 257DA1BF5F6
+ for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94F4F402E6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 714CA8229C
  for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F4F402E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 714CA8229C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oT4QuqnzdY0G for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uO69sUl_x6yz for <buildroot@lists.busybox.net>;
  Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74F3B40148
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94B88822D6
  for <buildroot@buildroot.org>; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74F3B40148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94B88822D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5220185D5A; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
+ id 6A82085D62; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Oct 2023 11:36:50 +0200
+Date: Wed, 18 Oct 2023 11:41:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f45fa3b4059373c7287eafeb6466cc491734b958
-X-Git-Newrev: 487761a5b294ae1806030b935faa97c1f1fd1820
+X-Git-Oldrev: 032601efa71f24e87b16cd688c942caf8db94f33
+X-Git-Newrev: 490b71f9f06af868639bbd243bf3423b9b8eee5d
 X-Patchwork-Hint: ignore
-Message-Id: <20231018094228.5220185D5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xdg-dbus-proxy: bump to version
- 0.1.5
+Message-Id: <20231018094228.6A82085D62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynq_zc706_defconfig: bump to
+ xilinx-v2023.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=487761a5b294ae1806030b935faa97c1f1fd1820
+commit: https://git.buildroot.net/buildroot/commit/?id=490b71f9f06af868639bbd243bf3423b9b8eee5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Version 0.1.5 mainly fixes handling of paths with more than 255
-characters. Release notes:
+This patch bumps the zynq_zc706_defconfig to xilinx-v2023.2 which includes
+the following updates:
 
-  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
+- Linux v6.1.30
+- U-Boot v2023.01 with additional bug fixes
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
- package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/zynq_zc706_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-index 7bbea72b03..37f1790c9b 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
--sha256  1ec0eab53d1e49966d722352bcfd51ac402dce5190baedc749a8541e761670ab  xdg-dbus-proxy-0.1.4.tar.xz
-+# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
-+sha256  061dcfaf8a0650e5fd9d5432dfe88bda749ea0d079dc136304bfecfbce0661fb  xdg-dbus-proxy-0.1.4.tar.xz
- 
- # Hash for license files:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-index 48f49dba2a..2e8c054386 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDG_DBUS_PROXY_VERSION = 0.1.4
-+XDG_DBUS_PROXY_VERSION = 0.1.5
- XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
- XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
- XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index 55e4d8ea23..3489f864e1 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc706"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
