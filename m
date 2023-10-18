@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEC3ECDB47E
-	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 09:43:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59791CDB47E
+	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 09:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6627B612E1;
-	Wed, 18 Oct 2023 09:43:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6627B612E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19CEE61337;
+	Wed, 18 Oct 2023 09:43:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19CEE61337
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k6ocnhmoT5Dn; Wed, 18 Oct 2023 09:43:10 +0000 (UTC)
+	with ESMTP id LLRkrXfwIYJv; Wed, 18 Oct 2023 09:43:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90B1E60BBD;
-	Wed, 18 Oct 2023 09:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90B1E60BBD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 257DA1BF5F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CE7A60BBD;
+	Wed, 18 Oct 2023 09:43:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CE7A60BBD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 665E31BF5F6
  for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 714CA8229C
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 714CA8229C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 477FA41A04
+ for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 477FA41A04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uO69sUl_x6yz for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4azFgxkeb5XQ for <buildroot@lists.busybox.net>;
  Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94B88822D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F56A4172F
  for <buildroot@buildroot.org>; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94B88822D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F56A4172F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A82085D62; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
+ id 4BC9185C64; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Oct 2023 11:41:48 +0200
+Date: Wed, 18 Oct 2023 11:36:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 032601efa71f24e87b16cd688c942caf8db94f33
-X-Git-Newrev: 490b71f9f06af868639bbd243bf3423b9b8eee5d
+X-Git-Oldrev: c239770d120486881755845768fb54b9b4019217
+X-Git-Newrev: f45fa3b4059373c7287eafeb6466cc491734b958
 X-Patchwork-Hint: ignore
-Message-Id: <20231018094228.6A82085D62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynq_zc706_defconfig: bump to
- xilinx-v2023.2
+Message-Id: <20231018094228.4BC9185C64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vlc: bump version to 3.0.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +57,116 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1016046340949785851=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=490b71f9f06af868639bbd243bf3423b9b8eee5d
+--===============1016046340949785851==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f45fa3b4059373c7287eafeb6466cc491734b958
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps the zynq_zc706_defconfig to xilinx-v2023.2 which includes
-the following updates:
+Rebased patch 0006 due to upstream commit
+https://code.videolan.org/videolan/vlc/-/commit/3f9fc44176cc5505132977885799fa988c5e7701
 
-- Linux v6.1.30
-- U-Boot v2023.01 with additional bug fixes
+Release notes: https://code.videolan.org/videolan/vlc/-/blob/3.0.19/NEWS
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/zynq_zc706_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...06-posix-remove-ancient-run-time-fallback-to-real-time-.patch | 9 +++++----
+ package/vlc/vlc.hash                                             | 8 ++++----
+ package/vlc/vlc.mk                                               | 2 +-
+ 3 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 55e4d8ea23..3489f864e1 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc706"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch b/package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch
+index 4fc639e222..5211ef882b 100644
+--- a/package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch
++++ b/package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch
+@@ -23,6 +23,7 @@ posix/thread.c: In function ‘vlc_clock_setup_once’:
+ posix/thread.c:88:18: error: lvalue required as left operand of assignment
+      vlc_clock_id = (val < 0) ? CLOCK_REALTIME : CLOCK_MONOTONIC;
+ 
++[Bernd: rebased for 3.0.19]
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  src/posix/thread.c | 96 +++++++-----------------------------------------------
+@@ -93,7 +94,7 @@ index dab8b71f97..8878941913 100644
+ -# warning Monotonic clock not available. Expect timing issues.
+ -#endif /* _POSIX_TIMERS */
+ -
+- static struct timespec mtime_to_ts (mtime_t date)
++ static struct timespec mtime_to_ts (vlc_tick_t date)
+  {
+      lldiv_t d = lldiv (date, CLOCK_FREQ);
+ @@ -233,14 +187,11 @@ void vlc_cond_init (vlc_cond_t *p_condvar)
+@@ -117,7 +118,7 @@ index dab8b71f97..8878941913 100644
+  
+ @@ -625,44 +576,27 @@ void vlc_control_cancel (int cmd, ...)
+  
+- mtime_t mdate (void)
++ vlc_tick_t mdate (void)
+  {
+ -#if (_POSIX_TIMERS > 0)
+      struct timespec ts;
+@@ -140,7 +141,7 @@ index dab8b71f97..8878941913 100644
+  }
+  
+  #undef mwait
+- void mwait (mtime_t deadline)
++ void mwait (vlc_tick_t deadline)
+  {
+ -#if (_POSIX_CLOCK_SELECTION > 0)
+ -    vlc_clock_setup ();
+@@ -165,7 +166,7 @@ index dab8b71f97..8878941913 100644
+  }
+  
+  #undef msleep
+-@@ -670,15 +604,7 @@ void msleep (mtime_t delay)
++@@ -670,15 +604,7 @@ void msleep (vlc_tick_t delay)
+  {
+      struct timespec ts = mtime_to_ts (delay);
+  
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 4b9940df33..ef381e5934 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,7 +1,7 @@
+-# From https://get.videolan.org/vlc/3.0.18/vlc-3.0.18.tar.xz.sha256
+-sha256  57094439c365d8aa8b9b41fa3080cc0eef2befe6025bb5cef722accc625aedec  vlc-3.0.18.tar.xz
+-# From https://get.videolan.org/vlc/3.0.18/vlc-3.0.18.tar.xz.sha1
+-sha1  b11ccaa0f5ee15a550564817d60458eb0946f80e  vlc-3.0.18.tar.xz
++# From https://get.videolan.org/vlc/3.0.19/vlc-3.0.19.tar.xz.sha256
++sha256  643e3294bafe922324663ca499515b7564f2794575fd7d2b7992d20896381745  vlc-3.0.19.tar.xz
++# From https://get.videolan.org/vlc/3.0.19/vlc-3.0.19.tar.xz.sha1
++sha1  6d162248a26fdd76a9d4e7e3d52f40d4326f72c1  vlc-3.0.19.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index c6ae46f469..729e928b4d 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 3.0.18
++VLC_VERSION = 3.0.19
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+
+--===============1016046340949785851==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1016046340949785851==--
