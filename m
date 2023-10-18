@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EA0CCDB47E
-	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 09:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 424F2CDB47E
+	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 09:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE9DF41488;
-	Wed, 18 Oct 2023 09:44:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE9DF41488
+	by smtp2.osuosl.org (Postfix) with ESMTP id D0769404D4;
+	Wed, 18 Oct 2023 09:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0769404D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PQ3Gof3WG2Bs; Wed, 18 Oct 2023 09:44:01 +0000 (UTC)
+	with ESMTP id DJCLjhlkixEs; Wed, 18 Oct 2023 09:44:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77625400FE;
-	Wed, 18 Oct 2023 09:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77625400FE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 934A7402E6;
+	Wed, 18 Oct 2023 09:44:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 934A7402E6
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 538A61BF5F6
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 640481BF5F6
+ for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F3293822D6
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3293822D6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B84E8229C
+ for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 09:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B84E8229C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rVT8avifDUiq for <buildroot@lists.busybox.net>;
+ with ESMTP id ywW_eMINLmSt for <buildroot@lists.busybox.net>;
  Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7166A822C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94B32822D3
  for <buildroot@buildroot.org>; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7166A822C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94B32822D3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 50EE785D5B; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
+ id 72F2B85D60; Wed, 18 Oct 2023 09:42:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Oct 2023 11:35:39 +0200
+Date: Wed, 18 Oct 2023 11:41:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2e1890db65fe0e08d626770e226e399309d33fe5
-X-Git-Newrev: c239770d120486881755845768fb54b9b4019217
+X-Git-Oldrev: 490b71f9f06af868639bbd243bf3423b9b8eee5d
+X-Git-Newrev: b0c46e2f911a0a80c53e2d2f733a73eefc6e59ec
 X-Patchwork-Hint: ignore
-Message-Id: <20231018094228.50EE785D5B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/eudev: bump version to 3.2.14
+Message-Id: <20231018094228.72F2B85D60@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynq_zed_defconfig: bump to
+ xilinx-v2023.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c239770d120486881755845768fb54b9b4019217
+commit: https://git.buildroot.net/buildroot/commit/?id=b0c46e2f911a0a80c53e2d2f733a73eefc6e59ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/eudev-project/eudev/releases/tag/v3.2.14
+This patch bumps the zynq_zed_defconfig to xilinx-v2023.2 which includes
+the following updates:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+- Linux v6.1.30
+- U-Boot v2023.01 with additional bug fixes
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eudev/eudev.hash | 2 +-
- package/eudev/eudev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/zynq_zed_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index d91bc761c9..c41bf5992d 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ccdd64ec3c381d3c3ed0e99d2e70d1f62988c7763de89ca7bdffafa5eacb9ad8  eudev-3.2.12.tar.gz
-+sha256  8da4319102f24abbf7fff5ce9c416af848df163b29590e666d334cc1927f006f  eudev-3.2.14.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 235a71967e..33cc638291 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EUDEV_VERSION = 3.2.12
-+EUDEV_VERSION = 3.2.14
- EUDEV_SITE = https://github.com/eudev-project/eudev/releases/download/v$(EUDEV_VERSION)
- EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index dc167e3bc1..a3a94687f5 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zed"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
