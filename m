@@ -4,134 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E2BBCDB47E
-	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 12:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2870DCDB482
+	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 14:19:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08F696149C;
-	Wed, 18 Oct 2023 12:46:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08F696149C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95B2160E24;
+	Wed, 18 Oct 2023 14:19:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95B2160E24
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3N8YV7LvyslK; Wed, 18 Oct 2023 12:46:54 +0000 (UTC)
+	with ESMTP id iOO6-SEEEGlf; Wed, 18 Oct 2023 14:19:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3871561498;
-	Wed, 18 Oct 2023 12:46:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3871561498
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE5211BF2A3
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 12:46:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF08E60EFD;
+	Wed, 18 Oct 2023 14:19:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF08E60EFD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A92C81BF5B5
+ for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 14:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4B7C40396
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 12:46:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4B7C40396
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8326D60EFD
+ for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 14:19:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8326D60EFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id siYaN58kJbQ8 for <buildroot@lists.busybox.net>;
- Wed, 18 Oct 2023 12:46:47 +0000 (UTC)
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam12on2060a.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe5a::60a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7C59F4037C
- for <buildroot@buildroot.org>; Wed, 18 Oct 2023 12:46:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C59F4037C
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aE8e3wuCW1Mb9SW0QPbFM83zpzrjJbJQkjHqMau+h7gUUcYTxeeZgAQD99BXDTN6z73whuqyk+iFlZAjAY4U74T15mlwmCzJuEixQEJo2yH7xrP7IW7ECKz1fGRVqU4st0s4Of3tPSZXekq54R698ICsykkn3iQHNdatRbmMbla6tlkwQAfPIboQ2M5W2j+rTv3vNl1JnfADdimGxyDZH1chuewd9TnD9hdEhhjN2FcCJZ+fVdrX0buXNBtXGZwwnTrtW4BDhnpuqmQpc+oAN5ImLKZb7eNZ9QVSd/OJigbJE6eSgyrf4Wza8AIdH3diVkePDTmCP+GoCPV+X2GDEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=abpErWsyYkarCr5qwijow1MtYNvOYWgUNhAtvpSDUjA=;
- b=YMvZYB9c5FkaEiFhxRXBOV1cKilH0IPcV0M5jHT3mOEiXUnAvaXnnWNONR1fe6R3Gj9Ac8ntq0G8kp+pPxG127gTsvwevQf70OIbai/4Dcg9KTHrKLJ7BgUm1IQkCt6ZVUp08oOvxWYcUZoSmyYgOEx7TWNY4gUS1Yfx6P6Kb6WkFfwXFsUNywphe4xNJd9jcPkJ1KRRGFowFTIDmE762Yh/rvlSWLe58gFos/vd6dr80rsW6sc0ovzCPqxE6DdFawV/kDrTFRm0Nt6yDj8FeoofqSTtTLhygewU+GNmigECEEzoQcsVs9fLo15KNWu2FISzxgOAuUyom4K6Br8lBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by CY5PR12MB6299.namprd12.prod.outlook.com (2603:10b6:930:20::21)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.23; Wed, 18 Oct
- 2023 12:46:41 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::53cc:feb5:431:6de1]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::53cc:feb5:431:6de1%4]) with mapi id 15.20.6907.021; Wed, 18 Oct 2023
- 12:46:40 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, "thomas.petazzoni@bootlin.com"
- <thomas.petazzoni@bootlin.com>
-Thread-Topic: [PATCH v4 04/10] toolchain/toolchain-bare-metal: new toolchain
-Thread-Index: AQHZ7vmb81VA12+4i0uq6vMxKQbJh7BMVGUAgANOgZA=
-Date: Wed, 18 Oct 2023 12:46:40 +0000
-Message-ID: <CH2PR12MB5004F0808389B4F67C1936A6F0D5A@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20230924151205.2099293-1-neal.frager@amd.com>
- <20230924151205.2099293-4-neal.frager@amd.com>
- <20231016121148.0eaec482@booty>
-In-Reply-To: <20231016121148.0eaec482@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|CY5PR12MB6299:EE_
-x-ms-office365-filtering-correlation-id: 48dc1542-b42a-4ce5-cba2-08dbcfd84653
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: S0jSQGpjlEcJW1rmzqdWLHQ36VRspx9VWD1aJZqeAC//a5GHXnr0vR3N1idDK/tT1eo/kA7xrPB9bVOkF8lsjGSdqsYQ6xFnOL+n1rKAMsVbY2/mHh3w3T9mDOIgkrg2vQKhpn92muT9ZxzKUb6k5sXvnugqswOy1ilIUUK6ZqCSBXIbbz0xhL8OTMlN2L4gxwe6abOx6meN4fQDcS5FAr5PBKXGDCRO+nCPmdJ+bbF55qlwJKUQpq64BrqLlStdK6INqatmy+MAJrVBHQWToAVyU/J+FHhWeTGX3IenniT8o164mcCT9CcvWhjb8RB4em79VJgO5ReBuxa770m7ZWMZWD6oW6nLL/avA1sE06EnzL8HyTH/3Ej29fBEfC8jNdun+XHKzHvCsAEBiIB7y2zeiddGF68NZcQ5ynqHMfaUN+VzstuqMPjvNOtGHlfSKG0qFFU6u+E0lH+v34YLlRRAbMSZgQICOdJyRuq8faTzBYwtS6X59FHygvbcdhHuZ8CDhzSnK+NT1jvnegmhRhJ+MIJGlwEbAxq5whXiuD1QJXujAetZZ0qs3SpDucRzVj/Vfx6ycLItdbb0ZoswW/F7ZnoJTa5zRIHKcI2EzDRGIsGZdAHAScAH4jyXWaKO
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(346002)(376002)(136003)(39860400002)(366004)(396003)(230922051799003)(451199024)(64100799003)(1800799009)(186009)(38070700005)(2906002)(478600001)(55016003)(71200400001)(8936002)(66476007)(38100700002)(52536014)(33656002)(5660300002)(64756008)(66446008)(110136005)(54906003)(76116006)(8676002)(66556008)(66946007)(4326008)(122000001)(316002)(86362001)(41300700001)(9686003)(7696005)(6506007)(26005);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dwtHvtVlUMY+ecKlfXqGW2WuJI6Oth2GjDL5j7j0C6+9EcB+sDRHgpVYUSeF?=
- =?us-ascii?Q?FpHedFXuWpTIs6pa/ZdGnF8KtUXpYNezZ+adC/He2NQWq02qybovYgixCgru?=
- =?us-ascii?Q?UV4WfmEg5O5trHcliS9CEKuk7ym/y2Uk8b1oxt+p3F8rAysISkFrVhXRQK6v?=
- =?us-ascii?Q?abgAOkbXunmuh8eExWzrHoHrmv0tnzvPDcFlOmmHDjI/EDakPsgG02UFqYwp?=
- =?us-ascii?Q?mNs8PFvDAY32qd+6nSTLV8hvusUM5AhmPOAesFmxa91fQjZZYO6p2B3p9+fw?=
- =?us-ascii?Q?x2SmMSdaDq4hidMw/bck3vYCYFqMX8JWGS/uKmL2cXLePAR4LE3ba4k2mlFI?=
- =?us-ascii?Q?VdDxgKzgXN371Jm6oDqBKXT7UdEN8Zh4e0c2FCwJk8RX8FRptO6arFI2Mt28?=
- =?us-ascii?Q?R0zwz4PowwEDqPKXdtA29KPcdCPu7Z2Im1zN/tUQRfw4U/g6uyfOSX2guQeC?=
- =?us-ascii?Q?BhnGdb94slroBPRQ8b/5Y8dC4R44cKmq8O6ctoVu3kHIS+s3/YHoA30jeZs6?=
- =?us-ascii?Q?Fm8bdiWtEs5Lv0tsRoBpP8anE12XrKDy79wcIksQfLquGGATdwU6mIx7WoB7?=
- =?us-ascii?Q?VANz78FM7iHaHshJD3ucwbbzyRCJhAUiDgYSe3eqsHmhGJ48sEtbyzu1jbWe?=
- =?us-ascii?Q?p2+CrzIMfbcOTSNuvmTO05H4iFJp4EbH1iIJnZegLSZhlB57gzd6gkSf7AEi?=
- =?us-ascii?Q?N8p7d76jMXk6ouvcf+XAuOfOgPm86iV2ZOpx6tef6jW/FAdRG6zh8OMI5he/?=
- =?us-ascii?Q?eeeIZKdXjnoXUCyWFUnNwiu9AJZ3dzz9wbfDGkQwIbrF3v5noZVuHKG0XZLe?=
- =?us-ascii?Q?YKVmsA1847E1JRoLIRDEGSUYRfMEZINvlgsb4xCNr66F8Het5Z1EaeSUtN2O?=
- =?us-ascii?Q?Oj6ELEDTSDvoUuqqJKQNyajgiKG5sbf9zwGQaMzpzh86AOt2gnzcRkYJoZlH?=
- =?us-ascii?Q?uGr/7MsvY3ADuAr/9zjwEzUDqBFCqIZ26vjMtUhZfS/OGsY5Ab+A2oJkvSTp?=
- =?us-ascii?Q?O6R10N9ar9U3oA5tLiKaFlrUyBiGaXLQAeZykA5vJlcMj+6NXzQ5dpKvi3+d?=
- =?us-ascii?Q?jz1S4MkBj2L2gHbKEJ92kxGfWNoDDT6eVDL15Vg6rvuYDZHC/9jLKOympAm8?=
- =?us-ascii?Q?PMrwknKS/ee0T0UecOynBJlTSyItLGZjNyGbEb5foTZd97G1/9yPOG2M9niv?=
- =?us-ascii?Q?SZwgbWYiB7yAGUWND8J9xjXPz96n272M2ukSxxGwGUEFZ/0bSXKkGJNZqin6?=
- =?us-ascii?Q?Lv+2tVE8jv5fKLiNAZLsZDojUXIPG4GkuGzwyGJFZIxjReH+HEEgT0e3lFgd?=
- =?us-ascii?Q?SWpwmybvTyRZGRVtrLAB0ZGnzEz9Gf8RbotHa8VW+/GBlrJ+WYUQfCXTTfnj?=
- =?us-ascii?Q?yywFa96RKtfxbe2QI9ap39ZDKGDhXo+p9ZqV2+KceN3txSuGNemcmVGkRf4B?=
- =?us-ascii?Q?lKgtAEk+dSFT5MxXn+glfkxEOniZbeh4bxypBgArPQ5rMdKih98E+m71bVYp?=
- =?us-ascii?Q?58/Hb0romvL+1FRB3pvVJ2B8wiOba558ofyWO8hXLX3vir8xHD+UJtYrqMt2?=
- =?us-ascii?Q?e0OSQUPtU3uRripnhbE=3D?=
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ha9RQ9Bncbr8 for <buildroot@lists.busybox.net>;
+ Wed, 18 Oct 2023 14:19:14 +0000 (UTC)
+X-Greylist: delayed 432 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 18 Oct 2023 14:19:14 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE66C60E24
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AE66C60E24
+ for <buildroot@buildroot.org>; Wed, 18 Oct 2023 14:19:14 +0000 (UTC)
+Received: from vfazio4.xes-mad.com (vfazio4.xes-mad.com [10.52.19.201])
+ by mail.xes-mad.com (Postfix) with ESMTP id 7EAB920266;
+ Wed, 18 Oct 2023 09:12:01 -0500 (CDT)
+From: Vincent Fazio <vfazio@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 18 Oct 2023 09:11:55 -0500
+Message-Id: <20231018141155.533944-1-vfazio@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48dc1542-b42a-4ce5-cba2-08dbcfd84653
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2023 12:46:40.2284 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1cd/VbgNEnJotWrdOaEEm9bIw43L8X3wSLFqCifdKfvcQ0D4KDm+0WuVxDHTOs0b
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6299
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=abpErWsyYkarCr5qwijow1MtYNvOYWgUNhAtvpSDUjA=;
- b=xEfBRMOWdVMDEBj5+MUGSundqU8Gy05Ei48IanpQlVuN6Ig0qKZzvYPaaOKJyhWyFuyC7MTahpCt1vRcEjuhbJY+hS5rKYigo+I6bL6zPa0Ct7oKqezwZe+c1xVID5aJPp341/1NPLbQgdJmaLuax01TFAr+s7ZDLuFDUrm4mfU=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=xEfBRMOW
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v4 04/10] toolchain/toolchain-bare-metal:
- new toolchain
+Subject: [Buildroot] [PATCH 1/1] support/dependencies: bump minimal tar
+ version to 1.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -143,73 +58,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>, "Simek,
- Michal" <michal.simek@amd.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Vincent Fazio <vfazio@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
+GNU tar 1.35 includes a breaking change [0] that changes the tar header
+created for each regular file even for "stable" formats like pax (which
+we use in support/download/helpers::mk_tar_gz).
 
-> This patch adds a new virtual package for adding a bare-metal 
-> toolchain to buildroot.  By default, this package will configure a 
-> bare-metal toolchain for the Xilinx microblaze little endian 
-> architecture.  When configured for the Xilinx microblaze architecture, 
-> this toolchain can be used to build the microblaze firmware applications for zynqmp and versal.
-> 
-> Signed-off-by: Ibai Erkiaga-Elorza <ibai.erkiaga-elorza@amd.com>
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-> V1->V2:
->  - adds select option to bring in all packages needed for 
-> toolchain-bare-metal
-> V2->V3:
->  - no changes
-> V3->V4:
->  - moved from package to toolchain directory
->  - improved menuconfig help comment
-> ---
->  DEVELOPERS                                    |  2 ++
->  toolchain/Config.in                           |  1 +
->  toolchain/toolchain-bare-metal/Config.in      | 21 +++++++++++++++++++
->  .../toolchain-bare-metal.mk                   |  7 +++++++
+Previously, normal files had the devmajor/devminor fields of the header
+filled with ASCII zero (0x30). These fields are now null which also
+affects the checksum value in the header as well.
 
-> I wonder whether this should be in
-> toolchain/toolchain-bare-metal-toolchain to make room for a future toolchain/toolchain-bare-metal-external.
+  $ diff <(head -n 100 xxd.1.34.output) <(head -n 100 xxd.1.35.output)
+  10c10
+  < 00000090: 3037 3500 3031 3531 3637 0020 3000 0000  075.015167. 0...
+  ---
+  > 00000090: 3037 3500 3031 3337 3237 0020 3000 0000  075.013727. 0...
+  21,22c21,22
+  < 00000140: 0000 0000 0000 0000 0030 3030 3030 3030  .........0000000
+  < 00000150: 0030 3030 3030 3030 0000 0000 0000 0000  .0000000........
+  ---
+  > 00000140: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+  > 00000150: 0000 0000 0000 0000 0000 0000 0000 0000  ................
 
-What is the value of adding another toolchain in the name?
+This has the consequence of causing hash mismatches for any tarball
+created with a version prior to 1.35.
 
-For example:
+Instead of reverting back to a host specific version (see 37a909cacf)
+and adding a cap to the maximal tar version (see ec50e407be), just
+establish that 1.35+ should be used going forward.
 
-Internal Toolchains:
-toolchain-bare-metal
-toolchain-buildroot
+This change requires an updated BR_FMT_VERSION for both git and svn.
 
-External Toolchains:
-toolchain-bare-metal-external
-toolchain-external
+[0] https://git.savannah.gnu.org/cgit/tar.git/commit/?id=738de9ecdec45ebfeb999628742373b5f8253bd0
 
-If anything, I could argue that we should then rename 'toolchain-external' to 'toolchain-buildroot-external'.
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+---
+This patch should be coordinated with other patches [1] that update the
+BR_FMT_VERSION revision for git or svn as all of the tarball hashes will
+need to be regenerated tree-wide.
 
-That would give us the following:
+[1] https://patchwork.ozlabs.org/project/buildroot/list/?series=373742
+---
+ package/pkg-download.mk                |  4 ++--
+ support/dependencies/check-host-tar.sh | 10 ++++++----
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-Internal Toolchains:
-toolchain-bare-metal
-toolchain-buildroot
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index e5cd83d859..d33eb2d811 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -20,8 +20,8 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+ 
+ # Version of the format of the archives we generate in the corresponding
+ # download backend:
+-BR_FMT_VERSION_git = -br1
+-BR_FMT_VERSION_svn = -br3
++BR_FMT_VERSION_git = -br2
++BR_FMT_VERSION_svn = -br4
+ 
+ DL_WRAPPER = support/download/dl-wrapper
+ 
+diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+index b7d607a47a..d56d0242a9 100755
+--- a/support/dependencies/check-host-tar.sh
++++ b/support/dependencies/check-host-tar.sh
+@@ -27,11 +27,13 @@ if [ -n "${version_bsd}" ] ; then
+     exit 1
+ fi
+ 
+-# Minimal version = 1.27 (previous versions do not correctly unpack archives
+-# containing hard-links if the --strip-components option is used or create
+-# different gnu long link headers for path elements > 100 characters).
++# Minimal version = 1.35
++# GNU tar upstream commit 738de9ecd introduced a "breaking" change that
++# affects tarballs regardless of mode (pax/ustar/v7) such that tarballs
++# generated with 1.35 will not hash to the same value as those generated
++# by previous versions of tar.
+ major_min=1
+-minor_min=27
++minor_min=35
+ 
+ if [ $major -lt $major_min ]; then
+ 	# echo nothing: no suitable tar found
+-- 
+2.34.1
 
-External Toolchains:
-toolchain-bare-metal-external
-toolchain-buildroot-external
-
-What do you think?
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
