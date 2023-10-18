@@ -4,130 +4,141 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDBCCDB47E
-	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 10:08:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A124CDB47E
+	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 10:37:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 68C04400FE;
-	Wed, 18 Oct 2023 10:08:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68C04400FE
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA2DE400FE;
+	Wed, 18 Oct 2023 10:37:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA2DE400FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MlgXgO45kMUp; Wed, 18 Oct 2023 10:08:20 +0000 (UTC)
+	with ESMTP id 1cRdPEvWKLeA; Wed, 18 Oct 2023 10:37:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69C7D401CA;
-	Wed, 18 Oct 2023 10:08:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69C7D401CA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 06EBF1BF5F5
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 10:08:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88C1B40168;
+	Wed, 18 Oct 2023 10:37:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88C1B40168
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E1B11BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 10:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A41918224A
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 10:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A41918224A
+ by smtp4.osuosl.org (Postfix) with ESMTP id D926E41F43
+ for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 10:37:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D926E41F43
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UMJuH-xpzkkl for <buildroot@lists.busybox.net>;
- Wed, 18 Oct 2023 10:08:16 +0000 (UTC)
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam12on20620.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe5b::620])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9B71C82244
- for <buildroot@buildroot.org>; Wed, 18 Oct 2023 10:08:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B71C82244
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UxjrUOYE_TDt for <buildroot@lists.busybox.net>;
+ Wed, 18 Oct 2023 10:37:04 +0000 (UTC)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam12on20625.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe5a::625])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 22E1041EF3
+ for <buildroot@buildroot.org>; Wed, 18 Oct 2023 10:37:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22E1041EF3
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cQ+equMhKtubA67s18Xb5+Bd/nyjpyAmbmsfnLipMwnVUNib+dZGUgZ6km1/H8Bw4ukJnrX9OwTiSf/zuWC+PW8APj0GrsT77KlXr7W37d2LGfYMLYAzrB+mBQ09N5qWIjUAvY1ST8rJyylDeDkVn/O2ZYaQ+90hAHQzasmPYBiuwZ8rn2CZLsz9aa3D+VKiRvgYjrRR9n0+i0u5z0V/SzM8/A3BhvJL63GML8qrszBOI404WTixwrL6ybdewcfMGmreCmg2S9LHlCJRU6G07Js3bX2DHtj3ApCmd2q5zm9B9LP5mfnW7zsZCoBWG9KbR7O+3llH2pt3KXSLw+2GZQ==
+ b=C26CSbiGkfsbWKYml5Z2grSOWSqBOWBzMg8acRKz0L+NVoWYpsenaUb15BimGsPkrUrxm0DxAafyXZpCCH+4S8HUzSXh/acRzbhfEMGlj40QqM3cxW7NUhK5AsFZG8hNFQnRym3q72uft2gXuEVbeXYrf7bWCsMRS3TskNw6VP/2zGcKWzKrj5wXkc19H+vCzl/R37dBwrDCaihnqo4GJ+mJFzfPWeGEXI1Luid/egLavAxxfavUAC+tLrRDpShhjwycAA+XE53azp7qIRrO1DtsARiMquijt4hGhuSGbY0izyzUR3cU9YcSZpXfVI+8QySXhaJLgfELufQZdBTCVw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kfUE6QhASeqIIXw+IZhHkCsZspaxKvBBbr2dMGIzfWo=;
- b=bOnk2xGBRBvVxrNLqRtjZGG2cbH/B7RtfzJ18lfqwfr9kN03r4RHmr5svTkV1uRHU6ttU3k43F2MZ/1iXxSRnt2JUCxZOk4XfwfIBKkpIQlMexccRgVNRl2zdmxsOcd6ST165Pw1wSSXmTAYyd0X2m05ae822f4YhPE4v/lAlIPogfWVgtvyTa9TjzF3jpwS2AiJ9l5uhljpa4gisbU7LonbYc8YNHjgvEfNwExIzrxX2IA/NM2vKAEowvSD3oYVvuX8RzrspWhXx2+46ULC8aWZETyRUTwe6xGc3s6TEsX5S+2F9eOOLKn/ccumpa4OJzxLl1TQVNttoxFKS1pTkg==
+ bh=91X8UVYscQ6s6Z9Z2oeskzWhUlUAiDjJZWz8QOs/Ex8=;
+ b=CLq57cryKpYtxbf+c5BiuGkdxfhRoOON/PElBR2umpP7MLViZW+a28oJJRbbQZPY4GF/fjVLIPTT/1isqCM1Bj6b/DAjfai49OStfvsvVLSKnS1pmAozUtXkcvzmSFBlCFLgoX758KxZ9ZSs5rsLxreBaI8b24DtDCMUuQWmcKD7XV1TvvD0Y5Ac5tuEnD1rfEuucThrtPkvO9tP2Q/qSl+ROsKbaeNln2beSu3Ugpnoj6Zf8WjsZCHzhp7qe5OkVvhWX80Gr2YNapp8wYLdoEPUnVvu3hqbkomtAudIVPIwKNF9EWS8jEZrHhUElKYTdQsc06ok1P5ReNTAP8t9NA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by IA1PR12MB6162.namprd12.prod.outlook.com (2603:10b6:208:3ea::19)
+ by SJ0PR12MB8616.namprd12.prod.outlook.com (2603:10b6:a03:485::20)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36; Wed, 18 Oct
- 2023 10:08:13 +0000
+ 2023 10:37:00 +0000
 Received: from CH2PR12MB5004.namprd12.prod.outlook.com
  ([fe80::53cc:feb5:431:6de1]) by CH2PR12MB5004.namprd12.prod.outlook.com
  ([fe80::53cc:feb5:431:6de1%4]) with mapi id 15.20.6907.021; Wed, 18 Oct 2023
- 10:08:12 +0000
-To: Peter Korsgaard <peter@korsgaard.com>, "Simek, Michal"
- <michal.simek@amd.com>
+ 10:37:00 +0000
+To: "Simek, Michal" <michal.simek@amd.com>, Peter Korsgaard
+ <peter@korsgaard.com>
 Thread-Topic: [PATCH v1 2/3] configs/zynq_zed_defconfig: bump to xilinx-v2023.2
-Thread-Index: AQHaAaLs43FKgLQKdUev5BO+lw+rQLBPS0ORgAAGXVA=
-Date: Wed, 18 Oct 2023 10:08:12 +0000
-Message-ID: <CH2PR12MB50049ACBED004D0940741439F0D5A@CH2PR12MB5004.namprd12.prod.outlook.com>
+Thread-Index: AQHaAaLs43FKgLQKdUev5BO+lw+rQLBPS0ORgAAGXVCAAAaKgIAAAU5A
+Date: Wed, 18 Oct 2023 10:36:59 +0000
+Message-ID: <CH2PR12MB5004328281E2B7ACDE8B5A2EF0D5A@CH2PR12MB5004.namprd12.prod.outlook.com>
 References: <20231018091002.2162735-1-neal.frager@amd.com>
  <20231018091002.2162735-2-neal.frager@amd.com> <87h6motghr.fsf@48ers.dk>
-In-Reply-To: <87h6motghr.fsf@48ers.dk>
+ <CH2PR12MB50049ACBED004D0940741439F0D5A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <f88a31b0-b6dd-4bfa-921b-1f37b737847f@amd.com>
+In-Reply-To: <f88a31b0-b6dd-4bfa-921b-1f37b737847f@amd.com>
 Accept-Language: en-US
 Content-Language: en-US
-X-Mentions: michal.simek@amd.com
+X-Mentions: peter@korsgaard.com
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|IA1PR12MB6162:EE_
-x-ms-office365-filtering-correlation-id: 5aff9c89-aaea-420a-902a-08dbcfc22379
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SJ0PR12MB8616:EE_
+x-ms-office365-filtering-correlation-id: fbc94d16-60f3-426c-861e-08dbcfc628dd
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 19gnDkl/4rmd5sbawIERo/OjtWJvah3WSI3KRMPN0hkbseuGKemAWA9PlNLCYNp9L0U0Rmgbq0v51OeRvwHdLYvCo1FEzEOga3DayNAWuNSU/eJuq0dPZdd2JFT4AfSNnNbSGKSRmdjrw2yxpSn+lXwG5XMRWU+EyLvyS91Oszafas2u0c/ifRf9mdfsqExx5cbWG4zfFW4HoRaLr5Tkn2yBNUKqfxfXnJPXDkUCax3xPqeYmESxX+9va9pThhOrMVnvvQznd4WOrOwTK/MkbFK+UvGs5WJ5s3wV1zJBxMD9vrsFrQg065AyCANKPNB3G7qm/iYy8YZTM75b28DrO4oUH6xE87AzViu0vel51xtTjZVJNMwG7BRh2k5obS2HdrQgacVPkfBGpmSEuXGKhhkFZ+c4/a1owHdJI2DsTp1UviZa/icsqwduxxTAfEOtCg4j9Hv/xSom9NnBgf3xYGpl/AEZLLj3JtLLfazaxqxFDdxhdVMtwL+GL2l+2zcSsshYWNQeIPHlCPHJ/Hx87UrMqzCUM82m684i1XgEflAmxNpiXMbNf/yknTcSc52KO6FVCVKQOX05mU3zRUYg5E9ESjdBbiWkCfbZjIcz6jaQfb9/g8wuCrjJDzSJ1Aaj
+x-microsoft-antispam-message-info: m9lrieAXEkA/xT8TGrH4o3x6UToxeEXISr/BkzB209SMwEApatPEL4gwgxNNzUh/+Iu2sh5Io/R+/fGWioML44P0UfoF/O5Bi5yjQgl9AzWOSc3GKyf2gaZJl7OvmOBB4n90l4ydOev5LfFm7I6XMqw9AG2+YRkV1cUFac6f54K4SwMD+dEg+SbhDxVo4WHFm5h6C2z4fCwqs6tqKE8OUNZ2gPkqSoF8gx2XXrRSy4H5l7POowpMihLPuQs+lH0ISpQ5SPqCwjjJQ6ABRYaP1eJmw99UNu/UbOK74f+B1GIOY5KrmIOQly3+yZn2BWFCJuqvSV8x4JWDgPkBYQHJXkwUgaaJJmK5Qc/5HMe4IXxHnfduolY1I/FovwT1vbZc+V/KnJyz52xMLRkd3S87hO88eayzQnORvu1BA1U0drF1lso2RIadi5P9qC9gaQMHnZxoxa2zIoat+IgFyXE/8wfAmkRGTlcjw8SlxQamdbnzIayRtylHLmfzy5fKoo9k6ECbG+Az5h6UzN6fgqkm+nuM2fLAUQ3gkfqOgPHli4fpSERGqoWsz6yWBNxsUQ3YcicJ4GHrad0ZiOq11i/fDsbFRF7A/9dsuPYL6jQZHH/n5ndoqftO1d9OwZRmHBRY
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(136003)(366004)(346002)(376002)(396003)(39860400002)(230922051799003)(1800799009)(64100799003)(186009)(451199024)(110136005)(66946007)(2906002)(86362001)(478600001)(41300700001)(54906003)(64756008)(66476007)(66556008)(76116006)(66446008)(9686003)(316002)(7696005)(6506007)(6636002)(38070700005)(8676002)(55016003)(52536014)(26005)(122000001)(83380400001)(4326008)(71200400001)(33656002)(8936002)(5660300002)(38100700002);
+ SFS:(13230031)(136003)(376002)(366004)(396003)(39860400002)(346002)(230922051799003)(186009)(1800799009)(64100799003)(451199024)(55016003)(33656002)(52536014)(5660300002)(2906002)(316002)(41300700001)(86362001)(26005)(8936002)(71200400001)(8676002)(64756008)(76116006)(66556008)(66476007)(54906003)(66946007)(66446008)(110136005)(38070700005)(7696005)(6506007)(4326008)(122000001)(9686003)(478600001)(38100700002)(83380400001);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yNDxak2LVrNzYXFSIAtzNud04rm5xJuQkRFc5nwV1HsJnE7Hrgow7HMY3FHl?=
- =?us-ascii?Q?WUIMgLSeBdZcJ4by6tgNnzuKUxfeXpKXDtluXPQXFY9G4h3qn8BTtnbSCPYQ?=
- =?us-ascii?Q?kTDcXo0qRuNXGETLDyuHfQny4ftP8SLHI1aYnm7/j/1gdkTTx/+8yzu3TtWF?=
- =?us-ascii?Q?1/qRzNFRwJh5F1aE92ChsghkA71AIfYyDE3it/znpHx9S9Y1K/4wdGyv5Zo3?=
- =?us-ascii?Q?XWQkjzIdWvCQz1krLsweEBlceJ4dZ7wiPz0kBAt76dFcm2/XchrA2hKE8oID?=
- =?us-ascii?Q?jiiX8Ujfol6lvjd7OWvT//uk0H36fLnBcHGdNdriNRyxRcGh2G9bpoidxUHm?=
- =?us-ascii?Q?AIGW+Aj2IdbBc+FXCGZPHgaBiFM884XaUvaRhdLhptmJ7c34hRn1Nu03wXEj?=
- =?us-ascii?Q?7RBx4pFkhHVof6l1MXHN4Vl/3+pNON1H/ZtKZSRjSCKjOaphWoyJYXQeIfw2?=
- =?us-ascii?Q?+Q2NRe+JFbf6/dIii+gdzqwGEQvCeyIxWeKq6GGqc7iNJl4IwjqaB72etzBC?=
- =?us-ascii?Q?uA2mttMUyiowWGjeCn+xKVsv34fAFsSA/R9FtGkxee03ytraDpdVTSQWQx6n?=
- =?us-ascii?Q?vPFpxSzsJ8lnAdrMlnr23pIqpK3BVPeWNARKOU8adBbWwNGBt8jV6R+SJSMF?=
- =?us-ascii?Q?WuLDdadOwYvWM2QMbZ7kkFL9DhhLwt4IRw2ZoMf2Bp3ocu0ymmC1wutoHqA4?=
- =?us-ascii?Q?cfZnacZyXF5KKWZU43sIncfBg6E5/ijC4eOz2k3/unHFFpCLyUiufchYoJmk?=
- =?us-ascii?Q?Ystxxyd7ZmaONNMCa00sHuOe4VAW12R/vfXE9sx/ntaGcMoArsFwKP7kzun+?=
- =?us-ascii?Q?14XgesRfD0td2a1BNwzj7KdgdWSJfpYV7utpizxQUlx36xcG8BnLQann9d8h?=
- =?us-ascii?Q?xhYf2SDu8HfLea2WNLfhclBkfdSdHBHwkYzEUihKn8WXYoo3hb1F13OQhrVe?=
- =?us-ascii?Q?aQwYp/VwHIp+wv7VGalZXQ0VdIkbHPQ4xLQM6iivslcIapaJAqMKcvllkdST?=
- =?us-ascii?Q?nEcoWmBh4rkbvxBbpYuOAOKn5L/voTX9oSh7vaByAqKBVXqIBID6Y9Lex4OM?=
- =?us-ascii?Q?L7QgFYd7iFEfpOJ4Fev1lHG7uw3yh9Emz+EsoFBbSHnhVdohSaDWYBZvj0Q6?=
- =?us-ascii?Q?1ZBqoQqt2WVN1qmOPmPvuqPkq7Tw/IxuygPxtZZGUWLsDzVOmF9ptY4k9csq?=
- =?us-ascii?Q?NygAK2H6aQJyPS4KcZyvx0/NY3lEjEQMwz6txymFEBZil6hhOEaXrypjEKUp?=
- =?us-ascii?Q?PDxmWcHaYq/X5IcwqkHZGpRjE4QdDlt47Wr8r+w6OWq9i66V9D+EwfoKQTlS?=
- =?us-ascii?Q?BTQylrgaCJsVxGgf/u+uW8s+PhYttkqA9P73MGJLCrS3tpUBrVvEQQA6Eamx?=
- =?us-ascii?Q?pWL7kLY3cNfN8kixoUQTNDKy5mjFoiwUdkjNpvE3unMUjiH7xQO/jcrMkZJl?=
- =?us-ascii?Q?6Dyts7TVlM9CLQ2QJ3ENx8MmbqJli6WFat2pR86Q2nFvxpBwKgTPzVoSOLI9?=
- =?us-ascii?Q?upPPhWwTCkUHEwQ5wrjs3IvcmQCIouApueUB7ZOep3fweiIF0Qtg5+sS7DBe?=
- =?us-ascii?Q?F4Jc+Fh29I+jurZF2BM=3D?=
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WUhFTEh3TW1YbWxTMVluMDk2ZFM1c3ZmSzRFazBoVWk2ZDJxZHdwb3NnQnpu?=
+ =?utf-8?B?dUlEY1FrSytEZllyRytHWmNMZ0d1cnYwZVVvNVpmMzBRYzBYeXgzek55Zjc1?=
+ =?utf-8?B?NGNsdXpGYkRKcjNnNVlFNWliaVYrYzZlaXhaV3VjM3RHUXhLaG1YelZRc0ZH?=
+ =?utf-8?B?N1pDT1BtZHNMZTdBM2lpMnI0RlZPdzhucjViaUZCOUx0TmVTcDlCOFFBcm02?=
+ =?utf-8?B?WU84eUw4K1ZBNVBST2tsbGU2NHNaT3RXQ0tva01FS0k5Ni9sM1hwakZnd3du?=
+ =?utf-8?B?QjVORkYwZDNQSTJ4YTRHRHlpRFZqVkVyT0ptSHdIRGNLQWpIU3NFeWxrQjQx?=
+ =?utf-8?B?SDVFVjZnRVZCNU9WeVJNTHVXckQ1R05iT25pRDZxS2MvYTgwanZVS1doYVBl?=
+ =?utf-8?B?STQwRGg4UjZXRDFjUjRrQ3VTNDlRYW9UeE83ZnFpa21OdnR5Mnp1UytTQWhV?=
+ =?utf-8?B?Z2cxd2Z1dFhWYzFta3FFMzR1cUNVR2g2a2FyY21hUDlQQ3NYdUNhdHRnbCs0?=
+ =?utf-8?B?b0lLUEQ0cklCcmJGRStDbmJsTVkvNEtLT1NrL0V2dklYWjBka1dmeGgrN1FV?=
+ =?utf-8?B?Rmc4TGtyeTJBUEUyeHVyWkM4bXFXaTN0U2x2bktTaDZBQnhicmxMc1V0YWxN?=
+ =?utf-8?B?SnpjL3R6TVNJRG5GWFNJS2toWUhoNE5UZFc1WFphbDhCRzh2MUFQYmdkMnhI?=
+ =?utf-8?B?Z2FvZFNORGtVaGRtM1NoVGtUTHRRUzNYM05zY1BSbURDenJjdVd6dUswQ2J6?=
+ =?utf-8?B?c1lVSUt3RHk5ZC9CQncwUjlBZ3c2YjArUHdQV2l0aFQyR3hnQlU4bkZPdFU2?=
+ =?utf-8?B?cEx4K29BVWxBYlovbWphamVoWk9yTmlScmZpQkRwQmJmZGN3WWZ0UEpRS2NG?=
+ =?utf-8?B?SlV4N1VYY2x5eFpucnI1bzVWQ01jZUFtNGpkQk5TU1VnNUxNRVVRdkZNajNB?=
+ =?utf-8?B?NExFMlRJdzk3NXZtQzUrSmQ3eURYV2FlcGx1RW4rRjkzYklPWElzV0Nsc3h6?=
+ =?utf-8?B?SGNMUDNicWdDZVYzWUxPcEtJZWovVFIrN0xaWFhEQTFJcUJLdy9KYnpBbG0w?=
+ =?utf-8?B?K3IvaDJtME5GYVcwR29JcDRXRlVKRjV4VGdXSEZGdFFCSUphUjRoOE50T05V?=
+ =?utf-8?B?VFAvTHhTQUxUV0JXME5XcTFCVHk5UFhNY3hxMHBTQXpIYW1XM1VWWmlQVUVX?=
+ =?utf-8?B?ZngySWV2YUVyYndTcUg0UGQzKzdsRktnYUNJeTIyRXE4UzVoa1BkTFFrbHNv?=
+ =?utf-8?B?ZnJZQXo5amFzUmJYdERzSlBYRjhhZ0NpSkQwVlNHZTY2a1RzRWYvdlRtR3pi?=
+ =?utf-8?B?UUU5WXdkRzZ5U04raHBQbTNxNHNJdEliSTJVMEtkN2ZOTm5YdXQvM0hUSWpU?=
+ =?utf-8?B?VkFvQytlMnBZd0YxYVQxb2g1V3VybWlSMmFXR1NFS0ZxUmJTeTl5WnpMOFR2?=
+ =?utf-8?B?d3ltM09VUDNESlZXcGdBaFdERFA4a2NETnIrWlA1VkVtSnBxVzNsZ0prdFVB?=
+ =?utf-8?B?NEM1Y3RmWjFybCtJZHF6dElHOGlNSk5JWGtsdlRveUpMb0dYU3ZnWEhRSkNa?=
+ =?utf-8?B?ZXBBWFJQQWdZT1llQUF3TTlTQ1RSUHlWaWRpbUl0clJBclhRQkUwZTkwWTdK?=
+ =?utf-8?B?YkYxOWI0RlZtMVNvcGZMRDhiVGVWdTBPdWhIWm1HQWpjbnZRc0J5akg2bFha?=
+ =?utf-8?B?VGE4REE5VnVCUkppRW95TWFyQ1NDMi9UVmFNU2xkNWRPcnFXcmw1cm4rNDh4?=
+ =?utf-8?B?WlZmSU1DZkI1QWMwVEtwZS9vZjNTZlk5L0Q2YlRMcU5JYlJDSyt1UU9zK2hN?=
+ =?utf-8?B?VXRWWW9VSWx4V3hKR3kzSnlHZ2VVK3hGNUdjc0JUZ3pJWmpEeHlVT1BLVEpW?=
+ =?utf-8?B?UTdnWGEyTUg0dGM1S1ZrUnhPQjhLckZZSEdudXNmNUMyTktib3lUVkl4VlpT?=
+ =?utf-8?B?OTdFTFBvV21OZ3FWZDFzSkNTNUtDb3A4bFR1VTl4TXFmdURhYWE2TVU1UlpR?=
+ =?utf-8?B?ZHFyWmhJcVFzZXVMbEFyYzhwK2lBZHhNKzNBczNUYVF4bkc0YkJVQ2hLQlUx?=
+ =?utf-8?B?KzVRcTRzS2pFVVlBZmNoTFFuaXc0OHdnc3llTWgwdGN6RFAvY2xsYVZhNXox?=
+ =?utf-8?Q?6UA8=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5aff9c89-aaea-420a-902a-08dbcfc22379
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2023 10:08:12.8217 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbc94d16-60f3-426c-861e-08dbcfc628dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2023 10:36:59.9059 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4dA+Wde2lgPc8thSIrlCTTMsu/niI+FoeM7poySkpMKpCPWHqxuf5V+UKlOxS+zW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6162
+X-MS-Exchange-CrossTenant-userprincipalname: VHDdor3g1r9C7fbMRLXRW6+z16fj6dnia5W4gcZiXFZNVycWwlVxueCfRA/oBsO3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8616
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kfUE6QhASeqIIXw+IZhHkCsZspaxKvBBbr2dMGIzfWo=;
- b=HlKXDCqSXqJfdV4PDXKT55BULsWXPVjugkgtqNb6b8LYJYJC/C+nHWyX9UIKDf3Ni2/TT7tZy8Zr931tLE4ZYBExH9czQJCn3T0nIqFIQ+CfnKYtEEqfyZ2XtHk8RvT86YPaN4+FtO6JPjS7JdgbksBpZuiEHkK0Mi0jMYyMQQw=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=91X8UVYscQ6s6Z9Z2oeskzWhUlUAiDjJZWz8QOs/Ex8=;
+ b=4915aw7ewrWcvUtCGv00oCulLE/j98r0oIczgjLhXCFF+UfF5vdQWBoo0S7LosHN80ORYCpDjlvO7Av3QUIcmtTJTFueg0gz25BwrfPtbqW8cY1rtXUzxEm4UMNxPYaa/ihxM7gkTvWl8XnimnLATmaYu2lZbSS9Rvj4XU6Dv/k=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=HlKXDCqS
+ header.s=selector1 header.b=4915aw7e
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Subject: Re: [Buildroot] [PATCH v1 2/3] configs/zynq_zed_defconfig: bump to
@@ -145,7 +156,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
 Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+Cc: "Chaplin, Kris" <Kris.Chaplin@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
  "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
  "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
@@ -153,33 +165,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
- > This patch bumps the zynq_zed_defconfig to xilinx-v2023.2 which includes  > the following updates:
+Hi Michal,
 
- > - Linux v6.1.30
+>   > This patch bumps the zynq_zed_defconfig to xilinx-v2023.2 which includes  > the following updates:
+> 
+>   > - Linux v6.1.30
+> 
+>> Out of interest, how come this was "only" based on 6.1.30, when there were already rebases of 2023.1 based on 6.1.40 and 6.1.50?
+> 
+>> commit ae6daa717cb4cd4d8234e6f91b99af68ef438252 (tag: 
+>> xlnx_rebase_v6.1_LTS_2023.1_merge_6.1.40)
+>> Merge: 9299ac26ca51 75389113731b
+>> Author: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+>> Date:   Wed Aug 2 13:28:10 2023 +0530
+> 
+>>     Merge tag 'v6.1.40' into xlnx_rebase_v6.1_LTS_2023.1_update
+> 
+>> commit 496752408d031f93159fcf1aba2831c807a389a3 (tag: 
+>> xlnx_rebase_v6.1_LTS_2023.1_merge_6.1.50, 
+>> xlnx/xlnx_rebase_v6.1_LTS_2023.1_update)
+>> Merge: 0f7f048016e0 a2943d2d9a00
+>> Author: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+>> Date:   Wed Sep 20 17:50:18 2023 +0530
+> 
+>>     Merge tag 'v6.1.50' into xlnx_rebase_v6.1_LTS_2023.1_update
+> 
+>> - U-Boot v2023.01 with additional bug fixes
+> 
+> I noticed that and I actually have the same question.
+> 
+> @Simek, Michal, perhaps you can shed some light on this?
+> 
+> In addition to Peter's question, should we be bumping the Linux kernel release tag we use with buildroot each time we merge with another set of 10 upstream patches?
 
-> Out of interest, how come this was "only" based on 6.1.30, when there were already rebases of 2023.1 based on 6.1.40 and 6.1.50?
+> It is because our internal deadlines and associated work in connection to our releases.
+> When .1 version is tagged we are merging every 10th LTS version on the top of xilinx 2023.1 tag.
 
-> commit ae6daa717cb4cd4d8234e6f91b99af68ef438252 (tag: xlnx_rebase_v6.1_LTS_2023.1_merge_6.1.40)
-> Merge: 9299ac26ca51 75389113731b
-> Author: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> Date:   Wed Aug 2 13:28:10 2023 +0530
+> On .2 version we continue to do new development and we reached the time where there shouldn't be major changes merged to that branch. That's why .2 version stopped at .30 for running all regressions and .1 can move on .40/.50(coming soon).
 
->    Merge tag 'v6.1.40' into xlnx_rebase_v6.1_LTS_2023.1_update
+>I see that xlnx_rebase_v6.1_LTS_2023.2 has been created. That means that next step is going to be that we will do merges for both branches to 6.1.60.
+> At that time both branches will be using the same LTS release.
 
-> commit 496752408d031f93159fcf1aba2831c807a389a3 (tag: xlnx_rebase_v6.1_LTS_2023.1_merge_6.1.50, xlnx/xlnx_rebase_v6.1_LTS_2023.1_update)
-> Merge: 0f7f048016e0 a2943d2d9a00
-> Author: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> Date:   Wed Sep 20 17:50:18 2023 +0530
+> And we should be doing merges to both branches till ~ April 2024.
 
->    Merge tag 'v6.1.50' into xlnx_rebase_v6.1_LTS_2023.1_update
+Thank you for the very clear explanation.
 
-> - U-Boot v2023.01 with additional bug fixes
+@Peter Korsgaard, if you would like, I could start bumping the Linux kernel release tag used by the buildroot zynq/zynqmp/versal example defconfigs every time we release a merge of .10 patches.  
 
-I noticed that and I actually have the same question.
+Since there are bug fixes in 2023.2 that are specific to AMD devices, I would think that 2023.2 with Linux kernel 6.1.30 is still a better choice than 2023.1 with Linux kernel 6.1.50.  However, I am happy to bump to 2023.2 with Linux kernel 6.1.60 as soon as this is released.
 
-@Simek, Michal, perhaps you can shed some light on this?
-
-In addition to Peter's question, should we be bumping the Linux kernel release tag we use with buildroot each time we merge with another set of 10 upstream patches?
+What do you think?
 
 Best regards,
 Neal Frager
