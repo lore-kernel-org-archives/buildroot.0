@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3BE9CDB483
-	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 07:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08982CDB465
+	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 07:47:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 574924010D;
-	Thu, 19 Oct 2023 07:47:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 574924010D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B5F040166;
+	Thu, 19 Oct 2023 07:47:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B5F040166
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PbtkyOKC7AOH; Thu, 19 Oct 2023 07:47:11 +0000 (UTC)
+	with ESMTP id BHaf50UwO4_1; Thu, 19 Oct 2023 07:47:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 57ACD424B8;
-	Thu, 19 Oct 2023 07:47:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57ACD424B8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 31DB41BF45A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5DFB7424C1;
+	Thu, 19 Oct 2023 07:47:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DFB7424C1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 657B51BF990
  for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 07:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0BD166FAC0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EADD40166
  for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 07:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BD166FAC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EADD40166
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hinX07yb8jQI for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hYd7w9z3W9ss for <buildroot@lists.busybox.net>;
  Thu, 19 Oct 2023 07:46:29 +0000 (UTC)
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com
- [IPv6:2a00:1450:4864:20::343])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 05D8E6FAB2
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com
+ [IPv6:2a00:1450:4864:20::141])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C3F314010D
  for <buildroot@buildroot.org>; Thu, 19 Oct 2023 07:46:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05D8E6FAB2
-Received: by mail-wm1-x343.google.com with SMTP id
- 5b1f17b1804b1-4083ac51d8aso14084725e9.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3F314010D
+Received: by mail-lf1-x141.google.com with SMTP id
+ 2adb3069b0e04-507bd19eac8so4043555e87.0
  for <buildroot@buildroot.org>; Thu, 19 Oct 2023 00:46:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697701587; x=1698306387;
+ d=1e100.net; s=20230601; t=1697701586; x=1698306386;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=nLys1b6LNJhmcDGUgxlZVUrFkqG0U16iYWUW+fHvBWI=;
- b=u808PhqMpY6aVh9J0LR1boaeqJN2Hu/0bBe4Vpa3arxZAakel6USLI8uZn8XBY09x8
- xLdEC0HUyy6AQrYW2mNrT/mwLUKbyN/XANNu9AKceox5OHqYzlKx6o1KUITyJVJu6kW1
- J+qshlo22inFCUb5q9A/CzalYbMR8Tna1xSnDMB7git/M8OKDjuIiuIlE7nDv2yH8a8e
- nnFxUVB1ArY8yF4uOAXEPU7NXWPVpXh7l/+iI6UoMm/eWjucT0aOJdpEaW3HZCPu3F8J
- 0Kf9kPfCo854PX2QV6EjaRBBBi9xxQi0wi4ZCOnn+mhSyEaAiAXhAnbDGHSI2kLZueDn
- 0N3Q==
-X-Gm-Message-State: AOJu0Ywu4Vfg5zAqtCKfjhuPdExm9fNV0LlOdFOugQCTb2caCaJo2tSW
- +lETLUq10M9etRWQlIRKOPSgxkA1bN9wmY5EZC0NbtBH1iU=
-X-Google-Smtp-Source: AGHT+IGEB4RJqgUoSbHTxp8JyG6yEuMDwPEDSkncdo9cPSNQuNNfep9kOCZX9zEbcTANbyzjcMOHaQ==
-X-Received: by 2002:a05:600c:1f8d:b0:405:36d7:4579 with SMTP id
- je13-20020a05600c1f8d00b0040536d74579mr1152158wmb.28.1697701586967; 
+ bh=87Tc9xkpgXBLFA4WClUoTxUIXhZ6QCJkLp3FoyCxGOM=;
+ b=Tubp03f5q0VfKLQuP0Jk3f1AAR1Veyla9+XyGxDgMxtPv3L5f6Zdkyog0rCykzTE6T
+ viSeAGICacsSgByYwKlFC/XHK/kEcD6Cwh0VfE/xGDAzRObvQ5rQYZqmJBmdCbLT2kOi
+ 68Ou7K9S8SONjyc6qVLS55YbXPVe91xr2Em5dp4ESLb3mhbOXrkSYVNLEavqytb8frYb
+ TnNTI7DSP4GosHfdsXCda0WL5G34oDAxikjB8tC8a8Bd668FP2SvvIzSLD//awWjxYRh
+ IsYkYzz8YApCDrhFJnU+Vyi0T24Am1fHJ04u/Zna5Lmf/DlCluN0IZ6dDzFNl6aPLR8U
+ QGmw==
+X-Gm-Message-State: AOJu0Yz+w6bM3Q0zpF9gvtuguw/kKyWH9nGn7637G3DsWR+e0fKmf6pw
+ tB2dE/EoMgpCYGkhr8iv015Cfk1dM/6l5KvLdfnkHK8tHdg=
+X-Google-Smtp-Source: AGHT+IGSITmcZba7/yGiYN0/4S5z4NwAVknci5VPL+TG5LWZDoZEwqF/62VlUOKbpzetNteOgvVHGQ==
+X-Received: by 2002:ac2:54a2:0:b0:503:32bb:d5ca with SMTP id
+ w2-20020ac254a2000000b0050332bbd5camr773056lfk.31.1697701586222; 
  Thu, 19 Oct 2023 00:46:26 -0700 (PDT)
 Received: from localhost.localdomain (net-91-81-8-146.cust.vodafonedsl.it.
  [91.81.8.146]) by smtp.gmail.com with ESMTPSA id
- fc8-20020a05600c524800b0040535648639sm3739268wmb.36.2023.10.19.00.46.26
+ fc8-20020a05600c524800b0040535648639sm3739268wmb.36.2023.10.19.00.46.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Oct 2023 00:46:26 -0700 (PDT)
+ Thu, 19 Oct 2023 00:46:25 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Oct 2023 09:46:15 +0200
-Message-ID: <20231019074615.1672645-5-adam.duskett@amarulasolutions.com>
+Date: Thu, 19 Oct 2023 09:46:14 +0200
+Message-ID: <20231019074615.1672645-4-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231019074615.1672645-1-adam.duskett@amarulasolutions.com>
 References: <20231019074615.1672645-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1697701587; x=1698306387;
+ d=amarulasolutions.com; s=google; t=1697701586; x=1698306386;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=nLys1b6LNJhmcDGUgxlZVUrFkqG0U16iYWUW+fHvBWI=;
- b=fLYa5pPZQEW/fqDmuunblj5yhpBbZ9r/YEx6BTvRjAIyyGGOp0yUkGb48+P+4qv8BK
- WRt2bQMdgw+Fkk8/gmnQ30s+pigVvLcUYpjNxo1hFQeKZhvvU9AOfARbNpsDxqE+F7Lx
- D+yHNzTiaK8SARm09i9gY7DP9lzNp9HX0x6GE=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=87Tc9xkpgXBLFA4WClUoTxUIXhZ6QCJkLp3FoyCxGOM=;
+ b=rCYn2ONEPf/4DrjqfibFparS/hyAZWHmjdBWMfHeS8N/LOn00LPRgPpQc8yYKEEb0K
+ 6ewFMeGZH2rIkAugQFDuJ2FYQ7lCmxzAWzg5YrmnTJRs8era+IKbm5nA4nD1+eZi2s87
+ cbWGVBlK9gEt8xO9Hix8SSNgPSpqrLT8BLq7U=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=fLYa5pPZ
-Subject: [Buildroot] [PATCH 5/5] package/flutter-pi: add charset converter
- plugin option
+ header.b=rCYn2ONE
+Subject: [Buildroot] [PATCH 4/5] package/flutter-pi: bump version to
+ 6a2873870f50e71b09dcbf50c661a44383104da4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,55 +102,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+ - Drop upstream 0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
+ - Disable new charset converter plugin.
+
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/flutter-pi/Config.in     | 7 +++++++
- package/flutter-pi/flutter-pi.mk | 7 ++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ ...er_surface-properly-fallback-to-surf.patch | 59 -------------------
+ package/flutter-pi/flutter-pi.hash            |  2 +-
+ package/flutter-pi/flutter-pi.mk              |  3 +-
+ 3 files changed, 3 insertions(+), 61 deletions(-)
+ delete mode 100644 package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
 
-diff --git a/package/flutter-pi/Config.in b/package/flutter-pi/Config.in
-index ecebfad89b..45b6b4faef 100644
---- a/package/flutter-pi/Config.in
-+++ b/package/flutter-pi/Config.in
-@@ -23,6 +23,13 @@ if BR2_PACKAGE_FLUTTER_PI
- 
- comment "plugins"
- 
-+config BR2_PACKAGE_FLUTTER_PI_CHARSET_CONVERTER_PLUGIN
-+	bool "charset converter"
-+	help
-+	  Adds platform-side implementation of charset_converter plugin.
-+
-+	  See: https://pub.dev/packages/charset_converter
-+
- config BR2_PACKAGE_FLUTTER_PI_GSTREAMER_AUDIO_PLAYER_PLUGIN
- 	bool "gstreamer audio player"
- 	depends on BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch b/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
+deleted file mode 100644
+index 7a1a49b3d4..0000000000
+--- a/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 856f9849763535d62ed01b538ba23905875c93f4 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Tue, 26 Sep 2023 20:31:17 +0200
+-Subject: [PATCH] src/egl_gbm_render_surface: properly fallback to surface with
+- no modifier
+-
+-In 869fa7fcfbeb, we added a fallback to be able to create an EGL sruface
+-when the driver do not support modifiers, like the llvmpipe software
+-renderer (or like some proprietary drivers, like the MALI ones), as
+-reported in #269 [0].
+-
+-However, in c6537673c9b6, there was a big overhaul of renderer
+-infrastructure. That commit lost the with-modifiers code path and only
+-kept the without-modifiers fallback one (i.e. it only kept the call to
+-gbm_surface_create(), not to gbm_surface_create_with_modifiers()).
+-
+-Then in b0d09f5032a4, the with-modifier code path was re-instated, but
+-in a way that made it exclusive with the without-modifiers one. That is,
+-the without-modifiers code path was not a fallback to when the other
+-failed.
+-
+-Re-instate the fallback mechanism as intiially implemented.
+-
+-[0] https://github.com/ardera/flutter-pi/issues/269
+-
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Upstream: https://github.com/ardera/flutter-pi/pull/367
+----
+- src/egl_gbm_render_surface.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/egl_gbm_render_surface.c b/src/egl_gbm_render_surface.c
+-index ce9e5e7..8a58667 100644
+---- a/src/egl_gbm_render_surface.c
+-+++ b/src/egl_gbm_render_surface.c
+-@@ -146,6 +146,7 @@ static int egl_gbm_render_surface_init(
+-     }
+- #endif
+- 
+-+    gbm_surface = NULL;
+-     if (allowed_modifiers != NULL) {
+-         gbm_surface = gbm_surface_create_with_modifiers(
+-             gbm_device,
+-@@ -158,9 +159,10 @@ static int egl_gbm_render_surface_init(
+-         if (gbm_surface == NULL) {
+-             ok = errno;
+-             LOG_ERROR("Couldn't create GBM surface for rendering. gbm_surface_create_with_modifiers: %s\n", strerror(ok));
+--            return ok;
+-+            LOG_ERROR("Will retry without modifiers\n");
+-         }
+--    } else {
+-+    }
+-+    if (gbm_surface == NULL) {
+-         gbm_surface = gbm_surface_create(
+-             gbm_device,
+-             size.x,
+--- 
+-2.25.1
+-
+diff --git a/package/flutter-pi/flutter-pi.hash b/package/flutter-pi/flutter-pi.hash
+index f7148963a4..e69fe5b884 100644
+--- a/package/flutter-pi/flutter-pi.hash
++++ b/package/flutter-pi/flutter-pi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e4af79c8f53c15913f52a83a221f099a2a750d023a0bc4560d0db6f15def79a2  flutter-pi-d62e84350d2869b3ec1dfb1af21bfe234c4b817f-br1.tar.gz
++sha256  e9c9f64a8f7390cabd8e8f8158f200fe5cd04e0811e72e08a1ef8a5df56620b1  flutter-pi-6a2873870f50e71b09dcbf50c661a44383104da4-br1.tar.gz
+ sha256  b34df9d3e1b4e5d1ba70b1740ec74b69f1189b44efd0c96b898b074ef8db1c70  LICENSE
 diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
-index 81034062d6..7798b5c513 100644
+index 27f140c177..81034062d6 100644
 --- a/package/flutter-pi/flutter-pi.mk
 +++ b/package/flutter-pi/flutter-pi.mk
-@@ -27,7 +27,6 @@ FLUTTER_PI_CONF_OPTS = \
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUTTER_PI_VERSION = d62e84350d2869b3ec1dfb1af21bfe234c4b817f
++FLUTTER_PI_VERSION = 6a2873870f50e71b09dcbf50c661a44383104da4
+ FLUTTER_PI_SITE = https://github.com/ardera/flutter-pi.git
+ FLUTTER_PI_SITE_METHOD = git
+ FLUTTER_PI_LICENSE = MIT
+@@ -27,6 +27,7 @@ FLUTTER_PI_CONF_OPTS = \
  	-DENABLE_VULKAN=OFF \
  	-DFILESYSTEM_LAYOUT=meta-flutter \
  	-DLINT_EGL_HEADERS=OFF \
--	-DBUILD_CHARSET_CONVERTER_PLUGIN=OFF \
++	-DBUILD_CHARSET_CONVERTER_PLUGIN=OFF \
  	-DTRY_BUILD_GSTREAMER_AUDIO_PLAYER_PLUGIN=OFF \
  	-DTRY_BUILD_GSTREAMER_VIDEO_PLAYER_PLUGIN=OFF \
  	-DTRY_ENABLE_OPENGL=OFF \
-@@ -43,6 +42,12 @@ else
- FLUTTER_PI_CONF_OPTS += -DLTO=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_FLUTTER_PI_CHARSET_CONVERTER_PLUGIN),y)
-+FLUTTER_PI_CONF_OPTS += -DBUILD_CHARSET_CONVERTER_PLUGIN=ON
-+else
-+FLUTTER_PI_CONF_OPTS += -DBUILD_CHARSET_CONVERTER_PLUGIN=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_FLUTTER_PI_GSTREAMER_AUDIO_PLAYER_PLUGIN),y)
- FLUTTER_PI_DEPENDENCIES += gstreamer1 gst1-plugins-base
- FLUTTER_PI_CONF_OPTS += -DBUILD_GSTREAMER_AUDIO_PLAYER_PLUGIN=ON
 -- 
 2.41.0
 
