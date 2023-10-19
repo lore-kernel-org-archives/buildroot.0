@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CBC0C004C0
-	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 21:11:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 165B7C001DF
+	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 21:32:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE3D470354;
-	Thu, 19 Oct 2023 21:11:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE3D470354
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FE394BA7C;
+	Thu, 19 Oct 2023 21:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FE394BA7C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C2adR3EEefXH; Thu, 19 Oct 2023 21:11:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WJr7CSjsTHM6; Thu, 19 Oct 2023 21:32:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2899370352;
-	Thu, 19 Oct 2023 21:11:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2899370352
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 70FD31BF488
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:11:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AADEE4BA32;
+	Thu, 19 Oct 2023 21:32:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AADEE4BA32
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DBDA1BF588
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 483DA4019E
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:11:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 483DA4019E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16F594BA32
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:32:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16F594BA32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xcAZn6c8eKys for <buildroot@lists.busybox.net>;
- Thu, 19 Oct 2023 21:11:35 +0000 (UTC)
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
- [IPv6:2a00:1450:4864:20::235])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F0E8540106
- for <buildroot@buildroot.org>; Thu, 19 Oct 2023 21:11:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0E8540106
-Received: by mail-lj1-x235.google.com with SMTP id
- 38308e7fff4ca-2c53c5f7aaaso1725311fa.0
- for <buildroot@buildroot.org>; Thu, 19 Oct 2023 14:11:34 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bnL4_8Z6rjAT for <buildroot@lists.busybox.net>;
+ Thu, 19 Oct 2023 21:32:20 +0000 (UTC)
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
+ [IPv6:2a00:1450:4864:20::22c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D7A104BA25
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 21:32:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7A104BA25
+Received: by mail-lj1-x22c.google.com with SMTP id
+ 38308e7fff4ca-2c50ec238aeso1965181fa.0
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 14:32:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697749892; x=1698354692;
+ d=1e100.net; s=20230601; t=1697751137; x=1698355937;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=TyT38jQleBikiHCifLabdhenh6ZFLZPpOznJ4VnXUlY=;
- b=o1HEXUrAohohZpVRivW/uxVKwkv4tVdlHy66Cv21XozzjGwd62eUVXw1pXqEq5kcP9
- S3uk/Hd2HEoAQCTw9jXcFRGLE4NetsXra413P7cy/RR2xkezfKMC+aH++pHCpB+8kmIu
- /p8NDhKh9aPkwryk7fkgV3qKzr3LB9SjYphs8Ia3GvpKO7XUYFI1t8Pfj+JLh/QTVLfM
- FsRvLDMp7NJCtDp/KCaYzc164i7ciKAxihG9sTWR8uqgL4T8tkmYtgAQfidCeUpwH/hj
- LfS8ghEnaqFJpD7rqr7q4nPH2Ej64nBoeF9lWwVaQHSpjx0IIJT1j1tRRvLMLS8X1+CI
- UHEw==
-X-Gm-Message-State: AOJu0YxS/mVs/gF0j1CUl0rnZOHUJ+efVQ7q3Li5zqKzgkzXhcl/9Lv2
- Z65ZScYLjkPGnsW0/eLYwlIkdPAScTU=
-X-Google-Smtp-Source: AGHT+IEMZUQ4/3d79mP3mjWgW82tDveTtlCoPRRbkI0acSgoJmFxKLkQGd4mFTV85Ue1iySu+wcfvQ==
-X-Received: by 2002:a2e:a9a7:0:b0:2c5:18ed:180a with SMTP id
- x39-20020a2ea9a7000000b002c518ed180amr89381ljq.33.1697749892120; 
- Thu, 19 Oct 2023 14:11:32 -0700 (PDT)
+ bh=S1Qnv+28IwI72gXJ2e8wL/fVP7Mh0MM3ydKgcukbIUw=;
+ b=n+5nmmlBUOT/G+2O9KSZW4JM1TYiAclLpSK4AgYge+Cyrfqx0+JvJfdFbFMxywKAPE
+ pVtLlNOQmskoNyLBFvwXyFS4bA7ovhhEJC3J6LG18wKKwXxWbDePQE9D7iwol1NxXW3d
+ ngD4zR4AH8M1Ypw337dFVnbaR0ukk5uyrZaeCXPcbFxEASKkt7h44JJqLrZS1I4Q35Cr
+ EPYsbrJffAtb+oAHchlJy92CK2SD8sezCnTkyMDRdgpTGudZdQWjJEVi03p6aFT1sLtg
+ BC3T5DlcggUhOO7tfvK63PIeiWJ6Nf5n1f3/KTDIV14K30mxhOi99Ge7NqU8EyTv6W7W
+ jTlQ==
+X-Gm-Message-State: AOJu0YyKlwBPt3eGfcE9ABoZfAJMJX45Mj55hwW+AstQVlDsbrUhSY6z
+ 6VaofVMV9ESu1w4ky21pwJ6iX/Jkb5c=
+X-Google-Smtp-Source: AGHT+IGmqpuojb8356V9P3bfxU0UeXKw1QQjIRq7wRO8sEBVul+wryRvMuQnx1DQ8uuqXV4iOQz/AA==
+X-Received: by 2002:a2e:8196:0:b0:2c5:1ea4:35aa with SMTP id
+ e22-20020a2e8196000000b002c51ea435aamr113376ljg.48.1697751137231; 
+ Thu, 19 Oct 2023 14:32:17 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- b12-20020a05600c150c00b0040586360a36sm5236068wmg.17.2023.10.19.14.11.21
+ t6-20020a05600c450600b0040535648639sm534184wmo.36.2023.10.19.14.32.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Oct 2023 14:11:22 -0700 (PDT)
+ Thu, 19 Oct 2023 14:32:15 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Oct 2023 23:11:13 +0200
-Message-ID: <20231019211113.426849-1-fontaine.fabrice@gmail.com>
+Date: Thu, 19 Oct 2023 23:32:09 +0200
+Message-ID: <20231019213209.627881-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697749892; x=1698354692; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1697751137; x=1698355937; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TyT38jQleBikiHCifLabdhenh6ZFLZPpOznJ4VnXUlY=;
- b=XPzAGwzOfDB6hiX9774Bs4pCwBjMrdYgW/epM6go5QWv27LypqPKod7ugDJPBF+CSx
- 5cvkr7GQ373ZAyoVAiHpz0vTLNBghpSqKSBdWKvr/XTQAg7NAtU2x4bZCKSoMg3xGkkQ
- Ku7gIlXv7W3Xpco7Gb9Yty8UAV6KMrq4sgpqPyz6fSMlNphIRoItAy9oMkefm/QLv0AA
- xflPh3HKK/9jqMQUDw6x5hGOw6us+GINU8Hwzx38xVFAc9U90BiZsGhcO5HyDTzPJVXP
- w5xrOIuloLlggU50bJDHTgXkx/GPesZ0dH2JZSUxNbH2Pr5Vouyp05s0XNCw2RcvrPqT
- BEYQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=S1Qnv+28IwI72gXJ2e8wL/fVP7Mh0MM3ydKgcukbIUw=;
+ b=h+ZKp4rM1Q3ufCGvwRb6pY13isb7Yh8Y9FFyPB5lA3AaXeAfW9PkAviZIOo/wptWzn
+ kQN0sQnksirV5uMqV9xigE2C8e/9TZkmFqJuAovNMbKcVZ+63gS9MyrMNRf3/fJfgv+Y
+ 6wLC8x06/gMQcHGhgf2bfiSkqZ+Jar7UXUmTtdpifI2RdWXaD/geVlO5zHiqbUszgP3e
+ L7CCBREW7oWupguNWzXeYwmVJWuenRnH+/b3tXdOzm2ddeLeU2HNl2ui71FhWJMzJZxp
+ uSzAIXLVXl8vRzSEeNkKJ7xE9pCECKmB2t1bc5ix2w00jNwvs81Mni9pzJOGx6G0wdTp
+ a90Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=XPzAGwzO
-Subject: [Buildroot] [PATCH 1/1] package/suricata: security bump to version
- 6.0.15
+ header.a=rsa-sha256 header.s=20230601 header.b=h+ZKp4rM
+Subject: [Buildroot] [PATCH 1/1] package/snort3: fix build with gcc >= 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,40 +99,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a security release, fixing a number of important issues.
+Fix the following build failure with gcc >= 13:
 
-https://forum.suricata.io/t/suricata-6-0-15-released/4068/2
+In file included from /home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.cc:25:
+/home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:59:25: error: 'uint32_t' has not been declared
+   59 |     void set_batch_size(uint32_t);
+      |                         ^~~~~~~~
+/home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:62:5: error: 'uint32_t' does not name a type
+   62 |     uint32_t get_batch_size() const { return (batch_size == BATCH_SIZE_UNSET) ? BATCH_SIZE_DEFAULT : batch_size; }
+      |     ^~~~~~~~
+/home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:26:1: note: 'uint32_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+   25 | #include <vector>
+  +++ |+#include <cstdint>
+   26 |
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c91a74bad542f32693f2e31412fba70446fd3959
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/suricata/suricata.hash | 2 +-
- package/suricata/suricata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ix-cstdint-related-clearlinux-errors.patch | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/snort3/0001-Pull-request-3925-build-fix-cstdint-related-clearlinux-errors.patch
 
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index 49341984a2..41befa61b9 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  cfa93de900d0fd8ba67c79fddec58fb7afb8f6c45b0773040035a15407b796ce  suricata-6.0.14.tar.gz
-+sha256  1bd546149ac6671c2476d520a38eab7755e10c3080fd2ec2dc8624b0cf89ee75  suricata-6.0.15.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index 2aa5a0c5ed..5b52635328 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SURICATA_VERSION = 6.0.14
-+SURICATA_VERSION = 6.0.15
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
+diff --git a/package/snort3/0001-Pull-request-3925-build-fix-cstdint-related-clearlinux-errors.patch b/package/snort3/0001-Pull-request-3925-build-fix-cstdint-related-clearlinux-errors.patch
+new file mode 100644
+index 0000000000..4f24ee72d4
+--- /dev/null
++++ b/package/snort3/0001-Pull-request-3925-build-fix-cstdint-related-clearlinux-errors.patch
+@@ -0,0 +1,60 @@
++From 154cf0312b3652bdfdf241e6883d7c6de9b85e01 Mon Sep 17 00:00:00 2001
++From: "Maya Dagon (mdagon)" <mdagon@cisco.com>
++Date: Mon, 24 Jul 2023 08:06:50 +0000
++Subject: [PATCH] Pull request #3925: build: fix cstdint related clearlinux
++ errors
++
++Merge in SNORT/snort3 from ~MDAGON/snort3:clearlinux to master
++
++Squashed commit of the following:
++
++commit 7ef2bc13851ffa2bf7908964242859a8c05ddd96
++Author: maya dagon <mdagon@cisco.com>
++Date:   Thu Jul 20 14:34:01 2023 -0400
++
++    build: fix cstdint related clearlinux errors
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/snort3/snort3/commit/154cf0312b3652bdfdf241e6883d7c6de9b85e01
++---
++ src/js_norm/js_identifier_ctx.h       | 1 +
++ src/packet_io/sfdaq_config.h          | 1 +
++ src/service_inspectors/wizard/magic.h | 1 +
++ 3 files changed, 3 insertions(+)
++
++diff --git a/src/utils/js_identifier_ctx.h b/src/utils/js_identifier_ctx.h
++index b8d5121a2c..6ef1ce2b23 100644
++--- a/src/utils/js_identifier_ctx.h
+++++ b/src/utils/js_identifier_ctx.h
++@@ -20,6 +20,7 @@
++ #ifndef JS_IDENTIFIER_CTX
++ #define JS_IDENTIFIER_CTX
++ 
+++#include <cstdint>
++ #include <list>
++ #include <string>
++ #include <unordered_map>
++diff --git a/src/packet_io/sfdaq_config.h b/src/packet_io/sfdaq_config.h
++index 990c45785b..f4c1042bc3 100644
++--- a/src/packet_io/sfdaq_config.h
+++++ b/src/packet_io/sfdaq_config.h
++@@ -21,6 +21,7 @@
++ #ifndef SFDAQ_CONFIG_H
++ #define SFDAQ_CONFIG_H
++ 
+++#include <cstdint>
++ #include <string>
++ #include <vector>
++ 
++diff --git a/src/service_inspectors/wizard/magic.h b/src/service_inspectors/wizard/magic.h
++index fa24d0b5a4..b9477eb95c 100644
++--- a/src/service_inspectors/wizard/magic.h
+++++ b/src/service_inspectors/wizard/magic.h
++@@ -21,6 +21,7 @@
++ #define MAGIC_H
++ 
++ #include <cassert>
+++#include <cstdint>
++ #include <string>
++ #include <vector>
++ 
 -- 
 2.42.0
 
