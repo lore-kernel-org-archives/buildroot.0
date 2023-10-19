@@ -4,71 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C667CDB482
-	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 07:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AAB2CDB465
+	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 07:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 002FF4010D;
-	Thu, 19 Oct 2023 07:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 002FF4010D
+	by smtp2.osuosl.org (Postfix) with ESMTP id DDB4F4010D;
+	Thu, 19 Oct 2023 07:46:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDB4F4010D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uJsHsTu-NBnh; Thu, 19 Oct 2023 07:43:09 +0000 (UTC)
+	with ESMTP id zMcaI9YP4UzI; Thu, 19 Oct 2023 07:46:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F02AD40166;
-	Thu, 19 Oct 2023 07:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F02AD40166
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5EC631BF45A
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 07:43:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F179B424A8;
+	Thu, 19 Oct 2023 07:46:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F179B424A8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 618A11BF45A
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 07:46:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37B0F4270B
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 07:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37B0F4270B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3AD446FAC0
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 07:46:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AD446FAC0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id exYATZa_EEwC for <buildroot@lists.busybox.net>;
- Thu, 19 Oct 2023 07:43:05 +0000 (UTC)
-X-Greylist: delayed 498 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 19 Oct 2023 07:43:03 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDE0242707
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [IPv6:2001:660:530d:201::44])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EDE0242707
- for <buildroot@buildroot.org>; Thu, 19 Oct 2023 07:43:03 +0000 (UTC)
-Received: from [147.173.65.159] (unknown [147.173.65.159])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 107ABC0CDC
- for <buildroot@buildroot.org>; Thu, 19 Oct 2023 09:34:39 +0200 (CEST)
-Message-ID: <bede2a82-ee1f-4f8a-97f8-c6e2b54b2b84@grenoble.cnrs.fr>
-Date: Thu, 19 Oct 2023 09:34:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DEPQRjjlHlC9 for <buildroot@lists.busybox.net>;
+ Thu, 19 Oct 2023 07:46:26 +0000 (UTC)
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com
+ [IPv6:2a00:1450:4864:20::343])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2FB826FAB2
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 07:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FB826FAB2
+Received: by mail-wm1-x343.google.com with SMTP id
+ 5b1f17b1804b1-4083f613272so10866285e9.1
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 00:46:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697701584; x=1698306384;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=lowdAcV4GBBaN9JFNNQAQ1lonNHtLfOWPpwdFSpuCzI=;
+ b=sVAW20o91lsZhwscEOBghDLn49Zipr09aH3CVfox6WUdNTYWEpmhNsGPM24g/qi/SP
+ VXIa9eL2Llrp4nVXS3V2w14rHhfQ2Sn7ux+dvCcicB+Wr1beeGV683COJMeha9gpK2Y8
+ g/aFGpey9pSG9KvhNIzkWq5+DsUjGElvmhng8gmnkPkq007+De7yC4aVwFOyCxaFacx6
+ rXrrkourf8Fu3EFoSfQvfRG868X/zKPU6MJTrvKXNn7re7MT+s+L63zI21KztqS566qo
+ 1OfQypWErc5vlcw17SECCI3ig5PXrfHXMnQIW7hTBu53gcveFaKiEYgBJyQR330/aNXK
+ nBkw==
+X-Gm-Message-State: AOJu0Yz8oHde156irMMOehl4gwy/niNX9LWpl+i/t7G6ma2IPq+FO+yA
+ /db9aATlelZJacBEuADRg13yKsTTQ4tN6mMCMb+oHf8C2rc=
+X-Google-Smtp-Source: AGHT+IHsx/eM7AgiV8JtaYpLOiEC5YZqzRTY3HQ5aN34r/rrCuVwNqKxtm+5ftTwwfUdaHSseQBEaw==
+X-Received: by 2002:a05:600c:354e:b0:408:45e2:1425 with SMTP id
+ i14-20020a05600c354e00b0040845e21425mr640034wmq.4.1697701583757; 
+ Thu, 19 Oct 2023 00:46:23 -0700 (PDT)
+Received: from localhost.localdomain (net-91-81-8-146.cust.vodafonedsl.it.
+ [91.81.8.146]) by smtp.gmail.com with ESMTPSA id
+ fc8-20020a05600c524800b0040535648639sm3739268wmb.36.2023.10.19.00.46.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 19 Oct 2023 00:46:23 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-References: <20231017143424.430007-1-anaumann@ultratronik.de>
- <PH1P110MB1603AE1FC3925D2A2D33EEED9FD6A@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
- <38dd6e9a-7fea-e3fb-21a1-5a381a36c8cf@mind.be>
-Content-Language: en-US
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <38dd6e9a-7fea-e3fb-21a1-5a381a36c8cf@mind.be>
+Date: Thu, 19 Oct 2023 09:46:11 +0200
+Message-ID: <20231019074615.1672645-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1697700880;
- bh=Gcq5XGKnAyWVsgbf/X72nfNhT7Q+dykLVZwK8+ppNWc=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=Pg9Shw8moL8az6OUoBGJJaCTi1FHChN1vOBs/wzNzteERy/D9YLHvs8LK/wFJXeeA
- N9c4L8XV+yj/kihgojg9tLoQVd3nU/sDBdJO6h6n9F0mNXshfOqQIFiRLKZB/QlrFN
- CBHyI8yTGln4zud9nZMmn1R8Fk3zYLcGUyhzNVqO4bnBbOFtIAhBbPvgIwB5l6KQbd
- RErQaQF5KsuBiSPiXdsGx9UB2f7WqOCBNtZ948IP+xGtalIEIPVh0j7cZauJ7FpsPr
- J1tz5U40G7STcpttvgs5E0Xc5r76zdXcq2+CL0CKO8MZ7Ab3u0EckEFBnVUozS3h/j
- Kn1uRWCP7HMNA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=Pg9Shw8m
-Subject: Re: [Buildroot] [External] - [PATCH 0/1] libgpiod v2
+ d=amarulasolutions.com; s=google; t=1697701584; x=1698306384;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=lowdAcV4GBBaN9JFNNQAQ1lonNHtLfOWPpwdFSpuCzI=;
+ b=ozgrWYgq10R5jVYgV4uZfqtQzuhG61plDT1i37asfaYgBMVDsLQKZ5RIormim5Big/
+ R7SUKVF3vKh32ntakRgrBPHh4Oj4GkrC6os4vOEfStPk4WaNKAVfL+rGkC13Rz3T/8h9
+ 1I0TCv4rtq1Kgls+YgL0mOFzBK3rVJ+6tbqRs=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=ozgrWYgq
+Subject: [Buildroot] [PATCH 1/5] package/flutter-sdk-bin: bump version to
+ 3.13.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,43 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello!
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/flutter-sdk-bin/flutter-sdk-bin.hash | 2 +-
+ package/flutter-sdk-bin/flutter-sdk-bin.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2023-10-18, about whether the API-breaking libgpiod v2 should be an
-upgrade or a new package, Arnout Vandecappelle wrote:
-> If it's like "mostly it will still work, but there are a few functions
-> that you need to replace with a new variant", then the proper approach
-> is indeed to fix the packages that fail to build. [...]
->
-> For bigger API changes [...] we indeed need a new package libgpiod2.
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.hash b/package/flutter-sdk-bin/flutter-sdk-bin.hash
+index 9daf6c58be..c914434e7e 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.hash
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d9bbfbfb6fe3c72a29c1040235126edd0cd461e4e18556335fd1cf217c2e1473  flutter_linux_3.13.4-stable.tar.xz
++sha256  98e78d32a0b600b1ab762b84774891c97a2f40a0ec09919fb6d35892c349e350  flutter_linux_3.13.8-stable.tar.xz
+ sha256  a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20  LICENSE
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+index dc6d68fdcb..0d764f8e25 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUTTER_SDK_BIN_VERSION = 3.13.4
++FLUTTER_SDK_BIN_VERSION = 3.13.8
+ FLUTTER_SDK_BIN_SITE = https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
+ FLUTTER_SDK_BIN_SOURCE = flutter_linux_$(FLUTTER_SDK_BIN_VERSION)-stable.tar.xz
+ FLUTTER_SDK_BIN_LICENSE = BSD-3-Clause
+-- 
+2.41.0
 
-I've watched a talk by Bartosz Golaszewski about the new libgpiod,[1]
-then started looking at the documentation of this new API.[2] My feeling
-is that this is a quite extensive rewrite. A program wanting to support
-both the v1 and the v2 APIs would need quite a bit of conditional
-compilation.
-
-Besides, I could not find in the header a macro designed to explicitly
-tell the API version, although some macros, that are defined only in v1,
-could be used for this purpose. E.g.:
-
-    #ifdef GPIOD_LINE_BULK_MAX_LINES
-    # define USE_GPIOD_API_V1
-    #else
-    # define USE_GPIOD_API_V2
-    #endif
-
-Regards,
-
-Edgar.
-
-[1] https://lpc.events/event/16/contributions/1247/
-[2] https://libgpiod.readthedocs.io/en/latest/modules.html
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
