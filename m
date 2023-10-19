@@ -4,73 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EF4CCDB465
-	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 11:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7C45CDB465
+	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 11:23:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF24083C8B;
-	Thu, 19 Oct 2023 11:21:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF24083C8B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5258382242;
+	Thu, 19 Oct 2023 11:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5258382242
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gnh5JN2RZn9m; Thu, 19 Oct 2023 11:21:39 +0000 (UTC)
+	with ESMTP id HEpL9ll9yuDF; Thu, 19 Oct 2023 11:23:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FA3C8215F;
-	Thu, 19 Oct 2023 11:21:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FA3C8215F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09BF583C8A;
+	Thu, 19 Oct 2023 11:23:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09BF583C8A
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 580D11BF5A2
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 11:21:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AF4CB1BF5A2
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 11:23:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FD91414A1
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 11:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FD91414A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86627414A1
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 11:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86627414A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y6EZIXpyvLtH for <buildroot@lists.busybox.net>;
- Thu, 19 Oct 2023 11:21:36 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7C9BC40332
- for <buildroot@buildroot.org>; Thu, 19 Oct 2023 11:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C9BC40332
-Received: from methusalix.internal.home.lespocky.de ([89.245.58.193]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MsqMq-1rmeEy1eDA-00tAaZ; Thu, 19 Oct 2023 13:21:28 +0200
-Received: from falbala.internal.home.lespocky.de ([192.168.243.94]
- helo=falbala.home.lespocky.de)
- by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
- TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
- (envelope-from <alex@home.lespocky.de>)
- id 1qtR5d-0004wq-CD; Thu, 19 Oct 2023 13:21:27 +0200
-Received: (nullmailer pid 1814 invoked by uid 2001);
- Thu, 19 Oct 2023 11:21:21 -0000
-From: Alexander Dahl <post@lespocky.de>
+ with ESMTP id HlFCPmRixM-a for <buildroot@lists.busybox.net>;
+ Thu, 19 Oct 2023 11:23:01 +0000 (UTC)
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 59DE840332
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 11:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59DE840332
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1qtR7D-002FBH-7Y; Thu, 19 Oct 2023 13:22:59 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 75363cd5;
+ Thu, 19 Oct 2023 11:22:58 +0000 (UTC)
+Date: Thu, 19 Oct 2023 14:22:54 +0300
+Message-ID: <20231019142254.GC1924783@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Oct 2023 13:21:10 +0200
-Message-Id: <20231019112110.1802-1-post@lespocky.de>
-X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231019110851.1924092-1-aperez@igalia.com>
+References: <20231018093933.1315894-1-aperez@igalia.com>
+ <20231019110851.1924092-1-aperez@igalia.com>
 MIME-Version: 1.0
-X-Scan-Signature: 816bea67802c9628cbe8afd1e6255274
-X-Provags-ID: V03:K1:sAlRmd/+GUrYAH3weRj48K2gRj+uS9J9VFME65ljOoWP4qhqvOK
- j3pK9dRg0w0VaKlSAluvj/r6kP1Ae7DRNTUVkWndMs9Kic1go10XbtBw0A8P8rYAE9oroW4
- fx9yHiB2+NRB9tUxkMfTtIDoduInxLZk+/BiXCsyTCt2Kc0QA3nEm9mMxAoJuG1u+xI+ngY
- qyxY6vVMmXRGB4nW4qRug==
-UI-OutboundReport: notjunk:1;M01:P0:DShxEP3oqQc=;IliSCGsd5mEVsLSoMetDgBdKSm7
- Cqm8E7QU61jHcHj+SZgRtN8mtzRPuQ3ub3hqsCs4lQhidRiYMsi8S0ur0kpjTcJIg9CP4c/fE
- dMvI9MXiDrLtpkzKn6h8znWZK1rD+frSVbigQM5W9BuDELcWWocwGEuIRQ9YGBInIpNIYngVO
- 8kjltIazETxxJMc3cr5JwW5XzDzEa2A9Dkv04TeY/rlhzz+KixPrD8vJkG0a//b0pxBipfI0m
- qT51kg+zWDb6UcODTDK0wdlWM29iwxy9FtK2xJ+LUducX/cHhyQQ4zk4zZpVU2v9dxpjWfwn4
- BHbxRG6vKjrQBPnx4WNt//0mcWA6xHWx/GrsxegCVMKhHi2mQjG5wx+FrFUvdby+z0Ob9Z6/O
- yCQz9ZvakxI+1Mn/2hfBla953xMCrtMxznM5upUz8mCFCLpIzdOPBVW7byPgrt6E+9Zg6Na8b
- +HfUwqDjWKuC0qViZHJdTwwIMbwd7SBBhWV0xJFQiBqVEwcEEOhKhUDdWbC3lVWSYo/X07te7
- M6cPKM1g2nUx6NsWpTLqvrtArFb/OUOHuuq+heEHkwXLZhKiwAGgZTSZTF3qlfonysO05Andm
- JysP5mFEvycYsUkrGWNmxyQNUHEx31emrexHfoRQs+49qpehjXd5wUFNGGFpGTtpRRBzbLs8O
- keTeBoFKh7ySUXj9KW9WOwRdo8wVt6eC9Qa/O52CxtKSkxGlwH05SQdmjH1RlY3i4dLJ1LlK1
- 27P05cwoiS66nxQB2VJRflDdBwu+H6yU6eBH94pA6zRquSzE4GdfoKym0/TGEmpv6rq7yOyXz
- s4yZs4SZCj7X9H9pclaXWJSvnpneAPzH2nEtBOm/KFyeX30irFas+N3eioktIxvwpwuSJIt2F
- yJQ0VlbBY13cB1Ojs8hBcVYUdORxK+daEFQU=
-Subject: [Buildroot] [PATCH] package/lighttpd: Bump to version 1.4.72
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=2rOEU3QjSFjBF3auHGeRmUE4sUxePmGt5UO640CNNaM=; b=jPqJgk81Glj+/msZQ4M+9WVOBu
+ gzzhb2fyee1xoUnNUfAe+KL7WZWJ0E50B1khcEq1PfgrPw0FFgFTXhpkGTNHLP1477DWnJsbsxq9B
+ eOGDkJsz/V6OLzk7/R04trLjAWChUfAwqXo1VXBc+W5A/qeQ1JE3VttcMfTEihkHayzE0W173EBLK
+ AdyZtnKgziaKPcux1slYPRt/dhg74C6cYPktkAk4IPGJyjRSYXXwcbAUvI08voNCn2O+1fzuD8icN
+ NXXXkzjOEc+4OPUjEJ3ES5gRq79yOdZaath6O9GZhBzW76hEXFs7smmkPqIlm2jckf2AeVW/TqbKt
+ ge78nKQw==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=jPqJgk81
+Subject: Re: [Buildroot] [PATCH] package/xdg-dbus-proxy: fix tarball name in
+ hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,51 +78,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Dahl <post@lespocky.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1298762110119177092=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Link: https://www.lighttpd.net/2023/10/6/1.4.72/
-Signed-off-by: Alexander Dahl <post@lespocky.de>
----
- package/lighttpd/lighttpd.hash | 6 ++++--
- package/lighttpd/lighttpd.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index a86ebf2f68..3c114c05a1 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,4 +1,6 @@
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.71.sha512sum
--sha512  c1388b563b9cf9dcab0a57bec42b09b2cb5e1932bc137ae5f957d1bf3932ddd8f5f188002a7b9a00f0a92ba3779b21ecbea2ccffa91e686b6660c9cc455d6598  lighttpd-1.4.71.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.72.sha512sum
-+sha512  5becb57915e3548a1b9b980014be22b3c08dcf0e9be524f9cd0093886aaf6d00b20986e8b1fb10ecdbdffd8e42dd18e4a227b03d562c91bef9490ea6d5c480e3  lighttpd-1.4.72.tar.xz
-+# From https://www.lighttpd.net/2023/10/6/1.4.72/
-+sha256  f7cade4d69b754a0748c01463c33cd8b456ca9cc03bb09e85a71bcbcd54e55ec  lighttpd-1.4.72.tar.xz
- # Locally calculated
- sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index bc0dbcbf45..af104de078 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).71
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).72
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3-Clause
+--===============1298762110119177092==
+Content-Type: multipart/signed; boundary="xw5aeo3KoaMeiZPQ"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
 
-base-commit: 3f23277c41ec05ccd13389fb806d83deafee8d22
--- 
-2.39.2
+
+--xw5aeo3KoaMeiZPQ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+SGkgUGV0ZXIsCgpPbiBUaHUsIDE5IE9jdCAyMDIzIDE0OjA4OjM1ICswMzAwIEFkcmlhbiBQZXJl
+eiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPiB3cm90ZToKPiBGaXhlczogNDg3NzYxYTVi
+MiAoInBhY2thZ2UveGRnLWRidXMtcHJveHk6IGJ1bXAgdG8gdmVyc2lvbiAwLjEuNSIpCj4gU2ln
+bmVkLW9mZi1ieTogQWRyaWFuIFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cj4g
+LS0tCj4gIHBhY2thZ2UveGRnLWRidXMtcHJveHkveGRnLWRidXMtcHJveHkuaGFzaCB8IDIgKy0K
+PiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpDb3VsZCB5
+b3UgYXBwbHkgdGhpcyBvbmUgZml4PyBJJ3ZlIHNlbnQgYSB2MiBwYXRjaCBhZnRlciBub3RpY2lu
+ZyB0aGF0IEkKZGlkbid0IHVwZGF0ZSB0aGUgdGFyYmFsbCBuYW1lIGluIHRoZSAuaGFzaCBmaWxl
+IGJ1dCB5b3UgbWVyZ2VkIHYxIG9mIHRoZQpwYXRjaCB3aXRoIHRoZSBtaXN0YWtlLiBUaGlzIHdp
+bGwgZml4IHRoZSBpc3N1ZSwgYW5kIGFwb2xvZ2llcyBmb3IgdGhlCmJhY2sgYW5kIGZvcnRoIE86
+LSkKCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UveGRnLWRidXMtcHJveHkveGRnLWRidXMtcHJveHku
+aGFzaCBiL3BhY2thZ2UveGRnLWRidXMtcHJveHkveGRnLWRidXMtcHJveHkuaGFzaAo+IGluZGV4
+IDM3ZjE3OTBjOWIuLmY2MWE2YTkxYWUgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS94ZGctZGJ1cy1w
+cm94eS94ZGctZGJ1cy1wcm94eS5oYXNoCj4gKysrIGIvcGFja2FnZS94ZGctZGJ1cy1wcm94eS94
+ZGctZGJ1cy1wcm94eS5oYXNoCj4gQEAgLTEsNSArMSw1IEBACj4gICMgRnJvbSBodHRwczovL2dp
+dGh1Yi5jb20vZmxhdHBhay94ZGctZGJ1cy1wcm94eS9yZWxlYXNlcy90YWcvMC4xLjUKPiAtc2hh
+MjU2ICAwNjFkY2ZhZjhhMDY1MGU1ZmQ5ZDU0MzJkZmU4OGJkYTc0OWVhMGQwNzlkYzEzNjMwNGJm
+ZWNmYmNlMDY2MWZiICB4ZGctZGJ1cy1wcm94eS0wLjEuNC50YXIueHoKPiArc2hhMjU2ICAwNjFk
+Y2ZhZjhhMDY1MGU1ZmQ5ZDU0MzJkZmU4OGJkYTc0OWVhMGQwNzlkYzEzNjMwNGJmZWNmYmNlMDY2
+MWZiICB4ZGctZGJ1cy1wcm94eS0wLjEuNS50YXIueHoKPiAgCj4gICMgSGFzaCBmb3IgbGljZW5z
+ZSBmaWxlczoKPiAgc2hhMjU2ICBkYzYyNjUyMGRjZDUzYTIyZjcyN2FmM2VlNDJjNzcwZTU2Yzk3
+YTY0ZmUzYWRiMDYzNzk5ZDhhYjAzMmZlNTUxICBDT1BZSU5HCj4gLS0gCj4gMi40Mi4wCgpDaGVl
+cnMsCuKAlEFkcmnDoW4K
+
+--xw5aeo3KoaMeiZPQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZTERjgAKCRCRxVnb5MkS
+O22BAJ4ofttoAfflw1H8XPoRK5UJHWm5mgCdEmBI5imZywkFHvc7Rgjs+5VORG0=
+=lfQi
+-----END PGP SIGNATURE-----
+
+--xw5aeo3KoaMeiZPQ--
+
+--===============1298762110119177092==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1298762110119177092==--
