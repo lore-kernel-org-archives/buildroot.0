@@ -4,64 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97673CDB482
-	for <buildroot@archiver.kernel.org>; Mon, 16 Oct 2023 09:53:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37F2ECDB465
+	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 17:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F4C14059B;
-	Mon, 16 Oct 2023 09:53:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F4C14059B
+	by smtp2.osuosl.org (Postfix) with ESMTP id D476B4060C;
+	Thu, 19 Oct 2023 17:01:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D476B4060C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZuNaKLOq9mqF; Mon, 16 Oct 2023 09:53:38 +0000 (UTC)
+	with ESMTP id yeZc2tNGDYTl; Thu, 19 Oct 2023 17:01:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66B19415C4;
-	Mon, 16 Oct 2023 09:53:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66B19415C4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 28C1F1BF3AA
- for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 09:53:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3A4D43037;
+	Thu, 19 Oct 2023 17:01:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3A4D43037
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 858E71BF4D6
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 17:01:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 014B940955
- for <buildroot@lists.busybox.net>; Mon, 16 Oct 2023 09:53:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 014B940955
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DBA76FC26
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 17:01:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DBA76FC26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TQ5P11IElj2K for <buildroot@lists.busybox.net>;
- Mon, 16 Oct 2023 09:53:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6104041712
- for <buildroot@uclibc.org>; Mon, 16 Oct 2023 09:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6104041712
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 4A0F185CA1; Mon, 16 Oct 2023 09:53:30 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JarzMiIHJYki for <buildroot@lists.busybox.net>;
+ Thu, 19 Oct 2023 17:01:14 +0000 (UTC)
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C99A6FC1B
+ for <buildroot@uclibc.org>; Thu, 19 Oct 2023 17:01:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C99A6FC1B
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qtWOU-0009Bl-50
+ for buildroot@uclibc.org; Thu, 19 Oct 2023 19:01:10 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Mon, 16 Oct 2023 09:53:29 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: minor
-X-Bugzilla-Who: jjm@j0057.nl
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: cheikh.taib@gmail.com
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15546-163-qIinOvJoyU@https.bugs.busybox.net/>
-In-Reply-To: <bug-15546-163@https.bugs.busybox.net/>
-References: <bug-15546-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15546] raspberry pi zero 2 w no Wi-Fi device
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Thu, 19 Oct 2023 19:00:44 +0200
+Message-ID: <pan$9d7d5$3bddbdbe$21e506c7$a819c53b@ID-313208.user.individual.net>
+References: <20231019075440.2568312-1-andyshrk@163.com>
+ <20231019075512.2568398-1-andyshrk__14620.458455623$1697702154$gmane$org@163.com>
+Mime-Version: 1.0
+User-Agent: Pan/0.154 (Izium; 517acf4)
+Subject: Re: [Buildroot] [PATCH v2 1/1] igt-gpu-tools: add igt-gpu-tools
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,18 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15546
+Hi Andy,
 
---- Comment #4 from Joost Molenaar <jjm@j0057.nl> ---
-I ran into this on a Pi 0 W; the module isn't loaded because there's no udev by
-default, which creates device files but also loads modules for available
-hardware. You can enable it under System configuration -> /dev management, I
-chose 'Dynamic using devtmpfs + mdev', that is,
-CONFIG_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y.
+just some small quirks.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+There are warnings by check-package
+
+$ utils/check-package package/igt-gpu-tools/*
+package/igt-gpu-tools/Config.in:28: should be indented with one tab 
+(http://nightly.buildroot.org/#_config_files)
+package/igt-gpu-tools/igt-gpu-tools.hash:2: separation does not match 
+expectation (http://nightly.buildroot.org/#adding-packages-hash)
+package/igt-gpu-tools/igt-gpu-tools.hash:3: separation does not match 
+expectation (http://nightly.buildroot.org/#adding-packages-hash)
+package/igt-gpu-tools/igt-gpu-tools.hash:6: separation does not match 
+expectation (http://nightly.buildroot.org/#adding-packages-hash)
+package/igt-gpu-tools/igt-gpu-tools.mk:3: line contains trailing 
+whitespace
+50 lines processed
+5 warnings generated
+
+> +++ b/package/igt-gpu-tools/igt-gpu-tools.hash
+> @@ -0,0 +1,6 @@
+> +# Locally calculated from download
+> +sha256 
+ba15b321c5a90da629baf326912c9c0406a903719040eb4959e0af1197935133  igt-gpu-
+tools-v1.28.tar.gz
+
+Also the hash for the gz tarball is not needed.
+
++IGT_GPU_TOOLS_VERSION = v1.28
+
+Please move the "v" from here to this line
+
++IGT_GPU_TOOLS_SITE = https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/
+archive/$(IGT_GPU_TOOLS_VERSION)
+
+so it looks like this
+
++IGT_GPU_TOOLS_SITE = https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/
+archive/v$(IGT_GPU_TOOLS_VERSION)
+        ^
+
+This will help using the release monitoring site:
+https://release-monitoring.org/project/323454/
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
