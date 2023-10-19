@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80C87CDB465
-	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 21:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B47DC001DF
+	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 21:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 105856FCDC;
-	Thu, 19 Oct 2023 21:01:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 105856FCDC
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB9206FCD2;
+	Thu, 19 Oct 2023 21:07:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB9206FCD2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2pM1Z0LzNuBE; Thu, 19 Oct 2023 21:01:35 +0000 (UTC)
+	with ESMTP id tV_kobqySSt9; Thu, 19 Oct 2023 21:07:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 553446FCD9;
-	Thu, 19 Oct 2023 21:01:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 553446FCD9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A97D81BF316
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:01:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BAFF6FCDB;
+	Thu, 19 Oct 2023 21:07:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BAFF6FCDB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 267AB1BF3E0
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7EA126FCD9
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:01:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EA126FCD9
+ by smtp2.osuosl.org (Postfix) with ESMTP id E79EA4313F
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:07:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E79EA4313F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jyp54jf4oETS for <buildroot@lists.busybox.net>;
- Thu, 19 Oct 2023 21:01:31 +0000 (UTC)
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5370661133
- for <buildroot@buildroot.org>; Thu, 19 Oct 2023 21:01:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5370661133
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-2c504a5e1deso1555601fa.2
- for <buildroot@buildroot.org>; Thu, 19 Oct 2023 14:01:31 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oPZ-UFXwYiVc for <buildroot@lists.busybox.net>;
+ Thu, 19 Oct 2023 21:07:07 +0000 (UTC)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A6B6240106
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 21:07:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6B6240106
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-32dd70c5401so104599f8f.0
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 14:07:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697749289; x=1698354089;
+ d=1e100.net; s=20230601; t=1697749625; x=1698354425;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=+VZejoYKZwX/4InftIIL1WbWvvGd5Wobf7nmmAuiohk=;
- b=HLaLPRW0wUa8Du6BiFfom8PbUlW8W+kwxR+aD0EWmY6OAlFMVP6qFUfLvl9Qvn4EAK
- q3NVLaQ8rXn5hr9Z0T6hKNAsEbBqiPly4MXTqr5TXtUqEQgSCdxbAVz3vEHqE49FrzpL
- 42PWHVKeqdRbYSPan5JDhj0cAWh8VPEWYfnfbsN4Bk+o6M/fi0vsFcYsVeUyZJGzV8Xu
- CImJhTsg1N90kNDH5GzigmcpdTVJgcVa/pGAw3VidU6ynuGr/MH6eWnNq9XS63f8ymvW
- fPH3o4bzAp6NLxuF71iH0rq3dVEv1uRGhzjiaH+p2ibPuTpZJuOjc8xSXSrOPB/nsh6u
- TJMw==
-X-Gm-Message-State: AOJu0YyPNE06JDCU01+fCjeURtgf1kO2AoWuq26umgCK919wuBIxO+Pp
- xAWam3ASOxoujj6EDzpYIgabjR7DNxs=
-X-Google-Smtp-Source: AGHT+IFlrwg6ZZFREXqU/ZljckHapy5Hk/++pBXDmSxLE542MaKR6BmTnvnD6U9IG3JZ9xm20eMI3g==
-X-Received: by 2002:a05:651c:1503:b0:2c5:1f20:926c with SMTP id
- e3-20020a05651c150300b002c51f20926cmr89100ljf.11.1697749288567; 
- Thu, 19 Oct 2023 14:01:28 -0700 (PDT)
+ bh=SQUReupat+/hUA5n9aJG3+JJprenv/pT7O8yX16Ic38=;
+ b=n1kqP3sgu2YuHXNjCwuIMPOMC4E/FpTyPQeJb6cyzT4Env9YMgWjS1hiF3PiLj0Ldi
+ n4kvai8pLkJzderPtgmH4ZR/eYWH+PhkoMiPfhkBdDjn0lt7Vhs5OFzMSl8wILJyPkUF
+ 50q3me4sYKQnzCryah2o/ZhBNMZq9Ea20K45Rb0g5O+4y2ubhfXMOT9uuRIIG4SOnj9A
+ nLn7qFyYLrdah5UgDvbEW76qYU28EeBT5m3Mf6110WKd5McfbO9uXBx1I1+Pb4JETAT8
+ G7jS2jIIpMgTT0K5lgY2+J3tRapI0YR9GLxRcK1SDa/2i4xdW5/AKsb+PtKyOC4JlDp9
+ 0fRw==
+X-Gm-Message-State: AOJu0YxviWCBJrrrMNWTUfZBlpnwAzeYExp5jG1PxUe/iSGC7OsEZO34
+ 2sUwuFP1Rl+FGtQGGTq6dCrg6vmk37E=
+X-Google-Smtp-Source: AGHT+IGnuEKobmiVM0FmjTpZGam8HEsJocKOUel7jiApj7zAtIxs5O5mGEpqLwXhkL+IWQXt/3pbDw==
+X-Received: by 2002:adf:fe47:0:b0:32d:8c90:cb28 with SMTP id
+ m7-20020adffe47000000b0032d8c90cb28mr2280470wrs.45.1697749625229; 
+ Thu, 19 Oct 2023 14:07:05 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m42-20020a05600c3b2a00b00407752bd834sm499383wms.1.2023.10.19.14.01.20
+ y10-20020a5d470a000000b0032d9efeccd8sm202750wrq.51.2023.10.19.14.07.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Oct 2023 14:01:22 -0700 (PDT)
+ Thu, 19 Oct 2023 14:07:04 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Oct 2023 23:01:17 +0200
-Message-ID: <20231019210117.417632-1-fontaine.fabrice@gmail.com>
+Date: Thu, 19 Oct 2023 23:07:01 +0200
+Message-ID: <20231019210701.423113-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697749289; x=1698354089; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1697749625; x=1698354425; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+VZejoYKZwX/4InftIIL1WbWvvGd5Wobf7nmmAuiohk=;
- b=ARVRPtmtlIl7pJK2nfBjAzceauOu9gyogrCSY1KhHYO/rCb4FUHQETRhKCigb02ZhF
- Jubtp+8NnR90A96Wz4/NKeq61lAR+XfHriiICzHtaGU7zRd684ozI3KE0PS3KQRSftz4
- ULihAtqiMc7qh0ErG61lrWA374+OKxg/oze9XiGw6J3GoTARXhwivHObulfQ3kW1rG4k
- /BW8gOY+yIkBJDDubmaHFCul99qlu4Pr6pgq+n7er8Ib8IrmiugBDGKhwtzRpVUH/aLC
- 6QHEPMI+s1+XEbwL0U29Pa8BN5gDRqMzzWIBG0sXPybXK+bYWInFQ7/qCTecONYTfwly
- lWzA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=SQUReupat+/hUA5n9aJG3+JJprenv/pT7O8yX16Ic38=;
+ b=NcmUrwNxv9S6gNtu8FY5umMtCSs5XdBGXUN5VTmUDbMADIbDRKQL+CXzZabHojMqxB
+ 5po3PJi6bEL+FL4TKHtKt5ii3f8GRBriel4JLihaK5s7qxhVxnxwuLIUnSXLPe+1Onbl
+ jyLO7uToG0Jor6ADRLJEhYU7XmQCtdTz2ZYrErSk5KS96NE56FZtsf5Mex6rttrxY+sz
+ 5ZjTMc+rcjGzJGOYqM+dxOtBvx1RGSegG/Nab4JRBF3KuqlPv4C0UelmwkVLAOCgV2pK
+ VmEIIM9wS2sZiKO+OuCljTZ/QNPktDVBMx0gbtRU3zgUZ8v/G7bTwRlze2jxgvmbdhjz
+ mj4w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ARVRPtmt
-Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: bump to version 10.0.4
+ header.a=rsa-sha256 header.s=20230601 header.b=NcmUrwNx
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version 1.3.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: John Stile <johns@msli.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.2
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.3
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.4
+https://github.com/eclipse/paho.mqtt.c/releases/tag/v1.3.13
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dhcpcd/dhcpcd.hash | 4 ++--
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
+ package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index 88032f05c1..b015dce4ac 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,4 +1,4 @@
--# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.1
--sha256  6e9f6a5c47fcd8a763cfa26f1ca6eedf1e534992224a01d6c1ab8abb154af972  dhcpcd-10.0.1.tar.xz
-+# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.4
-+sha256  ced5bbde8da3726eac77b9e77e4f31a89c9849d811ef8a2c749664fc5f55a718  dhcpcd-10.0.4.tar.xz
- # Locally calculated
- sha256  a7d6da3a202cdd38eaab0bcea4d25f60d002980f3785b3e896d9bf387f093ac8  LICENSE
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 82efe10ef9..a194bce323 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 529c538ff2..d359edf36e 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  6a70a664ed3bbcc1eafdc45a5dc11f3ad70c9bac12a54c2f8cef15c0e7d0a93b  paho-mqtt-c-1.3.12.tar.gz
++sha256  47c77e95609812da82feee30db435c3b7c720d4fd3147d466ead126e657b6d9c  paho-mqtt-c-1.3.13.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+ sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
+ sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index 8d1fe009a7..ec4e96c77f 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DHCPCD_VERSION = 10.0.1
-+DHCPCD_VERSION = 10.0.4
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$(DHCPCD_VERSION)
- DHCPCD_DEPENDENCIES = host-pkgconf
+-PAHO_MQTT_C_VERSION = 1.3.12
++PAHO_MQTT_C_VERSION = 1.3.13
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
+ PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
 -- 
 2.42.0
 
