@@ -1,94 +1,155 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE548CDB47E
-	for <buildroot@archiver.kernel.org>; Wed, 18 Oct 2023 17:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AA88CDB465
+	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 06:08:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A97F421CA;
-	Wed, 18 Oct 2023 17:43:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A97F421CA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 725FB83B4F;
+	Thu, 19 Oct 2023 06:08:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 725FB83B4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nMeiDJmMiwVC; Wed, 18 Oct 2023 17:43:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v7mz2m3Y3Lgs; Thu, 19 Oct 2023 06:08:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 702A4421B9;
-	Wed, 18 Oct 2023 17:43:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 702A4421B9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 45DB81BF27A
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 17:43:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95CA583B52;
+	Thu, 19 Oct 2023 06:08:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95CA583B52
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E01371BF3E3
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 06:08:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28D9F6F4E7
- for <buildroot@lists.busybox.net>; Wed, 18 Oct 2023 17:43:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28D9F6F4E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0CE24248B
+ for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 06:08:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0CE24248B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B9okK3yk6WzU for <buildroot@lists.busybox.net>;
- Wed, 18 Oct 2023 17:43:32 +0000 (UTC)
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0116861045
- for <buildroot@buildroot.org>; Wed, 18 Oct 2023 17:43:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0116861045
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-99bdeae1d0aso1159174766b.1
- for <buildroot@buildroot.org>; Wed, 18 Oct 2023 10:43:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697651009; x=1698255809;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=JFaD+0WyKqfcZIN1nZKpGeVImjdYj1eNqqJRDu7RnLE=;
- b=kWM72STchcc/NwiQrC7EU/wIS+b8DgVRete2LgHn3i81bOpJCueAEsjgfl0Ti3tmnb
- sHJb5ciQRfCtOaBVCpDUyLJD3IZc+5Qp7531AdtdWbei5ddgrTR0mCZCY+V06Wg8Mfek
- HvLF5iIpiIFKiE32Fi1v89GkZmGuUzA0Frd3hdDv6/tWyN0E15xaKEBFsfRg48bwYqIu
- 7tWt7vezQmsphJGZjYLZ5pCzLbyA3obEzEU+ZgiPjr4uededgwMBETdxX0m484v7U3Ma
- EVhvJ5XcXrNcOSi+SH8TnmHDb29CgteCf6eByObfOROT/JUDYpEY0dJFDFbrvWqCMXbD
- RpgA==
-X-Gm-Message-State: AOJu0Yyvz9rDTX+7yfmDClz0zK/FnN1TyIWgzgHoxhYPElH1iQkPdzgb
- 5X9qHK7qqVo4DQ/mPQRSq+i4ZA==
-X-Google-Smtp-Source: AGHT+IEz8IHc1gNzWmiUHZ4q/xG5lczPYC3RwFoGz5NqoyDYaD68B8AxiT8cdNnGOYnHhp4mfVTeqw==
-X-Received: by 2002:a17:907:1c1c:b0:9a9:e4ba:2da7 with SMTP id
- nc28-20020a1709071c1c00b009a9e4ba2da7mr5494867ejc.49.1697651008627; 
- Wed, 18 Oct 2023 10:43:28 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- bo16-20020a170906d05000b00977eec7b7e8sm2111909ejb.68.2023.10.18.10.43.27
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 18 Oct 2023 10:43:28 -0700 (PDT)
-Message-ID: <fc416325-98e6-04e2-6ea9-e48053c2c302@mind.be>
-Date: Wed, 18 Oct 2023 19:43:25 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kF2C610_ZO-h for <buildroot@lists.busybox.net>;
+ Thu, 19 Oct 2023 06:08:23 +0000 (UTC)
+Received: from mail.sensor-technik.de (mail.sensor-technik.de [80.150.181.156])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A99EB42481
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 06:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A99EB42481
+Received: from stwz1.stww2k.local (HELO stwz1.wiedemann-group.com)
+ ([172.25.209.3])
+ by mail.sensor-technik.de with ESMTP; 19 Oct 2023 08:08:19 +0200
+Received: from stwz1.stww2k.local (localhost [127.0.0.1])
+ by stwz1.wiedemann-group.com (Postfix) with ESMTP id E277AB5ABC
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 08:08:18 +0200 (CEST)
+Received: from mail.wiedemann-group.com (stwexm.stww2k.local [172.25.2.110])
+ by stwz1.wiedemann-group.com (Postfix) with ESMTP id 530B2B5AAC
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 08:08:09 +0200 (CEST)
+Received: from stwexm.stww2k.local (172.25.2.110) by stwexm.stww2k.local
+ (172.25.2.110) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Thu, 19 Oct
+ 2023 08:08:09 +0200
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (104.47.51.232)
+ by stwexm.stww2k.local (172.25.2.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32 via Frontend Transport; Thu, 19 Oct 2023 08:08:09 +0200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=agM4o5GL8751uS0eEmRLIGrMI7S/GZuzPHBxNjIjTtZXbGrvr3kwl+NXdN6s9T81DBgUjXRI5dHws6I/nfr3fHsEEngP6MsRr99kxpHBgcEEh6U2sTxeQ7aswH5gWA49EKcJq3Ap7C188/PPhSsxRDvZPTaMuNX3MoUHCLAEuvpvx5WcocSbBtmpJVSMH4VuRhgnZL7PA2ltaEtMe/y8kAcxwjhltpuPgxkCAALh4i54pXQJnYSBq4u4wWx1U0RIiiVAqPdiGbgATSVXntmd9j04xN7wwg4VBRinVuMp/OdJ/QqtoMN2ehzCocomLzbfDO7AVYiwovSLYhCvSsZcbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R+vmYsB014jE5Umm2q7wiqrZcCO7pqJS2Iwm7DgPtJQ=;
+ b=ggGxntR9Tb7qMsbzWC0SqnoSz8UTdMAgksFsD0/WE/MD3EW7QqvXov5uLOZTv/PsDwFocQo+BsBth7cbOrqS3bjVgVopM3ICklv4lxbzKki6OGcHlpZjEfZdObJIu0+cgbnUSVryzV6e0uRLm6pqBT9ifi/h65lHrPZnIwrwMlA/gGJjdZnVZpAaF7HFiLfpkEWLu7bm1sTo8k4Z5PCodfjrjuLVdbBWSXv1Ezgl/ObGSK9JDBtT50ynF/gI2u4em/eXbER8V4eLwcQIVkC5v27sW2oMoKXTaW0y3LGlHzJr9Vk2U8Dar51/pbGZM6bBSitUhxMmLXBSHgCU2Jk4FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wiedemann-group.com; dmarc=pass action=none
+ header.from=wiedemann-group.com; dkim=pass header.d=wiedemann-group.com;
+ arc=none
+Received: from AS1P250MB0608.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:48d::22)
+ by PR3P250MB0388.EURP250.PROD.OUTLOOK.COM (2603:10a6:102:17f::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.23; Thu, 19 Oct
+ 2023 06:08:07 +0000
+Received: from AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
+ ([fe80::3848:f440:3c65:5e82]) by AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
+ ([fe80::3848:f440:3c65:5e82%7]) with mapi id 15.20.6863.046; Thu, 19 Oct 2023
+ 06:08:07 +0000
+From: Michel Alex <Alex.Michel@wiedemann-group.com>
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH] package/libzenoh-pico: new package
+Thread-Index: AdoCUmjJIMBmVe6HSfGbNu7txBfNhw==
+Date: Thu, 19 Oct 2023 06:08:07 +0000
+Message-ID: <AS1P250MB0608055A4067BEE19E37EAA4A9D4A@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS1P250MB0608:EE_|PR3P250MB0388:EE_
+x-ms-office365-filtering-correlation-id: b2001374-afd5-4c03-69b2-08dbd069c39f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RKp6G/N9K1TMPmsYruMNnrj8o73knx8TZ0e3QZI3yiZdqFgR1Hk584BszzHzvqLlrpRslmkWne9uuJj1qiRPp4c4DRY+5uvmXJLeoklZJje7tSSZ3LO61Bo4NxiL7iWl3tkubipOF/SvcND255Bv5i1DX0dG9uiHCoMZc8KG4T7vxpA1h1li8LzNM0rLcXBv64vcrVENwPgyTk+J2CaqtEufuN8NSjji3Z/nNJDVxi7nhaENOkzITQ8X9vcooGi0F1t6ziTojzTkJ0vohspa/BcsMonEg4N0DFbTV37M73KVkHzKZWvK95ROwUG3l1It49SFt73/T3HdGWUTXWGNjgH4xXF2QjEQoalq5Cf2Eh7TqLxGaPof7BGnQpNTn5mq5HZZjui3JrWu6sTmsKOTUHZGrZhbJwJWMorn7PwNiOWy5Vfk7bQtVFDSzgyqMTCAEoOjvSGv4fn+qy2sl3WakWzv6iws00hW/T+3k//Ey0UNU7jfAIsoYz9zdQSSm4yKzYaxnu/SMLecXzJm/S3fI/SGM2IQ4k+VBHpACi+HLlXagXdlSYRPZeLwA6E7y+Th9uYJ67eIBN1SLWH9g9c52z4QpXAhZOkDyblYXbp7o4g=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS1P250MB0608.EURP250.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(39850400004)(376002)(136003)(396003)(346002)(366004)(230922051799003)(64100799003)(451199024)(186009)(1800799009)(8676002)(55016003)(33656002)(5660300002)(52536014)(8936002)(2906002)(86362001)(66899024)(71200400001)(38070700005)(38100700002)(6506007)(7696005)(478600001)(9686003)(122000001)(966005)(316002)(6916009)(66556008)(26005)(76116006)(41300700001)(66946007)(66446008)(64756008)(66476007);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tSfkWjSfE9gcBoNl/9M3gIGGcWYgzn3+1wH67oxMN6H0zmXYF3HRBQi0aTBs?=
+ =?us-ascii?Q?8vPQuLHm/337qc8bg0PjzdHINCFQk+StgdB62UVsoF2yEGkuHxWp+sQ8dbtA?=
+ =?us-ascii?Q?2NpRVOk+ynpYnij5eXkZCgbqXdefdqBkRAwXwDTy2RxqUF+kUoyt8QXIXsko?=
+ =?us-ascii?Q?jbrSSdY5SS/BAGKXfjiaaerfqpjSefw4ioI/LfcEaGHjb1f/FcwiHYF8pBUL?=
+ =?us-ascii?Q?u7uxTntSL6ILpcesgt5vQGxCjAPHo8zjlvlJgTIj0gaC6Ne9Rw/QjJ1N84sZ?=
+ =?us-ascii?Q?4ohLIbn7kaL5fDAuuKut75n/2iFhNUzGLfa+Z0g536vPVbT3Fw5oBQNI0hjl?=
+ =?us-ascii?Q?u5bGIHReEgIsYZ6AdHPy9lFdfjSXZ1brJ2MKQ6siz9YSLgMFfLZAkVHKQGEZ?=
+ =?us-ascii?Q?Odt79qSGYn/1b75e9UZ7a+FCp8GkUMuOE8NVkO1OUiVa4okwdi1bY4P/C77w?=
+ =?us-ascii?Q?7ohbBgVpj+J5jlPP37rHCJe75ULYjQZTddcEoo9q0g1KaJIcqXJQ1Q1+R9S9?=
+ =?us-ascii?Q?O10MzUYTC6+/LZzBhHkhQ3Ht/EZkBOtlY6lCqhnC50bRJblxnIPH9hETMVQC?=
+ =?us-ascii?Q?RrFE2m7OBqFYvlQwSpeSWtLykV2j8jzC2dUqDjiBug0vOfuJWAR1MUXYEpIl?=
+ =?us-ascii?Q?fmIBLpXvQ5gZI5U58s/4AeNZMLnY2MtYc3auGFT/My/GalTvQCr430JNnrHA?=
+ =?us-ascii?Q?Opwn9eUEZrl9CVlQ377VDegBrK6vbRAMxY0OFsdISZ6HKt53C3Q6rJCxjTgW?=
+ =?us-ascii?Q?tSUxs5+SQlUWlj4KsI4M2rv2sCiYG+srfayMJi2PH1rv68iGf6l4r0wNcwtr?=
+ =?us-ascii?Q?S+QiI+Cj0uiTpvCXT1eYaM+C/Sq02EsEUvdUnHvfJkbTvyi6Esr8OHl78YRO?=
+ =?us-ascii?Q?q8JvPTgwPQcRcT1PY6y9HWChOgEkmVhUpG8kuV8BNW/0qPai7nCptIfuK1q1?=
+ =?us-ascii?Q?UR/GvLbYnpMuZffYHKkOQZZ4vaxk2h1OSQr/sQ4PKhBF/Rc1XExdnd2vWODF?=
+ =?us-ascii?Q?uaSYw+JR9Xdjfi/oqTr2rGjEvHPBw/EWKRcXo0VI+uJvCXqFVROD5JY2KOui?=
+ =?us-ascii?Q?wNssRO8MN/TOsEYgP5TgQcwWywoNW7U51owUfwndatdtRoiN6n9VSnTCWVsi?=
+ =?us-ascii?Q?f8kBitMZQi9ppEI8wg12e1ZWplHRj6HSaJEUhIOR7faJsRF4OISxnZZk5sXW?=
+ =?us-ascii?Q?9jK7chOulCPYoPoCRf/4akWfgAzT5xiM6l5PebB3eun/n9bjoLDGzgj/1ZO1?=
+ =?us-ascii?Q?fU9JJ0KbYV72f7yscAC47APGe6fmUQbi3/u/WV0H6x53qa4h2Mx7Yb20knRw?=
+ =?us-ascii?Q?Um5ojup9/JO+ynuzYKGjz7YkHiijM8zgwVfGCF1KACQrfGZgQhNKKMrkzjH1?=
+ =?us-ascii?Q?nd9OP9+8lh7KrcIvBQUmKi/v7vgahC6uao1VfDXRxK8v/IDIe3fJf4tz+TUf?=
+ =?us-ascii?Q?Wuc1h91b8eET6gjVaxQSxuw5OXi2lcnGT+/oP6HtZd2P2RDxUe/gK8H+jgkC?=
+ =?us-ascii?Q?arKgDxxv0oHswvrZ9kXZT4G94lH4XnV1Ry8muqFYcyV94P2/ns8xYyo55nFj?=
+ =?us-ascii?Q?WhTDU4JPFNBPsaSVTzzCflb3sRVd5FuI0pbB2ryxsrABiCxo3r3/n/5ZE0a9?=
+ =?us-ascii?Q?bg=3D=3D?=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-GB
-To: Vincent Fazio <vfazio@gmail.com>, buildroot@buildroot.org
-References: <20231018141155.533944-1-vfazio@gmail.com>
-In-Reply-To: <20231018141155.533944-1-vfazio@gmail.com>
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: o9MpE0pmdvfU3EGTZi1iOgX2VaLmvmk/AXGyzLYKEKiwQ6zoI+ITxL7Jpfk4fhZExvpe7lNsa8Y/FozftiFtEji8m6PFTMpOA/rM468Zpwx+1xTp034ar59WDeuAp99BNuNzivYEZzx6O5RIsF+t4CgOyb0NXiZgYIQy2Vh1rVEhVTGYgM4yRGSCkfXL+lZPhcR7Jx7iO7/IfJGP10zACZdhrLFw/j4Tm8nzFNZBMCPjuIcn/k41kEf1py9SEN+EBZVqvHhIQo2jOggdm+9Xhr4AOLmdYUiJZ+lT5Th05Jkg3ygCzF8pO+e484cQcbUdVTfSEnVq3gokVNKlX1pb7iHnZw2pnIrYPW3QLkrASmkRc9Un138LY/dtTo6vxWbD2zDE40un1eejec4j2KxxDwwxuCgpaIX51xUWh8gsQ6dhnAX34+KIIxblfALyP54HZQRrI9A/12wJU7DOKUBS1tSJhAxCDLR1wfJzch2NWVxMYRzYjSMzvjSnhxkEpJ/r25mOvtob1Lclviib9kgQfuGUC8PVutVxuhD3hr3gEBiORmRfO8M0m/YRB3+6QVZpt8BFIN9ilaT9z5BH5sOGLQ7U5nnDMwIn6ozYLxsZjFpxzwUFzofiYBVsHyMeeYvOCIsNF0RVRkIamcRt1w9o+34XDuEvWNAalnk/OxM+RQZkpdXQb2GFgHLC9glMtmMHefauErHiUxE2FY1HvdRIqtAIqE31F+yYcbN0+K2sr8XmEyYOX9ViPuMslHItTjES
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2001374-afd5-4c03-69b2-08dbd069c39f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2023 06:08:07.4697 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f92d38a3-9c84-427f-afc3-aef091509c71
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /vTjSLOGno2LrdAF8ymx91JbZIMLmECZ4mSBr0UXhPt3yVdlOlX6+dKpKNM5xXWTJHGNLnjVqYpOa0sGciitCBfK2J5aYz6TcUlEFQl5Akg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P250MB0388
+X-C2ProcessedOrg: 71f8fb5e-29e9-40bb-a2d4-613e155b19df
+X-TBoneOriginalFrom: Michel Alex <Alex.Michel@wiedemann-group.com>
+X-TBoneOriginalTo: "buildroot@buildroot.org" <buildroot@buildroot.org>
+X-TBoneDomainSigned: false
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1697651009; x=1698255809; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=JFaD+0WyKqfcZIN1nZKpGeVImjdYj1eNqqJRDu7RnLE=;
- b=dk88N8gzzooV4AhJTCxfbWW1uFjq+Ep+1vI7DSnei6ZYT9a4PWr0jfDEWfOPTGVTyx
- 9lAUZ+OoQ812dGo+i/nhhTySVOsbb2i5/Da9qmIc9EBx4fxemalmZcOi6muNlhV9AFv1
- fEaDskMmuDSaq42JOBhLTvyj/O5/2LexfK+MCoApGa7ValzRt21etFcNM8S8d/QqgjGK
- 2RHgeodIBx+cVsmzxDAYl8LFZ9bPAQNK3Jx8Ks829LFIrn+S7kYsW2fi5NNUbSMLNER8
- DwUcLHi+EdAqlnWpPXCxAq3IurYcsv0Ff1cQ5KDsGwx7yB7udotv7iqRS1/8bnm0uJl5
- 6ZgQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=dk88N8gz
-Subject: Re: [Buildroot] [PATCH 1/1] support/dependencies: bump minimal tar
- version to 1.35
+ d=stwmm.onmicrosoft.com; 
+ s=selector1-stwmm-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R+vmYsB014jE5Umm2q7wiqrZcCO7pqJS2Iwm7DgPtJQ=;
+ b=A5nLlavFw9hpb1CpW0XRUSFLgPvtRGQEjlfgDrZDWzvbV1tckhBHxKthZ+TL5XKORTmXuNKn3IbC17DZWdJs0wzpx/bHEZKTI+tS1AzGl+ysZZN+G+irhrKNyWvsamtYq3giJLkEIH0xsrU9FPYF0Le38rFVIQ0wGaDQ2Y4bmtE=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=stwmm.onmicrosoft.com
+ header.i=@stwmm.onmicrosoft.com header.a=rsa-sha256
+ header.s=selector1-stwmm-onmicrosoft-com header.b=A5nLlavF
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wiedemann-group.com;
+Subject: [Buildroot] [PATCH] package/libzenoh-pico: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,119 +161,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+zenoh-pico is the Eclipse zenoh implementation that targets constrained
+devices and offers a native C API. It is fully compatible with its main
+Rust Zenoh implementation, providing a lightweight implementation of
+most functionalities.
 
+https://github.com/eclipse-zenoh/zenoh-pico
 
-On 18/10/2023 16:11, Vincent Fazio wrote:
-> GNU tar 1.35 includes a breaking change [0] that changes the tar header
-> created for each regular file even for "stable" formats like pax (which
-> we use in support/download/helpers::mk_tar_gz).
+Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
+---
+ package/Config.in                        |  1 +
+ package/libzenoh-pico/Config.in          |  9 +++++++++
+ package/libzenoh-pico/libzenoh-pico.hash |  3 +++
+ package/libzenoh-pico/libzenoh-pico.mk   | 19 +++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/libzenoh-pico/Config.in
+ create mode 100644 package/libzenoh-pico/libzenoh-pico.hash
+ create mode 100644 package/libzenoh-pico/libzenoh-pico.mk
 
-  The funny thing is that the tar docs have a section about making the archive 
-reproducible [1]. They call it "more reproducible", though, so perhaps they 
-realize that they fail...
+diff --git a/package/Config.in b/package/Config.in
+index a53b7d29b5..077cf959d8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1993,6 +1993,7 @@ menu "Networking"
+        source "package/libwebsock/Config.in"
+        source "package/libwebsockets/Config.in"
+        source "package/libyang/Config.in"
++       source "package/libzenoh-pico/Config.in"
+        source "package/lksctp-tools/Config.in"
+        source "package/mbuffer/Config.in"
+        source "package/mdnsd/Config.in"
+diff --git a/package/libzenoh-pico/Config.in b/package/libzenoh-pico/Config.in
+new file mode 100644
+index 0000000000..3baa76da3d
+--- /dev/null
++++ b/package/libzenoh-pico/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBZENOH_PICO
++       bool "libzenoh-pico"
++       help
++         zenoh-pico is the Eclipse zenoh implementation that targets constrained
++         devices and offers a native C API. It is fully compatible with its main
++         Rust Zenoh implementation, providing a lightweight implementation of
++         most functionalities.
++
++         https://github.com/eclipse-zenoh/zenoh-pico
+diff --git a/package/libzenoh-pico/libzenoh-pico.hash b/package/libzenoh-pico/libzenoh-pico.hash
+new file mode 100644
+index 0000000000..edd4c3df4a
+--- /dev/null
++++ b/package/libzenoh-pico/libzenoh-pico.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  752acec56236fca41dcc438307f4a76e69900383b06803d47f32c480643dc794  zenoh-pico-0.10.0-rc.tar.gz
++sha256  d386df32cf327bbb25abe894277d3d7e0f447bafc59f4ad362615b0136f30db5  LICENSE
+diff --git a/package/libzenoh-pico/libzenoh-pico.mk b/package/libzenoh-pico/libzenoh-pico.mk
+new file mode 100644
+index 0000000000..46d98a0a49
+--- /dev/null
++++ b/package/libzenoh-pico/libzenoh-pico.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# libzenoh-pico
++#
++################################################################################
++
++LIBZENOH_PICO_VERSION = 0.10.0-rc
++LIBZENOH_PICO_SITE = $(call github,eclipse-zenoh,zenoh-pico,$(LIBZENOH_PICO_VERSION))
++LIBZENOH_PICO_LICENSE = EPL-2.0
++LIBZENOH_PICO_LICENSE_FILES = LICENSE
++LIBZENOH_PICO_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBZENOH_PICO_INSTALL_STAGING = YES
++
++# - disable all examples
++LIBZENOH_PICO_CONF_OPTS += \
++       -DBUILD_EXAMPLES=OFF
++
++$(eval $(cmake-package))
++
+--
+2.34.1
 
-
-> Previously, normal files had the devmajor/devminor fields of the header
-> filled with ASCII zero (0x30). These fields are now null which also
-> affects the checksum value in the header as well.
-> 
->    $ diff <(head -n 100 xxd.1.34.output) <(head -n 100 xxd.1.35.output)
->    10c10
->    < 00000090: 3037 3500 3031 3531 3637 0020 3000 0000  075.015167. 0...
->    ---
->    > 00000090: 3037 3500 3031 3337 3237 0020 3000 0000  075.013727. 0...
->    21,22c21,22
->    < 00000140: 0000 0000 0000 0000 0030 3030 3030 3030  .........0000000
->    < 00000150: 0030 3030 3030 3030 0000 0000 0000 0000  .0000000........
->    ---
->    > 00000140: 0000 0000 0000 0000 0000 0000 0000 0000  ................
->    > 00000150: 0000 0000 0000 0000 0000 0000 0000 0000  ................
-> 
-> This has the consequence of causing hash mismatches for any tarball
-> created with a version prior to 1.35.
-> 
-> Instead of reverting back to a host specific version (see 37a909cacf)
-> and adding a cap to the maximal tar version (see ec50e407be), just
-> establish that 1.35+ should be used going forward.
-> 
-> This change requires an updated BR_FMT_VERSION for both git and svn.
-> 
-> [0] https://git.savannah.gnu.org/cgit/tar.git/commit/?id=738de9ecdec45ebfeb999628742373b5f8253bd0
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> ---
-> This patch should be coordinated with other patches [1] that update the
-> BR_FMT_VERSION revision for git or svn as all of the tarball hashes will
-> need to be regenerated tree-wide.
-> 
-> [1] https://patchwork.ozlabs.org/project/buildroot/list/?series=373742
-> ---
->   package/pkg-download.mk                |  4 ++--
->   support/dependencies/check-host-tar.sh | 10 ++++++----
->   2 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index e5cd83d859..d33eb2d811 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -20,8 +20,8 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
->   
->   # Version of the format of the archives we generate in the corresponding
->   # download backend:
-> -BR_FMT_VERSION_git = -br1
-> -BR_FMT_VERSION_svn = -br3
-> +BR_FMT_VERSION_git = -br2
-> +BR_FMT_VERSION_svn = -br4
-
-  Vendored cargo and go packages will have the same issue, no? Those will need 
-to be updated as well...
-
-  Perhaps we should look for an alternative archive format that is actually 
-reproducible. If we anyway have to do a mass update, then it's better if now is 
-the last time... Though I don't know if an actually reproducible format exists. 
-GNU cpio has the --reproducible option, but I don't know if it guarantees 
-reproducibility across cpio versions. Also, we still have gzip to contend with.
-
-  Regards,
-  Arnout
-
-[1] 
-https://www.gnu.org/software/tar/manual/html_chapter/Formats.html#Reproducibility
-
-
->   
->   DL_WRAPPER = support/download/dl-wrapper
->   
-> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
-> index b7d607a47a..d56d0242a9 100755
-> --- a/support/dependencies/check-host-tar.sh
-> +++ b/support/dependencies/check-host-tar.sh
-> @@ -27,11 +27,13 @@ if [ -n "${version_bsd}" ] ; then
->       exit 1
->   fi
->   
-> -# Minimal version = 1.27 (previous versions do not correctly unpack archives
-> -# containing hard-links if the --strip-components option is used or create
-> -# different gnu long link headers for path elements > 100 characters).
-> +# Minimal version = 1.35
-> +# GNU tar upstream commit 738de9ecd introduced a "breaking" change that
-> +# affects tarballs regardless of mode (pax/ustar/v7) such that tarballs
-> +# generated with 1.35 will not hash to the same value as those generated
-> +# by previous versions of tar.
->   major_min=1
-> -minor_min=27
-> +minor_min=35
->   
->   if [ $major -lt $major_min ]; then
->   	# echo nothing: no suitable tar found
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
