@@ -1,68 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1B7EC004C0
-	for <buildroot@archiver.kernel.org>; Thu, 19 Oct 2023 21:50:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C78CDCDB474
+	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 05:58:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55CE1402F0;
-	Thu, 19 Oct 2023 21:50:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55CE1402F0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1778640160;
+	Fri, 20 Oct 2023 05:58:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1778640160
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a5ECl284PUqZ; Thu, 19 Oct 2023 21:50:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 13WpHMQ6g4zn; Fri, 20 Oct 2023 05:58:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 380F6402BC;
-	Thu, 19 Oct 2023 21:49:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 380F6402BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id AED6840423;
+	Fri, 20 Oct 2023 05:58:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AED6840423
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E03461BF3E0
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:49:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B74491BF2FA
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 05:58:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4630820EB
- for <buildroot@lists.busybox.net>; Thu, 19 Oct 2023 21:49:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4630820EB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 898E784472
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 05:58:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 898E784472
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V1PVhGcg4r-L for <buildroot@lists.busybox.net>;
- Thu, 19 Oct 2023 21:49:56 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3480981EE9
- for <buildroot@buildroot.org>; Thu, 19 Oct 2023 21:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3480981EE9
-Received: from fli4l.lan.fli4l (p4fd6ced1.dip0.t-ipconnect.de [79.214.206.209])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 780CDA4C031A;
- Thu, 19 Oct 2023 23:49:53 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45642)
- by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
- (envelope-from <bernd@kuhls.net>) id 1qtatt-0007EJ-0F;
- Thu, 19 Oct 2023 23:49:53 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Thu, 19 Oct 2023 23:49:53 +0200
-Message-Id: <20231019214953.4002609-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id b58LSP_KJNOi for <buildroot@lists.busybox.net>;
+ Fri, 20 Oct 2023 05:58:48 +0000 (UTC)
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
+ [IPv6:2a00:1450:4864:20::22f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B83F84469
+ for <buildroot@buildroot.org>; Fri, 20 Oct 2023 05:58:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B83F84469
+Received: by mail-lj1-x22f.google.com with SMTP id
+ 38308e7fff4ca-2c50cf61f6dso6731281fa.2
+ for <buildroot@buildroot.org>; Thu, 19 Oct 2023 22:58:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697781525; x=1698386325;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mda3n/+M8DIWcz7Hg0xHUBOnsWdVUxhKRHdL1kVGelk=;
+ b=ff4Zl01wDw6gwHuVuhFdRHzjrO3aJZF7AebwEukXhNvKZ38yG6lC0dxpkcfINJjiB4
+ dSU/sNbVNM9EpY3lZ1UYyZe7gzZg47m+g/msW6D52Bj0mIs8O50aj20MHCvm16JDeQiS
+ jEH0uZRZfBB/Shrp8ZsT8DWGHsD+a4ojRcDNlNNdETQFpIwwADcrtbElowXb2eJ3hbRD
+ YgloIc/YAIZsL0CLpQaYp4vbi7FJ33S/Zuumt1EA0MjMp7RHOtNjpQgCJ7umAP7NmLHu
+ dAHfhHM9iQrZtHkWrzGlO78Ebuo0/8MtZfr15Pq43YKem6zh3gfVcp1QDn1z6n0PHziB
+ H7Hw==
+X-Gm-Message-State: AOJu0YyPLf3htdDVsBwAVnozOiHUvvL+dNXMEWvohFaV7zTysedum1SG
+ K6q+rzfENXrZDJnEbDG7zmyd8pK+peg=
+X-Google-Smtp-Source: AGHT+IEqYXpCX7UjKQnQ1DipakyU0Jdic4TXw6bK9SX6lV7ZHPPujrM5jz0wZf8y9oq9JrrIHBNUFw==
+X-Received: by 2002:a2e:8e2a:0:b0:2b5:7f93:b3b0 with SMTP id
+ r10-20020a2e8e2a000000b002b57f93b3b0mr532023ljk.17.1697781525147; 
+ Thu, 19 Oct 2023 22:58:45 -0700 (PDT)
+Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
+ [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
+ w10-20020a2e160a000000b002c032e54948sm227042ljd.117.2023.10.19.22.58.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 19 Oct 2023 22:58:44 -0700 (PDT)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+To: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>
+Date: Fri, 20 Oct 2023 08:02:36 +0200
+Message-ID: <20231020060236.3725194-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1697752193;
- bh=zICqrrR6V8x3qEq2WYxrpYAn881tB/Au16pzu82Vy0E=;
- h=From:To:Cc:Subject:Date:From;
- b=LlaAyJ6sFfHg1uO4L+ne6FHcOwcYK1BNI6erVNgg8DHoDdzABZl6s3cHzNNQhTMJy
- GEcIHGv5GeA4Mk/9wI098LEBeidb3nvQaKIzE5iuOM2jKsUbKNXnorbnBzobpsWJRG
- 1u9tX+Uj9PWNKb/x2+E3He4p10Rpj3DfC/HjdE4JCkV6V1qQXesgOvk6NQYeDJ87Ch
- rmRgBGGXp8amIVltW6+PkL17p2l6pzh/wrq1GRyVt2fq15dr412mcrDLAtyuZZbMiz
- XjO5Ip3JqD856S5v28x2G79c7sWAVK7gY2XPfsFbnjxVyKPxqQM1bJ7/u1sOQj9nhC
- iF1OOh6IgR+rQ==
+ d=gmail.com; s=20230601; t=1697781525; x=1698386325; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mda3n/+M8DIWcz7Hg0xHUBOnsWdVUxhKRHdL1kVGelk=;
+ b=l0I/3rcZ1X21ZFZf0tDWEmZ+ZF9AEcC5bp+CNHz063KpMS5EXqLYjL18Z5oCYBzZQb
+ ygkiiMjrI9ymWGFG5VROPlGmi8tTUw29EwFxeYUtOqL0LYsvaWeL7cdrBTr1uf6FVytb
+ ZMPc26V0MVyN2F2yzACK6zHMTFq6YtQjsQ9hF5i+fWrM3W0ZMhZZKKmVUG/C2B7nQfOT
+ kZ/oWZRBzCEbSfzu4xOG13V51YLykNYAq8yJ2abklphFejS3h8iYy2ZcfobCoAi6+G2u
+ B1PbVpyMerE24XUEBbzYLrF8WW0eo1ae8V5P4M9JDQ9ojAMVyWnqK0rK+Z/QRlRheljE
+ KoaQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=LlaAyJ6s
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: enable on musl
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=l0I/3rcZ
+Subject: [Buildroot] [PATCH v4] package/criu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,288 +94,216 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Laurent Vivier <laurent@vivier.eu>,
- "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Tobias Waldekranz <tobias@waldekranz.com>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit eb60820c0a9b3f938f32516f24df2eee9aac1e26 disabled
-elfutils for musl toolchains in 2015. Current code builds fine with musl
-so remove the exceptions.
+Checkpoint/Restore In Userspace (CRIU), is a software tool for the
+Linux operating system to make it possible to freeze a running
+application and checkpoint it to persistent storage as a collection of files.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- package/avrdude/Config.in    | 6 ++----
- package/bpftool/Config.in    | 4 +---
- package/elfutils/Config.in   | 9 +++------
- package/elfutils/elfutils.mk | 2 +-
- package/kexec-lite/Config.in | 6 ++----
- package/kmemd/Config.in      | 6 ++----
- package/libbpf/Config.in     | 6 ++----
- package/ltrace/Config.in     | 6 ++----
- package/mesa3d/Config.in     | 8 --------
- package/petitboot/Config.in  | 4 +---
- package/racehound/Config.in  | 6 ++----
- 11 files changed, 18 insertions(+), 45 deletions(-)
 
-diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
-index cbbd076667..06fee0ca7f 100644
---- a/package/avrdude/Config.in
-+++ b/package/avrdude/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_AVRDUDE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_LIBUSB
-@@ -27,7 +26,6 @@ comment "SPI support needs a toolchain w/ linux headers >= 4.8"
+Notes:
+    v2:
+     - Addressed comments from Thomas.
+     - Tested on ARM target and on x86_64 with qemu.
+    
+    v3:
+     - set CONFIG_CHECKPOINT_RESTORE in kernel config
+     - Only be available for ARMv6, ARMv7 and ARMv8
+    
+    v4:
+    - set SUBARCH for armv6, armv7 and armv8
+    - Use github download helper
+    
+    Result from test-pkg:
+                        bootlin-armv5-uclibc [1/6]: SKIPPED
+                         bootlin-armv7-glibc [2/6]: OK
+                       bootlin-armv7m-uclibc [3/6]: SKIPPED
+                         bootlin-x86-64-musl [4/6]: OK
+                          br-arm-full-static [5/6]: SKIPPED
+                                sourcery-arm [6/6]: SKIPPED
+    6 builds, 4 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/criu/Config.in | 48 +++++++++++++++++++++++++++++
+ package/criu/criu.hash |  3 ++
+ package/criu/criu.mk   | 70 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 123 insertions(+)
+ create mode 100644 package/criu/Config.in
+ create mode 100644 package/criu/criu.hash
+ create mode 100644 package/criu/criu.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 57015e245e..2047827bd9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2007,6 +2007,7 @@ F:	support/testing/tests/package/test_python_pytest.py
+ F:	support/testing/tests/package/test_python_pytest_asyncio.py
  
- endif
- 
--comment "avrdude needs a uClibc or glibc toolchain w/ threads, wchar, dynamic library, gcc >= 4.9"
-+comment "avrdude needs a toolchain w/ threads, wchar, dynamic library, gcc >= 4.9"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/bpftool/Config.in b/package/bpftool/Config.in
-index d131ec566e..ef3a7a8a45 100644
---- a/package/bpftool/Config.in
-+++ b/package/bpftool/Config.in
-@@ -16,7 +16,6 @@ config BR2_PACKAGE_BPFTOOL
- 	depends on BR2_USE_WCHAR # binutils, elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_ELFUTILS
-@@ -24,11 +23,10 @@ config BR2_PACKAGE_BPFTOOL
- 	  bpftool is a tool for for inspection and simple manipulation
- 	  of eBPF programs and maps.
- 
--comment "bpftool needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.12"
-+comment "bpftool needs a toolchain w/ wchar, dynamic library, threads, headers >= 4.12"
- 	depends on BR2_PACKAGE_BPFTOOL_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_nios2
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 5f45de14ab..c355048c6d 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -1,17 +1,14 @@
--comment "elfutils needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
-+comment "elfutils needs a toolchain w/ wchar, dynamic library, threads"
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_ELFUTILS
- 	bool "elfutils"
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# Only glibc and uClibc implement the myriad of required GNUisms
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  Libraries/utilities to handle ELF objects (drop in
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 0757851b72..ebe30f63fa 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -61,7 +61,7 @@ HOST_ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
- ELFUTILS_CONF_ENV += \
- 	LDFLAGS="$(ELFUTILS_LDFLAGS)"
- 
--ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- ELFUTILS_DEPENDENCIES += argp-standalone
- ELFUTILS_CONF_OPTS += --disable-symbol-versioning
- endif
-diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
-index abfa95ab36..5beaec6418 100644
---- a/package/kexec-lite/Config.in
-+++ b/package/kexec-lite/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_KEXEC_LITE
- 	depends on !BR2_STATIC_LIBS # dtc, elfutils
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_DTC
- 	select BR2_PACKAGE_DTC_PROGRAMS
-@@ -18,8 +17,7 @@ config BR2_PACKAGE_KEXEC_LITE
- 
- 	  https://github.com/antonblanchard/kexec-lite
- 
--comment "kexec-lite needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
-+comment "kexec-lite needs a toolchain w/ wchar, dynamic library, threads"
- 	depends on BR2_powerpc || BR2_powerpc64
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/kmemd/Config.in b/package/kmemd/Config.in
-index cd92757508..b3aebf1224 100644
---- a/package/kmemd/Config.in
-+++ b/package/kmemd/Config.in
-@@ -5,16 +5,14 @@ config BR2_PACKAGE_KMEMD
- 	depends on !BR2_STATIC_LIBS # libbpf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libbpf
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # libbpf
- 	select BR2_PACKAGE_LIBBPF
- 	help
- 	  Explore a live Linux kernel's memory using GDB
- 
- 	  https://github.com/wkz/kmemd
- 
--comment "kmemd needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 5.14"
-+comment "kmemd needs a toolchain w/ wchar, dynamic library, threads, headers >= 5.14"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
-index 1465366c9e..a78392cdc8 100644
---- a/package/libbpf/Config.in
-+++ b/package/libbpf/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_LIBBPF
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -16,9 +15,8 @@ config BR2_PACKAGE_LIBBPF
- 
- 	  https://github.com/libbpf/libbpf
- 
--comment "libbpf needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, headers >= 4.13"
-+comment "libbpf needs a toolchain w/ wchar, dynamic library, threads, headers >= 4.13"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13 \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index ce5a85edcf..21d381db70 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -15,7 +15,6 @@ config BR2_PACKAGE_LTRACE
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	depends on BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
- 	select BR2_PACKAGE_ELFUTILS
- 	help
-@@ -26,8 +25,7 @@ config BR2_PACKAGE_LTRACE
- 
- 	  http://ltrace.org
- 
--comment "ltrace needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
-+comment "ltrace needs a toolchain w/ wchar, dynamic library, threads"
- 	depends on BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 1e4a73a50f..ca7b9c8178 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -194,7 +194,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	depends on BR2_USE_MMU # libdrm
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_PACKAGE_MESA3D_LLVM
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_AMDGPU
- 	select BR2_PACKAGE_LIBDRM_RADEON
-@@ -204,13 +203,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	help
- 	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
- 
--# Radeon SI needs libelf
--# musl is not currently compatible with elfutils
--comment "Radeon SI driver needs a uClibc or glibc toolchain"
--	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_MESA3D_LLVM
--	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
--
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 	bool "Gallium vmware svga driver"
- 	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-index 0b4dc762bb..3d3c798c25 100644
---- a/package/petitboot/Config.in
-+++ b/package/petitboot/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_PETITBOOT
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils, lvm2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, lvm2
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_LVM2 # devmapper
-@@ -22,10 +21,9 @@ config BR2_PACKAGE_PETITBOOT
- 
- 	  http://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
- 
--comment "petitboot needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads, udev /dev management"
-+comment "petitboot needs a toolchain w/ wchar, dynamic library, threads, udev /dev management"
- 	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		BR2_TOOLCHAIN_HAS_THREADS || \
--		!(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) || \
- 		!BR2_PACKAGE_HAS_UDEV
-diff --git a/package/racehound/Config.in b/package/racehound/Config.in
-index d13f90adb4..5b8bdc77bc 100644
---- a/package/racehound/Config.in
-+++ b/package/racehound/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_RACEHOUND
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	# only x86/x86_64 supported
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_ELFUTILS
-@@ -30,8 +29,7 @@ comment "racehound needs an Linux kernel >= 3.14 to be built"
- 	depends on !BR2_LINUX_KERNEL
- 	depends on BR2_i386 || BR2_x86_64
- 
--comment "racehound needs a uClibc or glibc toolchain w/ C++, wchar, dynamic library, threads"
-+comment "racehound needs a toolchain w/ C++, wchar, dynamic library, threads"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
+ N:	Marcus Folkesson <marcus.folkesson@gmail.com>
++F:	package/criu/
+ F:	package/libcamera/
+ F:	package/libcamera-apps/
+ F:	package/libostree/
+diff --git a/package/Config.in b/package/Config.in
+index 4e489c4706..9e2099f6a5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2678,6 +2678,7 @@ menu "System tools"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+ 	source "package/cpuload/Config.in"
++	source "package/criu/Config.in"
+ 	source "package/crun/Config.in"
+ 	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+new file mode 100644
+index 0000000000..06e809fb83
+--- /dev/null
++++ b/package/criu/Config.in
+@@ -0,0 +1,48 @@
++# criu only builds on certain architectures
++config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
++	bool
++	default y if BR2_ARM_CPU_ARMV6
++	default y if BR2_ARM_CPU_ARMV7A
++	default y if BR2_ARM_CPU_ARMV7M
++	default y if BR2_ARM_CPU_ARMV8A
++	default y if BR2_ARM_CPU_ARMV8M
++	default y if BR2_aarch64
++	default y if BR2_i386
++	default y if BR2_mips
++	default y if BR2_x86_64
++	default y if BR2_powerpc64
++	default y if BR2_s390x
++
++menuconfig BR2_PACKAGE_CRIU
++	bool "criu"
++	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_PYTHON3 # host-python3-ssl
++	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP # protobuf
++	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on !BR2_STATIC_LIBS # protobuf, libbsd
++	depends on BR2_USE_WCHAR # libbsd
++	depends on BR2_USE_MMU # libcap
++	select BR2_PACKAGE_HOST_PYTHON3_SSL
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_PROTOBUF_C
++	select BR2_PACKAGE_LIBAIO
++	select BR2_PACKAGE_LIBBSD
++	select BR2_PACKAGE_LIBCAP
++	select BR2_PACKAGE_LIBNET
++	select BR2_PACKAGE_LIBNL
++	select BR2_PACKAGE_PYTHON3
++	help
++	  Checkpoint/Restore In Userspace (CRIU), is a software
++	  tool for the Linux operating system to make it possible
++	  to freeze a running application and checkpoint it to
++	  persistent storage as a collection of files.
++
++	  https://criu.org/Main_Page
++
++comment "criu needs a toolchain w/ threads, dynamic library, wchar"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| !BR2_USE_WCHAR
+diff --git a/package/criu/criu.hash b/package/criu/criu.hash
+new file mode 100644
+index 0000000000..2c4a07252b
+--- /dev/null
++++ b/package/criu/criu.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  6a9997981c9fe4730c848ce59346b3a22fad69b803607cb67a3f6ec0557fa474  criu-3.18.tar.gz
++sha256  568a1fa9d90e18a1a1a61ea58ec2eece16b56a5042cc72c1b4f8d4455ae6fcb7  COPYING
+diff --git a/package/criu/criu.mk b/package/criu/criu.mk
+new file mode 100644
+index 0000000000..a84c625696
+--- /dev/null
++++ b/package/criu/criu.mk
+@@ -0,0 +1,70 @@
++################################################################################
++#
++# CRIU
++#
++################################################################################
++
++CRIU_VERSION = 3.18
++CRIU_SITE = $(call github,checkpoint-restore,criu,v$(CRIU_VERSION))
++
++CRIU_LICENSE = GPL-2.0
++CRIU_LICENSE_FILES = COPYING
++CRIU_DEPENDENCIES =\
++	host-pkgconf \
++	host-protobuf-c \
++	host-python3 \
++	host-python-pip \
++	libaio \
++	libbsd \
++	libcap \
++	libnet \
++	libnl \
++	protobuf \
++	protobuf-c \
++	python3
++
++CRIU_MAKE_ENV =\
++	$(TARGET_MAKE_ENV) \
++	$(TARGET_CONFIGURE_OPTS) \
++	CROSS_COMPILE=$(TARGET_CROSS) \
++	WERROR=0
++
++#x86_64 is treated as x86 in criu
++#Also, powerpc64 is refered to as ppc64 in criu.
++ifeq ($(BR2_ARCH),"x86_64")
++CRIU_MAKE_ENV += ARCH=x86
++else ifeq ($(BR2_ARCH),"powerpc64")
++CRIU_MAKE_ENV += ARCH=ppc64
++else
++CRIU_MAKE_ENV += ARCH=$(BR2_ARCH)
++endif
++
++ifeq ($(BR2_ARM_CPU_ARMV6), y)
++CRIU_MAKE_ENV += SUBARCH=armv6
++else ifeq ($(BR2_ARM_CPU_ARMV7A), y)
++CRIU_MAKE_ENV += SUBARCH=armv7
++else ifeq ($(BR2_ARM_CPU_ARMV7M), y)
++CRIU_MAKE_ENV += SUBARCH=armv7
++else ifeq ($(BR2_ARM_CPU_ARMV8A), y)
++CRIU_MAKE_ENV += SUBARCH=armv8
++else ifeq ($(BR2_ARM_CPU_ARMV8M), y)
++CRIU_MAKE_ENV += SUBARCH=armv8
++endif
++
++# Criu needs Kernel Checkpoint/restore support which is not enabled
++# by default.
++define CRIU_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CHECKPOINT_RESTORE)
++endef
++
++define CRIU_BUILD_CMDS
++	rm -rf $(@D)/images/google/protobuf/descriptor.proto
++	ln -s  $(STAGING_DIR)/usr/include/google/protobuf/descriptor.proto $(@D)/images/google/protobuf/descriptor.proto
++	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define CRIU_INSTALL_TARGET_CMDS
++	$(CRIU_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) install-criu install-lib install-compel
++endef
++
++$(eval $(generic-package))
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
