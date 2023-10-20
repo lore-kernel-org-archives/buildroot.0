@@ -4,88 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99ED2C001DF
-	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 16:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D09CDB474
+	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 17:47:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52AAA705C7;
-	Fri, 20 Oct 2023 16:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52AAA705C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF02470560;
+	Fri, 20 Oct 2023 17:47:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF02470560
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kn2atrTZixgw; Fri, 20 Oct 2023 16:19:29 +0000 (UTC)
+	with ESMTP id ikxa9BdxSMDj; Fri, 20 Oct 2023 17:47:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C9D1705C2;
-	Fri, 20 Oct 2023 16:19:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C9D1705C2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D9F7705B4;
+	Fri, 20 Oct 2023 17:47:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D9F7705B4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CDEE31BF990
- for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 16:19:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13C061BF488
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 17:47:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1E7784BE9
- for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 16:19:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1E7784BE9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1770E84C2D
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 17:46:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1770E84C2D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VRpj4akJ76SH for <buildroot@lists.busybox.net>;
- Fri, 20 Oct 2023 16:19:12 +0000 (UTC)
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 411B384BEA
- for <buildroot@busybox.net>; Fri, 20 Oct 2023 16:19:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 411B384BEA
-Received: by mail-ed1-x52e.google.com with SMTP id
- 4fb4d7f45d1cf-53d9b94731aso1518412a12.1
- for <buildroot@busybox.net>; Fri, 20 Oct 2023 09:19:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697818750; x=1698423550;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=O748kIy3ityn8K8QGvB9EWhAty0Ca3HL8vmiBVlZArY=;
- b=YVKApcEchelKKJvtiOlOvdmke+1eYi6L0Eib1Wk9Lzv/UwCHn4nhgpqfP9buxS8rSu
- YIJIQS7UrJOqQLarPk2saxzB9ca8xxd7a4X/tX6G/WKspKGstQsh72s3QPKb8fOo9oFB
- Xp6ktW7+xJm5WoaGWch89mfgGLt/fDc4hrrW/svnklBpW+Ox7Ua0WT26pVw86+8AWSFS
- gk8CgmvCtDWdioieXMUSlQ89Plfz11uC1hZL+OuQA6OSSUbbmv1sckBdRL8m1TZjrmSn
- AJCOr8thbHNiF7Gr4JyJhG57oxZFjqk8SYipCU3Wns8DGeGAi7U9jfb1dId6J9t3b82h
- QMKQ==
-X-Gm-Message-State: AOJu0Yyr2shzjaZUOAL9DFf0/PwrtPKRgY3lN3ypbiVIPpHJ0nQ4RGHD
- vlG/pJ5s/cWh2UGU/Odr7QLy1lvc/7A=
-X-Google-Smtp-Source: AGHT+IGK5rgPieop24Phs9ShENU1NhctgLKSYYRcHYMAVjnqd8mzM1UujNTzYm3/RaZZsS/7aKLrQw==
-X-Received: by 2002:a17:907:9620:b0:9ba:2aae:6410 with SMTP id
- gb32-20020a170907962000b009ba2aae6410mr1629514ejc.29.1697818750150; 
- Fri, 20 Oct 2023 09:19:10 -0700 (PDT)
-Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- m2-20020a17090607c200b009c6a4a5ac80sm1746753ejc.169.2023.10.20.09.19.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Oct 2023 09:19:09 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Fri, 20 Oct 2023 18:19:02 +0200
-Message-Id: <20231020161902.48876-2-francois.perrad@gadz.org>
+ with ESMTP id KUaFofl4Tbpt for <buildroot@lists.busybox.net>;
+ Fri, 20 Oct 2023 17:46:54 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 833E3848D6
+ for <buildroot@buildroot.org>; Fri, 20 Oct 2023 17:46:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 833E3848D6
+Received: from fli4l.lan.fli4l (p4fd6ced1.dip0.t-ipconnect.de [79.214.206.209])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8141AA4C00EC
+ for <buildroot@buildroot.org>; Fri, 20 Oct 2023 19:46:51 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38808)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
+ (envelope-from <bernd@kuhls.net>) id 1qttaF-0006zR-0s
+ for buildroot@buildroot.org; Fri, 20 Oct 2023 19:46:51 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Fri, 20 Oct 2023 19:46:51 +0200
+Message-Id: <20231020174651.370111-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231020161902.48876-1-francois.perrad@gadz.org>
-References: <20231020161902.48876-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697818750; x=1698423550; darn=busybox.net;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=O748kIy3ityn8K8QGvB9EWhAty0Ca3HL8vmiBVlZArY=;
- b=b32lpVeAL6nmPJVJOE594bgo+wzbpX8RxktpOdo/BmNqSXIJcMslzpB2sqFkcdXkJE
- h68uNXckY1zwyWS5J7xYp+romqFQBScf7QWDXwYPRKGG6f0DU/dcUdCXXMEkKMUyqXaI
- 1vlng7a1DR6N2dqr3xjZhBKi0lWTz78273qHWZHvSGL68KUCbfrsGIMlPNp5NkAFD3Kx
- qHVSNWhqpv7+L3QuTsvWxTH7lBzMeyVs627G7yyfbS2I8RgFfVXUsS9LhF6vLbZivm/E
- NGHKhUCKyQnxWk5JWcvQr/INW5KgYWudWYrFZBDIFmwHUCcUJg0319yRaye7FwdVW7KV
- u0ew==
+ d=kuhls.net; 
+ s=kas202306131828; t=1697824011;
+ bh=++TK9YkyekzH03bpT+0XQ6aqEqMAHm34iwVNTdUSREo=;
+ h=From:To:Subject:Date:From;
+ b=qc1sEJahoYWwNM63vnjtAuzPHVn8fKuOKDqGYxlEKRQeDWV7dKyCILYiqqC6+oyiQ
+ DRSMMwJlKw46tww0Vm2AMtmUGIcmg6Sm1Zz35WaIwfAg8myJH0psmLTNvKzr9ebF8+
+ Qze5lHxDndRIkjWhEXKfXEgufCtJWTWOxi8RIv0MuyQ7qmM+9O9Prk4fvxrz76rMkP
+ Nb3cuY8oOKh+iaxQjORBzky8g/eo0IyOMlNcDyYYq8CdT3PXWWdAL54TgoXiiwem66
+ rYN7N2zgLv9q5Src2X2K8EEdBLy5oA6WrUf8trYTcU1MOxxJ9i+7Xl39slUZnUPHzM
+ TLDS61NwnaLlQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=b32lpVeA
-Subject: [Buildroot] [PATCH 2/2] package/perl-mojolicious: bump to version
- 9.34
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=qc1sEJah
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.15.x / 6.{1,
+ 5}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +80,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index 6d8f50015..ddf27a808 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from https://cpan.metacpan.org/
--md5  e06ce611dd2444f2ca5b74f3a910b679  Mojolicious-9.32.tar.gz
--sha256  bc04c552ee24eaecc45feb8709d49c2901bc26fb82b4a1a8e17574e1cca083dc  Mojolicious-9.32.tar.gz
-+md5  530e682c101eda6caa0b65438a0b704d  Mojolicious-9.34.tar.gz
-+sha256  5069d68e4e2d8ad663db58859b4fec0ce79ab134d9e58055aaaf3f0f3a73a2c6  Mojolicious-9.34.tar.gz
+diff --git a/linux/Config.in b/linux/Config.in
+index 3aef7142c2..21313ded51 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- # computed by scancpan
- sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 63b02a518..040fbf08e 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_MOJOLICIOUS_VERSION = 9.32
-+PERL_MOJOLICIOUS_VERSION = 9.34
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.5.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.5.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index c6e7ce858c..720598252b 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  0d09ea448005c9cfe5383e4c72a872b39188b928f8c44e146b03b1b7851fbb8c  linux-6.5.7.tar.xz
+-sha256  ce987ed3d2f640b3a2a62a0a8573d538a36dfd3cc31e2d7a239ce5a16c1c21ad  linux-6.1.58.tar.xz
++sha256  299cca897d90deaa176eebec42f0a80eeb7516afed330a45c14da9de086cf717  linux-6.5.8.tar.xz
++sha256  627f7724c675036639290fb5c39e3fdeb3d566b80b192c45f4a808ab54c8c0a0  linux-6.1.59.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  14835e629e237f136cfed484fdb533c95242429809bdcdb2a2d66dfcb7447170  linux-5.15.135.tar.xz
++sha256  c624b9fe7ee4708d34cfd0b7ebc58037afac7463338cc498641ea31c55eeacb8  linux-5.15.136.tar.xz
+ sha256  2b141fce994364fbbf137b01e7910d3518b8cdbdf18f1811b48470ab4ce2fa05  linux-5.10.198.tar.xz
+ sha256  39701815a7a1b5ea4253db18e9327a45926a944499628d032da63c1bb6ea623e  linux-5.4.258.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c7d34d91cf..d48cfa3787 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -408,9 +408,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.19.296"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.258"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.198"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.135"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.58"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.5.7"		if BR2_KERNEL_HEADERS_6_5
++	default "5.15.136"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.59"	if BR2_KERNEL_HEADERS_6_1
++	default "6.5.8"		if BR2_KERNEL_HEADERS_6_5
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
 2.39.2
 
