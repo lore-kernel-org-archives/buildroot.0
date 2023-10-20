@@ -4,83 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EACFCDB47E
-	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 08:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F4B1CDB474
+	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 09:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F95570455;
-	Fri, 20 Oct 2023 08:27:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F95570455
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36F4570496;
+	Fri, 20 Oct 2023 09:10:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36F4570496
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ZLJ0U1EAiod; Fri, 20 Oct 2023 08:27:18 +0000 (UTC)
+	with ESMTP id evZww5pc3-p9; Fri, 20 Oct 2023 09:10:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54F1770450;
-	Fri, 20 Oct 2023 08:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54F1770450
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BF2870492;
+	Fri, 20 Oct 2023 09:10:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BF2870492
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 366561BF2FD
- for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 08:27:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D0BA1BF861
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 09:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C2217045A
- for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 08:27:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C2217045A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F08670495
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 09:10:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F08670495
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LuiswUn-6H4v for <buildroot@lists.busybox.net>;
- Fri, 20 Oct 2023 08:27:14 +0000 (UTC)
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com
- [IPv6:2a00:1450:4864:20::141])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0C80770457
- for <buildroot@buildroot.org>; Fri, 20 Oct 2023 08:27:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C80770457
-Received: by mail-lf1-x141.google.com with SMTP id
- 2adb3069b0e04-5079fa1bbf8so755638e87.0
- for <buildroot@buildroot.org>; Fri, 20 Oct 2023 01:27:13 -0700 (PDT)
+ with ESMTP id Elix3WqnxQUe for <buildroot@lists.busybox.net>;
+ Fri, 20 Oct 2023 09:10:00 +0000 (UTC)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1B24160A8D
+ for <buildroot@buildroot.org>; Fri, 20 Oct 2023 09:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B24160A8D
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-32d9b507b00so454796f8f.1
+ for <buildroot@buildroot.org>; Fri, 20 Oct 2023 02:09:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697790431; x=1698395231;
+ d=1e100.net; s=20230601; t=1697792998; x=1698397798;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9aLC37ha0/iSVG1NPVNSNI04D4MvGLtVZhLa+ba8ydc=;
- b=LGivMTFoSpnWiC9xq7ykZUQh9ay5dwaXbHPaqzhJtMDowTzK4o7JWjPlRNoVZlbjSL
- U7MfDvK8wehc04/nq6js3FQfJPJ+aX3nn1j9bx+COWuxgMvC0vvutO7BbijJRLseVXFj
- 0zVXfFZQ8ClCflyssSAzmwXY2vk3RYGPj8vpKG/dkj5M/wmyLwGX5yu3vbgK7SIO6D/P
- jLsaoDM/wZW9R0KxQV6/Pvj+qXGxZmDGfqX9cobUP7invtXxJoNYPAqo0QTaVWYyvkq1
- kMG4fsyvj24Q/1is9hiwTKBw2N3QmZIbhR/0L4e2DuhXOK+/kDdcIpJKL3H310b5RcmG
- xMvw==
-X-Gm-Message-State: AOJu0YwHb2etHyIHlU13liIzOKTyFzX/SqSia2sgJVhgrFm8qzIq5Vh0
- JfmCnFitTdl6OZEmyPh+xcss6amM8womzWiC2mxgu0+Im6Wovg==
-X-Google-Smtp-Source: AGHT+IG0oj7zB6cvBMWvjOA42fAxFcbUCI5gTHNZ3QT1FulHq00x0Dk6UR6GlBaN2hpMlQuM6vyUmQ==
-X-Received: by 2002:a05:6512:4019:b0:507:a620:6b96 with SMTP id
- br25-20020a056512401900b00507a6206b96mr899670lfb.57.1697790431396; 
- Fri, 20 Oct 2023 01:27:11 -0700 (PDT)
-Received: from localhost.localdomain (net-91-81-8-146.cust.vodafonedsl.it.
- [91.81.8.146]) by smtp.gmail.com with ESMTPSA id
- o1-20020a5d6841000000b0031ad5fb5a0fsm1168826wrw.58.2023.10.20.01.27.10
+ bh=bOCcZ7vcNapnw9cz7NBwPq2ds/g6VZOKtbUMHeJVJP0=;
+ b=GlkL8hs87qWy/her7w4Sqa5jXNp1dyHYJDoRRa8fFDn+W5uQ8Owcu5BPN8tw10LuZk
+ 6QUfKYki5ZMZcr7d4kMgy0+OISTxIzC/eus36+lDxhE4Ek/R1ZKAJ+iati8Dn7hSsqxl
+ AyIblG7AlOfOEPY3up9/smX9Hx/+JhA5o+vOjH1bT/D0byzgV6LvETiVTrGM3hU+bSue
+ r0YadYjmEugqUgxMF1pu1bDISz/5emtDtQb1REV1DwEzvWuXUWIp8QJ9Y3/4qFHyWxiD
+ 0522QjAdgLeXScZPujiScCcD10/zDkBNdQYTGr7PZfsEPVttPrkkwChBNi6nUVrUAiEk
+ j5cQ==
+X-Gm-Message-State: AOJu0YxIDKNgyRCHdsvMgFag1TIpevfwX8AcjZlpsWQo9HGN53dWnvr8
+ UkwzHAbQI7npzHAfi8tXDY6kSYetbqbfXMr7iLl3cg==
+X-Google-Smtp-Source: AGHT+IF+7+XJhNyKIWvfYF4C7rhKS86/QuojqSXp1HTbqMjMjTvwojWz2T/BTz60IqD7ZwkwyPcpbg==
+X-Received: by 2002:a5d:698e:0:b0:32d:a54a:f57c with SMTP id
+ g14-20020a5d698e000000b0032da54af57cmr983247wru.25.1697792997791; 
+ Fri, 20 Oct 2023 02:09:57 -0700 (PDT)
+Received: from archlinux.. ([2a01:e0a:ce:f2f0:2a6b:35ff:feb8:77d9])
+ by smtp.gmail.com with ESMTPSA id
+ t8-20020adff048000000b0032dc2110d01sm1249895wro.61.2023.10.20.02.09.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Oct 2023 01:27:10 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+ Fri, 20 Oct 2023 02:09:57 -0700 (PDT)
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@rtone.fr>
 To: buildroot@buildroot.org
-Date: Fri, 20 Oct 2023 10:27:03 +0200
-Message-ID: <20231020082703.1610281-1-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.41.0
+Date: Fri, 20 Oct 2023 11:09:49 +0200
+Message-ID: <20231020090949.2839604-1-gael.portay@rtone.fr>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1697790431; x=1698395231;
- darn=buildroot.org; 
+ d=rtone.fr; s=google; t=1697792998; x=1698397798; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9aLC37ha0/iSVG1NPVNSNI04D4MvGLtVZhLa+ba8ydc=;
- b=b/VFPKTL+faqL1IBKneHPJWbd7XOhBCx7KRF3497V2e+3z9tsG2pMW+vkqVKdof+A/
- nguujWSm9Nz3EgurBOP0wVJyZSllyeai3FtKYjL5HQvETfAVgQM09HP2hn7paueKf0Ns
- MfnzmjA/7hErhPnmWrN03kItHGh+Tvxx24A8Q=
+ bh=bOCcZ7vcNapnw9cz7NBwPq2ds/g6VZOKtbUMHeJVJP0=;
+ b=b4b6d/zIMk7MI7XQLov4J76+sh6I8c7NDio71EDyFCEqCKIDYfHakChFe+JT07XquF
+ 3rI7U4omU+clI9Fvv6Ql3nAKoYpjgrNPj2yLJBBIwwZAH0X75NbidSEHe4TESGFcFKPN
+ BUTthBoY7AHNUhrNFXT7R0enlrdmsNJdBxQtA=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=b/VFPKTL
-Subject: [Buildroot] [PATCH 1/1] package/python-django: bump version to 4.2.6
+ dkim=pass (1024-bit key) header.d=rtone.fr header.i=@rtone.fr
+ header.a=rsa-sha256 header.s=google header.b=b4b6d/zI
+Subject: [Buildroot] [PATCH 1/1] package/libxmlrpc: bump version to 1.60.00
+ (code/advanced@r3162)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,56 +91,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Adam Duskett <adam.duskett@amarulasolutions.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@rtone.fr>,
+ "Alvaro G . M" <alvaro.gamez@hazent.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tested with tests.package.test_python_django.TestPythonPy3Django.test_run in
-Fedora 38 and Debian 11
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index ee1776b44f..b68f4231fa 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  3720c85a8c25cacbce2f95d345d0f5ad  Django-4.1.10.tar.gz
--sha256  56343019a9fd839e2e5bf203daf45f25af79d5bffa4c71d56eae4f4404d82ade  Django-4.1.10.tar.gz
-+md5  ad84c2b9bbebaa26427a2a656fe5ceea  Django-4.2.6.tar.gz
-+sha256  08f41f468b63335aea0d904c5729e0250300f6a1907bf293a65499496cdbc68f  Django-4.2.6.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 61dfd54dcd..79065ab60a 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 4.1.10
-+PYTHON_DJANGO_VERSION = 4.2.6
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/70/d4/eded564fa5928f68771d082ec0eef4d023f9d19dfa1d2923305bc3e62afe
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/23/7b/f47d10d870fabfcaa1fba403460a4e482ab7dbba4d715d43981d1f8c8d85
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
--- 
-2.41.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4KLS0tCiBw
+YWNrYWdlL2xpYnhtbHJwYy9saWJ4bWxycGMuaGFzaCB8IDIgKy0KIHBhY2thZ2UvbGlieG1scnBj
+L2xpYnhtbHJwYy5tayAgIHwgNCArKy0tCiAyIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygr
+KSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnhtbHJwYy9saWJ4bWxy
+cGMuaGFzaCBiL3BhY2thZ2UvbGlieG1scnBjL2xpYnhtbHJwYy5oYXNoCmluZGV4IDY2NWVlMzE4
+MzYuLmNhZDRkMGUzNzkgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbGlieG1scnBjL2xpYnhtbHJwYy5o
+YXNoCisrKyBiL3BhY2thZ2UvbGlieG1scnBjL2xpYnhtbHJwYy5oYXNoCkBAIC0xLDMgKzEsMyBA
+QAogIyBMb2NhbGx5IGNvbXB1dGVkCi1zaGEyNTYgIDYyNmUzNjI5NWY0M2IzMjAwODJiYzdiZGQ5
+NjFiNDZmMzlmYmUyNzE5NTM1YjVhNDE3OTc1YThlNTBjOGY3ZjMgIGxpYnhtbHJwYy1yMzExOS1i
+cjMudGFyLmd6CitzaGEyNTYgIGFjNWY1ZTgzYzZmZWFhNTI3NmZkMDYxMGIwNTVjNmU1ZDM1MDA4
+OTcwNGI2MGMxN2Q1YWYzMGFmYjA4NTA2YzUgIGxpYnhtbHJwYy1yMzE2Mi1icjMudGFyLmd6CiBz
+aGEyNTYgIGRiN2E2ZDNmMTg3YjIxOGMzNTM0MDEwYTgzNDI0YzZiY2RlZjg4ZTZhMGI2YjFhYTNh
+ODc2MjIzOGJkNjQyZTYgIGRvYy9DT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnhtbHJw
+Yy9saWJ4bWxycGMubWsgYi9wYWNrYWdlL2xpYnhtbHJwYy9saWJ4bWxycGMubWsKaW5kZXggYzFi
+MGVhZThlZS4uMmQzZWU2NjA1MCAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJ4bWxycGMvbGlieG1s
+cnBjLm1rCisrKyBiL3BhY2thZ2UvbGlieG1scnBjL2xpYnhtbHJwYy5tawpAQCAtNCw4ICs0LDgg
+QEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLSMgMS41OC4wMiAoY29kZS9hZHZhbmNl
+ZEByMzExOSkKLUxJQlhNTFJQQ19WRVJTSU9OID0gcjMxMTkKKyMgMS42MC4wMCAoY29kZS9hZHZh
+bmNlZEByMzE2MikKK0xJQlhNTFJQQ19WRVJTSU9OID0gcjMxNjIKIExJQlhNTFJQQ19TSVRFID0g
+aHR0cHM6Ly9zdm4uY29kZS5zZi5uZXQvcC94bWxycGMtYy9jb2RlL2FkdmFuY2VkCiBMSUJYTUxS
+UENfU0lURV9NRVRIT0QgPSBzdm4KIExJQlhNTFJQQ19MSUNFTlNFID0gQlNELTMtQ2xhdXNlICh4
+bWwtcnBjIG1haW4gY29kZSBhbmQgYWJ5c3Mgd2ViIHNlcnZlciksIEJTRCBsaWtlIChsaWIvZXhw
+YXQpLCBQeXRob24gMS41LjIgbGljZW5zZSAocGFydHMgb2YgeG1scnBjX2Jhc2U2NC5jKQotLSAK
+Mi40Mi4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
