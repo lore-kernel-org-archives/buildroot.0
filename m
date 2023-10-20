@@ -4,81 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 659ECCDB474
-	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 12:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F115C001DF
+	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 12:22:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0901460F48;
-	Fri, 20 Oct 2023 12:21:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0901460F48
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA26F607C7;
+	Fri, 20 Oct 2023 12:22:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA26F607C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YKnIr3x5khby; Fri, 20 Oct 2023 12:20:59 +0000 (UTC)
+	with ESMTP id 8tZfbo3Wa7FX; Fri, 20 Oct 2023 12:22:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4F87605AF;
-	Fri, 20 Oct 2023 12:20:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4F87605AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5FF360F60;
+	Fri, 20 Oct 2023 12:22:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5FF360F60
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C9FB61BF271
- for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 12:20:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CB8311BF271
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 12:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3704847E9
- for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 12:20:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3704847E9
+ by smtp1.osuosl.org (Postfix) with ESMTP id A41A0848A5
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 12:22:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A41A0848A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T2PmRKyDt8_k for <buildroot@lists.busybox.net>;
- Fri, 20 Oct 2023 12:20:55 +0000 (UTC)
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com
- [IPv6:2607:f8b0:4864:20::1136])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D63EA847DF
- for <buildroot@buildroot.org>; Fri, 20 Oct 2023 12:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D63EA847DF
-Received: by mail-yw1-x1136.google.com with SMTP id
- 00721157ae682-5a82c2eb50cso8010217b3.2
- for <buildroot@buildroot.org>; Fri, 20 Oct 2023 05:20:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1697804454; x=1698409254;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=I5bQZtDR6AHErGX7Z9TJ8Upq54c9wmyPuihh8z+xInA=;
- b=ezPJtELHfOrCBagar4QjUP+WYtEeik9hf2eHbIWBOkE6OS0lpz0it20tRcswPTftFs
- BlfDT1GdpmXHS1Jmr2a/iSfnR7BHUNO9zeCln9QkVcq8bIMfH30eJmktZv2JL9mQv29F
- esTB0M8AkNV98uCgNwvtoOS3FVzKf7chwXVARlJOKfimZ6gormoxIGK6D6j6ljuliyli
- GHl4RpDacEZYd4t3Ij4EyJg5H/OvCdqHGQ7sD3+iAY3vqCR6SxQLMDzWkHyrMcQrffEQ
- EXAH38s8LoDwyDttcph3NeswyPnR0Nz83BKAHWF1ybzh1MN7CFRy6bAhH7H5OrgeQh6n
- YV0w==
-X-Gm-Message-State: AOJu0YwP5ArqxDv+fA1r5H67x1G4aQVXRzaoKkPH3TQ96nYfZmV7c3NR
- EklMJ0fI7OzgGEhanMgRxZ+ZZap6f7xUEZ4Rr6v4vXTJopKffQ==
-X-Google-Smtp-Source: AGHT+IGbt1e+pR2P4QEqeMw3LESunvWOQlob6lFyo/g9E4w/KtUrocg6tFGMJs3ATvLRSDA3oA6l2jqQSTVT2ZEAd34=
-X-Received: by 2002:a05:690c:ec8:b0:5a7:af9d:53fd with SMTP id
- cs8-20020a05690c0ec800b005a7af9d53fdmr2259719ywb.9.1697804453584; Fri, 20 Oct
- 2023 05:20:53 -0700 (PDT)
+ with ESMTP id R2I5WS5nHrGE for <buildroot@lists.busybox.net>;
+ Fri, 20 Oct 2023 12:22:28 +0000 (UTC)
+X-Greylist: delayed 918 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 20 Oct 2023 12:22:26 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5545B84876
+Received: from m1322.mail.163.com (m1322.mail.163.com [220.181.13.22])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5545B84876
+ for <buildroot@buildroot.org>; Fri, 20 Oct 2023 12:22:25 +0000 (UTC)
+Received: from andyshrk$163.com ( [58.22.7.114] ) by ajax-webmail-wmsvr22
+ (Coremail) ; Fri, 20 Oct 2023 20:06:59 +0800 (CST)
+X-Originating-IP: [58.22.7.114]
+Date: Fri, 20 Oct 2023 20:06:59 +0800 (CST)
+From: "Andy Yan" <andyshrk@163.com>
+To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>, bernd@kuhls.net
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+In-Reply-To: <CWCOVFCCORRB.AKZI6Y3F3I2A@rtone.fr>
+References: <20231019075440.2568312-1-andyshrk@163.com>
+ <20231019075512.2568398-1-andyshrk@163.com>
+ <CWCOVFCCORRB.AKZI6Y3F3I2A@rtone.fr>
+X-NTES-SC: AL_QuySBfSbvE4q7yWZYekXn0kXhec2W8Czvvgg34JRP5k0qSn88CowVm9lFmnf2vuOCwyAoAildQVI0vxlTIV3Rr8213wrhlTNZBJuz3fURb+X
 MIME-Version: 1.0
-References: <20230809211401.3587177-1-bernd@kuhls.net>
-In-Reply-To: <20230809211401.3587177-1-bernd@kuhls.net>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 20 Oct 2023 14:20:42 +0200
-Message-ID: <CAFSsvmp9KKuPZex2jGiqa=YrUNV3K0+NFcgNsun8vA9WVQkCaw@mail.gmail.com>
-To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <4136a72d.6a47.18b4cfb4cc1.Coremail.andyshrk@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: FsGowAD3f_ljbTJlJJQZAA--.32127W
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbiTBYPXmI0bqAH9AABsh
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1697804454; x=1698409254; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=I5bQZtDR6AHErGX7Z9TJ8Upq54c9wmyPuihh8z+xInA=;
- b=mV3E8lxgS4QEgQkGayND3lihoNmB8myJqFyuH0tQHWKkgW00NxxnYkOHznQ5H33pIA
- 3+4/FLlvPdO2Yj6IL0FDwX6aaaDteYm582exMBVHw9uU0WrlQsKNnz3X9HbPhiSVzuNf
- O8CeLKJXK0BqTzHGTpnlcedp/4YE2T28+1IJwMWIIxIGcSrNFq8KXxSyTFkprU/1Z2OS
- PJzEwJ5NHDK1MtoBxdIJ0Emi6HbAngmYGeNDNFKUt9WpuBdfdHvUn23c8cq1TMhY7QZK
- 0gYDG/uFXlD7UISEhMd9NsrvFAJbLY5zL0Gui3GLaNq5uTa9nDCAumDxypY3lIhXCJ36
- RaOQ==
+ d=163.com; 
+ s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+ Message-ID; bh=vC9wOsmrx928bg6MGLQ12/6h9ZYg5PBFmMKOYA4mngg=; b=O
+ gVqrUZQPj3mYkauo1VKWmY5rShFJAUJuypTlHSSuV14Xs+R6y/RYpImnutXPfsBT
+ i8liISCoUwUkRkTWTtCB2YNeL2HI5jiVg4tqkpJcvvaZmIliHz1THFiFMKac4BGU
+ 8jAJIVxkqUF8uoWs6ILzY5MclDIkWTXTKhwDcN+QCI=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mV3E8lxg
-Subject: Re: [Buildroot] [PATCH/next v3 00/14] package/python3: Update
- infrastructure to disable the build of certain extensions
+ dkim=fail reason="signature verification failed" (1024-bit key)
+ header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527
+ header.b=OgVqrUZQ
+Subject: Re: [Buildroot] [PATCH v2 1/1] igt-gpu-tools: add igt-gpu-tools
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,399 +80,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============3768881070473561643=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3768881070473561643==
-Content-Type: multipart/alternative; boundary="0000000000005aa1b1060824e7cb"
-
---0000000000005aa1b1060824e7cb
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Bernd;
-
-Thanks for your incredibly talented hard work on this! Removing patches is
-always fantastic!
-
-Reviewed-by: Adam Duskett <aduskett@gmail.com>
-Tested-by: Adam Duskett <aduskett@gmail.com>
-
-On Wed, Aug 9, 2023 at 11:14=E2=80=AFPM Bernd Kuhls <bernd@kuhls.net> wrote=
-:
-
-> Hi,
->
-> python 3.12, currently at rc1, will remove toplevel setup.py
->
-> https://github.com/python/cpython/commit/81dca70d704d0834d8c30580e648a973=
-250b2973
-> so our patches using DISABLED_EXTENSIONS need to be adjusted.
->
-> Fortunately the build system of python 3.11 already contains a mechanism
-> to en-/disable most modules so we can update the current package which
-> will make the bump to 3.12 easier. In order remove our own code we need
-> to backport three new patches from the 3.12 branch.
->
-> Regards, Bernd
->
-> v3: fixed tk patch
-> v2: fixed bug in pyexpat patch, patched .checkpackageignore as well
->
-> Bernd Kuhls (14):
->   package/python3: use upstream build system to disable berkeleydb
->     module
->   package/python3: use upstream build system to disable uuid module
->   package/python3: use upstream build system to disable bzip2/zlib/xz
->     modules
->   package/python3: use upstream build system to disable curses/readline
->     modules
->   package/python3: use upstream build system to disable ssl module
->   package/python3: use upstream build system to disable ossaudiodev
->     module
->   package/python3: use upstream build system to disable unicodedata
->     module
->   package/python3: use upstream build system to disable nis module
->   package/python3: use upstream build system to disable decimal module
->   package/python3: use upstream build system to disable CJK codecs
->   package/python3: use upstream build system to disable pyexpat module
->   package/python3: use upstream build system to disable sqlite3 module
->   package/python3: update patch and partly use upstream build system to
->     disable tk module
->   package/python3: Remove infrastructure to disable the build of certain
->     extensions
->
->  .checkpackageignore                           |  14 -
->  ...re-to-disable-the-build-of-certain-e.patch | 108 ---
->  ...-header-paths-for-cross-compilation.patch} |   0
->  ...ok-in-usr-lib-termcap-for-libraries.patch} |   0
->  ...h =3D> 0005-Don-t-add-multiarch-paths.patch} |   0
->  ...> 0006-Abort-on-failed-module-build.patch} |   0
->  ...tch =3D> 0007-Serial-ioctl-workaround.patch} |   0
->  ...-shebang-of-Python-scripts-for-cros.patch} |   0
->  ...g.sh.in-ensure-sed-invocations-only.patch} |   0
->  ...0010-Add-an-option-to-disable-pydoc.patch} |   0
->  ...11-Add-an-option-to-disable-lib2to3.patch} |   0
->  ... 0012-Add-an-option-to-disable-IDLE.patch} |   0
->  ...option-to-disable-the-sqlite3-module.patch |  62 --
->  ...hon-config.sh-don-t-reassign-prefix.patch} |   0
->  ...d-an-option-to-disable-the-tk-module.patch |  33 +-
->  ...-option-to-disable-the-curses-module.patch |  61 --
->  ...fix-building-on-older-distributions.patch} |   0
->  .../0016-Add-an-option-to-disable-expat.patch |  82 --
->  ...p-CC-print-multiarch-output-for-mus.patch} |   0
->  ...-Add-an-option-to-disable-CJK-codecs.patch |  30 -
->  ...ng-doesn-t-set-errno-when-encryptio.patch} |   0
->  .../0018-Add-an-option-to-disable-NIS.patch   |  33 -
->  ...18-Port-_dbm-module-to-PY_STDLIB_MOD.patch | 293 +++++++
->  ...Add-an-option-to-disable-unicodedata.patch |  30 -
->  .../0019-Port-_ctypes-to-PY_STDLIB_MOD.patch  | 441 +++++++++++
->  ...readline-and-curses-to-PY_STDLIB_MOD.patch | 718 ++++++++++++++++++
->  ...021-Add-an-option-to-disable-decimal.patch |  54 --
->  ...on-to-disable-the-ossaudiodev-module.patch |  30 -
->  ...an-option-to-disable-openssl-support.patch |  30 -
->  ...ption-to-disable-the-readline-module.patch |  30 -
->  ...to-disable-zlib-bzip2-and-xz-modules.patch |  42 -
->  ...Add-an-option-to-disable-uuid-module.patch |  33 -
->  ...ion-to-disable-the-berkeleydb-module.patch |  30 -
->  package/python3/python3.mk                    |  77 +-
->  34 files changed, 1512 insertions(+), 719 deletions(-)
->  delete mode 100644
-> package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e=
-.patch
->  rename
-> package/python3/{0004-Adjust-library-header-paths-for-cross-compilation.p=
-atch
-> =3D> 0003-Adjust-library-header-paths-for-cross-compilation.patch} (100%)
->  rename
-> package/python3/{0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch =
-=3D>
-> 0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch} (100%)
->  rename package/python3/{0006-Don-t-add-multiarch-paths.patch =3D>
-> 0005-Don-t-add-multiarch-paths.patch} (100%)
->  rename package/python3/{0007-Abort-on-failed-module-build.patch =3D>
-> 0006-Abort-on-failed-module-build.patch} (100%)
->  rename package/python3/{0008-Serial-ioctl-workaround.patch =3D>
-> 0007-Serial-ioctl-workaround.patch} (100%)
->  rename
-> package/python3/{0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cro=
-s.patch
-> =3D> 0008-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch} (10=
-0%)
->  rename
-> package/python3/{0010-Misc-python-config.sh.in-ensure-sed-invocations-onl=
-y.patch
-> =3D> 0009-Misc-python-config.sh.in-ensure-sed-invocations-only.patch} (10=
-0%)
->  rename package/python3/{0011-Add-an-option-to-disable-pydoc.patch =3D>
-> 0010-Add-an-option-to-disable-pydoc.patch} (100%)
->  rename package/python3/{0012-Add-an-option-to-disable-lib2to3.patch =3D>
-> 0011-Add-an-option-to-disable-lib2to3.patch} (100%)
->  rename package/python3/{0020-Add-an-option-to-disable-IDLE.patch =3D>
-> 0012-Add-an-option-to-disable-IDLE.patch} (100%)
->  delete mode 100644
-> package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch
->  rename package/python3/{0026-python-config.sh-don-t-reassign-prefix.patc=
-h
-> =3D> 0013-python-config.sh-don-t-reassign-prefix.patch} (100%)
->  delete mode 100644
-> package/python3/0015-Add-an-option-to-disable-the-curses-module.patch
->  rename package/python3/{0028-fix-building-on-older-distributions.patch =
-=3D>
-> 0015-fix-building-on-older-distributions.patch} (100%)
->  delete mode 100644
-> package/python3/0016-Add-an-option-to-disable-expat.patch
->  rename
-> package/python3/{0029-configure.ac-fixup-CC-print-multiarch-output-for-mu=
-s.patch
-> =3D> 0016-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch} (10=
-0%)
->  delete mode 100644
-> package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch
->  rename
-> package/python3/{0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encrypti=
-o.patch
-> =3D> 0017-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} (10=
-0%)
->  delete mode 100644 package/python3/0018-Add-an-option-to-disable-NIS.pat=
-ch
->  create mode 100644
-> package/python3/0018-Port-_dbm-module-to-PY_STDLIB_MOD.patch
->  delete mode 100644
-> package/python3/0019-Add-an-option-to-disable-unicodedata.patch
->  create mode 100644
-> package/python3/0019-Port-_ctypes-to-PY_STDLIB_MOD.patch
->  create mode 100644
-> package/python3/0020-Port-readline-and-curses-to-PY_STDLIB_MOD.patch
->  delete mode 100644
-> package/python3/0021-Add-an-option-to-disable-decimal.patch
->  delete mode 100644
-> package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patc=
-h
->  delete mode 100644
-> package/python3/0023-Add-an-option-to-disable-openssl-support.patch
->  delete mode 100644
-> package/python3/0024-Add-an-option-to-disable-the-readline-module.patch
->  delete mode 100644
-> package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.pat=
-ch
->  delete mode 100644
-> package/python3/0027-Add-an-option-to-disable-uuid-module.patch
->  delete mode 100644
-> package/python3/0030-Add-an-option-to-disable-the-berkeleydb-module.patch
->
-> --
-> 2.39.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---0000000000005aa1b1060824e7cb
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Bernd;<div><br></div><div>Thanks for your incredibly talen=
-ted hard work on this! Removing patches is always fantastic!</div><div><br>=
-</div><div>Reviewed-by: Adam Duskett &lt;<a href=3D"mailto:aduskett@gmail.c=
-om">aduskett@gmail.com</a>&gt;</div><div>Tested-by: Adam Duskett &lt;<a hre=
-f=3D"mailto:aduskett@gmail.com">aduskett@gmail.com</a>&gt;=C2=A0</div></div=
-><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On We=
-d, Aug 9, 2023 at 11:14=E2=80=AFPM Bernd Kuhls &lt;<a href=3D"mailto:bernd@=
-kuhls.net">bernd@kuhls.net</a>&gt; wrote:<br></div><blockquote class=3D"gma=
-il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
-04,204);padding-left:1ex">Hi,<br>
-<br>
-python 3.12, currently at rc1, will remove toplevel setup.py<br>
-<a href=3D"https://github.com/python/cpython/commit/81dca70d704d0834d8c3058=
-0e648a973250b2973" rel=3D"noreferrer" target=3D"_blank">https://github.com/=
-python/cpython/commit/81dca70d704d0834d8c30580e648a973250b2973</a><br>
-so our patches using DISABLED_EXTENSIONS need to be adjusted.<br>
-<br>
-Fortunately the build system of python 3.11 already contains a mechanism<br=
->
-to en-/disable most modules so we can update the current package which<br>
-will make the bump to 3.12 easier. In order remove our own code we need<br>
-to backport three new patches from the 3.12 branch.<br>
-<br>
-Regards, Bernd<br>
-<br>
-v3: fixed tk patch<br>
-v2: fixed bug in pyexpat patch, patched .checkpackageignore as well<br>
-<br>
-Bernd Kuhls (14):<br>
-=C2=A0 package/python3: use upstream build system to disable berkeleydb<br>
-=C2=A0 =C2=A0 module<br>
-=C2=A0 package/python3: use upstream build system to disable uuid module<br=
->
-=C2=A0 package/python3: use upstream build system to disable bzip2/zlib/xz<=
-br>
-=C2=A0 =C2=A0 modules<br>
-=C2=A0 package/python3: use upstream build system to disable curses/readlin=
-e<br>
-=C2=A0 =C2=A0 modules<br>
-=C2=A0 package/python3: use upstream build system to disable ssl module<br>
-=C2=A0 package/python3: use upstream build system to disable ossaudiodev<br=
->
-=C2=A0 =C2=A0 module<br>
-=C2=A0 package/python3: use upstream build system to disable unicodedata<br=
->
-=C2=A0 =C2=A0 module<br>
-=C2=A0 package/python3: use upstream build system to disable nis module<br>
-=C2=A0 package/python3: use upstream build system to disable decimal module=
-<br>
-=C2=A0 package/python3: use upstream build system to disable CJK codecs<br>
-=C2=A0 package/python3: use upstream build system to disable pyexpat module=
-<br>
-=C2=A0 package/python3: use upstream build system to disable sqlite3 module=
-<br>
-=C2=A0 package/python3: update patch and partly use upstream build system t=
-o<br>
-=C2=A0 =C2=A0 disable tk module<br>
-=C2=A0 package/python3: Remove infrastructure to disable the build of certa=
-in<br>
-=C2=A0 =C2=A0 extensions<br>
-<br>
-=C2=A0.checkpackageignore=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 14 -<br>
-=C2=A0...re-to-disable-the-build-of-certain-e.patch | 108 ---<br>
-=C2=A0...-header-paths-for-cross-compilation.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...ok-in-usr-lib-termcap-for-libraries.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...h =3D&gt; 0005-Don-t-add-multiarch-paths.patch} |=C2=A0 =C2=A00<br=
->
-=C2=A0...&gt; 0006-Abort-on-failed-module-build.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...tch =3D&gt; 0007-Serial-ioctl-workaround.patch} |=C2=A0 =C2=A00<br=
->
-=C2=A0...-shebang-of-Python-scripts-for-cros.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...g.sh.in-ensure-sed-invocations-only.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...0010-Add-an-option-to-disable-pydoc.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...11-Add-an-option-to-disable-lib2to3.patch} |=C2=A0 =C2=A00<br>
-=C2=A0... 0012-Add-an-option-to-disable-IDLE.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...option-to-disable-the-sqlite3-module.patch |=C2=A0 62 --<br>
-=C2=A0...hon-config.sh-don-t-reassign-prefix.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...d-an-option-to-disable-the-tk-module.patch |=C2=A0 33 +-<br>
-=C2=A0...-option-to-disable-the-curses-module.patch |=C2=A0 61 --<br>
-=C2=A0...fix-building-on-older-distributions.patch} |=C2=A0 =C2=A00<br>
-=C2=A0.../0016-Add-an-option-to-disable-expat.patch |=C2=A0 82 --<br>
-=C2=A0...p-CC-print-multiarch-output-for-mus.patch} |=C2=A0 =C2=A00<br>
-=C2=A0...-Add-an-option-to-disable-CJK-codecs.patch |=C2=A0 30 -<br>
-=C2=A0...ng-doesn-t-set-errno-when-encryptio.patch} |=C2=A0 =C2=A00<br>
-=C2=A0.../0018-Add-an-option-to-disable-NIS.patch=C2=A0 =C2=A0|=C2=A0 33 -<=
-br>
-=C2=A0...18-Port-_dbm-module-to-PY_STDLIB_MOD.patch | 293 +++++++<br>
-=C2=A0...Add-an-option-to-disable-unicodedata.patch |=C2=A0 30 -<br>
-=C2=A0.../0019-Port-_ctypes-to-PY_STDLIB_MOD.patch=C2=A0 | 441 +++++++++++<=
-br>
-=C2=A0...readline-and-curses-to-PY_STDLIB_MOD.patch | 718 +++++++++++++++++=
-+<br>
-=C2=A0...021-Add-an-option-to-disable-decimal.patch |=C2=A0 54 --<br>
-=C2=A0...on-to-disable-the-ossaudiodev-module.patch |=C2=A0 30 -<br>
-=C2=A0...an-option-to-disable-openssl-support.patch |=C2=A0 30 -<br>
-=C2=A0...ption-to-disable-the-readline-module.patch |=C2=A0 30 -<br>
-=C2=A0...to-disable-zlib-bzip2-and-xz-modules.patch |=C2=A0 42 -<br>
-=C2=A0...Add-an-option-to-disable-uuid-module.patch |=C2=A0 33 -<br>
-=C2=A0...ion-to-disable-the-berkeleydb-module.patch |=C2=A0 30 -<br>
-=C2=A0package/python3/<a href=3D"http://python3.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">python3.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 77 +-<br>
-=C2=A034 files changed, 1512 insertions(+), 719 deletions(-)<br>
-=C2=A0delete mode 100644 package/python3/0003-Add-infrastructure-to-disable=
--the-build-of-certain-e.patch<br>
-=C2=A0rename package/python3/{0004-Adjust-library-header-paths-for-cross-co=
-mpilation.patch =3D&gt; 0003-Adjust-library-header-paths-for-cross-compilat=
-ion.patch} (100%)<br>
-=C2=A0rename package/python3/{0005-Don-t-look-in-usr-lib-termcap-for-librar=
-ies.patch =3D&gt; 0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch} (=
-100%)<br>
-=C2=A0rename package/python3/{0006-Don-t-add-multiarch-paths.patch =3D&gt; =
-0005-Don-t-add-multiarch-paths.patch} (100%)<br>
-=C2=A0rename package/python3/{0007-Abort-on-failed-module-build.patch =3D&g=
-t; 0006-Abort-on-failed-module-build.patch} (100%)<br>
-=C2=A0rename package/python3/{0008-Serial-ioctl-workaround.patch =3D&gt; 00=
-07-Serial-ioctl-workaround.patch} (100%)<br>
-=C2=A0rename package/python3/{0009-Do-not-adjust-the-shebang-of-Python-scri=
-pts-for-cros.patch =3D&gt; 0008-Do-not-adjust-the-shebang-of-Python-scripts=
--for-cros.patch} (100%)<br>
-=C2=A0rename package/python3/{0010-Misc-python-config.sh.in-ensure-sed-invo=
-cations-only.patch =3D&gt; 0009-Misc-python-config.sh.in-ensure-sed-invocat=
-ions-only.patch} (100%)<br>
-=C2=A0rename package/python3/{0011-Add-an-option-to-disable-pydoc.patch =3D=
-&gt; 0010-Add-an-option-to-disable-pydoc.patch} (100%)<br>
-=C2=A0rename package/python3/{0012-Add-an-option-to-disable-lib2to3.patch =
-=3D&gt; 0011-Add-an-option-to-disable-lib2to3.patch} (100%)<br>
-=C2=A0rename package/python3/{0020-Add-an-option-to-disable-IDLE.patch =3D&=
-gt; 0012-Add-an-option-to-disable-IDLE.patch} (100%)<br>
-=C2=A0delete mode 100644 package/python3/0013-Add-option-to-disable-the-sql=
-ite3-module.patch<br>
-=C2=A0rename package/python3/{0026-python-config.sh-don-t-reassign-prefix.p=
-atch =3D&gt; 0013-python-config.sh-don-t-reassign-prefix.patch} (100%)<br>
-=C2=A0delete mode 100644 package/python3/0015-Add-an-option-to-disable-the-=
-curses-module.patch<br>
-=C2=A0rename package/python3/{0028-fix-building-on-older-distributions.patc=
-h =3D&gt; 0015-fix-building-on-older-distributions.patch} (100%)<br>
-=C2=A0delete mode 100644 package/python3/0016-Add-an-option-to-disable-expa=
-t.patch<br>
-=C2=A0rename package/python3/{0029-configure.ac-fixup-CC-print-multiarch-ou=
-tput-for-mus.patch =3D&gt; 0016-configure.ac-fixup-CC-print-multiarch-outpu=
-t-for-mus.patch} (100%)<br>
-=C2=A0delete mode 100644 package/python3/0017-Add-an-option-to-disable-CJK-=
-codecs.patch<br>
-=C2=A0rename package/python3/{0031-lib-crypt-uClibc-ng-doesn-t-set-errno-wh=
-en-encryptio.patch =3D&gt; 0017-lib-crypt-uClibc-ng-doesn-t-set-errno-when-=
-encryptio.patch} (100%)<br>
-=C2=A0delete mode 100644 package/python3/0018-Add-an-option-to-disable-NIS.=
-patch<br>
-=C2=A0create mode 100644 package/python3/0018-Port-_dbm-module-to-PY_STDLIB=
-_MOD.patch<br>
-=C2=A0delete mode 100644 package/python3/0019-Add-an-option-to-disable-unic=
-odedata.patch<br>
-=C2=A0create mode 100644 package/python3/0019-Port-_ctypes-to-PY_STDLIB_MOD=
-.patch<br>
-=C2=A0create mode 100644 package/python3/0020-Port-readline-and-curses-to-P=
-Y_STDLIB_MOD.patch<br>
-=C2=A0delete mode 100644 package/python3/0021-Add-an-option-to-disable-deci=
-mal.patch<br>
-=C2=A0delete mode 100644 package/python3/0022-Add-an-option-to-disable-the-=
-ossaudiodev-module.patch<br>
-=C2=A0delete mode 100644 package/python3/0023-Add-an-option-to-disable-open=
-ssl-support.patch<br>
-=C2=A0delete mode 100644 package/python3/0024-Add-an-option-to-disable-the-=
-readline-module.patch<br>
-=C2=A0delete mode 100644 package/python3/0025-Add-options-to-disable-zlib-b=
-zip2-and-xz-modules.patch<br>
-=C2=A0delete mode 100644 package/python3/0027-Add-an-option-to-disable-uuid=
--module.patch<br>
-=C2=A0delete mode 100644 package/python3/0030-Add-an-option-to-disable-the-=
-berkeleydb-module.patch<br>
-<br>
--- <br>
-2.39.2<br>
-<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div>
-
---0000000000005aa1b1060824e7cb--
-
---===============3768881070473561643==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3768881070473561643==--
+CgpIZWxsbyBHYWVsIGFuZCBiZXJuZDoKICAgICBWZXJ5IHRoYW5rcyBmb3IgeW91ciBraW5kbHkg
+cmV2aWV3LCBJIHRyeSB0byBmaXggYWxsIHRoZSBpc3N1ZSBhbmQgaGF2ZSB0aGUgVjMgc2VuZCBv
+dXQuCgoKCgoKCgoKCgoKCgoK5ZyoIDIwMjMtMTAtMjAgMDQ6MTM6MjTvvIwiR2HDq2wgUE9SVEFZ
+IiA8Z2FlbC5wb3J0YXlAcnRvbmUuZnI+IOWGmemBk++8mgo+SGVsbG8gQW5keSwKPgo+QW5keTog
+VGhhbmtzIHRvIHRha2UgY2FyZSBhYm91dCBteSBhbG1vc3QgNS15ZWFyIG9sZCB3b3JrIDopCj4K
+PllvdSBtYXkgY29uc2lkZXIgdG8gdXBkYXRlIG15IGUtbWFpbCB0byBnYWVsLnBvcnRheUBydG9u
+ZS5mci4KPgo+SSBoYWQgYSBxdWljayBsb29rIGF0IGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9w
+Lm9yZy9kcm0vaWd0LWdwdS10b29scy8tL2Jsb2IvbWFzdGVyL21lc29uLmJ1aWxkP3JlZl90eXBl
+PWhlYWRzCj5hbmQgd2Ugc2hvdWxkIGZpeCB0aGUgcGFja2FnZSByZWxhdGlvbnNoaXBzLiBTZWUg
+dGhlIGlubGluZSBmaXhlcy4KPgo+T24gVGh1IE9jdCAxOSwgMjAyMyBhdCA5OjU1IEFNIENFU1Qs
+IEFuZHkgWWFuIHdyb3RlOgo+PiBGcm9tOiBHYcOrbCBQT1JUQVkgPGdhZWwucG9ydGF5QGNvbGxh
+Ym9yYS5jb20+Cj4+Cj4+IElHVCBHUFUgVG9vbHMgaXMgYSBjb2xsZWN0aW9uIG9mIHRvb2xzIGZv
+ciBkZXZlbG9wbWVudCBhbmQgdGVzdGluZyBvZgo+PiB0aGUgRFJNIGRyaXZlcnMKPj4KPj4gU2ln
+bmVkLW9mZi1ieTogR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheUBjb2xsYWJvcmEuY29tPgo+PiBT
+aWduZWQtb2ZmLWJ5OiBBbmR5IFlhbiA8YW5keXNocmtAMTYzLmNvbT4KPj4KPj4gWzBdaHR0cHM6
+Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDE4MTIwNDAy
+MjcwMS4yODA5NS0xLWdhZWwucG9ydGF5QGNvbGxhYm9yYS5jb20vCj4+Cj4+IC0tLQo+Pgo+PiBD
+aGFuZ2VzIGluIHYyOgo+PiAtIGFkZHJlc3MgdGhlIGNvbW1lbnRzIGZyb20gQXJub3V0IFZhbmRl
+Y2FwcGVsbGUgaW4gVjFbMF0KPj4KPj4gIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAg
+ICAgICAgICAgfCAgMSArCj4+ICBwYWNrYWdlL2lndC1ncHUtdG9vbHMvQ29uZmlnLmluICAgICAg
+ICAgIHwgMjkgKysrKysrKysrKysrKysrKysrKysrKysrCj4+ICBwYWNrYWdlL2lndC1ncHUtdG9v
+bHMvaWd0LWdwdS10b29scy5oYXNoIHwgIDYgKysrKysKPj4gIHBhY2thZ2UvaWd0LWdwdS10b29s
+cy9pZ3QtZ3B1LXRvb2xzLm1rICAgfCAxNSArKysrKysrKysrKysKPj4gIDQgZmlsZXMgY2hhbmdl
+ZCwgNTEgaW5zZXJ0aW9ucygrKQo+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvaWd0LWdw
+dS10b29scy9Db25maWcuaW4KPj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2lndC1ncHUt
+dG9vbHMvaWd0LWdwdS10b29scy5oYXNoCj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9p
+Z3QtZ3B1LXRvb2xzL2lndC1ncHUtdG9vbHMubWsKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
+Q29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KPj4gaW5kZXggODMxMzRmYjUyZC4uZDc5OGZl
+Njg1MCAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4KPj4gKysrIGIvcGFja2FnZS9D
+b25maWcuaW4KPj4gQEAgLTE2MDUsNiArMTYwNSw3IEBAIG1lbnUgIkdyYXBoaWNzIgo+PiAgCXNv
+dXJjZSAicGFja2FnZS9ndGttbTMvQ29uZmlnLmluIgo+PiAgCXNvdXJjZSAicGFja2FnZS9ndGtz
+b3VyY2V2aWV3L0NvbmZpZy5pbiIKPj4gIAlzb3VyY2UgInBhY2thZ2UvaGFyZmJ1enovQ29uZmln
+LmluIgo+PiArCXNvdXJjZSAicGFja2FnZS9pZ3QtZ3B1LXRvb2xzL0NvbmZpZy5pbiIKPj4gIAlz
+b3VyY2UgInBhY2thZ2UvaWpzL0NvbmZpZy5pbiIKPj4gIAlzb3VyY2UgInBhY2thZ2UvaW1saWIy
+L0NvbmZpZy5pbiIKPj4gIAlzb3VyY2UgInBhY2thZ2UvaW50ZWwtZ21tbGliL0NvbmZpZy5pbiIK
+Pj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvaWd0LWdwdS10b29scy9Db25maWcuaW4gYi9wYWNrYWdl
+L2lndC1ncHUtdG9vbHMvQ29uZmlnLmluCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4
+IDAwMDAwMDAwMDAuLjVjMDQwZjhhNWQKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9wYWNrYWdl
+L2lndC1ncHUtdG9vbHMvQ29uZmlnLmluCj4+IEBAIC0wLDAgKzEsMjkgQEAKPj4gK2NvbmZpZyBC
+UjJfUEFDS0FHRV9JR1RfR1BVX1RPT0xTCj4+ICsJYm9vbCAiaWd0LWdwdS10b29scyIKPj4gKwlk
+ZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgcHJvY3BzLW5nCj4KPlRoZSBwYWNrYWdlIHVzZXMgZm9y
+aygpLCByZXBsYWNlIGNvbW1lbnQgYnkgIyBmb3JrKCkKPgo+PiArCWRlcGVuZHMgb24gQlIyX1BB
+Q0tBR0VfTElCVU5XSU5EX0FSQ0hfU1VQUE9SVFMgIyBsaWJ1bndpbmQKPgo+VGhlIHBhY2thZ2Ug
+bGlidW53aW5kIGlzIG9wdGlvbmFsLgo+Cj5JIGRvIG5vdCBrbm93IGlmIHdlIHdhbnQgdG8gc2Vs
+ZWN0IGl0IGJ5IGRlZmF1bHQ/IGVzcGVjaWFsbHkgaWYgdGhlIGFyY2gKPmRvZXMgbm90IHN1cHBv
+cnQgbGlidW53aW5kLgo+Cj5NYXliZSwgYmV0dGVyIHRvIGFkZCBhbiBvcHRpb24gZm9yIHRoYXQg
+SSBndWVzcyA6LyAoc2VlIHRoZSBlbmQgb2YgdGhlCj5tYWlsKS4KPgo+PiArCWRlcGVuZHMgb24g
+IUJSMl9TVEFUSUNfTElCUyAjIGttb2QsIGxpYnVud2luZAo+Cj5UaGUgcGFja2FnZSBuZWVkcyBs
+aWJkbC5zbywgcmVtb3ZlIHRoZSBjb21tZW50ICMga21vZCwgbGlidW53aW5kCj4KPj4gKwlkZXBl
+bmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyBsaWJkcm0sIGxpYnVud2luZAo+Cj5U
+aGUgcGFja2FnZSBuZWVkcyBsaWJwdGhyZWFkLnNvLCByZW1vdmUgdGhlIGNvbW1lbnQgIyBsaWJk
+cm0sIGxpYnVud2luZAo+Cj4+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IQVNfVURFVgo+PiAr
+CXNlbGVjdCBCUjJfUEFDS0FHRV9CVVNZQk9YX1NIT1dfT1RIRVJTICMgcHJvY3BzLW5nCj4+ICsJ
+c2VsZWN0IEJSMl9QQUNLQUdFX0NBSVJPCj4+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0NBSVJPX1BO
+Rwo+PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9LTU9ECj4+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0xJ
+QkRSTQo+PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJQQ0lBQ0NFU1MKPj4gKwlzZWxlY3QgQlIy
+X1BBQ0tBR0VfTElCVU5XSU5ECj4+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX09QRU5TU0wKPgo+QlIy
+X1BBQ0tBR0VfT1BFTlNTTCBpcyB1bm5lY2Vzc2FyeSwgeW91IGNhbiByZW1vdmUgaXQuCj4KPlRo
+ZSBwYWNrYWdlIGdsaWIgYXBwZWFycyB0byBiZSBtaXNzaW5nOgo+Cj4Jc2VsZWN0IEJSMl9QQUNL
+QUdfTElCR0xJQjIKPgo+QWRkIHRoZSBwYWNrYWdlIGVsZnV0aWxzOgo+Cj4Jc2VsZWN0IEJSMl9Q
+QUNLQUdFX0VMRlVUSUxTCj4KPj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfUElYTUFOCj4+ICsJc2Vs
+ZWN0IEJSMl9QQUNLQUdFX1BST0NQU19ORwo+PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9aTElCCj4+
+ICsJaGVscAo+PiArCSAgSUdUIEdQVSBUb29scyBpcyBhIGNvbGxlY3Rpb24gb2YgdG9vbHMgZm9y
+IGRldmVsb3BtZW50IGFuZAo+PiArCSAgdGVzdGluZyBvZiB0aGUgRFJNIGRyaXZlcnMuCj4+ICsK
+Pj4gKwkgIGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9kcm0vaWd0LWdwdS10b29scwo+
+PiArCj4+ICtjb21tZW50ICJpZ3QtZ3B1LXRvb2xzIG5lZWRzIHVkZXYgL2RldiBtYW5hZ2VtZW50
+IGFuZCB0b29sY2hhaW4gdy8gdGhyZWFkcywgd2NoYXIsIGR5bmFtaWMgbGlicmFyeSIKPgo+VGhl
+IHBhY2thZ2VzIG5lZWRzIE1NVSAoYW5kIGFzIHNhaWQgYnkgQmVybmQsIHJlbW92ZSB3Y2hhciBh
+bmQgdGhlCj5sYXR0ZXIgIUJSMl9VU0VfV0NIQVIpCj4KPgljb21tZW50ICJpZ3QtZ3B1LXRvb2xz
+IG5lZWRzIE1NVSwgdWRldiAvZGV2IG1hbmFnZW1lbnQgYW5kIHRvb2xjaGFpbiB3LyB0aHJlYWRz
+IGFuZCBkeW5hbWljIGxpYnJhcnkiCj4KPj4gKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xJQlVO
+V0lORF9BUkNIX1NVUFBPUlRTICMgbGlidW53aW5kCj4KPllvdSBjYW4gcmVtb3ZlIHRoZSBkZXBl
+bmRlbmN5IG9uIEJSMl9QQUNLQUdFX0xJQlVOV0lORF9BUkNIX1NVUFBPUlRTLgo+Cj4+ICsJZGVw
+ZW5kcyBvbiBCUjJfVVNFX01NVSAjIHByb2Nwcy1uZwo+PiArICAgICAgICBkZXBlbmRzIG9uICFC
+UjJfUEFDS0FHRV9IQVNfVURFViB8fCBCUjJfU1RBVElDX0xJQlMgfHwgXAo+PiArCQkhQlIyX1RP
+T0xDSEFJTl9IQVNfVEhSRUFEUyB8fCAhQlIyX1VTRV9XQ0hBUgo+PiBkaWZmIC0tZ2l0IGEvcGFj
+a2FnZS9pZ3QtZ3B1LXRvb2xzL2lndC1ncHUtdG9vbHMuaGFzaCBiL3BhY2thZ2UvaWd0LWdwdS10
+b29scy9pZ3QtZ3B1LXRvb2xzLmhhc2gKPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4gaW5kZXgg
+MDAwMDAwMDAwMC4uOTc0YzI0N2EyOAo+PiAtLS0gL2Rldi9udWxsCj4+ICsrKyBiL3BhY2thZ2Uv
+aWd0LWdwdS10b29scy9pZ3QtZ3B1LXRvb2xzLmhhc2gKPj4gQEAgLTAsMCArMSw2IEBACj4+ICsj
+IExvY2FsbHkgY2FsY3VsYXRlZCBmcm9tIGRvd25sb2FkCj4+ICtzaGEyNTYgYmExNWIzMjFjNWE5
+MGRhNjI5YmFmMzI2OTEyYzljMDQwNmE5MDM3MTkwNDBlYjQ5NTllMGFmMTE5NzkzNTEzMyAgaWd0
+LWdwdS10b29scy12MS4yOC50YXIuZ3oKPj4gK3NoYTI1NiA2ZjhiMmIxMjcwNGMwYjM3YzIyZjMy
+YTM3NTE2ODhlNzE0NGY4NTBmYWE3MTVlODViMjZlZmZkYzUyMDljZmQxCSBpZ3QtZ3B1LXRvb2xz
+LXYxLjI4LnRhci5iejIKPgo+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tXiB1c2UgdHdvIHNwYWNl
+cyBiZXR3ZWVuIHNoYTI1NiBhbmQgZmlsZW5hbWUKPgo+PiArCj4+ICsjIEhhc2ggZm9yIGxpY2Vu
+c2UgZmlsZToKPj4gK3NoYTI1NiAxYjdlMjY2ODU3YjA1ODA4NjYwZjQyMzY5YTRhNzk3NDU5ZDdi
+N2JlYzcyNDVlMzc4YWEyOGE4ZGIyZjIxM2RhICBDT1BZSU5HCj4+IGRpZmYgLS1naXQgYS9wYWNr
+YWdlL2lndC1ncHUtdG9vbHMvaWd0LWdwdS10b29scy5tayBiL3BhY2thZ2UvaWd0LWdwdS10b29s
+cy9pZ3QtZ3B1LXRvb2xzLm1rCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAw
+MDAwMDAuLmQ5ZjQ1NTg2OWQKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9wYWNrYWdlL2lndC1n
+cHUtdG9vbHMvaWd0LWdwdS10b29scy5tawo+PiBAQCAtMCwwICsxLDE1IEBACj4+ICsjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIwo+PiArIwo+PiArIyBpZ3QtZ3B1LXRvb2xzIAo+Cj4tLS0tLS0tLS0t
+LS0tLS0tLS1eIHJlbW92ZSB0cmFpbGluZyBzcGFjZS4KPgo+PiArIwo+PiArIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMKPj4gKwo+PiArSUdUX0dQVV9UT09MU19WRVJTSU9OID0gdjEuMjgKPj4gK0lH
+VF9HUFVfVE9PTFNfU09VUkNFID0gaWd0LWdwdS10b29scy0kKElHVF9HUFVfVE9PTFNfVkVSU0lP
+TikudGFyLmJ6Mgo+PiArSUdUX0dQVV9UT09MU19TSVRFID0gaHR0cHM6Ly9naXRsYWIuZnJlZWRl
+c2t0b3Aub3JnL2RybS9pZ3QtZ3B1LXRvb2xzLy0vYXJjaGl2ZS8kKElHVF9HUFVfVE9PTFNfVkVS
+U0lPTikKPj4gK0lHVF9HUFVfVE9PTFNfTElDRU5TRSA9IE1JVAo+PiArSUdUX0dQVV9UT09MU19M
+SUNFTlNFX0ZJTEVTID0gQ09QWUlORwo+PiArSUdUX0dQVV9UT09MU19JTlNUQUxMX1NUQUdJTkcg
+PSBZRVMKPj4gK0lHVF9HUFVfVE9PTFNfREVQRU5ERU5DSUVTID0gaG9zdC1wa2djb25mIGNhaXJv
+IGttb2QgbGliZHJtIGxpYmdsaWIyIGxpYnBjaWFjY2VzcyBsaWJ1bndpbmQgcGl4bWFuIHByb2Nw
+cy1uZyB6bGliCj4KPkFkZCB0aGUgbWlzc2luZyBwYWNrYWdlcyBlbGZ1dGlscywgbGliZ2xpYjIg
+YW5kIHJlbW92ZSBsaWJ1bndpbmQuCj4KPklHVF9HUFVfVE9PTFNfREVQRU5ERU5DSUVTID0gLi4u
+IGVsZnV0aWxzIC4uLiBsaWJnbGliMgo+Cj4+ICsKPj4gKyQoZXZhbCAkKG1lc29uLXBhY2thZ2Up
+KQo+Cj5CZXJuZCwgZm9yIHRoZSBsaWJ1bndpbmQgSSB3YXMgdGhpbmtpbmcgYWJvdXQ6Cj4KPklu
+IEtjb25maWc6Cj4KPglpZiBCUjJfUEFDS0FHRV9JR1RfR1BVX1RPT0xTCj4KPgljb25maWcgQlIy
+X1BBQ0tBR0VfSUdUX0dQVV9UT09MU19MSUJVTldJTkQKPgkJYm9vbCAibGlidW53aW5kIgo+CQlk
+ZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xJQlVOV0lORF9BUkNIX1NVUFBPUlRTICMgbGlidW53aW5k
+Cj4JCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJVTldJTkQKPgkJaGVscAo+CQlVc2UgbGlidW53aW5k
+Cj4KPgllbmRpZgo+Cj5BbmQsIGluIGlndC1ncHUtdG9vbHMubWs6Cj4KPglpZmVxICgkKEJSMl9Q
+QUNLQUdFX0lHVF9HUFVfVE9PTFNfTElCVU5XSU5EKSx5KQo+CUlHVF9HUFVfVE9PTFNfREVQRU5E
+RU5DSUVTICs9IGxpYnVud2luZAo+CUlHVF9HUFVfVE9PTFNfQ09ORl9PUFRTICs9IC1EbGlidW53
+aW5kPWVuYWJsZWQKPgllbHNlCj4JSUdUX0dQVV9UT09MU19DT05GX09QVFMgKz0gLURsaWJ1bndp
+bmQ9ZGlzYWJsZWQKPgllbmRpZgo+Cj5Eb2VzIGl0IG1ha2Ugc2Vuc2U/Cj4KPktpbmQgUmVnYXJk
+cywKPkdhw6tsCj5fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xwo+YnVpbGRyb290IG1haWxpbmcgbGlzdAo+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
