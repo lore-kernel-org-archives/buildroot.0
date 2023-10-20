@@ -4,66 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3BEDCDB474
-	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 14:53:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7024FC001DF
+	for <buildroot@archiver.kernel.org>; Fri, 20 Oct 2023 14:57:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36C6A61143;
-	Fri, 20 Oct 2023 14:53:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36C6A61143
+	by smtp3.osuosl.org (Postfix) with ESMTP id E42487055A;
+	Fri, 20 Oct 2023 14:57:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E42487055A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jIiZEwxJ0P95; Fri, 20 Oct 2023 14:53:18 +0000 (UTC)
+	with ESMTP id i-AP8fJCydbZ; Fri, 20 Oct 2023 14:57:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3204370534;
-	Fri, 20 Oct 2023 14:53:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3204370534
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E41C01BF860
- for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 14:53:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32E7970547;
+	Fri, 20 Oct 2023 14:57:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32E7970547
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AE00A1BF860
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 14:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E8E370534
- for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 14:53:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E8E370534
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93357818C9
+ for <buildroot@lists.busybox.net>; Fri, 20 Oct 2023 14:57:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93357818C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lTX3TmVJNGHK for <buildroot@lists.busybox.net>;
- Fri, 20 Oct 2023 14:53:12 +0000 (UTC)
-X-Greylist: delayed 1947 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 20 Oct 2023 14:53:12 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C64B61143
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0C64B61143
- for <buildroot@buildroot.org>; Fri, 20 Oct 2023 14:53:11 +0000 (UTC)
-Received: from bl14-19-118.dsl.telepac.pt ([85.247.19.118]
- helo=trinity.bot.igalia.com) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1qtqMj-0039I7-J9; Fri, 20 Oct 2023 16:20:41 +0200
-From: Carlos Alberto Lopez Perez <clopez@igalia.com>
-To: buildroot@buildroot.org
-Date: Fri, 20 Oct 2023 15:20:41 +0100
-Message-Id: <20231020142041.25503-1-clopez@igalia.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DidNHKzdEfxR for <buildroot@lists.busybox.net>;
+ Fri, 20 Oct 2023 14:57:13 +0000 (UTC)
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com
+ [IPv6:2607:f8b0:4864:20::1035])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7109C84B40
+ for <buildroot@buildroot.org>; Fri, 20 Oct 2023 14:57:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7109C84B40
+Received: by mail-pj1-x1035.google.com with SMTP id
+ 98e67ed59e1d1-27ddc1b1652so716220a91.2
+ for <buildroot@buildroot.org>; Fri, 20 Oct 2023 07:57:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1697813833; x=1698418633;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=KRNfe0nxPEwGqf2FDHfoJQ13ZTX59dvrougss/h8KYM=;
+ b=uUViTahspc5wZ/3bUj2jiacjGE+d/mRiQFdF45PqL/1gNZJhHj02TrNuU+rqUWK4zg
+ Ire+OPy7AWaHz05GDozBM0SU6sTlzsV/scNq4GD3FRXrhXsnJ7voBkx3i+KqlyQUW8S5
+ vL3GSThEbDX5dAY1STkdWXyLmdYhern8HO00aE8jlP/NV3a5nRxDZhAHEt17Eg96X/PM
+ Fn02kp9U/Hjus2S17oBCxtm/4KgYBFXh3luNBS+xq+2USLQb+bCCbW9uEnSdrfpPvMVA
+ Kgud5/aGkYPTN3Tfq4tyVqnHR/HaybxyiRn/IaJ0c7wg167CSiMXjyvRMdyDvyLSVSsz
+ UScg==
+X-Gm-Message-State: AOJu0YxjeUEDaHejh/RJ0cwAAq+uMflCWWNxbmzvHfLmK6uK4N4QUriN
+ 2xi3TmgGSUeDc2ypI5mXu0EAYxswAfx2iKoTbKU=
+X-Google-Smtp-Source: AGHT+IFGZSO3hwdsdzbhPcAEN9v0JCW+q9KZbCd6yb8O5RUBGavhJbzUqHwUiDP+hLzIX8wG0fG/Z9X9SMic0xpX1Vk=
+X-Received: by 2002:a17:90a:196:b0:27d:63c:34f2 with SMTP id
+ 22-20020a17090a019600b0027d063c34f2mr2060230pjc.41.1697813832605; Fri, 20 Oct
+ 2023 07:57:12 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=iGSHK9vNbGlJASkc6BHoawiKBXY7T2HDVrF0D4LODXU=; b=jCiiPtKZDjaJLFdX8KtYjVhXE2
- VqQgkeowHDFx4kYKGCdcUpF9+RkSiGnDCyZ/CoabT8sV/mqupglvMRvF8NVZtV7J9p8E3NGDmlqls
- O41NeOcgyk4BlwNrtm8UL7wuOAQwIOU2I8EWEo5BFy1nZftnS7IiP3eQ9qEOmGocxhsYj2JxGTPEO
- 9pl/Z1GDOnhyGT1X0YMrNlPbrYrT7YOTpPFK7L+DjHyKE42fBjmreNoQhLlhF3o6Mo6O9ka+CTDLW
- +6Z/PcbIkgIqU81tW8w9yLWB+Mu2K/CYfNG3egLIHY6829+waxv0D0k5HJNTVt1sgFbssiQozyw+6
- PEHhiWsQ==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=jCiiPtKZ
-Subject: [Buildroot] [PATCH 1/1] configs/raspberrypi*: stop setting
- powersave as the default CPU governor
+References: <20231017143424.430007-1-anaumann@ultratronik.de>
+ <PH1P110MB1603AE1FC3925D2A2D33EEED9FD6A@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+ <38dd6e9a-7fea-e3fb-21a1-5a381a36c8cf@mind.be>
+ <bede2a82-ee1f-4f8a-97f8-c6e2b54b2b84@grenoble.cnrs.fr>
+ <b2979a64-22b7-4006-9cec-912af8b1cb02@andin.de>
+In-Reply-To: <b2979a64-22b7-4006-9cec-912af8b1cb02@andin.de>
+From: =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
+Date: Fri, 20 Oct 2023 16:57:01 +0200
+Message-ID: <CAEktqcv9kDVi_OZevO+uAU4mhf_J3nDZTqNz9oC-XWPNvZCj7Q@mail.gmail.com>
+To: Andreas Naumann <dev@andin.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1697813833; x=1698418633; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=KRNfe0nxPEwGqf2FDHfoJQ13ZTX59dvrougss/h8KYM=;
+ b=bjQZ7mkNE47xuWDVpbyKyA4BXg4D+ziH1sAHNSdZIkIIzQ5x5Byd6Xk9zV2M3YMmet
+ lm+Jzx6xWpw4c0C1HmPzp4YWoGxzM4lOxg9+wJZaTI2B/LM02k1sTVeEVPhoIMYuSlar
+ +Db4C8RRXWgg3lah9Ygy81WUjIzbBNcKajOqipr/gImusI9B3nRvpGzEOI7/42+On1xC
+ xSZon0v/8jFXQ+szyJ/i612tF7uJ+qL+tGPZVoUD790Ryk47mZivHr7zYXNkTtj3BInA
+ t/50iZruHPVXPxvr9AUYp1qWgQED0deTpj443K7hTYdjAS4QdUwXdPzJQwmBre486rLM
+ WFCg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=bjQZ7mkN
+Subject: Re: [Buildroot] [External] - [PATCH 0/1] libgpiod v2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,214 +94,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: vfazio@xes-inc.com, Edgar Bonet <bonet@grenoble.cnrs.fr>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* The defconfigs from the RPi Kernel set `powersave` as the default
-  CPU governor, which is a bad idea as that reduces performance by
-  setting the CPU frequency to the minimum one.
-
-* In case of a buildroot build user-space is not configured by default
-  to change the CPU governor, so `powersave` will remain the CPU
-  governor and it will slow down everything.
-
-* I submitted a fix for those defconfigs to upstream here:
-  https://github.com/raspberrypi/linux/pull/5666
-  However, we shouldn't wait until that is accepted and backported
-  to all the stable branches (if ever is).
-
-* This patch unsets the selection of `powersave` as the default CPU
-  governor.
-
-* Then the CPU governor that will be selected as default after this
-  patch will be the Linux's default one that is either `ondemand` or
-  `schedutil` depending on the Kernel version.
-
-Signed-off-by: Carlos Alberto Lopez Perez <clopez@igalia.com>
----
- board/raspberrypi/default-cpu-governor.fragment | 9 +++++++++
- configs/raspberrypi0_defconfig                  | 1 +
- configs/raspberrypi0w_defconfig                 | 1 +
- configs/raspberrypi2_defconfig                  | 1 +
- configs/raspberrypi3_64_defconfig               | 1 +
- configs/raspberrypi3_defconfig                  | 1 +
- configs/raspberrypi3_qt5we_defconfig            | 1 +
- configs/raspberrypi4_64_defconfig               | 1 +
- configs/raspberrypi4_defconfig                  | 1 +
- configs/raspberrypi_defconfig                   | 1 +
- configs/raspberrypicm4io_64_defconfig           | 1 +
- configs/raspberrypicm4io_defconfig              | 1 +
- configs/raspberrypizero2w_defconfig             | 1 +
- 13 files changed, 21 insertions(+)
- create mode 100644 board/raspberrypi/default-cpu-governor.fragment
-
-diff --git a/board/raspberrypi/default-cpu-governor.fragment b/board/raspberrypi/default-cpu-governor.fragment
-new file mode 100644
-index 0000000000..e2e201d71d
---- /dev/null
-+++ b/board/raspberrypi/default-cpu-governor.fragment
-@@ -0,0 +1,9 @@
-+# The defconfigs from the RPi Kernel set "powersave" as the default CPU governor.
-+# That is a bad idea as it reduces performance, so we unset that default option here.
-+# The option to build the powersave governor (but not as the default) is also enabled.
-+# A fix for this was sent to upstream: https://github.com/raspberrypi/linux/pull/5666
-+# However, we need to carry this option override until those defconfigs are fixed on
-+# *all* the kernel branches that we support. So that can be a long time depending
-+# on wheter the above PR gets accepted and/or backported to the stable branches.
-+CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE=n
-+CONFIG_CPU_FREQ_GOV_POWERSAVE=y
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 4506e94bce..a5a019822d 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -8,6 +8,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index 7a35794c2d..420cf53f7c 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -8,6 +8,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 9b484c5588..84c7a85393 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -11,6 +11,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 4d838ae0e8..b67cd5ae90 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -10,6 +10,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 0a59ab42a9..81995bb67e 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -10,6 +10,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index 40d0c0f888..4040d03066 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -11,6 +11,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-index 5942f7c4e1..fb2a916a4c 100644
---- a/configs/raspberrypi4_64_defconfig
-+++ b/configs/raspberrypi4_64_defconfig
-@@ -10,6 +10,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index 4e5580c140..2a2fc2aa21 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -10,6 +10,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index cca53f9b37..55deb343b2 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -10,6 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
-diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
-index 29cb0472d7..b4abc9126b 100644
---- a/configs/raspberrypicm4io_64_defconfig
-+++ b/configs/raspberrypicm4io_64_defconfig
-@@ -10,6 +10,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-diff --git a/configs/raspberrypicm4io_defconfig b/configs/raspberrypicm4io_defconfig
-index 017aecc0dd..106ca50609 100644
---- a/configs/raspberrypicm4io_defconfig
-+++ b/configs/raspberrypicm4io_defconfig
-@@ -10,6 +10,7 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-diff --git a/configs/raspberrypizero2w_defconfig b/configs/raspberrypizero2w_defconfig
-index 2ea503ca24..17e386d4f1 100644
---- a/configs/raspberrypizero2w_defconfig
-+++ b/configs/raspberrypizero2w_defconfig
-@@ -8,6 +8,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/default-cpu-governor.fragment"
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpJIGhhdmUgbm93IHVwbG9hZGVkIGEgcGF0Y2gtc2VyaWVzIHRvIHRoZSBzd3VwZGF0ZSBt
+YWlsaW5nIGxpc3QsIHdoaWNoCnVzZXMgdGhlIG1lY2hhbmlzbSBwcm9wb3NlZCBieSBFZGdhciBC
+b25ldCBpbiBvcmRlciB0byBkZXRlY3QgYXBpIHYxIHZzCmFwaSB2Mi4KClRoZSBmaXJzdCB2ZXJz
+aW9uIGNhbiBiZSBmb3VuZCBoZXJlOgpodHRwczovL2dyb3Vwcy5nb29nbGUuY29tL2cvc3d1cGRh
+dGUvYy81NS1fc1lhZmx1awoKT24gRnJpLCBPY3QgMjAsIDIwMjMgYXQgNDozMOKAr1BNIEFuZHJl
+YXMgTmF1bWFubiA8ZGV2QGFuZGluLmRlPiB3cm90ZToKPgo+IEhpIFZpbmNlbnQsIGFsbCwKPgo+
+IEkndmUgZ290IHRoZSBzYW1lIGltcHJlc3Npb24gYW5kIHdvdWxkIHZvdGUgdG8gY3JlYXRlIGxp
+YmdwaW9kMiBmb3IgdGhlCj4gc2FtZSByZWFzb25zIEFybm91dCBzdGF0ZWQuIEV2ZW4gaWYgY29u
+ZGl0aW9uYWwgdXNlIGlzIHBvc3NpYmxlLCBpdCdzCj4gbm90IHRoYXQgc3RyYWlnaHRmb3J3YXJk
+IGFuZCByZXF1aXJpbmcgc29tZWJvZHkgdG8gaW1wbGVtZW50IGFuZAo+IHBvc3NpYmx5IHVwc3Ry
+ZWFtIHRob3NlIGZvciB0aGUgNCBkZXBlbmRlbnQgcGFja2FnZXMgc2VlbXMgbGlrZSBjcmVhdGlu
+Zwo+IGEgYmFycmllci4KPgo+IEluIGFkZGl0aW9uLCBpIHRoaW5rIHRoZSBiZWhhdmlvdXIgb2Yg
+dGhlIHRvb2xzIGhhcyBjaGFuZ2VkIGEgYml0LCBlLmcuCj4gYWZ0ZXIgZ3Bpb3NldCBmaW5pc2hl
+cyBpdCByZXR1cm5zIHRoZSBHUElPIHRvIHRoZSBvcmlnaW5hbCBzdGF0ZSAoYXQKPiBsZWFzdCB0
+aGF0J3Mgd2hhdCBJIHJlY2FsbCBmcm9tIHdoYXQgQsO2cmdlIHRvbGQgbWUgYWJvdXQgaXQpLgo+
+CgpJIGRvbid0IHRoaW5rLCB0aGUgdG9vbHMgcmV0dXJuIHRvIHRoZSBvcmlnaW5hbCBzdGF0ZSwg
+SSB0aGluaywgdGhleQpqdXN0IHJlbGVhc2UKdGhlbSwgd2hpY2ggbWFrZXMgdGhlbSBnbyBiYWNr
+IHRvIGlucHV0LiBIb3dldmVyIEkgdGhpbmsgdGhleSBkaWQgdGhhdCBpbiB2MS42CmFzIHdlbGwu
+IFRoZXkgb25seSBrZWVwIHRoZWlyIHZhbHVlcyBpbmRlZmluYXRlbHkgd2l0aG91dCBzcGVjaWZp
+eWluZwpzbywgd2hlbiB1c2luZwp0aGUgb2xkZXIgc3lzZnMgZXhwb3J0IGZ1bmN0aW9uYWxpdHku
+CgpUaGUgcHJvYmxlbSBpcywgdGhhdCB3cm9uZ2Z1bGwgdXNhZ2Ugb2YgdGhlIGdwaW90b29scyBp
+cyBub3QgaW1lZGlhdGx5Cm9idmlvdXMsIHNpbmNlCmlmIHRoZSBsaW5lcyBhcmUgZmxvYXRpbmcs
+IHRoZXkgbWlnaHQga2VlcCB0aGVpciB2YWx1ZSBmb3Igc29tZSB0aW1lCmFmdGVyIHNldHRpbmcg
+dGhlbQoob3IgcG9zc2libHkgYmUgcmVsZWFzZWQgYmVmb3JlIGNoYXJnaW5nIHRoZSBjYXBhY2l0
+eSBzdWZmaWNpZW50bHkgYW5kCnRoZXJlZm9yZSwgd2hpY2gKaXMgbW9yZSBvYnZpb3VzLCBzaW5j
+ZSBpdCB3aWxsIHJlc3VsdCBpbiBhICdidWcnIHdoZXJlIHRoZSBsaW5lIGRvZXMKbm90IGFjdHVh
+bGx5IGNoYW5nZQphZnRlciB0aGUgZmlyc3QgY2FsbCwgYnV0IG1pZ2h0IGNoYW5nZSBhZnRlciB0
+aGUgc2Vjb25kIG9yIHRoaXJkIGNhbGwuLi4uKQoKPgo+IFNvIGlmIHBlb3BsZSB1c2UgZ3Bpb2dl
+dC9zZXQgYW5kIHNvIG9uIGluIHNjcmlwdHMsIHRoZSBiZWhhdmlvdXIgbW9zdAo+IGxpa2VseSBj
+aGFuZ2VzIHVuZXhwZWN0ZWRseS4KPgoKTW9zdCBsaWtlbHkgY3VzdG9tIHNjcmlwdHMgd291bGQg
+YnJlYWsgYW55d2F5LCBzaW5jZSB0aGUgc3ludGF4IGZvcgppZGVudGlmeWluZyBhCnNwZWNpZmlj
+IGdwaW8gaGFzIGNoYW5nZWQuIChiZWZvcmUgaXQgd2FzIGxpa2UgZ3Bpb3NldCA8YmFuaz4gPG9m
+ZnNldD49PHZhbHVlPgp3aGVyZWFzIGl0IGlzIG5vdyBncGlvc2V0IC1jIDxiYW5rL2NoaXA+IDxv
+ZmZzZXQ+PTx2YWx1ZT4gb3IgaWYgbGluZS1uYW1lcyBhcmUKZ2l2ZW4gZ3Bpb3NldCA8bGluZS1u
+YW1lPj08dmFsdWU+KQoKQWxzbyBhIGxvdCBvZiB0aGUgb3B0aW9ucyByZWdhcmRpbmcgaG93IGxv
+bmcgdGhlIGxpbmUgc2hvdWxkIGJlIGhlbGQsIGhhdmUgYmVlbgpyZXdvcmtlZCwgYW5kIHRoZSBw
+YXJhbWV0ZXJzIGhhdmUgY2hhbmdlZC4KCj4KPiBAVmluY2VudCwgZG8geW91IGhhdmUgdGhlIGlu
+dGVudCBvciBtYXliZSBldmVuIGEgcGF0Y2ggZm9yIGNyZWF0aW5nIGEKPiBzZXBhcmF0ZSB2MiBw
+YWNrYWdlPyBPdGhlcndpc2UgbWUvQsO2cmdlIHdvdWxkIGxvb2sgaW50byBjb21pbmcgdXAgd2l0
+aCBvbmUuCj4KPgo+IHJlZ2FyZHMsCj4gQW5kcmVhcwo+ID4gX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiA+
+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiA+Cj4gX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QKCktpbmQgUmVnYXJkcywKQm9lcmdlCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
