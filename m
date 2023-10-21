@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93880C0032E
-	for <buildroot@archiver.kernel.org>; Sat, 21 Oct 2023 09:01:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B580C001E0
+	for <buildroot@archiver.kernel.org>; Sat, 21 Oct 2023 11:15:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 275E54EF33;
-	Sat, 21 Oct 2023 09:01:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 275E54EF33
+	by smtp1.osuosl.org (Postfix) with ESMTP id C03CE84DFC;
+	Sat, 21 Oct 2023 11:15:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C03CE84DFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vfsCJ_0tNEQY; Sat, 21 Oct 2023 09:01:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z3x_IvWK6KoH; Sat, 21 Oct 2023 11:15:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90F2C4EF52;
-	Sat, 21 Oct 2023 09:01:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90F2C4EF52
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9D88E1BF869
- for <buildroot@lists.busybox.net>; Sat, 21 Oct 2023 09:01:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 179A984DF3;
+	Sat, 21 Oct 2023 11:15:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 179A984DF3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F82C1BF34B
+ for <buildroot@lists.busybox.net>; Sat, 21 Oct 2023 11:15:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75B9B70634
- for <buildroot@lists.busybox.net>; Sat, 21 Oct 2023 09:01:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75B9B70634
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB2AC416DF
+ for <buildroot@lists.busybox.net>; Sat, 21 Oct 2023 11:15:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB2AC416DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DgWudQOL1_fO for <buildroot@lists.busybox.net>;
- Sat, 21 Oct 2023 09:01:41 +0000 (UTC)
-Received: from m13102.mail.163.com (m13102.mail.163.com [220.181.13.102])
- by smtp3.osuosl.org (Postfix) with ESMTP id 47C88613F9
- for <buildroot@buildroot.org>; Sat, 21 Oct 2023 09:01:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47C88613F9
-Received: from andyshrk$163.com ( [58.22.7.114] ) by ajax-webmail-wmsvr102
- (Coremail) ; Sat, 21 Oct 2023 17:01:35 +0800 (CST)
-X-Originating-IP: [58.22.7.114]
-Date: Sat, 21 Oct 2023 17:01:35 +0800 (CST)
-From: "Andy Yan" <andyshrk@163.com>
-To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <CWDCZO7XJW8Y.2QBONYK1OUXJ@rtone.fr>
-References: <20231020120158.2684019-1-andyshrk@163.com>
- <20231020120240.2684127-1-andyshrk@163.com>
- <CWDCZO7XJW8Y.2QBONYK1OUXJ@rtone.fr>
-X-NTES-SC: AL_QuySBfSct0Ai4yCRbelSyjxX7opnBbrRyIZ+tfYve8UPuCDC5SAPd1FuFmbtyOP0m7uXaPZKDpP2GXBQaq1f
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t4AmubCg6rK9 for <buildroot@lists.busybox.net>;
+ Sat, 21 Oct 2023 11:15:16 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4C74A416C3
+ for <buildroot@buildroot.org>; Sat, 21 Oct 2023 11:15:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C74A416C3
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 8756FB00596;
+ Sat, 21 Oct 2023 13:15:10 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41808])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 21 Oct 2023 13:15:10 +0200
 MIME-Version: 1.0
-Message-ID: <34f965c3.15f5.18b5177e9fe.Coremail.andyshrk@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: ZsGowAAXEP9vkzNluD4YAA--.17303W
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbiEAoQXl8YL4chXgACsG
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
- Message-ID; bh=tq7kw7iDjI88rlsKmA6kEgGAwtyYEzMFGekQuakOIJI=; b=M
- h9d6NzuUKJ09ucRctEio28/q8bDiCxeGZZULsamnBcQIVFhIZEeFq1/FoqSzuUMW
- 2hHVr1MZBmDCajuVLzXl/2fdNHAcinfd5Qd/PH/McGsN2SOebKg5G3CJUhP8/cVC
- oYWyC0v7v3e+xc3cMN+Xa103IBkS20pqqjwGS+KNWA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
- header.a=rsa-sha256 header.s=s110527 header.b=Mh9d6Nzu
-Subject: Re: [Buildroot] [PATCH v3 1/1] igt-gpu-tools: add igt-gpu-tools
- package
+Date: Sat, 21 Oct 2023 13:15:10 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Marcus Folkesson <marcus.folkesson@gmail.com>
+In-Reply-To: <20231020060236.3725194-1-marcus.folkesson@gmail.com>
+References: <20231020060236.3725194-1-marcus.folkesson@gmail.com>
+User-Agent: Webmail Free/1.6.4
+Message-ID: <7a3a5533d8fc664535be030d5d1242f1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1697886913;
+ bh=4Jxi1zpnTnOmIXxjdw8O+FXwHteUPpjaW1czK6SeBZc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=F6liKdv/qW6jjzCpIqEdijDafmVR/h5jvSODRTX1jRcIdMj57HNeXhSsp8UJu25DM
+ jUh+FZ6dbj0h/2p3zMzi8DA8DT6pneurn+tfDq1/Gy38J7tieTn1CO6QZgNWyKUm6r
+ uyGQDg+goGp8yHeMGzjkRy6P8DEZ1wpih25IDyRPdTWygiW7gF7tdICUdONd2GxiVN
+ YFLiiVv5iKOlkwIAisORtW2Tlb1GEYe5Zky1GIk40GPDc8OyOfTrOgxTeYyYwoAJfU
+ vQQru1J2OuR9XFKrmdmh603zdxL4egOCpUi+BTwLv/lLuU0bHevbMIgSpG0bzTP1bG
+ eQD0Wjh5sClxg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=F6liKdv/
+Subject: Re: [Buildroot] [PATCH v4] package/criu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,264 +76,423 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: bernd@kuhls.net, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0453438657035658497=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0453438657035658497==
-Content-Type: multipart/alternative; 
-	boundary="----=_Part_20965_2081055884.1697878895102"
+Hi Marcus,
 
-------=_Part_20965_2081055884.1697878895102
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Thanks for the updated patch!
 
-SEkgR2FlbO+8mgoKCgoKCgoKCgoKCgoKCgoKCuWcqCAyMDIzLTEwLTIwIDIzOjA3OjI077yMIkdh
-w6tsIFBPUlRBWSIgPGdhZWwucG9ydGF5QHJ0b25lLmZyPiDlhpnpgZPvvJoKPkFuZHksCj4KPkkg
-c3RpbGwgaGF2ZSB0aHJlZSBuaXRwaWNrcyBpbiBtaW5kLCBhbmQgSSBhbSBzb3JyeSBpZiBJIGFt
-IHBpY2t5IDopCgo+ClRoYW5rcyBmb3IgeW91ciByZXZpZXfvvIwgdGhpcyBpcyBteSBmaXNydCB0
-aW1lIHRvIHRyeSB0byBzZW5kIGEgcGF0Y2ggdG8gYnVpbGRyb29077yMc28gcGxlYXNlIGZlZWwg
-ZnJlZSB0byBsZXQgbWUga25vdyBpZiB5b3UgZmluZCBzb21lIG5pdHMg77ya77yJCkFsbCB0aGUg
-aXNzdWUgd2lsbCBiZSBhZGRyZXNzIGluIFY0LgoKCj5GaXJzdCwgSSBzdWdnZXN0IHRvIHJld29y
-ZCB0aGUgY29tbWl0IHRpdGxlIHRvOgo+Cj4JcGFja2FnZS9pZ3QtZ3B1LXRvb2xzOiBuZXcgcGFj
-a2FnZQo+Cj5PbiBGcmkgT2N0IDIwLCAyMDIzIGF0IDI6MDIgUE0gQ0VTVCwgQW5keSBZYW4gd3Jv
-dGU6Cj4+IEZyb206IEdhw6tsIFBPUlRBWSA8Z2FlbC5wb3J0YXlAcnRvbmUuZnI+Cj4+Cj4+IElH
-VCBHUFUgVG9vbHMgaXMgYSBjb2xsZWN0aW9uIG9mIHRvb2xzIGZvciBkZXZlbG9wbWVudCBhbmQg
-dGVzdGluZyBvZgo+PiB0aGUgRFJNIGRyaXZlcnMKPj4KPj4gU2lnbmVkLW9mZi1ieTogR2HDq2wg
-UE9SVEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4KPj4gU2lnbmVkLW9mZi1ieTogQW5keSBZYW4g
-PGFuZHlzaHJrQDE2My5jb20+Cj4+Cj4+IFswXWh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcv
-cHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAxODEyMDQwMjI3MDEuMjgwOTUtMS1nYWVsLnBvcnRh
-eUBjb2xsYWJvcmEuY29tLwo+Pgo+Cj5UaGVuLCB5b3UgY2FuIGRyb3AgdGhhdCBsaW5rIG9mZjsg
-YW5kIGFzIGZhciBJIGFtIGNvbmNlcm5lZCwgeW91IGNhbgo+dGFrZSB0aGUgYXV0aG9yc2hpcCBv
-ZiB0aGUgY29tbWl0IGFzIGxvbmcgYXMgbXkgU2lnbmVkLW9mZi1ieSByZW1haW5zIGluCj50aGUg
-Y29tbWl0IG1lc3NhZ2UuCj4KPj4gLS0tCj4+Cj4+IENoYW5nZXMgaW4gdjM6Cj4+IC0gZml4IGNo
-ZWNrLXBhY2thZ2Ugd2FybmluZ3MKPj4gLSByZW1vdmUgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9P
-UEVOU1NMCj4+IC0gc2VsZWN0IEJSMl9QQUNLQUdfTElCR0xJQjIvQlIyX1BBQ0tBR0VfRUxGVVRJ
-TFMKPj4gLSBtYWtlIEJSMl9QQUNLQUdFX0xJQlVOV0lORF9BUkNIX1NVUFBPUlRTIG9wdGlvbmFs
-Cj4+IC0gdXBkYXRlIGVtYWlsIG9mIEdhw6tsIFBPUlRBWQo+Pgo+PiBDaGFuZ2VzIGluIHYyOgo+
-PiAtIGFkZHJlc3MgdGhlIGNvbW1lbnRzIGZyb20gQXJub3V0IFZhbmRlY2FwcGVsbGUgaW4gVjFb
-MF0KPj4KPj4gIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSAr
-Cj4+ICBwYWNrYWdlL2lndC1ncHUtdG9vbHMvQ29uZmlnLmluICAgICAgICAgIHwgMzcgKysrKysr
-KysrKysrKysrKysrKysrKysrCj4+ICBwYWNrYWdlL2lndC1ncHUtdG9vbHMvaWd0LWdwdS10b29s
-cy5oYXNoIHwgIDUgKysrKwo+PiAgcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL2lndC1ncHUtdG9vbHMu
-bWsgICB8IDIyICsrKysrKysrKysrKysrCj4+ICA0IGZpbGVzIGNoYW5nZWQsIDY1IGluc2VydGlv
-bnMoKykKPj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2lndC1ncHUtdG9vbHMvQ29uZmln
-LmluCj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL2lndC1ncHUt
-dG9vbHMuaGFzaAo+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvaWd0LWdwdS10b29scy9p
-Z3QtZ3B1LXRvb2xzLm1rCj4+Cj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3Bh
-Y2thZ2UvQ29uZmlnLmluCj4+IGluZGV4IDgzMTM0ZmI1MmQuLjdkZWM1MzhjYjggMTAwNjQ0Cj4+
-IC0tLSBhL3BhY2thZ2UvQ29uZmlnLmluCj4+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4+IEBA
-IC0zMTgsNiArMzE4LDcgQEAgY29tbWVudCAiR3JhcGhpYyBhcHBsaWNhdGlvbnMiCj4+ICAJc291
-cmNlICJwYWNrYWdlL2dsbWFyazIvQ29uZmlnLmluIgo+PiAgCXNvdXJjZSAicGFja2FnZS9nbHNs
-c2FuZGJveC1wbGF5ZXIvQ29uZmlnLmluIgo+PiAgCXNvdXJjZSAicGFja2FnZS9nbnVwbG90L0Nv
-bmZpZy5pbiIKPj4gKwlzb3VyY2UgInBhY2thZ2UvaWd0LWdwdS10b29scy9Db25maWcuaW4iCj4+
-ICAJc291cmNlICJwYWNrYWdlL2poZWFkL0NvbmZpZy5pbiIKPj4gIAlzb3VyY2UgInBhY2thZ2Uv
-a21zY3ViZS9Db25maWcuaW4iCj4+ICAJc291cmNlICJwYWNrYWdlL2xpYnZhLXV0aWxzL0NvbmZp
-Zy5pbiIKPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvaWd0LWdwdS10b29scy9Db25maWcuaW4gYi9w
-YWNrYWdlL2lndC1ncHUtdG9vbHMvQ29uZmlnLmluCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+
-IGluZGV4IDAwMDAwMDAwMDAuLjViOWZlMDMwMGUKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9w
-YWNrYWdlL2lndC1ncHUtdG9vbHMvQ29uZmlnLmluCj4+IEBAIC0wLDAgKzEsMzcgQEAKPj4gK2Nv
-bmZpZyBCUjJfUEFDS0FHRV9JR1RfR1BVX1RPT0xTCj4+ICsJYm9vbCAiaWd0LWdwdS10b29scyIK
-Pj4gKwlkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgZm9yawo+PiArCWRlcGVuZHMgb24gIUJSMl9T
-VEFUSUNfTElCUwo+PiArCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwo+PiAr
-CWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSEFTX1VERVYKPj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0Vf
-QlVTWUJPWF9TSE9XX09USEVSUyAjIHByb2Nwcy1uZwo+PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9D
-QUlSTwo+PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9DQUlST19QTkcKPj4gKwlzZWxlY3QgQlIyX1BB
-Q0tBR0VfRUxGVVRJTFMKPj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfS01PRAo+PiArCXNlbGVjdCBC
-UjJfUEFDS0FHRV9MSUJEUk0KPj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCR0xJQjIKPj4gKwlz
-ZWxlY3QgQlIyX1BBQ0tBR0VfTElCUENJQUNDRVNTCj4+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0xJ
-QlVOV0lORAo+PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9QSVhNQU4KPj4gKwlzZWxlY3QgQlIyX1BB
-Q0tBR0VfUFJPQ1BTX05HCj4+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1pMSUIKPj4gKwloZWxwCj4+
-ICsJICBJR1QgR1BVIFRvb2xzIGlzIGEgY29sbGVjdGlvbiBvZiB0b29scyBmb3IgZGV2ZWxvcG1l
-bnQgYW5kCj4+ICsJICB0ZXN0aW5nIG9mIHRoZSBEUk0gZHJpdmVycy4KPj4gKwo+PiArCSAgaHR0
-cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL2RybS9pZ3QtZ3B1LXRvb2xzCj4+ICsKPj4gK2Nv
-bW1lbnQgImlndC1ncHUtdG9vbHMgbmVlZHMgdWRldiAvZGV2IG1hbmFnZW1lbnQgYW5kIHRvb2xj
-aGFpbiB3LyB0aHJlYWRzLCBkeW5hbWljIGxpYnJhcnkiCj4+ICsJZGVwZW5kcyBvbiBCUjJfVVNF
-X01NVSAjIHByb2Nwcy1uZwo+PiArCWRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX0hBU19VREVWIHx8
-IEJSMl9TVEFUSUNfTElCUyB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwo+PiArCj4+ICtp
-ZiBCUjJfUEFDS0FHRV9JR1RfR1BVX1RPT0xTCj4+ICsKPj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9J
-R1RfR1BVX1RPT0xTX0xJQlVOV0lORAo+PiArCWJvb2wgImxpYnVud2luZCIKPj4gKwlkZXBlbmRz
-IG9uIEJSMl9QQUNLQUdFX0xJQlVOV0lORF9BUkNIX1NVUFBPUlRTICMgbGlidW53aW5kCj4+ICsJ
-c2VsZWN0IEJSMl9QQUNLQUdFX0xJQlVOV0lORAo+PiArCWhlbHAKPj4gKwkgIFVzZSBsaWJ1bndp
-bmQKPgo+RmluYWxseSwgeW91IGNhbiBhbiBhbiBlbXB0eSBsaW5lIGJlZm9yZSB0aGUgZW5kaWYg
-c3RhdGVtZW50Lgo+Cj4+ICtlbmRpZgo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9pZ3QtZ3B1LXRv
-b2xzL2lndC1ncHUtdG9vbHMuaGFzaCBiL3BhY2thZ2UvaWd0LWdwdS10b29scy9pZ3QtZ3B1LXRv
-b2xzLmhhc2gKPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAwMDAwMC4uOTVj
-YzNhNjM5Ygo+PiAtLS0gL2Rldi9udWxsCj4+ICsrKyBiL3BhY2thZ2UvaWd0LWdwdS10b29scy9p
-Z3QtZ3B1LXRvb2xzLmhhc2gKPj4gQEAgLTAsMCArMSw1IEBACj4+ICsjIExvY2FsbHkgY2FsY3Vs
-YXRlZCBmcm9tIGRvd25sb2FkCj4+ICtzaGEyNTYgIDZmOGIyYjEyNzA0YzBiMzdjMjJmMzJhMzc1
-MTY4OGU3MTQ0Zjg1MGZhYTcxNWU4NWIyNmVmZmRjNTIwOWNmZDEgIGlndC1ncHUtdG9vbHMtdjEu
-MjgudGFyLmJ6Mgo+PiArCj4+ICsjIEhhc2ggZm9yIGxpY2Vuc2UgZmlsZToKPj4gK3NoYTI1NiAg
-MWI3ZTI2Njg1N2IwNTgwODY2MGY0MjM2OWE0YTc5NzQ1OWQ3YjdiZWM3MjQ1ZTM3OGFhMjhhOGRi
-MmYyMTNkYSAgQ09QWUlORwo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL2ln
-dC1ncHUtdG9vbHMubWsgYi9wYWNrYWdlL2lndC1ncHUtdG9vbHMvaWd0LWdwdS10b29scy5tawo+
-PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+PiBpbmRleCAwMDAwMDAwMDAwLi5kYzkxZWU1MDQzCj4+
-IC0tLSAvZGV2L251bGwKPj4gKysrIGIvcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL2lndC1ncHUtdG9v
-bHMubWsKPj4gQEAgLTAsMCArMSwyMiBAQAo+PiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPj4g
-KyMKPj4gKyMgaWd0LWdwdS10b29scwo+PiArIwo+PiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMK
-Pj4gKwo+PiArSUdUX0dQVV9UT09MU19WRVJTSU9OID0gMS4yOAo+PiArSUdUX0dQVV9UT09MU19T
-T1VSQ0UgPSBpZ3QtZ3B1LXRvb2xzLXYkKElHVF9HUFVfVE9PTFNfVkVSU0lPTikudGFyLmJ6Mgo+
-PiArSUdUX0dQVV9UT09MU19TSVRFID0gaHR0cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL2Ry
-bS9pZ3QtZ3B1LXRvb2xzLy0vYXJjaGl2ZS92JChJR1RfR1BVX1RPT0xTX1ZFUlNJT04pCj4+ICtJ
-R1RfR1BVX1RPT0xTX0xJQ0VOU0UgPSBNSVQKPj4gK0lHVF9HUFVfVE9PTFNfTElDRU5TRV9GSUxF
-UyA9IENPUFlJTkcKPj4gK0lHVF9HUFVfVE9PTFNfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4+ICtJ
-R1RfR1BVX1RPT0xTX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZiBjYWlybyBrbW9kIGxpYmRy
-bSBsaWJnbGliMiBsaWJnbGliMiBsaWJwY2lhY2Nlc3MgcGl4bWFuIHByb2Nwcy1uZyB6bGliIGVs
-ZnV0aWxzCj4KPkFuZCBvbmUgbW9yZSB0aGluZywgbGliZ2xpYjIgYXBwZWFycyB0byBiZSBkdXBs
-aWNhdGVkLCBhbmQgdGhlIGxpc3QgaXMKPm5vdCBhbHBoYWJldGljYWxseSBvcmRlcmVkLgo+Cj4J
-SUdUX0dQVV9UT09MU19ERVBFTkRFTkNJRVMgPSBob3N0LXBrZ2NvbmYgY2Fpcm8gZWxmdXRpbHMg
-a21vZCBsaWJkcm0gbGliZ2xpYjIgbGlicGNpYWNjZXNzIHBpeG1hbiBwcm9jcHMtbmcgemxpYgo+
-Cj4+ICsKPj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfSUdUX0dQVV9UT09MU19MSUJVTldJTkQpLHkp
-Cj4+ICtJR1RfR1BVX1RPT0xTX0RFUEVOREVOQ0lFUyArPSBsaWJ1bndpbmQKPj4gK0lHVF9HUFVf
-VE9PTFNfQ09ORl9PUFRTICs9IC1EbGlidW53aW5kPWVuYWJsZWQKPj4gK2Vsc2UKPj4gK0lHVF9H
-UFVfVE9PTFNfQ09ORl9PUFRTICs9IC1EbGlidW53aW5kPWRpc2FibGVkCj4+ICtlbmRpZgo+PiAr
-Cj4+ICskKGV2YWwgJChtZXNvbi1wYWNrYWdlKSkKPgo+QWdhaW4sIHRoYW5rcyBmb3IgeW91IGVm
-Zm9ydCB0byBtYWtlIGl0IHVwc3RyZWFtLgo+Cj5SZWdhcmRzLAo+R2HDq2wK
-------=_Part_20965_2081055884.1697878895102
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: base64
+I confirm the normal test-pkg is passing. Then, I ran a "test-pkg -a"
+(which test more toolchains/arches) and observed few new minor
+failures. I'll comment a bit each failures and provide hints for
+improvements, when possible.
 
-PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS43O2NvbG9yOiMwMDAwMDA7Zm9udC1zaXplOjE0cHg7
-Zm9udC1mYW1pbHk6QXJpYWwiPjxwIHN0eWxlPSJtYXJnaW46IDA7Ij5ISSBHYWVs77yaPC9wPjxw
-IHN0eWxlPSJtYXJnaW46IDA7Ij48YnI+PC9wPjxwIHN0eWxlPSJtYXJnaW46IDA7Ij48YnI+PC9w
-PjxwIHN0eWxlPSJtYXJnaW46IDA7Ij48YnI+PC9wPjxwIHN0eWxlPSJtYXJnaW46IDA7Ij48YnI+
-PC9wPjxkaXYgc3R5bGU9InBvc2l0aW9uOnJlbGF0aXZlO3pvb206MSI+PC9kaXY+PGRpdiBpZD0i
-ZGl2TmV0ZWFzZU1haWxDYXJkIj48L2Rpdj48cCBzdHlsZT0ibWFyZ2luOiAwOyI+PGJyPjwvcD48
-cHJlPjxicj7lnKggMjAyMy0xMC0yMCAyMzowNzoyNO+8jCJHYcOrbCBQT1JUQVkiICZsdDtnYWVs
-LnBvcnRheUBydG9uZS5mciZndDsg5YaZ6YGT77yaCiZndDtBbmR5LAomZ3Q7CiZndDtJIHN0aWxs
-IGhhdmUgdGhyZWUgbml0cGlja3MgaW4gbWluZCwgYW5kIEkgYW0gc29ycnkgaWYgSSBhbSBwaWNr
-eSA6KQo8ZGl2PiZndDs8L2Rpdj48ZGl2PlRoYW5rcyBmb3IgeW91ciByZXZpZXfvvIwgdGhpcyBp
-cyBteSBmaXNydCB0aW1lIHRvIHRyeSB0byBzZW5kIGEgcGF0Y2ggdG8gYnVpbGRyb29077yMc28g
-cGxlYXNlIGZlZWwgZnJlZSB0byBsZXQgbWUga25vdyBpZiB5b3UgZmluZCBzb21lIG5pdHMg77ya
-77yJPC9kaXY+PGRpdj5BbGwgdGhlIGlzc3VlIHdpbGwgYmUgYWRkcmVzcyBpbiBWNC48L2Rpdj48
-ZGl2Pjxicj48L2Rpdj4mZ3Q7Rmlyc3QsIEkgc3VnZ2VzdCB0byByZXdvcmQgdGhlIGNvbW1pdCB0
-aXRsZSB0bzoKJmd0OwomZ3Q7CXBhY2thZ2UvaWd0LWdwdS10b29sczogbmV3IHBhY2thZ2UKJmd0
-OwomZ3Q7T24gRnJpIE9jdCAyMCwgMjAyMyBhdCAyOjAyIFBNIENFU1QsIEFuZHkgWWFuIHdyb3Rl
-OgomZ3Q7Jmd0OyBGcm9tOiBHYcOrbCBQT1JUQVkgJmx0O2dhZWwucG9ydGF5QHJ0b25lLmZyJmd0
-OwomZ3Q7Jmd0OwomZ3Q7Jmd0OyBJR1QgR1BVIFRvb2xzIGlzIGEgY29sbGVjdGlvbiBvZiB0b29s
-cyBmb3IgZGV2ZWxvcG1lbnQgYW5kIHRlc3Rpbmcgb2YKJmd0OyZndDsgdGhlIERSTSBkcml2ZXJz
-CiZndDsmZ3Q7CiZndDsmZ3Q7IFNpZ25lZC1vZmYtYnk6IEdhw6tsIFBPUlRBWSAmbHQ7Z2FlbC5w
-b3J0YXlAcnRvbmUuZnImZ3Q7CiZndDsmZ3Q7IFNpZ25lZC1vZmYtYnk6IEFuZHkgWWFuICZsdDth
-bmR5c2hya0AxNjMuY29tJmd0OwomZ3Q7Jmd0OwomZ3Q7Jmd0OyBbMF1odHRwczovL3BhdGNod29y
-ay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMTgxMjA0MDIyNzAxLjI4MDk1
-LTEtZ2FlbC5wb3J0YXlAY29sbGFib3JhLmNvbS8KJmd0OyZndDsKJmd0OwomZ3Q7VGhlbiwgeW91
-IGNhbiBkcm9wIHRoYXQgbGluayBvZmY7IGFuZCBhcyBmYXIgSSBhbSBjb25jZXJuZWQsIHlvdSBj
-YW4KJmd0O3Rha2UgdGhlIGF1dGhvcnNoaXAgb2YgdGhlIGNvbW1pdCBhcyBsb25nIGFzIG15IFNp
-Z25lZC1vZmYtYnkgcmVtYWlucyBpbgomZ3Q7dGhlIGNvbW1pdCBtZXNzYWdlLgomZ3Q7CiZndDsm
-Z3Q7IC0tLQomZ3Q7Jmd0OwomZ3Q7Jmd0OyBDaGFuZ2VzIGluIHYzOgomZ3Q7Jmd0OyAtIGZpeCBj
-aGVjay1wYWNrYWdlIHdhcm5pbmdzCiZndDsmZ3Q7IC0gcmVtb3ZlIGRlcGVuZHMgb24gQlIyX1BB
-Q0tBR0VfT1BFTlNTTAomZ3Q7Jmd0OyAtIHNlbGVjdCBCUjJfUEFDS0FHX0xJQkdMSUIyL0JSMl9Q
-QUNLQUdFX0VMRlVUSUxTCiZndDsmZ3Q7IC0gbWFrZSBCUjJfUEFDS0FHRV9MSUJVTldJTkRfQVJD
-SF9TVVBQT1JUUyBvcHRpb25hbAomZ3Q7Jmd0OyAtIHVwZGF0ZSBlbWFpbCBvZiBHYcOrbCBQT1JU
-QVkKJmd0OyZndDsKJmd0OyZndDsgQ2hhbmdlcyBpbiB2MjoKJmd0OyZndDsgLSBhZGRyZXNzIHRo
-ZSBjb21tZW50cyBmcm9tIEFybm91dCBWYW5kZWNhcHBlbGxlIGluIFYxWzBdCiZndDsmZ3Q7CiZn
-dDsmZ3Q7ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwom
-Z3Q7Jmd0OyAgcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL0NvbmZpZy5pbiAgICAgICAgICB8IDM3ICsr
-KysrKysrKysrKysrKysrKysrKysrKwomZ3Q7Jmd0OyAgcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL2ln
-dC1ncHUtdG9vbHMuaGFzaCB8ICA1ICsrKysKJmd0OyZndDsgIHBhY2thZ2UvaWd0LWdwdS10b29s
-cy9pZ3QtZ3B1LXRvb2xzLm1rICAgfCAyMiArKysrKysrKysrKysrKwomZ3Q7Jmd0OyAgNCBmaWxl
-cyBjaGFuZ2VkLCA2NSBpbnNlcnRpb25zKCspCiZndDsmZ3Q7ICBjcmVhdGUgbW9kZSAxMDA2NDQg
-cGFja2FnZS9pZ3QtZ3B1LXRvb2xzL0NvbmZpZy5pbgomZ3Q7Jmd0OyAgY3JlYXRlIG1vZGUgMTAw
-NjQ0IHBhY2thZ2UvaWd0LWdwdS10b29scy9pZ3QtZ3B1LXRvb2xzLmhhc2gKJmd0OyZndDsgIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2lndC1ncHUtdG9vbHMvaWd0LWdwdS10b29scy5tawom
-Z3Q7Jmd0OwomZ3Q7Jmd0OyBkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdl
-L0NvbmZpZy5pbgomZ3Q7Jmd0OyBpbmRleCA4MzEzNGZiNTJkLi43ZGVjNTM4Y2I4IDEwMDY0NAom
-Z3Q7Jmd0OyAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgomZ3Q7Jmd0OyArKysgYi9wYWNrYWdlL0Nv
-bmZpZy5pbgomZ3Q7Jmd0OyBAQCAtMzE4LDYgKzMxOCw3IEBAIGNvbW1lbnQgIkdyYXBoaWMgYXBw
-bGljYXRpb25zIgomZ3Q7Jmd0OyAgCXNvdXJjZSAicGFja2FnZS9nbG1hcmsyL0NvbmZpZy5pbiIK
-Jmd0OyZndDsgIAlzb3VyY2UgInBhY2thZ2UvZ2xzbHNhbmRib3gtcGxheWVyL0NvbmZpZy5pbiIK
-Jmd0OyZndDsgIAlzb3VyY2UgInBhY2thZ2UvZ251cGxvdC9Db25maWcuaW4iCiZndDsmZ3Q7ICsJ
-c291cmNlICJwYWNrYWdlL2lndC1ncHUtdG9vbHMvQ29uZmlnLmluIgomZ3Q7Jmd0OyAgCXNvdXJj
-ZSAicGFja2FnZS9qaGVhZC9Db25maWcuaW4iCiZndDsmZ3Q7ICAJc291cmNlICJwYWNrYWdlL2tt
-c2N1YmUvQ29uZmlnLmluIgomZ3Q7Jmd0OyAgCXNvdXJjZSAicGFja2FnZS9saWJ2YS11dGlscy9D
-b25maWcuaW4iCiZndDsmZ3Q7IGRpZmYgLS1naXQgYS9wYWNrYWdlL2lndC1ncHUtdG9vbHMvQ29u
-ZmlnLmluIGIvcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL0NvbmZpZy5pbgomZ3Q7Jmd0OyBuZXcgZmls
-ZSBtb2RlIDEwMDY0NAomZ3Q7Jmd0OyBpbmRleCAwMDAwMDAwMDAwLi41YjlmZTAzMDBlCiZndDsm
-Z3Q7IC0tLSAvZGV2L251bGwKJmd0OyZndDsgKysrIGIvcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL0Nv
-bmZpZy5pbgomZ3Q7Jmd0OyBAQCAtMCwwICsxLDM3IEBACiZndDsmZ3Q7ICtjb25maWcgQlIyX1BB
-Q0tBR0VfSUdUX0dQVV9UT09MUwomZ3Q7Jmd0OyArCWJvb2wgImlndC1ncHUtdG9vbHMiCiZndDsm
-Z3Q7ICsJZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGZvcmsKJmd0OyZndDsgKwlkZXBlbmRzIG9u
-ICFCUjJfU1RBVElDX0xJQlMKJmd0OyZndDsgKwlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFT
-X1RIUkVBRFMKJmd0OyZndDsgKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0hBU19VREVWCiZndDsm
-Z3Q7ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0JVU1lCT1hfU0hPV19PVEhFUlMgIyBwcm9jcHMtbmcK
-Jmd0OyZndDsgKwlzZWxlY3QgQlIyX1BBQ0tBR0VfQ0FJUk8KJmd0OyZndDsgKwlzZWxlY3QgQlIy
-X1BBQ0tBR0VfQ0FJUk9fUE5HCiZndDsmZ3Q7ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0VMRlVUSUxT
-CiZndDsmZ3Q7ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0tNT0QKJmd0OyZndDsgKwlzZWxlY3QgQlIy
-X1BBQ0tBR0VfTElCRFJNCiZndDsmZ3Q7ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkdMSUIyCiZn
-dDsmZ3Q7ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlBDSUFDQ0VTUwomZ3Q7Jmd0OyArCXNlbGVj
-dCBCUjJfUEFDS0FHRV9MSUJVTldJTkQKJmd0OyZndDsgKwlzZWxlY3QgQlIyX1BBQ0tBR0VfUElY
-TUFOCiZndDsmZ3Q7ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1BST0NQU19ORwomZ3Q7Jmd0OyArCXNl
-bGVjdCBCUjJfUEFDS0FHRV9aTElCCiZndDsmZ3Q7ICsJaGVscAomZ3Q7Jmd0OyArCSAgSUdUIEdQ
-VSBUb29scyBpcyBhIGNvbGxlY3Rpb24gb2YgdG9vbHMgZm9yIGRldmVsb3BtZW50IGFuZAomZ3Q7
-Jmd0OyArCSAgdGVzdGluZyBvZiB0aGUgRFJNIGRyaXZlcnMuCiZndDsmZ3Q7ICsKJmd0OyZndDsg
-KwkgIGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9kcm0vaWd0LWdwdS10b29scwomZ3Q7
-Jmd0OyArCiZndDsmZ3Q7ICtjb21tZW50ICJpZ3QtZ3B1LXRvb2xzIG5lZWRzIHVkZXYgL2RldiBt
-YW5hZ2VtZW50IGFuZCB0b29sY2hhaW4gdy8gdGhyZWFkcywgZHluYW1pYyBsaWJyYXJ5IgomZ3Q7
-Jmd0OyArCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUgIyBwcm9jcHMtbmcKJmd0OyZndDsgKwlkZXBl
-bmRzIG9uICFCUjJfUEFDS0FHRV9IQVNfVURFViB8fCBCUjJfU1RBVElDX0xJQlMgfHwgIUJSMl9U
-T09MQ0hBSU5fSEFTX1RIUkVBRFMKJmd0OyZndDsgKwomZ3Q7Jmd0OyAraWYgQlIyX1BBQ0tBR0Vf
-SUdUX0dQVV9UT09MUwomZ3Q7Jmd0OyArCiZndDsmZ3Q7ICtjb25maWcgQlIyX1BBQ0tBR0VfSUdU
-X0dQVV9UT09MU19MSUJVTldJTkQKJmd0OyZndDsgKwlib29sICJsaWJ1bndpbmQiCiZndDsmZ3Q7
-ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9MSUJVTldJTkRfQVJDSF9TVVBQT1JUUyAjIGxpYnVu
-d2luZAomZ3Q7Jmd0OyArCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJVTldJTkQKJmd0OyZndDsgKwlo
-ZWxwCiZndDsmZ3Q7ICsJICBVc2UgbGlidW53aW5kCiZndDsKJmd0O0ZpbmFsbHksIHlvdSBjYW4g
-YW4gYW4gZW1wdHkgbGluZSBiZWZvcmUgdGhlIGVuZGlmIHN0YXRlbWVudC4KJmd0OwomZ3Q7Jmd0
-OyArZW5kaWYKJmd0OyZndDsgZGlmZiAtLWdpdCBhL3BhY2thZ2UvaWd0LWdwdS10b29scy9pZ3Qt
-Z3B1LXRvb2xzLmhhc2ggYi9wYWNrYWdlL2lndC1ncHUtdG9vbHMvaWd0LWdwdS10b29scy5oYXNo
-CiZndDsmZ3Q7IG5ldyBmaWxlIG1vZGUgMTAwNjQ0CiZndDsmZ3Q7IGluZGV4IDAwMDAwMDAwMDAu
-Ljk1Y2MzYTYzOWIKJmd0OyZndDsgLS0tIC9kZXYvbnVsbAomZ3Q7Jmd0OyArKysgYi9wYWNrYWdl
-L2lndC1ncHUtdG9vbHMvaWd0LWdwdS10b29scy5oYXNoCiZndDsmZ3Q7IEBAIC0wLDAgKzEsNSBA
-QAomZ3Q7Jmd0OyArIyBMb2NhbGx5IGNhbGN1bGF0ZWQgZnJvbSBkb3dubG9hZAomZ3Q7Jmd0OyAr
-c2hhMjU2ICA2ZjhiMmIxMjcwNGMwYjM3YzIyZjMyYTM3NTE2ODhlNzE0NGY4NTBmYWE3MTVlODVi
-MjZlZmZkYzUyMDljZmQxICBpZ3QtZ3B1LXRvb2xzLXYxLjI4LnRhci5iejIKJmd0OyZndDsgKwom
-Z3Q7Jmd0OyArIyBIYXNoIGZvciBsaWNlbnNlIGZpbGU6CiZndDsmZ3Q7ICtzaGEyNTYgIDFiN2Uy
-NjY4NTdiMDU4MDg2NjBmNDIzNjlhNGE3OTc0NTlkN2I3YmVjNzI0NWUzNzhhYTI4YThkYjJmMjEz
-ZGEgIENPUFlJTkcKJmd0OyZndDsgZGlmZiAtLWdpdCBhL3BhY2thZ2UvaWd0LWdwdS10b29scy9p
-Z3QtZ3B1LXRvb2xzLm1rIGIvcGFja2FnZS9pZ3QtZ3B1LXRvb2xzL2lndC1ncHUtdG9vbHMubWsK
-Jmd0OyZndDsgbmV3IGZpbGUgbW9kZSAxMDA2NDQKJmd0OyZndDsgaW5kZXggMDAwMDAwMDAwMC4u
-ZGM5MWVlNTA0MwomZ3Q7Jmd0OyAtLS0gL2Rldi9udWxsCiZndDsmZ3Q7ICsrKyBiL3BhY2thZ2Uv
-aWd0LWdwdS10b29scy9pZ3QtZ3B1LXRvb2xzLm1rCiZndDsmZ3Q7IEBAIC0wLDAgKzEsMjIgQEAK
-Jmd0OyZndDsgKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiZndDsmZ3Q7ICsjCiZndDsmZ3Q7ICsj
-IGlndC1ncHUtdG9vbHMKJmd0OyZndDsgKyMKJmd0OyZndDsgKyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjCiZndDsmZ3Q7ICsKJmd0OyZndDsgK0lHVF9HUFVfVE9PTFNfVkVSU0lPTiA9IDEuMjgKJmd0
-OyZndDsgK0lHVF9HUFVfVE9PTFNfU09VUkNFID0gaWd0LWdwdS10b29scy12JChJR1RfR1BVX1RP
-T0xTX1ZFUlNJT04pLnRhci5iejIKJmd0OyZndDsgK0lHVF9HUFVfVE9PTFNfU0lURSA9IGh0dHBz
-Oi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9kcm0vaWd0LWdwdS10b29scy8tL2FyY2hpdmUvdiQo
-SUdUX0dQVV9UT09MU19WRVJTSU9OKQomZ3Q7Jmd0OyArSUdUX0dQVV9UT09MU19MSUNFTlNFID0g
-TUlUCiZndDsmZ3Q7ICtJR1RfR1BVX1RPT0xTX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCiZndDsm
-Z3Q7ICtJR1RfR1BVX1RPT0xTX0lOU1RBTExfU1RBR0lORyA9IFlFUwomZ3Q7Jmd0OyArSUdUX0dQ
-VV9UT09MU19ERVBFTkRFTkNJRVMgPSBob3N0LXBrZ2NvbmYgY2Fpcm8ga21vZCBsaWJkcm0gbGli
-Z2xpYjIgbGliZ2xpYjIgbGlicGNpYWNjZXNzIHBpeG1hbiBwcm9jcHMtbmcgemxpYiBlbGZ1dGls
-cwomZ3Q7CiZndDtBbmQgb25lIG1vcmUgdGhpbmcsIGxpYmdsaWIyIGFwcGVhcnMgdG8gYmUgZHVw
-bGljYXRlZCwgYW5kIHRoZSBsaXN0IGlzCiZndDtub3QgYWxwaGFiZXRpY2FsbHkgb3JkZXJlZC4K
-Jmd0OwomZ3Q7CUlHVF9HUFVfVE9PTFNfREVQRU5ERU5DSUVTID0gaG9zdC1wa2djb25mIGNhaXJv
-IGVsZnV0aWxzIGttb2QgbGliZHJtIGxpYmdsaWIyIGxpYnBjaWFjY2VzcyBwaXhtYW4gcHJvY3Bz
-LW5nIHpsaWIKJmd0OwomZ3Q7Jmd0OyArCiZndDsmZ3Q7ICtpZmVxICgkKEJSMl9QQUNLQUdFX0lH
-VF9HUFVfVE9PTFNfTElCVU5XSU5EKSx5KQomZ3Q7Jmd0OyArSUdUX0dQVV9UT09MU19ERVBFTkRF
-TkNJRVMgKz0gbGlidW53aW5kCiZndDsmZ3Q7ICtJR1RfR1BVX1RPT0xTX0NPTkZfT1BUUyArPSAt
-RGxpYnVud2luZD1lbmFibGVkCiZndDsmZ3Q7ICtlbHNlCiZndDsmZ3Q7ICtJR1RfR1BVX1RPT0xT
-X0NPTkZfT1BUUyArPSAtRGxpYnVud2luZD1kaXNhYmxlZAomZ3Q7Jmd0OyArZW5kaWYKJmd0OyZn
-dDsgKwomZ3Q7Jmd0OyArJChldmFsICQobWVzb24tcGFja2FnZSkpCiZndDsKJmd0O0FnYWluLCB0
-aGFua3MgZm9yIHlvdSBlZmZvcnQgdG8gbWFrZSBpdCB1cHN0cmVhbS4KJmd0OwomZ3Q7UmVnYXJk
-cywKJmd0O0dhw6tsCjwvcHJlPjwvZGl2Pg==
-------=_Part_20965_2081055884.1697878895102--
+     cat >criu.config <<EOF
+     BR2_PACKAGE_HOST_PYTHON3=y
+     BR2_PACKAGE_CRIU=y
+     EOF
+     utils/test-pkg -a -c criu.config -p criu
+                      arm-aarch64 [ 1/45]: OK
+            bootlin-aarch64-glibc [ 2/45]: FAILED
 
+criu uses restartable sequences, see:
+https://github.com/checkpoint-restore/criu/blob/v3.18/criu/include/linux/rseq.h#L7
 
---===============0453438657035658497==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Criu seems to have a header detection on "sys/rseq.h" (i.e. on the
+libc side). But the sys/rseq.h then includes linux/rseq.h (i.e. on the
+kernel side), which is not checked. Some configurations like
+bootlin-aarch64-glibc includes the glibc header, but also have older
+kernel. Restartable sequences were introduced in kernel >= 4.18. So
+this can be handled by adding a dependency on kernel.
 
+        bootlin-arcle-hs38-uclibc [ 3/45]: SKIPPED
+             bootlin-armv5-uclibc [ 4/45]: SKIPPED
+              bootlin-armv7-glibc [ 5/45]: OK
+            bootlin-armv7m-uclibc [ 6/45]: SKIPPED
+               bootlin-armv7-musl [ 7/45]: OK
+         bootlin-m68k-5208-uclibc [ 8/45]: SKIPPED
+        bootlin-m68k-68040-uclibc [ 9/45]: SKIPPED
+      bootlin-microblazeel-uclibc [10/45]: SKIPPED
+         bootlin-mipsel32r6-glibc [11/45]: SKIPPED
+            bootlin-mipsel-uclibc [12/45]: SKIPPED
+              bootlin-nios2-glibc [13/45]: SKIPPED
+          bootlin-openrisc-uclibc [14/45]: SKIPPED
+bootlin-powerpc64le-power8-glibc [15/45]: SKIPPED
+    bootlin-powerpc-e500mc-uclibc [16/45]: SKIPPED
+            bootlin-riscv32-glibc [17/45]: SKIPPED
+            bootlin-riscv64-glibc [18/45]: SKIPPED
+             bootlin-riscv64-musl [19/45]: SKIPPED
+          bootlin-s390x-z13-glibc [20/45]: FAILED
+
+Build fails with output:
+
+     Makefile:23: *** "The architecture s390x isn't supported".  Stop.
+
+criu Makefile checks for "s390" arch (but "s390x" is passed
+here). See:
+https://github.com/checkpoint-restore/criu/blob/v3.18/Makefile#L22
+
+               bootlin-sh4-uclibc [21/45]: SKIPPED
+            bootlin-sparc64-glibc [22/45]: SKIPPED
+             bootlin-sparc-uclibc [23/45]: SKIPPED
+             bootlin-x86-64-glibc [24/45]: OK
+              bootlin-x86-64-musl [25/45]: OK
+            bootlin-x86-64-uclibc [26/45]: FAILED
+
+Build fails with output:
+
+     criu/fsnotify.c:18:10: fatal error: aio.h: No such file or directory
+        18 | #include <aio.h>
+           |          ^~~~~~~
+
+            bootlin-xtensa-uclibc [27/45]: SKIPPED
+                     br-arm-basic [28/45]: SKIPPED
+             br-arm-full-nothread [29/45]: SKIPPED
+               br-arm-full-static [30/45]: SKIPPED
+            br-i386-pentium4-full [31/45]: FAILED
+
+Build fails with output:
+
+     Makefile:23: *** "The architecture i686 isn't supported".  Stop.
+
+         br-i386-pentium-mmx-musl [32/45]: FAILED
+
+Build fails with output:
+
+     Makefile:23: *** "The architecture i586 isn't supported".  Stop.
+
+               br-mips64-n64-full [33/45]: SKIPPED
+          br-mips64r6-el-hf-glibc [34/45]: SKIPPED
+        br-powerpc-603e-basic-cpp [35/45]: SKIPPED
+        br-powerpc64-power7-glibc [36/45]: FAILED
+
+Build fails with output:
+
+     In file included from compel/plugins/std/infect.c:14:
+     compel/include/uapi/compel/asm/sigframe.h:27:2: error: #error Only 
+supporting ABIv2.
+        27 | #error Only supporting ABIv2.
+           |  ^~~~~
+
+                linaro-aarch64-be [37/45]: FAILED
+
+Build fails with output:
+
+     Makefile:23: *** "The architecture aarch64_be isn't supported".  
+Stop.
+
+                   linaro-aarch64 [38/45]: OK
+                       linaro-arm [39/45]: FAILED
+
+Build fails with output:
+
+     arm-linux-gnueabihf-gcc: error: unrecognized argument in option 
+'-march=armv7-a+fp'
+     arm-linux-gnueabihf-gcc: note: valid arguments to '-march=' are: 
+armv2 armv2a armv3 armv3m armv4 armv4t armv5 armv5e armv5t armv5te 
+armv5tej armv6 armv6-m armv6j armv6k armv6kz armv6s-m armv6t2 armv6z 
+armv6zk armv7 armv7-a armv7-m armv7-r armv7e-m armv7ve armv8-a armv8-a+ 
+crc armv8-m.base armv8-m.main armv8-m.main+dsp armv8.1-a armv8.2-a 
+armv8.2-a+dotprod armv8.2-a+fp16 armv8.2-a+fp16+dotprod iwmmxt iwmmxt2 
+native; did you mean 'armv7-a'?
+
+Gcc option "-march=armv7-a+fp" was introduced in gcc commit
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=76d7d5334991a5646026e5aa8c3e7d23629f383a
+first included in version 8.1.0.
+So the package should have a dependency on this. linaro-arm fails
+because it contains 7.3.1.
+
+              sourcery-arm-armv4t [40/45]: SKIPPED
+                     sourcery-arm [41/45]: SKIPPED
+              sourcery-arm-thumb2 [42/45]: FAILED
+
+Same story as linaro-arm toolchain.
+
+                  sourcery-mips64 [43/45]: SKIPPED
+                    sourcery-mips [44/45]: FAILED
+
+Fails with output:
+
+     compel/arch/mips/plugins/std/memcpy.S: Assembler messages:
+     compel/arch/mips/plugins/std/memcpy.S:7: Error: opcode not supported 
+on this processor: mips32r2 (mips32r2) 'dadd $2,$0,$4'
+     compel/arch/mips/plugins/std/memcpy.S:8: Error: opcode not supported 
+on this processor: mips32r2 (mips32r2) 'daddiu $13,$0,0'
+     compel/arch/mips/plugins/std/memcpy.S:14: Error: opcode not 
+supported on this processor: mips32r2 (mips32r2) 'daddiu $13,$13,1'
+     compel/arch/mips/plugins/std/memcpy.S:15: Error: opcode not 
+supported on this processor: mips32r2 (mips32r2) 'daddiu $4,$4,1'
+     compel/arch/mips/plugins/std/memcpy.S:16: Error: opcode not 
+supported on this processor: mips32r2 (mips32r2) 'daddiu $5,$5,1'
+
+There is maybe few extra condtions missing in the _ARCH_SUPPORTS for 
+mips.
+
+                   sourcery-nios2 [45/45]: SKIPPED
+45 builds, 29 skipped, 10 build failed, 0 legal-info failed, 0 show-info 
+failed
+
+To test thoroughly your package with a specific list of toolchains, you 
+can use the
+following commands:
+
+     cp support/config-fragments/autobuild/toolchain-configs.csv 
+criu-toolchains.csv
+     # edit criu-toolchains.csv to keep your toolchains of interest.
+     utils/test-pkg -a -t criu-toolchains.csv -c criu.config -p criu
+
+This will retest only the toolchains kept in the csv.
+
+On 20/10/2023 08:02, Marcus Folkesson wrote:
+> Checkpoint/Restore In Userspace (CRIU), is a software tool for the
+> Linux operating system to make it possible to freeze a running
+> application and checkpoint it to persistent storage as a collection of 
+> files.
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
+> 
+> Notes:
+>     v2:
+>      - Addressed comments from Thomas.
+>      - Tested on ARM target and on x86_64 with qemu.
+> 
+>     v3:
+>      - set CONFIG_CHECKPOINT_RESTORE in kernel config
+>      - Only be available for ARMv6, ARMv7 and ARMv8
+> 
+>     v4:
+>     - set SUBARCH for armv6, armv7 and armv8
+>     - Use github download helper
+> 
+>     Result from test-pkg:
+>                         bootlin-armv5-uclibc [1/6]: SKIPPED
+>                          bootlin-armv7-glibc [2/6]: OK
+>                        bootlin-armv7m-uclibc [3/6]: SKIPPED
+>                          bootlin-x86-64-musl [4/6]: OK
+>                           br-arm-full-static [5/6]: SKIPPED
+>                                 sourcery-arm [6/6]: SKIPPED
+>     6 builds, 4 skipped, 0 build failed, 0 legal-info failed, 0 
+> show-info failed
+> 
+>  DEVELOPERS             |  1 +
+>  package/Config.in      |  1 +
+>  package/criu/Config.in | 48 +++++++++++++++++++++++++++++
+>  package/criu/criu.hash |  3 ++
+>  package/criu/criu.mk   | 70 ++++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 123 insertions(+)
+>  create mode 100644 package/criu/Config.in
+>  create mode 100644 package/criu/criu.hash
+>  create mode 100644 package/criu/criu.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 57015e245e..2047827bd9 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2007,6 +2007,7 @@ 
+> F:	support/testing/tests/package/test_python_pytest.py
+>  F:	support/testing/tests/package/test_python_pytest_asyncio.py
+> 
+>  N:	Marcus Folkesson <marcus.folkesson@gmail.com>
+> +F:	package/criu/
+>  F:	package/libcamera/
+>  F:	package/libcamera-apps/
+>  F:	package/libostree/
+> diff --git a/package/Config.in b/package/Config.in
+> index 4e489c4706..9e2099f6a5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2678,6 +2678,7 @@ menu "System tools"
+>  	source "package/coreutils/Config.in"
+>  	source "package/cpulimit/Config.in"
+>  	source "package/cpuload/Config.in"
+> +	source "package/criu/Config.in"
+>  	source "package/crun/Config.in"
+>  	source "package/daemon/Config.in"
+>  	source "package/dc3dd/Config.in"
+> diff --git a/package/criu/Config.in b/package/criu/Config.in
+> new file mode 100644
+> index 0000000000..06e809fb83
+> --- /dev/null
+> +++ b/package/criu/Config.in
+> @@ -0,0 +1,48 @@
+> +# criu only builds on certain architectures
+> +config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_ARM_CPU_ARMV6
+> +	default y if BR2_ARM_CPU_ARMV7A
+> +	default y if BR2_ARM_CPU_ARMV7M
+> +	default y if BR2_ARM_CPU_ARMV8A
+> +	default y if BR2_ARM_CPU_ARMV8M
+> +	default y if BR2_aarch64
+> +	default y if BR2_i386
+> +	default y if BR2_mips
+> +	default y if BR2_x86_64
+> +	default y if BR2_powerpc64
+> +	default y if BR2_s390x
+
+There is possibly some rework needed here to fix architecture
+related build failures described earlier.
+
+> +
+> +menuconfig BR2_PACKAGE_CRIU
+> +	bool "criu"
+> +	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_HOST_PYTHON3 # host-python3-ssl
+> +	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
+> +	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+> +	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
+
+A dependency on kernel header >= 4.18 should be added:
+
+     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
+
+The condition can be raised to:
+
+     depends on BR2_HOST_GCC_AT_LEAST_8 # -march=armv7-a+fp
+
+If gcc older than 8 for non-arm architecture are really needed, it can
+also be refined as something like "gcc >= 4.8 && !arm || gcc >= 8 && 
+arm".
+For reference, gcc 8.1 was release on 2018-05-02.
+
+> +	depends on !BR2_STATIC_LIBS # protobuf, libbsd
+> +	depends on BR2_USE_WCHAR # libbsd
+> +	depends on BR2_USE_MMU # libcap
+> +	select BR2_PACKAGE_HOST_PYTHON3_SSL
+> +	select BR2_PACKAGE_PROTOBUF
+> +	select BR2_PACKAGE_PROTOBUF_C
+> +	select BR2_PACKAGE_LIBAIO
+> +	select BR2_PACKAGE_LIBBSD
+> +	select BR2_PACKAGE_LIBCAP
+> +	select BR2_PACKAGE_LIBNET
+> +	select BR2_PACKAGE_LIBNL
+> +	select BR2_PACKAGE_PYTHON3
+> +	help
+> +	  Checkpoint/Restore In Userspace (CRIU), is a software
+> +	  tool for the Linux operating system to make it possible
+> +	  to freeze a running application and checkpoint it to
+> +	  persistent storage as a collection of files.
+> +
+> +	  https://criu.org/Main_Page
+> +
+> +comment "criu needs a toolchain w/ threads, dynamic library, wchar"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+> +		|| !BR2_USE_WCHAR
+
+The new toolchain dependencies you will add will need to be reflected
+here.
+
+> diff --git a/package/criu/criu.hash b/package/criu/criu.hash
+> new file mode 100644
+> index 0000000000..2c4a07252b
+> --- /dev/null
+> +++ b/package/criu/criu.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  
+> 6a9997981c9fe4730c848ce59346b3a22fad69b803607cb67a3f6ec0557fa474  
+> criu-3.18.tar.gz
+> +sha256  
+> 568a1fa9d90e18a1a1a61ea58ec2eece16b56a5042cc72c1b4f8d4455ae6fcb7  
+> COPYING
+> diff --git a/package/criu/criu.mk b/package/criu/criu.mk
+> new file mode 100644
+> index 0000000000..a84c625696
+> --- /dev/null
+> +++ b/package/criu/criu.mk
+> @@ -0,0 +1,70 @@
+> +################################################################################
+> +#
+> +# CRIU
+> +#
+> +################################################################################
+> +
+> +CRIU_VERSION = 3.18
+> +CRIU_SITE = $(call github,checkpoint-restore,criu,v$(CRIU_VERSION))
+> +
+> +CRIU_LICENSE = GPL-2.0
+> +CRIU_LICENSE_FILES = COPYING
+> +CRIU_DEPENDENCIES =\
+> +	host-pkgconf \
+> +	host-protobuf-c \
+> +	host-python3 \
+> +	host-python-pip \
+> +	libaio \
+> +	libbsd \
+> +	libcap \
+> +	libnet \
+> +	libnl \
+> +	protobuf \
+> +	protobuf-c \
+> +	python3
+> +
+> +CRIU_MAKE_ENV =\
+> +	$(TARGET_MAKE_ENV) \
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	CROSS_COMPILE=$(TARGET_CROSS) \
+> +	WERROR=0
+> +
+> +#x86_64 is treated as x86 in criu
+> +#Also, powerpc64 is refered to as ppc64 in criu.
+
+There is possibly some rework needed here to fix architecture
+related build failures described earlier.
+
+> +ifeq ($(BR2_ARCH),"x86_64")
+> +CRIU_MAKE_ENV += ARCH=x86
+> +else ifeq ($(BR2_ARCH),"powerpc64")
+> +CRIU_MAKE_ENV += ARCH=ppc64
+> +else
+> +CRIU_MAKE_ENV += ARCH=$(BR2_ARCH)
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_ARMV6), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv6
+> +else ifeq ($(BR2_ARM_CPU_ARMV7A), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv7
+> +else ifeq ($(BR2_ARM_CPU_ARMV7M), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv7
+> +else ifeq ($(BR2_ARM_CPU_ARMV8A), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv8
+> +else ifeq ($(BR2_ARM_CPU_ARMV8M), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv8
+> +endif
+> +
+> +# Criu needs Kernel Checkpoint/restore support which is not enabled
+> +# by default.
+> +define CRIU_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CHECKPOINT_RESTORE)
+> +endef
+> +
+> +define CRIU_BUILD_CMDS
+> +	rm -rf $(@D)/images/google/protobuf/descriptor.proto
+> +	ln -s  $(STAGING_DIR)/usr/include/google/protobuf/descriptor.proto 
+> $(@D)/images/google/protobuf/descriptor.proto
+> +	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define CRIU_INSTALL_TARGET_CMDS
+> +	$(CRIU_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) 
+> install-criu install-lib install-compel
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 2.41.0
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0453438657035658497==--
-
