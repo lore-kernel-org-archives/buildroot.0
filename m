@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1F82C0032E
-	for <buildroot@archiver.kernel.org>; Sat, 21 Oct 2023 09:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E7BEC0032E
+	for <buildroot@archiver.kernel.org>; Sat, 21 Oct 2023 21:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CF614EE01;
-	Sat, 21 Oct 2023 09:19:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CF614EE01
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD516708D4;
+	Sat, 21 Oct 2023 21:27:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD516708D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DhEDUcz_CGNa; Sat, 21 Oct 2023 09:19:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3Tpb_n2juLb0; Sat, 21 Oct 2023 21:27:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C1D64EEE4;
-	Sat, 21 Oct 2023 09:19:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C1D64EEE4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C9C111BF429
- for <buildroot@lists.busybox.net>; Sat, 21 Oct 2023 09:19:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 315CE708D1;
+	Sat, 21 Oct 2023 21:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 315CE708D1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ADC051BF47F
+ for <buildroot@lists.busybox.net>; Sat, 21 Oct 2023 21:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFA704EEE4
- for <buildroot@lists.busybox.net>; Sat, 21 Oct 2023 09:19:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFA704EEE4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79B6885154
+ for <buildroot@lists.busybox.net>; Sat, 21 Oct 2023 21:27:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79B6885154
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p0aq_f0oW7cy for <buildroot@lists.busybox.net>;
- Sat, 21 Oct 2023 09:19:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vjQH2IEX_nXn for <buildroot@lists.busybox.net>;
+ Sat, 21 Oct 2023 21:27:13 +0000 (UTC)
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 85CB14EE01
- for <buildroot@uclibc.org>; Sat, 21 Oct 2023 09:19:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85CB14EE01
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA9CC85153
+ for <buildroot@uclibc.org>; Sat, 21 Oct 2023 21:27:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA9CC85153
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qu88U-0008it-MV
- for buildroot@uclibc.org; Sat, 21 Oct 2023 11:19:10 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1quJV0-00031Q-Q9
+ for buildroot@uclibc.org; Sat, 21 Oct 2023 23:27:10 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sat, 21 Oct 2023 11:18:19 +0200
-Message-ID: <pan$3de0e$61d32a06$2e652447$868cdd00@ID-313208.user.individual.net>
+Date: Sat, 21 Oct 2023 23:26:30 +0200
+Message-ID: <pan$88a65$8ff79044$8640652c$7a879a5d@ID-313208.user.individual.net>
 References: <20231020120158.2684019-1-andyshrk@163.com>
- <fa6fbdf3-6a59-4893-9128-7087db14b91f@kuhls.net>
- <16d2b4bf.15c3.18b5174c2f1.Coremail.andyshrk__45408.7439969712$1697878733$gmane$org@163.com>
+ <20231020120240.2684127-1-andyshrk__36105.3176618711$1697804308$gmane$org@163.com>
 Mime-Version: 1.0
 User-Agent: Pan/0.154 (Izium; 517acf4)
 Subject: Re: [Buildroot] [PATCH v3 1/1] igt-gpu-tools: add igt-gpu-tools
@@ -67,25 +66,28 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Andy,
 
-Am Sat, 21 Oct 2023 16:58:08 +0800 (CST) schrieb Andy Yan:
+Am Fri, 20 Oct 2023 20:02:40 +0800 schrieb Andy Yan:
 
->>elfutils has another dependency which would need backporting:
->>
->>	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
->>
->>But when my patch series
->>https://patchwork.ozlabs.org/project/buildroot/patch/
-20231019214953.4002609-1-bernd@kuhls.net/
-> 
->>lands there is no need to add this dependency to igt-gpu-tools ;)
-> 
-> So maybe I can wait for this pach lands before sending v4.
+> --- /dev/null
+> +++ b/package/igt-gpu-tools/Config.in
+> @@ -0,0 +1,37 @@
+> +config BR2_PACKAGE_IGT_GPU_TOOLS
+> +	bool "igt-gpu-tools"
+> +	depends on BR2_USE_MMU # fork
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_PACKAGE_HAS_UDEV
 
-if you do so then you will need to add a patch to igt-gpu-tools which 
-fixes build errors with musl toolchains. I prepared a ready-to-commit 
-version here: https://github.com/bkuhls/buildroot/blob/master_patches/
-package/igt-gpu-tools/0001-musl.patch which you can add to the next 
-iteration of your patch, which then depends on my elfutils patch.
+Please add
+
+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 # linux/dma-buf.h
+
+to fix build errors with older kernel headers due to:
+https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/lib/dmabuf_sync_file.h?ref_type=heads#L10
+
+> +	select BR2_PACKAGE_LIBUNWIND
+
+Please remove this line, libunwind is an optional dependency.
 
 Regards, Bernd
 
