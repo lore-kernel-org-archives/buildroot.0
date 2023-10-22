@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 179BEC001DF
-	for <buildroot@archiver.kernel.org>; Sun, 22 Oct 2023 15:43:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08CDECDB474
+	for <buildroot@archiver.kernel.org>; Sun, 22 Oct 2023 17:04:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A816A60ED6;
-	Sun, 22 Oct 2023 15:43:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A816A60ED6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6670A4380F;
+	Sun, 22 Oct 2023 17:04:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6670A4380F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6MA0dsiLcnrk; Sun, 22 Oct 2023 15:43:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N0PCAvyK4hG5; Sun, 22 Oct 2023 17:04:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BD2870AAB;
-	Sun, 22 Oct 2023 15:43:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BD2870AAB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DD1543815;
+	Sun, 22 Oct 2023 17:04:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DD1543815
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BD0F91BF399
- for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 15:43:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0BFB71BF40B
+ for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 17:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96A844F57C
- for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 15:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96A844F57C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 60E244F583
+ for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 17:04:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60E244F583
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eX9wMyhdE-ku for <buildroot@lists.busybox.net>;
- Sun, 22 Oct 2023 15:43:12 +0000 (UTC)
+ with ESMTP id omkeTNrEjiIi for <buildroot@lists.busybox.net>;
+ Sun, 22 Oct 2023 17:04:12 +0000 (UTC)
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B3F9C4F579
- for <buildroot@uclibc.org>; Sun, 22 Oct 2023 15:43:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3F9C4F579
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C2DFE4F356
+ for <buildroot@uclibc.org>; Sun, 22 Oct 2023 17:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2DFE4F356
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1quabd-00013X-TJ
- for buildroot@uclibc.org; Sun, 22 Oct 2023 17:43:09 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qubs0-000Ab0-VV
+ for buildroot@uclibc.org; Sun, 22 Oct 2023 19:04:08 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sun, 22 Oct 2023 17:42:57 +0200
-Message-ID: <pan$cf003$90ab1044$86841b3c$e850ba99@ID-313208.user.individual.net>
-References: <20231019214953.4002609-1-bernd@kuhls.net>
- <20231022153724.7ae6a9f1__21240.1217942656$1697981877$gmane$org@windsurf>
+Date: Sun, 22 Oct 2023 19:03:48 +0200
+Message-ID: <pan$a8dae$c263fa31$c5524ffb$9910d64@ID-313208.user.individual.net>
+References: <20231022154133.1619344-1-bernd@kuhls.net>
+ <20231022163659.GQ2607__65.0460877054115$1697992660$gmane$org@scaer>
 Mime-Version: 1.0
 User-Agent: Pan/0.154 (Izium; 517acf4)
-Subject: Re: [Buildroot] [PATCH 1/1] package/elfutils: enable on musl
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/elfutils: enable on musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,15 +63,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sun, 22 Oct 2023 15:37:24 +0200 schrieb Thomas Petazzoni via buildroot:
+Am Sun, 22 Oct 2023 18:36:59 +0200 schrieb Yann E. MORIN:
 
-> Are you sure this is correct?
+> Bernd, could you check if upstream has changed something around the
+> handling of fts?
 
-Hi Thomas,
+Hi Yann,
 
-looking at it again I think you are right, sent v2:
-https://patchwork.ozlabs.org/project/buildroot/patch/
-20231022154133.1619344-1-bernd@kuhls.net/
+maybe this commit?
+https://sourceware.org/git/?
+p=elfutils.git;a=commitdiff;h=da855fc9cd415c288bfcb9de1f3d5eb329de0557
 
 Regards, Bernd
 
