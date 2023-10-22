@@ -1,68 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 962F0C001DF
-	for <buildroot@archiver.kernel.org>; Sun, 22 Oct 2023 15:41:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1204BCDB474
+	for <buildroot@archiver.kernel.org>; Sun, 22 Oct 2023 16:04:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 326C870A97;
-	Sun, 22 Oct 2023 15:41:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 326C870A97
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rcnWAINmC-Bz; Sun, 22 Oct 2023 15:41:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B90D70AA9;
-	Sun, 22 Oct 2023 15:41:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B90D70AA9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9EA8F1BF399
- for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 15:41:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8471D4F572
- for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 15:41:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8471D4F572
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98BC54F5A6;
+	Sun, 22 Oct 2023 16:04:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98BC54F5A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FnP5JOCrGlXZ for <buildroot@lists.busybox.net>;
- Sun, 22 Oct 2023 15:41:38 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C41964F570
- for <buildroot@buildroot.org>; Sun, 22 Oct 2023 15:41:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C41964F570
-Received: from fli4l.lan.fli4l (p4fd6ced1.dip0.t-ipconnect.de [79.214.206.209])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3478BA4C0CB2;
- Sun, 22 Oct 2023 17:41:34 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37936)
- by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
- (envelope-from <bernd@kuhls.net>) id 1quaa5-0005US-2T;
- Sun, 22 Oct 2023 17:41:33 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bw73KuD56gaG; Sun, 22 Oct 2023 16:04:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60FF74F5AA;
+	Sun, 22 Oct 2023 16:04:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60FF74F5AA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C67E1BF4DD
+ for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 16:03:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 423818549D
+ for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 16:03:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 423818549D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vGcg3dHdI9Iy for <buildroot@lists.busybox.net>;
+ Sun, 22 Oct 2023 16:03:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 01CAA8549C
+ for <buildroot@buildroot.org>; Sun, 22 Oct 2023 16:03:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01CAA8549C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DC66985DF8; Sun, 22 Oct 2023 16:03:57 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Oct 2023 17:41:33 +0200
-Message-Id: <20231022154133.1619344-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1697989294;
- bh=JNJ0Gbcgse8oiPjS+GjCDPSh/UlDEiWhyQefQm8xHbU=;
- h=From:To:Cc:Subject:Date:From;
- b=JUwj2ttkf7JC4tDNxcRlLZAo8spebnS5ux8jiI2eH0813O0IsQN0uR2PMof7Bx2h0
- isjGeAjk/aRHRxPBqS6meBL6XgDgZEs7yH3q+zLVxl1s/+cU60lzPpPwv9wC187odP
- WrElpPYg8nYRWk0WFvcngGRrVZd9S6TUlxz6ZohMhBxktQMyXuPC9ACwWiEmQU4ZLz
- 2DAuCU9BZHJXtUDTgaMI7VA9IKEy9ranEz2E10xKFzh4W7+AdQ5iq/xpFJ/YOIduVC
- 26Wa8y95cVeZJnoLcG7CRATJaTgUm97UYE/5VgtGGYOWvkXcrKgbnJ+pgfWTju+bRO
- DUlWuWFY6lscA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=JUwj2ttk
-Subject: [Buildroot] [PATCH v2 1/1] package/elfutils: enable on musl
+Date: Sun, 22 Oct 2023 18:02:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d8bcff69fc2887b2b0ceda0720b3a3569cf8abb0
+X-Git-Newrev: bf9583a50276f52edbc37d9f85df5f2cc7fdb5dc
+X-Patchwork-Hint: ignore
+Message-Id: <20231022160357.DC66985DF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elfutils: enable on musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,36 +56,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Laurent Vivier <laurent@vivier.eu>,
- "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Tobias Waldekranz <tobias@waldekranz.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=bf9583a50276f52edbc37d9f85df5f2cc7fdb5dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Buildroot commit eb60820c0a9b3f938f32516f24df2eee9aac1e26 disabled
 elfutils for musl toolchains in 2015. Current code builds fine with musl
 so remove the exceptions.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[yann.morin.1998@free.fr:
+  - move all libc-related conditional blocks together
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-v2: fix ELFUTILS_CONF_OPTS (Thomas)
-
- package/avrdude/Config.in    | 6 ++----
- package/bpftool/Config.in    | 4 +---
- package/elfutils/Config.in   | 9 +++------
- package/elfutils/elfutils.mk | 5 ++++-
- package/kexec-lite/Config.in | 6 ++----
- package/kmemd/Config.in      | 6 ++----
- package/libbpf/Config.in     | 6 ++----
- package/ltrace/Config.in     | 6 ++----
- package/mesa3d/Config.in     | 8 --------
- package/petitboot/Config.in  | 4 +---
- package/racehound/Config.in  | 6 ++----
- 11 files changed, 21 insertions(+), 45 deletions(-)
+ package/avrdude/Config.in    |  6 ++----
+ package/bpftool/Config.in    |  4 +---
+ package/elfutils/Config.in   |  9 +++------
+ package/elfutils/elfutils.mk | 11 +++++------
+ package/kexec-lite/Config.in |  6 ++----
+ package/kmemd/Config.in      |  6 ++----
+ package/libbpf/Config.in     |  6 ++----
+ package/ltrace/Config.in     |  6 ++----
+ package/mesa3d/Config.in     |  8 --------
+ package/petitboot/Config.in  |  4 +---
+ package/racehound/Config.in  |  6 ++----
+ 11 files changed, 22 insertions(+), 50 deletions(-)
 
 diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
 index cbbd076667..06fee0ca7f 100644
@@ -178,22 +161,37 @@ index 5f45de14ab..c355048c6d 100644
  	help
  	  Libraries/utilities to handle ELF objects (drop in
 diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 0757851b72..28fcb52eb3 100644
+index 0757851b72..45df971071 100644
 --- a/package/elfutils/elfutils.mk
 +++ b/package/elfutils/elfutils.mk
-@@ -61,8 +61,11 @@ HOST_ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
+@@ -50,10 +50,14 @@ ELFUTILS_LDFLAGS += -latomic
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+-ELFUTILS_DEPENDENCIES += musl-fts
++ELFUTILS_DEPENDENCIES += musl-fts argp-standalone
+ ELFUTILS_LDFLAGS += -lfts
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++ELFUTILS_CONF_OPTS += --disable-symbol-versioning
++endif
++
+ # disable for now, needs "distro" support
+ ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
+ HOST_ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
+@@ -61,11 +65,6 @@ HOST_ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
  ELFUTILS_CONF_ENV += \
  	LDFLAGS="$(ELFUTILS_LDFLAGS)"
  
 -ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
- ELFUTILS_DEPENDENCIES += argp-standalone
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- ELFUTILS_CONF_OPTS += --disable-symbol-versioning
- endif
- 
+-ELFUTILS_DEPENDENCIES += argp-standalone
+-ELFUTILS_CONF_OPTS += --disable-symbol-versioning
+-endif
+-
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ ELFUTILS_CONF_OPTS += --enable-demangler
+ else
 diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
 index abfa95ab36..5beaec6418 100644
 --- a/package/kexec-lite/Config.in
@@ -288,10 +286,10 @@ index ce5a85edcf..21d381db70 100644
 -		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
 +		|| !BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 1e4a73a50f..ca7b9c8178 100644
+index 6be05ef4b5..39a4f706e2 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -194,7 +194,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+@@ -201,7 +201,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
  	depends on BR2_USE_MMU # libdrm
  	depends on BR2_i386 || BR2_x86_64
  	depends on BR2_PACKAGE_MESA3D_LLVM
@@ -299,7 +297,7 @@ index 1e4a73a50f..ca7b9c8178 100644
  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
  	select BR2_PACKAGE_LIBDRM_AMDGPU
  	select BR2_PACKAGE_LIBDRM_RADEON
-@@ -204,13 +203,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+@@ -211,13 +210,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
  	help
  	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
  
@@ -360,9 +358,6 @@ index d13f90adb4..5b8bdc77bc 100644
 -		|| !BR2_TOOLCHAIN_HAS_THREADS \
 -		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
 +		|| !BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.39.2
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
