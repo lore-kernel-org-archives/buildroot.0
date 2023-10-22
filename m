@@ -1,70 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 002E3C001DF
-	for <buildroot@archiver.kernel.org>; Sun, 22 Oct 2023 18:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86DBDCDB474
+	for <buildroot@archiver.kernel.org>; Sun, 22 Oct 2023 20:24:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93E1A416C3;
-	Sun, 22 Oct 2023 18:47:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93E1A416C3
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0vLLeh2aZqEW; Sun, 22 Oct 2023 18:47:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7E75416AC;
-	Sun, 22 Oct 2023 18:47:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7E75416AC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 51C091BF41F
- for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 18:47:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34EC840135
- for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 18:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34EC840135
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13FF4401E1;
+	Sun, 22 Oct 2023 20:24:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13FF4401E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SZM6hIm0U0Wf for <buildroot@lists.busybox.net>;
- Sun, 22 Oct 2023 18:47:46 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ED6DC40012
- for <buildroot@buildroot.org>; Sun, 22 Oct 2023 18:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED6DC40012
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:9668:e224:b510:3431])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 19723B0037C;
- Sun, 22 Oct 2023 20:47:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 22 Oct 2023 20:47:39 +0200
-Date: Sun, 22 Oct 2023 20:47:39 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Brandon Maier <brandon.maier@collins.com>
-Message-ID: <20231022184739.GU2607@scaer>
-References: <20231019203338.6450-1-brandon.maier@collins.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 18fGoGrzL7ZX; Sun, 22 Oct 2023 20:24:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E35E740338;
+	Sun, 22 Oct 2023 20:24:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E35E740338
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 12AFB1BF8C7
+ for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 20:24:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC2AA60AC0
+ for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 20:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC2AA60AC0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id urWFBAyv_LzG for <buildroot@lists.busybox.net>;
+ Sun, 22 Oct 2023 20:24:40 +0000 (UTC)
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 94D1060675
+ for <buildroot@buildroot.org>; Sun, 22 Oct 2023 20:24:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94D1060675
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-507973f3b65so4046989e87.3
+ for <buildroot@buildroot.org>; Sun, 22 Oct 2023 13:24:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698006278; x=1698611078;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=BV2etZyDWNB0f7NQ6EekszDnkD1QPyVwBLnEnkWMjf8=;
+ b=KRHuhx+NivZ65ve6rBZhKRElnSajk4chpkG2rdIgIRn2pa0bxWGHvCPH4zo9+9bTmR
+ rMTuGardt1ETB93S0hn56X7rEhFTQwhJX6JO00DoXoBVPGdrEJBJtQv8iGkHsxOhN+2F
+ SdceTXeQZ9h3bN9pycusGsGd2XPUlA8p8h6SFhC3n0fIff/mDfFfXYS+NdiMKoaSw7+J
+ NzmC5XH4JIlRyy+RIMS4khbEZVuqmJ7DuZ8BiW9y1wHRzIDKT36hvzuI9q8WPcRWdY2C
+ QcL1wvP3A7jChwDd813LQQwon5hJTMUcHx1LPUFSK0Vu8NhzeNCNDijrI4T6exSlNzmS
+ 42nw==
+X-Gm-Message-State: AOJu0YxxBYQMzalfeuHFldrdQsfyt45LnzYyjFsE4EClNQBeYt3TTbq3
+ MN3r08ekypkPgleY5M+1Lxw0Em4XI5A=
+X-Google-Smtp-Source: AGHT+IGB9AFQ+R7ZtdZdVR5Al4kmCBtIHctLVzoIisfJV4GgDTDqzxAxv7JyJDFubLWc4Xf2hB6iUQ==
+X-Received: by 2002:ac2:46c6:0:b0:503:256a:80cc with SMTP id
+ p6-20020ac246c6000000b00503256a80ccmr4702581lfo.42.1698006277669; 
+ Sun, 22 Oct 2023 13:24:37 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ o1-20020a5d6841000000b0031ad5fb5a0fsm6282888wrw.58.2023.10.22.13.24.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 22 Oct 2023 13:24:37 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 22 Oct 2023 22:24:33 +0200
+Message-ID: <20231022202433.33149-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231019203338.6450-1-brandon.maier@collins.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698000464;
- bh=plokR3g92d3x+VwBHViV2752RuokftAqFghSFpXmVIE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=M+rP8RXS7Cfd8LuysDD8EJPbxhOrtEfUqD54c1lyfXk9z1NIkfnUo0qRTLk6mI6Sm
- Ii2Dw/otnx3XTWOTIonVYYrK4W/7iFPVbZcMgO1tyuwnNugibMVtjnsgQEXCb0MOwJ
- ZaH7uGuqt4vsEM18buMEv3zRV/GW+jGun2E28eNE/8ukkR3V/TL0Ky7ndzi2Jpl8m7
- SJE5dC67k5X478JTxJST8VRKpOj9UjRYKT5V7blWDMpo5fjFM6bys8Tb5trIwFIjz6
- fRO2rCBg2FX/OuFgSQXX0qg+npgD9r3TCxDJDIAEt0sRFJ3RxGPZtcBqTNMdj6TQLF
- lEAYvcglKs8zA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=M+rP8RXS
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireless_tools: add option to
- build ifrename
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1698006278; x=1698611078; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=BV2etZyDWNB0f7NQ6EekszDnkD1QPyVwBLnEnkWMjf8=;
+ b=m9iq8R2iJ66zfxU7Q0RNmlYgEzv0ysjcO6tHtUTdp1ET4ormI600SJ+Wput25YX2Gi
+ AQvXsLJPp0uKgcJxDTKa8LDc2Kh7m9CLHBsGbY1SFpezTAh5JPnVZDKJVKCoj+R3jJTN
+ Zm4rWHCkVKWGZr2mNAOvyvqfIfNbBqd4lPElrvYvlS59bwyIb5NTboLl8wnYrgF2QCwI
+ 5eiNm3mzfd56C8KyeAYe9zLDdLP9o7NXA1ua0viUou6CcV0N/3PGLUw5S2m6tPbVq8eq
+ G+cgnL3GEYl2EhtRvVKc8OeNf72N7XwuP2j1JP7pEZg3AmarJ+HI1ZDKhVrnnMhpc1mD
+ UqAQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=m9iq8R2i
+Subject: [Buildroot] [PATCH 1/1] package/reproc: fix build with gcc >= 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,138 +93,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- "Neal J. Buchmeyer" <neal.buchmeyer@collins.com>, buildroot@buildroot.org
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Brandon, Neal, All,
+Fix the following build failure with gcc >= 13:
 
-On 2023-10-19 20:33 +0000, Brandon Maier via buildroot spake thusly:
-> From: "Neal J. Buchmeyer" <neal.buchmeyer@collins.com>
-> 
-> Add option to select ifrename tool which is part of the wireless_tools
-> suite. Also add an option to disable iwconfig for targets that only want
-> the library or ifrename.
+In file included from /home/buildroot/autobuild/instance-1/output-1/build/reproc-14.2.4/reproc++/src/reproc.cpp:1:
+/home/buildroot/autobuild/instance-1/output-1/build/reproc-14.2.4/reproc++/include/reproc++/reproc.hpp:95:5: error: declaration of 'reproc::options::<unnamed struct> reproc::options::env' changes meaning of 'env' [-Wchanges-meaning]
+   95 |   } env = {};
+      |     ^~~
+/home/buildroot/autobuild/instance-1/output-1/build/reproc-14.2.4/reproc++/include/reproc++/reproc.hpp:91:5: note: used here to mean 'class reproc::env'
+   91 |     env::type behavior;
+      |     ^~~
 
-Those are two semantically disjoint changes, so they should be two
-patches, preferably in this order:
- 1. one to allow only building the library (and make iwconfig optional)
- 2. one to add ifrename
+Fixes:
+ - http://autobuild.buildroot.org/results/11feca3698154c255938ab3b25a34429135c31f8
 
-Plus, see below...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-reproc-Try-to-fix-gcc-13-build.patch | 37 +++++++++++++++++++
+ package/reproc/0002-Fix-gcc-13-build.patch    | 28 ++++++++++++++
+ 2 files changed, 65 insertions(+)
+ create mode 100644 package/reproc/0001-reproc-Try-to-fix-gcc-13-build.patch
+ create mode 100644 package/reproc/0002-Fix-gcc-13-build.patch
 
-> Signed-off-by: Neal J. Buchmeyer <neal.buchmeyer@collins.com>
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> ---
->  package/wireless_tools/Config.in         | 12 ++++++++++++
->  package/wireless_tools/wireless_tools.mk | 22 ++++++++++++++++------
->  2 files changed, 28 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/wireless_tools/Config.in b/package/wireless_tools/Config.in
-> index 349908dbde..ad1c2e8e82 100644
-> --- a/package/wireless_tools/Config.in
-> +++ b/package/wireless_tools/Config.in
-> @@ -7,6 +7,18 @@ config BR2_PACKAGE_WIRELESS_TOOLS
->  
->  if BR2_PACKAGE_WIRELESS_TOOLS
->  
-> +config BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME
-> +	bool "Add ifrename"
-> +	help
-> +	  Build and install the ifrename tool
-> +
-> +config BR2_PACKAGE_WIRELESS_TOOLS_IWCONFIG
-> +	bool "Add iwconfig"
-> +	default y
-> +	help
-> +	  Build and install the iwconfig, iwlist, iwspy, iwpriv, and
-> +	  iwgetid tools.
-> +
->  config BR2_PACKAGE_WIRELESS_TOOLS_LIB
->  	bool "Install shared library"
->  	depends on !BR2_STATIC_LIBS
-> diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
-> index 1d29c3b102..210d8aa51a 100644
-> --- a/package/wireless_tools/wireless_tools.mk
-> +++ b/package/wireless_tools/wireless_tools.mk
-> @@ -14,8 +14,14 @@ WIRELESS_TOOLS_CPE_ID_VERSION = $(WIRELESS_TOOLS_VERSION_MAJOR)
->  WIRELESS_TOOLS_CPE_ID_UPDATE = pre9
->  WIRELESS_TOOLS_INSTALL_STAGING = YES
->  
-> -WIRELESS_TOOLS_BUILD_TARGETS = iwmulticall
-> -WIRELESS_TOOLS_INSTALL_TARGETS = install-iwmulticall
-> +ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME),y)
-> +WIRELESS_TOOLS_BUILD_TARGETS += ifrename
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_IWCONFIG),y)
-> +WIRELESS_TOOLS_BUILD_TARGETS += iwmulticall
-> +WIRELESS_TOOLS_INSTALL_TARGETS += install-iwmulticall
-> +endif
->  
->  ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
->  WIRELESS_TOOLS_BUILD_TARGETS += libiw.so.$(WIRELESS_TOOLS_VERSION_MAJOR)
-> @@ -30,13 +36,17 @@ endef
->  endif
->  
->  define WIRELESS_TOOLS_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-> -		$(WIRELESS_TOOLS_BUILD_TARGETS)
-> +	$(if $(WIRELESS_TOOLS_BUILD_TARGETS),
-> +		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
-> +		CFLAGS="$(TARGET_CFLAGS)" $(WIRELESS_TOOLS_BUILD_TARGETS))
->  endef
-
-So, if none of ifrename, iwconfig, or the library is enabled, then there
-is nothjing to build (or to install, below). In this case, it does not
-make sense to enable the package altogether.
-
-I think we must ensure that at least one of those are enabled, and
-iwconfig looks like the obvious candidate. So (elided for the sake of
-example):
-
-    config BR2_PACKAGE_WIRELESS_TOOLS
-        bool "wireless tools"
-        select BR2_PACKAGE_WIRELESS_TOOLS_IWCONFIG if \
-            !BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME && \
-            !BR2_PACKAGE_WIRELESS_TOOLS_LIB
-
-Of course, in the first patch, only BR2_PACKAGE_WIRELESS_TOOLS_LIB would
-be needed in the condition, with BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME
-added in patch 2.
-
-Regards,
-Yann E. MORIN.
-
->  define WIRELESS_TOOLS_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" LDCONFIG=/bin/true \
-> -		$(WIRELESS_TOOLS_INSTALL_TARGETS)
-> +	$(if $(WIRELESS_TOOLS_INSTALL_TARGETS),
-> +		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" \
-> +		LDCONFIG=/bin/true $(WIRELESS_TOOLS_INSTALL_TARGETS))
-> +	$(if $(BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME),
-> +		$(INSTALL) -D -m 755 $(@D)/ifrename $(TARGET_DIR)/sbin/ifrename)
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/reproc/0001-reproc-Try-to-fix-gcc-13-build.patch b/package/reproc/0001-reproc-Try-to-fix-gcc-13-build.patch
+new file mode 100644
+index 0000000000..22b21bcbc7
+--- /dev/null
++++ b/package/reproc/0001-reproc-Try-to-fix-gcc-13-build.patch
+@@ -0,0 +1,37 @@
++From 0b23d88894ccedde04537fa23ea55cb2f8365342 Mon Sep 17 00:00:00 2001
++From: Daan De Meyer <daan.j.demeyer@gmail.com>
++Date: Sat, 18 Mar 2023 19:38:19 +0100
++Subject: [PATCH] reproc++: Try to fix gcc 13 build
++
++Upstream: https://github.com/DaanDeMeyer/reproc/commit/0b23d88894ccedde04537fa23ea55cb2f8365342
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ reproc++/include/reproc++/reproc.hpp | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/reproc++/include/reproc++/reproc.hpp b/reproc++/include/reproc++/reproc.hpp
++index ab6f1394..e883ecec 100644
++--- a/reproc++/include/reproc++/reproc.hpp
+++++ b/reproc++/include/reproc++/reproc.hpp
++@@ -88,7 +88,7 @@ struct redirect {
++ 
++ struct options {
++   struct {
++-    env::type behavior;
+++    enum env::type behavior;
++     /*! Implicitly converts from any STL container of string pairs to the
++     environment format expected by `reproc_start`. */
++     class env extra;
++@@ -97,9 +97,9 @@ struct options {
++   const char *working_directory = nullptr;
++ 
++   struct {
++-    redirect in;
++-    redirect out;
++-    redirect err;
+++    struct redirect in;
+++    struct redirect out;
+++    struct redirect err;
++     bool parent;
++     bool discard;
++     FILE *file;
+diff --git a/package/reproc/0002-Fix-gcc-13-build.patch b/package/reproc/0002-Fix-gcc-13-build.patch
+new file mode 100644
+index 0000000000..3e06a2a396
+--- /dev/null
++++ b/package/reproc/0002-Fix-gcc-13-build.patch
+@@ -0,0 +1,28 @@
++From 9f399675b821e175f85ac3ee6e3fd2e6056573eb Mon Sep 17 00:00:00 2001
++From: Daan De Meyer <daan.j.demeyer@gmail.com>
++Date: Fri, 21 Apr 2023 19:36:45 +0200
++Subject: [PATCH] Fix gcc 13 build
++
++Upstream: https://github.com/DaanDeMeyer/reproc/commit/9f399675b821e175f85ac3ee6e3fd2e6056573eb
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ reproc++/include/reproc++/reproc.hpp | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/reproc++/include/reproc++/reproc.hpp b/reproc++/include/reproc++/reproc.hpp
++index b52f495e..7b614a94 100644
++--- a/reproc++/include/reproc++/reproc.hpp
+++++ b/reproc++/include/reproc++/reproc.hpp
++@@ -88,10 +88,10 @@ struct redirect {
++ 
++ struct options {
++   struct {
++-    enum env::type behavior;
+++    reproc::env::type behavior;
++     /*! Implicitly converts from any STL container of string pairs to the
++     environment format expected by `reproc_start`. */
++-    class env extra;
+++    reproc::env extra;
++   } env = {};
++ 
++   const char *working_directory = nullptr;
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
