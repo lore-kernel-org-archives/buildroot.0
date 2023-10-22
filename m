@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0005FC001DF
-	for <buildroot@archiver.kernel.org>; Sun, 22 Oct 2023 11:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A43C001DF
+	for <buildroot@archiver.kernel.org>; Sun, 22 Oct 2023 11:37:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89C368504F;
-	Sun, 22 Oct 2023 11:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89C368504F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 006B4853D7;
+	Sun, 22 Oct 2023 11:37:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 006B4853D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rFdqglFcleDY; Sun, 22 Oct 2023 11:30:41 +0000 (UTC)
+	with ESMTP id wUKKKpNu-uRX; Sun, 22 Oct 2023 11:37:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5C8D84F88;
-	Sun, 22 Oct 2023 11:30:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5C8D84F88
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 32A6A1BF5AD
- for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 11:30:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C930853D5;
+	Sun, 22 Oct 2023 11:37:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C930853D5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FB071BF282
+ for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 11:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 180E14EF67
- for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 11:30:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 180E14EF67
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED2F7853D1
+ for <buildroot@lists.busybox.net>; Sun, 22 Oct 2023 11:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED2F7853D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cC-F8SoaJLUu for <buildroot@lists.busybox.net>;
- Sun, 22 Oct 2023 11:30:37 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7DDEA4AC55
- for <buildroot@buildroot.org>; Sun, 22 Oct 2023 11:30:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DDEA4AC55
-Received: from webmail.free.fr (unknown [172.20.246.2])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OyJTDuK4qA-c for <buildroot@lists.busybox.net>;
+ Sun, 22 Oct 2023 11:37:21 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC7D0853D0
+ for <buildroot@buildroot.org>; Sun, 22 Oct 2023 11:37:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC7D0853D0
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 9617019F5A7;
- Sun, 22 Oct 2023 13:30:31 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:46070])
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id D574A78032A;
+ Sun, 22 Oct 2023 13:37:16 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:56754])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 22 Oct 2023 13:30:31 +0200
+ with HTTP (HTTP/1.0 POST); Sun, 22 Oct 2023 13:37:16 +0200
 MIME-Version: 1.0
-Date: Sun, 22 Oct 2023 13:30:31 +0200
+Date: Sun, 22 Oct 2023 13:37:16 +0200
 From: Julien Olivain <ju.o@free.fr>
 To: Marcus Folkesson <marcus.folkesson@gmail.com>
 In-Reply-To: <ZTPtYruqfAvaqHCj@gmail.com>
 References: <20231020060236.3725194-1-marcus.folkesson@gmail.com>
  <7a3a5533d8fc664535be030d5d1242f1@free.fr> <ZTPtYruqfAvaqHCj@gmail.com>
 User-Agent: Webmail Free/1.6.4
-Message-ID: <b9762c5aeabb8feb81d5ba7549037b75@free.fr>
+Message-ID: <d035b49a837bf89d67fd267a05170b49@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1697974233;
- bh=QAJXhTcDYbCLQpS8uKI3/jbNW2bLAAcDMbNb85GsF4I=;
+ d=free.fr; s=smtp-20201208; t=1697974638;
+ bh=cUfDwFvaeC57D7ScO93JwzH+CgzFsWiOly2QAbTW0Q8=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=rl0T+EE00yDPRxBwRpvVg44pj8tBr6QuNU80eeZx03zGpTLvIP+93cG4vajZn/Hc8
- btO656KUQzVkB7+uF9UBw1nFLDRtjZX/EAy0/rLM2X+p/oTsn9diHvy+q088CCCDsb
- ANOvmT1RLi1u9H7YHyQM8TU9L/XoEH812FY9420uxa6u71zJYa25DOvidvqOd3O2CP
- 9pzCZn1AX8i2x8pTNJCmI8YlUpEbvSOxQqFsaK2dH8XVYb1+BeloJDrhkIiRP+bqkp
- /XvzXwbqknyR7ECMMYOcfYqePPwuwY90R1MA42PXWLEAtmtTJJy5zJLTT4bU9AVYzg
- tlYz5hBoX+UCA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=buFS1ox0NawZqEEdAUMRaKDUgOXK+EPqskpdmJQh+ew1R/OuO9GTVH2AhNIIGf9Gq
+ 8pJqNy3p445FifUGD46fInZ3Ltb8Ly3wOxJfkqR69nr5okdW5QfTTGNg00XKMB7QaZ
+ WTMsmX27qOUf/Bzaw5KftMr8w/OR1c9+ouxE1lXW42BhOqRHH/QSEa9qEPQe96DqWV
+ mNZFTtm1qrCz7y+MwIn+Vjrft4DOZ8gyNmP7l0PPSK8JNxYF+STXwPfErBTXVjkqtu
+ usn/HDEP/WGmgVgBA6BOcOWb3CF85uu9XaPV46bhwvcxtQcKFuUGHNQLpbA7NbtLO1
+ UEb+jT8wbKjaA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=rl0T+EE0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=buFS1ox0
 Subject: Re: [Buildroot] [PATCH v4] package/criu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -88,56 +88,48 @@ Hi Marcus,
 On 21/10/2023 17:25, Marcus Folkesson wrote:
 > Hi Julien,
 > 
-> Thank you for your solid review!
-> 
-> I will apply all changes you suggested.
-> 
-> On Sat, Oct 21, 2023 at 01:15:10PM +0200, Julien Olivain wrote:
->> Hi Marcus,
+
+[...]
+
+>> > +
+>> > +menuconfig BR2_PACKAGE_CRIU
+>> > +	bool "criu"
+>> > +	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+>> > +	depends on BR2_PACKAGE_HOST_PYTHON3 # host-python3-ssl
+>> > +	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
+>> > +	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+>> > +	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+>> > +	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+>> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
 >> 
->> Thanks for the updated patch!
+>> A dependency on kernel header >= 4.18 should be added:
 >> 
+>>     depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
 > 
-> [...]
->>            bootlin-x86-64-uclibc [26/45]: FAILED
->> 
->> Build fails with output:
->> 
->>     criu/fsnotify.c:18:10: fatal error: aio.h: No such file or 
->> directory
->>        18 | #include <aio.h>
->>           |          ^~~~~~~
 > 
-> Not sure that to do about this. It already depends on libaio.
+> This makes the bootlin-x86-64-musl test to be skipped as it has
+> BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 at highest.
+> 
+> The build used to succeed though :-/
 
-There is something strange here, in the criu code:
+Ah, good point. Adding this kernel >= 4.18 requirement would
+indeed exclude some working cases...
 
-libaio (Linux AIO) normally provides the "libaio.h" header file. See:
-https://pagure.io/libaio/blob/master/f/src/libaio.h
+criu has some logic to detect if a libc provides rseq.h. See:
+https://github.com/checkpoint-restore/criu/blob/v3.18/scripts/feature-tests.mak#L187
+which define CONFIG_HAS_NO_LIBC_RSEQ_DEFS.
 
-This header file is used exactly once in a criu test, here:
-https://github.com/checkpoint-restore/criu/blob/v3.18/test/zdtm/static/aio00.c#L1
+In the case of the working bootlin-x86-64-musl toolchain, we have a
+4.14 kernel without linux/rseq.h AND a libc also not providing
+sys/rseq.h.
 
-The rest of the code uses "aio.h" and <aio.h> (Posix AIO).
+In the failing bootlin-aarch64-glibc toolchain, we have a kernel
+headers without linux/rseq.h, but a glibc with sys/rseq.h.
 
-criu code also includes its own "aio.h" file:
-https://github.com/checkpoint-restore/criu/blob/v3.18/criu/include/aio.h
+I did not investigated any further.
 
-The <aio.h> header file is normally provided by the libc, if
-implemented. See glibc for example:
-https://sourceware.org/git/?p=glibc.git;a=blob;f=include/aio.h
-
-musl does also provide aio.h, see for example:
-https://git.musl-libc.org/cgit/musl/tree/include/aio.h?h=v1.2.4
-
-uclibc-ng does not currently provide aio.h.
-
-So maybe this means criu requires a libc with aio.h?
-In that case, that would mean this packages need a dependency on:
-
-     depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
-
-Were you ever able to do a successful build with uclibc?
+Maybe there is a corner case in the criu detection logic and it could
+be patched to support it?
 
 Best regards,
 
