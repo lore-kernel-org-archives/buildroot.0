@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2992BCDB474
-	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 09:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E63C9CDB474
+	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 09:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6C4F4150A;
-	Mon, 23 Oct 2023 09:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6C4F4150A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 891784150A;
+	Mon, 23 Oct 2023 09:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 891784150A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id khZc5o1HNsUF; Mon, 23 Oct 2023 09:25:39 +0000 (UTC)
+	with ESMTP id tkQNRJTzNZY7; Mon, 23 Oct 2023 09:25:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8787341453;
-	Mon, 23 Oct 2023 09:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8787341453
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 012AF1BF35D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8428B414C7;
+	Mon, 23 Oct 2023 09:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8428B414C7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B238E1BF35D
  for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE7BC60F3E
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE7BC60F3E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 98ACD80FB2
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98ACD80FB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1iaur-ngfHnj for <buildroot@lists.busybox.net>;
- Mon, 23 Oct 2023 09:25:10 +0000 (UTC)
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com
- [IPv6:2a00:1450:4864:20::141])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E525C60011
- for <buildroot@buildroot.org>; Mon, 23 Oct 2023 09:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E525C60011
-Received: by mail-lf1-x141.google.com with SMTP id
- 2adb3069b0e04-507b9408c61so4176735e87.0
- for <buildroot@buildroot.org>; Mon, 23 Oct 2023 02:25:09 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7KJ_fSryDjM4 for <buildroot@lists.busybox.net>;
+ Mon, 23 Oct 2023 09:25:11 +0000 (UTC)
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com
+ [IPv6:2a00:1450:4864:20::244])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ACD0980EEC
+ for <buildroot@buildroot.org>; Mon, 23 Oct 2023 09:25:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACD0980EEC
+Received: by mail-lj1-x244.google.com with SMTP id
+ 38308e7fff4ca-2c50906f941so46275531fa.2
+ for <buildroot@buildroot.org>; Mon, 23 Oct 2023 02:25:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698053107; x=1698657907;
+ d=1e100.net; s=20230601; t=1698053108; x=1698657908;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=v3FK9919tLvjgwK2ZEosZMSjLB10eVaGGSCoeqE7E7s=;
- b=iANxAHw/8VpInIB2mek+NntIuhV/WeqFjLsT3c9cqTgshU8h7oXGr+gE06ri7B2o16
- JJP9TCloTzyILKXoLIFgUj1+E1BXnhizrWhZyq0KzmJiiE0bsS9dbRYhy1453orhVugR
- J+fZ52H/gAMYApkl/fsPmgbp5I5MzNTEgAhef98Q0THB9iOj/JGsV+0duY6E7tYjklnP
- s0AF77OKznAlVDlui2/ir4z7G9jKmOdQURLeqsNZtbwbajljcjV5Ubr8ZATRRmKw0nW1
- D4OD+LY3OHkyq0rKccASN8uzZj6YmlwEFaf/fwsObsBTnZcGUHJ3Igu4/1kt7WEh16tm
- mSMQ==
-X-Gm-Message-State: AOJu0YzXTLbyZ4cNsbUw4dL5JpbPkYQymMhsp4XgNHJqAJByjibLELwh
- Owjb23a6dAUhPw1vG6ToG5mpOVkT5YWHYxiYNeWNCI8b0sIBdQ==
-X-Google-Smtp-Source: AGHT+IGqDNRq68spRASsa0BVGyLS9WhQ/O1Czzbw2xIocHppj/BnPLjLprX/Fj8y9Wo6cxSgyb1siw==
-X-Received: by 2002:a05:6512:4885:b0:507:a984:bf40 with SMTP id
- eq5-20020a056512488500b00507a984bf40mr6705014lfb.47.1698053107124; 
- Mon, 23 Oct 2023 02:25:07 -0700 (PDT)
+ bh=lu3JOxTBlO+Mf4ZYNWjOGJekB967Yl7LwWBFkKVNtsk=;
+ b=nTZ642yrTuR3JXGp1aBHIdMVui9PKSY8ThMEjJ9iR+HCdK4K0EZooFl4oAxB9Y/2P/
+ cuPpII9C6Dqp/hSzwrpz7qF9m2beHzfvbyhqAp7syXV65A/ZgLIGFOgvYv4D1NBJ1fnR
+ ix7JNXceRZ8w1bQWwzfZtrQhv4O3SowuQZl2j/b28hAw6QAXu/yOaRYRxEw7THrfGMob
+ HxiTPOxfm/apbD+XujORSl2scoDYHpDjCqbdV3/WyFpuRJIU60VPpGgCu2lTpYpIBBNz
+ w7MN81wOBwwZWw4I1dMlgMbyCD84mlO4mWfzyMhWWFkX506+sajNetCsFPKQB9ya+5gI
+ tk1g==
+X-Gm-Message-State: AOJu0YyVbwBEvho30qOL6XwDDJmB1hPQ82egFsVy/uSALU5e9lYEApxY
+ oD+9RSMG9zNfved3AAdQoI4Vp2QCgjV00X9rf/EA1HkarqoRzw==
+X-Google-Smtp-Source: AGHT+IEKY9Bvvb98iL/07ZLtuRWjbykp/rYeHcq9HPOHni4Ey0oTka9WZzmYgPni7c38eHvWBsSTWQ==
+X-Received: by 2002:a2e:b04b:0:b0:2c5:1b01:b67f with SMTP id
+ d11-20020a2eb04b000000b002c51b01b67fmr5812475ljl.52.1698053108371; 
+ Mon, 23 Oct 2023 02:25:08 -0700 (PDT)
 Received: from fedora.. (host185138219236.static.fidoka.tech.
  [185.138.219.236]) by smtp.gmail.com with ESMTPSA id
- l22-20020a05600c1d1600b004042dbb8925sm13911859wms.38.2023.10.23.02.25.06
+ l22-20020a05600c1d1600b004042dbb8925sm13911859wms.38.2023.10.23.02.25.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Oct 2023 02:25:06 -0700 (PDT)
+ Mon, 23 Oct 2023 02:25:07 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 Oct 2023 11:24:56 +0200
-Message-ID: <20231023092501.481436-3-adam.duskett@amarulasolutions.com>
+Date: Mon, 23 Oct 2023 11:24:57 +0200
+Message-ID: <20231023092501.481436-4-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231023092501.481436-1-adam.duskett@amarulasolutions.com>
 References: <20231023092501.481436-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1698053107; x=1698657907;
+ d=amarulasolutions.com; s=google; t=1698053108; x=1698657908;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=v3FK9919tLvjgwK2ZEosZMSjLB10eVaGGSCoeqE7E7s=;
- b=p+xWGJtTzPrgEfEkmOC7go5YsyuOZNoPXK5m/DG6qmUNy99pL5gtpzWVw4LDL1SHNQ
- hBlSt+H4aaQ9XJMBta84ZeNKVf9nZ0lusHaZSqsEL9eP23btbbwAGdUAwomwJrEvUvS6
- 3ZW3UPu0JC9VKRXESt+xEZctBtf+52NUXYeAQ=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=lu3JOxTBlO+Mf4ZYNWjOGJekB967Yl7LwWBFkKVNtsk=;
+ b=k/Z8GX2eCrjypZXsYhijq63UAvN6toUxSy6WQM7hrYRJRQTfq1MnS1CUaV7pzuMdaw
+ RkSD0urGncs/90ntjPTESHioa+l64VPKRGRPEpvxTIVQ2Rt6zigShVmCaWahjqo9jIX7
+ rGpVqTwXt2Z4VMM6JRHxyLEjfQ9LDMZ9AcIAc=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=p+xWGJtT
-Subject: [Buildroot] [PATCH 3/8] package/opkg: add zstd support
+ header.b=k/Z8GX2e
+Subject: [Buildroot] [PATCH 4/8] package/opkg: add xz suspport
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,54 +104,45 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/opkg/Config.in | 8 ++++++++
- package/opkg/opkg.mk   | 9 ++++++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ package/opkg/Config.in | 6 ++++++
+ package/opkg/opkg.mk   | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
 diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-index 1f6a39343f..c3c2463393 100644
+index c3c2463393..679214beea 100644
 --- a/package/opkg/Config.in
 +++ b/package/opkg/Config.in
-@@ -30,4 +30,12 @@ config BR2_PACKAGE_OPKG_GPG_SIGN
- 	  Enable opkg package signature checking support using
- 	  gnupg/libgpgme.
+@@ -32,6 +32,12 @@ config BR2_PACKAGE_OPKG_GPG_SIGN
  
-+comment "compression support"
-+
-+config BR2_PACKAGE_OPKG_ZSTD
-+	bool "zstd support"
-+	select BR2_PACKAGE_ZSTD
+ comment "compression support"
+ 
++config BR2_PACKAGE_OPKG_XZ
++	bool "xz support"
++	select BR2_PACKAGE_XZ
 +	help
-+	  Enable zstd compressor support.
++	  Enable xz compressor support.
 +
- endif
+ config BR2_PACKAGE_OPKG_ZSTD
+ 	bool "zstd support"
+ 	select BR2_PACKAGE_ZSTD
 diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index 9b1ffb3c74..605d4de82f 100644
+index 605d4de82f..e32dd1a84c 100644
 --- a/package/opkg/opkg.mk
 +++ b/package/opkg/opkg.mk
-@@ -10,7 +10,7 @@ OPKG_DEPENDENCIES = host-pkgconf libarchive
- OPKG_LICENSE = GPL-2.0+
- OPKG_LICENSE_FILES = COPYING
- OPKG_INSTALL_STAGING = YES
--OPKG_CONF_OPTS = --disable-curl --disable-zstd
-+OPKG_CONF_OPTS = --disable-curl
- 
- # Ensure directory for lockfile exists
- define OPKG_CREATE_LOCKDIR
 @@ -27,6 +27,13 @@ else
  OPKG_CONF_OPTS += --disable-gpg
  endif
  
-+ifeq ($(BR2_PACKAGE_OPKG_ZSTD),y)
-+OPKG_DEPENDENCIES += zstd
-+OPKG_CONF_OPTS += --enable-zstd
++ifeq ($(BR2_PACKAGE_OPKG_XZ),y)
++OPKG_DEPENDENCIES += xz
++OPKG_CONF_OPTS += --enable-xz
 +else
-+OPKG_CONF_OPTS += --disable-zstd
++OPKG_CONF_OPTS += --disable-xz
 +endif
 +
- OPKG_POST_INSTALL_TARGET_HOOKS += OPKG_CREATE_LOCKDIR
- 
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_OPKG_ZSTD),y)
+ OPKG_DEPENDENCIES += zstd
+ OPKG_CONF_OPTS += --enable-zstd
 -- 
 2.41.0
 
