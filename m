@@ -4,48 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97A24C25B45
-	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 19:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 899E8C25B45
+	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 19:37:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3811461307;
-	Mon, 23 Oct 2023 19:30:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3811461307
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12E8061323;
+	Mon, 23 Oct 2023 19:37:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12E8061323
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TJEbvlU_TRnA; Mon, 23 Oct 2023 19:30:20 +0000 (UTC)
+	with ESMTP id LKaVrOzyvCqE; Mon, 23 Oct 2023 19:37:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CBA26130A;
-	Mon, 23 Oct 2023 19:30:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CBA26130A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D16FD1BF2BC
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 19:30:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6315F6131F;
+	Mon, 23 Oct 2023 19:37:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6315F6131F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 14A621BF36C
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 19:37:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B6F681F10
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 19:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B6F681F10
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE6AD4207B
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 19:37:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE6AD4207B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NAZJ3qHsTGpT for <buildroot@lists.busybox.net>;
- Mon, 23 Oct 2023 19:30:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tNWVqzT0zQdn for <buildroot@lists.busybox.net>;
+ Mon, 23 Oct 2023 19:37:11 +0000 (UTC)
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7FAFE80C41
- for <buildroot@uclibc.org>; Mon, 23 Oct 2023 19:30:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FAFE80C41
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2094B42164
+ for <buildroot@uclibc.org>; Mon, 23 Oct 2023 19:37:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2094B42164
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qv0cr-00042h-IV
- for buildroot@uclibc.org; Mon, 23 Oct 2023 21:30:09 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qv0jc-0002qX-FQ
+ for buildroot@uclibc.org; Mon, 23 Oct 2023 21:37:08 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Mon, 23 Oct 2023 21:29:13 +0200
-Message-ID: <pan$8116c$14c376a1$11e18b6b$7ba3e986@ID-313208.user.individual.net>
-References: <20231016211414.28406-1-fontaine.fabrice__49164.7157048405$1697490885$gmane$org@gmail.com>
+Date: Mon, 23 Oct 2023 21:36:11 +0200
+Message-ID: <pan$455c4$fdeb1b54$fe1f7f5c$b1f78f42@ID-313208.user.individual.net>
+References: <20231022162052.540388-1-bernd@kuhls.net>
+ <721a32e6.19ae.18b5a5d7704.Coremail.andyshrk@163.com>
+ <ZTY9wZpTWfdBwdx3__21731.7699267127$1698053611$gmane$org@fdugast-desk.home>
 Mime-Version: 1.0
 User-Agent: Pan/0.154 (Izium; 517acf4)
-Subject: Re: [Buildroot] [PATCH 1/1] package/samba4: fix configure
+Subject: Re: [Buildroot] [PATCH v4 1/1] package/igt-gpu-tools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,15 +64,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Mon, 16 Oct 2023 23:14:14 +0200 schrieb Fabrice Fontaine:
+Am Mon, 23 Oct 2023 11:32:49 +0200 schrieb Francois Dugast:
 
-> Fix the following build failure raised since bump to version 4.19.1 in
-> commit a8ff60cff9402dcd04fffb67af15dfe2caab0995 and
-> https://gitlab.com/samba-team/samba/-/commit/
-fb4bb188acfc3e88887b500a05e9e4db8b08aed3:
+> Besides, something seems wrong with the binaries because I get this
+> error when executing any of them:
+> 
+>     # igt_stats igt_stats[102]: segfault at 2a9f6 ip 000000000002a9f6 sp
+>     00007ffe1c1ff258 error 14 in igt_stats[55eb718d8000+1000] likely on
+>     CPU 0 (core 0, socket 0)
+>     Code: Unable to access opcode bytes at 0x2a9cc.
+>     Segmentation fault
 
-Tested-by: Bernd Kuhls <bernd@kuhls.net>
-[build-tested]
+Hi Francois,
+
+building igt_stats with these default options changed
+
+BR2_SSP_NONE=y
+BR2_RELRO_NONE=y
+BR2_FORTIFY_SOURCE_NONE=y
+BR2_ENABLE_DEBUG=y
+BR2_ENABLE_RUNTIME_DEBUG=y
+# BR2_STRIP_strip is not set
+BR2_OPTIMIZE_G=y
+
+solved the segfault, maybe the problem is related to
+https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/issues/
+102#note_1253728 ?
+
+Regards, Bernd
 
 _______________________________________________
 buildroot mailing list
