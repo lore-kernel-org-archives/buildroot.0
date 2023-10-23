@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 116BFC25B46
-	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 17:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEFB5C25B45
+	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 17:27:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB6694226E;
-	Mon, 23 Oct 2023 17:25:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB6694226E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9015542274;
+	Mon, 23 Oct 2023 17:27:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9015542274
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rDjYHreAwiDk; Mon, 23 Oct 2023 17:25:56 +0000 (UTC)
+	with ESMTP id nllNJun6xvd9; Mon, 23 Oct 2023 17:27:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D100F42254;
-	Mon, 23 Oct 2023 17:25:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D100F42254
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 992EB1BF371
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 17:25:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDC954226E;
+	Mon, 23 Oct 2023 17:27:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDC954226E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 979851BF371
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 17:26:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F03E8347D
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 17:25:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F03E8347D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F20A4226E
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 17:26:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F20A4226E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bwpu6xNB_uIk for <buildroot@lists.busybox.net>;
- Mon, 23 Oct 2023 17:25:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b3TO0GNspbxo for <buildroot@lists.busybox.net>;
+ Mon, 23 Oct 2023 17:26:58 +0000 (UTC)
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 31F39830A7
- for <buildroot@buildroot.org>; Mon, 23 Oct 2023 17:25:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31F39830A7
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7722842254
+ for <buildroot@buildroot.org>; Mon, 23 Oct 2023 17:26:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7722842254
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:8ed0:8cf1:4440:5c7b])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 729002003F3;
- Mon, 23 Oct 2023 19:25:48 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 9607E2003F3;
+ Mon, 23 Oct 2023 19:26:53 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 23 Oct 2023 19:25:48 +0200
-Date: Mon, 23 Oct 2023 19:25:48 +0200
+ Mon, 23 Oct 2023 19:26:53 +0200
+Date: Mon, 23 Oct 2023 19:26:53 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231023172548.GZ2607@scaer>
+Message-ID: <20231023172653.GA2607@scaer>
 References: <20231023092501.481436-1-adam.duskett@amarulasolutions.com>
- <20231023092501.481436-3-adam.duskett@amarulasolutions.com>
+ <20231023092501.481436-8-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231023092501.481436-3-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20231023092501.481436-8-adam.duskett@amarulasolutions.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698081951;
- bh=uZx4Tv8exVVLf/AwkOW5Sp5xI0nuzyYpjpBnRi1N39o=;
+ d=free.fr; s=smtp-20201208; t=1698082016;
+ bh=r3HIFhGfO/i+iXl5lRFit3y5T4nVAi98VngaU94d7Jc=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=YdEOi8zpkxEsfOOdyC90+2UbIXuJk3q76X/LoaI5WuHG5oXsw/dL67FfTqaV9lusd
- 8SP0UovYlqj3q+m7gk8aVB0q8NZh3QKjmExJkYGCpNQ2h5HKOdkKnLwnwLJCy1UfeH
- qlG+syYN2TeVQ/OQMCPVhvE1GDuSUC4VUGnlfi3CFM16f1QO4/reebVCltNeDBCIKw
- DEGZAxnl4vPN0ZKHOtG2PirPxp2DWiPyArJNpuyIIc7k8XJfUh33De9VQ3RHyLYzXi
- ZMsQNkWi7TFqsAJyzQtScWniNEBo/jM7+t2iFjgxbHflfcLNadXVZCOTFKZK8+vK2a
- XGAoMiJSNZQgQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=XRS8PybGTtHIjzzum8d5lbZ3RSFsmIxeOlHwiX7iHk21drfq82dUyYf/3vwBgBr6s
+ tl4agpp5guU1D019StnvynEY3Cx+bRfeyIunCf8mYmpHbVTMoHdZMEAX5KN2kzRzhI
+ GWq/NWgevx6j3TZL+X7ZAMdL/7LUx7oNve3/R0EkalFwKuydocc9esztkpdR7UrQXT
+ argdH3pTS3xsAUcQmMU6BMdLQK+c1dV8p4sKTRuO9du9zxZ/IW5He9c7usB8ZKGxAX
+ I7SNi77qtT1qo1ogub6LUIHtalIEpYyw19c0WS/sFKTJvbbkMA5fcUogZ9AqKKIUO5
+ maMl3nzavvfsg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YdEOi8zp
-Subject: Re: [Buildroot] [PATCH 3/8] package/opkg: add zstd support
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XRS8PybG
+Subject: Re: [Buildroot] [PATCH 8/8] package/opkg: add sha256sum support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,81 +85,55 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Adam, All,
 
-On 2023-10-23 11:24 +0200, Adam Duskett spake thusly:
+On 2023-10-23 11:25 +0200, Adam Duskett spake thusly:
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 > ---
->  package/opkg/Config.in | 8 ++++++++
->  package/opkg/opkg.mk   | 9 ++++++++-
->  2 files changed, 16 insertions(+), 1 deletion(-)
+>  package/opkg/Config.in | 5 +++++
+>  package/opkg/opkg.mk   | 6 ++++++
+>  2 files changed, 11 insertions(+)
 > 
 > diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-> index 1f6a39343f..c3c2463393 100644
+> index adf39ca145..0104f48623 100644
 > --- a/package/opkg/Config.in
 > +++ b/package/opkg/Config.in
-> @@ -30,4 +30,12 @@ config BR2_PACKAGE_OPKG_GPG_SIGN
+> @@ -36,6 +36,11 @@ config BR2_PACKAGE_OPKG_GPG_SIGN
 >  	  Enable opkg package signature checking support using
 >  	  gnupg/libgpgme.
 >  
-> +comment "compression support"
-> +
-> +config BR2_PACKAGE_OPKG_ZSTD
-> +	bool "zstd support"
-> +	select BR2_PACKAGE_ZSTD
+> +config BR2_PACKAGE_OPKG_SHA256
+> +	bool "sha256sum check support"
 > +	help
-> +	  Enable zstd compressor support.
+> +	  Enable sha256sum check
 
-The usual way if a library is optional, is to rely on that library being
-enabled by the user, not by adding options for each.
-
-So I dropped the option, and...
-
->  endif
-> diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-> index 9b1ffb3c74..605d4de82f 100644
-> --- a/package/opkg/opkg.mk
-> +++ b/package/opkg/opkg.mk
-> @@ -10,7 +10,7 @@ OPKG_DEPENDENCIES = host-pkgconf libarchive
->  OPKG_LICENSE = GPL-2.0+
->  OPKG_LICENSE_FILES = COPYING
->  OPKG_INSTALL_STAGING = YES
-> -OPKG_CONF_OPTS = --disable-curl --disable-zstd
-> +OPKG_CONF_OPTS = --disable-curl
->  
->  # Ensure directory for lockfile exists
->  define OPKG_CREATE_LOCKDIR
-> @@ -27,6 +27,13 @@ else
->  OPKG_CONF_OPTS += --disable-gpg
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_OPKG_ZSTD),y)
-
-... changed this to directly depend on the zstd libray to be enabled.
-
-I see that you tried and did like the gpg support, but that was added 10
-years ago now [0], and we may have been a little bit less trict then.
-Now, let's try to be more consistent.
-
-I've done so for all the other compression support and for libcurl, so I
-will not reply to each individually to repeat the same thing; consider
-they have been handled like this patch.
+There is no reason to make that conditional: the code size increase is
+minor, sha1 adn md5 are broken so sha256 is the smallest hash still not
+broken, and it has no depenency; so I made it unconditional.
 
 Applied to master, thanks.
-
-[0] and that was even the commit that separated the hook macro and the
-hook assignemnt further apart; I've fixed that now.
 
 Regards,
 Yann E. MORIN.
 
-> +OPKG_DEPENDENCIES += zstd
-> +OPKG_CONF_OPTS += --enable-zstd
+>  comment "compression support"
+>  
+>  config BR2_PACKAGE_OPKG_BZIP2
+> diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+> index 730aa4cfe7..ce0b74f549 100644
+> --- a/package/opkg/opkg.mk
+> +++ b/package/opkg/opkg.mk
+> @@ -38,6 +38,12 @@ else
+>  OPKG_CONF_OPTS += --disable-gpg
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPKG_SHA256),y)
+> +OPKG_CONF_OPTS += --enable-sha256
 > +else
-> +OPKG_CONF_OPTS += --disable-zstd
+> +OPKG_CONF_OPTS += --disable-sha256
 > +endif
 > +
->  OPKG_POST_INSTALL_TARGET_HOOKS += OPKG_CREATE_LOCKDIR
->  
->  $(eval $(autotools-package))
+>  ifeq ($(BR2_PACKAGE_OPKG_BZIP2),y)
+>  OPKG_DEPENDENCIES += bzip2
+>  OPKG_CONF_OPTS += --enable-bzip2
 > -- 
 > 2.41.0
 > 
