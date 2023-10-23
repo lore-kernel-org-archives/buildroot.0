@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B0E0CDB474
-	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 09:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91FF0C001E0
+	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 09:26:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0ED6D41490;
-	Mon, 23 Oct 2023 09:26:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ED6D41490
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39A1741565;
+	Mon, 23 Oct 2023 09:26:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39A1741565
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LIMrbwIEptZb; Mon, 23 Oct 2023 09:26:38 +0000 (UTC)
+	with ESMTP id 6il-llkAsDwz; Mon, 23 Oct 2023 09:26:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D030041556;
-	Mon, 23 Oct 2023 09:26:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D030041556
+	by smtp2.osuosl.org (Postfix) with ESMTP id 04A1F40A94;
+	Mon, 23 Oct 2023 09:26:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04A1F40A94
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 95B0E1BF955
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4E2191BF35D
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E93281026
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E93281026
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EBB181026
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EBB181026
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qZnvrL8J9R0j for <buildroot@lists.busybox.net>;
- Mon, 23 Oct 2023 09:25:13 +0000 (UTC)
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com
- [IPv6:2a00:1450:4864:20::242])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 86CB880FFE
- for <buildroot@buildroot.org>; Mon, 23 Oct 2023 09:25:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86CB880FFE
-Received: by mail-lj1-x242.google.com with SMTP id
- 38308e7fff4ca-2c51388ccebso45114231fa.3
- for <buildroot@buildroot.org>; Mon, 23 Oct 2023 02:25:13 -0700 (PDT)
+ with ESMTP id iaMZgWFd5gDS for <buildroot@lists.busybox.net>;
+ Mon, 23 Oct 2023 09:25:14 +0000 (UTC)
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
+ [IPv6:2a00:1450:4864:20::344])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 406A381006
+ for <buildroot@buildroot.org>; Mon, 23 Oct 2023 09:25:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 406A381006
+Received: by mail-wm1-x344.google.com with SMTP id
+ 5b1f17b1804b1-4083f61312eso25033925e9.3
+ for <buildroot@buildroot.org>; Mon, 23 Oct 2023 02:25:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698053111; x=1698657911;
+ d=1e100.net; s=20230601; t=1698053112; x=1698657912;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=jKiss2ee1pUivtNXHxRU2ScPGM7K1NmIowdyNMXMTDU=;
- b=i8q5RI7nJEzPG7IHwcrBAUDcXaQEwX/mE/TjVQ9lLkV+XY7xUVzug87mk/Om3tYBN0
- ijbJX+f0V9uVLuFicD4lEulG+xtqdfRvS0szYjw1l4Lju0wbz5yYxe8DkWa44EQT9BGC
- 378Cfw9EPiVtX4pqjk1BrWbM3m5QkkH4L9/KtnvWb5R6UTy6oumfgwfwtVqVG+Tb5G0r
- xtBhLhVPzRmsRVnTV5xFY3LVHGFkrJD5cdomVyk3xY/iY0jW7dINxpeb9gKyEzyrMpcs
- Gz60xPXdjDZKqFq9rYMAlV0H/lP4TPzpwZre0au3hxxUBNwKw8Z6V4C+JUeOw7bB9wmJ
- 3RyA==
-X-Gm-Message-State: AOJu0YyRoEwzNiO0QcEdQLOstQdD5nj5/x1UJkXDzANrMKS1/R6/i7BE
- fScBtWTB9Pk4OAozWyTNWjmWKppmq/2y1fobio7glt4mzploKw==
-X-Google-Smtp-Source: AGHT+IFDTM9n1iCCXnnhdmcVdXF0AV+fC5CIAPQLnvc++rOnnkND0MjMr+lvfF5U86hlDXCK6Abuhw==
-X-Received: by 2002:a2e:a788:0:b0:2c5:996:9e28 with SMTP id
- c8-20020a2ea788000000b002c509969e28mr7162894ljf.19.1698053111222; 
- Mon, 23 Oct 2023 02:25:11 -0700 (PDT)
+ bh=j2KDR6P7UsuSt9LIkauY8PyPaqSacQjk7QNLzQ7nixE=;
+ b=CgoJTFtc2n27aPPqdBP2WPftRwRAaKbKW1/HI2cRlxbSha3yiHANHxBdk5s4j/XBlx
+ IqeTCla2Aa6QhdubgvkOmQ8BRMy56y0GNk7cCQcVs/pALICfhrA1BEE+Dr06v49KA1vs
+ sgAviFVVZs+NJ0MCmHDNM0LAraGKYPNOWaNaWAbHQl50JzKuXrm9Y4uQ/5o5NAxSQeuk
+ D3UYIbSvSZUXp/bqsNlfJYIq+QQmahjPWJGpO6bl5x2cv1q4uhe/ccbawQOdYTgU6+Qq
+ UZEwcq+eL3w+OH25YAc7jvuSFL+/oayy6P3DHejiPf3BrklG3XJiijQdtJvny5L36EuI
+ Jy3w==
+X-Gm-Message-State: AOJu0Yzcfcynxla9zNvzHRrDyxSwhM7qQKrxq6mgjf+mK+Ycpm23Exxo
+ zE2/Y/Z0RL4mDtZXsHwPr1+SjQ0TMbA5K8octL2TMf3x/pTyXA==
+X-Google-Smtp-Source: AGHT+IHxRfLA+v1Zrvw3c5qeQVXm14RU3+QlLpgqfvDkDYiUo3lz+hXzgxIcI27rl0TxYJwY9zmweg==
+X-Received: by 2002:a05:600c:9a5:b0:406:599f:f934 with SMTP id
+ w37-20020a05600c09a500b00406599ff934mr7463106wmp.12.1698053112197; 
+ Mon, 23 Oct 2023 02:25:12 -0700 (PDT)
 Received: from fedora.. (host185138219236.static.fidoka.tech.
  [185.138.219.236]) by smtp.gmail.com with ESMTPSA id
- l22-20020a05600c1d1600b004042dbb8925sm13911859wms.38.2023.10.23.02.25.10
+ l22-20020a05600c1d1600b004042dbb8925sm13911859wms.38.2023.10.23.02.25.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Oct 2023 02:25:10 -0700 (PDT)
+ Mon, 23 Oct 2023 02:25:11 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 23 Oct 2023 11:25:00 +0200
-Message-ID: <20231023092501.481436-7-adam.duskett@amarulasolutions.com>
+Date: Mon, 23 Oct 2023 11:25:01 +0200
+Message-ID: <20231023092501.481436-8-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231023092501.481436-1-adam.duskett@amarulasolutions.com>
 References: <20231023092501.481436-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1698053111; x=1698657911;
+ d=amarulasolutions.com; s=google; t=1698053112; x=1698657912;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jKiss2ee1pUivtNXHxRU2ScPGM7K1NmIowdyNMXMTDU=;
- b=DwkkjwbjDDJw/DYWweGdD7EE0lSmWLgs6/Hpwzc1HmivdVxct5/jgOmqXoMN5us2TH
- /W0xRYA3/R259pyV885qMe+CkH9qgMXu/SzNc7vV80Uf5W5I3uKh1/IU3Q+bp26r/y9Q
- wfXnU/dtD/5zU4Pb4Sm6Hbh31vl3c0dFToybE=
+ bh=j2KDR6P7UsuSt9LIkauY8PyPaqSacQjk7QNLzQ7nixE=;
+ b=rZ0PwFYVIxwTDU85Y68v6kZbih/8U1UqhHlvYQg8Q5OhOnjFuqzsIPl8FabY2VBdE+
+ 3rBHWNGCGMxlF5fYNzqaYMH0ba0I32ZUvfQeU3XUrYxG0Mg12u7EF6kP5Kv5fEiqdIuQ
+ 7RIcSAlrEmkuNfnPEQgAzb3NcN07VcVyXehUQ=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Dwkkjwbj
-Subject: [Buildroot] [PATCH 7/8] package/opkg: add curl support
+ header.b=rZ0PwFYV
+Subject: [Buildroot] [PATCH 8/8] package/opkg: add sha256sum support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,57 +104,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/opkg/Config.in |  6 ++++++
- package/opkg/opkg.mk   | 13 ++++++++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ package/opkg/Config.in | 5 +++++
+ package/opkg/opkg.mk   | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-index 7bc02e429e..adf39ca145 100644
+index adf39ca145..0104f48623 100644
 --- a/package/opkg/Config.in
 +++ b/package/opkg/Config.in
-@@ -21,6 +21,12 @@ config BR2_PACKAGE_OPKG
+@@ -36,6 +36,11 @@ config BR2_PACKAGE_OPKG_GPG_SIGN
+ 	  Enable opkg package signature checking support using
+ 	  gnupg/libgpgme.
  
- if BR2_PACKAGE_OPKG
- 
-+config BR2_PACKAGE_OPKG_CURL
-+	bool "curl support"
-+	select BR2_PACKAGE_LIBCURL
++config BR2_PACKAGE_OPKG_SHA256
++	bool "sha256sum check support"
 +	help
-+	  Enable downloading with curl.
++	  Enable sha256sum check
 +
- config BR2_PACKAGE_OPKG_GPG_SIGN
- 	bool "gnupg support"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
+ comment "compression support"
+ 
+ config BR2_PACKAGE_OPKG_BZIP2
 diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index ee14e774e3..730aa4cfe7 100644
+index 730aa4cfe7..ce0b74f549 100644
 --- a/package/opkg/opkg.mk
 +++ b/package/opkg/opkg.mk
-@@ -10,13 +10,24 @@ OPKG_DEPENDENCIES = host-pkgconf libarchive
- OPKG_LICENSE = GPL-2.0+
- OPKG_LICENSE_FILES = COPYING
- OPKG_INSTALL_STAGING = YES
--OPKG_CONF_OPTS = --disable-curl
+@@ -38,6 +38,12 @@ else
+ OPKG_CONF_OPTS += --disable-gpg
+ endif
  
- # Ensure directory for lockfile exists
- define OPKG_CREATE_LOCKDIR
- 	mkdir -p $(TARGET_DIR)/usr/lib/opkg
- endef
- 
-+ifeq ($(BR2_PACKAGE_OPKG_CURL),y)
-+OPKG_DEPENDENCIES += libcurl
-+OPKG_CONF_OPTS += --enable-curl
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+OPKG_CONF_OPTS += --enable-ssl-curl
++ifeq ($(BR2_PACKAGE_OPKG_SHA256),y)
++OPKG_CONF_OPTS += --enable-sha256
 +else
-+OPKG_CONF_OPTS += --disable-ssl-curl
-+endif
-+else
-+OPKG_CONF_OPTS += --disable-curl --disable-ssl-curl
++OPKG_CONF_OPTS += --disable-sha256
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
- OPKG_CONF_OPTS += --enable-gpg
- OPKG_CONF_ENV += \
+ ifeq ($(BR2_PACKAGE_OPKG_BZIP2),y)
+ OPKG_DEPENDENCIES += bzip2
+ OPKG_CONF_OPTS += --enable-bzip2
 -- 
 2.41.0
 
