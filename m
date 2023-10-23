@@ -4,93 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECFBDCDB474
-	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 07:45:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 398A4CDB474
+	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 09:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 51AFC40158;
-	Mon, 23 Oct 2023 07:45:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51AFC40158
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4A5A40A94;
+	Mon, 23 Oct 2023 09:25:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4A5A40A94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oh5nKJHuGifZ; Mon, 23 Oct 2023 07:45:18 +0000 (UTC)
+	with ESMTP id pZofTxwAPObF; Mon, 23 Oct 2023 09:25:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D52840CBF;
-	Mon, 23 Oct 2023 07:45:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D52840CBF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B45081BF41D
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 07:45:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B67F41453;
+	Mon, 23 Oct 2023 09:25:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B67F41453
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D4361BF35D
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C95C80BCC
- for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 07:45:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C95C80BCC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15E7F4086A
+ for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 09:25:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15E7F4086A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AqHs2agf4TTZ for <buildroot@lists.busybox.net>;
- Mon, 23 Oct 2023 07:45:13 +0000 (UTC)
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CAABB812A1
- for <buildroot@buildroot.org>; Mon, 23 Oct 2023 07:45:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAABB812A1
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-99357737980so468117166b.2
- for <buildroot@buildroot.org>; Mon, 23 Oct 2023 00:45:12 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yVjG0xogqs_W for <buildroot@lists.busybox.net>;
+ Mon, 23 Oct 2023 09:25:07 +0000 (UTC)
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com
+ [IPv6:2a00:1450:4864:20::143])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 99CC74085E
+ for <buildroot@buildroot.org>; Mon, 23 Oct 2023 09:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99CC74085E
+Received: by mail-lf1-x143.google.com with SMTP id
+ 2adb3069b0e04-507ad511315so4502438e87.0
+ for <buildroot@buildroot.org>; Mon, 23 Oct 2023 02:25:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698047111; x=1698651911;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=BtZtPUqi7aOSFFGlPdYPkfefWZldgq6XJhYyLBR1EEw=;
- b=ecgI2rkbgZwTPxmy9UpxIIGxLCyPWFV83j/2qNtpr/5TeAifK6gDgT+mvqp5Wi8O89
- SWYoSgil7tL9pg0vp6AcE152dUmLsSrlqq2Fd1vyaBIGetRSUS97Wqes/McfKLUeVPWa
- NN2R8YaLcJRDiP/+wV70UeLnynQOQM+GwC65hl4gtqcryRuHCw4YhdNj6s1ALDdv0l5C
- w8FxniJ1Vg+lIksnYM4nlmpWWGnUerl/Q3pzytn/otYl1ievnh0jExqHFBW+qzd8DOQU
- yok4oOJ60Z5s6cUTnIUvL8lm4NTM+iZsUuiZF7rVEN9SzwMSL/deME/cPmYPfnX61hvl
- 6mhw==
-X-Gm-Message-State: AOJu0YzuywFvaHmlqW9Y2nDgEx/nX66B9DHWjYPcRNIGzDND6zGPeznb
- M6zsUtg96nDtFAJZvLAbEu/d/w==
-X-Google-Smtp-Source: AGHT+IEhtDV1zFfGqVzttehM/B/yCuJ/F/eQxrPYSd30rlUSxOC621arxl83yqz0mcZishANECRy9w==
-X-Received: by 2002:a17:907:70e:b0:9ae:5270:46d5 with SMTP id
- xb14-20020a170907070e00b009ae527046d5mr5776056ejb.73.1698047110782; 
- Mon, 23 Oct 2023 00:45:10 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- h25-20020a170906261900b0099293cdbc98sm6326871ejc.145.2023.10.23.00.45.08
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 23 Oct 2023 00:45:09 -0700 (PDT)
-Message-ID: <93a0d852-000b-d36e-df54-e7aab3cc3a6a@mind.be>
-Date: Mon, 23 Oct 2023 09:45:06 +0200
+ d=1e100.net; s=20230601; t=1698053105; x=1698657905;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=CDGTLkshaC8jQ2LEmqo2l2jpiSd7p4ijqjgGNHRlq30=;
+ b=CJU7dZPaFovwi/V8Tz37UwVZPTgaZMARqy2J3wnZptyiVnNuZwewjjYL9CvnBIIQ5h
+ t0tm7hEkit8oQowO0sx3ZNY2d6FUIe+7kss1EmLXgYoXnoo2YFYDKaE0dmSg9xQSBzzr
+ nZKLyu68RqSBHhzKy3P3tH2JlgCr4TFU9UleAEbhdOzDhbVZPPVJtVs2Bj+ISblRZ2ea
+ 3A4GlTUflM6uB6bBMaeJoqrYgI2sAYKFy9OnF8mhmtfJz9JDfBCZci3lkslC7XfeRzi0
+ a+kS981DyrMO/2bx1LdkDII+dfSbMgoDTszhBOcMlirE5iE65EfqyPiGrL1Hv8BkCXdS
+ SEKg==
+X-Gm-Message-State: AOJu0YxnM6b/3d4c9XpF139nfq1C9IK4Hvzo+7TiKlOYgCQBeaA3K7bk
+ nFGbI3CthCAlnFTcfUDowWa89qxZPYz+G240SYtMDRXM6ndoFA==
+X-Google-Smtp-Source: AGHT+IEOky5x/Y9exffUvSV4mPQl/DPIzYQsWrDdMInxmxZuogl9IsN/3fGsvdQrDerpDxZJxbc0Qw==
+X-Received: by 2002:a05:6512:3b23:b0:507:a8d1:6e57 with SMTP id
+ f35-20020a0565123b2300b00507a8d16e57mr7096179lfv.40.1698053105124; 
+ Mon, 23 Oct 2023 02:25:05 -0700 (PDT)
+Received: from fedora.. (host185138219236.static.fidoka.tech.
+ [185.138.219.236]) by smtp.gmail.com with ESMTPSA id
+ l22-20020a05600c1d1600b004042dbb8925sm13911859wms.38.2023.10.23.02.25.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 23 Oct 2023 02:25:04 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Mon, 23 Oct 2023 11:24:54 +0200
+Message-ID: <20231023092501.481436-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20231018141155.533944-1-vfazio@gmail.com>
- <fc416325-98e6-04e2-6ea9-e48053c2c302@mind.be> <20231021202525.GD2607@scaer>
- <20231021203618.GE2607@scaer>
-In-Reply-To: <20231021203618.GE2607@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1698047111; x=1698651911; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=BtZtPUqi7aOSFFGlPdYPkfefWZldgq6XJhYyLBR1EEw=;
- b=R/+a10RcJUidh/cZzgryCYvp6VL4nJrwZVe9kkLMdxZiyNa73fRE3pSKRPD4HN3+0V
- svj28Pno+TanwIkOa3lf/OUOskg2lDKtyptLqDAodZywDJELgIHMZE2BfPpCd4TqxeTo
- KGnO6OazKfnNjpU4gAOjfplD9qrYAjNnRWg0JRp4GgxM4WY1g1EiOqZyZM0F8SLe+smF
- avITND5+/OVbB4Ym8/QNEpsJXqXWV0ni5TD4K/gZcbGzZTbgbhKcLng/qBsYHG6vJgsQ
- UmrLZ/irBSxnBTxWZ4n+se8+hqrixT9unb7vHFoL8WMPIhKRU7z90ue4UeRWZSLK/gdK
- WSvw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=R/+a10Rc
-Subject: Re: [Buildroot] [PATCH 1/1] support/dependencies: bump minimal tar
- version to 1.35
+ d=amarulasolutions.com; s=google; t=1698053105; x=1698657905;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=CDGTLkshaC8jQ2LEmqo2l2jpiSd7p4ijqjgGNHRlq30=;
+ b=GnTYu0V2IM6luBHUJGkt9n+u7FwoUkC6ZRETkM8IwT7Nx6nyBi311ik6ELSXZyyHW4
+ U0hzb/BZSD+BDFERgBbzhhbYaE1gfBBnGAyiUviOX9PyLWb+3MOscgWNTpOAP1rkAN2k
+ WjYyKk/MWV7qDgjADoDR9oqsBDB6nhWlgimTw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=GnTYu0V2
+Subject: [Buildroot] [PATCH 1/8] package/opkg: bump version to 0.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,93 +92,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Vincent Fazio <vfazio@gmail.com>, buildroot@buildroot.org
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Tested in Fedora 39 and Debian 11 with:
+./support/testing/run-tests tests.package.test_opkg.TestOpkg.test_run
 
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/opkg/opkg.hash | 2 +-
+ package/opkg/opkg.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 21/10/2023 22:36, Yann E. MORIN wrote:
-> Vincent, Arnout, All,
-> 
-> On 2023-10-21 22:25 +0200, Yann E. MORIN spake thusly:
->> On 2023-10-18 19:43 +0200, Arnout Vandecappelle via buildroot spake thusly:
->>> On 18/10/2023 16:11, Vincent Fazio wrote:
->>>> GNU tar 1.35 includes a breaking change [0] that changes the tar header
->>>> created for each regular file even for "stable" formats like pax (which
->>>> we use in support/download/helpers::mk_tar_gz).
-> [--SNIP--]
->>>> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
->>>> index e5cd83d859..d33eb2d811 100644
->>>> --- a/package/pkg-download.mk
->>>> +++ b/package/pkg-download.mk
->>>> @@ -20,8 +20,8 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
->>>>   # Version of the format of the archives we generate in the corresponding
->>>>   # download backend:
->>>> -BR_FMT_VERSION_git = -br1
->>>> -BR_FMT_VERSION_svn = -br3
->>>> +BR_FMT_VERSION_git = -br2
->>>> +BR_FMT_VERSION_svn = -br4
->>>   Vendored cargo and go packages will have the same issue, no? Those will
->>> need to be updated as well...
->> Good catch, indeed. I'll try and resurect my patch to add a -br suffix
->> to those...
-> 
-> I think it was basically just that:
-> 
->       b/package/pkg-download.mk |    1     1     0     0 +
->       b/package/pkg-utils.mk    |    2     1     1     0 +-
->       2 files changed, 2 insertions(+), 1 deletion(-)
-> 
->      diff --git a/package/pkg-download.mk b/package/pkg-download.mk
->      index e5cd83d859..5ad3f2baaf 100644
->      --- a/package/pkg-download.mk
->      +++ b/package/pkg-download.mk
->      @@ -22,6 +22,7 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
->       # download backend:
->       BR_FMT_VERSION_git = -br1
->       BR_FMT_VERSION_svn = -br3
->      +BR_FMT_VERSION_cargo = -cargo1
-> 
->       DL_WRAPPER = support/download/dl-wrapper
-> 
->      diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
->      index 7c670ee615..95a8452db8 100644
->      --- a/package/pkg-utils.mk
->      +++ b/package/pkg-utils.mk
->      @@ -48,7 +48,7 @@ pkgname = $(lastword $(subst /, ,$(pkgdir)))
->       # Helper to build the extension for a package archive, based on various
->       # conditions.
->       # $(1): upper-case package name
->      -pkg_source_ext = $(BR_FMT_VERSION_$($(1)_SITE_METHOD)).tar.gz
->      +pkg_source_ext = $(BR_FMT_VERSION_$($(1)_SITE_METHOD))$(BR_FMT_VERSION_$($(1)_DOWNLOAD_POST_PROCESS)).tar.gz
+diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
+index b0c0ba6574..c6ecefba21 100644
+--- a/package/opkg/opkg.hash
++++ b/package/opkg/opkg.hash
+@@ -1,4 +1,4 @@
+ # From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
+-sha256  a1214a75fa34fb9228db8da47308e0e711b1c93fd8938cf164c10fd28eb50f1e  opkg-0.4.5.tar.gz
++sha256  ac73a90a2549cd04948e563d915912c78e1b8ba0f43af75c5a53fcca474adbd5  opkg-0.6.2.tar.gz
+ # Locally calculated
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index 501edcf8af..9b1ffb3c74 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-OPKG_VERSION = 0.4.5
++OPKG_VERSION = 0.6.2
+ OPKG_SITE = https://downloads.yoctoproject.org/releases/opkg
+ OPKG_DEPENDENCIES = host-pkgconf libarchive
+ OPKG_LICENSE = GPL-2.0+
+ OPKG_LICENSE_FILES = COPYING
+ OPKG_INSTALL_STAGING = YES
+-OPKG_CONF_OPTS = --disable-curl
++OPKG_CONF_OPTS = --disable-curl --disable-zstd
+ 
+ # Ensure directory for lockfile exists
+ define OPKG_CREATE_LOCKDIR
+-- 
+2.41.0
 
-  When POST_PROCESS is used, the SITE_METHOD is not actually relevant (we don't 
-actually make a tarball of the git, or at least we don't hash it). So maybe:
-
-pkg_source_ext = $(or 
-$(BR_FMT_VERSION_$($(1)_DOWNLOAD_POST_PROCESS)),$(BR_FMT_VERSION_$($(1)_SITE_METHOD))).tar.gz
-
-
-  Then we an also make BR_FMT_VERSION_cargo = -br4 (not -br1 or -br3 to avoid 
-conflict with already existing git or svn based tarballs).
-
-  Regards,
-  Arnout
-
-> 
->       # Define extractors for different archive suffixes
->       INFLATE.bz2  = $(BZCAT)
-> 
-> Toally untested.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
