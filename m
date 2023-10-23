@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC56AC25B45
-	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 17:27:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 212F0C25B46
+	for <buildroot@archiver.kernel.org>; Mon, 23 Oct 2023 17:27:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82437423EE;
-	Mon, 23 Oct 2023 17:27:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82437423EE
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBA54423F2;
+	Mon, 23 Oct 2023 17:27:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBA54423F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cpExipwM92YL; Mon, 23 Oct 2023 17:27:33 +0000 (UTC)
+	with ESMTP id eH2HFWwvFeeo; Mon, 23 Oct 2023 17:27:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA6E342275;
-	Mon, 23 Oct 2023 17:27:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA6E342275
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 46F131BF371
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0944742274;
+	Mon, 23 Oct 2023 17:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0944742274
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E2621BF95C
  for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 17:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2BDB941802
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2634A612BA
  for <buildroot@lists.busybox.net>; Mon, 23 Oct 2023 17:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BDB941802
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2634A612BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6vfveSP8FtPA for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BP9tkK8bOFVc for <buildroot@lists.busybox.net>;
  Mon, 23 Oct 2023 17:27:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11E8A40012
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48CF2612B7
  for <buildroot@buildroot.org>; Mon, 23 Oct 2023 17:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11E8A40012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48CF2612B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F015B85E89; Mon, 23 Oct 2023 17:27:16 +0000 (UTC)
+ id 3505A85E89; Mon, 23 Oct 2023 17:27:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 23 Oct 2023 19:17:14 +0200
+Date: Mon, 23 Oct 2023 19:18:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10e644996474158f2ea700452ba8714a7401a2d6
-X-Git-Newrev: b3dd46344251f822560624873a569c0a3e5ceb13
+X-Git-Oldrev: 3d9ba8c3f765cc5a04cd0d6a1b4a9efd453c5d85
+X-Git-Newrev: 00583e1c16a5ee6297535307c6a5e6e7e8f38378
 X-Patchwork-Hint: ignore
-Message-Id: <20231023172716.F015B85E89@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opkg: move related code together
+Message-Id: <20231023172717.3505A85E89@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opkg: add bzip2 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,49 +62,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3dd46344251f822560624873a569c0a3e5ceb13
+commit: https://git.buildroot.net/buildroot/commit/?id=00583e1c16a5ee6297535307c6a5e6e7e8f38378
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit d31db334c3ad (opkg: Add gnupg signature checking support.),
-the macro definition for the hook, and the hook assignment, got
-separated by the then-newly introduced GPG handling.
-
-Move the macro definition closer to the hook assignment. Since this is
-a post-install hook, it is but logical that it comes further down in
-the .mk file.
-
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[yann.morin.1998@free.fr: drop option, use package as condition]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/opkg/opkg.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/opkg/opkg.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index 9b1ffb3c74..e167ba4fc4 100644
+index 53221ac31b..3d46adb59a 100644
 --- a/package/opkg/opkg.mk
 +++ b/package/opkg/opkg.mk
-@@ -12,11 +12,6 @@ OPKG_LICENSE_FILES = COPYING
- OPKG_INSTALL_STAGING = YES
- OPKG_CONF_OPTS = --disable-curl --disable-zstd
- 
--# Ensure directory for lockfile exists
--define OPKG_CREATE_LOCKDIR
--	mkdir -p $(TARGET_DIR)/usr/lib/opkg
--endef
--
- ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
- OPKG_CONF_OPTS += --enable-gpg
- OPKG_CONF_ENV += \
-@@ -27,6 +22,10 @@ else
+@@ -22,6 +22,13 @@ else
  OPKG_CONF_OPTS += --disable-gpg
  endif
  
-+# Ensure directory for lockfile exists
-+define OPKG_CREATE_LOCKDIR
-+	mkdir -p $(TARGET_DIR)/usr/lib/opkg
-+endef
- OPKG_POST_INSTALL_TARGET_HOOKS += OPKG_CREATE_LOCKDIR
- 
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_BZIP2),y)
++OPKG_DEPENDENCIES += bzip2
++OPKG_CONF_OPTS += --enable-bzip2
++else
++OPKG_CONF_OPTS += --disable-bzip2
++endif
++
+ ifeq ($(BR2_PACKAGE_LZ4),y)
+ OPKG_DEPENDENCIES += lz4
+ OPKG_CONF_OPTS += --enable-lz4
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
