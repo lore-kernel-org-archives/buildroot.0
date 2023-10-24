@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46F1AC07545
-	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 15:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76C93C07545
+	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 15:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8AAA4EF2F;
-	Tue, 24 Oct 2023 15:17:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8AAA4EF2F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D8C34EF3F;
+	Tue, 24 Oct 2023 15:17:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D8C34EF3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NsD6UCqsHKyr; Tue, 24 Oct 2023 15:17:37 +0000 (UTC)
+	with ESMTP id vXEkMJh6TWJ3; Tue, 24 Oct 2023 15:17:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AAA34EF2C;
-	Tue, 24 Oct 2023 15:17:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AAA34EF2C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2BE1F1BF3F7
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 15:17:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3406B4EF30;
+	Tue, 24 Oct 2023 15:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3406B4EF30
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 77BF51BF3F7
+ for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 15:17:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 050AF7037C
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 15:17:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 050AF7037C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E9884EF26
+ for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 15:17:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E9884EF26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GcJ3MMoHydlT for <buildroot@lists.busybox.net>;
- Tue, 24 Oct 2023 15:17:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2111C7037B
- for <buildroot@buildroot.org>; Tue, 24 Oct 2023 15:17:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2111C7037B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F37D684622; Tue, 24 Oct 2023 15:17:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mhf6UYXUwgYx for <buildroot@lists.busybox.net>;
+ Tue, 24 Oct 2023 15:17:46 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DD9744EF30
+ for <buildroot@buildroot.org>; Tue, 24 Oct 2023 15:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD9744EF30
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E772EC0009;
+ Tue, 24 Oct 2023 15:17:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qvJA6-002oPr-4C; Tue, 24 Oct 2023 17:17:42 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 24 Oct 2023 17:17:12 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 593454c77e542ca7f6924087376ad0de71412e49
-X-Git-Newrev: d975bd56a809a2d213261b694a40b4538dad7d0e
-X-Patchwork-Hint: ignore
-Message-Id: <20231024151733.F37D684622@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/redis: security
- bump to v7.0.14
+To: Titouan Christophe <titouanchristophe@gmail.com>
+References: <20231023135251.63644-1-titouanchristophe@gmail.com>
+Date: Tue, 24 Oct 2023 17:17:42 +0200
+In-Reply-To: <20231023135251.63644-1-titouanchristophe@gmail.com> (Titouan
+ Christophe's message of "Mon, 23 Oct 2023 15:52:50 +0200")
+Message-ID: <87o7gorqw9.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [For 2023.02.x 1/1] package/redis: security bump to
+ v7.0.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +63,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Daniel Price <daniel.price@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d975bd56a809a2d213261b694a40b4538dad7d0e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
 
-This contains security fixes for:
-- CVE-2022-24834
-- CVE-2023-36824
-- CVE-2023-41053
-- CVE-2023-45145
+ > This contains security fixes for:
+ > - CVE-2022-24834
+ > - CVE-2023-36824
+ > - CVE-2023-41053
+ > - CVE-2023-45145
 
-See the release notes:
-https://raw.githubusercontent.com/redis/redis/7.0.14/00-RELEASENOTES
+ > See the release notes:
+ > https://raw.githubusercontent.com/redis/redis/7.0.14/00-RELEASENOTES
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 69bfc1475f..cbbb29ca13 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  ce250d1fba042c613de38a15d40889b78f7cb6d5461a27e35017ba39b07221e3  redis-7.0.11.tar.gz
-+sha256  7e1cdf347f4970ea39d5b7fdb19aedec4c21942e202de65bdeb782d38d2f299f  redis-7.0.14.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index e5d3de8eb9..5bf15821ba 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 7.0.11
-+REDIS_VERSION = 7.0.14
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+Committed to 2023.02.x and 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
