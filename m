@@ -4,63 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C42BAC07545
-	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 14:38:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75A66C00A8F
+	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 14:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 506EB4EEBD;
-	Tue, 24 Oct 2023 14:38:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 506EB4EEBD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 166104EED5;
+	Tue, 24 Oct 2023 14:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 166104EED5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TRv1_iiW-ffX; Tue, 24 Oct 2023 14:38:05 +0000 (UTC)
+	with ESMTP id nqnUFy0ZVudc; Tue, 24 Oct 2023 14:43:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8126A4EEBB;
-	Tue, 24 Oct 2023 14:38:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8126A4EEBB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39D514EEFC;
+	Tue, 24 Oct 2023 14:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39D514EEFC
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 114BE1BF2C4
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 14:38:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 26CB01BF2C4
+ for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 14:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E913342F67
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 14:38:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E913342F67
+ by smtp2.osuosl.org (Postfix) with ESMTP id F3B00432FE
+ for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 14:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3B00432FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NfrJl4tiS3HP for <buildroot@lists.busybox.net>;
- Tue, 24 Oct 2023 14:38:01 +0000 (UTC)
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 53C01400BF
- for <buildroot@buildroot.org>; Tue, 24 Oct 2023 14:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53C01400BF
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id 048E3BDE9D7B;
- Tue, 24 Oct 2023 16:37:57 +0200 (CEST)
+ with ESMTP id oloLPtbRkQ05 for <buildroot@lists.busybox.net>;
+ Tue, 24 Oct 2023 14:43:10 +0000 (UTC)
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 47D1443308
+ for <buildroot@buildroot.org>; Tue, 24 Oct 2023 14:43:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47D1443308
+Received: from localhost.localdomain ([146.241.115.208])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id vIccqa0A1F9g1vIceq3zkS; Tue, 24 Oct 2023 16:43:08 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Tue, 24 Oct 2023 16:42:56 +0200
+Message-Id: <20231024144256.2708299-4-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231024144256.2708299-1-giulio.benetti@benettiengineering.com>
+References: <20231024144256.2708299-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-Date: Tue, 24 Oct 2023 14:37:57 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <fb3955a6-c58e-4705-aa5f-c7e2c931732b@benettiengineering.com>
-References: <mailman.9571.1697362018.35217.buildroot@buildroot.org>
- <be45c0d3f882a072e054632ae086413b@umbiko.net>
- <f22e9a6b-0229-4919-ad70-8eb60ab1fe65@benettiengineering.com>
- <79d4b2171690584e6cf0358b8a05ab51@umbiko.net>
- <fb3955a6-c58e-4705-aa5f-c7e2c931732b@benettiengineering.com>
-Message-ID: <d67ee9f1ba7df1c75055c5b576992efb@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.10 at serv15.avernis.de
-X-Virus-Status: Clean
+X-CMAE-Envelope: MS4xfCfqDRGTjnV0/deiU1Ci/VzCZdfyy/C1FQfEvegVYRDH+NzQSIED1KHrg3JRIYysKpx6assReImtkb+NxYJzzbXVhnPGrfwXq3JISq+F6acIvSn9YAWw
+ 736nMUXKYNZ4v/2rOSUXB6DnD/HE1J859TFSuvV7uvad76d9xNbJ17d4VWeA8nxmPpX1JJXDdr/qAe50ANKoeUvrZYWje+4n+XY9L5I8HztF7qGsHuO0W8Ev
+ j+u7jNQqAO+tzXGhsVuZGqYxoV5BRqLN3/ImfmCbkJiAjPECyi3bLF9dCpqV7RNOX1lbuxbJlm1w8EpCEiu2sJ4xAWI+cfjBxeS2ENVXrOJHIUr1vgnHvaYC
+ Mj3PcJLST7Lhl4FxgVTp7UMQbzyQ/AjfGv23rsLZcd9occPpLuVUktgUEpi+VlKo6YX5YQnan+e/spvntkGt1iQJd6gYr7JTF47uj2qzrvje71bgD3U=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1698158278; bh=dazyX2rhX/PgCXigTSR+lzJtKhY4Mq7F5ERlyJcQl9U=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=IsPTrxqfFHSmUYERFn3kQH8nwQgBn/jygYjdqRuoLIFcBQiNGcxPUTCH8NfIn3ePV
- 1Mp07IRN8rxm9BlWrT/p/CATzHYCqozzGunQS2MdshdVI+/DwL+GHP5lrdkJam8CKM
- HmcXVvvhtylvRLl91IWPzjQcOYhCW3IwBDgtLqnw=
+ d=aruba.it; s=a1; 
+ t=1698158588; bh=spJ7xi9imJ0QTEbdxi1TxPNW7LIaP9iNRSBk0Ui4IoA=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=lBIxh2c+BF7sG4g40GmOq++W+tZG01Mhuc77zDVMcbRTJUIy8ZxzDHrt16c0PoGLE
+ XRrqr4f3rBg9Dqx1bp93d+GnbBin4ZfL0b4xLO8uswRCb5NIpDqp7IICRPYHIBxJ9Q
+ eX26i5Vb1GA1w20VwuoDe/M1gq9bXEr2sG/wyM7hQfyfniR8UMsaE7ruARt/4DX7TW
+ 8gGbmwN6L3iiBEtffWSuaLkRFh1sIfd1DbZusfL/KGoeXBdo1F+kA0y8ctKVTuXKKT
+ gE8nw6zNttMz9u1dGpWQZW+0dk4bQlS4MgEd9IvB9IXpvrrOtMpgPW7/dEa0S239bQ
+ ZrOrOFTUYUD8Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=umbiko.net header.i=@umbiko.net
- header.a=rsa-sha256 header.s=mail header.b=IsPTrxqf
-Subject: Re: [Buildroot] [PATCH v4 3/4] package/linux-tools: add rtla
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=lBIxh2c+
+Subject: [Buildroot] [PATCH v5 4/4] package/trace-cmd: bump to 3.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,61 +75,90 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Pierre Floury <pierre.floury@gmail.com>, buildroot <buildroot@buildroot.org>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+ Pierre Floury <pierre.floury@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Andreas Ziegler <br015@umbiko.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgR2l1bGlvLAoKTmljZSB0aGF0IHRoaXMgd2FzIHVzZWZ1bC4KCk9uIDIwMjMtMTAtMjQgMTM6
-NDksIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhpIEFuZHJlYXMsCj4gCj4gT24gMjQvMTAvMjMg
-MDg6MjcsIEFuZHJlYXMgWmllZ2xlciB3cm90ZToKPiAKPiBbIFNOSVAgXQo+IAo+PiBJIHB1dCB0
-b2dldGhlciBhIGRlZmNvbmZpZywgYmFzZWQgb24gCj4+IGNvbmZpZ3MvcmFzcGJlcnJ5cGk0XzY0
-X2RlZmNvbmZpZzsgY2hhbmdlcyBhcmUsIHJvdWdobHk6Cj4+IAo+PiAgwqAgQy1saWJyYXJ5IG11
-c2wKPj4gIMKgIGJpbnV0aWxzIDIuNDEKPj4gIMKgIGdjYyAxMwo+PiAKPj4gIMKgIFBJQy9QSUUg
-bm90IHNldAo+PiAgwqAgU1NQIG5vbmUKPj4gIMKgIFJFTFJPIG5vbmUKPj4gCj4+ICDCoCBrZXJu
-ZWwgdmVyc2lvbiA2LjYtcmM2Cj4+ICDCoCBrZXJuZWwgcGF0Y2ggCj4+IGh0dHBzOi8vbWlycm9y
-cy5lZGdlLmtlcm5lbC5vcmcvcHViL2xpbnV4L2tlcm5lbC9wcm9qZWN0cy9ydC82LjYvcGF0Y2gt
-Ni42LXJjNi1ydDkucGF0Y2gueHoKPj4gIMKgIG5vIG92ZXJsYXkgc3VwcG9ydAo+PiAgwqAgbGlu
-dXgga2VybmVsIHRvb2xzIC0+IHJ0bGEKPj4gCj4+IFlvdSB3aWxsIHJ1biBpbnRvIGFub3RoZXIg
-ZXJyb3IgZmlyc3QsIGJlY2F1c2UgbGlidHJhY2VmcyBpcyBtaXNzaW5nIAo+PiBob3N0IGRlcGVu
-ZGVuY2llcy4KPj4gCj4+ICBGcm9tIHNyYy9tZXNvbi5idWlsZDoKPj4gIMKgIGZsZXggPSBmaW5k
-X3Byb2dyYW0oJ2ZsZXgnLCByZXF1aXJlZDogdHJ1ZSkKPj4gIMKgIGJpc29uID0gZmluZF9wcm9n
-cmFtKCdiaXNvbicsIHJlcXVpcmVkOiB0cnVlKQo+PiAKPj4gTW9kaWZpZWQgcGFja2FnZS9saWJ0
-cmFjZWZzL2xpYnRyYWNlZnMubWs6Cj4+ICDCoCBMSUJUUkFDRUZTX0RFUEVOREVOQ0lFUyA9IGhv
-c3QtYmlzb24gaG9zdC1mbGV4IGhvc3QtcGtnY29uZiAKPj4gbGlidHJhY2VldmVudAo+PiAKPj4g
-QlIyX2FhcmNoNjQ9eQo+PiBCUjJfY29ydGV4X2E3Mj15Cj4+IEJSMl9BUk1fRlBVX1ZGUFY0PXkK
-Pj4gQlIyX1RPT0xDSEFJTl9CVUlMRFJPT1RfTVVTTD15Cj4+IEJSMl9CSU5VVElMU19WRVJTSU9O
-XzJfNDFfWD15Cj4+IEJSMl9HQ0NfVkVSU0lPTl8xM19YPXkKPj4gQlIyX1RPT0xDSEFJTl9CVUlM
-RFJPT1RfQ1hYPXkKPj4gIyBCUjJfUElDX1BJRSBpcyBub3Qgc2V0Cj4+IEJSMl9TU1BfTk9ORT15
-Cj4+IEJSMl9SRUxST19OT05FPXkKPj4gQlIyX1NZU1RFTV9ESENQPSJldGgwIgo+PiBCUjJfUk9P
-VEZTX1BPU1RfQlVJTERfU0NSSVBUPSJib2FyZC9yYXNwYmVycnlwaTQtNjQvcG9zdC1idWlsZC5z
-aCIKPj4gQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcmFzcGJlcnJ5cGk0LTY0
-L3Bvc3QtaW1hZ2Uuc2giCj4+IEJSMl9MSU5VWF9LRVJORUw9eQo+PiBCUjJfTElOVVhfS0VSTkVM
-X0NVU1RPTV9WRVJTSU9OPXkKPj4gQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxV
-RT0iNi42LXJjNiIKPj4gQlIyX0xJTlVYX0tFUk5FTF9QQVRDSD0iaHR0cHM6Ly9taXJyb3JzLmVk
-Z2Uua2VybmVsLm9yZy9wdWIvbGludXgva2VybmVsL3Byb2plY3RzL3J0LzYuNi9wYXRjaC02LjYt
-cmM2LXJ0OS5wYXRjaC54eiIKPj4gQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9ImJjbTI3MTEi
-Cj4+IEJSMl9MSU5VWF9LRVJORUxfRFRTX1NVUFBPUlQ9eQo+PiBCUjJfTElOVVhfS0VSTkVMX0lO
-VFJFRV9EVFNfTkFNRT0iYnJvYWRjb20vYmNtMjcxMS1ycGktNC1iIgo+PiBCUjJfTElOVVhfS0VS
-TkVMX05FRURTX0hPU1RfT1BFTlNTTD15Cj4+IEJSMl9QQUNLQUdFX0xJTlVYX1RPT0xTX1JUTEE9
-eQo+PiBCUjJfUEFDS0FHRV9SUElfRklSTVdBUkU9eQo+PiBCUjJfUEFDS0FHRV9SUElfRklSTVdB
-UkVfVkFSSUFOVF9QSTQ9eQo+PiBCUjJfUEFDS0FHRV9SUElfRklSTVdBUkVfQ09ORklHX0ZJTEU9
-ImJvYXJkL3Jhc3BiZXJyeXBpNC02NC9jb25maWdfNF82NGJpdC50eHQiCj4+ICMgQlIyX1BBQ0tB
-R0VfUlBJX0ZJUk1XQVJFX0lOU1RBTExfRFRCX09WRVJMQVlTIGlzIG5vdCBzZXQKPj4gQlIyX1RB
-UkdFVF9ST09URlNfRVhUMj15Cj4+IEJSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15Cj4+IEJSMl9U
-QVJHRVRfUk9PVEZTX0VYVDJfU0laRT0iMTIwTSIKPj4gIyBCUjJfVEFSR0VUX1JPT1RGU19UQVIg
-aXMgbm90IHNldAo+PiBCUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQo+PiBCUjJfUEFDS0FH
-RV9IT1NUX0dFTklNQUdFPXkKPj4gQlIyX1BBQ0tBR0VfSE9TVF9NVE9PTFM9eQo+PiAKPiAKPiBS
-ZXByb2R1Y2VkIGFuZCB5ZXMgaXQncyBmaXhlZCB3aXRoIC1EX0dOVV9TT1VSQ0UgYXMgcG9pbnRl
-ZCBoZXJlOgo+IGh0dHBzOi8vbWFuNy5vcmcvbGludXgvbWFuLXBhZ2VzL21hbjMvQ1BVX1NFVC4z
-Lmh0bWwKPiAKPiBBIGh1Z2UgdGhhbmsgeW91IGZvciB0aGUgaGVscCEKPiAKPiBEbyB5b3UgbWlu
-ZCBpZiBJIGFkZCB5b3VyIFNvQiBkZXNjcmliaW5nIHdoYXQgeW91J3ZlIGFkZGVkIG9uIHRoaXMg
-Cj4gcGF0Y2g/Cj4gCgpOb3QgYXQgYWxsOgpTaWduZWQtb2ZmLWJ5OiBBbmRyZWFzIFppZWdsZXIg
-PGJyMDE1QHVtYmlrby5uZXQ+Cgo+IC0tCj4gR2l1bGlvIEJlbmV0dGkKPiBDRU8vQ1RPQEJlbmV0
-dGkgRW5naW5lZXJpbmcgc2FzCgpLaW5kIHJlZ2FyZHMsCkFuZHJlYXMKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+
+trace-cmd's dependencies 'libtracefs' and 'libtraceevent' were split
+into dedicated projects, maintained outside of trace-cmd.
+
+This release, on top of bumping the version, adds this new dependencies.
+
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+[Giulio: bump to version 3.1.7]
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/trace-cmd/Config.in      | 2 ++
+ package/trace-cmd/trace-cmd.hash | 2 +-
+ package/trace-cmd/trace-cmd.mk   | 6 ++++--
+ 3 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
+index 2d0accd7ae..00b9ebbd9a 100644
+--- a/package/trace-cmd/Config.in
++++ b/package/trace-cmd/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_TRACE_CMD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen()
++	select BR2_PACKAGE_LIBTRACEEVENT
++	select BR2_PACKAGE_LIBTRACEFS
+ 	help
+ 	  Command line reader for ftrace.
+ 
+diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+index 4d39e4d5ea..6edcaf0e1c 100644
+--- a/package/trace-cmd/trace-cmd.hash
++++ b/package/trace-cmd/trace-cmd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  a74d9ade2633b88d0ad199360d51996427e23f4835594133e456cd6e3bd3a651  trace-cmd-v2.9.7.tar.gz
++sha256  e496d41e599f8ef3c9a74675da05f86be0d8d48d524f0182c73ab98cd16da0b0  trace-cmd-v3.1.7.tar.gz
+ sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
+ sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 52bb99036c..3d4d88c964 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-TRACE_CMD_VERSION = 2.9.7
++TRACE_CMD_VERSION = 3.1.7
+ TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
+ TRACE_CMD_SITE = \
+ 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
+ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+ 
+-TRACE_CMD_DEPENDENCIES = host-pkgconf
++TRACE_CMD_DEPENDENCIES = host-pkgconf libtracefs libtraceevent
+ TRACE_CMD_MAKE_OPTS = prefix=/usr etcdir=/etc
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+@@ -34,6 +34,8 @@ ifeq ($(BR2_sparc64),y)
+ TRACE_CMD_CFLAGS += -fPIC
+ endif
+ 
++TRACE_CMD_CFLAGS += $($(HOST_DIR)/bin/pkg-config --cflags libtracefs)
++
+ # trace-cmd use CPPFLAGS to add some extra flags.
+ # But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
+ # that causes build problems.
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
