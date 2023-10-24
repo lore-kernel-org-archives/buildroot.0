@@ -1,67 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE145C07545
-	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 16:54:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EEE4C07545
+	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 19:50:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4660D433E8;
-	Tue, 24 Oct 2023 16:54:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4660D433E8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 181DD83E2A;
+	Tue, 24 Oct 2023 19:50:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 181DD83E2A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8TLRvmzVEdVX; Tue, 24 Oct 2023 16:54:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G25Bp0QZPGru; Tue, 24 Oct 2023 19:50:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0203F433EC;
-	Tue, 24 Oct 2023 16:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0203F433EC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5961083DCF;
+	Tue, 24 Oct 2023 19:50:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5961083DCF
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 834BF1BF3F7
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 16:54:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 765511BF377
+ for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 19:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66DCE6F521
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 16:54:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66DCE6F521
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F963705B9
+ for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 19:50:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F963705B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zYJoHJCUX7-4 for <buildroot@lists.busybox.net>;
- Tue, 24 Oct 2023 16:54:22 +0000 (UTC)
+ with ESMTP id 23xiM2ydz7m9 for <buildroot@lists.busybox.net>;
+ Tue, 24 Oct 2023 19:50:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B6226FC07
- for <buildroot@uclibc.org>; Tue, 24 Oct 2023 16:54:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B6226FC07
+ by smtp3.osuosl.org (Postfix) with ESMTP id 96AD86FC59
+ for <buildroot@uclibc.org>; Tue, 24 Oct 2023 19:50:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96AD86FC59
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 8463282866; Tue, 24 Oct 2023 16:54:22 +0000 (UTC)
+ id 8474784FC8; Tue, 24 Oct 2023 19:50:43 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 24 Oct 2023 16:54:21 +0000
+Date: Tue, 24 Oct 2023 19:50:40 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: gary.isliefson@ametek.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15820-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution bug_status cc
+Message-ID: <bug-15820-163-cyzLE6rCck@https.bugs.busybox.net/>
+In-Reply-To: <bug-15820-163@https.bugs.busybox.net/>
+References: <bug-15820-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15820] New: make linux-menuconfig does not modify
+Subject: [Buildroot] [Bug 15820] make linux-menuconfig does not modify
  correct .config file when LINUX_KERNEL_CUSTOM_CONFIG_FILE set
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -81,46 +81,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15820
 
-            Bug ID: 15820
-           Summary: make linux-menuconfig does not modify correct .config
-                    file when LINUX_KERNEL_CUSTOM_CONFIG_FILE set
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: gary.isliefson@ametek.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-I want to have the linux source files in an alternate tree from where buildroot
-places them after the download. I've successfully done this by using the
-local.mk file with an entry LINUX_OVERRIDE_SRCDIR=/home/me/some-path.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
+                 CC|                            |yann.morin.1998@free.fr
 
-make linux-rebuild then correctly builds from the source files in the new path. 
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Garyl, All,
 
-However, if I run make linux-menuconfig, it modifies the .config file in its
-build directory (which is under buildroot at output/build/linux-custom/.config)
+Thanks for your report.
 
-I found the variable BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE in buildroot's make
-menuconfig, and I thought this would do what I want (ie, modify the .config in
-my linux source directory), so I set this var to
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=/home/me/some-path/.config
+> Correct me if I'm wrong, but setting BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+> shouldn't buildroot make linux-menuconfig modify the one pointed to by
+> this variable?
 
-Then make linux-reconfigure, it rebuilds linux, but appeared to again use the
-wrong .config file, then make linux-menuconfig still modifies the .config in
-output/build/linux-custom, rather than modifying the one in my source directory
-(/home/me/some-path/.config).
+No, BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE is used as the "source" for the
+configuration, it is not meant to be the "working copy", so the behaviour
+you report is the expected one.
 
-Correct me if I'm wrong, but setting BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
-shouldn't buildroot make linux-menuconfig modify the one pointed to by this
-variable? So far, I've had to run make linux-menuconfig, then manually copy the
-output/target/linux-custom/.config to my actual linux source directory in order
-to preserve the changes.
+> So far, I've had to run make linux-menuconfig, then manually copy the
+> output/target/linux-custom/.config to my actual linux source directory
+> in order to preserve the changes.
+
+You want to run:  make linux-update-defconfig   (or: linux-update-config)
+See help, with:   make help
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
