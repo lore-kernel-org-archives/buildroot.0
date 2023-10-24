@@ -4,67 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E28EDC00A8F
-	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 19:23:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50C1FC07545
+	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 20:53:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B7E6705AB;
-	Tue, 24 Oct 2023 19:23:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B7E6705AB
+	by smtp3.osuosl.org (Postfix) with ESMTP id D191270637;
+	Tue, 24 Oct 2023 20:53:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D191270637
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iBD0Rr2QtzNI; Tue, 24 Oct 2023 19:23:18 +0000 (UTC)
+	with ESMTP id JvwZ07o9Luzv; Tue, 24 Oct 2023 20:53:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA70D705A4;
-	Tue, 24 Oct 2023 19:23:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA70D705A4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 495F61BF286
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 19:23:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C44070635;
+	Tue, 24 Oct 2023 20:53:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C44070635
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 469191BF470
+ for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 20:53:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 219FD4EF50
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 19:23:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 219FD4EF50
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F0BB84CEE
+ for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 20:53:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F0BB84CEE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qi1Q7JRIxujk for <buildroot@lists.busybox.net>;
- Tue, 24 Oct 2023 19:23:15 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2EE0A4EF4A
- for <buildroot@buildroot.org>; Tue, 24 Oct 2023 19:23:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EE0A4EF4A
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:b634:9dd0:c5f5:6564])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 3F58FB00593;
- Tue, 24 Oct 2023 21:23:07 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 24 Oct 2023 21:23:06 +0200
-Date: Tue, 24 Oct 2023 21:23:06 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Sergey Bobrenok <sibobrenok@salutedevices.com>
-Message-ID: <20231024192306.GC2607@scaer>
-References: <20231024153023.19173-1-sibobrenok@salutedevices.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BDAgOk1ClDRi for <buildroot@lists.busybox.net>;
+ Tue, 24 Oct 2023 20:53:27 +0000 (UTC)
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CDE9C84CED
+ for <buildroot@buildroot.org>; Tue, 24 Oct 2023 20:53:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDE9C84CED
+Received: from bl14-19-118.dsl.telepac.pt ([85.247.19.118] helo=[192.168.1.10])
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+ id 1qvOOq-006jTw-1P; Tue, 24 Oct 2023 22:53:16 +0200
+Message-ID: <004cba7d-2c39-a504-b4cb-9030424f4ac0@igalia.com>
+Date: Tue, 24 Oct 2023 22:53:15 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231024153023.19173-1-sibobrenok@salutedevices.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698175391;
- bh=hawYQUtmm/Yqb6LHaClMOuKh7JwggTGun7PIq5p8WbI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=j6CIRcmNAjHGY9674WlgmrXXk8rj1T1Jo5HW4Hw01obGDodcExr6DDP7xgM1gkAO8
- BXPRDhfr5tu7uWs2ypuHFtN+h9Ftr5KUzS+cSf6/wwXCncuV/DHDmhv6Hqx3XZBDM4
- gTHprtYBqLlSpkpPUjwd+QrCFx84Oop6ZlijVLtK91zO7a55BLulTrqFFOt2C8OylY
- LSAqPRO50Q2d4MCB/Kc4KEIfy1LRmGVmoL7Nsj2/+Uw6/qsfM/8xiXyjxluKbLh9xw
- +pj2+3YslzPD+qVvZ5PowwI5Bu3fqRtPNJFNd1qnWA12n3jhrir8/E+CKkuvbdBvzS
- wzhjiKclEeOjA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=j6CIRcmN
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-kernel-module: add
- BR2_MAKE_HOST_DEPENDENCY
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20231021213800.GG2607@scaer>
+ <e1ef03a2-8f5f-4cd3-a433-e180eb3203d5@othermo.de>
+ <20231023162506.GV2607@scaer>
+ <6024766d-548e-c9ce-a0a0-2aaeb4396461@igalia.com>
+ <PH1P110MB1603AA64767C75F0971FFB339FDFA@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+ <4528d9f7-78ee-1576-37d7-236476d3874f@igalia.com>
+ <PH1P110MB16038C63A3D4037B53F502499FDFA@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+ <12dadf47-47c1-d158-b6f9-1f15991553e4@igalia.com>
+ <PH1P110MB1603BACCE9A528FF031B049A9FDFA@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+ <8c44f1f6-7ef7-487b-db22-b396497e2a68@igalia.com>
+ <20231024190747.GB2607@scaer>
+From: Carlos Alberto Lopez Perez <clopez@igalia.com>
+Organization: Igalia S.L.
+In-Reply-To: <20231024190747.GB2607@scaer>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+ References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+ Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+ Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+ List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=msMH4fkx6V2eCiD8QyQro5nNQOtnCH0nhi2qT10sj10=; b=MI+bKYSB6sXWu9MqdP/+NEBnTq
+ vg+DL3AZ+yiDdXqzWsxDXGz58wk9l9TcXSD8WExdrKOI/GRj/Foao3u0vOoF2fuybfqhHWgNKksNx
+ OXdOS+VGbASxCntEwZAFXD40JJ7e7CRfb9GcJL/x1mmFPx+lFReIr3FL3M3TQ1t7UA0OR9XxrfDx5
+ O+eDXG+bP4M3I6WUgErX/f1+b09Boz0Yu/IvcyqNSgiYYRx3k97i4poNqvxu9SN71kWl0RbKViGL0
+ lm2Bd8Zgo/mEoRvoVfKLnrE3ekolcHj3AswHj13hnq+USkwq/BO9T8rwFQWXfFuRHTtzVwRz6J6as
+ Yfh4tC9g==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=MI+bKYSB
+Subject: Re: [Buildroot] [External] - Re: [PATCH 1/1] configs/raspberrypi*:
+ stop setting powersave as the default CPU governor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,74 +88,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Bobrenok <SIBobrenok@sberdevices.ru>,
- Alexey Romanov <avromanov@sberdevices.ru>, buildroot@buildroot.org
+Cc: Martin Bark <martin@barkynet.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Vincent Fazio <vfazio@xes-inc.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Marcus Hoffmann <marcus.hoffmann@othermo.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sergey, All,
+On 24/10/2023 21:07, Yann E. MORIN wrote:
+> Because we are *not* RPi-OS. We are not matching against RPi-OS; we are
+> using rpi-kernel upstream decision.
 
-On 2023-10-24 18:30 +0300, Sergey Bobrenok via buildroot spake thusly:
-> From: Alexey Romanov <avromanov@sberdevices.ru>
-> 
-> Commit 0b9efc991f ("linux: use BR2_MAKE") switched LINUX_MAKE to
-> $(BR2_MAKE) to avoid build issue with kernel version >= 6.2 and GNU
-> Make version < 3.82. However, the same issue is actual for kernel
-> modules as well.
-> 
-> Using $(BR2_MAKE) should guarantee a consistent behavior between
-> kernel and kernel-modules builds.
-> 
-> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
-> Signed-off-by: Sergey Bobrenok <SIBobrenok@sberdevices.ru>
-> ---
->  package/pkg-kernel-module.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-> index fcd6b8bc29..ae7a09114e 100644
-> --- a/package/pkg-kernel-module.mk
-> +++ b/package/pkg-kernel-module.mk
-> @@ -50,11 +50,12 @@ LINUX_NEEDS_MODULES = y
->  endif
->  
->  # The kernel must be built first.
-> -$(2)_DEPENDENCIES += linux
-> +$(2)_DEPENDENCIES += linux \
-> +    $$(BR2_MAKE_HOST_DEPENDENCY)
+rpi-kernel upstream decision can't be considered alone. They just do
+this because they have an init script that later changes the governor to
+ondemand on RPi-OS.
 
-With multi-line assignments, each value should be on its own line. Also,
-indentation should be with TAB, not spaces.
+They are not defining those defconfings thinking on other downstreams
+than RPi-OS.
 
-Applied to master with the above fixed, thanks.
+I think they are committing a mistake by doing that: the kernel
+defconfig is not the right place to set such behaviour. They should be
+setting powersave as default from the debian/rules of the kernel package
+instead.
 
-Regards,
-Yann E. MORIN.
+And I think you are committing another mistake by taking their
+defconfigs as something that should be the default or is thought for
+other downstreams than RPi-OS.
 
->  # This is only defined in some infrastructures (e.g. autotools, cmake),
->  # but not in others (e.g. generic). So define it here as well.
-> -$(2)_MAKE ?= $$(MAKE)
-> +$(2)_MAKE ?= $$(BR2_MAKE)
->  
->  # If not specified, consider the source of the kernel module to be at
->  # the root of the package.
-> -- 
-> 2.24.3 (Apple Git-128)
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+It makes *zero* sense to have powersave as default without that init
+script that later changes it.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
