@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DE2BC0032E
-	for <buildroot@archiver.kernel.org>; Wed, 25 Oct 2023 20:15:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA2E2C0032E
+	for <buildroot@archiver.kernel.org>; Wed, 25 Oct 2023 20:15:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E02124049A;
-	Wed, 25 Oct 2023 20:15:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E02124049A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D2954051C;
+	Wed, 25 Oct 2023 20:15:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D2954051C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AamyCTHIPcM6; Wed, 25 Oct 2023 20:15:03 +0000 (UTC)
+	with ESMTP id CvusuRvIRlta; Wed, 25 Oct 2023 20:15:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C4488404F4;
-	Wed, 25 Oct 2023 20:15:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4488404F4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4BAED40111;
+	Wed, 25 Oct 2023 20:15:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BAED40111
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DDF711BF356
- for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:14:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 217341BF977
+ for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:14:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B613360B94
- for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:14:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B613360B94
+ by smtp3.osuosl.org (Postfix) with ESMTP id 08F7C60B45
+ for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:14:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08F7C60B45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mJp2Ddpln2T5 for <buildroot@lists.busybox.net>;
- Wed, 25 Oct 2023 20:14:02 +0000 (UTC)
+ with ESMTP id iVeLbU-lhT8K for <buildroot@lists.busybox.net>;
+ Wed, 25 Oct 2023 20:14:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB59060B8C
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFBCE60A74
  for <buildroot@buildroot.org>; Wed, 25 Oct 2023 20:14:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB59060B8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFBCE60A74
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C523085EC2; Wed, 25 Oct 2023 20:14:01 +0000 (UTC)
+ id AC7A385EBE; Wed, 25 Oct 2023 20:14:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 25 Oct 2023 22:06:09 +0200
+Date: Wed, 25 Oct 2023 22:04:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6890c1c4e04a968484ccf0c89ffce8b57ff3281
-X-Git-Newrev: 97d6a77d1ef0057c9ccf3da91ac0bdebdb129112
+X-Git-Oldrev: 0629895dbf071e39a2994c57d888ed5c124a32c1
+X-Git-Newrev: 871f611e5aa4a6ccc7d5ea654cb88d336578fbc4
 X-Patchwork-Hint: ignore
-Message-Id: <20231025201401.C523085EC2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/paho-mqtt-c: bump to version 1.3.13
+Message-Id: <20231025201401.AC7A385EBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
+ 23.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97d6a77d1ef0057c9ccf3da91ac0bdebdb129112
+commit: https://git.buildroot.net/buildroot/commit/?id=871f611e5aa4a6ccc7d5ea654cb88d336578fbc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/eclipse/paho.mqtt.c/releases/tag/v1.3.13
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 529c538ff2..d359edf36e 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  6a70a664ed3bbcc1eafdc45a5dc11f3ad70c9bac12a54c2f8cef15c0e7d0a93b  paho-mqtt-c-1.3.12.tar.gz
-+sha256  47c77e95609812da82feee30db435c3b7c720d4fd3147d466ead126e657b6d9c  paho-mqtt-c-1.3.13.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 8d1fe009a7..ec4e96c77f 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index 4a3b34a9c1..93930f07f2 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0101a600d70fa423b224d8ab53d8359c880a697af7a32fcfae3c744518277773  intel-media-23.3.4.tar.gz
++sha256  67fd15654bb3c596feb8c85e81221de5632e11f598421c35adc4453d727f0130  intel-media-23.3.5.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 90bfbfc505..5492411b63 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--PAHO_MQTT_C_VERSION = 1.3.12
-+PAHO_MQTT_C_VERSION = 1.3.13
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 23.3.4
++INTEL_MEDIADRIVER_VERSION = 23.3.5
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
