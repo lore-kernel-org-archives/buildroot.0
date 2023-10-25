@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F4BC07545
-	for <buildroot@archiver.kernel.org>; Wed, 25 Oct 2023 19:26:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16C7CC25B6F
+	for <buildroot@archiver.kernel.org>; Wed, 25 Oct 2023 19:30:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE30C81E62;
-	Wed, 25 Oct 2023 19:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE30C81E62
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADC9881E9E;
+	Wed, 25 Oct 2023 19:30:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADC9881E9E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cpkn4qAH4O-M; Wed, 25 Oct 2023 19:26:12 +0000 (UTC)
+	with ESMTP id ta_5fMDXB3gY; Wed, 25 Oct 2023 19:30:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C80FE81E03;
-	Wed, 25 Oct 2023 19:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C80FE81E03
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 731FD1BF976
- for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 19:26:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F012181E9C;
+	Wed, 25 Oct 2023 19:30:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F012181E9C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CBF5F1BF976
+ for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 19:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C12E81E00
- for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 19:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C12E81E00
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5F5160B6F
+ for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 19:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5F5160B6F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NPaRwVJBygci for <buildroot@lists.busybox.net>;
- Wed, 25 Oct 2023 19:26:08 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8C3AF81DF9
- for <buildroot@buildroot.org>; Wed, 25 Oct 2023 19:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C3AF81DF9
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 650BA13F838;
- Wed, 25 Oct 2023 21:26:04 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Aeo6qxu-_HmX for <buildroot@lists.busybox.net>;
+ Wed, 25 Oct 2023 19:30:23 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BF64460B6E
+ for <buildroot@buildroot.org>; Wed, 25 Oct 2023 19:30:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF64460B6E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 986771C0005;
+ Wed, 25 Oct 2023 19:30:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qvja6-004PdW-O8; Wed, 25 Oct 2023 21:30:18 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 25 Oct 2023 21:25:53 +0200
-Message-ID: <20231025192553.370253-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+Date: Wed, 25 Oct 2023 21:30:17 +0200
+Message-Id: <20231025193017.1051787-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698261965;
- bh=LTDH7vVoiRcl5foQtOuVyaV9IdgjK7z+gu4KjRyste8=;
- h=From:To:Cc:Subject:Date:From;
- b=lCzB++svzxsZ3iRBPuJi6QcQ0Od2kg1PqBtDEvttyh+MjKZXJUfc0RKdlMkN4yesJ
- 7jaofPPFDDHHD8rdJqREtUc0OwU2qGwkLl1XohJtt04PKM69by+ZqUGJv7PTkgmxlB
- iv0ijfankIcHhB+rZ6m/cowearYJVyNH55rhrp9mmHlmqrCRa2Mz981pc6d04vU9F9
- UQXLYO5hrJSdhW0Aj2ybca9EMxN//fe8/LrFptRR8AQU9/QBvAc44X3FLE0/4XQT4W
- ji2lWo7DmKicOweeL8UfpCeMW0wcu7fU1T87pIhLWBVgZ+1PRpiceifBnHeP69x/oW
- jx8kLLWxf8diw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lCzB++sv
-Subject: [Buildroot] [PATCH 1/1] package/rdma-core: bump to version v48.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH] package/mxsldr: add .hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,63 +59,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Erik Stromdahl <erik.stromdahl@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://github.com/linux-rdma/rdma-core/releases/tag/v48.0
+The host-mxsldr package was missing a hash file, add it now.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Patch tested on branch master at commit 75fa573 with commands:
+ package/mxsldr/mxsldr.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 package/mxsldr/mxsldr.hash
 
-    make check-package
-    ...
-    0 warnings generated
-
-    utils/test-pkg -p rdma-core
-    ...
-    6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_rdma_core
-    ...
-    OK
----
- package/rdma-core/rdma-core.hash | 2 +-
- package/rdma-core/rdma-core.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-index 0dfcce7fe4..f0f2448a8f 100644
---- a/package/rdma-core/rdma-core.hash
-+++ b/package/rdma-core/rdma-core.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  c1d84405e05e00bfd99732bdc1b8394ac1332ffd0eedbf0af99f926732f67044  rdma-core-47.0.tar.gz
-+sha256  e78abaa3ed16771bc6c40b538fe27082429363b86b6ce47636bb57a59238b2be  rdma-core-48.0.tar.gz
- sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
- sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-index 9cc9434744..41f10d44f6 100644
---- a/package/rdma-core/rdma-core.mk
-+++ b/package/rdma-core/rdma-core.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RDMA_CORE_VERSION = 47.0
-+RDMA_CORE_VERSION = 48.0
- RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
- RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
- RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
+diff --git a/package/mxsldr/mxsldr.hash b/package/mxsldr/mxsldr.hash
+new file mode 100644
+index 0000000000..c2a7b4ad64
+--- /dev/null
++++ b/package/mxsldr/mxsldr.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  8ef7b7abb8d17c879e70b2c3911df8c5ce97f38779fa65d40be7f34febba55e1  mxsldr-2793a657ab7a22487d21c1b020957806f8ae8383-br1.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
 -- 
-2.41.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
