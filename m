@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA2E2C0032E
-	for <buildroot@archiver.kernel.org>; Wed, 25 Oct 2023 20:15:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05C8EC07545
+	for <buildroot@archiver.kernel.org>; Wed, 25 Oct 2023 20:17:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D2954051C;
-	Wed, 25 Oct 2023 20:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D2954051C
+	by smtp2.osuosl.org (Postfix) with ESMTP id A199B40492;
+	Wed, 25 Oct 2023 20:17:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A199B40492
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CvusuRvIRlta; Wed, 25 Oct 2023 20:15:17 +0000 (UTC)
+	with ESMTP id IohOP7stxx2I; Wed, 25 Oct 2023 20:17:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4BAED40111;
-	Wed, 25 Oct 2023 20:15:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BAED40111
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9A9040486;
+	Wed, 25 Oct 2023 20:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9A9040486
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 217341BF977
- for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:14:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B95581BF356
+ for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 08F7C60B45
- for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:14:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08F7C60B45
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9283360B8C
+ for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:17:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9283360B8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iVeLbU-lhT8K for <buildroot@lists.busybox.net>;
- Wed, 25 Oct 2023 20:14:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFBCE60A74
- for <buildroot@buildroot.org>; Wed, 25 Oct 2023 20:14:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFBCE60A74
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC7A385EBE; Wed, 25 Oct 2023 20:14:01 +0000 (UTC)
+ with ESMTP id UpxYZMXfmxQ4 for <buildroot@lists.busybox.net>;
+ Wed, 25 Oct 2023 20:17:21 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 39E0160B45
+ for <buildroot@buildroot.org>; Wed, 25 Oct 2023 20:17:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39E0160B45
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D6A31BF204;
+ Wed, 25 Oct 2023 20:17:18 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qvkJZ-004Szm-BS; Wed, 25 Oct 2023 22:17:17 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 25 Oct 2023 22:04:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0629895dbf071e39a2994c57d888ed5c124a32c1
-X-Git-Newrev: 871f611e5aa4a6ccc7d5ea654cb88d336578fbc4
-X-Patchwork-Hint: ignore
-Message-Id: <20231025201401.AC7A385EBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 23.3.5
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20231019190151.919007-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 25 Oct 2023 22:17:17 +0200
+In-Reply-To: <20231019190151.919007-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Thu, 19 Oct 2023 21:01:51 +0200")
+Message-ID: <87il6upicy.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 8.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,44 +62,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=871f611e5aa4a6ccc7d5ea654cb88d336578fbc4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 4a3b34a9c1..93930f07f2 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0101a600d70fa423b224d8ab53d8359c880a697af7a32fcfae3c744518277773  intel-media-23.3.4.tar.gz
-+sha256  67fd15654bb3c596feb8c85e81221de5632e11f598421c35adc4453d727f0130  intel-media-23.3.5.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 90bfbfc505..5492411b63 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 23.3.4
-+INTEL_MEDIADRIVER_VERSION = 23.3.5
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
