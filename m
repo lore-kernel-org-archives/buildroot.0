@@ -1,52 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7BDCC25B47
-	for <buildroot@archiver.kernel.org>; Tue, 24 Oct 2023 19:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99358C07545
+	for <buildroot@archiver.kernel.org>; Wed, 25 Oct 2023 20:39:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6ABA584C8E;
-	Tue, 24 Oct 2023 19:58:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ABA584C8E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DA8F404C8;
+	Wed, 25 Oct 2023 20:39:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DA8F404C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ip3tnXuSdLGT; Tue, 24 Oct 2023 19:58:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b5GpVQCJ-Adh; Wed, 25 Oct 2023 20:38:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A733F84C84;
-	Tue, 24 Oct 2023 19:58:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A733F84C84
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B67D404BF;
+	Wed, 25 Oct 2023 20:38:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B67D404BF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F24A51BF377
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 19:58:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7BF521BF3F4
+ for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:38:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9FBB4EC90
- for <buildroot@lists.busybox.net>; Tue, 24 Oct 2023 19:58:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9FBB4EC90
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6118F41800
+ for <buildroot@lists.busybox.net>; Wed, 25 Oct 2023 20:38:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6118F41800
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kVL_ms_dhifu for <buildroot@lists.busybox.net>;
- Tue, 24 Oct 2023 19:58:10 +0000 (UTC)
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2CD7F4853D
- for <buildroot@uclibc.org>; Tue, 24 Oct 2023 19:58:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CD7F4853D
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qvNXT-0009wI-Qp
- for buildroot@uclibc.org; Tue, 24 Oct 2023 21:58:07 +0200
-X-Injected-Via-Gmane: http://gmane.org/
+ with ESMTP id o-eV-S_KHeAu for <buildroot@lists.busybox.net>;
+ Wed, 25 Oct 2023 20:38:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F8C54168B
+ for <buildroot@uclibc.org>; Wed, 25 Oct 2023 20:38:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F8C54168B
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 6BB628353E; Wed, 25 Oct 2023 20:38:55 +0000 (UTC)
+From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Tue, 24 Oct 2023 21:57:53 +0200
-Message-ID: <pan$bd914$68481ed4$7471af7$2ff683d3@ID-313208.user.individual.net>
-References: <20231024181412.3198951-1-bernd@kuhls.net>
- <ZTgVKtuCBV708jzY__8992.36735874496$1698174287$gmane$org@fdugast-desk.home>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
-Subject: Re: [Buildroot] [PATCH v5 1/1] package/igt-gpu-tools: new package
+Date: Wed, 25 Oct 2023 20:38:54 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2023.08.2
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: marcus.hoffmann@othermo.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-15823-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+Subject: [Buildroot] [Bug 15823] New: Installing nodejs modules with native
+ extensions fails on first run
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,20 +79,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Tue, 24 Oct 2023 21:04:10 +0200 schrieb Francois Dugast:
+https://bugs.busybox.net/show_bug.cgi?id=15823
 
-> This is a workaround for igt_stats only but the issue affects more, if
-> not almost all IGT binaries. A few more random examples:
-[...]
-> Instead I would add a package dependency:
-[...]
-> +       depends on BR2_RELRO_NONE # prevent segfault in IGT binaries
+            Bug ID: 15823
+           Summary: Installing nodejs modules with native extensions fails
+                    on first run
+           Product: buildroot
+           Version: 2023.08.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: marcus.hoffmann@othermo.de
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-The tool I am interested in, intel_gpu_top, works fine with my private config BR2_RELRO_FULL=y so depending on BR2_RELRO_NONE is too much imho.
-Are the chances that the bug causing segfaults can be fixed?
+I'm building the the raspberrypi4_64_defconfig with the following
+changes/additions:
 
-Regards, Bernd
+```
+BR2_CCACHE=y
+BR2_PACKAGE_NODEJS=y
+BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="serialport"
+BR2_TARGET_ROOTFS_EXT2_SIZE="300M"
+```
 
+
+This fails during the first run with the following errors:
+```
+ERROR: architecture for
+"/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-arm/node.napi.armv6.node"
+is "ARM", should be "AArch64"
+ERROR: architecture for
+"/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/android-arm/node.napi.armv7.node"
+is "ARM", should be "AArch64"
+ERROR: architecture for
+"/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-arm/node.napi.armv7.node"
+is "ARM", should be "AArch64"
+ERROR: architecture for
+"/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64/node.napi.glibc.node"
+is "Advanced Micro Devices X86-64", should be "AArch64"
+ERROR: architecture for
+"/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64/node.napi.musl.node"
+is "Advanced Micro Devices X86-64", should be "AArch64"
+make[1]: *** [package/pkg-generic.mk:406:
+/home/marcus/repos/buildroot-upstream/output/build/nodejs-16.20.0/.stamp_installed]
+Error 1
+```
+
+On a second invocation of make, it then succeeds to build. I have not yet
+runtime testing if the serialport library actually works.
+
+As discussed on IRC just now, there was a discussion about this issue on this
+patch already:
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20190531075800.7064-1-vcrini@gmail.com/
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
