@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF27DC25B48
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 16:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F423C25B67
+	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 16:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FCD042CB3;
-	Thu, 26 Oct 2023 16:40:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FCD042CB3
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6418410A0;
+	Thu, 26 Oct 2023 16:40:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6418410A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0CuL7B91dcAg; Thu, 26 Oct 2023 16:40:23 +0000 (UTC)
+	with ESMTP id r0jEc4igjRad; Thu, 26 Oct 2023 16:40:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5D8742CA8;
-	Thu, 26 Oct 2023 16:40:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5D8742CA8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 23BF01BF239
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:40:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E08C342DC3;
+	Thu, 26 Oct 2023 16:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E08C342DC3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E7A81BF239
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:40:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 095F442CA8
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:40:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 095F442CA8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36ECE6FA15
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:40:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36ECE6FA15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J60rvdFW_Su0 for <buildroot@lists.busybox.net>;
- Thu, 26 Oct 2023 16:40:20 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0CE66410A0
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 16:40:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CE66410A0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 472AF240005;
- Thu, 26 Oct 2023 16:40:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qw3P7-006yik-Hv; Thu, 26 Oct 2023 18:40:17 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z2OKF6QPZdVd for <buildroot@lists.busybox.net>;
+ Thu, 26 Oct 2023 16:40:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32E936FA13
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 16:40:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32E936FA13
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1F99E85F04; Thu, 26 Oct 2023 16:40:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-References: <20231017195327.644914-1-aperez@igalia.com>
-Date: Thu, 26 Oct 2023 18:40:17 +0200
-In-Reply-To: <20231017195327.644914-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Tue, 17 Oct 2023 22:53:24 +0300")
-Message-ID: <87sf5xmj66.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/xdg-dbus-proxy: bump to version
- 0.1.5
+To: buildroot@buildroot.org
+Date: Thu, 26 Oct 2023 18:40:10 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 89a71e4222f7047f9c9f0e5e204d4fc45a8e19ce
+X-Git-Newrev: b77df1db5bdea98043ac9fc73e75244ea3a60efc
+X-Patchwork-Hint: ignore
+Message-Id: <20231026164040.1F99E85F04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/xdg-dbus-proxy:
+ bump to version 0.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,25 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b77df1db5bdea98043ac9fc73e75244ea3a60efc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
- > Version 0.1.5 mainly fixes handling of paths with more than 255
- > characters. Release notes:
+Version 0.1.5 mainly fixes handling of paths with more than 255
+characters. Release notes:
 
- >   https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
+  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 487761a5b294ae1806030b935faa97c1f1fd1820)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
+ package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2023.02.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+index 7bbea72b03..37f1790c9b 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
+-sha256  1ec0eab53d1e49966d722352bcfd51ac402dce5190baedc749a8541e761670ab  xdg-dbus-proxy-0.1.4.tar.xz
++# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
++sha256  061dcfaf8a0650e5fd9d5432dfe88bda749ea0d079dc136304bfecfbce0661fb  xdg-dbus-proxy-0.1.4.tar.xz
+ 
+ # Hash for license files:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+index 48f49dba2a..2e8c054386 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDG_DBUS_PROXY_VERSION = 0.1.4
++XDG_DBUS_PROXY_VERSION = 0.1.5
+ XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
+ XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
+ XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
