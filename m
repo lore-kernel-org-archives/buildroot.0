@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CA0DC25B67
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 16:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F532C25B48
+	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 16:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48F3D42463;
-	Thu, 26 Oct 2023 16:08:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48F3D42463
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0927B41D3B;
+	Thu, 26 Oct 2023 16:08:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0927B41D3B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n16K5h1lBt3O; Thu, 26 Oct 2023 16:08:34 +0000 (UTC)
+	with ESMTP id mr7Rc-8KIhPr; Thu, 26 Oct 2023 16:08:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1387E41D7C;
-	Thu, 26 Oct 2023 16:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1387E41D7C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 155811BF976
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:08:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D27BA41CE4;
+	Thu, 26 Oct 2023 16:08:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D27BA41CE4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 174E61BF976
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D419740CC9
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:08:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D419740CC9
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2CD942D60
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2CD942D60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W1KmdcJDjT-O for <buildroot@lists.busybox.net>;
- Thu, 26 Oct 2023 16:08:07 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B5D1641D18
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 16:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5D1641D18
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0F32D20002;
- Thu, 26 Oct 2023 16:08:02 +0000 (UTC)
-Date: Thu, 26 Oct 2023 18:08:02 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CHObhO5YN-Cr for <buildroot@lists.busybox.net>;
+ Thu, 26 Oct 2023 16:08:15 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C404F42D28
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 16:08:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C404F42D28
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8892B1BF204;
+ Thu, 26 Oct 2023 16:08:11 +0000 (UTC)
+Date: Thu, 26 Oct 2023 18:08:10 +0200
 To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20231026180802.2a5d22c5@booty>
-In-Reply-To: <20231020114236.4129636-8-neal.frager@amd.com>
+Message-ID: <20231026180810.15bac13a@booty>
+In-Reply-To: <20231020114236.4129636-9-neal.frager@amd.com>
 References: <20231020114236.4129636-1-neal.frager@amd.com>
- <20231020114236.4129636-8-neal.frager@amd.com>
+ <20231020114236.4129636-9-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698336483;
+ d=bootlin.com; s=gm1; t=1698336492;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=mCvbkzBD94IYXm+summLNCvuSL8ZlX2bC6E1nbGmk2I=;
- b=eaF3VB28MAJdQSzLvOdIJiCxNQtGCvlTHlaZ25IxbfM6vHGztcQ80iqyIfvf9EwflYTemv
- 4V4Vubrx7SbwbTHTBFGCIEul9VXg3vLVSTVqaH9kDLMtzDzWxFH2Z8RWEHm9FY+nSTd2rT
- JICyqtKE1RI35oukLNt2TUhulML6tKsPJAgxbGkVUzUvZHyDF8tTmI/11fz00UvGlz6N1i
- TSkYNTbRIWFidyPThqwEZ2srBVSxykcm+QB3TVw2YEXiQO6VxbguLuqwrdWwlgJ1qe6CPL
- DZF8me/rEL2WAlBqbn8xEL5GP3+b639xtuc7bIB+2k91Kq5y4lU8u4oI/OOBfg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=GfPIM8aLTvNvB7OP6FlTJ66H2vKaAEmxS7OvMp3NBQ4=;
+ b=mWkEjyUvDSriIJ49qbx8Kaj5fQd3nBkzU/iR2Z7W6ph7HBqK4qjHUL+/ZTRi+xHg16DTJ/
+ ZI2E0KKXQ46qLBbok2/0FllT4riIb4pHfb6p3C3Hof955rpvgFjtMn92k3sgxpxH5gcIZR
+ H7D4gu9MZ9E1hztIYmGy1Rc2URk4bluJ8kIuUyHw1figHGvnGOMl2IeRdkk/75P7I0ALsS
+ AvSdVmW1g060b4GPCf8ZYnIvffzn74M2LfXUTHHum9DJBRPcc/JGfZu6DzFNszVBUk00K9
+ Bw+EfZpWUhvgiYKvkjMc6cBjJ851lHGzVwUDM7LTe/HrdJwTsAJUR0fzrtZMWw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=eaF3VB28
-Subject: Re: [Buildroot] [PATCH v6 08/10] boot/versal-firmware: new boot
- firmware
+ header.s=gm1 header.b=mWkEjyUv
+Subject: Re: [Buildroot] [PATCH v6 09/10] configs/versal_vck190_defconfig:
+ build plm and psmfw source
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,18 +85,11 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 20 Oct 2023 12:42:34 +0100
+On Fri, 20 Oct 2023 12:42:35 +0100
 Neal Frager <neal.frager@amd.com> wrote:
 
-> This patch adds a new boot firmware to buildroot for building the versal plm
-> and psmfw.  It requires the toolchain-bare-metal package that includes a
-> bare-metal binutils, gcc and newlib which can be built for the microblaze
-> architecture.
-> 
-> Patches are required to enable parallel building of the versal plm and psmfw
-> applications.  These two patches have been submitted upstream internally at
-> AMD / Xilinx and will be included with the 2023.2 release of the embeddedsw
-> repository.
+> This patch migrates the versal_vck190_defconfig to use the new
+> versal-firmware package for building the versal plm and psmfw from source.
 > 
 > Signed-off-by: Neal Frager <neal.frager@amd.com>
 
