@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4461EC25B6B
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 09:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82706C25B6B
+	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 09:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB382417A1;
-	Thu, 26 Oct 2023 09:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB382417A1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2931441759;
+	Thu, 26 Oct 2023 09:31:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2931441759
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mqVoE5XqFGu8; Thu, 26 Oct 2023 09:31:29 +0000 (UTC)
+	with ESMTP id UVQhGhYEXjbL; Thu, 26 Oct 2023 09:31:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A057417E6;
-	Thu, 26 Oct 2023 09:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A057417E6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 970D41BF2B8
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:27:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7C81417E6;
+	Thu, 26 Oct 2023 09:31:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7C81417E6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C6151BF2B8
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FBEE6124C
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FBEE6124C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5292641773
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:27:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5292641773
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TfXlq9ckcwEk for <buildroot@lists.busybox.net>;
- Thu, 26 Oct 2023 09:27:23 +0000 (UTC)
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com
- [IPv6:2a00:1450:4864:20::641])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8BD916124D
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 09:27:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BD916124D
-Received: by mail-ej1-x641.google.com with SMTP id
- a640c23a62f3a-9c603e2354fso135273466b.1
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 02:27:23 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e8JMnxz5DwRB for <buildroot@lists.busybox.net>;
+ Thu, 26 Oct 2023 09:27:25 +0000 (UTC)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B05641780
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 09:27:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B05641780
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-9b9faf05f51so97478766b.2
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 02:27:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698312441; x=1698917241;
+ d=1e100.net; s=20230601; t=1698312442; x=1698917242;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=za/Bx7mDU113OmIs/fc3ObpTh2nSKTbT1sWXFa+8qVQ=;
- b=Fz1dbZGN73P7fAxnmy0j6tlZyVpn9lHG6qE5pU2qEwALVT/j60+GEPc77PX3BoRprN
- 1YBnBf9Goqn4Sudpeqaz7hApUR3LGd02/nvu8GYJHMVkunmSz69fD91/B92yvtERH6hq
- I7hl3utXjBYwJ//H9vHZwuQzl8mlGIx6JnXW5fMzZvPOyPE5TGmOOFKtk+BRwHP4MLJg
- CCMXaPbxPBDNV2HyYsdLJNORcIrk3BBeJ6d10gROwvygeQa2AhpV6SJJiRia+CAoaUpz
- BPge53RhQk1sqDhE4XbnLU8TH72IsZmUxvyU8cIT+nKG/qmViEBbZXpxHDwgGh2rIFPb
- YLCg==
-X-Gm-Message-State: AOJu0YxCYbCRtmUZJo6JbyZwCZfPXflC+Er1o3peV2n5gIlOPQ6oYr6p
- Znx3b8CXtiqU0G+Yc2fK3FUqI0/Znm5PmrLjXogH3i2byCyIoOp/
-X-Google-Smtp-Source: AGHT+IH6ZuOgEBQFFDxKatbIOM29cDksiaWZrajMyFJX60DOkc4F5jf7TK/zXHjL4YGwUhgj6jvpqw==
-X-Received: by 2002:a17:907:1ca4:b0:9aa:206d:b052 with SMTP id
- nb36-20020a1709071ca400b009aa206db052mr2202500ejc.27.1698312441433; 
- Thu, 26 Oct 2023 02:27:21 -0700 (PDT)
+ bh=0enXpB6fUn1eoynUhTRg72LITeIP3UzPL/U0dx+RazE=;
+ b=tqYpegMFnhvrs+g1121S52KvKiMxqFrdA66IugBicQwIpnj0wY79wOWxpT9woKBdhK
+ iYEqPPOC54c2u5rUJErsNbY/UcYE0JGuKtimUASZsRqA/WbwyHk0cTVoVcjBigjVKkRU
+ zYQUQz1Q9zSda8ghEHzDejP3LNS8pqAxrS8qJi3nGoSLkRr9Ng0uwkl3AYsw/aLbfFQs
+ Gn/0ZkniAn/551iycXM1rHzo3E4YZuz71M4akt/O04kHjPAkuBKbmBrofQmPV+WynhU3
+ 3rnRm9vuKqi/4+CAiygEehL9SJokHAeXt7ePOB2FO/RygjD90bh3qQ4fwd7pbbvRRf01
+ ARqw==
+X-Gm-Message-State: AOJu0YyTELn0DFTjaTHewHAmaEKFUu02Xjs8emneKUf4rEGyht4mwx8j
+ QmxvTqLVY3OLzLvik9w7BfdbimZoFt1VZ2lN+5/o/jSpq3/h0Q==
+X-Google-Smtp-Source: AGHT+IEEce7MJFR9XZAaSEaJUeSC3i91CySXNOsSL3UfOyN7qi3BiTZuIzSnKh6AAlIJxvM1tsw7Aw==
+X-Received: by 2002:a17:907:988:b0:9c1:66cc:1d7d with SMTP id
+ bf8-20020a170907098800b009c166cc1d7dmr10914341ejc.64.1698312442308; 
+ Thu, 26 Oct 2023 02:27:22 -0700 (PDT)
 Received: from fedora.. ([77.241.232.0]) by smtp.gmail.com with ESMTPSA id
- mb8-20020a170906eb0800b009b947f81c4asm11268438ejb.155.2023.10.26.02.27.20
+ mb8-20020a170906eb0800b009b947f81c4asm11268438ejb.155.2023.10.26.02.27.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Oct 2023 02:27:20 -0700 (PDT)
+ Thu, 26 Oct 2023 02:27:21 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Oct 2023 11:26:49 +0200
-Message-ID: <20231026092701.12345-19-adam.duskett@amarulasolutions.com>
+Date: Thu, 26 Oct 2023 11:26:50 +0200
+Message-ID: <20231026092701.12345-20-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
 References: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1698312441; x=1698917241;
+ d=amarulasolutions.com; s=google; t=1698312442; x=1698917242;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=za/Bx7mDU113OmIs/fc3ObpTh2nSKTbT1sWXFa+8qVQ=;
- b=oRYjCTUcgH6s5y6tUJVDhHsMYrHQD8D1mnnvW69s+6o8vtXuvfa1ITON0LX43npI1f
- l+F7NrkZfuC/Z15baR/lggquz8Pyb0Q0ROeXyvL04PjcK53kQmPTVBTTCMs8VvMgkFBc
- obB6a/XANKU2kX+3Fqdsqf3+w+RXFhtlVDt6w=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=0enXpB6fUn1eoynUhTRg72LITeIP3UzPL/U0dx+RazE=;
+ b=r6Q33EoW8piAceGZQlnHtVjB3uJzDw//F4V3Hr63XzrwOmNlx76M+n8MqZFrdfgbhf
+ nhlh8KKb94afjqCchBaIGniYB4cR8liWQC0zgRX5a/9igze71jpxVTUEeWxBXqDtldtZ
+ SxxQQYo8yw9szt+QOMX6dffEu7v2yj10+vdAA=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=oRYjCTUc
-Subject: [Buildroot] [PATCH 18/30] package/python-iptables: bump version to
- 1.0.1
+ header.b=r6Q33EoW
+Subject: [Buildroot] [PATCH 19/30] package/libftdi: add patch to move from
+ distutils to sysconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,40 +105,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+In preperation of python 3.12.0, distutils has been removed completely.
+This is a patch taken from the Fedora 39 RPM: libftdi-1.5-10.fc39.x86_64.
+
+Upstream commit: abd19b721f7e9b4d514ed319ece173ebc7b1ea72
+
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/python-iptables/python-iptables.hash | 4 ++--
- package/python-iptables/python-iptables.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...003-move-from-distutils-to-sysconfig.patch | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/libftdi/0003-move-from-distutils-to-sysconfig.patch
 
-diff --git a/package/python-iptables/python-iptables.hash b/package/python-iptables/python-iptables.hash
-index ee5f765fba..1b7c9e9324 100644
---- a/package/python-iptables/python-iptables.hash
-+++ b/package/python-iptables/python-iptables.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/python-iptables/json
--md5  3fb27da1107bdb62196850fa70e8b0d4  python-iptables-1.0.0.tar.gz
--sha256  480470adb5f29bf84269b4e53dbad9623af91c79aa666cc0274dec199a555bc5  python-iptables-1.0.0.tar.gz
-+md5  bd6950c1ed9c6b48b7d552ff8e6766c5  python-iptables-1.0.1.tar.gz
-+sha256  1989f2b48598392c3574052a95f456985cb06fb4287b61bf8794e93ebc37eddb  python-iptables-1.0.1.tar.gz
- 
- # Locally calculated
- sha256  b827789c74144d9bb92595ed3bc568aef767a7e8d930fba61c2cdd9f6ec27599  NOTICE
-diff --git a/package/python-iptables/python-iptables.mk b/package/python-iptables/python-iptables.mk
-index 9cb4285ec3..d01545d8b2 100644
---- a/package/python-iptables/python-iptables.mk
-+++ b/package/python-iptables/python-iptables.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_IPTABLES_VERSION = 1.0.0
--PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/ca/6e/cba9c6f4b5a1963b7f5b015f5ed5e2eec7a94ac460570e3474177c4004d6
-+PYTHON_IPTABLES_VERSION = 1.0.1
-+PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/35/e4/33e639b9e153c2d798d73342a96715a4edca6f46431d763b275a34b3aeca
- PYTHON_IPTABLES_SETUP_TYPE = setuptools
- PYTHON_IPTABLES_LICENSE = Apache-2.0
- PYTHON_IPTABLES_LICENSE_FILES = NOTICE
+diff --git a/package/libftdi/0003-move-from-distutils-to-sysconfig.patch b/package/libftdi/0003-move-from-distutils-to-sysconfig.patch
+new file mode 100644
+index 0000000000..cb179c7cde
+--- /dev/null
++++ b/package/libftdi/0003-move-from-distutils-to-sysconfig.patch
+@@ -0,0 +1,32 @@
++From 872cd480990e6536d2cf48568627903ebf5acbeb Mon Sep 17 00:00:00 2001
++From: Dan Hor <dan@danny.cz>
++Date: Tue, 24 Oct 2023 10:36:09 +0200
++Subject: [PATCH] move from distutils to sysconfig
++
++The distutils module was deprecated in Python 3.10, thus switch to the
++sysconfig module instead.
++
++Upstream: committed abd19b721f7e9b4d514ed319ece173ebc7b1ea72
++
++Signed-off-by: Dan Hor <dan@danny.cz>
++Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++---
++ python/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
++index 5b6f420..19ce500 100644
++--- a/python/CMakeLists.txt
+++++ b/python/CMakeLists.txt
++@@ -42,7 +42,7 @@ endif ()
++ 
++ set_target_properties ( ${SWIG_MODULE_ftdi1_REAL_NAME} PROPERTIES NO_SONAME ON )
++ 
++-execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print( sysconfig.get_python_lib( plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}' ) )"
+++execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig; print( sysconfig.get_path( 'platlib', vars={'platbase': '${CMAKE_INSTALL_PREFIX}'} ) )"
++                   OUTPUT_VARIABLE _ABS_PYTHON_MODULE_PATH
++                   OUTPUT_STRIP_TRAILING_WHITESPACE )
++ 
++-- 
++2.41.0
++
 -- 
 2.41.0
 
