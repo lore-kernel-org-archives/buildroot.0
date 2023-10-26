@@ -4,82 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBF69C25B48
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 09:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73793C25B48
+	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 09:27:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12E37400DD;
-	Thu, 26 Oct 2023 09:27:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12E37400DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 15EF840A71;
+	Thu, 26 Oct 2023 09:27:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15EF840A71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ctMRaVNuzW3Z; Thu, 26 Oct 2023 09:27:10 +0000 (UTC)
+	with ESMTP id PYb36YdNRbyb; Thu, 26 Oct 2023 09:27:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F75941712;
-	Thu, 26 Oct 2023 09:27:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F75941712
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D04C71BF2B8
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:27:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E526A41773;
+	Thu, 26 Oct 2023 09:27:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E526A41773
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 28EBE1BF2B8
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABCB66124C
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:27:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABCB66124C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 04447839B4
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:27:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04447839B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wZg8l06xQyzN for <buildroot@lists.busybox.net>;
- Thu, 26 Oct 2023 09:27:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 94YCa69gWG_q for <buildroot@lists.busybox.net>;
+ Thu, 26 Oct 2023 09:27:08 +0000 (UTC)
 Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com
  [IPv6:2a00:1450:4864:20::642])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 49A7A61261
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 09:27:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49A7A61261
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B48A8399E
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 09:27:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B48A8399E
 Received: by mail-ej1-x642.google.com with SMTP id
- a640c23a62f3a-99c1c66876aso107222466b.2
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 02:27:06 -0700 (PDT)
+ a640c23a62f3a-9b1ebc80d0aso102594766b.0
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 02:27:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698312423; x=1698917223;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=6evyJNZybTofUTmhUz/N9KFK+OTBPzAQuy32ltJXWD4=;
- b=W5nKW5Hp7q1FVE6u0oFujFQJcWDTURhi1oVtxkvZRa5gMg5GCCH/KuH+d5nI9+LxQD
- Sb1UCMb9Sm3lky4jm8rj5JJvVvZSGXQlzwwIeZvhNNobHxWW9sGOaep7XrAsbSrxQZwB
- AmJ8c+xlcz/bdA3nChwMy962vJnf7zFqWg+YB0wkXRrn7ziztOZ5YndFFqogz+2UDKfO
- lwIlwt5YMbo52dUAdSaLKBzCOc6H3DL3iACQMf6ayITBq9fRCgAbVZT5h+T3giuGFdXY
- 6j6iTqOBNPVZajg2Ia6ApBThrpUiMY+WCRkLvFU7bo0Ne5NmGbX6ZOd6ImssUl/g/zFn
- OUww==
-X-Gm-Message-State: AOJu0YwN6hx0bH/UuhJSuSgYMa7umjDaBv90G4d5B82gsmn4QKOdy+0X
- vg1SdDr7F4oSmzK11XCJNaF1MBO/GmLKXpZIUVv9DUdr4OZSa68V
-X-Google-Smtp-Source: AGHT+IFEUZUoGO5IYaOwfp/BvmB4KBirvjiepvGSVpyQZk2qNsiiTGDSfEAbmctubuQZp52ypCUR8Q==
-X-Received: by 2002:a17:906:9c83:b0:9a1:bd33:4389 with SMTP id
- fj3-20020a1709069c8300b009a1bd334389mr13135524ejc.74.1698312423443; 
- Thu, 26 Oct 2023 02:27:03 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1698312426; x=1698917226;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=bEGsJkSGspNUSewvf58hNLHxPSWfSMGIydqw28Cfkto=;
+ b=Zxz+9nz0kmj1IyLyKKZhVhigGEn4EORwTLzIUgHmog8V1MSUg4kgJNpN9DLu9O9+iZ
+ M1H3omTpbc/PUzYclHOTCxXnEFyzGD5DxXn1Cse4KNcJolO9PHUhcMZSjsFRMxgOCxkU
+ 5ZXTB5ulbDY1RFr3yjW9y1wxm0Tf5Spz0gxnJydjGULM4fWLZGHTsGl95wR3qqgwxOxc
+ kq0aVktCeQlo3k5gbemH0els2WytLQLTJFJTAq/0UeHT/UFo+4FfsCFnQK6OOmnQt1x+
+ bXzCIYkqBgTg2VTmyeBFW+4D4eKxNbbzDxj/tujAVI9AczPVscN2QjBoG+X13Mw9KA6t
+ n8fQ==
+X-Gm-Message-State: AOJu0Yz57byedY7MeeQfwFwpcNoCpTEd1CEt8OOhGS0hUBnsfTuumKxp
+ umgFn7XgDq69cTEXw6Fjnk5xBl/AeaT0OchgBxumNgoFOWnIUPWc
+X-Google-Smtp-Source: AGHT+IFAdRXrSc2qnOigNQlfzODM4dGDSik2nGcsPcpmj5JY+/gDd51+553/49BRUpkH29P1Tw8wyg==
+X-Received: by 2002:a17:907:3e84:b0:9c7:4c8a:2e75 with SMTP id
+ hs4-20020a1709073e8400b009c74c8a2e75mr11743843ejc.62.1698312425864; 
+ Thu, 26 Oct 2023 02:27:05 -0700 (PDT)
 Received: from fedora.. ([77.241.232.0]) by smtp.gmail.com with ESMTPSA id
- mb8-20020a170906eb0800b009b947f81c4asm11268438ejb.155.2023.10.26.02.27.02
+ mb8-20020a170906eb0800b009b947f81c4asm11268438ejb.155.2023.10.26.02.27.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Oct 2023 02:27:03 -0700 (PDT)
+ Thu, 26 Oct 2023 02:27:05 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Oct 2023 11:26:31 +0200
-Message-ID: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
+Date: Thu, 26 Oct 2023 11:26:33 +0200
+Message-ID: <20231026092701.12345-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
+References: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1698312423; x=1698917223;
+ d=amarulasolutions.com; s=google; t=1698312426; x=1698917226;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6evyJNZybTofUTmhUz/N9KFK+OTBPzAQuy32ltJXWD4=;
- b=S7mikiBzELlYFkAVt84TTTKELgTlpkG7swaiJCGpUnqiBMkSuZBtJr9Ncycetw5Z3b
- MWeADwDqPRwVuciyyksCwJ1K6140chSJNIitmu9IS0B8sGH6XrovbcAMHQqRSaDTZhYC
- PdUzqI3BV+YfTsqreX9Z020rpo+4HRoZoz7aA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=bEGsJkSGspNUSewvf58hNLHxPSWfSMGIydqw28Cfkto=;
+ b=jEw6pxGzOsVbg7IkIxc+q6secJySII5o0rJculKHmaU7o6ucgGnRwKmydFQRcdRnnL
+ lFMKZ93O64UuxEuH2Ssg9ogE8pqv46i+NyxHS6lTIK3NMOYFnW1mCN9qIwuVQ08SzlJG
+ uAlqrxV5Qik9G/qRxagi2wO9d8iIk0rE90K50=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=S7mikiBz
-Subject: [Buildroot] [PATCH 00/30] package/python3: bump version to 3.12.0
+ header.b=jEw6pxGz
+Subject: [Buildroot] [PATCH 02/30] package/python3: use upstream build
+ system to disable uuid module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,8 +96,9 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Andrey Smirnov <andrew.smirnov@gmail.com>, Julien Olivain <ju.o@free.fr>,
- Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
+ Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Mauro Condarelli <mc5686@mclink.it>
 Content-Type: text/plain; charset="us-ascii"
@@ -101,183 +106,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Major changes:
+From: Bernd Kuhls <bernd@kuhls.net>
 
-Drop the following packages:
-  python-pygame
-  python-pyxb
-  python-crossbar
-
-Remove distutils as an option
-
-I tested every single python package test in buildroot currently
-available and every single one passes on Debian 11 and FC38/39.
-
-Adam Duskett (16):
-  package/scons: bump version to 4.5.2
-  package/python-wsaccel: bump version to 0.6.6
-  package/python-systemd: bump version to 235
-  package/python-iptables: bump version to 1.0.1
-  package/libftdi: add patch to move from distutils to sysconfig
-  package/python-constantly: update versioneer to 0.29
-  package/python-magic-wormhole: update versioneer to 0.29
-  package/python-magic-wormhole-mailbox-server: update versioneer to
-    0.29
-  package/python-magic-wormhole-transit-relay: update versioneer to 0.29
-  package/python-spake2: update versioneer to 0.29
-  package/python-iptables: use sysconfig.get_path instead of
-    get_python_lib
-  package/python-pathtools: add 0001-replace-imp.patch
-  package/python-pyxb: Drop package
-  package/python-pygame: drop package
-  package/python-crossbar: drop package
-  package/python3: bump version to 3.12.0
-
-Bernd Kuhls (14):
-  package/python3: use upstream build system to disable berkeleydb
-    module
-  package/python3: use upstream build system to disable uuid module
-  package/python3: use upstream build system to disable bzip2/zlib/xz
-    modules
-  package/python3: use upstream build system to disable curses/readline
-    modules
-  package/python3: use upstream build system to disable ssl module
-  package/python3: use upstream build system to disable ossaudiodev
-    module
-  package/python3: use upstream build system to disable unicodedata
-    module
-  package/python3: use upstream build system to disable nis module
-  package/python3: use upstream build system to disable decimal module
-  package/python3: use upstream build system to disable CJK codecs
-  package/python3: use upstream build system to disable pyexpat module
-  package/python3: use upstream build system to disable sqlite3 module
-  package/python3: update patch and partly use upstream build system to
-    disable tk module
-  package/python3: Remove infrastructure to disable the build of certain
-    extensions
-
- .checkpackageignore                           |   14 -
- Config.in.legacy                              |   30 +
- package/Config.in                             |    3 -
- ...003-move-from-distutils-to-sysconfig.patch |   32 +
- package/pkg-python.mk                         |   44 +-
- .../0001-Update-versioneer-to-0.29.patch      | 2619 +++++++++++++++++
- .../0001-Avoid-intentional-syntax-error.patch |   29 -
- ...s-min.txt-drop-indirect-dependencies.patch |   74 -
- ...ice-wap-use-markupsafe-instead-of-we.patch |   53 -
- package/python-crossbar/Config.in             |   71 -
- package/python-crossbar/python-crossbar.hash  |    5 -
- package/python-crossbar/python-crossbar.mk    |   14 -
- ...g-get_path-instead-of-get_python_lib.patch |   40 +
- package/python-iptables/python-iptables.hash  |    4 +-
- package/python-iptables/python-iptables.mk    |    4 +-
- .../0002-Update-versioneer-to-0.29.patch      | 2194 ++++++++++++++
- .../0001-Update-versioneer-to-0.29.patch      | 2194 ++++++++++++++
- .../0001-Update-versioneer-to-0.29.patch      | 2185 ++++++++++++++
- .../python-pathtools/0001-replace-imp.patch   |   55 +
- package/python-pygame/Config.in               |   50 -
- package/python-pygame/python-pygame.hash      |    3 -
- package/python-pygame/python-pygame.mk        |  111 -
- package/python-pyxb/Config.in                 |    8 -
- package/python-pyxb/python-pyxb.hash          |    4 -
- package/python-pyxb/python-pyxb.mk            |   14 -
- .../0001-Update-versioneer-to-0.29.patch      | 2194 ++++++++++++++
- package/python-systemd/python-systemd.hash    |    4 +-
- package/python-systemd/python-systemd.mk      |    6 +-
- package/python-wsaccel/python-wsaccel.hash    |    4 +-
- package/python-wsaccel/python-wsaccel.mk      |    4 +-
- ...e-the-build-of-pyc-files-conditional.patch |   24 +-
- ...taddrinfo-configure-test-when-cross-.patch |    2 +-
- ...re-to-disable-the-build-of-certain-e.patch |  108 -
- ...-header-paths-for-cross-compilation.patch} |   31 +-
- ...tch => 0004-Serial-ioctl-workaround.patch} |    0
- ...ook-in-usr-lib-termcap-for-libraries.patch |   31 -
- ...g.sh.in-ensure-sed-invocations-only.patch} |    0
- ...0006-Add-an-option-to-disable-pydoc.patch} |   50 +-
- .../0006-Don-t-add-multiarch-paths.patch      |   37 -
- .../0007-Abort-on-failed-module-build.patch   |   30 -
- ...07-Add-an-option-to-disable-lib2to3.patch} |   74 +-
- ... 0008-Add-an-option-to-disable-IDLE.patch} |   43 +-
- ...e-shebang-of-Python-scripts-for-cros.patch |   35 -
- ...hon-config.sh-don-t-reassign-prefix.patch} |    0
- ...d-an-option-to-disable-the-tk-module.patch |   79 +
- ...fix-building-on-older-distributions.patch} |   12 +-
- ...p-CC-print-multiarch-output-for-mus.patch} |    2 +-
- ...option-to-disable-the-sqlite3-module.patch |   62 -
- ...ng-doesn-t-set-errno-when-encryptio.patch} |    0
- ...d-an-option-to-disable-the-tk-module.patch |   77 -
- ...-option-to-disable-the-curses-module.patch |   61 -
- .../0016-Add-an-option-to-disable-expat.patch |   82 -
- ...-Add-an-option-to-disable-CJK-codecs.patch |   30 -
- .../0018-Add-an-option-to-disable-NIS.patch   |   33 -
- ...Add-an-option-to-disable-unicodedata.patch |   30 -
- ...021-Add-an-option-to-disable-decimal.patch |   54 -
- ...on-to-disable-the-ossaudiodev-module.patch |   30 -
- ...an-option-to-disable-openssl-support.patch |   30 -
- ...ption-to-disable-the-readline-module.patch |   30 -
- ...to-disable-zlib-bzip2-and-xz-modules.patch |   42 -
- ...Add-an-option-to-disable-uuid-module.patch |   33 -
- ...ion-to-disable-the-berkeleydb-module.patch |   30 -
- package/python3/python3.hash                  |    6 +-
- package/python3/python3.mk                    |   81 +-
- package/scons/scons.hash                      |    4 +-
- package/scons/scons.mk                        |    7 +-
- .../tests/package/sample_python_crossbar.py   |    4 -
- .../tests/package/test_python_crossbar.py     |   23 -
- 68 files changed, 11778 insertions(+), 1595 deletions(-)
- create mode 100644 package/libftdi/0003-move-from-distutils-to-sysconfig.patch
- create mode 100644 package/python-constantly/0001-Update-versioneer-to-0.29.patch
- delete mode 100644 package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
- delete mode 100644 package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
- delete mode 100644 package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
- delete mode 100644 package/python-crossbar/Config.in
- delete mode 100644 package/python-crossbar/python-crossbar.hash
- delete mode 100644 package/python-crossbar/python-crossbar.mk
- create mode 100644 package/python-iptables/0001-use-sysconfig-get_path-instead-of-get_python_lib.patch
- create mode 100644 package/python-magic-wormhole-mailbox-server/0002-Update-versioneer-to-0.29.patch
- create mode 100644 package/python-magic-wormhole-transit-relay/0001-Update-versioneer-to-0.29.patch
- create mode 100644 package/python-magic-wormhole/0001-Update-versioneer-to-0.29.patch
- create mode 100644 package/python-pathtools/0001-replace-imp.patch
- delete mode 100644 package/python-pygame/Config.in
- delete mode 100644 package/python-pygame/python-pygame.hash
- delete mode 100644 package/python-pygame/python-pygame.mk
- delete mode 100644 package/python-pyxb/Config.in
- delete mode 100644 package/python-pyxb/python-pyxb.hash
- delete mode 100644 package/python-pyxb/python-pyxb.mk
- create mode 100644 package/python-spake2/0001-Update-versioneer-to-0.29.patch
- delete mode 100644 package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
- rename package/python3/{0004-Adjust-library-header-paths-for-cross-compilation.patch => 0003-Adjust-library-header-paths-for-cross-compilation.patch} (64%)
- rename package/python3/{0008-Serial-ioctl-workaround.patch => 0004-Serial-ioctl-workaround.patch} (100%)
- delete mode 100644 package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch
- rename package/python3/{0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch => 0005-Misc-python-config.sh.in-ensure-sed-invocations-only.patch} (100%)
- rename package/python3/{0011-Add-an-option-to-disable-pydoc.patch => 0006-Add-an-option-to-disable-pydoc.patch} (54%)
- delete mode 100644 package/python3/0006-Don-t-add-multiarch-paths.patch
- delete mode 100644 package/python3/0007-Abort-on-failed-module-build.patch
- rename package/python3/{0012-Add-an-option-to-disable-lib2to3.patch => 0007-Add-an-option-to-disable-lib2to3.patch} (59%)
- rename package/python3/{0020-Add-an-option-to-disable-IDLE.patch => 0008-Add-an-option-to-disable-IDLE.patch} (57%)
- delete mode 100644 package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
- rename package/python3/{0026-python-config.sh-don-t-reassign-prefix.patch => 0009-python-config.sh-don-t-reassign-prefix.patch} (100%)
- create mode 100644 package/python3/0010-Add-an-option-to-disable-the-tk-module.patch
- rename package/python3/{0028-fix-building-on-older-distributions.patch => 0011-fix-building-on-older-distributions.patch} (82%)
- rename package/python3/{0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch => 0012-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch} (97%)
- delete mode 100644 package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch
- rename package/python3/{0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch => 0013-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} (100%)
- delete mode 100644 package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
- delete mode 100644 package/python3/0015-Add-an-option-to-disable-the-curses-module.patch
- delete mode 100644 package/python3/0016-Add-an-option-to-disable-expat.patch
- delete mode 100644 package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch
- delete mode 100644 package/python3/0018-Add-an-option-to-disable-NIS.patch
- delete mode 100644 package/python3/0019-Add-an-option-to-disable-unicodedata.patch
- delete mode 100644 package/python3/0021-Add-an-option-to-disable-decimal.patch
- delete mode 100644 package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch
- delete mode 100644 package/python3/0023-Add-an-option-to-disable-openssl-support.patch
- delete mode 100644 package/python3/0024-Add-an-option-to-disable-the-readline-module.patch
- delete mode 100644 package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ .checkpackageignore                           |  1 -
+ ...Add-an-option-to-disable-uuid-module.patch | 33 -------------------
+ package/python3/python3.mk                    |  4 +--
+ 3 files changed, 2 insertions(+), 36 deletions(-)
  delete mode 100644 package/python3/0027-Add-an-option-to-disable-uuid-module.patch
- delete mode 100644 package/python3/0030-Add-an-option-to-disable-the-berkeleydb-module.patch
- delete mode 100644 support/testing/tests/package/sample_python_crossbar.py
- delete mode 100644 support/testing/tests/package/test_python_crossbar.py
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 85273420b7..4425eb6859 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1177,7 +1177,6 @@ package/python3/0023-Add-an-option-to-disable-openssl-support.patch Upstream
+ package/python3/0024-Add-an-option-to-disable-the-readline-module.patch Upstream
+ package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch Upstream
+ package/python3/0026-python-config.sh-don-t-reassign-prefix.patch Upstream
+-package/python3/0027-Add-an-option-to-disable-uuid-module.patch Upstream
+ package/python3/0028-fix-building-on-older-distributions.patch Upstream
+ package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch Upstream
+ package/python3/0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch Upstream
+diff --git a/package/python3/0027-Add-an-option-to-disable-uuid-module.patch b/package/python3/0027-Add-an-option-to-disable-uuid-module.patch
+deleted file mode 100644
+index a9501ec189..0000000000
+--- a/package/python3/0027-Add-an-option-to-disable-uuid-module.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 58027d25c3cabcf654cb0b31a61d7cbd53dc68c0 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sat, 18 Aug 2018 10:54:56 +0200
+-Subject: [PATCH] Add an option to disable uuid module
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- configure.ac | 9 +++++++++
+- 1 file changed, 9 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index ca6c16491a..ed03b27fb1 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -4267,6 +4267,15 @@ if test "$CURSES" = "no"; then
+-    DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _curses _curses_panel"
+- fi
+- 
+-+AC_SUBST(UUID)
+-+AC_ARG_ENABLE(uuid,
+-+	AS_HELP_STRING([--disable-uuid], [disable uuid]),
+-+	[ UUID="${enableval}" ], [ UUID=yes ])
+-+
+-+if test "$UUID" = "no"; then
+-+   DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _uuid"
+-+fi
+-+
+- AC_SUBST(PYDOC)
+- 
+- AC_ARG_ENABLE(pydoc,
+--- 
+-2.34.1
+-
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 8166d306c5..7f31f3308c 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -28,7 +28,6 @@ HOST_PYTHON3_CONF_OPTS += \
+ 	--enable-unicodedata \
+ 	--disable-test-modules \
+ 	--disable-idle3 \
+-	--disable-uuid \
+ 	--disable-ossaudiodev
+ 
+ # Make sure that LD_LIBRARY_PATH overrides -rpath.
+@@ -38,6 +37,7 @@ HOST_PYTHON3_CONF_OPTS += \
+ # communicate over the network during the build.
+ HOST_PYTHON3_CONF_ENV += \
+ 	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
++	py_cv_module__uuid=n/a \
+ 	ac_cv_prog_HAS_HG=/bin/false
+ 
+ PYTHON3_DEPENDENCIES = host-python3 libffi
+@@ -125,7 +125,7 @@ endif
+ # Disable auto-detection of uuid.h (util-linux)
+ # which would add _uuid module support, instead
+ # default to the pure python implementation
+-PYTHON3_CONF_OPTS += --disable-uuid
++PYTHON3_CONF_ENV += py_cv_module__uuid=n/a
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
+ PYTHON3_DEPENDENCIES += bzip2
 -- 
 2.41.0
 
