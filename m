@@ -1,90 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD789C25B48
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 09:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C2E5C25B6F
+	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 10:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E5DF4157B;
-	Thu, 26 Oct 2023 09:55:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E5DF4157B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id urNN490j-GkM; Thu, 26 Oct 2023 09:55:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 333FC40A71;
-	Thu, 26 Oct 2023 09:55:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 333FC40A71
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CB5571BF2B8
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:55:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A62A240971
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 09:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A62A240971
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BFB2415E3;
+	Thu, 26 Oct 2023 10:26:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BFB2415E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ckpUI7DvoZQS for <buildroot@lists.busybox.net>;
- Thu, 26 Oct 2023 09:55:23 +0000 (UTC)
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 80306409E6
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 09:55:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80306409E6
-Received: by mail-lj1-x233.google.com with SMTP id
- 38308e7fff4ca-2c50906f941so10538881fa.2
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 02:55:23 -0700 (PDT)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4ifCUpXqkWA9; Thu, 26 Oct 2023 10:26:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5969E4095B;
+	Thu, 26 Oct 2023 10:26:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5969E4095B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F2F81BF3F3
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 10:26:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0986F61230
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 10:26:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0986F61230
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qig2jS_QtWSk for <buildroot@lists.busybox.net>;
+ Thu, 26 Oct 2023 10:26:26 +0000 (UTC)
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com
+ [IPv6:2607:f8b0:4864:20::112f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EC928611A8
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 10:26:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC928611A8
+Received: by mail-yw1-x112f.google.com with SMTP id
+ 00721157ae682-5a7c95b8d14so5479337b3.3
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 03:26:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698314121; x=1698918921;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1698315985; x=1698920785;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=WLspFdTmn7cAmta4C5QoKJ70aWvO/ANXtHHHNgczmTw=;
- b=NkSOnueM8ISza1Bgxa9nXJZeqQYrPxorwSAcKAKskqE7O1s4iRxhAypBTZFJRW6VWU
- ccUwybiUZKEu9/V0vEBmLzOu7yYiwOt8Fgyj5loberN890m/gOSsdU4o3TIhbsdVjKJn
- FiAaaFdefYjPAZ4fqfjK7ZJaJa4RnkKqyucaR6jdYYv8LxQRxtsx8mBda4v2Ufa5Yp9v
- 8fS5aaB8m5f/I6EnIR1jMzeazZmQe+Wyo96+gBwqtx4j2/AOO37m8z2QyuuJmplah+eh
- wsbgGxTLazCdRTYkeUtOd2Hd0UngGPxelm/yWByoqjl3fWzOEVlNoxMomnkDAObRN5xB
- 7WGw==
-X-Gm-Message-State: AOJu0YyCJvOdNZlyUrm7PDmkEgkZxrMUWyoI2sHAi9jRxUY2jtjYQk9h
- hslhRzU9IfuqONAZPgdDZYl3Idl1Vf5uAZJnKEYdKw==
-X-Google-Smtp-Source: AGHT+IFif/KShrrIy1Y5P+GECIQnguD0t1YBaLa7VC7H9mpSyhlusQIDt9iZuqpylYM+43Q33kbdFA==
-X-Received: by 2002:a05:651c:1542:b0:2bc:d94f:ad04 with SMTP id
- y2-20020a05651c154200b002bcd94fad04mr13426948ljp.13.1698314119924; 
- Thu, 26 Oct 2023 02:55:19 -0700 (PDT)
-Received: from p-nan-fatho.nantes.intranet
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- r15-20020a05600c35cf00b003fee53feab5sm2147196wmq.10.2023.10.26.02.55.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Oct 2023 02:55:19 -0700 (PDT)
-From: Fabien Thomas <fabien.thomas@smile.fr>
-To: buildroot@buildroot.org
-Date: Thu, 26 Oct 2023 11:55:06 +0200
-Message-Id: <20231026095506.876284-1-fabien.thomas@smile.fr>
-X-Mailer: git-send-email 2.34.1
+ bh=b9Bx0RDE7FiBCO8xHqgMWj2PdkabDIvY9wI/zPFW9jY=;
+ b=hsplUSY5DaHjabweVbYIhsJzzMAtutE12lXhkSocqRhD9tYiqz2PVEvi9AzBWXGT8r
+ BLoQjpOfYJbZI0hLYEFOxM2hxUk08G0ibFhNrLSYKNdPOgmZCNWZGlZ/uRW4BhNxF88B
+ jgTV41c5oMEaKzWhQsgBWIJlNtU0shOcgkKGb1owx6uFwXh7z+RI8i5DO132avHxYCx8
+ 9dMtmOVoZ1ifqNLnCpY0TSuA4HYJIpEqrE5/DHKdpKaWFiqtaNREVyB1yc+J0fqi00S2
+ tXhDfxaRooSozk1cPBst4JxBrF0DotV+8Sl3fPqSj4UOVeovsTQvqQ/rlR80QzT9IMOY
+ 7eBg==
+X-Gm-Message-State: AOJu0YztyYYH8snOP8E6agiZ/vw6Za6mN8LQB7Wp5n4zLXhWIxiqszLk
+ CUgHjt7CMAUYKN/UrBP03QToamkHmiXpUZirBE8=
+X-Google-Smtp-Source: AGHT+IGKqhnT0Jwd7Q1hJtYm+mRP2r3ASs47XZ7y8lPCZvnsbq5K7KZC5KRGUcw61dL7kRd7CykkD0ZYTvWC19FdIGY=
+X-Received: by 2002:a81:65c2:0:b0:583:3c54:6d89 with SMTP id
+ z185-20020a8165c2000000b005833c546d89mr16744079ywb.44.1698315984686; Thu, 26
+ Oct 2023 03:26:24 -0700 (PDT)
 MIME-Version: 1.0
+References: <20231020082703.1610281-1-adam.duskett@amarulasolutions.com>
+ <875y2uphio.fsf@48ers.dk>
+In-Reply-To: <875y2uphio.fsf@48ers.dk>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 26 Oct 2023 12:26:13 +0200
+Message-ID: <CAFSsvmqCL1sd1tqjyX8MWBLkUv3kHP97cDHNjkzr01QfgyfSGQ@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1698314121; x=1698918921;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WLspFdTmn7cAmta4C5QoKJ70aWvO/ANXtHHHNgczmTw=;
- b=Y2hcBHv3BvKEltgxM4ZuIz1QT2AKGtW+bYbZUbkwfGjH24qj9MucQOGOGzUjT2C/T2
- p+NVrbC9ri0A89zN1ixQ2aoMz1N1ztXoWJ7ic/T5uu5QCIx3Jc5Oeh26exzLDNAA/3NG
- wP/Ske9HEbUENynmIpnMMwZ6Wh+6beCDA74gyMwwiImY9w7QWAjr+EhaZR9R5oiJHvFk
- UmtdW42NK9yxkc38F72hMgrPViRz98wVEinhxsggKfmf+py0vcI2Nz81djhAlf8VkErn
- In1S3vgWKWLuxMgefenqw9QSMbwuIjdxsbqF+o7cJ+HN86NPhd5Pp7jHEw9GdFBY+OaC
- bdTg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=Y2hcBHv3
-Subject: [Buildroot] [PATCH] package/nettle: add missing host-gmp dependency
+ d=gmail.com; s=20230601; t=1698315985; x=1698920785; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=b9Bx0RDE7FiBCO8xHqgMWj2PdkabDIvY9wI/zPFW9jY=;
+ b=eNwJYPKDAF7MSpb1qIsuIeKnWqeEYG2d8UPbn6YmNrxpS1qbAM0ihBH9/V0OywXWDI
+ AAZcIsVSqPjI/xgZjdcA9pRTMHQGGqLqg1YOjlH2zL6GpfxdihEG/+UUVwxg1G+WiM6M
+ lal0k5dZ9GGmIcH4qPtiW/JrbX9VZUXbF7mqFNez43BI23JXLgNNXl3Ts/i5bTXTEc55
+ oO2J+VlgR4j/ZD9TOmcxS0P6nLozX94+KBHJL5xB7hdnVEosqhBnW6dZGz0aVdpGrHd/
+ gyHMtSOhEq+UQh/MnOgynHDHKI1g0D7I1iIa43BAq52XDcCDyZTjPTLhLp3zT5+61Sll
+ Yppg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=eNwJYPKD
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-django: bump version to
+ 4.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,56 +91,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabien Thomas <fabien.thomas@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Oli Vogt <oli.vogt.pub01@gmail.com>
+Content-Type: multipart/mixed; boundary="===============5473698222971827671=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the generic package infrastructure removed auto derivation of
-host dependencies [1] (2016.08), the host dependencies must be
-explicitly set.
+--===============5473698222971827671==
+Content-Type: multipart/alternative; boundary="000000000000fbd68a06089c0011"
 
-While adding the nettle host variant [2] the gmp dependency was not
-duplicated and host-nettle was built without host-gmp (or built with
-gmp installed on the build machine).
+--000000000000fbd68a06089c0011
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-While building host-gnutls required for building mkeficapsule u-boot
-tool, the configure script check if Libhogweed (nettle's companion
-library) is build with libgmp support.
+Sure Peter; I can update to 4.2.7 when it's released!
 
-If internal toolchain is used, luckily host-gmp is built before
-building host-nettle (and host-gnutls). But when using prebuilt
-external toolchain, following error shows up :
+Adam
 
-Libhogweed (nettle's companion library) 3.6 was not found. Note that you must compile nettle with gmp support.
+On Wed, Oct 25, 2023 at 10:36=E2=80=AFPM Peter Korsgaard <peter@korsgaard.c=
+om>
+wrote:
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/4bdb067e380e72c3a6cb9c6ccf3791a6cf8661e0
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/dac6e3011883ce3b35cbf64ec156186153bf0032
-[3] https://gitlab.com/gnutls/gnutls/-/commit/eb24bfa808ee029e9b3b198d66d29256eea3fd08
+> >>>>> "Adam" =3D=3D Adam Duskett <adam.duskett@amarulasolutions.com> writ=
+es:
+>
+>  > Tested with
+> tests.package.test_python_django.TestPythonPy3Django.test_run in
+>  > Fedora 38 and Debian 11
+>
+>  > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+>
+> Looking at
+> https://www.djangoproject.com/weblog/2023/oct/04/security-releases/,
+> Django 4.2.6 was a security release, so it should have been marked as
+> such (and ideally we would first have bumped to 4.1.12 for easier
+> backporting).
+>
+> 4.2.6 apparently also introduced a regression, so it would be good if
+> you could send a bump to 4.2.7:
+>
+> https://docs.djangoproject.com/en/dev/releases/4.2.7/
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
 
-Signed-off-by: Fabien Thomas <fabien.thomas@smile.fr>
----
- package/nettle/nettle.mk | 2 ++
- 1 file changed, 2 insertions(+)
+--000000000000fbd68a06089c0011
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index dd4dfbbe38..e2e3219057 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -15,6 +15,8 @@ NETTLE_CPE_ID_VENDOR = nettle_project
- # with static linking
- NETTLE_CONF_OPTS = --disable-openssl
- 
-+HOST_NETTLE_DEPENDENCIES = host-gmp
-+
- # ARM assembly requires v6+ ISA
- ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
- NETTLE_CONF_OPTS += --disable-assembler
--- 
-2.34.1
+<div dir=3D"ltr">Sure Peter; I can update to 4.2.7 when it&#39;s released!<=
+div><br></div><div>Adam</div></div><br><div class=3D"gmail_quote"><div dir=
+=3D"ltr" class=3D"gmail_attr">On Wed, Oct 25, 2023 at 10:36=E2=80=AFPM Pete=
+r Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">peter@korsgaard.com<=
+/a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
+px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">&=
+gt;&gt;&gt;&gt;&gt; &quot;Adam&quot; =3D=3D Adam Duskett &lt;<a href=3D"mai=
+lto:adam.duskett@amarulasolutions.com" target=3D"_blank">adam.duskett@amaru=
+lasolutions.com</a>&gt; writes:<br>
+<br>
+=C2=A0&gt; Tested with tests.package.test_python_django.TestPythonPy3Django=
+.test_run in<br>
+=C2=A0&gt; Fedora 38 and Debian 11<br>
+<br>
+=C2=A0&gt; Signed-off-by: Adam Duskett &lt;<a href=3D"mailto:adam.duskett@a=
+marulasolutions.com" target=3D"_blank">adam.duskett@amarulasolutions.com</a=
+>&gt;<br>
+<br>
+Looking at<br>
+<a href=3D"https://www.djangoproject.com/weblog/2023/oct/04/security-releas=
+es/" rel=3D"noreferrer" target=3D"_blank">https://www.djangoproject.com/web=
+log/2023/oct/04/security-releases/</a>,<br>
+Django 4.2.6 was a security release, so it should have been marked as<br>
+such (and ideally we would first have bumped to 4.1.12 for easier<br>
+backporting).<br>
+<br>
+4.2.6 apparently also introduced a regression, so it would be good if<br>
+you could send a bump to 4.2.7:<br>
+<br>
+<a href=3D"https://docs.djangoproject.com/en/dev/releases/4.2.7/" rel=3D"no=
+referrer" target=3D"_blank">https://docs.djangoproject.com/en/dev/releases/=
+4.2.7/</a><br>
+<br>
+-- <br>
+Bye, Peter Korsgaard<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div>
+
+--000000000000fbd68a06089c0011--
+
+--===============5473698222971827671==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5473698222971827671==--
