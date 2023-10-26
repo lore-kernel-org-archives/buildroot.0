@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0EDAC25B48
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 16:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1A31C25B67
+	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 17:00:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A42640227;
-	Thu, 26 Oct 2023 16:59:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A42640227
+	by smtp4.osuosl.org (Postfix) with ESMTP id 651B84189D;
+	Thu, 26 Oct 2023 17:00:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 651B84189D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JVUY9Y5tDApq; Thu, 26 Oct 2023 16:59:52 +0000 (UTC)
+	with ESMTP id 24pBb6CXGukq; Thu, 26 Oct 2023 17:00:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BB29401D8;
-	Thu, 26 Oct 2023 16:59:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BB29401D8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A310B1BF3BC
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:59:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8018D41E49;
+	Thu, 26 Oct 2023 17:00:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8018D41E49
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 486041BF3BC
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AC7F6FA32
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:59:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AC7F6FA32
+ by smtp2.osuosl.org (Postfix) with ESMTP id 211754171D
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:59:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 211754171D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i2S5tR9WOrFK for <buildroot@lists.busybox.net>;
- Thu, 26 Oct 2023 16:59:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RXF1MfjHqCwq for <buildroot@lists.busybox.net>;
+ Thu, 26 Oct 2023 16:59:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF06A6FA31
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 16:59:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF06A6FA31
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28266416A4
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 16:59:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28266416A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D77B85F64; Thu, 26 Oct 2023 16:59:49 +0000 (UTC)
+ id 17CBD85F64; Thu, 26 Oct 2023 16:59:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Oct 2023 18:58:39 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 3d47381d4a4cf6dacfdcd43d404233a14c16f6c3
-X-Git-Newrev: d19e8ca76870e02a0d4dcb33bb672a7e72ab5456
+Date: Thu, 26 Oct 2023 18:58:31 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: b77df1db5bdea98043ac9fc73e75244ea3a60efc
+X-Git-Newrev: c8c96d9c35336fa3698fbfa5dece8a6ddf31ef96
 X-Patchwork-Hint: ignore
-Message-Id: <20231026165949.9D77B85F64@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/xdg-dbus-proxy:
+Message-Id: <20231026165950.17CBD85F64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/xdg-dbus-proxy:
  fix tarball name in hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d19e8ca76870e02a0d4dcb33bb672a7e72ab5456
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c8c96d9c35336fa3698fbfa5dece8a6ddf31ef96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
 Fixes: 487761a5b2 ("package/xdg-dbus-proxy: bump to version 0.1.5")
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
