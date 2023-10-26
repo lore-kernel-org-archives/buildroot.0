@@ -4,55 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA7BAC25B6B
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 18:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35A51C25B6B
+	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 18:35:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6533C6FAFF;
-	Thu, 26 Oct 2023 18:34:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6533C6FAFF
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8ABF6FAEF;
+	Thu, 26 Oct 2023 18:35:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8ABF6FAEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WRBIbMS0wJIE; Thu, 26 Oct 2023 18:34:45 +0000 (UTC)
+	with ESMTP id 5x0wwFLEAaqT; Thu, 26 Oct 2023 18:35:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A08306FAF8;
-	Thu, 26 Oct 2023 18:34:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A08306FAF8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D86F1BF378
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 18:34:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 293346FAE9;
+	Thu, 26 Oct 2023 18:35:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 293346FAE9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D2191BF378
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 18:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35CEA6FAE6
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 18:34:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35CEA6FAE6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5653B4182B
+ for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 18:35:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5653B4182B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9DuORu-y_qyH for <buildroot@lists.busybox.net>;
- Thu, 26 Oct 2023 18:34:34 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 56E8A6FAE5
- for <buildroot@buildroot.org>; Thu, 26 Oct 2023 18:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56E8A6FAE5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4B37F60002;
- Thu, 26 Oct 2023 18:34:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qw5Bf-0072UG-9w; Thu, 26 Oct 2023 20:34:31 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id thJ_2fskg79n for <buildroot@lists.busybox.net>;
+ Thu, 26 Oct 2023 18:35:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E3D4417FE
+ for <buildroot@buildroot.org>; Thu, 26 Oct 2023 18:35:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E3D4417FE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1097A85F8A; Thu, 26 Oct 2023 18:35:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <cover.1697576472.git.yann.morin.1998@free.fr>
- <3a0be46ecee62af708a5c63ebcd4845228fc29a5.1697576472.git.yann.morin.1998@free.fr>
-Date: Thu, 26 Oct 2023 20:34:31 +0200
-In-Reply-To: <3a0be46ecee62af708a5c63ebcd4845228fc29a5.1697576472.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 17 Oct 2023 23:01:20 +0200")
-Message-ID: <87edhhmdvs.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2] package/pkg-utils: teach
- per-package-rsync to copy or hardlink dest
+To: buildroot@buildroot.org
+Date: Thu, 26 Oct 2023 20:29:54 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: c8c96d9c35336fa3698fbfa5dece8a6ddf31ef96
+X-Git-Newrev: a1169c45f4a0fe723857ac8d907cf08ad5f940ec
+X-Patchwork-Hint: ignore
+Message-Id: <20231026183515.1097A85F8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] Revert
+ "package/pkg-utils.mk: break hardlinks in global {TARGET,
+ HOST}_DIR on per-package build"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,37 +58,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Herve Codina <herve.codina@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a1169c45f4a0fe723857ac8d907cf08ad5f940ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
- > commit 21d52e52d8de (package/pkg-utils.mk: break hardlinks in global
- > {TARGET, HOST}_DIR on per-package build) was recently reverted, so we
- > are back to a situation where it is possible for packages and post-build
- > scripts to modify files in-place, and thus impact files in any arbitrary
- > per-package directory, which may break things on rebuild for example.
+Commit 21d52e52d8de (package/pkg-utils.mk: break hardlinks in global
+{TARGET, HOST}_DIR on per-package build) stopped hardlink the source and
+destination when rsyncing per-package directory, on the rationale that
+modifying files in-place after the rsync would also modify the original
+file, and that break foo-rebuild and can cause issues with post-build
+scripts.
 
- > 21d52e52d8de wsa too big a hammer, but we can still apply the reasoning
- > from it, to the aggregation of the final target and host directories.
+However, what 21d52e52d8de did not envision, is that copying instead of
+hard-linking has two nasty side effects:
 
- > This solves the case for post-build scripts at least. We leave the case
- > of inter-package modification aside, as it is a bigger issue that will
- > need more than jsut copying files around.
+  - the size increase for the build directory increase with the number
+    of packages and with the depth of th dependency chains for those
+    packages: a (relatively small) build that was previously totalling
+    ~13GiB in output/, now totals north of 122GiB, an almost 10-time
+    increase;
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Herve Codina <herve.codina@bootlin.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  - the build time increases, as it takes more time to read+write files
+    than it takes to create a new link to a file; the same build saw an
+    increase of build time from 5min 10s to 7min 30s, a 45% increase.
 
-Committed to 2023.02.x and 2023.08.x, thanks.
+These regressions are both serious, so revert the change; we'll come up
+with a stopgap measure in follow-up commits.
 
--- 
-Bye, Peter Korsgaard
+This reverts commit 21d52e52d8dee0940d28b3a38551eb183be37813.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Herve Codina <herve.codina@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Herve Codina <herve.codina@bootlin.com>
+(cherry picked from commit 8f1487d6fa4cde5330f73e2432c264c0bd7940c6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index ba3da68a7b..5d5980b098 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -217,7 +217,7 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ define per-package-rsync
+ 	mkdir -p $(3)
+ 	$(foreach pkg,$(1),\
+-		rsync -a \
++		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+ 			$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+ 			$(3)$(sep))
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
