@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F423C25B67
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 16:40:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5EC4C25B67
+	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 16:40:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6418410A0;
-	Thu, 26 Oct 2023 16:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6418410A0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9083F42CB1;
+	Thu, 26 Oct 2023 16:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9083F42CB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r0jEc4igjRad; Thu, 26 Oct 2023 16:40:44 +0000 (UTC)
+	with ESMTP id l9m26wQSW6EU; Thu, 26 Oct 2023 16:40:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E08C342DC3;
-	Thu, 26 Oct 2023 16:40:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E08C342DC3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5E7A81BF239
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB92142DDD;
+	Thu, 26 Oct 2023 16:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB92142DDD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 78A231BF98E
  for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:40:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36ECE6FA15
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E411416F1
  for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36ECE6FA15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E411416F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z2OKF6QPZdVd for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CCf16FNJWLJH for <buildroot@lists.busybox.net>;
  Thu, 26 Oct 2023 16:40:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32E936FA13
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31A8E42462
  for <buildroot@buildroot.org>; Thu, 26 Oct 2023 16:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32E936FA13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31A8E42462
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F99E85F04; Thu, 26 Oct 2023 16:40:40 +0000 (UTC)
+ id 12F9785F2B; Thu, 26 Oct 2023 16:40:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Oct 2023 18:40:10 +0200
+Date: Thu, 26 Oct 2023 18:36:20 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 89a71e4222f7047f9c9f0e5e204d4fc45a8e19ce
-X-Git-Newrev: b77df1db5bdea98043ac9fc73e75244ea3a60efc
+X-Git-Oldrev: 3b5e9e24c4419b8d78281a64d98bec73a5cc990f
+X-Git-Newrev: 89a71e4222f7047f9c9f0e5e204d4fc45a8e19ce
 X-Patchwork-Hint: ignore
-Message-Id: <20231026164040.1F99E85F04@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/xdg-dbus-proxy:
- bump to version 0.1.5
+Message-Id: <20231026164040.12F9785F2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] {linux,
+ linux-headers}: bump 6.1.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b77df1db5bdea98043ac9fc73e75244ea3a60efc
+commit: https://git.buildroot.net/buildroot/commit/?id=89a71e4222f7047f9c9f0e5e204d4fc45a8e19ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Version 0.1.5 mainly fixes handling of paths with more than 255
-characters. Release notes:
-
-  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 487761a5b294ae1806030b935faa97c1f1fd1820)
+(cherry picked from commit 2e1890db65fe0e08d626770e226e399309d33fe5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
- package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/linux.hash                     | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-index 7bbea72b03..37f1790c9b 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
--sha256  1ec0eab53d1e49966d722352bcfd51ac402dce5190baedc749a8541e761670ab  xdg-dbus-proxy-0.1.4.tar.xz
-+# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
-+sha256  061dcfaf8a0650e5fd9d5432dfe88bda749ea0d079dc136304bfecfbce0661fb  xdg-dbus-proxy-0.1.4.tar.xz
- 
- # Hash for license files:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-index 48f49dba2a..2e8c054386 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDG_DBUS_PROXY_VERSION = 0.1.4
-+XDG_DBUS_PROXY_VERSION = 0.1.5
- XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
- XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
- XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 283c07693f..b1e5d4963a 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  9626ec84a39ecb009bf11a271dd520941159c165d4e62f82e3a77b79d20ff27d  linux-6.4.16.tar.xz
+-sha256  f9ebfe3ddc5152d87b37e33be30e31875d137433be10a57ce29d2eae7b6e91b1  linux-6.1.57.tar.xz
++sha256  ce987ed3d2f640b3a2a62a0a8573d538a36dfd3cc31e2d7a239ce5a16c1c21ad  linux-6.1.58.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  14835e629e237f136cfed484fdb533c95242429809bdcdb2a2d66dfcb7447170  linux-5.15.135.tar.xz
+ sha256  2b141fce994364fbbf137b01e7910d3518b8cdbdf18f1811b48470ab4ce2fa05  linux-5.10.198.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ed32b32ea4..64c6820a28 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -405,7 +405,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.4.258"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.198"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.135"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.57"	if BR2_KERNEL_HEADERS_6_1
++	default "6.1.58"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.4.16"	if BR2_KERNEL_HEADERS_6_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
