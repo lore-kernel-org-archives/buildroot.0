@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E6BC25B67
-	for <buildroot@archiver.kernel.org>; Fri, 27 Oct 2023 10:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB98C25B47
+	for <buildroot@archiver.kernel.org>; Fri, 27 Oct 2023 10:43:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4113F433EE;
-	Fri, 27 Oct 2023 10:30:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4113F433EE
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DBwcJAcWk0ME; Fri, 27 Oct 2023 10:30:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B315433E2;
-	Fri, 27 Oct 2023 10:30:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B315433E2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 808D71BF301
- for <buildroot@lists.busybox.net>; Fri, 27 Oct 2023 10:30:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 672EB84E3F
- for <buildroot@lists.busybox.net>; Fri, 27 Oct 2023 10:30:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 672EB84E3F
+	by smtp1.osuosl.org (Postfix) with ESMTP id C32CE81EE9;
+	Fri, 27 Oct 2023 10:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C32CE81EE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YiPLpStWWi4I for <buildroot@lists.busybox.net>;
- Fri, 27 Oct 2023 10:30:52 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d8MMkGqM1j5v; Fri, 27 Oct 2023 10:43:15 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20E2281E75;
+	Fri, 27 Oct 2023 10:43:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20E2281E75
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 118EC1BF847
+ for <buildroot@lists.busybox.net>; Fri, 27 Oct 2023 10:43:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE47F7048A
+ for <buildroot@lists.busybox.net>; Fri, 27 Oct 2023 10:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE47F7048A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id smqNRdDP1Ij1 for <buildroot@lists.busybox.net>;
+ Fri, 27 Oct 2023 10:43:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F7DF84E3E
- for <buildroot@uclibc.org>; Fri, 27 Oct 2023 10:30:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F7DF84E3E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AB866FCB4
+ for <buildroot@uclibc.org>; Fri, 27 Oct 2023 10:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AB866FCB4
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 18874846E3; Fri, 27 Oct 2023 10:30:52 +0000 (UTC)
+ id EBC6E843AE; Fri, 27 Oct 2023 10:43:10 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 27 Oct 2023 10:30:51 +0000
+Date: Fri, 27 Oct 2023 10:43:10 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
+X-Bugzilla-Version: 2023.08.2
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: marcus.hoffmann@othermo.de
@@ -55,14 +55,14 @@ X-Bugzilla-Assigned-To: giulio.benetti@benettiengineering.com
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15826-163-ttRio91u03@https.bugs.busybox.net/>
-In-Reply-To: <bug-15826-163@https.bugs.busybox.net/>
-References: <bug-15826-163@https.bugs.busybox.net/>
+Message-ID: <bug-15823-163-HbtMMThJGH@https.bugs.busybox.net/>
+In-Reply-To: <bug-15823-163@https.bugs.busybox.net/>
+References: <bug-15823-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15826] nodejs modules with native extensions fail
- to install
+Subject: [Buildroot] [Bug 15823] Installing nodejs modules with native
+ extensions fails on first run
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,11 +79,11 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15826
+https://bugs.busybox.net/show_bug.cgi?id=15823
 
 --- Comment #1 from Marcus Hoffmann <marcus.hoffmann@othermo.de> ---
-This occured when building with buildroot commit
-91381143e86110f1912ca539b807be9bad4716ed
+To clarify: this is happening on the 2023.08.2 release tag, i.e.
+fe50c054bce7fb9b2e073b9c1bc78dd8a187289a.
 
 -- 
 You are receiving this mail because:
