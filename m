@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8B83C25B48
-	for <buildroot@archiver.kernel.org>; Thu, 26 Oct 2023 16:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24207C25B47
+	for <buildroot@archiver.kernel.org>; Fri, 27 Oct 2023 05:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5896A42E03;
-	Thu, 26 Oct 2023 16:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5896A42E03
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAF4241F9B;
+	Fri, 27 Oct 2023 05:10:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAF4241F9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oz3nWiQTCXdT; Thu, 26 Oct 2023 16:52:12 +0000 (UTC)
+	with ESMTP id 5GBK2-tWnkN9; Fri, 27 Oct 2023 05:10:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9955C42E00;
-	Thu, 26 Oct 2023 16:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9955C42E00
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96C451BF976
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:52:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB4B341EA9;
+	Fri, 27 Oct 2023 05:10:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB4B341EA9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DC791BF38D
+ for <buildroot@lists.busybox.net>; Fri, 27 Oct 2023 05:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FC5D42E00
- for <buildroot@lists.busybox.net>; Thu, 26 Oct 2023 16:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FC5D42E00
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84BD4704C7
+ for <buildroot@lists.busybox.net>; Fri, 27 Oct 2023 05:10:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84BD4704C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vel5PH431Kwe for <buildroot@lists.busybox.net>;
- Thu, 26 Oct 2023 16:52:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wI8KQHj9EbS6 for <buildroot@lists.busybox.net>;
+ Fri, 27 Oct 2023 05:10:10 +0000 (UTC)
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 72E6C42DF7
- for <buildroot@uclibc.org>; Thu, 26 Oct 2023 16:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72E6C42DF7
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ED8AD704C6
+ for <buildroot@uclibc.org>; Fri, 27 Oct 2023 05:10:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED8AD704C6
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qw3aY-0007RX-KO
- for buildroot@uclibc.org; Thu, 26 Oct 2023 18:52:06 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qwF6k-0007dz-Gk
+ for buildroot@uclibc.org; Fri, 27 Oct 2023 07:10:06 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Thu, 26 Oct 2023 18:51:16 +0200
-Message-ID: <pan$e41fd$697d2a98$1eeca1a$1202b144@ID-313208.user.individual.net>
+Date: Fri, 27 Oct 2023 07:09:54 +0200
+Message-ID: <pan$a545b$e29223eb$eab5048c$d1eca542@ID-313208.user.individual.net>
 References: <20231026092701.12345-1-adam.duskett__11152.3364832223$1698312455$gmane$org@amarulasolutions.com>
 Mime-Version: 1.0
 User-Agent: Pan/0.154 (Izium; 517acf4)
@@ -65,20 +65,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Am Thu, 26 Oct 2023 11:26:31 +0200 schrieb Adam Duskett:
 
->   package/python3: bump version to 3.12.0
+> Drop the following packages:
+>   python-pygame python-pyxb python-crossbar
 
-Hi,
+Hi Adam,
 
-building this defconfig is broken with python 3.12:
+there are entries in DEVELOPERS which need to be removed, get-developers 
+prints these warnings:
 
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_KMOD=y
-
-libkmod/python/kmod/kmod.c:6022:34: error: 'PyThreadState' {aka 'struct 
-_ts'} has no member named 'curexc_traceback'
-
-libkmod/python/kmod/kmod.c:6782:53: error: 'PyLongObject' {aka 'struct 
-_longobject'} has no member named 'ob_digit'
+WARNING: 'package/python-pygame/' doesn't match any file, line 1687
+WARNING: 'package/python-crossbar/' doesn't match any file, line 2089
 
 Regards, Bernd
 
