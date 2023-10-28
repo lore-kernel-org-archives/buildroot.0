@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B43AAC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 28 Oct 2023 21:05:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A02CFC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 28 Oct 2023 21:06:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 696084005E;
-	Sat, 28 Oct 2023 21:05:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 696084005E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 520EF42F64;
+	Sat, 28 Oct 2023 21:06:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 520EF42F64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LbVMR4TCvkVQ; Sat, 28 Oct 2023 21:05:46 +0000 (UTC)
+	with ESMTP id 35XjXy1eu_sU; Sat, 28 Oct 2023 21:05:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F2144177D;
-	Sat, 28 Oct 2023 21:05:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F2144177D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E5EC42F30;
+	Sat, 28 Oct 2023 21:05:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E5EC42F30
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 25B681BF32C
- for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 21:03:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 362A91BF32C
+ for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 21:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92E99613A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id A8A33613AE
  for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 21:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92E99613A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8A33613AE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n7cyXaA8FcKX for <buildroot@lists.busybox.net>;
+ with ESMTP id 7bKtrGEPHz3u for <buildroot@lists.busybox.net>;
  Sat, 28 Oct 2023 21:03:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38772613BF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 131DB613BA
  for <buildroot@buildroot.org>; Sat, 28 Oct 2023 21:03:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38772613BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 131DB613BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2981D8607A; Sat, 28 Oct 2023 21:03:22 +0000 (UTC)
+ id 0ED7186079; Sat, 28 Oct 2023 21:03:22 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 28 Oct 2023 22:50:16 +0200
+Date: Sat, 28 Oct 2023 22:50:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 654f18c61709cf8c7d92236c1b81bb80a9ce70d6
-X-Git-Newrev: e324475294bf4714d81dfc3e8fe5f2c62335fb9f
+X-Git-Oldrev: c709ab6fff85285c3f44eacbe780302a29a32ede
+X-Git-Newrev: 98d0a7b95f416c88581788b5ad3ee3d1d5cbbd67
 X-Patchwork-Hint: ignore
-Message-Id: <20231028210322.2981D8607A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cli11: bump to version 2.3.2
+Message-Id: <20231028210322.0ED7186079@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: security bump
+ to version 1.8.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,44 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e324475294bf4714d81dfc3e8fe5f2c62335fb9f
+commit: https://git.buildroot.net/buildroot/commit/?id=98d0a7b95f416c88581788b5ad3ee3d1d5cbbd67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of LICENSE file (update in year:
-https://github.com/CLIUtils/CLI11/commit/39a5f1981e9395e82be863e77b4b0c69239ec338)
+Fix CVE-2023-43785, CVE-2023-43786 and CVE-2023-43787
 
-https://github.com/CLIUtils/CLI11/releases/tag/v2.3.2
+https://lists.x.org/archives/xorg-announce/2023-October/003424.html
+https://lists.x.org/archives/xorg-announce/2023-October/003426.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cli11/cli11.hash | 4 ++--
- package/cli11/cli11.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cli11/cli11.hash b/package/cli11/cli11.hash
-index 12e5b4fb55..42ab5d1311 100644
---- a/package/cli11/cli11.hash
-+++ b/package/cli11/cli11.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  378da73d2d1d9a7b82ad6ed2b5bda3e7bc7093c4034a1d680a2e009eb067e7b2  cli11-2.3.1.tar.gz
--sha256  89022151dbf5827a22430557ef2f8a75808dd25fa1e9a12709ef5421d363e66d  LICENSE
-+sha256  aac0ab42108131ac5d3344a9db0fdf25c4db652296641955720a4fbe52334e22  cli11-2.3.2.tar.gz
-+sha256  4110754959bd99e0ebc34001ed0402ff5f371364e83f9db6d1e230d02368984f  LICENSE
-diff --git a/package/cli11/cli11.mk b/package/cli11/cli11.mk
-index b02bd4478f..349c14fe60 100644
---- a/package/cli11/cli11.mk
-+++ b/package/cli11/cli11.mk
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index f443d947a4..56fecee9ff 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-June/003407.html
+-sha256  59535b7cc6989ba806a022f7e8533b28c4397b9d86e9d07b6df0c0703fa25cc9  libX11-1.8.6.tar.xz
+-sha512  b94a578003078a42cea43d80fae2c54a3aaa30f706088bb3546331e9abfc180131cafb37887117abcc5b6116992e299974981eef96ecfcf883cc8a1aba4d1ade  libX11-1.8.6.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-October/003426.html
++sha256  05f267468e3c851ae2b5c830bcf74251a90f63f04dd7c709ca94dc155b7e99ee  libX11-1.8.7.tar.xz
++sha512  d53bfc18f38d339a6a695b09835b2ae96b323881678bfe7ddca697605e3bdf4102ff49cc3078880a6c55b5977fcdd0aadaf5429086132de3a5bda302f79a2fa6  libX11-1.8.7.tar.xz
+ # Locally computed
+ sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 75199f1a3d..920a5d9aed 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CLI11_VERSION = 2.3.1
-+CLI11_VERSION = 2.3.2
- CLI11_SITE = $(call github,CLIUtils,CLI11,v$(CLI11_VERSION))
- CLI11_LICENSE = BSD-3-Clause
- CLI11_LICENSE_FILES = LICENSE
+-XLIB_LIBX11_VERSION = 1.8.6
++XLIB_LIBX11_VERSION = 1.8.7
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
