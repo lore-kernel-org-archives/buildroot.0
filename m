@@ -4,66 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 906D4C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 28 Oct 2023 21:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75A82C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 28 Oct 2023 21:09:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AAB1408B4;
-	Sat, 28 Oct 2023 21:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AAB1408B4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32B08417A5;
+	Sat, 28 Oct 2023 21:09:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32B08417A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YxbhfWrKZJ12; Sat, 28 Oct 2023 21:08:16 +0000 (UTC)
+	with ESMTP id UZwwgDdV8q2P; Sat, 28 Oct 2023 21:09:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 776BF42F2E;
-	Sat, 28 Oct 2023 21:08:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 776BF42F2E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 91D091BF20B
- for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 21:08:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FFAC417E0;
+	Sat, 28 Oct 2023 21:09:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FFAC417E0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A8401BF20B
+ for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 21:09:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A8E083D45
- for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 21:08:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A8E083D45
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51540403EA
+ for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 21:09:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51540403EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j1Ef-1T8PZEV for <buildroot@lists.busybox.net>;
- Sat, 28 Oct 2023 21:08:12 +0000 (UTC)
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 58C8683D37
- for <buildroot@buildroot.org>; Sat, 28 Oct 2023 21:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58C8683D37
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:de1f:355b:eff2:ec6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 54C102003C3;
- Sat, 28 Oct 2023 23:08:07 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 28 Oct 2023 23:08:07 +0200
-Date: Sat, 28 Oct 2023 23:08:07 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oaAfOptm8mzj for <buildroot@lists.busybox.net>;
+ Sat, 28 Oct 2023 21:09:08 +0000 (UTC)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F280F40102
+ for <buildroot@buildroot.org>; Sat, 28 Oct 2023 21:09:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F280F40102
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4083f613275so23699695e9.2
+ for <buildroot@buildroot.org>; Sat, 28 Oct 2023 14:09:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698527346; x=1699132146;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=66XRthgEutbpkSm2dLf9qeZDjNoH4yY0MpLiu6to0QQ=;
+ b=vyN7490bLPTH289FaTrhWNDPN/cZgLwr+tVIY/O0O9CoZ0APYyjpBpzR3qozOTZLbd
+ s8kKcdsBSMVW5yoSB1EaGknvX+7fZBdnqx4HP7Knr77sMt/t46xQY56qr/eTKFjBTCpm
+ hj1mb0VVVBlpGCY747Ac+2eHfHVYZM0eV8gi9ufj/TqZhdMsU2monPp+hrJcHFgjw5t3
+ sl4bjvth2lw6A4rk8JfQN78/U2Vx3jOVko01AdixSqXcFjbuD6/qHwNd2G6UKQXn3rUT
+ FczY0zO1N6APrw3AHfdtR4ehhkwBYUPTK7jAatlmyEPmNBLKaJZg8Fh5ywNbKL6lOlu8
+ 0K9g==
+X-Gm-Message-State: AOJu0Yw1MORuEC69Uu3YPr+AA9BkjsN12bbas3ShUSi1naEnFWR0F6wu
+ 0yClNVQ5coweXsP9hUcfZVwhXLYNd60=
+X-Google-Smtp-Source: AGHT+IGbZUaXboMh3cB6ZdvE2bvG2e1GdlCvRdDzG0PE+eSVEeBwfMn4uH0McWLFg8oa2grkFm07mg==
+X-Received: by 2002:a05:600c:1d0e:b0:405:dbe2:df10 with SMTP id
+ l14-20020a05600c1d0e00b00405dbe2df10mr5280749wms.35.1698527345843; 
+ Sat, 28 Oct 2023 14:09:05 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8290:3800:de1f:355b:eff2:ec6])
+ by smtp.gmail.com with ESMTPSA id
+ r11-20020adfe68b000000b0032d9f32b96csm4568724wrm.62.2023.10.28.14.09.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 28 Oct 2023 14:09:05 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231028210807.GB687180@scaer>
-References: <20231028205100.1220118-1-fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 28 Oct 2023 23:09:04 +0200
+Message-Id: <cover.1698527340.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231028205100.1220118-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698527290;
- bh=1RiOIe89sfVGCCEoTJ6PuQ4OiicU90hZOx1OZ4o2h3Y=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=oI9A4GSOnApEW05x3idZVlumycQTcgRlUoc+ghNEArBlvDhtkNV5h2TcsHilpox7r
- Ng5tqnNhgZdfM33rSnHgmt0VRrHYCELiISELhy/64EmpUTHHCaHXyD2zWBgmCEAieI
- nzGe+FRO+WINnkamrmnVfKcqGn3oxxr+HdnBvi4UuZ1EHsa2c2/b5Ko29TEipAn8qU
- YXSwczTFYHd8C/bs0jdY5ZoYuzmY6AtCz5I9X6tFN8HzqNsSadq5zsX+opPI+skbRK
- JTI3YQ2xOKW3FIU7bNxm6A/nH+A5bpx9bx2j809klTh/ojXr2Ot73Zxxwj+1bXmTMe
- A6KXY+f/MR+vg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=oI9A4GSO
-Subject: Re: [Buildroot] [PATCH 1/1] package/acsccid: bump to version 1.1.10
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1698527346; x=1699132146; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=66XRthgEutbpkSm2dLf9qeZDjNoH4yY0MpLiu6to0QQ=;
+ b=Fzqejk91N4lgPDjvrLjIec9macIT8RoAwpyMJBP1dYoqG9U2o2fXVlaFVomOG8Hrw4
+ z1ymTqyI8WBTqN6HiIOaEk6gIaDHxKov1LmpV0NR1tvF2imvkUCBU6P9198w46CWAKsK
+ xpDO5/vCyjYDc2eJ9LpV3+iF3bdWmR07pLh1eaAj1o5QiGcgpWIvS0muRc7xi3ihjLSx
+ uccZq0ueddt0DguziFNmiJf7voIbiuIWh92lVNsOVrHX82au1YGJQqADCIyU+ytOvrPD
+ ocwJGITKTit7cEt8ejNuJOKwoWWqG5+vsSy6Ijm+JFgGzhhqTSP/ZlBU/0S32tjhugYV
+ mWfw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Fzqejk91
+Subject: [Buildroot] [PATCH 0/4] support/download: accept user-provided list
+ of extra hash files (branch yem/multi-hash)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,67 +94,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Juha Rantanen <juha@codercoded.com>, buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ "Martin Zeiser \(mzeiser\)" <mzeiser@cisco.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Hello All!
 
-On 2023-10-28 22:51 +0200, Fabrice Fontaine spake thusly:
-> https://sourceforge.net/p/acsccid/news/2023/04/acsccid-119-released/
-> https://sourceforge.net/p/acsccid/news/2023/08/acsccid-1110-released/
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For packages where the version can be specified by the user (e.g. with a
+custom version string, a custom tarball location, a custom git tree and
+changeset...), Buildroot can't carry hashes for those, and thus does not
+check the integritiy of the downloads.
 
-Applied to master, thanks.
+Add the possibility for users to provide hashes for those, by leveraging
+the global patch dir setting, to look up extra hash files in a way
+similar to how extra patches are looked up in there.
 
-... along with the set of version bumps from tonight you sent so far.
+Users who provide such extra hashes will most probably be interested in
+ensuring that no download ever gets used without an actual integrity
+check, so also add an option the requires all downloads to have at least
+one valid hash (and no invalid ones, of course), rather than ignoring
+downloads for custom versions.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/acsccid/acsccid.hash | 8 ++++----
->  package/acsccid/acsccid.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/acsccid/acsccid.hash b/package/acsccid/acsccid.hash
-> index f43a7930a4..5310d78144 100644
-> --- a/package/acsccid/acsccid.hash
-> +++ b/package/acsccid/acsccid.hash
-> @@ -1,6 +1,6 @@
-> -# From https://sourceforge.net/projects/acsccid/files/acsccid/1.1.7/
-> -sha1  c0062401e5fedf3ec12c8c2d375d6e1561a8a8ed  acsccid-1.1.8.tar.bz2
-> -md5  3eba7b2527aa0b14c73b1a620a1d72d2  acsccid-1.1.8.tar.bz2
-> +# From https://sourceforge.net/projects/acsccid/files/acsccid/1.1.10/
-> +sha1  6284a693b8edb511f2f80d9069af9b4a41fd55ae  acsccid-1.1.10.tar.bz2
-> +md5  4d2b7f34414aed029084c96dd05a0e7d  acsccid-1.1.10.tar.bz2
->  # Locally computed
-> -sha256  f86fd846bc88594a569ea27040cb441d933b7eca8d51d2a90bacf161e7740051  acsccid-1.1.8.tar.bz2
-> +sha256  5ee112febdcac6656629025f3a85923f155f6ca150b2d24fd716f9043265528e  acsccid-1.1.10.tar.bz2
->  sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-> diff --git a/package/acsccid/acsccid.mk b/package/acsccid/acsccid.mk
-> index db74e9cb76..463f0f24d6 100644
-> --- a/package/acsccid/acsccid.mk
-> +++ b/package/acsccid/acsccid.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -ACSCCID_VERSION = 1.1.8
-> +ACSCCID_VERSION = 1.1.10
->  ACSCCID_SOURCE = acsccid-$(ACSCCID_VERSION).tar.bz2
->  ACSCCID_SITE = http://downloads.sourceforge.net/acsccid
->  ACSCCID_LICENSE = LGPL-2.1+
-> -- 
-> 2.42.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      docs/manual: svn downloads can be hash-checked
+      support/download: teach dl-wrapper to handle more than one hash file
+      package/pkg-download: lookup hash files in global-patch-dir
+      pkg-download: add option to enforce hash checking
+
+ Config.in                                  | 30 ++++++++++++--
+ docs/manual/adding-packages-directory.adoc | 12 ++++--
+ docs/manual/customize-patches.adoc         | 25 +++++++++++-
+ package/pkg-download.mk                    | 15 +++++--
+ support/download/check-hash                | 64 ++++++++++++++++--------------
+ support/download/dl-wrapper                | 10 ++---
+ 6 files changed, 110 insertions(+), 46 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
