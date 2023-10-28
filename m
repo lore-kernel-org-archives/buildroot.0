@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02D11C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 28 Oct 2023 20:14:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF0D4C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 28 Oct 2023 20:33:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F97842EB4;
-	Sat, 28 Oct 2023 20:14:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F97842EB4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55ACD42F1B;
+	Sat, 28 Oct 2023 20:33:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55ACD42F1B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6LTG-B-702jw; Sat, 28 Oct 2023 20:14:22 +0000 (UTC)
+	with ESMTP id lLPgBjEI_mSr; Sat, 28 Oct 2023 20:33:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D56DE42EB0;
-	Sat, 28 Oct 2023 20:14:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D56DE42EB0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 908EF42F16;
+	Sat, 28 Oct 2023 20:33:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 908EF42F16
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 52DBA1BF426
- for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 20:14:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8841E1BF25F
+ for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 20:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 377CB4183D
- for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 20:14:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 377CB4183D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F9F04187C
+ for <buildroot@lists.busybox.net>; Sat, 28 Oct 2023 20:32:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F9F04187C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P6vV8thlOsoj for <buildroot@lists.busybox.net>;
- Sat, 28 Oct 2023 20:14:19 +0000 (UTC)
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D599F41817
- for <buildroot@buildroot.org>; Sat, 28 Oct 2023 20:14:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D599F41817
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-507c5249d55so4678851e87.3
- for <buildroot@buildroot.org>; Sat, 28 Oct 2023 13:14:18 -0700 (PDT)
+ with ESMTP id CM1eyhXUDS_d for <buildroot@lists.busybox.net>;
+ Sat, 28 Oct 2023 20:32:58 +0000 (UTC)
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
+ [IPv6:2a00:1450:4864:20::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 164DF40102
+ for <buildroot@buildroot.org>; Sat, 28 Oct 2023 20:32:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 164DF40102
+Received: by mail-lj1-x230.google.com with SMTP id
+ 38308e7fff4ca-2c6b48cb2b6so6890801fa.2
+ for <buildroot@buildroot.org>; Sat, 28 Oct 2023 13:32:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698524056; x=1699128856;
+ d=1e100.net; s=20230601; t=1698525175; x=1699129975;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=x7kkiXlB1Qh1j+pAs/03rAdUTQrTSMLcfQWrhyea/Pc=;
- b=fCZ/EHtJdlbgBAiElHopa/sInivcII5ncyKNdzm+shy4Lrvxlt5owSGnBO9s7B2oBC
- uRTm13556HjB/nmb9ECyVa41vyGtp0qMSyyys1ojZyW01FZ+0glGJvB0qdVZZwvRMH75
- FkPtAFHIDcY0Tz7t1PE6mPecZLHpuu5cWMvZxGWTbNXGG7IG5qoVAbCreFvr4p+mkeWv
- SzA+m/6aBJM+ThYLYP6PI1+cGJ0WH5qkYKoHIFfDCIkl3kl+poi3VnHcSsuOiZnWwKDX
- P1+UeiotaO7ygJyuznOmtcBTNSLDA8VX5pd6mmD0TZTmzP0ZPF+qG9ZTdVQA+Bl4ykK3
- KCvQ==
-X-Gm-Message-State: AOJu0Yw5CuOg2cDapMRf/n3kiSPTbu8Fyc6wQtlTOLTK3lDZ9aQwEiZP
- OhnjouLBDpUhjYbkrahHvw9oDcwQ6kk=
-X-Google-Smtp-Source: AGHT+IFw7qRRGNQASyHiXXmgs5+CBfXv5/BTtBwvj4fzwAh7DAeFj+Go64r7ejt0CShcRTJ24eZ7wg==
-X-Received: by 2002:a05:6512:4845:b0:500:acf1:b432 with SMTP id
- ep5-20020a056512484500b00500acf1b432mr4759969lfb.63.1698524056088; 
- Sat, 28 Oct 2023 13:14:16 -0700 (PDT)
+ bh=10CE3JQRe5a8Tsf12jD8O8eDirahB9NH1IbRlvT+ezY=;
+ b=dtNiHC5niBMYglN1r+pG6itZKVbhkt48GtbMSNw/65cX5nySDmnI2p+lPUVjx4W05h
+ gkVLTE2tutr+47m5TPw2HFbKJwymjHUgpYjVytQ/FNeyLUA+m5prSM4W4J5ANHM4M4qR
+ Klt2NQNnh62c6prg5lud4/9lzbjckqem7dbfvJSu8u1LjUYuaFFI1UN21QgtYed6L8Vj
+ 0Q9hbJzH+44F6jxZA+hmsVvVhbIGUDZmeD5Ooovh5u76e+dWFooDayF8GIfpJbHywcmh
+ +NpDG5tSRZByKgQnX5OZkwNpPfsACCvuyNuKzBfqftUBMzg0tmDzjNsQBwP+AufoP4xv
+ Zl6w==
+X-Gm-Message-State: AOJu0YwmVO5QT8p/LEgCCdwidtXjl18wGHzW6JphbKXXKzzyeF3Xcs7s
+ XMqXJeBx7DOloycmKC8MBlhpF4IwBoE=
+X-Google-Smtp-Source: AGHT+IGSWQmai2eLvv7uHB2kne7zJUThp516ominTxS5OUqCn7ulvUoaIp8vYN7+grozu28rXq8LvA==
+X-Received: by 2002:a05:651c:1a23:b0:2c5:1ea4:4e99 with SMTP id
+ by35-20020a05651c1a2300b002c51ea44e99mr5612609ljb.48.1698525174981; 
+ Sat, 28 Oct 2023 13:32:54 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- s4-20020adff804000000b0032dbf32bd56sm4523599wrp.37.2023.10.28.13.14.15
+ v18-20020a05600c4d9200b004065e235417sm8193856wmp.21.2023.10.28.13.32.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 28 Oct 2023 13:14:15 -0700 (PDT)
+ Sat, 28 Oct 2023 13:32:54 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 28 Oct 2023 22:14:13 +0200
-Message-ID: <20231028201413.1160957-1-fontaine.fabrice@gmail.com>
+Date: Sat, 28 Oct 2023 22:32:52 +0200
+Message-ID: <20231028203252.1177951-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1698524056; x=1699128856; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1698525175; x=1699129975; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=x7kkiXlB1Qh1j+pAs/03rAdUTQrTSMLcfQWrhyea/Pc=;
- b=ToBTwD9AIlQXxiPdps2lU9VlWP4lP6X6HOAKcd9PZfXmxdTDCLtNHF5rtX0JyvEDv6
- Wanrq64f1l9vP86ozLNCKXQ5zHVsOBNRB5VuAu/I9PF3n/aFdhAvpYxBEmuhtdwDQrX1
- HJOMy8bKm5JCUxLIYzBTQeh0l3Snz7s3MXCAD39d1ZHkvRqJBStfn90LlNibF9W53k2O
- SP5p4YGq+ASvhnLnxAhK9+dNkcKpzqS5NfjLD8JOykxkWuxS60Zj7zyKIq3G5TeNywvP
- +OdIQbVq1RERz011ogMaHXWAjWRdweuhbrfmft3ppy8jK7bD+I+vz6Ry4dsPYrj2hVTr
- pebA==
+ bh=10CE3JQRe5a8Tsf12jD8O8eDirahB9NH1IbRlvT+ezY=;
+ b=CPkVwodVCsn3Lzjw5ro2UFt2tS6X94ncx+T5s6J03g1ovLbevuaf5dG5bjt4zeMh8M
+ 59cvMxSsJOCdcF0omxtOshPZNqo8CRXH/Y9FcbjZjdr9OajAxGp2nsNh00xVAskl6gma
+ ENpzBGCelFOgOU3+nqou00K431wM/pdq1kaD/dGuvIDVg5Vu0/CvBKtl2cmR8rxDpVaj
+ 60ggZp44AePkkU9kPWxgsNf4rIw1aNMmVBtLR6EgEw2MfmJx9CCFlLTfaSzzLOS3uDs0
+ 8hBtB4QHIM5ES0VkzllujchBkADAKG7CMQvGa6Bsa+2W5Zdf2/ZLvxwM/hQrtmYA0OF6
+ wxJw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ToBTwD9A
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: security bump to
- version 1.8.7
+ header.a=rsa-sha256 header.s=20230601 header.b=CPkVwodV
+Subject: [Buildroot] [PATCH 1/1] package/cjson: bump to version 1.7.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,43 +99,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-43785, CVE-2023-43786 and CVE-2023-43787
-
-https://lists.x.org/archives/xorg-announce/2023-October/003424.html
-https://lists.x.org/archives/xorg-announce/2023-October/003426.html
+https://github.com/DaveGamble/cJSON/releases/tag/v1.7.16
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index f443d947a4..56fecee9ff 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-June/003407.html
--sha256  59535b7cc6989ba806a022f7e8533b28c4397b9d86e9d07b6df0c0703fa25cc9  libX11-1.8.6.tar.xz
--sha512  b94a578003078a42cea43d80fae2c54a3aaa30f706088bb3546331e9abfc180131cafb37887117abcc5b6116992e299974981eef96ecfcf883cc8a1aba4d1ade  libX11-1.8.6.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-October/003426.html
-+sha256  05f267468e3c851ae2b5c830bcf74251a90f63f04dd7c709ca94dc155b7e99ee  libX11-1.8.7.tar.xz
-+sha512  d53bfc18f38d339a6a695b09835b2ae96b323881678bfe7ddca697605e3bdf4102ff49cc3078880a6c55b5977fcdd0aadaf5429086132de3a5bda302f79a2fa6  libX11-1.8.7.tar.xz
- # Locally computed
- sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 75199f1a3d..920a5d9aed 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index c39e884cdd..74844d6aa6 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  5308fd4bd90cef7aa060558514de6a1a4a0819974a26e6ed13973c5f624c24b2  cjson-1.7.15.tar.gz
++sha256  451131a92c55efc5457276807fc0c4c2c2707c9ee96ef90c47d68852d5384c6c  cjson-1.7.16.tar.gz
+ sha256  a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index ad9d76a4ba..7ed732ac90 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.8.6
-+XLIB_LIBX11_VERSION = 1.8.7
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+-CJSON_VERSION = 1.7.15
++CJSON_VERSION = 1.7.16
+ CJSON_SITE = $(call github,DaveGamble,cjson,v$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
 2.42.0
 
