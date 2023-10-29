@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA21AC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 22:02:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DC8BC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 23:40:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C35E7068F;
-	Sun, 29 Oct 2023 22:02:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C35E7068F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F5FD8201E;
+	Sun, 29 Oct 2023 23:40:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F5FD8201E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3boEsavq0m8W; Sun, 29 Oct 2023 23:40:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E22F582015;
+	Sun, 29 Oct 2023 23:40:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E22F582015
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0363E1BF3EE
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 23:40:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D05FE70653
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 23:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D05FE70653
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ee59KORjw5nc; Sun, 29 Oct 2023 22:02:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0A847074C;
-	Sun, 29 Oct 2023 22:02:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0A847074C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF0671BF403
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 22:02:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 848FA4F182
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 22:02:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 848FA4F182
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tXRsHRJI8IOP for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 22:02:19 +0000 (UTC)
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 80D1A4F180
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 22:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80D1A4F180
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-32f7db21967so928659f8f.1
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 15:02:19 -0700 (PDT)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xn3Ld7TMOcp0 for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 23:40:11 +0000 (UTC)
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E33E370636
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 23:40:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E33E370636
+Received: by mail-il1-x12a.google.com with SMTP id
+ e9e14a558f8ab-3576e74ae9dso12998685ab.3
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 16:40:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698616937; x=1699221737;
+ d=1e100.net; s=20230601; t=1698622809; x=1699227609;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=35/3tGuU8iLrPXFn0fLuFdkegh4E7gogU/yYSRGgLLc=;
- b=E5BqdNplTfSrzIJWkuO8OsBEH3V6d964+tbTS1nSGKQuTG3xjD437pQj/7Gclhn0YC
- IV8cNBuU3wHLHW9iNfIgy2FNgdYTlsL00e78wTgA0yQatkmsOEtYGLPZbbouQ5hPF+2C
- 1kCjTjFMU4smtGDTuNhkBzTy3ugqSx3d5I3/H5WwQQhX8IxPdjpLmy91sLts3qjU8rtM
- K7rHdaRduDlvKq4xVNPQQSeZwZDEcZ2wx1G0JJ3PMYGELw4KXTMs34Lfvel8LZbCC3um
- 4D4H2DL+z4KZMwEA9ifATiC1zDIBpOl3akU3XF3izDVfC6J83txfk/GQ7dGnQbYTQU/W
- pazg==
-X-Gm-Message-State: AOJu0YxyNZQCP0A4nB7Ei6tJ1mgLnyr4f/yuMc9W1N28lrz0WiTzeB9O
- lPR+WCFRiTUl8viATbX2Xu3289o3fhE=
-X-Google-Smtp-Source: AGHT+IEZ/jii0agzaFrj4ewU/ScdQe+2YlDncstEHongdEWbCwKZ2z1bHgituwKDke48SXTOvBv9CQ==
-X-Received: by 2002:a5d:67c7:0:b0:31a:d871:7ae7 with SMTP id
- n7-20020a5d67c7000000b0031ad8717ae7mr5527543wrw.29.1698616936963; 
- Sun, 29 Oct 2023 15:02:16 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- d25-20020adfa419000000b0032f79e55eb8sm4562031wra.16.2023.10.29.15.02.16
+ bh=u4SMY3qP9ScLd/bQ35z79Uggu1NKXadaIXh+ia45aCM=;
+ b=aC1ekRohBcHKIGDF/erHlkstDCiyU23fWPHrBuNEC+/eQ3ZjPELQEZ+huqP2n+mRVx
+ +51JOBLXKTWpdShkWjX4nu3aohl9XsgwpzCYDV0aXOPU48MQFC0sEhNgDk+Bm3WBYr5O
+ xrevjS3cELx5yDNlWxmtwbHNuzN4l29RvMyW9xXoNyNX5zNqBeSues2c/By9BwAgqsBv
+ SGRjoiK5MXw/GjTCaGsb2QBQ52kfLW8cogrY2L5pMJaUhVEvDIoftiu5qI7AXsXoU6CB
+ ZxZdm7v7J4TUsbvV5SvN08s1bP5pkrAY0E5zGUHYCan6ZLKHdgmqK7bFck7py1JoF+lt
+ 8rJA==
+X-Gm-Message-State: AOJu0YzAELVFhZAQxBPl9J78SsoZWclIdEDVcktoU2dXEb16+pHz0LFM
+ nlNCqcZRoDyjxPh5yDGdMqM3NpxpaR8=
+X-Google-Smtp-Source: AGHT+IEU1h3WgeAW7cLJw0EdwmHr+ufBycLGi/ITfwuidAcuyfFoyHWUpw/zvOQa5yU6YmGBO7+JFQ==
+X-Received: by 2002:a05:6e02:1567:b0:358:574:4c74 with SMTP id
+ k7-20020a056e02156700b0035805744c74mr11535390ilu.2.1698622809578; 
+ Sun, 29 Oct 2023 16:40:09 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
+ [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
+ j16-20020a056e02015000b00357e53527afsm2012478ilr.61.2023.10.29.16.40.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Oct 2023 15:02:16 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sun, 29 Oct 2023 16:40:08 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 Oct 2023 23:02:14 +0100
-Message-ID: <20231029220214.32159-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+Date: Sun, 29 Oct 2023 17:40:00 -0600
+Message-Id: <20231029234003.2606006-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1698616937; x=1699221737; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1698622809; x=1699227609; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=35/3tGuU8iLrPXFn0fLuFdkegh4E7gogU/yYSRGgLLc=;
- b=VrDMhnpXF8C5W2mYSPDNi29ivNDw4kKBoKaoIbwV+f0KWzdiatoq4vqtXUX0fnY7NO
- 3IohxGnacB/drvzSno60gAtnrNOutbWp47D++59ZZUWkrsjcj9ejmQB5HZMvI13gQZFI
- cIRK9Q1lMrOms4K9UJ0QM3PV/6hbMp5HUoiFyhC2yZvVMcMHVDHEDVLHXWLFgKHa92nH
- ntgikN5TTNcHhh1Rb/q873aaXMpiFbEAXx5lG6Jxbc/Gz1ScVdRVzIndzkKmA5ziMtW7
- sY2gKtp98+eWrW5TI2FyIaFHY4MRT4g5O9mLNY0/eNyzH0DSOfgu+sBel+P7j0T1ol0F
- Jodg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=u4SMY3qP9ScLd/bQ35z79Uggu1NKXadaIXh+ia45aCM=;
+ b=XobLoyPkhlIvUhPPv8dc8YuNbgHuL+J0BZli9vbx2oABAlX43DkZodhpi6aH77xK06
+ ZaLM1LwTJufvpkDZBPWMT/z5fjzA6IYAaM7KNwm9m7qzoqF0DDJVDmCFQZaVOhqISXKg
+ vnVre24YGSJS8boNYlXzYaf1+tdKgK4ARyL0Nj3a48Xpp1Hz0Esysr7sAipt1XZaXCtj
+ JgNoQ6nDz7Xt/+ObW+O2I4aWkDVY5t4IwHvWZ4/0hOC3xu2WY+MQ/TJ/NW+8tXxAsnH/
+ GUk22h8o0lLwOFLq3e2GdvHQUtZDLUv6zFbfU/w/T7geVblXid2FdovII7P1xVa71IV2
+ /OqA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=VrDMhnpX
-Subject: [Buildroot] [PATCH 1/1] package/uftrace: bump to version 0.14
+ header.a=rsa-sha256 header.s=20230601 header.b=XobLoyPk
+Subject: [Buildroot] [PATCH v4 1/4] package/python-poetry-core: new host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,73 +94,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Gustavo Heinz <gustavo@gsthnz.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ "Wojciech M . Zabolotny" <wzab01@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add Upstream link to patch (even if it was rejected)
-
-https://github.com/namhyung/uftrace/blob/v0.14/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .checkpackageignore                                             | 1 -
- ...01-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch | 1 +
- package/uftrace/uftrace.hash                                    | 2 +-
- package/uftrace/uftrace.mk                                      | 2 +-
- 4 files changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+  - update to 1.7.0
+  - drop patch which is now upstream
+---
+ package/python-poetry-core/python-poetry-core.hash |  5 +++++
+ package/python-poetry-core/python-poetry-core.mk   | 14 ++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 package/python-poetry-core/python-poetry-core.hash
+ create mode 100644 package/python-poetry-core/python-poetry-core.mk
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index d5c894ff25..31f6672eb3 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1397,7 +1397,6 @@ package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.pa
- package/ubus/0001-Install-server-and-client-examples.patch Upstream
- package/udpcast/0001-fix-musl-build.patch Upstream
- package/uemacs/01-clear-ixon-termios-flag.patch Upstream
--package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch Upstream
- package/uhd/0001-host-CMakeLists-add-boost-unit_test_framework-requir.patch Upstream
- package/uhttpd/0001-Remove-Werror.patch Upstream
- package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch Upstream
-diff --git a/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch b/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
-index 6913012c3b..2855be0d9e 100644
---- a/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
-+++ b/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
-@@ -11,6 +11,7 @@ Using a #ifdef ... #endif test doesn't work as this value is defined
- through an enum in glibc.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: https://github.com/namhyung/uftrace/pull/1389
- ---
-  cmds/record.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
-index 195f0605c8..c4aad39016 100644
---- a/package/uftrace/uftrace.hash
-+++ b/package/uftrace/uftrace.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2aad01f27d4f18717b681824c7a28ac3e1efd5e7bbed3ec888a3ea5af60e3700  uftrace-0.12.tar.gz
-+sha256  b81255bc288e79e96a5b158d4875fa6425ad51c85f4c4c8523c1defb9366ad12  uftrace-0.14.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
-index d36c3bd8f5..c005a32b76 100644
---- a/package/uftrace/uftrace.mk
-+++ b/package/uftrace/uftrace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UFTRACE_VERSION = 0.12
-+UFTRACE_VERSION = 0.14
- UFTRACE_SITE = $(call github,namhyung,uftrace,v$(UFTRACE_VERSION))
- UFTRACE_LICENSE = GPL-2.0
- UFTRACE_LICENSE_FILES = COPYING
+diff --git a/package/python-poetry-core/python-poetry-core.hash b/package/python-poetry-core/python-poetry-core.hash
+new file mode 100644
+index 0000000000..c6b180c852
+--- /dev/null
++++ b/package/python-poetry-core/python-poetry-core.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/poetry-core/json
++md5  7461547cac0e0e9c8cd7463aa87e7470  poetry_core-1.7.0.tar.gz
++sha256  8f679b83bd9c820082637beca1204124d5d2a786e4818da47ec8acefd0353b74  poetry_core-1.7.0.tar.gz
++# Locally computed sha256 checksums
++sha256  f1978133782b90f4733bc308ddb19267c3fe04797c88d9ed3bc219032495a982  LICENSE
+diff --git a/package/python-poetry-core/python-poetry-core.mk b/package/python-poetry-core/python-poetry-core.mk
+new file mode 100644
+index 0000000000..4ca587b11d
+--- /dev/null
++++ b/package/python-poetry-core/python-poetry-core.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-poetry-core
++#
++################################################################################
++
++PYTHON_POETRY_CORE_VERSION = 1.7.0
++PYTHON_POETRY_CORE_SOURCE = poetry_core-$(PYTHON_POETRY_CORE_VERSION).tar.gz
++PYTHON_POETRY_CORE_SITE = https://files.pythonhosted.org/packages/cb/1c/af7f886e723b2dfbaea9b8a739153f227b386dd856cf956f9fd0ed0a502b
++PYTHON_POETRY_CORE_SETUP_TYPE = pep517
++PYTHON_POETRY_CORE_LICENSE = MIT
++PYTHON_POETRY_CORE_LICENSE_FILES = LICENSE
++
++$(eval $(host-python-package))
 -- 
-2.42.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
