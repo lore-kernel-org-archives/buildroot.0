@@ -4,66 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40DFEC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F66BC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E22E743108;
-	Sun, 29 Oct 2023 08:48:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E22E743108
+	by smtp2.osuosl.org (Postfix) with ESMTP id D82244312B;
+	Sun, 29 Oct 2023 08:58:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D82244312B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id usjRvnN9NLzV; Sun, 29 Oct 2023 08:48:18 +0000 (UTC)
+	with ESMTP id 7aXRRSCi0fWi; Sun, 29 Oct 2023 08:58:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8967943127;
-	Sun, 29 Oct 2023 08:48:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8967943127
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4AA1D1BF20B
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:47:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F0AE43128;
+	Sun, 29 Oct 2023 08:58:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F0AE43128
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2466A1BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:58:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F3E043127
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:47:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F3E043127
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1F2D84C57
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:58:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1F2D84C57
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zf02wu6tpSYC for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 08:47:53 +0000 (UTC)
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B079143125
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:47:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B079143125
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:de1f:355b:eff2:ec6])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 09395200412;
- Sun, 29 Oct 2023 09:47:49 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Oct 2023 09:47:49 +0100
-Date: Sun, 29 Oct 2023 09:47:49 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231029084749.GT687180@scaer>
-References: <20231026180751.3150845-1-bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Km_bG8VU_XCB for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 08:58:37 +0000 (UTC)
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
+ [IPv6:2a00:1450:4864:20::236])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0526E84C54
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:58:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0526E84C54
+Received: by mail-lj1-x236.google.com with SMTP id
+ 38308e7fff4ca-2c503da4fd6so51337161fa.1
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 01:58:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698569914; x=1699174714;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=UDjT84sVlELZQd8k6qH84HyY6VG7N381y2qLLyU3ub0=;
+ b=chgzI6kMAgiiJuvJqaeNbmKN0r7khCugUpAt8JSgMAXGA1j9Js7cUqUivQ75fdX4Hz
+ Dqjm7/+F1d6x7HpOMI6dSaBDyOx00NVXXetld9gnVEy0MaGP3cqqZgpQ55Ycb+qPGjMX
+ Q0a5nZz33u/n3Lo2rdmWSrKdH572tM7ih35uUpJ8eYqRpKhEEF9maiLw7UjIyCkniOfI
+ k7Z/zTBjLyD4MtjPbSH7IXQesC5FuzDKeZuSWSE3dnng3EgGRdIo9BnkL84AZKDS6bhS
+ 1HusYl6PcvbUsNbr38LkSVwEg+KH8HJJe7F6M3GMb4iUYX8QJ2sYjjxMhbT3dIWiUORu
+ GERg==
+X-Gm-Message-State: AOJu0Yw1gCpjwnM9rOcUSRa5XW4w/jECAwIp1S85pHhxJpN/Rbx3eJnN
+ nh0/A8+e2lv8TpmfspuGAeHvEANSmLc=
+X-Google-Smtp-Source: AGHT+IGMPCxw58GlhcFAxAP57hYOpuu3X7t4VO6a+LwC02GrM720HYVeh/1NwDhQYciYSZrDf4l/Kw==
+X-Received: by 2002:a2e:b5c9:0:b0:2bd:1000:431d with SMTP id
+ g9-20020a2eb5c9000000b002bd1000431dmr4753496ljn.10.1698569914175; 
+ Sun, 29 Oct 2023 01:58:34 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ i21-20020a05600c355500b00405959469afsm6126039wmq.3.2023.10.29.01.58.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 29 Oct 2023 01:58:33 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 29 Oct 2023 09:58:31 +0100
+Message-ID: <20231029085831.234005-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231026180751.3150845-1-bernd@kuhls.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698569272;
- bh=l8AY5IsyXVG45JftJ/W7KEnNvVCkq/qZmtEqI6h5foo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Ht61crzz7d1NB40jMItK47Xtrr7ISOOezsju42s8DIj8Vk1D65l5Gh3NTv7+n0T+p
- J/R20OEZ+RPxZyAVczMAulSbJeDHx45X6MqUn/o1Ch7ub8RwjdA1eXpdsvZBckgYVl
- dZ+IW/t0vKRDUVKWx7Yr1ONBNWNCn441cmN2CwxI0vCv0WPQd/Zmd8mXaI2V1Xb9L1
- ihwCi6rurGtISa26j2EvHJRHU1iSpQeWrYhaOnRV5wGc9387wUEnE2st3LDiKO1n3c
- q4Gi+k7eX87HmaYhkHRZ6DADvFZdHM7lNv+PrcAYhsStLOHWW9Ls4oOQBT0IbBneSt
- 5Hpzv3eu4Eh1g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ht61crzz
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: fix build with python 3.12
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1698569914; x=1699174714; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=UDjT84sVlELZQd8k6qH84HyY6VG7N381y2qLLyU3ub0=;
+ b=EwSpMC9o5/Mp8e6urFaQfnZyadzK0pQFPyN2guqZE65iCeleqgelA927hstfSLZwBv
+ ejrXPqWJciCa6XXX2uh+OvNU+eB/GSXIaB+pIXLjL+PnU9FIU66Pm6Gb1tfLiR2IGr15
+ kVtVgGQ7IBtwgWHF/gYWXTYzBjCthxM3TnS4NTy2q3Ti1fmrbWhRmw2AM0kKY/ZNH/bR
+ h8XAJOdR1h85D8wCWhzyIf5wqh2Z6TCJcpqPFJZtD+5DyS9KSgIs/FtjOu+UR31bMSu4
+ XK9PvcscDq1M4aeeSCjGY26aMKA12Df7lT30LlMj7V3tZAydfKKldMuGvEOrSdmU0Ktr
+ HyRw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=EwSpMC9o
+Subject: [Buildroot] [PATCH 1/1] package/pango: fix build with gcc >= 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,107 +93,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+Fix the following build failure with gcc >= 13:
 
-On 2023-10-26 20:07 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+In function 'find_best_lang_match_cached',
+    inlined from 'find_best_lang_match_cached' at ../pango/pango-language.c:501:1,
+    inlined from 'pango_language_get_scripts' at ../pango/pango-language.c:661:21:
+../pango/pango-language.c:518:12: error: array subscript 0 is outside array bounds of 'const void *[0]' {aka 'const void *[]'} [-Werror=array-bounds=]
+  518 |     *cache = result;
+      |     ~~~~~~~^~~~~~~~
+In function 'pango_language_get_scripts':
+cc1: note: source object is likely at address zero
+cc1: some warnings being treated as errors
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/e8b5a752a62621099942b29c1642747eef2930cb
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../pango/0001-Drop-Werror-array-bounds.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/pango/0001-Drop-Werror-array-bounds.patch
 
-> ---
->  ...ypeInfo-add-initialization-of-tp_wat.patch | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 package/kodi/0006-PythonBindings-TypeInfo-add-initialization-of-tp_wat.patch
-> 
-> diff --git a/package/kodi/0006-PythonBindings-TypeInfo-add-initialization-of-tp_wat.patch b/package/kodi/0006-PythonBindings-TypeInfo-add-initialization-of-tp_wat.patch
-> new file mode 100644
-> index 0000000000..ed0c340f52
-> --- /dev/null
-> +++ b/package/kodi/0006-PythonBindings-TypeInfo-add-initialization-of-tp_wat.patch
-> @@ -0,0 +1,59 @@
-> +From cbfee0e6add2b57c6a2a8641a60b4322543f4675 Mon Sep 17 00:00:00 2001
-> +From: Lukas Rusak <lorusak@gmail.com>
-> +Date: Wed, 12 Jul 2023 19:58:08 -0700
-> +Subject: [PATCH] PythonBindings: TypeInfo: add initialization of
-> + tp_watched for PyTypeObject
-> +
-> +This member was added in upstream commit https://github.com/python/cpython/commit/82ccbf69a842db25d8117f1c41b47aa5b4ed96ab
-> +
-> +This change first appeared in Python v3.12.0a1
-> +
-> +Signed-off-by: Lukas Rusak <lorusak@gmail.com>
-> +
-> +Upstream: https://github.com/xbmc/xbmc/commit/2c84ee54a75770e291f38d4ebb2c31c8f2c3b8c5
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + xbmc/interfaces/python/swig.cpp | 3 +++
-> + 1 file changed, 3 insertions(+)
-> +
-> +diff --git a/xbmc/interfaces/python/swig.cpp b/xbmc/interfaces/python/swig.cpp
-> +index 5a2599a84ea0f..74baa72ee5c4c 100644
-> +--- a/xbmc/interfaces/python/swig.cpp
-> ++++ b/xbmc/interfaces/python/swig.cpp
-> +@@ -71,6 +71,9 @@ namespace PythonBindings
-> + #endif
-> + #if PY_VERSION_HEX < 0x03090000
-> +       0,
-> ++#endif
-> ++#if PY_VERSION_HEX >= 0x030C00A1
-> ++      0,
-> + #endif
-> +     };
-> + 
-> +
-> +From e3ba40936cc10de05c46d507851568ee3e351f43 Mon Sep 17 00:00:00 2001
-> +From: Lukas Rusak <lorusak@gmail.com>
-> +Date: Thu, 13 Jul 2023 08:57:38 -0700
-> +Subject: [PATCH] swig.cpp: add clang-format formatting
-> +
-> +Signed-off-by: Lukas Rusak <lorusak@gmail.com>
-> +---
-> + xbmc/interfaces/python/swig.cpp | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/xbmc/interfaces/python/swig.cpp b/xbmc/interfaces/python/swig.cpp
-> +index 74baa72ee5c4c..0c49f87ca84e1 100644
-> +--- a/xbmc/interfaces/python/swig.cpp
-> ++++ b/xbmc/interfaces/python/swig.cpp
-> +@@ -18,8 +18,8 @@ namespace PythonBindings
-> + {
-> +   TypeInfo::TypeInfo(const std::type_info& ti) : swigType(NULL), parentType(NULL), typeIndex(ti)
-> +   {
-> +-    static PyTypeObject py_type_object_header =
-> +-    { PyVarObject_HEAD_INIT(nullptr, 0) 0,
-> ++    static PyTypeObject py_type_object_header = {
-> ++      PyVarObject_HEAD_INIT(nullptr, 0) 0,
-> +       0,
-> +       0,
-> +       0,
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/pango/0001-Drop-Werror-array-bounds.patch b/package/pango/0001-Drop-Werror-array-bounds.patch
+new file mode 100644
+index 0000000000..45821e8533
+--- /dev/null
++++ b/package/pango/0001-Drop-Werror-array-bounds.patch
+@@ -0,0 +1,40 @@
++From e93dbd66973040f1e0afcba0dc7c712c27d75d59 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen <mclasen@redhat.com>
++Date: Mon, 1 May 2023 23:27:52 -0400
++Subject: [PATCH] Drop -Werror=array-bounds
++
++gcc has strange issues with this and produces false
++positives that recently started breaking the build of
++pango as a subproject in gtk.
++
++See e.g. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
++
++Upstream: https://gitlab.gnome.org/GNOME/pango/-/commit/e93dbd66973040f1e0afcba0dc7c712c27d75d59
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 930f41082..2d30c0141 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -89,7 +89,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++     '-Wuninitialized',
++     '-Wunused',
++     '-Werror=address',
++-    '-Werror=array-bounds',
++     '-Werror=empty-body',
++     '-Werror=implicit',
++     '-Werror=implicit-fallthrough',
++@@ -132,7 +131,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++     '-Werror=sequence-point',
++     '-Werror=return-type',
++     '-Werror=trigraphs',
++-    '-Werror=array-bounds',
++     '-Werror=write-strings',
++     '-Werror=address',
++     '-Werror=int-to-pointer-cast',
++-- 
++GitLab
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
