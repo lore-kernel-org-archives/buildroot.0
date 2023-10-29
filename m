@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA02C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 11:15:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4597EC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 11:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9A71431CD;
-	Sun, 29 Oct 2023 11:15:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9A71431CD
+	by smtp2.osuosl.org (Postfix) with ESMTP id E055E40164;
+	Sun, 29 Oct 2023 11:33:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E055E40164
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AEdUIkh5okmH; Sun, 29 Oct 2023 11:15:27 +0000 (UTC)
+	with ESMTP id f_S4_eT7zkRv; Sun, 29 Oct 2023 11:33:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5238443032;
-	Sun, 29 Oct 2023 11:15:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5238443032
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 51F0F1BF3AE
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 11:15:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D97F943204;
+	Sun, 29 Oct 2023 11:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D97F943204
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F2E41BF59A
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 11:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2B85284C1F
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 11:15:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B85284C1F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 357D14EDF1
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 11:33:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 357D14EDF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8BLZvm0F0x75 for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 11:15:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HXJNnda1Z0-a for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 11:33:31 +0000 (UTC)
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0FFB284C1C
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 11:15:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FFB284C1C
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 31C5B4EDF0
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 11:33:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31C5B4EDF0
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:de1f:355b:eff2:ec6])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 53A6520039C;
- Sun, 29 Oct 2023 12:15:20 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 459EB2003EE;
+ Sun, 29 Oct 2023 12:33:26 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Oct 2023 12:15:20 +0100
-Date: Sun, 29 Oct 2023 12:15:20 +0100
+ Sun, 29 Oct 2023 12:33:26 +0100
+Date: Sun, 29 Oct 2023 12:33:26 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231029111520.GW687180@scaer>
-References: <20231029085831.234005-1-fontaine.fabrice@gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20231029113325.GX687180@scaer>
+References: <20231026155754.1637976-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231029085831.234005-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20231026155754.1637976-1-giulio.benetti@benettiengineering.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698578122;
- bh=Ij8+RVK7xlU3lJY1aLeAwFwrGN7Ub34ySnq9iNB8a0E=;
+ d=free.fr; s=smtp-20201208; t=1698579208;
+ bh=jtdd1UPxriPY/z6YpRy4FrTYAGX6WGJ3RwDqb2UU5RY=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=bp5EUBDqxFcvWg9aHay06PXE4zS3hSIYc+2akPxGYp3tCSNV1ahSU2fnqGbYOuzHT
- HmdlYZbzbbab9x3P+3q4nqAm9nz7jkdHSiwumv8zr5+D+cT7h1O1zGkJ7iNBhl1eeN
- yYnv3cBe7w8M8PPlRHj9lZr0N3YO7KUT24CTPbv/ZoB7Xqope3C2mwzQGmmgReDTCL
- pCaSpeNWirK07P5VCOUHQE5Bz4Kp2IaJRh+l/1epx9SEVrANLEwPjYHOyCcNMwYpnm
- ZOibRKMns6vNDM8rcdzhLG4Ov+hK5tZTKzvyrmz9cmj92TNrDgtUyROhrlKJA8er2r
- c5/sdTmhPPbDg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=QfSL42L5EqMi2DRdUd5IUMnSl+z0vced9Zh3pKq4k5XCBD4icZjcBk6u9h9DLgsQ9
+ wQQLsGxLJe2yhGDlkaG0fbBtgxv3CasTgShQkHb/yWbWyCe5DjrOg5rUV9HZa9wtZ4
+ X0FEV3kT6dY9B2bh68UI7sJ0ccGQSyUSevf+RvO3WrzzqkJ82LBA/SyuE5AgFfUNnM
+ rvqbHfX4WCU6bjpxuhjfGH+DdQLqKHrfKpIg0bfrKKD6swCYf+8c85Dt+omy3IkqRe
+ vcezX2fVS8qjDDOdZt0O0GXOZ/FTFTtkLwKBXDytaIlksxGYXkCmEvo6apmhE66fnK
+ AN4ldnzv/FWig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bp5EUBDq
-Subject: Re: [Buildroot] [PATCH 1/1] package/pango: fix build with gcc >= 13
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QfSL42L5
+Subject: Re: [Buildroot] [PATCH] package/libnvme: needs host-swig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,84 +81,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Giulio, All,
 
-On 2023-10-29 09:58 +0100, Fabrice Fontaine spake thusly:
-> Fix the following build failure with gcc >= 13:
-> 
-> In function 'find_best_lang_match_cached',
->     inlined from 'find_best_lang_match_cached' at ../pango/pango-language.c:501:1,
->     inlined from 'pango_language_get_scripts' at ../pango/pango-language.c:661:21:
-> ../pango/pango-language.c:518:12: error: array subscript 0 is outside array bounds of 'const void *[0]' {aka 'const void *[]'} [-Werror=array-bounds=]
->   518 |     *cache = result;
->       |     ~~~~~~~^~~~~~~~
-> In function 'pango_language_get_scripts':
-> cc1: note: source object is likely at address zero
-> cc1: some warnings being treated as errors
-> 
+On 2023-10-26 17:57 +0200, Giulio Benetti spake thusly:
 > Fixes:
->  - http://autobuild.buildroot.org/results/e8b5a752a62621099942b29c1642747eef2930cb
+> http://autobuild.buildroot.net/results/a63d18fd318783d7e3d1cede062c9c7cacb10282/
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/libnvme/libnvme.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
+> index 38394b9931..3b622839fa 100644
+> --- a/package/libnvme/libnvme.mk
+> +++ b/package/libnvme/libnvme.mk
+> @@ -10,6 +10,8 @@ LIBNVME_LICENSE = LGPL-2.1
+>  LIBNVME_LICENSE_FILES = COPYING
+>  LIBNVME_INSTALL_STAGING = YES
+>  
+> +LIBNVME_DEPENDENCIES += host-swig
 
-Applied to master, thanks.
+swig is only needed to build the python bindings, no?
+In which case it should be in the python conditional block, right?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  .../pango/0001-Drop-Werror-array-bounds.patch | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/pango/0001-Drop-Werror-array-bounds.patch
-> 
-> diff --git a/package/pango/0001-Drop-Werror-array-bounds.patch b/package/pango/0001-Drop-Werror-array-bounds.patch
-> new file mode 100644
-> index 0000000000..45821e8533
-> --- /dev/null
-> +++ b/package/pango/0001-Drop-Werror-array-bounds.patch
-> @@ -0,0 +1,40 @@
-> +From e93dbd66973040f1e0afcba0dc7c712c27d75d59 Mon Sep 17 00:00:00 2001
-> +From: Matthias Clasen <mclasen@redhat.com>
-> +Date: Mon, 1 May 2023 23:27:52 -0400
-> +Subject: [PATCH] Drop -Werror=array-bounds
-> +
-> +gcc has strange issues with this and produces false
-> +positives that recently started breaking the build of
-> +pango as a subproject in gtk.
-> +
-> +See e.g. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
-> +
-> +Upstream: https://gitlab.gnome.org/GNOME/pango/-/commit/e93dbd66973040f1e0afcba0dc7c712c27d75d59
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + meson.build | 2 --
-> + 1 file changed, 2 deletions(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 930f41082..2d30c0141 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -89,7 +89,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
-> +     '-Wuninitialized',
-> +     '-Wunused',
-> +     '-Werror=address',
-> +-    '-Werror=array-bounds',
-> +     '-Werror=empty-body',
-> +     '-Werror=implicit',
-> +     '-Werror=implicit-fallthrough',
-> +@@ -132,7 +131,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
-> +     '-Werror=sequence-point',
-> +     '-Werror=return-type',
-> +     '-Werror=trigraphs',
-> +-    '-Werror=array-bounds',
-> +     '-Werror=write-strings',
-> +     '-Werror=address',
-> +     '-Werror=int-to-pointer-cast',
-> +-- 
-> +GitLab
-> +
+>  LIBNVME_CONF_OPTS += \
+>  	-Dtests=false
+>  
 > -- 
-> 2.42.0
+> 2.34.1
 > 
 > _______________________________________________
 > buildroot mailing list
