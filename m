@@ -1,104 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F3B1C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 13:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9514EC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 15:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 004616005E;
-	Sun, 29 Oct 2023 13:27:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 004616005E
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9B16400A6;
+	Sun, 29 Oct 2023 15:24:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9B16400A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7Dfo05bG7fSZ; Sun, 29 Oct 2023 13:27:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gHw9yoxt1yum; Sun, 29 Oct 2023 15:24:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B60F761497;
-	Sun, 29 Oct 2023 13:27:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B60F761497
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5BBFF1BF59A
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 13:27:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 49A6C42F08;
+	Sun, 29 Oct 2023 15:24:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49A6C42F08
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A3D71BF36E
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 15:24:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33C3061497
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 13:27:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33C3061497
+ by smtp1.osuosl.org (Postfix) with ESMTP id 10F368500E
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 15:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10F368500E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KZdZJIrb1eAl for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 13:27:44 +0000 (UTC)
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F20B6005E
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 13:27:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F20B6005E
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
- by mx1.sberdevices.ru (Postfix) with ESMTP id E01BE120003;
- Sun, 29 Oct 2023 16:27:39 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru E01BE120003
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru
- [172.16.192.107])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mx1.sberdevices.ru (Postfix) with ESMTPS;
- Sun, 29 Oct 2023 16:27:38 +0300 (MSK)
-Received: from [192.168.1.13] (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.37; Sun, 29 Oct 2023 16:27:37 +0300
-Message-ID: <5ee15a06-a3d5-4920-a7af-195f9e2aca05@salutedevices.com>
-Date: Sun, 29 Oct 2023 16:27:37 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mWQqC65W30-3 for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 15:24:07 +0000 (UTC)
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6BACC8500A
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 15:24:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BACC8500A
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-509109104e2so1352680e87.3
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:24:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698593044; x=1699197844;
+ h=mime-version:user-agent:reply-to:references:in-reply-to:message-id
+ :date:cc:subject:to:from:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=AD0s/cN+JFT2KXFB8ew+nl6jv9g4c8jWoZpvqND1PiY=;
+ b=pmS8Kh62cmVnHbNDMQCJIsWDB+U6hKwyLDzj+LlQ9EgizejDNK5GJs4SOgrpLMUtj4
+ eEmkl5G4RtlRMQUEK+dn68ZshNIRga+FdtpMu+Z2vOHIEdN3t27lpWrIj7I0TimRQxfd
+ gbu+oc6rjRIY3Bls6THeqvbeag+WVOlN0SYpU/ncVuhW6S2fRARAJyMj0H0ubdLke0Za
+ cR+NzrS1F5xRyl5S8298a9Fk9rw0oJDDfDATObRICuDLaz6sgaXLN7V/ko90z6Uahgvk
+ QVsxLqrkU7msW7+3LeTMKZb3o98mCloxHc0vYlOq0C4qE6bpLW0NJRgqV4WTcX9YYE5n
+ BRPw==
+X-Gm-Message-State: AOJu0YzOk99NmHhk+FrOGSNJB4Z+nUyv6eP5R7ZrPQ04LgIlth6it9kA
+ JIPlMVGzBkKTY4xUen4CowLAwYbKFco=
+X-Google-Smtp-Source: AGHT+IGjOc1EPalYZqvUdIFWgxUJfsJsV4LdBmCevA38Gko64YUhk9/eT885PBENh/LbIno9i1BwPQ==
+X-Received: by 2002:a05:6512:709:b0:500:ac0b:8d58 with SMTP id
+ b9-20020a056512070900b00500ac0b8d58mr5525969lfs.18.1698593043909; 
+ Sun, 29 Oct 2023 08:24:03 -0700 (PDT)
+Received: from [192.168.7.144] (epd88.neoplus.adsl.tpnet.pl. [83.20.45.88])
+ by smtp.gmail.com with ESMTPSA id
+ c34-20020a05651223a200b004fba82dde47sm1066866lfv.123.2023.10.29.08.24.02
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Sun, 29 Oct 2023 08:24:02 -0700 (PDT)
+From: =?utf-8?q?=c5=81ukasz=20Przenios=c5=82o?= <bremenpl@gmail.com>
+To: "Edgar Bonet" <bonet@grenoble.cnrs.fr>
+Date: Sun, 29 Oct 2023 15:24:01 +0000
+Message-Id: <emb9a3bd28-b4d1-4bc8-afa1-921689dee1ec@9e2fe6c2.com>
+In-Reply-To: <em6bc2a225-6a20-4539-86d0-076745906717@9e2fe6c2.com>
+References: <em9eec97a0-87a4-4352-9e89-03948b436830@9e2fe6c2.com>
+ <61e80819-c901-486c-afdd-1e69441821e2@grenoble.cnrs.fr>
+ <em6bc2a225-6a20-4539-86d0-076745906717@9e2fe6c2.com>
+User-Agent: eM_Client/9.2.2093.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Yann E. MO RIN" <yann.morin.1998@free.fr>
-References: <20231027161010.980901-1-ovlevin@salutedevices.com>
- <20231028225038.GG687180@scaer>
-In-Reply-To: <20231028225038.GG687180@scaer>
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 180965 [Oct 29 2023]
-X-KSMG-AntiSpam-Version: 6.0.0.2
-X-KSMG-AntiSpam-Envelope-From: ovlevin@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 543 543
- 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4, {Tracking_uf_ne_domains},
- {Tracking_from_domain_doesnt_match_to}, salutedevices.com:7.1.1;
- www.kernel.org:7.1.1; github.com:7.1.1; 127.0.0.199:7.1.2;
- p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1; lists.buildroot.org:7.1.1;
- d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;
- 100.64.160.123:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean, bases: 2023/10/29 11:52:00
-X-KSMG-LinksScanning: Clean, bases: 2023/10/29 11:52:00
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960,
- bases: 2023/10/29 12:01:00 #22345651
-X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=salutedevices.com; s=mail; t=1698586059;
- bh=Fuhyz7qAbuDKvDUDxeO1r2xGN2XeY9dq+JJmDvkDalw=;
- h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
- b=ekvrZEKecPiuT1FVrdKsIdrGUupg8XtGRExldxdb02OzLSwf48CjQcw9XdFSbEipU
- XMqp0ipAR0C8hSCc8PuRCoVXz+tje8+vUj2Z/Bymy5kmbyIyA67eSzq35KiENUTqWJ
- HZ3al1rxSw/QEnj8zNPSqHNhoAq1uLCm0ZZR7FQyUw9aUbL6r1L8pF/8t7dp5K7ORd
- OMFHvAVNloSZ85fDi9j0erevvgQCviHtm7v1g8h+REM52ZOZabvXMvcvbeX2O4RLaJ
- g5S1/usA5iD3oUH66rkwF4H9ZXmScv/Rp4VMdvZAFdGeqvb/F4J3epDUvTb3lBknB4
- OKOFYDaFEcaYg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=salutedevices.com
- header.i=@salutedevices.com header.a=rsa-sha256 header.s=mail
- header.b=ekvrZEKe
-Subject: Re: [Buildroot] [PATCH 1/1] package/fscryptctl: add choice between
- v1 and v2 versions
+ d=gmail.com; s=20230601; t=1698593044; x=1699197844; darn=buildroot.org;
+ h=mime-version:user-agent:reply-to:references:in-reply-to:message-id
+ :date:cc:subject:to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=AD0s/cN+JFT2KXFB8ew+nl6jv9g4c8jWoZpvqND1PiY=;
+ b=hiLGINF+gsOEF/4bQB41PTXvKFFG+sR8opf/z2I6qc71g9xVBp9oF5z8xBdIH3trNk
+ sAxy1bncwGx2f38qVso+ecE+i3+uisLsHfFFQ7jaQd/8NFjBIy5JTfiV55hxrApwAHf5
+ Ny/kj6DLkt7Oikcmy5uBvrFnbu+A5TTlMI8rR/iEFNUL4V7KXGzE17k2MjwVR2i2yGgF
+ 0tTj2HjJnFWbzSRvhgZ2QC0ytq0QjyCKAHjWB36Uv7aigojmzUr98MuHvhYoD5T2o2PS
+ u3+my1dtott8Ksbc9wtQcGweAewun7zZPp3HD2Y9DFdxVAZawZS22AbIlP02VBfsevdD
+ dIlA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=hiLGINF+
+Subject: Re: [Buildroot] Help with DTO
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,310 +97,366 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Oleg Lyovin via buildroot <buildroot@buildroot.org>
-Reply-To: Oleg Lyovin <ovlevin@salutedevices.com>
-Cc: olegartys@gmail.com, John Keeping <john@metanate.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Reply-To: =?utf-8?q?=c5=81ukasz=20Przenios=c5=82o?= <bremenpl@gmail.com>
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============0168477933592471539=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yann, All,
+--===============0168477933592471539==
+Content-Type: multipart/alternative;
+ boundary="------=_MBC9B028F6-1B61-431B-B460-25C5F3D1F687"
 
-On 29.10.2023 01:50, Yann E. MO RIN wrote:
-> Oleg, All,
-> 
-> +John for commit b832f6eb9d
-> 
-> On 2023-10-27 19:10 +0300, Oleg Lyovin via buildroot spake thusly:
->> b832f6eb9d bumped fscryptctl to the version that
->> does not support fscrypt v1. However, there may be
->> active users that already has v1 configuration without
->> an ability to migrate to v2, so the above change would
->> break them.
+--------=_MBC9B028F6-1B61-431B-B460-25C5F3D1F687
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+
+Hi Edgar and all,
+Edgar, as you suggested, I went with the beaglebone_defconfig as a=20
+template- when booted, I could normally export the GPIOs via sysfs.=20
+Again, I do not understand why this was not possible in the "virgin"=20
+buildroot system...
+
+Right now I am trying to figure out how to provide a device tree overlay=20
+on this system, that would define my specific baseboard (or cape, or=20
+hat...). What I do need to do is:
+Disable the HDMI pins,
+I think I dont need to do anything with pins that I need to use as=20
+outputs- I can just work with sysfs and userspace for these,
+Configure specific pins as belonging to PRU0 or PRU1,
+Enable the ethernet phy with DHCP by default (not sure if this is to be=20
+defined in the overlay).
+So question is: how to create such a DTO and make buildroot compile it=20
+and then later uBoot automatically load it, so the booted system has all=20
+the HW ready to be used?
+
+I would appreciate all further feedback!
+
+--
+=C5=81ukasz Przenios=C5=82o
+
+
+------ Original Message ------
+From "=C5=81ukasz Przenios=C5=82o" <bremenpl@gmail.com>
+To "Edgar Bonet" <bonet@grenoble.cnrs.fr>
+Cc buildroot@buildroot.org
+Date 2023-10-28 23:04:22
+Subject Re[2]: [Buildroot] Help with DTO
+
+>Hi Edgar and thank you for the answer!
+>
+>This tutorial walks you through a manual configuration. Note that
+>Buildroot ships a ready-made configuration you can use:
+>
+>     make beaglebone_defconfig  # load the ready-made defconfig
+>     make menuconfig            # if you want to tweak it
+>     make
+>I see, so this is like a more proper template for BBB specifically,=20
+>thanks! I started from scratch, because I wanted to try to learn as=20
+>much as possible + the fact that I do not need the HDMI pins.=20
+>Furthermore, I need to reuse them as gpio outputs and PRU inputs- for=20
+>these, I think I need to configure the pins in specific mode 5 (PRU1)=20
+>or 6 (PRU0).
+>
+>I do not understand why you need a device tree overlay. The tutorial
+>gets you a kernel together with the am335x-boneblack device tree. This
+>device tree already defines four GPIO chips. Can't you see them? Try
+>
+>     ls /dev/gpiochip*
+>Yes, I do see them:
+>
+># ls /dev/gpiochip*
+>/dev/gpiochip0  /dev/gpiochip1  /dev/gpiochip2  /dev/gpiochip3
+>
+>My problem was that I was unable to export any of the gpios:
+>
+># pwd
+>/sys/class/gpio
+># echo 66 > export
+>[23448.896503] export_store: invalid GPIO 66
+>sh: write error: Invalid argument
+>
+>I thought that these cannot be exported due to incorrect DTS- no?
+>
+>If you want to play with the GPIOs, I suggest you install the tools that
+>come with libgpiod: in Target packages / Libraries / Hardware handling,
+>select =E2=80=9Clibgpiod=E2=80=9D, then =E2=80=9Cinstall tools=E2=80=9D. T=
+hen, on the booted system,
+>type
+>Here, do you mean to choose all this in the make menuconfig dialog?
+>
+>Thanks already and in advance!
+>
+>--
+>=C5=81ukasz Przenios=C5=82o
+>
+>
+>------ Original Message ------
+>From "Edgar Bonet" <bonet@grenoble.cnrs.fr>
+>To "=C5=81ukasz Przenios=C5=82o" <bremenpl@gmail.com>; buildroot@buildroot=
+.org
+>Date 2023-10-28 20:58:38
+>Subject Re: [Buildroot] Help with DTO
+>
+>>Hello!
 >>
->> This patch adds the option to choice which fscryptctl
->> version to use assuming v2 by default.
-> 
-> It is very exceptional that we allow chosing a version, so you'll need
-> to provide more explanations than "without an ability to migrate to v2".
-> 
-> Why is it not possible for those users to migrate?
-> 
-> Note that commit b832f6eb9d stated:
->     There are unlikely to be many v1 users and the format has some known
->     vulnerabilities so no compatibility option is included.
-> 
-> So this was a mindful decision not to provide such compatibility,
-> especially because of the vulnerability issues.
-> 
-> In the odd case that we do indeed need to provide that choice, then
-> there is no need to split in two, as it is totally possible to write
-> everything in a single .mk in conditional blocs. E.g. (elided for
-> brevity):
-> 
->     choice
->         prompt "fscryptctl variant"
-> 
->     config BR2_PACKAGE_FSCRYPTCTL_V1
->         bool "v1 (deprecated)"
-> 
->     config BR2_PACKAGE_FSCRYPTCTL_V2
->         bool "v2"
-> 
->     endchoice
-> 
->     config BR2_PACKAGE_FSCRYPTCTL_VERSION
->         string
->         default "f037dcf4354ce8f25d0f371b58dfe7a7ac27576f" if BR2_PACKAGE_FSCRYPTCTL_V1
->         default "1.0.0" if BR2_PACKAGE_FSCRYPTCTL_V2
-> 
-> and then in the .mk:
-> 
->     FSCRYPTCTL_VERSION = $(call qstrip,$(BR2_PACKAGE_FSCRYPTCTL_VERSION))
->     FSCRYPTCTL_GIT_VERSION = $(if $(BR2_PACKAGE_FSCRYPTCTL_V2),v)$(FSCRYPTCTL_VERSION)
->     FSCRYPTCTL_SITE = $(call github,google,fscryptctl,$(FSCRYPTCTL_GIT_VERSION))
-> 
->     FSCRYPTCTL_CFLAGS = $(TARGET_CFLAGS)
->     ifeq ($(BR2_PACKAGE_FSCRYPTCTL_V2),y)
->     FSCRYPTCTL_CFLAGS += -std=c99
->     endif
-> 
->     define FSCRYPTCTL_BUILD_CMDS
->         $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
->             CFLAGS="$(FSCRYPTCTL_CFLAGS)" fscryptctl
->     endef
-> 
->     define FSCRYPTCTL_INSTALL_TARGET_CMDS
->         $(INSTALL) -m 0755 -D $(@D)/fscryptctl $(TARGET_DIR)/usr/bin/fscryptctl
->     endef
-> 
->     $(eval $(generic-package))
-> 
-> Toally untested, and missing all the rest of the usual variables...
-> 
-> But of course, this still needs a good explanations why this is needed.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Signed-off-by: Oleg Lyovin <ovlevin@salutedevices.com>
->> ---
->>  package/fscryptctl/Config.in                  | 22 +++++++++++++++++++
->>  package/fscryptctl/fscryptctl.mk              | 22 +------------------
->>  .../fscryptctl_v1/fscryptctl_v1.hash          |  3 +++
->>  .../fscryptctl/fscryptctl_v1/fscryptctl_v1.mk | 20 +++++++++++++++++
->>  .../fscryptctl_v2.hash}                       |  2 +-
->>  .../fscryptctl/fscryptctl_v2/fscryptctl_v2.mk | 21 ++++++++++++++++++
->>  6 files changed, 68 insertions(+), 22 deletions(-)
->>  create mode 100644 package/fscryptctl/fscryptctl_v1/fscryptctl_v1.hash
->>  create mode 100644 package/fscryptctl/fscryptctl_v1/fscryptctl_v1.mk
->>  rename package/fscryptctl/{fscryptctl.hash => fscryptctl_v2/fscryptctl_v2.hash} (81%)
->>  create mode 100644 package/fscryptctl/fscryptctl_v2/fscryptctl_v2.mk
+>>=C5=81ukasz Przenios=C5=82o wrote, about the BeagleBone:
+>>>  So I have the HW and virgin working Buildroot image baked thanks to
+>>>  this tutorial.
+>>>  (https://blog.billvanleeuwen.ca/creating-a-minimal-linux-system-for-th=
+e-beaglebone-black-with-buildroot)
 >>
->> diff --git a/package/fscryptctl/Config.in b/package/fscryptctl/Config.in
->> index 91b9ba8ebe..2fb7176ad9 100644
->> --- a/package/fscryptctl/Config.in
->> +++ b/package/fscryptctl/Config.in
->> @@ -10,3 +10,25 @@ config BR2_PACKAGE_FSCRYPTCTL
->>  	  (BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O encrypt -b 4096")
->>  
->>  	  https://github.com/google/fscryptctl
->> +
->> +if BR2_PACKAGE_FSCRYPTCTL
->> +
->> +choice
->> +	prompt "fscryptctl variant"
->> +	default BR2_PACKAGE_FSCRYPTCTL_V2
->> +	help
->> +	  Select the version of fscrypt.
->> +
->> +config BR2_PACKAGE_FSCRYPTCTL_V2
->> +	bool "fscrpyctl_v2"
->> +	help
->> +	  Support the latest fscrypt v2 implementation.
->> +
->> +config BR2_PACKAGE_FSCRYPTCTL_V1
->> +	bool "fscryptctl_v1"
->> +	help
->> +	  v1 is deprecated, enable this only for legacy configurations.
->> +
->> +endchoice
->> +
->> +endif
->> diff --git a/package/fscryptctl/fscryptctl.mk b/package/fscryptctl/fscryptctl.mk
->> index 0546f67a1f..e3571f4e07 100644
->> --- a/package/fscryptctl/fscryptctl.mk
->> +++ b/package/fscryptctl/fscryptctl.mk
->> @@ -1,21 +1 @@
->> -################################################################################
->> -#
->> -# fscryptctl
->> -#
->> -################################################################################
->> -
->> -FSCRYPTCTL_VERSION = 1.0.0
->> -FSCRYPTCTL_SITE = $(call github,google,fscryptctl,v$(FSCRYPTCTL_VERSION))
->> -FSCRYPTCTL_LICENSE = Apache-2.0
->> -FSCRYPTCTL_LICENSE_FILES = LICENSE
->> -
->> -define FSCRYPTCTL_BUILD_CMDS
->> -	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
->> -		CFLAGS="$(TARGET_CFLAGS) -std=c99" fscryptctl
->> -endef
->> -
->> -define FSCRYPTCTL_INSTALL_TARGET_CMDS
->> -	$(INSTALL) -m 0755 -D $(@D)/fscryptctl $(TARGET_DIR)/usr/bin/fscryptctl
->> -endef
->> -
->> -$(eval $(generic-package))
->> +include $(sort $(wildcard package/fscryptctl/*/*.mk))
->> diff --git a/package/fscryptctl/fscryptctl_v1/fscryptctl_v1.hash b/package/fscryptctl/fscryptctl_v1/fscryptctl_v1.hash
->> new file mode 100644
->> index 0000000000..f810aaacb5
->> --- /dev/null
->> +++ b/package/fscryptctl/fscryptctl_v1/fscryptctl_v1.hash
->> @@ -0,0 +1,3 @@
->> +# Locally calculated
->> +sha256  970a8febbcbf315313711d8a7ee3d954dea593d8087744d3cba65f6cb4bebcc1  fscryptctl_v1-f037dcf4354ce8f25d0f371b58dfe7a7ac27576f.tar.gz
->> +sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
->> diff --git a/package/fscryptctl/fscryptctl_v1/fscryptctl_v1.mk b/package/fscryptctl/fscryptctl_v1/fscryptctl_v1.mk
->> new file mode 100644
->> index 0000000000..c1c1ab34f2
->> --- /dev/null
->> +++ b/package/fscryptctl/fscryptctl_v1/fscryptctl_v1.mk
->> @@ -0,0 +1,20 @@
->> +################################################################################
->> +#
->> +# fscryptctl_v1
->> +#
->> +################################################################################
->> +
->> +FSCRYPTCTL_V1_VERSION = f037dcf4354ce8f25d0f371b58dfe7a7ac27576f
->> +FSCRYPTCTL_V1_SITE = $(call github,google,fscryptctl,$(FSCRYPTCTL_V1_VERSION))
->> +FSCRYPTCTL_V1_LICENSE = Apache-2.0
->> +FSCRYPTCTL_V1_LICENSE_FILES = LICENSE
->> +
->> +define FSCRYPTCTL_V1_BUILD_CMDS
->> +	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) fscryptctl
->> +endef
->> +
->> +define FSCRYPTCTL_V1_INSTALL_TARGET_CMDS
->> +	$(INSTALL) -m 0755 -D $(@D)/fscryptctl $(TARGET_DIR)/usr/bin/fscryptctl
->> +endef
->> +
->> +$(eval $(generic-package))
->> diff --git a/package/fscryptctl/fscryptctl.hash b/package/fscryptctl/fscryptctl_v2/fscryptctl_v2.hash
->> similarity index 81%
->> rename from package/fscryptctl/fscryptctl.hash
->> rename to package/fscryptctl/fscryptctl_v2/fscryptctl_v2.hash
->> index 0dcca6893e..61ff022310 100644
->> --- a/package/fscryptctl/fscryptctl.hash
->> +++ b/package/fscryptctl/fscryptctl_v2/fscryptctl_v2.hash
->> @@ -1,3 +1,3 @@
->>  # Locally calculated
->> -sha256  3828d5ad9b93664b9fec0174fc5d8e96d7b021a7896da74efe18fabe5f01d638  fscryptctl-1.0.0.tar.gz
->> +sha256  3828d5ad9b93664b9fec0174fc5d8e96d7b021a7896da74efe18fabe5f01d638  fscryptctl_v2-1.0.0.tar.gz
->>  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
->> diff --git a/package/fscryptctl/fscryptctl_v2/fscryptctl_v2.mk b/package/fscryptctl/fscryptctl_v2/fscryptctl_v2.mk
->> new file mode 100644
->> index 0000000000..847a7bbcda
->> --- /dev/null
->> +++ b/package/fscryptctl/fscryptctl_v2/fscryptctl_v2.mk
->> @@ -0,0 +1,21 @@
->> +################################################################################
->> +#
->> +# fscryptctl_v2
->> +#
->> +################################################################################
->> +
->> +FSCRYPTCTL_V2_VERSION = 1.0.0
->> +FSCRYPTCTL_V2_SITE = $(call github,google,fscryptctl,v$(FSCRYPTCTL_V2_VERSION))
->> +FSCRYPTCTL_V2_LICENSE = Apache-2.0
->> +FSCRYPTCTL_V2_LICENSE_FILES = LICENSE
->> +
->> +define FSCRYPTCTL_V2_BUILD_CMDS
->> +	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
->> +		CFLAGS="$(TARGET_CFLAGS) -std=c99" fscryptctl
->> +endef
->> +
->> +define FSCRYPTCTL_V2_INSTALL_TARGET_CMDS
->> +	$(INSTALL) -m 0755 -D $(@D)/fscryptctl $(TARGET_DIR)/usr/bin/fscryptctl
->> +endef
->> +
->> +$(eval $(generic-package))
->> -- 
->> 2.42.0.270.gbcb6cae296
+>>This tutorial walks you through a manual configuration. Note that
+>>Buildroot ships a ready-made configuration you can use:
 >>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
+>>     make beaglebone_defconfig  # load the ready-made defconfig
+>>     make menuconfig            # if you want to tweak it
+>>     make
+>>
+>>>  What I wanted to do next is to create a device tree overlay for all
+>>>  required GPIOs that would be compiled at kernel build time.
+>>
+>>I do not understand why you need a device tree overlay. The tutorial
+>>gets you a kernel together with the am335x-boneblack device tree. This
+>>device tree already defines four GPIO chips. Can't you see them? Try
+>>
+>>     ls /dev/gpiochip*
+>>
+>>If you want to play with the GPIOs, I suggest you install the tools that
+>>come with libgpiod: in Target packages / Libraries / Hardware handling,
+>>select =E2=80=9Clibgpiod=E2=80=9D, then =E2=80=9Cinstall tools=E2=80=9D.=
+ Then, on the booted system,
+>>type
+>>
+>>     gpiodetect
+>>     gpioinfo
+>>
+>>You should see all the available GPIO chips, then all the GPIO lines.
+>>
+>>Regards,
+>>
+>>Edgar.
+--------=_MBC9B028F6-1B61-431B-B460-25C5F3D1F687
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> It is very exceptional that we allow chosing a version, so you'll need
-> to provide more explanations than "without an ability to migrate to v2".
+<html><head>
 
-Thanks a lot for your comments. Indeed, I haven't found any cases like this among the current buildroot packages,
-so it seems I should have written the cover letter for the patch.
+<style type=3D"text/css"><!--#xd26d2fb6be86498 blockquote.cite
+{margin-left: 5px; margin-right: 0px; padding-left: 10px; padding-right: 0p=
+x; border-left: 1px solid rgb(204, 204, 204);}
+#xd26d2fb6be86498 blockquote.cite2
+{margin-left: 5px; margin-right: 0px; padding-left: 10px; padding-right: 0p=
+x; border-left: 1px solid rgb(204, 204, 204); margin-top: 3px; padding-top: =
+0px;}
+#xd26d2fb6be86498
+{font-family: Verdana; font-size: 12pt;}
+#xd26d2fb6be86498 .quote
+{margin-left: 1em; margin-right: 1em; border-left: 5px solid rgb(235, 235,=
+ 235); padding-left: 0.3em;}
+--></style><style id=3D"css_styles" type=3D"text/css"><!--blockquote.cite { =
+margin-left: 5px; margin-right: 0px; padding-left: 10px; padding-right:0px=
+; border-left: 1px solid #cccccc }
+blockquote.cite2 {margin-left: 5px; margin-right: 0px; padding-left: 10px;=
+ padding-right:0px; border-left: 1px solid #cccccc; margin-top: 3px; padding=
+-top: 0px; }
+a img { border: 0px; }
+li[style=3D'text-align: center;'], li[style=3D'text-align: center; '], li[s=
+tyle=3D'text-align: right;'], li[style=3D'text-align: right; '] {  list-sty=
+le-position: inside;}
+body { font-family: Verdana; font-size: 12pt; }
+.quote { margin-left: 1em; margin-right: 1em; border-left: 5px #ebebeb soli=
+d; padding-left: 0.3em; }
+--></style></head>
+<body><div>Hi Edgar and all,</div><div>Edgar, as you suggested, I went with =
+the beaglebone_defconfig as a template- when booted, I could normally expo=
+rt the GPIOs via sysfs. Again, I do not understand why this was not possibl=
+e in the "virgin" buildroot system...</div><div><br /></div><div>Right now=
+ I am trying to figure out how to provide a device tree overlay on this syst=
+em, that would define my specific baseboard (or cape, or hat...). What I do =
+need to do is:</div><div><ul style=3D"list-style-type: disc;"><li>Disable=
+ the HDMI pins,</li><li>I think I dont need to do anything with pins that I=
+ need to use as outputs- I can just work with sysfs and userspace for these,=
+</li><li>Configure specific pins as belonging to PRU0 or PRU1,</li><li>Enab=
+le the ethernet phy with DHCP by default (not sure if this is to be defined =
+in the overlay).</li></ul></div>
+<div>So question is: how to create such a DTO and make buildroot compile it =
+and then later uBoot automatically load it, so the booted system has all t=
+he HW ready to be used?</div><div><br /></div><div>I would appreciate all f=
+urther feedback!</div><div><br /></div><div id=3D"signature_old" style=3D"c=
+lear:both">--<div>=C5=81ukasz Przenios=C5=82o</div></div><div style=3D"clea=
+r:both"><br /></div>
+<div><br /></div>
+<div>
+<div>------ Original Message ------</div>
+<div>From "=C5=81ukasz Przenios=C5=82o" &lt;<a href=3D"mailto:bremenpl@gmai=
+l.com">bremenpl@gmail.com</a>&gt;</div>
+<div>To "Edgar Bonet" &lt;<a href=3D"mailto:bonet@grenoble.cnrs.fr">bonet@g=
+renoble.cnrs.fr</a>&gt;</div>
+<div>Cc <a href=3D"mailto:buildroot@buildroot.org">buildroot@buildroot.org<=
+/a></div>
+<div>Date 2023-10-28 23:04:22</div>
+<div>Subject Re[2]: [Buildroot] Help with DTO</div></div><div><br /></div>
+<div id=3D"xd26d2fb6be86498"><blockquote cite=3D"em6bc2a225-6a20-4539-86d0-=
+076745906717@9e2fe6c2.com" type=3D"cite" class=3D"cite2">
+<div>Hi Edgar and thank you for the answer!</div><div><br /><div class=3D"q=
+uote"><div id=3D"xf92eab7c6cd542c39809342847b01392"><div class=3D"plain_lin=
+e" style=3D"background-color:rgba(0,0,0,0);margin:3px 0px 16px 5px;">This t=
+utorial walks you through a manual configuration. Note that</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">Buildroot ships a ready-made configuration you can use:</d=
+iv>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">=C2=A0</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">    make beaglebone_defconfig  # load the ready-made defco=
+nfig</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">    make menuconfig            # if you want to tweak it</=
+div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">    make</div></div></div></div>
+<div>I see, so this is like a more proper template for BBB specifically, th=
+anks! I started from scratch, because I wanted to try to learn as much as p=
+ossible + the fact that I do not need the HDMI pins. Furthermore, I need to =
+reuse them as gpio outputs and PRU inputs- for these, I think I need to co=
+nfigure the pins in specific mode 5 (PRU1) or 6 (PRU0).=C2=A0</div><div><br =
+/><div class=3D"quote"><div id=3D"x9e72c06aa8614a78a362b741093aae35"><div=
+ class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3px 0px =
+16px 5px;">I do not understand why you need a device tree overlay. The tut=
+orial</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">gets you a kernel together with the am335x-boneblack devic=
+e tree. This</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">device tree already defines four GPIO chips. Can't you see =
+them? Try</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">=C2=A0</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">    ls /dev/gpiochip*</div></div></div></div><div>Yes, I d=
+o see them:</div><div><br /></div><div><font face=3D"Consolas" size=3D"2" s=
+tyle=3D"font-size: 10pt;"># ls /dev/gpiochip*
+</font></div><div><font face=3D"Consolas" size=3D"2" style=3D"font-size: 10=
+pt;">/dev/gpiochip0=C2=A0 /dev/gpiochip1=C2=A0 /dev/gpiochip2=C2=A0 /dev/gp=
+iochip3
+</font></div><div><br /></div><div>My problem was that I was unable to expo=
+rt any of the gpios:</div><div><br /></div><div><font face=3D"Consolas" siz=
+e=3D"2" style=3D"font-size: 10pt;"># pwd
+</font></div><div><font face=3D"Consolas" size=3D"2" style=3D"font-size: 10=
+pt;">/sys/class/gpio
+</font></div><div><font face=3D"Consolas" size=3D"2" style=3D"font-size: 10=
+pt;"># echo 66 &gt;=C2=A0export
+</font></div><div><font face=3D"Consolas" size=3D"2" style=3D"font-size: 10=
+pt;">[23448.896503] export_store: invalid GPIO 66
+</font></div><div><font face=3D"Consolas" size=3D"2" style=3D"font-size: 10=
+pt;">sh: write error: Invalid argument
+</font></div><div><br /></div><div>I thought that these cannot be exported=
+ due to incorrect DTS- no?</div><div><br /><div class=3D"quote"><div id=3D"x=
+fcda051123e441dabbb1433090a9c8a1"><div class=3D"plain_line" style=3D"backgr=
+ound-color:rgba(0,0,0,0);margin:3px 0px 16px 5px;">If you want to play with =
+the GPIOs, I suggest you install the tools that</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">come with libgpiod: in Target packages / Libraries / Hardw=
+are handling,</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">select =E2=80=9Clibgpiod=E2=80=9D, then =E2=80=9Cinstall t=
+ools=E2=80=9D. Then, on the booted system,</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">type</div></div></div></div><div>Here, do you mean to choo=
+se all this in the make menuconfig dialog?</div><div><br /></div><div>Thank=
+s already and in advance!</div><div><br /></div><div id=3D"signature_old" s=
+tyle=3D"clear:both">--<div>=C5=81ukasz Przenios=C5=82o</div></div><div styl=
+e=3D"clear:both"><br /></div>
+<div><br /></div>
+<div>
+<div>------ Original Message ------</div>
+<div>From "Edgar Bonet" &lt;<a href=3D"mailto:bonet@grenoble.cnrs.fr">bonet=
+@grenoble.cnrs.fr</a>&gt;</div>
+<div>To "=C5=81ukasz Przenios=C5=82o" &lt;<a href=3D"mailto:bremenpl@gmail.=
+com" style=3D"">bremenpl@gmail.com</a>&gt;; <a href=3D"mailto:buildroot@bui=
+ldroot.org">buildroot@buildroot.org</a></div>
+<div>Date 2023-10-28 20:58:38</div>
+<div>Subject Re: [Buildroot] Help with DTO</div></div><div><br /></div>
+<div id=3D"x05283e394a49435" class=3D"plain"><blockquote cite=3D"61e80819-c=
+901-486c-afdd-1e69441821e2@grenoble.cnrs.fr" type=3D"cite" class=3D"cite2">
 
-Let me try to describe my motivation for it.
+<div class=3D"plain_line">Hello!</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">=C5=81ukasz Przenios=C5=82o wrote, about the Beag=
+leBone:</div>
+<blockquote type=3D"cite" class=3D"cite">
+<div class=3D"plain_line"> So I have the HW and virgin working Buildroot im=
+age baked thanks to</div>
+<div class=3D"plain_line"> this tutorial.</div>
+<div class=3D"plain_line"> (<a href=3D"https://blog.billvanleeuwen.ca/creat=
+ing-a-minimal-linux-system-for-the-beaglebone-black-with-buildroot" style=
+=3D"">https://blog.billvanleeuwen.ca/creating-a-minimal-linux-system-for-th=
+e-beaglebone-black-with-buildroot</a>)</div>
+</blockquote>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">This tutorial walks you through a manual configur=
+ation. Note that</div>
+<div class=3D"plain_line">Buildroot ships a ready-made configuration you ca=
+n use:</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">    make beaglebone_defconfig  # load the ready-m=
+ade defconfig</div>
+<div class=3D"plain_line">    make menuconfig            # if you want to t=
+weak it</div>
+<div class=3D"plain_line">    make</div>
+<div class=3D"plain_line">=C2=A0</div>
+<blockquote type=3D"cite" class=3D"cite2">
+<div class=3D"plain_line"> What I wanted to do next is to create a device t=
+ree overlay for all</div>
+<div class=3D"plain_line"> required GPIOs that would be compiled at kernel=
+ build time.</div>
+</blockquote>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">I do not understand why you need a device tree ov=
+erlay. The tutorial</div>
+<div class=3D"plain_line">gets you a kernel together with the am335x-bonebl=
+ack device tree. This</div>
+<div class=3D"plain_line">device tree already defines four GPIO chips. Can'=
+t you see them? Try</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">    ls /dev/gpiochip*</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">If you want to play with the GPIOs, I suggest you =
+install the tools that</div>
+<div class=3D"plain_line">come with libgpiod: in Target packages / Librarie=
+s / Hardware handling,</div>
+<div class=3D"plain_line">select =E2=80=9Clibgpiod=E2=80=9D, then =E2=80=9C=
+install tools=E2=80=9D. Then, on the booted system,</div>
+<div class=3D"plain_line">type</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">    gpiodetect</div>
+<div class=3D"plain_line">    gpioinfo</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">You should see all the available GPIO chips, then =
+all the GPIO lines.</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">Regards,</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">Edgar.</div>
+</blockquote></div>
 
-> Note that commit b832f6eb9d stated:
->     There are unlikely to be many v1 users and the format has some known
->     vulnerabilities so no compatibility option is included.
-> 
-> So this was a mindful decision not to provide such compatibility,
-> especially because of the vulnerability issues.
 
-The same explanation is given in the original commit that completely removes fscrypt v1 support in the fscryptctl tool:
-
-    commit d2066cded914860164ffacebc24ea0afc0b57963
-    Author: Eric Biggers <ebiggers@google.com>
-    Date:   Tue Feb 2 15:52:59 2021 -0800
-
-        Remove support for v1 encryption policies
-        
-        Since not many people are using fscryptctl yet, and v1 encryption
-        policies have some annoying limitations which people keep running into,
-        and all major users of filesystem encryption have already switched to v2
-        by default, it's better to just drop the fscryptctl support for v1
-        policies and only support v2.  This keeps things much simpler going
-        forward, and reduces the chance that people misconfigure things.
-        
-        If anyone really needs to continue to use v1-encrypted directories with
-        fscryptctl (despite the known limitations with key visibility and so
-        on), they can just use an older version of fscryptctl.
+</blockquote></div>
+</body></html>
+--------=_MBC9B028F6-1B61-431B-B460-25C5F3D1F687--
 
 
-Based on that, the original motivation of removing v1 support from the fscryptctl is to make the tool simpler,
-so users won't be able to make an initial fscrypt setup with fscrypt v1, which is no doubt worse than v2.
-Also, the author assumes that "not many people are using fscryptctl", so there are not many already
-configured v1 installations, but if there are, users can just use an older version of the fscryptctl tool.
+--===============0168477933592471539==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-This is exactly what my patch is intended for: to give buildroot users an ability to use buildroots fscryptctl
-package for configurations with already existing v1-encrypted directories. Still, it chooses fscrypt v2 by default.
-
-Moreover, it is worth noticing, that fscrypt v1 support is still existing in linux kernel mainline,
-and I didn't find any news that the maintainers are going to remove it.
-
-> Why is it not possible for those users to migrate?
-
-buildroot is often used with embedded devices, and embedded devices often have limited disk space. As far as I understand,
-the only way to migrate from fscrypt v1 to v2 is to create v2-encrypted volume and then **copy** all the data into it.
-Without taking into account the technical difficulties of this task, it may be heavy load for storage device
-and will require additional disk space: according to linux kernel documentation,
-""moving" an unencrypted file into an encrypted directory, e.g. with the mv program, is implemented in userspace by a copy followed by a delete".
-(https://www.kernel.org/doc/html/latest/filesystems/fscrypt.html?highlight=fscrypt#access-semantics)
-
-> In the odd case that we do indeed need to provide that choice, then
-> there is no need to split in two, as it is totally possible to write
-> everything in a single .mk in conditional blocs
-
-Thanks for the snippet, no doubt it is better to use a single .mk. However, I didn't find solution for having in a single .hash file
-different entries for different fscryptctl versions depending on user choice.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0168477933592471539==--
+
