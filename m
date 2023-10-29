@@ -1,70 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4A14C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 18:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 854CDC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 19:30:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FC3C70513;
-	Sun, 29 Oct 2023 18:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FC3C70513
+	by smtp2.osuosl.org (Postfix) with ESMTP id F082740134;
+	Sun, 29 Oct 2023 19:30:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F082740134
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qgiv2DQJGXnh; Sun, 29 Oct 2023 18:49:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7d-OAnOhPrWM; Sun, 29 Oct 2023 19:30:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3BD470517;
-	Sun, 29 Oct 2023 18:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3BD470517
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74173434CA;
+	Sun, 29 Oct 2023 19:30:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74173434CA
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 28D851BF33E
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 18:49:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 86D431BF575
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 19:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C93E340060
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 18:49:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C93E340060
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5ECB54F06C
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 19:30:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ECB54F06C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x9T7mX0bVRw9 for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 18:49:49 +0000 (UTC)
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A56F4F07B
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 18:49:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A56F4F07B
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:bcbc:1bd1:5057:b8bc])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 82B292003DA;
- Sun, 29 Oct 2023 19:49:44 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Oct 2023 19:49:44 +0100
-Date: Sun, 29 Oct 2023 19:49:44 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Francois Dugast <francois.dugast.foss@gmail.com>
-Message-ID: <20231029184944.GZ687180@scaer>
-References: <20231027114700.1904-1-francois.dugast.foss@gmail.com>
- <20231027114700.1904-2-francois.dugast.foss@gmail.com>
+ with ESMTP id QjkH5invOiIg for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 19:30:53 +0000 (UTC)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F15094F06A
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 19:30:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F15094F06A
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-40859c466efso29686915e9.3
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 12:30:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698607850; x=1699212650;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=r8MtPiusMbkB5MbIMtmNGotabh6eu4CWJhKPN7UO48c=;
+ b=FHgz0XIa3k8qbyK/DoK0PucZp/Ndwy1zGEY+j7lcdUudbMJk6Ms1wYXjvXiEO578vW
+ w+HGezJKeTTvDli5kaGc5N2Ejxlt/nDDVmSbqb7RyGTngnmQJEmJ8JOZkrHG/89zPeSC
+ o+F+5LZs+exMjQ+Pyt6I4xI3WETIn4U9l3vd8HkNEDhhld1vd3TB3KJFvazxMHYEXlL8
+ cqoF/BtApA/6HXAMuUyJy2fFDIao7WZ7wMhRLJrKDC9Slb1L1bUSGv8mAAzWbpA9miiX
+ 1KJqeHgnu5a/R+hcUf27Fe7zpJh6UKubAZCqSOmxyT3/bnpU2XLEs0+DxkRYoZSUBGoP
+ xpTQ==
+X-Gm-Message-State: AOJu0YxquHOES2YMNYXvnkdtGEH6qxVh7bJB3Tiu7EARJdgwm4WKED7e
+ C2HxunSHyiq2XnLabSXfORD4L+UTe8c=
+X-Google-Smtp-Source: AGHT+IELarM3nLEg042esrch4iX9c9xs2uxNzmOquqRqGssbuzX6rX6fkLBwkdoeqtonIgtbe3b0yA==
+X-Received: by 2002:a05:600c:138b:b0:408:55f8:7de with SMTP id
+ u11-20020a05600c138b00b0040855f807demr6355085wmf.28.1698607850233; 
+ Sun, 29 Oct 2023 12:30:50 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ gw18-20020a05600c851200b00405442edc69sm10636420wmb.14.2023.10.29.12.30.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 29 Oct 2023 12:30:49 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 29 Oct 2023 20:30:44 +0100
+Message-ID: <20231029193044.672993-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231027114700.1904-2-francois.dugast.foss@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698605387;
- bh=wu1NZpLDBf74/2J31nwBbSPuSMs2r0mYNak4SuRhzxs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=cU6b9uRXIVPO1n/3/ipmU+a9j/Ejj3ZvVZkKP3tM291ua1VlVKpF19y7AsmrjZ9C6
- ovFaBad005XX4qjRTfzcsRndxA3rMO7V4e2w7GQs8hgR4GqRfT/B4euTJ59dy1Y711
- GQYQ1GODwTU373a+7gGg7GBmF94evTW1u084rMCMH9UhOgGNA0pERLP39LvEuZTGJZ
- j8JzhVa9h2DeAZartRJQCq55wlgLikhw4MZNu9q3G7Poq2Xa/tvKIq+0krhamsE6UZ
- jtVQS5NI1dsq25f9wrB1vRzpy8yOgXXDCo+ckYuvsSqiI/w58Y8HzjhjxavctZjZa1
- FQVo/sHfD/ntw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1698607850; x=1699212650; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=r8MtPiusMbkB5MbIMtmNGotabh6eu4CWJhKPN7UO48c=;
+ b=XTFwIj7AM7NjpWxSViXsAXyAUAAURmZZoDe4dXAz2rrgEtNfB+UkEzbkAAH9yCqZzy
+ fl6BBKTLY+Q+RIgEsFetqEKJZJzK/8YV9w94GRdlxmdKi+9W5IghkSKmL652Wm228CsO
+ aXJp2CCcajV61ZeWcn8Sy/vwELeAxjeeTddmZWezD5y7JLf+xN9b1Ua3q0blewTLWNYW
+ 8qxuXIs7QhdqOYhL/xuTjz+Py7Pia9H8/E8svoyyqlpA++rd1gMqaL9rUiw6CfTSpp+6
+ 10CEgVyV93IangYwtAZ+lafVO+6RUZ7B9pn8j20oP+yrQXRgyILXP9fP2WDS4Shd8pAf
+ rriA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=cU6b9uRX
-Subject: Re: [Buildroot] [PATCH 2/2] board/licheepi/licheepi_nano: new board
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=XTFwIj7A
+Subject: [Buildroot] [PATCH 1/1] package/ace: bump to version 7.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,171 +93,224 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michel Stempin <michel.stempin@wanadoo.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJhbsOnb2lzLiBBbGwsCgpPbiAyMDIzLTEwLTI3IDEzOjQ3ICswMjAwLCBGcmFuY29pcyBEdWdh
-c3Qgc3Bha2UgdGh1c2x5Ogo+IEFkZCBzdXBwb3J0IGZvciB0aGUgTGljaGVlUGkgTmFubyB3aXRo
-Ogo+IC0gVS1Cb290IDIwMjMuMDQKPiAtIExpbnV4IGN1cnJlbnQgbGF0ZXN0IHZlcnNpb24KCldl
-IGRvIG5vdCBsZWF2ZSB0aGUga2VybmVsIHZlcnNpb24gdG8gdGhlIGw7YXRlc3Qgb25lLCBiZWNh
-dXNlIHdlIHdhbnQKdG8gaGF2ZSBrbm93bi13b3JraW5nIGRlZmNvbmZpZ3MsIGFuZCBzbyBidW1w
-aW5nIHRoZSBrZXJuZWwgKGFuZApib290bG9hZGVyKSB2ZXJzaW9uIHNob3VsZCBiZSBleHBsaWNp
-dCAoYW5kIHRlc3RlZCkgcmF0aGVyIHRoYW4gZm9sbG93CndoYXRldmVyIHRoZSBsYXRlc3Qga2Vy
-bmVsIHZlcnNpb24gaXMuCgpTbyBJIHBpbm5lZCB0aGUgdmVyc2lvbiB0byBrZXJuZWwgNi41Ljks
-IHdoaWNoIGlzIHRoZSBjdXJyZW50IGxhdGVzdAprbm93biB0byBCaXVsZHJvb3QgKHNvLCBwcmVz
-dW1hYmx5IHdoYXQgeW91IHRlc3RlZCB3aXRoKS4KCj4gQm9hcmQgaG9tZXBhZ2U6IGh0dHBzOi8v
-bGludXgtc3VueGkub3JnL0xpY2hlZVBpX05hbm8KCkkgYWRkZWQgdGhlIHRydWUgaG9tZSBwYWdl
-IG9uIHRoZSBtYW51ZmFjdHVyZXIgd2Vic2l0ZSwgYW5kIGtlcHQgdGhlCmxpbnV4LXN1bnhpIHdp
-a2kgVVJMIHRvby4KCj4gbGludXguZnJhZ21lbnQgaXMgcmVxdWlyZWQgdG8gZGlzYWJsZSBzb21l
-IGZlYXR1cmVzIGluIG9yZGVyCj4gdG8ga2VlcCB0aGUga2VybmVsIHNpemUgc21hbGwsIG90aGVy
-d2lzZSB0aGUgYm9hcmQgZG9lcyBub3QKPiBib290IGR1ZSB0byBsaW1pdGVkIG1lbW9yeS4gU2Vl
-IG5vdGUgaW4gcmVhZG1lLnR4dC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBGcmFuY29pcyBEdWdhc3Qg
-PGZyYW5jb2lzLmR1Z2FzdC5mb3NzQGdtYWlsLmNvbT4KPiAtLS0KPiAgYm9hcmQvbGljaGVlcGkv
-bGljaGVlcGlfbmFuby9nZW5pbWFnZS5jZmcgICB8IDMzICsrKysrKysrCj4gIGJvYXJkL2xpY2hl
-ZXBpL2xpY2hlZXBpX25hbm8vbGludXguZnJhZ21lbnQgfCAxMSArKysKPiAgYm9hcmQvbGljaGVl
-cGkvbGljaGVlcGlfbmFuby9yZWFkbWUudHh0ICAgICB8IDg0ICsrKysrKysrKysrKysrKysrKysr
-Kwo+ICBib2FyZC9saWNoZWVwaS9saWNoZWVwaV9uYW5vL3Vib290LmZyYWdtZW50IHwgIDMgKwo+
-ICBjb25maWdzL2xpY2hlZXBpX25hbm9fZGVmY29uZmlnICAgICAgICAgICAgIHwgNDMgKysrKysr
-KysrKysKPiAgNSBmaWxlcyBjaGFuZ2VkLCAxNzQgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9k
-ZSAxMDA2NDQgYm9hcmQvbGljaGVlcGkvbGljaGVlcGlfbmFuby9nZW5pbWFnZS5jZmcKPiAgY3Jl
-YXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2xpY2hlZXBpL2xpY2hlZXBpX25hbm8vbGludXguZnJhZ21l
-bnQKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2xpY2hlZXBpL2xpY2hlZXBpX25hbm8vcmVh
-ZG1lLnR4dAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvbGljaGVlcGkvbGljaGVlcGlfbmFu
-by91Ym9vdC5mcmFnbWVudAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgY29uZmlncy9saWNoZWVwaV9u
-YW5vX2RlZmNvbmZpZwoKT2YgY291cnNlLCBsaWtlIGZvciBsaWNoZWVwaV96ZXJvLCBJIG1vdmVk
-IHRoYXQgdG8gdGhlIHNpcGVlZCBzdWItZGlyLgoKQW5kIGFzIGZvciBsaWNoZWVwaV96ZXJvLCBJ
-IHJlbmFtZWQgdGhlIGRlZmNvbmZpZyB0byBzdGFydCB3aXRoIHNpcGVlZCwKbGlrZSBhbGwgdGhl
-IG90aGVyIHNpcGVlZCBib2FyZHMuCgpPb3BzLCBJIGZvcmdvdCB0byByZW5hbWUgbGljaGVlcGlf
-emVybywgc28gSSd2ZSBwdXNoZWQgYSBmaXh1cCBjb21taXQuLi4KCkFwcGxpZWQgdG8gbWFzdGVy
-IHdpdGggdGhlIGFib3ZlIGNoYW5nZXMsIHRoYW5rcy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4u
-Cgo+IGRpZmYgLS1naXQgYS9ib2FyZC9saWNoZWVwaS9saWNoZWVwaV9uYW5vL2dlbmltYWdlLmNm
-ZyBiL2JvYXJkL2xpY2hlZXBpL2xpY2hlZXBpX25hbm8vZ2VuaW1hZ2UuY2ZnCj4gbmV3IGZpbGUg
-bW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi41ZTM5OGVlYjIxCj4gLS0tIC9kZXYvbnVs
-bAo+ICsrKyBiL2JvYXJkL2xpY2hlZXBpL2xpY2hlZXBpX25hbm8vZ2VuaW1hZ2UuY2ZnCj4gQEAg
-LTAsMCArMSwzMyBAQAo+ICtmbGFzaCB3MjVxMTI4IHsKPiArCXBlYnNpemUgPSA2NTUzNgo+ICsJ
-bnVtcGVicyA9IDI1Ngo+ICsJbWluaW11bS1pby11bml0LXNpemUgPSAxCj4gKwlzdWItcGFnZS1z
-aXplID0gMQo+ICsJdmlkLWhlYWRlci1vZmZzZXQgPSA2NAo+ICt9Cj4gKwo+ICtpbWFnZSBmbGFz
-aC5iaW4gewo+ICsJZmxhc2gge30KPiArCWZsYXNodHlwZSA9IHcyNXExMjgKPiArCj4gKwlwYXJ0
-aXRpb24gdWJvb3Qgewo+ICsJCWltYWdlID0gInUtYm9vdC1zdW54aS13aXRoLXNwbC5iaW4iCj4g
-KwkJc2l6ZSA9IDUxMksKPiArCX0KPiArCj4gKwlwYXJ0aXRpb24gZHRiIHsKPiArCQlpbWFnZSA9
-ICJzdW5pdi1mMWMxMDBzLWxpY2hlZXBpLW5hbm8uZHRiIgo+ICsJCXNpemUgPSA2NEsKPiArCX0K
-PiArCj4gKwlwYXJ0aXRpb24gemltYWdlIHsKPiArCQlpbWFnZSA9ICJ6SW1hZ2UiCj4gKwkJc2l6
-ZSA9IDVNCj4gKwl9Cj4gKwo+ICsJcGFydGl0aW9uIHJvb3RmcyB7Cj4gKwkJaW1hZ2UgPSAicm9v
-dGZzLmpmZnMyIgo+ICsJCXNpemUgPSAwCj4gKwl9Cj4gK30KPiArCj4gZGlmZiAtLWdpdCBhL2Jv
-YXJkL2xpY2hlZXBpL2xpY2hlZXBpX25hbm8vbGludXguZnJhZ21lbnQgYi9ib2FyZC9saWNoZWVw
-aS9saWNoZWVwaV9uYW5vL2xpbnV4LmZyYWdtZW50Cj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBp
-bmRleCAwMDAwMDAwMDAwLi5hZjY4ZjI4MTY3Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJk
-L2xpY2hlZXBpL2xpY2hlZXBpX25hbm8vbGludXguZnJhZ21lbnQKPiBAQCAtMCwwICsxLDExIEBA
-Cj4gKyMgQ09ORklHX05FVCBpcyBub3Qgc2V0Cj4gKyMgQ09ORklHX0RSTSBpcyBub3Qgc2V0Cj4g
-KyMgQ09ORklHX0NNQSBpcyBub3Qgc2V0Cj4gKyMgQ09ORklHX0FSQ0hfTVVMVElfVjcgaXMgbm90
-IHNldAo+ICtDT05GSUdfVUVWRU5UX0hFTFBFUj15Cj4gK0NPTkZJR19NVEQ9eQo+ICtDT05GSUdf
-TVREX0JMT0NLPXkKPiArQ09ORklHX01URF9TUElfTk9SPXkKPiArIyBDT05GSUdfTVREX1NQSV9O
-T1JfVVNFXzRLX1NFQ1RPUlMgaXMgbm90IHNldAo+ICtDT05GSUdfTVREX0NNRExJTkVfUEFSVFM9
-eQo+ICtDT05GSUdfSkZGUzJfRlM9eQo+IGRpZmYgLS1naXQgYS9ib2FyZC9saWNoZWVwaS9saWNo
-ZWVwaV9uYW5vL3JlYWRtZS50eHQgYi9ib2FyZC9saWNoZWVwaS9saWNoZWVwaV9uYW5vL3JlYWRt
-ZS50eHQKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjU1YWE2MDI3
-NzcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvbGljaGVlcGkvbGljaGVlcGlfbmFuby9y
-ZWFkbWUudHh0Cj4gQEAgLTAsMCArMSw4NCBAQAo+ICtJbnRybwo+ICs9PT09PQo+ICsKPiArVGhp
-cyBkaXJlY3RvcnkgY29udGFpbnMgYSBidWlsZHJvb3QgY29uZmlndXJhdGlvbiBmb3IgYnVpbGRp
-bmcgYQo+ICtMaWNoZWVQaSBOYW5vIGltYWdlIHdoaWNoIGNhbiBiZSBmbGFzaGVkIGludG8gdGhl
-IGJvYXJkLgo+ICsKPiArVGhpcyBmcmVlcyB0aGUgTU1DIHBvcnQgd2hpY2ggY2FuIGJlIHVzZWQg
-Zm9yIGFuIGFkZGl0aW9uYWwgU0QKPiArY2FyZCBvZiBmb3IgYSBXaUZpIGFkYXB0ZXIuCj4gKwo+
-ICtIb3cgdG8gYnVpbGQgaXQKPiArPT09PT09PT09PT09PT09Cj4gKwo+ICtDb25maWd1cmUgQnVp
-bGRyb290Cj4gKy0tLS0tLS0tLS0tLS0tLS0tLS0KPiArCj4gKyAgJCBtYWtlIGxpY2hlZXBpX25h
-bm9fZGVmY29uZmlnCj4gKwo+ICtCdWlsZCB0aGUgcm9vdGZzCj4gKy0tLS0tLS0tLS0tLS0tLS0K
-PiArCj4gK05vdGU6IHlvdSB3aWxsIG5lZWQgdG8gaGF2ZSBhY2Nlc3MgdG8gdGhlIG5ldHdvcmss
-IHNpbmNlIEJ1aWxkcm9vdAo+ICt3aWxsIGRvd25sb2FkIHRoZSBwYWNrYWdlcycgc291cmNlcy4K
-PiArCj4gK1lvdSBtYXkgbm93IGJ1aWxkIHlvdXIgcm9vdGZzIHdpdGg6Cj4gKwo+ICsgICQgbWFr
-ZQo+ICsKPiArKFRoaXMgbWF5IHRha2UgYSB3aGlsZSwgY29uc2lkZXIgZ2V0dGluZyB5b3Vyc2Vs
-ZiBhIGNvZmZlZSA7LSkgKQo+ICsKPiArUmVzdWx0IG9mIHRoZSBidWlsZAo+ICstLS0tLS0tLS0t
-LS0tLS0tLS0tCj4gKwo+ICtBZnRlciBidWlsZGluZywgeW91IHNob3VsZCBvYnRhaW4gdGhpcyB0
-cmVlOgo+ICsKPiArICAgIG91dHB1dC9pbWFnZXMvCj4gKyAgICArLS0gZmxhc2guYmluCj4gKyAg
-ICArLS0gcm9vdGZzLmpmZnMyCj4gKyAgICArLS0gcm9vdGZzLnRhcgo+ICsgICAgKy0tIHN1bml2
-LWYxYzEwMHMtbGljaGVlcGktbmFuby5kdGIKPiArICAgICstLSB1LWJvb3QuYmluCj4gKyAgICAr
-LS0gdS1ib290LXN1bnhpLXdpdGgtc3BsLmJpbgo+ICsgICAgYC0tIHpJbWFnZQo+ICsKPiArSG93
-IHRvIGZsYXNoCj4gKz09PT09PT09PT09PQo+ICsKPiArT25jZSB0aGUgYnVpbGQgcHJvY2VzcyBp
-cyBmaW5pc2hlZCB5b3Ugd2lsbCBoYXZlIGFuIGltYWdlIGNhbGxlZAo+ICsiZmxhc2guYmluIiBp
-biB0aGUgb3V0cHV0L2ltYWdlcy8gZGlyZWN0b3J5LiBJdCBjb250YWlucyB0aGUKPiArYm9vdGxv
-YWRlciwgdGhlIGRldmljZSB0cmVlLCB0aGUga2VybmVsIGFuZCB0aGUgcm9vdCBmaWxlIHN5c3Rl
-bS4KPiArCj4gK1RoZSBkZXZpY2UgY2FuIGJlIGZsYXNoZWQgd2hlbiBpdCBpcyBpbiBzcGVjaWFs
-IG1vZGUgY2FsbGVkICJGRUwKPiArbW9kZSIuIFRoZXJlIGFyZSBtdWx0aXBsZSB3YXlzIHRvIGVu
-dGVyIHRoaXMgbW9kZSBkZXNjcmliZWQgaGVyZToKPiAraHR0cHM6Ly9saW51eC1zdW54aS5vcmcv
-RkVMI0VudGVyaW5nX0ZFTF9tb2RlCj4gKwo+ICtPbmUgd2F5IGlzIHRvIHdyaXRlIG9uZSBmaWxl
-IGZyb20gc3VueGktdG9vbHMgdG8gYSBTRCBjYXJkIHdpdGg6Cj4gKwo+ICsgICQgc3VkbyBkZCBp
-Zj0uL291dHB1dC9idWlsZC9ob3N0LXN1bnhpLXRvb2xzLSovYmluL2ZlbC1zZGJvb3Quc3VueGkg
-b2Y9L2Rldi9zZFggYnM9MTAyNCBzZWVrPTgKPiArCj4gK09uY2UgdGhlIFNEIGNhcmQgaXMgYnVy
-bmVkLCBpbnNlcnQgaXQgaW50byB5b3VyIExpY2hlZVBpIE5hbm8gYm9hcmQsCj4gK2FuZCBwbHVn
-IHRoZSBVU0IgY2FibGUuIEEgbmV3IFVTQiBkZXZpY2Ugc2hvdWxkIGJlIHZpc2libGUgd2l0aAo+
-ICtsc3VzYjoKPiArCj4gKyAgMWYzYTplZmU4IEFsbHdpbm5lciBUZWNobm9sb2d5IHN1bnhpIFNv
-QyBPVEcgY29ubmVjdG9yIGluIEZFTC9mbGFzaGluZyBtb2RlCj4gKwo+ICtUaGUgaW1hZ2UgY2Fu
-IGJlIGZsYXNoZWQgd2l0aDoKPiArCj4gKyAgJCBzdWRvIC4vb3V0cHV0L2hvc3QvYmluL3N1bnhp
-LWZlbCAtcCBzcGlmbGFzaC13cml0ZSAwIG91dHB1dC9pbWFnZXMvZmxhc2guYmluCj4gKwo+ICtP
-bmNlIHRoaXMgY29tcGxldGVzLCByZW1vdmUgdGhlIFNEIGNhcmQgYW5kIHBvd2VyIHRoZSBib2Fy
-ZC4gWW91cgo+ICtuZXcgc3lzdGVtIHNob3VsZCBjb21lIHVwIG5vdyBhbmQgc3RhcnQgYSBjb25z
-b2xlIG9uIHRoZSBVQVJUMAo+ICtzZXJpYWwgcG9ydC4KPiArCj4gK05vdGUKPiArPT09PQo+ICsK
-PiArU29tZSBzdGFuZGFyZCBrZXJuZWwgZmVhdHVyZXMgYXJlIGRpc2FibGVkIHVzaW5nIHRoZSBm
-cmFnbWVudCBpbgo+ICtvcmRlciB0byByZWR1Y2UgdGhlIHNpemUuIFRoZXkgY2FuIGJlIGVuYWJs
-ZWQgYWdhaW4gaWYgb3RoZXIKPiArZmVhdHVyZXMgYXJlIGRpc2FibGVkIGluc3RlYWQuCj4gKwo+
-ICtGb3IgVS1Cb290LCB0aGUgdXBzdHJlYW0gcmVwb3NpdG9yeSBpcyBwcmVmZXJyZWQgYW5kIHRo
-ZSBzeXN0ZW0KPiArYm9vdHMsIGJ1dCBsb2FkaW5nIHRoZSBpbWFnZSBmcm9tIHRoZSBmbGFzaCB0
-YWtlcyBhIGxvbmcgdGltZS4gSXQKPiAraXMgbXVjaCBmYXN0ZXIgd2hlbiB1c2luZyB0aGUgYnJh
-bmNoICJsaWNoZWVwaS1uYW5vLXYyMDIwLjAxIiBvZgo+ICt0aGlzIGZvcms6Cj4gK2h0dHBzOi8v
-Z2l0aHViLmNvbS9mbG9ycG9yL3UtYm9vdAo+IGRpZmYgLS1naXQgYS9ib2FyZC9saWNoZWVwaS9s
-aWNoZWVwaV9uYW5vL3Vib290LmZyYWdtZW50IGIvYm9hcmQvbGljaGVlcGkvbGljaGVlcGlfbmFu
-by91Ym9vdC5mcmFnbWVudAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAw
-MC4uMzlmMmJmZTc0Mgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib2FyZC9saWNoZWVwaS9saWNo
-ZWVwaV9uYW5vL3Vib290LmZyYWdtZW50Cj4gQEAgLTAsMCArMSwzIEBACj4gK0NPTkZJR19VU0Vf
-Qk9PVEFSR1M9eQo+ICtDT05GSUdfQk9PVEFSR1M9ImNvbnNvbGU9dHR5MCBjb25zb2xlPXR0eVMw
-LDExNTIwMCBwYW5pYz01IHJvb3R3YWl0IHJvb3Q9L2Rldi9tdGRibG9jazMgcncgcm9vdGZzdHlw
-ZT1qZmZzMiBtdGRwYXJ0cz1zcGkwLjA6NTEyayh1Ym9vdClybyw2NGsoZHRiKSw1TShrZXJuZWwp
-cm8sLShyb290ZnMpIgo+ICtDT05GSUdfQk9PVENPTU1BTkQ9InNmIHByb2JlIDAgNTAwMDAwMDA7
-IHNmIHJlYWQgMHg4MEMwMDAwMCAweDgwMDAwIDB4NDAwMDsgc2YgcmVhZCAweDgwMDA4MDAwIDB4
-OTAwMDAgMHg1MDAwMDA7IGJvb3R6IDB4ODAwMDgwMDAgLSAweDgwQzAwMDAwIgo+IGRpZmYgLS1n
-aXQgYS9jb25maWdzL2xpY2hlZXBpX25hbm9fZGVmY29uZmlnIGIvY29uZmlncy9saWNoZWVwaV9u
-YW5vX2RlZmNvbmZpZwo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4u
-M2RiZDI5MjQxZgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9jb25maWdzL2xpY2hlZXBpX25hbm9f
-ZGVmY29uZmlnCj4gQEAgLTAsMCArMSw0MyBAQAo+ICsjIFRhcmdldCBvcHRpb25zCj4gK0JSMl9h
-cm09eQo+ICsKPiArIyBTeXN0ZW0gY29uZmlndXJhdGlvbgo+ICtCUjJfVEFSR0VUX0dFTkVSSUNf
-SE9TVE5BTUU9ImxpY2hlZXBpLW5hbm8iCj4gK0JSMl9UQVJHRVRfR0VORVJJQ19JU1NVRT0iV2Vs
-Y29tZSB0byBCdWlsZHJvb3QgZm9yIHRoZSBMaWNoZWVQaSBOYW5vIgo+ICtCUjJfVEFSR0VUX0dF
-TkVSSUNfR0VUVFlfUE9SVD0idHR5UzAiCj4gK0JSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9CQVVE
-UkFURV8xMTUyMDA9eQo+ICtCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0L3Nj
-cmlwdHMvZ2VuaW1hZ2Uuc2giCj4gK0JSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iLWMgYm9h
-cmQvbGljaGVlcGkvbGljaGVlcGlfbmFuby9nZW5pbWFnZS5jZmciCj4gKwo+ICsjIEtlcm5lbAo+
-ICtCUjJfTElOVVhfS0VSTkVMPXkKPiArQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InN1bnhp
-Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NPTkZJR19GUkFHTUVOVF9GSUxFUz0iYm9hcmQvbGljaGVl
-cGkvbGljaGVlcGlfbmFuby9saW51eC5mcmFnbWVudCIKPiArQlIyX0xJTlVYX0tFUk5FTF9EVFNf
-U1VQUE9SVD15Cj4gK0JSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJhbGx3aW5uZXIv
-c3VuaXYtZjFjMTAwcy1saWNoZWVwaS1uYW5vIgo+ICsKPiArIyBGaWxlc3lzdGVtIGltYWdlcwo+
-ICtCUjJfVEFSR0VUX1JPT1RGU19KRkZTMj15Cj4gK0JSMl9UQVJHRVRfUk9PVEZTX0pGRlMyX0ZM
-QVNIXzY0PXkKPiArQlIyX1RBUkdFVF9ST09URlNfSkZGUzJfTk9DTEVBTk1BUktFUj15Cj4gK0JS
-Ml9UQVJHRVRfUk9PVEZTX0pGRlMyX1BBRD15Cj4gKwo+ICsjIEJvb3Rsb2FkZXJzCj4gK0JSMl9U
-QVJHRVRfVUJPT1Q9eQo+ICtCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklHPXkK
-PiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTj15Cj4gK0JSMl9UQVJHRVRfVUJPT1Rf
-Q1VTVE9NX1ZFUlNJT05fVkFMVUU9IjIwMjMuMDQiCj4gK0JSMl9UQVJHRVRfVUJPT1RfQk9BUkRf
-REVGQ09ORklHPSJsaWNoZWVwaV9uYW5vIgo+ICtCUjJfVEFSR0VUX1VCT09UX0NPTkZJR19GUkFH
-TUVOVF9GSUxFUz0iYm9hcmQvbGljaGVlcGkvbGljaGVlcGlfbmFuby91Ym9vdC5mcmFnbWVudCIK
-PiArQlIyX1RBUkdFVF9VQk9PVF9TUEw9eQo+ICtCUjJfVEFSR0VUX1VCT09UX1NQTF9OQU1FPSJ1
-LWJvb3Qtc3VueGktd2l0aC1zcGwuYmluIgo+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX0RUQz15
-Cj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfUFlMSUJGRFQ9eQo+ICtCUjJfVEFSR0VUX1VCT09U
-X05FRURTX09QRU5TU0w9eQo+ICsKPiArIyBSZXF1aXJlZCBob3N0IHV0aWxpdGllcwo+ICtCUjJf
-UEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0UyRlNQUk9HUz15
-Cj4gK0JSMl9QQUNLQUdFX0hPU1RfR0VOSU1BR0U9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX01UT09M
-Uz15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfU1VOWElfVE9PTFM9eQo+IC0tIAo+IDIuMzAuMgo+IAo+
-IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRy
-b290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0t
-LS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0t
-LS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAv
-IlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYg
-fCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAg
-ICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5T
-VCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5v
-cmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4t
-LS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+- Drop patches (already in version)
+- C++14 is mandatory since version 7.1.0
+
+https://github.com/DOCGroup/ACE_TAO/blob/ACE%2BTAO-7_1_1/ACE/NEWS
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .checkpackageignore                           |  2 -
+ ...Asynch_BIO.cpp-fix-build-with-libres.patch | 52 -----------------
+ ...Asynch_BIO.cpp-fix-build-with-libres.patch | 56 -------------------
+ package/ace/Config.in                         |  6 +-
+ package/ace/ace.hash                          |  6 +-
+ package/ace/ace.mk                            |  4 +-
+ 6 files changed, 8 insertions(+), 118 deletions(-)
+ delete mode 100644 package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+ delete mode 100644 package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 7f12a9a3b4..d5c894ff25 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -124,8 +124,6 @@ boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch Up
+ linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch Upstream
+ package/18xx-ti-utils/0001-plt.h-fix-build-with-gcc-10.patch Upstream
+ package/4th/0001-avoid-regen-during-install.patch Upstream
+-package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch Upstream
+-package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch Upstream
+ package/acl/0001-Build-with-old-GCC-versions.patch Upstream
+ package/acpid/0001-dont-use-isfdtype.patch Upstream
+ package/alchemy/0001-toolchains-remove-hash-style-management.patch Upstream
+diff --git a/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch b/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+deleted file mode 100644
+index ad82c10172..0000000000
+--- a/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From e06cadc3b95a577e6a8bbc94f93dd063710c73a1 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 3 Apr 2022 15:25:49 +0200
+-Subject: [PATCH] ACE/ace/SSL/SSL_Asynch_BIO.cpp: fix build with libressl
+-
+-Fix the following build failure with libressl:
+-
+-/home/autobuild/autobuild/instance-10/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:174:7: error: 'BIO_get_init' was not declared in this scope; did you mean 'BIO_set_init'?
+-  174 |   if (BIO_get_init(pBIO) == 0 || p_stream == 0 || buf == 0 || len <= 0)
+-      |       ^~~~~~~~~~~~
+-      |       BIO_set_init
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/386afa88ac9e5e3bb65dddeabf610bb1e9bc4285
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/DOCGroup/ACE_TAO/commit/e06cadc3b95a577e6a8bbc94f93dd063710c73a1]
+----
+- ACE/ace/SSL/SSL_Asynch_BIO.cpp | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/ace/SSL/SSL_Asynch_BIO.cpp b/ace/SSL/SSL_Asynch_BIO.cpp
+-index a657d8a14e6f7..64aa14c6ab9a7 100644
+---- a/ace/SSL/SSL_Asynch_BIO.cpp
+-+++ b/ace/SSL/SSL_Asynch_BIO.cpp
+-@@ -41,7 +41,7 @@ extern "C"
+- 
+- #define BIO_TYPE_ACE  ( 21 | BIO_TYPE_SOURCE_SINK )
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- static BIO_METHOD methods_ACE =
+-   {
+-     BIO_TYPE_ACE, // BIO_TYPE_PROXY_SERVER,
+-@@ -68,14 +68,14 @@ static BIO_METHOD methods_ACE =
+- #else
+- static BIO_METHOD* methods_ACE;
+- # define BIO_set_num(b, val)
+--#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
+-+#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER) */
+- 
+- ACE_BEGIN_VERSIONED_NAMESPACE_DECL
+- 
+- BIO *
+- ACE_SSL_make_BIO (void * ssl_asynch_stream)
+- {
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-   BIO * const pBIO = BIO_new (&methods_ACE);
+- #else
+-   if (!methods_ACE)
+diff --git a/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch b/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+deleted file mode 100644
+index 4f9fde5579..0000000000
+--- a/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 82b139f921ddb549c1bd236030bbc86e314852b3 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 21 Feb 2023 14:20:11 +0100
+-Subject: [PATCH] ACE/ace/SSL/SSL_Asynch_BIO.cpp: fix build with libressl >=
+- 3.5.0
+-
+-Fix the following build failure with libressl >= 3.5.0:
+-
+-/tmp/instance-17/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:45:19: error: variable 'BIO_METHOD methods_ACE' has initializer but incomplete type
+-   45 | static BIO_METHOD methods_ACE =
+-      |                   ^~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/7f40d6dde03134238151c248fbbd66e4713546cb
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/DOCGroup/ACE_TAO/pull/2053]
+----
+- ACE/ace/SSL/SSL_Asynch_BIO.cpp | 8 +++++---
+- 1 file changed, 5 insertions(+), 3 deletions(-)
+-
+-diff --git a/ace/SSL/SSL_Asynch_BIO.cpp b/ace/SSL/SSL_Asynch_BIO.cpp
+-index 0faa775fc0..5543598873 100644
+---- a/ace/SSL/SSL_Asynch_BIO.cpp
+-+++ b/ace/SSL/SSL_Asynch_BIO.cpp
+-@@ -41,7 +41,8 @@ extern "C"
+- 
+- #define BIO_TYPE_ACE  ( 21 | BIO_TYPE_SOURCE_SINK )
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
+- static BIO_METHOD methods_ACE =
+-   {
+-     BIO_TYPE_ACE, // BIO_TYPE_PROXY_SERVER,
+-@@ -68,14 +69,15 @@ static BIO_METHOD methods_ACE =
+- #else
+- static BIO_METHOD* methods_ACE;
+- # define BIO_set_num(b, val)
+--#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER) */
+-+#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L) */
+- 
+- ACE_BEGIN_VERSIONED_NAMESPACE_DECL
+- 
+- BIO *
+- ACE_SSL_make_BIO (void * ssl_asynch_stream)
+- {
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
+-   BIO * const pBIO = BIO_new (&methods_ACE);
+- #else
+-   if (!methods_ACE)
+--- 
+-2.39.0
+-
+diff --git a/package/ace/Config.in b/package/ace/Config.in
+index 5000f2352f..cf3819284b 100644
+--- a/package/ace/Config.in
++++ b/package/ace/Config.in
+@@ -3,14 +3,14 @@ config BR2_PACKAGE_ACE
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	help
+ 	  The ADAPTIVE Communication Environment (ACE(TM))
+ 	  An OO Network Programming Toolkit in C++.
+ 
+ 	  http://www.dre.vanderbilt.edu/~schmidt/ACE.html
+ 
+-comment "ACE needs a glibc toolchain, dynamic library, C++, gcc >= 4.8"
++comment "ACE needs a glibc toolchain, dynamic library, C++, gcc >= 4.9"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/ace/ace.hash b/package/ace/ace.hash
+index 2387927879..0c5ed12c97 100644
+--- a/package/ace/ace.hash
++++ b/package/ace/ace.hash
+@@ -1,6 +1,6 @@
+-# From https://download.dre.vanderbilt.edu/previous_versions/ACE-7.0.6.tar.bz2.md5:
+-md5  d1656851619aff15365270ccf2d56c6e  ACE-7.0.6.tar.bz2
++# From https://download.dre.vanderbilt.edu/previous_versions/ACE-7.1.1.tar.bz2.md5:
++md5  6c86ec6c7879703783b9749d5409a67f  ACE-7.1.1.tar.bz2
+ 
+ # Locally Computed:
+-sha256  4a0cd7da4851f769fddfcf33f663eba4afad824efeff9f59f134c4640ee80216  ACE-7.0.6.tar.bz2
++sha256  fe5fdeab1dddf4fdd99f73c59420886cf61ca2ce92adf2cc6b612b752986df62  ACE-7.1.1.tar.bz2
+ sha256  687bf9d16119e0caf6fb5c18214928fd6ea0da10df91e906255b7613af8061d8  COPYING
+diff --git a/package/ace/ace.mk b/package/ace/ace.mk
+index 29555eea74..1f79508629 100644
+--- a/package/ace/ace.mk
++++ b/package/ace/ace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ACE_VERSION = 7.0.6
++ACE_VERSION = 7.1.1
+ ACE_SOURCE = ACE-$(ACE_VERSION).tar.bz2
+ ACE_SITE = http://download.dre.vanderbilt.edu/previous_versions
+ ACE_LICENSE = DOC
+@@ -17,7 +17,7 @@ ACE_CPE_ID_PRODUCT = adaptive_communication_environment
+ # Only compiling ACE libraries (no TAO)
+ ACE_LIBRARIES = ace ACEXML Kokyu netsvcs protocols/ace
+ 
+-ACE_CPPFLAGS = $(TARGET_CPPFLAGS) -std=c++11
++ACE_CPPFLAGS = $(TARGET_CPPFLAGS) -std=c++14
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101915),y)
+ ACE_CPPFLAGS += -O0
+-- 
+2.42.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
