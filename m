@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFCD5C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFDD5C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:47:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74A4A43108;
-	Sun, 29 Oct 2023 08:46:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74A4A43108
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74E514311E;
+	Sun, 29 Oct 2023 08:47:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74E514311E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ogQ4fDlKzXgI; Sun, 29 Oct 2023 08:46:30 +0000 (UTC)
+	with ESMTP id apKR0Cr-IUwT; Sun, 29 Oct 2023 08:47:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3B5D24311E;
-	Sun, 29 Oct 2023 08:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B5D24311E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DADCA1BF41A
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:46:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48AC643124;
+	Sun, 29 Oct 2023 08:47:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48AC643124
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B1E491BF41A
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF3B64ECE0
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF3B64ECE0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96BF84249E
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:47:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96BF84249E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gHEz_27LVKHp for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 08:46:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8gy5OBwyFpUM for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 08:47:01 +0000 (UTC)
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 97D7C4ECDC
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:46:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97D7C4ECDC
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2088F4311F
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:47:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2088F4311F
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:de1f:355b:eff2:ec6])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id DAA5F2003CC;
- Sun, 29 Oct 2023 09:46:21 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 69AC820047F;
+ Sun, 29 Oct 2023 09:46:57 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Oct 2023 09:46:21 +0100
-Date: Sun, 29 Oct 2023 09:46:21 +0100
+ Sun, 29 Oct 2023 09:46:57 +0100
+Date: Sun, 29 Oct 2023 09:46:57 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231029084621.GQ687180@scaer>
-References: <20231026173836.4149430-1-bernd@kuhls.net>
+Message-ID: <20231029084657.GR687180@scaer>
+References: <20231026172713.4147295-1-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231026173836.4149430-1-bernd@kuhls.net>
+In-Reply-To: <20231026172713.4147295-1-bernd@kuhls.net>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698569184;
- bh=k4SRC8uQW7lqdhec+ZP0Jgtu14GflWX0xVtBTZ4iEBg=;
+ d=free.fr; s=smtp-20201208; t=1698569219;
+ bh=rAoZeEMEYsLOutd3y+uFLqaE2p9vJxUKo9WNSUr1ncs=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=FlVE/dd0PCJ29PT5NyAICkplfgHSWxcYn7zkOEarobgIxuzCbU2IULQujA6zYCTSL
- 2D9/MHZB5SkfKnZ9cxA+1wUOmv3b9/XcmLTykMrSb2wib7SOzufzJwzhoTIr58POWp
- 7+Zi+fNBWOEDVDjDVwSzr5df+KRSSUrY/sDel/McpECvnPHL3fP8diG3v0XtfOMwNs
- u9rXiz5PHwiSScq7sD+6JDEO0Gn+fRyq7BzRBM4FCmquRBXZuFKyjUpFHkdJ/em591
- rqnL0YdBKHPl4iFRVs8SYJrhob+m7eP2NoHouHlscfpWnGuiTehXulbcA5YL5R7V3J
- TNGrUXMnckb/w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=CJCPXTmbMMJFBvQYjrSiUs70EXT+r2H5MuRuCx58+9i9AkieO6w/PDvFVPbkYGchW
+ hHZlTNf1Om5TpxfSTcUJJ/2GW2CrgYCnShNcYVBG/pghfy9rqMnBFLdc2Xr5Yeym85
+ bzgdMEh7o1Ie8xC++uYViMitxGhT1UKKgYN0uF6+30OvguMd9EOUR5+G1/f1ncxBDq
+ oZj0ZMIJjqsryDR+82WuR+BmWede5/YRC3p98lP3Rd4sp5JErPa/6cHwClVF5L0Ltg
+ J6aBKX/u7T0dvO1FnJWQ+Z4MVxPrDzQL2SHkjMjDmq1evf1l4LzPrJsjgWk52L9fqk
+ bwt4aLQY+0O0Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FlVE/dd0
-Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
- 19}.x / 5.{4, 10, 15}.x / 6.{1, 5}.x series
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CJCPXTmb
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,7 +83,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Bernd, All,
 
-On 2023-10-26 19:38 +0200, Bernd Kuhls spake thusly:
+On 2023-10-26 19:27 +0200, Bernd Kuhls spake thusly:
+> Changelog: https://www.php.net/ChangeLog-8.php#8.2.12
+> Release notes: https://www.php.net/releases/8_2_12.php
+> 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to master, thanks.
@@ -93,74 +95,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  linux/Config.in                      |  2 +-
->  linux/linux.hash                     | 14 +++++++-------
->  package/linux-headers/Config.in.host | 14 +++++++-------
->  3 files changed, 15 insertions(+), 15 deletions(-)
+>  package/php/php.hash | 2 +-
+>  package/php/php.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 21313ded51..195b0dc00e 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -128,7 +128,7 @@ endif
+> diff --git a/package/php/php.hash b/package/php/php.hash
+> index e5f94a5e05..0f77f0082f 100644
+> --- a/package/php/php.hash
+> +++ b/package/php/php.hash
+> @@ -1,5 +1,5 @@
+>  # From https://www.php.net/downloads.php
+> -sha256  29af82e4f7509831490552918aad502697453f0869a579ee1b80b08f9112c5b8  php-8.2.11.tar.xz
+> +sha256  e1526e400bce9f9f9f774603cfac6b72b5e8f89fa66971ebc3cc4e5964083132  php-8.2.12.tar.xz
 >  
->  config BR2_LINUX_KERNEL_VERSION
->  	string
-> -	default "6.5.8" if BR2_LINUX_KERNEL_LATEST_VERSION
-> +	default "6.5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
->  	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->  	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
->  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-> diff --git a/linux/linux.hash b/linux/linux.hash
-> index 720598252b..78d1395e66 100644
-> --- a/linux/linux.hash
-> +++ b/linux/linux.hash
-> @@ -1,13 +1,13 @@
->  # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-> -sha256  299cca897d90deaa176eebec42f0a80eeb7516afed330a45c14da9de086cf717  linux-6.5.8.tar.xz
-> -sha256  627f7724c675036639290fb5c39e3fdeb3d566b80b192c45f4a808ab54c8c0a0  linux-6.1.59.tar.xz
-> +sha256  c6662f64713f56bf30e009c32eac15536fad5fd1c02e8a3daf62a0dc2f058fd5  linux-6.5.9.tar.xz
-> +sha256  58520e7ae5a6af254ddf7ddbfc42e4373b0d36c67d467f6e35a3bd1672f5fb0a  linux-6.1.60.tar.xz
->  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-> -sha256  c624b9fe7ee4708d34cfd0b7ebc58037afac7463338cc498641ea31c55eeacb8  linux-5.15.136.tar.xz
-> -sha256  2b141fce994364fbbf137b01e7910d3518b8cdbdf18f1811b48470ab4ce2fa05  linux-5.10.198.tar.xz
-> -sha256  39701815a7a1b5ea4253db18e9327a45926a944499628d032da63c1bb6ea623e  linux-5.4.258.tar.xz
-> +sha256  9749b21609f9e7ad9c46160c2c107db823b99cef77fa6cb080b6c2dc685fb2f7  linux-5.15.137.tar.xz
-> +sha256  a0ea77a1f5eeb1387d62e7a8df585ffc53758e4da153d98224ccd833bd2624c1  linux-5.10.199.tar.xz
-> +sha256  ffe6e4fa1266d5480e529fc8659f572c57030040c548face30f56fd5a223bba4  linux-5.4.259.tar.xz
->  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-> -sha256  636166769dc232d18f399f40c22107c289aab8702e752301588e64ab582860ae  linux-4.19.296.tar.xz
-> -sha256  bff085d8832dd5c3d717beeebdff78a0b678f0a2307f83acf22764dabdcb0a5a  linux-4.14.327.tar.xz
-> +sha256  9d89e0bc6503c0d61178fd1605f6ed04b016873b9f370372866644b11fee3d31  linux-4.19.297.tar.xz
-> +sha256  1db5926e02dc29b30d77f731228d3bd31402e2feba3aa59bfb2c730eedbeecc5  linux-4.14.328.tar.xz
->  # Locally computed
->  sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
->  sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index d48cfa3787..bb624147ec 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -404,13 +404,13 @@ endchoice
+>  # License file
+>  sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index ee33000a6f..add46584c6 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  config BR2_DEFAULT_KERNEL_HEADERS
->  	string
-> -	default "4.14.327"	if BR2_KERNEL_HEADERS_4_14
-> -	default "4.19.296"	if BR2_KERNEL_HEADERS_4_19
-> -	default "5.4.258"	if BR2_KERNEL_HEADERS_5_4
-> -	default "5.10.198"	if BR2_KERNEL_HEADERS_5_10
-> -	default "5.15.136"	if BR2_KERNEL_HEADERS_5_15
-> -	default "6.1.59"	if BR2_KERNEL_HEADERS_6_1
-> -	default "6.5.8"		if BR2_KERNEL_HEADERS_6_5
-> +	default "4.14.328"	if BR2_KERNEL_HEADERS_4_14
-> +	default "4.19.297"	if BR2_KERNEL_HEADERS_4_19
-> +	default "5.4.259"	if BR2_KERNEL_HEADERS_5_4
-> +	default "5.10.199"	if BR2_KERNEL_HEADERS_5_10
-> +	default "5.15.137"	if BR2_KERNEL_HEADERS_5_15
-> +	default "6.1.60"	if BR2_KERNEL_HEADERS_6_1
-> +	default "6.5.9"		if BR2_KERNEL_HEADERS_6_5
->  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
->  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
->  	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+> -PHP_VERSION = 8.2.11
+> +PHP_VERSION = 8.2.12
+>  PHP_SITE = https://www.php.net/distributions
+>  PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+>  PHP_INSTALL_STAGING = YES
 > -- 
 > 2.39.2
 > 
