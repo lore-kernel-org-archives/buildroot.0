@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12BCFC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 21:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA21AC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 22:02:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83D974F052;
-	Sun, 29 Oct 2023 21:53:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83D974F052
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C35E7068F;
+	Sun, 29 Oct 2023 22:02:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C35E7068F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ee59KORjw5nc; Sun, 29 Oct 2023 22:02:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0A847074C;
+	Sun, 29 Oct 2023 22:02:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0A847074C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF0671BF403
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 22:02:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 848FA4F182
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 22:02:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 848FA4F182
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w0hfcJ6Y8vMt; Sun, 29 Oct 2023 21:53:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0FC24F056;
-	Sun, 29 Oct 2023 21:53:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0FC24F056
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0666F1BF3DA
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 21:53:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB10F430CC
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 21:53:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB10F430CC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PCOlMn5PDwdS for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 21:53:54 +0000 (UTC)
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
- [IPv6:2a00:1450:4864:20::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 45C8F430C7
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 21:53:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45C8F430C7
-Received: by mail-lj1-x229.google.com with SMTP id
- 38308e7fff4ca-2c5087d19a6so54298331fa.0
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 14:53:54 -0700 (PDT)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tXRsHRJI8IOP for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 22:02:19 +0000 (UTC)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 80D1A4F180
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 22:02:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80D1A4F180
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-32f7db21967so928659f8f.1
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 15:02:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698616432; x=1699221232;
+ d=1e100.net; s=20230601; t=1698616937; x=1699221737;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8hdi4qR3p+SPW0xt9Zvvy/w/3YPwQiIriUSPqHiCh3w=;
- b=C9wOmZDvBzoyR4Exu7zc1EAIALMJkgl6Y8sXDoPjPzOygqUl0sIsX1lMg5TCePU9mx
- WKl9hhoFfe+d7Ue/i0GHfOhTkxAklF9bxJneE/YIxLSI0xv+5CwpiU3YIkveRoo2vLK4
- aPnfW72A0QjOGmsqVmiUsWvSLcVzP9xslOYMHDzJMkWtue78akUCSWrawC4m/wxx0EgL
- BJymDtXFCuqJnpDgiEjAv8vBH29Ni9W32MvOcJYh3TD6t4qy+WqvEOTz+cdwVhzbq9yD
- M0c/7w/IS7eXMyuKxVOB+QWOikHMX/yxW+q07CmeBU8PaMwA7uzLCqH3BjOdhuZNB7mS
- DedA==
-X-Gm-Message-State: AOJu0YwRSJIqeRwuOQfs75OXFtvRl82z565lrymVSpEwEf8rEqYmRPmh
- zTt+JRUcj5y0bzgQeHuT3PEgwzKsZkQ=
-X-Google-Smtp-Source: AGHT+IE7Puamx7LoEXINTiKzGQeFZCke+8FBEP6zsI+VF/NVGs0MrhLClJa41lLeU74NIl5nSZktRQ==
-X-Received: by 2002:ac2:47fb:0:b0:507:b8e1:76f0 with SMTP id
- b27-20020ac247fb000000b00507b8e176f0mr5289476lfp.22.1698616431418; 
- Sun, 29 Oct 2023 14:53:51 -0700 (PDT)
+ bh=35/3tGuU8iLrPXFn0fLuFdkegh4E7gogU/yYSRGgLLc=;
+ b=E5BqdNplTfSrzIJWkuO8OsBEH3V6d964+tbTS1nSGKQuTG3xjD437pQj/7Gclhn0YC
+ IV8cNBuU3wHLHW9iNfIgy2FNgdYTlsL00e78wTgA0yQatkmsOEtYGLPZbbouQ5hPF+2C
+ 1kCjTjFMU4smtGDTuNhkBzTy3ugqSx3d5I3/H5WwQQhX8IxPdjpLmy91sLts3qjU8rtM
+ K7rHdaRduDlvKq4xVNPQQSeZwZDEcZ2wx1G0JJ3PMYGELw4KXTMs34Lfvel8LZbCC3um
+ 4D4H2DL+z4KZMwEA9ifATiC1zDIBpOl3akU3XF3izDVfC6J83txfk/GQ7dGnQbYTQU/W
+ pazg==
+X-Gm-Message-State: AOJu0YxyNZQCP0A4nB7Ei6tJ1mgLnyr4f/yuMc9W1N28lrz0WiTzeB9O
+ lPR+WCFRiTUl8viATbX2Xu3289o3fhE=
+X-Google-Smtp-Source: AGHT+IEZ/jii0agzaFrj4ewU/ScdQe+2YlDncstEHongdEWbCwKZ2z1bHgituwKDke48SXTOvBv9CQ==
+X-Received: by 2002:a5d:67c7:0:b0:31a:d871:7ae7 with SMTP id
+ n7-20020a5d67c7000000b0031ad8717ae7mr5527543wrw.29.1698616936963; 
+ Sun, 29 Oct 2023 15:02:16 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- p1-20020a5d68c1000000b0032db8f7f378sm6718628wrw.71.2023.10.29.14.53.50
+ d25-20020adfa419000000b0032f79e55eb8sm4562031wra.16.2023.10.29.15.02.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Oct 2023 14:53:50 -0700 (PDT)
+ Sun, 29 Oct 2023 15:02:16 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 Oct 2023 22:53:48 +0100
-Message-ID: <20231029215348.25075-1-fontaine.fabrice@gmail.com>
+Date: Sun, 29 Oct 2023 23:02:14 +0100
+Message-ID: <20231029220214.32159-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1698616432; x=1699221232; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1698616937; x=1699221737; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8hdi4qR3p+SPW0xt9Zvvy/w/3YPwQiIriUSPqHiCh3w=;
- b=PV/lFaK4xuOPZIxeAHXkmvSO5pF7+sGVV2NbqsFRceN30s3uOyfyBdHIkO+++Bx362
- B0TqOeBdpQQL7dQG9pqRHSQEV6hrX1KzjTiHN5nOFu90YisaqspbgMLUWJkmAuHKAlIi
- HEVit3GahusmGrYuG3LqXarGY0WxbK1+4ftdDsMq8hcZ7RUY4NcK2xImGYOiUY1buI6x
- MZM2rq/t9WcPMIWKfLsvL8kYmhuxmnPMf4Cm7qa7fkkyA93uOTXqlEj0zavJfb2+6zzN
- fswVm2SkQTgi22DIvF0cDxCOuzkqpRbdWkh9q5qkeoZ19rNK2U91Pxbk5qnGaYsGKv+8
- Er+w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=35/3tGuU8iLrPXFn0fLuFdkegh4E7gogU/yYSRGgLLc=;
+ b=VrDMhnpXF8C5W2mYSPDNi29ivNDw4kKBoKaoIbwV+f0KWzdiatoq4vqtXUX0fnY7NO
+ 3IohxGnacB/drvzSno60gAtnrNOutbWp47D++59ZZUWkrsjcj9ejmQB5HZMvI13gQZFI
+ cIRK9Q1lMrOms4K9UJ0QM3PV/6hbMp5HUoiFyhC2yZvVMcMHVDHEDVLHXWLFgKHa92nH
+ ntgikN5TTNcHhh1Rb/q873aaXMpiFbEAXx5lG6Jxbc/Gz1ScVdRVzIndzkKmA5ziMtW7
+ sY2gKtp98+eWrW5TI2FyIaFHY4MRT4g5O9mLNY0/eNyzH0DSOfgu+sBel+P7j0T1ol0F
+ Jodg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=PV/lFaK4
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: bump to version 4.3.5
+ header.a=rsa-sha256 header.s=20230601 header.b=VrDMhnpX
+Subject: [Buildroot] [PATCH 1/1] package/uftrace: bump to version 0.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,124 +100,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (already in version)
-- Relicensing from LGPL-3.0+ to MPL-2.0:
-  https://github.com/zeromq/libzmq/commit/da31917f4f443df751871ee359f7562cf6d77bde
+Add Upstream link to patch (even if it was rejected)
 
-https://github.com/zeromq/libzmq/releases/tag/v4.3.5
+https://github.com/namhyung/uftrace/blob/v0.14/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-define-missing-rebind-type.patch     | 62 -------------------
- package/zeromq/zeromq.hash                    |  9 ++-
- package/zeromq/zeromq.mk                      |  6 +-
- 3 files changed, 7 insertions(+), 70 deletions(-)
- delete mode 100644 package/zeromq/0001-define-missing-rebind-type.patch
+ .checkpackageignore                                             | 1 -
+ ...01-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch | 1 +
+ package/uftrace/uftrace.hash                                    | 2 +-
+ package/uftrace/uftrace.mk                                      | 2 +-
+ 4 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/zeromq/0001-define-missing-rebind-type.patch b/package/zeromq/0001-define-missing-rebind-type.patch
-deleted file mode 100644
-index f7484931e8..0000000000
---- a/package/zeromq/0001-define-missing-rebind-type.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 438d5d88392baffa6c2c5e0737d9de19d6686f0d Mon Sep 17 00:00:00 2001
--From: Sergei Trofimovich <slyich@gmail.com>
--Date: Tue, 20 Dec 2022 21:45:16 +0000
--Subject: [PATCH] src/secure_allocator.hpp: define missing 'rebind' type
--
--`gcc-13` added an assert to standard headers to make sure custom
--allocators have intended implementation of rebind type instead
--of inherited rebind. gcc change:
--    https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=64c986b49558a7
--
--Without the fix build fails on this week's `gcc-13` as:
--
--    [ 92%] Building CXX object tests/CMakeFiles/test_security_curve.dir/test_security_curve.cpp.o
--    In file included from /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/ext/alloc_traits.h:34,
--                     from /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/bits/stl_uninitialized.h:64,
--                     from /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/memory:69,
--                     from tests/../src/secure_allocator.hpp:42,
--                     from tests/../src/curve_client_tools.hpp:49,
--                     from tests/test_security_curve.cpp:53:
--    /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/bits/alloc_traits.h: In instantiation of 'struct std::__allocator_traits_base::__rebind<zmq::secure_allocator_t<unsigned char>, unsigned char, void>':
--    /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/bits/alloc_traits.h:94:11:   required by substitution of 'template<class _Alloc, class _Up> using std::__alloc_rebind = typename std::__allocator_traits_base::__rebind<_Alloc, _Up>::type [with _Alloc = zmq::secure_allocator_t<unsigned char>; _Up = unsigned char]'
--    /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/bits/alloc_traits.h:228:8:   required by substitution of 'template<class _Alloc> template<class _Tp> using std::allocator_traits< <template-parameter-1-1> >::rebind_alloc = std::__alloc_rebind<_Alloc, _Tp> [with _Tp = unsigned char; _Alloc = zmq::secure_allocator_t<unsigned char>]'
--    /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/ext/alloc_traits.h:126:65:   required from 'struct __gnu_cxx::__alloc_traits<zmq::secure_allocator_t<unsigned char>, unsigned char>::rebind<unsigned char>'
--    /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/bits/stl_vector.h:88:21:   required from 'struct std::_Vector_base<unsigned char, zmq::secure_allocator_t<unsigned char> >'
--    /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/bits/stl_vector.h:423:11:   required from 'class std::vector<unsigned char, zmq::secure_allocator_t<unsigned char> >'
--    tests/../src/curve_client_tools.hpp:64:76:   required from here
--    /<<NIX>>/gcc-13.0.0/include/c++/13.0.0/bits/alloc_traits.h:70:31: error: static assertion failed: allocator_traits<A>::rebind_alloc<A::value_type> must be A
--       70 |                         _Tp>::value,
--          |                               ^~~~~
--
--The change adds trivial `rebind` definition with expected return type
--and satisfies conversion requirements.
--
--Upstream: merged. Commit: bdd471fa17100fe84f64da348951dab3ee4780bb
--Signed-off-by: Sergei Trofimovich <slyich@gmail.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- src/secure_allocator.hpp | 11 +++++++++++
-- 1 file changed, 11 insertions(+)
--
--diff --git a/src/secure_allocator.hpp b/src/secure_allocator.hpp
--index e0871dcc99..5e97368911 100644
----- a/src/secure_allocator.hpp
--+++ b/src/secure_allocator.hpp
--@@ -99,6 +99,17 @@ bool operator!= (const secure_allocator_t<T> &, const secure_allocator_t<U> &)
-- #else
-- template <typename T> struct secure_allocator_t : std::allocator<T>
-- {
--+    secure_allocator_t () ZMQ_DEFAULT;
--+
--+    template <class U>
--+    secure_allocator_t (const secure_allocator_t<U> &) ZMQ_NOEXCEPT
--+    {
--+    }
--+
--+    template <class U> struct rebind
--+    {
--+        typedef secure_allocator_t<U> other;
--+    };
-- };
-- #endif
-- }
-diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
-index 5085fbca33..e5ac289656 100644
---- a/package/zeromq/zeromq.hash
-+++ b/package/zeromq/zeromq.hash
-@@ -1,7 +1,6 @@
- # From https://github.com/zeromq/libzmq/releases
--md5  c897d4005a3f0b8276b00b7921412379  zeromq-4.3.4.tar.gz
--sha1  47277a64749049123d1401600e8cfbab10a3ae28  zeromq-4.3.4.tar.gz
-+md5  ae933b1e98411fd7cb8309f9502d2737  zeromq-4.3.5.tar.gz
-+sha1  bdbf686c8a40ba638e21cf74e34dbb425e108500  zeromq-4.3.5.tar.gz
+diff --git a/.checkpackageignore b/.checkpackageignore
+index d5c894ff25..31f6672eb3 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1397,7 +1397,6 @@ package/uboot-tools/0003-tools-Makefile-fix-C-LD-FLAGS-with-CROSS_BUILD_TOOLS.pa
+ package/ubus/0001-Install-server-and-client-examples.patch Upstream
+ package/udpcast/0001-fix-musl-build.patch Upstream
+ package/uemacs/01-clear-ixon-termios-flag.patch Upstream
+-package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch Upstream
+ package/uhd/0001-host-CMakeLists-add-boost-unit_test_framework-requir.patch Upstream
+ package/uhttpd/0001-Remove-Werror.patch Upstream
+ package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch Upstream
+diff --git a/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch b/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
+index 6913012c3b..2855be0d9e 100644
+--- a/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
++++ b/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
+@@ -11,6 +11,7 @@ Using a #ifdef ... #endif test doesn't work as this value is defined
+ through an enum in glibc.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://github.com/namhyung/uftrace/pull/1389
+ ---
+  cmds/record.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
+index 195f0605c8..c4aad39016 100644
+--- a/package/uftrace/uftrace.hash
++++ b/package/uftrace/uftrace.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  c593001a89f5a85dd2ddf564805deb860e02471171b3f204944857336295c3e5  zeromq-4.3.4.tar.gz
--sha256  4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
--sha256  83f32abe61ee58ffb1b007412c08415168c052501dbf56d7a47aaaac52b03ef6  COPYING.LESSER
-+sha256  6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43  zeromq-4.3.5.tar.gz
-+sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  LICENSE
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 452c5f4291..137fad1a66 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -4,12 +4,12 @@
+-sha256  2aad01f27d4f18717b681824c7a28ac3e1efd5e7bbed3ec888a3ea5af60e3700  uftrace-0.12.tar.gz
++sha256  b81255bc288e79e96a5b158d4875fa6425ad51c85f4c4c8523c1defb9366ad12  uftrace-0.14.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
+index d36c3bd8f5..c005a32b76 100644
+--- a/package/uftrace/uftrace.mk
++++ b/package/uftrace/uftrace.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZEROMQ_VERSION = 4.3.4
-+ZEROMQ_VERSION = 4.3.5
- ZEROMQ_SITE = https://github.com/zeromq/libzmq/releases/download/v$(ZEROMQ_VERSION)
- ZEROMQ_INSTALL_STAGING = YES
- ZEROMQ_CONF_OPTS = --disable-Werror --without-documentation
--ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
--ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
-+ZEROMQ_LICENSE = MPL-2.0
-+ZEROMQ_LICENSE_FILES = LICENSE
- ZEROMQ_CPE_ID_VENDOR = zeromq
- ZEROMQ_CPE_ID_PRODUCT = libzmq
- 
+-UFTRACE_VERSION = 0.12
++UFTRACE_VERSION = 0.14
+ UFTRACE_SITE = $(call github,namhyung,uftrace,v$(UFTRACE_VERSION))
+ UFTRACE_LICENSE = GPL-2.0
+ UFTRACE_LICENSE_FILES = COPYING
 -- 
 2.42.0
 
