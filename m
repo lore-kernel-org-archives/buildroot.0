@@ -4,83 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A46CAC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 20:12:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB2A8C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 20:18:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D95270939;
-	Sun, 29 Oct 2023 20:12:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D95270939
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4698970935;
+	Sun, 29 Oct 2023 20:18:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4698970935
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RcVFSJ4q45FP; Sun, 29 Oct 2023 20:12:16 +0000 (UTC)
+	with ESMTP id ek8VGW6NQOMb; Sun, 29 Oct 2023 20:18:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 552D270937;
-	Sun, 29 Oct 2023 20:12:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 552D270937
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABE6A1BF870
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 20:12:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9840B7062A;
+	Sun, 29 Oct 2023 20:18:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9840B7062A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 51B1E1BF870
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 20:18:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9255185200
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 20:12:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9255185200
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28D10430CA
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 20:18:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28D10430CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7eiH0sDJ3tVy for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 20:12:12 +0000 (UTC)
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
- [IPv6:2a00:1450:4864:20::22c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 69362851F0
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 20:12:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69362851F0
-Received: by mail-lj1-x22c.google.com with SMTP id
- 38308e7fff4ca-2c5087d19a6so53609741fa.0
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 13:12:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698610330; x=1699215130;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=tHHBgk6IVCmhs/xS/0wfDRqRSD6rbSx+fx5nHQb+lb4=;
- b=N88voaZ9hNcfPm8E2+4aZgvaHUeQRTFXF50wM7D+OE07iHrPqEoGHe4YCcI4Tia5sU
- 8wK1E9sV0dmxBxOsm8c8B9E6lb6YRY/SRXUpSBi4GYMin5VKX+Ez059QzkrA3ccrfoMh
- PavmUZDyOc3nacionsZTgzYy4GdSRk/S1cdG8xGHK2yceyVsHMu00kmOM3E3OKG+aVio
- YJkw4biNcwGibTbU4qD8oX9PcM+gvNWZTUlHAbai3vZGllGxTaRLV/dN1/GMx+ga93Xz
- pioe2iKGd+LCBM4QWcqogJfn0ESSHEHUn3PsFhrxPsbU3DzufPDZyNZm6aGaNyVfLPa+
- gRYg==
-X-Gm-Message-State: AOJu0YwdqjNuc/Cj32g7Ld3D97Gtn5bhhX092qGAIYSsGoNcK3DqYsxd
- Ba8AZQJTBWHrBqYs4yMBPBF2ZhuejTlSXRtS2pI=
-X-Google-Smtp-Source: AGHT+IETErYKebm6aCoAroeYmonEd13pUZNhd1IpVBVSWp6HvZqQfAKU/EdYWxTRLC6mBh1Pgm3vdnUuldl3DteAVrg=
-X-Received: by 2002:a19:c510:0:b0:503:34b8:20b with SMTP id
- w16-20020a19c510000000b0050334b8020bmr5756344lfe.65.1698610329685; Sun, 29
- Oct 2023 13:12:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231028102435.1771460-1-yegorslists@googlemail.com>
- <CAGm1_kt2d-MUxuoJ+LF_pnNeiXXWyFGzZ1XYwnTAnp84ff+FZg@mail.gmail.com>
- <CADvTj4pyC-HhUAK3iJ=zRAUaw0WRQv09n-7Y45v2L-nkwgv-Vg@mail.gmail.com>
-In-Reply-To: <CADvTj4pyC-HhUAK3iJ=zRAUaw0WRQv09n-7Y45v2L-nkwgv-Vg@mail.gmail.com>
-Date: Sun, 29 Oct 2023 21:11:59 +0100
-Message-ID: <CAGm1_kvXMmZwf16m0h3-EqiSHjDXu07kS1pJA3eMLP9BoyC4dA@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1698610330; x=1699215130; darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=tHHBgk6IVCmhs/xS/0wfDRqRSD6rbSx+fx5nHQb+lb4=;
- b=QslSmGcg4QfBR+TJkfe1eoBUdaHQJIjMIbtZpxhA4X6hV+MQu7cqg15nFa5yHm852/
- s/UiDmaU8fw1mBEdr7j5FSlRS6yiyLSYVjTRyanC+Rwai8EBjgv/HJ+ZtsFcr+y50Wia
- YpgjH+mUHBZjnZiGChAd1oaToLmW09xhFQsdDZw2u+mynCm/crygeEJ03fyTxhcIf9rH
- u/zRcisYwvYd6TGfgxD8xrLHhNwVpCxWUoRyXXycOEoW2ljbMWFargBgSvriQhKTdTaq
- 4goJKLy8jKV5AcYUlqJeoRur+PnBSDVIdak0IRx9i/TfLOMyqXvFLGX0nSu1JwJVSZWZ
- EfBQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=QslSmGcg
-Subject: Re: [Buildroot] [RFC PATCH] package/pkg-python.mk: PEP517: add
- support for setuptools backend
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lHtDm0Yy0z_W for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 20:18:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12FBD430C0
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 20:18:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12FBD430C0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EF46F86134; Sun, 29 Oct 2023 20:18:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 29 Oct 2023 19:50:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9a51a07a9175cd564fffa89a6b8b851c258384a0
+X-Git-Newrev: 750392e95e480d0b6f9facb266187b5cd9bb3eb2
+X-Patchwork-Hint: ignore
+Message-Id: <20231029201851.EF46F86134@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/licheepi_zero: rename with
+ manufacturer prefix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,57 +57,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: adam.duskett@amarulasolutions.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSmFtZXMsIGFsbCwKCk9uIFNhdCwgT2N0IDI4LCAyMDIzIGF0IDEyOjQ04oCvUE0gSmFtZXMg
-SGlsbGlhcmQKPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gT24gU2F0LCBP
-Y3QgMjgsIDIwMjMgYXQgNDozMeKAr0FNIFllZ29yIFllZnJlbW92IDx5ZWdvcnNsaXN0c0Bnb29n
-bGVtYWlsLmNvbT4gd3JvdGU6Cj4+Cj4+IEhpIGFsbCwKPj4KPj4gT24gU2F0LCBPY3QgMjgsIDIw
-MjMgYXQgMTI6MjXigK9QTSA8eWVnb3JzbGlzdHNAZ29vZ2xlbWFpbC5jb20+IHdyb3RlOgo+PiA+
-Cj4+ID4gRnJvbTogWWVnb3IgWWVmcmVtb3YgPHllZ29yc2xpc3RzQGdvb2dsZW1haWwuY29tPgo+
-PiA+Cj4+ID4gU2luY2UgdmVyc2lvbiA0MS4wLjAsIHNldHVwdG9vbHMgaGFzIGFuIGV4cGVyaW1l
-bnRhbCBQRVA1MTcgc3VwcG9ydC4KPj4gPgo+PiA+IFNpZ25lZC1vZmYtYnk6IFllZ29yIFllZnJl
-bW92IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KPj4gPiAtLS0KPj4gPiAgcGFja2FnZS9w
-a2ctcHl0aG9uLm1rIHwgMiArLQo+PiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyks
-IDEgZGVsZXRpb24oLSkKPj4gPgo+PiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3BrZy1weXRob24u
-bWsgYi9wYWNrYWdlL3BrZy1weXRob24ubWsKPj4gPiBpbmRleCAyOGVlNGNiODVmLi4wMGY3MWY2
-YjE5IDEwMDY0NAo+PiA+IC0tLSBhL3BhY2thZ2UvcGtnLXB5dGhvbi5tawo+PiA+ICsrKyBiL3Bh
-Y2thZ2UvcGtnLXB5dGhvbi5tawo+PiA+IEBAIC0zMDAsNyArMzAwLDcgQEAgaWZlcSAoJCQoJCgy
-KV9TRVRVUF9UWVBFKSxzZXR1cHRvb2xzLXJ1c3QpCj4+ID4gICQoMilfREVQRU5ERU5DSUVTICs9
-IGhvc3QtcHl0aG9uLXNldHVwdG9vbHMtcnVzdAo+PiA+ICBlbmRpZgo+PiA+ICBlbHNlIGlmbmVx
-ICgkJChmaWx0ZXIgZmxpdCBtYXR1cmluIHBlcDUxNywkJCgkKDIpX1NFVFVQX1RZUEUpKSwpCj4+
-ID4gLSQoMilfREVQRU5ERU5DSUVTICs9IGhvc3QtcHl0aG9uLXB5cGEtYnVpbGQgaG9zdC1weXRo
-b24taW5zdGFsbGVyCj4+ID4gKyQoMilfREVQRU5ERU5DSUVTICs9IGhvc3QtcHl0aG9uLXB5cGEt
-YnVpbGQgaG9zdC1weXRob24taW5zdGFsbGVyIGhvc3QtcHl0aG9uLXNldHVwdG9vbHMKPj4gPiAg
-aWZlcSAoJCQoJCgyKV9TRVRVUF9UWVBFKSxmbGl0KQo+PiA+ICAkKDIpX0RFUEVOREVOQ0lFUyAr
-PSBob3N0LXB5dGhvbi1mbGl0LWNvcmUKPj4gPiAgZW5kaWYKPj4KPj4gVGhpcyBwYXRjaCBpcyBt
-b3JlIGEgd29ya2Fyb3VuZCB0byBjb252ZXJ0IHN1Y2ggcGFja2FnZXMgYXMKPj4gcHl0aG9uLXRv
-cm5hZG8sIHB5dGhvbi1jb25maWdvYmosIGV0Yy4gdG8gUEVQNTE3IGluZnJhc3RydWN0dXJlLiBU
-aGVzZQo+PiBwYWNrYWdlcyBqdXN0IHVzZSBhIGJ1aWxkLXN5c3RlbSBzZWN0aW9uIGFuZCBvdGhl
-cndpc2UgcmVseSBvbiB0aGUKPj4gc2V0dXAucHkgZmlsZToKPgo+Cj4gQXJlIHRoZXNlIGZhaWxp
-bmcgdG8gYnVpbGQgd2l0aG91dCBQRVA1MTcgaW5mcmFzdHJ1Y3R1cmUgZm9yIHNldHVwdG9vbHM/
-CgpObywgdGhleSBhcmUgd29ya2luZyBhcyBleHBlY3RlZCBpbiBib3RoICJ3b3JsZHMiLgoKPj4K
-Pj4gW2J1aWxkLXN5c3RlbV0KPj4gcmVxdWlyZXMgPSBbInNldHVwdG9vbHMiXQo+PiBidWlsZC1i
-YWNrZW5kID0gInNldHVwdG9vbHMuYnVpbGRfbWV0YSIKPj4KPj4gV2hhdCBpcyB0aGUgcGxhbiB0
-byBzdXBwb3J0IHRoaXMgYmFja2VuZD8gSnVzdCB1c2Ugc2V0dXB0b29scy1ydXN0IG9yCj4+IGNv
-bnZlcnQgIl9TRVRVUF9UWVBFPXNldHVwdG9vbHMiIHRvIFBFUDUxNyBhZnRlciB0aGUgaW50cm9k
-dWN0aW9uIG9mCj4+IFB5dGhvbiAxMi54Pwo+Cj4KPiBJIGFscmVhZHkgaGF2ZSBhIHBhdGNoIGNv
-bnZlcnRpbmcgb3VyIHNldHVwdG9vbHMgaW5mcmFzdHJ1Y3R1cmUgdG8gUEVQNTE3Ogo+IGh0dHBz
-Oi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDIzMDkzMDE1MjUxNy4xMDc3NTc2LTMtamFt
-ZXMuaGlsbGlhcmQxQGdtYWlsLmNvbS8KCkkgaGF2ZSBvdmVybG9va2VkIHlvdXIgc2VyaWVzLiBN
-ZWFud2hpbGUsIEkgY291bGQgdGVzdCBpdCAoYXMgeW91IGhhdmUKcHJvYmFibHkgc2VlbikgYW5k
-IHNvIGZhciwgYm90aCBteSBwYWNrYWdlcyBhbmQgdG9ybmFkbyBjb3VsZCBiZQpzdWNjZXNzZnVs
-bHkgYnVpbHQuIEJ1dCBhdCBzb21lIHBvaW50LCBJIHJhbiBhY3Jvc3MgdGhlIHB5dGhvbi1tc2dw
-YWNrCmlzc3VlLCB3aGljaCB5b3UgaGF2ZSBhbHJlYWR5IHRyaWVkIHRvIGZpeC4gQXJlIHlvdSBn
-b2luZyB0byBwb3N0IHY0Cm9mIHlvdXIgc2VyaWVzIGNvbnRhaW5pbmcgdGhlIHB5dGhvbi1tc2dw
-YWNrIGZpeD8KClJlZ2FyZHMsClllZ29yCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=750392e95e480d0b6f9facb266187b5cd9bb3eb2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit 72c653367daa (board/licheepi_zero: move board files to their own
+directory) forgot to rename the defconfig file, even though the
+readme.txt was updated.
+
+Do the rename now.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/{licheepi_zero_defconfig => sipeed_licheepi_zero_defconfig} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+diff --git a/configs/licheepi_zero_defconfig b/configs/sipeed_licheepi_zero_defconfig
+similarity index 100%
+rename from configs/licheepi_zero_defconfig
+rename to configs/sipeed_licheepi_zero_defconfig
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
