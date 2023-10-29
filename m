@@ -4,47 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7051C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 18:44:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E634C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 18:44:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9057670833;
-	Sun, 29 Oct 2023 18:44:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9057670833
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0495270861;
+	Sun, 29 Oct 2023 18:44:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0495270861
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QzP8qkVFgKJD; Sun, 29 Oct 2023 18:44:13 +0000 (UTC)
+	with ESMTP id D4EE3CMGNNx2; Sun, 29 Oct 2023 18:44:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E20870827;
-	Sun, 29 Oct 2023 18:44:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E20870827
+	by smtp3.osuosl.org (Postfix) with ESMTP id 127D47083F;
+	Sun, 29 Oct 2023 18:44:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 127D47083F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9E1D11BF33E
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 18:43:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 28DDB1BF33E
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 18:44:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 773EE4EFD3
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 18:43:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 773EE4EFD3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 017AE4F025
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 18:44:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 017AE4F025
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RfHkdvO5hrbM for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 18:43:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C1354ECF1
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 18:43:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C1354ECF1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2515F86109; Sun, 29 Oct 2023 18:43:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 29 Oct 2023 19:43:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 72c653367daaccb47089bfed4ca7ce459a75bde7
-X-Git-Newrev: 9a51a07a9175cd564fffa89a6b8b851c258384a0
-X-Patchwork-Hint: ignore
-Message-Id: <20231029184356.2515F86109@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/sipeed_licheepi_nano: new board
+ with ESMTP id 6JMR4pCddyio for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 18:44:37 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 857E14EFD3
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 18:44:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 857E14EFD3
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-32f760cbff3so1287437f8f.0
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 11:44:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698605075; x=1699209875;
+ h=mime-version:user-agent:reply-to:references:in-reply-to:message-id
+ :date:cc:subject:to:from:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=a9QV8oY92ikPTSFm2gfg3Pm8sRfWmoC4+Sjpnj+xkR8=;
+ b=Ruzno/QNi9z19e8kIXpgesRugovh1HWrpRTMaZ+pnU5n8lfEsWw05q5zzQMDm+gzx1
+ DVr493rpCX/KXddgePtfmkVPPaiy/VlsSM5aRdnW3AR65efRMogSCo9o5eAze/M7GR2O
+ DsuLad8lUHZ/BjUOBBCqmiSNJ4TZoM441IgaUK1kDrB1dYXvoe3Gczsm/G4irQ7lAWX+
+ PnKGU6fKhVhgcSdzjXTxPjVVbTZeeF18O5QmPFXMK+jB8cSHUJPnNNDswY+BZqbciMDM
+ D1IbBT/fZQVnEa9MA4ZDiY7FjNehYhoL9aXruTubPpFaZdNkSDq7Ygg8G+M8KAzyqSxr
+ 2Bpg==
+X-Gm-Message-State: AOJu0YwBlv4bU6dgk2MiXm+r9UHnyIDRAAHLoIEx5+m+TzDHBdLW1slC
+ 2r0DPz32FcKgHOwykp+613+GyCaC1mE=
+X-Google-Smtp-Source: AGHT+IE/kQLkd1nju48IjUczqJy5vGRtNdcXzHv6r4gNxHCZWEqBpXVtNtWLrq5Z3eoUJQV8KraFDQ==
+X-Received: by 2002:a05:6000:1a85:b0:32f:8a1e:6eaf with SMTP id
+ f5-20020a0560001a8500b0032f8a1e6eafmr170684wry.60.1698605075044; 
+ Sun, 29 Oct 2023 11:44:35 -0700 (PDT)
+Received: from [192.168.7.144] (epd88.neoplus.adsl.tpnet.pl. [83.20.45.88])
+ by smtp.gmail.com with ESMTPSA id
+ e18-20020a5d5012000000b0032dbf26e7aesm6457904wrt.65.2023.10.29.11.44.34
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Sun, 29 Oct 2023 11:44:34 -0700 (PDT)
+From: =?utf-8?q?=c5=81ukasz=20Przenios=c5=82o?= <bremenpl@gmail.com>
+To: "Edgar Bonet" <bonet@grenoble.cnrs.fr>
+Date: Sun, 29 Oct 2023 18:44:33 +0000
+Message-Id: <em29cb4aaa-8ce7-4449-986c-81c594d64587@9e2fe6c2.com>
+In-Reply-To: <61e80819-c901-486c-afdd-1e69441821e2@grenoble.cnrs.fr>
+References: <em9eec97a0-87a4-4352-9e89-03948b436830@9e2fe6c2.com>
+ <61e80819-c901-486c-afdd-1e69441821e2@grenoble.cnrs.fr>
+User-Agent: eM_Client/9.2.2093.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1698605075; x=1699209875; darn=buildroot.org;
+ h=mime-version:user-agent:reply-to:references:in-reply-to:message-id
+ :date:cc:subject:to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=a9QV8oY92ikPTSFm2gfg3Pm8sRfWmoC4+Sjpnj+xkR8=;
+ b=IF5OYxCFGqVyHbJ94gCukwJywr7xQV17tyTxbCDBmEdtzh/O3dYMKIsytmaziO1fj1
+ h/MWCIvSOtGWBu22pGXRyk9z5rUZQsNnEnQn69snE2/RpEBZ9zK+z/3iL9byrvKHxhu3
+ yG3+8XLMnk10g1ccFCxLzIo52p8HhawBi1Orpz0SMGNE+6MN8jAOGwPpq2BMNvQsSDjK
+ WkyLlNePiSjgoaV5Qm8s113XZTdKsS2HOHOGj0BhW2Yc5o9Ab/sSGnPpt/DR3phWqS7y
+ OayhgG752hQuIIOze/LhyJl9BOuGI/Nf8x9kKs6Jv1ci+VxtNIZtVOIJl4dMFdK8m9yy
+ DOzg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=IF5OYxCF
+Subject: Re: [Buildroot] Help with DTO
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,248 +96,255 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Reply-To: =?utf-8?q?=c5=81ukasz=20Przenios=c5=82o?= <bremenpl@gmail.com>
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8726480861246970363=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a51a07a9175cd564fffa89a6b8b851c258384a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============8726480861246970363==
+Content-Type: multipart/alternative;
+ boundary="------=_MBF84AD12C-2F47-4730-85E0-4A8A5EFE1F4B"
 
-Add support for the LicheePi Nano with mainline components:
-  - U-Boot 2023.04
-  - Linux 6.5.9
+--------=_MBF84AD12C-2F47-4730-85E0-4A8A5EFE1F4B
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-Board homepage and more usable WiKi:
-  - https://wiki.sipeed.com/hardware/en/lichee/Nano/Nano.html
-  - https://linux-sunxi.org/LicheePi_Nano
+Hi Edgar and all,
+With your suggestion:
 
-linux.fragment is required to disable some features in order to keep the
-kernel size small, otherwise the board does not boot due to limited
-memory. See note in readme.txt.
+If you want to play with the GPIOs, I suggest you install the tools that
+come with libgpiod: in Target packages / Libraries / Hardware handling,
+select =E2=80=9Clibgpiod=E2=80=9D, then =E2=80=9Cinstall tools=E2=80=9D. Th=
+en, on the booted system,
+type
 
-Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
-[yann.morin.1998@free.fr:
-  - use fixed kernel version
-  - use manufacturer directory
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- board/sipeed/licheepi_nano/genimage.cfg   | 33 ++++++++++++
- board/sipeed/licheepi_nano/linux.fragment | 11 ++++
- board/sipeed/licheepi_nano/readme.txt     | 84 +++++++++++++++++++++++++++++++
- board/sipeed/licheepi_nano/uboot.fragment |  3 ++
- configs/sipeed_licheepi_nano_defconfig    | 45 +++++++++++++++++
- 5 files changed, 176 insertions(+)
+     gpiodetect
+     gpioinfo
 
-diff --git a/board/sipeed/licheepi_nano/genimage.cfg b/board/sipeed/licheepi_nano/genimage.cfg
-new file mode 100644
-index 0000000000..5e398eeb21
---- /dev/null
-+++ b/board/sipeed/licheepi_nano/genimage.cfg
-@@ -0,0 +1,33 @@
-+flash w25q128 {
-+	pebsize = 65536
-+	numpebs = 256
-+	minimum-io-unit-size = 1
-+	sub-page-size = 1
-+	vid-header-offset = 64
-+}
-+
-+image flash.bin {
-+	flash {}
-+	flashtype = w25q128
-+
-+	partition uboot {
-+		image = "u-boot-sunxi-with-spl.bin"
-+		size = 512K
-+	}
-+
-+	partition dtb {
-+		image = "suniv-f1c100s-licheepi-nano.dtb"
-+		size = 64K
-+	}
-+
-+	partition zimage {
-+		image = "zImage"
-+		size = 5M
-+	}
-+
-+	partition rootfs {
-+		image = "rootfs.jffs2"
-+		size = 0
-+	}
-+}
-+
-diff --git a/board/sipeed/licheepi_nano/linux.fragment b/board/sipeed/licheepi_nano/linux.fragment
-new file mode 100644
-index 0000000000..af68f28167
---- /dev/null
-+++ b/board/sipeed/licheepi_nano/linux.fragment
-@@ -0,0 +1,11 @@
-+# CONFIG_NET is not set
-+# CONFIG_DRM is not set
-+# CONFIG_CMA is not set
-+# CONFIG_ARCH_MULTI_V7 is not set
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_MTD=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_SPI_NOR=y
-+# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_JFFS2_FS=y
-diff --git a/board/sipeed/licheepi_nano/readme.txt b/board/sipeed/licheepi_nano/readme.txt
-new file mode 100644
-index 0000000000..1f1f8ef17d
---- /dev/null
-+++ b/board/sipeed/licheepi_nano/readme.txt
-@@ -0,0 +1,84 @@
-+Intro
-+=====
-+
-+This directory contains a buildroot configuration for building a
-+LicheePi Nano image which can be flashed into the board.
-+
-+This frees the MMC port which can be used for an additional SD
-+card of for a WiFi adapter.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot
-+-------------------
-+
-+  $ make sipeed_licheepi_nano_defconfig
-+
-+Build the rootfs
-+----------------
-+
-+Note: you will need to have access to the network, since Buildroot
-+will download the packages' sources.
-+
-+You may now build your rootfs with:
-+
-+  $ make
-+
-+(This may take a while, consider getting yourself a coffee ;-) )
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    +-- flash.bin
-+    +-- rootfs.jffs2
-+    +-- rootfs.tar
-+    +-- suniv-f1c100s-licheepi-nano.dtb
-+    +-- u-boot.bin
-+    +-- u-boot-sunxi-with-spl.bin
-+    `-- zImage
-+
-+How to flash
-+============
-+
-+Once the build process is finished you will have an image called
-+"flash.bin" in the output/images/ directory. It contains the
-+bootloader, the device tree, the kernel and the root file system.
-+
-+The device can be flashed when it is in special mode called "FEL
-+mode". There are multiple ways to enter this mode described here:
-+https://linux-sunxi.org/FEL#Entering_FEL_mode
-+
-+One way is to write one file from sunxi-tools to a SD card with:
-+
-+  $ sudo dd if=./output/build/host-sunxi-tools-*/bin/fel-sdboot.sunxi of=/dev/sdX bs=1024 seek=8
-+
-+Once the SD card is burned, insert it into your LicheePi Nano board,
-+and plug the USB cable. A new USB device should be visible with
-+lsusb:
-+
-+  1f3a:efe8 Allwinner Technology sunxi SoC OTG connector in FEL/flashing mode
-+
-+The image can be flashed with:
-+
-+  $ sudo ./output/host/bin/sunxi-fel -p spiflash-write 0 output/images/flash.bin
-+
-+Once this completes, remove the SD card and power the board. Your
-+new system should come up now and start a console on the UART0
-+serial port.
-+
-+Note
-+====
-+
-+Some standard kernel features are disabled using the fragment in
-+order to reduce the size. They can be enabled again if other
-+features are disabled instead.
-+
-+For U-Boot, the upstream repository is preferred and the system
-+boots, but loading the image from the flash takes a long time. It
-+is much faster when using the branch "licheepi-nano-v2020.01" of
-+this fork:
-+https://github.com/florpor/u-boot
-diff --git a/board/sipeed/licheepi_nano/uboot.fragment b/board/sipeed/licheepi_nano/uboot.fragment
-new file mode 100644
-index 0000000000..39f2bfe742
---- /dev/null
-+++ b/board/sipeed/licheepi_nano/uboot.fragment
-@@ -0,0 +1,3 @@
-+CONFIG_USE_BOOTARGS=y
-+CONFIG_BOOTARGS="console=tty0 console=ttyS0,115200 panic=5 rootwait root=/dev/mtdblock3 rw rootfstype=jffs2 mtdparts=spi0.0:512k(uboot)ro,64k(dtb),5M(kernel)ro,-(rootfs)"
-+CONFIG_BOOTCOMMAND="sf probe 0 50000000; sf read 0x80C00000 0x80000 0x4000; sf read 0x80008000 0x90000 0x500000; bootz 0x80008000 - 0x80C00000"
-diff --git a/configs/sipeed_licheepi_nano_defconfig b/configs/sipeed_licheepi_nano_defconfig
-new file mode 100644
-index 0000000000..8be26165d9
---- /dev/null
-+++ b/configs/sipeed_licheepi_nano_defconfig
-@@ -0,0 +1,45 @@
-+# Target options
-+BR2_arm=y
-+
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="licheepi-nano"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Nano"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/licheepi_nano/genimage.cfg"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.5.9"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/licheepi_nano/linux.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/suniv-f1c100s-licheepi-nano"
-+
-+# Filesystem images
-+BR2_TARGET_ROOTFS_JFFS2=y
-+BR2_TARGET_ROOTFS_JFFS2_FLASH_64=y
-+BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
-+BR2_TARGET_ROOTFS_JFFS2_PAD=y
-+
-+# Bootloaders
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="licheepi_nano"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/sipeed/licheepi_nano/uboot.fragment"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+
-+# Required host utilities
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_E2FSPROGS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_SUNXI_TOOLS=y
+You should see all the available GPIO chips, then all the GPIO lines.
+
+I have installed libgpiod and I am able to see the mentioned tools:
+
+gpiodetect  gpiofind    gpioget     gpioinfo    gpiomon     gpioset
+
+The problem is that thse mentioned commands provide no output in my=20
+shell (here run one by one with no output):
+# gpiodetect
+# gpioinfo
+#
+
+And I think none of these libgpiod tools do... At the same time, I am=20
+able to use the old sysfs way to export a gpio and toggle it and so on.=20
+I tried googling around, but I could find no reference to these tools=20
+not providing any output.
+
+Am I missing anything in the buildroot config? In the menuconfig I have=20
+checked both libgpiod and its tools... I would appreciate all feedback!
+
+--
+=C5=81ukasz Przenios=C5=82o
+
+
+------ Original Message ------
+From "Edgar Bonet" <bonet@grenoble.cnrs.fr>
+To "=C5=81ukasz Przenios=C5=82o" <bremenpl@gmail.com>; buildroot@buildroot.=
+org
+Date 2023-10-28 20:58:38
+Subject Re: [Buildroot] Help with DTO
+
+>Hello!
+>
+>=C5=81ukasz Przenios=C5=82o wrote, about the BeagleBone:
+>>  So I have the HW and virgin working Buildroot image baked thanks to
+>>  this tutorial.
+>>  (https://blog.billvanleeuwen.ca/creating-a-minimal-linux-system-for-the=
+-beaglebone-black-with-buildroot)
+>
+>This tutorial walks you through a manual configuration. Note that
+>Buildroot ships a ready-made configuration you can use:
+>
+>     make beaglebone_defconfig  # load the ready-made defconfig
+>     make menuconfig            # if you want to tweak it
+>     make
+>
+>>  What I wanted to do next is to create a device tree overlay for all
+>>  required GPIOs that would be compiled at kernel build time.
+>
+>I do not understand why you need a device tree overlay. The tutorial
+>gets you a kernel together with the am335x-boneblack device tree. This
+>device tree already defines four GPIO chips. Can't you see them? Try
+>
+>     ls /dev/gpiochip*
+>
+>If you want to play with the GPIOs, I suggest you install the tools that
+>come with libgpiod: in Target packages / Libraries / Hardware handling,
+>select =E2=80=9Clibgpiod=E2=80=9D, then =E2=80=9Cinstall tools=E2=80=9D. T=
+hen, on the booted system,
+>type
+>
+>     gpiodetect
+>     gpioinfo
+>
+>You should see all the available GPIO chips, then all the GPIO lines.
+>
+>Regards,
+>
+>Edgar.
+--------=_MBF84AD12C-2F47-4730-85E0-4A8A5EFE1F4B
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+
+<style id=3D"css_styles" type=3D"text/css"><!--blockquote.cite { margin-lef=
+t: 5px; margin-right: 0px; padding-left: 10px; padding-right:0px; border-le=
+ft: 1px solid #cccccc }
+blockquote.cite2 {margin-left: 5px; margin-right: 0px; padding-left: 10px;=
+ padding-right:0px; border-left: 1px solid #cccccc; margin-top: 3px; padding=
+-top: 0px; }
+a img { border: 0px; }
+li[style=3D'text-align: center;'], li[style=3D'text-align: center; '], li[s=
+tyle=3D'text-align: right;'], li[style=3D'text-align: right; '] {  list-sty=
+le-position: inside;}
+body { font-family: Verdana; font-size: 12pt; }
+.quote { margin-left: 1em; margin-right: 1em; border-left: 5px #ebebeb soli=
+d; padding-left: 0.3em; }
+--></style></head>
+<body><div>Hi Edgar and all,</div><div>With your suggestion:</div><div><br=
+ /><div class=3D"quote"><div id=3D"xff91c0985c244ed88f8cd8489f66bfd2"><div c=
+lass=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3px 0px=
+ 16px 5px;">If you want to play with the GPIOs, I suggest you install the to=
+ols that</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">come with libgpiod: in Target packages / Libraries / Hardw=
+are handling,</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">select =E2=80=9Clibgpiod=E2=80=9D, then =E2=80=9Cinstall t=
+ools=E2=80=9D. Then, on the booted system,</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">type</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">=C2=A0</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">    gpiodetect</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">    gpioinfo</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">=C2=A0</div>
+<div class=3D"plain_line" style=3D"background-color:rgba(0,0,0,0);margin:3p=
+x 0px 16px 5px;">You should see all the available GPIO chips, then all the=
+ GPIO lines.</div></div></div></div><div><br /></div>
+<div>I have installed libgpiod and I am able to see the mentioned tools:</d=
+iv><div><br /></div><div><font face=3D"Consolas" size=3D"2" style=3D"font-s=
+ize: 10pt;">gpiodetect=C2=A0 gpiofind=C2=A0 =C2=A0 gpioget=C2=A0 =C2=A0=C2=
+=A0 gpioinfo=C2=A0 =C2=A0 gpiomon=C2=A0 =C2=A0=C2=A0 gpioset
+</font></div><div><br /></div><div>The problem is that thse mentioned comma=
+nds provide no output in my shell (here run one by one with no output):</di=
+v><div>
+</div><div><font face=3D"Consolas" size=3D"2" style=3D"font-size: 10pt;">#=
+ gpiodetect
+</font></div><div><font face=3D"Consolas" size=3D"2" style=3D"font-size: 10=
+pt;"># gpioinfo
+</font></div><div><font face=3D"Consolas" size=3D"2" style=3D"font-size: 10=
+pt;">#
+</font></div><div><br /></div><div>And I think none of these libgpiod tools =
+do... At the same time, I am able to use the old sysfs way to export a gpi=
+o and toggle it and so on. I tried googling around, but I could find no ref=
+erence to these tools not providing any output.=C2=A0</div><div><br /></div=
+><div>Am I missing anything in the buildroot config? In the menuconfig I ha=
+ve checked both libgpiod and its tools... I would appreciate all feedback!<=
+/div><div><br /></div><div id=3D"signature_old" style=3D"clear:both">--<div=
+>=C5=81ukasz Przenios=C5=82o</div></div><div style=3D"clear:both"><br /></d=
+iv>
+<div><br /></div>
+<div>
+<div>------ Original Message ------</div>
+<div>From "Edgar Bonet" &lt;<a href=3D"mailto:bonet@grenoble.cnrs.fr" style=
+=3D"">bonet@grenoble.cnrs.fr</a>&gt;</div>
+<div>To "=C5=81ukasz Przenios=C5=82o" &lt;<a href=3D"mailto:bremenpl@gmail.=
+com">bremenpl@gmail.com</a>&gt;; <a href=3D"mailto:buildroot@buildroot.org"=
+>buildroot@buildroot.org</a></div>
+<div>Date 2023-10-28 20:58:38</div>
+<div>Subject Re: [Buildroot] Help with DTO</div></div><div><br /></div>
+<div id=3D"x0859f427cbff4a7" class=3D"plain"><blockquote cite=3D"61e80819-c=
+901-486c-afdd-1e69441821e2@grenoble.cnrs.fr" type=3D"cite" class=3D"cite2">
+
+<div class=3D"plain_line">Hello!</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">=C5=81ukasz Przenios=C5=82o wrote, about the Beag=
+leBone:</div>
+<blockquote type=3D"cite" class=3D"cite">
+<div class=3D"plain_line"> So I have the HW and virgin working Buildroot im=
+age baked thanks to</div>
+<div class=3D"plain_line"> this tutorial.</div>
+<div class=3D"plain_line"> (<a href=3D"https://blog.billvanleeuwen.ca/creat=
+ing-a-minimal-linux-system-for-the-beaglebone-black-with-buildroot">https:/=
+/blog.billvanleeuwen.ca/creating-a-minimal-linux-system-for-the-beaglebone-=
+black-with-buildroot</a>)</div>
+</blockquote>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">This tutorial walks you through a manual configur=
+ation. Note that</div>
+<div class=3D"plain_line">Buildroot ships a ready-made configuration you ca=
+n use:</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">    make beaglebone_defconfig  # load the ready-m=
+ade defconfig</div>
+<div class=3D"plain_line">    make menuconfig            # if you want to t=
+weak it</div>
+<div class=3D"plain_line">    make</div>
+<div class=3D"plain_line">=C2=A0</div>
+<blockquote type=3D"cite" class=3D"cite2">
+<div class=3D"plain_line"> What I wanted to do next is to create a device t=
+ree overlay for all</div>
+<div class=3D"plain_line"> required GPIOs that would be compiled at kernel=
+ build time.</div>
+</blockquote>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">I do not understand why you need a device tree ov=
+erlay. The tutorial</div>
+<div class=3D"plain_line">gets you a kernel together with the am335x-bonebl=
+ack device tree. This</div>
+<div class=3D"plain_line">device tree already defines four GPIO chips. Can'=
+t you see them? Try</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">    ls /dev/gpiochip*</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">If you want to play with the GPIOs, I suggest you =
+install the tools that</div>
+<div class=3D"plain_line">come with libgpiod: in Target packages / Librarie=
+s / Hardware handling,</div>
+<div class=3D"plain_line">select =E2=80=9Clibgpiod=E2=80=9D, then =E2=80=9C=
+install tools=E2=80=9D. Then, on the booted system,</div>
+<div class=3D"plain_line">type</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">    gpiodetect</div>
+<div class=3D"plain_line">    gpioinfo</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">You should see all the available GPIO chips, then =
+all the GPIO lines.</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">Regards,</div>
+<div class=3D"plain_line">=C2=A0</div>
+<div class=3D"plain_line">Edgar.</div>
+</blockquote></div>
+
+
+</body></html>
+--------=_MBF84AD12C-2F47-4730-85E0-4A8A5EFE1F4B--
+
+
+--===============8726480861246970363==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8726480861246970363==--
+
