@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F323C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B26A2C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:39:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C97F7040D;
-	Sun, 29 Oct 2023 08:39:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C97F7040D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 421077040D;
+	Sun, 29 Oct 2023 08:39:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 421077040D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T2xC3u10Wxfx; Sun, 29 Oct 2023 08:39:04 +0000 (UTC)
+	with ESMTP id EaGoX5tH6bFF; Sun, 29 Oct 2023 08:39:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D830B7040A;
-	Sun, 29 Oct 2023 08:39:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D830B7040A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4AE561BF41A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CFBB7040F;
+	Sun, 29 Oct 2023 08:39:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CFBB7040F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E1211BF8C7
  for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31DD084C0A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 453994ECC9
  for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:39:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31DD084C0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 453994ECC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n50I9hD8L4ns for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lq69RiWwNGlt for <buildroot@lists.busybox.net>;
  Sun, 29 Oct 2023 08:39:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6818484C07
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72A874ECC4
  for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:39:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6818484C07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72A874ECC4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55BBC860E0; Sun, 29 Oct 2023 08:39:01 +0000 (UTC)
+ id 5FCEF860E1; Sun, 29 Oct 2023 08:39:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Oct 2023 09:32:52 +0100
+Date: Sun, 29 Oct 2023 09:32:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c1b3aac218afcda84b5ce20fdbb8b1522457bd18
-X-Git-Newrev: c4006bff7cb51041bb61740880ed5839ccc30bc7
+X-Git-Oldrev: c4006bff7cb51041bb61740880ed5839ccc30bc7
+X-Git-Newrev: b02338f06635478df7f862cfeef261ac873787d5
 X-Patchwork-Hint: ignore
-Message-Id: <20231029083901.55BBC860E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl: security bump version
- to 3.1.4
+Message-Id: <20231029083901.5FCEF860E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdbus-cpp: bump to version 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4006bff7cb51041bb61740880ed5839ccc30bc7
+commit: https://git.buildroot.net/buildroot/commit/?id=b02338f06635478df7f862cfeef261ac873787d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2023-5363:
-https://www.openssl.org/news/secadv/20231024.txt
-https://www.openssl.org/news/vulnerabilities.html
+Changelog:
+https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v1.4.0
 
-Changelog: https://www.openssl.org/news/cl31.txt
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sdbus-cpp/sdbus-cpp.hash | 2 +-
+ package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 9126175977..29ced7cddd 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-3.1.3.tar.gz.sha256
--sha256  f0316a2ebd89e7f2352976445458689f80302093788c466692fb2a188b2eacf6  openssl-3.1.3.tar.gz
-+# From https://www.openssl.org/source/openssl-3.1.4.tar.gz.sha256
-+sha256  840af5366ab9b522bde525826be3ef0fb0af81c6a9ebd84caa600fea1731eee3  openssl-3.1.4.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index b69ef032f2..b8b6ec6bff 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
+diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
+index f5fc8d6868..379864e3ba 100644
+--- a/package/sdbus-cpp/sdbus-cpp.hash
++++ b/package/sdbus-cpp/sdbus-cpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  d44f59abdd64d8f1ca3af7db58bc6518cb081fc9ff16285c3d75a68f5c073d10  v1.3.0.tar.gz
++sha256  ca7405c7f0f9ae3023dcfa37bc68974c4b8a1c9ea2909b970e0aedc3e8657ee6  v1.4.0.tar.gz
+ sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
+ sha256  a1c9e75e25d8f2ce18017c88978edab2f0dbc7814ad0697d4ff2e5e59959f657  COPYING-LGPL-Exception
+diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
+index 2a6b67d6e3..2c3844094e 100644
+--- a/package/sdbus-cpp/sdbus-cpp.mk
++++ b/package/sdbus-cpp/sdbus-cpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 3.1.3
-+LIBOPENSSL_VERSION = 3.1.4
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+-SDBUS_CPP_VERSION = 1.3.0
++SDBUS_CPP_VERSION = 1.4.0
+ SDBUS_CPP_SOURCE = v$(SDBUS_CPP_VERSION).tar.gz
+ SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
+ SDBUS_CPP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
