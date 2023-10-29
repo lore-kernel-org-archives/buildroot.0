@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FAC7C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C201C4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 260B560A80;
-	Sun, 29 Oct 2023 08:42:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 260B560A80
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54A3360F5E;
+	Sun, 29 Oct 2023 08:43:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54A3360F5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9iI5uTYCIQGc; Sun, 29 Oct 2023 08:42:48 +0000 (UTC)
+	with ESMTP id 3SBSUtroRKX4; Sun, 29 Oct 2023 08:43:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0B8360AF1;
-	Sun, 29 Oct 2023 08:42:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0B8360AF1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E9E671BF41A
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:42:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9302560AF1;
+	Sun, 29 Oct 2023 08:43:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9302560AF1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DC361BF41A
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D03204ECD6
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:42:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D03204ECD6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63CF884C1C
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:43:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63CF884C1C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9Yv4843pepSO for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 08:42:41 +0000 (UTC)
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B9B604ECD2
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:42:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9B604ECD2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d7XJcua6MJhM for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 08:43:20 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6E9EE84C1A
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:43:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E9EE84C1A
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:de1f:355b:eff2:ec6])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id CE6C12003DA;
- Sun, 29 Oct 2023 09:42:36 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id B354120041D;
+ Sun, 29 Oct 2023 09:43:16 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Oct 2023 09:42:36 +0100
-Date: Sun, 29 Oct 2023 09:42:36 +0100
+ Sun, 29 Oct 2023 09:43:16 +0100
+Date: Sun, 29 Oct 2023 09:43:16 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Stefan Agner <stefan@agner.ch>
-Message-ID: <20231029084236.GK687180@scaer>
-References: <b0e4b3f0059d978aaa662b56826d66f737770c96.1698421556.git.stefan@agner.ch>
- <e3bc2a06143633266e9c8dae5e6bc397cb7748eb.1698421556.git.stefan@agner.ch>
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20231029084316.GL687180@scaer>
+References: <20231027050817.17828-1-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <e3bc2a06143633266e9c8dae5e6bc397cb7748eb.1698421556.git.stefan@agner.ch>
+In-Reply-To: <20231027050817.17828-1-bernd@kuhls.net>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698568959;
- bh=cH2ByE8MWPdgzWv6jvahaksiWW6llGGlFm/kqpUFReA=;
+ d=free.fr; s=smtp-20201208; t=1698568998;
+ bh=sK5IGJjMmGvvg9X9bGvfX6iYFImrOfhT9dI1paXpLR4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=SsIKyg6fdtldsi/YSZI1YH38ZeW7DY5jCYEWGl1vixKKf7/VNQrZTPFSW4pjINtj8
- VO/AezuRrHeTle3XkEdu1VU0NXnZKqUOqEyDyvicTgs9LE0EJ419hIeqmGLGKrCTMo
- K6YMnPy/DmNRMoHzgUlzgyAOe/BgEURgZBOO6DMK+pVG0ItJFHVTmPnii9RhRBcSVQ
- zF9iaM4UCJ6L2Fy2QHAk5ajA1nwuiqZ2F3TY+b3YV3evRBG0Ak/QLkHq+4LJCIep4D
- L4sF9WSW8g6CBW5Kzpb4v79X6gvvuHeIeJhpjd4d9pGOfdBGA5GUbBkZV2kBus0qjm
- bR4YLN9h9DNaw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=dfefZ7/vJNTOHXAoPy6LPpRsW1hQ5c1+5FNUi6S/w12WS/8K9WagWs9KJom3LMqSS
+ K7OOxU2gf0xNMVAG/cB1kXgBrKTU4YXnOhBLKFQqJU5bRh0AeSA2HFJo1mQOISvkEq
+ fns8HmUZUWnw3JQu+zplZfvtE0tQha1h0QYzRZPAbvt3yypB6sJFGOkEb4G9EDggw9
+ 5vUZ6hDNpVMoT1qpB02u1qo55c3p6J5jnwLwcAWWqkwKxGIRgd5SgMzDnkO1KlPSWB
+ AybrMh+u+HBBXdyzlJx00FrhOrSB17Nfz1b9MHycImt13QZRsMN2tj2RbnVLmm2tJA
+ 2CRod9bQV0J1g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SsIKyg6f
-Subject: Re: [Buildroot] [PATCH 2/2] package/docker-cli: bump version to
- v24.0.7
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=dfefZ7/v
+Subject: Re: [Buildroot] [PATCH 1/1] package/onevpl-intel-gpu: bump version
+ to 23.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,20 +76,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: christian@aperture.us, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Stefan, All,
+Bernd, All,
 
-On 2023-10-27 17:46 +0200, Stefan Agner spake thusly:
-> Minor bugfix in docker ps status description.
-> 
-> https://github.com/moby/moby/releases/tag/v24.0.7
-> 
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
+On 2023-10-27 07:08 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to master, thanks.
 
@@ -98,34 +93,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/docker-cli/docker-cli.hash | 2 +-
->  package/docker-cli/docker-cli.mk   | 2 +-
+>  package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
+>  package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-> index 5d8c1b0f59..9c8d08bba5 100644
-> --- a/package/docker-cli/docker-cli.hash
-> +++ b/package/docker-cli/docker-cli.hash
+> diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+> index fa25c507eb..5f7728e5f9 100644
+> --- a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+> +++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
 > @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  c1a4a580ced3633e489c5c9869a20198415da44df7023fdc200d425cdf5fa652  docker-cli-24.0.6.tar.gz
-> +sha256  72a54d131c28938221c81bd08364459fed9c71c093d4d615d324aaf31de6db1d  docker-cli-24.0.7.tar.gz
->  sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-> diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-> index 53c9ddb6b8..95fce27ffb 100644
-> --- a/package/docker-cli/docker-cli.mk
-> +++ b/package/docker-cli/docker-cli.mk
+>  # Locally computed
+> -sha256  9de6bfd17259b7434f2bb4fb6d2874decf9b1d4587ec9b90d91188049921e32f  onevpl-intel-gpu-23.3.4.tar.gz
+> +sha256  0939232daa2ef3e35b453e4aa0d25674a9b2376b4ef814fb64712cf587654787  onevpl-intel-gpu-23.4.0.tar.gz
+>  sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+> diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+> index c7c557e9e2..8c9275fe75 100644
+> --- a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+> +++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -DOCKER_CLI_VERSION = 24.0.6
-> +DOCKER_CLI_VERSION = 24.0.7
->  DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
->  
->  DOCKER_CLI_LICENSE = Apache-2.0
+> -ONEVPL_INTEL_GPU_VERSION = 23.3.4
+> +ONEVPL_INTEL_GPU_VERSION = 23.4.0
+>  ONEVPL_INTEL_GPU_SITE = $(call github,oneapi-src,oneVPL-intel-gpu,intel-onevpl-$(ONEVPL_INTEL_GPU_VERSION))
+>  ONEVPL_INTEL_GPU_LICENSE = MIT
+>  ONEVPL_INTEL_GPU_LICENSE_FILES = LICENSE
 > -- 
-> 2.42.0
+> 2.39.2
 > 
 > _______________________________________________
 > buildroot mailing list
