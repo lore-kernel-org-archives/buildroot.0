@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C7B0C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E18BC4332F
+	for <buildroot@archiver.kernel.org>; Sun, 29 Oct 2023 08:45:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6A6B61464;
-	Sun, 29 Oct 2023 08:43:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6A6B61464
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F19270419;
+	Sun, 29 Oct 2023 08:45:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F19270419
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7ViFu3bkaWKy; Sun, 29 Oct 2023 08:43:50 +0000 (UTC)
+	with ESMTP id QSYzhqMqSWrc; Sun, 29 Oct 2023 08:45:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EBEE61174;
-	Sun, 29 Oct 2023 08:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EBEE61174
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1BE751BF41A
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:43:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A55E70416;
+	Sun, 29 Oct 2023 08:45:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A55E70416
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 448851BF41A
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:45:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F26534ECDB
- for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F26534ECDB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C8FA43112
+ for <buildroot@lists.busybox.net>; Sun, 29 Oct 2023 08:45:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C8FA43112
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T_zqRxmXRNMa for <buildroot@lists.busybox.net>;
- Sun, 29 Oct 2023 08:43:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J-m2u8P2WSO5 for <buildroot@lists.busybox.net>;
+ Sun, 29 Oct 2023 08:45:32 +0000 (UTC)
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 133484ECD6
- for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:43:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 133484ECD6
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F09F343108
+ for <buildroot@buildroot.org>; Sun, 29 Oct 2023 08:45:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F09F343108
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:de1f:355b:eff2:ec6])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 5AC7E200402;
- Sun, 29 Oct 2023 09:43:42 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id E99E32003CC;
+ Sun, 29 Oct 2023 09:45:27 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 29 Oct 2023 09:43:42 +0100
-Date: Sun, 29 Oct 2023 09:43:42 +0100
+ Sun, 29 Oct 2023 09:45:27 +0100
+Date: Sun, 29 Oct 2023 09:45:27 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Sergey Bobrenok <bobrofon@gmail.com>
-Message-ID: <20231029084342.GM687180@scaer>
+Message-ID: <20231029084527.GN687180@scaer>
 References: <20231026201145.130747-1-bobrofon@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
 In-Reply-To: <20231026201145.130747-1-bobrofon@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1698569024;
- bh=iud8ibzCEyo4ubMJFXKc1/SQnfEbeVznlnEYxLq4z90=;
+ d=free.fr; s=smtp-20201208; t=1698569130;
+ bh=4SPAh2BcFR7Y3FgxBj2OGwYfl81z5PNFHRKSNECn8PI=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=JVNFqkk/FCK5tWcF0/XPuxOiSrSLEiq+uoFUL6xC93r/vPa8rEt+nyQj939/svKyT
- ePWs5jH6zpZjK6VgHE+Qf1GNpAZjdL+tgrDUOeJQY1vZpeTfcRKCDF0WXGL284GBtD
- iP2Y1bjVNBC2mCvB6a62XHXzjfrXQ+Vkj7vChZEgtKrrrCh7NujTEF46BHDMDWPNHI
- pNJEwZK+s0ThuaaDuRW/RrfGx7kd5RxX2PMSow59hgMXg+E9c3DHo1srU2q4wC4wKv
- E1HGd278KbVCGbZU1YkJ3CdbU1tFKpWvjJ5PtR/u28MNX79gAfdgpDYMB5x4YVNZnK
- blp1e/PbbTyFw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=dsA3HzPme86fY30Uqf3EObRnZw19OTF1ZxHYD9FZ3cZO4/iH2ea2h/bo04Tp4Qdjd
+ h3b9O7/lIsOsM25VuIVOSTJSJ9wgu6Irh3wZNvfdgEJqDo7X57dosG+pe598zPpsNb
+ WXl75iUJZ/Wt+GH+zF4QtDIf+i2jZyGY9uqXVtJFw+PN2wC8T2ywlU22UVnKsqvdrd
+ 4Ni54t7KymoS1K6L5NVLmBG4NDLwAkoa5zNXsE9UeZNpSDiWDwpHdVvIL3kCONoafM
+ jJjWokIX2TQwVVCNkuQLKHCwaGFyKcROGVegs47l29p9uyMzjm0QR775QdM7+GgwGh
+ XWq4H4QzhMoxA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JVNFqkk/
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=dsA3HzPm
 Subject: Re: [Buildroot] [PATCH 1/1] package/sdbus-cpp: bump to version 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -84,31 +84,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Sergey, All,
 
 On 2023-10-26 23:11 +0300, Sergey Bobrenok spake thusly:
-> Changelog:
-> https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v1.4.0
-> 
-> Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/sdbus-cpp/sdbus-cpp.hash | 2 +-
->  package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
-> index f5fc8d6868..379864e3ba 100644
-> --- a/package/sdbus-cpp/sdbus-cpp.hash
-> +++ b/package/sdbus-cpp/sdbus-cpp.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed:
-> -sha256  d44f59abdd64d8f1ca3af7db58bc6518cb081fc9ff16285c3d75a68f5c073d10  v1.3.0.tar.gz
-> +sha256  ca7405c7f0f9ae3023dcfa37bc68974c4b8a1c9ea2909b970e0aedc3e8657ee6  v1.4.0.tar.gz
->  sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
->  sha256  a1c9e75e25d8f2ce18017c88978edab2f0dbc7814ad0697d4ff2e5e59959f657  COPYING-LGPL-Exception
+[--SNIP--]
 > diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
 > index 2a6b67d6e3..2c3844094e 100644
 > --- a/package/sdbus-cpp/sdbus-cpp.mk
@@ -120,6 +96,15 @@ Yann E. MORIN.
 > -SDBUS_CPP_VERSION = 1.3.0
 > +SDBUS_CPP_VERSION = 1.4.0
 >  SDBUS_CPP_SOURCE = v$(SDBUS_CPP_VERSION).tar.gz
+
+I just noticed thatwe for the _SOURCE, but usually that is not needed
+when we use the github helper, like we do below.
+
+Could you try and send a patch to drop it, please?
+
+Regards,
+Yann E. MORIN.
+
 >  SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
 >  SDBUS_CPP_INSTALL_STAGING = YES
 > -- 
