@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06DDFC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 10:20:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3D8EC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 10:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A706685054;
-	Mon, 30 Oct 2023 10:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A706685054
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6198684D8F;
+	Mon, 30 Oct 2023 10:20:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6198684D8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jv7Bk4X_tWkh; Mon, 30 Oct 2023 10:20:33 +0000 (UTC)
+	with ESMTP id h-_VXl8cHGYm; Mon, 30 Oct 2023 10:20:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00D048224A;
-	Mon, 30 Oct 2023 10:20:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00D048224A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1EEFC1BF38B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9580A82213;
+	Mon, 30 Oct 2023 10:20:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9580A82213
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E3E91BF955
  for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 053B34327E
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 053B34327E
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCDBA705C9
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCDBA705C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gK_1TJZiqZ3l for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 10:20:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TloL50vTyEzI for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 10:20:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAE00437FB
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 10:20:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAE00437FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05FB970A82
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 10:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05FB970A82
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C73CE86176; Mon, 30 Oct 2023 10:20:16 +0000 (UTC)
+ id E72228617D; Mon, 30 Oct 2023 10:20:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 11:15:58 +0100
+Date: Mon, 30 Oct 2023 11:18:16 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ec7785adc8e9c03e651d879341d1a78391cc8232
-X-Git-Newrev: 6d9ac35d9a442f3516fd3e40817872b5f8b089e3
+X-Git-Oldrev: c2770f7cc3953aac1484af8895f2febd9d074cf7
+X-Git-Newrev: b4989f431c5dc3b01cc6937d5b7f5952c00e16de
 X-Patchwork-Hint: ignore
-Message-Id: <20231030102016.C73CE86176@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/apache: security
- bump version to 2.4.58
+Message-Id: <20231030102016.E72228617D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libtommath: add
+ LIBTOMMATH_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d9ac35d9a442f3516fd3e40817872b5f8b089e3
+commit: https://git.buildroot.net/buildroot/commit/?id=b4989f431c5dc3b01cc6937d5b7f5952c00e16de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes CVE-2023-31122, CVE-2023-43622 & CVE-2023-45802:
-https://httpd.apache.org/security/vulnerabilities_24.html
+cpe:2.3:a:libtom:libtommath is a valid CPE identifier for this package:
 
-Release notes:
-https://lists.apache.org/thread/1qnr3jpk1mdnqc2c6foyjvg0ch636h1n
+  https://nvd.nist.gov/products/cpe/detail/F0D99614-AA27-4713-ADD2-103647C8838B
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d00881cad152040cc679c37124d636196ab7eb82)
+(cherry picked from commit 17ffb91551cc7c76427fd9675bc5e5a01d683afe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libtommath/libtommath.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 1f0020f65a..854bc85dcc 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,5 +1,5 @@
--# From https://archive.apache.org/dist/httpd/httpd-2.4.57.tar.bz2.{sha256,sha512}
--sha256  dbccb84aee95e095edfbb81e5eb926ccd24e6ada55dcd83caecb262e5cf94d2a  httpd-2.4.57.tar.bz2
--sha512  4d1e0a274ee90bdfb5f38d4a7d73a7367ed1c6388e26280e640014e49abc0df03683705b88dcfe2ec2da313dda4c7b4a3b86daffa1911f58e224eba89d82d155  httpd-2.4.57.tar.bz2
-+# From https://archive.apache.org/dist/httpd/httpd-2.4.58.tar.bz2.{sha256,sha512}
-+sha256  fa16d72a078210a54c47dd5bef2f8b9b8a01d94909a51453956b3ec6442ea4c5  httpd-2.4.58.tar.bz2
-+sha512  d6e73bf413a507ec16b621ff635e178206207a9e9810ce3944b3dc98d39cde8f225307110167fc9da5822175796c8cb66f98be5b9f0d8b76dcd83a401d39b2c1  httpd-2.4.58.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 320a6ad20e..cac62134ed 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+index 25d4e836bb..7b5305faf6 100644
+--- a/package/libtommath/libtommath.mk
++++ b/package/libtommath/libtommath.mk
+@@ -9,6 +9,7 @@ LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBT
+ LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
+ LIBTOMMATH_LICENSE = Unlicense
+ LIBTOMMATH_LICENSE_FILES = LICENSE
++LIBTOMMATH_CPE_ID_VENDOR = libtom
+ LIBTOMMATH_INSTALL_STAGING = YES
+ LIBTOMMATH_INSTALL_TARGET = NO  # only static library
  
--APACHE_VERSION = 2.4.57
-+APACHE_VERSION = 2.4.58
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = https://downloads.apache.org/httpd
- APACHE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
