@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FCF3C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 10:19:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EDABC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 10:19:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4108855BD;
-	Mon, 30 Oct 2023 10:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4108855BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE25085604;
+	Mon, 30 Oct 2023 10:19:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE25085604
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O2aEA2omRkeF; Mon, 30 Oct 2023 10:19:31 +0000 (UTC)
+	with ESMTP id cXpj8r-5EzqY; Mon, 30 Oct 2023 10:19:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D215985556;
-	Mon, 30 Oct 2023 10:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D215985556
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D1381BF966
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10EA385554;
+	Mon, 30 Oct 2023 10:19:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10EA385554
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 629751BF976
  for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:19:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36C984F4A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B5324325B
  for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:19:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36C984F4A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B5324325B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6gLXBzUhf9Wr for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WEJ8Xi_kTglP for <buildroot@lists.busybox.net>;
  Mon, 30 Oct 2023 10:19:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2BDF74F414
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14CF74064E
  for <buildroot@buildroot.org>; Mon, 30 Oct 2023 10:19:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BDF74F414
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14CF74064E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1875886169; Mon, 30 Oct 2023 10:19:03 +0000 (UTC)
+ id EEB1B86167; Mon, 30 Oct 2023 10:19:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 11:17:24 +0100
+Date: Mon, 30 Oct 2023 11:12:43 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 6ac17539d61fa19920b4545d204251f75ddb2597
-X-Git-Newrev: e6e88ccf8009447b5764e9cb023ac8fb3f0eec0b
+X-Git-Oldrev: 0bc9bf988829d45253e80625ef0709bc22ded8bb
+X-Git-Newrev: 6489cb62b217044eecb598c173d86f5d9da58313
 X-Patchwork-Hint: ignore
-Message-Id: <20231030101903.1875886169@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/nghttp2: security
- bump to version 1.57.0
+Message-Id: <20231030101902.EEB1B86167@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x]
+ package/pkg-kernel-module: add BR2_MAKE_HOST_DEPENDENCY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6e88ccf8009447b5764e9cb023ac8fb3f0eec0b
+commit: https://git.buildroot.net/buildroot/commit/?id=6489cb62b217044eecb598c173d86f5d9da58313
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix CVE-2023-44487: The HTTP/2 protocol allows a denial of service
-(server resource consumption) because request cancellation can reset
-many streams quickly, as exploited in the wild in August through October
-2023.
+Commit 0b9efc991f ("linux: use BR2_MAKE") switched LINUX_MAKE to
+$(BR2_MAKE) to avoid build issue with kernel version >= 6.2 and GNU
+Make version < 3.82. However, the same issue is actual for kernel
+modules as well.
 
-Fix CVE-2023-35945: nghttp2 fails to release memory when PUSH_PROMISE or
-HEADERS frame cannot be sent, and nghttp2_on_stream_close_callback fails
-with a fatal error. For example, if GOAWAY frame has been received, a
-HEADERS frame that opens new stream cannot be sent.
+Using $(BR2_MAKE) should guarantee a consistent behavior between
+kernel and kernel-modules builds.
 
-https://github.com/nghttp2/nghttp2/security/advisories/GHSA-vx74-f528-fxqg
-https://github.com/nghttp2/nghttp2/security/advisories/GHSA-6pcr-v3hg-752p
-https://github.com/nghttp2/nghttp2/compare/v1.41.0...v1.57.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 07c44afc8d297c5a2e13bd6303e07f48f18b5c8a)
+Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+Signed-off-by: Sergey Bobrenok <SIBobrenok@sberdevices.ru>
+[yann.morin.1998@free.fr: minor coding style]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 75fa573ef9336b57d1cfb86bfcaaed4872f64ac6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nghttp2/nghttp2.hash | 2 +-
- package/nghttp2/nghttp2.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/pkg-kernel-module.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/nghttp2/nghttp2.hash b/package/nghttp2/nghttp2.hash
-index 3702a91b5e..18774d01d4 100644
---- a/package/nghttp2/nghttp2.hash
-+++ b/package/nghttp2/nghttp2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  eacc6f0f8543583ecd659faf0a3f906ed03826f1d4157b536b4b385fe47c5bb8  nghttp2-1.41.0.tar.gz
-+sha256  9210b0113109f43be526ac5835d58a701411821a4d39e155c40d67c40f47a958  nghttp2-1.57.0.tar.xz
- sha256  6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
-diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
-index 9190fa30d6..70a25d409c 100644
---- a/package/nghttp2/nghttp2.mk
-+++ b/package/nghttp2/nghttp2.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
+diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+index fcd6b8bc29..4f64a73f11 100644
+--- a/package/pkg-kernel-module.mk
++++ b/package/pkg-kernel-module.mk
+@@ -50,11 +50,13 @@ LINUX_NEEDS_MODULES = y
+ endif
  
--NGHTTP2_VERSION = 1.41.0
-+NGHTTP2_VERSION = 1.57.0
-+NGHTTP2_SOURCE =  nghttp2-$(NGHTTP2_VERSION).tar.xz
- NGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(NGHTTP2_VERSION)
- NGHTTP2_LICENSE = MIT
- NGHTTP2_LICENSE_FILES = COPYING
+ # The kernel must be built first.
+-$(2)_DEPENDENCIES += linux
++$(2)_DEPENDENCIES += \
++	linux \
++	$$(BR2_MAKE_HOST_DEPENDENCY)
+ 
+ # This is only defined in some infrastructures (e.g. autotools, cmake),
+ # but not in others (e.g. generic). So define it here as well.
+-$(2)_MAKE ?= $$(MAKE)
++$(2)_MAKE ?= $$(BR2_MAKE)
+ 
+ # If not specified, consider the source of the kernel module to be at
+ # the root of the package.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
