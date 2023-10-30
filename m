@@ -4,72 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE33DC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 13:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC257C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 13:38:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6EA9040447;
-	Mon, 30 Oct 2023 13:29:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EA9040447
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7BA8E43400;
+	Mon, 30 Oct 2023 13:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BA8E43400
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LmTphLwc7NtZ; Mon, 30 Oct 2023 13:29:02 +0000 (UTC)
+	with ESMTP id 6bulhTD81rdx; Mon, 30 Oct 2023 13:38:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D168432E2;
-	Mon, 30 Oct 2023 13:29:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D168432E2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8639F43610;
+	Mon, 30 Oct 2023 13:38:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8639F43610
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0B6D01BF3DA
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:28:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A47D1BF387
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8FC6854BD
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:28:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8FC6854BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7E438561C
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:38:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7E438561C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GVw93TZuomk2 for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 13:28:58 +0000 (UTC)
-Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com
- [136.143.188.51])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 206F5821BA
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 13:28:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 206F5821BA
-ARC-Seal: i=1; a=rsa-sha256; t=1698672535; cv=none; 
- d=zohomail.com; s=zohoarc; 
- b=BvxYpZQeD1kdFDuaxmoFBG+zZXFS8sAU7JrUWROTNXOcR+CY1kf5fNoXJXRCPhyIfYXUJZoJQ5uDWZVZRDKH9cYFd7YGgp1rkwtIPxYsC90M6bWAVDaCo40wlznCLzj5nClfcJ5Z11+jmpQ07UFgy/KS59nsq/ApHLRFJwGIG9o=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
- s=zohoarc; t=1698672535;
- h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To;
- bh=PHXnSMlPdNnYecJoPBmY1BV4WcCGPVJ1onkYCX4dqYM=; 
- b=WU6TF48GbxJheaD/k8wUMMYMB4kcuxmd/lG+88mxu77kztXL4ftObhZS/r3f09XbiLSjd+znmZqJA4WJ4+QA29Dqrf8LPNkQQZGHJ3FUupjTPSbbvWzS0UB0xcNMOtI19FR7x8ZuEUegcai5h9A48lNCa0ag64KolbIH0VxCLUw=
-ARC-Authentication-Results: i=1; mx.zohomail.com; dkim=pass  header.i=fsck.pl;
- spf=pass  smtp.mailfrom=enki@fsck.pl;
- dmarc=pass header.from=<enki@fsck.pl>
-Received: from newton.shill.gq (193.93.205.86 [193.93.205.86]) by
- mx.zohomail.com with SMTPS id 1698672533302505.9042571028415;
- Mon, 30 Oct 2023 06:28:53 -0700 (PDT)
-From: Maciej Grela <enki@fsck.pl>
+ with ESMTP id b6gcrtsU-ZfK for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 13:38:38 +0000 (UTC)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E29B585619
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 13:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E29B585619
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-40839807e82so26325545e9.0
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 06:38:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698673115; x=1699277915;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=okBXUdX8/EHUED53EiZ6FP3Jzq+xzT6AOczfKByqf9U=;
+ b=gAAz9OzgkM+BA/2LaFduZEDXjqzY3u9UrjT1NJnk556jXOZgYm7MNY3JC9SKoua9cP
+ HX2O4bJGeUyaniZElxoUy6oiaDrF2xKFaWJPCziBPVCEmuOFhiXfAplff9Df+BkLFgBj
+ w0sq0SI4bllubLw8WyOhV3B8M7Nsz1GDDPGWGs/ryeYc4GIEiEKX/GjGEKqP9TfRDLrH
+ 3/wQdRQsZ81iPyLbWuGDSnDIvoKrQ2PBwnmUk6AhQf/qGCSHEd/UkgWUitlgrsWCno0h
+ tLGuJFUi8PPiZsx6yldWs5kutux0CbyME5TE+Q7FZYwSEpd/jN3aKJDq+ETvpL7ZXdDB
+ eiwQ==
+X-Gm-Message-State: AOJu0YyhgEBGv5XoJOWKePKa7kXI/476O3kMjOaVWbyo3QcsfaYUZD/f
+ Y4gG9zccNORQdkBv7Xf3T+5fMjW5xrk=
+X-Google-Smtp-Source: AGHT+IGcBJdheTjMH7zgBEhQ0xINR9zBIIh187BZrNo3muK+3icbs7TKwxXf2vAXVolhM52keCixOA==
+X-Received: by 2002:a05:600c:3550:b0:3fe:1fd9:bedf with SMTP id
+ i16-20020a05600c355000b003fe1fd9bedfmr11232744wmq.11.1698673115480; 
+ Mon, 30 Oct 2023 06:38:35 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ q7-20020a05600c46c700b004076f522058sm12885141wmo.0.2023.10.30.06.38.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 30 Oct 2023 06:38:35 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 14:28:40 +0100
-Message-Id: <20231030132841.3052429-1-enki@fsck.pl>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <18b80c0ce62.cb399136547843.6065948676717076989@fsck.pl>
-References: <18b80c0ce62.cb399136547843.6065948676717076989@fsck.pl>
+Date: Mon, 30 Oct 2023 14:38:33 +0100
+Message-ID: <20231030133833.1102839-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; t=1698672535; 
- s=zoho; d=fsck.pl; i=enki@fsck.pl;
- h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
- bh=PHXnSMlPdNnYecJoPBmY1BV4WcCGPVJ1onkYCX4dqYM=;
- b=GDxGe2hAEx0U5WWl+hNvnBmFB9fBKqS1XUpATDawizwBDzt0Cy+wp6FE+6MLujwK
- ON+sL/HoFoeLJynuQrZtaUaz4QeKM4Hw7Fen2myFjpPRAPtFIHPyskeKh3p2n4ZnlR1
- c9CMEkB0EMacq0PKUNT2UjSy/uN3+DCuOozzsRho=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1698673115; x=1699277915; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=okBXUdX8/EHUED53EiZ6FP3Jzq+xzT6AOczfKByqf9U=;
+ b=Xa0iqG2RNAUBuLmRCvUmZx5h5jhVOAO85NEgXelI+McqoMBRPZJoKt6FvWubpmLCEz
+ kIVKSOWpVuTIMnXnoPGZE/mSRmzdee3M79Q/PQCGFITDar5vIuFXnSunUo983zG1ZHUY
+ TPexKGksaMrPZwLD0zXFsag76zZUyWTIciWtEpp4S49q5wQm0vn8vPiuZRDbpS6NK2O0
+ pBfW1fn8YZf5d2lnumFBi7f9nHX/xXgZFovgNopPssFLWcUqzFa5wbhtg26Rp+P0Ok+J
+ hfWnFQM9/JlLEN2laJQ6t5+XjlDr2GLQeNcHJb/wjz+NXPosvmAHP0D1sVRiEIU1pUpA
+ Ep0A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=fsck.pl header.i=enki@fsck.pl
- header.a=rsa-sha256 header.s=zoho header.b=GDxGe2hA
-Subject: [Buildroot] [PATCH v3 1/1] package/spirv-tools: fix build issue
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Xa0iqG2R
+Subject: [Buildroot] [PATCH 1/1] package/tar: fix NLS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,53 +93,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maciej Grela <enki@fsck.pl>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-spirv-tools requires a toolchain w/ shared libs, add flag dependency and comment.
+Fix the following build failure raised since bump to version 1.35 in
+commit d4d483451f0a305781b94b96c15a6cf4b489cd84:
 
-Fixes: http://autobuild.buildroot.net/results/53b3cf124d6c299398e620120465eca396ddcdff
-Fixes: http://autobuild.buildroot.net/results/a1f615d2410bffb6fdacc8586761c9def05aafa9
-Fixes: http://autobuild.buildroot.net/results/294ade8c9aa3d650fa5ab6cc34701c4176bc197f
-Fixes: http://autobuild.buildroot.net/results/40e8f50eb7e82ca42f84fa5f4336cefb51204a28
-Fixes: http://autobuild.buildroot.net/results/8df8de1aeaf1317f6ba43f6752502da2eedcdea1
-Fixes: http://autobuild.buildroot.net/results/ea2c1f97e82efcd867c79f05ab02f5f099140379
-Fixes: http://autobuild.buildroot.net/results/fa4e39d1e78e885d20851201ed8a6fcf9d48d7d6
-Fixes: http://autobuild.buildroot.net/results/4ed3f13b3ce178f8fe87de7aee86acb9642e3434
-Fixes: http://autobuild.buildroot.net/results/e1b4853a7e8714fd2af8f8677681c9895034b3e8
-Signed-off-by: Maciej Grela <enki@fsck.pl>
+/home/thomas/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/12.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: buffer.o: in function `bufmap_reset':
+buffer.c:(.text+0xe8): undefined reference to `libintl_gettext'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/99b05d4b495b6337c6a48ea5a551a3a84c6d2e6b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/spirv-tools/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/tar/tar.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/spirv-tools/Config.in b/package/spirv-tools/Config.in
-index 39fdb80b86..c1d3a4f9bc 100644
---- a/package/spirv-tools/Config.in
-+++ b/package/spirv-tools/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_SPIRV_TOOLS
- 	bool "spirv-tools"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_SPIRV_HEADERS
- 	help
- 	  The SPIR-V Tools project provides an API and commands for
-@@ -9,6 +10,8 @@ config BR2_PACKAGE_SPIRV_TOOLS
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 8a612b6f45..5908b9ec3e 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -19,6 +19,8 @@ TAR_CONF_OPTS = \
+ TAR_LICENSE = GPL-3.0+
+ TAR_LICENSE_FILES = COPYING
+ TAR_CPE_ID_VENDOR = gnu
++TAR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++TAR_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
  
- 	  https://github.com/KhronosGroup/SPIRV-Tools
- 
--comment "spirv-tools needs a toolchain w/ C++, gcc >= 7"
-+comment "spirv-tools needs a toolchain w/ C++, gcc >= 7, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		BR2_STATIC_LIBS
-+
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ TAR_DEPENDENCIES += acl
 -- 
-2.39.2
+2.42.0
 
 _______________________________________________
 buildroot mailing list
