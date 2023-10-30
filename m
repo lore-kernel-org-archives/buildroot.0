@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33417C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 13:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5EF8C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 13:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2908826E7;
-	Mon, 30 Oct 2023 13:09:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2908826E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 613D3854AD;
+	Mon, 30 Oct 2023 13:09:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 613D3854AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cNjTMYqzG_wQ; Mon, 30 Oct 2023 13:09:17 +0000 (UTC)
+	with ESMTP id LVl6K09V6TiI; Mon, 30 Oct 2023 13:09:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22BB6854B3;
-	Mon, 30 Oct 2023 13:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22BB6854B3
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4230854A2;
+	Mon, 30 Oct 2023 13:09:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4230854A2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F390C1BF955
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:09:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 297D01BF966
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CDDCB703E2
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:09:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDDCB703E2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 101C4703DA
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:09:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 101C4703DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Cwd-neP0TaR for <buildroot@lists.busybox.net>;
+ with ESMTP id JZeJzhLf0KPk for <buildroot@lists.busybox.net>;
  Mon, 30 Oct 2023 13:09:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0DF78703DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04168703A3
  for <buildroot@buildroot.org>; Mon, 30 Oct 2023 13:09:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DF78703DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04168703A3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F2CF7861A3; Mon, 30 Oct 2023 13:09:00 +0000 (UTC)
+ id E8191861A2; Mon, 30 Oct 2023 13:09:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 14:05:58 +0100
+Date: Mon, 30 Oct 2023 14:04:35 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: cc74b71ea0729c6d52ced43c4d0d3fbb835ea706
-X-Git-Newrev: 70cb03d1b0b03f7bd40016c52e7b02fb00179ab2
+X-Git-Oldrev: d8bd44d455f8ec6b1575fb72eb8f3da8a34e9323
+X-Git-Newrev: cc74b71ea0729c6d52ced43c4d0d3fbb835ea706
 X-Patchwork-Hint: ignore
-Message-Id: <20231030130900.F2CF7861A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/paho-mqtt-c: bump
- to version 1.3.13
+Message-Id: <20231030130900.E8191861A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/dhcpcd: bump to
+ version 10.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70cb03d1b0b03f7bd40016c52e7b02fb00179ab2
+commit: https://git.buildroot.net/buildroot/commit/?id=cc74b71ea0729c6d52ced43c4d0d3fbb835ea706
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-https://github.com/eclipse/paho.mqtt.c/releases/tag/v1.3.13
+https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.2
+https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.3
+https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 97d6a77d1ef0057c9ccf3da91ac0bdebdb129112)
+(cherry picked from commit f6890c1c4e04a968484ccf0c89ffce8b57ff3281)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dhcpcd/dhcpcd.hash | 4 ++--
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 529c538ff2..d359edf36e 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  6a70a664ed3bbcc1eafdc45a5dc11f3ad70c9bac12a54c2f8cef15c0e7d0a93b  paho-mqtt-c-1.3.12.tar.gz
-+sha256  47c77e95609812da82feee30db435c3b7c720d4fd3147d466ead126e657b6d9c  paho-mqtt-c-1.3.13.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 8d1fe009a7..ec4e96c77f 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 88032f05c1..b015dce4ac 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,4 +1,4 @@
+-# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.1
+-sha256  6e9f6a5c47fcd8a763cfa26f1ca6eedf1e534992224a01d6c1ab8abb154af972  dhcpcd-10.0.1.tar.xz
++# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.4
++sha256  ced5bbde8da3726eac77b9e77e4f31a89c9849d811ef8a2c749664fc5f55a718  dhcpcd-10.0.4.tar.xz
+ # Locally calculated
+ sha256  a7d6da3a202cdd38eaab0bcea4d25f60d002980f3785b3e896d9bf387f093ac8  LICENSE
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 82efe10ef9..a194bce323 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PAHO_MQTT_C_VERSION = 1.3.12
-+PAHO_MQTT_C_VERSION = 1.3.13
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+-DHCPCD_VERSION = 10.0.1
++DHCPCD_VERSION = 10.0.4
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$(DHCPCD_VERSION)
+ DHCPCD_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
