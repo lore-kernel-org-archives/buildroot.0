@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2697C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 21:57:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DF5BC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 21:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A15CB82154;
-	Mon, 30 Oct 2023 21:57:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A15CB82154
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16839820B4;
+	Mon, 30 Oct 2023 21:57:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16839820B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kgFGBcChPfpf; Mon, 30 Oct 2023 21:57:03 +0000 (UTC)
+	with ESMTP id iYmisXMJDbCU; Mon, 30 Oct 2023 21:57:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D03C5820E8;
-	Mon, 30 Oct 2023 21:57:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D03C5820E8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 130B91BF955
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 21:56:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69630820F2;
+	Mon, 30 Oct 2023 21:57:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69630820F2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 516E31BF34E
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 21:56:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF72840534
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 21:56:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF72840534
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3836841809
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 21:56:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3836841809
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uz9CipG-6gTl for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 21:56:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B80244052D
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 21:56:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B80244052D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A660886211; Mon, 30 Oct 2023 21:56:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZQIDBW3323Cj for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 21:56:55 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE646417EC
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 21:56:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE646417EC
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A878D40003;
+ Mon, 30 Oct 2023 21:56:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1qxaFe-003cu3-36;
+ Mon, 30 Oct 2023 22:56:50 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 22:53:53 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 61b918ecc90c029c4c73b18e61a8e77b3a5a11fd
-X-Git-Newrev: ef4f123ee3fb111ff4927bfc7580e4abf41a632a
-X-Patchwork-Hint: ignore
-Message-Id: <20231030215647.A660886211@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x]
- package/x11r7/xlib_libX11: security bump to version 1.8.7
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20231028203252.1177951-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Oct 2023 22:56:50 +0100
+In-Reply-To: <20231028203252.1177951-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 28 Oct 2023 22:32:52 +0200")
+Message-ID: <878r7j3hb1.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/cjson: bump to version 1.7.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +62,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef4f123ee3fb111ff4927bfc7580e4abf41a632a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix CVE-2023-43785, CVE-2023-43786 and CVE-2023-43787
+ > https://github.com/DaveGamble/cJSON/releases/tag/v1.7.16
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-https://lists.x.org/archives/xorg-announce/2023-October/003424.html
-https://lists.x.org/archives/xorg-announce/2023-October/003426.html
+Committed to 2023.02.x and 2023.08.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 98d0a7b95f416c88581788b5ad3ee3d1d5cbbd67)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index f443d947a4..56fecee9ff 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-June/003407.html
--sha256  59535b7cc6989ba806a022f7e8533b28c4397b9d86e9d07b6df0c0703fa25cc9  libX11-1.8.6.tar.xz
--sha512  b94a578003078a42cea43d80fae2c54a3aaa30f706088bb3546331e9abfc180131cafb37887117abcc5b6116992e299974981eef96ecfcf883cc8a1aba4d1ade  libX11-1.8.6.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-October/003426.html
-+sha256  05f267468e3c851ae2b5c830bcf74251a90f63f04dd7c709ca94dc155b7e99ee  libX11-1.8.7.tar.xz
-+sha512  d53bfc18f38d339a6a695b09835b2ae96b323881678bfe7ddca697605e3bdf4102ff49cc3078880a6c55b5977fcdd0aadaf5429086132de3a5bda302f79a2fa6  libX11-1.8.7.tar.xz
- # Locally computed
- sha256  2e7012a140f000735a7172674a2d314398d79622444fba65d108b029b29ab283  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 75199f1a3d..920a5d9aed 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBX11_VERSION = 1.8.6
-+XLIB_LIBX11_VERSION = 1.8.7
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.xz
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
