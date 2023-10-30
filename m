@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 051E5C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 19:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55916C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 19:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F2AC4038D;
-	Mon, 30 Oct 2023 19:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F2AC4038D
+	by smtp2.osuosl.org (Postfix) with ESMTP id DAB7640018;
+	Mon, 30 Oct 2023 19:09:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAB7640018
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sL0FYlWnukBg; Mon, 30 Oct 2023 19:03:27 +0000 (UTC)
+	with ESMTP id V66OWwDj9KcG; Mon, 30 Oct 2023 19:09:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4434240253;
-	Mon, 30 Oct 2023 19:03:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4434240253
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 236051BF954
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 19:03:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD72E4038D;
+	Mon, 30 Oct 2023 19:09:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD72E4038D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EFCF81BF37E
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 19:09:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F023B81FA5
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 19:03:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F023B81FA5
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8883418D1
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 19:09:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8883418D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yoj2Gd2zpNXr for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 19:03:24 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D4A6381F9F
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 19:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4A6381F9F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E0DD1C0008;
- Mon, 30 Oct 2023 19:03:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fRYktVYzhsD3 for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 19:09:14 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C2DFA418BF
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 19:09:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2DFA418BF
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D03E71BF203;
+ Mon, 30 Oct 2023 19:09:10 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1qxXXk-002q3z-0X;
- Mon, 30 Oct 2023 20:03:20 +0100
+ (envelope-from <peter@korsgaard.com>) id 1qxXdO-002qbd-0m;
+ Mon, 30 Oct 2023 20:09:10 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231028194119.987835-1-fontaine.fabrice@gmail.com>
-Date: Mon, 30 Oct 2023 20:03:20 +0100
-In-Reply-To: <20231028194119.987835-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 28 Oct 2023 21:41:19 +0200")
-Message-ID: <87pm0w2arr.fsf@48ers.dk>
+References: <20231028200024.1054270-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Oct 2023 20:09:10 +0100
+In-Reply-To: <20231028200024.1054270-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 28 Oct 2023 22:00:24 +0200")
+Message-ID: <87lebk2ai1.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/rabbitmq-c: fix CVE-2023-35789
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-urllib3: security bump
+ to version 2.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,7 +63,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joris Lijssens <joris.lijssens@gmail.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -70,14 +72,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > An issue was discovered in the C AMQP client library (aka rabbitmq-c)
- > through 0.13.0 for RabbitMQ. Credentials can only be entered on the
- > command line (e.g., for amqp-publish or amqp-consume) and are thus
- > visible to local attackers by listing a process and its arguments.
+ > Fix CVE-2023-43804 and CVE-2023-45803
+ > https://github.com/urllib3/urllib3/security/advisories/GHSA-v845-jxx5-vc9f
+ > https://github.com/urllib3/urllib3/security/advisories/GHSA-g4mx-q9vg-27p4
+ > https://github.com/urllib3/urllib3/blob/2.0.7/CHANGES.rst
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2023.02.x and 2023.08.x, thanks.
+Committed to 2023.08.x, thanks.
+
+For 2023.02.x I will instead bump to 1.26.18, which contains the same
+fixes.
 
 -- 
 Bye, Peter Korsgaard
