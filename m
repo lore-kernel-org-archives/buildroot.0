@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5EF8C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 13:09:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48BF9C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 13:09:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 613D3854AD;
-	Mon, 30 Oct 2023 13:09:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 613D3854AD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 001228527E;
+	Mon, 30 Oct 2023 13:09:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 001228527E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LVl6K09V6TiI; Mon, 30 Oct 2023 13:09:29 +0000 (UTC)
+	with ESMTP id BRvxazT3rMDG; Mon, 30 Oct 2023 13:09:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4230854A2;
-	Mon, 30 Oct 2023 13:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4230854A2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 297D01BF966
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:09:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 475628552B;
+	Mon, 30 Oct 2023 13:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 475628552B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E7C11BF2A9
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:09:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 101C4703DA
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 101C4703DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6230A4F4EA
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 13:09:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6230A4F4EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JZeJzhLf0KPk for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 13:09:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 04168703A3
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 13:09:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04168703A3
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8191861A2; Mon, 30 Oct 2023 13:09:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Svi3ll7-tbtu for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 13:09:23 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9A5434F415
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 13:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A5434F415
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D0BCC60006;
+ Mon, 30 Oct 2023 13:09:20 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1qxS1A-001miE-16;
+ Mon, 30 Oct 2023 14:09:20 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 14:04:35 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: d8bd44d455f8ec6b1575fb72eb8f3da8a34e9323
-X-Git-Newrev: cc74b71ea0729c6d52ced43c4d0d3fbb835ea706
-X-Patchwork-Hint: ignore
-Message-Id: <20231030130900.E8191861A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/dhcpcd: bump to
- version 10.0.4
+References: <20231027084159.1841045-1-peter@korsgaard.com>
+Date: Mon, 30 Oct 2023 14:09:20 +0100
+In-Reply-To: <20231027084159.1841045-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 27 Oct 2023 10:41:59 +0200")
+Message-ID: <87jzr445q7.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/riscv64-elf-toolchain: add .hash
+ file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +63,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc74b71ea0729c6d52ced43c4d0d3fbb835ea706
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.2
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.3
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.4
+ > The host-riscv64-elf-toolchain package was missing a hash file, add it now.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f6890c1c4e04a968484ccf0c89ffce8b57ff3281)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dhcpcd/dhcpcd.hash | 4 ++--
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to 2023.02.x and 2023.08.x, thanks.
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index 88032f05c1..b015dce4ac 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,4 +1,4 @@
--# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.1
--sha256  6e9f6a5c47fcd8a763cfa26f1ca6eedf1e534992224a01d6c1ab8abb154af972  dhcpcd-10.0.1.tar.xz
-+# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.0.4
-+sha256  ced5bbde8da3726eac77b9e77e4f31a89c9849d811ef8a2c749664fc5f55a718  dhcpcd-10.0.4.tar.xz
- # Locally calculated
- sha256  a7d6da3a202cdd38eaab0bcea4d25f60d002980f3785b3e896d9bf387f093ac8  LICENSE
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 82efe10ef9..a194bce323 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DHCPCD_VERSION = 10.0.1
-+DHCPCD_VERSION = 10.0.4
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$(DHCPCD_VERSION)
- DHCPCD_DEPENDENCIES = host-pkgconf
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
