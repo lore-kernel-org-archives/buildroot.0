@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9DC3C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 17:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0EEAC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 17:26:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 821AB40354;
-	Mon, 30 Oct 2023 17:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 821AB40354
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D6A040374;
+	Mon, 30 Oct 2023 17:26:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D6A040374
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tiOc8f1mzx71; Mon, 30 Oct 2023 17:26:10 +0000 (UTC)
+	with ESMTP id BGX4PXxZIv9A; Mon, 30 Oct 2023 17:26:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79C1840383;
-	Mon, 30 Oct 2023 17:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79C1840383
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 48EEC1BF3DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F34740382;
+	Mon, 30 Oct 2023 17:26:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F34740382
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A5FB1BF3A0
  for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F1214037C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5445D4149F
  for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:25:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F1214037C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5445D4149F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bz7e-RprcLxH for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pRLPWjS8x-eq for <buildroot@lists.busybox.net>;
  Mon, 30 Oct 2023 17:25:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FB1C40386
+ by smtp4.osuosl.org (Postfix) with ESMTP id 249CC4095A
  for <buildroot@buildroot.org>; Mon, 30 Oct 2023 17:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FB1C40386
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 249CC4095A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1EDB9861D9; Mon, 30 Oct 2023 17:25:38 +0000 (UTC)
+ id 145DA861D8; Mon, 30 Oct 2023 17:25:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 18:17:25 +0100
+Date: Mon, 30 Oct 2023 18:17:20 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 47a5fa5cf36b1efa3ec6154e655635bf2a033a21
-X-Git-Newrev: 6d91519910b879607cce8501489bdb087872b3f6
+X-Git-Oldrev: 68d7581cb318c3ab30521334326707284a4743bc
+X-Git-Newrev: 47a5fa5cf36b1efa3ec6154e655635bf2a033a21
 X-Patchwork-Hint: ignore
-Message-Id: <20231030172538.1EDB9861D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/aufs: use HTTPS
- for git.code.sf.net
+Message-Id: <20231030172538.145DA861D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] Config.in: default to
+ HTTPS for s.b.n backup site
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d91519910b879607cce8501489bdb087872b3f6
+commit: https://git.buildroot.net/buildroot/commit/?id=47a5fa5cf36b1efa3ec6154e655635bf2a033a21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-git.code.sf.net is available over HTTPS, so use that for security and
-consistency with the other packages.
+Now that we have HTTPS support for sources.buildroot.net (through Lets
+encrypt / Cloudflare), it makes sense to default to it for our backup site.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f2a590750f5bedcee48ce7beb8f35356b42eda11)
+(cherry picked from commit 05296ced369bab8877efa624f3d9b4d201ba5b38)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/aufs/aufs.mk | 2 +-
+ Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
-index 4e95a350a0..d00e7a1a21 100644
---- a/package/aufs/aufs.mk
-+++ b/package/aufs/aufs.mk
-@@ -9,7 +9,7 @@ AUFS_LICENSE = GPL-2.0
- AUFS_LICENSE_FILES = COPYING
+diff --git a/Config.in b/Config.in
+index 670e199c0b..1fcf549e62 100644
+--- a/Config.in
++++ b/Config.in
+@@ -241,7 +241,7 @@ if !BR2_PRIMARY_SITE_ONLY
  
- ifeq ($(BR2_PACKAGE_AUFS_SERIES),3)
--AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
-+AUFS_SITE = https://git.code.sf.net/p/aufs/aufs3-standalone
- AUFS_SITE_METHOD = git
- else ifeq ($(BR2_PACKAGE_AUFS_SERIES),4)
- AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
+ config BR2_BACKUP_SITE
+ 	string "Backup download site"
+-	default "http://sources.buildroot.net"
++	default "https://sources.buildroot.net"
+ 	help
+ 	  Backup site to download from. If this option is set then
+ 	  buildroot will fall back to download package sources from here
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
