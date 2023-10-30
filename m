@@ -4,69 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63C8AC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 19:14:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED416C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 19:23:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E11FB403B8;
-	Mon, 30 Oct 2023 19:14:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E11FB403B8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 77C4E40018;
+	Mon, 30 Oct 2023 19:23:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77C4E40018
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JWW1rhjKIkpO; Mon, 30 Oct 2023 19:14:15 +0000 (UTC)
+	with ESMTP id lVuUWsNve2QS; Mon, 30 Oct 2023 19:23:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC4CA403AA;
-	Mon, 30 Oct 2023 19:14:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC4CA403AA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 70FEC1BF37E
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 19:14:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 736B6403FF;
+	Mon, 30 Oct 2023 19:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 736B6403FF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EF7B31BF31D
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 19:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43B3081FD4
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 19:14:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43B3081FD4
+ by smtp3.osuosl.org (Postfix) with ESMTP id C498660BC8
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 19:23:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C498660BC8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aRyNkCH1XUVJ for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 19:14:10 +0000 (UTC)
-X-Greylist: delayed 669 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 30 Oct 2023 19:14:09 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCBF081FD2
-Received: from mxd-2-a01.seznam.cz (mxd-2-a01.seznam.cz
- [IPv6:2a02:598:64:8a00::1000:a01])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DCBF081FD2
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 19:14:09 +0000 (UTC)
-Received: from email.seznam.cz by smtpc-mxd-6786d888bc-jnlz9
- (smtpc-mxd-6786d888bc-jnlz9 [2a02:598:64:8a00::1000:a01])
- id 50d9b2a5d03ed83852ad8ccb; Mon, 30 Oct 2023 20:14:07 +0100 (CET)
-Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
- by smtpd-relay-75b8985f9d-hg2j8 (smtpd/2.0.15) with ESMTPA
- id 13ca9e0c-4809-4571-97f8-c67a3939622d;
- Mon, 30 Oct 2023 20:02:55 +0100
-Date: Mon, 30 Oct 2023 20:02:49 +0100
-From: Jan Havran <havran.jan@email.cz>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n-lxIKr0EkgU for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 19:23:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 927ED60A92
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 19:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 927ED60A92
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7D293861E2; Mon, 30 Oct 2023 19:23:04 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Message-ID: <ZT_92cB-gzyB56Kf@arch-zen.localdomain>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=email.cz; s=szn20221014; t=1698693247;
- bh=RcGa/tWPuPTDIkzEidkHZw6j3yIoXdfiNYGY/rMkpVI=;
- h=Received:Date:From:To:Subject:Message-ID:MIME-Version:
- Content-Type:Content-Disposition;
- b=x1mFE/W8gbrsK1HJ1F/DS8Q4gL/McWMK+ESQ7ysx37LvixTBmz1IIDcJmCrmXzhkm
- bT8MW4Z2RNZHnggpEavNKTcolOHWe3QgOFG2q9tdMOoUo5TxZ77Gj66XH7DCLSEVF7
- xRiU3CHq3LbuKxCMbJOWhWCJGfIxcQNDqHN+ufzwkTkZF8dWcTLja+vPxCg6yBoJ/Y
- GdPFfnN3ewYWh4+R241rxr6eYO0fWF6z6NA4ul4KVEUcammTvj8VspqGNY8tV9pymV
- fLs8ikYuKaWgy+0SlUhJdS9P0/SCRcD1YpU9P3RSNszSypGnVrz1YpkHzSs89Smu66
- 4VyNCFastwV/A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=email.cz header.i=@email.cz header.a=rsa-sha256
- header.s=szn20221014 header.b=x1mFE/W8
-Subject: [Buildroot] [PATCH 1/1] configs/pine64_pinecube_defconfig: bump to
- Linux 6.1.60 and U-Boot 2023.10
+Date: Mon, 30 Oct 2023 20:02:54 +0100
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 49bed3048ba18a4ed0aee4fbc3e2331ac698bd80
+X-Git-Newrev: 499256cd1cdac6c5541f508bfd71d96027da544f
+X-Patchwork-Hint: ignore
+Message-Id: <20231030192304.7D293861E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/rabbitmq-c: fix
+ CVE-2023-35789
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,50 +57,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Jan Havran <havran.jan@email.cz>
+commit: https://git.buildroot.net/buildroot/commit/?id=499256cd1cdac6c5541f508bfd71d96027da544f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+
+An issue was discovered in the C AMQP client library (aka rabbitmq-c)
+through 0.13.0 for RabbitMQ. Credentials can only be entered on the
+command line (e.g., for amqp-publish or amqp-consume) and are thus
+visible to local attackers by listing a process and its arguments.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c3fcaeaaa7fc0a6023d44ac16c9197b847504706)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/pine64_pinecube_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...ption-to-read-username-password-from-file.patch | 130 +++++++++++++++++++++
+ package/rabbitmq-c/rabbitmq-c.mk                   |   3 +
+ 2 files changed, 133 insertions(+)
 
-diff --git a/configs/pine64_pinecube_defconfig b/configs/pine64_pinecube_defconfig
-index 8f60115f8f..5cdaf59fae 100644
---- a/configs/pine64_pinecube_defconfig
-+++ b/configs/pine64_pinecube_defconfig
-@@ -4,7 +4,7 @@ BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
+diff --git a/package/rabbitmq-c/0001-Add-option-to-read-username-password-from-file.patch b/package/rabbitmq-c/0001-Add-option-to-read-username-password-from-file.patch
+new file mode 100644
+index 0000000000..347063cfb3
+--- /dev/null
++++ b/package/rabbitmq-c/0001-Add-option-to-read-username-password-from-file.patch
+@@ -0,0 +1,130 @@
++From 463054383fbeef889b409a7f843df5365288e2a0 Mon Sep 17 00:00:00 2001
++From: Christian Kastner <ckk@kvr.at>
++Date: Tue, 13 Jun 2023 14:21:52 +0200
++Subject: [PATCH] Add option to read username/password from file (#781)
++
++* Add option to read username/password from file
++
++Upstream: https://github.com/alanxz/rabbitmq-c/commit/463054383fbeef889b409a7f843df5365288e2a0
++Signed-off-by: Fabrice Fontaine <fontaine.fabrce@gmail.com>
++---
++ tools/common.c | 66 ++++++++++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 66 insertions(+)
++
++diff --git a/tools/common.c b/tools/common.c
++index 73b47e25..7efe557b 100644
++--- a/tools/common.c
+++++ b/tools/common.c
++@@ -18,6 +18,11 @@
++ #include "compat.h"
++ #endif
++ 
+++/* For when reading auth data from a file */
+++#define MAXAUTHTOKENLEN 128
+++#define USERNAMEPREFIX "username:"
+++#define PASSWORDPREFIX "password:"
+++
++ void die(const char *fmt, ...) {
++   va_list ap;
++   va_start(ap, fmt);
++@@ -125,6 +130,7 @@ static char *amqp_vhost;
++ static char *amqp_username;
++ static char *amqp_password;
++ static int amqp_heartbeat = 0;
+++static char *amqp_authfile;
++ #ifdef WITH_SSL
++ static int amqp_ssl = 0;
++ static char *amqp_cacert = "/etc/ssl/certs/cacert.pem";
++@@ -147,6 +153,8 @@ struct poptOption connect_options[] = {
++      "the password to login with", "password"},
++     {"heartbeat", 0, POPT_ARG_INT, &amqp_heartbeat, 0,
++      "heartbeat interval, set to 0 to disable", "heartbeat"},
+++    {"authfile", 0, POPT_ARG_STRING, &amqp_authfile, 0,
+++     "path to file containing username/password for authentication", "file"},
++ #ifdef WITH_SSL
++     {"ssl", 0, POPT_ARG_NONE, &amqp_ssl, 0, "connect over SSL/TLS", NULL},
++     {"cacert", 0, POPT_ARG_STRING, &amqp_cacert, 0,
++@@ -158,6 +166,50 @@ struct poptOption connect_options[] = {
++ #endif /* WITH_SSL */
++     {NULL, '\0', 0, NULL, 0, NULL, NULL}};
++ 
+++void read_authfile(const char *path) {
+++  size_t n;
+++  FILE *fp = NULL;
+++  char token[MAXAUTHTOKENLEN];
+++
+++  if ((amqp_username = malloc(MAXAUTHTOKENLEN)) == NULL ||
+++      (amqp_password = malloc(MAXAUTHTOKENLEN)) == NULL) {
+++    die("Out of memory");
+++  } else if ((fp = fopen(path, "r")) == NULL) {
+++    die("Could not read auth data file %s", path);
+++  }
+++
+++  if (fgets(token, MAXAUTHTOKENLEN, fp) == NULL ||
+++      strncmp(token, USERNAMEPREFIX, strlen(USERNAMEPREFIX))) {
+++    die("Malformed auth file (missing username)");
+++  }
+++  strncpy(amqp_username, &token[strlen(USERNAMEPREFIX)], MAXAUTHTOKENLEN);
+++  /* Missing newline means token was cut off */
+++  n = strlen(amqp_username);
+++  if (amqp_username[n - 1] != '\n') {
+++    die("Username too long");
+++  } else {
+++    amqp_username[n - 1] = '\0';
+++  }
+++
+++  if (fgets(token, MAXAUTHTOKENLEN, fp) == NULL ||
+++      strncmp(token, PASSWORDPREFIX, strlen(PASSWORDPREFIX))) {
+++    die("Malformed auth file (missing password)");
+++  }
+++  strncpy(amqp_password, &token[strlen(PASSWORDPREFIX)], MAXAUTHTOKENLEN);
+++  /* Missing newline means token was cut off */
+++  n = strlen(amqp_password);
+++  if (amqp_password[n - 1] != '\n') {
+++    die("Password too long");
+++  } else {
+++    amqp_password[n - 1] = '\0';
+++  }
+++
+++  (void)fgetc(fp);
+++  if (!feof(fp)) {
+++    die("Malformed auth file (trailing data)");
+++  }
+++}
+++
++ static void init_connection_info(struct amqp_connection_info *ci) {
++   ci->user = NULL;
++   ci->password = NULL;
++@@ -237,6 +289,8 @@ static void init_connection_info(struct amqp_connection_info *ci) {
++   if (amqp_username) {
++     if (amqp_url) {
++       die("--username and --url options cannot be used at the same time");
+++    } else if (amqp_authfile) {
+++      die("--username and --authfile options cannot be used at the same time");
++     }
++ 
++     ci->user = amqp_username;
++@@ -245,11 +299,23 @@ static void init_connection_info(struct amqp_connection_info *ci) {
++   if (amqp_password) {
++     if (amqp_url) {
++       die("--password and --url options cannot be used at the same time");
+++    } else if (amqp_authfile) {
+++      die("--password and --authfile options cannot be used at the same time");
++     }
++ 
++     ci->password = amqp_password;
++   }
++ 
+++  if (amqp_authfile) {
+++    if (amqp_url) {
+++      die("--authfile and --url options cannot be used at the same time");
+++    }
+++
+++    read_authfile(amqp_authfile);
+++    ci->user = amqp_username;
+++    ci->password = amqp_password;
+++  }
+++
++   if (amqp_vhost) {
++     if (amqp_url) {
++       die("--vhost and --url options cannot be used at the same time");
+diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
+index 18ecaa3098..fad6655e4e 100644
+--- a/package/rabbitmq-c/rabbitmq-c.mk
++++ b/package/rabbitmq-c/rabbitmq-c.mk
+@@ -14,6 +14,9 @@ RABBITMQ_C_CONF_OPTS = \
+ 	-DBUILD_API_DOCS=OFF \
+ 	-DBUILD_TOOLS_DOCS=OFF
  
- # Toolchain options
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="pinecube"
-@@ -17,7 +17,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pinecube/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.61"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.60"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-s3-pinecube"
-@@ -31,7 +31,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pinecube"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--- 
-2.42.0
-
++# 0001-Add-option-to-read-username-password-from-file.patch
++RABBITMQ_C_IGNORE_CVES += CVE-2023-35789
++
+ # BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
+ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ RABBITMQ_C_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
