@@ -4,68 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB42C4167D
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 10:12:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6878CC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 10:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFE744F59A;
-	Mon, 30 Oct 2023 10:12:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFE744F59A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B9114F4BF;
+	Mon, 30 Oct 2023 10:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B9114F4BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bz_EzotyUrzc; Mon, 30 Oct 2023 10:12:05 +0000 (UTC)
+	with ESMTP id H2196bFxRE7c; Mon, 30 Oct 2023 10:12:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 362E24F595;
-	Mon, 30 Oct 2023 10:12:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 362E24F595
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C52DB1BF313
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:11:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D8114F4D8;
+	Mon, 30 Oct 2023 10:12:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D8114F4D8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ADC7C1BF313
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E89885520
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:11:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E89885520
+ by smtp4.osuosl.org (Postfix) with ESMTP id 869504F16D
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 10:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 869504F16D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IZuSOpUew7yW for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 10:11:23 +0000 (UTC)
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 88F1185545
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 10:11:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88F1185545
-Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1qxPEs-00ErHG-Ay; Mon, 30 Oct 2023 11:11:18 +0100
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 3508670d;
- Mon, 30 Oct 2023 10:11:15 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 12:11:07 +0200
-Message-ID: <20231030101115.2214402-4-aperez@igalia.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231030101115.2214402-1-aperez@igalia.com>
-References: <20231030101115.2214402-1-aperez@igalia.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CqmISqKbVMP3 for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 10:11:56 +0000 (UTC)
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com
+ [91.207.212.93])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 56EFC4F2DB
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 10:11:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56EFC4F2DB
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+ by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id
+ 39U7rMgU012069; Mon, 30 Oct 2023 10:30:07 +0100
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+ by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3u1d8hcdu8-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Mon, 30 Oct 2023 10:30:07 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+ by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F211710005C;
+ Mon, 30 Oct 2023 10:30:06 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+ by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EAE6921A90F;
+ Mon, 30 Oct 2023 10:30:06 +0100 (CET)
+Received: from localhost (10.201.20.20) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 30 Oct
+ 2023 10:30:06 +0100
+From: Etienne Carriere <etienne.carriere@foss.st.com>
+To: <buildroot@buildroot.org>
+Date: Mon, 30 Oct 2023 10:30:01 +0100
+Message-ID: <20231030093002.1047149-4-etienne.carriere@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231030093002.1047149-1-etienne.carriere@foss.st.com>
+References: <20231030093002.1047149-1-etienne.carriere@foss.st.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
- Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=6LtwWq266xbtiBT0+J9oyjBs3CSile7p2a12cHaAG+E=; b=HZo0nuD2GkhUuAVTovR7mKSE12
- cwHqonpP56gG7AGSPeGLo0zIUHLwjB/6Brkm0B8RzdpTvZnML4kSw7lmy7qRujcAXzU/c2DSVUJ2+
- WmyexwRx1kzqI5VaOXChuasbLy4JM4hLdXIa6PA84j+hvcTRok+pISADiD4nuEAPNjLvm770E4Tnu
- oHOMZWdQ6ps+0uQUQEUTUqWrfIe9kMv5jbi307si72ZR5ZIF2wZgppIOFPVyZ9QLv3Lgvg0yxljl1
- jgkuUbHdgXs0n1Wu02xNxUolwBARY0gSZYWQOHeVrRSQw2fbGNMlr217bJGqAFaOwRlEVyo0RyPpW
- Ikjjc4KQ==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=HZo0nuD2
-Subject: [Buildroot] [PATCH 3/3] package/sway: bump to version 1.8.1
+X-Originating-IP: [10.201.20.20]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-30_08,2023-10-27_01,2023-05-22_02
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=foss.st.com; h=
+ from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding:content-type; s=
+ selector1; bh=aE9PTMGZWoBeUGJpTm76Lfnoga3ogOi+ekhF0njJdf4=; b=mg
+ Phale2mJmJVZlb/QRQ5k7h7ZE3/Y3EgAvHAXaBAjO7o5gFHP1kxn4Y/jFDwgp7ZS
+ lXOHAA40/J4ogh+hj7eP8jWKnS0BIe6dp/jmys+qcUkJALQX+q4+/3gXygSzaa1K
+ yy850mMqTMo58nY05mSY43yaetnB6SYat+E7cDxSOo0zQFaSRAvH3LGL7K3iBNnX
+ MVcTqwoWjjSdPDZ092AydspjJ4bWN5upItNp1g35dfcEohKZemBE0xsHSgjDFaWi
+ OuArbWrWci2nazoMdo1LYK/FaAfmHoynTueccvih8F81fjQvFapfiLa+bXxc4hd5
+ 0BGt9RoM105lPtFrpioA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com
+ header.a=rsa-sha256 header.s=selector1 header.b=mgPhale2
+Subject: [Buildroot] [PATCH 4/5] package/optee-examples: bump to version
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,48 +93,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Etienne Carriere <etienne.carriere@foss.st.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update Sway to version 1.8.1, which brings a new release series to
-Buildroot and can be built with wlroots 0.16.x
+Bumps OP-TEE examples package version to OP-TEE release 4.0.0.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
 ---
- package/sway/sway.hash | 2 +-
- package/sway/sway.mk   | 4 ++--
+ package/optee-examples/optee-examples.hash | 4 ++--
+ package/optee-examples/optee-examples.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sway/sway.hash b/package/sway/sway.hash
-index 6dfa71730f..86b6581f1c 100644
---- a/package/sway/sway.hash
-+++ b/package/sway/sway.hash
-@@ -1,3 +1,3 @@
- # Locally computed, tarball verified with GPG signature
--sha256  0c64536fb2883ec518e75cfb119f9300115fb49b084e3fde62b794fe2c6c8d84  sway-1.7.tar.gz
-+sha256  73f08fd2cf7948e8af900709efe44eae412ae11c5773960e25c9aa09f73bad41  sway-1.8.1.tar.gz
- sha256  bd35722bff46327f5eded1d211207277bbe043d2a22048b282c42ef801593b8b  LICENSE
-diff --git a/package/sway/sway.mk b/package/sway/sway.mk
-index 802371c827..19f90b8b00 100644
---- a/package/sway/sway.mk
-+++ b/package/sway/sway.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
+index c61c434c60..71cd95605d 100644
+--- a/package/optee-examples/optee-examples.hash
++++ b/package/optee-examples/optee-examples.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/linaro-swg/optee_examples/archive/3.21.0/optee-examples-3.21.0.tar.gz
+-sha256  9b965f829adc532b5228534d3b9b38ae1fc4f2ac55d73159a39d43e59749f3ed  optee-examples-3.21.0.tar.gz
++# From https://github.com/linaro-swg/optee_examples/archive/4.0.0/optee-examples-4.0.0.tar.gz
++sha256  4e21455c889ffb93085eb76f76ce191e24f394b3fa8f1d2429cad38a36e4f6e5  optee-examples-4.0.0.tar.gz
+ # Locally computed
+ sha256  6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
+diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
+index c182bab4cc..d620f0e36a 100644
+--- a/package/optee-examples/optee-examples.mk
++++ b/package/optee-examples/optee-examples.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SWAY_VERSION = 1.7
--SWAY_SITE = $(call github,swaywm,sway,v$(SWAY_VERSION))
-+SWAY_VERSION = 1.8.1
-+SWAY_SITE = https://github.com/swaywm/sway/releases/download/$(SWAY_VERSION)
- SWAY_LICENSE = MIT
- SWAY_LICENSE_FILES = LICENSE
- SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
+-OPTEE_EXAMPLES_VERSION = 3.21.0
++OPTEE_EXAMPLES_VERSION = 4.0.0
+ OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
+ OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
+ OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
 -- 
-2.42.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
