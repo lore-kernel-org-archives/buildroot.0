@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A72C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 21:55:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12D6BC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 21:56:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 356EB82051;
-	Mon, 30 Oct 2023 21:55:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 356EB82051
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4483820B4;
+	Mon, 30 Oct 2023 21:56:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4483820B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vdPRmcLAF7n0; Mon, 30 Oct 2023 21:55:50 +0000 (UTC)
+	with ESMTP id KCr-Gx3R8abr; Mon, 30 Oct 2023 21:56:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7749F82127;
-	Mon, 30 Oct 2023 21:55:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7749F82127
+	by smtp1.osuosl.org (Postfix) with ESMTP id E35F28212D;
+	Mon, 30 Oct 2023 21:56:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E35F28212D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 732991BF34E
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 21:55:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 26D8B1BF34E
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 21:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A7CA82051
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 21:55:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A7CA82051
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C7EA820B1
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 21:55:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C7EA820B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u4d8IbJmznda for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 21:55:32 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 64420820B0
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 21:55:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64420820B0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 56DC820002;
- Mon, 30 Oct 2023 21:55:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1qxaEK-003clM-2W;
- Mon, 30 Oct 2023 22:55:28 +0100
+ with ESMTP id By2wI7u9HpnE for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 21:55:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A02081FF2
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 21:55:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A02081FF2
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E67B5861FE; Mon, 30 Oct 2023 21:55:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231028201413.1160957-1-fontaine.fabrice@gmail.com>
-Date: Mon, 30 Oct 2023 22:55:28 +0100
-In-Reply-To: <20231028201413.1160957-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 28 Oct 2023 22:14:13 +0200")
-Message-ID: <87cywv3hdb.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: security
- bump to version 1.8.7
+To: buildroot@buildroot.org
+Date: Mon, 30 Oct 2023 22:54:48 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 6f1e83065c7cbc99efcbc67d9d2b6822750aeadb
+X-Git-Newrev: f64601392e7edb296e2fa4ed6039e0ee27476c79
+X-Patchwork-Hint: ignore
+Message-Id: <20231030215541.E67B5861FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ package/x11r7/xlib_libXpm: security bump to version 3.5.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +57,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f64601392e7edb296e2fa4ed6039e0ee27476c79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Fix CVE-2023-43785, CVE-2023-43786 and CVE-2023-43787
- > https://lists.x.org/archives/xorg-announce/2023-October/003424.html
- > https://lists.x.org/archives/xorg-announce/2023-October/003426.html
+Fix CVE-2023-43788, CVE-2023-43789 and CVE-2023-43786
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://lists.x.org/archives/xorg-announce/2023-October/003424.html
+https://lists.x.org/archives/xorg-announce/2023-October/003425.html
 
-Committed to 2023.02.x and 2023.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c709ab6fff85285c3f44eacbe780302a29a32ede)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xlib_libXpm/xlib_libXpm.hash | 6 +++---
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
+index a041f0d440..3582169891 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-April/003385.html
+-sha256  e6bc5da7a69dbd9bcc67e87c93d4904fe2f5177a0711c56e71fa2f6eff649f51  libXpm-3.5.16.tar.xz
+-sha512  ee564311f8c1c9c08ed1035d55c287ecf7c20c6fee09ad448acfab59f38fd1ef381d4a24b4af2b581f3033730eebc7c690918e52ba706de689d1ef11085edac2  libXpm-3.5.16.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-October/003425.html
++sha256  64b31f81019e7d388c822b0b28af8d51c4622b83f1f0cb6fa3fc95e271226e43  libXpm-3.5.17.tar.xz
++sha512  52f9d2664a47a26c1a6ad65d18867de870b66947b0b0d99cca3512756a0aaa6ce2a245c0b49f20b70c3ce48bf04c47c333e8119a147465c277bca727f6ab017e  libXpm-3.5.17.tar.xz
+ # Locally calculated
+ sha256  a80d706759624a04aa90fd62bc644a360fc3d72e08dcbfb129f167c11ca285de  COPYING
+ sha256  cbe4ced0abc8a32bea471204ae01038c202758ce4e772d3d329a341ffa761e71  COPYRIGHT
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index 51f6283370..0bba3ea946 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXPM_VERSION = 3.5.16
++XLIB_LIBXPM_VERSION = 3.5.17
+ XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
+ XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBXPM_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
