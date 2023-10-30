@@ -4,55 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A9F0C4167D
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 17:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28548C4167D
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 17:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5B1A60BC4;
-	Mon, 30 Oct 2023 17:18:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5B1A60BC4
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0D51607A3;
+	Mon, 30 Oct 2023 17:22:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0D51607A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mHzkB4KXdVAB; Mon, 30 Oct 2023 17:18:42 +0000 (UTC)
+	with ESMTP id DBN0jGV1shJ1; Mon, 30 Oct 2023 17:22:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3758660BBE;
-	Mon, 30 Oct 2023 17:18:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3758660BBE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 262FD1BF2A9
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:18:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41053607BC;
+	Mon, 30 Oct 2023 17:22:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41053607BC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EA06E1BF37E
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F303241876
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:18:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F303241876
+ by smtp1.osuosl.org (Postfix) with ESMTP id D036581FBC
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:22:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D036581FBC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qAPBeti21XRt for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 17:18:28 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87CDA4185C
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 17:18:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87CDA4185C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C94DB40003
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 17:18:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IVWL26NO_xvZ for <buildroot@lists.busybox.net>;
+ Mon, 30 Oct 2023 17:22:43 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ACB4481FB1
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 17:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACB4481FB1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A7E76E0003;
+ Mon, 30 Oct 2023 17:22:39 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1qxVuD-002nfF-0S
- for buildroot@buildroot.org; Mon, 30 Oct 2023 18:18:25 +0100
+ (envelope-from <peter@korsgaard.com>) id 1qxVyJ-002nxM-0G;
+ Mon, 30 Oct 2023 18:22:39 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-References: <20231027122551.1856719-1-peter@korsgaard.com>
- <20231027122551.1856719-2-peter@korsgaard.com>
-Date: Mon, 30 Oct 2023 18:18:25 +0100
-In-Reply-To: <20231027122551.1856719-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 27 Oct 2023 14:25:51 +0200")
-Message-ID: <877cn43u72.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20231028153448.142511-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Oct 2023 18:22:39 +0100
+In-Reply-To: <20231028153448.142511-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 28 Oct 2023 17:34:47 +0200")
+Message-ID: <8734xs3u00.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2] package/aufs-util: use HTTPS for
- git.code.sf.net
+Subject: Re: [Buildroot] [PATCH 1/2] package/zchunk: add ZCHUNK_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,17 +62,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > git.code.sf.net is available over HTTPS, so use that for security and
- > consistency with the other packages.
+ > cpe:2.3:a:zchunk:zchunk is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/detail/480C0B83-3109-49EE-9E06-7866A54878CA
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2023.02.x and 2023.08.x, thanks.
 
