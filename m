@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08A59C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 12:43:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C650DC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 12:43:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5B10856A6;
-	Mon, 30 Oct 2023 12:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5B10856A6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B6CC8554D;
+	Mon, 30 Oct 2023 12:43:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B6CC8554D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QRkBn92ijHVN; Mon, 30 Oct 2023 12:43:03 +0000 (UTC)
+	with ESMTP id nI0lP-jjiRxw; Mon, 30 Oct 2023 12:43:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22322855DC;
-	Mon, 30 Oct 2023 12:43:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22322855DC
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2353856B8;
+	Mon, 30 Oct 2023 12:43:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2353856B8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 175581BF408
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 12:43:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 36EBC1BF408
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 12:43:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E43424340B
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 12:43:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E43424340B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28382432E4
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 12:43:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28382432E4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OLl02h2eW634 for <buildroot@lists.busybox.net>;
+ with ESMTP id xyxelCC3VQ1M for <buildroot@lists.busybox.net>;
  Mon, 30 Oct 2023 12:43:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E96A1432E4
+ by smtp2.osuosl.org (Postfix) with ESMTP id E108F4311A
  for <buildroot@buildroot.org>; Mon, 30 Oct 2023 12:42:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E96A1432E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E108F4311A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D153D86166; Mon, 30 Oct 2023 12:42:59 +0000 (UTC)
+ id BD4B486191; Mon, 30 Oct 2023 12:42:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 13:41:27 +0100
+Date: Mon, 30 Oct 2023 13:40:31 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 4616a30c63a444e9502e67d1fe325f4cf30833e0
-X-Git-Newrev: d8bd44d455f8ec6b1575fb72eb8f3da8a34e9323
+X-Git-Oldrev: 30472d98b8766d626759a7aa52d76c4f9a0164c5
+X-Git-Newrev: 4616a30c63a444e9502e67d1fe325f4cf30833e0
 X-Patchwork-Hint: ignore
-Message-Id: <20231030124259.D153D86166@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/mxsldr: add .hash
- file
+Message-Id: <20231030124259.BD4B486191@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/minizip-zlib: fix
+ CVE-2023-45853
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,28 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8bd44d455f8ec6b1575fb72eb8f3da8a34e9323
+commit: https://git.buildroot.net/buildroot/commit/?id=4616a30c63a444e9502e67d1fe325f4cf30833e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-The host-mxsldr package was missing a hash file, add it now.
+MiniZip in zlib through 1.3 has an integer overflow and resultant
+heap-based buffer overflow in zipOpenNewFileInZip4_64 via a long
+filename, comment, or extra field. NOTE: MiniZip is not a supported part
+of the zlib product.
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fefcfddc5e6a265c66adbdff615558f99133f148)
+(cherry picked from commit de7bc4ada2ab5ef2e4094934acd5271c0aca19a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mxsldr/mxsldr.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ ...overflows-of-zip-header-fields-in-minizip.patch | 39 ++++++++++++++++++++++
+ package/minizip-zlib/minizip-zlib.mk               |  2 ++
+ 2 files changed, 41 insertions(+)
 
-diff --git a/package/mxsldr/mxsldr.hash b/package/mxsldr/mxsldr.hash
+diff --git a/package/minizip-zlib/0001-Reject-overflows-of-zip-header-fields-in-minizip.patch b/package/minizip-zlib/0001-Reject-overflows-of-zip-header-fields-in-minizip.patch
 new file mode 100644
-index 0000000000..c2a7b4ad64
+index 0000000000..f4eacc7fdc
 --- /dev/null
-+++ b/package/mxsldr/mxsldr.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  8ef7b7abb8d17c879e70b2c3911df8c5ce97f38779fa65d40be7f34febba55e1  mxsldr-2793a657ab7a22487d21c1b020957806f8ae8383-br1.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++++ b/package/minizip-zlib/0001-Reject-overflows-of-zip-header-fields-in-minizip.patch
+@@ -0,0 +1,39 @@
++From 73331a6a0481067628f065ffe87bb1d8f787d10c Mon Sep 17 00:00:00 2001
++From: Hans Wennborg <hans@chromium.org>
++Date: Fri, 18 Aug 2023 11:05:33 +0200
++Subject: [PATCH] Reject overflows of zip header fields in minizip.
++
++This checks the lengths of the file name, extra field, and comment
++that would be put in the zip headers, and rejects them if they are
++too long. They are each limited to 65535 bytes in length by the zip
++format. This also avoids possible buffer overflows if the provided
++fields are too long.
++
++Upstream: https://github.com/madler/zlib/commit/73331a6a0481067628f065ffe87bb1d8f787d10c
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ contrib/minizip/zip.c | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/contrib/minizip/zip.c b/contrib/minizip/zip.c
++index 3d3d4cadd..0446109b2 100644
++--- a/contrib/minizip/zip.c
+++++ b/contrib/minizip/zip.c
++@@ -1043,6 +1043,17 @@ extern int ZEXPORT zipOpenNewFileInZip4_64(zipFile file, const char* filename, c
++       return ZIP_PARAMERROR;
++ #endif
++ 
+++    // The filename and comment length must fit in 16 bits.
+++    if ((filename!=NULL) && (strlen(filename)>0xffff))
+++        return ZIP_PARAMERROR;
+++    if ((comment!=NULL) && (strlen(comment)>0xffff))
+++        return ZIP_PARAMERROR;
+++    // The extra field length must fit in 16 bits. If the member also requires
+++    // a Zip64 extra block, that will also need to fit within that 16-bit
+++    // length, but that will be checked for later.
+++    if ((size_extrafield_local>0xffff) || (size_extrafield_global>0xffff))
+++        return ZIP_PARAMERROR;
+++
++     zi = (zip64_internal*)file;
++ 
++     if (zi->in_opened_file_inzip == 1)
+diff --git a/package/minizip-zlib/minizip-zlib.mk b/package/minizip-zlib/minizip-zlib.mk
+index 259570f75c..81fee3c687 100644
+--- a/package/minizip-zlib/minizip-zlib.mk
++++ b/package/minizip-zlib/minizip-zlib.mk
+@@ -16,5 +16,7 @@ MINIZIP_ZLIB_AUTORECONF = YES
+ MINIZIP_ZLIB_DEPENDENCIES = zlib
+ # demos must be disabled to avoid a conflict with BR2_PACKAGE_MINIZIP_DEMOS
+ MINIZIP_ZLIB_CONF_OPTS = --disable-demos
++# 0001-Reject-overflows-of-zip-header-fields-in-minizip.patch
++MINIZIP_ZLIB_IGNORE_CVES += CVE-2023-45853
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
