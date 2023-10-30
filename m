@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EAEBC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 17:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBD63C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 17:25:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 238B040374;
-	Mon, 30 Oct 2023 17:25:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 238B040374
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E1E54037C;
+	Mon, 30 Oct 2023 17:25:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E1E54037C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PWHtpnz4NWj8; Mon, 30 Oct 2023 17:25:28 +0000 (UTC)
+	with ESMTP id 69DhlZDDtAQ6; Mon, 30 Oct 2023 17:25:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15955403C7;
-	Mon, 30 Oct 2023 17:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15955403C7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4639D1BF3A0
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:24:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 712A7403B3;
+	Mon, 30 Oct 2023 17:25:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 712A7403B3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 719931BF3A0
+ for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:24:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D1916080B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 84F824036E
  for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 17:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D1916080B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84F824036E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B1oxsKf4GdxA for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YmLj_vmhSDnV for <buildroot@lists.busybox.net>;
  Mon, 30 Oct 2023 17:24:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C2E660BAC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3766840280
  for <buildroot@buildroot.org>; Mon, 30 Oct 2023 17:24:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C2E660BAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3766840280
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 22EC3861C4; Mon, 30 Oct 2023 17:24:27 +0000 (UTC)
+ id 21F6B861BE; Mon, 30 Oct 2023 17:24:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 18:17:34 +0100
+Date: Mon, 30 Oct 2023 18:23:34 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 639b6ececb93af8b8c3d44a4f727f07e5dd96e43
-X-Git-Newrev: 7aad5e1b433e4eb60a33c05474a6dcd2bffa8ce9
+X-Git-Oldrev: 60de45e18416e63bcbf0829291083e25a5773a75
+X-Git-Newrev: 49bed3048ba18a4ed0aee4fbc3e2331ac698bd80
 X-Patchwork-Hint: ignore
-Message-Id: <20231030172428.22EC3861C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/aufs-util: use
- HTTPS for git.code.sf.net
+Message-Id: <20231030172428.21F6B861BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/tiff: security
+ bump to version 4.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aad5e1b433e4eb60a33c05474a6dcd2bffa8ce9
+commit: https://git.buildroot.net/buildroot/commit/?id=49bed3048ba18a4ed0aee4fbc3e2331ac698bd80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-git.code.sf.net is available over HTTPS, so use that for security and
-consistency with the other packages.
+- Drop --without-x (now unrecognized)
+- Fix CVE-2023-40745: LibTIFF is vulnerable to an integer overflow. This
+  flaw allows remote attackers to cause a denial of service (application
+  crash) or possibly execute an arbitrary code via a crafted tiff image,
+  which triggers a heap-based buffer overflow.
+- Fix CVE-2023-41175: A vulnerability was found in libtiff due to
+  multiple potential integer overflows in raw2tiff.c. This flaw allows
+  remote attackers to cause a denial of service or possibly execute an
+  arbitrary code via a crafted tiff image, which triggers a heap-based
+  buffer overflow.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+https://libtiff.gitlab.io/libtiff/releases/v4.6.0.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 99d525028f969220719a4e6bcd694f7d9cfd5b67)
+(cherry picked from commit e96b1c4b0b06d65c54a764fe4a59d886afc70df5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/aufs-util/aufs-util.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tiff/tiff.hash | 2 +-
+ package/tiff/tiff.mk   | 6 ++----
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
-index d954f02958..32f3bca151 100644
---- a/package/aufs-util/aufs-util.mk
-+++ b/package/aufs-util/aufs-util.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+index 0fa503a02a..3aae7dc4d5 100644
+--- a/package/tiff/tiff.hash
++++ b/package/tiff/tiff.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d7f38b6788e4a8f5da7940c5ac9424f494d8a79eba53d555f4a507167dca5e2b  tiff-4.5.1.tar.gz
++sha256  88b3979e6d5c7e32b50d7ec72fb15af724f6ab2cbf7e10880c360a77e4b5d99a  tiff-4.6.0.tar.gz
+ sha256  0780558a8bfba0af1160ec1ff11ade4f41c0d7deafd6ecfc796b492a788e380d  LICENSE.md
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 0006f461a0..e384e8b814 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # linux-headers
- AUFS_UTIL_VERSION = $(call qstrip,$(BR2_PACKAGE_AUFS_UTIL_VERSION))
--AUFS_UTIL_SITE = http://git.code.sf.net/p/aufs/aufs-util
-+AUFS_UTIL_SITE = https://git.code.sf.net/p/aufs/aufs-util
- AUFS_UTIL_SITE_METHOD = git
- AUFS_UTIL_LICENSE = GPL-2.0
- AUFS_UTIL_LICENSE_FILES = COPYING
+-TIFF_VERSION = 4.5.1
++TIFF_VERSION = 4.6.0
+ TIFF_SITE = http://download.osgeo.org/libtiff
+ TIFF_LICENSE = tiff license
+ TIFF_LICENSE_FILES = LICENSE.md
+@@ -17,14 +17,12 @@ TIFF_INSTALL_STAGING = YES
+ TIFF_CONF_OPTS = \
+ 	--disable-contrib \
+ 	--disable-tests \
+-	--disable-webp \
+-	--without-x
++	--disable-webp
+ 
+ TIFF_DEPENDENCIES = host-pkgconf
+ 
+ HOST_TIFF_CONF_OPTS = \
+ 	--disable-cxx \
+-	--without-x \
+ 	--disable-zlib \
+ 	--disable-libdeflate \
+ 	--disable-lzma \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
