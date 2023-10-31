@@ -4,134 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DE90C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 12:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35580C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 12:23:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3E12428E5;
-	Tue, 31 Oct 2023 12:13:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3E12428E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBE9142C61;
+	Tue, 31 Oct 2023 12:23:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBE9142C61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lC83DLfngzS6; Tue, 31 Oct 2023 12:12:59 +0000 (UTC)
+	with ESMTP id h9JE-WRNns6v; Tue, 31 Oct 2023 12:23:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD4C4428F1;
-	Tue, 31 Oct 2023 12:12:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD4C4428F1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0E59C1BF31A
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:12:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 914C442C66;
+	Tue, 31 Oct 2023 12:23:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 914C442C66
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 25E731BF321
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:23:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E57334173F
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:12:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E57334173F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09707839BB
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:23:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09707839BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DnmE4g4KkhWq for <buildroot@lists.busybox.net>;
- Tue, 31 Oct 2023 12:12:52 +0000 (UTC)
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com
- (mail-bn7nam10on20605.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e8a::605])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 515D541720
- for <buildroot@buildroot.org>; Tue, 31 Oct 2023 12:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 515D541720
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g27vZcAamPDoVSjPzhWh/XPVBwyfGKMTRad350IkbGswJJWPGVB4N0rynCFD1RAj0RrNESZV+Iep09FDLVqbKHZt/dm70RPkUArJaF5uNMxn/pJEFvG/Qz0AZ4MT8tSM6ImWlv8RNFuynJTVWUaLHfKWZ0f6ynyV5on1hfr/piNwMjjp5cxNI5Oi0M3+PD7D6dDdbXR5HWV3heelX8QzTA8l6T4+wlQmOCAfV9dmPvTsNvI4Rg0Jjre7frNOQF+TCqSROBvDRAoiCi3Ix2kH6ctIVR3uAxFxYIP/R/BlA/kFVvSmgYpMWTMcj8fXcN2rrZ1wTVPUxqd/HFD0CuqRMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cF0LiXiO/lL+VIBT+b8Eky7hWY+NSbeUtmOZcUzgAo8=;
- b=FlRzs5rHncfXk4X8oK9Ggl35atuqZhKIPgt8dNxxufvTwHXncvaoWYcr4XfSaI7DO+0t4D71Wubj2EyFFiCLiMAGyhZNnW9G1xBHJzt79VXjHixx9VtDT3XXZpXl7Ho/jqIhIEN7vKNyWR2iKMvqZXFthUsuvYnGMaBAAARE1anepAomvaBQlURRbRVr8qCn4vMlMRQ+x0izrLw0fQT1XiRBNe1yXB5c+uxsPW0MLSGz9wsrjakxGEHudAq7tpiO+92ixFRs0mltBVOedcyTaIlECO9+suNHpaeFSKS10irzPHgPypBSFpBKgSZsTFwFhc1vLGan7DZtbr6SBWStDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by SN7PR12MB7346.namprd12.prod.outlook.com (2603:10b6:806:299::16)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.27; Tue, 31 Oct
- 2023 12:12:48 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::a507:b06b:e64b:4c50]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::a507:b06b:e64b:4c50%4]) with mapi id 15.20.6933.029; Tue, 31 Oct 2023
- 12:12:47 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, "peter@korsgaard.com"
- <peter@korsgaard.com>
-Thread-Topic: [PATCH v2 1/1] configs/zynq_zc702_defconfig: new defconfig
-Thread-Index: AQHaAbQ3Mm25p1p3fUKYJaXPsu9PIbBj0tQAgAAE7hA=
-Date: Tue, 31 Oct 2023 12:12:47 +0000
-Message-ID: <CH2PR12MB50042DEEED0FC5E7D3BBCA99F0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20231018111357.2898095-1-neal.frager@amd.com>
- <20231031121222.1dfa4035@booty>
-In-Reply-To: <20231031121222.1dfa4035@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SN7PR12MB7346:EE_
-x-ms-office365-filtering-correlation-id: 96a71401-48c2-4136-19d9-08dbda0ab240
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LfsLNn7nyOhCZf8a7nJciygzSDuDJEovlaNESZvKgmwdQXePgHREUhtorpxOTzCtUXvcko8YFE1OlUOj3u4cL9cRGIHK1YXalqTC7tOV4eeOHFgQ5Twfsg0bmdktdCx9beornjQk+DBLRVC7anzaHSxlyLXxmwdd/24nPr1Jn8Pf2o9xzkDnsezUHkeNtScPByNA3AZdDiyH9NOvqq1VP6eLo9A6UM9D0oQYfqSqTY+J3F7qTUguBpZfaSW/QHeA1cCu0sqwdJ+zrOwaGYeNfefVxhYRyL9bGH4m4X9ZyxoLip7B9H2avTUh6+rNC5Ij19AGCKBQHyDEnTP7Atq/rmI6vZ++kUfhFm7ORa9BvU7XCpBxXMntMfdW/tbuBUVlaSBHNci223JIEFW/fENb1m4NAEU/k4JQgBLmWPoyFhpGGvbAyxsQpOhciNkbgt3jfocZUsDCvNU+uZ8w2HdIAXjEZGcVpWIYgDfgSmO6hr3XRCPESvWx541wMrzrrmYTbIE4mtvSqSXMU/EWW8njjrYuOyv8gbgCjYkByjr2r3Puv4pfDVUzQQwk9Ct0hyFtX6D3+2Y99amFxzkKvo1yVMPdcUFye9k5Nrx5hg20AX/9S32fxLFAvH+YjsV4FDxxM9y2AmUwdfRErzMsRrZ4QQ==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(366004)(39860400002)(376002)(136003)(396003)(346002)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(2906002)(9686003)(478600001)(71200400001)(7696005)(6506007)(83380400001)(5660300002)(66476007)(76116006)(110136005)(41300700001)(4326008)(966005)(66946007)(8676002)(8936002)(54906003)(64756008)(316002)(66446008)(66556008)(38070700009)(38100700002)(33656002)(86362001)(122000001)(52536014)(55016003);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Oj5wxdQ//dIacybewaAnvUph+G/zqBB7cL6yOVYG619zUuipEeKr6MlfRDBl?=
- =?us-ascii?Q?zZKZCB/cpSoncQ0obTavCwMhyLrSoUqcppJ1k0I5MeNJoOHfQxhDAQw4ZzTB?=
- =?us-ascii?Q?vgTclWouViOiQDMIesxOqii8H6cjevFal6/q3oL48aWhceUGzo0MkHRjL2Lx?=
- =?us-ascii?Q?zV4n3U8aNs/AGYVf2vgmsoTTN+LC3CtfO7qWe62pGca2zRr/mjS1S2t42sF7?=
- =?us-ascii?Q?1Q3GXWjQoOMELdUeDcGPJwg9BE8A2wAe+vk69dqVBHBLLL/Szedh+m5jJPL8?=
- =?us-ascii?Q?Xo0mYweOaixikLqDjy9cIpPN30AvRRFj4Yod7nJli9JPqYZ2AJsq1lnUw8Cy?=
- =?us-ascii?Q?idxsno+3atpcUH40ajlXPIzdXWLJUag1z3jfUqQV2oWZ6pgfJZ4B2pezXUC4?=
- =?us-ascii?Q?lrBRFSlH/xSYXswGiHdeeBUEW9CsP5WIW9iA+vqW1akIm3+KBISFuYYsrcao?=
- =?us-ascii?Q?/VyTgYviOmfIeh9wYOF8CviPrYLGAyavYu+XoF05fdr9Ci6rDqnL54nwQ4Zb?=
- =?us-ascii?Q?17lu3QPr4JVX9fPcHAQ73Oqlg6PLhCHluR3AWKuyGRBgFx3YvNyCievmPg1D?=
- =?us-ascii?Q?1LOkXI/y34tSpxmSUi2EWyEGjSRfL6F83MtrvBh6UfRc5jD7ZRQdESlcl69V?=
- =?us-ascii?Q?CJe+9Xo/MbLLs3tNC2dFEin3IakGJU9l8jOqsdEnT7mo3jJ1avQlvvKPXphV?=
- =?us-ascii?Q?rDkh8Lotc9m6jqmrj/tO/8ig2fNMZLgMmK4jEIyLrNBq7s+6Jx9i9E6SKR6m?=
- =?us-ascii?Q?I4ld019AvRiO3Se78IKF9CiNFIOor/ea0zxGkLWnIvNXdGfSexdF+qJXeJfP?=
- =?us-ascii?Q?s51g5gUwFIyJQ5iSPaI1bqILl8q4JCBzKPvv5Qx7JIS2GDoO8smvtyW3C0HL?=
- =?us-ascii?Q?gTMozT8doFqn0xEXxhhmfBATnQcOxkZwUzSppziLg4KEQGCyPWGelieeDu2v?=
- =?us-ascii?Q?VxwoJvLudE5D7KAkcsD559obvDbvOFQkMShw9dms1gkoCLYWwTY0kyMbdF4W?=
- =?us-ascii?Q?Cgrs3C3QHJDYjqz2RlQktS+dO3GnVtdwJIzn0KCbbQhBdrCXahDh+YXiFTDt?=
- =?us-ascii?Q?h/BKRhwTNwOSFCg/00ECJJyJ6Lf4CqQ3Wde+/0uLUyeTutbO/j6k2eBnmwar?=
- =?us-ascii?Q?22HHHIC06jZJEieZAJhHhorEmrpDULTmUXqB+gXAVZsXSM7VJSNoWCOggijo?=
- =?us-ascii?Q?+E6UDFAOIFxphxssFuiw9hKbSGi/33yng0hvyYyKq1dxTfHDHXjcF3AgGTr7?=
- =?us-ascii?Q?bb9QNQnX+gL/X1LT8ySRlw5aoy1sgWI8B8V3FlO9yp6lsP5ovrOsqWnTrOly?=
- =?us-ascii?Q?B5Gj7RdNXdFwKSoXlN6sGKWrQzBdvgMeCKbdNNLMMqB5FhP8BZDUh/27BrDw?=
- =?us-ascii?Q?DBZ2bKYG1IjT9LomblUsJF97yf2HDHcXxkWxvp7BJ8iJ+ritlbM0J+VDspVZ?=
- =?us-ascii?Q?YB1g47ig7b0sm1MC1OMoDMqVO55KvEofWskSJwI70knVsHjsMQpSsT9ho+WB?=
- =?us-ascii?Q?Qt9UnEWZsrFX8+RLgd6ngz7q1UC0v7soAXSKK2VJzmn78CXZ7+EqzgzJfaAe?=
- =?us-ascii?Q?GB20F6yli7YVwlU8q1MWzse7e3pF5FaHDa0nQ+2AF8HyJxA3QQi4RbnCkMUl?=
- =?us-ascii?Q?+IEgLJ+uauhXh+LRxlG0lNA=3D?=
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DjfC8Eizz_XB for <buildroot@lists.busybox.net>;
+ Tue, 31 Oct 2023 12:23:06 +0000 (UTC)
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E8FCE8399E
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 12:23:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8FCE8399E
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 9E37419F5C2;
+ Tue, 31 Oct 2023 13:23:00 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34546])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 31 Oct 2023 13:23:00 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96a71401-48c2-4136-19d9-08dbda0ab240
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2023 12:12:47.7932 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kllgZzN3hmcF7AafJkbRExz8iUZT62lM56paEUJq57NQQAYn17cqMYwcdRe4OIFu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7346
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cF0LiXiO/lL+VIBT+b8Eky7hWY+NSbeUtmOZcUzgAo8=;
- b=OmBKSOoGIV2+a5nMsLLEQx/IANThRN9Ge7hGhgiktFpBhGwi7Al6bv4FV1+N4iG6QJjy2eXSE7xulAbqgAVTj/EBId2K6SAYes1RwlfBTpmAPEsZN0YsdX40HgQ9KjAcqvTRl166upzEQ/5WbH/8ff8LZYYmo3MIQX7HaKfV64Q=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=OmBKSOoG
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v2 1/1] configs/zynq_zc702_defconfig: new
- defconfig
+Date: Tue, 31 Oct 2023 13:23:00 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Marcus Folkesson <marcus.folkesson@gmail.com>
+In-Reply-To: <20231030103931.2684786-1-marcus.folkesson@gmail.com>
+References: <20231030103931.2684786-1-marcus.folkesson@gmail.com>
+User-Agent: Webmail Free/1.6.4
+Message-ID: <627c2e7888ad6a916e976d470fc23dd6@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1698754982;
+ bh=j0AFKZw1aWV4gvHCpI490+4QzYBZjIgjz86zRVcnJ8A=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Zt58BgdDSWlGJweDuwdYs5BdfRjXGd9QfoDhkmMWNtnZ/JnbzunUKTZIuZkQQV7KU
+ aqUFzoEdrS2a3TSz7EWuFX9e9gFs/0Tj26WWANr/AQ6ZHhmRrE47MI0CcPVTnQqNhP
+ j+DZMzoR1fI8RqC9wNVbRvl3Wl1Ep0G6hzm2uewc+s9leyRI0SD2Fkun2VRa+kJBJN
+ QY28DY+iBYT8PBnnd+RZaBwZT964VwfS+y7ZCn4msqXA//kQEwmv1Ctk1uQ8BbiGyq
+ KeSCaBVUtWkEq8xc7ZpacD6bMLqJdK+H8viynMsT2FTRhwRgxMc4hCtw2xoVmFcbGa
+ absH9SfD8GNvg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Zt58BgdD
+Subject: Re: [Buildroot] [PATCH v5] package/criu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -143,77 +76,345 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Simek, Michal" <michal.simek@amd.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
+Hi Marcus,
 
-> This patch adds support for Xilinx Zynq ZC702 starter kit.
+Thanks for this updated v5 patch!
+
+I confirm I successfully tested this patch on branch master at commit
+a9d2040 with commands:
+
+     utils/docker-run make check-package
+     ...
+     0 warnings generated
+
+     cat >criu.config <<EOF
+     BR2_PACKAGE_HOST_PYTHON3=y
+     BR2_PACKAGE_CRIU=y
+     EOF
+     utils/test-pkg -a -c criu.config -p criu
+                          arm-aarch64 [ 1/45]: OK
+                bootlin-aarch64-glibc [ 2/45]: SKIPPED
+            bootlin-arcle-hs38-uclibc [ 3/45]: SKIPPED
+                 bootlin-armv5-uclibc [ 4/45]: SKIPPED
+                  bootlin-armv7-glibc [ 5/45]: OK
+                bootlin-armv7m-uclibc [ 6/45]: SKIPPED
+                   bootlin-armv7-musl [ 7/45]: SKIPPED
+             bootlin-m68k-5208-uclibc [ 8/45]: SKIPPED
+            bootlin-m68k-68040-uclibc [ 9/45]: SKIPPED
+          bootlin-microblazeel-uclibc [10/45]: SKIPPED
+             bootlin-mipsel32r6-glibc [11/45]: SKIPPED
+                bootlin-mipsel-uclibc [12/45]: SKIPPED
+                  bootlin-nios2-glibc [13/45]: SKIPPED
+              bootlin-openrisc-uclibc [14/45]: SKIPPED
+     bootlin-powerpc64le-power8-glibc [15/45]: SKIPPED
+        bootlin-powerpc-e500mc-uclibc [16/45]: SKIPPED
+                bootlin-riscv32-glibc [17/45]: SKIPPED
+                bootlin-riscv64-glibc [18/45]: SKIPPED
+                 bootlin-riscv64-musl [19/45]: SKIPPED
+              bootlin-s390x-z13-glibc [20/45]: SKIPPED
+                   bootlin-sh4-uclibc [21/45]: SKIPPED
+                bootlin-sparc64-glibc [22/45]: SKIPPED
+                 bootlin-sparc-uclibc [23/45]: SKIPPED
+                 bootlin-x86-64-glibc [24/45]: OK
+                  bootlin-x86-64-musl [25/45]: SKIPPED
+                bootlin-x86-64-uclibc [26/45]: SKIPPED
+                bootlin-xtensa-uclibc [27/45]: SKIPPED
+                         br-arm-basic [28/45]: SKIPPED
+                 br-arm-full-nothread [29/45]: SKIPPED
+                   br-arm-full-static [30/45]: SKIPPED
+                br-i386-pentium4-full [31/45]: SKIPPED
+             br-i386-pentium-mmx-musl [32/45]: SKIPPED
+                   br-mips64-n64-full [33/45]: SKIPPED
+              br-mips64r6-el-hf-glibc [34/45]: SKIPPED
+            br-powerpc-603e-basic-cpp [35/45]: SKIPPED
+            br-powerpc64-power7-glibc [36/45]: SKIPPED
+                    linaro-aarch64-be [37/45]: SKIPPED
+                       linaro-aarch64 [38/45]: SKIPPED
+                           linaro-arm [39/45]: SKIPPED
+                  sourcery-arm-armv4t [40/45]: SKIPPED
+                         sourcery-arm [41/45]: SKIPPED
+                  sourcery-arm-thumb2 [42/45]: SKIPPED
+                      sourcery-mips64 [43/45]: SKIPPED
+                        sourcery-mips [44/45]: SKIPPED
+                       sourcery-nios2 [45/45]: SKIPPED
+      45 builds, 42 skipped, 0 build failed, 0 legal-info failed, 0 
+show-info failed
+
+I also tested with the runtime test from:
+https://patchwork.ozlabs.org/project/buildroot/patch/20230915221444.1686011-1-ju.o@free.fr/
+
+     support/testing/run-tests \
+         -d dl -o output_folder \
+         tests.package.test_criu
+     ...
+     OK
+
+I have also few minor comments.
+
+On 30/10/2023 11:39, Marcus Folkesson wrote:
+> Checkpoint/Restore In Userspace (CRIU), is a software tool for the
+> Linux operating system to make it possible to freeze a running
+> application and checkpoint it to persistent storage as a collection of 
+> files.
 > 
-> ZC702 features can be found here:
-> https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
 > 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> Notes:
+>     v2:
+>      - Addressed comments from Thomas.
+>      - Tested on ARM target and on x86_64 with qemu.
+> 
+>     v3:
+>      - set CONFIG_CHECKPOINT_RESTORE in kernel config
+>      - Only be available for ARMv6, ARMv7 and ARMv8
+> 
+>     v4:
+>     - set SUBARCH for armv6, armv7 and armv8
+>     - Use github download helper
+> 
+>     Result from test-pkg:
+>                         bootlin-armv5-uclibc [1/6]: SKIPPED
+>                          bootlin-armv7-glibc [2/6]: OK
+>                        bootlin-armv7m-uclibc [3/6]: SKIPPED
+>                          bootlin-x86-64-musl [4/6]: OK
+>                           br-arm-full-static [5/6]: SKIPPED
+>                                 sourcery-arm [6/6]: SKIPPED
+>     6 builds, 4 skipped, 0 build failed, 0 legal-info failed, 0 
+> show-info failed
+> 
+>     v5:
+>     - Remove support for s390 arch
+>     - Depend on BR2_HOST_GCC_AT_LEAST_8
+>     - Depend on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+>     - Depend on !BR2_TOOLCHAIN_USES_UCLIBC
+>     - Use BR2_NORMALIZED_ARCH instead of BR2_ARCH
+> 
+>  DEVELOPERS             |  1 +
+>  package/Config.in      |  1 +
+>  package/criu/Config.in | 55 ++++++++++++++++++++++++++++++++
+>  package/criu/criu.hash |  3 ++
+>  package/criu/criu.mk   | 71 ++++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 131 insertions(+)
+>  create mode 100644 package/criu/Config.in
+>  create mode 100644 package/criu/criu.hash
+>  create mode 100644 package/criu/criu.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 57015e245e..2047827bd9 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2007,6 +2007,7 @@ 
+> F:	support/testing/tests/package/test_python_pytest.py
+>  F:	support/testing/tests/package/test_python_pytest_asyncio.py
+> 
+>  N:	Marcus Folkesson <marcus.folkesson@gmail.com>
+> +F:	package/criu/
+>  F:	package/libcamera/
+>  F:	package/libcamera-apps/
+>  F:	package/libostree/
+> diff --git a/package/Config.in b/package/Config.in
+> index 4e489c4706..9e2099f6a5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2678,6 +2678,7 @@ menu "System tools"
+>  	source "package/coreutils/Config.in"
+>  	source "package/cpulimit/Config.in"
+>  	source "package/cpuload/Config.in"
+> +	source "package/criu/Config.in"
+>  	source "package/crun/Config.in"
+>  	source "package/daemon/Config.in"
+>  	source "package/dc3dd/Config.in"
+> diff --git a/package/criu/Config.in b/package/criu/Config.in
+> new file mode 100644
+> index 0000000000..7963e6e8df
+> --- /dev/null
+> +++ b/package/criu/Config.in
+> @@ -0,0 +1,55 @@
+> +# criu only builds on certain architectures
+> +config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_ARM_CPU_ARMV6
+> +	default y if BR2_ARM_CPU_ARMV7A
+> +	default y if BR2_ARM_CPU_ARMV7M
+> +	default y if BR2_ARM_CPU_ARMV8A
+> +	default y if BR2_ARM_CPU_ARMV8M
+> +	default y if BR2_aarch64
+> +	default y if BR2_i386
+> +	default y if BR2_mips
+> +	default y if BR2_x86_64
+> +	default y if BR2_BR2_powerpc64le #Only support powerpc64 with LE
+> +	#default y if BR2_s390x
 
-> This patch looks very clean, however I have a question. The zc702 config you are adding is identical to the existing one for the zc706 except for the device tree:
+I think this BR2_s390x Kconfig line can be removed. Keeping only the
+following comment will be sufficient.
 
-> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc702"
-> -BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc706"
-> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc702"
+> +	#CRIU has "some" support for s390 but it is not included due to
+> +	#BE/LE endian issues.
+> +
+> +menuconfig BR2_PACKAGE_CRIU
+> +	bool "criu"
+> +	depends on BR2_HOST_GCC_AT_LEAST_8 # -march=armv7-a+fp
 
-> However, exactly because it is so similar, I am not sure about the usefulness of having a large number of (from the build system
-> perspective) very similar configurations, where a user can simply 'sed s/zc706/zc702/' to work on a different board.
+This should be BR2_TOOLCHAIN_GCC_AT_LEAST_8 (i.e. target gcc). It
+should then replace the "depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8"
+you already have for protobuf. I didn't see any build failure, as it
+is probably hidden with the kernel headers >= 4.18 dependency.
 
-> I'm wondering whether we could have a unique defconfig that builds artifacts able to boot on both boards. This probably build down to whether the hardware components involved in the boot process are similar enough to allow U-Boot to boot with the same embedded device tree for both boards. At a quick glance the two dts files appear very similar.
+> +	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_HOST_PYTHON3 # host-python3-ssl
+> +	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
+> +	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+> +	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
 
-I do understand your point.  From this perspective, we can say the same thing about the zynq_zed_defconfig and the zynq_microzed_defconfig as well.  For all 4 of these zynq boards, the DTS definition is all that changes from one defconfig to another.  And in all 4 cases, the only differences in the dts files are things like gpio LEDs, switches and whether or not there is a CAN peripheral on board.  So you could potentially boot the same images across these boards.  You would just lose a peripheral or two that is included in one dts file but not another.
+This line should be replaced by BR2_HOST_GCC_AT_LEAST_8, as commented
+earlier.
 
-My reasoning for creating the zynq_zc702_defconfig is the same as with the zynqmp_kr260_defconfig.  I would like for buildroot to be a clear alternative to yocto.  This is my primary motivation as an AMD employee.  At the moment, if a new user wants to run a yocto or petalinux build for any AMD Xilinx evaluation board, they simply need to use that board's configuration as all of them are included with the meta-xilinx releases.
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
+> +	depends on !BR2_STATIC_LIBS # protobuf, libbsd
+> +	depends on BR2_USE_WCHAR # libbsd
+> +	depends on BR2_USE_MMU # libcap
+> +	select BR2_PACKAGE_HOST_PYTHON3_SSL
+> +	select BR2_PACKAGE_PROTOBUF
+> +	select BR2_PACKAGE_PROTOBUF_C
+> +	select BR2_PACKAGE_LIBAIO
+> +	select BR2_PACKAGE_LIBBSD
+> +	select BR2_PACKAGE_LIBCAP
+> +	select BR2_PACKAGE_LIBNET
+> +	select BR2_PACKAGE_LIBNL
+> +	select BR2_PACKAGE_PYTHON3
+> +	help
+> +	  Checkpoint/Restore In Userspace (CRIU), is a software
+> +	  tool for the Linux operating system to make it possible
+> +	  to freeze a running application and checkpoint it to
+> +	  persistent storage as a collection of files.
+> +
+> +	  https://criu.org/Main_Page
+> +
+> +comment "criu needs a toolchain w/ threads, dynamic library, wchar"
 
-I get that knowledgeable buildroot users can simply 'sed s/zc706/zc702/' to work on a different board.  But what about the new user who does not know that changing the dts is all that needs to be done?  It may be hard to believe, but I have received questions about certain boards like the zc702 or the zcu104 which do not have an explicit buildroot defconfig, and some users interpret that to mean the board is not supported.  But in reality, you and I both know that it takes very little to support another zynq or zynqmp evaluation board now that all the board support is already included in buildroot.  The new user does not know this.
+The comment should be slightly refined, with something like,
+in one line:
+"criu needs a glibc or musl toolchain w/ threads, gcc >= 8, headers >= 
+4.18, dynamic library, wchar"
 
-Even internally at AMD, some people think buildroot does not have support for our products.  @Peter can vouch for this as he has personally been involved in getting AMD technical support, and received the feedback that we need to duplicate the problem using the "petalinux flow" even though buildroot and petalinux use the exact same u-boot and Linux release tags.
+> +	depends on !BR2_HOST_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS \
 
-If we compare buildroot with yocto/petalinux, we can see how many boards are supported "out of the box" by yocto/petalinux without having a buildroot defconfig.  Below is a nice github containing all of the yocto/petalinux pre-built binaries.
+The change I proposed earlier should also be reflected here:
 
-https://github.com/Xilinx/soc-prebuilt-firmware/tree/xlnx_rel_v2023.2
+     depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || ...
 
-You can see that buildroot only includes the following defconfigs:
-zynq: 1 out 2 defconfigs
-zynqmp: 2 out of 5 defconfigs
-kria: 1 out of 3 defconfigs
-versal: 1 out of 5 defconfigs
-
-In many cases, I think this can be a blocker for many new users when deciding to go the buildroot or yocto path.
-
-If having too many defconfigs is an issue for buildroot, I would propose we drop support of some boards like the zynq_qmtech board, and include more of the boards that are still actively supported.
-
-Would the community be ok with the following list of AMD defconfigs being included in buildroot?  I believe the following list includes the most popular boards on our side.  I know 10 defconfigs is a lot, but I have no problem with maintaining them, and it would definitely give buildroot the appearance of being an officially supported platform for new users.  Half of these defconfigs are already included in buildroot.
-
-zynq_zc702
-zynq_zc706
-zynqmp_zcu102
-zynqmp_zcu104
-zynqmp_zcu106
-kria_kd240
-kria_kr260
-kria_kv260
-versal_vck190
-versal_vmk180
-
-What do you think?
+> +		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 \
+> +		|| BR2_TOOLCHAIN_USES_UCLIBC \
+> +		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
+> diff --git a/package/criu/criu.hash b/package/criu/criu.hash
+> new file mode 100644
+> index 0000000000..2c4a07252b
+> --- /dev/null
+> +++ b/package/criu/criu.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  
+> 6a9997981c9fe4730c848ce59346b3a22fad69b803607cb67a3f6ec0557fa474  
+> criu-3.18.tar.gz
+> +sha256  
+> 568a1fa9d90e18a1a1a61ea58ec2eece16b56a5042cc72c1b4f8d4455ae6fcb7  
+> COPYING
+> diff --git a/package/criu/criu.mk b/package/criu/criu.mk
+> new file mode 100644
+> index 0000000000..9814e4a0de
+> --- /dev/null
+> +++ b/package/criu/criu.mk
+> @@ -0,0 +1,71 @@
+> +################################################################################
+> +#
+> +# CRIU
+> +#
+> +################################################################################
+> +
+> +CRIU_VERSION = 3.18
+> +CRIU_SITE = $(call github,checkpoint-restore,criu,v$(CRIU_VERSION))
+> +
+> +CRIU_LICENSE = GPL-2.0
+> +CRIU_LICENSE_FILES = COPYING
+> +CRIU_DEPENDENCIES =\
+> +	host-pkgconf \
+> +	host-protobuf-c \
+> +	host-python3 \
+> +	host-python-pip \
+> +	libaio \
+> +	libbsd \
+> +	libcap \
+> +	libnet \
+> +	libnl \
+> +	protobuf \
+> +	protobuf-c \
+> +	python3
+> +
+> +CRIU_MAKE_ENV =\
+> +	$(TARGET_MAKE_ENV) \
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	CROSS_COMPILE=$(TARGET_CROSS) \
+> +	WERROR=0
+> +
+> +#Remap to match the used in criu.
+> +ifeq ($(BR2_NORMALIZED_ARCH),"x86_64")
+> +CRIU_MAKE_ENV += ARCH=x86
+> +else ifeq ($(BR2_NORMALIZED_ARCH),"powerpc")
+> +CRIU_MAKE_ENV += ARCH=ppc64
+> +else ifeq ($(BR2_NORMALIZED_ARCH),"arm64")
+> +CRIU_MAKE_ENV += ARCH=aarch64
+> +else
+> +CRIU_MAKE_ENV += ARCH=$(BR2_NORMALIZED_ARCH)
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_ARMV6), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv6
+> +else ifeq ($(BR2_ARM_CPU_ARMV7A), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv7
+> +else ifeq ($(BR2_ARM_CPU_ARMV7M), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv7
+> +else ifeq ($(BR2_ARM_CPU_ARMV8A), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv8
+> +else ifeq ($(BR2_ARM_CPU_ARMV8M), y)
+> +CRIU_MAKE_ENV += SUBARCH=armv8
+> +endif
+> +
+> +# Criu needs Kernel Checkpoint/restore support which is not enabled
+> +# by default.
+> +define CRIU_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CHECKPOINT_RESTORE)
+> +endef
+> +
+> +define CRIU_BUILD_CMDS
+> +	rm -rf $(@D)/images/google/protobuf/descriptor.proto
+> +	ln -s  $(STAGING_DIR)/usr/include/google/protobuf/descriptor.proto 
+> $(@D)/images/google/protobuf/descriptor.proto
+> +	$(CRIU_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define CRIU_INSTALL_TARGET_CMDS
+> +	$(CRIU_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) 
+> install-criu install-lib install-compel
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 2.42.0
 
 Best regards,
-Neal Frager
-AMD
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
