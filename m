@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9FE8C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 12:09:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FE88C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 20:30:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66619428D9;
-	Tue, 31 Oct 2023 12:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66619428D9
+	by smtp4.osuosl.org (Postfix) with ESMTP id C58C3409AA;
+	Tue, 31 Oct 2023 20:30:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C58C3409AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EOYj5rPjQLOp; Tue, 31 Oct 2023 12:09:14 +0000 (UTC)
+	with ESMTP id ayvCQMmroQHO; Tue, 31 Oct 2023 20:30:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0E9F428CF;
-	Tue, 31 Oct 2023 12:09:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0E9F428CF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 94E351BF322
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:09:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA95C41BA8;
+	Tue, 31 Oct 2023 20:30:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA95C41BA8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B0621BF373
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 20:30:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 67E6F835CF
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:09:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67E6F835CF
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB70B40131
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 20:30:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB70B40131
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GPmkfbQbjwjz for <buildroot@lists.busybox.net>;
- Tue, 31 Oct 2023 12:09:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a236UjDqxLTi for <buildroot@lists.busybox.net>;
+ Tue, 31 Oct 2023 20:30:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 924878356C
- for <buildroot@uclibc.org>; Tue, 31 Oct 2023 12:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 924878356C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 011B740586
+ for <buildroot@uclibc.org>; Tue, 31 Oct 2023 20:30:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 011B740586
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 7F47D861BE; Tue, 31 Oct 2023 12:09:11 +0000 (UTC)
+ id C1D6F86167; Tue, 31 Oct 2023 20:30:04 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 31 Oct 2023 12:09:11 +0000
+Date: Tue, 31 Oct 2023 20:30:04 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2023.08.2
+X-Bugzilla-Version: 2023.02.6
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: giulio.benetti@benettiengineering.com
+X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: giulio.benetti@benettiengineering.com
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15823-163-S2PTUCkq9a@https.bugs.busybox.net/>
-In-Reply-To: <bug-15823-163@https.bugs.busybox.net/>
-References: <bug-15823-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-15835-163-l491CVw34t@https.bugs.busybox.net/>
+In-Reply-To: <bug-15835-163@https.bugs.busybox.net/>
+References: <bug-15835-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15823] Installing nodejs modules with native
- extensions fails on first run
+Subject: [Buildroot] [Bug 15835] Incompatibility between network-manager and
+ libcurl 8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,17 +79,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15823
+https://bugs.busybox.net/show_bug.cgi?id=15835
 
---- Comment #2 from Giulio Benetti <giulio.benetti@benettiengineering.com> ---
-Hi Marcus,
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-can you please give a try to this [0] pending patch?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998@free.fr
 
-[0]:
-https://patchwork.ozlabs.org/project/buildroot/patch/20231031120713.678783-1-giulio.benetti@benettiengineering.com/
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+chhitz, All,
 
-Thank you
+Thanks for the report.
+
+> Applying the path from above mentioned issue to network-manager fixes the issue
+
+Can you send a patch doing that, tio the mailing list, please?
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
