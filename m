@@ -4,83 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCA98C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 09:01:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24BDDC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 09:01:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4FE9E82D2F;
-	Tue, 31 Oct 2023 09:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FE9E82D2F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4546F82D49;
+	Tue, 31 Oct 2023 09:01:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4546F82D49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yyOU2Tqi81fn; Tue, 31 Oct 2023 09:01:03 +0000 (UTC)
+	with ESMTP id Yh9RoJ4slilk; Tue, 31 Oct 2023 09:01:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FBEE82D07;
-	Tue, 31 Oct 2023 09:01:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FBEE82D07
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4ACFB1BF329
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 09:01:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C51682D2F;
+	Tue, 31 Oct 2023 09:01:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C51682D2F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 575671BF329
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 09:01:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30481421FE
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 09:01:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30481421FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C3D441552
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 09:01:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C3D441552
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pkTzeqeBAIkT for <buildroot@lists.busybox.net>;
- Tue, 31 Oct 2023 09:01:00 +0000 (UTC)
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
- [IPv6:2a00:1450:4864:20::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA2D0421E0
- for <buildroot@buildroot.org>; Tue, 31 Oct 2023 09:00:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA2D0421E0
-Received: by mail-lj1-x229.google.com with SMTP id
- 38308e7fff4ca-2c523ac38fbso79581371fa.0
- for <buildroot@buildroot.org>; Tue, 31 Oct 2023 02:00:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698742858; x=1699347658;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=3+AVtmlYKEDS4ANxzad/A23Y3fhx89XQDw0PBNzL01I=;
- b=bhCJ4f69nZsuybHkz0saCjdr6pMqQC4ZXlvNFKAf7nYuu5qQpUffadET7Fa8gcn99E
- VlaRI7cWratw45tU8BhqyTWxHGeXP446s8uSCNkHJ/V80OqozlRLD2lh55YZtGWjHhnA
- aeKHI5EMIkY+xVZ623jbjYZUgAcZ1q50ET8Qi6YRMUDBiTE4xjqYQmPmtid6pnxHBXaT
- Y42KuT2UZJ4M1Nh/OlAK0opEaC3ka4pW7NcrPvoqt1nJ8HHFlAS6RuBQcT6V24rR+qVR
- mAXLKm3heXcYeVB2jRtVBGIujjSpu3S/ToudTN3zC7dSEenhFlElUuVlO9go0i3rlYwi
- 9p3A==
-X-Gm-Message-State: AOJu0YxhCxUpZssW4Yk0f0uPlZJqylOUsrHPhBxYfaKZ2W1P3IuGIeZF
- kHB1TEHeXxAqXt4WvXfY35Z4BKh7XLyY7ZM/BHXoYda5
-X-Google-Smtp-Source: AGHT+IGwBbSD+g7BMAN8XlRa778h3LnjeomLvMGPGHyT5xXaZCInUqRHNwnJByDfA/CHL/qRhSNs529xUny3HyGMwJ0=
-X-Received: by 2002:a2e:2c11:0:b0:2c5:1e3f:7379 with SMTP id
- s17-20020a2e2c11000000b002c51e3f7379mr9371095ljs.48.1698742857578; Tue, 31
- Oct 2023 02:00:57 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ysfO-j-mPajx for <buildroot@lists.busybox.net>;
+ Tue, 31 Oct 2023 09:01:19 +0000 (UTC)
+Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8449340466
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 09:01:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8449340466
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id xkcdq7eTycfkCxkcdqKxNs; Tue, 31 Oct 2023 10:01:15 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Tue, 31 Oct 2023 10:01:14 +0100
+Message-Id: <20231031090114.618913-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20231026181904.3218122-1-bernd@kuhls.net>
- <87o7gf1b6h.fsf@48ers.dk>
-In-Reply-To: <87o7gf1b6h.fsf@48ers.dk>
-From: Scott Fan <fancp2007@gmail.com>
-Date: Tue, 31 Oct 2023 17:00:46 +0800
-Message-ID: <CAFkzVZacX8bhs_2qKcSKifXm7JkUSLpg5ZaVKfz7Zvq7FBbQLw@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1698742858; x=1699347658; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=3+AVtmlYKEDS4ANxzad/A23Y3fhx89XQDw0PBNzL01I=;
- b=YTciggtoUZSbbyHjAhGYMEMeHfPp5Sv2yOBnMh3TfcsQxmjb3smH7/PunvV2HBTNaR
- pcf399hXP7BoS3Ubdk1ooFPRuXYMGUBuV7tiILfX26WCGPA8+uKGLQ4KuprYcpsaJ0lz
- Z3YMbzzVAue6JxkH0hnDmzc2uozP2V0RHjlLtMd42g8+l/v+tqjvOiA6uOCeQVl9mbrJ
- xED2sA6MehJAtxl7Hq/7B74P3dsbV0eLWTvPKNK9wgyfesYThhwQ72gFPd1F5DT3eie+
- D4dRx7ojY5Y6D7DRcEBukqTXMOxA9FtPQtsJSQvy/Qa/JRB4IspYZz33m5l/xKbsOQR/
- lW3A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YTciggto
-Subject: Re: [Buildroot] [PATCH 1/1] package/libopenssl: security bump
- version to 3.1.4
+X-CMAE-Envelope: MS4xfGYqUeNF6l3mWVyLQfgLlja+u6AeiBKN/Bh6QWLwmYJ26c1USdRco5OkSZ7DQcrjWLDXL4w5n2dlU3xBlnSbuqfKAgXLGBDVU8Q9hiP0BlJDeTXrasVN
+ g+viCzHAky7H/R9EctS1WNlZQw198pzDrnxevb6uFQQuDMqX0tIVvIaoRzKzULOWgJI26REr9EX17INEy/FfqNAOXalxKtWQP7JV9rwV5t5h97FGO4YgV0OB
+ D5mdYfZBKOubrk727DRpSCA9XZMx7706iG/y4I0t/hjl0dIacyB4pUdfgFFpFQudiZIUlKl7hbyFtMjfQceRsPlHVD3NGYIw0o2DwpmUk1t2Ps11ZO3RzJaU
+ SC5YDnjtlg+LbjBReplHms2BkYW6QLsWlwYLlSpU8bv/KIYmnCkVrd4xp4TXpwbVynjMxIGH
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1698742875; bh=OJhiR+5IG5HTvucBvymq3vAzruw0D40UDWBUdMVAIrg=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=KBPw535UW5Zuz9nlr/6z1b5bHwoC8hWR67WcqJtDEGTpyw6RV9B5pc2ZP9sQJ6WQD
+ I6LxtsHqmXtI4e6Q/EeqdJjIVawneYp8HIxI/CVpYwkPRMBUBmvd9Hkj2GkcP6IblK
+ EY1rhYZf1+Kxng2brSJuNEUNYDjrqMTlg59JnTSIFf38r3Jie2JFVxSa0+q0qYI6Ys
+ G5Q2CNmwoIBh789SFvr9/eph1n1+Zgcx13wCksbEVwYvbWmj8BUyQSGoDQg2FO7lD9
+ pjBw2uklt7r9wpLIT4vdiDlu1NHHIc0qfltH5i1X9JvR5BO2AMwuOy/jyJf0QruyvP
+ sVIvKp46L4Ang==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=KBPw535U
+Subject: [Buildroot] [PATCH] package/nodejs: fix additional modules
+ installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,25 +73,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Daniel Price <daniel.price@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Martin Bark <martin@barkynet.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rm9yIDIwMjMuMDIueCBicmFuY2gsIGl0IG5lZWQgYnVtcCB0byAxLjEuMXcgdmVyc2lvbi4KClNj
-b3R0IEZhbgoKT24gVHVlLCBPY3QgMzEsIDIwMjMgYXQgMzo1MuKAr1BNIFBldGVyIEtvcnNnYWFy
-ZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4gd3JvdGU6Cj4KPiA+Pj4+PiAiQmVybmQiID09IEJlcm5k
-IEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+IHdyaXRlczoKPgo+ICA+IEZpeGVzIENWRS0yMDIzLTUz
-NjM6Cj4gID4gaHR0cHM6Ly93d3cub3BlbnNzbC5vcmcvbmV3cy9zZWNhZHYvMjAyMzEwMjQudHh0
-Cj4gID4gaHR0cHM6Ly93d3cub3BlbnNzbC5vcmcvbmV3cy92dWxuZXJhYmlsaXRpZXMuaHRtbAo+
-Cj4gID4gQ2hhbmdlbG9nOiBodHRwczovL3d3dy5vcGVuc3NsLm9yZy9uZXdzL2NsMzEudHh0Cj4K
-PiAgPiBTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0Pgo+Cj4gRm9y
-IDIwMjMuMDgueCBJIHdpbGwgaW5zdGVhZCBidW1wIHRvIDMuMC4xMiwgd2hpY2ggY29udGFpbnMg
-dGhlIHNhbWUKPiBmaXguCj4KPiAtLQo+IEJ5ZSwgUGV0ZXIgS29yc2dhYXJkCj4gX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+At the moment the npm_config_nodedir is set to the build directory but
+npm nodedir must be the one on target to find the expected files. So let's
+set npm_config_nodedir to $(TARGET_DIR)/usr.
+
+Fixes:
+https://bugs.busybox.net/show_bug.cgi?id=15826
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/nodejs/nodejs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 2a8c570932..8f86413049 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -20,7 +20,7 @@ NODEJS_BIN_ENV = $(TARGET_CONFIGURE_OPTS) \
+ 	npm_config_arch=$(NODEJS_CPU) \
+ 	npm_config_target_arch=$(NODEJS_CPU) \
+ 	npm_config_build_from_source=true \
+-	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
++	npm_config_nodedir=$(TARGET_DIR)/usr \
+ 	npm_config_prefix=$(TARGET_DIR)/usr \
+ 	npm_config_cache=$(BUILD_DIR)/.npm-cache
+ 
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
