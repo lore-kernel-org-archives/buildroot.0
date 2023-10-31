@@ -1,63 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D906FC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 22:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B1E4C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 23:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 252D04246C;
-	Tue, 31 Oct 2023 22:58:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 252D04246C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B8F742E0C;
+	Tue, 31 Oct 2023 23:04:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B8F742E0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nj16eObmUY9o; Tue, 31 Oct 2023 22:58:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kPN1YOFtB4jC; Tue, 31 Oct 2023 23:04:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1675742469;
-	Tue, 31 Oct 2023 22:58:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1675742469
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37FC442DFF;
+	Tue, 31 Oct 2023 23:04:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37FC442DFF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 15F9D1BF284
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 22:58:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BCB201BF2A6
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 23:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E8A5C42D5A
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 22:58:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8A5C42D5A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A9E742E0B
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 23:04:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A9E742E0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HH0GJP9Dd655 for <buildroot@lists.busybox.net>;
- Tue, 31 Oct 2023 22:58:32 +0000 (UTC)
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
- [67.231.152.184])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2848B42D47
- for <buildroot@buildroot.org>; Tue, 31 Oct 2023 22:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2848B42D47
-Received: from pps.filterd (m0346902.ppops.net [127.0.0.1])
+ with ESMTP id SMnihWUHVATo for <buildroot@lists.busybox.net>;
+ Tue, 31 Oct 2023 23:04:12 +0000 (UTC)
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0557342DFF
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 23:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0557342DFF
+Received: from pps.filterd (m0346908.ppops.net [127.0.0.1])
  by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 39VL9NQw009368; Tue, 31 Oct 2023 22:58:31 GMT
-Received: from xusxph004rp050.rtx.com (xusxph004rp050.rtx.com [128.13.120.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3u35vgunrb-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 31 Oct 2023 22:58:30 +0000
-Received: from xusxph009rp020.corp.ray.com ([128.13.125.224])
- by xusxph004rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 39VMwTuf020815
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 31 Oct 2023 22:58:30 GMT
-Received: from crulimr01.rockwellcollins.com
+ 39VN4B0B032010
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 23:04:11 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3u33eex4kd-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 23:04:11 +0000
+Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 39VN3rxw014841
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 23:03:54 GMT
+Received: from dtulimr01.rockwellcollins.com
  (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph009rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 39VMwTZE012272
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Tue, 31 Oct 2023 22:58:29 GMT
+ by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 39VN3qJf024453
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 23:03:53 GMT
 X-Received: from bspbox.kirk (kirk.rockwellcollins.lab [10.148.204.208])
- by crulimr01.rockwellcollins.com (Postfix) with ESMTP id 6DD2D6065A;
- Tue, 31 Oct 2023 17:58:29 -0500 (CDT)
+ by dtulimr01.rockwellcollins.com (Postfix) with ESMTP id A7527603BD;
+ Tue, 31 Oct 2023 18:03:52 -0500 (CDT)
 To: buildroot@buildroot.org
-Date: Tue, 31 Oct 2023 22:57:51 +0000
-Message-ID: <20231031225751.35130-1-brandon.maier@collins.com>
+Date: Tue, 31 Oct 2023 23:03:36 +0000
+Message-ID: <20231031230336.51110-1-brandon.maier@collins.com>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
@@ -67,37 +68,37 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-31_10,2023-10-31_03,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- mlxscore=0 spamscore=0
- mlxlogscore=346 malwarescore=0 suspectscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310240000
- definitions=main-2310310189
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- adultscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 mlxlogscore=266 phishscore=0
+ malwarescore=0 spamscore=0
+ adultscore=0 mlxscore=0 bulkscore=0 mlxlogscore=462 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310240000
  definitions=main-2310310190
-X-Proofpoint-ORIG-GUID: 4oZAtZROWRi07-Hswhbwpb745_GGEgSA
-X-Proofpoint-GUID: 4oZAtZROWRi07-Hswhbwpb745_GGEgSA
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ bulkscore=0 adultscore=0
+ phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 mlxlogscore=384
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310240000
+ definitions=main-2310310190
+X-Proofpoint-GUID: xd5lnC-yYbTouwfpSEjmSJkxYzFM1QFY
+X-Proofpoint-ORIG-GUID: xd5lnC-yYbTouwfpSEjmSJkxYzFM1QFY
 X-Proofpoint-Spam-Details: rule=outbound_default_notspam
  policy=outbound_default score=0
- malwarescore=0 adultscore=0 mlxlogscore=416 clxscore=1011 spamscore=0
- suspectscore=0 mlxscore=0 impostorscore=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2310240000 definitions=main-2310310189
+ malwarescore=0 suspectscore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=543 bulkscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0
+ spamscore=0 adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2310240000 definitions=main-2310310191
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=collins.com; h=from : to : cc :
  subject : date : message-id : mime-version : content-transfer-encoding;
- s=POD051818; bh=hYGIFoCVN9/zIdbQPW+0UXQPseMvJxKbNk/8r78qkiU=;
- b=sZrdQqJ4uLwVr1JFoqQU4j+jmtEJg9So8cQ5XDUMHJiAYY8OCniFO0xdGHt7bZdbhTim
- m9g+/ZDnvSDA74MtyNe1ryzQkS6QpVxXu3D81bStc1JGSBd6j18akWnlf9lL98nLtDVN
- TRe4gM1VvRYTpnMOeH071jW9KRhlr16LofMCt7Ydvt8lPy5qZhqT4Dwsi1Gcti+pcGJs
- jb28GI4b2LH62lwiwtNg28iwPJ2BOXs34B1ru05t6KFLbjDMz1PvPsyDxXpZAGvOBNsy
- 7V/Jt5t7pIIndqGzovmUzBF2GYvSbKU18sb3N+kPigwa2VDlDWe+NHCHFeabINL8RvoB bQ== 
+ s=POD051818; bh=S+BVhRT+9PbtV+TSiuhcMw5SN3RXVl96j0W8nHJzA/k=;
+ b=gVWyQaZil5Jl9Gfft/ytE/p87QCGlidFPbDW1nY5gQAvLVDmn2gE84vZkps44/F9lL3t
+ TygQt5fCpz3n+M5bA6uLxZAzACb9pFCcaaiFMUJzY6RLfKe3ET7a6a2pZatmNkpeBzq6
+ oM/FgDUK5qEd53TTAwfwunWEpQwrhhFaBEbKhtlP9tLjLRoMHU5YNczs6N/9VaJz7liA
+ TKDuuzuojuL42wm6p8ofPI0iV8HlazA58hCMipPdGioDkEdKtIxemokvLwRKWpaDUttN
+ PEkdPGIJ9mNtllWMLcR1HFJKN/wT5jnjCFjGdAPKfrPHIBTbbpGTWKxWi4NIE2arqy0Z Mw== 
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
- header.a=rsa-sha256 header.s=POD051818 header.b=sZrdQqJ4
-Subject: [Buildroot] [PATCH 1/1] freeradius-server: enable default modules
- mschap and realm
+ header.a=rsa-sha256 header.s=POD051818 header.b=gVWyQaZi
+Subject: [Buildroot] [PATCH 1/1] aufs-util: fix build error for missing
+ linux header
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,8 +112,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Brandon Maier via buildroot <buildroot@buildroot.org>
 Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: David GOUARIN <dgouarin@gmail.com>,
- Kalpesh Panchal <kalpesh.panchal2@collins.com>,
+Cc: Kalpesh Panchal <kalpesh.panchal2@collins.com>,
  Brandon Maier <brandon.maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -121,35 +121,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Kalpesh Panchal <kalpesh.panchal2@collins.com>
 
-"mschap" and "realm" are already part of default required
-raddb modules(DEFAULT_MODULES in raddb/all.mk).
+added missing linux header path to fix below build error:
 
-so removed them from disabled module list so that
-radiusd.service can start without following errors:
-
-- /etc/raddb/mods-enabled/mschap[11]: Failed to link to module 'rlm_mschap': /usr/lib/rlm_mschap.so
-- /etc/raddb/mods-enabled/realm[21]: Failed to link to module 'rlm_realm': /usr/lib/rlm_realm.so
+- $(LINUX_DIR)/include/uapi/linux/stddef.h:5:10:fatal error: linux/compiler_types.h: No such file or directory
 
 Signed-off-by: Kalpesh Panchal <kalpesh.panchal2@collins.com>
 Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 ---
- package/freeradius-server/freeradius-server.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/aufs-util/aufs-util.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index af3320eb44..125427c9e2 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
-@@ -45,9 +45,7 @@ FREERADIUS_SERVER_CONF_OPTS += \
- FREERADIUS_SERVER_CONF_OPTS += \
- 	--without-rlm_eap_ike \
- 	--without-rlm_eap_tnc \
--	--without-rlm_mschap \
- 	--without-rlm_perl \
--	--without-rlm_realm \
- 	--without-rlm_sql_iodbc \
- 	--without-rlm_sql_oracle \
- 	--without-rlm_sql_freetds \
+diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
+index 32f3bca151..c334b8c014 100644
+--- a/package/aufs-util/aufs-util.mk
++++ b/package/aufs-util/aufs-util.mk
+@@ -21,11 +21,13 @@ AUFS_UTIL_DEPENDENCIES = linux
+ AUFS_UTIL_HOST_CPPFLAGS = \
+ 	$(HOST_CPPFLAGS) \
+ 	-I$(LINUX_DIR)/include/uapi \
++	-I$(LINUX_DIR)/include \
+ 	-D__user=
+ 
+ AUFS_UTIL_CPPFLAGS = \
+ 	$(TARGET_CPPFLAGS) \
+ 	-I$(LINUX_DIR)/include/uapi \
++	-I$(LINUX_DIR)/include \
+ 	-D__user=
+ 
+ # rdu64 is supposed to provide the LFS variant of readdir(),
 -- 
 2.41.0
 
