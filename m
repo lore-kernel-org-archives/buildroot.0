@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99EC9C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 12:37:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEB2FC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 12:42:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4299842122;
-	Tue, 31 Oct 2023 12:37:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4299842122
+	by smtp4.osuosl.org (Postfix) with ESMTP id 925EE42247;
+	Tue, 31 Oct 2023 12:42:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 925EE42247
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KJJhWAYJF6Zc; Tue, 31 Oct 2023 12:37:54 +0000 (UTC)
+	with ESMTP id qHfwxkkT3x3M; Tue, 31 Oct 2023 12:42:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 598B041F2C;
-	Tue, 31 Oct 2023 12:37:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 598B041F2C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 413E51BF31A
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:37:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE6B542224;
+	Tue, 31 Oct 2023 12:42:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE6B542224
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 44FC51BF31A
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:41:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A66E41F2C
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:37:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A66E41F2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06F3361379
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 12:41:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06F3361379
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JwJ89fs7nodr for <buildroot@lists.busybox.net>;
- Tue, 31 Oct 2023 12:37:51 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9452741F07
- for <buildroot@buildroot.org>; Tue, 31 Oct 2023 12:37:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9452741F07
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 89ABDFF815;
- Tue, 31 Oct 2023 12:37:47 +0000 (UTC)
-Date: Tue, 31 Oct 2023 13:37:46 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HqRspcXl4w_k for <buildroot@lists.busybox.net>;
+ Tue, 31 Oct 2023 12:41:57 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 92C7F61376
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 12:41:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C7F61376
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 728331C0002;
+ Tue, 31 Oct 2023 12:41:53 +0000 (UTC)
+Date: Tue, 31 Oct 2023 13:41:52 +0100
 To: Neal Frager via buildroot <buildroot@buildroot.org>
-Message-ID: <20231031133746.5ce62f07@windsurf>
-In-Reply-To: <20231020114236.4129636-1-neal.frager@amd.com>
+Message-ID: <20231031134152.792af099@windsurf>
+In-Reply-To: <20231020114236.4129636-2-neal.frager@amd.com>
 References: <20231020114236.4129636-1-neal.frager@amd.com>
+ <20231020114236.4129636-2-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698755867;
+ d=bootlin.com; s=gm1; t=1698756113;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=w1boeM20CicP7GeGIdyVZTgtnDxVepE2djwBABnxqdE=;
- b=HUV3BKGMiEVwlKez67rxIH2k1i9CGYuJ+gRavgGFPfvlurjTA8eVsVeluge0i/A3ktUOaL
- hO+onYpkdrgsuBtLGZQmDP3aTyQF1z9CcPTN87jgelXuaJDXq01MU51QWJDEsN7Vp4VEHm
- Khuo8pN7KpeGwFslIl0F3Tu+9bmpGGlGo27beBNjubFcxJNeYd7B0Vvugjho3DWkvpHCDE
- GPc+kv2izV79RHJLS5bpba6BwfkK3yaycEGBOA+tE/8s1WNUu2R6E+WJ6NGq+6L1GGZqkS
- jwNcn2NN/Vc+Png9MFHmz7uFEk8BlI47ZuhAFPHp0M2pgkQl9+qep8BPUs+VNg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=+BBzZ+8dCBx+NKUg7aejrTHNRRKT6Lz1Q+4VveOGb/U=;
+ b=ikmHrsU6RTMOnJdkg/fDmBQqL9EaJXfTbaa2LDrQF7ywpisgoQVTOx07euLEZz6K8SxPiS
+ HtqLprZDIHUDJEQwHagOopJ4WZpgrDkmZiOBns/9uuV97P6rQunb8Qg0pv94JKQ74lVLC0
+ 4yZ73C82Kv2MvpfGqxpxgr0cNduUTnz+b2XdKYV/F+NLDHuPQ0l5SZW2z6JGdk1sUivkSo
+ Kjl2YSaskr8zIOeSat/jUD9FbLP7QNUAzWeIcUbawTKcbcjlcpBA8IFdWd3LWgdSSXPcO+
+ LQuN8PhgPGZ0m7y4Znqk6Y01yx/siXdUyQdFoiUscC6XFQopTKpShobi2/78Ng==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HUV3BKGM
-Subject: Re: [Buildroot] [PATCH v6 01/10] package/binutils-bare-metal: new
- package
+ header.s=gm1 header.b=ikmHrsU6
+Subject: Re: [Buildroot] [PATCH v6 02/10] package/gcc-bare-metal: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,86 +86,131 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello,
 
-I'm late to the party, but here are some comments.
-
-On Fri, 20 Oct 2023 12:42:27 +0100
+On Fri, 20 Oct 2023 12:42:28 +0100
 Neal Frager via buildroot <buildroot@buildroot.org> wrote:
 
-
-> diff --git a/package/binutils-bare-metal/2.41/0001-sh-conf.patch b/package/binutils-bare-metal/2.41/0001-sh-conf.patch
-> new file mode 120000
-> index 0000000000..26dff99523
-> --- /dev/null
-> +++ b/package/binutils-bare-metal/2.41/0001-sh-conf.patch
-
-I'm not happy with how patches are handled here. I think
-package/binutils-bare-metal/2.41/ should be a symlink to
-package/binutils/2.41/, and all patches you need should be added to
-package/binutils/2.41/. I don't want to see a different patch stack to
-be applied on binutils-bare-metal compared to binutils.
-
-
-> diff --git a/package/binutils-bare-metal/Config.in.host b/package/binutils-bare-metal/Config.in.host
+> diff --git a/package/gcc-bare-metal/Config.in.host b/package/gcc-bare-metal/Config.in.host
 > new file mode 100644
-> index 0000000000..e70bee8fa2
+> index 0000000000..ca7735340c
 > --- /dev/null
-> +++ b/package/binutils-bare-metal/Config.in.host
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_HOST_BINUTILS_BARE_METAL
-> +	bool "host binutils-bare-metal"
-
-This visible config option is useless, as it's anyway only selected by
-host-toolchain-bare-metal. I believe it can simply be dropped.
-
+> +++ b/package/gcc-bare-metal/Config.in.host
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_HOST_GCC_BARE_METAL
+> +	bool "host gcc-bare-metal"
 > +	help
-> +	  Build GNU binutils for a bare-metal toolchain
+> +	  Build GCC for a bare-metal toolchain
 > +
-> +if BR2_PACKAGE_HOST_BINUTILS_BARE_METAL
+> +if BR2_PACKAGE_HOST_GCC_BARE_METAL
 > +
-> +config BR2_PACKAGE_HOST_BINUTILS_BARE_METAL_VERSION
+> +config BR2_PACKAGE_HOST_GCC_BARE_METAL_VERSION
 > +	string
-> +	default "2.41"
+> +	default "13.2.0"
 
-This option is invisible (it has no prompt), so it is useless. Just
-hardcode 2.41 in package/binutils-bare-metal/binutils-bare-metal.mk.
+Both of these options are useless, they should be dropped.
 
 
-> diff --git a/package/binutils-bare-metal/binutils-bare-metal.hash b/package/binutils-bare-metal/binutils-bare-metal.hash
+> diff --git a/package/gcc-bare-metal/gcc-bare-metal.hash b/package/gcc-bare-metal/gcc-bare-metal.hash
 > new file mode 100644
-> index 0000000000..3aab4d433d
+> index 0000000000..5c5c28fa7e
 > --- /dev/null
-> +++ b/package/binutils-bare-metal/binutils-bare-metal.hash
-> @@ -0,0 +1,6 @@
-> +# From https://gcc.gnu.org/pub/binutils/releases/sha512.sum
-> +sha512  5df45d0bd6ddabdce4f35878c041e46a92deef01e7dea5facc97fd65cc06b59abc6fba0eb454b68e571c7e14038dc823fe7f2263843e6e627b7444eaf0fe9374  binutils-2.41.tar.xz
-> +
-> +# locally calculated
-> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
-> +sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
+> +++ b/package/gcc-bare-metal/gcc-bare-metal.hash
 
-Perhaps this should be a symlink to package/binutils/binutils.hash ?
+Symlink to package/gcc/gcc.hash ?
 
 
-
-> diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
+> diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
 > new file mode 100644
-> index 0000000000..c361a5102a
+> index 0000000000..fe6f931008
 > --- /dev/null
-> +++ b/package/binutils-bare-metal/binutils-bare-metal.mk
-> @@ -0,0 +1,39 @@
+> +++ b/package/gcc-bare-metal/gcc-bare-metal.mk
+> @@ -0,0 +1,68 @@
 > +################################################################################
 > +#
-> +# binutils-bare-metal
+> +# gcc-bare-metal
 > +#
 > +################################################################################
 > +
-> +HOST_BINUTILS_BARE_METAL_VERSION = \
-> +	$(call qstrip,$(BR2_PACKAGE_HOST_BINUTILS_BARE_METAL_VERSION))
-> +ifeq ($(HOST_BINUTILS_BARE_METAL_VERSION),)
-> +HOST_BINUTILS_BARE_METAL_VERSION = 2.41
-> +endif # BINUTILS_VERSION
+> +HOST_GCC_BARE_METAL_VERSION = \
+> +	$(call qstrip,$(BR2_PACKAGE_HOST_GCC_BARE_METAL_VERSION))
+> +ifeq ($(HOST_GCC_BARE_METAL_VERSION),)
+> +HOST_GCC_BARE_METAL_VERSION = 13.2.0
+> +endif
 
-Just hardcode the version to 2.41, no option needed.
+Just harcode the version.
+
+> +
+> +HOST_GCC_BARE_METAL_SITE = \
+> +	https://ftp.gnu.org/gnu/gcc/gcc-$(HOST_GCC_BARE_METAL_VERSION)
+> +HOST_GCC_BARE_METAL_SOURCE = gcc-$(HOST_GCC_BARE_METAL_VERSION).tar.xz
+> +
+> +HOST_GCC_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
+> +HOST_GCC_BARE_METAL_LICENSE_FILES = COPYING COPYING3 COPYING.LIB COPYING3.LIB
+> +
+> +HOST_GCC_BARE_METAL_DEPENDENCIES = \
+> +	host-binutils-bare-metal \
+> +	host-gmp \
+> +	host-mpc \
+> +	host-mpfr \
+> +	host-isl
+> +
+> +# gcc doesn't support in-tree build, so we create a 'build'
+> +# subdirectory in the gcc sources, and build from there.
+> +define GCC_BARE_METAL_CONFIGURE_SYMLINK
+> +	mkdir -p $(@D)/build
+> +	ln -sf ../configure $(@D)/build/configure
+> +endef
+> +
+> +HOST_GCC_BARE_METAL_PRE_CONFIGURE_HOOKS += GCC_BARE_METAL_CONFIGURE_SYMLINK
+> +HOST_GCC_BARE_METAL_SUBDIR = build
+> +
+> +HOST_GCC_BARE_METAL_MAKE_OPTS = \
+> +	$(HOST_GCC_COMMON_MAKE_OPTS) \
+> +	all-gcc \
+> +	all-target-libgcc
+> +
+> +HOST_GCC_BARE_METAL_INSTALL_OPTS = install-gcc install-target-libgcc
+> +
+> +GCC_BARE_METAL_ARCH = \
+> +	$(call qstrip,$(BR2_PACKAGE_HOST_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH))
+
+From a patch sequencing perspective, this is a bit weird because
+BR2_PACKAGE_HOST_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH does not even
+exist yet. But I don't have a very good suggestion on how to handle
+this, so it's fine as is.
+
+Should the variable be named HOST_GCC_BARE_METAL_ARCH, for consistency
+with the other variables?
+
+> +HOST_GCC_BARE_METAL_CONF_OPTS = \
+> +	--target=$(GCC_BARE_METAL_ARCH)-elf \
+
+I'm wondering if BR2_PACKAGE_HOST_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
+shouldn't be the full tuple, instead of assuming it's also going to end
+in -elf. Whenever we've assumed things like this, it sometimes turned
+out to be wrong. So I would suggest that
+BR2_PACKAGE_HOST_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH carry the full
+tuple instead.
+
+> +	--disable-initfini_array \
+> +	--disable-__cxa_atexit \
+> +	--disable-libstdcxx-pch \
+> +	--with-newlib \
+> +	--disable-threads \
+> +	--enable-plugins \
+> +	--with-gnu-as \
+> +	--disable-libitm \
+> +	--without-long-double-128 \
+> +	--without-headers \
+> +	--enable-languages=c \
+> +	--disable-multilib \
+> +	--with-gmp=$(HOST_DIR) \
+> +	--with-mpc=$(HOST_DIR) \
+> +	--with-mpfr=$(HOST_DIR) \
+> +	--with-isl=$(HOST_DIR) \
+> +	AR_FOR_TARGET=$(O)/host/bin/$(GCC_BARE_METAL_ARCH)-elf-ar \
+> +	RANLIB_FOR_TARGET=$(O)/host/bin/$(GCC_BARE_METAL_ARCH)-elf-ranlib
+
+$(HOST_DIR) instead of $(O)/host/bin
 
 Thanks!
 
