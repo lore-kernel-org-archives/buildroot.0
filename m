@@ -1,51 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D0E5C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Oct 2023 22:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 687DCC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 04:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 292DD8215F;
-	Mon, 30 Oct 2023 22:03:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 292DD8215F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yeUYTPe2tC5v; Mon, 30 Oct 2023 22:03:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C4F6820F0;
-	Mon, 30 Oct 2023 22:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C4F6820F0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A8F1F1BF955
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 22:03:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E4FB60BAB
- for <buildroot@lists.busybox.net>; Mon, 30 Oct 2023 22:03:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E4FB60BAB
+	by smtp3.osuosl.org (Postfix) with ESMTP id B219A60FD2;
+	Tue, 31 Oct 2023 04:05:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B219A60FD2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rx-MQLQKS7Cg for <buildroot@lists.busybox.net>;
- Mon, 30 Oct 2023 22:03:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BBC2560AF0
- for <buildroot@buildroot.org>; Mon, 30 Oct 2023 22:03:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBC2560AF0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB0A786239; Mon, 30 Oct 2023 22:03:01 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 30 Oct 2023 23:01:06 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: e856907cd9f0a601e71985abcfed74e08498495c
-X-Git-Newrev: 4196900a1c5e6c03576f617bf7c8ff81bf66dd06
-X-Patchwork-Hint: ignore
-Message-Id: <20231030220301.AB0A786239@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/php: bump version
- to 8.2.12
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id p4J9Iu-9W6_E; Tue, 31 Oct 2023 04:05:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0629460FD0;
+	Tue, 31 Oct 2023 04:04:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0629460FD0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 413E71BF30E
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 04:04:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19982402E5
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 04:04:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19982402E5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 30Z6uHRw3HOp for <buildroot@lists.busybox.net>;
+ Tue, 31 Oct 2023 04:04:56 +0000 (UTC)
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com
+ [IPv6:2607:f8b0:4864:20::933])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 15384402AD
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 04:04:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15384402AD
+Received: by mail-ua1-x933.google.com with SMTP id
+ a1e0cc1a2514c-7ba0c234135so739627241.1
+ for <buildroot@buildroot.org>; Mon, 30 Oct 2023 21:04:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698725095; x=1699329895;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=QlazQJ2+KREnS2lDbcpj1EVyT3KqpHYogr9cyNJFXMo=;
+ b=mXU8U1y8NU+8Zsc6ATVgag8a0tqxk7EnQQMN1NrsGxAqTTX87N9c5BIlmr59hepCpH
+ rslclzSVCkFZtQr2zLuGE1aAqmyn8r9dt49ua8bEAg2rcMjJ34TGdf8VK2SPJ3sLE7Ke
+ Rr5b+ZqYj2nsBWcJx/t7edkKvkHB3FzC19KxdoZ26dBi7iohnFGiGGszZbYwmF+dDaxZ
+ YGGM4POmUZcxz/sa2J3efFXGRexO8wCt0UjSB/46VEMaIko/cU7Ld4KmD4rfoYqUa/Wr
+ h0DRb+H6qTmbv9B4HtZYrmwkxln5Iev26HnXhKaJkSMCYXKNz4bxsxn12Hizqt+jrb3R
+ zw+g==
+X-Gm-Message-State: AOJu0Yx3m40hkcs3tEMI5920sGMPyu0T1/M3QDWWvXEtmwUSkCOCIZIg
+ ri+/Ls+jcj75uyuRvZMTMVtczjR9rLAxD5g58Rgh2Og1c50=
+X-Google-Smtp-Source: AGHT+IHp9kZMFxjbciWmn7mk7oLsSax3rIg3BvgZquaXQaF0kYLrmqyvsGAkpgzdOCMYlN6qzdpLcHGUc2FcALGBLYE=
+X-Received: by 2002:a05:6102:2092:b0:457:c37d:33c with SMTP id
+ h18-20020a056102209200b00457c37d033cmr7042988vsr.10.1698725094474; Mon, 30
+ Oct 2023 21:04:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231030142153.645962-1-peter@korsgaard.com>
+In-Reply-To: <20231030142153.645962-1-peter@korsgaard.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Tue, 31 Oct 2023 14:04:27 +1000
+Message-ID: <CAKmqyKNXnQbb-m4O_KjCN7amV0-wbWL+xj6gMewTQAVEYNMzPA@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1698725095; x=1699329895; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=QlazQJ2+KREnS2lDbcpj1EVyT3KqpHYogr9cyNJFXMo=;
+ b=dd5gnfYo0f5AE01aeCDRfeqR+hNE9TNbsrUgBKc+sy8EymjAhDdHD/Vb+y+xcoLP1Z
+ N5ARyuONpKP69PDrlkQp4E57twqLIE3/0i1032ptR6VhqXLn8cbHXL85jaQzKIHj7zt5
+ YVTAknt8yOCjogJhPAIixNpuwshYibEDS2T9cxoTgLt3zsXCVIbDgLU+IPleJB680JcJ
+ UaHQn4dWLnDVeHDbgEkM1G9jrzYgm3iED6o1mCAAsAEr25kDVERkeN4Il6/Yw9QKIXXi
+ U5RuIBKNk37Qw9XuToKvO9ZpEvHauvbLh1UbYOLzp/WCUCivWOXKJGjWejjRRj0vCcqA
+ gNqg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=dd5gnfYo
+Subject: Re: [Buildroot] [PATCH] package/xen: security bump to version 4.14.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +90,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Alistair Francis <alistair@alistair23.me>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4196900a1c5e6c03576f617bf7c8ff81bf66dd06
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
-
-Changelog: https://www.php.net/ChangeLog-8.php#8.2.12
-Release notes: https://www.php.net/releases/8_2_12.php
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a40924107d63551906050b199fe6b93d479a96ce)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/php/php.hash b/package/php/php.hash
-index e5f94a5e05..0f77f0082f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  29af82e4f7509831490552918aad502697453f0869a579ee1b80b08f9112c5b8  php-8.2.11.tar.xz
-+sha256  e1526e400bce9f9f9f774603cfac6b72b5e8f89fa66971ebc3cc4e5964083132  php-8.2.12.tar.xz
- 
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ee33000a6f..add46584c6 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.2.11
-+PHP_VERSION = 8.2.12
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCBPY3QgMzEsIDIwMjMgYXQgMTI6MjLigK9BTSBQZXRlciBLb3JzZ2FhcmQgPHBldGVy
+QGtvcnNnYWFyZC5jb20+IHdyb3RlOgo+Cj4gSW5jbHVkZXMgYSBudW1iZXIgb2YgYnVnZml4ZXMg
+YW5kIHRoZSBzZWN1cml0eSBmaXhlcyB1cCB0byB4c2EtNDM2Ogo+IGh0dHBzOi8veGVucHJvamVj
+dC5vcmcvZG93bmxvYWRzL3hlbi1wcm9qZWN0LWFyY2hpdmVzL3hlbi1wcm9qZWN0LTQtMTQtc2Vy
+aWVzL3hlbi1wcm9qZWN0LTQtMTQtNi8KPgo+IFNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFy
+ZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KClJldmlld2VkLWJ5OiBBbGlzdGFpciBGcmFuY2lzIDxh
+bGlzdGFpci5mcmFuY2lzQHdkYy5jb20+CgpBbGlzdGFpcgoKPiAtLS0KPiAgcGFja2FnZS94ZW4v
+eGVuLmhhc2ggfCAyICstCj4gIHBhY2thZ2UveGVuL3hlbi5tayAgIHwgMiArLQo+ICAyIGZpbGVz
+IGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQg
+YS9wYWNrYWdlL3hlbi94ZW4uaGFzaCBiL3BhY2thZ2UveGVuL3hlbi5oYXNoCj4gaW5kZXggNTYz
+N2YwZThkOS4uZDIzNTBhYzUxNSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3hlbi94ZW4uaGFzaAo+
+ICsrKyBiL3BhY2thZ2UveGVuL3hlbi5oYXNoCj4gQEAgLTEsMyArMSwzIEBACj4gICMgTG9jYWxs
+eSBjb21wdXRlZAo+IC1zaGEyNTYgIGExYTI0MDkyYWQxNDY1OGVlZDQyMGI3ZDU2YjY3ZDBkOWQ1
+YjMxNGU5NmMzMGE3OTliNDVmM2E3MjFmOThiZjAgIHhlbi00LjE0LjUudGFyLmd6Cj4gK3NoYTI1
+NiAgNzkxNzY4MWJjNmU3NDQ3ODk4MTUxMzFmY2Y3Nzk5ZTZiODNhMGQ0NWI1ODAxYWM2NTQzMjJi
+MDM3Y2U0NzJmOCAgeGVuLTQuMTQuNi50YXIuZ3oKPiAgc2hhMjU2ICBlY2NhOTUzOGU5ZDNmN2Uz
+YzJiZmY4Mjc1MDJmNDQ5NWUyZWY5ZTIyYzQ1MTI5ODY5NmVhMDg4ODZiMTc2YzJjICBDT1BZSU5H
+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UveGVuL3hlbi5tayBiL3BhY2thZ2UveGVuL3hlbi5tawo+
+IGluZGV4IDE2OTc1M2U4OWYuLjY1MTQ0MmNmZGYgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS94ZW4v
+eGVuLm1rCj4gKysrIGIvcGFja2FnZS94ZW4veGVuLm1rCj4gQEAgLTQsNyArNCw3IEBACj4gICMK
+PiAgIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPgo+IC1YRU5fVkVSU0lPTiA9IDQuMTQuNQo+ICtY
+RU5fVkVSU0lPTiA9IDQuMTQuNgo+ICBYRU5fU0lURSA9IGh0dHBzOi8vZG93bmxvYWRzLnhlbnBy
+b2plY3Qub3JnL3JlbGVhc2UveGVuLyQoWEVOX1ZFUlNJT04pCj4gIFhFTl9MSUNFTlNFID0gR1BM
+LTIuMAo+ICBYRU5fTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKPiAtLQo+IDIuMzkuMgo+Cj4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
