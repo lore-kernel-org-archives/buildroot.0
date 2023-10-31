@@ -4,66 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A50AAC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 16:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C30AC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 16:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 335E18322A;
-	Tue, 31 Oct 2023 16:06:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 335E18322A
+	by smtp1.osuosl.org (Postfix) with ESMTP id A543C83D9A;
+	Tue, 31 Oct 2023 16:39:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A543C83D9A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c0Mbwl1rOiZ5; Tue, 31 Oct 2023 16:06:40 +0000 (UTC)
+	with ESMTP id lKCf28Tx1mvs; Tue, 31 Oct 2023 16:39:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CF6182DDE;
-	Tue, 31 Oct 2023 16:06:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CF6182DDE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3C7021BF39D
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 16:06:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1DC283D96;
+	Tue, 31 Oct 2023 16:39:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1DC283D96
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E99961BF2C9
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 16:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1445341E89
- for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 16:06:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1445341E89
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFEA361513
+ for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 16:39:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFEA361513
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yFLjYmThzyhe for <buildroot@lists.busybox.net>;
- Tue, 31 Oct 2023 16:06:36 +0000 (UTC)
-X-Greylist: delayed 954 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 31 Oct 2023 16:06:35 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 829B441E7B
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
- by smtp4.osuosl.org (Postfix) with ESMTP id 829B441E7B
- for <buildroot@buildroot.org>; Tue, 31 Oct 2023 16:06:35 +0000 (UTC)
-Received: from ubuntu-jammy.. (unknown [223.102.86.35])
- by zwqz-smtp-mta-g2-1 (Coremail) with SMTP id _____wD3XwhJIkFlFJnxBw--.11487S2;
- Tue, 31 Oct 2023 23:50:33 +0800 (CST)
-From: TIAN Yuanhao <tianyuanhao3@163.com>
-To: buildroot@buildroot.org
-Date: Tue, 31 Oct 2023 15:50:29 +0000
-Message-Id: <20231031155029.2689-1-tianyuanhao3@163.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tqW6Mg4H_qzt for <buildroot@lists.busybox.net>;
+ Tue, 31 Oct 2023 16:39:41 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8CBF761511
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 16:39:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CBF761511
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 056562000A;
+ Tue, 31 Oct 2023 16:39:37 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1qxrmD-004Gab-06;
+ Tue, 31 Oct 2023 17:39:37 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Frager, Neal" <neal.frager@amd.com>
+References: <20231018111357.2898095-1-neal.frager@amd.com>
+ <20231031121222.1dfa4035@booty>
+ <CH2PR12MB50042DEEED0FC5E7D3BBCA99F0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20231031133415.1d89db5a@windsurf>
+ <8a0d97bb-2fe5-4e09-8e95-b928a431ce1e@amd.com>
+ <CH2PR12MB5004A3E0B5725A32D422E945F0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
+Date: Tue, 31 Oct 2023 17:39:36 +0100
+In-Reply-To: <CH2PR12MB5004A3E0B5725A32D422E945F0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ (Neal Frager's message of "Tue, 31 Oct 2023 13:30:15 +0000")
+Message-ID: <87bkce21br.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-CM-TRANSID: _____wD3XwhJIkFlFJnxBw--.11487S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Gw4fCrW3Gw17ur4DAr4UXFb_yoWDZwcEyF
- 1fGr18J398WrZrWrZYyFn3AryrCw17Jr1kKFnrtrn0kr40yan0vwsYgry7XF1fGFy2gr13
- Jrn8Xr1ftrW29jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
- 9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRRf-P5UUUUU==
-X-Originating-IP: [223.102.86.35]
-X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbBdgsajWDkpt1r+wAAsF
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Eer+n
- 8DIDluYRWv+1F1UIO9k970Rq/xY6usA+WGxE4Q=; b=kZc1wNjAbJ+lmQHl1XFYK
- sLBVZIN5wcCYYskxGT3dZ7yAdwy4RTQqEf/1Cp+lomzB9cKHapvrWFUPe7HmckOM
- GH8kwYz9diy08ZXRS7hefmIYJehjXQyCdINTkyJv3CGdVh/UZiKIm+7rkdeYZnqw
- Lx+qVf69IV8Xk2grZnePjs=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
- header.a=rsa-sha256 header.s=s110527 header.b=kZc1wNjA
-Subject: [Buildroot] [PATCH 1/1] package/tini: move docker-init to
- /usr/libexec/docker/
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/1] configs/zynq_zc702_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,41 +68,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@paral.in>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, "Simek,
+ Michal" <michal.simek@amd.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>, romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The docker-init is not intended to be a user-facing command, and as such
-it is more appropriate for it to be found in /usr/libexec/ than in $PATH.
+>>>>> "Frager," == Frager, Neal <neal.frager@amd.com> writes:
 
-See:
-https://github.com/moby/moby/commit/6caaa8cadc9e4f1e122b7b2bb4451500bbec6086
-https://github.com/docker/docker-ce-packaging/commit/5a998af6f53d978810aa6f5b566a484911ff4ca2
+Hi,
 
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
----
- package/tini/tini.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > The remaining question is just a matter of how many zynq, zynqmp and
+ > versal defconfigs is the right amount for buildroot?  I would like to
+ > be able to support the following 11 boards, if it would be ok for the
+ > buildroot community.  5 of these 11 are already included in
+ > buildroot.
 
-diff --git a/package/tini/tini.mk b/package/tini/tini.mk
-index 9da54f8a25..75b6786cfb 100644
---- a/package/tini/tini.mk
-+++ b/package/tini/tini.mk
-@@ -31,7 +31,8 @@ endef
- 
- define TINI_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/bin/tini $(TARGET_DIR)/usr/bin/tini
--	ln -sf tini $(TARGET_DIR)/usr/bin/docker-init
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/libexec/docker
-+	ln -sf ../../bin/tini $(TARGET_DIR)/usr/libexec/docker/docker-init
- endef
- 
- # Tini's CMakeLists.txt is not suitable for Buildroot.
+ > zynq_zc702
+ > zynq_zc706
+ > zynqmp_zcu102
+ > zynqmp_zcu104
+ > zynqmp_zcu106
+ > zynqmp_kria_kd240
+ > zynqmp_kria_kr260
+ > zynqmp_kria_kv260
+ > versal_vck190
+ > versal_vek280 (coming next year)
+ > versal_vmk180
+
+ > In exchange, I would be ok with dropping the zynq_qmtech board and
+ > possibly one of the zynq_zed
+ > boards.
+
+I think the main issue with a lot of defconfigs is maintaining them (but
+you already do that) and the CI overhead from building all of them.
+
+I guess we could come up with some logic to skip some of the zynq*
+defconfigs from the Gitlab CI setup. Romain, any good ideas?
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
