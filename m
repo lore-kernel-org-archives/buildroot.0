@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F5E0C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 18:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E13EC4167D
+	for <buildroot@archiver.kernel.org>; Tue, 31 Oct 2023 18:04:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39A0883E9C;
-	Tue, 31 Oct 2023 18:03:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39A0883E9C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 268AB83E9B;
+	Tue, 31 Oct 2023 18:04:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 268AB83E9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V4Lv5Y6ZHI7j; Tue, 31 Oct 2023 18:03:48 +0000 (UTC)
+	with ESMTP id ITzyK7Jh7dgR; Tue, 31 Oct 2023 18:04:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C705F83E97;
-	Tue, 31 Oct 2023 18:03:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C705F83E97
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A1E581BF2E3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F2A083EA2;
+	Tue, 31 Oct 2023 18:04:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F2A083EA2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C4BF71BF976
  for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 18:03:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B4BD6141D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9EB194199A
  for <buildroot@lists.busybox.net>; Tue, 31 Oct 2023 18:03:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B4BD6141D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EB194199A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sc32ftq_DD5J for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pb7e_io8t7bT for <buildroot@lists.busybox.net>;
  Tue, 31 Oct 2023 18:03:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0F8361455
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0A2B408B1
  for <buildroot@buildroot.org>; Tue, 31 Oct 2023 18:03:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0F8361455
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0A2B408B1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB50186139; Tue, 31 Oct 2023 18:03:40 +0000 (UTC)
+ id BB82486270; Tue, 31 Oct 2023 18:03:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 31 Oct 2023 19:02:57 +0100
+Date: Tue, 31 Oct 2023 19:02:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 957e2d2ffd94aa51f043c75ff0adf8453127b1ab
-X-Git-Newrev: c4658ede712305455eaf72a67a74509d4434a46a
+X-Git-Oldrev: a9d2040b064d8cb0623c7cc75f1036a2f3bf9ee5
+X-Git-Newrev: 957e2d2ffd94aa51f043c75ff0adf8453127b1ab
 X-Patchwork-Hint: ignore
-Message-Id: <20231031180340.CB50186139@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wolfssl: security bump to version
- 5.6.4
+Message-Id: <20231031180340.BB82486270@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xen: security bump to version
+ 4.14.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4658ede712305455eaf72a67a74509d4434a46a
+commit: https://git.buildroot.net/buildroot/commit/?id=957e2d2ffd94aa51f043c75ff0adf8453127b1ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Medium] A fix was added, but still under review for completeness, for a
-Bleichenbacher style attack, leading to being able to decrypt a saved
-TLS connection and potentially forge a signature after probing with a
-large number of trial connections. This issue is around RSA decryption
-and affects static RSA cipher suites on the server side, which are not
-recommended to be used and are off by default. Static RSA cipher suites
-were also removed from the TLS 1.3 protocol and only present in TLS 1.2
-and lower. All padding versions of RSA decrypt are affected since the
-code under review is outside of the padding processing. Information
-about the private keys is NOT compromised in affected code. It's
-recommended to disable static RSA cipher suites and update the version
-of wolfSSL used if using RSA private decryption alone outside of TLS.
+Includes a number of bugfixes and the security fixes up to xsa-436:
+https://xenproject.org/downloads/xen-project-archives/xen-project-4-14-series/xen-project-4-14-6/
 
-https://github.com/wolfSSL/wolfssl/releases/tag/v5.6.4-stable
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 3407586edd..fb5a570de8 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  2e74a397fa797c2902d7467d500de904907666afb4ff80f6464f6efd5afb114a  wolfssl-5.6.3.tar.gz
-+sha256  031691906794ff45e1e792561cf31759f5d29ac74936bc8dffb8b14f16d820b4  wolfssl-5.6.4.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 9b35a6a84a..17452fdcaf 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 5637f0e8d9..d2350ac515 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a1a24092ad14658eed420b7d56b67d0d9d5b314e96c30a799b45f3a721f98bf0  xen-4.14.5.tar.gz
++sha256  7917681bc6e744789815131fcf7799e6b83a0d45b5801ac654322b037ce472f8  xen-4.14.6.tar.gz
+ sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 169753e89f..651442cfdf 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WOLFSSL_VERSION = 5.6.3
-+WOLFSSL_VERSION = 5.6.4
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
+-XEN_VERSION = 4.14.5
++XEN_VERSION = 4.14.6
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
