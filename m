@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD6AFC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 16:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4B34C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 16:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6548F431CD;
-	Wed,  1 Nov 2023 16:36:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6548F431CD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FC40416C2;
+	Wed,  1 Nov 2023 16:38:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FC40416C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XxO_W1UHZjGR; Wed,  1 Nov 2023 16:36:53 +0000 (UTC)
+	with ESMTP id aqWDzoID-B3H; Wed,  1 Nov 2023 16:37:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3ABC431D1;
-	Wed,  1 Nov 2023 16:36:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3ABC431D1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 301AD1BF841
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 16:36:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCEAE431B0;
+	Wed,  1 Nov 2023 16:37:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCEAE431B0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 317BC1BF841
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 16:37:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0AF734172D
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 16:36:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AF734172D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BC084E6A1
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 16:37:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BC084E6A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G3G5lHipe3Rh for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 16:36:16 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E337A431B6
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 16:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E337A431B6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EEC3EE0004;
- Wed,  1 Nov 2023 16:36:13 +0000 (UTC)
-Date: Wed, 1 Nov 2023 17:36:13 +0100
-To: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Message-ID: <20231101173613.516c74c4@windsurf>
-In-Reply-To: <20231010131626.1128436-1-thomas.claveirole@green-communications.fr>
-References: <20231010131626.1128436-1-thomas.claveirole@green-communications.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HuglaCsq1LaL for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 16:37:55 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E7A7B4BA46
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 16:37:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7A7B4BA46
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B3038240002;
+ Wed,  1 Nov 2023 16:37:52 +0000 (UTC)
+Date: Wed, 1 Nov 2023 17:37:51 +0100
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20231101173751.153f9b41@windsurf>
+In-Reply-To: <20231010164554.2954023-1-adam.duskett@amarulasolutions.com>
+References: <20231010164554.2954023-1-adam.duskett@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698856574;
+ d=bootlin.com; s=gm1; t=1698856673;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ik7NaKqt3Sb0kV8doSrMdkX3F5jCwgTdZiQglv/ZLlA=;
- b=j0sUqxkYHffDCK70juIaGmRHP98VckegqOZE9Y9esn09OqE1PO9ZHSUL5eptSHsiTCJkin
- dw/smtFmmrcnihdkqviNwKFeySwWNIBvH63Y8Uxhkt8jzsTVbf/iFrroxwXnSq8hcPMpsi
- TG7lKwsgMfBZFWrEwA6oV8HR4KP6NV2AwCfIHyooqRAqcSTjwcHOQe3OLFfrn2JrRwPg08
- hYR2PVr5oY/XP2l7IMiuDn+aEMzH/nyrXtsTo0Iin+XBkP3ip4abGL2VQ96ANMMYmgHbrz
- 8AvPK+RfVhvqTHRyYu7BqmLyPgLm8yXdu7oLGeOWtFBmiK0hhQc4bP6GNZwKsw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=CcSttkzPkW2WTJiiEwGzjzpHp4VDh5U7LsUdiw16k1M=;
+ b=RdJl7cwqnEoiB6axp6jifk4Tya4Tc7Kb/Yyw/EDUOdaIOBMuEQpdwxEZPVcJEX+M+nTgjZ
+ HCzTg7qUnqC/RdbesEKfYJBa0/2cFiGHsHUVwKwKJ4KIL7JYUetO4V2GZ8sC5qTHewny8G
+ 0ZCNYF5Ockm04tEpXHxN9K4jXXCm0wvKWcAObeKqoFd/E85MhQYlw14ty47nbjd9bJlZjH
+ 8Fpc5pFCArUJnXrmoZmVoUWqPxgAYQhRBbw4FB7YcWoiSPY2hprslpUjNVoobWBxddcIp9
+ fL876LDFgxsjw2WjKU0LHYbSI9VpYhdPX2mTiGNZPXsnqyU3oJL/wx4A57Aqzg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=j0sUqxkY
-Subject: Re: [Buildroot] [PATCH 1/2] package/vuejs: bump to version 3.3.4
+ header.s=gm1 header.b=RdJl7cwq
+Subject: Re: [Buildroot] [PATCH 1/2] package/postgresql/postgresql.service:
+ set locale for initdb to C
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,27 +77,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>, buildroot@buildroot.org
+Cc: Maxim Kochetkov <fido_max@inbox.ru>, Peter Seiderer <ps.report@gmx.net>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 10 Oct 2023 15:16:25 +0200
-Thomas Claveirole <thomas.claveirole@green-communications.fr> wrote:
+On Tue, 10 Oct 2023 18:45:53 +0200
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> ---
->  package/vuejs/vuejs.hash | 2 +-
->  package/vuejs/vuejs.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> From: Peter Seiderer <ps.report@gmx.net>
+> 
+> From this patch from Sept. 20, 2020, postgresql.service is still broken on
+> startup:
 
-Both applied, thanks!
+Which "this patch" ?
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
