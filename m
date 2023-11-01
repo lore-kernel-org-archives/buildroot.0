@@ -4,48 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23F7EC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 09:22:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55733C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 09:24:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFF896FC6E;
-	Wed,  1 Nov 2023 09:22:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF896FC6E
+	by smtp3.osuosl.org (Postfix) with ESMTP id E60B16FBA9;
+	Wed,  1 Nov 2023 09:24:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E60B16FBA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VZuOGDgLrqtq; Wed,  1 Nov 2023 09:22:06 +0000 (UTC)
+	with ESMTP id wbrLGFEALCzI; Wed,  1 Nov 2023 09:24:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E9D96FC85;
-	Wed,  1 Nov 2023 09:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E9D96FC85
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6AFBE1BF44A
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51F216FBBB;
+	Wed,  1 Nov 2023 09:24:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51F216FBBB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1453A1BF47E
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44FDF81E47
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44FDF81E47
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7AB243030
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:24:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7AB243030
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c-coUoPd9PAh for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43541840E8
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43541840E8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27466862BE; Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 1 Nov 2023 09:58:42 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: c4f67bf98102e2ad1a338be22231605d97669daf
-X-Git-Newrev: 9971f8713c0fca020d82b4577fab9559096ac60d
-X-Patchwork-Hint: ignore
-Message-Id: <20231101092109.27466862BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/docker-engine:
- bump version to v24.0.7
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WqN5-jQTNtlC for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 09:24:42 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7CC3841972
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 09:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CC3841972
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6ABA71C0006;
+ Wed,  1 Nov 2023 09:24:39 +0000 (UTC)
+Date: Wed, 1 Nov 2023 10:24:38 +0100
+To: "Frager, Neal" <neal.frager@amd.com>
+Message-ID: <20231101102438.3bdf8707@windsurf>
+In-Reply-To: <CH2PR12MB50047AC40733F136A2AE7DFAF0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20231020114236.4129636-1-neal.frager@amd.com>
+ <20231020114236.4129636-5-neal.frager@amd.com>
+ <20231031135419.56b25f1c@windsurf>
+ <CH2PR12MB50047AC40733F136A2AE7DFAF0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1698830679;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=bmr5Of4egvWA8K9HuS2ePGDlhdeSMIb7z4NjhsxzKmo=;
+ b=KEl3+0KE2VpacI2Hvt3PXkA2Yr88kEofph/6kJICeweIOUwV/d2e4CDO5juOkXfHsmhOE7
+ Vzaokl03PDmr8/HtFuFPTtG01zblQeQ6Ve55XQJdTVJM0JBcP/i5rNk5xk6AAKXznedTrO
+ IsXsxe70YUzwYXWzGKROL8jLB3qD+Ang8vYN5RE7H4zFWp2l6Ew9sf6yPf1qQbFK78vuVO
+ XytxC+zsG5saiqzKaFlfOOmoqpoJp7MP/RUL5c28HYmb/GdWUlUFEjKt4c7Ww1zUENHXfT
+ d8TcVPAXt9hul8T5DzVOge+/2nN45mS2d+sIXXSpe9USnQi7Uw3xg5REEJb0ug==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=KEl3+0KE
+Subject: Re: [Buildroot] [PATCH v6 05/10] boot/zynqmp-firmware: new boot
+ firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +78,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Simek, Michal" <michal.simek@amd.com>, "Erkiaga Elorza,
+ Ibai" <ibai.erkiaga-elorza@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ Neal Frager via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9971f8713c0fca020d82b4577fab9559096ac60d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+Hello Neal,
 
-The overlay2 layers metadata are now written atomically. Many other
-bugfixes and hardening against security issues around the power capping
-framework.
+On Tue, 31 Oct 2023 19:07:29 +0000
+"Frager, Neal" <neal.frager@amd.com> wrote:
 
-https://github.com/moby/moby/releases/tag/v24.0.7
+> When I do this, I am stuck with the following message:
+> make: *** No rule to make target 'toolchain-bare-metal-buildroot', needed by '/buildroot/output/build/zynqmp-firmware-xilinx_v2023.1/.stamp_configured'.  Stop.
+> 
+> I also tried with host-toolchain-bare-metal-buildroot:
+> make: *** No rule to make target 'host-toolchain-bare-metal-buildroot', needed by '/buildroot/output/build/zynqmp-firmware-xilinx_v2023.1/.stamp_configured'.  Stop.
+> 
+> I had this problem before which is why I solved it by just bypassing the dependency straight to newlib-bare-metal.
+> 
+> Any ideas what the virtual package is missing?
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d2290e614196bfec05c3bd08cdca1c98cb7d0bf2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Yann just pointed out to me what is very likely to be the explanation:
+your toolchain-bare-metal-buildroot.mk is incorrect. It does this:
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 7a8b17d3f3..931d6529e1 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  29a8ee54e9ea008b40eebca42dec8b67ab257eb8ac175f67e79c110e4187d7d2  docker-engine-24.0.6.tar.gz
-+sha256  16a2cb4cf4d314a070085e0df06e3a6bd9ec678d28715b64060af694fc9051d5  docker-engine-24.0.7.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index a8f47254a4..34e74c09c6 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 24.0.6
-+DOCKER_ENGINE_VERSION = 24.0.7
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
++(eval $(host-virtual-package))
+
+While it should have been:
+
++$(eval $(host-virtual-package))
+
+due to that, this makefile is most likely incorrect from a syntax point
+of view, and ignored by make when all makefiles are parsed.
+
+What I am a bit surprised with, is why you send a patch series that
+includes this virtual package if you know you couldn't get it to work?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
