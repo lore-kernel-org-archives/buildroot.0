@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D13EBC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 21:50:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23C17C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 21:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D90E432A0;
-	Wed,  1 Nov 2023 21:50:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D90E432A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4917416E6;
+	Wed,  1 Nov 2023 21:53:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4917416E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l30eZxXoM5D9; Wed,  1 Nov 2023 21:50:48 +0000 (UTC)
+	with ESMTP id XdgUb-7Bfhmf; Wed,  1 Nov 2023 21:53:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5DB244328A;
-	Wed,  1 Nov 2023 21:50:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DB244328A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F27931BF335
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:50:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F922431C9;
+	Wed,  1 Nov 2023 21:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F922431C9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 136811BF335
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D95CE84B63
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:50:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D95CE84B63
+ by smtp4.osuosl.org (Postfix) with ESMTP id D832F4EECC
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D832F4EECC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aqDX1IwIOHj1 for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 21:50:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bBrknDxNMtM4 for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 21:53:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01D1F84B5D
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 21:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01D1F84B5D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 595CF4EEC9
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 21:53:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 595CF4EEC9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DEE45864C2; Wed,  1 Nov 2023 21:50:40 +0000 (UTC)
+ id 35AE0864C6; Wed,  1 Nov 2023 21:53:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 Nov 2023 22:44:58 +0100
+Date: Wed, 1 Nov 2023 22:53:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c7e0f011906646e45a23139c3006b4d767e19fa
-X-Git-Newrev: 6d8512bf04762754b2243df3d2658d75cf7f9d31
+X-Git-Oldrev: 6d8512bf04762754b2243df3d2658d75cf7f9d31
+X-Git-Newrev: be9f72278f6b6826b75af4536b62743c5b37b737
 X-Patchwork-Hint: ignore
-Message-Id: <20231101215040.DEE45864C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: fix configure cache
- preseed for fcntl capabilities
+Message-Id: <20231101215342.35AE0864C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] .editorconfig: add editor-agnostic
+ configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +64,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d8512bf04762754b2243df3d2658d75cf7f9d31
+commit: https://git.buildroot.net/buildroot/commit/?id=be9f72278f6b6826b75af4536b62743c5b37b737
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since bump to version 4.19.1 in
-commit a8ff60cff9402dcd04fffb67af15dfe2caab0995 and
-https://gitlab.com/samba-team/samba/-/commit/fb4bb188acfc3e88887b500a05e9e4db8b08aed3:
+EditorConfig [0] is an editor-agnostic configuration file, to set
+preferences on how to edit text: tabs vs. spaces, tab width, indentation
+size, line endings...
 
-Cross answers file /home/buildroot/autobuild/instance-1/output-1/build/samba4-4.19.1/cache.txt is incomplete
+A large number of editors support EditorConfig, either natively [1] or
+with the help of plugins [2].
 
-Indeed, a typo in the configure script was fixed, which causes our
-logic to preseed the configure cache with test results to no longer be
-taken into account.
+Add a basic .editorconfig that provides defaults for most of the files
+used by Buildroot. More can be added in the future if we can find more
+matching patterns.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c1fbfdab11c0521b8199f6a661987eb6076c84d2
+The values are chosen a bit arbitrarily, unless we already have a
+(un)written rule about it. Notably, indentation defaults to using 4
+spaces, and only a set of files for which we require TABs (Makefile,
+essentially) or have already settled for TABs (Kconfig files, init
+scripts...) are configured so. The traditional width of TABs is 8 char,
+and we pair TAB indentation with TAB size.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Trailing spaces are usually useless, except in asciidoc source where
+they can be used to force a new line without a new paragraph.
+
+One of the limitations of .editorconfig, though, is that it matches on
+filenames (e.g. *.py), not on the content (e.g. no use of mimetype, or
+libmagic, or such). Still, this is enough to cover a lot of files in
+Buildroot.
+
+[0] https://editorconfig.org/
+[1] https://editorconfig.org/#pre-installed
+[2] https://editorconfig.org/#download
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/samba4/samba4.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .editorconfig | 29 +++++++++++++++++++++++++++++
+ DEVELOPERS    |  1 +
+ 2 files changed, 30 insertions(+)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 832b128132..b89f961d99 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -118,7 +118,7 @@ SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_REMOVE_CTDB_TESTS
+diff --git a/.editorconfig b/.editorconfig
+new file mode 100644
+index 0000000000..4acaf3486b
+--- /dev/null
++++ b/.editorconfig
+@@ -0,0 +1,29 @@
++root = true
++
++[*]
++charset = utf-8
++end_of_line = lf
++indent_style = space
++indent_size = 4
++tab_width = 8
++trim_trailing_whitespace = true
++insert_final_newline = true
++
++[DEVELOPERS]
++indent_style = tab
++indent_size = tab
++
++[{Config*.in*,linux/Config.ext.in}]
++indent_style = tab
++indent_size = tab
++
++[{Makefile*,*.mk}]
++indent_style = tab
++indent_size = tab
++
++[S{0..9}{0..9}*]
++indent_style = tab
++indent_size = tab
++
++[*.adoc]
++trim_trailing_whitespace = false
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ca812b3ae6..e7e4a59e94 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3171,6 +3171,7 @@ F:	package/zisofs-tools/
+ F:	support/download/
  
- define SAMBA4_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 package/samba4/samba4-cache.txt $(@D)/cache.txt;
--	echo 'Checking whether fcntl supports setting/geting hints: $(if $(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13),OK,NO)' >>$(@D)/cache.txt;
-+	echo 'Checking whether fcntl supports setting/getting hints: $(if $(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13),OK,NO)' >>$(@D)/cache.txt;
- 	echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
- 	(cd $(@D); \
- 		$(SAMBA4_PYTHON) \
+ N:	Yann E. MORIN <yann.morin@orange.com>
++F:	.editorconfig
+ F:	package/gpsd/
+ 
+ N:	Yegor Yefremov <yegorslists@googlemail.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
