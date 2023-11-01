@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DAA0C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 09:13:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 404A7C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 09:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E228E6FBA2;
-	Wed,  1 Nov 2023 09:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E228E6FBA2
+	by smtp3.osuosl.org (Postfix) with ESMTP id E97596FC56;
+	Wed,  1 Nov 2023 09:21:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E97596FC56
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2dnC2MY8yWhr; Wed,  1 Nov 2023 09:13:56 +0000 (UTC)
+	with ESMTP id nVmCJjAN7S9B; Wed,  1 Nov 2023 09:21:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43EF96FA82;
-	Wed,  1 Nov 2023 09:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43EF96FA82
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D71EA1BF44A
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:13:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 743CA6FBA2;
+	Wed,  1 Nov 2023 09:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 743CA6FBA2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B68A1BF44A
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6C3E848BC
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:13:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6C3E848BC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1450B4EBC3
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1450B4EBC3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wLy34DRDNAwZ for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 09:13:48 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A6CCE848BA
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 09:13:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6CCE848BA
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A6C7C1C0006;
- Wed,  1 Nov 2023 09:13:43 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1qy7IF-0053yl-0P;
- Wed, 01 Nov 2023 10:13:43 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cSgMQxSxErFY for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 09:21:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8BF894EBA7
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 09:21:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BF894EBA7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6BEFA862BE; Wed,  1 Nov 2023 09:21:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231029085831.234005-1-fontaine.fabrice@gmail.com>
-Date: Wed, 01 Nov 2023 10:13:43 +0100
-In-Reply-To: <20231029085831.234005-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Oct 2023 09:58:31 +0100")
-Message-ID: <87lebhzvi0.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/pango: fix build with gcc >= 13
+To: buildroot@buildroot.org
+Date: Wed, 1 Nov 2023 10:11:52 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 915f157d476c132ce6d24c85600d9d1978051e46
+X-Git-Newrev: 176e2d2a06c3b2aacc5125d7e60423a735993f80
+X-Patchwork-Hint: ignore
+Message-Id: <20231101092108.6BEFA862BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/clamav: security
+ bump to version 0.103.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,34 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=176e2d2a06c3b2aacc5125d7e60423a735993f80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Fix the following build failure with gcc >= 13:
- > In function 'find_best_lang_match_cached',
- >     inlined from 'find_best_lang_match_cached' at ../pango/pango-language.c:501:1,
- >     inlined from 'pango_language_get_scripts' at ../pango/pango-language.c:661:21:
- > ../pango/pango-language.c:518:12: error: array subscript 0 is outside array bounds of 'const void *[0]' {aka 'const void *[]'} [-Werror=array-bounds=]
- >   518 |     *cache = result;
- >       |     ~~~~~~~^~~~~~~~
- > In function 'pango_language_get_scripts':
- > cc1: note: source object is likely at address zero
- > cc1: some warnings being treated as errors
+Release notes:
+https://blog.clamav.net/2023/10/clamav-121-113-104-010311-patch.html
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/e8b5a752a62621099942b29c1642747eef2930cb
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 235b1e9048..60aba89fa0 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  9a2608971efee6092c009babf71d3b891ec6cf902bafa1dd6616f5308549a640  clamav-0.103.10.tar.gz
++sha256  61d7ebda7c9c36f50425a3726ae293db36adeae7f71b1fe488902b73c70b7e11  clamav-0.103.11.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 5f8eebbe9a..090e546aee 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 0.103.10
++CLAMAV_VERSION = 0.103.11
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
