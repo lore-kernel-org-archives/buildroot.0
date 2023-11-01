@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08676C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 22:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19DA1C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 22:13:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A986A432AA;
-	Wed,  1 Nov 2023 22:12:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A986A432AA
+	by smtp2.osuosl.org (Postfix) with ESMTP id B231F432A5;
+	Wed,  1 Nov 2023 22:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B231F432A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AIigS8rOXig1; Wed,  1 Nov 2023 22:12:56 +0000 (UTC)
+	with ESMTP id 7O_DRETQazMd; Wed,  1 Nov 2023 22:13:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46D89432A5;
-	Wed,  1 Nov 2023 22:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D89432A5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7712A1BF30B
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:12:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDA8C432AA;
+	Wed,  1 Nov 2023 22:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDA8C432AA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A48E21BF30B
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FEC684A51
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FEC684A51
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E23F6FCA7
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:13:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E23F6FCA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dc8hEDFSsY5Y for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 22:12:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F491847F2
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 22:12:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F491847F2
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37F45864EC; Wed,  1 Nov 2023 22:12:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 1 Nov 2023 23:12:12 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5868ce7a50c84bdacb5c2636f5eeaa958ba9f1a0
-X-Git-Newrev: f0d4bf1df5838c3aba678ca21d6ce2214f0466e0
-X-Patchwork-Hint: ignore
-Message-Id: <20231101221249.37F45864EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgeos: needs gcc >= 4.9
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s2nFHmGQRIOz for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 22:13:21 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6992B6FC5A
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 22:13:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6992B6FC5A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9EF7920004;
+ Wed,  1 Nov 2023 22:13:19 +0000 (UTC)
+Date: Wed, 1 Nov 2023 23:13:18 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20231101231318.496e60ea@windsurf>
+In-Reply-To: <20231015201449.1279312-1-fontaine.fabrice@gmail.com>
+References: <20231015201449.1279312-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1698876800;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=98wYZ68Wvt2gNRgglL+H2xqSlVK3t9VNLa2pVOWIac0=;
+ b=bzu6yEBb2SCem8mPquAEtMn7nfVMG8cORT23sfvHJSxFizhpyEe8y+IjHy55NZ/oDM96iB
+ xtfBJhH82/bDKYPhN+tj+DEaXnTrh1jr/JbaYPGcWFjTBwSM+Jmw+cfa9H+YtEOOeRkXG3
+ PywZP9tK/oHsoq2u0mEVwR8nIScHDleuPR4GfCRt9KEu/AJLv0Ut92GmC1zQlYwd+I20Yl
+ xeSe6rG6svkaPQoT6eZ0jWXaIQ7LUoyJWg7h+JTuLqhEDVKdpKW7Xbq6wbo165eF3T4aIK
+ 7EXrNGO6UnxVdmh/6ALGwKAiOJBwktWf4zaRyovucSgetAPZDde1Ox8Bcguepg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=bzu6yEBb
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgeos: needs gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,83 +76,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0d4bf1df5838c3aba678ca21d6ce2214f0466e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 15 Oct 2023 22:14:49 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-libgeos needs gcc >= 4.9 since bump to version 3.12.0 in commit
-16727d4595dd1972a46e92bbd2260a896cc19b60 and
-https://github.com/libgeos/geos/commit/289ed4efb26a9944f4385381e1574184b1e7448e:
+> libgeos needs gcc >= 4.9 since bump to version 3.12.0 in commit
+> 16727d4595dd1972a46e92bbd2260a896cc19b60 and
+> https://github.com/libgeos/geos/commit/289ed4efb26a9944f4385381e1574184b1e7448e:
+> 
+> In file included from /home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/src/algorithm/ConvexHull.cpp:30:0:
+> /home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/include/geos/util.h:38:12: error: 'std::make_unique' has not been declared
+>  using std::make_unique;
+>             ^
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/56bb572fb1d56d45dbb950a73b9b888239fa6968
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libgeos/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-In file included from /home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/src/algorithm/ConvexHull.cpp:30:0:
-/home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/include/geos/util.h:38:12: error: 'std::make_unique' has not been declared
- using std::make_unique;
-            ^
+I've applied, but you had forgotten to look at the reverse dependencies
+of BR2_PACKAGE_LIBGEOS. Namely, BR2_PACKAGE_POSTGIS selects
+BR2_PACKAGE_LIBGEOS, so it needs to inherit this dependency on gcc >=
+4.9, so I fixed that when applying.
 
-This dependency is propagated to libgeos only reverse dependency,
-postgis.
+Thanks a lot!
 
-Fixes:
- - http://autobuild.buildroot.org/results/56bb572fb1d56d45dbb950a73b9b888239fa6968
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libgeos/Config.in | 4 +++-
- package/postgis/Config.in | 6 +++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index 8411627d43..2a27c6f2a4 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEOS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
- 	help
- 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
-@@ -13,7 +14,8 @@ config BR2_PACKAGE_LIBGEOS
- 
- 	  https://trac.osgeo.org/geos
- 
--comment "libgeos needs a toolchain w/ C++, wchar, threads not binutils bug 27597"
-+comment "libgeos needs a toolchain w/ C++, wchar, gcc >= 4.9, threads not binutils bug 27597"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		   !BR2_TOOLCHAIN_HAS_THREADS || \
-+		   !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-diff --git a/package/postgis/Config.in b/package/postgis/Config.in
-index 405c5c723a..7d42390677 100644
---- a/package/postgis/Config.in
-+++ b/package/postgis/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_POSTGIS
- 	bool "postgis"
- 	depends on BR2_PACKAGE_POSTGRESQL_FULL
- 	depends on BR2_INSTALL_LIBSTDCPP # libgeos, proj
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgeos
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgeos, proj
- 	depends on BR2_USE_WCHAR # libgeos, proj
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 # libgeos
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_POSTGIS
- 
- 	  https://postgis.net/
- 
--comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.7, not binutils bug 27597"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
-+comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.9, not binutils bug 27597"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
