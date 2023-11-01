@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABCDBC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 22:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0F2EC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 22:09:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 470A0432A0;
-	Wed,  1 Nov 2023 22:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 470A0432A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CD18432A7;
+	Wed,  1 Nov 2023 22:09:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CD18432A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oLxctxrvcLoo; Wed,  1 Nov 2023 22:01:10 +0000 (UTC)
+	with ESMTP id slg6Rs3f7gyB; Wed,  1 Nov 2023 22:09:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 30926432AB;
-	Wed,  1 Nov 2023 22:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30926432AB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD75A1BF44A
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:01:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83964432A2;
+	Wed,  1 Nov 2023 22:09:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83964432A2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B04C1BF30B
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9553861002
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9553861002
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8D3484DA1
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:09:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8D3484DA1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VyMBbfgB_CLG for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 22:00:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V3TDpGNg25ze for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 22:08:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C15860B7C
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 22:00:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C15860B7C
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0BD084DA0
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 22:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0BD084DA0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53E15864D1; Wed,  1 Nov 2023 22:00:59 +0000 (UTC)
+ id B8592864DD; Wed,  1 Nov 2023 22:08:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 Nov 2023 22:55:56 +0100
+Date: Wed, 1 Nov 2023 23:08:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2476faa2adfea9d77cd872e30445cab365efafea
-X-Git-Newrev: d952b970a1897b5e01d32127a426cd6864e7a409
+X-Git-Oldrev: d952b970a1897b5e01d32127a426cd6864e7a409
+X-Git-Newrev: 8dd5390be6b210eaac1bf02af2fea84d4c87dcd1
 X-Patchwork-Hint: ignore
-Message-Id: <20231101220059.53E15864D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libspdm: bump version to 3.1.1
+Message-Id: <20231101220856.B8592864DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tftpy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d952b970a1897b5e01d32127a426cd6864e7a409
+commit: https://git.buildroot.net/buildroot/commit/?id=8dd5390be6b210eaac1bf02af2fea84d4c87dcd1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+tftpy is described as a pure Python implementation of the Trivial FTP
+protocol. Add support for this package.
+
+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libspdm/libspdm.hash | 2 +-
- package/libspdm/libspdm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-tftpy/Config.in         |  7 +++++++
+ package/python-tftpy/python-tftpy.hash |  3 +++
+ package/python-tftpy/python-tftpy.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
 
-diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
-index 3280ebfb88..23faba1c4b 100644
---- a/package/libspdm/libspdm.hash
-+++ b/package/libspdm/libspdm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  73e0d7df3c91beeb9f61a50eaa0a44c8e32b7a62ce32ed3cab1f0fab406ed5b8  libspdm-3.1.0.tar.gz
-+sha256  84d4a755f57b17775c63b5c8be646d518ce34d5d1b85994b6150ebce9d31b183  libspdm-3.1.1.tar.gz
- sha256  7dc072bff163df39209bbb63e0916f4667c2a84cf3c36ccc84ec7425bc3e4779  LICENSE.md
-diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
-index b216d98093..34dbb457c4 100644
---- a/package/libspdm/libspdm.mk
-+++ b/package/libspdm/libspdm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e7e4a59e94..26b25edd98 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -666,6 +666,7 @@ F:	board/beelink/gs1/
+ F:	configs/beelink_gs1_defconfig
  
--LIBSPDM_VERSION = 3.1.0
-+LIBSPDM_VERSION = 3.1.1
- LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
- LIBSPDM_LICENSE = BSD-3-Clause
- LIBSPDM_LICENSE_FILES = LICENSE.md
+ N:	Colin Foster <colin.foster@in-advantage.com>
++F:	package/python-tftpy/
+ F:	package/rauc-hawkbit-updater/
+ 
+ N:	Corentin Guillevic <corentin.guillevic@smile.fr>
+diff --git a/package/Config.in b/package/Config.in
+index 3ce78a2461..7e2fccc8b1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1337,6 +1337,7 @@ menu "External python modules"
+ 	source "package/python-termcolor/Config.in"
+ 	source "package/python-terminaltables/Config.in"
+ 	source "package/python-texttable/Config.in"
++	source "package/python-tftpy/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tinycss2/Config.in"
+ 	source "package/python-tinyrpc/Config.in"
+diff --git a/package/python-tftpy/Config.in b/package/python-tftpy/Config.in
+new file mode 100644
+index 0000000000..ef21ac58de
+--- /dev/null
++++ b/package/python-tftpy/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_TFTPY
++	bool "python-tftpy"
++	help
++	  tftpy is a pure Python implementation of the
++	  Trivial FTP protocol.
++
++	  https://github.com/msoulier/tftpy
+diff --git a/package/python-tftpy/python-tftpy.hash b/package/python-tftpy/python-tftpy.hash
+new file mode 100644
+index 0000000000..1fae4fdeef
+--- /dev/null
++++ b/package/python-tftpy/python-tftpy.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  2bfbf6377f6e3b6ba647f0ac614e9cbc225d1cc35b52991860ba6ea1ec58ef9d  python-tftpy-0.8.2.tar.gz
++sha256  4616f0c71e62ce2e0f6cdd3aef6d3c285f8730c9304b88a9f3ce3f14c2e6f756  LICENSE
+diff --git a/package/python-tftpy/python-tftpy.mk b/package/python-tftpy/python-tftpy.mk
+new file mode 100644
+index 0000000000..829bd08b96
+--- /dev/null
++++ b/package/python-tftpy/python-tftpy.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-tftpy
++#
++################################################################################
++
++PYTHON_TFTPY_VERSION = 0.8.2
++PYTHON_TFTPY_SITE = $(call github,msoulier,tftpy,$(PYTHON_TFTPY_VERSION))
++PYTHON_TFTPY_LICENSE = MIT
++PYTHON_TFTPY_LICENSE_FILES = LICENSE.txt
++PYTHON_TFTPY_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
