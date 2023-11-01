@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DBF9C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 09:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23F7EC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 09:22:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0615E6FBE0;
-	Wed,  1 Nov 2023 09:21:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0615E6FBE0
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFF896FC6E;
+	Wed,  1 Nov 2023 09:22:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF896FC6E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x6zSLuMPdRp3; Wed,  1 Nov 2023 09:21:53 +0000 (UTC)
+	with ESMTP id VZuOGDgLrqtq; Wed,  1 Nov 2023 09:22:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1600B6FC7D;
-	Wed,  1 Nov 2023 09:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1600B6FC7D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 47B551BF44A
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E9D96FC85;
+	Wed,  1 Nov 2023 09:22:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E9D96FC85
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AFBE1BF44A
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D47443034
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D47443034
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44FDF81E47
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44FDF81E47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NMywr64K9KKL for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c-coUoPd9PAh for <buildroot@lists.busybox.net>;
  Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67A0141972
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43541840E8
  for <buildroot@buildroot.org>; Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67A0141972
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43541840E8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 46ECF862C1; Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
+ id 27466862BE; Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 1 Nov 2023 10:13:12 +0100
+Date: Wed, 1 Nov 2023 09:58:42 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 71766b4fcd3602c6a02ead31fa99a07cbe74e92d
-X-Git-Newrev: e67ef0d8fa3b422972998c66c0eedbd4b49a95d7
+X-Git-Oldrev: c4f67bf98102e2ad1a338be22231605d97669daf
+X-Git-Newrev: 9971f8713c0fca020d82b4577fab9559096ac60d
 X-Patchwork-Hint: ignore
-Message-Id: <20231101092109.46ECF862C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/pango: fix build
- with gcc >= 13
+Message-Id: <20231101092109.27466862BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/docker-engine:
+ bump version to v24.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,78 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e67ef0d8fa3b422972998c66c0eedbd4b49a95d7
+commit: https://git.buildroot.net/buildroot/commit/?id=9971f8713c0fca020d82b4577fab9559096ac60d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix the following build failure with gcc >= 13:
+The overlay2 layers metadata are now written atomically. Many other
+bugfixes and hardening against security issues around the power capping
+framework.
 
-In function 'find_best_lang_match_cached',
-    inlined from 'find_best_lang_match_cached' at ../pango/pango-language.c:501:1,
-    inlined from 'pango_language_get_scripts' at ../pango/pango-language.c:661:21:
-../pango/pango-language.c:518:12: error: array subscript 0 is outside array bounds of 'const void *[0]' {aka 'const void *[]'} [-Werror=array-bounds=]
-  518 |     *cache = result;
-      |     ~~~~~~~^~~~~~~~
-In function 'pango_language_get_scripts':
-cc1: note: source object is likely at address zero
-cc1: some warnings being treated as errors
+https://github.com/moby/moby/releases/tag/v24.0.7
 
-Fixes:
- - http://autobuild.buildroot.org/results/e8b5a752a62621099942b29c1642747eef2930cb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 477b39a1e08452a3210a71c4f83b6f910a062566)
+(cherry picked from commit d2290e614196bfec05c3bd08cdca1c98cb7d0bf2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pango/0001-Drop-Werror-array-bounds.patch | 40 +++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/0001-Drop-Werror-array-bounds.patch b/package/pango/0001-Drop-Werror-array-bounds.patch
-new file mode 100644
-index 0000000000..45821e8533
---- /dev/null
-+++ b/package/pango/0001-Drop-Werror-array-bounds.patch
-@@ -0,0 +1,40 @@
-+From e93dbd66973040f1e0afcba0dc7c712c27d75d59 Mon Sep 17 00:00:00 2001
-+From: Matthias Clasen <mclasen@redhat.com>
-+Date: Mon, 1 May 2023 23:27:52 -0400
-+Subject: [PATCH] Drop -Werror=array-bounds
-+
-+gcc has strange issues with this and produces false
-+positives that recently started breaking the build of
-+pango as a subproject in gtk.
-+
-+See e.g. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
-+
-+Upstream: https://gitlab.gnome.org/GNOME/pango/-/commit/e93dbd66973040f1e0afcba0dc7c712c27d75d59
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ meson.build | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 930f41082..2d30c0141 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -89,7 +89,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
-+     '-Wuninitialized',
-+     '-Wunused',
-+     '-Werror=address',
-+-    '-Werror=array-bounds',
-+     '-Werror=empty-body',
-+     '-Werror=implicit',
-+     '-Werror=implicit-fallthrough',
-+@@ -132,7 +131,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
-+     '-Werror=sequence-point',
-+     '-Werror=return-type',
-+     '-Werror=trigraphs',
-+-    '-Werror=array-bounds',
-+     '-Werror=write-strings',
-+     '-Werror=address',
-+     '-Werror=int-to-pointer-cast',
-+-- 
-+GitLab
-+
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 7a8b17d3f3..931d6529e1 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  29a8ee54e9ea008b40eebca42dec8b67ab257eb8ac175f67e79c110e4187d7d2  docker-engine-24.0.6.tar.gz
++sha256  16a2cb4cf4d314a070085e0df06e3a6bd9ec678d28715b64060af694fc9051d5  docker-engine-24.0.7.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index a8f47254a4..34e74c09c6 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = 24.0.6
++DOCKER_ENGINE_VERSION = 24.0.7
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
