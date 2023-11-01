@@ -1,68 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19DA1C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 22:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20BA8C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 22:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B231F432A5;
-	Wed,  1 Nov 2023 22:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B231F432A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id A75944015D;
+	Wed,  1 Nov 2023 22:24:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A75944015D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7O_DRETQazMd; Wed,  1 Nov 2023 22:13:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c37i6S53jssd; Wed,  1 Nov 2023 22:24:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDA8C432AA;
-	Wed,  1 Nov 2023 22:13:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDA8C432AA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A48E21BF30B
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:13:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A0C340268;
+	Wed,  1 Nov 2023 22:24:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A0C340268
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 923D81BF30B
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E23F6FCA7
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:13:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E23F6FCA7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 67D00810CD
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67D00810CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s2nFHmGQRIOz for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 22:13:21 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6992B6FC5A
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 22:13:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6992B6FC5A
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9EF7920004;
- Wed,  1 Nov 2023 22:13:19 +0000 (UTC)
-Date: Wed, 1 Nov 2023 23:13:18 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231101231318.496e60ea@windsurf>
-In-Reply-To: <20231015201449.1279312-1-fontaine.fabrice@gmail.com>
-References: <20231015201449.1279312-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e7SDQ6I-VJiY for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 22:24:47 +0000 (UTC)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
+ [IPv6:2a00:1450:4864:20::22b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A858284DA1
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 22:24:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A858284DA1
+Received: by mail-lj1-x22b.google.com with SMTP id
+ 38308e7fff4ca-2c509d5ab43so4267031fa.0
+ for <buildroot@buildroot.org>; Wed, 01 Nov 2023 15:24:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698877485; x=1699482285;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=YCLqKzFG9+XKaeUfOqP51GOzZuVSkyUZXxi6liNGw9A=;
+ b=syxVdZNcG6Ye50Tc/gcZUIuVfH54au2CqOIQ/OtzlLlJK32EV9jZbmPhpSLlALvqSM
+ x1g8g9ULIDjJAkaEk9KDqFKq0I5Qmtmfi83gyqnETC5fMRdwz8GizhrvurfoF9gIyQVz
+ O7ur8rHBmoVktPYF+eKB4Rum38/mmlBSYoY5u7LLd1A8o9G0eEHFCI4nn5Wl4DJ7tC+q
+ XLsZsgKSMIZKJfTHJtawNa1WnGsv2RPzIcLHrKXgeG13GsVSnipsWvIAlRZUK/H1JN7a
+ YScrA2zhAIjxm0NdrjmMqDZLlxoTMbRnD7qKiFXJ6BNEJhXe0e97/6tiXmI0E+wq4bwk
+ 7R5A==
+X-Gm-Message-State: AOJu0YwRmqVvObtKfSqhFEg/bB8YvHjoNCSUMfXpV5By1oS/CbAf3hJJ
+ qlGm3iRD0ANacAwokzW9Ifh13EgvefE=
+X-Google-Smtp-Source: AGHT+IFRYiBkW1VyIYbIGD9LJ/aYUWZ7bOWEspV6ukOQzabP7L3+7c3G/RekP2/HuDi/tsY9JEDTew==
+X-Received: by 2002:a2e:88c2:0:b0:2c5:1df1:ac1 with SMTP id
+ a2-20020a2e88c2000000b002c51df10ac1mr13831345ljk.20.1698877484358; 
+ Wed, 01 Nov 2023 15:24:44 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ m1-20020a05600c4f4100b0040684abb623sm934963wmq.24.2023.11.01.15.24.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 01 Nov 2023 15:24:44 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  1 Nov 2023 23:24:41 +0100
+Message-ID: <20231101222441.10497-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698876800;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=98wYZ68Wvt2gNRgglL+H2xqSlVK3t9VNLa2pVOWIac0=;
- b=bzu6yEBb2SCem8mPquAEtMn7nfVMG8cORT23sfvHJSxFizhpyEe8y+IjHy55NZ/oDM96iB
- xtfBJhH82/bDKYPhN+tj+DEaXnTrh1jr/JbaYPGcWFjTBwSM+Jmw+cfa9H+YtEOOeRkXG3
- PywZP9tK/oHsoq2u0mEVwR8nIScHDleuPR4GfCRt9KEu/AJLv0Ut92GmC1zQlYwd+I20Yl
- xeSe6rG6svkaPQoT6eZ0jWXaIQ7LUoyJWg7h+JTuLqhEDVKdpKW7Xbq6wbo165eF3T4aIK
- 7EXrNGO6UnxVdmh/6ALGwKAiOJBwktWf4zaRyovucSgetAPZDde1Ox8Bcguepg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bzu6yEBb
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgeos: needs gcc >= 4.9
+ d=gmail.com; s=20230601; t=1698877485; x=1699482285; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=YCLqKzFG9+XKaeUfOqP51GOzZuVSkyUZXxi6liNGw9A=;
+ b=UQfg65sUDmnl/uQzBu3QILfN3e8wecdrHw70fiSRN6cemeBiGq9UJrFNAzzSmwcwEF
+ F+16OQ3//Q6sIZfCgMgyViJh9dRYiOCxi22vD8ylp7ubU6wxBXEBaCjz0kI7C32O6d7p
+ /xkjR9UiF7GQStEXunBuAT/omQu4kOwDFQn0zrwgA9bE0CF32JevEKMmiIWDEZMV1a//
+ 1YCOzvg8Fyp39zNx3ThKIektGiGwfiDco4PMVtQdIzGQrS2a9I35zijqEVPQ5kUfNhv7
+ OKOFimKzx7OkeTyaR4wjHRJCoA8TGvUSq6z48bB0Ed0vYCsZ7r4YFDLJGDY9Jq0gbRKu
+ h/zg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=UQfg65sU
+Subject: [Buildroot] [PATCH 1/1] package/opusfile: add OPUSFILE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,46 +93,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
+Cc: Gilles Talis <gilles.talis@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 15 Oct 2023 22:14:49 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+cpe:2.3:a:xiph:opusfile is a valid CPE identifier for this package:
 
-> libgeos needs gcc >= 4.9 since bump to version 3.12.0 in commit
-> 16727d4595dd1972a46e92bbd2260a896cc19b60 and
-> https://github.com/libgeos/geos/commit/289ed4efb26a9944f4385381e1574184b1e7448e:
-> 
-> In file included from /home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/src/algorithm/ConvexHull.cpp:30:0:
-> /home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/include/geos/util.h:38:12: error: 'std::make_unique' has not been declared
->  using std::make_unique;
->             ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/56bb572fb1d56d45dbb950a73b9b888239fa6968
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libgeos/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+  https://nvd.nist.gov/products/cpe/detail/BB1B035B-FCF0-4854-AB18-0FD1181B0CC3
 
-I've applied, but you had forgotten to look at the reverse dependencies
-of BR2_PACKAGE_LIBGEOS. Namely, BR2_PACKAGE_POSTGIS selects
-BR2_PACKAGE_LIBGEOS, so it needs to inherit this dependency on gcc >=
-4.9, so I fixed that when applying.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/opusfile/opusfile.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks a lot!
-
-Thomas
+diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
+index 63553a81e7..efd38c542c 100644
+--- a/package/opusfile/opusfile.mk
++++ b/package/opusfile/opusfile.mk
+@@ -9,6 +9,7 @@ OPUSFILE_SITE = https://downloads.xiph.org/releases/opus
+ OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
+ OPUSFILE_LICENSE = BSD-3-Clause
+ OPUSFILE_LICENSE_FILES = COPYING
++OPUSFILE_CPE_ID_VENDOR = xiph
+ OPUSFILE_INSTALL_STAGING = YES
+ 
+ # 0001-Propagate-allocation-failure-from-ogg_sync_buffer.patch
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
