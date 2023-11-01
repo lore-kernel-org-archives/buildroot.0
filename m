@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83BA1C4167D
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 09:21:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DBF9C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 09:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 314816FC1D;
-	Wed,  1 Nov 2023 09:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 314816FC1D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0615E6FBE0;
+	Wed,  1 Nov 2023 09:21:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0615E6FBE0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vWd7bTRUAeyV; Wed,  1 Nov 2023 09:21:40 +0000 (UTC)
+	with ESMTP id x6zSLuMPdRp3; Wed,  1 Nov 2023 09:21:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87EF36FC76;
-	Wed,  1 Nov 2023 09:21:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87EF36FC76
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 112941BF966
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1600B6FC7D;
+	Wed,  1 Nov 2023 09:21:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1600B6FC7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 47B551BF44A
  for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EBA4981E47
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBA4981E47
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D47443034
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 09:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D47443034
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G4TDbjJVBtzf for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NMywr64K9KKL for <buildroot@lists.busybox.net>;
  Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45C21840E9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67A0141972
  for <buildroot@buildroot.org>; Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45C21840E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67A0141972
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32937818CC; Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
+ id 46ECF862C1; Wed,  1 Nov 2023 09:21:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 1 Nov 2023 09:58:51 +0100
+Date: Wed, 1 Nov 2023 10:13:12 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 9971f8713c0fca020d82b4577fab9559096ac60d
-X-Git-Newrev: 2aaf51f867d9b3640d751032a9097ec86214a31a
+X-Git-Oldrev: 71766b4fcd3602c6a02ead31fa99a07cbe74e92d
+X-Git-Newrev: e67ef0d8fa3b422972998c66c0eedbd4b49a95d7
 X-Patchwork-Hint: ignore
-Message-Id: <20231101092109.32937818CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/docker-cli: bump
- version to v24.0.7
+Message-Id: <20231101092109.46ECF862C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/pango: fix build
+ with gcc >= 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aaf51f867d9b3640d751032a9097ec86214a31a
+commit: https://git.buildroot.net/buildroot/commit/?id=e67ef0d8fa3b422972998c66c0eedbd4b49a95d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Minor bugfix in docker ps status description.
+Fix the following build failure with gcc >= 13:
 
-https://github.com/moby/moby/releases/tag/v24.0.7
+In function 'find_best_lang_match_cached',
+    inlined from 'find_best_lang_match_cached' at ../pango/pango-language.c:501:1,
+    inlined from 'pango_language_get_scripts' at ../pango/pango-language.c:661:21:
+../pango/pango-language.c:518:12: error: array subscript 0 is outside array bounds of 'const void *[0]' {aka 'const void *[]'} [-Werror=array-bounds=]
+  518 |     *cache = result;
+      |     ~~~~~~~^~~~~~~~
+In function 'pango_language_get_scripts':
+cc1: note: source object is likely at address zero
+cc1: some warnings being treated as errors
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Fixes:
+ - http://autobuild.buildroot.org/results/e8b5a752a62621099942b29c1642747eef2930cb
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ae2dc6ae619dfea517a833cd184890b8bca3768a)
+(cherry picked from commit 477b39a1e08452a3210a71c4f83b6f910a062566)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pango/0001-Drop-Werror-array-bounds.patch | 40 +++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 5d8c1b0f59..9c8d08bba5 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c1a4a580ced3633e489c5c9869a20198415da44df7023fdc200d425cdf5fa652  docker-cli-24.0.6.tar.gz
-+sha256  72a54d131c28938221c81bd08364459fed9c71c093d4d615d324aaf31de6db1d  docker-cli-24.0.7.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 53c9ddb6b8..95fce27ffb 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = 24.0.6
-+DOCKER_CLI_VERSION = 24.0.7
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+diff --git a/package/pango/0001-Drop-Werror-array-bounds.patch b/package/pango/0001-Drop-Werror-array-bounds.patch
+new file mode 100644
+index 0000000000..45821e8533
+--- /dev/null
++++ b/package/pango/0001-Drop-Werror-array-bounds.patch
+@@ -0,0 +1,40 @@
++From e93dbd66973040f1e0afcba0dc7c712c27d75d59 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen <mclasen@redhat.com>
++Date: Mon, 1 May 2023 23:27:52 -0400
++Subject: [PATCH] Drop -Werror=array-bounds
++
++gcc has strange issues with this and produces false
++positives that recently started breaking the build of
++pango as a subproject in gtk.
++
++See e.g. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
++
++Upstream: https://gitlab.gnome.org/GNOME/pango/-/commit/e93dbd66973040f1e0afcba0dc7c712c27d75d59
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 930f41082..2d30c0141 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -89,7 +89,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++     '-Wuninitialized',
++     '-Wunused',
++     '-Werror=address',
++-    '-Werror=array-bounds',
++     '-Werror=empty-body',
++     '-Werror=implicit',
++     '-Werror=implicit-fallthrough',
++@@ -132,7 +131,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
++     '-Werror=sequence-point',
++     '-Werror=return-type',
++     '-Werror=trigraphs',
++-    '-Werror=array-bounds',
++     '-Werror=write-strings',
++     '-Werror=address',
++     '-Werror=int-to-pointer-cast',
++-- 
++GitLab
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
