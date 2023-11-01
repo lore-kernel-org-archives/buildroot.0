@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB643C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 21:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B6DDC4167B
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 21:38:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7AAA2401AD;
-	Wed,  1 Nov 2023 21:37:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7AAA2401AD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 113C4401AD;
+	Wed,  1 Nov 2023 21:38:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 113C4401AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iwXB0EPS-dPh; Wed,  1 Nov 2023 21:37:11 +0000 (UTC)
+	with ESMTP id Te738-7xa8wb; Wed,  1 Nov 2023 21:38:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B56BF4313E;
-	Wed,  1 Nov 2023 21:37:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B56BF4313E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9E1C21BF59F
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:37:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F22724313E;
+	Wed,  1 Nov 2023 21:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F22724313E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B6771BF59F
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:38:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B29A4EEBF
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:37:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B29A4EEBF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 146C684D6F
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:38:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 146C684D6F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EIHsKKNf8wsR for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 21:37:04 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0185B400B0
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 21:37:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0185B400B0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E408840006;
- Wed,  1 Nov 2023 21:37:00 +0000 (UTC)
-Date: Wed, 1 Nov 2023 22:36:59 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231101223659.3daf8e1a@windsurf>
-In-Reply-To: <20231016180855.69848-1-bernd@kuhls.net>
-References: <20231016180855.69848-1-bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U-RL9-PVZERX for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 21:38:20 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EBE8D84D6B
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 21:38:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBE8D84D6B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2C0561C0002;
+ Wed,  1 Nov 2023 21:38:18 +0000 (UTC)
+Date: Wed, 1 Nov 2023 22:38:17 +0100
+To: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <20231101223817.4c355102@windsurf>
+In-Reply-To: <20231016200055.1175594-1-troglobit@gmail.com>
+References: <20231016200055.1175594-1-troglobit@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698874621;
+ d=bootlin.com; s=gm1; t=1698874698;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=bIEjUxjX46IvEyHzHi12/BVF1tavODY148FsoU2+wUQ=;
- b=jx5yig2SyWH8ABmsSz/yXEsZpXNhhLxBFGbPn+INMtzl4IXjyILUYim2C1kipazDvLhgp9
- sIAQrjWiEweQ8gv+QzDLhTJKj1/0VhI/0saYIup2NwNxPeCyPNYHfJb2+uktQsOlbYrzc7
- /ys3FT5BMnmyi2FWnWDdsOrWb5zmScfS7KszLYhTsuev74PLwnaEwBvnQX7osI29T12Ti/
- ytIgmexCvYZVEMXr5eAIYzj3jIBj4iryr0DrwcBnxBd6cPAuzm3WyaMmAg3vfc4wmhjJh1
- c8ZQdCua4x3oNrzkppLgOXKKIW5heZRgGen6vQeQa2+GX8rQX70/I/vdGhQsFQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=N71yM4bwkZgSYYgLl7W579RIWXokW+LujSwcTht2LwY=;
+ b=mJe5R1UokNVxbj0m3dOcPJEf8zzx3TLn5a8sMlHkejYR3Axafrvkhpg0qYc7zv0SN3eltq
+ Y40LqzhhNEJB87Hierwq+R21iKYhDgtvnyJ2HOwSgys5R0in+ssd/YiO5DaGCbckIAOZzT
+ 54k2wneArL7guWKtr+L/EuDfera3TlEVk8ECaXgKW1Q9cd1rwgvV4kwV/fd3hhAkZmyZ7x
+ bROi1mFYdho9o9NTGez/zfuebJw6Z/FnntsqHXMUCPl1iFwv3gaVNfHj1dQYmsnaIZjzkY
+ +r4EFCG7ogVpfvFYzOQVITMp5W6U/f9QH6NJ1BPYFRZjjZyuh4PqisDzFyTq8w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jx5yig2S
-Subject: Re: [Buildroot] [PATCH 1/1] package/samba4: security bump version
- to 4.19.2
+ header.s=gm1 header.b=mJe5R1Uo
+Subject: Re: [Buildroot] [PATCH 1/1] package/libnet: bump to v1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +76,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Joris Lijssens <joris.lijssens@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 16 Oct 2023 20:08:55 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Mon, 16 Oct 2023 22:00:55 +0200
+Joachim Wiberg <troglobit@gmail.com> wrote:
 
-> Fixes CVE-2023-5568:
-> Heap buffer overflow with freshness tokens in the Heimdal KDC in Samba 4.19
+> Changes:
+>  - Major upgrade, no API or ABI breaking changes (that we know of).
+>    https://github.com/libnet/libnet/releases/tag/v1.3
 > 
-> Release notes:
-> https://www.samba.org/samba/history/samba-4.19.2.html
+> Packaging:
+>  - Verified builds on *all* test-pkg archs & toolchains
+>  - Verified test-pkg also with ngrep, suricata, and mz
+>  - Drop backported int64_t patch
+>  - Disable doxygen (html docs) in build
+>  - sha256sum of tarball now generated upstream
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 > ---
->  package/samba4/samba4.hash | 4 ++--
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...d-of-__int64_t-for-mingw-cross-build.patch | 31 -------------------
+>  package/libnet/libnet.hash                    |  6 ++--
+>  package/libnet/libnet.mk                      |  3 +-
+>  3 files changed, 5 insertions(+), 35 deletions(-)
+>  delete mode 100644 package/libnet/0001-Use-standard-int64_t-instead-of-__int64_t-for-mingw-cross-build.patch
 
-Applied to master, thanks.
+This change raised 3 check-package warnings:
+
+WARNING: package/libnet/libnet.hash:2: separation does not match expectation (http://nightly.buildroot.org/#adding-packages-hash)
+WARNING: package/libnet/libnet.mk:17: unconditional override of variable LIBNET_CONF_OPTS
+WARNING: .checkpackageignore:712: ignored file package/libnet/0001-Use-standard-int64_t-instead-of-__int64_t-for-mingw-cross-build.patch is missing
+
+I fixed then and applied to master. Thanks!
+
+(Perhaps you can add "make check-package" do your usual testing of your
+changes)
 
 Thomas
 -- 
