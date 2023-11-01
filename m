@@ -4,67 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0D8DC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 16:43:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52FD1C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 16:50:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E50940180;
-	Wed,  1 Nov 2023 16:43:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E50940180
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF603431B2;
+	Wed,  1 Nov 2023 16:50:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF603431B2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gN5jeGWq2laG; Wed,  1 Nov 2023 16:43:44 +0000 (UTC)
+	with ESMTP id vacYrVEkYx5B; Wed,  1 Nov 2023 16:50:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96650401CC;
-	Wed,  1 Nov 2023 16:43:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96650401CC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 26F321BF841
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 16:43:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7CE1431AD;
+	Wed,  1 Nov 2023 16:50:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7CE1431AD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 17E311BF2F1
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 16:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5F2484BFF
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 16:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5F2484BFF
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2ECD40936
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 16:50:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2ECD40936
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xFXZKrfG7NOF for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 16:43:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hOU3ZJi3cQx4 for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 16:50:02 +0000 (UTC)
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 898CF84BFE
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 16:43:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 898CF84BFE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D52C40006;
- Wed,  1 Nov 2023 16:43:35 +0000 (UTC)
-Date: Wed, 1 Nov 2023 17:43:34 +0100
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231101174334.2b6a1e77@windsurf>
-In-Reply-To: <20231010164554.2954023-2-adam.duskett@amarulasolutions.com>
-References: <20231010164554.2954023-1-adam.duskett@amarulasolutions.com>
- <20231010164554.2954023-2-adam.duskett@amarulasolutions.com>
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DBD15408AB
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 16:50:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBD15408AB
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D01240008;
+ Wed,  1 Nov 2023 16:50:00 +0000 (UTC)
+Date: Wed, 1 Nov 2023 17:49:59 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20231101174959.3c6d1707@windsurf>
+In-Reply-To: <20231019213209.627881-1-fontaine.fabrice@gmail.com>
+References: <20231019213209.627881-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698857015;
+ d=bootlin.com; s=gm1; t=1698857400;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=PjK6dwVx4DfGnCmQlkF8Yk10aAN24fVCUBjS8s/saDU=;
- b=JNC0kkg/bWf8jX6JcQCZzT9DC7IVEM7f8mYq14/LJSoLbohST7jjHKY1ZyA1L5ekrhw+Gt
- SK290d4uHP7QfjJkkd8IYJfr7Lbqt+mHLqBh04qD6WcGk6D8okcVz/K7Y7VxOm/602LfP7
- +A2xfT4xp2uTKwE6DWPHJJoPHdsj+xZm3VIW8bDMqtjJu9N8MVx8W/llY/L1QBDfgmO4Z+
- jARzPRvF7MFEAN3ZDnuLT8G+A98WEMsgT83zE8XpnCDO13vsnUkA6VreLVowCfau0Rr7hA
- XkQciceG54168SC/YRv84eV72EjxySNkDBdKYliav9JKlPwtP4sA5AACRQxwRA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=8zz+LM240GXNcOMeqeB5eqWggrYKgJYi6hyb009PkpA=;
+ b=OJJ6V7LghW6OrOTCdhILFa9TkSxPlBfhSKB5YPMPQfiuNcUDEPsc42pdHIC3MpMotPiMbz
+ ujC0X35tV3BOZGL9d6bq+dhy3Gh4Tlrjy8n0Lky8/Qv5sJKnheyewGu67lZSQrct7cknpW
+ vgvL8+2KDgrfMdnSsk3RrjcfGF4rN8AI5s09+/I18SFKl0wxZbulP0ZX2MJQ1uK0x1GRN4
+ vmxvPhm2Se4+Fyp3vCgOF7Nbh9dOjtSewJl+2ul7POO7huhkYzdV//SDz9T2dvlYiGJkal
+ iyOcv3cGzW86lvwhCnATX8Hbi9l1gUYqJ7+vu+CsEYdH/ZDDQtnaqJ1qqKQ+dA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JNC0kkg/
-Subject: Re: [Buildroot] [PATCH 2/2]
- support/testing/tests/package/test_postgresql.py: new test
+ header.s=gm1 header.b=OJJ6V7Lg
+Subject: Re: [Buildroot] [PATCH 1/1] package/snort3: fix build with gcc >= 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,65 +76,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Thu, 19 Oct 2023 23:32:09 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Tue, 10 Oct 2023 18:45:54 +0200
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+> Fix the following build failure with gcc >= 13:
+> 
+> In file included from /home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.cc:25:
+> /home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:59:25: error: 'uint32_t' has not been declared
+>    59 |     void set_batch_size(uint32_t);
+>       |                         ^~~~~~~~
+> /home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:62:5: error: 'uint32_t' does not name a type
+>    62 |     uint32_t get_batch_size() const { return (batch_size == BATCH_SIZE_UNSET) ? BATCH_SIZE_DEFAULT : batch_size; }
+>       |     ^~~~~~~~
+> /home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:26:1: note: 'uint32_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+>    25 | #include <vector>
+>   +++ |+#include <cstdint>
+>    26 |
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/c91a74bad542f32693f2e31412fba70446fd3959
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ix-cstdint-related-clearlinux-errors.patch | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 package/snort3/0001-Pull-request-3925-build-fix-cstdint-related-clearlinux-errors.patch
 
-> +class TestPostgreSQLInitd(infra.basetest.BRTest):
-
-Initd is not a very good name. To me Initd doesn't mean
-"Sysvinit/Busybox init".
-
-I see the polkit tests already use that naming, though.
-
-> +    config: str = """
-
-Any reason to use this syntax? I don't have anything against it, but
-it's not consistent with how we define the configuration in other test
-cases, and I like consistency.
-
-> +        BR2_arm=y
-> +        BR2_cortex_a9=y
-> +        BR2_ARM_ENABLE_VFP=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-
-Any reason not to use BASIC_TOOLCHAIN_CONFIG instead?
-
-> +        BR2_PER_PACKAGE_DIRECTORIES=y
-
-Not needed.
-
-> +        BR2_PACKAGE_POSTGRESQL=y
-> +        BR2_TARGET_ROOTFS_EXT2=y
-> +        BR2_TARGET_ROOTFS_EXT2_4=y
-> +        BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-> +        self.emulator.boot(
-> +            arch="armv7",
-
-This would have to be changed to arvm5 if you use the
-BASIC_TOOLCHAIN_CONFIG.
-
-Long term, maybe we could consider changing the BASIC_TOOLCHAIN_CONFIG
-to use ARMv7, would perhaps be more sensible than the aging ARMv5
-architecture.
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
