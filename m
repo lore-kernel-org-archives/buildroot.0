@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2781EC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 17:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F731C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 17:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA2EC84CE9;
-	Wed,  1 Nov 2023 17:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA2EC84CE9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 472E784CCB;
+	Wed,  1 Nov 2023 17:48:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 472E784CCB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BGLJET--lKU4; Wed,  1 Nov 2023 17:47:46 +0000 (UTC)
+	with ESMTP id UTCZcjgk-q0f; Wed,  1 Nov 2023 17:47:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4DCF84CC1;
-	Wed,  1 Nov 2023 17:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4DCF84CC1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2BAE81BF2F1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5068B84D41;
+	Wed,  1 Nov 2023 17:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5068B84D41
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8EED51BF2F1
  for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 17:47:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 049FB70458
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F149431D3
  for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 17:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 049FB70458
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F149431D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vuMHVhoItjIJ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HIj5znIYw-Wi for <buildroot@lists.busybox.net>;
  Wed,  1 Nov 2023 17:47:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74F5770452
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87DB0431CE
  for <buildroot@buildroot.org>; Wed,  1 Nov 2023 17:47:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74F5770452
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87DB0431CE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59904863DF; Wed,  1 Nov 2023 17:47:39 +0000 (UTC)
+ id 72860863BD; Wed,  1 Nov 2023 17:47:39 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 1 Nov 2023 18:47:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e4b479f39c15ffdf307ec8395d856680c727204
-X-Git-Newrev: 27fc59029f1f813f2a11e95cfcdccf14562cef51
+X-Git-Oldrev: 27fc59029f1f813f2a11e95cfcdccf14562cef51
+X-Git-Newrev: 0aeca68489a7e90a4834a58bba976184222db58c
 X-Patchwork-Hint: ignore
-Message-Id: <20231101174739.59904863DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: update to version 0.23.14
+Message-Id: <20231101174739.72860863BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lighttpd: bump to version 1.4.72
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27fc59029f1f813f2a11e95cfcdccf14562cef51
+commit: https://git.buildroot.net/buildroot/commit/?id=0aeca68489a7e90a4834a58bba976184222db58c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bug fixes in decoder (flac, mad), mixer (wasapi),
-libfmt, systemd detection
+Details: https://www.lighttpd.net/2023/10/6/1.4.72/
 
-Change log:
-	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.14/NEWS
-
-Tested on:
-	i386 (build, run)
-	x86_64 (build)
-	Aarch64 (build, run)
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Alexander Dahl <post@lespocky.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lighttpd/lighttpd.hash | 6 ++++--
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 8683b02e3b..4ee4967556 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  a96b01e6fbbb7e8ab25eb7c15d5c811c62eb19b76d143a802f51674791f1d519  mpd-0.23.13.tar.xz
-+sha256  85b9a67426d528ae9fb849eb3b10faf52d4b18d22b1fd71088e6d9a388b509d2  mpd-0.23.14.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index f03a459b8c..4dbd7a6d1d 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index a86ebf2f68..3c114c05a1 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,6 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.71.sha512sum
+-sha512  c1388b563b9cf9dcab0a57bec42b09b2cb5e1932bc137ae5f957d1bf3932ddd8f5f188002a7b9a00f0a92ba3779b21ecbea2ccffa91e686b6660c9cc455d6598  lighttpd-1.4.71.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.72.sha512sum
++sha512  5becb57915e3548a1b9b980014be22b3c08dcf0e9be524f9cd0093886aaf6d00b20986e8b1fb10ecdbdffd8e42dd18e4a227b03d562c91bef9490ea6d5c480e3  lighttpd-1.4.72.tar.xz
++# From https://www.lighttpd.net/2023/10/6/1.4.72/
++sha256  f7cade4d69b754a0748c01463c33cd8b456ca9cc03bb09e85a71bcbcd54e55ec  lighttpd-1.4.72.tar.xz
+ # Locally calculated
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index bc0dbcbf45..af104de078 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).13
-+MPD_VERSION = $(MPD_VERSION_MAJOR).14
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).71
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).72
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
