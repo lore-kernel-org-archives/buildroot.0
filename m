@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9089C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 17:54:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40872C4167B
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 18:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6412D84D02;
-	Wed,  1 Nov 2023 17:54:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6412D84D02
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCD0B848A7;
+	Wed,  1 Nov 2023 18:05:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCD0B848A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QQPl-Rn1Q4O0; Wed,  1 Nov 2023 17:53:59 +0000 (UTC)
+	with ESMTP id lhM1IeNLgsDQ; Wed,  1 Nov 2023 18:05:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC06884D54;
-	Wed,  1 Nov 2023 17:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC06884D54
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7CEC01BF280
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 17:53:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4063784AFE;
+	Wed,  1 Nov 2023 18:05:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4063784AFE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 562761BF32A
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 18:05:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5440F431CB
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 17:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5440F431CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CE79408D3
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 18:05:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CE79408D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0ZfJFSmCOAvV for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 17:53:44 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 25FA0431BD
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 17:53:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25FA0431BD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 322DE40002;
- Wed,  1 Nov 2023 17:53:41 +0000 (UTC)
-Date: Wed, 1 Nov 2023 18:53:40 +0100
-To: Brandon Maier via buildroot <buildroot@buildroot.org>
-Message-ID: <20231101185340.082af24e@windsurf>
-In-Reply-To: <20231031230709.60348-1-brandon.maier@collins.com>
-References: <20231031230709.60348-1-brandon.maier@collins.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698861221;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MzS+wm03xFmVJ3lVM9+RW49RUNqizB6WcqFPDxE5RGA=;
- b=aCLrFnhiW8XRI7c6eZRQDNQwdqi9fphBc+eqwvzkXIYmDpTvSh5g3DnmxF9pDHa2l+1+3M
- YIPtzb7gK/YuVs/gte5tySvSLROqQchtEPzTCyBH4i4/wi6ZXtp9iLUbOFjSHx9Y9d5L3P
- R9fwoLR9xqniUgAZRrhwosVz07ldBIe2eXFewjD5w+DgFaYHap+SESYIO9hdts3ryWNVHL
- lLBaP2pAogpUre0XH8xO09fRKRYAbFNU8MoQM4GoSdvwG7heL+7pXJX4Nj0glYR0NY2rMS
- q23/q1o9DHq9nR8g05KGl0NXswcnjEMP1eh08TAt6WyRYdsWQIOipitSQAvkBQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aCLrFnhi
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgdiplus: bump to version 6.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0SUfZtylRQ-B for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 18:05:28 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 290674056A
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 18:05:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 290674056A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 12B3486413; Wed,  1 Nov 2023 18:05:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 Nov 2023 18:59:36 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5b6dd17b864cfb9133d3e2d78b9a15fed877b15b
+X-Git-Newrev: 547552a9cbec769daffd3093a1c24eb0876c8fc7
+X-Patchwork-Hint: ignore
+Message-Id: <20231101180528.12B3486413@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openjdk-bin: bump OpenJDK17
+ version to 17.0.8.1+1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,39 +58,92 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Kalpesh Panchal <kalpesh.panchal2@collins.com>,
- Sergio Prado <sergio.prado@e-labworks.com>,
- Brandon Maier <brandon.maier@collins.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 31 Oct 2023 23:07:09 +0000
-Brandon Maier via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=547552a9cbec769daffd3093a1c24eb0876c8fc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Kalpesh Panchal <kalpesh.panchal2@collins.com>
-> 
-> - bump to version 6.1
-> - updated makefile to download source from
->   https://download.mono-project.com/sources/libgdiplus/
->   instead of github to avoid submodule build error
->   from ./update_submodules.sh
-> 
-> Signed-off-by: Kalpesh Panchal <kalpesh.panchal2@collins.com>
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> ---
->  package/libgdiplus/libgdiplus.hash | 2 +-
->  package/libgdiplus/libgdiplus.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                                   | 2 +-
+ package/openjdk-bin/openjdk-bin.hash                                  | 4 ++--
+ package/openjdk-bin/openjdk-bin.mk                                    | 2 +-
+ .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch               | 0
+ package/openjdk/openjdk.hash                                          | 2 +-
+ package/openjdk/openjdk.mk                                            | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 973c3ba134..399739de7b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1005,7 +1005,7 @@ package/olsr/S50olsr Indent Shellcheck Variables
+ package/omxplayer/0001-Update-Makefile-to-be-compatible-with-buildroot.patch Upstream
+ package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch Upstream
+ package/open2300/0001-fix-makefile.patch Upstream
+-package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch Upstream
++package/openjdk/17.0.8.1+1/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch Upstream
+ package/openldap/0001-fix_cross_strip.patch Upstream
+ package/openldap/0002-fix-bignum.patch Upstream
+ package/openldap/0003-disable-docs.patch Upstream
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 401e83e75e..98f12cb2b8 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,6 +1,6 @@
+ # https://github.com/adoptium/temurin17-binaries/releases
+-sha256  aa5fc7d388fe544e5d85902e68399d5299e931f9b280d358a3cbee218d6017b0  OpenJDK17U-jdk_x64_linux_hotspot_17.0.8_7.tar.gz
+-sha256  c43688163cfdcb1a6e6fe202cc06a51891df746b954c55dbd01430e7d7326d00  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8_7.tar.gz
++sha256  c25dfbc334068a48c19c44ce39ad4b8427e309ae1cfa83f23c102e78b8a6dcc0  OpenJDK17U-jdk_x64_linux_hotspot_17.0.8.1_1.tar.gz
++sha256  eefd3cf3b3dd47ff269fa5b5c10b5e096b163f4e9c1810023abdbc00dc6cc304  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8.1_1.tar.gz
+ 
+ # From https://github.com/adoptium/temurin11-binaries/releases
+ sha256  7a99258af2e3ee9047e90f1c0c1775fd6285085759501295358d934d662e01f9  OpenJDK11U-jdk_x64_linux_hotspot_11.0.20_8.tar.gz
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 616c8d917d..785ca87337 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -6,7 +6,7 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.8_7
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.8.1_1
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+ HOST_OPENJDK_BIN_VERSION_MINOR = 0.20_8
+diff --git a/package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.8.1+1/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+similarity index 100%
+rename from package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+rename to package/openjdk/17.0.8.1+1/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index ba398b84be..fcb9143748 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  643ff42dcdf8751e0fee716c1a1914ddc7348b174e871a5eb2636578a181f20d  openjdk-17.0.8+7.tar.gz
++sha256  e57251d8306911282b6f0a2f721431dab5f87c99cce0930fc062e690f7c77f04  openjdk-17.0.8.1+1.tar.gz
+ sha256  b2a37ef209ae7eaf8f34182b7c9aa3252af20a214d02970f96ce62242c805479  openjdk-11.0.20+8.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index d1a2fa23ee..068d16b770 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -6,7 +6,7 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ OPENJDK_VERSION_MAJOR = 17
+-OPENJDK_VERSION_MINOR = 0.8+7
++OPENJDK_VERSION_MINOR = 0.8.1+1
+ else
+ OPENJDK_VERSION_MAJOR = 11
+ OPENJDK_VERSION_MINOR = 0.20+8
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
