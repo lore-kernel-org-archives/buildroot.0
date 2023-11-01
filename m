@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ACC4C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 02:14:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B567C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 02:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1861442F3E;
-	Wed,  1 Nov 2023 02:14:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1861442F3E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F5BB42F52;
+	Wed,  1 Nov 2023 02:19:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F5BB42F52
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X0LIjtJentmj; Wed,  1 Nov 2023 02:14:21 +0000 (UTC)
+	with ESMTP id wZplCoNTEfDt; Wed,  1 Nov 2023 02:19:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CBBB42F45;
-	Wed,  1 Nov 2023 02:14:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CBBB42F45
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 06BD81BF277
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 02:14:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE4DD42F6D;
+	Wed,  1 Nov 2023 02:19:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE4DD42F6D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AC40F1BF277
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 02:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3417408E2
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 02:14:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3417408E2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8578442F6D
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 02:19:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8578442F6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EThR84WDNGxL for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 02:14:14 +0000 (UTC)
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5318B41734
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 02:14:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5318B41734
-Received: by mail-pf1-x42b.google.com with SMTP id
- d2e1a72fcca58-6bd0e1b1890so5269042b3a.3
- for <buildroot@buildroot.org>; Tue, 31 Oct 2023 19:14:14 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l9QLhCcFpwbx for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 02:19:22 +0000 (UTC)
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
+ [IPv6:2607:f8b0:4864:20::62f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AF70C42F82
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 02:19:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF70C42F82
+Received: by mail-pl1-x62f.google.com with SMTP id
+ d9443c01a7336-1cc5fa0e4d5so19155995ad.0
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 19:19:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698804853; x=1699409653;
+ d=1e100.net; s=20230601; t=1698805153; x=1699409953;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=swZvHnxnqUj5hJUv33Eff/JjI/K6EUh0JHO0bme86Cg=;
- b=dssiwc56++Fm7lOylMjhnKb7ss2Nmlmp51c0U0xyl7MhKKHq5f9BM1Kgo6xelwjVrn
- tumURl+2LKyRHKJytTfQqIMU/ZWvKtPwUfLbdoUPqCtWIa8oHaLOjtT7xoVYv3id/QAR
- YOsMZZLaN3N2hQwLuIlK9paUkv+5SvSc9LiruXDCamv/pa7ff6lo2pjUXEQgcfG6PTPA
- fWtt3FTzYC49plH9DG6Cw3+nHS8/4a5BFpKDIPKmSRrePWHl1a2/GXCA/O2tqbj3fpFe
- G5bqIeIRIYfXDunBarEFUoOcR22sASNd0Z/x7NDGiSGqw1GXfg5OdGKfDMaLnpuLA7R6
- gWoA==
-X-Gm-Message-State: AOJu0YxhA96GwXCT6vWvRyjVaumoPhW5sty9Ns8yw49yphh73O0yLGMp
- x4dXkt3LrJXpPMyIwpcTpeMcyUo8wlI=
-X-Google-Smtp-Source: AGHT+IEAzaHUO7bjdoIlN4Tysvr1o3FYLz2+J66ks/MTdHHd57hAmsX0gJemDQwyXCNJEUz1ytYWnw==
-X-Received: by 2002:a05:6a00:16ce:b0:692:822a:2250 with SMTP id
- l14-20020a056a0016ce00b00692822a2250mr13778898pfc.17.1698804852736; 
- Tue, 31 Oct 2023 19:14:12 -0700 (PDT)
+ bh=F0KoTAiOXlhYUwkZYvCP6JSsLffkPcjIBwkFsl/5Ens=;
+ b=hIR+M+eFguKWWY74GJtKfXEMw0Xg8ewTp3v7q4Rc3dBlNjIjdsKJuSSElj9CuexBJv
+ U5eOQPG+h9viOZRmhK6AU5y0WnmdBm/KDOx02Z9Vxu1C4vTMBTeb0wN/B0RLULa8Erol
+ 1MqMwKz26FOZFBpFdvV3qNgWcv/6VT6uIATRn65qIWY6uyQEB94FTNkY+jbyDsebDZKZ
+ boahIurh9sjxM+SYttuaYDVyaKtU9jPIp2sG7e4RVHp0emvbLmgDFyJoQvBLW+5y4Md1
+ Wux3V2Uiaeimt1ie645Ddz3dJp+/Pu/AlqGWlWDN8w7HBe2HV17LSnD8RcSXSUgNJmKy
+ Ak4Q==
+X-Gm-Message-State: AOJu0YwhdHI0lYi0z6TfdmXciNl7QZYFIolUaqNUqeQNoftrIRKGdC3w
+ ky4ZAYow5EnA4F8taEzf2nHTmP1cFJ8=
+X-Google-Smtp-Source: AGHT+IFYx5kI26y1S6/WL2Uh0xU05tkKDXZOoBw1GmvUF6ZNKoPRXYScyGOZOMFiPX3LDmy3zpXjfA==
+X-Received: by 2002:a17:902:cec9:b0:1cc:6b55:fd3 with SMTP id
+ d9-20020a170902cec900b001cc6b550fd3mr3723824plg.42.1698805153503; 
+ Tue, 31 Oct 2023 19:19:13 -0700 (PDT)
 Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- q14-20020a056a0002ae00b0069023d80e63sm255903pfs.25.2023.10.31.19.14.11
+ je19-20020a170903265300b001bf846dd2d0sm223135plb.13.2023.10.31.19.19.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 31 Oct 2023 19:14:12 -0700 (PDT)
+ Tue, 31 Oct 2023 19:19:13 -0700 (PDT)
 From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  1 Nov 2023 10:12:38 +0800
-Message-Id: <20231101021239.16313-1-fancp2007@gmail.com>
+Date: Wed,  1 Nov 2023 10:19:07 +0800
+Message-Id: <20231101021908.16917-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1698804853; x=1699409653; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1698805153; x=1699409953; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=swZvHnxnqUj5hJUv33Eff/JjI/K6EUh0JHO0bme86Cg=;
- b=ZficBKNv6ixPyCXupPVdFGMPqqpMfhl9yjW1YSmujJ3hRUn+P5oimHkHsYuKdFDixz
- rqeXnL9tgCOfN0UOUZk5VoNRhV4sj9DSkS1OT2QHBeLpdwyc4JSRaFRKvlJrwL5f6Clt
- c9QMLVNT/U2Mi8kpwn6bq9pnZxGWHFjk/l9/1eC1YLewm7f4Oz3wuFwl5zAcx8Xy1Hp/
- cNGvoE489GAp5jp9lDZe3tlhXe314nW867KAxT4QZ7jHFaEk7f98mkYeJjXy6nQFN5XV
- 8nH152iQhHkMcArVQcZ3eCJo9LLrFjXGFwROFCjTUGGQlFEal+gzbYZnS9yvmshvC0iK
- D+kg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=F0KoTAiOXlhYUwkZYvCP6JSsLffkPcjIBwkFsl/5Ens=;
+ b=ECWdMDxQ5gqV6qxBvZx/nLpC9gTR6sNrqP3u/3SX0vGQgN3uS6A6PexzQEJVFEp1am
+ tEnCtZIJOMLXSpS0dJqJ41kT3ek3Qn9YJH4H8W634YSznjNqyZ20OajB4k68EACaltF7
+ gQ9ZqkQmXDN0tq6YdoEh+hqPImxExYj6zXCvjdnm2BViIgAm9N705L2gaUWUr3drLnQ5
+ /CIEtw/UX7S2eyoMBxDFefPNV/LXhFuKvmpkUArVo0l/OD22LrAyfqUcADAsUMstcIa7
+ oWpYJAS3e3dfLI37z8UOeiK6ctOmOAbdMVWj67iqWuFZ93+rHh38ixeKlxnwiuwEIrhP
+ NOrw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ZficBKNv
-Subject: [Buildroot] [PATCH] package/openvpn: bump version to 2.5.9
+ header.a=rsa-sha256 header.s=20230601 header.b=ECWdMDxQ
+Subject: [Buildroot] [PATCH] package/htop: bump to version 3.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,39 +98,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/v2.5.9/Changes.rst
-
-This is a small bugfix release, and the last version for 2.5.x
+Changlog:
+https://github.com/htop-dev/htop/blob/3.2.2/ChangeLog
 
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/htop/htop.hash | 4 ++--
+ package/htop/htop.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 0959b7f838..a60362a09c 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  08340a389905c84196b6cd750add1bc0fa2d46a1afebfd589c24120946c13e68  openvpn-2.5.7.tar.gz
-+sha256  8794b7125998c68f30de654267a702b9581454ca1e7061511fcc5f99fea4bd32  openvpn-2.5.9.tar.gz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 5c602e0448..1e47b75557 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+diff --git a/package/htop/htop.hash b/package/htop/htop.hash
+index d43da13441..12dc864de1 100644
+--- a/package/htop/htop.hash
++++ b/package/htop/htop.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/htop-dev/htop/releases/download/3.2.1/htop-3.2.1.tar.xz.sha256
+-sha256  5a17121cf1c69d2f2e557c0b29d45a2c353ab983f644742e1c2e4ece15aa6cbb  htop-3.2.1.tar.xz
++# From https://github.com/htop-dev/htop/releases/download/3.2.2/htop-3.2.2.tar.xz.sha256
++sha256  bac9e9ab7198256b8802d2e3b327a54804dc2a19b77a5f103645b11c12473dc8  htop-3.2.2.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index df2ec25908..aafda5d48f 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.5.7
-+OPENVPN_VERSION = 2.5.9
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf
- OPENVPN_LICENSE = GPL-2.0
+-HTOP_VERSION = 3.2.1
++HTOP_VERSION = 3.2.2
+ HTOP_SOURCE = htop-$(HTOP_VERSION).tar.xz
+ HTOP_SITE = https://github.com/htop-dev/htop/releases/download/$(HTOP_VERSION)
+ HTOP_DEPENDENCIES = ncurses
 -- 
 2.25.1
 
