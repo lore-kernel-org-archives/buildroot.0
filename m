@@ -4,82 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E76BC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 01:31:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33E42C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 01:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A47ED8415C;
-	Wed,  1 Nov 2023 01:31:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A47ED8415C
+	by smtp1.osuosl.org (Postfix) with ESMTP id B93F8813FA;
+	Wed,  1 Nov 2023 01:35:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B93F8813FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 94wlKovF0KiZ; Wed,  1 Nov 2023 01:31:44 +0000 (UTC)
+	with ESMTP id Za4lG_BytI1l; Wed,  1 Nov 2023 01:35:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0DE17840BA;
-	Wed,  1 Nov 2023 01:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DE17840BA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 080F01BF976
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 01:31:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2517C81444;
+	Wed,  1 Nov 2023 01:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2517C81444
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 660481BF976
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 01:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5515840BA
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 01:31:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5515840BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 47AC54049F
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 01:35:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47AC54049F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r8uMlqrlxSGk for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 01:31:36 +0000 (UTC)
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C14DD840B4
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 01:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C14DD840B4
-Received: by mail-pl1-x634.google.com with SMTP id
- d9443c01a7336-1cc131e52f1so3102445ad.0
- for <buildroot@buildroot.org>; Tue, 31 Oct 2023 18:31:36 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DhEORCn4-0gQ for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 01:35:04 +0000 (UTC)
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
+ [IPv6:2607:f8b0:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2771640491
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 01:35:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2771640491
+Received: by mail-pl1-x629.google.com with SMTP id
+ d9443c01a7336-1cbf47fa563so49816895ad.2
+ for <buildroot@buildroot.org>; Tue, 31 Oct 2023 18:35:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698802295; x=1699407095;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
+ d=1e100.net; s=20230601; t=1698802502; x=1699407302;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
  bh=QAQk4qQDtOjG+D1P6oL37DA9x7CzPUe52+qLN2dkPAo=;
- b=UUy+c0sHZiz6M5SUmwiRBJVVg/2PsAOX9mpBXoBBRwJ73YpY0K2722J+7N6nUu1tT/
- cPgku4+2wvWZu7L17wtpGCRGlEqXbg8+aFZavG12UmFQy+xlapys0R0HgOMs1C4yh/hv
- lT3SsaBcFVVGs+ZYzkqabgEVkGM1/h3D2uTs1zXsCxtQldw6D7BT/yi+X7FNWQJ/RrDK
- 0WB7fgj7il2nxtcN+66e9u1yPF30/iXCYQYjjZ3EPhu/vx4uVQ0xBaI5wTov9nea+jbc
- YNwPd0esrCYLkKsHzAsQ9m8z8o+ZcOfQfYA1LbW+uw6CCHMxaxIPTSX/pWqIVwtK8Oi1
- NjIQ==
-X-Gm-Message-State: AOJu0YwyiFe3y1GFvoo48Hk8XLtBhNZETQROVxVgw3iEYYmT6czTmpv+
- 9Pr8+zYJydrPvXJgNeeWIZtJfm577b8=
-X-Google-Smtp-Source: AGHT+IET+mkkFgunJljUFcW29K32/lo7gv0QJuh7FvR881Y5jcdsN96eYFsR66/2iSqIRe+AAzSyow==
-X-Received: by 2002:a17:90b:1e0d:b0:27d:d9a:be8b with SMTP id
- pg13-20020a17090b1e0d00b0027d0d9abe8bmr5850236pjb.6.1698802295157; 
- Tue, 31 Oct 2023 18:31:35 -0700 (PDT)
+ b=PYvvr++uB7hti0gHMTRYNnfNYMvkuUaeOdfDXuQmpOx1veyczlL7TPUu1FAgkUhl3a
+ 1N2JfULG42YbJkJ8Gd8/LUtWbVC0SzIA/l+9hbZ6oSzhpIT+FNesgJJ/LVX5MuBhKzfv
+ H30NWXxrYQsMQxK/e6R3pjxGEXuPZlaugugPbE2wiifIrTkmQS4+eVOcrM217g7dzjAh
+ MnoYpb+Tv29vwwamkAW7YTxGMNMBrMsQpwEyQPGqmG0qWUFf8O9MgtAM6v9X9q1KxdWC
+ lOiGkrwnLnvDeu2du5zwaj/YekQHhfc7h29O1ALDnaKtHzN8MMPszw3izkUa3orq2LJ4
+ xljQ==
+X-Gm-Message-State: AOJu0Yxmxw1SXfHiY3jtHi2cTQdpyAwrD1Py66pIJJAO1w8gfaWMDqi6
+ nZNeXmmlJEYfJBeFL3RPUKKVpud0i74=
+X-Google-Smtp-Source: AGHT+IFYKpZkg+PT+faPhXb4M5gSyeNGzzOaV0WHG26b8jxfO/UMhajONBwQ7JAu3UDIK3/yvwSTPw==
+X-Received: by 2002:a17:902:ccca:b0:1bd:c7e2:462 with SMTP id
+ z10-20020a170902ccca00b001bdc7e20462mr14690533ple.11.1698802502529; 
+ Tue, 31 Oct 2023 18:35:02 -0700 (PDT)
 Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- on15-20020a17090b1d0f00b0026f39c90111sm1659427pjb.20.2023.10.31.18.31.34
+ jk6-20020a170903330600b001c61901ed2esm182523plb.219.2023.10.31.18.35.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 31 Oct 2023 18:31:34 -0700 (PDT)
+ Tue, 31 Oct 2023 18:35:02 -0700 (PDT)
 From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  1 Nov 2023 09:31:27 +0800
-Message-Id: <20231101013128.13305-1-fancp2007@gmail.com>
+Date: Wed,  1 Nov 2023 09:34:56 +0800
+Message-Id: <20231101013457.13495-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231031084936.2397858-1-fancp2007@gmail.com>
+References: <20231031084936.2397858-1-fancp2007@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1698802295; x=1699407095; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
+ d=gmail.com; s=20230601; t=1698802502; x=1699407302; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
  bh=QAQk4qQDtOjG+D1P6oL37DA9x7CzPUe52+qLN2dkPAo=;
- b=SK7mBLNIpwIftgBqrqiVIasxsf6vzfBmIFjPRZh8ke8fBOmhvjqtBwBSfQMARegIZg
- ZL41C5rNJ1uUIqOO8VoWbQXC3c94vHjgjRZ1MiCF7FQ20EtGGkS8q3Qq+l4rtwTrtKh4
- Ym63V9nJxAR3wsIh5bbZbGYs0dI/ebuhedlNPERneysUW3dmi4/Igknt9T0GRw6TjRpa
- eJgMYBjPAL5UvqomiJjW8aOmbXXookRSjtDi7eHg/p+31YoyjYOvrAFktN81MsKLMs4n
- 5OvtEJIz5YLLSxFZTEDYVQfFVjqajBDDwwE0YTzbGh4V32EdJNl/1zCAy2jFYtxlz2Ks
- 9TGw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=nh7dOJqQjkcvLIGimGvpgF786yarVA/Bsm6SSi2WDZCsddTvbH+zdceKVcTtjZuxks
+ pMRhsJ+/nKmOypUwy6HRxIIi6Tq6reGniKLEA1L7COXpS4wr4SFf9AWC+/uCnka0ekVO
+ /mVVC6sZoNg1GoGPIpwfv+1y4c7SaUc8adFmrU5YAorXRw6Pue5epIzGBbzWVi7hIbHD
+ SORqfRVAkJoYAFiLnPnbYih4UpLek2zE20Go9wI3EvzpqfeJKn5pHJGPL+iuz/Nqr/Ae
+ rVrVsJR67KNT/uM3FrKY93Tbz3bNycRFVufTqp881slroAauHWSe2OZDx3IIK6ZaNVTz
+ cjXQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SK7mBLNI
+ header.a=rsa-sha256 header.s=20230601 header.b=nh7dOJqQ
 Subject: [Buildroot] [PATCH] configs/friendlyarm_nanopi_neo2_defconfig: new
  board
 X-BeenThere: buildroot@buildroot.org
