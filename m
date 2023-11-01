@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94489C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 11:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9B5CC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 11:26:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24CE5430DD;
-	Wed,  1 Nov 2023 11:26:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24CE5430DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C97E430DE;
+	Wed,  1 Nov 2023 11:26:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C97E430DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e4vLJ2L5oQdn; Wed,  1 Nov 2023 11:26:20 +0000 (UTC)
+	with ESMTP id T9BBjfO9u84x; Wed,  1 Nov 2023 11:26:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60D0640156;
-	Wed,  1 Nov 2023 11:26:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60D0640156
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B7F74016C;
+	Wed,  1 Nov 2023 11:26:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B7F74016C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EEE041BF34C
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 11:26:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2222B1BF954
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 11:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D54A38493E
+ by smtp1.osuosl.org (Postfix) with ESMTP id F032784937
  for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 11:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D54A38493E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F032784937
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id javdP57l8dpF for <buildroot@lists.busybox.net>;
+ with ESMTP id Botu1LSZ95O9 for <buildroot@lists.busybox.net>;
  Wed,  1 Nov 2023 11:26:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3606884937
+ by smtp1.osuosl.org (Postfix) with ESMTP id 243C4848E4
  for <buildroot@buildroot.org>; Wed,  1 Nov 2023 11:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3606884937
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 243C4848E4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 22E048631F; Wed,  1 Nov 2023 11:26:13 +0000 (UTC)
+ id 0C9708631D; Wed,  1 Nov 2023 11:26:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 Nov 2023 12:25:53 +0100
+Date: Wed, 1 Nov 2023 12:25:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 111986f4350cdbad6f1c4f4d21944447d53ac831
-X-Git-Newrev: 0645cb39e0ce3af743190e587812a5bd4c1f4b24
+X-Git-Oldrev: bdf1506e9664b7b7d2441496192723e26383623d
+X-Git-Newrev: d6279bc82c02b43c9a2f28c36639e092b9e9e08b
 X-Patchwork-Hint: ignore
-Message-Id: <20231101112613.22E048631F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sway: bump to version 1.8.1
+Message-Id: <20231101112613.0C9708631D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wlroots: bump to version 0.16.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0645cb39e0ce3af743190e587812a5bd4c1f4b24
+commit: https://git.buildroot.net/buildroot/commit/?id=d6279bc82c02b43c9a2f28c36639e092b9e9e08b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update Sway to version 1.8.1, which brings a new release series to
-Buildroot and can be built with wlroots 0.16.x
+Update to version 0.16.2, which brings in support for a few new Wayland
+protocols, and improved input device and scene graph APIs. Applications
+which use wlroots might need to be adapted, and at least rebuilt. The
+only packages in Buildroot which use wlroots at the moment are the Cage
+and Sway compositors, to be updated in follow-up patches.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sway/sway.hash | 2 +-
- package/sway/sway.mk   | 4 ++--
+ package/wlroots/wlroots.hash | 4 ++--
+ package/wlroots/wlroots.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sway/sway.hash b/package/sway/sway.hash
-index 6dfa71730f..86b6581f1c 100644
---- a/package/sway/sway.hash
-+++ b/package/sway/sway.hash
-@@ -1,3 +1,3 @@
- # Locally computed, tarball verified with GPG signature
--sha256  0c64536fb2883ec518e75cfb119f9300115fb49b084e3fde62b794fe2c6c8d84  sway-1.7.tar.gz
-+sha256  73f08fd2cf7948e8af900709efe44eae412ae11c5773960e25c9aa09f73bad41  sway-1.8.1.tar.gz
- sha256  bd35722bff46327f5eded1d211207277bbe043d2a22048b282c42ef801593b8b  LICENSE
-diff --git a/package/sway/sway.mk b/package/sway/sway.mk
-index 802371c827..19f90b8b00 100644
---- a/package/sway/sway.mk
-+++ b/package/sway/sway.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
+index 04bbd65e43..8ab05393b1 100644
+--- a/package/wlroots/wlroots.hash
++++ b/package/wlroots/wlroots.hash
+@@ -1,5 +1,5 @@
+-# Generated locally, after checking https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.15.1/downloads/wlroots-0.15.1.tar.gz.sig
+-sha256  5b92f11a52d978919ed1306e0d54c9d59f1762b28d44f0a2da3ef3b351305373  wlroots-0.15.1.tar.gz
++# Generated locally, after checking https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.16.2/downloads/wlroots-0.16.2.tar.gz.sig
++sha256  83e9a11605f23d4bf781ab1947089483d9ec3f7e9ba65398e0609593b77d44aa  wlroots-0.16.2.tar.gz
+ 
+ # Hashes for license files:
+ sha256  ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 5b930a51be..b478e57abb 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SWAY_VERSION = 1.7
--SWAY_SITE = $(call github,swaywm,sway,v$(SWAY_VERSION))
-+SWAY_VERSION = 1.8.1
-+SWAY_SITE = https://github.com/swaywm/sway/releases/download/$(SWAY_VERSION)
- SWAY_LICENSE = MIT
- SWAY_LICENSE_FILES = LICENSE
- SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
+-WLROOTS_VERSION = 0.15.1
++WLROOTS_VERSION = 0.16.2
+ WLROOTS_SITE = https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/$(WLROOTS_VERSION)/downloads
+ WLROOTS_LICENSE = MIT
+ WLROOTS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
