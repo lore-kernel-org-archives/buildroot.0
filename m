@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93971C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 22:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABCDBC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 22:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 373B7432A9;
-	Wed,  1 Nov 2023 22:01:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 373B7432A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 470A0432A0;
+	Wed,  1 Nov 2023 22:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 470A0432A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 47oEIWFWQqY6; Wed,  1 Nov 2023 22:00:56 +0000 (UTC)
+	with ESMTP id oLxctxrvcLoo; Wed,  1 Nov 2023 22:01:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6730C432A0;
-	Wed,  1 Nov 2023 22:00:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6730C432A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30926432AB;
+	Wed,  1 Nov 2023 22:01:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30926432AB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A54C1BF44A
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:00:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BD75A1BF44A
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:01:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B42CC61002
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:00:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B42CC61002
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9553861002
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 22:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9553861002
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fCNesQgYZpBe for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 22:00:48 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9EB3660B7C
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 22:00:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EB3660B7C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D894A20005;
- Wed,  1 Nov 2023 22:00:45 +0000 (UTC)
-Date: Wed, 1 Nov 2023 23:00:44 +0100
-To: Alistair Francis <alistair23@gmail.com>
-Message-ID: <20231101230044.70ddaf51@windsurf>
-In-Reply-To: <20231026015310.716044-1-alistair.francis@wdc.com>
-References: <20231026015310.716044-1-alistair.francis@wdc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698876046;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BM6RebeCq9HPeBC5+0XOq8X82Y+qSzJuaw8CEr1LgT4=;
- b=lIfZVHn+zBbaSxoJpsjlH5haXsgpVjkC71SD/PrA2k7QKButMWeN24GmmRFPcNN1u4y/t4
- pAJMds8808U5yErONylw9weHmU4qSKSL1bjMLxa3z+nMyP+s7O8jThtRGv/PnmnRR6N70l
- jrqSBfWF3RNl1g/oSZst31mmJuhuGD1pCIHdyoKXHKb4lXibdp/WB9n11pE/e02XureSuj
- 44CqOWBUiDM/0Jkk0SERuymV6kXnbnwHd7LglMWW6eviEXKmJu6aTNKFWgabVIcMXIs0k9
- qlMdKkLGiRUl914sBz8ZfIcDgrYa/0sOErIVAOSUF4p7IaIIC7syKvU0AUHbyg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lIfZVHn+
-Subject: Re: [Buildroot] [PATCH] package/libspdm: bump version to 3.1.1
+ with ESMTP id VyMBbfgB_CLG for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 22:00:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C15860B7C
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 22:00:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C15860B7C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 53E15864D1; Wed,  1 Nov 2023 22:00:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 Nov 2023 22:55:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2476faa2adfea9d77cd872e30445cab365efafea
+X-Git-Newrev: d952b970a1897b5e01d32127a426cd6864e7a409
+X-Patchwork-Hint: ignore
+Message-Id: <20231101220059.53E15864D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libspdm: bump version to 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,28 +57,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alistair Francis <alistair.francis@wdc.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 26 Oct 2023 11:53:10 +1000
-Alistair Francis <alistair23@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d952b970a1897b5e01d32127a426cd6864e7a409
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> ---
->  package/libspdm/libspdm.hash | 2 +-
->  package/libspdm/libspdm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libspdm/libspdm.hash | 2 +-
+ package/libspdm/libspdm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
+index 3280ebfb88..23faba1c4b 100644
+--- a/package/libspdm/libspdm.hash
++++ b/package/libspdm/libspdm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  73e0d7df3c91beeb9f61a50eaa0a44c8e32b7a62ce32ed3cab1f0fab406ed5b8  libspdm-3.1.0.tar.gz
++sha256  84d4a755f57b17775c63b5c8be646d518ce34d5d1b85994b6150ebce9d31b183  libspdm-3.1.1.tar.gz
+ sha256  7dc072bff163df39209bbb63e0916f4667c2a84cf3c36ccc84ec7425bc3e4779  LICENSE.md
+diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
+index b216d98093..34dbb457c4 100644
+--- a/package/libspdm/libspdm.mk
++++ b/package/libspdm/libspdm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSPDM_VERSION = 3.1.0
++LIBSPDM_VERSION = 3.1.1
+ LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
+ LIBSPDM_LICENSE = BSD-3-Clause
+ LIBSPDM_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
