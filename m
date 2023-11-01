@@ -4,135 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0727C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 11:43:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97A01C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 11:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B7FF430DE;
-	Wed,  1 Nov 2023 11:43:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B7FF430DE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 25C26430E5;
+	Wed,  1 Nov 2023 11:49:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25C26430E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iLtY5-SIiibY; Wed,  1 Nov 2023 11:43:46 +0000 (UTC)
+	with ESMTP id 4t03dnCwVb5o; Wed,  1 Nov 2023 11:49:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B98E6430DF;
-	Wed,  1 Nov 2023 11:43:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B98E6430DF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 97B241BF34C
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 11:43:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB8B0430DE;
+	Wed,  1 Nov 2023 11:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB8B0430DE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CC7C21BF34C
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 11:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 428F46FCA3
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 11:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 428F46FCA3
+ by smtp4.osuosl.org (Postfix) with ESMTP id B21674EC90
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 11:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B21674EC90
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z3V4J2MfpLXd for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 11:43:38 +0000 (UTC)
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam04on20610.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e8c::610])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8EC406FC9F
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 11:43:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EC406FC9F
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B+PNl7d4FvakBS84G/wuAKmGWEbQKZGtjqYyD3Cr/JJTY/y+Qw5jmsaQ5aAXoFEqAyKo9Nz9Odt0qz04Cm/B3Ilh+laaztEDnHEpolSzU53+pYgvAWdu5496V2ECA+jl6Z1hNaJ1zcFE1HAFfY0Fm6wgdbJAJVKax349M3AGmBzOTLKUx3qkwE2L6kLhItHUDwg3vLajAKMKYKQ/ymxtlV0TSANaeV+wYj0wl2oirhHXTQBJhM1rF9tApISBQMGJz9lJXsDAedFE8iCCINotL2kjMXIJCn00mSQ5TzVn6mHov+nvEsO+C8EFckdVcipGSfoEZ6+3AMrY1THPPuoWcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zrv+O8AkfgQcCqDrfWyINCeQ876uR1A1ykPONwuek0o=;
- b=j8LZi+76yecdJ/HFNLOP1avesNpih3a0OWwIcowQe1grdhqrLydUrDb7FL1jnS7htNX6OyGf5np6spHyBY6l+ZVgp9krm+PLbX9QbV6MnjoXFr6hBqr22aPSPzgnVCn2zaGdBsI0qdjLemVDBT78DyPuzr8XUuqLx3Z5PB2C3BYxs8YvRBY4HsTwTlD+k5Z5eG7CTNU1DrAkHlOzM1zHrd0spzeUxpDQoSvbae15YtpIY0AHNfN3kXn6zFRX6C1tJFvRZK7g4Y0DdPH84iPmZ74cPt7OxC9X6HMJGn0krqiIkkeu4hska1DPzEfHYbPQ4VWEoXu7SHgctgJheKKNmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by CH3PR12MB8075.namprd12.prod.outlook.com (2603:10b6:610:122::5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.28; Wed, 1 Nov
- 2023 11:43:34 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::a507:b06b:e64b:4c50]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::a507:b06b:e64b:4c50%4]) with mapi id 15.20.6933.032; Wed, 1 Nov 2023
- 11:43:34 +0000
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Neal Frager via buildroot
- <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH v6 03/10] package/newlib-bare-metal: new
- package
-Thread-Index: AQHaA0qXU55l7C7pwkan+EbiGTH5Q7Bj6Q6AgAGBHmA=
-Date: Wed, 1 Nov 2023 11:43:34 +0000
-Message-ID: <CH2PR12MB5004C8F27820E2EC98FC5232F0A7A@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20231020114236.4129636-1-neal.frager@amd.com>
- <20231020114236.4129636-3-neal.frager@amd.com>
- <20231031134317.4ce2349e@windsurf>
-In-Reply-To: <20231031134317.4ce2349e@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|CH3PR12MB8075:EE_
-x-ms-office365-filtering-correlation-id: 4ece3877-08a2-467c-3bb7-08dbdacfc7d1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jaJzM8VneduXMPbSa/lfCqZUB1Z7UWbcqGY9l6zxQGlk1Dxv1VoVZ1birsc7snTeRcMAdhRyoo6D9DoFQ9kCFnpPrYtUMROEe0ESp6yJDoOFkd6M2PJdqATOr+JeCWj6DeeQTZLYpQsXen4Xtwsb0BpiyKViRdLp7GZUnE45WPjq0zsoo53Zir61lZra+Sk/nn1kdGpeZ1Q7UPtEJoucUkmsFOOuQ/WTNi7kiNhGFFB2j40CV/hYq8znfVzmncuEnrUftrG+pZ1A0n13vA7KzH7ekyBekHNCp+zUT+WpAgXXZwGurKIUio81USaZoPduaRYqiNlD9Y+c32gGk4kjTarZyAzpy7Q+ggCP9zfLwBS6F0kWl7MOMUf6x5vVL6ZCg5Rb12e4UmvlCIjAD4j38p6mhTeyq5o20wjPce6cgQk7XL7XvBqONw+/Gax7oSYVFzx1xt8L1++33jo8uL6UZcZS/nDScLLZ1A4swjV41nfAY9MuPBMFsXRHrADX3aAtDumRu9SdcVmwAbLfPNcTMvkTDKA2X3YDjpKVkucaSxF3PEKds7sYJ8Y7y/CMuZOMWtunXQ8z6paTA8stDHlmbnKzk6HdRstPQITV/4hAibk=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(136003)(346002)(396003)(366004)(39860400002)(376002)(230922051799003)(1800799009)(451199024)(186009)(64100799003)(64756008)(9686003)(26005)(71200400001)(66556008)(478600001)(8936002)(7696005)(5660300002)(2906002)(41300700001)(76116006)(8676002)(6506007)(4326008)(54906003)(110136005)(66476007)(52536014)(66446008)(66946007)(316002)(38070700009)(38100700002)(86362001)(33656002)(122000001)(55016003)(66899024);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?STWuqeSjrOvIytSc/NWryvdR+e80cHV4IAlIoyWgV5LoqKTU3nvhHCnzceXd?=
- =?us-ascii?Q?hy15keWwEUt2WsAa4ldZ3lpOVa9I6XcvJEPziszOKU2nCKNgNpf7IPETxaRX?=
- =?us-ascii?Q?WzJAJeGRFa5IF/KQRzT8AW0plFQuBiDp6KfOHxxqoLYlSUrYl12ETRKw3SoX?=
- =?us-ascii?Q?Su5FFeexGSBIjoAikP2RLauGjRZDkWtLGMspiUm8I+E2/Rz2VLbKS3nTk+yG?=
- =?us-ascii?Q?DsC77IAKlEzT1lwQ0BKgjPenoKC7Vti8pB+gLx3pLegd13zGaWu/x6Kgpqor?=
- =?us-ascii?Q?LCEc5Zz5sdLMYOFrvqdYTfUi3DZGWU5j2FyG1UZifDHpmeNbyZFU7D2EfsHR?=
- =?us-ascii?Q?7Wtq+6qD1Okj6UG7Gf9u70dL4LEonCIF55i9QfY++kivoS9Nk65HKSaQCS4Z?=
- =?us-ascii?Q?z0gbINyP7lEB9xJ2xqFbrlHMr+In6N2uywdlt3oGW3fESUdRxL1POquEs2S7?=
- =?us-ascii?Q?uVw7bdiFQxNedRmHiWLjL5P9lYzakcvRprRgrd3kAoldDj47vJvIcv6lhL+l?=
- =?us-ascii?Q?D/W0DsXwVGFjKKcMGFaSJxME9rHrHPE2PwhKPWNFis4zeNWYv5IUcVJ3pfsT?=
- =?us-ascii?Q?NkbN1PyIwthGzv02T3YNxuaAS+tNVhMPmQfNuaf5OSXmO2cN/cCvdM+FVgjC?=
- =?us-ascii?Q?xAtemtnX1/lip78EZcrhzj3irwCRJK6wnUyV6Bt8LWk1slTLJhkm6OQOHvbG?=
- =?us-ascii?Q?vKHtepbIOUl3hGQZAWtbqm5KaWGc++88YDrxSR6Ib2AxizP2KKsY8lHtg3xF?=
- =?us-ascii?Q?zKtqeraxa4AuOWJB5l+SdVem4cV7DBiGlkmh7/N7JrCMImFvjEqb+VYOt0O3?=
- =?us-ascii?Q?ebuM6mG353tKZuSLyOAlFn/4i3yM1DfF4XgIRXoigphG6cn0mwijwIO9me61?=
- =?us-ascii?Q?PzL/wgSciskhygIfw2NwQTaIJtUYlmkercSwkFcvZikZWpNzJhQ7Fy9Ea69O?=
- =?us-ascii?Q?XJWsQgjvGiFXwrlBjccxpoAwoPSGiCiSvTBKZkrVWG1/mkhnis3SnGoTPvwM?=
- =?us-ascii?Q?afuvfQ/3rs2UfTwJXAbIVIutBtHf7cOWofVglmWax+1ERyqcCQqzWjC8Zdxj?=
- =?us-ascii?Q?7KAu8tLdLmKB/ZImDQDSEt6ApFiEVh+XIrzLDYx4XzmbDUBZANMr3ITgEdQM?=
- =?us-ascii?Q?7MUiH+27dApH1P1T1fldfDW5F5Wwk+7WfsFVoi7IfP0q2Zyvi2/lQxHhg3d7?=
- =?us-ascii?Q?gN4Kwoh03Ywz6nv+u3+8qfhJteX4ao2dpDtXlI8e3udasMuphI4122/fDRo8?=
- =?us-ascii?Q?SG6lsCNZGUSK0lZ/K6nnsPidv95dGAhJLKR/KTwOe8+O3ivDBqRb1jqB0S4w?=
- =?us-ascii?Q?8siYrRzAzqOBmZlM5K1N3FGJ6gBqOBPEoIJTZABOnviDIgd7CF3WbRYFMZku?=
- =?us-ascii?Q?vXtaS58pliMFF3gYSBZIvVLT8cdZCeXj1dcUrlEAZH5KD+ABZupj1LkYm6Bm?=
- =?us-ascii?Q?xTQKy0MZ854h5C/d6PkP5tIu/rBa0U6SqfSxbP1tcBCE8pTxixLo6CZVIhFG?=
- =?us-ascii?Q?d4RDbrMnLSG8iyeRp39AIEvM/lMFjrFRpVGSZWvoOjRLyuLH572sRPJpuAUs?=
- =?us-ascii?Q?VF45g1NhNbQ2XE7FHD4=3D?=
-MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ece3877-08a2-467c-3bb7-08dbdacfc7d1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2023 11:43:34.8088 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 70PbKAD2ip+eRe1xVnfOJF9Z/xeZkJDh/82g5iG2s0FlRw458ntM2VBI4Jg5rjrD
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8075
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zrv+O8AkfgQcCqDrfWyINCeQ876uR1A1ykPONwuek0o=;
- b=bXZO5vfPe+uOQaC6lJqHCnS6oHMG8b66u0b+VwY+diqe+mWzWdtcDrH59xuNTYq8RYWXQKoWZTssWs5F9kk3juzm4+y1EZc97SKPp+NDtytlIUYtIRElNqrj6kA6ToS3ZXKAF3BhZhbERrG216NRdGzfg05QJ/qfzFHGhW2hskI=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=bXZO5vfP
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v6 03/10] package/newlib-bare-metal: new
- package
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zP1lucsuJtt3 for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 11:49:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B67374EC8B
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 11:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B67374EC8B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 896998632B; Wed,  1 Nov 2023 11:49:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 Nov 2023 12:45:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: db3a730e8ce42b8f70f469eafe53e9e5981e57b7
+X-Git-Newrev: 0c9dc366bf92caed532ac225fd0406e9c09ff42f
+X-Patchwork-Hint: ignore
+Message-Id: <20231101114927.896998632B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ace: bump to version 7.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -144,124 +55,224 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Simek, Michal" <michal.simek@amd.com>,
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>, "Erkiaga Elorza,
- Ibai" <ibai.erkiaga-elorza@amd.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=0c9dc366bf92caed532ac225fd0406e9c09ff42f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+- Drop patches (already in version)
+- C++14 is mandatory since version 7.1.0
 
-> diff --git a/package/newlib-bare-metal/Config.in.host 
-> b/package/newlib-bare-metal/Config.in.host
-> new file mode 100644
-> index 0000000000..be92a1d6a6
-> --- /dev/null
-> +++ b/package/newlib-bare-metal/Config.in.host
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_HOST_NEWLIB_BARE_METAL
-> +	bool "host newlib-bare-metal"
-> +	help
-> +	  Build the newlib C library for a bare-metal toolchain
-> +
-> +if BR2_PACKAGE_HOST_NEWLIB_BARE_METAL
-> +
-> +config BR2_PACKAGE_HOST_NEWLIB_BARE_METAL_VERSION
-> +	string
-> +	default "4.1.0"
-> +
-> +endif #BR2_PACKAGE_HOST_NEWLIB_BARE_METAL
+https://github.com/DOCGroup/ACE_TAO/blob/ACE%2BTAO-7_1_1/ACE/NEWS
 
-> Like the other packages: this Config.in is useless, so it can be dropped.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |  2 -
+ ...-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch | 52 --------------------
+ ...-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch | 56 ----------------------
+ package/ace/Config.in                              |  6 +--
+ package/ace/ace.hash                               |  6 +--
+ package/ace/ace.mk                                 |  4 +-
+ 6 files changed, 8 insertions(+), 118 deletions(-)
 
-Are you sure that the Config.in files can be dropped?  
-
-When I drop them, I am stuck with the following build error:
-Makefile:576: *** newlib-bare-metal is in the dependency chain of toolchain-bare-metal-buildroot that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-
-How can we deal with this without selecting the packages and having Config.in files?
-
-Thanks for your help!
-
-Best regards,
-Neal Frager
-AMD
-
-> diff --git a/package/newlib-bare-metal/newlib-bare-metal.hash 
-> b/package/newlib-bare-metal/newlib-bare-metal.hash
-> new file mode 100644
-> index 0000000000..1a681ecf77
-> --- /dev/null
-> +++ b/package/newlib-bare-metal/newlib-bare-metal.hash
-> @@ -0,0 +1,8 @@
-> +# Locally calculated
-> +sha256  
-> +f296e372f51324224d387cc116dc37a6bd397198756746f93a2b02e9a5d40154  
-> +newlib-4.1.0.tar.gz
-> +
-> +# Hashes for license files locally calculated
-> +sha256  
-> +231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  
-> +COPYING
-> +sha256  
-> +a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  
-> +COPYING.LIB
-> +sha256  
-> +f3b7f3e4426b1fa6f60198dae7adfedd94b77b28db2d108adc0253575011e0ff  
-> +COPYING.LIBGLOSS
-> +sha256  
-> +422aa40293093fb54fc66e692a0d68fd0b24ed5602e5d1d33ad05ba3909057e9  
-> +COPYING.NEWLIB
-> diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk 
-> b/package/newlib-bare-metal/newlib-bare-metal.mk
-> new file mode 100644
-> index 0000000000..a42e04877a
-> --- /dev/null
-> +++ b/package/newlib-bare-metal/newlib-bare-metal.mk
-> @@ -0,0 +1,37 @@
-> +#####################################################################
-> +###########
-> +#
-> +# newlib-bare-metal
-> +#
-> +#####################################################################
-> +###########
-> +
-> +HOST_NEWLIB_BARE_METAL_VERSION = \
-> +	$(call qstrip,$(BR2_PACKAGE_HOST_NEWLIB_BARE_METAL_VERSION))
-> +ifeq ($(HOST_NEWLIB_BARE_METAL_VERSION),)
-> +HOST_NEWLIB_BARE_METAL_VERSION = 4.1.0 endif
-
-Just hardcode the version number.
-
-> +
-> +HOST_NEWLIB_BARE_METAL_SITE = ftp://sourceware.org/pub/newlib 
-> +HOST_NEWLIB_BARE_METAL_SOURCE = 
-> +newlib-$(HOST_NEWLIB_BARE_METAL_VERSION).tar.gz
-> +HOST_NEWLIB_BARE_METAL_DEPENDENCIES = host-gcc-bare-metal
-> +
-> +HOST_NEWLIB_BARE_METAL_LICENSE = GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0 
-> +HOST_NEWLIB_BARE_METAL_LICENSE_FILES = COPYING \
-> +	COPYING.LIB \
-> +	COPYING.LIBGLOSS \
-> +	COPYING.NEWLIB
-> +
-> +NEWLIB_ARCH = \
-> +	$(call 
-> +qstrip,$(BR2_PACKAGE_HOST_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH))
-> +
-> +HOST_NEWLIB_BARE_METAL_CONF_OPTS = \
-> +	--target=$(NEWLIB_ARCH)-elf \
-> +	CC_FOR_TARGET=$(HOST_DIR)/bin/$(NEWLIB_ARCH)-elf-gcc \
-> +	AR_FOR_TARGET=$(HOST_DIR)/bin/$(NEWLIB_ARCH)-elf-ar \
-> +	RANLIB_FOR_TARGET=$(HOST_DIR)/bin/$(NEWLIB_ARCH)-elf-ranlib \
-
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 638d3b48a2..23c0811de6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -124,8 +124,6 @@ boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch Up
+ linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch Upstream
+ package/18xx-ti-utils/0001-plt.h-fix-build-with-gcc-10.patch Upstream
+ package/4th/0001-avoid-regen-during-install.patch Upstream
+-package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch Upstream
+-package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch Upstream
+ package/acl/0001-Build-with-old-GCC-versions.patch Upstream
+ package/acpid/0001-dont-use-isfdtype.patch Upstream
+ package/alchemy/0001-toolchains-remove-hash-style-management.patch Upstream
+diff --git a/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch b/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+deleted file mode 100644
+index ad82c10172..0000000000
+--- a/package/ace/0001-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From e06cadc3b95a577e6a8bbc94f93dd063710c73a1 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 3 Apr 2022 15:25:49 +0200
+-Subject: [PATCH] ACE/ace/SSL/SSL_Asynch_BIO.cpp: fix build with libressl
+-
+-Fix the following build failure with libressl:
+-
+-/home/autobuild/autobuild/instance-10/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:174:7: error: 'BIO_get_init' was not declared in this scope; did you mean 'BIO_set_init'?
+-  174 |   if (BIO_get_init(pBIO) == 0 || p_stream == 0 || buf == 0 || len <= 0)
+-      |       ^~~~~~~~~~~~
+-      |       BIO_set_init
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/386afa88ac9e5e3bb65dddeabf610bb1e9bc4285
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/DOCGroup/ACE_TAO/commit/e06cadc3b95a577e6a8bbc94f93dd063710c73a1]
+----
+- ACE/ace/SSL/SSL_Asynch_BIO.cpp | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/ace/SSL/SSL_Asynch_BIO.cpp b/ace/SSL/SSL_Asynch_BIO.cpp
+-index a657d8a14e6f7..64aa14c6ab9a7 100644
+---- a/ace/SSL/SSL_Asynch_BIO.cpp
+-+++ b/ace/SSL/SSL_Asynch_BIO.cpp
+-@@ -41,7 +41,7 @@ extern "C"
+- 
+- #define BIO_TYPE_ACE  ( 21 | BIO_TYPE_SOURCE_SINK )
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- static BIO_METHOD methods_ACE =
+-   {
+-     BIO_TYPE_ACE, // BIO_TYPE_PROXY_SERVER,
+-@@ -68,14 +68,14 @@ static BIO_METHOD methods_ACE =
+- #else
+- static BIO_METHOD* methods_ACE;
+- # define BIO_set_num(b, val)
+--#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
+-+#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER) */
+- 
+- ACE_BEGIN_VERSIONED_NAMESPACE_DECL
+- 
+- BIO *
+- ACE_SSL_make_BIO (void * ssl_asynch_stream)
+- {
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-   BIO * const pBIO = BIO_new (&methods_ACE);
+- #else
+-   if (!methods_ACE)
+diff --git a/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch b/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
+deleted file mode 100644
+index 4f9fde5579..0000000000
+--- a/package/ace/0002-ACE-ace-SSL-SSL_Asynch_BIO.cpp-fix-build-with-libres.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 82b139f921ddb549c1bd236030bbc86e314852b3 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 21 Feb 2023 14:20:11 +0100
+-Subject: [PATCH] ACE/ace/SSL/SSL_Asynch_BIO.cpp: fix build with libressl >=
+- 3.5.0
+-
+-Fix the following build failure with libressl >= 3.5.0:
+-
+-/tmp/instance-17/output-1/build/ace-7.0.6/ace/SSL/SSL_Asynch_BIO.cpp:45:19: error: variable 'BIO_METHOD methods_ACE' has initializer but incomplete type
+-   45 | static BIO_METHOD methods_ACE =
+-      |                   ^~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/7f40d6dde03134238151c248fbbd66e4713546cb
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/DOCGroup/ACE_TAO/pull/2053]
+----
+- ACE/ace/SSL/SSL_Asynch_BIO.cpp | 8 +++++---
+- 1 file changed, 5 insertions(+), 3 deletions(-)
+-
+-diff --git a/ace/SSL/SSL_Asynch_BIO.cpp b/ace/SSL/SSL_Asynch_BIO.cpp
+-index 0faa775fc0..5543598873 100644
+---- a/ace/SSL/SSL_Asynch_BIO.cpp
+-+++ b/ace/SSL/SSL_Asynch_BIO.cpp
+-@@ -41,7 +41,8 @@ extern "C"
+- 
+- #define BIO_TYPE_ACE  ( 21 | BIO_TYPE_SOURCE_SINK )
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
+- static BIO_METHOD methods_ACE =
+-   {
+-     BIO_TYPE_ACE, // BIO_TYPE_PROXY_SERVER,
+-@@ -68,14 +69,15 @@ static BIO_METHOD methods_ACE =
+- #else
+- static BIO_METHOD* methods_ACE;
+- # define BIO_set_num(b, val)
+--#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER) */
+-+#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L) */
+- 
+- ACE_BEGIN_VERSIONED_NAMESPACE_DECL
+- 
+- BIO *
+- ACE_SSL_make_BIO (void * ssl_asynch_stream)
+- {
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+	(defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L)
+-   BIO * const pBIO = BIO_new (&methods_ACE);
+- #else
+-   if (!methods_ACE)
+--- 
+-2.39.0
+-
+diff --git a/package/ace/Config.in b/package/ace/Config.in
+index 5000f2352f..cf3819284b 100644
+--- a/package/ace/Config.in
++++ b/package/ace/Config.in
+@@ -3,14 +3,14 @@ config BR2_PACKAGE_ACE
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	help
+ 	  The ADAPTIVE Communication Environment (ACE(TM))
+ 	  An OO Network Programming Toolkit in C++.
+ 
+ 	  http://www.dre.vanderbilt.edu/~schmidt/ACE.html
+ 
+-comment "ACE needs a glibc toolchain, dynamic library, C++, gcc >= 4.8"
++comment "ACE needs a glibc toolchain, dynamic library, C++, gcc >= 4.9"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/ace/ace.hash b/package/ace/ace.hash
+index 2387927879..0c5ed12c97 100644
+--- a/package/ace/ace.hash
++++ b/package/ace/ace.hash
+@@ -1,6 +1,6 @@
+-# From https://download.dre.vanderbilt.edu/previous_versions/ACE-7.0.6.tar.bz2.md5:
+-md5  d1656851619aff15365270ccf2d56c6e  ACE-7.0.6.tar.bz2
++# From https://download.dre.vanderbilt.edu/previous_versions/ACE-7.1.1.tar.bz2.md5:
++md5  6c86ec6c7879703783b9749d5409a67f  ACE-7.1.1.tar.bz2
+ 
+ # Locally Computed:
+-sha256  4a0cd7da4851f769fddfcf33f663eba4afad824efeff9f59f134c4640ee80216  ACE-7.0.6.tar.bz2
++sha256  fe5fdeab1dddf4fdd99f73c59420886cf61ca2ce92adf2cc6b612b752986df62  ACE-7.1.1.tar.bz2
+ sha256  687bf9d16119e0caf6fb5c18214928fd6ea0da10df91e906255b7613af8061d8  COPYING
+diff --git a/package/ace/ace.mk b/package/ace/ace.mk
+index 29555eea74..1f79508629 100644
+--- a/package/ace/ace.mk
++++ b/package/ace/ace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ACE_VERSION = 7.0.6
++ACE_VERSION = 7.1.1
+ ACE_SOURCE = ACE-$(ACE_VERSION).tar.bz2
+ ACE_SITE = http://download.dre.vanderbilt.edu/previous_versions
+ ACE_LICENSE = DOC
+@@ -17,7 +17,7 @@ ACE_CPE_ID_PRODUCT = adaptive_communication_environment
+ # Only compiling ACE libraries (no TAO)
+ ACE_LIBRARIES = ace ACEXML Kokyu netsvcs protocols/ace
+ 
+-ACE_CPPFLAGS = $(TARGET_CPPFLAGS) -std=c++11
++ACE_CPPFLAGS = $(TARGET_CPPFLAGS) -std=c++14
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101915),y)
+ ACE_CPPFLAGS += -O0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
