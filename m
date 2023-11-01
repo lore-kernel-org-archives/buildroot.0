@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AE24C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 20:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0476C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 21:04:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D32AA40908;
-	Wed,  1 Nov 2023 20:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D32AA40908
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E05E4EEA7;
+	Wed,  1 Nov 2023 21:04:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E05E4EEA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o1IP0oIOKg64; Wed,  1 Nov 2023 20:54:54 +0000 (UTC)
+	with ESMTP id etm5DQyABxiA; Wed,  1 Nov 2023 21:04:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 695204088F;
-	Wed,  1 Nov 2023 20:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 695204088F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E07A71BF5DB
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 20:54:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5F344EEA2;
+	Wed,  1 Nov 2023 21:04:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5F344EEA2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5081BF335
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EF1D43273
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 20:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EF1D43273
+ by smtp1.osuosl.org (Postfix) with ESMTP id 692A784C77
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 21:04:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 692A784C77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cqICCXJoU7DY for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 20:54:38 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 78FCC40127
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 20:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78FCC40127
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 13CFA20005;
- Wed,  1 Nov 2023 20:54:33 +0000 (UTC)
-Date: Wed, 1 Nov 2023 21:54:32 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231101215432.0d5a4581@windsurf>
-In-Reply-To: <20231030064101.362244-1-bernd@kuhls.net>
-References: <20231030064101.362244-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698872074;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=VKHEVIZhXr7vn5adTeGQ6Vrttp5kWlmZlLXPlH/FM4A=;
- b=W7EGEXN6jC1Ar/8JOG8Ul87NHUDHZmBfb79UEPTUk57BkgHnxJNqFqdNq0TYnFozUQ7cnC
- 9NEUC7zyNLthsykkA4LZJRrdVZJohjkNCkefQEn6LIy9WoEyqFyD91EpI4tzor6L6IB9RG
- mkfoGk+33bG2Umjx2KaYrGpYhHy0KTTXN3/AO9D2xh0gMzF9/MUv52V72vVfCd24IRbFME
- xqMvc7+X64x2DEeptntEEYKX5NjbcUn+wAeLCllmFljEQ9o7cLl7WWnX/ePG/Yl4OTcmOm
- 9zLVqO7T0AZdoZa0rIG88PDd2ki6Aip2JymaVS6pTI+/qRPAFDDTeIHo8nCSSQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=W7EGEXN6
-Subject: Re: [Buildroot] [PATCH 1/2] {toolchain,
- linux-headers}: add support for 6.6 headers
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UWQYd0Q5C5lI for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 21:04:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C31C884C76
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 21:04:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C31C884C76
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A0AB686495; Wed,  1 Nov 2023 21:04:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 Nov 2023 21:54:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df74c56315b62ee49c50515ecb8e9819b88bc527
+X-Git-Newrev: 30cb3d784c73d56e18eb294907b124053b2c37a0
+X-Patchwork-Hint: ignore
+Message-Id: <20231101210421.A0AB686495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-web2py: security bump to
+ version 2.26.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,35 +58,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 30 Oct 2023 07:41:00 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=30cb3d784c73d56e18eb294907b124053b2c37a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> And add (and default to) 6.6 to linux-headers.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  linux/linux.hash                                    |  1 +
->  package/linux-headers/Config.in.host                | 13 +++++++++++--
->  toolchain/Config.in                                 |  5 +++++
->  .../toolchain-external-custom/Config.in.options     |  6 +++++-
->  4 files changed, 22 insertions(+), 3 deletions(-)
+Fix CVE-2023-45158: An OS command injection vulnerability exists in
+web2py 2.24.1 and earlier. When the product is configured to use
+notifySendHandler for logging (not the default configuration), a crafted
+web request may execute an arbitrary OS command on the web server using
+the product.
 
-Both applied to master. Thanks!
+https://jvn.jp/en/jp/JVN80476432
+https://github.com/web2py/web2py/compare/v2.24.1...v2.26.1
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-web2py/python-web2py.hash | 2 +-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index 03c71db8a5..1b4d8f5632 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  db42d52097d43fa797c29f9ce1493d7356f192dd0c2590ec56f36022252c284b  python-web2py-2.24.1.tar.gz
++sha256  d5d79f6260ec9f53f90447ad59313a8fac0571fce0018aa5f6fcf95d28c04382  python-web2py-2.26.1.tar.gz
+ sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 91c041f6f2..fe7774fc2b 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEB2PY_VERSION = 2.24.1
++PYTHON_WEB2PY_VERSION = 2.26.1
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
