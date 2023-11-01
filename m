@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7297C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 18:15:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F7CCC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  1 Nov 2023 18:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AD4A81E74;
-	Wed,  1 Nov 2023 18:15:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AD4A81E74
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B95E84CC5;
+	Wed,  1 Nov 2023 18:15:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B95E84CC5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ud_RO65noyxb; Wed,  1 Nov 2023 18:15:12 +0000 (UTC)
+	with ESMTP id igFtsRA9NLLM; Wed,  1 Nov 2023 18:15:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA9C881E56;
-	Wed,  1 Nov 2023 18:15:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA9C881E56
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5ACBA1BF59F
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 18:15:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A98B782327;
+	Wed,  1 Nov 2023 18:15:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A98B782327
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 873621BF59F
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 18:15:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32478704B9
- for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 18:15:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32478704B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6098D84CB3
+ for <buildroot@lists.busybox.net>; Wed,  1 Nov 2023 18:15:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6098D84CB3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mp6JRxtAsrys for <buildroot@lists.busybox.net>;
- Wed,  1 Nov 2023 18:14:55 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 673C2704BB
- for <buildroot@buildroot.org>; Wed,  1 Nov 2023 18:14:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 673C2704BB
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5584BC0006;
- Wed,  1 Nov 2023 18:14:52 +0000 (UTC)
-Date: Wed, 1 Nov 2023 19:14:51 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231101191451.61c19ddf@windsurf>
-In-Reply-To: <20231101180606.18319-1-fontaine.fabrice@gmail.com>
-References: <20231101180606.18319-1-fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bJM62Emyga2f for <buildroot@lists.busybox.net>;
+ Wed,  1 Nov 2023 18:15:29 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B8C0D84C4E
+ for <buildroot@buildroot.org>; Wed,  1 Nov 2023 18:15:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8C0D84C4E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B5AD71BF205;
+ Wed,  1 Nov 2023 18:15:26 +0000 (UTC)
+Date: Wed, 1 Nov 2023 19:15:25 +0100
+To: Jan Havran <havran.jan@email.cz>
+Message-ID: <20231101191525.53792793@windsurf>
+In-Reply-To: <ZT_92cB-gzyB56Kf@arch-zen.localdomain>
+References: <ZT_92cB-gzyB56Kf@arch-zen.localdomain>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698862492;
+ d=bootlin.com; s=gm1; t=1698862526;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=UdcFTgpHd88tkYTMk6vKktYqvG8dWx3arDqBBDpgZxw=;
- b=Wx9WL3novE1qiWUPn7jqsrzN3gi3NRJtbq0Qg0ZKVhcTydnOY8NBjS1BYhjN0fB35Fm0Mi
- fl6yt5pJ+vzFUe2eCEjGAMcjra2bSUODwjIBLIsFjsNC85VvJl01Wpm8ff3xNpJSuTTRss
- DT9JVlQXwq1m6cjGiYmb0OdsKuTPgbv6sak526gD3Qva63tZ3GIp1Ptd/peqEefvNWQO1s
- afBcqBukR9TJliHh2PlfYsC0XcjkZ4p3joLM51bzVCwrrK/yJ841UrxtD6hWGV0ZqrhvJt
- CcJGP/zNBMV11it9beYKGqVq+OK93D+gBcVFUDzm5ch2Oa/nHCCxDCNQ79de5w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=yTLgKzeBds/HMQ5osG5msqYzDhkNMY298kTIYdVX8YE=;
+ b=QAnHl4ONv5CcKTlyXEEUHV0cqCPvla7tTiMkvYe0XrJ1tI29fXtg42vtxutKjXQR9W0epN
+ q7SMLgwXb8cGwkNYvsSZzXuFfMr0c2IuhuJazPEBNSl305OcKNP680eLvIFrAWaVlGbWvB
+ IW9Hu52oTc/PELvBJ149VafcHeVLDHFRDXMhYalXixxDgjlnmLM1cZ0fXyziW5MoK9Cl7q
+ Dg8ABzzEzZgHOmkUUTtVIDei105hzITXAQfXLD7i+mqJYxD9HtjZL/qpiLsDiZEr0f0zlL
+ uzEnJ3zFHNoSCEX/RsJe3oXD7olqd+Sji4uLzTex3/KbE0gOcjoU9ZgTXa6Wsg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Wx9WL3no
-Subject: Re: [Buildroot] [PATCH 1/1] package/perl-lwp-protocol-https: add
- CPE variables
+ header.s=gm1 header.b=QAnHl4ON
+Subject: Re: [Buildroot] [PATCH 1/1] configs/pine64_pinecube_defconfig: bump
+ to Linux 6.1.60 and U-Boot 2023.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,25 +77,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  1 Nov 2023 19:06:06 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 30 Oct 2023 20:02:49 +0100
+Jan Havran <havran.jan@email.cz> wrote:
 
-> cpe:2.3:a:lwp\:\:protocol\:\:https_project:lwp\:\:protocol\:\:https is a
-> valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/detail/804408BE-097D-4FE3-B6DB-29324871C6B9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Jan Havran <havran.jan@email.cz>
 > ---
->  package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  configs/pine64_pinecube_defconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
