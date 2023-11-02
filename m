@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F133C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 18:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B551C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 18:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54C1A80E4A;
-	Thu,  2 Nov 2023 18:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54C1A80E4A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 238B482038;
+	Thu,  2 Nov 2023 18:55:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 238B482038
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 33ppM6j2zG7b; Thu,  2 Nov 2023 18:54:49 +0000 (UTC)
+	with ESMTP id EEndIhMFyoiR; Thu,  2 Nov 2023 18:55:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B010C8089B;
-	Thu,  2 Nov 2023 18:54:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B010C8089B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D6441BF287
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:54:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C08982039;
+	Thu,  2 Nov 2023 18:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C08982039
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B9D1B1BF287
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7508243549
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:54:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7508243549
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F43D4F2C6
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:54:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F43D4F2C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RPt-Sjon3NjR for <buildroot@lists.busybox.net>;
- Thu,  2 Nov 2023 18:54:19 +0000 (UTC)
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com
- [IPv6:2607:f8b0:4864:20::1043])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B1CCC43541
- for <buildroot@buildroot.org>; Thu,  2 Nov 2023 18:54:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1CCC43541
-Received: by mail-pj1-x1043.google.com with SMTP id
- 98e67ed59e1d1-28028f92709so1049623a91.0
- for <buildroot@buildroot.org>; Thu, 02 Nov 2023 11:54:19 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fwqkrdOeUwmS for <buildroot@lists.busybox.net>;
+ Thu,  2 Nov 2023 18:54:21 +0000 (UTC)
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com
+ [IPv6:2607:f8b0:4864:20::1041])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 20E2D4F2C5
+ for <buildroot@buildroot.org>; Thu,  2 Nov 2023 18:54:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20E2D4F2C5
+Received: by mail-pj1-x1041.google.com with SMTP id
+ 98e67ed59e1d1-2809414efa9so1238638a91.1
+ for <buildroot@buildroot.org>; Thu, 02 Nov 2023 11:54:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698951258; x=1699556058;
+ d=1e100.net; s=20230601; t=1698951260; x=1699556060;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=VVjVU2ozWm2AglnAUm3u97rGkhHa3b5dn35CgWzZtGc=;
- b=rHR3G04Qcec7Eiaum6J8riH9ksvwp6ga3Sl0hZAq/DK7FrO5k3cgxGz+jkdhuCr8ln
- OO1KJQXR43lVUuCVQ77VeAVzJnS7lMLftGwMEpVatlXzUBYh5a7pwSWdHdDy/L+9wCbK
- n+tv5jGaMBfCWmn51BjQPGyRo8tZFQtSt490x9KHD2bycM4ckumMh7gKvtzeNl4anctV
- jV3iDwPpzw6hN+A94UNPYgqQgABp79jy/HYfkfZj314Fg8jb+lhTGh9suIUJOcyCqGCN
- nrDd4VGxky4qAWJOq7el1fOtnqiditRGFUjGXEiDxhtF2PmcZANVbZYFgUxUBCjR34qE
- SAgw==
-X-Gm-Message-State: AOJu0YxrmKxDUd4tbRA7BxcKy38rFsH0BwzxIOL6iBw3xF3NfOfev0A9
- R8dIGe8xkEMcZ5O1isVIY7HjyOn38kTQ36emIAkMXiihpoY=
-X-Google-Smtp-Source: AGHT+IFic61ReeKCFw8Qukp4NZVOM/9Cpur4ag/T0+7eGYG+QqMeYCs1i9fbaCv9HezeLAPI/FEpgQ==
-X-Received: by 2002:a17:90b:a01:b0:277:68c3:64b9 with SMTP id
- gg1-20020a17090b0a0100b0027768c364b9mr447612pjb.5.1698951258203; 
- Thu, 02 Nov 2023 11:54:18 -0700 (PDT)
+ bh=BD3V80KBp1aZA2yZjBrRPP59EhYzCHAvqZE2hLBG9DI=;
+ b=IaIMmKPxXCtHh3HIqvAyAGrseK061xPazOF5R1vMEuwEzksg/r79KeY4+DFEhd7EKg
+ 2F76Kp4HovAtsQqKSTPI7dIxTKdF89zdGeIK9szwLI4bOq3/26AYA0raVVSCNUf6tO92
+ 2LtnStypGTIu++Vt1XUU+/xmLwLnMZqFt8CjPyMyqmjFFV6wtJu8/ZuOBVnI8c9+fS6e
+ q3fmpMC7yMpeTE/R+SjTbAacnSa8iVJID3LjP0rSnej3dkHh9aRgNAt7c/Uwc+4Ekayr
+ ft4yELlGby1lX61Kqxnpv7Xiucvq8ik1hPVf9C0p5u/6KY/Lzb/lW9jmbzmSRGGBikr/
+ EiTQ==
+X-Gm-Message-State: AOJu0YxqDSwtKpX5h1tWUfdzrMRgg3utfB+YODPmGitQR0vasE8KEcGv
+ TurFe/JitgJmh0PIBQFDDy4DYxlMTPqFWYTeo6KqZrmAGvA=
+X-Google-Smtp-Source: AGHT+IE8q/SRjH3rcBTgZJ4b5s0O34guFcJT6pZ9FnvDY9YR/nU8PYDVazV0ZxlWC2rC7iVvJBaeOg==
+X-Received: by 2002:a17:90b:4d12:b0:280:959c:660f with SMTP id
+ mw18-20020a17090b4d1200b00280959c660fmr8198388pjb.27.1698951259736; 
+ Thu, 02 Nov 2023 11:54:19 -0700 (PDT)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.201.196])
  by smtp.gmail.com with ESMTPSA id
- ge17-20020a17090b0e1100b0027cf8869ee7sm210962pjb.0.2023.11.02.11.54.16
+ ge17-20020a17090b0e1100b0027cf8869ee7sm210962pjb.0.2023.11.02.11.54.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Nov 2023 11:54:17 -0700 (PDT)
+ Thu, 02 Nov 2023 11:54:18 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu,  2 Nov 2023 12:54:09 -0600
-Message-ID: <20231102185411.51382-3-adam.duskett@amarulasolutions.com>
+Date: Thu,  2 Nov 2023 12:54:10 -0600
+Message-ID: <20231102185411.51382-4-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231102185411.51382-1-adam.duskett@amarulasolutions.com>
 References: <20231102185411.51382-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1698951258; x=1699556058;
+ d=amarulasolutions.com; s=google; t=1698951260; x=1699556060;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=VVjVU2ozWm2AglnAUm3u97rGkhHa3b5dn35CgWzZtGc=;
- b=T5gNM6/1cRkE5kNhCZYZoiQfFUlXSnTfwAFMvVXZCmFpU9qjkI9zSL2pqB2v9ntkb1
- bs7VPQaxhBU5myaMmyynPOHBVDK20VKeWd0Z/jSEoIDAJfumjX5BXIHc5Q/nmsphOtvH
- OgzHHiWoigpXyDZFnLeXvLaEt2IUYJr6RiujI=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=BD3V80KBp1aZA2yZjBrRPP59EhYzCHAvqZE2hLBG9DI=;
+ b=rmoUbtwv5u4vPMHQaYnuHXrA/K9YGvAIUKL/wkAXBMKQ/sISA2cE9T7oti5e6r8NCn
+ bOp8eHQwwL9RIWxungrLc74zomLReAWdhKvp5M8yky+dEa9gtoZgQnF9mcFiVVHmXO1w
+ VXNoN8D056c/HfybNDh9D11p9KZXPhmcHDGh4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=T5gNM6/1
-Subject: [Buildroot] [PATCH 3/5] package/flutter-engine: use impeller
- rendering engine
+ header.b=rmoUbtwv
+Subject: [Buildroot] [PATCH 4/5] package/flutter-pi: bump version to
+ 8f4e9726a18b32822b6e7faf19c044f88bded570
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,47 +97,121 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogaHR0cHM6Ly9kb2NzLmZsdXR0ZXIuZGV2L3BlcmYvaW1wZWxsZXIKSW1wZWxsZXIgcHJv
-dmlkZXMgYSBuZXcgcmVuZGVyaW5nIHJ1bnRpbWUgZm9yIEZsdXR0ZXIuIFRoZSBGbHV0dGVyIHRl
-YW3igJlzCmJlbGlldmVzIHRoaXMgc29sdmVzIEZsdXR0ZXLigJlzIGVhcmx5LW9uc2V0IGphbmsg
-aXNzdWUuIEltcGVsbGVyIHByZWNvbXBpbGVzIGEKc21hbGxlciwgc2ltcGxlciBzZXQgb2Ygc2hh
-ZGVycyBhdCBFbmdpbmUgYnVpbGQgdGltZSBzbyB0aGV5IGRvbuKAmXQgY29tcGlsZSBhdApydW50
-aW1lLgoKSW1wZWxsZXIgaGFzIHRoZSBmb2xsb3dpbmcgb2JqZWN0aXZlczoKCiAgLSBQcmVkaWN0
-YWJsZSBwZXJmb3JtYW5jZTogSW1wZWxsZXIgY29tcGlsZXMgYWxsIHNoYWRlcnMgYW5kIHJlZmxl
-Y3Rpb24KICAgIG9mZmxpbmUgYXQgYnVpbGQgdGltZS4gSXQgYnVpbGRzIGFsbCBwaXBlbGluZSBz
-dGF0ZSBvYmplY3RzIHVwZnJvbnQuCiAgICBUaGUgZW5naW5lIGNvbnRyb2xzIGNhY2hpbmcgYW5k
-IGNhY2hlcyBleHBsaWNpdGx5LgoKICAtIEluc3RydW1lbnRhYmxlOiBJbXBlbGxlciB0YWdzIGFu
-ZCBsYWJlbHMgYWxsIGdyYXBoaWNzIHJlc291cmNlcyBsaWtlCiAgICB0ZXh0dXJlcywgYW5kIGJ1
-ZmZlcnMuIEl0IGNhbiBjYXB0dXJlIGFuZCBwZXJzaXN0IGFuaW1hdGlvbnMgdG8gZGlzawogICAg
-d2l0aG91dCBhZmZlY3RpbmcgcGVyLWZyYW1lIHJlbmRlcmluZyBwZXJmb3JtYW5jZS4KCiAgLSBQ
-b3J0YWJsZTogRmx1dHRlciBkb2VzbuKAmXQgdGllIEltcGVsbGVyIHRvIGEgc3BlY2lmaWMgY2xp
-ZW50IHJlbmRlcmluZyBBUEkuCiAgICBZb3UgY2FuIGF1dGhvciBzaGFkZXJzIG9uY2UgYW5kIGNv
-bnZlcnQgdGhlbSB0byBiYWNrZW5kLXNwZWNpZmljIGZvcm1hdHMgYXMKICAgIG5lY2Vzc2FyeS4K
-CiAgLSBMZXZlcmFnZXMgbW9kZXJuIGdyYXBoaWNzIEFQSXM6IEltcGVsbGVyIHVzZXMsIGJ1dCBk
-b2VzbuKAmXQgZGVwZW5kIG9uLAogICAgZmVhdHVyZXMgYXZhaWxhYmxlIGluIG1vZGVybiBBUElz
-IGxpa2UgTWV0YWwgYW5kIFZ1bGthbi4KCiAgLSBMZXZlcmFnZXMgY29uY3VycmVuY3k6IEltcGVs
-bGVyIGNhbiBkaXN0cmlidXRlIHNpbmdsZS1mcmFtZSB3b3JrbG9hZHMKICAgIGFjcm9zcyBtdWx0
-aXBsZSB0aHJlYWRzIGlmIG5lY2Vzc2FyeS4KClNpZ25lZC1vZmYtYnk6IEFkYW0gRHVza2V0dCA8
-YWRhbS5kdXNrZXR0QGFtYXJ1bGFzb2x1dGlvbnMuY29tPgotLS0KIHBhY2thZ2UvZmx1dHRlci1l
-bmdpbmUvZmx1dHRlci1lbmdpbmUubWsgfCAzICsrLQogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0
-aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZmx1dHRlci1lbmdp
-bmUvZmx1dHRlci1lbmdpbmUubWsgYi9wYWNrYWdlL2ZsdXR0ZXItZW5naW5lL2ZsdXR0ZXItZW5n
-aW5lLm1rCmluZGV4IDQ3MDFjMWY1MzYuLjMyYWFhMWNjY2YgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uv
-Zmx1dHRlci1lbmdpbmUvZmx1dHRlci1lbmdpbmUubWsKKysrIGIvcGFja2FnZS9mbHV0dGVyLWVu
-Z2luZS9mbHV0dGVyLWVuZ2luZS5tawpAQCAtMTI0LDYgKzEyNCw3IEBAIGVuZGlmCiAKIGlmZXEg
-KCQoQlIyX1BBQ0tBR0VfSEFTX0xJQkdMRVMpLHkpCiBGTFVUVEVSX0VOR0lORV9ERVBFTkRFTkNJ
-RVMgKz0gbGliZ2xlcworRkxVVFRFUl9FTkdJTkVfQ09ORl9PUFRTICs9IC0tZW5hYmxlLWltcGVs
-bGVyLW9wZW5nbGVzCiBlbmRpZgogCiBpZmVxICgkKEJSMl9QQUNLQUdFX0xJQkdMRlcpLHkpCkBA
-IC0xNDIsNyArMTQzLDcgQEAgZW5kaWYKIAogIyBUaGVyZSBpcyBubyAtLWRpc2FibGUtdnVsa2Fu
-IG9wdGlvbgogaWZlcSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfVlVMS0FOX0RSSVZFUikseSkKLUZM
-VVRURVJfRU5HSU5FX0NPTkZfT1BUUyArPSAtLWVuYWJsZS12dWxrYW4KK0ZMVVRURVJfRU5HSU5F
-X0NPTkZfT1BUUyArPSAtLWVuYWJsZS12dWxrYW4gLS1lbmFibGUtaW1wZWxsZXItdnVsa2FuCiBl
-bmRpZgogCiBpZmVxICgkKEJSMl9QQUNLQUdFX1hPUkc3KSQoQlIyX1BBQ0tBR0VfTElCWENCKSx5
-eSkKLS0gCjIuNDEuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+ - Drop upstream 0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
+ - Disable new charset converter plugin.
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ ...er_surface-properly-fallback-to-surf.patch | 59 -------------------
+ package/flutter-pi/flutter-pi.hash            |  2 +-
+ package/flutter-pi/flutter-pi.mk              |  3 +-
+ 3 files changed, 3 insertions(+), 61 deletions(-)
+ delete mode 100644 package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
+
+diff --git a/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch b/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
+deleted file mode 100644
+index 7a1a49b3d4..0000000000
+--- a/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 856f9849763535d62ed01b538ba23905875c93f4 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Tue, 26 Sep 2023 20:31:17 +0200
+-Subject: [PATCH] src/egl_gbm_render_surface: properly fallback to surface with
+- no modifier
+-
+-In 869fa7fcfbeb, we added a fallback to be able to create an EGL sruface
+-when the driver do not support modifiers, like the llvmpipe software
+-renderer (or like some proprietary drivers, like the MALI ones), as
+-reported in #269 [0].
+-
+-However, in c6537673c9b6, there was a big overhaul of renderer
+-infrastructure. That commit lost the with-modifiers code path and only
+-kept the without-modifiers fallback one (i.e. it only kept the call to
+-gbm_surface_create(), not to gbm_surface_create_with_modifiers()).
+-
+-Then in b0d09f5032a4, the with-modifier code path was re-instated, but
+-in a way that made it exclusive with the without-modifiers one. That is,
+-the without-modifiers code path was not a fallback to when the other
+-failed.
+-
+-Re-instate the fallback mechanism as intiially implemented.
+-
+-[0] https://github.com/ardera/flutter-pi/issues/269
+-
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Upstream: https://github.com/ardera/flutter-pi/pull/367
+----
+- src/egl_gbm_render_surface.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/egl_gbm_render_surface.c b/src/egl_gbm_render_surface.c
+-index ce9e5e7..8a58667 100644
+---- a/src/egl_gbm_render_surface.c
+-+++ b/src/egl_gbm_render_surface.c
+-@@ -146,6 +146,7 @@ static int egl_gbm_render_surface_init(
+-     }
+- #endif
+- 
+-+    gbm_surface = NULL;
+-     if (allowed_modifiers != NULL) {
+-         gbm_surface = gbm_surface_create_with_modifiers(
+-             gbm_device,
+-@@ -158,9 +159,10 @@ static int egl_gbm_render_surface_init(
+-         if (gbm_surface == NULL) {
+-             ok = errno;
+-             LOG_ERROR("Couldn't create GBM surface for rendering. gbm_surface_create_with_modifiers: %s\n", strerror(ok));
+--            return ok;
+-+            LOG_ERROR("Will retry without modifiers\n");
+-         }
+--    } else {
+-+    }
+-+    if (gbm_surface == NULL) {
+-         gbm_surface = gbm_surface_create(
+-             gbm_device,
+-             size.x,
+--- 
+-2.25.1
+-
+diff --git a/package/flutter-pi/flutter-pi.hash b/package/flutter-pi/flutter-pi.hash
+index f7148963a4..bb8f52c608 100644
+--- a/package/flutter-pi/flutter-pi.hash
++++ b/package/flutter-pi/flutter-pi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e4af79c8f53c15913f52a83a221f099a2a750d023a0bc4560d0db6f15def79a2  flutter-pi-d62e84350d2869b3ec1dfb1af21bfe234c4b817f-br1.tar.gz
++sha256  ecb1557020afc22b30a4361230a4ed09be2493d420fed5e89cd93698a008a2fd  flutter-pi-8f4e9726a18b32822b6e7faf19c044f88bded570-br1.tar.gz
+ sha256  b34df9d3e1b4e5d1ba70b1740ec74b69f1189b44efd0c96b898b074ef8db1c70  LICENSE
+diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
+index 27f140c177..491c074e13 100644
+--- a/package/flutter-pi/flutter-pi.mk
++++ b/package/flutter-pi/flutter-pi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUTTER_PI_VERSION = d62e84350d2869b3ec1dfb1af21bfe234c4b817f
++FLUTTER_PI_VERSION = 8f4e9726a18b32822b6e7faf19c044f88bded570
+ FLUTTER_PI_SITE = https://github.com/ardera/flutter-pi.git
+ FLUTTER_PI_SITE_METHOD = git
+ FLUTTER_PI_LICENSE = MIT
+@@ -27,6 +27,7 @@ FLUTTER_PI_CONF_OPTS = \
+ 	-DENABLE_VULKAN=OFF \
+ 	-DFILESYSTEM_LAYOUT=meta-flutter \
+ 	-DLINT_EGL_HEADERS=OFF \
++	-DBUILD_CHARSET_CONVERTER_PLUGIN=OFF \
+ 	-DTRY_BUILD_GSTREAMER_AUDIO_PLAYER_PLUGIN=OFF \
+ 	-DTRY_BUILD_GSTREAMER_VIDEO_PLAYER_PLUGIN=OFF \
+ 	-DTRY_ENABLE_OPENGL=OFF \
+-- 
+2.41.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
