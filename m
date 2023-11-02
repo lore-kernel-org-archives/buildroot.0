@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D214BC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 18:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27C76C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 18:10:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87A564F1BD;
-	Thu,  2 Nov 2023 18:08:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87A564F1BD
+	by smtp4.osuosl.org (Postfix) with ESMTP id C882A423F0;
+	Thu,  2 Nov 2023 18:10:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C882A423F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h4hf0hnmYW0t; Thu,  2 Nov 2023 18:07:57 +0000 (UTC)
+	with ESMTP id GdetkYqwsF32; Thu,  2 Nov 2023 18:10:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1A864F1BF;
-	Thu,  2 Nov 2023 18:07:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1A864F1BF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 91E0C1BF861
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:07:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92D48423F7;
+	Thu,  2 Nov 2023 18:10:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92D48423F7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4ED111BF861
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:10:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B4546118C
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:07:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B4546118C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3554C8501C
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:10:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3554C8501C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5aqv8auZkPdq for <buildroot@lists.busybox.net>;
- Thu,  2 Nov 2023 18:07:51 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DB70761126
- for <buildroot@buildroot.org>; Thu,  2 Nov 2023 18:07:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB70761126
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 05AC540003;
- Thu,  2 Nov 2023 18:07:48 +0000 (UTC)
-Date: Thu, 2 Nov 2023 19:07:48 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20231102190748.3232ab71@windsurf>
-In-Reply-To: <20231013210841.153788-1-giulio.benetti@benettiengineering.com>
-References: <20231013210841.153788-1-giulio.benetti@benettiengineering.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xLPSkbv69Oc1 for <buildroot@lists.busybox.net>;
+ Thu,  2 Nov 2023 18:10:37 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C34B084FBA
+ for <buildroot@buildroot.org>; Thu,  2 Nov 2023 18:10:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C34B084FBA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 76ACA240005;
+ Thu,  2 Nov 2023 18:10:33 +0000 (UTC)
+Date: Thu, 2 Nov 2023 19:10:32 +0100
+To: Bram Oosterhuis <dev@bybram.com>
+Message-ID: <20231102191032.095142db@windsurf>
+In-Reply-To: <20231011162430.3484150-1-dev@bybram.com>
+References: <20231011162430.3484150-1-dev@bybram.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1698948469;
+ d=bootlin.com; s=gm1; t=1698948634;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Q35imbB2NubXceO2uvHKNKm2DwyRS9bWZfMRFw9dVKU=;
- b=SgAhw7ZgL1Q1gx3dCfLDOx4naiGqOKp/rqEnkDEgKtdIQyK42/bBW8p1pXHiAyxIyiyMsg
- nrUs3gEDSE0Xd88lglN2rlGqN2dMLMvZlE55IQzGAJye/U8j03p5oZ2TwMxOhTvl/ltB51
- S9Of6EwmQu6OrpenEaWrWeAQt8jfDRwBL1Whuws0voZJByR1+lw0S9UdKDz1SZDt3z0A33
- 7ErfIfFYWBjLkG+e5CACulecLEHVKVpNnZHHw9iVbgOvk8f7mztrxW6CjhsSz3iMdJxzAR
- LIwx+/2SBteJJOe+eRtgqXWLNrJSldEwECYu7tw/7y4phsGuyvvrA4ypim1PXA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=XVp+OT3c+FA2L0gFEzC8u1oBLh2Gni0wO3nQs9GC3GE=;
+ b=BHJw6T2V4qj+kzcmLlRZvsg+XMsSKIw0H4joDNDwlWFPVG9pJFvZ4bOanK4ap07mJxyZps
+ gECy3nGGM5Kt/+/yeJHnwkqe648kTbb3nEDtDproqeSqtyrBHT4ACinf0UbtiEIGoXlz0/
+ gYBaM+Ksdj9g0iiz4/mayJw0As+CH3UqVcBX1HZmeYD3u+mf7+p9DrlF4FqqYavpx6JVVO
+ eVdlhcXNQln28Wa9G7Bi+nHCwUHCHfAxafTvDIO7YAbc71ilsnfz06sBY37xP55OAejimK
+ obWwiliMsj8QQv7gWC0mb4mdqZH3j7uOB+uwlTW75OPTNiOuZdjTLj0C9pM77Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SgAhw7Zg
-Subject: Re: [Buildroot] [PATCH 1/2] board/bananapi/bananapi-m2-berry:
- switch to use extlinux.conf
+ header.s=gm1 header.b=BHJw6T2V
+Subject: Re: [Buildroot] [PATCH 1/2] configs/raspberrypi: bump Linux version
+ to 6.1.55
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,60 +77,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jagan Teki <jagan@amarulasolutions.com>,
- Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
+Cc: Martin Bark <martin@barkynet.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio,
+Hello Bram,
 
-Thanks for your work on this!
+On Wed, 11 Oct 2023 18:24:29 +0200
+Bram Oosterhuis <dev@bybram.com> wrote:
 
-On Fri, 13 Oct 2023 23:08:40 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> Linux 6.1 has been marked LTS for a long time now. Time to bump
+> Linux for RaspberryPi's to the latest 6.1.55-v7. Since April 2022
+> the RaspberryPi defconfigs have compressed kernel module enabled
+> by default. (see [1] and [2]).
+> 
+> To load compressed kernel modules kmod and xz packages are needed
+> because busybox doesn't support it.
+> 
+> [1] https://github.com/raspberrypi/linux/commit/c45b4223a4e4a8cfe39edbb4949329ea478fa4e2
+> [2] https://github.com/raspberrypi/linux/issues/4966
+> 
+> Signed-off-by: Bram Oosterhuis <dev@bybram.com>
 
-> diff --git a/board/bananapi/bananapi-m2-berry/genimage.cfg b/board/bananapi/bananapi-m2-berry/genimage.cfg
-> index 535f3dffee..92c8677545 100644
-> --- a/board/bananapi/bananapi-m2-berry/genimage.cfg
-> +++ b/board/bananapi/bananapi-m2-berry/genimage.cfg
-> @@ -1,15 +1,3 @@
-> -image boot.vfat {
-> -	vfat {
-> -		files = {
-> -			"zImage",
-> -			"sun8i-v40-bananapi-m2-berry.dtb",
-> -			"boot.scr"
-> -		}
-> -	}
-> -
-> -	size = 64M
-> -}
-> -
->  image sdcard.img {
->  	hdimage {
->  	}
-> @@ -21,12 +9,6 @@ image sdcard.img {
->  		size = 1016K # 1MB - 8KB
->  	}
->  
-> -	partition boot {
-> -		partition-type = 0xC
-> -		bootable = "true"
-> -		image = "boot.vfat"
-> -	}
-> -
->  	partition rootfs {
->  		partition-type = 0x83
->  		image = "rootfs.ext4"
+Thanks for this patch. Could you clarify in the commit log on which
+platforms it was runtime-tested, vs. the platforms for which you only
+verified the build?
 
-Are you sure this works? Indeed the FAT partition used to have the
-bootable = "true" flag. Now, no partition has this flag. But from what
-I remember, the heuristic that U-Boot uses to determine which partition
-has the extlinux.conf file is precisely this bootable flag.
+> +# Enable compressed kernel module support
+> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> +BR2_PACKAGE_KMOD_TOOLS
+> +BR2_PACKAGE_XZ
+> +BR2_PACKAGE_KMOD
+> +BR2_PACKAGE_HOST_KMOD_XZ
 
-Could you double check this?
+I'm afraid this has certainly not been tested, as I believe these lines
+have no effect since they lack the =y to enable the option:
+
+BR2_PACKAGE_XZ=y
+
+for example.
+
+> \ No newline at end of file
+
+Please fix this to have a newline at end of file.
+
+(Of course, same for all other defconfigs)
 
 Thanks!
 
