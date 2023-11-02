@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3264C4167B
-	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 16:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E63BEC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 16:11:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAF37802B0;
-	Thu,  2 Nov 2023 16:11:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAF37802B0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9EFC582CCA;
+	Thu,  2 Nov 2023 16:11:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EFC582CCA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BQP7Vv1dmYvS; Thu,  2 Nov 2023 16:10:57 +0000 (UTC)
+	with ESMTP id bSCmR08SKzMw; Thu,  2 Nov 2023 16:11:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89E6A8290B;
-	Thu,  2 Nov 2023 16:10:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89E6A8290B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D4251BF380
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 16:09:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B05283211;
+	Thu,  2 Nov 2023 16:11:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B05283211
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A38CC1BF380
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 16:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2571540141
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 16:09:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2571540141
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C86340211
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 16:09:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C86340211
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d9eK_lcGF1oc for <buildroot@lists.busybox.net>;
- Thu,  2 Nov 2023 16:09:44 +0000 (UTC)
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AFDF6434BA
- for <buildroot@buildroot.org>; Thu,  2 Nov 2023 16:09:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFDF6434BA
-Received: from unknown (HELO opfedv1rlp0a.nor.fr.ftgroup) ([x.x.x.x]) by
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J7OaRSApqO6y for <buildroot@lists.busybox.net>;
+ Thu,  2 Nov 2023 16:09:49 +0000 (UTC)
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1C887485C2
+ for <buildroot@buildroot.org>; Thu,  2 Nov 2023 16:09:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C887485C2
+Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 02 Nov 2023 17:09:44 +0100
+ 02 Nov 2023 17:09:45 +0100
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0a.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2023 17:09:43 +0100
+ ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2023 17:09:46 +0100
 Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 2 Nov 2023 17:09:41 +0100
+ 15.1.2507.34; Thu, 2 Nov 2023 17:09:44 +0100
 Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Thu, 02 Nov 2023 17:09:40 +0100
-X-IronPort-AV: E=Sophos;i="6.03,271,1694728800"; d="scan'208";a="61920812"
+ Thu, 02 Nov 2023 17:09:42 +0100
+X-IronPort-AV: E=Sophos;i="6.03,271,1694728800"; d="scan'208";a="61773729"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Thu, 2 Nov 2023 17:09:25 +0100
-Message-ID: <4db136849481236cd6c1475f74e51822e0df640d.1698941362.git.yann.morin@orange.com>
+Date: Thu, 2 Nov 2023 17:09:26 +0100
+Message-ID: <07e738074928626377bb888bbe53888e79fe070a.1698941362.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1698941362.git.yann.morin@orange.com>
 References: <cover.1698941362.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX505.corporate.adroot.infra.ftgroup
- (10.115.27.25) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX107.corporate.adroot.infra.ftgroup (10.115.27.4)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1698941384; x=1730477384;
+ t=1698941388; x=1730477388;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=3ihFNoaZbop1LmOiaTS+NYHsfMtyHXWXdH80ZYRw2ns=;
- b=jA6oFstObAAlFIwUhb/g3hEEp2aCJ2xtpnJi7aBs5j23dBQvf/j7c6tr
- yFH19O4Il4StFzmKA8YcVrjAJM/hhXxZG6ZIEt0vpYNvLO68WpOZJ5pzz
- rRGUAcT6lwzsqzA0qUPvwfPGMEJjIyacnn+xqoyEW36FL+Ah1ITZIIKMW
- 0gv6xqYq5AQixC1FIfdH8bKt4KWq8f/r7e3aOHNnsGuYIpVLej72aHSQD
- 18e8WKJKamvPeMBstMoNSKLU8RwxGrmp9uE7Xr6pxSCZcnogp1mTHj5gQ
- dmGmnBPQ63bAAjJiXcRsVteyKwhwtdxm0U/fD/uWTXgfbbig161iV4T+c
- A==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=NDNjvVe3F1xuGDxkLQQgwdjwSAi+uh5xtYbJx1dlv08=;
+ b=eAWZVYh03h6/5mBRwsF5Ob3zGv5hyOdUZiArDkqI18yZEjYj+/frcm5a
+ 2xIavmZXyVgqMkGRPCUvBVx2LQRH2jU1cGE9hH64porWcXW/dwCVQBPj7
+ Br2E7baXwd4aDQSUrFLRMQi9f7ahiZ3GVfFxDEEWiETRBwGgCGCGY8kiA
+ sfByOizNXzzg40dAPrpd9yY7cq8GPowbNFb6XVj5rV/OsI44Ya3B43vzb
+ XKnMeRWBUY4kEF6LBjHfXHDtj/mse7M2GBUhZV0L/EtFyzdWJ/JTqlp0q
+ hOiGqunThSJTo3GXYhaf3emLjylXOR68InhYZV3NRV9rjwcMGDcLV0rKw
+ g==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=jA6oFstO
-Subject: [Buildroot] [PATCH 6/8] package/libassuan: add host variant
+ header.a=rsa-sha256 header.s=orange002 header.b=eAWZVYh0
+Subject: [Buildroot] [PATCH 7/8] package/libgpgme: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,31 +95,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-libassuan is needed by libgpgme, which is needed for skopeo
-(to come in a followup patch);
+libgpgme is needed by skopeo (to come in a followup patch).
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 ---
- package/libassuan/libassuan.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libgpgme/libgpgme.mk | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-index fb95a6fd67..cec214f636 100644
---- a/package/libassuan/libassuan.mk
-+++ b/package/libassuan/libassuan.mk
-@@ -15,8 +15,14 @@ LIBASSUAN_CONF_OPTS = \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
- LIBASSUAN_CONFIG_SCRIPTS = libassuan-config
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 036103b7fc..55710430e7 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -47,4 +47,23 @@ ifeq ($(BR2_MIPS_NABI64)x$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10),yx)
+ LIBGPGME_CONF_OPTS += --disable-linux-getdents
+ endif
  
-+HOST_LIBASSUAN_DEPENDENCIES = host-libgpg-error
-+HOST_LIBASSUAN_CONFIG_SCRIPTS = libassuan-config
-+HOST_LIBASSUAN_CONF_OPTS = --with-gpg-error-prefix=$(HOST_DIR)
++HOST_LIBGPGME_DEPENDENCIES = host-libassuan host-libgpg-error
++HOST_LIBGPGME_CONFIG_SCRIPTS = gpgme-config
 +
- # Force the path to "gpgrt-config" (from the libgpg-error package) to
- # avoid using the one on host, if present.
- LIBASSUAN_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
-+HOST_LIBASSUAN_CONF_ENV += GPGRT_CONFIG=$(HOST_DIR)/bin/gpgrt-config
- 
++# C++ bindings require a C++11 capable gcc, and -Wsuggest-override support
++# Let's assume the host toolchain always has C++
++HOST_LIBGPGME_LANGUAGE_BINDINGS = \
++	cl \
++	$(if $(BR2_HOST_GCC_AT_LEAST_5),cpp)
++
++HOST_LIBGPGME_CONF_OPTS = \
++	--with-gpg-error-prefix=$(HOST_DIR) \
++	--with-libassuan-prefix=$(HOST_DIR) \
++	--disable-gpgsm-test \
++	--disable-gpgconf-test \
++	--disable-g13-test \
++	--disable-gpg-test \
++	--enable-languages=$(subst $(space),$(comma),$(HOST_LIBGPGME_LANGUAGE_BINDINGS))
++
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
 -- 
