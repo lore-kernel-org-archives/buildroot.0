@@ -1,70 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF0CC4167D
-	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 18:31:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13946C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 18:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F24D34EC55;
-	Thu,  2 Nov 2023 18:31:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F24D34EC55
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A0C58521E;
+	Thu,  2 Nov 2023 18:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A0C58521E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B6TPMIvLZ272; Thu,  2 Nov 2023 18:31:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rGrMSIRyxA50; Thu,  2 Nov 2023 18:42:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F8FF4F276;
-	Thu,  2 Nov 2023 18:31:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F8FF4F276
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 014F51BF287
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:30:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C908D85224;
+	Thu,  2 Nov 2023 18:42:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C908D85224
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 491A11BF287
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:42:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D7C454F276
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:30:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7C454F276
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DEE843549
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 18:42:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DEE843549
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Odb3amESzKCz for <buildroot@lists.busybox.net>;
- Thu,  2 Nov 2023 18:30:53 +0000 (UTC)
-Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AC95E4EC55
- for <buildroot@buildroot.org>; Thu,  2 Nov 2023 18:30:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC95E4EC55
-Received: from [192.168.50.220] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id ycSvq9jLIV2laycSvq0UaL; Thu, 02 Nov 2023 19:30:49 +0100
-Message-ID: <7f1c47f6-91f0-438a-83ab-621eabf032b6@benettiengineering.com>
-Date: Thu, 2 Nov 2023 19:30:48 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 09Aziycp0nZO for <buildroot@lists.busybox.net>;
+ Thu,  2 Nov 2023 18:42:00 +0000 (UTC)
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
+ [IPv6:2607:f8b0:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F0D4A404A0
+ for <buildroot@buildroot.org>; Thu,  2 Nov 2023 18:41:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0D4A404A0
+Received: by mail-pf1-x433.google.com with SMTP id
+ d2e1a72fcca58-6c3077984e8so1237480b3a.0
+ for <buildroot@buildroot.org>; Thu, 02 Nov 2023 11:41:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698950518; x=1699555318;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=guBRqWpPWKFXMOezIKJd2JTKjZyZ4w27NUvzse1IxUY=;
+ b=Srdc578pBZT3WQBa6kMtfS60SG6b/KEBZ9REdO5DmXmcsg6+HprgK71OSF74yDd1sV
+ A5t2aB1YM87omFQp1Ac4QqYdBQGyrFwCCD2imp/T/XZWilm5PRuEbXCeXcMhJe5ypfNo
+ i0eKV99dLj/2eUpvK4HwRvfJpC7KkzlYd7Ct3JI23iEfm9TPXFiDeA73wGjNSVOGujNt
+ aEwzyG3ZroleDWxRfU0GbSWWCd3LMvoS6Xk8jA4qFPAqbRiywTTncaSS3S+JnlORafGe
+ zT0zacqC+EPIrWTfZZmzOQLZtfAjmFXWXgW6eqN5lfjVKdZiGTqdrSz3KS+toH6MTP6F
+ TpHA==
+X-Gm-Message-State: AOJu0YwE5cCmlDabDnzG4RRX7XgLSjMGmCa4YPAzbUuZa3CrMW+zjMNn
+ 3WGkdL41x2p56ENGLLJ1mTwZ9P+1zF78AZV5uH32BZ5h
+X-Google-Smtp-Source: AGHT+IEX+mH5KaUc9v0CIWJKAnjJCAE4KgyLPhXwupddomdH8psDqStk7hti+e/DJ6Yq7Yi3CtAwHA==
+X-Received: by 2002:a05:6a00:93aa:b0:6be:bf7:fda5 with SMTP id
+ ka42-20020a056a0093aa00b006be0bf7fda5mr18849141pfb.12.1698950518505; 
+ Thu, 02 Nov 2023 11:41:58 -0700 (PDT)
+Received: from DESKTOP-OI0KN2B.lan ([172.56.201.196])
+ by smtp.gmail.com with ESMTPSA id
+ b21-20020a056a0002d500b00688965c5227sm77604pft.120.2023.11.02.11.41.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 02 Nov 2023 11:41:57 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Thu,  2 Nov 2023 12:41:53 -0600
+Message-ID: <20231102184154.46185-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20231013210841.153788-1-giulio.benetti@benettiengineering.com>
- <20231102190748.3232ab71@windsurf>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20231102190748.3232ab71@windsurf>
-X-CMAE-Envelope: MS4xfDo/fnIViZxcLf29oEpVc0Vf+9IdiPLSfepyBTZ/80keUO/4cxnogzGtbTLkrVcjtx1m84LOTFECdjOyhvWzs/b4Pf9OtGyRLojPGeyK84js0a8B7Blu
- hjmFrz6KRNmIQ9YvgDwlvUVkMYOZh8ZlSAKXJ3v9gvMx+62Fg09fkR6tFdcwyfiSrK5KSLBEqeHqj15gFU2hbZUOVVUDvJ1QO2tUVlq9Qq37dwi1QCfaBqXF
- yQI4ZZWIQz7qc34297js6dyYD3bKlvmmhIHBwYu58Lwz5cMvuIgT6Jwbfr02smGpVVMdby1J2f2mAZw13XrWIS8p1u5qQOtrJG3o8duzJCY=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1698949849; bh=nGrRsMeKvurAQ7k/NNJIsNLTvGOpKeq/TzFa03jsRCk=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=A+D2/h1o2thWveLu72cFWtr5W0dE62Pj4o8IBdzSWb57Q/6uOWFEV4+vy54Wf7iM6
- iGtj6ZLr8fwzblZHCyVYxDdfZTbKmz6c8oruQk4Ms13pVZcPIk1TXtzc+bmDGvsmvR
- uxPO6uguLSzII+m7jqLy5pcBsP2BoX7MCa3fVYr6rPSk3ObiOGZAbzgoBLQDE3FSgc
- Wjp9E5tP3kNwbWdPGYu+Meoj2XdlWynBYDgGO1wYK+dHdGxrjNnRznSbzJaXnIHSMu
- 3ct3Csqxbv71idh4ZdobgvxgLiNWANdDI4jfT+5QCvqTiiCnfzwHFQxW1sIwNcphwO
- js3h5YApHcLPQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=A+D2/h1o
-Subject: Re: [Buildroot] [PATCH 1/2] board/bananapi/bananapi-m2-berry:
- switch to use extlinux.conf
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1698950518; x=1699555318;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=guBRqWpPWKFXMOezIKJd2JTKjZyZ4w27NUvzse1IxUY=;
+ b=lzRo/SGGQzn2FbVdJuG0r+Js2pwB8px3e2m4US7x/pKvwS3KuAJ8fLzUWz248myFiN
+ o3eHUiGXpLMmAsCyrPiKwRjr7fN52hg4LlJOxaMGPfu/Ao8sCs6EQL+gu0vm0IL/LKYz
+ bMdiEs8GRH6zP4omRjVn43O6CRDOtKFVTsnL8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=lzRo/SGG
+Subject: [Buildroot] [PATCH v2 1/2] package/postgresql/postgresql.service:
+ set locale for initdb to C
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,100 +93,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>,
- Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Peter Seiderer <ps.report@gmx.net>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+From: Peter Seiderer <ps.report@gmx.net>
 
-On 02/11/23 19:07, Thomas Petazzoni wrote:
-> Hello Giulio,
-> 
-> Thanks for your work on this!
-> 
-> On Fri, 13 Oct 2023 23:08:40 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> diff --git a/board/bananapi/bananapi-m2-berry/genimage.cfg b/board/bananapi/bananapi-m2-berry/genimage.cfg
->> index 535f3dffee..92c8677545 100644
->> --- a/board/bananapi/bananapi-m2-berry/genimage.cfg
->> +++ b/board/bananapi/bananapi-m2-berry/genimage.cfg
->> @@ -1,15 +1,3 @@
->> -image boot.vfat {
->> -	vfat {
->> -		files = {
->> -			"zImage",
->> -			"sun8i-v40-bananapi-m2-berry.dtb",
->> -			"boot.scr"
->> -		}
->> -	}
->> -
->> -	size = 64M
->> -}
->> -
->>   image sdcard.img {
->>   	hdimage {
->>   	}
->> @@ -21,12 +9,6 @@ image sdcard.img {
->>   		size = 1016K # 1MB - 8KB
->>   	}
->>   
->> -	partition boot {
->> -		partition-type = 0xC
->> -		bootable = "true"
->> -		image = "boot.vfat"
->> -	}
->> -
->>   	partition rootfs {
->>   		partition-type = 0x83
->>   		image = "rootfs.ext4"
-> 
-> Are you sure this works? Indeed the FAT partition used to have the
-> bootable = "true" flag. Now, no partition has this flag. But from what
-> I remember, the heuristic that U-Boot uses to determine which partition
-> has the extlinux.conf file is precisely this bootable flag.
-> 
-> Could you double check this?
+Systemd creates a /etc/locale.conf file with LANG="C.UTF-8". On boot, systemd
+reads /etc/locale.conf and sets the LANG environment variable,
+(see the locale_context_load_conf method in local-setup.c.)
 
-Just rebuilt, flashed and given a run, this is the log, specifically in
-u-boot:
-```
-Bus usb@1c19000: USB EHCI 1.00
-scanning bus usb@1c19000 for devices... 2 USB Device(s) found
-        scanning usb for storage devices... 0 Storage Device(s) found
-Hit any key to stop autoboot:  0
-switch to partitions #0, OK
-mmc0 is current device
-Scanning mmc 0:1...
-Found /boot/extlinux/extlinux.conf
-Retrieving file: /boot/extlinux/extlinux.conf
-1:      Bananapi M2 Berry linux
-Retrieving file: /boot/zImage
-append: console=ttyS0,115200n8 root=/dev/mmcblk0p1 rootwait
-Retrieving file: /boot/sun8i-v40-bananapi-m2-berry.dtb
-Kernel image @ 0x42000000 [ 0x000000 - 0x4ee608 ]
-## Flattened Device Tree blob at 43000000
-    Booting using the fdt blob at 0x43000000
-Working FDT set to 43000000
-    Loading Device Tree to 49ff6000, end 49fff231 ... OK
-Working FDT set to 49ff6000
-
-Starting kernel ...
-
-[    0.000000] Booting Linux on physical CPU 0x0
+When initdb.c is called, a check for the LANG environment variable is called,
+and if it is set to something other than "C" initdb attempts to load the
+corresponding LC_CTYPE file in /usr/lib/locale/. IE: If LANG is set to C.UTF-8,
+then initdb.c attempts to load /usr/lib/locale/C.UTF-8/LC_CTYPE. However, these
+files do not exist on a Buildroot system, and as such, initdb throws the
+following error on startup:
 
 ```
+initdb: error: invalid locale settings; check LANG and LC_* environment variables
+pg_ctl: database system initialization failed
+```
 
-It looks for /boot/extlinux/extlinux.conf among the medias and other 
-scripts. So yes, it works.
+To fix this issue, add "Environment=LANG=C" to the package provided
+postgresql.service file to force Postgresql to use the C locale.
 
-Kind regards
+Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+v1 -> v2:
+  - Get to the root cause of the problem and provide a better explination of
+    what is happening.
+
+  - Use Environment=LANG=C isntead of -o --locale=C
+
+ package/postgresql/postgresql.service | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+index 539eea8964..c470c7181e 100644
+--- a/package/postgresql/postgresql.service
++++ b/package/postgresql/postgresql.service
+@@ -16,6 +16,10 @@ StandardOutput=syslog
+ StandardError=syslog
+ SyslogIdentifier=postgres
+ 
++# Overwrite the LANG variable to prevent systemd from passing the LANG
++# environment variable set in /etc/locale.conf.
++Environment=LANG=C
++
+ ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+ ExecStart=/usr/bin/postgres -D /var/lib/pgsql
+ ExecReload=/usr/bin/kill -HUP $MAINPID
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
