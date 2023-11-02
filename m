@@ -4,78 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E63BEC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 16:11:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9FD1C4167B
+	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 16:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EFC582CCA;
-	Thu,  2 Nov 2023 16:11:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EFC582CCA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B66981424;
+	Thu,  2 Nov 2023 16:11:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B66981424
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bSCmR08SKzMw; Thu,  2 Nov 2023 16:11:08 +0000 (UTC)
+	with ESMTP id AVabhEtBdxPt; Thu,  2 Nov 2023 16:11:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B05283211;
-	Thu,  2 Nov 2023 16:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B05283211
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A38CC1BF380
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 16:09:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 34B6D82F4F;
+	Thu,  2 Nov 2023 16:11:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34B6D82F4F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AA7951BF380
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 16:09:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C86340211
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 16:09:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C86340211
+ by smtp1.osuosl.org (Postfix) with ESMTP id 91A3481326
+ for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 16:09:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91A3481326
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J7OaRSApqO6y for <buildroot@lists.busybox.net>;
- Thu,  2 Nov 2023 16:09:49 +0000 (UTC)
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1C887485C2
- for <buildroot@buildroot.org>; Thu,  2 Nov 2023 16:09:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C887485C2
-Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7pgAYMmNWu-I for <buildroot@lists.busybox.net>;
+ Thu,  2 Nov 2023 16:09:53 +0000 (UTC)
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 976F081403
+ for <buildroot@buildroot.org>; Thu,  2 Nov 2023 16:09:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 976F081403
+Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 02 Nov 2023 17:09:45 +0100
+ 02 Nov 2023 17:09:48 +0100
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2023 17:09:46 +0100
+ ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2023 17:09:48 +0100
 Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 2 Nov 2023 17:09:44 +0100
+ 15.1.2507.34; Thu, 2 Nov 2023 17:09:47 +0100
 Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Thu, 02 Nov 2023 17:09:42 +0100
-X-IronPort-AV: E=Sophos;i="6.03,271,1694728800"; d="scan'208";a="61773729"
+ Thu, 02 Nov 2023 17:09:45 +0100
+X-IronPort-AV: E=Sophos;i="6.03,272,1694728800"; d="scan'208";a="61804592"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Thu, 2 Nov 2023 17:09:26 +0100
-Message-ID: <07e738074928626377bb888bbe53888e79fe070a.1698941362.git.yann.morin@orange.com>
+Date: Thu, 2 Nov 2023 17:09:27 +0100
+Message-ID: <fb85e4dd41a441b26ae93b621f8f2462ab0eeafc.1698941362.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1698941362.git.yann.morin@orange.com>
 References: <cover.1698941362.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX107.corporate.adroot.infra.ftgroup (10.115.27.4)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX404.corporate.adroot.infra.ftgroup
+ (10.115.26.17) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1698941388; x=1730477388;
+ t=1698941392; x=1730477392;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=NDNjvVe3F1xuGDxkLQQgwdjwSAi+uh5xtYbJx1dlv08=;
- b=eAWZVYh03h6/5mBRwsF5Ob3zGv5hyOdUZiArDkqI18yZEjYj+/frcm5a
- 2xIavmZXyVgqMkGRPCUvBVx2LQRH2jU1cGE9hH64porWcXW/dwCVQBPj7
- Br2E7baXwd4aDQSUrFLRMQi9f7ahiZ3GVfFxDEEWiETRBwGgCGCGY8kiA
- sfByOizNXzzg40dAPrpd9yY7cq8GPowbNFb6XVj5rV/OsI44Ya3B43vzb
- XKnMeRWBUY4kEF6LBjHfXHDtj/mse7M2GBUhZV0L/EtFyzdWJ/JTqlp0q
- hOiGqunThSJTo3GXYhaf3emLjylXOR68InhYZV3NRV9rjwcMGDcLV0rKw
+ bh=5NKiMXE6z2OPGaOgMkLlkposxlLbZwuaRBKrU+qT+2g=;
+ b=PvbNO1Bn7k00zlFTBzAGXL+35h1/+lsfyr9I8N8AVHK/T+XDhQ/UksRG
+ /EDp3gBM1BjqODOa0qIcQa08bD6n7XPxabT5j1DRE/HHfS6HZBzy7kLN8
+ b1aYo1w6kv0WLyzZMHcAiIp/W5C/XgBdpWbl6CpYZXA76ZUG6AV+cjD5W
+ Pzeqrn/PwTS9IFvXfPooQb4i8s6nWokHHxnVUA+6hk5Sdwo6Jdr/kF/bV
+ lWDV1J5jQaeGSbYeYhz3AxE8Br/Y0tuLXIt8SHQFZI9REtPxd7bQlJlKb
+ OTwN7Ps6LOcZPCc1LvnX7lhBl0cXg984Hvr6ArsHdHe4NdpJ4RQYd79gm
  g==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=eAWZVYh0
-Subject: [Buildroot] [PATCH 7/8] package/libgpgme: add host variant
+ header.a=rsa-sha256 header.s=orange002 header.b=PvbNO1Bn
+Subject: [Buildroot] [PATCH 8/8] package/skopeo: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,41 +95,88 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-libgpgme is needed by skopeo (to come in a followup patch).
+skopeo is a command line utility that performs various operations on
+container images and image repositories.
+
+We introduce it as a host-only package, as the expected usage is to
+transform an OCI image into a docker image, or to help in uploading an
+OCI image to a (local) docker daemon or to a docker registry, for
+example, in a post-build script.
+
+As such, it needs a prompt in the host packages section.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 ---
- package/libgpgme/libgpgme.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/Config.in.host        |  1 +
+ package/skopeo/Config.in.host |  7 +++++++
+ package/skopeo/skopeo.hash    |  2 ++
+ package/skopeo/skopeo.mk      | 22 ++++++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/skopeo/Config.in.host
+ create mode 100644 package/skopeo/skopeo.hash
+ create mode 100644 package/skopeo/skopeo.mk
 
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 036103b7fc..55710430e7 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -47,4 +47,23 @@ ifeq ($(BR2_MIPS_NABI64)x$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10),yx)
- LIBGPGME_CONF_OPTS += --disable-linux-getdents
- endif
- 
-+HOST_LIBGPGME_DEPENDENCIES = host-libassuan host-libgpg-error
-+HOST_LIBGPGME_CONFIG_SCRIPTS = gpgme-config
+diff --git a/package/Config.in.host b/package/Config.in.host
+index c80842c33a..52ea32d18f 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -103,6 +103,7 @@ menu "Host utilities"
+ 	source "package/sdbus-cpp/Config.in.host"
+ 	source "package/sdbusplus/Config.in.host"
+ 	source "package/sentry-cli/Config.in.host"
++	source "package/skopeo/Config.in.host"
+ 	source "package/sloci-image/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
+diff --git a/package/skopeo/Config.in.host b/package/skopeo/Config.in.host
+new file mode 100644
+index 0000000000..4a63a0829c
+--- /dev/null
++++ b/package/skopeo/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_SKOPEO
++	bool "host skopeo"
++	help
++	  skopeo is a command line utility that performs various
++	  operations on container images and image repositories.
 +
-+# C++ bindings require a C++11 capable gcc, and -Wsuggest-override support
-+# Let's assume the host toolchain always has C++
-+HOST_LIBGPGME_LANGUAGE_BINDINGS = \
-+	cl \
-+	$(if $(BR2_HOST_GCC_AT_LEAST_5),cpp)
++	  https://github.com/containers/skopeo
+diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
+new file mode 100644
+index 0000000000..25b0d92fd7
+--- /dev/null
++++ b/package/skopeo/skopeo.hash
+@@ -0,0 +1,2 @@
++sha256  0b788fc5725ac79327f7c29797821a2bafc1c3c87bbfcb2998c2a1be949e314d  skopeo-1.13.3.tar.gz
++sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
+diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
+new file mode 100644
+index 0000000000..98b0e7ed0a
+--- /dev/null
++++ b/package/skopeo/skopeo.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# skopeo
++#
++################################################################################
 +
-+HOST_LIBGPGME_CONF_OPTS = \
-+	--with-gpg-error-prefix=$(HOST_DIR) \
-+	--with-libassuan-prefix=$(HOST_DIR) \
-+	--disable-gpgsm-test \
-+	--disable-gpgconf-test \
-+	--disable-g13-test \
-+	--disable-gpg-test \
-+	--enable-languages=$(subst $(space),$(comma),$(HOST_LIBGPGME_LANGUAGE_BINDINGS))
++SKOPEO_VERSION = 1.13.3
++SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++SKOPEO_LICENSE = Apache-2.0
++SKOPEO_LICENSE_FILES = LICENSE
++
++HOST_SKOPEO_DEPENDENCIES = \
++	host-btrfs-progs \
++	host-libgpgme \
++	host-lvm2 \
++	host-pkgconf
++
++HOST_SKOPEO_GO_ENV = PKG_CONFIG_PATH=$(HOST_DIR)/lib/pkgconfig
++HOST_SKOPEO_BUILD_TARGETS = cmd/skopeo
++
++$(eval $(host-golang-package))
 -- 
 2.34.1
 
