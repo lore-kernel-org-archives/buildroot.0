@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03B05C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 22:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C08C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 22:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A95DA60BD1;
-	Fri,  3 Nov 2023 22:19:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A95DA60BD1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C18660BD8;
+	Fri,  3 Nov 2023 22:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C18660BD8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3ohewvGJXf_O; Fri,  3 Nov 2023 22:19:41 +0000 (UTC)
+	with ESMTP id Xd2c8nKobsal; Fri,  3 Nov 2023 22:19:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0597960BEF;
-	Fri,  3 Nov 2023 22:19:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0597960BEF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9245A1BF995
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DB2760BF9;
+	Fri,  3 Nov 2023 22:19:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DB2760BF9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D2AE41BF5F8
  for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 22:19:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7924160BEF
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7820404EC
  for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 22:19:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7924160BEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7820404EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CuS9xhh4afUH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iaUQ1aFQgROe for <buildroot@lists.busybox.net>;
  Fri,  3 Nov 2023 22:19:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B103860BDD
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5ADF404B2
  for <buildroot@buildroot.org>; Fri,  3 Nov 2023 22:19:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B103860BDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5ADF404B2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CC128660C; Fri,  3 Nov 2023 22:19:18 +0000 (UTC)
+ id A155986622; Fri,  3 Nov 2023 22:19:18 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 3 Nov 2023 23:17:14 +0100
+Date: Fri, 3 Nov 2023 23:17:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 78adcf377efe6767f731f7ea02cef31edf1a558a
-X-Git-Newrev: acb49a3aff0913187b1da6603f0b615cbc29e418
+X-Git-Oldrev: acb49a3aff0913187b1da6603f0b615cbc29e418
+X-Git-Newrev: e6724f3a7294ddaba8a648ea162ca1f84b13307a
 X-Patchwork-Hint: ignore
-Message-Id: <20231103221918.9CC128660C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tor: security bump version to
- 0.4.8.8
+Message-Id: <20231103221918.A155986622@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/valgrind: bump to version 3.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +62,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acb49a3aff0913187b1da6603f0b615cbc29e418
+commit: https://git.buildroot.net/buildroot/commit/?id=e6724f3a7294ddaba8a648ea162ca1f84b13307a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
-https://forum.torproject.org/t/security-release-0-4-7-16-and-0-4-8-8/10064
+https://valgrind.org/docs/manual/dist.news.html
 
-Fixes TROVE-2023-004.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
+ package/valgrind/valgrind.hash | 4 ++--
+ package/valgrind/valgrind.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 933208fce0..fc128e0fcf 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.7.tar.gz.sha256sum
--sha256  b20d2b9c74db28a00c07f090ee5b0241b2b684f3afdecccc6b8008931c557491  tor-0.4.8.7.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.8.tar.gz.sha256sum
-+sha256  21bbe908cafeabff04636d26293540aa9366eb1cf389bc65dc2476c93e688004  tor-0.4.8.8.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 1b29fd336e..b054bc55bb 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
+index d406babe35..d236c7b4a0 100644
+--- a/package/valgrind/valgrind.hash
++++ b/package/valgrind/valgrind.hash
+@@ -1,7 +1,7 @@
+ # From https://valgrind.org/downloads/current.html
+-sha1  817d769743d278b5d07526e85115082054e9bf9c  valgrind-3.21.0.tar.bz2
++sha1  60894cbf59d480c1794674da24a8406518a8df59  valgrind-3.22.0.tar.bz2
+ # locally computed
+-sha256  10ce1618bb3e33fad16eb79552b0a3e1211762448a0d7fce11c8a6243b9ac971  valgrind-3.21.0.tar.bz2
++sha256  c811db5add2c5f729944caf47c4e7a65dcaabb9461e472b578765dd7bf6d2d4c  valgrind-3.22.0.tar.bz2
+ 
+ # License files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 4c4c3ce543..97a955bd3b 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.8.7
-+TOR_VERSION = 0.4.8.8
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-VALGRIND_VERSION = 3.21.0
++VALGRIND_VERSION = 3.22.0
+ VALGRIND_SITE = https://sourceware.org/pub/valgrind
+ VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+ VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
