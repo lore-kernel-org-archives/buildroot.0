@@ -4,84 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E39AC4167D
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 21:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABD1BC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 21:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1BF6E82347;
-	Fri,  3 Nov 2023 21:53:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BF6E82347
+	by smtp1.osuosl.org (Postfix) with ESMTP id 571A082351;
+	Fri,  3 Nov 2023 21:57:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 571A082351
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Q-3miSqauFu; Fri,  3 Nov 2023 21:53:58 +0000 (UTC)
+	with ESMTP id 4a7xdVbGxnGN; Fri,  3 Nov 2023 21:57:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58B2482344;
-	Fri,  3 Nov 2023 21:53:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58B2482344
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 73D1E1BF616
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 21:53:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94F298234F;
+	Fri,  3 Nov 2023 21:57:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94F298234F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ECC71BF616
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 21:57:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B6F940182
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 21:53:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B6F940182
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7575441E2C
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 21:57:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7575441E2C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vzdTitWmtNUV for <buildroot@lists.busybox.net>;
- Fri,  3 Nov 2023 21:53:54 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19ADD40015
- for <buildroot@buildroot.org>; Fri,  3 Nov 2023 21:53:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19ADD40015
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4084b0223ccso18702165e9.2
- for <buildroot@buildroot.org>; Fri, 03 Nov 2023 14:53:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699048432; x=1699653232;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=e/ruYAt46JPiXug9rxx+aVyPMeu2ecJc8pAWrDfQdOU=;
- b=OtCxLc2HUYuj4HrG1v8Sf9tBKTlhf4S6oUNHvpS0aAJeEwr2FWfibIAgDtDOc6drBS
- 2Df2EOdlXNa4dZqvRJJ4TapVcmontozPgtGF/dOPPzaMVv1TRZiBxoC3p13gjdmSfT0y
- eLSDcW0L+lBN/Ag8O7nmMZ8TarhwBeiXQL7/ExJOutDFPsk0kDrrEpeit38SzyWy1Ypd
- 43F/FSok6dwfea/BiB63SPl90PWxTW02J5+alwA+OhdSBCZhNsilufJ/z3VfBjDF0KiQ
- PAPtPMjFunc7PKcK6utrz9kwG/S2xwGdlxFHpTvNw/4pfVMwy1hobH/b5Qk4hWaUDjmN
- RK4g==
-X-Gm-Message-State: AOJu0Yyj82cE7XKmnLRXpE96nYvRHWqtydEoi1VXPobx4mIL7IIBYBTp
- Hh6LF4hfk5n73qpKaOmcQaghqpSSfLA=
-X-Google-Smtp-Source: AGHT+IH/6qSw8ssaZFz645XhXVczD4SbcCFO0GjuieoIS1QRhxxfwDH7RIKrgBO82sbNEoqRl5RU4Q==
-X-Received: by 2002:a05:600c:470d:b0:404:f9c1:d5d7 with SMTP id
- v13-20020a05600c470d00b00404f9c1d5d7mr19324289wmo.25.1699048431482; 
- Fri, 03 Nov 2023 14:53:51 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- bg19-20020a05600c3c9300b0040531f5c51asm3881350wmb.5.2023.11.03.14.53.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Nov 2023 14:53:51 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0ksIb_KCT4yv for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 21:57:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A776041E1F
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 21:57:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A776041E1F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8F03086600; Fri,  3 Nov 2023 21:57:30 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri,  3 Nov 2023 22:53:45 +0100
-Message-ID: <20231103215345.25210-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699048432; x=1699653232; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=e/ruYAt46JPiXug9rxx+aVyPMeu2ecJc8pAWrDfQdOU=;
- b=mhmuXUuj+s9H4bDipCZ0ZNUdDFKaySyTV+LuOsdVygY5Gs8MmLryO18J9XH9mjodsT
- hr3n5vYgsTYtdYzCyhMNEqfmGZSs0bM21JBMiLOQGtKg6F3RqYVlvcnsj2X6qWvpdEss
- a2z4t6LExai6htPeeWU4TzdvV9CaHlOfFhncdKAQ2zHSOOaV4UEAr7CpF8SAYXiOWoeL
- abCpazqryN9xJll3Sm94LbqgsKqKIm6XWLRGcu6HFsrboWeRTxNlQUuglZJgWjjVpAuv
- +zDasxHFbiOe2GSS2TJkpdaK9hPB3FvV59yA3bDJb3R7TOeYcLu0jE1DsesOYXFPHJuh
- 3d9Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mhmuXUuj
-Subject: [Buildroot] [PATCH 1/1] package/mender: add MENDER_CPE_ID_VENDOR
+Date: Fri, 3 Nov 2023 22:34:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c1d5eada4d4db9eeaa1c44dd1dea95a67c8a70ca
+X-Git-Newrev: f9ff92a0793fe86353583fc5d36e74ef7e79c255
+X-Patchwork-Hint: ignore
+Message-Id: <20231103215730.8F03086600@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: bump version to
+ 20231030
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,38 +57,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:northern.tech:mender is a valid CPE identifier for this
-package:
+commit: https://git.buildroot.net/buildroot/commit/?id=f9ff92a0793fe86353583fc5d36e74ef7e79c255
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  https://nvd.nist.gov/products/cpe/detail/F90CE0C3-FCE6-40AA-8C0D-EDE2C81BD67B
+Updated license hash due to various commits:
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/WHENCE
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mender/mender.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/linux-firmware/linux-firmware.hash | 4 ++--
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 724295f784..ee1398244b 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -7,6 +7,7 @@
- MENDER_VERSION = 3.4.0
- MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
- MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
-+MENDER_CPE_ID_VENDOR = northern.tech
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 31bbfddfaa..6722aa14c6 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  88d46c543847ee3b03404d4941d91c92974690ee1f6fdcbee9cef3e5f97db688  linux-firmware-20230804.tar.xz
++sha256  c98d200fc4a3120de1a594713ce34e135819dff23e883a4ed387863ba25679c7  linux-firmware-20231030.tar.xz
  
- # Vendor license paths generated with:
- #    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
--- 
-2.42.0
-
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -36,6 +36,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  0f87f8f67de39828d8e59c69369f850e0a80de638795e22ddfdd1f7f31cdf889  WHENCE
++sha256  697134859b663bc110d57275a7a7862bba21c4425266aac8c62bee18202aac20  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 0cd1f30c16..c2cf0fec19 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 20230804
++LINUX_FIRMWARE_VERSION = 20231030
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
