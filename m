@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21321C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 09:32:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BCA2C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 09:32:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA29F707E8;
-	Fri,  3 Nov 2023 09:32:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA29F707E8
+	by smtp3.osuosl.org (Postfix) with ESMTP id E707F60BF1;
+	Fri,  3 Nov 2023 09:32:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E707F60BF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wVPTSdeuIdrX; Fri,  3 Nov 2023 09:32:30 +0000 (UTC)
+	with ESMTP id wHyfpzZryYJQ; Fri,  3 Nov 2023 09:32:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B817707FC;
-	Fri,  3 Nov 2023 09:32:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B817707FC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0AA1B1BF99A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10FE8707EC;
+	Fri,  3 Nov 2023 09:32:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10FE8707EC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E6F01BF99D
  for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 09:31:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1E2D435B2
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7EF585130
  for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 09:31:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1E2D435B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7EF585130
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JOjc9H1bsdp5 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 52cIqyjxMn4w for <buildroot@lists.busybox.net>;
  Fri,  3 Nov 2023 09:31:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18FAB416F8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0933385129
  for <buildroot@buildroot.org>; Fri,  3 Nov 2023 09:31:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18FAB416F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0933385129
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 000498655A; Fri,  3 Nov 2023 09:31:43 +0000 (UTC)
+ id E3958865A2; Fri,  3 Nov 2023 09:31:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 3 Nov 2023 10:25:57 +0100
+Date: Fri, 3 Nov 2023 10:25:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 83dc4d9a3990a89ffa6c83e5992f8628e7acfdde
-X-Git-Newrev: fcc4ea595a07f47c86f4d52084dc1317473d2f40
+X-Git-Oldrev: ba1176b23b655474d3dc4c9f48768497c6ffee4d
+X-Git-Newrev: 83dc4d9a3990a89ffa6c83e5992f8628e7acfdde
 X-Patchwork-Hint: ignore
-Message-Id: <20231103093144.000498655A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/civetweb: bump to version 1.16
+Message-Id: <20231103093143.E3958865A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tftpy: fix legal info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcc4ea595a07f47c86f4d52084dc1317473d2f40
+commit: https://git.buildroot.net/buildroot/commit/?id=83dc4d9a3990a89ffa6c83e5992f8628e7acfdde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of LICENSE.md (Additional components Copyright (C) Lua.org,
-PUC-Rio, with MIT license added with
-https://github.com/civetweb/civetweb/commit/82ba5a04c9a1ca980d8dfe00c18e086017e8ab25)
+Fix the following build failure raised since the addition of the package
+in commit 8dd5390be6b210eaac1bf02af2fea84d4c87dcd1:
 
-https://github.com/civetweb/civetweb/releases/tag/v1.16
+>>> python-tftpy 0.8.2 Collecting legal info
+ERROR: No hash found for LICENSE.txt
+
+Fixes:
+ - http://autobuild.buildroot.org/results/9e12e0cd81bdf1a09884a340ca809c194e4dba9b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/civetweb/civetweb.hash | 4 ++--
- package/civetweb/civetweb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-tftpy/python-tftpy.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/civetweb/civetweb.hash b/package/civetweb/civetweb.hash
-index bdf6d77427..0daa6efee2 100644
---- a/package/civetweb/civetweb.hash
-+++ b/package/civetweb/civetweb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  90a533422944ab327a4fbb9969f0845d0dba05354f9cacce3a5005fa59f593b9  civetweb-1.15.tar.gz
--sha256  24d3d2aee56ae3cddcdf3392c1250877818108314233cf15f2bc9eb3ac298934  LICENSE.md
-+sha256  f0e471c1bf4e7804a6cfb41ea9d13e7d623b2bcc7bc1e2a4dd54951a24d60285  civetweb-1.16.tar.gz
-+sha256  bc24af9ffb777f4842f8556ac752efd5ea212c55d2eccfae58cc2c2a24ea1f03  LICENSE.md
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index a299de85e9..633ae21c00 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-tftpy/python-tftpy.mk b/package/python-tftpy/python-tftpy.mk
+index 829bd08b96..fd3c601496 100644
+--- a/package/python-tftpy/python-tftpy.mk
++++ b/package/python-tftpy/python-tftpy.mk
+@@ -7,7 +7,7 @@
+ PYTHON_TFTPY_VERSION = 0.8.2
+ PYTHON_TFTPY_SITE = $(call github,msoulier,tftpy,$(PYTHON_TFTPY_VERSION))
+ PYTHON_TFTPY_LICENSE = MIT
+-PYTHON_TFTPY_LICENSE_FILES = LICENSE.txt
++PYTHON_TFTPY_LICENSE_FILES = LICENSE
+ PYTHON_TFTPY_SETUP_TYPE = setuptools
  
--CIVETWEB_VERSION = 1.15
-+CIVETWEB_VERSION = 1.16
- CIVETWEB_SITE = $(call github,civetweb,civetweb,v$(CIVETWEB_VERSION))
- CIVETWEB_LICENSE = MIT
- CIVETWEB_LICENSE_FILES = LICENSE.md
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
