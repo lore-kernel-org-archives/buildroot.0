@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03501C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 18:44:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72EE1C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 19:08:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C77A4109F;
-	Fri,  3 Nov 2023 18:44:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C77A4109F
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7B8841904;
+	Fri,  3 Nov 2023 19:08:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7B8841904
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JZOaTB1wdmjA; Fri,  3 Nov 2023 18:44:40 +0000 (UTC)
+	with ESMTP id HqtaeNuIjIi7; Fri,  3 Nov 2023 19:08:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3483B410A4;
-	Fri,  3 Nov 2023 18:44:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3483B410A4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CECD91BF57C
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 18:44:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF3F241901;
+	Fri,  3 Nov 2023 19:08:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF3F241901
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C8EA91BF33D
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:08:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A3C0F60AD1
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 18:44:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3C0F60AD1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C0C140232
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:08:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C0C140232
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p2W87DlR-TJJ for <buildroot@lists.busybox.net>;
- Fri,  3 Nov 2023 18:44:33 +0000 (UTC)
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com
- [IPv6:2607:f8b0:4864:20::544])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E24B460AD0
- for <buildroot@buildroot.org>; Fri,  3 Nov 2023 18:44:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E24B460AD0
-Received: by mail-pg1-x544.google.com with SMTP id
- 41be03b00d2f7-5b7f3f470a9so1921457a12.0
- for <buildroot@buildroot.org>; Fri, 03 Nov 2023 11:44:32 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3RMq_ifHVCwD for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 19:08:23 +0000 (UTC)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 14D1A4011B
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 19:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14D1A4011B
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-32f78dcf036so2144588f8f.0
+ for <buildroot@buildroot.org>; Fri, 03 Nov 2023 12:08:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699037071; x=1699641871;
+ d=1e100.net; s=20230601; t=1699038500; x=1699643300;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=U7vuhMeQWqBAST0h8mNm10gEZgya6Wa3H+iuzprxKxs=;
- b=e8My9xzUvwyGMET4YdRLS+5cLYtsIp0ViPPhzXPMmz7TxgQUPLlp2hcnlulLD5457H
- wR0BUT0G8ClaVmIgO0vho1pqnzt3PxlZGGh3KX3aroWriam2bNWiynX0awwlx/EY+mWO
- EblbbMEe0ipqSqFCZreqh48OxdjE6Krug3XVRglJ3bC7OganDdj+RpdxrpsUf++5o5xo
- 5+3iRI9wqW0yw/RSUXhIOKqk1+oKAhlXWgbL8XmiSiOVNG6xKpEAjmmAFxEhVqPFUuPK
- n9tWV5M/XD2zClx3GZSEzrnDYLHZ82CQst5QORuBK3aMA/lrBSI323RAyC4HftiL5ATi
- 4H8Q==
-X-Gm-Message-State: AOJu0YzrPIBhpkg4TIou6lGsKBpGKlqRACuRRpOPfKlPTfQdefZHIWo7
- Km2YH5qzQKu/fQMI16lJntyTSdV1Vf44Q+2IQGfv2jj68mg=
-X-Google-Smtp-Source: AGHT+IFso+fi7o1u92vHK/k7He6yEzs07gv1nBMfROksl/DCBiWB6PHs+MbK0a9T0OY87XP5p3BCzA==
-X-Received: by 2002:a17:90b:617:b0:27d:58a8:fa7f with SMTP id
- gb23-20020a17090b061700b0027d58a8fa7fmr20350498pjb.37.1699037071354; 
- Fri, 03 Nov 2023 11:44:31 -0700 (PDT)
-Received: from DESKTOP-OI0KN2B.lan ([172.56.201.196])
- by smtp.gmail.com with ESMTPSA id
- em16-20020a17090b015000b002800ea6caacsm1596476pjb.1.2023.11.03.11.44.30
+ bh=AOFeMVSoDD0mshaH2hR2cVpLm4GU4iPlZZGxE3yJQQE=;
+ b=AHOhUbhglX+0abZtv0GA9se0Rxsb6lgBKaq5ThNxFIBlLKzNrX22tXm5bWURm1Nt2p
+ mNiVTvSwxnk3SIfS1vzsVK2l6A9Al7/8/+Fh1FBwzoHOT4gVfq6T8Pbp8n2P2+PH80Sv
+ kN/8Zh2OTbZUBJP87/t0ZfKY50H14QXQ4b8AVJfO4t2Y55D1DjRKQrf7PlffiiyKj/RY
+ UzBkaTgwqYuZda8ypfsmUHdWxbSMkuUh5HyuBaAd6rolCmlTfP8IS+w+BGn77ZQl7O51
+ eEchwNk/atequioALDUVLiV+MjiXccspI6y4c3JRPsiClP1a6q1BHKX+F9Do1sL4zMwf
+ aKIg==
+X-Gm-Message-State: AOJu0YzCDQdgsLW/ZG+1t3r79EuGH7RKexfgN+nzdTeDmHKllRKUcIVj
+ DesdYiJngI4DdNcIfu+CpW81wx8gbBk=
+X-Google-Smtp-Source: AGHT+IHEHrf2nVG8MSIi6QzfZwpA0XWlo3V38SXUeUMr34kVE2PzCeJtNDSwYb/51oCshDiJioqa7w==
+X-Received: by 2002:adf:ed4f:0:b0:32d:a366:7073 with SMTP id
+ u15-20020adfed4f000000b0032da3667073mr3755577wro.14.1699038500050; 
+ Fri, 03 Nov 2023 12:08:20 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ g4-20020a05600c310400b004068e09a70bsm3365152wmo.31.2023.11.03.12.08.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Nov 2023 11:44:30 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+ Fri, 03 Nov 2023 12:08:19 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  3 Nov 2023 12:44:28 -0600
-Message-ID: <20231103184428.1029306-1-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.41.0
+Date: Fri,  3 Nov 2023 20:08:12 +0100
+Message-ID: <20231103190812.2484268-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1699037071; x=1699641871;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1699038500; x=1699643300; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=U7vuhMeQWqBAST0h8mNm10gEZgya6Wa3H+iuzprxKxs=;
- b=Oo8NYyl8HrafSL1wBAWLYQhFO/QdPJcIGd2bNU/HJuf8Q0aAoMrLDTZXqBwPnAksS4
- BGbzlKqRyYv3sgkIvyH7XP5HU1EzGuf4FFtaJGNxRbRGPb5geN/THfQ8iQgz2Iyp0Psq
- m5CXUrgjijXoALz6xtrPqnxMW0nN8xYDK+zjI=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Oo8NYyl8
-Subject: [Buildroot] [PATCH 1/1] package/python-django: security bump to
- 4.2.7
+ bh=AOFeMVSoDD0mshaH2hR2cVpLm4GU4iPlZZGxE3yJQQE=;
+ b=Jo4TIpAASqJ3Hu+qlfEaxAVZW35FnjdKXuxVlWmAxUzG035vrv+ctD0kAeHtJ6kUra
+ poR+V68xd+7ZXAEojSmkDS8TCPLCYQNXGurjgF16Ip75Nny8usWML7/QMERhELRFJkZP
+ AKYJM9bqSWaHF9S4Vgsc63GMVyi5ATaCQ+bQ70G+SgSPhy1rl76eLolUu7KcnfeqVpWv
+ +jlmDD1up5bxyJ0VH79hwKfCpIgbGzyezHuPtlxkandfTsyBy7h+b7zVwtNFhPXlq5is
+ TcPRrdI+IHUE9irpJvlQEiHnFcoc7+EalMvW/Vl4h+z5WD71qFIg225qqQZrlMrYsmRM
+ OItw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Jo4TIpAA
+Subject: [Buildroot] [PATCH 1/1] package/brltty: bump to version 6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,59 +93,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Mario Lang <mlang@blind.guru>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
- - Fixed a regression in Django 4.2 that caused a crash of QuerySet.aggregate()
-   with aggregates referencing expressions containing subqueries (#34798).
+- Drop second patch (already in version)
+- Update hash of README (DotPadd added with
+  https://github.com/brltty/brltty/commit/5a9288c6bc3226201146aaafed4885f2bb277739
+  and year updated with
+  https://github.com/brltty/brltty/commit/f21f2199162012a74398afb1265d458933a19291
+  https://github.com/brltty/brltty/commit/68589179695e129ab2b0972071a93b2233115df6)
+- This bump will fix the following build failure raised since bump of
+  gettext-gnu to version 0.22 in commit f6a6e3a8363a32e5443c9eadc2ee047853640d1a
+  thanks to
+  https://github.com/brltty/brltty/commit/31061173fd80c7ed0f83e8d20d62c59dbedcebe0:
 
- - Restored, following a regression in Django 4.2, creating
-   varchar/text_pattern_ops indexes on CharField and TextField with
-   deterministic collations on PostgreSQL (#34932).
+/home/thomas/autobuild/instance-2/output-1/host/bin/msgfmt --output-file zh.mo -- ./zh.po
+/home/thomas/autobuild/instance-2/output-1/host/bin/msgfmt: input file doesn't contain a header entry with a charset specification
+make[3]: *** [Makefile:86: ru.mo] Error 1
 
-Tested on Fedora 39 with:
-./support/testing/run-tests tests.package.test_python_django
+https://github.com/brltty/brltty/blob/BRLTTY-6.6/Documents/ChangeLog
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/29f5ef8a52db4dd717fbaf1ade9d250dfcebe6ff
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                           |  1 -
+ ...unProgramTerminationCommands-used-a-.patch | 29 -------------------
+ package/brltty/brltty.hash                    |  4 +--
+ package/brltty/brltty.mk                      |  2 +-
+ 4 files changed, 3 insertions(+), 33 deletions(-)
+ delete mode 100644 package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b68f4231fa..98c338f9d4 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  ad84c2b9bbebaa26427a2a656fe5ceea  Django-4.2.6.tar.gz
--sha256  08f41f468b63335aea0d904c5729e0250300f6a1907bf293a65499496cdbc68f  Django-4.2.6.tar.gz
-+md5  d7afe6a68b631725a1dac116a7832b10  Django-4.2.7.tar.gz
-+sha256  8e0f1c2c2786b5c0e39fe1afce24c926040fad47c8ea8ad30aaf1188df29fc41  Django-4.2.7.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 79065ab60a..9b710412fa 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 18acf0bba2..1fda294145 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -217,7 +217,6 @@ package/botan/0002-src-build-data-arch-superh.txt-add-sh4-eb-aeb.patch Upstream
+ package/brickd/S70brickd Indent Shellcheck Variables
+ package/bridge-utils/0001-fix-build-on-musl.patch Upstream
+ package/brltty/0001-Fix-linking-error-on-mips64el.patch Upstream
+-package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch Upstream
+ package/brltty/S10brltty Indent Shellcheck Variables
+ package/bsdiff/0001-Add-missing-header-for-u_char.patch Upstream
+ package/bustle/0001-Makefile-fix-pcap-config-call.patch Upstream
+diff --git a/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch b/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
+deleted file mode 100644
+index 0f81254e08..0000000000
+--- a/package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 4503c2cbd3981ba1b50ec7ce287ab48c772b3a7f Mon Sep 17 00:00:00 2001
+-From: Dave Mielke <Dave@Mielke.cc>
+-Date: Sat, 15 Oct 2022 15:20:38 -0400
+-Subject: [PATCH] shell prologue: runProgramTerminationCommands used a bash
+- command. (dm)
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[james.hilliard1@gmail.com: backport from upstream commit
+-4503c2cbd3981ba1b50ec7ce287ab48c772b3a7f]
+----
+- brltty-prologue.sh | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/brltty-prologue.sh b/brltty-prologue.sh
+-index 05b817742..6d1faf983 100644
+---- a/brltty-prologue.sh
+-+++ b/brltty-prologue.sh
+-@@ -102,7 +102,7 @@ runProgramTerminationCommands() {
+-    while [ "${programTerminationCommandCount}" -gt 0 ]
+-    do
+-       set -- $(getVariable "programTerminationCommand${programTerminationCommandCount}")
+--      let "programTerminationCommandCount -= 1"
+-+      programTerminationCommandCount=$((programTerminationCommandCount - 1))
+- 
+-       local process="${1}"
+-       local directory="${2}"
+--- 
+-2.34.1
+-
+diff --git a/package/brltty/brltty.hash b/package/brltty/brltty.hash
+index 9fc63714bc..9b707fc1c2 100644
+--- a/package/brltty/brltty.hash
++++ b/package/brltty/brltty.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2f173535291ba39b5a9fc8d80c349234333d92042d95d6dd88796c98a02f316b  brltty-6.5.tar.xz
++sha256  ab11cfc5fbd7ef0ec876ffea7e131e424b2fd004b6158064e1a2e46412825529  brltty-6.6.tar.xz
+ sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  LICENSE-LGPL
+-sha256  c00c876cb4581a6b54fcc176f7e694896e5b52c4b015615566a787e8bc89fe69  README
++sha256  72740317768530c60046c591160d4552afb3ac49657b04c7b8452c1bbe7b834e  README
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index dc5a38cddb..f00a18cc6f 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 4.2.6
-+PYTHON_DJANGO_VERSION = 4.2.7
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/23/7b/f47d10d870fabfcaa1fba403460a4e482ab7dbba4d715d43981d1f8c8d85
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/5c/62/0c6ab2f3ac9a242b4562b6be1c418685fa7d1ccb8ca302cdb97e0b23cf4b
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-BRLTTY_VERSION = 6.5
++BRLTTY_VERSION = 6.6
+ BRLTTY_SOURCE = brltty-$(BRLTTY_VERSION).tar.xz
+ BRLTTY_SITE = http://brltty.com/archive
+ BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
 -- 
-2.41.0
+2.42.0
 
 _______________________________________________
 buildroot mailing list
