@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B90A1C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 19:55:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21E1CC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 20:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60DFD4042B;
-	Fri,  3 Nov 2023 19:55:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60DFD4042B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 99E2B403E9;
+	Fri,  3 Nov 2023 20:11:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99E2B403E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uS459Dg08Up4; Fri,  3 Nov 2023 19:55:41 +0000 (UTC)
+	with ESMTP id msYZ056qm1Rk; Fri,  3 Nov 2023 20:11:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D26B40482;
-	Fri,  3 Nov 2023 19:55:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D26B40482
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 224171BF357
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:54:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45CBA40441;
+	Fri,  3 Nov 2023 20:11:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45CBA40441
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 14F6E1BF33D
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 20:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0885C60B31
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0885C60B31
+ by smtp2.osuosl.org (Postfix) with ESMTP id E09F440441
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 20:11:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E09F440441
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YHTfC73xfizt for <buildroot@lists.busybox.net>;
- Fri,  3 Nov 2023 19:54:41 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E261A60B2C
- for <buildroot@buildroot.org>; Fri,  3 Nov 2023 19:54:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E261A60B2C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 32EBAE0003;
- Fri,  3 Nov 2023 19:54:39 +0000 (UTC)
-Date: Fri, 3 Nov 2023 20:54:38 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231103205438.730b1dc1@windsurf>
-In-Reply-To: <20231103190812.2484268-1-fontaine.fabrice@gmail.com>
-References: <20231103190812.2484268-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hMuysp1J3oLN for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 20:11:37 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9FCB8403E9
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 20:11:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FCB8403E9
+Received: from fli4l.lan.fli4l (p54a1b8f0.dip0.t-ipconnect.de [84.161.184.240])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 72F24A4C05AD;
+ Fri,  3 Nov 2023 21:11:31 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53036)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
+ (envelope-from <bernd@kuhls.net>) id 1qz0Vv-0007V6-0e;
+ Fri, 03 Nov 2023 21:11:31 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Fri,  3 Nov 2023 21:11:31 +0100
+Message-Id: <20231103201131.80826-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699041279;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=43C/D8r+axfhHBISdbstbjfj3Nve2QrV7qLkLjhFE+E=;
- b=AbZJGo9NW7KQuzaiJSJQ4DQWpHfUY8KoeLd9EwBE7E4Pn9Gu0oz4HyMqgwjUZ8P8db2RBo
- qwZ1J8cZpFqZN1tfavuK/1HJ7zB0YaJL/wrc8WKHboXhRMY8l/EXtKMkqVPcjkz71jPfBV
- q0Wf68oQ9VyA5Yvn1kF+BgLRyH9c+ghTHccrmS2xOuK5sZXd3FNH3OkSzbhN3Kd6HtRTmP
- kj/yX8w0IcjBgbhEaqndyqFwSQj6PkJpsH+pVBSUwS9xRfTqdHJtUrjCz9O1XP1pWhv8/Z
- vEUtaWI/ItI6aCWXZFAD+SVH4QGTIQKcuFA7WRFQ7O301novn+93xKZ9+nhV8A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AbZJGo9N
-Subject: Re: [Buildroot] [PATCH 1/1] package/brltty: bump to version 6.6
+ d=kuhls.net; 
+ s=kas202306131828; t=1699042291;
+ bh=iELg3Flz5n0Mmhr7Q+0UqJ+rVeBL80va9sOEGhPYbhw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=IzfuSq2O4GWjOAt9xJ6CzYQ703cUaus46tqQcntAg0t/dH6wJxY/nZePFbxtiMJ8H
+ epr6UvUuR7849nxEf9/nbQ6En7gYqhreamY88DORphoZx0p0QX99w9LhGvCzP4F2hX
+ nUbPgTbfT8KRu42Qvw0R3Qi9SSpDBOObbILdkSvq93c/FH9jCAigE6sm3gkgosiUGh
+ ExAHufXN4Tz4Tlx7uZ6aVm51mNG7S542+SRkUA6nk6ANf3V3nKb9vlNikn4jsjYBP7
+ IUDNWLsr1/BXx7CWixKVzC0/dc2SyD1pubs9yNUkKIRMAuFNpwckHTpelnnxE+sMz0
+ 2C81My8rAUbsw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=IzfuSq2O
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: bump version to
+ 20231030
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,53 +75,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mario Lang <mlang@blind.guru>, buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  3 Nov 2023 20:08:12 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Updated license hash due to various commits:
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/WHENCE
 
-> - Drop second patch (already in version)
-> - Update hash of README (DotPadd added with
->   https://github.com/brltty/brltty/commit/5a9288c6bc3226201146aaafed4885f2bb277739
->   and year updated with
->   https://github.com/brltty/brltty/commit/f21f2199162012a74398afb1265d458933a19291
->   https://github.com/brltty/brltty/commit/68589179695e129ab2b0972071a93b2233115df6)
-> - This bump will fix the following build failure raised since bump of
->   gettext-gnu to version 0.22 in commit f6a6e3a8363a32e5443c9eadc2ee047853640d1a
->   thanks to
->   https://github.com/brltty/brltty/commit/31061173fd80c7ed0f83e8d20d62c59dbedcebe0:
-> 
-> /home/thomas/autobuild/instance-2/output-1/host/bin/msgfmt --output-file zh.mo -- ./zh.po
-> /home/thomas/autobuild/instance-2/output-1/host/bin/msgfmt: input file doesn't contain a header entry with a charset specification
-> make[3]: *** [Makefile:86: ru.mo] Error 1
-> 
-> https://github.com/brltty/brltty/blob/BRLTTY-6.6/Documents/ChangeLog
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/29f5ef8a52db4dd717fbaf1ade9d250dfcebe6ff
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .checkpackageignore                           |  1 -
->  ...unProgramTerminationCommands-used-a-.patch | 29 -------------------
->  package/brltty/brltty.hash                    |  4 +--
->  package/brltty/brltty.mk                      |  2 +-
->  4 files changed, 3 insertions(+), 33 deletions(-)
->  delete mode 100644 package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/linux-firmware/linux-firmware.hash | 4 ++--
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 31bbfddfaa..6722aa14c6 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  88d46c543847ee3b03404d4941d91c92974690ee1f6fdcbee9cef3e5f97db688  linux-firmware-20230804.tar.xz
++sha256  c98d200fc4a3120de1a594713ce34e135819dff23e883a4ed387863ba25679c7  linux-firmware-20231030.tar.xz
+ 
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -36,6 +36,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  0f87f8f67de39828d8e59c69369f850e0a80de638795e22ddfdd1f7f31cdf889  WHENCE
++sha256  697134859b663bc110d57275a7a7862bba21c4425266aac8c62bee18202aac20  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 0cd1f30c16..c2cf0fec19 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 20230804
++LINUX_FIRMWARE_VERSION = 20231030
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
