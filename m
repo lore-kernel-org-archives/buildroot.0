@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C3D1C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 09:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C78CEC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 09:16:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B12AB6FBA6;
-	Fri,  3 Nov 2023 09:15:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B12AB6FBA6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6AA8B61327;
+	Fri,  3 Nov 2023 09:16:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AA8B61327
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OLd7cxsvYnyF; Fri,  3 Nov 2023 09:15:06 +0000 (UTC)
+	with ESMTP id 8cbwAG1Z_FfB; Fri,  3 Nov 2023 09:16:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B1BB61327;
-	Fri,  3 Nov 2023 09:15:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B1BB61327
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7D7291BF27E
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 09:15:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB54D61331;
+	Fri,  3 Nov 2023 09:16:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB54D61331
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F80D1BF27E
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 09:16:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54BFD433DD
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 09:15:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54BFD433DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47FFC61331
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 09:16:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47FFC61331
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CwAm3cBS1LUY for <buildroot@lists.busybox.net>;
- Fri,  3 Nov 2023 09:14:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87BAA43090
- for <buildroot@buildroot.org>; Fri,  3 Nov 2023 09:14:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87BAA43090
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 71E158655D; Fri,  3 Nov 2023 09:14:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 3 Nov 2023 10:13:40 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6da2b51a66a848cc9a7346302227fd4740fc7e67
-X-Git-Newrev: 72de7890233026f020de4aba3e8e86c156e55773
-X-Patchwork-Hint: ignore
-Message-Id: <20231103091458.71E158655D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/imx-mkimage: bump version to
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b6CIC5F-zsJN for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 09:16:31 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0FEF861327
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 09:16:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FEF861327
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A7C9260004;
+ Fri,  3 Nov 2023 09:16:27 +0000 (UTC)
+Date: Fri, 3 Nov 2023 10:16:26 +0100
+To: =?UTF-8?B?U8OpYmFzdGllbg==?= Szymanski <sebastien.szymanski@armadeus.com>
+Message-ID: <20231103101626.70a83c47@windsurf>
+In-Reply-To: <20231011110932.4425-2-sebastien.szymanski@armadeus.com>
+References: <20231011110932.4425-1-sebastien.szymanski@armadeus.com>
+ <20231011110932.4425-2-sebastien.szymanski@armadeus.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699002988;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uuS3LyCQvj4skYZBXpS1kcQGhNyWI/wrPycCSx4ZjEw=;
+ b=jNqI1Fu5oyMliY2N7lgdKnYvAGiAcfVx9bPVZIhP8VVoyHvgfSq0stW0cZwdFiZT2dVgMI
+ SYstSTfQG6v997kO2CnUjO0gMN+YIdiAO8KnGZgGKU8xuyMGMoa5JclrZdDMIdkyXXZowY
+ S5OQDMU4QMbsWhKFrFNhAsdvem05Sfsz0xvR3YeZIZ4oH0TPlIhuLZa+3yLYx8Bl46TsJd
+ GFAYVI5skpXAhFeh0gO1DTW0j5n/t31UA61ufKrNnOevZj8b0d5aXyaEKGKC7lyu5pDHAk
+ yOwappAn1xlGa48LFQz5v8ge2yna0F540STrb/Z0HT/cgHY9k4TMmtdmQhrU1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=jNqI1Fu5
+Subject: Re: [Buildroot] [PATCH 1/4] package/imx-mkimage: bump version to
  lf-6.1.36-2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,281 +78,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8514175168609366893=="
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ Erik Larsson <karl.erik.larsson@gmail.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>, Fabio Estevam <festevam@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8514175168609366893==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=72de7890233026f020de4aba3e8e86c156e55773
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump imx-mkimage to the latest version to gain i.MX9 support.
-
-Patch 0001 and 0004 are merged upstream:
-https://github.com/nxp-imx/imx-mkimage/commit/ff23c4fd84bb88d73b52a0ccad733522d2faa477
-https://github.com/nxp-imx/imx-mkimage/commit/bce82912c8206edd0cc97af8c6b30240229fae7f
-
-Patch 0002 is no more needed, BUILD_LDFLAGS var is now available:
-https://github.com/nxp-imx/imx-mkimage/commit/8185a000a7c6af562e773da812c6c8d141815531
-
-Renumber the remaining patch.
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                |  5 +-
- ...-for-overriding-BL32-and-BL33-not-only-BL.patch | 60 ---------------------
- ...on.patch => 0001-Add-unused-fake-version.patch} |  0
- .../0002-Add-LDFLAGS-to-link-step.patch            | 26 ---------
- ...support-for-overriding-BL31-BL32-and-BL33.patch | 61 ----------------------
- package/imx-mkimage/imx-mkimage.hash               |  4 +-
- package/imx-mkimage/imx-mkimage.mk                 |  9 ++--
- 7 files changed, 8 insertions(+), 157 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index d956951a87..45f175cd55 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -573,10 +573,7 @@ package/ifupdown-scripts/nfs_check Shellcheck
- package/ifupdown/0001-archcommon-define-GNU-only-FNM_EXTMATCH-to-zero-on-n.patch Upstream
- package/ifupdown/0001-dont-use-dpkg-architecture.patch Upstream
- package/igd2-for-linux/S99upnpd Indent Shellcheck Variables
--package/imx-mkimage/0001-Add-support-for-overriding-BL32-and-BL33-not-only-BL.patch Upstream
--package/imx-mkimage/0002-Add-LDFLAGS-to-link-step.patch Upstream
--package/imx-mkimage/0003-Add-unused-fake-version.patch Upstream
--package/imx-mkimage/0004-Add-support-for-overriding-BL31-BL32-and-BL33.patch Upstream
-+package/imx-mkimage/0001-Add-unused-fake-version.patch Upstream
- package/inadyn/S70inadyn Indent NotExecutable
- package/initscripts/init.d/rcK ConsecutiveEmptyLines EmptyLastLine Shellcheck
- package/initscripts/init.d/rcS ConsecutiveEmptyLines EmptyLastLine Shellcheck
-diff --git a/package/imx-mkimage/0001-Add-support-for-overriding-BL32-and-BL33-not-only-BL.patch b/package/imx-mkimage/0001-Add-support-for-overriding-BL32-and-BL33-not-only-BL.patch
-deleted file mode 100644
-index 66891ac8e7..0000000000
---- a/package/imx-mkimage/0001-Add-support-for-overriding-BL32-and-BL33-not-only-BL.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From a4993eda7483cd01662f3f3e2965e7a568cb7178 Mon Sep 17 00:00:00 2001
--From: Erik Larsson <erik.larsson@combitech.se>
--Date: Thu, 8 Mar 2018 19:04:37 +0100
--Subject: [PATCH] Add support for overriding BL32 and BL33 not only BL31
--
--Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
--Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
--Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-----
-- iMX8M/mkimage_fit_atf.sh | 16 ++++++++--------
-- 1 file changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/iMX8M/mkimage_fit_atf.sh b/iMX8M/mkimage_fit_atf.sh
--index 4f2b3f3..0444ff0 100755
----- a/iMX8M/mkimage_fit_atf.sh
--+++ b/iMX8M/mkimage_fit_atf.sh
--@@ -18,23 +18,23 @@ if [ ! -f $BL31 ]; then
-- 	echo "ERROR: BL31 file $BL31 NOT found" >&2
-- 	exit 0
-- else
---	echo "bl31.bin size: " >&2
---	ls -lct bl31.bin | awk '{print $5}' >&2
--+	echo "$BL31 size: " >&2
--+	ls -lct $BL31 | awk '{print $5}' >&2
-- fi
-- 
---BL32="tee.bin"
--+[ -z "$BL32" ] && BL32="tee.bin"
-- LOADABLES="\"atf-1\""
-- 
-- if [ ! -f $BL32 ]; then
-- 	BL32=/dev/null
-- else
-- 	echo "Building with TEE support, make sure your bl31 is compiled with spd. If you do not want tee, please delete tee.bin" >&2
---	echo "tee.bin size: " >&2
---	ls -lct tee.bin | awk '{print $5}' >&2
--+	echo "$BL32 size: " >&2
--+	ls -lct $BL32 | awk '{print $5}' >&2
-- 	LOADABLES="$LOADABLES, \"tee-1\""
-- fi
-- 
---BL33="u-boot-nodtb.bin"
--+[ -z "$BL33" ] && BL33="u-boot-nodtb.bin"
-- DEK_BLOB="dek_blob_fit_dummy.bin"
-- 
-- if [ ! -f $DEK_BLOB ]; then
--@@ -49,8 +49,8 @@ if [ ! -f $BL33 ]; then
-- 	exit 0
-- else
-- 
---	echo "u-boot-nodtb.bin size: " >&2
---	ls -lct u-boot-nodtb.bin | awk '{print $5}' >&2
--+	echo "$BL33 size: " >&2
--+	ls -lct $BL33 | awk '{print $5}' >&2
-- fi
-- 
-- for dtname in $*
---- 
--2.31.1
--
-diff --git a/package/imx-mkimage/0003-Add-unused-fake-version.patch b/package/imx-mkimage/0001-Add-unused-fake-version.patch
-similarity index 100%
-rename from package/imx-mkimage/0003-Add-unused-fake-version.patch
-rename to package/imx-mkimage/0001-Add-unused-fake-version.patch
-diff --git a/package/imx-mkimage/0002-Add-LDFLAGS-to-link-step.patch b/package/imx-mkimage/0002-Add-LDFLAGS-to-link-step.patch
-deleted file mode 100644
-index 086e634d23..0000000000
---- a/package/imx-mkimage/0002-Add-LDFLAGS-to-link-step.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From b7ace564b419a05a375a205fd4df8933716b241a Mon Sep 17 00:00:00 2001
--From: Erik Larsson <erik.larsson@combitech.se>
--Date: Tue, 6 Mar 2018 12:28:39 +0100
--Subject: [PATCH] Add LDFLAGS to link step
--
--Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
-----
-- iMX8M/soc.mak | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
--index 4bfdc37..806b805 100644
----- a/iMX8M/soc.mak
--+++ b/iMX8M/soc.mak
--@@ -84,7 +84,7 @@ FW_DIR = imx-boot/imx-boot-tools/$(PLAT)
-- $(MKIMG): mkimage_imx8.c
-- 	@echo "PLAT="$(PLAT) "HDMI="$(HDMI)
-- 	@echo "Compiling mkimage_imx8"
---	$(CC) $(CFLAGS) mkimage_imx8.c -o $(MKIMG) -lz
--+	$(CC) $(CFLAGS) mkimage_imx8.c -o $(MKIMG) $(LDFLAGS) -lz
-- 
-- lpddr4_imem_1d = lpddr4_pmu_train_1d_imem$(LPDDR_FW_VERSION).bin
-- lpddr4_dmem_1d = lpddr4_pmu_train_1d_dmem$(LPDDR_FW_VERSION).bin
---- 
--2.31.1
--
-diff --git a/package/imx-mkimage/0004-Add-support-for-overriding-BL31-BL32-and-BL33.patch b/package/imx-mkimage/0004-Add-support-for-overriding-BL31-BL32-and-BL33.patch
-deleted file mode 100644
-index 494aaf1566..0000000000
---- a/package/imx-mkimage/0004-Add-support-for-overriding-BL31-BL32-and-BL33.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From b1e77d8ccabc6a3910ede2441ff567326291a355 Mon Sep 17 00:00:00 2001
--From: Thomas Perrot <thomas.perrot@bootlin.com>
--Date: Tue, 26 Apr 2022 15:10:04 +0200
--Subject: [PATCH] Add support for overriding BL31, BL32 and BL33
--
--Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
-----
-- iMX8M/print_fit_hab.sh | 14 +++++++++-----
-- 1 file changed, 9 insertions(+), 5 deletions(-)
--
--diff --git a/iMX8M/print_fit_hab.sh b/iMX8M/print_fit_hab.sh
--index b915115..dbc28f2 100755
----- a/iMX8M/print_fit_hab.sh
--+++ b/iMX8M/print_fit_hab.sh
--@@ -1,12 +1,16 @@
-- #!/bin/bash
-- 
---BL32="tee.bin"
---
-- let fit_off=$1
-- 
-- # keep backward compatibility
-- [ -z "$TEE_LOAD_ADDR" ] && TEE_LOAD_ADDR="0xfe000000"
-- 
--+[ -z "$BL31" ] && BL31="bl31.bin"
--+
--+[ -z "$BL32" ] && BL32="tee.bin"
--+
--+[ -z "$BL33" ] && BL33="u-boot-nodtb.bin"
--+
-- if [ -z "$ATF_LOAD_ADDR" ]; then
-- 	echo "ERROR: BL31 load address is not set" >&2
-- 	exit 0
--@@ -26,7 +30,7 @@ else
-- 	let uboot_sign_off=$((fit_off - 0x8000 - ivt_off + 0x3000))
-- fi
-- 
---let uboot_size=$(ls -lct u-boot-nodtb.bin | awk '{print $5}')
--+let uboot_size=$(ls -lct $BL33 | awk '{print $5}')
-- let uboot_load_addr=0x40200000
-- 
-- let last_sign_off=$(((uboot_sign_off + uboot_size + 3) & ~3))
--@@ -64,13 +68,13 @@ done
-- 
-- let atf_sign_off=$((last_sign_off))
-- let atf_load_addr=$ATF_LOAD_ADDR
---let atf_size=$(ls -lct bl31.bin | awk '{print $5}')
--+let atf_size=$(ls -lct $BL31 | awk '{print $5}')
-- 
-- if [ ! -f $BL32 ]; then
-- 	let tee_size=0x0
-- 	let tee_sign_off=$((atf_sign_off + atf_size))
-- else
---	let tee_size=$(ls -lct tee.bin | awk '{print $5}')
--+	let tee_size=$(ls -lct $BL32 | awk '{print $5}')
-- 
-- 	let tee_sign_off=$(((atf_sign_off + atf_size + 3) & ~3))
-- 	let tee_load_addr=$TEE_LOAD_ADDR
---- 
--2.31.1
--
-diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
-index 8346fd64b1..034b3d02ed 100644
---- a/package/imx-mkimage/imx-mkimage.hash
-+++ b/package/imx-mkimage/imx-mkimage.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  593bd94aac027844bc58c62aae55557c14e1f8a99e68ba235a46f083759df3d4  imx-mkimage-lf-5.10.72_2.2.0.tar.gz
--sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-+sha256  fd538dc571ce06609d6a4d9ee8cfd7d0c93ec4685afa9f1079e5a5931ad3bdbc  imx-mkimage-lf-6.1.36_2.1.0.tar.gz
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  LICENSE
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index 54c948e0d3..6e70a946bf 100644
---- a/package/imx-mkimage/imx-mkimage.mk
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--IMX_MKIMAGE_VERSION = lf-5.10.72_2.2.0
-+IMX_MKIMAGE_VERSION = lf-6.1.36_2.1.0
- IMX_MKIMAGE_SITE = $(call github,nxp-imx,imx-mkimage,$(IMX_MKIMAGE_VERSION))
- IMX_MKIMAGE_LICENSE = GPL-2.0+
--IMX_MKIMAGE_LICENSE_FILES = COPYING
-+IMX_MKIMAGE_LICENSE_FILES = LICENSE
- HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
- 
- ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP),y)
-@@ -15,7 +15,8 @@ ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLA
- define HOST_IMX_MKIMAGE_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$(HOST_CFLAGS) -std=c99" \
--		-C $(@D)/iMX8M -f soc.mak mkimage_imx8
-+		BUILD_LDFLAGS="$(HOST_LDFLAGS)" \
-+		-C $(@D)/iMX8M SOC_DIR=iMX8M -f soc.mak mkimage_imx8
- endef
- define HOST_IMX_MKIMAGE_INSTALL_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
-@@ -23,7 +24,7 @@ define HOST_IMX_MKIMAGE_INSTALL_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/iMX8M/print_fit_hab.sh $(HOST_DIR)/bin/print_fit_hab.sh
- endef
- else
--# i.MX8 and i.MX8X
-+# i.MX8, i.MX8X and i.MX9
- define HOST_IMX_MKIMAGE_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$(HOST_CFLAGS) -std=c99" \
-
---===============8514175168609366893==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8514175168609366893==--
+SGVsbG8gU8OpYmFzdGllbiwKCk9uIFdlZCwgMTEgT2N0IDIwMjMgMTM6MDk6MjkgKzAyMDAKU8Op
+YmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPiB3cm90
+ZToKCj4gQnVtcCBpbXgtbWtpbWFnZSB0byB0aGUgbGF0ZXN0IHZlcnNpb24gdG8gZ2FpbiBpLk1Y
+OSBzdXBwb3J0Lgo+IAo+IFBhdGNoIDAwMDEgYW5kIDAwMDQgYXJlIG1lcmdlZCB1cHN0cmVhbToK
+PiBodHRwczovL2dpdGh1Yi5jb20vbnhwLWlteC9pbXgtbWtpbWFnZS9jb21taXQvZmYyM2M0ZmQ4
+NGJiODhkNzNiNTJhMGNjYWQ3MzM1MjJkMmZhYTQ3Nwo+IGh0dHBzOi8vZ2l0aHViLmNvbS9ueHAt
+aW14L2lteC1ta2ltYWdlL2NvbW1pdC9iY2U4MjkxMmM4MjA2ZWRkMGNjOTdhZjhjNmIzMDI0MDIy
+OWZhZTdmCj4gCj4gUGF0Y2ggMDAwMiBpcyBubyBtb3JlIG5lZWRlZCwgQlVJTERfTERGTEFHUyB2
+YXIgaXMgbm93IGF2YWlsYWJsZToKPiBodHRwczovL2dpdGh1Yi5jb20vbnhwLWlteC9pbXgtbWtp
+bWFnZS9jb21taXQvODE4NWEwMDBhN2M2YWY1NjJlNzczZGE4MTJjNmM4ZDE0MTgxNTUzMQo+IAo+
+IFNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tp
+QGFybWFkZXVzLmNvbT4KCkkndmUgYXBwbGllZCwgYWZ0ZXIgZG9pbmcgc29tZSBmaXhlcy4KCj4g
+LS0tCj4gIC4uLm92ZXJyaWRpbmctQkwzMi1hbmQtQkwzMy1ub3Qtb25seS1CTC5wYXRjaCB8IDYw
+IC0tLS0tLS0tLS0tLS0tLS0tLQo+ICAuLi4vMDAwMi1BZGQtTERGTEFHUy10by1saW5rLXN0ZXAu
+cGF0Y2ggICAgICAgfCAyNiAtLS0tLS0tLQo+ICAuLi5ydC1mb3Itb3ZlcnJpZGluZy1CTDMxLUJM
+MzItYW5kLUJMMzMucGF0Y2ggfCA2MSAtLS0tLS0tLS0tLS0tLS0tLS0tCj4gIHBhY2thZ2UvaW14
+LW1raW1hZ2UvaW14LW1raW1hZ2UuaGFzaCAgICAgICAgICB8ICAyICstCj4gIHBhY2thZ2UvaW14
+LW1raW1hZ2UvaW14LW1raW1hZ2UubWsgICAgICAgICAgICB8ICA3ICsrLQo+ICA1IGZpbGVzIGNo
+YW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMTUxIGRlbGV0aW9ucygtKQo+ICBkZWxldGUgbW9kZSAx
+MDA2NDQgcGFja2FnZS9pbXgtbWtpbWFnZS8wMDAxLUFkZC1zdXBwb3J0LWZvci1vdmVycmlkaW5n
+LUJMMzItYW5kLUJMMzMtbm90LW9ubHktQkwucGF0Y2gKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBh
+Y2thZ2UvaW14LW1raW1hZ2UvMDAwMi1BZGQtTERGTEFHUy10by1saW5rLXN0ZXAucGF0Y2gKPiAg
+ZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvaW14LW1raW1hZ2UvMDAwNC1BZGQtc3VwcG9ydC1m
+b3Itb3ZlcnJpZGluZy1CTDMxLUJMMzItYW5kLUJMMzMucGF0Y2gKClRoZSByZW1haW5pbmcgcGF0
+Y2ggMDAwMyBzaG91bGQgaGF2ZSBiZWVuIHJlbnVtYmVyZWQgMDAwMSwgYW5kIHRoZQpyZW1vdmVk
+IHBhdGNoZXMgMDAwMSwgMDAwMiBhbmQgMDAwNCBzaG91bGQgaGF2ZSBiZWVuIGRyb3BwZWQgZnJv
+bSB0aGUKLmNoZWNrcGFja2FnZWlnbm9yZSBmaWxlLgoKPiAgSU1YX01LSU1BR0VfTElDRU5TRSA9
+IEdQTC0yLjArCj4gIElNWF9NS0lNQUdFX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCgpUaGlzIHdh
+cyBubyBsb25nZXIgY29ycmVjdCBhcyB0aGUgZmlsZSBoYXMgYmVlbiByZW5hbWVkICJMSUNFTlNF
+Iiwgc28KdGhlIGxlZ2FsIGluZm9ybWF0aW9uIHdhcyBub3Qgd29ya2luZy4KCkluIGdlbmVyYWws
+IHBsZWFzZSB0cnkgdG8gcnVuICJtYWtlIGNoZWNrLXBhY2thZ2UiIGFuZCAibWFrZQo8cGtnPi1s
+ZWdhbC1pbmZvIiB0byB2ZXJpZnkgdGhpcyBzb3J0IG9mIGRldGFpbHMuCgpQdXNoZWQgd2l0aCB0
+aG9zZSBjaGFuZ2VzLiBUaGFua3MgYSBsb3QhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmks
+IGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdp
+bmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
