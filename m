@@ -4,86 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F9B9C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 00:07:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05674C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 06:36:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F8BC703C1;
-	Fri,  3 Nov 2023 00:07:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F8BC703C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id F090A6F529;
+	Fri,  3 Nov 2023 06:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F090A6F529
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hPDQTENPWRIl; Fri,  3 Nov 2023 00:07:21 +0000 (UTC)
+	with ESMTP id N0JNK3oEBlnS; Fri,  3 Nov 2023 06:36:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C70977062E;
-	Fri,  3 Nov 2023 00:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C70977062E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AE7791BF28E
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 00:07:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A915A707A7;
+	Fri,  3 Nov 2023 06:36:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A915A707A7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BD08D1BF340
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 06:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C0348512B
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 00:07:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C0348512B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 673104359A
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 06:36:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 673104359A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YJeJiDLmeSpi for <buildroot@lists.busybox.net>;
- Fri,  3 Nov 2023 00:07:02 +0000 (UTC)
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com
- [IPv6:2607:f8b0:4864:20::441])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0E1DC85080
- for <buildroot@buildroot.org>; Fri,  3 Nov 2023 00:07:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E1DC85080
-Received: by mail-pf1-x441.google.com with SMTP id
- d2e1a72fcca58-694ed847889so1550090b3a.2
- for <buildroot@buildroot.org>; Thu, 02 Nov 2023 17:07:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698970021; x=1699574821;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=zuk8dfFFVIt5wweOnfmeqN9m0V6z4MUcYDMLRDlxvuE=;
- b=fW7eD7X/Y9w7RhMFPOGIJ/WcVFo7BMe7LY0564ZQ/RUjzKrVf/kFJdiRvk3cUU2y41
- sXOTny4PNPOEsqt1BqpetHBh9qp6SCIUlyAFxhKo9VwaR3aviVyH8+xyOzijYn1F9FAZ
- vjEh8DttfSOfWxRwYxcOo+kn48Gd//P20RQkN45dbLiFL8ZaqFLA0gk/a0lFjKZqhihR
- fOXkWk2ptMQ/JeSYjjn8wCWUMiwBYN7sPMk/oErfcqt1kBV/h3XDPkax+io3T7A0hPlV
- qdve0e+cMxwfiqPUdGbC3JScc+joMvU0UTTARQzeu4Lgqvzt+DwnC1fu9Ae4Sc6beLu0
- PJug==
-X-Gm-Message-State: AOJu0YybB6pWb5FUCMUuUIU7cFEJwKSuKFlt3pOqsgpTnFqjJ1bhcfvI
- Uk1VWJ0z8k5uFVMMH8yzgfXp5CP0VZUF8MhPPSG6leuNy88=
-X-Google-Smtp-Source: AGHT+IG1GzkEGZL4T6gZ6qWjiLmgNqELdHzNXjB2eTvV42ZaALBl6cNGJMmKxaCct17I5Uhwwjrbjg==
-X-Received: by 2002:a05:6a20:7f87:b0:15b:c800:48af with SMTP id
- d7-20020a056a207f8700b0015bc80048afmr22477833pzj.23.1698970020967; 
- Thu, 02 Nov 2023 17:07:00 -0700 (PDT)
-Received: from DESKTOP-OI0KN2B.lan ([172.56.201.196])
- by smtp.gmail.com with ESMTPSA id
- z14-20020aa785ce000000b006b65b0f903csm272525pfn.192.2023.11.02.17.06.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Nov 2023 17:07:00 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu,  2 Nov 2023 18:06:50 -0600
-Message-ID: <20231103000650.195673-2-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231103000650.195673-1-adam.duskett@amarulasolutions.com>
-References: <20231103000650.195673-1-adam.duskett@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FEY3Vp0FDbfd for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 06:36:12 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A50C435A4
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 06:36:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A50C435A4
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 17B661C0002
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 06:36:10 +0000 (UTC)
 MIME-Version: 1.0
+To: buildroot@buildroot.org
+Date: Fri, 03 Nov 2023 06:36:10 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20231103063617.673104359A@smtp2.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1698970021; x=1699574821;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=zuk8dfFFVIt5wweOnfmeqN9m0V6z4MUcYDMLRDlxvuE=;
- b=rRuUcd3NQdvoRFrt2vu0K8wTn8gtmNxfKZQSlTlOmIo4vhkF3vZ3L8WBRWoiEunsMo
- wSCUynL5I64ebaZ3yREGT/iPJwmu3CB/Wt4ceZY9m8DqncCYto7+BPRoOM4lbuGIIdhc
- wbqBsNC5SI5VcErRnVMekF1hO/ADtvm9vISBE=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=rRuUcd3N
-Subject: [Buildroot] [PATCH] package/nodejs: bump version to 20.9.0
+ d=bootlin.com; s=gm1; 
+ t=1698993370; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=LtcRD3G6dJGbdKOUAPPDqFv7BYNtnP47eTCeivwWHtQ=;
+ b=HqdXO2zTaPwfk1yMYMCdS1iEf26T31zjnE5QVL9qBAcmyC/ronvdGQxUsbhY1JrrQqSxGR
+ mduq+oQCXvA4wQI6npR+4aZYlyQtY4Uj80NJ3sMzWAJmVeInF6YQ7k3GVJ9/m6mygj6POf
+ an4TeFWR/EEVqSeGbvK3pWHO4WUrlYpoeEg4/7Yr18G5Ys7IP1uY5QhpWe435tDYCAaUQ+
+ cn/prHGUvQKZT0VrvDHYxwSSq3MPhN30CiI64k2k8JxXl1RN4peFDLG2BIJ98roukPn4Al
+ jj4oySdxJFPChLA0DNqHBbyZe+gb78PgMho8fbXZ0jv/JcjVE1UAVkx74HBJ2w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HqdXO2zT
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-11-02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,281 +69,191 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Martin Bark <martin@barkynet.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Daniel Price <daniel.price@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Refactor 0001-add-qemu-wrapper-support.patch for 20.9.0
+Hello,
 
-- NodeJS now requires GCC 10.1 header. However, as there is no
-  BR2_TOOLCHAIN_GCC_AT_LEAST_10_1, we round up to BR2_TOOLCHAIN_GCC_AT_LEAST_11.
+Autobuild statistics for 2023-11-02
+===================================
 
-- Drop the --without-dtrace and --without-etw config options as they no longer
-  exist.
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  8  |  9  |  0  | 17  |
+  2023.08.x  | 12  |  9  |  0  | 21  |
+    master   | 46  | 54  |  3  | 103 |
 
-- Update support/testing/tests/package/test_nodejs.py to use
-  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN, otherwise the test fails as the
-  gcc version selected will be 7.
+Classification of failures by reason for master
+-----------------------------------------------
 
-- Update the hash file for LICENSE.txt due to numerous changes, such
-  as the addition of new libraries and updated dates. No new license
-  types are added.
+                       unknown | 6 
+              gcc-final-12.3.0 | 5 
+                flashrom-1.3.0 | 4 
+                   bird-2.0.12 | 3 
+glibc-2.38-27-g750a45a78390... | 3 
+                elfutils-0.189 | 2 
+         gobject-introspection | 2 
+              libarchive-3.7.2 | 2 
+                   openrc-0.51 | 2 
+package/python-tftpy/python... | 2 
+                    atop-2.9.0 | 1 
+check-11970a7e112dfe243a2e6... | 1 
+                    crun-1.8.4 | 1 
+           dmraid-1.0.0.rc16-3 | 1 
+                 dtbocfg-0.0.9 | 1 
+                flannel-0.14.0 | 1 
+              gcc-final-11.4.0 | 1 
+  gobject-introspection-1.76.1 | 1 
+              gr-osmosdr-0.2.4 | 1 
+host-gcc-final-arc-2020.09-... | 1 
+                host-go-1.21.3 | 1 
+                      lft-3.91 | 1 
+      libabseil-cpp-20220623.1 | 1 
+               libglib2-2.76.1 | 1 
+                   libmediaart | 1 
+                libselinux-3.5 | 1 
+     linux-5.10.162-cip24-rt10 | 1 
+                     linux-6.6 | 1 
+ltrace-82c66409c7a93ca6ad2e... | 1 
+                    ncmpc-0.47 | 1 
+                    pppd-2.5.0 | 1 
+    python-cryptography-39.0.2 | 1 
+                    strace-6.5 | 1 
+                      tar-1.35 | 1 
+               valgrind-3.21.0 | 1 
+               xwayland-23.1.1 | 1 
 
-Tested with: ./support/testing/run-tests tests.package.test_nodejs
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- package/nodejs/Config.in                      |  8 +--
- .../0001-add-qemu-wrapper-support.patch       | 51 ++++++++++++-------
- ...ules-cjs-loader.js-adjust-default-pa.patch |  2 +-
- package/nodejs/nodejs-src/nodejs-src.mk       |  4 --
- package/nodejs/nodejs.hash                    | 15 +++---
- package/nodejs/nodejs.mk                      |  2 +-
- support/testing/tests/package/test_nodejs.py  |  3 ++
- 7 files changed, 50 insertions(+), 35 deletions(-)
+Detail of failures for master
+-----------------------------
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index c684f8eb86..72770095d0 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -7,19 +7,19 @@ config BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 
--comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 7, wchar, host gcc >= 8"
-+comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 11, wchar, host gcc >= 11"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		!BR2_HOST_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR
-+		!BR2_HOST_GCC_AT_LEAST_11 || !BR2_TOOLCHAIN_GCC_AT_LEAST_11 || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_NODEJS
- 	bool "nodejs"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
--	depends on BR2_HOST_GCC_AT_LEAST_8 # qemu
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_HOST_GCC_AT_LEAST_11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
-diff --git a/package/nodejs/nodejs-src/0001-add-qemu-wrapper-support.patch b/package/nodejs/nodejs-src/0001-add-qemu-wrapper-support.patch
-index 184f3d19b7..18f320ec5d 100644
---- a/package/nodejs/nodejs-src/0001-add-qemu-wrapper-support.patch
-+++ b/package/nodejs/nodejs-src/0001-add-qemu-wrapper-support.patch
-@@ -15,26 +15,18 @@ qemu-wrapper, so add @MAYBE_WRAPPER@ to the needed files and sed the path to
- the qemu-wrapper on target builds, and remove @MAYBE_WRAPPER@ entirely on
- host-builds.
- 
-+[Adam: Update for 20.9.0]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- ---
-- node.gyp                 |  4 ++--
-+ node.gyp                 |  6 ++++--
-  tools/v8_gypfiles/v8.gyp | 10 +++++-----
-- 2 files changed, 7 insertions(+), 7 deletions(-)
-+ 2 files changed, 9 insertions(+), 7 deletions(-)
- 
- diff --git a/node.gyp b/node.gyp
- index 97cdbb531d..db5cf51ce6 100644
- --- a/node.gyp
- +++ b/node.gyp
--@@ -319,7 +319,7 @@
--               'action_name': 'run_mkcodecache',
--               'process_outputs_as_sources': 1,
--               'inputs': [
---                '<(mkcodecache_exec)',
--+                @MAYBE_WRAPPER@ '<(mkcodecache_exec)',
--               ],
--               'outputs': [
--                 '<(SHARED_INTERMEDIATE_DIR)/node_code_cache.cc',
--@@ -346,7 +346,7 @@
-+@@ -662,7 +662,7 @@
-                    'action_name': 'node_mksnapshot',
-                    'process_outputs_as_sources': 1,
-                    'inputs': [
-@@ -43,11 +35,36 @@ index 97cdbb531d..db5cf51ce6 100644
-                      '<(node_snapshot_main)',
-                    ],
-                    'outputs': [
-+@@ -682,7 +682,7 @@
-+                   'action_name': 'node_mksnapshot',
-+                   'process_outputs_as_sources': 1,
-+                   'inputs': [
-+-                    '<(node_mksnapshot_exec)',
-++                    @MAYBE_WRAPPER@ '<(node_mksnapshot_exec)',
-+                   ],
-+                   'outputs': [
-+                     '<(SHARED_INTERMEDIATE_DIR)/node_snapshot.cc',
-+@@ -966,6 +966,7 @@
-+           'action_name': 'node_js2c',
-+           'process_outputs_as_sources': 1,
-+           'inputs': [
-++            @MAYBE_WRAPPER@
-+             '<(node_js2c_exec)',
-+             '<@(library_files)',
-+             '<@(deps_files)',
-+@@ -975,6 +976,7 @@
-+             '<(SHARED_INTERMEDIATE_DIR)/node_javascript.cc',
-+           ],
-+           'action': [
-++            @MAYBE_WRAPPER@
-+             '<(node_js2c_exec)',
-+             '<@(_outputs)',
-+             'lib',
- diff --git a/tools/v8_gypfiles/v8.gyp b/tools/v8_gypfiles/v8.gyp
- index 73099a03e4..88ca91efb4 100644
- --- a/tools/v8_gypfiles/v8.gyp
- +++ b/tools/v8_gypfiles/v8.gyp
--@@ -68,7 +68,7 @@
-+@@ -81,7 +81,7 @@
-          {
-            'action_name': 'run_torque_action',
-            'inputs': [  # Order matters.
-@@ -56,7 +73,7 @@ index 73099a03e4..88ca91efb4 100644
-              '<@(torque_files)',
-            ],
-            'outputs': [
--@@ -99,7 +99,7 @@
-+@@ -112,7 +112,7 @@
-              '<@(torque_outputs_inc)',
-            ],
-            'action': [
-@@ -65,7 +82,7 @@ index 73099a03e4..88ca91efb4 100644
-              '-o', '<(SHARED_INTERMEDIATE_DIR)/torque-generated',
-              '-v8-root', '<(V8_ROOT)',
-              '<@(torque_files_without_v8_root)',
--@@ -211,7 +211,7 @@
-+@@ -224,7 +224,7 @@
-          {
-            'action_name': 'generate_bytecode_builtins_list_action',
-            'inputs': [
-@@ -74,7 +91,7 @@ index 73099a03e4..88ca91efb4 100644
-            ],
-            'outputs': [
-              '<(generate_bytecode_builtins_list_output)',
--@@ -395,7 +395,7 @@
-+@@ -401,7 +401,7 @@
-              ],
-            },
-            'inputs': [
-@@ -83,7 +100,7 @@ index 73099a03e4..88ca91efb4 100644
-            ],
-            'outputs': [
-              '<(INTERMEDIATE_DIR)/snapshot.cc',
--@@ -1505,7 +1505,7 @@
-+@@ -1660,7 +1660,7 @@
-          {
-            'action_name': 'run_gen-regexp-special-case_action',
-            'inputs': [
-diff --git a/package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch b/package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
-index 5b93998e5e..25c26b43bd 100644
---- a/package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
-+++ b/package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
-@@ -21,7 +21,7 @@ diff --git a/lib/internal/modules/cjs/loader.js b/lib/internal/modules/cjs/loade
- index f1971c40a4..5fe3884156 100644
- --- a/lib/internal/modules/cjs/loader.js
- +++ b/lib/internal/modules/cjs/loader.js
--@@ -1261,7 +1261,8 @@ Module._initPaths = function() {
-+@@ -1378,7 +1378,8 @@ Module._initPaths = function() {
-      path.resolve(process.execPath, '..') :
-      path.resolve(process.execPath, '..', '..');
-  
-diff --git a/package/nodejs/nodejs-src/nodejs-src.mk b/package/nodejs/nodejs-src/nodejs-src.mk
-index 3452c93728..6fb550f158 100644
---- a/package/nodejs/nodejs-src/nodejs-src.mk
-+++ b/package/nodejs/nodejs-src/nodejs-src.mk
-@@ -40,8 +40,6 @@ NODEJS_SRC_CONF_OPTS = \
- 	--shared-cares \
- 	--shared-libuv \
- 	--shared-nghttp2 \
--	--without-dtrace \
--	--without-etw \
- 	--cross-compiling \
- 	--dest-os=linux \
- 	--ninja
-@@ -97,8 +95,6 @@ define HOST_NODEJS_SRC_CONFIGURE_CMDS
- 		PYTHON=$(HOST_DIR)/bin/python3 \
- 		$(HOST_DIR)/bin/python3 configure.py \
- 		--prefix=$(HOST_DIR) \
--		--without-dtrace \
--		--without-etw \
- 		--shared-openssl \
- 		--shared-openssl-includes=$(HOST_DIR)/include \
- 		--shared-openssl-libpath=$(HOST_DIR)/lib \
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index eaf41f6437..da027cc17a 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,9 +1,8 @@
--# From https://nodejs.org/dist/v16.20.0/SHASUMS256.txt.asc
--sha256  aca4794ca60f2e17689a700eeaa95d7adcd5fd01cdd2e4f9d596ac41b600b796  node-v16.20.0-linux-arm64.tar.xz
--sha256  5b79addab37bbdc31b442f8e648efad0b5d3aa5f3e0d682f23f4db483408eb2a  node-v16.20.0-linux-armv7l.tar.xz
--sha256  b439a8f874e8c2fad287ba75a3229407551f5ff9eb41e45e43e9bf67f184f618  node-v16.20.0-linux-ppc64le.tar.xz
--sha256  dff21020b555cc165a1ac36da7d4f6c810b35409c94e00afc51d5d370aae47ae  node-v16.20.0-linux-x64.tar.xz
--sha256  e0990f992234e40a51fe11f92c3816c93a77e1b081145d3dd762cd1026345349  node-v16.20.0.tar.xz
--
-+# From https://nodejs.org/dist/v20.9.0/SHASUMS256.txt.asc
-+sha256  ced3ecece4b7c3a664bca3d9e34a0e3b9a31078525283a6fdb7ea2de8ca5683b  node-v20.9.0-linux-arm64.tar.xz
-+sha256  64099d7e62bdbb8efd52c216a6759b3cdd77c38aa993096fdee9f875d95b2d8e  node-v20.9.0-linux-armv7l.tar.xz
-+sha256  3c6cea5d614cfbb95d92de43fbc2f8ecd66e431502fe5efc4f3c02637897bd45  node-v20.9.0-linux-ppc64le.tar.xz
-+sha256  9033989810bf86220ae46b1381bdcdc6c83a0294869ba2ad39e1061f1e69217a  node-v20.9.0-linux-x64.tar.xz
-+sha256  a23d96810abf0455426b349d47ce5310f33095b7bc0571b9cc510f481c3a4519  node-v20.9.0.tar.xz
- # Locally calculated
--sha256  ba325815d3df8819bebaf37cad67d6e1f82271e1e4a1189b53abd28e261977d6  LICENSE
-+sha256  a6871483905199033882d66453649675f0e88ffaa07f9f8acb257ce7504bc758  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 2a8c570932..7c8345cbcf 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
--NODEJS_COMMON_VERSION = 16.20.0
-+NODEJS_COMMON_VERSION = 20.9.0
- NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
- NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
- 
-diff --git a/support/testing/tests/package/test_nodejs.py b/support/testing/tests/package/test_nodejs.py
-index b63d44c97e..2884529c6e 100644
---- a/support/testing/tests/package/test_nodejs.py
-+++ b/support/testing/tests/package/test_nodejs.py
-@@ -10,6 +10,7 @@ class TestNodeJSBasic(infra.basetest.BRTest):
-         BR2_cortex_a9=y
-         BR2_ARM_ENABLE_VFP=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_PACKAGE_NODEJS=y
-         BR2_TARGET_ROOTFS_CPIO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
-@@ -34,6 +35,7 @@ class TestNodeJSModuleHostBin(infra.basetest.BRTest):
-         BR2_cortex_a9=y
-         BR2_ARM_ENABLE_VFP=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_PACKAGE_NODEJS=y
-         BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="lodash"
-         BR2_PACKAGE_HOST_NODEJS_BIN=y
-@@ -60,6 +62,7 @@ class TestNodeJSModuleHostSrc(infra.basetest.BRTest):
-         BR2_cortex_a9=y
-         BR2_ARM_ENABLE_VFP=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_PACKAGE_NODEJS=y
-         BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="lodash"
-         BR2_PACKAGE_HOST_NODEJS_SRC=y
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |           atop-2.9.0           | NOK | http://autobuild.buildroot.net/results/8782cf4f39f3311bf8164764b9e02c061c94bb9a |     
+   mipsel    |          bird-2.0.12           | NOK | http://autobuild.buildroot.net/results/192598e277ea84134a76a7ca5685858777bc49ea |     
+    i686     |          bird-2.0.12           | NOK | http://autobuild.buildroot.net/results/5311d9f46b90fd1fa0e58798c423ec4bebe59565 |     
+    or1k     |          bird-2.0.12           | NOK | http://autobuild.buildroot.net/results/edb01ed39449005969955c84303c29d8f197e977 |     
+    arc      | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/53ab12a5ffca1bacae2dd4820778170649519b8f | ORPH
+   arceb     |           crun-1.8.4           | NOK | http://autobuild.buildroot.net/results/3b0202346c1b47aa429f39fde439c2cf0739f78c |     
+   mips64    |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/7d113c85d9491a7fd438b2ce1c1a50fb4bf574b9 | ORPH
+ powerpc64   |         dtbocfg-0.0.9          | NOK | http://autobuild.buildroot.net/results/e5bae7fa5558801c39f53a4a15ac550c3855322e |     
+ microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/a98f94640791a7208f802772c8dc08faefbaca98 | ORPH
+   armeb     |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/d59ec4404381cdfc7d2e07041fa1fd2a4a45200b | ORPH
+   s390x     |         flannel-0.14.0         | NOK | http://autobuild.buildroot.net/results/59f915d95ab8c71c3ff62d852c9e95b99fb5d358 |     
+   mips64    |         flashrom-1.3.0         | NOK | http://autobuild.buildroot.net/results/e2a22a8468ecbb5d727fc9f0a60f204860faaa18 |     
+   armeb     |         flashrom-1.3.0         | NOK | http://autobuild.buildroot.net/results/067960b73048cfbf215ccd2a820b0c485717d079 |     
+powerpc64le  |         flashrom-1.3.0         | NOK | http://autobuild.buildroot.net/results/2d750aafdacd0cb2b05c353901033edbfdfffb2f |     
+    i686     |         flashrom-1.3.0         | NOK | http://autobuild.buildroot.net/results/1b2072257144e91356da34759e468a04a57e9321 |     
+   x86_64    |        gcc-final-11.4.0        | NOK | http://autobuild.buildroot.net/results/c44e6768890bd7b7b86103cc0138b8e171c52236 |     
+  mips64el   |        gcc-final-12.3.0        | NOK | http://autobuild.buildroot.net/results/e2b13aa45b10f859ffea0c895986390bf69e8a57 |     
+  riscv64    |        gcc-final-12.3.0        | NOK | http://autobuild.buildroot.net/results/78ca736d1951e32d4047dfb8a6b9d35d4bc23d05 |     
+  riscv64    |        gcc-final-12.3.0        | NOK | http://autobuild.buildroot.net/results/18cebcccbe52b0c5a7cf2ef00bce7b885df4094c |     
+  riscv64    |        gcc-final-12.3.0        | NOK | http://autobuild.buildroot.net/results/c4231b7e4d020da696a138ae1f848c70f771140c |     
+  riscv64    |        gcc-final-12.3.0        | NOK | http://autobuild.buildroot.net/results/7dd8474cbe6d4f9d479e066ae18702cf2e7d7f02 |     
+ powerpc64   | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/23d198c5e9d04c4f8326610ea1cffe3d9784d304 |     
+  powerpc    | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/9c7ae2e0bc795a65cb50b3c92d11a70ecc1b935e |     
+ powerpc64   | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/213e351972376ed074fb11c758d96c45fd8fc057 |     
+microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/8e8e310a9fb1be8c18cc6e7189fe98d401caf74d |     
+ microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/03e1eac5426878a7654447967d0ce1d3c7d7c371 |     
+  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/5eb5a758fc271855ca7903b5a9050a346bc84653 | ORPH
+   x86_64    |        gr-osmosdr-0.2.4        | NOK | http://autobuild.buildroot.net/results/8d6fbdba1fbdb0fbc8d738b5c76f8eaf44754499 |     
+   arceb     | host-gcc-final-arc-2020.09-... | NOK | http://autobuild.buildroot.net/results/abf76d1835b72a7765090c3f82687cde991f46de |     
+    mips     |         host-go-1.21.3         | NOK | http://autobuild.buildroot.net/results/1a79d9e5f8c792ca1b960bda32ca2da63c9235b2 |     
+    arc      |            lft-3.91            | NOK | http://autobuild.buildroot.net/results/7675835f68df098c63fd4d91b0eac90777ea3f4e | ORPH
+   mips64    |    libabseil-cpp-20220623.1    | NOK | http://autobuild.buildroot.net/results/f508cfe67cced4c0a18bfdf20efe18ab6bebbbee |     
+    mips     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/80c2941d171df86e643fcd4cdb9d133b33cf3add |     
+    arm      |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/6101911ee7fb487ea0da5e3a78c93b9207c96ef5 |     
+    arc      |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/ed5e9f0684486f8b556bcacb34493ac7ecf06057 |     
+   nios2     |          libmediaart           | TIM | http://autobuild.buildroot.net/results/017f3fb0b92a1978114302726b385609e808fb88 |     
+   mipsel    |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/7feee092fb332320f811d2fdfc086b6bcd5dd057 |     
+  powerpc    |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/b7e07a425865a64dfb5db9c90a777f292b88889d | ORPH
+   arceb     |           linux-6.6            | NOK | http://autobuild.buildroot.net/results/16c761935b3636cbafad7ab0e736fcb22b846f20 | ORPH
+    mips     | ltrace-82c66409c7a93ca6ad2e... | NOK | http://autobuild.buildroot.net/results/a3a5c46e8562d3f091a9b4b205322168fbf9d16b | ORPH
+powerpc64le  |           ncmpc-0.47           | NOK | http://autobuild.buildroot.net/results/3d0ba0162026b5b7c97b3dc45e36e4516886682d |     
+    arc      |          openrc-0.51           | NOK | http://autobuild.buildroot.net/results/0bae1ea05d80db57d446419f6197de2137997bf1 |     
+    mips     |          openrc-0.51           | NOK | http://autobuild.buildroot.net/results/e14996832eb953907a37db6d81a1296257482ae6 |     
+  sparc64    | package/python-tftpy/python... | NOK | http://autobuild.buildroot.net/results/438d38513732ba011e3670116e400a5eb8087588 |     
+   mipsel    | package/python-tftpy/python... | NOK | http://autobuild.buildroot.net/results/9e12e0cd81bdf1a09884a340ca809c194e4dba9b |     
+  sparc64    |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/100527b728fca43ce8adfbc607967adb8a3717f4 |     
+   armeb     |   python-cryptography-39.0.2   | NOK | http://autobuild.buildroot.net/results/e23cf85608d159308952d48c375773ce24bbac0e |     
+microblazeel |           strace-6.5           | NOK | http://autobuild.buildroot.net/results/da026b8307a4ef1406d2c90d42564df38a172a50 |     
+  aarch64    |            tar-1.35            | NOK | http://autobuild.buildroot.net/results/f00d438205fa95e8107dfb8f691a736385d7ba4d | ORPH
+   mips64    |            unknown             | NOK | http://autobuild.buildroot.net/results/3e7d5ca6c2c7e2d5b3dab9e67e5d01d0539a3cea |     
+   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/a879deb9a1d846fd0eb8ed715b5cab9668dbc730 |     
+   sparc     |            unknown             | NOK | http://autobuild.buildroot.net/results/c0b6923acf10d2ed28e2529dd06b6ac122a23469 |     
+   arceb     |            unknown             | NOK | http://autobuild.buildroot.net/results/2cc58f367ab19208c2bcb7a3d55e07a3f2dca594 |     
+   xtensa    |            unknown             | NOK | http://autobuild.buildroot.net/results/43619f93ae07c7c16064d4f9f0a934691d073bfc |     
+    mips     |            unknown             | NOK | http://autobuild.buildroot.net/results/8b8cde4e0965b0bfef6c70090131a24e128bbe55 |     
+  mips64el   |        valgrind-3.21.0         | NOK | http://autobuild.buildroot.net/results/6ef993770c8c1b990a641512d4b334d61d5a40f2 | ORPH
+  sparc64    |        xwayland-23.1.1         | NOK | http://autobuild.buildroot.net/results/d85b71d6c1022e46bcb5a77384d6a55396d8e69c |     
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+             containerd-1.6.22 | 1 
+                elfutils-0.186 | 1 
+        ltp-testsuite-20220930 | 1 
+                   luvi-2.13.0 | 1 
+         nftables-python-1.0.7 | 1 
+                   perl-5.36.0 | 1 
+                      poke-3.0 | 1 
+                    vlc-3.0.18 | 1 
+                xenomai-3.0.10 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |       containerd-1.6.22        | NOK | http://autobuild.buildroot.net/results/9ec2dfcffe147d3bb459b6c298cf9cdb2cbbaee6 |     
+microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/e3b795952f35aedc8edcff55c385ab7926cd8293 | ORPH
+ powerpc64   |     ltp-testsuite-20220930     | NOK | http://autobuild.buildroot.net/results/be6768b1c5834700068c9d70b48e8c9c7be92411 |     
+ aarch64_be  |          luvi-2.13.0           | NOK | http://autobuild.buildroot.net/results/997c48e694c2ac4fd901bf4b6a0d3041255c4334 | ORPH
+powerpc64le  |     nftables-python-1.0.7      | NOK | http://autobuild.buildroot.net/results/fbc5cb64297690ecea481f568a02b02bd5102c7f |     
+   mipsel    |          perl-5.36.0           | NOK | http://autobuild.buildroot.net/results/128140b8beb7e6894b315bacdbe427b362eb2f6e |     
+  riscv32    |            poke-3.0            | NOK | http://autobuild.buildroot.net/results/e3509219c81e11f5a28ae3b61d86a2f9a04ac290 | ORPH
+   sh4aeb    |           vlc-3.0.18           | NOK | http://autobuild.buildroot.net/results/c42a761cdd5b3aa978600419a0a4dfe7e469650a |     
+   armeb     |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/14f3232219306cb365091f5bb6982df32bc710a3 |     
+
+
+Classification of failures by reason for 2023.08.x
+--------------------------------------------------
+
+                   bird-2.0.12 | 1 
+                elfutils-0.189 | 1 
+                 fdk-aac-2.0.2 | 1 
+  gobject-introspection-1.76.1 | 1 
+               host-go-1.20.10 | 1 
+              host-rust-1.71.1 | 1 
+               libglib2-2.76.1 | 1 
+                libxml2-2.11.4 | 1 
+            python-sip-4.19.25 | 1 
+
+
+Detail of failures for 2023.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |          bird-2.0.12           | NOK | http://autobuild.buildroot.net/results/3bc8c0f5ab014090187614483b3ffb6afa63d9b2 |     
+microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/5bcbd2be38181691fdc962b3d802a9a08a5f7433 | ORPH
+  mips64el   |         fdk-aac-2.0.2          | NOK | http://autobuild.buildroot.net/results/cddf63614b47ad2aea32e9f9dd81616d68e3ff01 |     
+  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/15f74f3ed10b484dc16aa0eddd71f93efd31d564 | ORPH
+    i586     |        host-go-1.20.10         | NOK | http://autobuild.buildroot.net/results/dafc785ef295f979356151faef7491c22feea066 |     
+    i686     |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/f4322054e494e50a7626372ce4f4721ef0e67761 |     
+   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/b4020b59406f926a2f02e1f4fb09a07601cc84ed |     
+    arc      |         libxml2-2.11.4         | NOK | http://autobuild.buildroot.net/results/8ea40125660a2b49b7f6d8c4cd8012544d1c009e |     
+    i686     |       python-sip-4.19.25       | NOK | http://autobuild.buildroot.net/results/212b9be476e9c9a8caccfd01b1aa084ad5a27d08 |     
+
+
+
 -- 
-2.41.0
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
