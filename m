@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BF8EC4332F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 19:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE3EBC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 19:29:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3053402DC;
-	Fri,  3 Nov 2023 19:29:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3053402DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CF4F403AF;
+	Fri,  3 Nov 2023 19:29:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CF4F403AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ltCH_1hpPWr0; Fri,  3 Nov 2023 19:29:12 +0000 (UTC)
+	with ESMTP id ry32eQfeNEPj; Fri,  3 Nov 2023 19:29:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C85234038D;
-	Fri,  3 Nov 2023 19:29:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C85234038D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 967411BF33D
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:28:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 76A7340377;
+	Fri,  3 Nov 2023 19:29:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76A7340377
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 93E101BF33D
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:28:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59BFF41B8B
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:28:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59BFF41B8B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D7DA82212
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:28:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D7DA82212
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ja6VDlyRqBIx for <buildroot@lists.busybox.net>;
- Fri,  3 Nov 2023 19:28:50 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 161FB41B77
- for <buildroot@buildroot.org>; Fri,  3 Nov 2023 19:28:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 161FB41B77
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C2B7B60003;
- Fri,  3 Nov 2023 19:28:46 +0000 (UTC)
-Date: Fri, 3 Nov 2023 20:28:45 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w5Qo0JNzKTte for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 19:28:53 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B11E821C8
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 19:28:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B11E821C8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 376EC40002;
+ Fri,  3 Nov 2023 19:28:49 +0000 (UTC)
+Date: Fri, 3 Nov 2023 20:28:49 +0100
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231103202845.1e53c488@windsurf>
-In-Reply-To: <20231102185411.51382-1-adam.duskett@amarulasolutions.com>
+Message-ID: <20231103202849.14971401@windsurf>
+In-Reply-To: <20231102185411.51382-2-adam.duskett@amarulasolutions.com>
 References: <20231102185411.51382-1-adam.duskett@amarulasolutions.com>
+ <20231102185411.51382-2-adam.duskett@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699039727;
+ d=bootlin.com; s=gm1; t=1699039730;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=oXK520/5LkTCKqanx/ZjrQkeviOyASq0pP8c4FZQTBQ=;
- b=LtNewtl585XtpEGCXEt3tTYxEuoP7N50dojRlw+KxffwuEMa2l0tHyUQYLiUKybWk9GyQ8
- uKi/w7e6NFn1J+ndV8ds7rBgO+xCZeWbolT9tIJEwqiq3n5yvvUATgC3Cga44JU4fTrNKA
- lvBg56C9LznYNe4N2J2SqFgejsSnYRvY/JW6PVVbxEL9BmSdrLGO0+eWYZiTbmSuc4fzs/
- EhwlJT0Fg+GLE6xPwAXLdvgAcapSgcaCojUJrABYSLA+ym7eDbFeozgVzqTpo7vonpBJYZ
- 4iMiwCGBm4/aE0ONOV2lPbfjpbz+goXCWES+mtmsyccVF03tDuRbwh6eF4Io6g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=khPntP4o2pKObQdeUv4oUHY5KktFGigesuRkEsqfK74=;
+ b=eTPl/ekmrDm/vH9ybfNWtuKkGy4f1S1BvACNO2nNYnyPP/TjkCsccgbMznPbYQI7lVM4Du
+ Y6vx3OvKQ8CWpvP64knVQC+YQRvGsvckJbV5FPYDeX3pZu2hUynN47pDgY+qRHV+YQ4OU0
+ bHDEoXvcxJhzTWpR64TXh0Uqb9VkyYA/B/DdW+AxpoagZVzfMrRm0D/PZNXzQbikFlg60X
+ MewyJz+iSzeOu7OUhREaKvXNQ8RQzHJK2ZXNBoGdQbNeMxUVjCJTyjg05b3iDv+DI9KbxO
+ A5iz6LZCihmjsfIDHV1h7dV41BN81b5yBVPXWiwZn2t3zeBoR+G4xS8JulE1vA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LtNewtl5
-Subject: Re: [Buildroot] [PATCH 1/5] package/flutter-sdk-bin: bump version
- to 3.13.9
+ header.s=gm1 header.b=eTPl/ekm
+Subject: Re: [Buildroot] [PATCH 2/5] package/flutter-engine: bump version to
+ 3.13.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,14 +84,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  2 Nov 2023 12:54:07 -0600
+On Thu,  2 Nov 2023 12:54:08 -0600
 Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 > ---
->  package/flutter-sdk-bin/flutter-sdk-bin.hash | 2 +-
->  package/flutter-sdk-bin/flutter-sdk-bin.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/flutter-engine/flutter-engine.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
