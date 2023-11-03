@@ -4,69 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B88EC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  2 Nov 2023 23:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D8ADC4167B
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 00:07:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E93AC614A4;
-	Thu,  2 Nov 2023 23:44:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E93AC614A4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30B8370433;
+	Fri,  3 Nov 2023 00:07:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30B8370433
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6HRKqFd4EKSq; Thu,  2 Nov 2023 23:44:06 +0000 (UTC)
+	with ESMTP id aj1byy6eRRFk; Fri,  3 Nov 2023 00:07:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D6446F563;
-	Thu,  2 Nov 2023 23:44:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D6446F563
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF7861BF398
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 23:44:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13D06705FC;
+	Fri,  3 Nov 2023 00:07:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13D06705FC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B8FB81BF28E
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 00:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD8A54F114
- for <buildroot@lists.busybox.net>; Thu,  2 Nov 2023 23:44:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD8A54F114
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D91970443
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 00:07:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D91970443
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A7VRA9xVvcJK for <buildroot@lists.busybox.net>;
- Thu,  2 Nov 2023 23:43:59 +0000 (UTC)
-Received: from smtpdh18-2.aruba.it (smtpdh18-2.aruba.it [62.149.155.133])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 066A84F0A7
- for <buildroot@buildroot.org>; Thu,  2 Nov 2023 23:43:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 066A84F0A7
-Received: from [192.168.50.162] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id yhLvqJewppdQyyhLvqN4i2; Fri, 03 Nov 2023 00:43:56 +0100
-Message-ID: <e52ca4e8-7651-4de3-b793-cafc6d6c9881@benettiengineering.com>
-Date: Fri, 3 Nov 2023 00:43:55 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B3nPnyVamH2y for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 00:07:01 +0000 (UTC)
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com
+ [IPv6:2607:f8b0:4864:20::542])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0485B703C1
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 00:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0485B703C1
+Received: by mail-pg1-x542.google.com with SMTP id
+ 41be03b00d2f7-5bd33a450fdso713090a12.0
+ for <buildroot@buildroot.org>; Thu, 02 Nov 2023 17:07:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1698970019; x=1699574819;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=YtsFX9C1eZFo45AF4wNAPAcjN+vSReQ0p96STdkR8AM=;
+ b=n1ReiILJTJiyghkjhLPlEJljwgfvvRS1oYztoFLQk9IlLJongTbRIgaiYKiai2dz3v
+ NDuwjT1N9xCzeyusJ8HqTVzbU0/neKfKBb1ZbBnQ2sbilggFkCKoywERYujbNaoA216b
+ M13mgw2c8PO6Ef1QwaH1hcduO89HNRatx3DMzBPFDnkYHy24cQp5+cccRTL20NEeDDYe
+ 6i1eTYzx8YxUCNVcOuXNZCUhJjcWgS+TKYLD9W6LStcQIeoHP2Nbue+bnvaj8+izXmJ2
+ ML5qcAqgY9GjWUfOwsMiXnTlyRb7BBUDmpxL65MX1AcfPr2U1XJBnNEptJ44BhNGZbTq
+ gOIw==
+X-Gm-Message-State: AOJu0YxtTJQoztfEtrRIbVvr/sIlJZyAaT3GoudEYQRO2DX1L+9jya5t
+ jiC8Bf+pvDee5D/Dqm4WWT9rtZnYaGrjHFEmWehcSRRr9IU=
+X-Google-Smtp-Source: AGHT+IHWGz99pPT2rnEkfzSAs9E6OAsgp5nMUbmYy+75KwwZKai+VDgFjDE7D1Xbbq6j6jDUNURG0g==
+X-Received: by 2002:a05:6a20:1f99:b0:17d:1337:cfc5 with SMTP id
+ dm25-20020a056a201f9900b0017d1337cfc5mr15069390pzb.29.1698970019485; 
+ Thu, 02 Nov 2023 17:06:59 -0700 (PDT)
+Received: from DESKTOP-OI0KN2B.lan ([172.56.201.196])
+ by smtp.gmail.com with ESMTPSA id
+ z14-20020aa785ce000000b006b65b0f903csm272525pfn.192.2023.11.02.17.06.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 02 Nov 2023 17:06:58 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Thu,  2 Nov 2023 18:06:49 -0600
+Message-ID: <20231103000650.195673-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20231031120713.678783-1-giulio.benetti@benettiengineering.com>
- <20231101152114.GE114892@scaer>
- <26fabf07-fc17-421b-9cbb-fb721bf63374@benettiengineering.com>
-In-Reply-To: <26fabf07-fc17-421b-9cbb-fb721bf63374@benettiengineering.com>
-X-CMAE-Envelope: MS4xfPTgYT5UrMj3TqAVPOYGVZ2CtHEd6sCLIHL4E3frUe86Xahnf6mvVb8Vwi8hYo5b59ZZqUgVz65w2nd/zyCouKVxmcaWf1zBB7aXPcmKV29W8VG4l5B1
- fkfppHL+ppzVr8C3oPmP8bpXR5l9Hzvt4+hP9hciT3BDgSX1srHRFCE3qJsBqCLKQX2SL1y+ZZBdqC+R/w7HTV7WgYZ7utFkb3+OfDxdC8rCR2i2hue1Elcu
- 1p96OW4n3Pd8sTJ9SJXp/wPSTOGt4lSciJ9u2wujrLg0SxT1GBOfCcrtuVCyB7CrUO+lw7U7CVm4GHG/LSthucdMp/Ax7mP4C32unlr2VIn3wJDBYgqJepv3
- LYdVKadj
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1698968636; bh=JdH/4rhyiIb64pxjVsbs1QNh/Yf+82taN1aQHl0KkMk=;
- h=Date:MIME-Version:Subject:From:To:Content-Type;
- b=CAfrVt8uv/pyXblW7nyXqJo8bewxWwcoY2Eq7JolpRIzdzjk3g/W3v5qDZ3zWl5kv
- bBRbOQmO+YSVFuC+TCDBK1pZPvuyWoZEASq1hkrcBkXvFqdjaANaQ9CFwutp5c/cvS
- PvcaxESMv5aveIu5ND86aG8CJ7GTux1CnlwXOIN9JY4VY27O3DbQAckMiQ8/6TW4R9
- LIZl0JkYCPCiCSPr9dxyHXVH6LvkPy8dwlOpQT40i4j+Cb3Xjj6P12o0JbuqmV0yA6
- xsuUOrLzYVY9OdtiQsyv9FnVhiFvO4dKb8217FVpaHGAX7NwH/mA5cpxaYgs/nTXzb
- Gw4PtO8COdpUg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=CAfrVt8u
-Subject: Re: [Buildroot] [PATCH] package/nodejs/nodejs-src: remove .node
- files with different architecture
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1698970019; x=1699574819;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=YtsFX9C1eZFo45AF4wNAPAcjN+vSReQ0p96STdkR8AM=;
+ b=YYftzDrFWoJ3YZQ64cxmF+sBCOdve5MnnIFA+l/wsKOgRHP/If5qVMcD5+W6RDox7W
+ BeSeX/1hm1JeZUwFf3X8zMbfHzXKRXLhK2UwDyltAsNxdxtXkus9J9HzZucWRsJA5emO
+ u5JWeQMOSqmDbewT8tAXX47Vxh23mDNCaCDqw=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=YYftzDrF
+Subject: [Buildroot] [PATCH] Config.in: Introduce BR2_HOST_GCC_AT_LEAST_11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,50 +92,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Price <daniel.price@gmail.com>, Martin Bark <martin@barkynet.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Martin Bark <martin@barkynet.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Daniel Price <daniel.price@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMDMvMTEvMjMgMDA6MTYsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgoKWyBTTklQIF0KCj4+IFRo
-ZXJlJ3MgYWxzbyBiaW5kaW5nLmd5cCB0aGF0IGxvb2tzIGxpa2UgaXQgbGlzdHMgd2hhdCB0byBi
-dWlsZCB1bmRlcgo+PiB3aGljaCBjb25kaXRpb24uCj4gCj4geWVzLCAuZ3lwIGZpbGUgaXMgYW5v
-dGhlciBidWlsZCBzeXN0ZW0sIHNhbWUgTW96aWxsYSBhZG9wdGVkIGZvciAKPiBOU1MobWF5YmUg
-c29tZXRoaW5nIGVsc2UpOgo+IGh0dHBzOi8vZ3lwLmdzcmMuaW8vaW5kZXgubWQKPiAKPiBCdXQg
-Tm9kZUpTIHNlZW1zIHRvIGRlYWwgd2l0aCBpdCB3aXRob3V0IHRoZSBuZWVkIHRvIGFkZCBhIGd5
-cCBpbmZyYS4KCnllcyBpdCBkb2VzIGhhdmUgbm9kZS1neXAgdGhhdCBkZWFscyB3aXRoIHRoYXQg
-Zm9ydHVuYXRlbHksCgo+PiBJbiB3aGljaCBjYXNlLCBob3cgZG9lcyBucG0gZGVjaWRlIHRoYXQg
-aXQgY2FuIHVzZSBvbmUgc3VjaCBwcmVidWlsZCwgb3IKPj4gd2hldGhlciBpdCBzaG91bGQgY29t
-cGlsZSBmcm9tIHRoZSBzb3VyY2UgZmlsZXM/IENhbiB3ZSBmb3JjZSBpdCB0bwo+PiBuZXZlciB1
-c2UgcHJlYnVpbGRzIGFuZCBhbHdheXMgY29tcGlsZT8KPiAKPiBJJ20gd29ya2luZyBvbiB0aGlz
-IGFmdGVyIHlvdXIgcmV2aWV3LAo+IAo+PiBJJ20gYWZyYWlkIHRoZSBwcm9wb3NlZCBwYXRjaCBq
-dXN0IGNvdmVycyB1cCBhIGJpZ2dlciBpc3N1ZSBieSBzd2VlcGluZwo+PiB0aGUgZHVzdCB1bmRl
-ciB0aGUgcnVnLi4uIEl0IHdpbGwgaW5kZWVkIG1ha2UgY2hlY2stYmluLWFyY2ggaGFwcHkKPj4g
-YmVjYXVzZSBubyBiaW5hcnkgd2lsbCBpbmRlZWQgbWF0Y2ggYW5vdGhlciBhcmNoLCBpbmRlZWQs
-IGJ1dCB0aGF0IGRvZXMKPj4gbm90IG1lYW4gdGhlIG1vZHVsZSB3aWxsIGJlIGFjdHVhbGx5IGNv
-cnJlY3RseSBpbnN0YWxsZWQuLi4KPiAKPiBleGFjdGx5LAo+IAo+PiBTbyB5ZXMsIG5wbSBpcyBz
-dWNoIGEgbWVzcyB0aGF0IG1heWJlIHN3ZWVwaW5nIHRoZSBkdXN0IHVuZGVyIHRoZSBydWcgaXMK
-Pj4gdGhlIG9ubHkgc29sdXRpb24gd2UgY2FuIGltcGxlbWVudCwgYnV0IGl0IGlzIGRpc2FwcG9p
-bnRpbmcuLi4KPiAKPiBJIHRoaW5rIGl0J3Mgbm90IHRoZSB3YXkgdG8gZ28gYmVjYXVzZSBvZiBs
-aWJjLCB0aGF0IGNoYW5nZXMgZXZlcnl0aGluZywKPiAKPj4gTWF5YmUgd2UgY2FuIGp1c3QgYWxz
-byBleGNsdWRlIHRoZSBub2RlIG1vZHVsZXMgZnJvbSBjaGVjay1iaW4tYXJjaAo+PiBhbHRvZ2V0
-aGVyIGFuZCBiZSBkb25lIHdpdGggaXQ6Cj4+Cj4+IMKgwqDCoMKgIE5PREVKU19TUkNfQklOX0FS
-Q0hfRVhDTFVERSA9IC91c3IvbGliL25vZGVfbW9kdWxlcy8KPiAKPiBUaGlzIF5eXiBkb2Vzbid0
-IGZpeCB0aGUgbGliYyBwcm9ibGVtLiBJZiB5b3Ugbm06Cj4gdGFyZ2V0L3Vzci9saWIvbm9kZV9t
-b2R1bGVzL3NlcmlhbHBvcnQvYmluZGluZ3MtY3BwL2J1aWxkL1JlbGVhc2UvYmluZGluZ3Mubm9k
-ZQo+IAo+IHlvdSB3aWxsIHNlZSB0aGF0IE5vZGVKUyBhc3N1bWUgbmF0aXZlIGNvZGUgdG8gYmUg
-YnVpbHQgd2l0aCBnbGliYywgc28KPiBJIHJlYWxseSBuZWVkIHRvIGdvIHdpdGggYnVpbGRpbmcg
-ZnJvbSBzY3JhdGNoLiBBbmQgdGhpcyB3b3JrcyB1c2luZzoKPiBucG0gcmVidWlsZCAuLi4KClN0
-aWxsIG5vdCwgSSdtIHVzaW5nOgpucG0gcGFjayAuLi4uCnRvIGRvd25sb2FkIHRoZSB0YXJiYWxs
-IHRoYXQgb25seSBjb250YWlucyB0aGUgbW9kdWxlIGJ1dCBub3QgaXRzCmRlcGVuZGVuY2llcywg
-c28gSSBuZWVkIHRvIGV4dHJhY3QgYW5kIHJldHJpZXZlIGFsbCB0aGUgZGVwZW5kZW5jaWVzCmlu
-Y2x1ZGluZyAiQHNlcmlhbHBvcnQvYmluZGluZ3MtY3BwIiB0aGF0IG11c3QgYmUgbmF0aXZlbHkg
-YnVpbHQgYW5kCml0IGNvbnRhaW5zIHRoZSBwcmVidWlsdCBiaW5hcmllcywgc28gSSB3aWxsIGhh
-dmUgdG8gZGVhbCB3aXRoCmluc3RhbGxhdGlvbiBvZiB0aGUgc2luZ2xlIG9zLWFyY2ggZGlyZWN0
-b3J5LgoKTm90IGFuIGVhc3kgdGFzaywgYnV0IEknbGwgdGFrZSBjYXJlLgoKQmVzdCByZWdhcmRz
-Ci0tIApHaXVsaW8gQmVuZXR0aQpDRU8mQ1RPQEJlbmV0dGkgRW5naW5lZXJpbmcgc2FzCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+NodeJS 20 requires gcc >= 10.1. Unfortuantly, the only host gcc that has a
+decimal place is 4.9, and every other HOST_GCC_AT_LEAST is an even release,
+we round up to 11.
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ Config.in | 10 ++++++++++
+ Makefile  |  2 +-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/Config.in b/Config.in
+index 556b6c2575..7dd49567f6 100644
+--- a/Config.in
++++ b/Config.in
+@@ -55,6 +55,16 @@ config BR2_HOST_GCC_AT_LEAST_9
+ 	default y if BR2_HOST_GCC_VERSION = "9"
+ 	select BR2_HOST_GCC_AT_LEAST_8
+ 
++config BR2_HOST_GCC_AT_LEAST_10
++	bool
++	default y if BR2_HOST_GCC_VERSION = "10"
++	select BR2_HOST_GCC_AT_LEAST_9
++
++config BR2_HOST_GCC_AT_LEAST_11
++	bool
++	default y if BR2_HOST_GCC_VERSION = "11"
++	select BR2_HOST_GCC_AT_LEAST_10
++
+ # When adding new entries above, be sure to update
+ # the HOSTCC_MAX_VERSION variable in the Makefile.
+ 
+diff --git a/Makefile b/Makefile
+index 3e85d5ef09..37deb35912 100644
+--- a/Makefile
++++ b/Makefile
+@@ -353,7 +353,7 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
+ 
+ # When adding a new host gcc version in Config.in,
+ # update the HOSTCC_MAX_VERSION variable:
+-HOSTCC_MAX_VERSION := 9
++HOSTCC_MAX_VERSION := 11
+ 
+ HOSTCC_VERSION := $(shell V=$$($(HOSTCC_NOCCACHE) --version | \
+ 	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p'); \
+-- 
+2.41.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
