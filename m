@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38BC4C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 19:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE90DC4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 19:55:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D866C4042B;
-	Fri,  3 Nov 2023 19:54:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D866C4042B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 811F54042B;
+	Fri,  3 Nov 2023 19:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 811F54042B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id muvgbQ-_KrXM; Fri,  3 Nov 2023 19:54:45 +0000 (UTC)
+	with ESMTP id rhlzeRhDnenA; Fri,  3 Nov 2023 19:55:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FE69403E9;
-	Fri,  3 Nov 2023 19:54:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FE69403E9
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9FCB40463;
+	Fri,  3 Nov 2023 19:54:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9FCB40463
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 276211BF357
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:54:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ED24C1BF357
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00C68822BC
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:54:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00C68822BC
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6428822BC
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 19:54:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6428822BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id er19MFRCM24u for <buildroot@lists.busybox.net>;
- Fri,  3 Nov 2023 19:54:20 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 58828822BA
- for <buildroot@busybox.net>; Fri,  3 Nov 2023 19:54:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58828822BA
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EC70EFF806;
- Fri,  3 Nov 2023 19:54:16 +0000 (UTC)
-Date: Fri, 3 Nov 2023 20:54:14 +0100
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20231103205414.18af1810@windsurf>
-In-Reply-To: <20231103163400.63805-1-francois.perrad@gadz.org>
-References: <20231103163400.63805-1-francois.perrad@gadz.org>
+ with ESMTP id P0Gnv3R5RXOA for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 19:54:23 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4C725822BA
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 19:54:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C725822BA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7FA9A4000A;
+ Fri,  3 Nov 2023 19:54:21 +0000 (UTC)
+Date: Fri, 3 Nov 2023 20:54:20 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20231103205420.7fd947b3@windsurf>
+In-Reply-To: <20231103173645.2069295-1-fontaine.fabrice@gmail.com>
+References: <20231103173645.2069295-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699041257;
+ d=bootlin.com; s=gm1; t=1699041261;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=cQBb7ury8tP5z/m9TSRVpYednZvVgzqJFRHdT5rjca4=;
- b=iTImI3bCmGFhM+kWh9E9tPKaQaMxuEIi3+3Gf7gVtkPZ29+j6PIYEhq7nhQXZTAHRsqhOF
- cVqAUaqhwHMXRBHntogkGS2Nm5b/IQJAmJBkFdMXw0R4Jme3+qVBZYB6Ha6znFLpggehzP
- 4NaGvyWECP5ci5cB8rW2EnNwcZCXRkzuUTIhj8MPFz9QSG+Zn38lHh1JmFxaSx2k/dslGF
- 3mKzqug5vvlm+T5dvWC8ruBIZxLd8Zt5CKVj3lbcDjJ54fkXR0CF9Zt1ztJtSsEoEEih9e
- uVcYEeq3almLCHzV1jkuw3zZgWltG11VjN7yu8AZSLyd9AgMbwaHZ70MVUNlnA==
+ bh=lB2ScSqPB5L/71pqIk3e2gANfhauuVXGzTFgAu05n3c=;
+ b=KoEc9KS9V8t/PLT9GxnDh7f8li4N7vq3W3N/nj7uj19ANw31furOAHQqaNSRHacADKu/Pg
+ S/mscnf35CY51j0Yp5twVxWU4BuoWmNrR5GL5WRK1ruIyw32TsGj6ctRB+tS5x8kx62Mrs
+ qBS1gT9Dr5rl3EKY4u6ZRuRelem2uu5Ke7E3kOdUlsG6QwjG21FX98Zt9eIuTBVJtMCHNF
+ t+Nx6KUpj6tRBYcfCSngQWVN1LXHExorrViFzG0vTpQCxJ817zTkGpgfw2PH+iN+CDr4tR
+ ZPRlkUsOPQkLA+cyTEBkrF9+O/baeJYDNtji+t2mbKyMswdWfvIlQWeTupaKkw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iTImI3bC
-Subject: Re: [Buildroot] [PATCH] package/libressl: bump to version 3.8.2
+ header.s=gm1 header.b=KoEc9KS9
+Subject: Re: [Buildroot] [PATCH 1/1] package/azure-iot-sdk: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,20 +76,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  3 Nov 2023 17:34:00 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+On Fri,  3 Nov 2023 18:36:45 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Disable provisioning client when building statically to avoid the
+> following build failure raised since bump to version LTS_01_2022_Ref01
+> in commit 06bb3640c13191f7515f2140c2207f5b7a2cb7ab and
+> https://github.com/Azure/azure-iot-sdk-c/commit/1de399fd4875d16eb78e8193778238b9762ed44f
+> which enabled provisioning client by default:
+> 
+> /home/buildroot/autobuild/instance-3/output-1/build/azure-iot-sdk-c-LTS_01_2023_Ref02/provisioning_client/deps/utpm/src/tpm_comm_linux.c:13:10: fatal error: dlfcn.h: No such file or directory
+>    13 | #include <dlfcn.h>
+>       |          ^~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/894188649f66d9917e1ed94989ebe307102ab28c
+>  - http://autobuild.buildroot.org/results/735b96c842796f309c33a0545eeb2e8f8d1f75ca
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libressl/libressl.hash | 2 +-
->  package/libressl/libressl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
 Applied to master, thanks.
 
