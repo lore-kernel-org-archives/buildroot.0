@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 296D5C4332F
-	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 17:37:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AFD7C4332F
+	for <buildroot@archiver.kernel.org>; Fri,  3 Nov 2023 17:48:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D66A41714;
-	Fri,  3 Nov 2023 17:37:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D66A41714
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9086841876;
+	Fri,  3 Nov 2023 17:48:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9086841876
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UIg5EYl2f8NC; Fri,  3 Nov 2023 17:37:02 +0000 (UTC)
+	with ESMTP id 9vN2xD5ghMRb; Fri,  3 Nov 2023 17:48:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0C2741755;
-	Fri,  3 Nov 2023 17:37:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0C2741755
+	by smtp4.osuosl.org (Postfix) with ESMTP id E259441869;
+	Fri,  3 Nov 2023 17:48:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E259441869
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 89E241BF21A
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 17:36:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 734A11BF21A
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 17:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E76A4012E
- for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 17:36:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E76A4012E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49F134015F
+ for <buildroot@lists.busybox.net>; Fri,  3 Nov 2023 17:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49F134015F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XXIrd9BZYWRY for <buildroot@lists.busybox.net>;
- Fri,  3 Nov 2023 17:36:53 +0000 (UTC)
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
- [IPv6:2a00:1450:4864:20::22a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4629E40124
- for <buildroot@buildroot.org>; Fri,  3 Nov 2023 17:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4629E40124
-Received: by mail-lj1-x22a.google.com with SMTP id
- 38308e7fff4ca-2c5210a1515so33315671fa.0
- for <buildroot@buildroot.org>; Fri, 03 Nov 2023 10:36:53 -0700 (PDT)
+ with ESMTP id 3204g8FwGTXg for <buildroot@lists.busybox.net>;
+ Fri,  3 Nov 2023 17:48:02 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D89340124
+ for <buildroot@buildroot.org>; Fri,  3 Nov 2023 17:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D89340124
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40806e4106dso14778955e9.1
+ for <buildroot@buildroot.org>; Fri, 03 Nov 2023 10:48:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699033010; x=1699637810;
+ d=1e100.net; s=20230601; t=1699033680; x=1699638480;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zyrfL40C7omcve4cKdMIHZAkV5c7fL6pG/SLUnsHTw4=;
- b=GxluZaEssvXAbDEUJMFJLTqvgQQuHlLQne/dIA9ofl8SK9QrAobGlkwVYaED4x4Viy
- PNgOod0/4M8OaOU5pbbK484HkvZO3Fw8czyAGAz7CcnfarFTIXtSoowv2p5MGBhglevT
- tfRGAHoOVW1bKjo8yC5Zz38dP/FFQhEEJUUTaVoDX//UE5GjwByviHeZ7klApmfEemBy
- yBTnbX1ivHioOOpyru++G8OQOIbRl/DOsAXfU3bN/JMeaQv9xIXw1BkbTT8WeaL4uD91
- oXa+rnTm9/VcU5xrwDph6BnN2/mxdn1ADeJP0NYC47aNFuIUcVnilhEHvWfPgEJoTb12
- 1ucw==
-X-Gm-Message-State: AOJu0YxjH76T93xWzfAbtX5qRZ/EwaXYPBXtnKyYyTf1aM6KBPCR9czj
- fbwz1Y2Q0u+BB5t+CTphwFPPnk8VXzE=
-X-Google-Smtp-Source: AGHT+IE+agBdLB2haiiBzm8OOVx0J+ZwLRPTS+bQcae29PtxejKJjyRj0FO1s1Zt9frhodaAg6RcKQ==
-X-Received: by 2002:a2e:a98c:0:b0:2c5:4a5:9560 with SMTP id
- x12-20020a2ea98c000000b002c504a59560mr22862682ljq.41.1699033010036; 
- Fri, 03 Nov 2023 10:36:50 -0700 (PDT)
+ bh=LCxpAnxZfMzbqjor21ywZPES4N+KbmZ5BP+WewT6SvE=;
+ b=LCDJLdMKE1QgSVuQSJO655q/mAqmJ6SWOssPtL5M81vQG1TP+AcRJBFZtuLZ5t/5Cw
+ AmWopRf5jBNKtAZWsaEtjp1SBhZp6Z7iVVzCOM7r9z+5U9+/IxigOJ/xn2pVdaTfUHLj
+ cZKfYTpIonQOGDUGYdWEYYWIV5MqGinRV5eZkITQo71iBrJoZ8nfiNgUWnGcUxxShE2K
+ IKBDMXS8ADLOPor172zCNdVbNWpstkG76YcyyVVhJNVAmd1pdPId3+QLTsZDyGS6aadx
+ 7L+95hbip+lCSTB/MHWPzwbYsUDo+jvQEo3FFOZ59YZ6Zu7+pj0PCFLIg9w3z9KjWdsI
+ U+Vg==
+X-Gm-Message-State: AOJu0Yx1SwbL4ScATljesruH1j1kmULJtaFkWXu4TYAacCZTiXmiV5Ms
+ 4kgE32Hg+N/woef9TzqxdS4kFiOM00M=
+X-Google-Smtp-Source: AGHT+IEQVy7lLZGbgd05pHg+VTWia8beVSq2gLA2qa0qb0zBY94v9Hu0XXctdcc3P5AzG0JZgfJfKg==
+X-Received: by 2002:a05:600c:3103:b0:407:3e94:bcca with SMTP id
+ g3-20020a05600c310300b004073e94bccamr4336658wmo.1.1699033679449; 
+ Fri, 03 Nov 2023 10:47:59 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- r22-20020a05600c35d600b003fee567235bsm3192526wmq.1.2023.11.03.10.36.49
+ f10-20020a5d58ea000000b00327bf4f2f14sm2375099wrd.88.2023.11.03.10.47.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Nov 2023 10:36:49 -0700 (PDT)
+ Fri, 03 Nov 2023 10:47:59 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  3 Nov 2023 18:36:45 +0100
-Message-ID: <20231103173645.2069295-1-fontaine.fabrice@gmail.com>
+Date: Fri,  3 Nov 2023 18:47:55 +0100
+Message-ID: <20231103174755.2118753-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699033010; x=1699637810; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699033680; x=1699638480; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zyrfL40C7omcve4cKdMIHZAkV5c7fL6pG/SLUnsHTw4=;
- b=YBcnjpfSGGYA+vvrTkjsfiUE5JDfG4BMLhItZVixD06nMFaJvC3w0jZkHovr8wovL4
- qZ4IcDRWl2p0IK3i2sfhBUM5x+aIxOCpA9AfJo5nGAvFH44f1VWQNiwGdqh6VpcQBjby
- 73wYmSUtv/Fx2/YSxtWCFzrkV8gx1UUO4q3oT/tsYnn7Pg9DTzwpmeFlYLn8WRYLUwT3
- ocppVCv7Uk4wL9JzNIgP2bdk9dASFC/omJ1R8LIO0YofTw5MF2Bhm1PdzJLdnVKzhAds
- DAyR0B0fJTJt74gcbadxb5XW/S0fPdGN4YOqV/JWoxEejRpVTO9qjdg3rEESySO7dSeF
- AMFQ==
+ bh=LCxpAnxZfMzbqjor21ywZPES4N+KbmZ5BP+WewT6SvE=;
+ b=kFSDGKCrS99meYKqjANNBDDYWXCPrwuPyzLoxlx1/SVeAj2uE+OGrtNyq7zDz0oDu2
+ xJJb4Hrxx9CR7CHL8bo9B+pox5kaMhf46oZkf7R/2OKFWM47tlNrARwc/HHrDNS15KjR
+ 2pnm0BMhKCI4YjFZk5W3kLhV9jSrqWsqyCU/KENZW//IlMFrPya70DHMPbUbTf+Y8YQI
+ 8GTY5tDjJw3gZyZGzXEsXgRBu6U3t7S4FDTcMwFZV6zVrnWoTmoMTzIDaV+QGDMcEsLT
+ c3TAtgImoyhpEqTauos/sFnsVNkPVQjJcFfJbY42glK4+xKOlN0xxTcG3xdDXpuUo0Yv
+ 2R7w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YBcnjpfS
-Subject: [Buildroot] [PATCH 1/1] package/azure-iot-sdk: fix static build
+ header.a=rsa-sha256 header.s=20230601 header.b=kFSDGKCr
+Subject: [Buildroot] [PATCH 1/1] package/apache: add host-pkgconf dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,47 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
+Cc: Bernd Kuhls <bernd@kuhls.net>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable provisioning client when building statically to avoid the
-following build failure raised since bump to version LTS_01_2022_Ref01
-in commit 06bb3640c13191f7515f2140c2207f5b7a2cb7ab and
-https://github.com/Azure/azure-iot-sdk-c/commit/1de399fd4875d16eb78e8193778238b9762ed44f
-which enabled provisioning client by default:
+apache uses pkgconfig to find dependencies such as lua, nhgttp2, openssl
+and systemd.
+For openssl, pkgconfig is used since version 2.1.1 and
+https://github.com/apache/httpd/commit/0d4387dedc4ad83460bf52fc326c475c64133634
+resulting in the following build failure since at least bump to version
+2.4.54 in commit 78e5a9c40e0754bbe840ef7b8da85efc28eb8b48:
 
-/home/buildroot/autobuild/instance-3/output-1/build/azure-iot-sdk-c-LTS_01_2023_Ref02/provisioning_client/deps/utpm/src/tpm_comm_linux.c:13:10: fatal error: dlfcn.h: No such file or directory
-   13 | #include <dlfcn.h>
-      |          ^~~~~~~~~
+ac_cv_path_PKGCONFIG=/usr/bin/pkg-config
+[...]
+configure:28669: checking for SSL_CTX_new
+configure:28669: /home/buildroot/autobuild/instance-1/output-1/host/bin/armeb-buildroot-linux-uclibcgnueabi-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -L/home/buildroot/autobuild/instance-1/output-1/host/armeb-buildroot-linux-uclibcgnueabi/sysroot/usr/bin/../../../../armeb-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -L/usr/lib conftest.c -lssl -lcrypto   -lpthread >&5
+armeb-buildroot-linux-uclibcgnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
 
 Fixes:
- - http://autobuild.buildroot.org/results/894188649f66d9917e1ed94989ebe307102ab28c
- - http://autobuild.buildroot.org/results/735b96c842796f309c33a0545eeb2e8f8d1f75ca
+ - http://autobuild.buildroot.org/results/d85c86ee1070582014c7b29b39f9a9f356988220
+ - http://autobuild.buildroot.org/results/55d6bad8572138e200730d3a9f2dd1b9048fd95d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/apache/apache.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index b6cd0e623a..a6cb968d65 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -15,4 +15,10 @@ AZURE_IOT_SDK_C_INSTALL_STAGING = YES
- AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
- AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index cac62134ed..3efa6b0ac1 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -17,7 +17,7 @@ APACHE_INSTALL_STAGING = YES
+ # We have a patch touching configure.in and Makefile.in,
+ # so we need to autoreconf:
+ APACHE_AUTORECONF = YES
+-APACHE_DEPENDENCIES = apr apr-util pcre2
++APACHE_DEPENDENCIES = host-pkgconf apr apr-util pcre2
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+AZURE_IOT_SDK_C_CONF_OPTS += -Duse_prov_client=OFF
-+else
-+AZURE_IOT_SDK_C_CONF_OPTS += -Duse_prov_client=ON
-+endif
-+
- $(eval $(cmake-package))
+ APACHE_CONF_ENV= \
+ 	ap_cv_void_ptr_lt_long=no \
 -- 
 2.42.0
 
