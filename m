@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2136C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 16:55:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56C55C4167B
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 16:55:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A74160F1F;
-	Sat,  4 Nov 2023 16:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A74160F1F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C32960F1F;
+	Sat,  4 Nov 2023 16:55:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C32960F1F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oQZqKNErFTPI; Sat,  4 Nov 2023 16:55:45 +0000 (UTC)
+	with ESMTP id ua5FEN2Ht-Am; Sat,  4 Nov 2023 16:55:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE9860F9C;
-	Sat,  4 Nov 2023 16:55:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DE9860F9C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53C7960F0B;
+	Sat,  4 Nov 2023 16:55:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53C7960F0B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 179111BF2C5
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:55:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1454C1BF2C5
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3804560F1F
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE24160F93
  for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3804560F1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE24160F93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Inmq0efnPUPm for <buildroot@lists.busybox.net>;
+ with ESMTP id 7uqgyF1lpjmw for <buildroot@lists.busybox.net>;
  Sat,  4 Nov 2023 16:55:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 72A1160F95
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4971460F08
  for <buildroot@buildroot.org>; Sat,  4 Nov 2023 16:55:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72A1160F95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4971460F08
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5153E8669C; Sat,  4 Nov 2023 16:55:16 +0000 (UTC)
+ id 2DBC68669A; Sat,  4 Nov 2023 16:55:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 17:53:37 +0100
+Date: Sat, 4 Nov 2023 17:48:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 049ea7b389e1f4657aa7683b6a6241e021817b76
-X-Git-Newrev: 01a4614d10b90540bbab76c823d8fb2faea87a27
+X-Git-Oldrev: 200b264b7a12c582a5d200d02fec8d9babd79651
+X-Git-Newrev: 0a8bc54e09ea816e0231afe13bbec14c2d8baa7d
 X-Patchwork-Hint: ignore
-Message-Id: <20231104165516.5153E8669C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-golang: don't expand license
+Message-Id: <20231104165516.2DBC68669A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-cargo: don't expand license
  info when empty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -64,11 +64,11 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01a4614d10b90540bbab76c823d8fb2faea87a27
+commit: https://git.buildroot.net/buildroot/commit/?id=0a8bc54e09ea816e0231afe13bbec14c2d8baa7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The golang infrastructure automatically expands the list of licenses
-with a little blurb that the licenses for vendored dependencies might be
+The cargo infrastructure automatically expands the list of licenses with
+a little blurb that the licenses for vendored dependencies might be
 missing in the list.
 
 However, when a package does not define a license, the resulting text is
@@ -86,15 +86,15 @@ license altogether.
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/pkg-golang.mk | 6 +++++-
+ package/pkg-cargo.mk | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 7ba82284f3..1fa0b001e0 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -92,8 +92,12 @@ $(2)_DL_ENV += \
- 	$$($(2)_GO_ENV)
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+index 264bf5a1ae..7802c3a883 100644
+--- a/package/pkg-cargo.mk
++++ b/package/pkg-cargo.mk
+@@ -96,8 +96,12 @@ $(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(2)_SUBDIR)/Cargo.toml
+ endif
  
  # Due to vendoring, it is pretty likely that not all licenses are
 -# listed in <pkg>_LICENSE.
@@ -105,8 +105,8 @@ index 7ba82284f3..1fa0b001e0 100644
  $(2)_LICENSE += , vendored dependencies licenses probably not listed
 +endif
  
- # Build step. Only define it if not already defined by the package .mk
- # file.
+ # Note: in all the steps below, we "cd" into the build directory to
+ # execute the "cargo" tool instead of passing $(@D)/Cargo.toml as the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
