@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23412C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:26:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3D5BC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:26:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A44EC4033F;
-	Sat,  4 Nov 2023 20:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A44EC4033F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73EED403A7;
+	Sat,  4 Nov 2023 20:26:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73EED403A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RYlD52yq8duU; Sat,  4 Nov 2023 20:26:16 +0000 (UTC)
+	with ESMTP id 72PWgUgSUug6; Sat,  4 Nov 2023 20:26:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C066403BE;
-	Sat,  4 Nov 2023 20:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C066403BE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BCC461BF868
+	by smtp2.osuosl.org (Postfix) with ESMTP id 432364033F;
+	Sat,  4 Nov 2023 20:26:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 432364033F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DB54D1BF869
  for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:25:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9586481F1B
+ by smtp2.osuosl.org (Postfix) with ESMTP id B377040359
  for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:25:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9586481F1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B377040359
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ru7EFotIlaDt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bDOC8-SM--YR for <buildroot@lists.busybox.net>;
  Sat,  4 Nov 2023 20:25:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CDDDA81F1A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9798B40273
  for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:25:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDDDA81F1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9798B40273
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B717886735; Sat,  4 Nov 2023 20:25:57 +0000 (UTC)
+ id 7FD2E86732; Sat,  4 Nov 2023 20:25:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 21:25:23 +0100
+Date: Sat, 4 Nov 2023 21:18:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd0362e3376abd7f383c666f0f6d600dba9dba2d
-X-Git-Newrev: 73b24215807da4c0610feb4d8be0961c70050700
+X-Git-Oldrev: 738029bc122e2c79941d8cbaac010f0640dcb3d4
+X-Git-Newrev: 519374f0d28abc76b7d77964528fbdd9a04c587e
 X-Patchwork-Hint: ignore
-Message-Id: <20231104202557.B717886735@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/amlogic-boot-fip: fix typo in
- Config.in.host
+Message-Id: <20231104202557.7FD2E86732@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/stellarium: bump version to 23.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,28 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73b24215807da4c0610feb4d8be0961c70050700
+commit: https://git.buildroot.net/buildroot/commit/?id=519374f0d28abc76b7d77964528fbdd9a04c587e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
+Release notes:
+http://stellarium.org/release/2023/09/25/stellarium-23.3.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/amlogic-boot-fip/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/stellarium/stellarium.hash | 2 +-
+ package/stellarium/stellarium.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/amlogic-boot-fip/Config.in.host b/package/amlogic-boot-fip/Config.in.host
-index d72bac568e..bccc6296d1 100644
---- a/package/amlogic-boot-fip/Config.in.host
-+++ b/package/amlogic-boot-fip/Config.in.host
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_HOST_AMLOGIC_BOOT_FIP
- 	bool "host amlogic-boot-fip"
- 	depends on BR2_HOSTARCH = "x86_64"
- 	help
--	  Firmware Image Pacakge (FIP) sources used to sign Amlogic
-+	  Firmware Image Package (FIP) sources used to sign Amlogic
- 	  u-boot binaries in LibreELEC images
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+index e0ee61d2b6..a2f511a283 100644
+--- a/package/stellarium/stellarium.hash
++++ b/package/stellarium/stellarium.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/Stellarium/stellarium/releases
+-sha256  3aee154d0de3ed484e3e6fee027cf73e6dd0a677b3ea1af348b225ac02339008  stellarium-23.2.tar.xz
++sha256  179420e9e9f11278b78dc54e14458452c92055cc8923538748c8a0f961714fc2  stellarium-23.3.tar.xz
+ # Locally computed
+ sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index 43c99413dd..94ad4e1352 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/LibreELEC/amlogic-boot-fip
+-STELLARIUM_VERSION = 23.2
++STELLARIUM_VERSION = 23.3
+ STELLARIUM_SOURCE = stellarium-$(STELLARIUM_VERSION).tar.xz
+ STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
+ STELLARIUM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
