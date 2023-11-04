@@ -4,89 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98430C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 17:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01B39C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 17:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9F70400BD;
-	Sat,  4 Nov 2023 17:54:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9F70400BD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E236400BD;
+	Sat,  4 Nov 2023 17:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E236400BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PL-G9DZfRCk9; Sat,  4 Nov 2023 17:54:39 +0000 (UTC)
+	with ESMTP id UPzCQ86XRccJ; Sat,  4 Nov 2023 17:55:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D08F940128;
-	Sat,  4 Nov 2023 17:54:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D08F940128
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B66A71BF21A
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:54:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8BF7640128;
+	Sat,  4 Nov 2023 17:55:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BF7640128
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1719E1BF21A
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:55:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9515141926
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9515141926
+ by smtp3.osuosl.org (Postfix) with ESMTP id E471260AC6
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:55:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E471260AC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hubW1cHZ3WjH for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 17:54:35 +0000 (UTC)
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3157B41920
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3157B41920
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-9c5b313b3ffso463442666b.0
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 10:54:34 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LlBB3f8Mm9x6 for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 17:55:17 +0000 (UTC)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D303760AB2
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D303760AB2
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-9a58dbd5daeso482023166b.2
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 10:55:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699120472; x=1699725272;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ d=1e100.net; s=20230601; t=1699120515; x=1699725315;
+ h=content-transfer-encoding:in-reply-to:references:cc:to:from
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=52Wqa9/2KNPhgnt1I3YChUwntqFmQZAvG5CEdsmWYvY=;
- b=aBDozZFFLUw0uJkQXIiSL2KUxSrmzSjYp0HZM4w1uuUCfMuUqcroRGOURYLS7ETQc1
- dBpfcLI1BegGCCRlw6VFiGOgau6NDx99qHET5+fHms47sxSFQb8NNVEjdCYxV5fKc6V/
- uGHUv2qXh9em4RlLReQzIjzF0gxZDUz1oWCEiqUdAEh3/HMxLbBG61mx5OIdAyUlt6I9
- OjT5f0rzRu8dsVS0HLhjS1J789FLfZb0iWkkfj8FkKSOBv2b6ZI5R5NyelCkKGTCqHz6
- /l4BqFixhdt4xcNHuJQjECSZNufNEiti7G4S/R5ADvV7gE3k+0b6mvJNsjxDJ1bRO9s+
- aVzA==
-X-Gm-Message-State: AOJu0YyJx/lRxtfVPKdHhSHk50vproIARhg8PGR6aEULcertdnI9if8a
- wEg8qCZ3zbQKwxjysgOyt8BPQg==
-X-Google-Smtp-Source: AGHT+IHtJsifMJqKk8VfWcbQap3yoyaD5uesBziaiaT46gocAQxBq3YJGs2/7t8DJ6nynHM3+oLtpg==
-X-Received: by 2002:a17:907:25c6:b0:9bd:f902:9a61 with SMTP id
- ae6-20020a17090725c600b009bdf9029a61mr9685640ejc.18.1699120472417; 
- Sat, 04 Nov 2023 10:54:32 -0700 (PDT)
+ bh=Yi+2c6MwlJmbXT4PZUUfHYisC/cg4pY4jATs/50JN5I=;
+ b=qlihUVH3f46fDVWHFZFqhKicznpmTvUza3+YOeAULo6xxg7T9Y2uK3Etdczu6Sbybw
+ NnaWW+9UqTOK0gcj1H8uYG9fza8Z88Qy8iqiQ3ZMUgef25/DHmeqn6uGihu6SY82gheb
+ 3B04Bqa7/jBJA/tRapUDnP6aEHJbv/V8d/YAxjeFFu5zCO6mXfW3EgJ61srLXqJLejXX
+ orNSX0X/Iof6LPjE7sY0psP31LaUy1AEzpNTaP/KVozI6CdqsyXhF9rQnWthZy6Qbh5j
+ X7VVBxb+QsixQLwCU9rpbufCNb/mr2OgsyOXBEK6uVQcCEV+QPaQouMRAp4jv6VQJVDq
+ hVig==
+X-Gm-Message-State: AOJu0Yy9mU/k68d2B3JV5Mm114jKfaU1Rr9qmCX1+vgcAtOtXG67L5e4
+ DJTM5XMIdJAxCJyb3R2NHE/oFQ==
+X-Google-Smtp-Source: AGHT+IF872FjEEmy7grtPxIptOcLn+KtfN9cWaShWJnuOLnbBeDaz3fofF8qpVfu6RpBBjRtjqKF8A==
+X-Received: by 2002:a17:907:60d2:b0:9c6:8190:359f with SMTP id
+ hv18-20020a17090760d200b009c68190359fmr10860655ejc.33.1699120515101; 
+ Sat, 04 Nov 2023 10:55:15 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- a1-20020a170906368100b0099bd453357esm2167290ejc.41.2023.11.04.10.54.31
+ a1-20020a170906368100b0099bd453357esm2167290ejc.41.2023.11.04.10.55.14
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 04 Nov 2023 10:54:31 -0700 (PDT)
-Message-ID: <c8a18ebb-1b1c-4e4f-b855-ba1241257a14@mind.be>
-Date: Sat, 4 Nov 2023 18:54:29 +0100
+ Sat, 04 Nov 2023 10:55:14 -0700 (PDT)
+Message-ID: <3e5949fe-5d4e-4d48-b9ef-4088c19d792e@mind.be>
+Date: Sat, 4 Nov 2023 18:55:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
 References: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
  <20231026092701.12345-16-adam.duskett@amarulasolutions.com>
-In-Reply-To: <20231026092701.12345-16-adam.duskett@amarulasolutions.com>
+ <c8a18ebb-1b1c-4e4f-b855-ba1241257a14@mind.be>
+In-Reply-To: <c8a18ebb-1b1c-4e4f-b855-ba1241257a14@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699120472; x=1699725272; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ d=mind.be; s=google; t=1699120515; x=1699725315; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:references:cc:to:from
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=52Wqa9/2KNPhgnt1I3YChUwntqFmQZAvG5CEdsmWYvY=;
- b=Ad6vaLc/gtjcghQkmQrN0mfO0tmjsp1qh9smuPbzMdxs/wsC8qFZi6ANwTp9ieGcPJ
- xE6zCY3aazzzjxvraM9QPfsJ5X7HzlRbJhHpNe5aHUAD4QcANrwuTUIjG7acwicoZBsn
- SQje9TLDI0bZgC+sDgdtfPU7CO50u3dI2T0kvQwxCq6pP5qrGX3EfYoyMTCuA3LuXCY0
- OQODez/8bcu0dNdVXllViPZ771pRJGvNwE3/ZjECyxbudSfE7k2hl/YlAVzZq8czJfMx
- GBXCqc5F53ya6gqlTQFgkh/aBHdw5lxy/vIk+0jdXuGfr0GmNXuiMuXuscHBPEM0i76S
- IHyg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Yi+2c6MwlJmbXT4PZUUfHYisC/cg4pY4jATs/50JN5I=;
+ b=eH0HRFh4gjs7G/UDASUiaXezEuJK2ubLOI0vx/NfOwh2PhuZmdK5j9825w1GpjMPFh
+ 5StlFUhk4uAeQJiDxOEwKh0l4QJ9Yd42yjoiQ9kPX66ZQuSpxzBNzJZ9vqZbUNaUzonN
+ FUq9JxSeO+BHoU1Fb6Gkq0wsH5can1AXB9r4o7OYBfjqfez3Mz0MWLgPC0OxdvnYKS2d
+ MrdNDlVCWSPdjuGipR+9h4oGzwVPtD5O6NnKTtjTe6YI9U8+7Nb+zbyHRssNg9KPG2AW
+ cPZYJ5UTBxSjRc/yo+5ycDCkCHlEVc+qldbXJ5OCOW31A0eb9YIrsOsaFoRyORmmsikI
+ wUSg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Ad6vaLc/
+ header.a=rsa-sha256 header.s=google header.b=eH0HRFh4
 Subject: Re: [Buildroot] [PATCH 15/30] package/scons: bump version to 4.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -105,64 +106,47 @@ Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
  James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
  Julien Olivain <ju.o@free.fr>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Mauro Condarelli <mc5686@mclink.it>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Adam,
-
-On 26/10/2023 11:26, Adam Duskett wrote:
-> Scons is a setuptools package now.
-> 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->   package/scons/scons.hash | 4 ++--
->   package/scons/scons.mk   | 7 ++++---
->   2 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/scons/scons.hash b/package/scons/scons.hash
-> index a72fbaee5a..48b5077b2e 100644
-> --- a/package/scons/scons.hash
-> +++ b/package/scons/scons.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed:
-> -sha256  7801f3f62f654528e272df780be10c0e9337e897650b62ddcee9f39fde13f8fb  scons-3.1.2.tar.gz
-> -sha256  72ed889165fb28378cadac14552be4a959f1ebab6b148abb5dd2b49712c3c6f6  LICENSE.txt
-> +sha256  ce26aac95d350a79a4192196b0beac3cb24f4ccabce0123eb28d3370f576f072  SCons-4.5.2.tar.gz
-> +sha256  2f6ac9a1fc98394d18b80dba9bedb9d5626006d44db3fecf7cf3e21cff7e8b1c  LICENSE
-
-  The license hash changed. Can you report in the commit message why it changed 
-(i.e., did something change about the license?)
-
-> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-> index 6b75d3ddca..767cf64b26 100644
-> --- a/package/scons/scons.mk
-> +++ b/package/scons/scons.mk
-> @@ -4,11 +4,12 @@
->   #
->   ################################################################################
->   
-> -SCONS_VERSION = 3.1.2
-> +SCONS_VERSION = 4.5.2
-
-  That's a pretty big bump. Have you tested if the scons packages (benejson, 
-gpsd, mongodb) still build?
-
-  Regards,
-  Arnout
-
-> +SCONS_SOURCE = SCons-$(SCONS_VERSION).tar.gz
->   SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
->   SCONS_LICENSE = MIT
-> -SCONS_LICENSE_FILES = LICENSE.txt
-> -SCONS_SETUP_TYPE = distutils
-> +SCONS_LICENSE_FILES = LICENSE
-> +SCONS_SETUP_TYPE = setuptools
->   
->   HOST_SCONS_INSTALL_OPTS = \
->   	--install-lib=$(HOST_DIR)/lib/scons-$(SCONS_VERSION)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Ck9uIDA0LzExLzIwMjMgMTg6NTQsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+IMKgSGkg
+QWRhbSwKPgo+IE9uIDI2LzEwLzIwMjMgMTE6MjYsIEFkYW0gRHVza2V0dCB3cm90ZToKPj4gU2Nv
+bnMgaXMgYSBzZXR1cHRvb2xzIHBhY2thZ2Ugbm93Lgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBBZGFt
+IER1c2tldHQgPGFkYW0uZHVza2V0dEBhbWFydWxhc29sdXRpb25zLmNvbT4KPj4gLS0tCj4+IMKg
+IHBhY2thZ2Uvc2NvbnMvc2NvbnMuaGFzaCB8IDQgKystLQo+PiDCoCBwYWNrYWdlL3Njb25zL3Nj
+b25zLm1rwqDCoCB8IDcgKysrKy0tLQo+PiDCoCAyIGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9u
+cygrKSwgNSBkZWxldGlvbnMoLSkKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2NvbnMvc2Nv
+bnMuaGFzaCBiL3BhY2thZ2Uvc2NvbnMvc2NvbnMuaGFzaAo+PiBpbmRleCBhNzJmYmFlZTVhLi40
+OGI1MDc3YjJlIDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL3Njb25zL3Njb25zLmhhc2gKPj4gKysr
+IGIvcGFja2FnZS9zY29ucy9zY29ucy5oYXNoCj4+IEBAIC0xLDMgKzEsMyBAQAo+PiDCoCAjIExv
+Y2FsbHkgY29tcHV0ZWQ6Cj4+IC1zaGEyNTYgNzgwMWYzZjYyZjY1NDUyOGUyNzJkZjc4MGJlMTBj
+MGU5MzM3ZTg5NzY1MGI2MmRkY2VlOWYzOWZkZTEzZjhmYiAKPj4gc2NvbnMtMy4xLjIudGFyLmd6
+Cj4+IC1zaGEyNTYgNzJlZDg4OTE2NWZiMjgzNzhjYWRhYzE0NTUyYmU0YTk1OWYxZWJhYjZiMTQ4
+YWJiNWRkMmI0OTcxMmMzYzZmNiAKPj4gTElDRU5TRS50eHQKPj4gK3NoYTI1NiBjZTI2YWFjOTVk
+MzUwYTc5YTQxOTIxOTZiMGJlYWMzY2IyNGY0Y2NhYmNlMDEyM2ViMjhkMzM3MGY1NzZmMDcyIAo+
+PiBTQ29ucy00LjUuMi50YXIuZ3oKPj4gK3NoYTI1NiAyZjZhYzlhMWZjOTgzOTRkMThiODBkYmE5
+YmVkYjlkNTYyNjAwNmQ0NGRiM2ZlY2Y3Y2YzZTIxY2ZmN2U4YjFjIExJQ0VOU0UKPgo+IMKgVGhl
+IGxpY2Vuc2UgaGFzaCBjaGFuZ2VkLiBDYW4geW91IHJlcG9ydCBpbiB0aGUgY29tbWl0IG1lc3Nh
+Z2Ugd2h5IGl0IGNoYW5nZWQgCj4gKGkuZS4sIGRpZCBzb21ldGhpbmcgY2hhbmdlIGFib3V0IHRo
+ZSBsaWNlbnNlPykKCiDCoElkZWFsbHkgd2l0aCBgZGlmZiAtd2Agb3V0cHV0LgoKCiDCoFJlZ2Fy
+ZHMsCiDCoEFybm91dAoKCj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2NvbnMvc2NvbnMubWsg
+Yi9wYWNrYWdlL3Njb25zL3Njb25zLm1rCj4+IGluZGV4IDZiNzVkM2RkY2EuLjc2N2NmNjRiMjYg
+MTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2Uvc2NvbnMvc2NvbnMubWsKPj4gKysrIGIvcGFja2FnZS9z
+Y29ucy9zY29ucy5tawo+PiBAQCAtNCwxMSArNCwxMiBAQAo+PiDCoCAjCj4+ICMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjCj4+IMKgIC1TQ09OU19WRVJTSU9OID0gMy4xLjIKPj4gK1NDT05TX1ZFUlNJ
+T04gPSA0LjUuMgo+Cj4gwqBUaGF0J3MgYSBwcmV0dHkgYmlnIGJ1bXAuIEhhdmUgeW91IHRlc3Rl
+ZCBpZiB0aGUgc2NvbnMgcGFja2FnZXMgKGJlbmVqc29uLCAKPiBncHNkLCBtb25nb2RiKSBzdGls
+bCBidWlsZD8KPgo+IMKgUmVnYXJkcywKPiDCoEFybm91dAo+Cj4+ICtTQ09OU19TT1VSQ0UgPSBT
+Q29ucy0kKFNDT05TX1ZFUlNJT04pLnRhci5nego+PiDCoCBTQ09OU19TSVRFID0gCj4+IGh0dHA6
+Ly9kb3dubG9hZHMuc291cmNlZm9yZ2UubmV0L3Byb2plY3Qvc2NvbnMvc2NvbnMvJChTQ09OU19W
+RVJTSU9OKQo+PiDCoCBTQ09OU19MSUNFTlNFID0gTUlUCj4+IC1TQ09OU19MSUNFTlNFX0ZJTEVT
+ID0gTElDRU5TRS50eHQKPj4gLVNDT05TX1NFVFVQX1RZUEUgPSBkaXN0dXRpbHMKPj4gK1NDT05T
+X0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4+ICtTQ09OU19TRVRVUF9UWVBFID0gc2V0dXB0b29s
+cwo+PiDCoCDCoCBIT1NUX1NDT05TX0lOU1RBTExfT1BUUyA9IFwKPj4gwqDCoMKgwqDCoCAtLWlu
+c3RhbGwtbGliPSQoSE9TVF9ESVIpL2xpYi9zY29ucy0kKFNDT05TX1ZFUlNJT04pCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
