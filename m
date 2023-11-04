@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8282C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E00C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B9DA60C15;
-	Sat,  4 Nov 2023 20:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B9DA60C15
+	by smtp3.osuosl.org (Postfix) with ESMTP id D876760BA0;
+	Sat,  4 Nov 2023 20:42:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D876760BA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zdEveDuxwc3x; Sat,  4 Nov 2023 20:42:36 +0000 (UTC)
+	with ESMTP id mXy-0HHcqyMo; Sat,  4 Nov 2023 20:42:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EC1460BA9;
-	Sat,  4 Nov 2023 20:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EC1460BA9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A053E1BF584
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:42:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C58360B32;
+	Sat,  4 Nov 2023 20:42:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C58360B32
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 779591BF584
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:42:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79038418C2
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:42:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79038418C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F18140359
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:42:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F18140359
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h1OaGDDezcFB for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 20:42:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8BF8418AC
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:42:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8BF8418AC
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92EED818C9; Sat,  4 Nov 2023 20:42:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 21:41:53 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c71477f663c64bf7e3455e235f610fe17d0956c
-X-Git-Newrev: 5b139e2a8ded312e3b4a0939b35e6888a3d73076
-X-Patchwork-Hint: ignore
-Message-Id: <20231104204232.92EED818C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libzlib: Switch to using HTTPS
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IwXTR02rILiH for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 20:42:37 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0A1E24033F
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:42:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1E24033F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 57C2A20003;
+ Sat,  4 Nov 2023 20:42:35 +0000 (UTC)
+Date: Sat, 4 Nov 2023 21:42:34 +0100
+To: Andrew Donnellan <ajd@linux.ibm.com>
+Message-ID: <20231104214234.136b0e66@windsurf>
+In-Reply-To: <20231003234734.525050-1-ajd@linux.ibm.com>
+References: <20231003234734.525050-1-ajd@linux.ibm.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699130555;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=t+EOejyEiZRmZE/tzwiF6hx0aF+Df3gBg6bLDCEjfIs=;
+ b=hHG55dkSoqIEcJOMwh76JRJpFLoyaY0SO0YoS1eyRw4aHKa48Wt++PJkLF+g71wTCrfN5Q
+ duQIRPCyTAezQ6P4FvAe0LYJI/HvIsz0YroTJFeV/q2CKIx7I3mh+Qfu418ftkq9yBBBCw
+ hzggMvsNeOLOu/qf8IE1dxnFcDsXdFdV2797Nq/5jfkIrtmuvRZLLCx9JZxH2x/XQKoQ4U
+ yTLMRI5Zc34qiXTkNRnipHjUImeXxh/yZo4GS+ZOhM2AZN6p60YllimxMVtrQP6LzizmbG
+ l54zfFKYiEFjvXLOE3N0o0kjfs9tadEPVvWvyXT7CAjBMDTHoPlKM9sBKrMZPw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hHG55dkS
+Subject: Re: [Buildroot] [PATCH] package/libzlib: Switch to using HTTPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,40 +76,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b139e2a8ded312e3b4a0939b35e6888a3d73076
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  4 Oct 2023 10:47:34 +1100
+Andrew Donnellan <ajd@linux.ibm.com> wrote:
 
-Switch to using HTTPS for downloading libzlib from zlib.net.
+> Switch to using HTTPS for downloading libzlib from zlib.net.
+> 
+> (zlib.net doesn't default to HTTPS but does suggest HTTPS in the permalink
+> for the latest zlib release. Also works better with some corporate firewalls
+> that get suspicious about zlib for some reason.)
+> 
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> ---
+>  package/libzlib/libzlib.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-(zlib.net doesn't default to HTTPS but does suggest HTTPS in the permalink
-for the latest zlib release. Also works better with some corporate firewalls
-that get suspicious about zlib for some reason.)
+Applied to master, thanks.
 
-Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libzlib/libzlib.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
-index da452af8e9..e0a4e454e1 100644
---- a/package/libzlib/libzlib.mk
-+++ b/package/libzlib/libzlib.mk
-@@ -6,7 +6,7 @@
- 
- LIBZLIB_VERSION = 1.3
- LIBZLIB_SOURCE = zlib-$(LIBZLIB_VERSION).tar.xz
--LIBZLIB_SITE = http://www.zlib.net
-+LIBZLIB_SITE = https://www.zlib.net
- LIBZLIB_LICENSE = Zlib
- LIBZLIB_LICENSE_FILES = LICENSE
- LIBZLIB_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
