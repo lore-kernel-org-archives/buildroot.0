@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E1A0C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14501C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CFD2940273;
-	Sat,  4 Nov 2023 20:13:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFD2940273
+	by smtp2.osuosl.org (Postfix) with ESMTP id 99AB840360;
+	Sat,  4 Nov 2023 20:13:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99AB840360
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2YrovjxZB1Il; Sat,  4 Nov 2023 20:13:33 +0000 (UTC)
+	with ESMTP id HNIz9iCYfl76; Sat,  4 Nov 2023 20:13:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB2374031C;
-	Sat,  4 Nov 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB2374031C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B13DD1BF5A6
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:13:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FA984033F;
+	Sat,  4 Nov 2023 20:13:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FA984033F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4495C1BF5A6
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:13:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97374418F2
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97374418F2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A6FC60BD6
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:13:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A6FC60BD6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FkoU-dCk2Ndu for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 20:13:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75FBF418F0
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75FBF418F0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60BFD86705; Sat,  4 Nov 2023 20:13:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 21:06:31 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8a307fbac92181caf333289c031ec9eb7680203b
-X-Git-Newrev: a13c6c707bcfdb60751428544bd316979470a914
-X-Patchwork-Hint: ignore
-Message-Id: <20231104201329.60BFD86705@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/procs: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VobBOOwizaH9 for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 20:13:35 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1C7DE60BC7
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:13:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C7DE60BC7
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FB6FFF803;
+ Sat,  4 Nov 2023 20:13:31 +0000 (UTC)
+Date: Sat, 4 Nov 2023 21:13:30 +0100
+To: Saeed Kazemi <kazemi.ms@gmail.com>
+Message-ID: <20231104211330.6ef7d718@windsurf>
+In-Reply-To: <20231001220841.2586827-1-kazemi.ms@gmail.com>
+References: <20231001220841.2586827-1-kazemi.ms@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699128811;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=evO841ygDJLmAgKBCXYCEQQo9+6eG9EVxjBXsZYOEXo=;
+ b=jvzgwgSEPBk5hNWwBP4jOx3BBBbJ3TLEfbroKsS/4ZutA+T9SkG3OsBdLFcoDlw2XF07HY
+ ZIRd1x1odZP4+on7njao9njnkktjnIR7mfFKvkyiMDOrmI24DAKUAqYLPyLIf4FPg3KMiv
+ oNvspEuUQuHLH7olWrrdhWADYkQ46ok/H5hpteBE+flBTuOpzFRE1wy8wncgQgccwsk5Ec
+ EYoj8RvfijxFHFxGOZsNlYig7i2IkRDMqvP7xIzvSerb7E1PKoT+6QkrK4fMtoWeYmExhD
+ 7zGBo3TAvBjIflzj5w/XoGRxC9YHioI286wFTujzu0zYakO4NW36nV5RTr0Bsg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=jvzgwgSE
+Subject: Re: [Buildroot] [PATCH 1/1] package/procs: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,96 +76,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a13c6c707bcfdb60751428544bd316979470a914
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  2 Oct 2023 00:08:41 +0200
+Saeed Kazemi <kazemi.ms@gmail.com> wrote:
 
-procs is a modern replacement for ps written in Rust
+> procs is a modern replacement for ps written in Rust
+> 
+> https://github.com/dalance/procs.git
+> 
+> Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+> ---
+>  DEVELOPERS               |  3 +++
+>  package/Config.in        |  1 +
+>  package/procs/Config.in  |  8 ++++++++
+>  package/procs/procs.hash |  3 +++
+>  package/procs/procs.mk   | 12 ++++++++++++
+>  5 files changed, 27 insertions(+)
+>  create mode 100644 package/procs/Config.in
+>  create mode 100644 package/procs/procs.hash
+>  create mode 100644 package/procs/procs.mk
 
-https://github.com/dalance/procs.git
+Applied to master, thanks!
 
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS               |  3 +++
- package/Config.in        |  1 +
- package/procs/Config.in  |  8 ++++++++
- package/procs/procs.hash |  3 +++
- package/procs/procs.mk   | 12 ++++++++++++
- 5 files changed, 27 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index de4cd7168e..019516396e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2634,6 +2634,9 @@ F:	package/agent-proxy/
- N:	Ryan Wilkins <ryan@deadfrog.net>
- F:	package/biosdevname/
- 
-+N:	Saeed Kazemi <kazemi.ms@gmail.com>
-+F:	package/procs/
-+
- N:	Sam Lancia <sam@gpsm.co.uk>
- F:	package/lrzip/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 7e2fccc8b1..9a189a2183 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2733,6 +2733,7 @@ menu "System tools"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/procps-ng/Config.in"
- 	source "package/procrank_linux/Config.in"
-+	source "package/procs/Config.in"
- 	source "package/psmisc/Config.in"
- 	source "package/pwgen/Config.in"
- 	source "package/quota/Config.in"
-diff --git a/package/procs/Config.in b/package/procs/Config.in
-new file mode 100644
-index 0000000000..946fa68c63
---- /dev/null
-+++ b/package/procs/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PROCS
-+	bool "procs"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  procs is a modern replacement for ps written in Rust
-+
-+	  https://github.com/dalance/procs.git
-diff --git a/package/procs/procs.hash b/package/procs/procs.hash
-new file mode 100644
-index 0000000000..1c2fb5c3d5
---- /dev/null
-+++ b/package/procs/procs.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  643b7ba4b769ee9f336d441ecdac779c3d52e5719a15c14bb0acb3609ce1cd99  procs-0.14.0.tar.gz
-+sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
-diff --git a/package/procs/procs.mk b/package/procs/procs.mk
-new file mode 100644
-index 0000000000..a074ee1311
---- /dev/null
-+++ b/package/procs/procs.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# procs
-+#
-+################################################################################
-+
-+PROCS_VERSION = 0.14.0
-+PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
-+PROCS_LICENSE = MIT
-+PROCS_LICENSE_FILES = LICENSE
-+
-+$(eval $(cargo-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
