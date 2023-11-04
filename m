@@ -4,68 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E39AAC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 14:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6999C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 14:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90B2C82300;
-	Sat,  4 Nov 2023 14:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90B2C82300
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E89E8231F;
+	Sat,  4 Nov 2023 14:02:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E89E8231F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U7ikVSOzlHCL; Sat,  4 Nov 2023 14:02:04 +0000 (UTC)
+	with ESMTP id uMCvsXISwfvn; Sat,  4 Nov 2023 14:02:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE39D822FD;
-	Sat,  4 Nov 2023 14:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE39D822FD
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4EC182309;
+	Sat,  4 Nov 2023 14:02:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4EC182309
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B11C1BF30C
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 14:02:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 57C1C1BF30C
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 14:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B935822FD
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 14:02:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B935822FD
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9D5182321
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 14:02:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9D5182321
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RdjphaVkIS_F for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 14:02:01 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F0406822FA
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 14:02:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0406822FA
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C02E1240003;
- Sat,  4 Nov 2023 14:01:58 +0000 (UTC)
-Date: Sat, 4 Nov 2023 15:01:57 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20231104150157.6830ab67@windsurf>
-In-Reply-To: <7f1c47f6-91f0-438a-83ab-621eabf032b6@benettiengineering.com>
-References: <20231013210841.153788-1-giulio.benetti@benettiengineering.com>
- <20231102190748.3232ab71@windsurf>
- <7f1c47f6-91f0-438a-83ab-621eabf032b6@benettiengineering.com>
+ with ESMTP id 8svF-mSPXD1K for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 14:02:23 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A07D08231D
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 14:02:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A07D08231D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E842760005;
+ Sat,  4 Nov 2023 14:02:21 +0000 (UTC)
+Date: Sat, 4 Nov 2023 15:02:21 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20231104150221.07670044@windsurf>
+In-Reply-To: <20231015210548.36882-1-bernd@kuhls.net>
+References: <20231015210548.36882-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699106519;
+ d=bootlin.com; s=gm1; t=1699106542;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=LGqa0ya4ceLdFu7K0DtKr5TO8wQOONmLSbXaqEQFGEE=;
- b=atkp/mZCaS9ToCqnyH1bsidDKkNqiZZU8Ju3Q4catp+tyacZVwJ1AroR1ccmhk0mkaygOt
- 3DxxU4LsmWlAi0xS4CP/kmACplHJCkCS42OoCslbrUrX8I7qtPtOz0/350OayK5V/zBANj
- Ky6ed9TfTOd8rA3dFFdoV5qUdGbvLJuDTW+OoqBzPvnVd7TY+q1aPmY8RS14X8LkpK8fnp
- 4yH7Yyo0GZed/cDO/ocrUNoshA3KtlHSA6nStswuZht02iS7IYESkPO01hxe8c30ToEZYL
- wEI5Gmz6LfyFSP9kv88PYC5dO8fM6uDjeB+Yby43FCds84iR13z0V14tFiX4yg==
+ bh=F0XBGoTg+W8hW+uTuDVPz0Jx8XVaB3/dYuYr1vWQfFc=;
+ b=bOq+La33p4v559wLkblvfKVhN0m0BnkUO+PzaPin+7XDbuXSha5XfjpsZkeKO7Fu+3h6Jz
+ 15j4bjonh9k32NihOO6q3xiAdYDAWY2na7T12KX0xlmhMNPYth2hkoFVh8lJBigUXKx9xb
+ JzOA0L3WMiSLa4iLOrTX302Zd7bbFfRV9fI9WhMSAjBCed3XfEo98BtEe98XwD0nRMckMv
+ 70C/j+lg27J9xYeb17nL0kt0L1I7AWOcDU6qw6OE3nE2otNqsAunK+9j/Y1d4xJyEoWL56
+ 4vvHQ7P0upUFTvdgvjsEChHll3HNyCh599zIFGrBo/A9LV2eiBY3dpyrq7DWrA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=atkp/mZC
-Subject: Re: [Buildroot] [PATCH 1/2] board/bananapi/bananapi-m2-berry:
- switch to use extlinux.conf
+ header.s=gm1 header.b=bOq+La33
+Subject: Re: [Buildroot] [PATCH 1/1] package/ethtool: switch to git snapshot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,31 +76,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jagan Teki <jagan@amarulasolutions.com>,
- Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 2 Nov 2023 19:30:48 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Sun, 15 Oct 2023 23:05:48 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Just rebuilt, flashed and given a run, this is the log, specifically in
-> u-boot:
+> Upstream tarball does not include several header files leading to build
+> errors with older kernels. For details see:
+> https://patchwork.kernel.org/project/netdevbpf/patch/20231005163053.1800218-1-florian.fainelli@broadcom.com/
+> 
+> Switch _SITE to git snapshot and add _AUTORECONF = YES which needs
+> host-pkgconf to fix subsequent configure error:
+> 
+> ./configure: line 4723: PKG_PROG_PKG_CONFIG: command not found
+> 
+> ./configure: line 5055: syntax error near unexpected token `MNL,'
+> ./configure: line 5055: `    PKG_CHECK_MODULES(MNL, libmnl)'
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/69e/69e01b7f370920630d132fc43a40104fa5b3959f/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/ethtool/ethtool.hash | 3 +--
+>  package/ethtool/ethtool.mk   | 7 +++++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 
-Hum, indeed, the U-Boot documentation says:
-
-"Note that in the absence of any partition that is explicitly marked
-bootable, U-Boot falls back to searching the first valid partition of a
-disk for boot configuration files."
-
-So, that's why it works.
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
