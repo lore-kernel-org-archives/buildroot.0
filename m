@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43ADDC4167D
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:45:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B789C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1893607E3;
-	Sat,  4 Nov 2023 20:45:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1893607E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1A5B60D78;
+	Sat,  4 Nov 2023 20:46:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1A5B60D78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rRYnPwgmPwhE; Sat,  4 Nov 2023 20:45:44 +0000 (UTC)
+	with ESMTP id qLINOA-MQ7F7; Sat,  4 Nov 2023 20:46:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5779D608A6;
-	Sat,  4 Nov 2023 20:45:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5779D608A6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0F1CE1BF584
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:45:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09CB860B8A;
+	Sat,  4 Nov 2023 20:46:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09CB860B8A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E1471BF584
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA24C608A6
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:45:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA24C608A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A6D541755
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:46:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A6D541755
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h6pq0l7eR6FS for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 20:45:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DADCB607D0
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:45:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DADCB607D0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAC768285B; Sat,  4 Nov 2023 20:45:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 21:43:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a29c3144a49758f7c9cd9ff5cbb8e446bfc605f1
-X-Git-Newrev: 2eff004fe61177b35a09f944eaa5c616ff36838e
-X-Patchwork-Hint: ignore
-Message-Id: <20231104204539.CAC768285B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-engine: drop experimental
- build flag
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NtT6I2INd8E9 for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 20:46:14 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DBDEE4174B
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBDEE4174B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CE359FF803;
+ Sat,  4 Nov 2023 20:46:11 +0000 (UTC)
+Date: Sat, 4 Nov 2023 21:46:10 +0100
+To: Viacheslav Bocharov via buildroot <buildroot@buildroot.org>
+Message-ID: <20231104214610.7c1b9e2f@windsurf>
+In-Reply-To: <20231004132756.548326-1-adeep@lexina.in>
+References: <20231004132756.548326-1-adeep@lexina.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699130772;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Mtj4ooEHoxUr919U6PHAJ3qGCzjObZKBOSu+WYXGTG8=;
+ b=VWve6nEihrdRIGzQMzn/hUKNQtW8wD8rbeD58WZCF47QCndqeylBqJfl6n3DktBm92r0Ws
+ YIuk6RhXl+eAduoHZeSHdC7J8R0ybrRlDzpFr+RcM21ODvhXvbiIu+Fm6EKqtrryhp8UPb
+ CqaQN8JhHVB8uTPBkbMM4hQfMziMEPhSiHqqwOA7DKUxxbmTWc9KWv00xP3BpevZRj2/tq
+ rTsdQqvX5IBclYbAOC+JYNY2ijnV4w9+UthRwzmSxvfsH/xcbG3mDwyj/dbze3YW1YeBRr
+ DqN6TaYykCMVDdowgSD7IeioaMI6ICMgoh8+1VG3hc70WD+nW3cy84WfMIovkQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VWve6nEi
+Subject: Re: [Buildroot] [PATCH] package/rtl8822cs: Bump driver version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,53 +76,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Viacheslav Bocharov <adeep@lexina.in>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2eff004fe61177b35a09f944eaa5c616ff36838e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  4 Oct 2023 16:27:56 +0300
+Viacheslav Bocharov via buildroot <buildroot@buildroot.org> wrote:
 
-Since Docker v1.13.0 experimental only exists as a runtime flag. Drop
-the config from buildroot as well.
+> Bump driver version. Fix build failures:
+>  powerpc64 http://autobuild.buildroot.net/results/3600153fa9d7bb267c835ef896e35cd11458163e
+> 
+> Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
+> ---
+>  package/rtl8822cs/rtl8822cs.hash | 2 +-
+>  package/rtl8822cs/rtl8822cs.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/docker-engine/Config.in        | 3 ---
- package/docker-engine/docker-engine.mk | 3 ---
- 2 files changed, 6 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 570b2ff681..71bf670f17 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -19,9 +19,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 
- if BR2_PACKAGE_DOCKER_ENGINE
- 
--config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
--	bool "build experimental features"
--
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
- 	depends on BR2_USE_MMU # btrfs-progs
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 34e74c09c6..262be2df20 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -34,9 +34,6 @@ ifeq ($(BR2_INIT_SYSTEMD),y)
- DOCKER_ENGINE_DEPENDENCIES += systemd
- DOCKER_ENGINE_TAGS += systemd journald
- endif
--ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
--DOCKER_ENGINE_TAGS += experimental
--endif
- 
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
- DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
