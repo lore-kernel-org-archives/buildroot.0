@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50B76C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 21:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02387C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 21:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F39B782200;
-	Sat,  4 Nov 2023 21:39:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F39B782200
+	by smtp1.osuosl.org (Postfix) with ESMTP id B306382206;
+	Sat,  4 Nov 2023 21:39:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B306382206
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M1kagpNcJQso; Sat,  4 Nov 2023 21:39:13 +0000 (UTC)
+	with ESMTP id glQj1NgsiwCw; Sat,  4 Nov 2023 21:39:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47C71821F7;
-	Sat,  4 Nov 2023 21:39:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47C71821F7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8BF261BF2F9
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:38:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E741B821F6;
+	Sat,  4 Nov 2023 21:39:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E741B821F6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 21DF61BF2F9
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:38:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6390040360
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49F11418FE
  for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:38:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6390040360
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49F11418FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dPyMvhhgtEwK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FJOKEGSfRsIs for <buildroot@lists.busybox.net>;
  Sat,  4 Nov 2023 21:38:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52D2840273
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D93F41935
  for <buildroot@buildroot.org>; Sat,  4 Nov 2023 21:38:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52D2840273
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D93F41935
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3268F86773; Sat,  4 Nov 2023 21:38:44 +0000 (UTC)
+ id 5798C8677A; Sat,  4 Nov 2023 21:38:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 22:37:13 +0100
+Date: Sat, 4 Nov 2023 22:37:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: da63c87c8a88c8de4a44803611e0ba2685564fec
-X-Git-Newrev: 301c829705a39465de90955e6fc738cea738ed98
+X-Git-Oldrev: 0bf73cce2b5c48149b2807354c323ebf6861d07a
+X-Git-Newrev: b04ef9c6d2b15b542f1d8fac40b77ab797fb18da
 X-Patchwork-Hint: ignore
-Message-Id: <20231104213844.3268F86773@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/python-magic-wormhole-mailbox-server: update versioneer to 0.29
+Message-Id: <20231104213844.5798C8677A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-iptables: use
+ sysconfig.get_path instead of get_python_lib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,19 +64,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=301c829705a39465de90955e6fc738cea738ed98
+commit: https://git.buildroot.net/buildroot/commit/?id=b04ef9c6d2b15b542f1d8fac40b77ab797fb18da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Versioneer < 0.21 is incompatible with Python 3.12.0. Use the latest version
-which is 0.29 as of this commit.
+distutils is removed in Python 3.12.0. Switch to using sysconfig.get_path to
+facilitate the migration.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- .../0002-Update-versioneer-to-0.29.patch           | 2194 ++++++++++++++++++++
- 1 file changed, 2194 insertions(+)
+ ...config-get_path-instead-of-get_python_lib.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-Patch is too large, so refusing to show it
+diff --git a/package/python-iptables/0001-use-sysconfig-get_path-instead-of-get_python_lib.patch b/package/python-iptables/0001-use-sysconfig-get_path-instead-of-get_python_lib.patch
+new file mode 100644
+index 0000000000..2a4de3daf2
+--- /dev/null
++++ b/package/python-iptables/0001-use-sysconfig-get_path-instead-of-get_python_lib.patch
+@@ -0,0 +1,40 @@
++From fd415a3613fad872062fb7cb4e271ac1476402ef Mon Sep 17 00:00:00 2001
++From: Adam Duskett <adam.duskett@amarulasolutions.com>
++Date: Tue, 24 Oct 2023 08:47:12 +0200
++Subject: [PATCH] use sysconfig.get_path instead of get_python_lib
++
++Distutils has been removed from python 3.12.0. Use sysconfig.get_path instead
++of get_python_lib.
++
++Upstream: https://github.com/ldx/python-iptables/pull/340
++
++Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++---
++ iptc/util.py | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/iptc/util.py b/iptc/util.py
++index 04fe905..94befc5 100644
++--- a/iptc/util.py
+++++ b/iptc/util.py
++@@ -3,7 +3,7 @@ import os
++ import sys
++ import ctypes
++ import ctypes.util
++-from distutils.sysconfig import get_python_lib
+++import sysconfig
++ from itertools import product
++ from subprocess import Popen, PIPE
++ from sys import version_info
++@@ -64,7 +64,7 @@ def _do_find_library(name):
++ 
++     # probably we have been installed in a virtualenv
++     try:
++-        lib = ctypes.CDLL(os.path.join(get_python_lib(), name),
+++        lib = ctypes.CDLL(os.path.join(sysconfig.get_path("purelib"), name),
++                           mode=ctypes.RTLD_GLOBAL)
++         return lib
++     except:
++-- 
++2.41.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
