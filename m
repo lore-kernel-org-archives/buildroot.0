@@ -4,62 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92472C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 17:37:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 287E6C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 17:40:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28C14400BD;
-	Sat,  4 Nov 2023 17:37:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28C14400BD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9DA014019E;
+	Sat,  4 Nov 2023 17:40:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DA014019E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DNoMI6uyPs-p; Sat,  4 Nov 2023 17:37:32 +0000 (UTC)
+	with ESMTP id UjS7FUtfnE4G; Sat,  4 Nov 2023 17:40:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06D4E4014D;
-	Sat,  4 Nov 2023 17:37:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06D4E4014D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8733B1BF21A
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:37:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B040F4014D;
+	Sat,  4 Nov 2023 17:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B040F4014D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D6521BF21A
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6825B4014D
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:37:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6825B4014D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49777812B9
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:40:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49777812B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JdWjU0aNc7pL for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 17:37:28 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EDDC4400BD
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:37:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDDC4400BD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F398B20004
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:37:24 +0000 (UTC)
-Date: Sat, 4 Nov 2023 18:37:23 +0100
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Message-ID: <20231104183723.2bb97efb@windsurf>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hgw10_IU9LGr for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 17:40:09 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3747B812B4
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:40:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3747B812B4
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 036EB1C0005;
+ Sat,  4 Nov 2023 17:40:05 +0000 (UTC)
+Date: Sat, 4 Nov 2023 18:39:59 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20231104183959.4dfef743@windsurf>
+In-Reply-To: <20231104151944.84393-2-fontaine.fabrice@gmail.com>
+References: <20231104151944.84393-1-fontaine.fabrice@gmail.com>
+ <20231104151944.84393-2-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699119445;
+ d=bootlin.com; s=gm1; t=1699119606;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=EB5kOw27eUQjjpX1Zsgvxf6R7cb3Y+73tjiv6dCeWI8=;
- b=JvUVK5kFUxexRPoqgF/pd2ER9ZL3vNFXzmlV1XFSIg+JSJ+0S5eXR0UQkokXxFvJkYQlSH
- 2rHy1bvBazsk2QPDzYdnx/cXmFvh0Bp1QXpoCRpdeEEiOBx8tGkymabiGxdQs6p11ufsKh
- R70CXtyh8U+rc7OX3J0zloAGPoTsjC4YnMLoHMBqqbs1kbTULnNpL8gFkdqgKylHa+dPPu
- g215zRyp1qgMSG2UmjPsL7pMQ4KoZyHz4xvk2z++is/qvyRlSk+JVUOpaKLyhUC4ULm09o
- DQ00WNntPezTsRYF2bdtMgwX7mdk6XtGx7kwWJBTc98R+m1ievpgxOdx1U/wvQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/0ImpGg4zGegv8arNnFgQ/PvUYphUUJTRaqTqAjr5gA=;
+ b=NhoVJpvqOY23GEdPsYI+pRG7dfM/6ZP2HYnjI/73g5Z0hJ9dfJ/FNLdhBf6BHsC7NQlk5n
+ gdRXc+b6/mg1kRf9YywGVIuvncwL8nw4uQIR+TKW2HV0CXMXvusHtV7XjKEr/mhivBUo0Y
+ 0IgVcnfflMxLGoG+/u7OKTHPuG9/wQd08CUOO18ohZoJ0FrJG2yxOrweWgOWHB0lGk6+e+
+ kUcgFZ9pdTQX4GvVSCLRv9urgOiMi+REo7vZsaRgKwD5fFcLOUCAW1m57TJ8jnpODBCsVe
+ gXExORpstFEp+IALoWjbW05D+g5uAQqPnvaue4FOk0gLGFQ/C3HkzDfEkuFR2A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JvUVK5kF
-Subject: [Buildroot] Buildroot Developer Days at FOSDEM 2024: Feb 5-7
+ header.s=gm1 header.b=NhoVJpvq
+Subject: Re: [Buildroot] [PATCH 2/2] package/nut: fix python build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,37 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Sat,  4 Nov 2023 16:19:44 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-FOSDEM is taking place once again in Brussels, this year on February 3-4.
+> +Subject: [PATCH 2/2] m4/nut_check_python.m4: allow overriding of
+> + PYTHON{2,3}_SITE_PACKAGES
 
-Right after FOSDEM, we're inviting all Buildroot contributors and/or
-developers interested to participate to the Buildroot Developer Days, a
-3-day event to meet with the rest of the Buildroot community and work
-together to improve Buildroot.
+Patches should be generated with git format-patch -N to not have
+numbering (2/2).
 
-See more details at:
+> +
+> +Allow the end-user to override PYTHON{2,3}_SITE_PACKAGES as this can be
+> +useful when cross-compiling
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  https://elinux.org/Buildroot:DeveloperDaysFOSDEM2024
+Upstream status? :-)
 
-The event is free. Attending all 3 days is not required. If you want to
-attend just 1 day to get a feeling of what the meeting looks like,
-that's totally fine.
-
-Registration is directly on the Wiki page. If you don't have an
-eLinux.org Wiki account and don't want to create one, you can either
-reply to this e-mail or contact me.
-
-The exact location of the meeting in Brussels is not yet defined. We
-are working with one possible host company (not confirmed yet) and will
-announce the location when it is confirmed.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
