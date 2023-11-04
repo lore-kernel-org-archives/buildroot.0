@@ -4,84 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5B73C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 07:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D41CC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 07:25:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37C7340863;
-	Sat,  4 Nov 2023 07:25:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37C7340863
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2600041F23;
+	Sat,  4 Nov 2023 07:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2600041F23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nrv539d4XGJp; Sat,  4 Nov 2023 07:25:10 +0000 (UTC)
+	with ESMTP id RY71aRYvFMW6; Sat,  4 Nov 2023 07:25:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62B8940743;
-	Sat,  4 Nov 2023 07:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62B8940743
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 844DE1BF397
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 07:25:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E4874150C;
+	Sat,  4 Nov 2023 07:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E4874150C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 380BB1BF397
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 07:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A39760E17
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 07:25:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A39760E17
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0DC8F4010F
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 07:25:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DC8F4010F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nj6NVN4NtqBr for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 07:25:08 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B00E560B29
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 07:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B00E560B29
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-507b96095abso3507793e87.3
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 00:25:07 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sAeVobuMpf3m for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 07:25:09 +0000 (UTC)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F262E400C1
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 07:25:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F262E400C1
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-32dc918d454so1633898f8f.2
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 00:25:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699082705; x=1699687505;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Ppvn8Rvk3T67uZipeGKk0Uc9TqESSleZPBZSZJDPaLw=;
- b=ogZ/KH0OAom508SmY9pez5f32tWwOhQ0hpwWBZAV2bR9Zhfn6AaFYpCEmzY25rDSqD
- wOPbHq3MECU1Vap3Ls+KToLJICEElUC1KnHKUaah95sgYYmIOAwrzQfD0uMa/6s26Vda
- t8zKjIUBFmW2si4V7PkNTfbPzH48lwPd+LdslqHHKm8xuWhvuxMQkcffVBg49shOr5kt
- QhWU8SA152hyRnE4mquzinOJ4cYsk3u064ltCHVkfVW/YGIkh4mxOMcmZoE583IV3F6i
- a9pt1t+QpiW/FiwAn9I2RF13QnsLjlVEX/vXRF98BH0em8hZecNdnANk6YnVO1pMOiZw
- +ilA==
-X-Gm-Message-State: AOJu0YzezFwQ8eHx7CBuvdaJGCovy2t/Y7K0fgwzEJqAMP2tgJWRXV6D
- ih4wyR9BDf53/EQLXGD7BiwhqFwhwls+k7g+zhP7pg==
-X-Google-Smtp-Source: AGHT+IHp8yThi43lGMCi5vUMi1+uKl0C/hDEnVL7CyafPtBwfDhuTGkVWyQSGoERNU117PYXvkDaOw==
-X-Received: by 2002:ac2:5928:0:b0:504:3499:7c37 with SMTP id
- v8-20020ac25928000000b0050434997c37mr17428246lfi.60.1699082704404; 
- Sat, 04 Nov 2023 00:25:04 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1699082706; x=1699687506;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=BD00wohrS134kareyAj24Pwhjx+Y93tWEi0gryHLw4Y=;
+ b=HdBh++kwvdEDRK/AaESH1s/gPUItcrEeoSNJvci29d/ggN2NWC9+eP+cX8e2/cE0GV
+ 3mgjO34qtPSKrNdGGj4aXoiN+FC65svCEp7ltfM5hmsN7eXyG53Ib01saLop5lzSi6gx
+ H6ZQl5BoacAPEroncRTEYN/41LkzwWYiQYO+T376qeJLoB/X6lAzJuA8GMmdVVPiRoNZ
+ 0R2QLpC4WmMFUC3gJCaIcvCixr8ZSCggsTkukp+bUL51ZEuKhpMNoAwfU6SvCLXLufaO
+ TcJqjFKuFlGrMDK8/hFS8odL8+QrWgSyemMRRMvPwNNakDZqygMV+X4eA4LTCQjsGDxP
+ ZW4g==
+X-Gm-Message-State: AOJu0YyxkqSraevTMn/vB0C00tGCM6Hj2ILaj9krQaOy6qoD78fPCxhR
+ qhdrmfwfwDDBJtP1fpcFR/2+z8r4oINwIhoJ3ff++g==
+X-Google-Smtp-Source: AGHT+IGBy2xGbAZejwwjN8bUwyH++ZdlQFCPjlXlioXPsBj4o7ckmyBSw3MYyoCEom7JWTVpHxF05A==
+X-Received: by 2002:a05:6000:1ace:b0:32f:908e:c7de with SMTP id
+ i14-20020a0560001ace00b0032f908ec7demr11961115wry.57.1699082706122; 
+ Sat, 04 Nov 2023 00:25:06 -0700 (PDT)
 Received: from jpl.. ([151.238.102.70]) by smtp.gmail.com with ESMTPSA id
- c18-20020a5d5292000000b0032da87e32e2sm3686742wrv.4.2023.11.04.00.25.03
+ c18-20020a5d5292000000b0032da87e32e2sm3686742wrv.4.2023.11.04.00.25.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Nov 2023 00:25:04 -0700 (PDT)
+ Sat, 04 Nov 2023 00:25:05 -0700 (PDT)
 From: Javad Rahimipetroudi <javad321javad@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 10:54:52 +0330
-Message-Id: <20231104072458.7369-1-javad321javad@gmail.com>
+Date: Sat,  4 Nov 2023 10:54:53 +0330
+Message-Id: <20231104072458.7369-2-javad321javad@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231104072458.7369-1-javad321javad@gmail.com>
+References: <20231104072458.7369-1-javad321javad@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699082705; x=1699687505; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Ppvn8Rvk3T67uZipeGKk0Uc9TqESSleZPBZSZJDPaLw=;
- b=OHL6MKY1VQBw87jgGdQ1kdGh5DHmtmCTIQkFcWA5lk4u46wnoGNwgdMyaOHJZPSX1T
- LGL4tel0zlX9U/rA8zAHr/OBpxumlVhdIWcjfahmZf988jWKv5SlBcS6FUOnYtHoRRd1
- lliIk9bNkaGa6qI3m8ylE71ZDUVF6rEN7rq0vvD0TdB2JM9J1XpGLpoct2UbyvlkvTMg
- oc5ZLZozBXDrqjs818a3PlTbWs2csit3cIAFonJ5Au0jGeymouxqKOYla/pnaE83FrxN
- d7lm87FgIWOB26LF2FLSyXiCYVrXGCiNBk9bBmLGcU3djPfwOU1MEWVmHEQ9P6FhwFKE
- EQ7Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1699082706; x=1699687506; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=BD00wohrS134kareyAj24Pwhjx+Y93tWEi0gryHLw4Y=;
+ b=FaEO+L5waKixK/KFofXUvumL8XF2IjHuwJeX9Thx2mnJMkH/7TdmqDBPS6MXSqYIBM
+ ka4nos5nPOXZcd0ZEjod+l140KhRfxF74iQ9YtVr3tZD+TEhvmoMjQqEQpxIw8aZz/T6
+ VorUe+zP1gNznlRTf6PiKabdh/kkYH9Dr0cB1DTlbhB8jm+5+AXV+PR/eIO5iBKzTsji
+ TPr9LxC2GB9WIpVEb5w3Jli7jDxc29VWG9+oOoiITn4dkdzld9UZHHEPYN6WXNp0Rcqr
+ k8GEmELsgClf9BwKXgDFrvB/1hyZDvBFwcm2hoT78GmcJQxnPafi0mVxvKIo57WXno8G
+ WRcg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OHL6MKY1
-Subject: [Buildroot] [PATCH 1/7] configs/pine64_defconfig: bump Linux
- version to 6.1 Linux Kernel and Header version upgraded to 6.1.50 LTS
+ header.a=rsa-sha256 header.s=20230601 header.b=FaEO+L5w
+Subject: [Buildroot] [PATCH 2/7] configs/pine64_defconfig: bump ATF version
+ to v2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,33 +106,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Javad Rahimipetroudi <javad321javad@gmail.com>
 ---
- configs/pine64_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ configs/pine64_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
-index c454114d2a..e2549628ee 100644
+index e2549628ee..8d2324260c 100644
 --- a/configs/pine64_defconfig
 +++ b/configs/pine64_defconfig
-@@ -2,8 +2,8 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
- 
--# Linux headers same as kernel, a 5.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-+# Linux headers same as kernel, a 6.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- 
+@@ -8,7 +8,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
  # Firmware
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-@@ -32,7 +32,7 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/pine64/pine64/boot.cmd"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.60"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ 
 -- 
 2.34.1
 
