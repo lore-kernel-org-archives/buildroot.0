@@ -4,91 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B402DC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 16:55:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4659C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 16:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6331160F0B;
-	Sat,  4 Nov 2023 16:55:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6331160F0B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EFCA60F0B;
+	Sat,  4 Nov 2023 16:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EFCA60F0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zQF0NhkmAaPH; Sat,  4 Nov 2023 16:55:04 +0000 (UTC)
+	with ESMTP id WXKvGB5yrdBh; Sat,  4 Nov 2023 16:55:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A227160EF1;
-	Sat,  4 Nov 2023 16:55:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A227160EF1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4113660F92;
+	Sat,  4 Nov 2023 16:55:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4113660F92
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A6F141BF2C5
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:55:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 50CA91BF2C5
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:55:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CA9160EF1
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:55:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA9160EF1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26F6560F97
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:55:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26F6560F97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T3Usq3CdLiLQ for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 16:55:01 +0000 (UTC)
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 313F060EC6
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 16:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 313F060EC6
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-53e751aeb3cso4993491a12.2
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 09:55:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699116899; x=1699721699;
- h=content-transfer-encoding:in-reply-to:cc:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=j31X+N1WuVOPh7GShBBJOz38d/n+olYB3Dbx1OMam7w=;
- b=GXWPfoRInz0lPxRNpQgWKI8Q4haIQEE1tcKRRCARKr1YeYjn88KBCVZCheARaY3Yof
- IuJ/oig2Gex/mphxAZGgwBsqNf5Oii1icA+PF3KvIbm93aCyURCyyWpztEtGbiM4rBj1
- mV6Q1R9Tf7hoSaLnM2bTpWiSig2cPyah730GDSzx1JGrVeVst6S1gqXTWO5mbAPLNS8Z
- +75T7ZNSXl290GwIIasnC696ND7+dSz2TAJBbc0NFwsc7A6g/ccm2IGXfz3gzMGkLMmB
- URpEX0wTTxfvhCQX0Dz5zeuX4w9eu4aHLopYMvv1Sedy3G17Vjhq/yNtPltSIg6Gqyeq
- EUVA==
-X-Gm-Message-State: AOJu0YykC7IQxJdvvYe448exumEoBeVZkh65DfnLhMzpVNHdK9AO5evm
- CG0Ur3qVU7cXo87mw8Y65etHTA==
-X-Google-Smtp-Source: AGHT+IHz+j+DKqew+f/MDY61v0XbmdOegA5vzZE7YTRtyA20jsNwjyD4SXPAnOSsS9ADuc/xCaA6Yw==
-X-Received: by 2002:a17:907:daa:b0:9bd:a063:39d2 with SMTP id
- go42-20020a1709070daa00b009bda06339d2mr10219148ejc.16.1699116899309; 
- Sat, 04 Nov 2023 09:54:59 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- v26-20020a17090606da00b009ae57888718sm2097524ejb.207.2023.11.04.09.54.58
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 04 Nov 2023 09:54:58 -0700 (PDT)
-Message-ID: <567d5432-f525-4d7a-a3b5-59a32723c9c4@mind.be>
-Date: Sat, 4 Nov 2023 17:54:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: yann.morin@orange.com, buildroot@buildroot.org
-References: <cover.1698941362.git.yann.morin@orange.com>
- <243109e5e05b74bbf150d902a55625da4844564d.1698941362.git.yann.morin@orange.com>
-In-Reply-To: <243109e5e05b74bbf150d902a55625da4844564d.1698941362.git.yann.morin@orange.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699116899; x=1699721699; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:cc:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=j31X+N1WuVOPh7GShBBJOz38d/n+olYB3Dbx1OMam7w=;
- b=CfxxvhY8J/vJrbsRFUePox7qfBkuToxnX2fubNFL8I6X8k+Da9A37r7ZJyMqImteN/
- TZm8ZQLmClML2YmC+i+GKllpVcbp8P/mvUcO+QYVYkUjogCzKDJqLlafeic1dygdzwGb
- evOQhEGTsqeAWP1qdtIxr7aNdVQlxUbs+BR0vYvayFB8Do/KZSKj0tDq/vDQaPo3iigu
- tCMcphC4dS4fvIN9gzHJn/OVtrgw86lVvuqjzpSQ5sf63qDK3nNAqsUQX8XLBAHtyYod
- 7B1b+JzfDQOyeBBOiN8wW4KSXM1mXEOWoxe58yQOM5d3CkEjHBt4jjpch28gxzZ3tmwV
- GUNg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CfxxvhY8
-Subject: Re: [Buildroot] [PATCH 4/8] package/pkg-golang: handle licensing
- terms for host-only packages
+ with ESMTP id CqW4axbP37Qv for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 16:55:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 51AB960F93
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 16:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51AB960F93
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3A6398669B; Sat,  4 Nov 2023 16:55:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 4 Nov 2023 17:49:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0a8bc54e09ea816e0231afe13bbec14c2d8baa7d
+X-Git-Newrev: 049ea7b389e1f4657aa7683b6a6241e021817b76
+X-Patchwork-Hint: ignore
+Message-Id: <20231104165516.3A6398669B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-cargo: handle licensing terms
+ for host-only packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,69 +58,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=049ea7b389e1f4657aa7683b6a6241e021817b76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The licensing terms are inherited from the target variant to the host
+variant: when the host _LICENSE is empty, then the value of the target
+_LICENSE is used.
 
-On 02/11/2023 17:09, yann.morin@orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> The licensing terms are inherited from the target variant to the host
-> variant: when the host _LICENSE is empty, then the value of the target
-> _LICENSE is used.
-> 
-> However, for the golang infra, we want to append a little blurb about
-> vendored depndencies. If the package is a host-only, then it would
-> inherit the target _LICENSE, i.e. the variable without the leading
-> HOST_. If that is defined, this is inherited in the generic-package part
-> of the infra, but in the golang infra, we saw an empty variable, and so
-> we would not add the vendoring blurb.
-> 
-> We can't move the condition appending that blurb, after we called into
-> the generic-package infra, otherwise in that case, we'd have the
-> opposite issue for packages that are both target and host packages,
-> where the blurb would be duplicated for host packages...
-> 
-> Instead, we workaround the issue by duplicating the heuristic to inherit
-> the target value, from the generic- into the golang-package infra.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> ---
->   package/pkg-golang.mk | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> index 1fa0b001e0..8e27602d41 100644
-> --- a/package/pkg-golang.mk
-> +++ b/package/pkg-golang.mk
-> @@ -91,6 +91,15 @@ $(2)_DL_ENV += \
->   	GOPROXY=direct \
->   	$$($(2)_GO_ENV)
->   
-> +# Because we append vendored info, we can't rely on the values being empty
-> +# once we eventually get into the generic-package infra. So, we duplicate
-> +# the heuristics here
-> +ifndef $(2)_LICENSE
-> +  ifdef $(3)_LICENSE
-> +    $(2)_LICENSE = $$($(3)_LICENSE)
-> +  endif
-> +endif
+However, for the cargo infra, we want to append a little blurb about
+vendored depndencies. If the package is a host-only, then it would
+inherit the target _LICENSE, i.e. the variable without the leading
+HOST_. If that is defined, this is inherited in the generic-package part
+of the infra, but in the cargo infra, we saw an empty variable, and so
+we would not add the vendoring blurb.
 
-  This isn't a very elegant solution, but I can't think of anything better.
+We can't move the condition appending that blurb, after we called into
+the generic-package infra, otherwise in that case, we'd have the
+opposite issue for packages that are both target and host packages,
+where the blurb would be duplicated for host packages...
 
-  Applied the first 4 patches of this series to master, thanks.
+Instead, we workaround the issue by duplicating the heuristic to inherit
+the target value, from the generic- into the cargo-package infra.
 
-  Regards,
-  Arnout
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/pkg-cargo.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> +
->   # Due to vendoring, it is pretty likely that not all licenses are
->   # listed in <pkg>_LICENSE. If the license is unset, it is "unknown"
->   # so adding unknowns to some unknown is still some other unkown,
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+index 7802c3a883..2c277f7079 100644
+--- a/package/pkg-cargo.mk
++++ b/package/pkg-cargo.mk
+@@ -95,6 +95,15 @@ ifneq ($$($(2)_SUBDIR),)
+ $(2)_DL_ENV += BR_CARGO_MANIFEST_PATH=$$($(2)_SUBDIR)/Cargo.toml
+ endif
+ 
++# Because we append vendored info, we can't rely on the values being empty
++# once we eventually get into the generic-package infra. So, we duplicate
++# the heuristics here
++ifndef $(2)_LICENSE
++ ifdef $(3)_LICENSE
++  $(2)_LICENSE = $$($(3)_LICENSE)
++ endif
++endif
++
+ # Due to vendoring, it is pretty likely that not all licenses are
+ # listed in <pkg>_LICENSE. If the license is unset, it is "unknown"
+ # so adding unknowns to some unknown is still some other unkown,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
