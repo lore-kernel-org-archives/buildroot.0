@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 551C2C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 18:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 239CBC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 18:38:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE7D9402E0;
-	Sat,  4 Nov 2023 18:37:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE7D9402E0
+	by smtp3.osuosl.org (Postfix) with ESMTP id C16DB60F56;
+	Sat,  4 Nov 2023 18:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C16DB60F56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d_ZROF4FECSi; Sat,  4 Nov 2023 18:37:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rZsB_YaM_-1a; Sat,  4 Nov 2023 18:38:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F323140176;
-	Sat,  4 Nov 2023 18:37:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F323140176
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0AE3E1BF5AE
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:37:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C11B60F31;
+	Sat,  4 Nov 2023 18:38:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C11B60F31
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A5E021BF5AE
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:38:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D166482191
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:37:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D166482191
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F62F41A60
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:38:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F62F41A60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PwuK8bAQKvTE for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 18:37:08 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 94B2E82190
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 18:37:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94B2E82190
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 85885E0003;
- Sat,  4 Nov 2023 18:37:06 +0000 (UTC)
-Date: Sat, 4 Nov 2023 19:37:05 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231104193705.6c3205dc@windsurf>
-In-Reply-To: <20231004180602.53327-1-bernd@kuhls.net>
-References: <20231004180602.53327-1-bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XvAjlm8ZyqW3 for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 18:38:22 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 671AE41989
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 18:38:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 671AE41989
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6444AC0002;
+ Sat,  4 Nov 2023 18:38:19 +0000 (UTC)
+Date: Sat, 4 Nov 2023 19:38:18 +0100
+To: Francois Dugast <francois.dugast.foss@gmail.com>
+Message-ID: <20231104193818.519472c7@windsurf>
+In-Reply-To: <20231027114700.1904-1-francois.dugast.foss@gmail.com>
+References: <20231027114700.1904-1-francois.dugast.foss@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699123026;
+ d=bootlin.com; s=gm1; t=1699123099;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=FaNNvN+svIv2VNFxYLN7JJHJ8hniVM/3uxu9CLuynZQ=;
- b=U6DzHNFiuuQnVrvPVv5IteSvkRalipAwLUwGRIfQx2mgu8aaEAsK5qlabQKAUUamr3JN5h
- UhgrBVR4A0aMjb+1v+SyqitTD4vxTwDLEfPp065XatrieikqfkXLe+PyzTI99cCaGLBfkX
- 2Cis3Z1xDQ6dUSRdjPq1sQrf4TE1iiWdUPNkj6FaJJFp1Jtnr/JgCGymu4YsYyP5rmMaPH
- SQceKaalcCznHD6pbbF8Sjbs8SNt2g0WhRP1VY+FiiBMtOa+hKm26M4ZOde4Sj4xfgwLFu
- SA3MwC3E0IprifQAiIfhfFB4sMWHg+f1Q0vSa2rbKi7qREW1X0JfPEfChOs7Ig==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=V6EB4JZ6wtzL6OXfHnbASm8bN/4TIqTVNrL1isBwhgs=;
+ b=DjEJGBEPcgMDvaNpTmUxQ1vOzfFXGzT755GEVCPfEQ4AVvjx0P7xyd8dgJxh5vrTbhqU+F
+ ou2zNnKWM0+O50Ng00cUvz+hFS6yjodyi6ElZ+zDim29bT/CUHa0ETwjEN5LS7gHXnRaYI
+ c9/iXZozNmyYjiqGHhNsmTC4c6oJNH7JWizLoByJP5HFCpGldeoWAU65x2zuzMaR9Okgu2
+ LQQIjtImVWQEV53sLL2spDq9YIzBMktzp5MsdX79hJMk4YDeMxX916tbcsb52BM2ZQb1et
+ Qhg18Cckq+YSRBlUkUfAJnmZc931t6o8o/3fjzg0S9bHB2uHFjtU//+VbPyPBg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=U6DzHNFi
-Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 23.2.1
+ header.s=gm1 header.b=DjEJGBEP
+Subject: Re: [Buildroot] [PATCH 1/2] board/licheepi_zero: move board files
+ to their own directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,41 +77,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, "Yann E
- . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Michel Stempin <michel.stempin@wanadoo.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  4 Oct 2023 20:06:02 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
-
-> Rebased patches 0002 & 0004.
-> Removed patch 0006 which is included in this release.
-> 
-> Release notes:
-> https://gitlab.freedesktop.org/mesa/mesa/-/blob/23.2/docs/relnotes/23.2.1.rst
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
->  ...tion-to-disable-optional-neon-suppor.patch |  4 +-
->  package/mesa3d/0004-Fix-uClibc-build.patch    | 19 ++++----
->  ...5-Gallium-driver-includes-Intel-sour.patch | 46 -------------------
->  package/mesa3d/mesa3d.hash                    |  5 +-
->  package/mesa3d/mesa3d.mk                      |  2 +-
->  6 files changed, 17 insertions(+), 61 deletions(-)
->  delete mode 100644 package/mesa3d/0006-meson-ensure-i915-Gallium-driver-includes-Intel-sour.patch
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRnJhbsOnb2lzLAoKT24gRnJpLCAyNyBPY3QgMjAyMyAxMzo0Njo1OSArMDIwMApGcmFu
+Y29pcyBEdWdhc3QgPGZyYW5jb2lzLmR1Z2FzdC5mb3NzQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IEdy
+b3VwIGZpbGVzIGZvciBib2FyZCBsaWNoZWVwaV96ZXJvIHVuZGVyIGEgbmV3IGRpcmVjdG9yeS4g
+VGhpcyBpcwo+IHRvIHByZXBhcmUgZm9yIGEgbmV3IGJvYXJkIGFsc28gY29taW5nIHRvIHRoZSBs
+aWNoZWVwaSBkaXJlY3RvcnkuCj4gCj4gU2lnbmVkLW9mZi1ieTogRnJhbmNvaXMgRHVnYXN0IDxm
+cmFuY29pcy5kdWdhc3QuZm9zc0BnbWFpbC5jb20+Cj4gLS0tCj4gIGJvYXJkL2xpY2hlZXBpL3sg
+PT4gbGljaGVlcGlfemVyb30vYm9vdC5jbWQgICAgIHwgMAo+ICBib2FyZC9saWNoZWVwaS97ID0+
+IGxpY2hlZXBpX3plcm99L2dlbmltYWdlLmNmZyB8IDAKPiAgYm9hcmQvbGljaGVlcGkveyA9PiBs
+aWNoZWVwaV96ZXJvfS9yZWFkbWUudHh0ICAgfCAwCgpDb3VsZCB5b3UgcmVuYW1lIHRoZSBmb2xk
+ZXIgdG8gbGljaGVlcGktemVybyBpbnN0ZWFkIG9mIGxpY2hlZXBpX3plcm8/CgpJIHdvdWxkIGhh
+dmUgZG9uZSBpdCBteXNlbGYgd2hpbGUgYXBwbHlpbmcgaWYgdGhlcmUgd2VyZSBubyBvdGhlcgpp
+c3N1ZXMgd2l0aCB0aGUgcGF0Y2ggc2VyaWVzLCBidXQgSSBoYXZlIGNvbW1lbnRzIG9uIFBBVENI
+IDIvMi4KCkJlc3QgcmVnYXJkcywKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3du
+ZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5n
+IGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
+Zm8vYnVpbGRyb290Cg==
