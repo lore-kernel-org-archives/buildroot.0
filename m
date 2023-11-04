@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E00C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:42:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90C01C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:43:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D876760BA0;
-	Sat,  4 Nov 2023 20:42:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D876760BA0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4ADA360D88;
+	Sat,  4 Nov 2023 20:43:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ADA360D88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mXy-0HHcqyMo; Sat,  4 Nov 2023 20:42:49 +0000 (UTC)
+	with ESMTP id jEbO8tVPfAUx; Sat,  4 Nov 2023 20:43:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C58360B32;
-	Sat,  4 Nov 2023 20:42:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C58360B32
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 779591BF584
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:42:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6F0260D71;
+	Sat,  4 Nov 2023 20:43:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6F0260D71
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E93C1BF584
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F18140359
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:42:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F18140359
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B0FC60D71
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B0FC60D71
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IwXTR02rILiH for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 20:42:37 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0A1E24033F
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:42:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1E24033F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 57C2A20003;
- Sat,  4 Nov 2023 20:42:35 +0000 (UTC)
-Date: Sat, 4 Nov 2023 21:42:34 +0100
-To: Andrew Donnellan <ajd@linux.ibm.com>
-Message-ID: <20231104214234.136b0e66@windsurf>
-In-Reply-To: <20231003234734.525050-1-ajd@linux.ibm.com>
-References: <20231003234734.525050-1-ajd@linux.ibm.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id as8S5SI2S3ny for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 20:43:14 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 34858607D0
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34858607D0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C402240005;
+ Sat,  4 Nov 2023 20:43:11 +0000 (UTC)
+Date: Sat, 4 Nov 2023 21:43:10 +0100
+To: Laurent Vivier <laurent@vivier.eu>
+Message-ID: <20231104214310.176ffba7@windsurf>
+In-Reply-To: <20231004065835.2190872-1-laurent@vivier.eu>
+References: <20231004065835.2190872-1-laurent@vivier.eu>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699130555;
+ d=bootlin.com; s=gm1; t=1699130591;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=t+EOejyEiZRmZE/tzwiF6hx0aF+Df3gBg6bLDCEjfIs=;
- b=hHG55dkSoqIEcJOMwh76JRJpFLoyaY0SO0YoS1eyRw4aHKa48Wt++PJkLF+g71wTCrfN5Q
- duQIRPCyTAezQ6P4FvAe0LYJI/HvIsz0YroTJFeV/q2CKIx7I3mh+Qfu418ftkq9yBBBCw
- hzggMvsNeOLOu/qf8IE1dxnFcDsXdFdV2797Nq/5jfkIrtmuvRZLLCx9JZxH2x/XQKoQ4U
- yTLMRI5Zc34qiXTkNRnipHjUImeXxh/yZo4GS+ZOhM2AZN6p60YllimxMVtrQP6LzizmbG
- l54zfFKYiEFjvXLOE3N0o0kjfs9tadEPVvWvyXT7CAjBMDTHoPlKM9sBKrMZPw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=qIL9zyhwE6yAMffAtiTrNwvg+eM1aoajTQZmztPISvQ=;
+ b=QQUogES8Y/vJA4XYsK2gVTyauVtBepyB4jel1nuKKTmpbykHnk2TbT1a/fG66+aBARckPb
+ 9N8//50PwJpiRiQcrDpUT4pczTocVnqHrsQc4galqFXx07LvlL1BS9e+yU3hsL3oSjWl7Z
+ bK5fZxIBETwcsFCZ47xtbpm1Wv/eqH3hFTKfZv0Nk8M5fRNwheCitvVPVw7hhWMvvn5cgg
+ ATILObc8+xicrI5aqxoLesEkk7q87X6smJFXP6wFhc7ed62wTpAfpsClVlq0d6GkJKIyUT
+ zTVHCo4QpIrR5DkMb6VAFXyYLG+VWhrXN5Si+lS2RO841L0pZ/d4c8zUFwlKLw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hHG55dkS
-Subject: Re: [Buildroot] [PATCH] package/libzlib: Switch to using HTTPS
+ header.s=gm1 header.b=QQUogES8
+Subject: Re: [Buildroot] [PATCH] package/petitboot: bump to version 1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,25 +76,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Reza Arbab <arbab@linux.ibm.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  4 Oct 2023 10:47:34 +1100
-Andrew Donnellan <ajd@linux.ibm.com> wrote:
+On Wed,  4 Oct 2023 08:58:35 +0200
+Laurent Vivier <laurent@vivier.eu> wrote:
 
-> Switch to using HTTPS for downloading libzlib from zlib.net.
-> 
-> (zlib.net doesn't default to HTTPS but does suggest HTTPS in the permalink
-> for the latest zlib release. Also works better with some corporate firewalls
-> that get suspicious about zlib for some reason.)
-> 
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 > ---
->  package/libzlib/libzlib.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/petitboot/petitboot.hash | 2 +-
+>  package/petitboot/petitboot.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
