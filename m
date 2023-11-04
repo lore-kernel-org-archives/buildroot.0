@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C98B6C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:27:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6BD9C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:28:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 770184045C;
-	Sat,  4 Nov 2023 20:27:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 770184045C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 853A1404BF;
+	Sat,  4 Nov 2023 20:28:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 853A1404BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PiD3Z8lQlXXL; Sat,  4 Nov 2023 20:27:39 +0000 (UTC)
+	with ESMTP id hoCqpfhqATOR; Sat,  4 Nov 2023 20:28:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71E0F4033F;
-	Sat,  4 Nov 2023 20:27:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71E0F4033F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EA3881BF20B
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:26:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C4C3C40383;
+	Sat,  4 Nov 2023 20:28:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4C3C40383
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 64A4F1BF20B
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:26:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B64E860E13
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:26:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B64E860E13
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E00781F1B
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:26:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E00781F1B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xc4qyPvVZzfC for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 20:26:25 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8920560C00
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:26:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8920560C00
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C0C221BF203;
- Sat,  4 Nov 2023 20:26:22 +0000 (UTC)
-Date: Sat, 4 Nov 2023 21:26:21 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231104212621.0715724a@windsurf>
-In-Reply-To: <20231003123208.2688289-1-bernd@kuhls.net>
-References: <20231003123208.2688289-1-bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vE8z5jFXOpOj for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 20:26:37 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1EACA81F1A
+ for <buildroot@busybox.net>; Sat,  4 Nov 2023 20:26:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EACA81F1A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92A88E0003;
+ Sat,  4 Nov 2023 20:26:33 +0000 (UTC)
+Date: Sat, 4 Nov 2023 21:26:32 +0100
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20231104212632.2ef03d72@windsurf>
+In-Reply-To: <20231003052120.3594513-1-francois.perrad@gadz.org>
+References: <20231003052120.3594513-1-francois.perrad@gadz.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699129583;
+ d=bootlin.com; s=gm1; t=1699129594;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=HesJgzzS0Yl7s6pRUyrdaW8T2TJ2McobS9FDNSG/1aw=;
- b=BdDxb0rE6vDVKJR4mMYJv2fUStL4Eaf8WwCLsFblHSoYKEmn8rmXxeDW4wNouKAL4BVon1
- 4sHmmfTGE6ALNUeKC/ZdsgXKJYgrEjxG4FjQvxPQAJQ5v9Q+Mni4ylU1kDuXgc2IIAfQPD
- aKJxfc+qlPfHnFKdambDHF/rOloWOAZ4emr6cnx/O3uXeAg1jaVYH4kIFr+qG3tPZx8Xh0
- Zs7xi0J2X/h8lcyLFkkXeql6XAySqaTqkdUO3X4kHLshkY0Fd1wFvisSVtEggm7aww9r5h
- ZC1AJsgZoDSZhsJDJuKSsqbL4qIJhmmfcpQMBp+vcpQgB+H1KJG3y07MODUT3w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=pQbHUhGNuSOAcBv0mXLPcte1LZXGg0NZesL6YKgpc+E=;
+ b=LutuqnA8VAIlQFX7gU57YfJgt9vnrH6pTTeQDEW4x94aLwB4gMxzjyvn8D7LYXrfWpYD9a
+ I9ua1UmziCzd/HGLCx5rXEtxDHhHecW+uo2ghkJesnhn/uIry5DAL5JF412FW3xEv1YMlJ
+ pSef4QFhK3DErHVNaunYBVOTGyctIRp+Qj8AE778riI9aKhNxBzOuVn59JH4xkWsVAAFwG
+ zcKDjIP0VCM57SIJe1xFnOgxe7mgD4gknCfvxp0Y+CR0Nw5ZbSq3lXzRQJc6PRopt+HmZk
+ dSD3ioWcbJ2GlGGv2Sf1UbVpQz1dpQmM65yl1BVolsi3b7/a1NLne7YBfjwNxw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BdDxb0rE
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpg123: bump version to 1.32.3
+ header.s=gm1 header.b=LutuqnA8
+Subject: Re: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump
+ Linux and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,25 +77,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  3 Oct 2023 14:32:08 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Tue,  3 Oct 2023 07:21:20 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Removed patch which was applied upstream:
-> https://github.com/madebr/mpg123/commit/e1e6aa201a88d9d7f91c806b71270dd0013c6ca6
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/mpg123/0001-mpg123-buildfix.patch | 24 -----------------------
->  package/mpg123/mpg123.hash                |  6 +++---
->  package/mpg123/mpg123.mk                  |  2 +-
->  3 files changed, 4 insertions(+), 28 deletions(-)
->  delete mode 100644 package/mpg123/0001-mpg123-buildfix.patch
+>  configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
+>  configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
