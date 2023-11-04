@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 208D1C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61448C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 20:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C34AB40391;
-	Sat,  4 Nov 2023 20:30:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C34AB40391
+	by smtp2.osuosl.org (Postfix) with ESMTP id D267B40360;
+	Sat,  4 Nov 2023 20:35:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D267B40360
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A3fTrLlz6vKK; Sat,  4 Nov 2023 20:30:06 +0000 (UTC)
+	with ESMTP id o_HVNI0_cGQF; Sat,  4 Nov 2023 20:35:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1B754037E;
-	Sat,  4 Nov 2023 20:30:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1B754037E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2404E1BF584
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:29:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B83C74036E;
+	Sat,  4 Nov 2023 20:35:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B83C74036E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F8791BF584
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3FFF60AF2
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:29:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3FFF60AF2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2EB49416D6
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 20:35:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EB49416D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id trvtOwIj1Lu1 for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 20:29:49 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D897760ADD
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:29:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D897760ADD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1C0211C0002;
- Sat,  4 Nov 2023 20:29:46 +0000 (UTC)
-Date: Sat, 4 Nov 2023 21:29:46 +0100
-To: Paul Cercueil <paul@crapouillou.net>
-Message-ID: <20231104212946.405bf671@windsurf>
-In-Reply-To: <20231007104205.12608-1-paul@crapouillou.net>
-References: <20231007104205.12608-1-paul@crapouillou.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699129787;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2HXfgXqsvfc+ofwPfWvSx8WMIQhEu5laA+QHNc/ncB4=;
- b=PQfX7Pm3/K5MHw4q8KW+VK9S2oBiX7760sF2VyxXjE1w6EXVp6zstUX3Yn9UAlyIMJZSx3
- aIrrIXrp4dUC5QnK7nA38VYEFkaZ2ZbRFaTqa67DkporpSk6sCUVtUK6W0uRBSHBMj/jjl
- 0dGHgWri52KLSDTg/y1dTsyI+WvzC6t324iQNyz7Jr68xFFcXrXQT/cLHt3fcVPWmy9TKv
- yGOdH1AMF3cvBg4LjUzKKlErHGnOEX1EbZHDJ20F3C8V7ubjoqddV5yXNB5Sm9/IqyL/R8
- jXMP0i7l0C/jmgHMGVYL7KRr+KG/Vs8fmNjCWrNWV5FAa/UKO6qwD7HR1d1hAA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PQfX7Pm3
-Subject: Re: [Buildroot] [PATCH] package/lightning: fix build on mips64
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u3FwasiEcR3a for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 20:35:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 32268416C3
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 20:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32268416C3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0B30A80D9F; Sat,  4 Nov 2023 20:35:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 4 Nov 2023 21:34:45 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 604eecf0116ff7b82f6d9cf0e867591f830f447c
+X-Git-Newrev: 6122ba62f6d9ac4350b9bb2e5d935acfd077e2c9
+X-Patchwork-Hint: ignore
+Message-Id: <20231104203511.0B30A80D9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/containerd: add control for
+ additional build tags
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,31 +58,107 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  7 Oct 2023 12:42:05 +0200
-Paul Cercueil <paul@crapouillou.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6122ba62f6d9ac4350b9bb2e5d935acfd077e2c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Grab commit 90f5c78f47dfb1ae4b953b0e30c7ef72a6438396 from upstream to
-> fix the build on mips64 and mips64el.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  .../0001-Fix-build-on-mips64el.patch          | 65 +++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 package/lightning/0001-Fix-build-on-mips64el.patch
+Disable the AUFS snapshotter by default. AUFS support has been deprecated
+since v1.5 and won't be available with containerd v2.0.
 
-Applied to master, thanks.
+Add configuration option for the ZFS snapshotter and add the proper
+runtime dependencies.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Add configuration option for Kubernetes CRI support. Note that CRI
+support requires a writeable /etc or an appropriate containerd
+configuration.
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/containerd/Config.in     | 33 +++++++++++++++++++++++++++++++++
+ package/containerd/containerd.mk | 13 +++++++++++++
+ 2 files changed, 46 insertions(+)
+
+diff --git a/package/containerd/Config.in b/package/containerd/Config.in
+index e69dd6768a..12a53bc111 100644
+--- a/package/containerd/Config.in
++++ b/package/containerd/Config.in
+@@ -26,6 +26,39 @@ config BR2_PACKAGE_CONTAINERD_DRIVER_BTRFS
+ 	help
+ 	  Build the btrfs snapshot driver for containerd.
+ 
++config BR2_PACKAGE_CONTAINERD_DRIVER_DEVMAPPER
++	bool "devmapper snapshot driver"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
++	depends on BR2_USE_MMU # lvm2
++	depends on !BR2_STATIC_LIBS # lvm2
++	select BR2_PACKAGE_LVM2
++	help
++	  Build the devmapper snapshot driver for containerd.
++
++comment "devmapper snapshot driver needs a toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_CONTAINERD_DRIVER_ZFS
++	bool "zfs snapshot driver"
++	depends on BR2_LINUX_KERNEL # zfs
++	depends on BR2_PACKAGE_HAS_UDEV # zfs
++	depends on BR2_USE_MMU  # zfs
++	depends on BR2_TOOLCHAIN_HAS_THREADS  # zfs
++	select BR2_PACKAGE_ZFS
++	help
++	  Build the zfs snapshot driver for containerd.
++
++comment "zfs snapshot driver needs a Linux kernel, udev, toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_LINUX_KERNEL || !BR2_PACKAGE_HAS_UDEV || \
++		!BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_CONTAINERD_CRI
++	bool "Kubernetes CRI support"
++	help
++	  Build containerd with Kubernetes CRI support.
++
+ endif
+ 
+ comment "containerd needs a glibc or musl toolchain w/ threads"
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index d29a796a72..7c130770c0 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
+@@ -24,6 +24,7 @@ CONTAINERD_BUILD_TARGETS = \
+ 	cmd/ctr
+ 
+ CONTAINERD_INSTALL_BINS = $(notdir $(CONTAINERD_BUILD_TARGETS))
++CONTAINERD_TAGS = no_aufs
+ 
+ ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+ CONTAINERD_DEPENDENCIES += libapparmor
+@@ -41,6 +42,18 @@ else
+ CONTAINERD_TAGS += no_btrfs
+ endif
+ 
++ifneq ($(BR2_PACKAGE_CONTAINERD_DRIVER_DEVMAPPER),y)
++CONTAINERD_TAGS += no_devmapper
++endif
++
++ifneq ($(BR2_PACKAGE_CONTAINERD_DRIVER_ZFS),y)
++CONTAINERD_TAGS += no_zfs
++endif
++
++ifneq ($(BR2_PACKAGE_CONTAINERD_CRI),y)
++CONTAINERD_TAGS += no_cri
++endif
++
+ define CONTAINERD_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(@D)/containerd.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/containerd.service
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
