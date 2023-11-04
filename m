@@ -4,88 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D679C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 22:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49B88C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 23:00:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C93A60BD4;
-	Sat,  4 Nov 2023 22:54:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C93A60BD4
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3F4C60D64;
+	Sat,  4 Nov 2023 23:00:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3F4C60D64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XJJG3E51l1Vb; Sat,  4 Nov 2023 22:54:27 +0000 (UTC)
+	with ESMTP id j4G2vrCwNxdC; Sat,  4 Nov 2023 23:00:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D876C60D71;
-	Sat,  4 Nov 2023 22:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D876C60D71
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3DC401BF267
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 22:54:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F0D760C17;
+	Sat,  4 Nov 2023 23:00:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F0D760C17
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 102AF1BF267
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 23:00:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1417F60D71
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 22:54:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1417F60D71
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA14241822
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 23:00:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA14241822
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sdVimcSuyh9o for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 22:54:13 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0C1B460BD4
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 22:54:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C1B460BD4
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-40853c639abso24654275e9.0
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 15:54:12 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SCKPds0oZ-Hp for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 23:00:33 +0000 (UTC)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A026F41821
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 23:00:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A026F41821
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-7a694254684so121837039f.1
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 16:00:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699138451; x=1699743251;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=PvWPQ7l1EQ2QP+SaRmEUC7jDNvW0ubH71FbSYIu2tts=;
- b=paRH4A2cxZbwvpFs3EkYb+c4SWoyMJ+3nBVcsZzOtScXZhehMP4cDgetCyNGvoO4LB
- bKVnLxsFrKoN51VsdGhvooinSBlAyhFiMbYwWYlLHRpEpQ8L/4P/5Ogu8WL2Eg2BtJQg
- RA4U1fgYbY67MiSFo4gRu6RiWaZ4iVk4WQ0wG1iSoBaGkLt7iZzWJLJVCt+l0ER9oMC3
- 05ai6i9aytGN18W1WRXvyVykNRj6ZRfQ697Rb5Jk9NvMJHrgWemlX8LmTDFTyewVWiOR
- RtAxN+fDTR70bhKoANb/bVdhHxJpAmYl6UADsuEocRoorYLvrnieku6bBMDdU2SPPJxm
- l/PQ==
-X-Gm-Message-State: AOJu0YyWdN5Pr54qcG+aq4F6Df+p3RlPqP1Rojm9OKBJ+icyuKPdQ950
- dg3X3qi63o0SnV4NDGgnxFQq955ZpQ8=
-X-Google-Smtp-Source: AGHT+IHEOjWcjuNQTyS1wTtMKTu+8wV2IiHTwmgEeqWi6JJrV10lLKqgz4mAepI8DeRq60WEaCllRQ==
-X-Received: by 2002:a05:600c:4750:b0:408:3d91:8251 with SMTP id
- w16-20020a05600c475000b004083d918251mr20040779wmo.5.1699138450516; 
- Sat, 04 Nov 2023 15:54:10 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- q8-20020a05600c46c800b0040776008abdsm7111533wmo.40.2023.11.04.15.54.10
+ d=1e100.net; s=20230601; t=1699138832; x=1699743632;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9brEPem5kh8RTLVo2dvFSs7UN0ptFMA/YsikZASuEKY=;
+ b=rzxwyy8lLjdztFPidv+U75CdaN/OYsnqhjKerFgHMLFnALUy6H0G7xPFC2Z2p47Fvx
+ SRcH4khuL/Hm+Lxq9pyEhkeDPV51ne3MaaL7MULpPvfoyybtDPwolHtdyAuonHfEGfTE
+ 52gJGKxG3EqALf+BX54tT1LXvqvkuAm4HrYb/nJBkBue8L+kJ81E7key26C3fJ3A0Q/o
+ Po6VluQ7ecsWSj4qdgUA+PRyynJsm4qjb9qh8tTtSl5hteCLfawvGtkC33vjOh5dK40v
+ rHPvKBzOK8+9ZVfIJMo7mUBjz0Vg7iM9VxIHea04rC3hFpz7xoFtVMC2df+Yv99bCGB/
+ VWGg==
+X-Gm-Message-State: AOJu0YwpUcE75ZQhXK8l0nQ2IqfihuRT0a8HxlSaMe4ywqmpwfr/BP4+
+ 4z3JL0LKZipd+OHo5PDPBYJVXSd2sfw=
+X-Google-Smtp-Source: AGHT+IEsq5yu4fha/nBTPfbzX7gSudktVu9QWb/ICmdvXqrbmQqNo+bjSKBNfooTRgWMIPiZ/dwbzA==
+X-Received: by 2002:a05:6e02:1545:b0:359:6dce:67bb with SMTP id
+ j5-20020a056e02154500b003596dce67bbmr5886160ilu.23.1699138832197; 
+ Sat, 04 Nov 2023 16:00:32 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
+ [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
+ o4-20020a056e0214c400b00357631d2213sm1484790ilk.8.2023.11.04.16.00.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Nov 2023 15:54:10 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 04 Nov 2023 16:00:31 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 23:53:39 +0100
-Message-ID: <20231104225339.380802-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231104225339.380802-1-fontaine.fabrice@gmail.com>
-References: <20231104225339.380802-1-fontaine.fabrice@gmail.com>
+Date: Sat,  4 Nov 2023 17:00:29 -0600
+Message-Id: <20231104230029.2668016-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699138451; x=1699743251; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=PvWPQ7l1EQ2QP+SaRmEUC7jDNvW0ubH71FbSYIu2tts=;
- b=Hya5JSiPhug2loGKicn3fDuylIC+WitiErdJdvCMqxrVc8pXkjFn8FZ7RyJJCicY8y
- 3CdCJIEWDbM2eQ49J+o1+d2rqouGm2kl6xrJWTP/9hS7vx+knL5udciKGsF3+pkw37la
- hkzyNeuHvfPXPRXbAZsLU8CaZhhOHwV9yn0tR9Ibp5LNsBAisLVFuRQig6Fb3009prS8
- VFxRvHKUnd4IuewCbHBZDVNvT97mF8Ikd6AhizAcRbD9vgl+x8MNe0nosH7KvPuB3zR5
- enPQH0A+wHEIvdqnI2sptGx2iteJ3fLEExTFrFBejkNa7SilQeZC7ubommtEspFkgU2X
- 8p2Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1699138832; x=1699743632; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9brEPem5kh8RTLVo2dvFSs7UN0ptFMA/YsikZASuEKY=;
+ b=XROJoEjdCrzDz9GF2x5vs3OEq516A5Kr5DRuJwwB91jNxU7VsAqCAqSnaJC6mHgywJ
+ qmA4GgW/a+V3ODc08kvVDm3Oj05Ky/6pujLBJHwZ5IRXsVQFxz84N8KIcNDlnFvIJJMz
+ XGqkFBZBDs11i08YO1eZmZrj2qdev2HBv5RyefYJpUaqnpFYhmfAvgm3FhdGUpkPSJa4
+ JjXodue3vZVOzvArhfH5RKMeLOM6vt5t0i9gY/HGI9LiPjxj59NWfpTwSmvMwerKr/St
+ +KAt18N4ZcdIG6vmk6sI4PTxx6RoGL2pk8QB0CDm5jLyk72tmWtdacBYu59qXo7lHG5f
+ 4VBg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Hya5JSiP
-Subject: [Buildroot] [PATCH 2/2] package/traceroute: security bump to
- version 2.1.3
+ header.a=rsa-sha256 header.s=20230601 header.b=XROJoEjd
+Subject: [Buildroot] [PATCH 1/1] package/python-aenum: bump to version 3.1.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,52 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-46316: In buc Traceroute 2.0.12 through 2.1.2 before 2.1.3,
-the wrapper scripts do not properly parse command lines.
-
-https://sourceforge.net/projects/traceroute/files/traceroute/traceroute-2.1.1
-https://sourceforge.net/projects/traceroute/files/traceroute/traceroute-2.1.2
-https://sourceforge.net/projects/traceroute/files/traceroute/traceroute-2.1.3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/traceroute/traceroute.hash | 2 +-
- package/traceroute/traceroute.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-aenum/python-aenum.hash | 4 ++--
+ package/python-aenum/python-aenum.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/traceroute/traceroute.hash b/package/traceroute/traceroute.hash
-index 83791c18a4..cf2eb127a2 100644
---- a/package/traceroute/traceroute.hash
-+++ b/package/traceroute/traceroute.hash
+diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
+index 40c0e55fc5..9c59804d6e 100644
+--- a/package/python-aenum/python-aenum.hash
++++ b/package/python-aenum/python-aenum.hash
 @@ -1,5 +1,5 @@
- # Locally computed:
--sha256  3669d22a34d3f38ed50caba18cd525ba55c5c00d5465f2d20d7472e5d81603b6  traceroute-2.1.0.tar.gz
-+sha256  05ebc7aba28a9100f9bbae54ceecbf75c82ccf46bdfce8b5d64806459a7e0412  traceroute-2.1.3.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/traceroute/traceroute.mk b/package/traceroute/traceroute.mk
-index 155e134c68..133f8d3c3e 100644
---- a/package/traceroute/traceroute.mk
-+++ b/package/traceroute/traceroute.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/aenum/json
+-md5  c0b78a74cdfacc0bf0cbb42785afaed8  aenum-3.1.11.tar.gz
+-sha256  aed2c273547ae72a0d5ee869719c02a643da16bf507c80958faadc7e038e3f73  aenum-3.1.11.tar.gz
++md5  f3fa11cda9ddaaed4d3f03b35f3a65ea  aenum-3.1.15.tar.gz
++sha256  8cbd76cd18c4f870ff39b24284d3ea028fbe8731a58df3aa581e434c575b9559  aenum-3.1.15.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0db837e38002017b352666c83c8d3216ee5b9b2229375eb2cf4487f8c24e1f8c  aenum/LICENSE
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+index 603fc66d0c..27f9e5cea6 100644
+--- a/package/python-aenum/python-aenum.mk
++++ b/package/python-aenum/python-aenum.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--TRACEROUTE_VERSION = 2.1.0
-+TRACEROUTE_VERSION = 2.1.3
- TRACEROUTE_SITE = http://downloads.sourceforge.net/traceroute/traceroute/traceroute-$(TRACEROUTE_VERSION)
- 
- TRACEROUTE_LICENSE = GPL-2.0+, LGPL-2.1+
+-PYTHON_AENUM_VERSION = 3.1.11
++PYTHON_AENUM_VERSION = 3.1.15
+ PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
+-PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/63/6c/a71e18de7c651f384b328be6bccadbbd472aca62f547c1a307b9388d03ca
++PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/d0/f8/33e75863394f42e429bb553e05fda7c59763f0fd6848de847a25b3fbccf6
+ PYTHON_AENUM_SETUP_TYPE = setuptools
+ PYTHON_AENUM_LICENSE = BSD-3-Clause
+ PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
 -- 
-2.42.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
