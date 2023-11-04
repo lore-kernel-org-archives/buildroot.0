@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BBC3C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 17:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00B08C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 17:44:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 11EFE4029F;
-	Sat,  4 Nov 2023 17:44:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11EFE4029F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C07B400BD;
+	Sat,  4 Nov 2023 17:44:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C07B400BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W25U9od61gzU; Sat,  4 Nov 2023 17:44:20 +0000 (UTC)
+	with ESMTP id kr4Z-S0d133t; Sat,  4 Nov 2023 17:44:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6CCD40116;
-	Sat,  4 Nov 2023 17:44:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6CCD40116
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 46A391BF21A
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:44:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C5D140193;
+	Sat,  4 Nov 2023 17:44:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C5D140193
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C98991BF21A
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DBC58216C
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:44:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DBC58216C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D38040193
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:44:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D38040193
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lu8Wk_5w8aFC for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 17:44:02 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25BDD821AE
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:44:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25BDD821AE
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 13BCC866BC; Sat,  4 Nov 2023 17:44:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 18:42:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 893bd5697488c45809eeebebaff699c7c242c02f
-X-Git-Newrev: 8f6024153032d4f7a3406f43aaebe6c2c6be5cf6
-X-Patchwork-Hint: ignore
-Message-Id: <20231104174402.13BCC866BC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/docker-run: propagate user's proxy
- settings
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 12MqkhvwnAnU for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 17:44:17 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 055C640359
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 055C640359
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2BFF840002;
+ Sat,  4 Nov 2023 17:44:13 +0000 (UTC)
+Date: Sat, 4 Nov 2023 18:44:12 +0100
+To: <yann.morin@orange.com>
+Message-ID: <20231104184412.44dc321a@windsurf>
+In-Reply-To: <cover.1698747732.git.yann.morin@orange.com>
+References: <cover.1698747732.git.yann.morin@orange.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699119854;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=305IhuYfbjH+XtWGxG5PWMzU7SRCX+u4JVmRAfGtzg4=;
+ b=gHnWOz0EMKBzhtbC5Ma94oOWZCVzCQp7TZ3/J09yUGWuq8QFaH1QcU9hyDIED43bo/NEi2
+ fO5bt+dobzhtOzuRZCnGVsmGVm7Jlf5CtmM7TfP1vb2yyOU+oX0APdrw9IodDS8nKhwYRT
+ NuB6WxGFI6qQfxk7sEdbMSkVdspUChHEff+0x30AAz8YmitZmJ4JOayV3f47wDHI/9vpjr
+ OiH+57MP5MDjnuWJoPn+0OvEY6VzBAL7bm3Y/Of08LbXnKm46nNzzsK/gH0MZ2lBIVrgzN
+ hnf8kXyIFhM+suducPhgHDdS6IXBvNr1uX1uIYGhGWGS3itUgQHuBPDPpKJy0w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gHnWOz0E
+Subject: Re: [Buildroot] [PATCH 0/2] utils/docker-run network improvements
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,85 +76,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4085665910729056276=="
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4085665910729056276==
-Content-Type: text/plain
+On Tue, 31 Oct 2023 11:22:14 +0100
+<yann.morin@orange.com> wrote:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f6024153032d4f7a3406f43aaebe6c2c6be5cf6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> Yann E. MORIN (2):
+>       utils/docker: use host's network setup
+>       utils/docker-run: propagate user's proxy settings
 
-When dealing with enterprise-grade networks, it is more often than not
-the case that the wider internet is unreachable but through proxies.
+Both applied with minor tweaks to the commit logs. Thanks!
 
-There is a usual set of variables that users can set in the
-environment to point various tools (curl, git...) to use those
-proxies.
-
-Propagate those variables inside the container.
-
-Note that there are a few tools (e.g. cvs, svn) that may not recognise
-those variables; instead, they require custom setup that is too
-complex to handle, so is left as an exercise to interested parties.
-
-Similarly, there are other types of proxy, socks4 or socks5, that also
-require custom setup that is not trivial to replicate in a container,
-so is also left out as an exercise for interested parties.
-
-In the large majority of cases, those few variables are enough to Make
-Things Work™.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/docker-run | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/utils/docker-run b/utils/docker-run
-index 464cbf691f..79694474c1 100755
---- a/utils/docker-run
-+++ b/utils/docker-run
-@@ -29,6 +29,26 @@ declare -a mountpoints=(
-     "$(pwd)"
- )
- 
-+# curl lists (and recognises and uses) other types of *_proxy variables,
-+# but only those make sense for Buildroot:
-+for env in all_proxy http_proxy https_proxy ftp_proxy no_proxy; do
-+    if [ "${!env}" ]; then
-+        docker_opts+=( --env "${env}" )
-+        # The lower-case variant takes precedence on the upper-case one
-+        # (dixit curl)
-+        continue
-+    fi
-+    # http_proxy is only lower-case (dixit curl)
-+    if [ "${env}" = http_proxy ]; then
-+        continue
-+    fi
-+    # All the others also exist in the upper-case variant
-+    env="${env^^}"
-+    if [ "${!env}" ]; then
-+        docker_opts+=( --env "${env}" )
-+    fi
-+done
-+
- # Empty GIT_DIR means that we are not in a workdir, *and* git is too old
- # to know about worktrees, so we're not in a worktree either. So it means
- # we're in the main git working copy, and thus we don't need to mount the
-
---===============4085665910729056276==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4085665910729056276==--
