@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 904D6C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 18:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D4C1C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 18:50:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FE5960F75;
-	Sat,  4 Nov 2023 18:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FE5960F75
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF04260F75;
+	Sat,  4 Nov 2023 18:50:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF04260F75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mu0AaetCelPW; Sat,  4 Nov 2023 18:48:39 +0000 (UTC)
+	with ESMTP id 5V8cs1LZoLXW; Sat,  4 Nov 2023 18:50:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FC0A60F35;
-	Sat,  4 Nov 2023 18:48:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FC0A60F35
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 91E181BF285
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:48:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4961F60F35;
+	Sat,  4 Nov 2023 18:50:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4961F60F35
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C21E1BF285
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:50:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63EF541BF8
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:48:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63EF541BF8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82ADF60F35
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:50:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82ADF60F35
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a5d_qtcbsh3u for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 18:48:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z12IyWANEGVV for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 18:50:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9275141BF7
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 18:48:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9275141BF7
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD58260B88
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 18:50:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD58260B88
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E338866F1; Sat,  4 Nov 2023 18:48:35 +0000 (UTC)
+ id 9E21B866F7; Sat,  4 Nov 2023 18:50:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 19:47:45 +0100
+Date: Sat, 4 Nov 2023 19:50:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b8d7e7bedb204b6fb1094a57822a4652206b44a
-X-Git-Newrev: 29a66292f80a1fbd509ae71190cdd55b7f3329c7
+X-Git-Oldrev: 29a66292f80a1fbd509ae71190cdd55b7f3329c7
+X-Git-Newrev: 8a307fbac92181caf333289c031ec9eb7680203b
 X-Patchwork-Hint: ignore
-Message-Id: <20231104184835.7E338866F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: add missing entries for
- configs/sipeed_licheepi_nano_defconfig
+Message-Id: <20231104185054.9E21B866F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Makefile: drop gen-missing-cpe leftovers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,32 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29a66292f80a1fbd509ae71190cdd55b7f3329c7
+commit: https://git.buildroot.net/buildroot/commit/?id=8a307fbac92181caf333289c031ec9eb7680203b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This should have been part of commit
-9a51a07a9175cd564fffa89a6b8b851c258384a0 ("configs/sipeed_licheepi_nano:
-new board")
+In 6fa3a239 the gen-missing-cpe support script was removed together with
+"make missing-cpe".
+Remove the leftover path variable and drop it from "make clean".
 
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ Makefile | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d26fddd9b1..de4cd7168e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1089,7 +1089,9 @@ N:	Francisco Gonzalez <gzmorell@gmail.com>
- F:	package/ser2net/
+diff --git a/Makefile b/Makefile
+index 37deb35912..ada5b96f08 100644
+--- a/Makefile
++++ b/Makefile
+@@ -227,8 +227,6 @@ LEGAL_MANIFEST_CSV_HOST = $(LEGAL_INFO_DIR)/host-manifest.csv
+ LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
+ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
  
- N:	Francois Dugast <francois.dugast.foss@gmail.com>
-+F:	board/sipeed/licheepi_nano/
- F:	board/visionfive2/
-+F:	configs/sipeed_licheepi_nano_defconfig
- F:	configs/visionfive2_defconfig
+-CPE_UPDATES_DIR = $(BASE_DIR)/cpe-updates
+-
+ BR2_CONFIG = $(CONFIG_DIR)/.config
  
- N:	Francois Perrad <francois.perrad@gadz.org>
+ # Pull in the user's configuration file
+@@ -1104,8 +1102,7 @@ show-vars:
+ clean:
+ 	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
+ 		$(BUILD_DIR) $(BASE_DIR)/staging \
+-		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR) $(CPE_UPDATES_DIR) \
+-		$(O)/pkg-stats.*
++		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR) $(O)/pkg-stats.*
+ 
+ .PHONY: distclean
+ distclean: clean
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
