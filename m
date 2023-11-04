@@ -4,69 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8FB1C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 21:35:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 769DFC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 21:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CC3560AD6;
-	Sat,  4 Nov 2023 21:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CC3560AD6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3101B60DFE;
+	Sat,  4 Nov 2023 21:35:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3101B60DFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uctWBAUeE7D1; Sat,  4 Nov 2023 21:35:27 +0000 (UTC)
+	with ESMTP id DB6qUt8cKvmA; Sat,  4 Nov 2023 21:35:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACBCC60AE9;
-	Sat,  4 Nov 2023 21:35:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACBCC60AE9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5801C1BF2F9
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:35:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AA5960AF4;
+	Sat,  4 Nov 2023 21:35:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AA5960AF4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B53A11BF2F9
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 29B0E81F1B
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:35:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29B0E81F1B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C6D160AE9
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:35:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C6D160AE9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5cOracVW56xg for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 21:35:23 +0000 (UTC)
-Received: from linux1801mail.webawere.nl (linux1801mail.webawere.nl
- [185.158.164.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2CF9C81F17
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 21:35:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CF9C81F17
-Received: from [185.47.134.76] (helo=share.bybram.com)
- by linux1801.webawere.nl with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.96.2-12-g29d01ae2a)
- (envelope-from <dev@bybram.com>) id 1qzOIa-00DIwQ-2Y;
- Sat, 04 Nov 2023 22:35:20 +0100
-From: Bram Oosterhuis <dev@bybram.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20231102191032.095142db@windsurf>
-In-Reply-To: <20231102191032.095142db@windsurf>
-Message-ID: <20231104213517.Horde.o27r9AtgGcJYwgSgZsafIb9@share.bybram.com>
-User-Agent: Horde Application Framework 5
-Date: Sat, 04 Nov 2023 21:35:17 +0000
-MIME-Version: 1.0
-X-Authenticated-Id: dev@bybram.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=bybram.com; 
- s=x; h=Content-Transfer-Encoding:MIME-Version:Content-Type:Date:Message-ID:
- In-Reply-To:References:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=lb954ig9HqS/AwRaRQ5Aaq8Tqa4dAhpphbVxIFInIT0=; b=QSwaKlnqscUNGggrvrCARttLws
- eBEea1D0sn1pEj2AftSegJwV2Ma1pOnTOcIm1C54x5gBGCy91SSlCXV5QODmZK0nJy3Xc9D5ZoaAf
- wFFpqvO6jEHtFDtL6JZHBxMsyM4SFVc+1+Mzh+2cnm64dK8SG6IVrndjtc07JEtQLgBVZfGiSrnmT
- rjXcxlSHWYy5Ztk7ghfAYdZMBj4wEslJKma09Q5UpN748aPAN5y7tAM/+c8UhQZViQuN5BopKumAq
- EAsYl61iXRU12A5+hX9GViDw/9iSywCTk6VZKuBfw/GrqdUTwwxSbWEGe1cmgChxWawBpb8ZiKItG
- h6LSAngQ==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bybram.com header.i=@bybram.com
- header.a=rsa-sha256 header.s=x header.b=QSwaKlnq
-Subject: Re: [Buildroot] [PATCH 1/2] configs/raspberrypi: bump Linux version
- to 6.1.55
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s_mxMqNF_CX6 for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 21:35:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A54AF60AF6
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 21:35:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A54AF60AF6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 87C1886737; Sat,  4 Nov 2023 21:35:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 4 Nov 2023 22:33:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bfa3cd74d017ba47b91729f131daf5d5993c5265
+X-Git-Newrev: f9f5b3a6cbc4e62beefdd0448842ef0c8c3eb6f6
+X-Patchwork-Hint: ignore
+Message-Id: <20231104213539.87C1886737@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnfs: bump to version 5.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,44 +55,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org, Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5583655767619986510=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLArCoApJIHRlc3RlZCBpdCB1c2luZyBhIHByaXZhdGUgZGVmY29uZmlnIG9uIGEg
-UlBJM2IsIGJ1dCBJIHNlZSBJIHNjcmV3ZWQgdXAgd2hlbiBtb3ZpbmcgdG8gdGhlIHVwc3RyZWFt
-LiBBbHNvIHJhc3BiZXJyeSBqdXN0IHJlbGVhc2VkIGxpbnV4IHY2LjEuNi4gSSB0aGluayBpdHMg
-YmV0dGVyIHRvIGRyb3AgdGhlc2UgcGF0Y2hlcyBhbmQgSSB3aWxsIHByb3ZpZGUgYSBuZXcgc2V0
-IG9mIHBhdGNoZXMuCsKgCkNoZWVycywgwqBCcmFtCsKgCiJUaG9tYXMgUGV0YXp6b25pIHZpYSBi
-dWlsZHJvb3QiIGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnIOKAkyAyIG5vdmVtYmVyIDIwMjMgMTk6
-MTAKPiBIZWxsbyBCcmFtLAo+wqAKPiBPbiBXZWQsIDExIE9jdCAyMDIzIDE4OjI0OjI5ICswMjAw
-Cj4gQnJhbSBPb3N0ZXJodWlzIDxkZXZAYnlicmFtLmNvbT4gd3JvdGU6Cj7CoAo+ID4gTGludXgg
-Ni4xIGhhcyBiZWVuIG1hcmtlZCBMVFMgZm9yIGEgbG9uZyB0aW1lIG5vdy4gVGltZSB0byBidW1w
-Cj4gPiBMaW51eCBmb3IgUmFzcGJlcnJ5UGkncyB0byB0aGUgbGF0ZXN0IDYuMS41NS12Ny4gU2lu
-Y2UgQXByaWwgMjAyMgo+ID4gdGhlIFJhc3BiZXJyeVBpIGRlZmNvbmZpZ3MgaGF2ZSBjb21wcmVz
-c2VkIGtlcm5lbCBtb2R1bGUgZW5hYmxlZAo+ID4gYnkgZGVmYXVsdC4gKHNlZSBbMV0gYW5kIFsy
-XSkuCj4gPsKgCj4gPiBUbyBsb2FkIGNvbXByZXNzZWQga2VybmVsIG1vZHVsZXMga21vZCBhbmQg
-eHogcGFja2FnZXMgYXJlIG5lZWRlZAo+ID4gYmVjYXVzZSBidXN5Ym94IGRvZXNuJ3Qgc3VwcG9y
-dCBpdC4KPiA+wqAKPiA+IFsxXSBodHRwczovL2dpdGh1Yi5jb20vcmFzcGJlcnJ5cGkvbGludXgv
-Y29tbWl0L2M0NWI0MjIzYTRlNGE4Y2ZlMzllZGJiNDk0OTMyOWVhNDc4ZmE0ZTIKPiA+IFsyXSBo
-dHRwczovL2dpdGh1Yi5jb20vcmFzcGJlcnJ5cGkvbGludXgvaXNzdWVzLzQ5NjYKPiA+wqAKPiA+
-IFNpZ25lZC1vZmYtYnk6IEJyYW0gT29zdGVyaHVpcyA8ZGV2QGJ5YnJhbS5jb20+Cj7CoAo+IFRo
-YW5rcyBmb3IgdGhpcyBwYXRjaC4gQ291bGQgeW91IGNsYXJpZnkgaW4gdGhlIGNvbW1pdCBsb2cg
-b24gd2hpY2gKPiBwbGF0Zm9ybXMgaXQgd2FzIHJ1bnRpbWUtdGVzdGVkLCB2cy4gdGhlIHBsYXRm
-b3JtcyBmb3Igd2hpY2ggeW91IG9ubHkKPiB2ZXJpZmllZCB0aGUgYnVpbGQ/Cj7CoAo+ID4gKyMg
-RW5hYmxlIGNvbXByZXNzZWQga2VybmVsIG1vZHVsZSBzdXBwb3J0Cj4gPiArQlIyX1BBQ0tBR0Vf
-QlVTWUJPWF9TSE9XX09USEVSUwo+ID4gK0JSMl9QQUNLQUdFX0tNT0RfVE9PTFMKPiA+ICtCUjJf
-UEFDS0FHRV9YWgo+ID4gK0JSMl9QQUNLQUdFX0tNT0QKPiA+ICtCUjJfUEFDS0FHRV9IT1NUX0tN
-T0RfWFoKPsKgCj4gSSdtIGFmcmFpZCB0aGlzIGhhcyBjZXJ0YWlubHkgbm90IGJlZW4gdGVzdGVk
-LCBhcyBJIGJlbGlldmUgdGhlc2UgbGluZXMKPiBoYXZlIG5vIGVmZmVjdCBzaW5jZSB0aGV5IGxh
-Y2sgdGhlID15IHRvIGVuYWJsZSB0aGUgb3B0aW9uOgo+wqAKPiBCUjJfUEFDS0FHRV9YWj15Cj7C
-oAo+IGZvciBleGFtcGxlLgo+wqAKPiA+IFwgTm8gbmV3bGluZSBhdCBlbmQgb2YgZmlsZQo+wqAK
-PiBQbGVhc2UgZml4IHRoaXMgdG8gaGF2ZSBhIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUuCj7CoAo+
-IChPZiBjb3Vyc2UsIHNhbWUgZm9yIGFsbCBvdGhlciBkZWZjb25maWdzKQo+wqAKPiBUaGFua3Mh
-Cj7CoAo+IFRob21hcwo+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============5583655767619986510==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f9f5b3a6cbc4e62beefdd0448842ef0c8c3eb6f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Update patch
+- Handle pthread support added with
+  https://github.com/sahlberg/libnfs/commit/f55637619ecbeb7c7bbd4143768b6b45100be86c
+
+https://github.com/sahlberg/libnfs/blob/libnfs-5.0.2/CHANGELOG
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                              | 1 -
+ package/libnfs/0001-Fix-include-sys-time.h.patch | 9 +++++----
+ package/libnfs/libnfs.hash                       | 2 +-
+ package/libnfs/libnfs.mk                         | 8 +++++++-
+ 4 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 9db01a5fde..ff26d44a0a 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -705,7 +705,6 @@ package/libmpeg2/0003-fix-arm-detection.patch Upstream
+ package/libmpeg2/0004-fix-sparc.patch Upstream
+ package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch Upstream
+ package/libnfc/0001-autotools-make-example-build-optional.patch Upstream
+-package/libnfs/0001-Fix-include-sys-time.h.patch Upstream
+ package/libnids/0001-libpcap-use-pkg-config.patch Upstream
+ package/libnl/0001-Add-musl-workaround-to-the-libc-compat.h-copy.patch Upstream
+ package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch Upstream
+diff --git a/package/libnfs/0001-Fix-include-sys-time.h.patch b/package/libnfs/0001-Fix-include-sys-time.h.patch
+index 15b281672a..c3779f13a2 100644
+--- a/package/libnfs/0001-Fix-include-sys-time.h.patch
++++ b/package/libnfs/0001-Fix-include-sys-time.h.patch
+@@ -11,10 +11,11 @@ POSIX says `struct timeval` is defined if <sys/time.h> is included.
+ Instead of the mess that is currently done based on the system on which
+ the stuff is being compiled, include it unconditionally.
+ 
+-Reported upstream:
+-https://github.com/sahlberg/libnfs/issues/272
++Upstream: https://github.com/sahlberg/libnfs/issues/272
+ 
+ Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
++[Fabrice: update for 5.0.2]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  include/nfsc/libnfs.h | 5 -----
+  1 file changed, 5 deletions(-)
+@@ -27,8 +28,8 @@ index 09dcf1c..b6db58c 100755
+  #define _LIBNFS_H_
+  
+  #include <stdint.h>
+--#if defined(__ANDROID__) || defined(AROS) \
+-- || ( defined(__APPLE__) && defined(__MACH__) )
++-#if defined(__ANDROID__) || defined(AROS) || defined(__PPU__) \
++- || ( defined(__APPLE__) && defined(__MACH__) ) || defined(__FreeBSD__) || defined(__OpenBSD__)
+  #include <sys/time.h>
+ -#else
+ -#include <time.h>
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index ffb6c62073..b67a5d2eda 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  6ee77e9fe220e2d3e3b1f53cfea04fb319828cc7dbb97dd9df09e46e901d797d  libnfs-4.0.0.tar.gz
++sha256  637e56643b19da9fba98f06847788c4dad308b723156a64748041035dcdf9bd3  libnfs-5.0.2.tar.gz
+ sha256  edd960c0142b8ada98b43b6396b78f4e557b0bc70ac601a51e397ad04070e2c5  COPYING
+ sha256  d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index 5f950b5cde..b013decfc7 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNFS_VERSION = 4.0.0
++LIBNFS_VERSION = 5.0.2
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,libnfs-$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
+@@ -16,4 +16,10 @@ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ LIBNFS_DEPENDENCIES += libtirpc
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBNFS_CONF_OPTS += --enable-threads
++else
++LIBNFS_CONF_OPTS += --disable-threads
++endif
++
+ $(eval $(autotools-package))
+
+--===============5583655767619986510==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5583655767619986510==--
