@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA2A6C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 17:47:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98430C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 17:54:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50ACF400BD;
-	Sat,  4 Nov 2023 17:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50ACF400BD
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9F70400BD;
+	Sat,  4 Nov 2023 17:54:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9F70400BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eW1JEZGW9oiQ; Sat,  4 Nov 2023 17:47:23 +0000 (UTC)
+	with ESMTP id PL-G9DZfRCk9; Sat,  4 Nov 2023 17:54:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10A4E40116;
-	Sat,  4 Nov 2023 17:47:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10A4E40116
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4ADC01BF21A
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:47:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D08F940128;
+	Sat,  4 Nov 2023 17:54:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D08F940128
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B66A71BF21A
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:54:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3129682277
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:47:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3129682277
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9515141926
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 17:54:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9515141926
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DtTR0I3-wGfu for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 17:47:20 +0000 (UTC)
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BE3F582275
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE3F582275
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-5437269a661so8252099a12.0
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 10:47:19 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hubW1cHZ3WjH for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 17:54:35 +0000 (UTC)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3157B41920
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 17:54:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3157B41920
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-9c5b313b3ffso463442666b.0
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 10:54:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699120038; x=1699724838;
+ d=1e100.net; s=20230601; t=1699120472; x=1699725272;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=B80gpRgETnFDusUbTJJmm4kF90OwDB4dU65kHrFHYbg=;
- b=CGRHT1pS8WVqBryuqcdS+rWWWF34zFBPiowf901faY8g8GbFgAVTn7KlirI/B8Lj2S
- lWWbl2niKgpmrErT1vB1N/yL+JHeOB9WrZlN3oEwobv+6kUfqB6eFQaNxFtC4g/dENkG
- kHiAJigNCIqHxngjhoSPHCzqkw2FUiQE3H1BtZEXbCMUj4FW9edAutpYMk0VYVe7UaF1
- joyZfQL5+yOeuL0vryN9PbbpJYzKP/F4CKa0KqkLyZgS46pmYdguDSbhRBooGXSKOmh1
- hpLhsGSHArq48+I+M5oELZKjtwsVi3KyQuIzcVIOWMczjKKscGsw+ihjsCH1o7PpWqd2
- hejg==
-X-Gm-Message-State: AOJu0YwpQluk+L8dH3dQdruk980QKQAKbnE5iaZnNu1hsf/sYMpMo2Ux
- B2ZjOUXK9yeCD3ozDai5fcxpV2Ucu1xPl8NEEJk=
-X-Google-Smtp-Source: AGHT+IHTVql5ppsAn+mRGutra5wES0eaN/K7Gi0WxvNkibn1EJSv0+HUSpw+ZXZq82FI0CiMzS0rAw==
-X-Received: by 2002:a17:906:749a:b0:9dd:ce68:a28c with SMTP id
- e26-20020a170906749a00b009ddce68a28cmr2548005ejl.24.1699120037816; 
- Sat, 04 Nov 2023 10:47:17 -0700 (PDT)
+ bh=52Wqa9/2KNPhgnt1I3YChUwntqFmQZAvG5CEdsmWYvY=;
+ b=aBDozZFFLUw0uJkQXIiSL2KUxSrmzSjYp0HZM4w1uuUCfMuUqcroRGOURYLS7ETQc1
+ dBpfcLI1BegGCCRlw6VFiGOgau6NDx99qHET5+fHms47sxSFQb8NNVEjdCYxV5fKc6V/
+ uGHUv2qXh9em4RlLReQzIjzF0gxZDUz1oWCEiqUdAEh3/HMxLbBG61mx5OIdAyUlt6I9
+ OjT5f0rzRu8dsVS0HLhjS1J789FLfZb0iWkkfj8FkKSOBv2b6ZI5R5NyelCkKGTCqHz6
+ /l4BqFixhdt4xcNHuJQjECSZNufNEiti7G4S/R5ADvV7gE3k+0b6mvJNsjxDJ1bRO9s+
+ aVzA==
+X-Gm-Message-State: AOJu0YyJx/lRxtfVPKdHhSHk50vproIARhg8PGR6aEULcertdnI9if8a
+ wEg8qCZ3zbQKwxjysgOyt8BPQg==
+X-Google-Smtp-Source: AGHT+IHtJsifMJqKk8VfWcbQap3yoyaD5uesBziaiaT46gocAQxBq3YJGs2/7t8DJ6nynHM3+oLtpg==
+X-Received: by 2002:a17:907:25c6:b0:9bd:f902:9a61 with SMTP id
+ ae6-20020a17090725c600b009bdf9029a61mr9685640ejc.18.1699120472417; 
+ Sat, 04 Nov 2023 10:54:32 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- gl9-20020a170906e0c900b009b2b47cd757sm2152053ejb.9.2023.11.04.10.47.16
+ a1-20020a170906368100b0099bd453357esm2167290ejc.41.2023.11.04.10.54.31
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 04 Nov 2023 10:47:17 -0700 (PDT)
-Message-ID: <311be0da-367e-4adf-8092-893ec3a9cff4@mind.be>
-Date: Sat, 4 Nov 2023 18:47:14 +0100
+ Sat, 04 Nov 2023 10:54:31 -0700 (PDT)
+Message-ID: <c8a18ebb-1b1c-4e4f-b855-ba1241257a14@mind.be>
+Date: Sat, 4 Nov 2023 18:54:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
 References: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
- <20231026092701.12345-14-adam.duskett@amarulasolutions.com>
-In-Reply-To: <20231026092701.12345-14-adam.duskett@amarulasolutions.com>
+ <20231026092701.12345-16-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20231026092701.12345-16-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699120038; x=1699724838; darn=buildroot.org;
+ d=mind.be; s=google; t=1699120472; x=1699725272; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=B80gpRgETnFDusUbTJJmm4kF90OwDB4dU65kHrFHYbg=;
- b=T22yxXCPwQBVf+ZWVA2FTDI1UohrgqC3jBVG3ceeKAtAmyd/3bSSqCxAjoLFj7edbJ
- 7Z7odymY4h6/K03M/QtuwtIiMziHHHAnWE4gUNx7x5lFRWtNHxxXtscSW/aZlR0L3EgL
- jp6Yah/SVZkEZw3yupT8D+bnu5OcS3TPdF3BIsaiTCLUjzDb74S8ohbLCFZHLh2iJEfm
- TMc+XBSZeG6k7fuAfPYOfcW9EC74JITu9tT8Ic6Lhe4PIeEP+ZMGw5tUG1D/HnbKe9TR
- EeMl4vaIlyzw+OVc6O9YE8ON9BckcDQzgYi8DZupEAqYPiphNUIIQ+BJCY37SE5F2YVk
- p9fQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=52Wqa9/2KNPhgnt1I3YChUwntqFmQZAvG5CEdsmWYvY=;
+ b=Ad6vaLc/gtjcghQkmQrN0mfO0tmjsp1qh9smuPbzMdxs/wsC8qFZi6ANwTp9ieGcPJ
+ xE6zCY3aazzzjxvraM9QPfsJ5X7HzlRbJhHpNe5aHUAD4QcANrwuTUIjG7acwicoZBsn
+ SQje9TLDI0bZgC+sDgdtfPU7CO50u3dI2T0kvQwxCq6pP5qrGX3EfYoyMTCuA3LuXCY0
+ OQODez/8bcu0dNdVXllViPZ771pRJGvNwE3/ZjECyxbudSfE7k2hl/YlAVzZq8czJfMx
+ GBXCqc5F53ya6gqlTQFgkh/aBHdw5lxy/vIk+0jdXuGfr0GmNXuiMuXuscHBPEM0i76S
+ IHyg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=T22yxXCP
-Subject: Re: [Buildroot] [PATCH 13/30] package/python3: update patch and
- partly use upstream build system to disable tk module
+ header.a=rsa-sha256 header.s=google header.b=Ad6vaLc/
+Subject: Re: [Buildroot] [PATCH 15/30] package/scons: bump version to 4.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,140 +101,67 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
- Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Julien Olivain <ju.o@free.fr>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Mauro Condarelli <mc5686@mclink.it>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Bernd, Adam,
+  Hi Adam,
 
 On 26/10/2023 11:26, Adam Duskett wrote:
-> From: Bernd Kuhls <bernd@kuhls.net>
+> Scons is a setuptools package now.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 > ---
->   ...d-an-option-to-disable-the-tk-module.patch | 33 +++++++------------
->   package/python3/python3.mk                    |  2 ++
->   2 files changed, 14 insertions(+), 21 deletions(-)
+>   package/scons/scons.hash | 4 ++--
+>   package/scons/scons.mk   | 7 ++++---
+>   2 files changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
-> index b89e1d27bc..1ed8959dba 100644
-> --- a/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
-> +++ b/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
-> @@ -20,15 +20,15 @@ diff --git a/Makefile.pre.in b/Makefile.pre.in
->   index 9f4cdf14cf..4f83911200 100644
->   --- a/Makefile.pre.in
->   +++ b/Makefile.pre.in
-> -@@ -1920,7 +1920,6 @@ LIBSUBDIRS=	asyncio \
-> - 		multiprocessing multiprocessing/dummy \
-> +@@ -1921,7 +1921,6 @@
->    		re \
->    		site-packages \
-> + 		sqlite3 \
->   -		tkinter \
->    		tomllib \
->    		turtledemo \
->    		unittest \
-> -@@ -2038,9 +2038,6 @@
-> +@@ -2039,12 +2038,15 @@
->    		test/xmltestdata \
->    		test/xmltestdata/c14n-20 \
->    		test/ziptestdata \
-> @@ -37,10 +37,6 @@ index 9f4cdf14cf..4f83911200 100644
->   -		tkinter/test/test_ttk \
->    		unittest/test \
->    		unittest/test/testmock
-> - ifeq (@PYDOC@,yes)
-> -@@ -2021,6 +2018,13 @@ ifeq (@SQLITE3@,yes)
-> - LIBSUBDIRS += sqlite3
-> - endif
->    
->   +ifeq (@TK@,yes)
->   +LIBSUBDIRS += tkinter
-> @@ -48,30 +44,25 @@ index 9f4cdf14cf..4f83911200 100644
->   +	tkinter/test/test_ttk
->   +endif
->   +
-> -+
-> - TEST_MODULES=@TEST_MODULES@
-> - libinstall:	all $(srcdir)/Modules/xxmodule.c
-> - 	@for i in $(SCRIPTDIR) $(LIBDEST); \
-> + ifeq (@PYDOC@,yes)
-> + LIBSUBDIRS += pydoc_data
-> + endif
->   diff --git a/configure.ac b/configure.ac
->   index 4cc0951ab9..f4ce506801 100644
->   --- a/configure.ac
->   +++ b/configure.ac
-> -@@ -4180,6 +4180,15 @@ if test "$SQLITE3" = "no" ; then
-> -    DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _sqlite3"
-> - fi
-> +@@ -4202,6 +4202,11 @@
-> + 	AS_HELP_STRING([--disable-pydoc], [disable pydoc]),
-> + 	[ PYDOC="${enableval}" ], [ PYDOC=yes ])
->    
->   +AC_SUBST(TK)
->   +AC_ARG_ENABLE(tk,
->   +	AS_HELP_STRING([--disable-tk], [disable tk]),
->   +	[ TK="${enableval}" ], [ TK=yes ])
->   +
-> -+if test "$TK" = "no"; then
-> -+   DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _tkinter"
-> -+fi
-> -+
+> diff --git a/package/scons/scons.hash b/package/scons/scons.hash
+> index a72fbaee5a..48b5077b2e 100644
+> --- a/package/scons/scons.hash
+> +++ b/package/scons/scons.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  7801f3f62f654528e272df780be10c0e9337e897650b62ddcee9f39fde13f8fb  scons-3.1.2.tar.gz
+> -sha256  72ed889165fb28378cadac14552be4a959f1ebab6b148abb5dd2b49712c3c6f6  LICENSE.txt
+> +sha256  ce26aac95d350a79a4192196b0beac3cb24f4ccabce0123eb28d3370f576f072  SCons-4.5.2.tar.gz
+> +sha256  2f6ac9a1fc98394d18b80dba9bedb9d5626006d44db3fecf7cf3e21cff7e8b1c  LICENSE
 
-  By doing the refresh in the same commit as the actual change to the patch, 
-it's hard to see what really changed.
+  The license hash changed. Can you report in the commit message why it changed 
+(i.e., did something change about the license?)
 
-  After this change, it makes me wonder if the --disable-tk option is even 
-relevant any more? AFAICS all it does is to avoid doing a test for tk, the 
-result of which is anyway not going to be used.
-
-  In that case, of course, the --disable-tk options also need to be removed from 
-.mk.
-
-> - AC_SUBST(PYDOC)
-> -
-> - AC_ARG_ENABLE(pydoc,
-> + # Check for enable-ipv6
-> + AH_TEMPLATE(ENABLE_IPV6, [Define if --enable-ipv6 is specified])
-> + AC_MSG_CHECKING([if --enable-ipv6 is specified])
->   --
->   2.34.1
+> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+> index 6b75d3ddca..767cf64b26 100644
+> --- a/package/scons/scons.mk
+> +++ b/package/scons/scons.mk
+> @@ -4,11 +4,12 @@
+>   #
+>   ################################################################################
 >   
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 8b06c28fde..04105289d6 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -43,6 +43,7 @@ HOST_PYTHON3_CONF_ENV += \
->   	py_cv_module__codecs_kr=n/a \
->   	py_cv_module__codecs_tw=n/a \
->   	py_cv_module__sqlite3=n/a \
-> +	py_cv_module__tkinter=n/a \
+> -SCONS_VERSION = 3.1.2
+> +SCONS_VERSION = 4.5.2
 
-  IIUC this applies to 3.11 already, so we could use this part of the patch 
-without any other change?
+  That's a pretty big bump. Have you tested if the scons packages (benejson, 
+gpsd, mongodb) still build?
 
   Regards,
   Arnout
 
->   	py_cv_module__uuid=n/a \
->   	ac_cv_prog_HAS_HG=/bin/false
+> +SCONS_SOURCE = SCons-$(SCONS_VERSION).tar.gz
+>   SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
+>   SCONS_LICENSE = MIT
+> -SCONS_LICENSE_FILES = LICENSE.txt
+> -SCONS_SETUP_TYPE = distutils
+> +SCONS_LICENSE_FILES = LICENSE
+> +SCONS_SETUP_TYPE = setuptools
 >   
-> @@ -176,6 +177,7 @@ PYTHON3_CONF_ENV += \
->   	ac_cv_file__dev_ptc=yes \
->   	ac_cv_working_tzset=yes \
->   	py_cv_module_nis=n/a \
-> +	py_cv_module__tkinter=n/a \
->   	ac_cv_prog_HAS_HG=/bin/false
->   
->   # GCC is always compliant with IEEE754
+>   HOST_SCONS_INSTALL_OPTS = \
+>   	--install-lib=$(HOST_DIR)/lib/scons-$(SCONS_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
