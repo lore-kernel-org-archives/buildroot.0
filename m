@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5943EC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 21:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36B84C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 21:31:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 168DE60D78;
-	Sat,  4 Nov 2023 21:31:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 168DE60D78
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1D8660D71;
+	Sat,  4 Nov 2023 21:31:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1D8660D71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VuQ08bSUKLR8; Sat,  4 Nov 2023 21:31:07 +0000 (UTC)
+	with ESMTP id V_WMTg76-r63; Sat,  4 Nov 2023 21:31:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CD0760BAF;
-	Sat,  4 Nov 2023 21:31:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CD0760BAF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2393F1BF2F9
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:31:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CAEA60DCB;
+	Sat,  4 Nov 2023 21:31:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CAEA60DCB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 823651BF2F9
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:31:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DCAD40360
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:31:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DCAD40360
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66BB760BAF
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:31:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66BB760BAF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P-ykH8qbeQhb for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 21:31:00 +0000 (UTC)
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5311F40273
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 21:30:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5311F40273
-Received: by mail-lf1-x12d.google.com with SMTP id
- 2adb3069b0e04-507c78d258fso4244739e87.2
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 14:30:59 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6CyaN0lJ8SlG for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 21:31:10 +0000 (UTC)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 09DDA60BA3
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 21:31:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09DDA60BA3
+Received: by mail-ed1-x52d.google.com with SMTP id
+ 4fb4d7f45d1cf-5440f25dcc7so3377757a12.0
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 14:31:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699133457; x=1699738257;
+ d=1e100.net; s=20230601; t=1699133468; x=1699738268;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=lMO22iz65mlDWg51rCuNRwLKPc9ueVslJlrym+/Pa4w=;
- b=n1irZo9NYE/4Df/+4TVhWxf9U8tq3vV+gT2NmXd3ANgdO+nJcnvAy3X3wFEehM5jiV
- WcTPHLY2AJnbONpdZYtcKCjNQhG0M16c77rlMXx46jrvNPlTco4dc65adRVG2X77zoPm
- 3eQrZX85p2baarHWMCR6ZUi2C7/EYpe6GGjWshIEuOWzZ+NmXHV7RZyt53GqI6voJfiH
- 3nSGkfuh6HUarsz4m8k3pVKkdBghjbrP/nnnjdDaldqWecLO3J8SbrQ7mhyEPPF+A4X+
- eedps/Ou1iZjE9CtGDM+7xssztNFU8GLUGIdE7RNWzkftMHUYWUQiA+VrQTdu53Rgr3A
- 1b3g==
-X-Gm-Message-State: AOJu0YyGAIeVuhFBDujHhjZQ+awoZZezj9br/YfpaAL37ZGtItyWvIVf
- lrakbPcawvlxBs8gJX5V4fhDuw==
-X-Google-Smtp-Source: AGHT+IGRtP5ihcELYMG9Bi7E+UkrusMs8CuKyOdBVzcooCgesjc1GXR0hPicLzdKlygdmO+EGoEPpg==
-X-Received: by 2002:a05:6512:488e:b0:509:d97:c850 with SMTP id
- eq14-20020a056512488e00b005090d97c850mr16523379lfb.31.1699133456238; 
- Sat, 04 Nov 2023 14:30:56 -0700 (PDT)
+ bh=mSAQIp5pqkoZPvU96dgykrracNEOBoKAPCChg/0FjFs=;
+ b=ugpqiX4kdoXdEyAQu0HvE7A0Aj6RWMUKDb+esGX02bVjxr3D6087tt1Kznsw75f7Dh
+ dOa5/4/cUTdyn0rk93e2cEYpVOvBO5GslntYfRtQIIMMBXNhY3oMZ4jqghw2kBUG+a18
+ gPQkhg0jlxAGT7oITy6OjtE2iIovfJ8vaHzYcSML27L4eBauLeOxJ34Lm1nSA7on5IDM
+ rwBXYyTYG25CqsQtu8n8wuI1DsVzx3NQkfGwR4T7vgs5Cpz9+1t975bOnqLjDAX65bge
+ lah4foS6BqbHgyexE84F5VRUe3xtIT2UlLiGY40gnNfciE+iKynJJcpK9guZyYO8Rpjo
+ ar8g==
+X-Gm-Message-State: AOJu0YxgmV7AcIoZw/RrNlXbJKYizHMSAktRAxM+15xGr98ekVXlLuXR
+ NJdeshxAkrfpaYtb6YEAX7MExg==
+X-Google-Smtp-Source: AGHT+IHi7aYYG2eRSOiu+6ACjURG1APhxkfeUMfYMdaOoSfrMrplJhZyiDU0VMQz1tBniOPLkJwe4g==
+X-Received: by 2002:a50:9994:0:b0:53e:7781:2279 with SMTP id
+ m20-20020a509994000000b0053e77812279mr22115031edb.36.1699133467551; 
+ Sat, 04 Nov 2023 14:31:07 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- s18-20020a508d12000000b00540ea3a25e6sm2549326eds.72.2023.11.04.14.30.54
+ s18-20020a508d12000000b00540ea3a25e6sm2549326eds.72.2023.11.04.14.31.06
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 04 Nov 2023 14:30:55 -0700 (PDT)
-Message-ID: <166280f3-08ed-4b09-937d-786e793e9843@mind.be>
-Date: Sat, 4 Nov 2023 22:30:52 +0100
+ Sat, 04 Nov 2023 14:31:06 -0700 (PDT)
+Message-ID: <43cb5b24-622a-49b5-8ed6-a35b296d8604@mind.be>
+Date: Sat, 4 Nov 2023 22:31:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
 References: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
- <20231026092701.12345-22-adam.duskett@amarulasolutions.com>
-In-Reply-To: <20231026092701.12345-22-adam.duskett@amarulasolutions.com>
+ <20231026092701.12345-23-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20231026092701.12345-23-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699133457; x=1699738257; darn=buildroot.org;
+ d=mind.be; s=google; t=1699133468; x=1699738268; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=lMO22iz65mlDWg51rCuNRwLKPc9ueVslJlrym+/Pa4w=;
- b=NkfTylLMqcRueCdSz3XoNZ3h3uiLsIxQC6amdXYGZij2xeMmrKimheroYl7W2lWU55
- U4VlRW6h9Te220j8k9PB7dTxIuPcEwtON/gge+1Bie/5VbfzbgHtSA2iwsalt1kjQPBD
- o83WQ2QINcdn2kJBrzF8p8DTvSd7txPUG8OSEMbmypXoz5XV3kJ/5ieJ6yO9Y4NkyEn/
- cV9zv9dDx3JKs5MApFP83pbh4yTBZlb1ff4p1FsRRsHLCyMs7yxF5ASb0yb+ToYBlkWi
- eGUVgWr6oJtS8uFGUvqJ9RNOMDD6gbFV8+airr8sAmqGWGHhowjKwJvSQEIWdiooErXl
- G0ew==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=mSAQIp5pqkoZPvU96dgykrracNEOBoKAPCChg/0FjFs=;
+ b=EFWbf/s8RCp84ZJ2LeiAXNMzqL7h9igyhSIJa879sZwWjK0qGp8qtB1zAwdfsjqVUk
+ 0rWg+q3Fw7NucZ7vOybpikz+BPRshqXPwWfqK0Nu5/Qh/bIP177RFmVcI3mUkxQCDVIx
+ vlonhsYj8A4URPPvXanOjOqI16GSyysuAs/0A4CX14WPFZhjKS3/fUdfKisHf0AwzaML
+ oFQ9K/aBaAAwHZF+wA2xbjWxxp51sDT37UKLeUTj9LyORXCbEJUpyb//N/dbWec3DTvY
+ 5FA+vN6UMoe4jwmHPl4dgffO9eAv9jvVMNeXOfry4I1tUZC5bbQZn/dI+mxwvswksbfK
+ 8nQw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=NkfTylLM
-Subject: Re: [Buildroot] [PATCH 21/30] package/python-magic-wormhole: update
- versioneer to 0.29
+ header.a=rsa-sha256 header.s=google header.b=EFWbf/s8
+Subject: Re: [Buildroot] [PATCH 22/30]
+ package/python-magic-wormhole-mailbox-server: update versioneer to 0.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -125,32 +125,32 @@ On 26/10/2023 11:26, Adam Duskett wrote:
   Arnout
 
 > ---
->   .../0001-Update-versioneer-to-0.29.patch      | 2185 +++++++++++++++++
->   1 file changed, 2185 insertions(+)
->   create mode 100644 package/python-magic-wormhole/0001-Update-versioneer-to-0.29.patch
+>   .../0002-Update-versioneer-to-0.29.patch      | 2194 +++++++++++++++++
+>   1 file changed, 2194 insertions(+)
+>   create mode 100644 package/python-magic-wormhole-mailbox-server/0002-Update-versioneer-to-0.29.patch
 > 
-> diff --git a/package/python-magic-wormhole/0001-Update-versioneer-to-0.29.patch b/package/python-magic-wormhole/0001-Update-versioneer-to-0.29.patch
+> diff --git a/package/python-magic-wormhole-mailbox-server/0002-Update-versioneer-to-0.29.patch b/package/python-magic-wormhole-mailbox-server/0002-Update-versioneer-to-0.29.patch
 > new file mode 100644
-> index 0000000000..54b5fe8b1d
+> index 0000000000..3152f1aae7
 > --- /dev/null
-> +++ b/package/python-magic-wormhole/0001-Update-versioneer-to-0.29.patch
-> @@ -0,0 +1,2185 @@
-> +From b283ce50c6f32387d0f474c935ed6015585b986c Mon Sep 17 00:00:00 2001
+> +++ b/package/python-magic-wormhole-mailbox-server/0002-Update-versioneer-to-0.29.patch
+> @@ -0,0 +1,2194 @@
+> +From 76b422b7f53dbc41195a184d966230106f6ddc7d Mon Sep 17 00:00:00 2001
 > +From: Adam Duskett <adam.duskett@amarulasolutions.com>
-> +Date: Tue, 24 Oct 2023 09:54:40 +0200
+> +Date: Tue, 24 Oct 2023 09:50:41 +0200
 > +Subject: [PATCH] Update versioneer to 0.29
 > +
 > +Fixes builds against Python 3.12.0
 > +
-> +Upstream: https://github.com/magic-wormhole/magic-wormhole/pull/505
+> +Upstream: https://github.com/magic-wormhole/magic-wormhole-mailbox-server/pull/40
 > +
 > +Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 > +---
-> + versioneer.py | 1348 ++++++++++++++++++++++++++++++++++---------------
-> + 1 file changed, 930 insertions(+), 418 deletions(-)
+> + versioneer.py | 1350 ++++++++++++++++++++++++++++++++++---------------
+> + 1 file changed, 931 insertions(+), 419 deletions(-)
 > +
 > +diff --git a/versioneer.py b/versioneer.py
-> +index ebe628e..de97d90 100644
+> +index 64fea1c..de97d90 100644
 > +--- a/versioneer.py
 > ++++ b/versioneer.py
 > +@@ -1,5 +1,4 @@
@@ -246,6 +246,15 @@ On 26/10/2023 11:26, Adam Duskett wrote:
 > +
 > + ### Subprojects
 > +
+> +@@ -180,7 +204,7 @@ two common reasons why `setup.py` might not be in the root:
+> +   `setup.cfg`, and `tox.ini`. Projects like these produce multiple PyPI
+> +   distributions (and upload multiple independently-installable tarballs).
+> + * Source trees whose main purpose is to contain a C library, but which also
+> +-  provide bindings to Python (and perhaps other langauges) in subdirectories.
+> ++  provide bindings to Python (and perhaps other languages) in subdirectories.
+> +
+> + Versioneer will look for `.git` in parent directories, and most operations
+> + should get the right version string. However `pip` and `setuptools` have bugs
 > +@@ -194,9 +218,9 @@ work too.
 > + Pip-8.1.1 is known to have this problem, but hopefully it will get fixed in
 > + some later version.
