@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF72BC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 13:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BB0DC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 13:38:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68FDD82005;
-	Sat,  4 Nov 2023 13:38:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68FDD82005
+	by smtp1.osuosl.org (Postfix) with ESMTP id E968F822C7;
+	Sat,  4 Nov 2023 13:38:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E968F822C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FucuzwD4JWqd; Sat,  4 Nov 2023 13:38:20 +0000 (UTC)
+	with ESMTP id GM8IEmkssiCN; Sat,  4 Nov 2023 13:38:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A46648228E;
-	Sat,  4 Nov 2023 13:38:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A46648228E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3EE811BF30C
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 13:38:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 459A28228E;
+	Sat,  4 Nov 2023 13:38:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 459A28228E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B1BB1BF30C
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 13:38:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18E0F60BC9
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 13:38:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18E0F60BC9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30CFA8228E
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 13:38:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30CFA8228E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dcbqYvLJPH6S for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 13:38:16 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8B90560BBC
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 13:38:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B90560BBC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DD62640006;
- Sat,  4 Nov 2023 13:38:12 +0000 (UTC)
-Date: Sat, 4 Nov 2023 14:38:11 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7rlV37xtMzcA for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 13:38:48 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 26B9682014
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 13:38:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26B9682014
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E68360007;
+ Sat,  4 Nov 2023 13:38:45 +0000 (UTC)
+Date: Sat, 4 Nov 2023 14:38:45 +0100
 To: Javad Rahimipetroudi <javad321javad@gmail.com>
-Message-ID: <20231104143811.0d9ba0f3@windsurf>
-In-Reply-To: <20231104072458.7369-4-javad321javad@gmail.com>
+Message-ID: <20231104143845.429624c3@windsurf>
+In-Reply-To: <20231104072458.7369-6-javad321javad@gmail.com>
 References: <20231104072458.7369-1-javad321javad@gmail.com>
- <20231104072458.7369-4-javad321javad@gmail.com>
+ <20231104072458.7369-6-javad321javad@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699105093;
+ d=bootlin.com; s=gm1; t=1699105126;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=r9SFDoFH73rbelYNF490uIAc4a0df7QI1EbN2jWTtgw=;
- b=MYn7Z1l9O7K3v4uAkbTGGnT3HUmAlOgOh/OxGSUvD+Z9NG7qLHsTxPk2Li0jR/RWSHHE+C
- yt5532UXSon0vmEyeJYobzrdSCxNOQM61sfXp0TVV+jmIUsdl1lMq/TG9yXumLARt/GNKB
- 0YFwyyNyKZfOJqrjgkbAWkJKKnmzUwwoe33TRW1ZnS4DbVnMoCMdaOg6r+claJtz0K74/D
- 5MxUgV9XwVHv1fuIG16K6lTkQ5ZN+xJM4lXWKLkz0ZVYRdDb6KO/iOyUR6HWRGeua/Iyx3
- ddF5NpD5uHG9a0/4Toj+A5coRzvahlv38LVanuNrjLD8CxWPrP2kQjZivOhqGQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=OahtgmjurGlj94CUVM3PC//d4ppqYLjIKQniZfPGGZI=;
+ b=OutbMzFbUHaZJoQTEbKeEDhaXv1fJCtyVPdjvCBidg55L9l1NwI8twPMw2L04kSG8v7d+P
+ pBzLuY9S0Tnamz+lngAtSAreTdBYoLN0U8o4x738NxiLlpKTQkodU83JPwPm939hAyRK+V
+ iF+hMk3DxcWj2E6/Fhb25bj37PBzZkgH03meiFRZWChE4INSK/XpxxarMVq7ECB871U4qV
+ B6AphSR/8UDQhN6t/LzYx0VgC9ZwL0y4u/GgwSAhqOREMehkgHGfrraqrx9oRLQRcAkXwN
+ 3bV/0ecnFje9tqLq2Ti74DsoYaC9CVoK5/1fxdmwBrXA9Z1SscFU2HfTQ4Jcag==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MYn7Z1l9
-Subject: Re: [Buildroot] [PATCH 4/7] configs/pine64_defconfig: add dynamic
- mdev To add networking support,
- dynamic mdev is required to load network drivers.
+ header.s=gm1 header.b=OutbMzFb
+Subject: Re: [Buildroot] [PATCH 6/7] board/pine64/genimage.cfg: rename uboot
+ bin image The generated image name modified according to uboot output
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,41 +84,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-The commit title is too long.
-
-On Sat,  4 Nov 2023 10:54:55 +0330
+On Sat,  4 Nov 2023 10:54:57 +0330
 Javad Rahimipetroudi <javad321javad@gmail.com> wrote:
 
 > Signed-off-by: Javad Rahimipetroudi <javad321javad@gmail.com>
 > ---
->  configs/pine64_defconfig | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  board/pine64/pine64/genimage.cfg | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
-> index b567462f5d..5cb4b4a0b5 100644
-> --- a/configs/pine64_defconfig
-> +++ b/configs/pine64_defconfig
-> @@ -42,9 +42,13 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/pine64/genimage.cfg
+> index 06b4ed1056..37ebe5ea6e 100644
+> --- a/board/pine64/pine64/genimage.cfg
+> +++ b/board/pine64/pine64/genimage.cfg
+> @@ -16,7 +16,7 @@ image sdcard.img {
 >  
->  # Filesystem
->  BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-> +BR2_SYSTEM_DHCP="eth0"
-> +
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
-> -BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>  	partition spl {
+>  		in-partition-table = "no"
+> -		image = "sunxi-spl.bin"
+> +		image = "u-boot-sunxi-with-spl.bin"
 
-Why are you removing this package?
-
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-
-This is not explained in the commit log. Why does the size needs to be
-increased? Is it because the Linux 6.1 kernel is bigger, and has more
-kernel modules? If so, this change should be together with the kernel
-update.
+This should go together with the U-Boot update, otherwise your series
+is not bisectable.
 
 Thomas
 -- 
