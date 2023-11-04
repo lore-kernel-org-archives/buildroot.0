@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7901C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 13:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73FC5C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 14:00:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B2F18229C;
-	Sat,  4 Nov 2023 13:56:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B2F18229C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 119AB822DB;
+	Sat,  4 Nov 2023 14:00:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 119AB822DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qCYibxLTy46c; Sat,  4 Nov 2023 13:56:15 +0000 (UTC)
+	with ESMTP id kAAD52gdtpkN; Sat,  4 Nov 2023 14:00:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF5F0822A3;
-	Sat,  4 Nov 2023 13:56:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF5F0822A3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 79D871BF30C
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 13:55:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F3F8822C7;
+	Sat,  4 Nov 2023 14:00:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F3F8822C7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C4F381BF30C
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 14:00:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4136A822A5
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 13:55:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4136A822A5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9ED0760F31
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 14:00:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ED0760F31
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ALHeJ1GQ27PL for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 13:55:58 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E03938229A
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 13:55:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E03938229A
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0337D240006;
- Sat,  4 Nov 2023 13:55:55 +0000 (UTC)
-Date: Sat, 4 Nov 2023 14:55:55 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231104145555.5013c783@windsurf>
-In-Reply-To: <20231103221540.43254-1-fontaine.fabrice@gmail.com>
-References: <20231103221540.43254-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699106156;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=pHbGDzOIbL1vlNfqETM7OgB78VORtW2FWnhfgi2TyRs=;
- b=lwqi+a13YrVjxk/MukvPDLRGHPiX727OVQ1Rj+l1e2FhIrIXZ7z3YpmX7ThJhNlR+b1tZI
- zhJLnPzKMmiSia7nllbYbCFPUNsoMg8Ar68nY9bRFwhrdwkpaT7ApzW19Sey9+lVGr16YQ
- dMB1Z7A06oqAWSwiBTUvlEPI32got70m932m7Nmb1rwMFibj6/9TWO7+TRaMhIooBv1eBg
- H1gDpON3hBCMFByfTmD2jFrpYY0XgjULbnk++a6xKNPWBSTkFyjKjzNhRcQp27084NPfaY
- y4HDGun58pOQx5Y+MPnhEh6pWrKnLIEsywednkg0fC8pOUXjL2mILvdhRk0q8Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lwqi+a13
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgsm: bump to version 1.0.22
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7iZYjCHObR9T for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 14:00:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C363960E03
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 14:00:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C363960E03
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A8A5E86331; Sat,  4 Nov 2023 14:00:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 4 Nov 2023 14:56:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e1ca2601cab69052c0f49936b403b57586953280
+X-Git-Newrev: e60fde3451236545c7ffc39d4885106507121730
+X-Patchwork-Hint: ignore
+Message-Id: <20231104140039.A8A5E86331@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ethtool: switch to git snapshot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,50 +57,67 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  3 Nov 2023 23:15:40 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e60fde3451236545c7ffc39d4885106507121730
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Refresh patch
-> 
-> Thu Aug  4 18:47:10 2022	Jutta Degener (jutta@pobox.com)
-> 
-> 	* Release 1.0 Patchlevel 22
-> 	Remove unused, and occasionally out of date, VERSION variable
-> 	from Makefile.
-> 
-> Sun Jul 31 16:17:59 2022	Jutta Degener (jutta@pobox.com)
-> 
-> 	* Release 1.0 Patchlevel 21
-> 	Use $(LN), not ln, in the Makefile rules for the installed binary
->  	of untoast and tcat.
-> 	(Thanks to Carlo Cabrera for pointing that out!)
-> 
-> Mon Jul  4 10:34:18 2022
-> 
-> 	* Release 1.0 Patchlevel 20
-> 	Use $(RMFLAGS) with the rms in the Makefile; add -f to $(RMFLAGS) to
->         avoid spurious error messages during build.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-misc-fixes-from-archlinux.patch      | 82 +------------------
->  package/libgsm/libgsm.hash                    |  2 +-
->  package/libgsm/libgsm.mk                      |  2 +-
->  3 files changed, 6 insertions(+), 80 deletions(-)
+Upstream tarball does not include several header files leading to build
+errors with older kernels. For details see:
+https://patchwork.kernel.org/project/netdevbpf/patch/20231005163053.1800218-1-florian.fainelli@broadcom.com/
 
-Applied to master, thanks.
+Switch _SITE to git snapshot and add _AUTORECONF = YES which needs
+host-pkgconf to fix subsequent configure error:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+./configure: line 4723: PKG_PROG_PKG_CONFIG: command not found
+
+./configure: line 5055: syntax error near unexpected token `MNL,'
+./configure: line 5055: `    PKG_CHECK_MODULES(MNL, libmnl)'
+
+Fixes:
+http://autobuild.buildroot.net/results/69e/69e01b7f370920630d132fc43a40104fa5b3959f/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ethtool/ethtool.hash | 3 +--
+ package/ethtool/ethtool.mk   | 7 +++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 8d2bf58420..812e4dd8d1 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,4 @@
+-# From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  814171ea4b8026b081c0741dbbf32e6968311483ecf64711232faec2ac70a14c  ethtool-6.5.tar.xz
+ # Locally calculated
++sha256  b1f5fa66f71c3bab9daeacbd77e010b52c47df0a711b216847f78405f3299189  ethtool-6.5.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 94d14b123b..ee710e0021 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -5,8 +5,11 @@
+ ################################################################################
+ 
+ ETHTOOL_VERSION = 6.5
+-ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+-ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
++ETHTOOL_SITE = https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/snapshot
++# needed only for autoreconf
++ETHTOOL_DEPENDENCIES = host-pkgconf
++# GIT version, shipped without configure
++ETHTOOL_AUTORECONF = YES
+ ETHTOOL_LICENSE = GPL-2.0
+ ETHTOOL_LICENSE_FILES = LICENSE COPYING
+ ETHTOOL_CPE_ID_VENDOR = kernel
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
