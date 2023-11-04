@@ -4,69 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00B43C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 22:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D878C4167B
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 22:04:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B4D182211;
-	Sat,  4 Nov 2023 22:02:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B4D182211
+	by smtp1.osuosl.org (Postfix) with ESMTP id 186A681D16;
+	Sat,  4 Nov 2023 22:04:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 186A681D16
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DRG5O1AbsqBE; Sat,  4 Nov 2023 22:02:15 +0000 (UTC)
+	with ESMTP id suKd5slDprBN; Sat,  4 Nov 2023 22:04:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EDE582148;
-	Sat,  4 Nov 2023 22:02:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EDE582148
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 66FF81BF5A7
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 22:02:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DCA58210D;
+	Sat,  4 Nov 2023 22:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DCA58210D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EC021BF267
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 22:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FF1C60D64
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 22:02:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FF1C60D64
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16F058210D
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 22:04:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16F058210D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KZEbn2dgBXdC for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 22:02:00 +0000 (UTC)
-Received: from linux1801mail.webawere.nl (linux1801mail.webawere.nl
- [185.158.164.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8B07A60C17
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 22:02:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B07A60C17
-Received: from [185.47.134.76] (helo=bram-MS-7D25.bybram.com)
- by linux1801.webawere.nl with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.96.2-12-g29d01ae2a)
- (envelope-from <dev@bybram.com>) id 1qzOiM-00DTJS-1A;
- Sat, 04 Nov 2023 23:01:58 +0100
-From: Bram Oosterhuis <dev@bybram.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vqePbJPVU7Jb for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 22:04:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2BDA81D16
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 22:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2BDA81D16
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CBC8586799; Sat,  4 Nov 2023 22:04:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 23:01:52 +0100
-Message-Id: <20231104220152.3252635-2-dev@bybram.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231104220152.3252635-1-dev@bybram.com>
-References: <20231104220152.3252635-1-dev@bybram.com>
-MIME-Version: 1.0
-X-Authenticated-Id: dev@bybram.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=bybram.com; 
- s=x; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
- Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=TScpRVQo6LBYPsqwqKwnK4ZY0tAaB12SYgqZKVJ5PJI=; b=uVd3FSoyDjnJlxD3HPQB4Cii6D
- zn1kC0Pg0L0atDIUIL7/IHp+kk3cXh0qGLok7GBiy2iiWQ+u2E/zZl7s25aTk+8f7qmyG/AajKhdY
- vKeTTKntaNCcBz5Nt3D5HaE02Zb+6IPtMqnihxAIgbioo2rr2JqDFcnUhXnxHFBuY/4HPYcxvqYKA
- d20nnasYe0deQwr7HaFTcnbKMPVa8OTdQ7NcyFjFBFuFowuPheTDc2N346SDsk0fzc4hcUzFYdFu0
- 21rayTGwcEsntGASckFCCTfqXiVGlnCo8cx8C6c2DsvjuXCJvjImfngIJuch2D9VNUIl5fUbAAcqU
- /EfuR/mw==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bybram.com header.i=@bybram.com
- header.a=rsa-sha256 header.s=x header.b=uVd3FSoy
-Subject: [Buildroot] [PATCH 2/2] package/rpi-firmware: bump version to
- 83dafbc
+Date: Sat, 4 Nov 2023 23:04:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3cc1b539e7e9fd49f571441e395e7daa8597dbec
+X-Git-Newrev: a9ceaba794141e9f06d97aebc852b67b6fb501b8
+X-Patchwork-Hint: ignore
+Message-Id: <20231104220442.CBC8586799@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcanberra: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,47 +55,157 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bram Oosterhuis <dev@bybram.com>, Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Version 83dafbc will match the with kernel 6.1.61
+commit: https://git.buildroot.net/buildroot/commit/?id=a9ceaba794141e9f06d97aebc852b67b6fb501b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bram Oosterhuis <dev@bybram.com>
+This package defines a simple abstract interface for playing event sounds.
+It is mainly used by desktop applications such as GDM and GNOME Session.
+
+http://0pointer.de/lennart/projects/libcanberra/
+
+Signed-off-by: Takumi Takahashi <takumiiinn@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/libcanberra/Config.in        | 21 +++++++++++++
+ package/libcanberra/libcanberra.hash |  3 ++
+ package/libcanberra/libcanberra.mk   | 59 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 85 insertions(+)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index ec13115f3b..33e05a2f4a 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  33aea2cb9c3be94c3dd6a96fbb3443eee5af1dc5fc9140e1fadc50832983064e  rpi-firmware-3f20b832b27cd730deb6419b570f31a98167eef6.tar.gz
-+sha256  dd43e77ca1a8969cdb7f05dd72a57f90862071d5a93bdd6aea8246aba85689cf  rpi-firmware-83dafbc92c0e63f76ca2ecdd42462d56489d1c77.tar.gz
- sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 53d6d8ca06..37e010d1de 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 14bf8d982c..a1bb99319c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2837,6 +2837,7 @@ F:	package/tl-expected/
  
--RPI_FIRMWARE_VERSION = 3f20b832b27cd730deb6419b570f31a98167eef6
-+RPI_FIRMWARE_VERSION = 83dafbc92c0e63f76ca2ecdd42462d56489d1c77
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
--- 
-2.34.1
-
+ N:	Takumi Takahashi <takumiiinn@gmail.com>
+ F:	package/gsettings-desktop-schemas/
++F:	package/libcanberra/
+ 
+ N:	Tan En De <ende.tan@starfivetech.com>
+ F:	package/libkcapi/
+diff --git a/package/Config.in b/package/Config.in
+index a7aee1816d..9da39c2159 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1426,6 +1426,7 @@ menu "Audio/Sound"
+ 	source "package/fdk-aac/Config.in"
+ 	source "package/libao/Config.in"
+ 	source "package/libbroadvoice/Config.in"
++	source "package/libcanberra/Config.in"
+ 	source "package/libcdaudio/Config.in"
+ 	source "package/libcddb/Config.in"
+ 	source "package/libcdio/Config.in"
+diff --git a/package/libcanberra/Config.in b/package/libcanberra/Config.in
+new file mode 100644
+index 0000000000..b24088005a
+--- /dev/null
++++ b/package/libcanberra/Config.in
+@@ -0,0 +1,21 @@
++comment "libcanberra needs a toolchain w/ wchar, threads, dynamic library"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
++
++config BR2_PACKAGE_LIBCANBERRA
++	bool "libcanberra"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	# We need at least one audio backend
++	select BR2_PACKAGE_ALSA_LIB if \
++	       !BR2_PACKAGE_PULSEAUDIO && \
++	       !BR2_PACKAGE_GSTREAMER1
++	# We need libltdl
++	select BR2_PACKAGE_LIBTOOL
++	select BR2_PACKAGE_LIBVORBIS
++	help
++	  libcanberra defines a simple abstract interface for playing
++	  event sounds.
++
++	  http://0pointer.de/lennart/projects/libcanberra/
+diff --git a/package/libcanberra/libcanberra.hash b/package/libcanberra/libcanberra.hash
+new file mode 100644
+index 0000000000..8dc90ccd88
+--- /dev/null
++++ b/package/libcanberra/libcanberra.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72  libcanberra-0.30.tar.xz
++sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
+diff --git a/package/libcanberra/libcanberra.mk b/package/libcanberra/libcanberra.mk
+new file mode 100644
+index 0000000000..1eadcb571b
+--- /dev/null
++++ b/package/libcanberra/libcanberra.mk
+@@ -0,0 +1,59 @@
++################################################################################
++#
++# libcanberra
++#
++################################################################################
++
++LIBCANBERRA_VERSION = 0.30
++LIBCANBERRA_SOURCE = libcanberra-$(LIBCANBERRA_VERSION).tar.xz
++LIBCANBERRA_SITE = http://0pointer.de/lennart/projects/libcanberra
++LIBCANBERRA_LICENSE = LGPL-2.1+
++LIBCANBERRA_LICENSE_FILES = LICENSE
++LIBCANBERRA_INSTALL_STAGING = YES
++
++LIBCANBERRA_DEPENDENCIES = host-pkgconf libtool libvorbis
++LIBCANBERRA_CONF_OPTS = --disable-oss --disable-null --disable-tdb --disable-lynx
++
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++LIBCANBERRA_CONF_OPTS += --enable-udev
++LIBCANBERRA_DEPENDENCIES += udev
++else
++LIBCANBERRA_CONF_OPTS += --disable-udev
++endif
++
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++LIBCANBERRA_CONF_OPTS += --enable-alsa
++LIBCANBERRA_DEPENDENCIES += alsa-lib
++else
++LIBCANBERRA_CONF_OPTS += --disable-alsa
++endif
++
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++LIBCANBERRA_CONF_OPTS += --enable-pulse
++LIBCANBERRA_DEPENDENCIES += pulseaudio
++else
++LIBCANBERRA_CONF_OPTS += --disable-pulse
++endif
++
++ifeq ($(BR2_PACKAGE_GSTREAMER1),y)
++LIBCANBERRA_CONF_OPTS += --enable-gstreamer
++LIBCANBERRA_DEPENDENCIES += gstreamer1
++else
++LIBCANBERRA_CONF_OPTS += --disable-gstreamer
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGTK2),y)
++LIBCANBERRA_CONF_OPTS += --enable-gtk
++LIBCANBERRA_DEPENDENCIES += libgtk2
++else
++LIBCANBERRA_CONF_OPTS += --disable-gtk
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++LIBCANBERRA_CONF_OPTS += --enable-gtk3
++LIBCANBERRA_DEPENDENCIES += libgtk3
++else
++LIBCANBERRA_CONF_OPTS += --disable-gtk3
++endif
++
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
