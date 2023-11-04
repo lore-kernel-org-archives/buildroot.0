@@ -4,85 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 844A0C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 16:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D91FC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 16:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 219EC41E8D;
-	Sat,  4 Nov 2023 16:23:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 219EC41E8D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2972441DF1;
+	Sat,  4 Nov 2023 16:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2972441DF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nIlEBrob4gZ8; Sat,  4 Nov 2023 16:23:12 +0000 (UTC)
+	with ESMTP id qQPZDh2QG7Hy; Sat,  4 Nov 2023 16:26:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C0F941EE1;
-	Sat,  4 Nov 2023 16:23:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C0F941EE1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 675AB41DE9;
+	Sat,  4 Nov 2023 16:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 675AB41DE9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C13E01BF5AE
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:23:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE0EC1BF5AE
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A78D6822A6
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:23:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A78D6822A6
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0E25822F3
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 16:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0E25822F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XB5B25oozlXM for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 16:23:08 +0000 (UTC)
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 60D698232C
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 16:23:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60D698232C
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-32d9effe314so1768910f8f.3
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 09:23:08 -0700 (PDT)
+ with ESMTP id Dh_HhmRrDzNp for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 16:26:08 +0000 (UTC)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0FB19822F2
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 16:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FB19822F2
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-99357737980so457254366b.2
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 09:26:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699114985; x=1699719785;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=M5lh6Bl6RnnGZH/fqAjbm+5FTqurAUoJbYNtYVEHRD4=;
- b=hvbz0yWxozCtrBcQAZYQRjVvEfwIjCIr0gjCW4Oqem6VRpizP7bTKSijdn4wQLY83Y
- D+ziDJggFE/uS9WUjxF8ny5hKJoUXkiguAwH4wBmWPeG/2b9u2Z3qb7nHBkZUEsbw89j
- Y687cu9psx3DwzFxeK1to/xePmOLI6LcBqFPnuZYW9g+JSb+nqJV5EhDk35Iuooh13Dd
- fMa7SY8b3266c5LCVNXAMGj6kGHushi8hYPzFNAmcFshTYD7Vfv5M+iYiPWvaESza1cI
- XMwBvw3sba/6RpI08NnBFeDIX9CCiMLUcfa/TTo5U2BmnTFhpdcpoP70rx6By85+k38J
- i7mg==
-X-Gm-Message-State: AOJu0Ywm1rZbkuw0wgGWVnIB+BiKIFw6/lgAXXcTVuRKuty1Q4TIy0ff
- cAT8O/hHgRYj1jm1CZumcP5Hb+lMjTQ=
-X-Google-Smtp-Source: AGHT+IFmM8Br9i+0s1gzg74BLU6ewjaLTLwZX7FrrGzeK7UhW7gkCKqjRRFx3Zd+I2c3Q4gZJPEcOA==
-X-Received: by 2002:a05:6000:1e96:b0:32f:a423:ef38 with SMTP id
- dd22-20020a0560001e9600b0032fa423ef38mr7014073wrb.38.1699114985359; 
- Sat, 04 Nov 2023 09:23:05 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- t13-20020a5d460d000000b0032fb46812c2sm4758351wrq.12.2023.11.04.09.23.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Nov 2023 09:23:04 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 17:23:03 +0100
-Message-ID: <20231104162303.537730-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+ d=1e100.net; s=20230601; t=1699115166; x=1699719966;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=wjw3kJVniT1MAIZXDDvjW+7mjPSEcxuZ69QoEbDo0Io=;
+ b=WYmv5cpHIzqC7sMcd3F7yP2wHCvUYaRAnFxVZd8VeZz1SswnxvVmkOJRDSvMW4V82S
+ 9zQ9OqXjz9fH072jFaUEs3r82U8AD4Jy3H5fAmAa5wvEcMiU2W3HwxuNczcS/OEUqlTL
+ gRwd2N7PG9zN1GXsUvPIZMVvHKZ3jzjiBYyd/1BgnXDzyR6/vx3tMwpyB4NmofNemO0y
+ oklcjsMsIt2GnKp+UmFZSiQo5UHgbdp9EbI2FJlKX2zNJoRidbcVMkodxa8nAz7AxjxO
+ VzOct+JdyfCPaQO4b+OY6Z4n8XwUwilOdJ079HQUTzyltvBC3iVyXW8cUjmwN9dU1Ent
+ lI/Q==
+X-Gm-Message-State: AOJu0Yx/8EwzbLDdi4ByQCIZ4Tz5F9T9i9WOepERa/Zz9qFSezAWKY9y
+ QmxzjMNkVPjf+f2TCDPVCep6FEz112OWOwFvWmA=
+X-Google-Smtp-Source: AGHT+IE0RLBqJD0BkpQcTV/EV2kUF/HsdwvYmZLgzexIVIG1lhlWqnEgmB3neGLuEQaq7n3PfHJXPg==
+X-Received: by 2002:a17:907:869f:b0:9c3:a193:2580 with SMTP id
+ qa31-20020a170907869f00b009c3a1932580mr9750219ejc.12.1699115165969; 
+ Sat, 04 Nov 2023 09:26:05 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ bn21-20020a170906c0d500b0099d798a6bb5sm2096082ejb.67.2023.11.04.09.26.04
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 04 Nov 2023 09:26:05 -0700 (PDT)
+Message-ID: <f34d953c-f0c6-449c-b5e3-dc35148ab2b0@mind.be>
+Date: Sat, 4 Nov 2023 17:26:02 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
+References: <20231103000650.195673-1-adam.duskett@amarulasolutions.com>
+ <20231103000650.195673-2-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20231103000650.195673-2-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699114985; x=1699719785; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=M5lh6Bl6RnnGZH/fqAjbm+5FTqurAUoJbYNtYVEHRD4=;
- b=La4uyd+fjYi4DR0n+/1/Gpu5ZJkb/MilzzA2U9G16Dx89T6JFX0Cd5Yr+igWPL0dqG
- HjszhdzfJhef36Lk5J2lLoLFyCD28rvsOJGPcDJjWVcJTSnykVzfBoqox+oO+6P0l52j
- OA2etg9r2ICpy62nbGT6WmPN8ZiEw/ntdcMAVHsasqBntS1J3KXX3PJb2bHgcYl2hXuB
- 2eJ9kg+YQGWnyGRcJ3h/tos3Ql9VO4N5UK8lqh/17McPYVNpFux6IMqqql/NsfxqjtBE
- E5YIgOoWMl6V35Zw3tPcsrey87HwSxXxD7TH9V2QHi0Ik+txjRHvmD2h9eq3Knq58FX5
- ai9A==
+ d=mind.be; s=google; t=1699115166; x=1699719966; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=wjw3kJVniT1MAIZXDDvjW+7mjPSEcxuZ69QoEbDo0Io=;
+ b=brnvYp4w6hYdqYQX7eV1w0QxFAe3xsvXXV1PBEnS1/XkZzM3dZZmgUEZ+bDsZCrVYg
+ RuamM8cMVf+qE7kt6ym8tOOAz6CspRRW4JOKgk3yKGVb1YUb06IJxkDtVgpImRLYULrV
+ 4a7MngXzeLhzS+2FmjKQ8ep1b8EV2bMbq/aXSU+Lcoj8WaKArqA074Sjc1eRGIqBc71B
+ T4quI3fOD3tXyP4FO9UIXNNy29p9r+1cy9Py8Lo2B/fPk3SsLiPRyWCB91Pz8AcJ3d2F
+ JLVdCQrV++gwULbAq9oD89sotCABXVB5PZZrmfjV5eNbJ0cleWqoJeh0N/9wEXoUI5Oj
+ 6y0g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=La4uyd+f
-Subject: [Buildroot] [PATCH 1/1] package/libgdiplus: add upstream link to
- patch
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=brnvYp4w
+Subject: Re: [Buildroot] [PATCH] package/nodejs: bump version to 20.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +99,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Martin Bark <martin@barkynet.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Daniel Price <daniel.price@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .checkpackageignore                                              | 1 -
- ...01-Build-unit-tests-only-when-enable-unit-tests-is-pass.patch | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1fda294145..1a78addd0e 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -662,7 +662,6 @@ package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
- package/libfuse/0001-fix-aarch64-build.patch Upstream
- package/libfuse/0002-util-ulockmgr_server-c-conditionally-define-closefrom-fix-glibc-2-34.patch Upstream
- package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch Upstream
--package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.patch Upstream
- package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch Upstream
- package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch Upstream
- package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch Upstream
-diff --git a/package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.patch b/package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.patch
-index 450286462e..33746872ac 100644
---- a/package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.patch
-+++ b/package/libgdiplus/0001-Build-unit-tests-only-when-enable-unit-tests-is-pass.patch
-@@ -10,6 +10,7 @@ So let's disable the build of unit tests by default and introduce
- --enable-unit-tests configure option to enable it.
- 
- Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-+Upstream: https://github.com/mono/libgdiplus/pull/701
- ---
-  Makefile.am  | 8 ++++++--
-  configure.ac | 4 ++++
--- 
-2.42.0
 
+On 03/11/2023 01:06, Adam Duskett wrote:
+> - Refactor 0001-add-qemu-wrapper-support.patch for 20.9.0
+> 
+> - NodeJS now requires GCC 10.1 header. However, as there is no
+>    BR2_TOOLCHAIN_GCC_AT_LEAST_10_1, we round up to BR2_TOOLCHAIN_GCC_AT_LEAST_11.
+
+  GCC 10.1 is the first GCC release [1] (they start counting at 1, weird 
+people). So I think it really should be _AT_LEAST_10.
+
+  Regards,
+  Arnout
+
+[1] https://gcc.gnu.org/gcc-10/
+
+> 
+> - Drop the --without-dtrace and --without-etw config options as they no longer
+>    exist.
+> 
+> - Update support/testing/tests/package/test_nodejs.py to use
+>    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN, otherwise the test fails as the
+>    gcc version selected will be 7.
+> 
+> - Update the hash file for LICENSE.txt due to numerous changes, such
+>    as the addition of new libraries and updated dates. No new license
+>    types are added.
+> 
+> Tested with: ./support/testing/run-tests tests.package.test_nodejs
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
