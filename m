@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACFEFC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 18:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C64BC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 18:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F89640164;
-	Sat,  4 Nov 2023 18:21:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F89640164
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BD8D4033F;
+	Sat,  4 Nov 2023 18:22:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BD8D4033F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qg8u-3UmZ6CJ; Sat,  4 Nov 2023 18:21:45 +0000 (UTC)
+	with ESMTP id U3uWsZaBD-Ro; Sat,  4 Nov 2023 18:21:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 384484021C;
-	Sat,  4 Nov 2023 18:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 384484021C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21D731BF2A3
+	by smtp2.osuosl.org (Postfix) with ESMTP id D72DE4025D;
+	Sat,  4 Nov 2023 18:21:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D72DE4025D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 56C891BF868
  for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:21:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEB22418C1
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:21:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEB22418C1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3044D81FEF
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 18:21:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3044D81FEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7ZsMGlzGV18w for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cyhd-5YI6SRR for <buildroot@lists.busybox.net>;
  Sat,  4 Nov 2023 18:21:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 249CC41B72
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C24E81FEC
  for <buildroot@buildroot.org>; Sat,  4 Nov 2023 18:21:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 249CC41B72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C24E81FEC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0FC19866D0; Sat,  4 Nov 2023 18:21:41 +0000 (UTC)
+ id 1A2A4866D1; Sat,  4 Nov 2023 18:21:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 19:21:29 +0100
+Date: Sat, 4 Nov 2023 19:21:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a001ca657b4434989900a2a2a55faae45b786a6a
-X-Git-Newrev: dec855e19c28e8cf17d225cac9b90af252bfbbe8
+X-Git-Oldrev: dec855e19c28e8cf17d225cac9b90af252bfbbe8
+X-Git-Newrev: d58f2677e5a46fc1d73b30ffa276a2a1bae777be
 X-Patchwork-Hint: ignore
-Message-Id: <20231104182141.0FC19866D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireless_tools: make 'iwconfig'
- tool optional
+Message-Id: <20231104182141.1A2A4866D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireless_tools: add option to
+ build ifrename
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,60 +64,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dec855e19c28e8cf17d225cac9b90af252bfbbe8
+commit: https://git.buildroot.net/buildroot/commit/?id=d58f2677e5a46fc1d73b30ffa276a2a1bae777be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Allow disabling iwconfig for targets that only want the library.
+The ifrename tool is separate from iwconfig and is not being built. The
+upstream does not have an install target for ifrename either, so we must
+manually install it.
 
 Signed-off-by: Neal J. Buchmeyer <neal.buchmeyer@collins.com>
 Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireless_tools/Config.in         | 9 +++++++++
- package/wireless_tools/wireless_tools.mk | 2 ++
- 2 files changed, 11 insertions(+)
+ package/wireless_tools/Config.in         |  6 ++++++
+ package/wireless_tools/wireless_tools.mk | 11 +++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/package/wireless_tools/Config.in b/package/wireless_tools/Config.in
-index 349908dbde..74786d883e 100644
+index 74786d883e..1d83cb5a5a 100644
 --- a/package/wireless_tools/Config.in
 +++ b/package/wireless_tools/Config.in
-@@ -1,5 +1,7 @@
+@@ -1,6 +1,7 @@
  config BR2_PACKAGE_WIRELESS_TOOLS
  	bool "wireless tools"
-+	select BR2_PACKAGE_WIRELESS_TOOLS_IWCONFIG if \
-+		!BR2_PACKAGE_WIRELESS_TOOLS_LIB
+ 	select BR2_PACKAGE_WIRELESS_TOOLS_IWCONFIG if \
++		!BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME && \
+ 		!BR2_PACKAGE_WIRELESS_TOOLS_LIB
  	help
  	  A collection of tools to configure wireless lan cards.
+@@ -16,6 +17,11 @@ config BR2_PACKAGE_WIRELESS_TOOLS_IWCONFIG
+ 	  Build and install the iwconfig, iwlist, iwspy, iwpriv, and
+ 	  iwgetid tools.
  
-@@ -7,6 +9,13 @@ config BR2_PACKAGE_WIRELESS_TOOLS
- 
- if BR2_PACKAGE_WIRELESS_TOOLS
- 
-+config BR2_PACKAGE_WIRELESS_TOOLS_IWCONFIG
-+	bool "Install tools"
-+	default y
++config BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME
++	bool "Install ifrename"
 +	help
-+	  Build and install the iwconfig, iwlist, iwspy, iwpriv, and
-+	  iwgetid tools.
++	  Build and install the ifrename tool
 +
  config BR2_PACKAGE_WIRELESS_TOOLS_LIB
  	bool "Install shared library"
  	depends on !BR2_STATIC_LIBS
 diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
-index 1d29c3b102..3e55eda600 100644
+index 3e55eda600..90c9286688 100644
 --- a/package/wireless_tools/wireless_tools.mk
 +++ b/package/wireless_tools/wireless_tools.mk
-@@ -14,8 +14,10 @@ WIRELESS_TOOLS_CPE_ID_VERSION = $(WIRELESS_TOOLS_VERSION_MAJOR)
- WIRELESS_TOOLS_CPE_ID_UPDATE = pre9
- WIRELESS_TOOLS_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_IWCONFIG),y)
- WIRELESS_TOOLS_BUILD_TARGETS = iwmulticall
+@@ -19,6 +19,10 @@ WIRELESS_TOOLS_BUILD_TARGETS = iwmulticall
  WIRELESS_TOOLS_INSTALL_TARGETS = install-iwmulticall
-+endif
+ endif
  
++ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME),y)
++WIRELESS_TOOLS_BUILD_TARGETS += ifrename
++endif
++
  ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
  WIRELESS_TOOLS_BUILD_TARGETS += libiw.so.$(WIRELESS_TOOLS_VERSION_MAJOR)
+ WIRELESS_TOOLS_INSTALL_TARGETS += install-dynamic
+@@ -37,8 +41,11 @@ define WIRELESS_TOOLS_BUILD_CMDS
+ endef
+ 
+ define WIRELESS_TOOLS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" LDCONFIG=/bin/true \
+-		$(WIRELESS_TOOLS_INSTALL_TARGETS)
++	$(if $(WIRELESS_TOOLS_INSTALL_TARGETS),
++		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" \
++			LDCONFIG=/bin/true $(WIRELESS_TOOLS_INSTALL_TARGETS))
++	$(if $(BR2_PACKAGE_WIRELESS_TOOLS_IFRENAME),
++		$(INSTALL) -D -m 755 $(@D)/ifrename $(TARGET_DIR)/sbin/ifrename)
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
