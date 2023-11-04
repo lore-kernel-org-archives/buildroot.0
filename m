@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51B35C4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 21:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C61D5C4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 21:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0059860D79;
-	Sat,  4 Nov 2023 21:32:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0059860D79
+	by smtp3.osuosl.org (Postfix) with ESMTP id 770B36062F;
+	Sat,  4 Nov 2023 21:33:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 770B36062F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T99-Yqd5IncY; Sat,  4 Nov 2023 21:32:11 +0000 (UTC)
+	with ESMTP id AxdCp6R9H8wl; Sat,  4 Nov 2023 21:33:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EABB60D88;
-	Sat,  4 Nov 2023 21:32:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EABB60D88
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C94BD1BF2F9
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:32:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DC446077D;
+	Sat,  4 Nov 2023 21:33:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DC446077D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 602DC1BF2F9
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:32:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A04BF60D79
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:32:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A04BF60D79
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37447821BF
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 21:32:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37447821BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QY3SeiqhF8Un for <buildroot@lists.busybox.net>;
- Sat,  4 Nov 2023 21:32:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lZW9gZYFBjLh for <buildroot@lists.busybox.net>;
+ Sat,  4 Nov 2023 21:32:55 +0000 (UTC)
 Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
  [IPv6:2a00:1450:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1035160E6A
- for <buildroot@buildroot.org>; Sat,  4 Nov 2023 21:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1035160E6A
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D01F78212F
+ for <buildroot@buildroot.org>; Sat,  4 Nov 2023 21:32:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D01F78212F
 Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-53e2308198eso5422362a12.1
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 14:32:04 -0700 (PDT)
+ 4fb4d7f45d1cf-53e08b60febso5509135a12.1
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 14:32:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699133523; x=1699738323;
+ d=1e100.net; s=20230601; t=1699133573; x=1699738373;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=WmFMphl9jGkKPDYjFF6ieIjkIpucWmz+dQhGDXenSnA=;
- b=cBRvfQwmVZdmPG1oQzRPmjRPccZpLM00Ta6c52n/DtyCL0Y79uWdyi8nngIwzIFez4
- lmCVffnYICWbNK6W+r9+ymPsJCqpApOpWLHnruJdt7YL9RPeExmDOIqynIkN0a8o4Srh
- X8hYf548bXFaT3SUQ5lHqR4PDVLDRlldYXnfQjU9iG5h22niq4crKciBoAQRnTp5I15u
- aTidAvw5PjUJwSzBKp9Cgwr5uEb0b6CSjIGuMLvr3VKN118a4nQzVMTZqSoA1bOpTo4h
- oD62axrbgNn2/8LWZNO64Es9Kmc1qyDtbYX8nXOk+Y9KQB41o9UUz1GXlXFPElDWsiCO
- fO8g==
-X-Gm-Message-State: AOJu0Yws+qc6c0MPckBxy2G+qLAdZaQadeKD8s+Hp/pWOt9mQ98Pd4V7
- WGnOujWZkZdrVs6nSEn9AFBXxw==
-X-Google-Smtp-Source: AGHT+IGbgwy6kb8OFZ5KYzk1xStYX8uxL/52oVYr33/jdAknc8shUGFjl7APhtWmwqW2QmkD/m8lHg==
-X-Received: by 2002:a50:a41b:0:b0:542:eb1f:c70a with SMTP id
- u27-20020a50a41b000000b00542eb1fc70amr16270627edb.29.1699133522271; 
- Sat, 04 Nov 2023 14:32:02 -0700 (PDT)
+ bh=yWg1+x/8OtJqme4MoaUvdgAbkAc5O/oZawBnVA2gP2Y=;
+ b=Kjs7GCmQwBejG6gW8Q1HfAPnS3EW4uuFe8szMDdnk1Jm8wWKnWUjzTeaK/PN1Qe/hy
+ s0ClH6KI4TepEWRGPQLkqWQDV/c6LP+EAZA/oFzyadoYIZv+dxRkBu6QXcISpzh2lBfB
+ e47gj1u+SYXTGCdVv2WU0afF1UeIBLX8BV3KMpS8Jcv+R/MpF3y2BAXsaeB7zFTj51VU
+ m0kbFM0cM+3r/jIcdgGLu7UnzjS+agVlYtNkqEDG0vxRo2ZiTAUhK6Xu004tDh310RIj
+ BjyROYH1f4sn6kEpnQI3VgkoMlw/9tCgrw80z7OJrPv6n64HbJR/nukav+tKsseknGVI
+ pwaQ==
+X-Gm-Message-State: AOJu0YyAuwtxqTPECYHHs7D/stVTWxdrB/gXFCcJFVSx2wngS4ECBU4V
+ 7vVgVNapkNS8peHw/AaVY+Lgfg==
+X-Google-Smtp-Source: AGHT+IGKefEzPkGmef7BaKUKg+7Hjt5Lp59wUx6vjajnZ1p8zlojjo5pVeqCwZwOP6QX79h9+SOVyw==
+X-Received: by 2002:a50:9f06:0:b0:543:6588:555e with SMTP id
+ b6-20020a509f06000000b005436588555emr12227548edf.9.1699133572138; 
+ Sat, 04 Nov 2023 14:32:52 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- s18-20020a508d12000000b00540ea3a25e6sm2549326eds.72.2023.11.04.14.32.00
+ s18-20020a508d12000000b00540ea3a25e6sm2549326eds.72.2023.11.04.14.32.50
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 04 Nov 2023 14:32:01 -0700 (PDT)
-Message-ID: <e1967d02-568d-475f-b2d2-29ab3b0847cd@mind.be>
-Date: Sat, 4 Nov 2023 22:31:59 +0100
+ Sat, 04 Nov 2023 14:32:51 -0700 (PDT)
+Message-ID: <fd82cadf-2d95-4902-84fc-86052bece0dd@mind.be>
+Date: Sat, 4 Nov 2023 22:32:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
 References: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
- <20231026092701.12345-24-adam.duskett@amarulasolutions.com>
-In-Reply-To: <20231026092701.12345-24-adam.duskett@amarulasolutions.com>
+ <20231026092701.12345-25-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20231026092701.12345-25-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699133523; x=1699738323; darn=buildroot.org;
+ d=mind.be; s=google; t=1699133573; x=1699738373; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=WmFMphl9jGkKPDYjFF6ieIjkIpucWmz+dQhGDXenSnA=;
- b=ExSMBDJ0O8TiKwJW+3lGiin+LJedGLwJG3/fjX25IvU5zuOjNCeMv9/wQvJOZSyeZU
- 0RRWdlCHqQ4EnG2TvA8+KWjJlwP50+yjkDAyDlGd4/7fmY2NJZ2/UJJUZlZOCd8HQs4a
- efx2r5txJ0SbdhZFU1s4uxKQ46Ec+aZmdZA9b1TZcxmz/wMTvYITmjpupM0xqC+ZhFyq
- 16dz0Uke/tDlHNr9OreuETxAjH0kouoe3cnnWkvcF4j/B6/ZaHEt61jsi44eP0bxYx3b
- aYYFHZvHt27p3n0Hi5+bl4U/m+S1N0RP7gLGO6PbOvNLdBweuVk/ID5BeQgz3dvdssLP
- 3JCQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=yWg1+x/8OtJqme4MoaUvdgAbkAc5O/oZawBnVA2gP2Y=;
+ b=G24uFs78rf1I2JIlp5AzPFnRpq0NVb4KKRaS90gx0jpr9ydKqNXC0Mbz7OKX33T3a5
+ IcudMLn+h+SGPeYSNU8FzrqqmMfMiP/uvqv/2SLo7NrRpEAFZDa0ppeNuDbuKueaQwTP
+ eu2d3sgIK8Z7UZi60S0SxzZuRoiWSCcnkEh/MSskRua4RwlsaITzOYlO1SQMH+BcHby/
+ XCYNiUDhDUzT0lpqJ0lz/L/EqlOEc/Nl9U6jbKY4uhkxxQPeihyPX6h24+izRiptUbxD
+ 80IdYStIU1QRngC+scILhaHymIx1UWeJ7nLB4YNzVFvdx0F3RXQeFBzNx7vaN8ouRHGi
+ RJpg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ExSMBDJ0
-Subject: Re: [Buildroot] [PATCH 23/30]
- package/python-magic-wormhole-transit-relay: update versioneer to 0.29
+ header.a=rsa-sha256 header.s=google header.b=G24uFs78
+Subject: Re: [Buildroot] [PATCH 24/30] package/python-spake2: update
+ versioneer to 0.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -118,31 +118,34 @@ On 26/10/2023 11:26, Adam Duskett wrote:
 > which is 0.29 as of this commit.
 > 
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+>   .../0001-Update-versioneer-to-0.29.patch      | 2194 +++++++++++++++++
+>   1 file changed, 2194 insertions(+)
+>   create mode 100644 package/python-spake2/0001-Update-versioneer-to-0.29.patch
+> 
+> diff --git a/package/python-spake2/0001-Update-versioneer-to-0.29.patch b/package/python-spake2/0001-Update-versioneer-to-0.29.patch
+> new file mode 100644
+> index 0000000000..3b5db5342c
+> --- /dev/null
+> +++ b/package/python-spake2/0001-Update-versioneer-to-0.29.patch
+> @@ -0,0 +1,2194 @@
+> +From 5b5436f11d01e66505bb4c148304c2eb49346529 Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <adam.duskett@amarulasolutions.com>
+> +Date: Tue, 24 Oct 2023 09:56:57 +0200
+> +Subject: [PATCH] Update versioneer to 0.29
+> +
+> +Fixes builds against Python 3.12.0
+> +
+> +Upstream: https://github.com/warner/python-spake2/pull/15
+
+  Upstream hasn't had a commit in 5 years so I don't know if this will ever get 
+merged...
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
-> ---
->   .../0001-Update-versioneer-to-0.29.patch      | 2194 +++++++++++++++++
->   1 file changed, 2194 insertions(+)
->   create mode 100644 package/python-magic-wormhole-transit-relay/0001-Update-versioneer-to-0.29.patch
-> 
-> diff --git a/package/python-magic-wormhole-transit-relay/0001-Update-versioneer-to-0.29.patch b/package/python-magic-wormhole-transit-relay/0001-Update-versioneer-to-0.29.patch
-> new file mode 100644
-> index 0000000000..51cecd138a
-> --- /dev/null
-> +++ b/package/python-magic-wormhole-transit-relay/0001-Update-versioneer-to-0.29.patch
-> @@ -0,0 +1,2194 @@
-> +From f00f54ecbd9bea970795da4f1f6091828a011bcd Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <adam.duskett@amarulasolutions.com>
-> +Date: Tue, 24 Oct 2023 09:52:45 +0200
-> +Subject: [PATCH] Update versioneer to 0.29
-> +
-> +Fixes builds against Python 3.12.0
-> +
-> +Upstream: https://github.com/magic-wormhole/magic-wormhole-transit-relay/pull/34
 > +
 > +Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 > +---
