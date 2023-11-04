@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FFBBC4332F
-	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 15:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D24BCC4332F
+	for <buildroot@archiver.kernel.org>; Sat,  4 Nov 2023 15:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49F2440A90;
-	Sat,  4 Nov 2023 15:12:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49F2440A90
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F5DE40A78;
+	Sat,  4 Nov 2023 15:12:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F5DE40A78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 23DKxZo7GwFn; Sat,  4 Nov 2023 15:12:38 +0000 (UTC)
+	with ESMTP id JEPk3Epw0Hwm; Sat,  4 Nov 2023 15:12:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2DA0E40A94;
-	Sat,  4 Nov 2023 15:12:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DA0E40A94
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2731BF869
- for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 15:11:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D61C40A46;
+	Sat,  4 Nov 2023 15:12:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D61C40A46
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 721F11BF584
+ for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 15:11:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FF3241D9B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47040822BD
  for <buildroot@lists.busybox.net>; Sat,  4 Nov 2023 15:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FF3241D9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47040822BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1HdlLMIFri25 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pWyHhx-zCrLa for <buildroot@lists.busybox.net>;
  Sat,  4 Nov 2023 15:11:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7222241D99
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89075822BA
  for <buildroot@buildroot.org>; Sat,  4 Nov 2023 15:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7222241D99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89075822BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61E3E8666C; Sat,  4 Nov 2023 15:11:26 +0000 (UTC)
+ id 785C08666E; Sat,  4 Nov 2023 15:11:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 4 Nov 2023 16:10:55 +0100
+Date: Sat, 4 Nov 2023 16:11:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95e00339d1176bda5193d7cf4c904b64f99d8e98
-X-Git-Newrev: 64ce823223fece5c106994d9654a126fc6161d6a
+X-Git-Oldrev: 11ffca6d56471070bdce292cc932e0f37d46dd43
+X-Git-Newrev: 61a38c7ee0e4829592f09f84dfabc9328da1370c
 X-Patchwork-Hint: ignore
-Message-Id: <20231104151126.61E3E8666C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xen: enable selinux module
+Message-Id: <20231104151126.785C08666E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: enable selinux module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,27 +63,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64ce823223fece5c106994d9654a126fc6161d6a
+commit: https://git.buildroot.net/buildroot/commit/?id=61a38c7ee0e4829592f09f84dfabc9328da1370c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xen/xen.mk | 1 +
+ package/zfs/zfs.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 651442cfdf..ad71b14105 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -6,6 +6,7 @@
- 
- XEN_VERSION = 4.14.6
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
-+XEN_SELINUX_MODULES = xen
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_CPE_ID_VENDOR = xen
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index b852d8d4e2..f0461ea9ec 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -7,6 +7,7 @@
+ ZFS_VERSION = 2.1.12
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_PATCH = https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
++ZFS_SELINUX_MODULES = zfs
+ ZFS_LICENSE = CDDL
+ ZFS_LICENSE_FILES = LICENSE COPYRIGHT
+ ZFS_CPE_ID_VENDOR = openzfs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
