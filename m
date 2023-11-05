@@ -4,84 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71360C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 08:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFBDBC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 08:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8FA360FDA;
-	Sun,  5 Nov 2023 08:55:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8FA360FDA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9513C60FD4;
+	Sun,  5 Nov 2023 08:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9513C60FD4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kyaisKbZx5o4; Sun,  5 Nov 2023 08:55:56 +0000 (UTC)
+	with ESMTP id tGeqiSYFoH5C; Sun,  5 Nov 2023 08:56:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15B6160FD4;
-	Sun,  5 Nov 2023 08:55:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15B6160FD4
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFDCC60FDF;
+	Sun,  5 Nov 2023 08:56:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFDCC60FDF
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E2DE71BF2F9
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 08:55:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4462E1BF2F9
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 08:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C0683403A2
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 08:55:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0683403A2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BDD4401B7
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 08:55:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BDD4401B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MCxJp1160amN for <buildroot@lists.busybox.net>;
+ with ESMTP id SPNM7uy2uh7F for <buildroot@lists.busybox.net>;
  Sun,  5 Nov 2023 08:55:51 +0000 (UTC)
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
- [IPv6:2607:f8b0:4864:20::132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 87FB7401B7
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C95FB4051F
  for <buildroot@buildroot.org>; Sun,  5 Nov 2023 08:55:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87FB7401B7
-Received: by mail-il1-x132.google.com with SMTP id
- e9e14a558f8ab-35961c61febso8779335ab.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C95FB4051F
+Received: by mail-il1-x12b.google.com with SMTP id
+ e9e14a558f8ab-35941fd3a60so12074605ab.0
  for <buildroot@buildroot.org>; Sun, 05 Nov 2023 01:55:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1699174550; x=1699779350;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=p/T4wBNDK25UModmfUlPtktYS01IYRiJLhN8EGFFyuc=;
- b=R/PGz5RKd/vMwO1nwX9iTJ2dGTLZO1uvun/CmA6ifYFcK4rVq47Pw32wt/lPjlaHyQ
- LFG9AShpd3vh2X6i2+s2s8zYOwcSI0gTL4L1K3EpC5EhameM/y2RIudIUXbYi6/X5pD5
- kmE8ObpV/m9WjHpjavAYiu1td8hPrOMDPqdvYp2FGNlWmvAS0tJFTp0q+NAG4Xnbmluc
- xWGaU3Vf7QwbwoLSApY8EPp0ZEYVw4juAxgdFuhG9BDhb2pzLbyaO3rT9vXYy24U/rZ4
- LdzU3/FT9NHGfk7EGWDNaiC6ztUfNGh93KKtOrKhXhy4TTUU0vGchgYpG8tX07TzwTln
- X9dg==
-X-Gm-Message-State: AOJu0YzGq0cX2gJ5jy3YHrrM/kC7jF4Mxe8REqoWhizebEUTnmRS9sl4
- cPeVo4pVvjOPq6mRbu5FCf+zMyRkQYnFBw==
-X-Google-Smtp-Source: AGHT+IHM1x8YvIwvR+3Kwn5yYi1AGkdFQrNxZqXTqQXagLmvhLMj3wkCEyxAue3T05QFCmbdxO5+CQ==
-X-Received: by 2002:a05:6e02:b49:b0:358:141:8584 with SMTP id
- f9-20020a056e020b4900b0035801418584mr34563386ilu.17.1699174549616; 
- Sun, 05 Nov 2023 01:55:49 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=P0Ey27oe2aJTVb2DAV+DY3RcfxglB1vE2zVUaNJ+8qU=;
+ b=rXEyBVjt/8JsOzXdT08spjlI2n4NMn2fvUJEOPo4oqWWewnXry1mQNWmBuzx2/df32
+ v3lciOISGH5mwXZH/5AZZ+Bfuiajm6pFIo+22gskz88TDBMqEcSrXg9ldVb0hbX1sZH7
+ 8T3KPFWb7yoEaSn3AAvyAECDHvfQ3K304Zg4RaaVVgTenP9AB8pNEhTAAzCsmFNfmUeq
+ QoYvUxK4LU5XkMAgkm0uVt4TJewvRXHlhvVvDfPzGi9BJ4foT1zsUAsGUMXA/0pprWEn
+ 8egD/BW4aesPWmRY3c2Yep4VQOtuacWwXk3+vcZ33IcgzJliF63gFy3t1WlPQ5/E1MV7
+ RlVA==
+X-Gm-Message-State: AOJu0YxRabzZnlOnEdltmwHntZpw7MURB57lVC+Z7sn7fqY7JhvJHO6Z
+ r9e6oOPS+c0mE+4Klvl+5kyVWSmHOMx72Q==
+X-Google-Smtp-Source: AGHT+IHWlJhyPCTr3BHdmaHruOL1XqbTsvZ53MpJOAPApG5zR5aASINT7DFtMkkQS8lvbdMwvX4TyA==
+X-Received: by 2002:a92:dc83:0:b0:359:523d:f1f7 with SMTP id
+ c3-20020a92dc83000000b00359523df1f7mr9038490iln.9.1699174550285; 
+ Sun, 05 Nov 2023 01:55:50 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- a13-20020a056e0208ad00b003576e122389sm1774216ilt.24.2023.11.05.01.55.48
+ a13-20020a056e0208ad00b003576e122389sm1774216ilt.24.2023.11.05.01.55.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 01:55:48 -0700 (PDT)
+ Sun, 05 Nov 2023 01:55:49 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 01:55:44 -0700
-Message-Id: <20231105085546.2919443-1-james.hilliard1@gmail.com>
+Date: Sun,  5 Nov 2023 01:55:45 -0700
+Message-Id: <20231105085546.2919443-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231105085546.2919443-1-james.hilliard1@gmail.com>
+References: <20231105085546.2919443-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20230601; t=1699174550; x=1699779350; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=p/T4wBNDK25UModmfUlPtktYS01IYRiJLhN8EGFFyuc=;
- b=VdKmyn1hZcj6ouvoSr4rNJg5mv/tGXjjA5lQsHAGGwZmbKHWIYmUfkCWWkMwvVnsqc
- 3cI2IDxALtbAoOgd+/ituCVW/2i3M4mvIBCBcw65ve7nkJPgM2l/G1MznGplYaIzF+//
- pM7mwIueBxVCGxmnpiQWKP+xiiVMtOLyYUK4D3JWYEMG61zv1lYCZL9fiDlmc0CsIhV6
- Wgmf2hc0mRdKvUP09q0fwZ0Vu9uW9c/NN3ZPDGr04DqgaRTB1uDNT8+FDm19Q86laLkM
- tQ/QBeQw5Pz1nvqUbLTj6jBNYC1N8FziYvFxFvw4LPAmn1ak2NvWJ7/oFXf0TTq6yowy
- 0Peg==
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=P0Ey27oe2aJTVb2DAV+DY3RcfxglB1vE2zVUaNJ+8qU=;
+ b=ZE9mMmPo5Z9yQ0W/o4obFsJgk60rIlVdNXc7U0FX5KdY9wf45U0GtG7Rwy+IAZkId7
+ TPJiUdK7Ix9fOpElW9yoK75QbVgTaJnXxKwXQ5fFv3bQmgXQVewErPNkPzBdqGPZHyVB
+ rS2x2Ar+sUo5tiOXLKF1FUgga7wT7G0rTZEmHcwAwKBIgI7AbXTerDhrc/CcscHOsw2z
+ nVUdqTNUD3IXzlAhZGqvB3LhnZkgzh1QZpdZt+bk0TGrXwvCSqHzwasL/o5txmrPymIq
+ TI2GX/9UVLRmeOaVVm+pbUurdbmpR2ao2g1fALG4ons4EUkr34ejEvZEFdXCpY6BIDP0
+ csLw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=VdKmyn1h
-Subject: [Buildroot] [PATCH 1/3] package/python-referencing: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=ZE9mMmPo
+Subject: [Buildroot] [PATCH 2/3] package/python-jsonschema-specifications:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,71 +107,71 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
  package/Config.in                               |  1 +
- package/python-referencing/Config.in            |  9 +++++++++
- .../python-referencing/python-referencing.hash  |  5 +++++
- .../python-referencing/python-referencing.mk    | 17 +++++++++++++++++
+ .../python-jsonschema-specifications/Config.in  |  9 +++++++++
+ .../python-jsonschema-specifications.hash       |  5 +++++
+ .../python-jsonschema-specifications.mk         | 17 +++++++++++++++++
  4 files changed, 32 insertions(+)
- create mode 100644 package/python-referencing/Config.in
- create mode 100644 package/python-referencing/python-referencing.hash
- create mode 100644 package/python-referencing/python-referencing.mk
+ create mode 100644 package/python-jsonschema-specifications/Config.in
+ create mode 100644 package/python-jsonschema-specifications/python-jsonschema-specifications.hash
+ create mode 100644 package/python-jsonschema-specifications/python-jsonschema-specifications.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a0d5339b0a..6a2f1cad1a 100644
+index 6a2f1cad1a..7167616189 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1276,6 +1276,7 @@ menu "External python modules"
- 	source "package/python-redis/Config.in"
- 	source "package/python-reedsolo/Config.in"
- 	source "package/python-reentry/Config.in"
-+	source "package/python-referencing/Config.in"
- 	source "package/python-regex/Config.in"
- 	source "package/python-remi/Config.in"
- 	source "package/python-request-id/Config.in"
-diff --git a/package/python-referencing/Config.in b/package/python-referencing/Config.in
+@@ -1133,6 +1133,7 @@ menu "External python modules"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-jsonmodels/Config.in"
+ 	source "package/python-jsonschema/Config.in"
++	source "package/python-jsonschema-specifications/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-kiwisolver/Config.in"
+ 	source "package/python-lark/Config.in"
+diff --git a/package/python-jsonschema-specifications/Config.in b/package/python-jsonschema-specifications/Config.in
 new file mode 100644
-index 0000000000..273c42543e
+index 0000000000..31453a12ea
 --- /dev/null
-+++ b/package/python-referencing/Config.in
++++ b/package/python-jsonschema-specifications/Config.in
 @@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_REFERENCING
-+	bool "python-referencing"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-rpds-py
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_RPDS_PY # runtime
++config BR2_PACKAGE_PYTHON_JSONSCHEMA_SPECIFICATIONS
++	bool "python-jsonschema-specifications"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-referencing -> python-rpds-py
++	select BR2_PACKAGE_PYTHON_REFERENCING # runtime
 +	help
-+	  JSON Referencing + Python.
++	  The JSON Schema meta-schemas and vocabularies, exposed as a
++	  Registry.
 +
-+	  https://github.com/python-jsonschema/referencing
-diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
++	  https://github.com/python-jsonschema/jsonschema-specifications
+diff --git a/package/python-jsonschema-specifications/python-jsonschema-specifications.hash b/package/python-jsonschema-specifications/python-jsonschema-specifications.hash
 new file mode 100644
-index 0000000000..d4f3dce5a4
+index 0000000000..5aaba45210
 --- /dev/null
-+++ b/package/python-referencing/python-referencing.hash
++++ b/package/python-jsonschema-specifications/python-jsonschema-specifications.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/referencing/json
-+md5  617d973b9ce86b6f74b2216c6f3af5c9  referencing-0.30.2.tar.gz
-+sha256  794ad8003c65938edcdbc027f1933215e0d0ccc0291e3ce20a4d87432b59efc0  referencing-0.30.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/jsonschema-specifications/json
++md5  d37762167688d8a05024b92dc8a1e20f  jsonschema_specifications-2023.7.1.tar.gz
++sha256  c91a50404e88a1f6ba40636778e2ee08f6e24c5613fe4c53ac24578a5a7f72bb  jsonschema_specifications-2023.7.1.tar.gz
 +# Locally computed sha256 checksums
 +sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
-diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
+diff --git a/package/python-jsonschema-specifications/python-jsonschema-specifications.mk b/package/python-jsonschema-specifications/python-jsonschema-specifications.mk
 new file mode 100644
-index 0000000000..4d11c99deb
+index 0000000000..7a19eee423
 --- /dev/null
-+++ b/package/python-referencing/python-referencing.mk
++++ b/package/python-jsonschema-specifications/python-jsonschema-specifications.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# python-referencing
++# python-jsonschema-specifications
 +#
 +################################################################################
 +
-+PYTHON_REFERENCING_VERSION = 0.30.2
-+PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
-+PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/e1/43/d3f6cf3e1ec9003520c5fb31dc363ee488c517f09402abd2a1c90df63bbb
-+PYTHON_REFERENCING_SETUP_TYPE = pep517
-+PYTHON_REFERENCING_LICENSE = MIT
-+PYTHON_REFERENCING_LICENSE_FILES = COPYING
-+PYTHON_REFERENCING_DEPENDENCIES = \
++PYTHON_JSONSCHEMA_SPECIFICATIONS_VERSION = 2023.7.1
++PYTHON_JSONSCHEMA_SPECIFICATIONS_SOURCE = jsonschema_specifications-$(PYTHON_JSONSCHEMA_SPECIFICATIONS_VERSION).tar.gz
++PYTHON_JSONSCHEMA_SPECIFICATIONS_SITE = https://files.pythonhosted.org/packages/12/ce/eb5396b34c28cbac19a6a8632f0e03d309135d77285536258b82120198d8
++PYTHON_JSONSCHEMA_SPECIFICATIONS_SETUP_TYPE = pep517
++PYTHON_JSONSCHEMA_SPECIFICATIONS_LICENSE = MIT
++PYTHON_JSONSCHEMA_SPECIFICATIONS_LICENSE_FILES = COPYING
++PYTHON_JSONSCHEMA_SPECIFICATIONS_DEPENDENCIES = \
 +	host-python-hatchling \
 +	host-python-hatch-vcs
 +
