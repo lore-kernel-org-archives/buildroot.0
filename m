@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 876B3C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 00:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75F7CC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 00:10:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A35560C1A;
-	Sun,  5 Nov 2023 00:00:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A35560C1A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0156660D78;
+	Sun,  5 Nov 2023 00:10:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0156660D78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TLasFSAUUB5u; Sun,  5 Nov 2023 00:00:37 +0000 (UTC)
+	with ESMTP id Ko3B4u32L-UR; Sun,  5 Nov 2023 00:10:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F18560BFF;
-	Sun,  5 Nov 2023 00:00:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F18560BFF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF4271BF584
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 00:00:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4576F60C17;
+	Sun,  5 Nov 2023 00:10:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4576F60C17
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A89B81BF5A2
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 00:10:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B813F60BFF
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 00:00:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B813F60BFF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 816AE41821
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 00:10:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 816AE41821
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1yTaO0EfySCx for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 00:00:33 +0000 (UTC)
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 734F760BBF
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 00:00:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 734F760BBF
-Received: by mail-il1-x135.google.com with SMTP id
- e9e14a558f8ab-357c9dc1068so8553755ab.0
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 17:00:33 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nI3uGe3pXD3S for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 00:10:24 +0000 (UTC)
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 713CA4181F
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 00:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 713CA4181F
+Received: by mail-io1-xd2f.google.com with SMTP id
+ ca18e2360f4ac-7a694a365d9so141232739f.0
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 17:10:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699142432; x=1699747232;
+ d=1e100.net; s=20230601; t=1699143023; x=1699747823;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=im8QFnjAcuGKnL510/mCEWQupq08TpMIr+bORIENhHc=;
- b=ZNj5VPmVnrQ0+x8SFh74/sKsBgHclf5fV2PrPtqiXHLn4vthE1I9ycuk2v7X9fgEZ8
- j5bQTLpedo0LPVzMIzGlwlGuS8b6QtPjcEIL0fRo2z+djkyqePZiTASTx9h4HNFuF0YL
- FTsg29j3cX6izimRcbmDAeKl8VrnDPgsTjaAhZkCX1HjxlLuq1xqiIQHG1s8u5TrnnVk
- ZfgbytnmRZ4gPGKRL82zoctaa8v+wka3apZc2jQwjjnEV+6K7agEcrHtJB+lpQfHjRX0
- DZFarsmIIq4llsT7Il2bh/uV9oj1r0q9zdMgRSXunAVLiVPaSzcT/hZiRzFkpju8X4N1
- zd4A==
-X-Gm-Message-State: AOJu0YyGlE03NkDVuJN/3xXMkt5SAsitN68z/qQ8kHGM3ykdls8zt6js
- PCNX1d27AgJMQ0ryhf2adGs0x4yRDI0=
-X-Google-Smtp-Source: AGHT+IHO3f5RhwGPAghU1cnJRyDx8gM0HbFOHmag8l5ty75Bob2PwakO7F+TFTFlR4oACY4Hg9IfVw==
-X-Received: by 2002:a05:6e02:180e:b0:357:4779:9dbc with SMTP id
- a14-20020a056e02180e00b0035747799dbcmr7412156ilv.10.1699142432031; 
- Sat, 04 Nov 2023 17:00:32 -0700 (PDT)
+ bh=TmYLW4pc6NV7wM3yYUfZDrcybhVnkrTITKeHkjkv7qo=;
+ b=IepxBIKmEh3QF1cJw+i02aDtYuR+j9vo66Jecer5mULiya9Xp+aNqfFn6KKuzW77Zr
+ 6VW1NEORYpzhYoUI6t2PGltUmqPkE7wpCMQ81zQIzDKJf2Sni+/I/KZVQoglOMofOHQX
+ t3Nb+PbvmRXl90IKCFwoWbUpgO1nrzSQHPBhB43mRnaReww9hhfGhdJYylQxT+rS6CME
+ uJ2/4RX6tc0UTjE3VQfN8D/9FmUAsuDAxePevDxxrBU9du7l6U+Klfcbp79zt0r1paeO
+ AGjKrvavOx7erCdfsmZtzsU8FKPsXczpaL+QDpgoBOkJgabGtvj7N1LSwueoGwYqCSKb
+ 3A6g==
+X-Gm-Message-State: AOJu0Ywo1AN7LntCEQNAOh9M9WxK8L/gNqyOPjJQAkds54BFo3dYD5lr
+ 1B0HmoYzH+cjLQVvPUfXSSZZSnX0lEU=
+X-Google-Smtp-Source: AGHT+IGJ7RQ7OrJLrT9PskHauNwbzYi1IOS8okiMjdVzz+kP6vk9hINzBDe0MimR1+zufOsg3FQaBA==
+X-Received: by 2002:a05:6602:29ca:b0:7a2:a8d5:e146 with SMTP id
+ z10-20020a05660229ca00b007a2a8d5e146mr35374670ioq.15.1699143022986; 
+ Sat, 04 Nov 2023 17:10:22 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- k5-20020a056e0205a500b00357fc1e2ffesm1524632ils.23.2023.11.04.17.00.31
+ s13-20020a02cf2d000000b004300eca209csm1259255jar.112.2023.11.04.17.10.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Nov 2023 17:00:31 -0700 (PDT)
+ Sat, 04 Nov 2023 17:10:22 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 18:00:28 -0600
-Message-Id: <20231105000028.2698957-1-james.hilliard1@gmail.com>
+Date: Sat,  4 Nov 2023 18:10:09 -0600
+Message-Id: <20231105001009.2704781-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699142432; x=1699747232; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699143023; x=1699747823; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=im8QFnjAcuGKnL510/mCEWQupq08TpMIr+bORIENhHc=;
- b=OL5mniuPutCMoWCwuJCXOjgcLIdMZwe2b0qfaBqfpEP3fbzp2UsahbNOfc7onNpRMt
- +NYuzBx9dnblbz6ut3FHpXrjMofjnctB3Yd6qIG0SJiYczKvsE7DyR7AAHKv0VIdD+NC
- ZJiLaFQAem6zWU+jAzMyv+zO/1fyngJAFhRty8npjEPHMiTThuX0hWMevzxkYCFqab+L
- TML/GoX2WQiCTOp6FKn+SA+00E3qNUaxILuWt6EtrwqUYLn5NBbXH+Kt8i+pY7uT3ENG
- Ez47CffENFaJkdbN32e3Td+/mw6tsy71LDoMBvl0bL5iH0rvYwINRG13rzRvLDSvENYP
- COaw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=TmYLW4pc6NV7wM3yYUfZDrcybhVnkrTITKeHkjkv7qo=;
+ b=OmOVWM+3zDvOldxZ4OY957Xxc4e3Lt8I+zM7ZhZ99EfMecN34ZYDHmTeq8yKZyM9nH
+ vHURlngow25PsEAYSNnuwr4RRx8Fmss2nspxsoFmP0o9rZ/mIcXB5b4xIdfaT6wVpRNE
+ k2nhAsTWcKGm9QDqnigUZQ7ftYA1IpDSF4VV8eeyc+nOldhk6U6+NRGg1czbxKekLsY2
+ JJPNndlDSOPL6FKe49z3Ciad42RnIwhziAX/nAjl/gVpn8F8WXAN/wJuVbj7EGKsnUuM
+ 5K4ztqzCM/HoG1U8Le0tUny7VLKRd3Q6os27koRdoz6URmNDNKgcQ3ur5da53nKBjaaO
+ TIgQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OL5mniuP
-Subject: [Buildroot] [PATCH 1/1] package/python-argh: bump to version 0.30.4
+ header.a=rsa-sha256 header.s=20230601 header.b=OmOVWM+3
+Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: bump to version
+ 23.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,41 +100,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Migrate to new hatchling pep517 build backend.
+
+License hash changed due to adding contributors:
+https://github.com/hynek/argon2-cffi/commit/1133f3c2bafee1501535de5e5531054570438b1d
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-argh/python-argh.hash | 4 ++--
- package/python-argh/python-argh.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-argon2-cffi/python-argon2-cffi.hash |  6 +++---
+ package/python-argon2-cffi/python-argon2-cffi.mk   | 12 ++++++++----
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-argh/python-argh.hash b/package/python-argh/python-argh.hash
-index abfcec98f3..8bfb45d1c3 100644
---- a/package/python-argh/python-argh.hash
-+++ b/package/python-argh/python-argh.hash
-@@ -1,6 +1,6 @@
- # md5 from https://pypi.python.org/pypi/argh/json
--md5  d51d4ed7d82ce24a981169074f3e64e1  argh-0.28.1.tar.gz
--sha256  b2093086f0e809a3ecc24b64a2145309ee8f56d034936cd59e57c558a357329d  argh-0.28.1.tar.gz
-+md5  7001dd9ff619cf1422ddf8bf813bd08a  argh-0.30.4.tar.gz
-+sha256  9fca8e69c4dad4f8d2a7bdfbdd80b0754462b53510a03e1b5cf2b43a87e6e960  argh-0.30.4.tar.gz
- # Locally computed
- sha256  2594f46b9b23a5fddeca090faeb270c7ceee8116675fe35082be859aa7466e89  COPYING
- sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING.LESSER
-diff --git a/package/python-argh/python-argh.mk b/package/python-argh/python-argh.mk
-index 82cef822e9..ccb9f61d48 100644
---- a/package/python-argh/python-argh.mk
-+++ b/package/python-argh/python-argh.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-argon2-cffi/python-argon2-cffi.hash b/package/python-argon2-cffi/python-argon2-cffi.hash
+index 09da5855a3..e11195e1e2 100644
+--- a/package/python-argon2-cffi/python-argon2-cffi.hash
++++ b/package/python-argon2-cffi/python-argon2-cffi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/argon2-cffi/json
+-md5  b7843e8690c790f8e743d37bb75c25a8  argon2-cffi-21.3.0.tar.gz
+-sha256  d384164d944190a7dd7ef22c6aa3ff197da12962bd04b17f64d4e93d934dba5b  argon2-cffi-21.3.0.tar.gz
++md5  7371c126f21a895b33c4fe7e00ac6fc1  argon2_cffi-23.1.0.tar.gz
++sha256  879c3e79a2729ce768ebb7d36d4609e3a78a4ca2ec3a9f12286ca057e3d0db08  argon2_cffi-23.1.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
++sha256  b6944d386e87ccf49d9632da083685a4b7624733e686a7fe283dd2d428341d77  LICENSE
+diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
+index 0fb3e50ff3..238271f5f7 100644
+--- a/package/python-argon2-cffi/python-argon2-cffi.mk
++++ b/package/python-argon2-cffi/python-argon2-cffi.mk
+@@ -4,11 +4,15 @@
  #
  ################################################################################
  
--PYTHON_ARGH_VERSION = 0.28.1
-+PYTHON_ARGH_VERSION = 0.30.4
- PYTHON_ARGH_SOURCE = argh-$(PYTHON_ARGH_VERSION).tar.gz
--PYTHON_ARGH_SITE = https://files.pythonhosted.org/packages/bf/77/6758074453c83c7ac0456d397e95aaa91b33fbd2ec977dcf38be736ea177
-+PYTHON_ARGH_SITE = https://files.pythonhosted.org/packages/37/3a/175f4a2c47e8c20e59cf25fe69546f76cf1196251a377b182e8f4542b4c4
- PYTHON_ARGH_SETUP_TYPE = flit
- PYTHON_ARGH_LICENSE = LGPL-3.0+
- PYTHON_ARGH_LICENSE_FILES = COPYING COPYING.LESSER
+-PYTHON_ARGON2_CFFI_VERSION = 21.3.0
+-PYTHON_ARGON2_CFFI_SOURCE = argon2-cffi-$(PYTHON_ARGON2_CFFI_VERSION).tar.gz
+-PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/3f/18/20bb5b6bf55e55d14558b57afc3d4476349ab90e0c43e60f27a7c2187289
+-PYTHON_ARGON2_CFFI_SETUP_TYPE = flit
++PYTHON_ARGON2_CFFI_VERSION = 23.1.0
++PYTHON_ARGON2_CFFI_SOURCE = argon2_cffi-$(PYTHON_ARGON2_CFFI_VERSION).tar.gz
++PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/31/fa/57ec2c6d16ecd2ba0cf15f3c7d1c3c2e7b5fcb83555ff56d7ab10888ec8f
++PYTHON_ARGON2_CFFI_SETUP_TYPE = pep517
+ PYTHON_ARGON2_CFFI_LICENSE = MIT
+ PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
++PYTHON_ARGON2_CFFI_DEPENDENCIES = \
++	host-python-hatchling \
++	host-python-hatch-fancy-pypi-readme \
++	host-python-hatch-vcs
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
