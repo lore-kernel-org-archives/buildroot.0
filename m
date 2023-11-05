@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44ADBC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 20:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DA9CC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 20:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC83A40A90;
-	Sun,  5 Nov 2023 20:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC83A40A90
+	by smtp2.osuosl.org (Postfix) with ESMTP id 18C0040A93;
+	Sun,  5 Nov 2023 20:27:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18C0040A93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xBI4VFMefwup; Sun,  5 Nov 2023 20:27:17 +0000 (UTC)
+	with ESMTP id s7E50v2ISZ7A; Sun,  5 Nov 2023 20:27:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AED1040A84;
-	Sun,  5 Nov 2023 20:27:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AED1040A84
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E47341BF48C
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 20:26:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A417A40A84;
+	Sun,  5 Nov 2023 20:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A417A40A84
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DC1A1BF48C
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 20:26:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDC6481E10
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 20:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDC6481E10
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56EDF418A7
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 20:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56EDF418A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K72n2MUN__2r for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 20:26:09 +0000 (UTC)
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com
- [IPv6:2607:f8b0:4864:20::1044])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 146C181E00
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 20:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 146C181E00
-Received: by mail-pj1-x1044.google.com with SMTP id
- 98e67ed59e1d1-2802b744e52so3893858a91.0
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 12:26:08 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JlqfFK1OJ6Vr for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 20:26:10 +0000 (UTC)
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com
+ [IPv6:2607:f8b0:4864:20::644])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A1A4B418A6
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 20:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1A4B418A6
+Received: by mail-pl1-x644.google.com with SMTP id
+ d9443c01a7336-1cc5916d578so34708535ad.2
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 12:26:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699215967; x=1699820767;
+ d=1e100.net; s=20230601; t=1699215969; x=1699820769;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=NQZe8hMRyi6aklIK78ht/7IHMNJyig+YSNUNbnYq+QA=;
- b=sK245fPLOLDGCz5k0eBtqqmYM6qm3WLnPXd8mGDn5OMmoYwwBr0z6NSBFAFebscwS1
- mEHiu1LKE6ZiFgQt/Hs0uX+tKgqr3xTjure09jDDjFbUS/bctCprXPNF2uDD4BR3VnMY
- lvBUOqeUnc/jFTHADGnRjJhu2JxSJiWQJavCKNfECxNH9NzsQczncBPERaMTFBUTH2DR
- jaIx318SQvcQfH3RajNbG1S13CWFrmSvi4ygEksTlM2P4qhzPwjpgNMRnxiFUU/ODCGb
- tnncWgYfz945fGQWNJKa6pH5C6RnhI29QbaxXRUg0w/1zWGlxVUh8i5qySHUFbaKrqjZ
- Rd3A==
-X-Gm-Message-State: AOJu0YwOeZ7PW9nYixMuy0gXBy7b2G1yfwqQaekVfZaD+NwTl8axQq6Y
- RwWT4KDGhQHwDhw44OK0vycM2qw+DBNYWZNfbway57V+0no=
-X-Google-Smtp-Source: AGHT+IEdSCzM1o8yh0IDSOJ6+30pyW/Lc1V2A74FYFfOb9Y3oVmivNiKh/DSdwC6xZNWQMfbjwlFJw==
-X-Received: by 2002:a17:90a:d997:b0:281:3a5:d2ec with SMTP id
- d23-20020a17090ad99700b0028103a5d2ecmr1028103pjv.8.1699215967473; 
- Sun, 05 Nov 2023 12:26:07 -0800 (PST)
+ bh=CkbkfF5ET7l8AqqkaqCOppXXAbKk7xbRzN/l27ID+eY=;
+ b=FKjECdxpv8ss9CUd+rJRUXGcJfVJG0f4uPspY0XryW0xsHwpc4QmNE8AalkGSpO3La
+ GpSZ6c4ZhUT3Ag902yuMJBVN8AWgYkz7RAEVlbmUl99nGTqPlJVZ08TZE3iNI+s6Jic+
+ SBTtRWohBEskoEh/s9ee7aZnl/+35AX58lmekJnxE5PbcIkcBubV039AGDxl6krDLnFG
+ GWwQumC2euBxlgHTPRR47AhXlLW2/cBYxL3p2mGeu3GHdLQMtZRa174txxb2yWnJPGBp
+ 6SFIIxn3baGv0wV8cHpd+INxDvH3hnHK9GDRsijiLja7DD80E5EETvyyGqdHFo4ISu+b
+ pGFA==
+X-Gm-Message-State: AOJu0YyIgp7pejkntpdnATIV+XiVdiauEd30S0glBqouYPAQsVUQdsmF
+ 4VLEHAKJkggCQ7lRXdV8rPp4V3kN3QkaSEGqOeIRArKE4IE=
+X-Google-Smtp-Source: AGHT+IFzQk/83pqwfQdZMsxnlrAKQ5x2yXWDTjYtS9FUSZpVIs5p60cLEau2yQD8B3JfCk31t6HzoA==
+X-Received: by 2002:a17:90b:3449:b0:27d:3f08:cc21 with SMTP id
+ lj9-20020a17090b344900b0027d3f08cc21mr26247546pjb.5.1699215968976; 
+ Sun, 05 Nov 2023 12:26:08 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.201.196])
  by smtp.gmail.com with ESMTPSA id
- z20-20020a170902ee1400b001c735421215sm4478175plb.216.2023.11.05.12.26.06
+ z20-20020a170902ee1400b001c735421215sm4478175plb.216.2023.11.05.12.26.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 12:26:06 -0800 (PST)
+ Sun, 05 Nov 2023 12:26:08 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 13:25:37 -0700
-Message-ID: <20231105202555.359391-6-adam.duskett@amarulasolutions.com>
+Date: Sun,  5 Nov 2023 13:25:38 -0700
+Message-ID: <20231105202555.359391-7-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231105202555.359391-1-adam.duskett@amarulasolutions.com>
 References: <20231105202555.359391-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1699215967; x=1699820767;
+ d=amarulasolutions.com; s=google; t=1699215969; x=1699820769;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=NQZe8hMRyi6aklIK78ht/7IHMNJyig+YSNUNbnYq+QA=;
- b=ia/7WUE5bvpHX5zGF7gQ/vGhf202H16Q0VrZ1OdnyXBjOjpT/f6CsKJxUyrAmmt0OS
- PydNlWTtZbMeru059rxlZrnw28I9pMDz8y6Bs51kIY/1oHMauYfqOPpEsisyI8Wpeld6
- OsiGr5JcfNon9l3uyf+158c+x9eUO4f5QG5ko=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=CkbkfF5ET7l8AqqkaqCOppXXAbKk7xbRzN/l27ID+eY=;
+ b=Q8r5vo4+cnB1aBLATH2LM3KAcOZ8dpIUPmGV2pVOMmbFiIK9JkCDZIpPIj3DitUoTh
+ svCas4r7Pw7aNtPuEU8mt/R1nItJmz2PSuWO/ISWx+CIqZAdnZHpvoGSkd/gNTkX4oK8
+ rArzNuS1+MNNPAkVf2nBi1zKReAc0Zc4NA7zo=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=ia/7WUE5
-Subject: [Buildroot] [PATCH v2 06/24] package/python3: use upstream build
- system to disable ossaudiodev module
+ header.b=Q8r5vo4+
+Subject: [Buildroot] [PATCH v2 07/24] package/python3: use upstream build
+ system to disable unicodedata module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,33 +113,33 @@ Tested-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
  .checkpackageignore                           |  1 -
- ...on-to-disable-the-ossaudiodev-module.patch | 30 -------------------
- package/python3/python3.mk                    |  6 ++--
- 3 files changed, 2 insertions(+), 35 deletions(-)
- delete mode 100644 package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch
+ ...Add-an-option-to-disable-unicodedata.patch | 30 -------------------
+ package/python3/python3.mk                    |  4 +--
+ 3 files changed, 2 insertions(+), 33 deletions(-)
+ delete mode 100644 package/python3/0019-Add-an-option-to-disable-unicodedata.patch
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index bfa65f5a0a..97b1f2db1a 100644
+index 97b1f2db1a..31f4d4f7e3 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1157,7 +1157,6 @@ package/python3/0018-Add-an-option-to-disable-NIS.patch Upstream
- package/python3/0019-Add-an-option-to-disable-unicodedata.patch Upstream
+@@ -1154,7 +1154,6 @@ package/python3/0014-Add-an-option-to-disable-the-tk-module.patch Upstream
+ package/python3/0016-Add-an-option-to-disable-expat.patch Upstream
+ package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch Upstream
+ package/python3/0018-Add-an-option-to-disable-NIS.patch Upstream
+-package/python3/0019-Add-an-option-to-disable-unicodedata.patch Upstream
  package/python3/0020-Add-an-option-to-disable-IDLE.patch Upstream
  package/python3/0021-Add-an-option-to-disable-decimal.patch Upstream
--package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch Upstream
  package/python3/0026-python-config.sh-don-t-reassign-prefix.patch Upstream
- package/python3/0028-fix-building-on-older-distributions.patch Upstream
- package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch Upstream
-diff --git a/package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch b/package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch
+diff --git a/package/python3/0019-Add-an-option-to-disable-unicodedata.patch b/package/python3/0019-Add-an-option-to-disable-unicodedata.patch
 deleted file mode 100644
-index 56713a7f8f..0000000000
---- a/package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch
+index 74702b67a5..0000000000
+--- a/package/python3/0019-Add-an-option-to-disable-unicodedata.patch
 +++ /dev/null
 @@ -1,30 +0,0 @@
--From d48d9da534cec7891ae444b4ab94a76ac67f5daa Mon Sep 17 00:00:00 2001
+-From 4fe7f375a3d171d294caebdd7b7ce49bbc9ad9f3 Mon Sep 17 00:00:00 2001
 -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Wed, 23 Dec 2015 11:51:58 +0100
--Subject: [PATCH] Add an option to disable the ossaudiodev module
+-Date: Wed, 23 Dec 2015 11:50:27 +0100
+-Subject: [PATCH] Add an option to disable unicodedata
 -
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
@@ -147,42 +147,54 @@ index 56713a7f8f..0000000000
 - 1 file changed, 6 insertions(+)
 -
 -diff --git a/configure.ac b/configure.ac
--index e6b1f1e9de..db33d567ad 100644
+-index 1bdde7f69d..ba4b0e0c1c 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -3678,6 +3678,12 @@ fi
+-@@ -4200,6 +4200,12 @@ AC_ARG_ENABLE(nis,
+-     	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
+-   	  fi])
 - 
-- AC_MSG_RESULT($with_decimal_contextvar)
-- 
--+AC_ARG_ENABLE(ossaudiodev,
--+	AS_HELP_STRING([--disable-ossaudiodev], [disable OSSAUDIODEV]),
+-+AC_ARG_ENABLE(unicodedata,
+-+	AS_HELP_STRING([--disable-unicodedata], [disable unicodedata]),
 -+	[ if test "$enableval" = "no"; then
--+	  DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ossaudiodev"
--+	  fi])
+-+    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} unicodedata"
+-+  	  fi])
 -+
-- # Check for libmpdec machine flavor
-- AC_MSG_CHECKING(for decimal libmpdec machine)
-- AS_CASE([$ac_sys_system],
+- AC_SUBST(TK)
+- AC_ARG_ENABLE(tk,
+- 	AS_HELP_STRING([--disable-tk], [disable tk]),
 --- 
 -2.34.1
 -
 diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 79a89ca225..0033bec2bc 100644
+index 0033bec2bc..7c0473c1b0 100644
 --- a/package/python3/python3.mk
 +++ b/package/python3/python3.mk
-@@ -153,10 +153,8 @@ else
- PYTHON3_CONF_ENV += py_cv_module_zlib=n/a
+@@ -24,7 +24,6 @@ HOST_PYTHON3_CONF_OPTS += \
+ 	--with-expat=system \
+ 	--disable-codecs-cjk \
+ 	--disable-nis \
+-	--enable-unicodedata \
+ 	--disable-test-modules \
+ 	--disable-idle3 \
+ 	--disable-ossaudiodev
+@@ -38,6 +37,7 @@ HOST_PYTHON3_CONF_ENV += \
+ 	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
+ 	py_cv_module__curses=n/a \
+ 	py_cv_module__curses_panel=n/a \
++	py_cv_module_unicodedata=yes \
+ 	py_cv_module__uuid=n/a \
+ 	ac_cv_prog_HAS_HG=/bin/false
+ 
+@@ -127,7 +127,7 @@ PYTHON3_CONF_OPTS += --disable-codecs-cjk
  endif
  
--ifeq ($(BR2_PACKAGE_PYTHON3_OSSAUDIODEV),y)
--PYTHON3_CONF_OPTS += --enable-ossaudiodev
--else
--PYTHON3_CONF_OPTS += --disable-ossaudiodev
-+ifneq ($(BR2_PACKAGE_PYTHON3_OSSAUDIODEV),y)
-+PYTHON3_CONF_ENV += py_cv_module_ossaudiodev=n/a
+ ifneq ($(BR2_PACKAGE_PYTHON3_UNICODEDATA),y)
+-PYTHON3_CONF_OPTS += --disable-unicodedata
++PYTHON3_CONF_ENV += py_cv_module_unicodedata=n/a
  endif
  
- # Make python believe we don't have 'hg', so that it doesn't try to
+ # Disable auto-detection of uuid.h (util-linux)
 -- 
 2.41.0
 
