@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAC87C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E66C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:08:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F12741B42;
-	Sun,  5 Nov 2023 21:07:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F12741B42
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E7E341952;
+	Sun,  5 Nov 2023 21:08:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E7E341952
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fv_qqATG_H0S; Sun,  5 Nov 2023 21:07:16 +0000 (UTC)
+	with ESMTP id WQLvC6oifB_U; Sun,  5 Nov 2023 21:08:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74C8241962;
-	Sun,  5 Nov 2023 21:07:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74C8241962
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8BAD01BF488
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:06:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9503F418E1;
+	Sun,  5 Nov 2023 21:08:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9503F418E1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 972AC1BF488
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6205040A68
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:06:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6205040A68
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D5F96104D
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D5F96104D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JnzEZ9HjPZHM for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 21:06:53 +0000 (UTC)
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1CCB940A5F
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:06:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CCB940A5F
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-5401bab7525so6444077a12.2
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 13:06:52 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y2zkj06oJLb7 for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 21:08:38 +0000 (UTC)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6B2CD60BA2
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:08:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B2CD60BA2
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-53dd752685fso6353886a12.3
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 13:08:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699218411; x=1699823211;
+ d=1e100.net; s=20230601; t=1699218516; x=1699823316;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=8UgGuhHt7j34SBJI5Gonsa29owyc7En/9Lr8bgIhNnI=;
- b=DmYAGikoCaH6DTSkClV2WRvtu3z6Hu5LIIgdQKUzOdok8SMqYUVyiKQ4ACgxVdTmCk
- qJUh6XHz8cYSsEqZINq3agk/bYzQXpAVFudsLSm5wzA3qNNV6RVW28/P8+/9bxpCYse9
- Gz1oyN8jFv7mefQ9d7hNP2+xqzmSpDZ9/mz3wVEW14hqnFwvOLxOEszXHxsN+lWCoVGL
- 6unBTAjVUVHtI1oFz2UaMoYMCFTUdihx1+aywxYEpo64xIgUnArlj14eIFB7hid/Fk2u
- TKxX2aX95VF70Wd9Unt7H54LuwlKwjXvMHCSmIfJioGhBFfzRp2dRAqOhmBYXJ0I6dRe
- BRMg==
-X-Gm-Message-State: AOJu0YwJiGShJWkot/Rvp1zHORsQyi+wtEHdO0yjNBd8/0d3wdgV04Lz
- Mu//dzxNAwAgAuyYthezsAdWTBWzQEteD6x+6OA=
-X-Google-Smtp-Source: AGHT+IHCiWHEWgtAO1CRiaKdaTsx4orZcklzK4GUeCZSDesrV4H0zYJhau9/bQ7/csD9I5yMqCEvAQ==
-X-Received: by 2002:a17:907:9406:b0:9df:bc50:2519 with SMTP id
- dk6-20020a170907940600b009dfbc502519mr1863229ejc.56.1699218411152; 
- Sun, 05 Nov 2023 13:06:51 -0800 (PST)
+ bh=ClsYIQpUd+ebntMGdhwrw0Nx5ttPCcZS3zRQiieQoAo=;
+ b=xTd6CwZKEG83ZcHViOBkDMoqqXhAb5GHBqyXmTy25mEcgm5SZH9SMzFFhQlHpILQ39
+ FTUvy1RPYfPGAuVSVkyaSozu3pg/y2vVqQS3zZIIUm8Va71Z36rKWf9WPIQCzlmog4Cq
+ 9Vt08DuvaO9YwD/W1n8X+t2eSq+tNc50NkPt4c7jlgzngOPykXRphmrAM3/BDYFxo5nL
+ ACS6N8bPT2XUzv2gZrzOgCKB5a6qdK11fP4PSznf11gwf+nITdPo+MndgJ/orehelwee
+ 5SMIoKTOJ42F4DdcJxpwL8seBgQYdLmywW0ZL4zkeW2XGzl+2LubNN8OXf2o42BUrN4/
+ IKLw==
+X-Gm-Message-State: AOJu0YwH/XrHo2RUqsQkktW20s/JvMKj5UAiXWMAvZshRhsaA+C/S7KJ
+ ovoT6t/2ewKPDEEIyo4EJ0U7LQ==
+X-Google-Smtp-Source: AGHT+IGVe8M8pZmdTzxDpknrJKhcFLfnn8umnZzxZdNnoDOhlrNlEMutoreTMCxAOTGUuiCcOYG3Xw==
+X-Received: by 2002:a05:6402:54f:b0:53f:a4f7:7bfb with SMTP id
+ i15-20020a056402054f00b0053fa4f77bfbmr19827438edx.17.1699218516489; 
+ Sun, 05 Nov 2023 13:08:36 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- bw4-20020a170906c1c400b00992e94bcfabsm3343523ejb.167.2023.11.05.13.06.50
+ w27-20020a50d79b000000b005432f45bee9sm3659319edi.19.2023.11.05.13.08.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 05 Nov 2023 13:06:50 -0800 (PST)
-Message-ID: <74b55286-079a-4d73-b637-f5461735e138@mind.be>
-Date: Sun, 5 Nov 2023 22:06:49 +0100
+ Sun, 05 Nov 2023 13:08:36 -0800 (PST)
+Message-ID: <fa4a43c8-2e50-4c5b-80f2-7d144f8f3b00@mind.be>
+Date: Sun, 5 Nov 2023 22:08:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20231104234337.2684087-1-james.hilliard1@gmail.com>
-In-Reply-To: <20231104234337.2684087-1-james.hilliard1@gmail.com>
+References: <20231104230029.2668016-1-james.hilliard1@gmail.com>
+In-Reply-To: <20231104230029.2668016-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699218411; x=1699823211; darn=buildroot.org;
+ d=mind.be; s=google; t=1699218516; x=1699823316; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=8UgGuhHt7j34SBJI5Gonsa29owyc7En/9Lr8bgIhNnI=;
- b=aS/6+1UnFlkJzMeId2UhpY1BulHkVXtWBaTZFO68MQdskRpRFMAtubm5hBsrafEexl
- Tn7CHpYlbjdA/pzJo2TFBr6wXglC7IIjCyYkELYqlwKco+asz2bykJXJwfUEZWMMTyvo
- E4o2Agh/xht+nRg+WXEuhaChL9x+yZBK/Ejk+6FZHYfuzof2UpVE0KfQhVkstNN1Kf+e
- Ltxh529Z2T9a+sYVZNgEdTiqAThYqbqsVQQOO3MVUrHEpyYS28ocdu9MwZ6sL9heSmxe
- lNVhxX68yn8oqXTX4YPAsXnpKAE3W3Bt09/Ka2yVDSr9Aa3GFvGxDz9SVTqdF2uxQLQh
- EChw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ClsYIQpUd+ebntMGdhwrw0Nx5ttPCcZS3zRQiieQoAo=;
+ b=R/bdrDNlAK7n5/Y2xN7fN0vI89OjlI9JlXLoO93IZyf5ZmiEsXTc8HSAaeCTJH8/4n
+ kBT2PbxHkzDhlEOOpB3//og1TpwdZU8NT24fTF8snLkYHN8t1Y9Bv0/FmReZ2UpQuJxP
+ vGIJBsExxpcG7YJx38RBZ9SbUoYm0FfzCpAfyEl0cMAnq+UdKsNiA11HE4q+Ay90ViI1
+ TNiYgseESITjU14Tld2MEdkQ7dsNkIMpKTfPzk6rJd1p+yi8yGYJp/PaAKE/GaUTvUTd
+ b38Wz06T1BD47ixieBp1bQqJFv8IS5AKv/KGMGE/VocVkzEKIdxF6QY0vNOvNQ1gked9
+ ZSKg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=aS/6+1Un
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiomonitor: bump to
- version 0.6.0
+ header.a=rsa-sha256 header.s=google header.b=R/bdrDNl
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aenum: bump to version
+ 3.1.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,12 +109,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/11/2023 00:43, James Hilliard wrote:
-> Add new host-python-setuptools-scm build dependency.
-> 
-> License hash changed due to line ending removal:
-> https://github.com/aio-libs/aiomonitor/commit/9ec9910145c70037da8ab52e007b9fc286c3a4c7
-> 
+On 05/11/2023 00:00, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
@@ -123,42 +118,38 @@ On 05/11/2023 00:43, James Hilliard wrote:
   Arnout
 
 > ---
->   package/python-aiomonitor/python-aiomonitor.hash | 6 +++---
->   package/python-aiomonitor/python-aiomonitor.mk   | 5 +++--
->   2 files changed, 6 insertions(+), 5 deletions(-)
+>   package/python-aenum/python-aenum.hash | 4 ++--
+>   package/python-aenum/python-aenum.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-aiomonitor/python-aiomonitor.hash b/package/python-aiomonitor/python-aiomonitor.hash
-> index 652702c479..b67d68e478 100644
-> --- a/package/python-aiomonitor/python-aiomonitor.hash
-> +++ b/package/python-aiomonitor/python-aiomonitor.hash
+> diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
+> index 40c0e55fc5..9c59804d6e 100644
+> --- a/package/python-aenum/python-aenum.hash
+> +++ b/package/python-aenum/python-aenum.hash
 > @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/aiomonitor/json
-> -md5  5f184e4b97ea161fc2d690aef604f997  aiomonitor-0.4.5.tar.gz
-> -sha256  6232c1ab14bf06cd7217845801c27340032f74e283bdaf32d01cdd3b7c673d0e  aiomonitor-0.4.5.tar.gz
-> +md5  0f786c8278a68e7df8b24317e7d33271  aiomonitor-0.6.0.tar.gz
-> +sha256  31d30d1e9c0a23926edba2a2242b8572c6e8639af9aae2692dee863064d27e48  aiomonitor-0.6.0.tar.gz
+>   # md5, sha256 from https://pypi.org/pypi/aenum/json
+> -md5  c0b78a74cdfacc0bf0cbb42785afaed8  aenum-3.1.11.tar.gz
+> -sha256  aed2c273547ae72a0d5ee869719c02a643da16bf507c80958faadc7e038e3f73  aenum-3.1.11.tar.gz
+> +md5  f3fa11cda9ddaaed4d3f03b35f3a65ea  aenum-3.1.15.tar.gz
+> +sha256  8cbd76cd18c4f870ff39b24284d3ea028fbe8731a58df3aa581e434c575b9559  aenum-3.1.15.tar.gz
 >   # Locally computed sha256 checksums
-> -sha256  9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
-> +sha256  98397c300949e0cc1ddc68b0e48e67b10f2d0a4ffada4903d891a1315fe04156  LICENSE
-> diff --git a/package/python-aiomonitor/python-aiomonitor.mk b/package/python-aiomonitor/python-aiomonitor.mk
-> index a8860097d5..1a3b999b90 100644
-> --- a/package/python-aiomonitor/python-aiomonitor.mk
-> +++ b/package/python-aiomonitor/python-aiomonitor.mk
-> @@ -4,11 +4,12 @@
+>   sha256  0db837e38002017b352666c83c8d3216ee5b9b2229375eb2cf4487f8c24e1f8c  aenum/LICENSE
+> diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+> index 603fc66d0c..27f9e5cea6 100644
+> --- a/package/python-aenum/python-aenum.mk
+> +++ b/package/python-aenum/python-aenum.mk
+> @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_AIOMONITOR_VERSION = 0.4.5
-> +PYTHON_AIOMONITOR_VERSION = 0.6.0
->   PYTHON_AIOMONITOR_SOURCE = aiomonitor-$(PYTHON_AIOMONITOR_VERSION).tar.gz
-> -PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/98/76/b62e9fbe267287527fb6f4b6774394d4f00650195774173bb0055a99ab3d
-> +PYTHON_AIOMONITOR_SITE = https://files.pythonhosted.org/packages/13/ab/36fbaf36c1c7cb4d5a81b945faf69e95a48dd38cbc9b57915d41d9445f55
->   PYTHON_AIOMONITOR_SETUP_TYPE = setuptools
->   PYTHON_AIOMONITOR_LICENSE = Apache-2.0
->   PYTHON_AIOMONITOR_LICENSE_FILES = LICENSE
-> +PYTHON_AIOMONITOR_DEPENDENCIES = host-python-setuptools-scm
->   
->   $(eval $(python-package))
+> -PYTHON_AENUM_VERSION = 3.1.11
+> +PYTHON_AENUM_VERSION = 3.1.15
+>   PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
+> -PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/63/6c/a71e18de7c651f384b328be6bccadbbd472aca62f547c1a307b9388d03ca
+> +PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/d0/f8/33e75863394f42e429bb553e05fda7c59763f0fd6848de847a25b3fbccf6
+>   PYTHON_AENUM_SETUP_TYPE = setuptools
+>   PYTHON_AENUM_LICENSE = BSD-3-Clause
+>   PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
