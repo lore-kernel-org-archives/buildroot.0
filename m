@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75F7CC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 00:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69AABC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 00:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0156660D78;
-	Sun,  5 Nov 2023 00:10:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0156660D78
+	by smtp3.osuosl.org (Postfix) with ESMTP id E713660D64;
+	Sun,  5 Nov 2023 00:29:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E713660D64
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ko3B4u32L-UR; Sun,  5 Nov 2023 00:10:28 +0000 (UTC)
+	with ESMTP id fcskmeKnUmYh; Sun,  5 Nov 2023 00:29:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4576F60C17;
-	Sun,  5 Nov 2023 00:10:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4576F60C17
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A89B81BF5A2
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 00:10:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28DC260C1A;
+	Sun,  5 Nov 2023 00:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28DC260C1A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AC3CE1BF869
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 00:28:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 816AE41821
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 00:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 816AE41821
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F8CC403A7
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 00:28:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F8CC403A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nI3uGe3pXD3S for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 00:10:24 +0000 (UTC)
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 713CA4181F
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 00:10:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 713CA4181F
-Received: by mail-io1-xd2f.google.com with SMTP id
- ca18e2360f4ac-7a694a365d9so141232739f.0
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 17:10:24 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c_dZ65F5Tri8 for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 00:28:58 +0000 (UTC)
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1593B4037E
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 00:28:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1593B4037E
+Received: by mail-il1-x12d.google.com with SMTP id
+ e9e14a558f8ab-359974f4c7eso2536905ab.1
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 17:28:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699143023; x=1699747823;
+ d=1e100.net; s=20230601; t=1699144136; x=1699748936;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=TmYLW4pc6NV7wM3yYUfZDrcybhVnkrTITKeHkjkv7qo=;
- b=IepxBIKmEh3QF1cJw+i02aDtYuR+j9vo66Jecer5mULiya9Xp+aNqfFn6KKuzW77Zr
- 6VW1NEORYpzhYoUI6t2PGltUmqPkE7wpCMQ81zQIzDKJf2Sni+/I/KZVQoglOMofOHQX
- t3Nb+PbvmRXl90IKCFwoWbUpgO1nrzSQHPBhB43mRnaReww9hhfGhdJYylQxT+rS6CME
- uJ2/4RX6tc0UTjE3VQfN8D/9FmUAsuDAxePevDxxrBU9du7l6U+Klfcbp79zt0r1paeO
- AGjKrvavOx7erCdfsmZtzsU8FKPsXczpaL+QDpgoBOkJgabGtvj7N1LSwueoGwYqCSKb
- 3A6g==
-X-Gm-Message-State: AOJu0Ywo1AN7LntCEQNAOh9M9WxK8L/gNqyOPjJQAkds54BFo3dYD5lr
- 1B0HmoYzH+cjLQVvPUfXSSZZSnX0lEU=
-X-Google-Smtp-Source: AGHT+IGJ7RQ7OrJLrT9PskHauNwbzYi1IOS8okiMjdVzz+kP6vk9hINzBDe0MimR1+zufOsg3FQaBA==
-X-Received: by 2002:a05:6602:29ca:b0:7a2:a8d5:e146 with SMTP id
- z10-20020a05660229ca00b007a2a8d5e146mr35374670ioq.15.1699143022986; 
- Sat, 04 Nov 2023 17:10:22 -0700 (PDT)
+ bh=RNXGwa3PVhsKK0t1bHf0TXDmp+ekQCnjq8AHD8jB5hk=;
+ b=BVrhXblfmwhrMY8s0hnXtXtQLFOnEQbsOu9HsvycS1YCCSWrCT3Vev6q3ztga1wkfu
+ Hli4htBUC6nhZb36xsUnVccTeXwxbO5uZtsA4osyxBq3wmyjW4azj+awKrfLRPYJYxzm
+ xv4rT7UOETnkPWvYoR5FWcQ9QA1PwZtRDRJXyH8XNkNsY3nLhPXPGdtiA1N+NIUrKSIA
+ DSXJ5xaBbUtaW0l8RcKzALBYugIZJ8CBMR1+51HbVxfL3+hZMUhDhGe2w55/Yn8Y6EyV
+ T/uxUB7lkjj6eSKJKERY1FkpV+Y9Dqkhp8/xaWh8TrCsGxIsLh8zTowTAgp1Za1dtqB7
+ pOMA==
+X-Gm-Message-State: AOJu0YzIeXD5//rcAlX5XYBVi3kG4Kq+nfvdXcABJNZpwwepDaMuUI62
+ cPixST8+rqm8tzc8X5WhH/KVUhYmjbs=
+X-Google-Smtp-Source: AGHT+IGmsmeUTu7JX3U+oqO7Axa4ey/EnFVB3+/pBekLIWrDmWXCM4ziYtnqfxFSmMow+7fMcSA+Bg==
+X-Received: by 2002:a05:6e02:1a42:b0:351:1647:5fa0 with SMTP id
+ u2-20020a056e021a4200b0035116475fa0mr31690739ilv.18.1699144136617; 
+ Sat, 04 Nov 2023 17:28:56 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- s13-20020a02cf2d000000b004300eca209csm1259255jar.112.2023.11.04.17.10.22
+ l5-20020a056e0205c500b003580cb49ce4sm1543031ils.41.2023.11.04.17.28.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Nov 2023 17:10:22 -0700 (PDT)
+ Sat, 04 Nov 2023 17:28:56 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 18:10:09 -0600
-Message-Id: <20231105001009.2704781-1-james.hilliard1@gmail.com>
+Date: Sat,  4 Nov 2023 18:28:51 -0600
+Message-Id: <20231105002852.2708915-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699143023; x=1699747823; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699144136; x=1699748936; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TmYLW4pc6NV7wM3yYUfZDrcybhVnkrTITKeHkjkv7qo=;
- b=OmOVWM+3zDvOldxZ4OY957Xxc4e3Lt8I+zM7ZhZ99EfMecN34ZYDHmTeq8yKZyM9nH
- vHURlngow25PsEAYSNnuwr4RRx8Fmss2nspxsoFmP0o9rZ/mIcXB5b4xIdfaT6wVpRNE
- k2nhAsTWcKGm9QDqnigUZQ7ftYA1IpDSF4VV8eeyc+nOldhk6U6+NRGg1czbxKekLsY2
- JJPNndlDSOPL6FKe49z3Ciad42RnIwhziAX/nAjl/gVpn8F8WXAN/wJuVbj7EGKsnUuM
- 5K4ztqzCM/HoG1U8Le0tUny7VLKRd3Q6os27koRdoz6URmNDNKgcQ3ur5da53nKBjaaO
- TIgQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=RNXGwa3PVhsKK0t1bHf0TXDmp+ekQCnjq8AHD8jB5hk=;
+ b=B9nXfQIGvz1R9ad049MExSYKqknQWV6NRdeMCbDvfW6y3X/UhIk7X/Ha0zvZG1pABT
+ nltpw3vtKXYs7w/etRjiCmvDJa4cIAOaAMFlR4ySodx8JmlhJGyxXNK7MjC+TD02BQ4k
+ gn4ioIKDwan0txCRaYN9TrrkHKILbdZjXCns73vtZzcpfaUpMLYwLQnAdKAWFdPvjHOP
+ 5LTnJ6zp6+v3JA8dOYWRuy/c83lzkwVnTpj4zvjQ/xB6aAKmtKxWyQ09QhjWymhBBTRB
+ ZhxmYec4e7sYc/35BiRw8dckxrysCZkcPRWryFkk3B94e1grxENrt3B9E/Ffb7JPVEy9
+ lxtA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OmOVWM+3
-Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: bump to version
- 23.1.0
+ header.a=rsa-sha256 header.s=20230601 header.b=B9nXfQIG
+Subject: [Buildroot] [PATCH 1/2] package/python-types-python-dateutil: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,60 +94,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate to new hatchling pep517 build backend.
-
-License hash changed due to adding contributors:
-https://github.com/hynek/argon2-cffi/commit/1133f3c2bafee1501535de5e5531054570438b1d
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-argon2-cffi/python-argon2-cffi.hash |  6 +++---
- package/python-argon2-cffi/python-argon2-cffi.mk   | 12 ++++++++----
- 2 files changed, 11 insertions(+), 7 deletions(-)
+ package/Config.in                                   |  1 +
+ package/python-types-python-dateutil/Config.in      |  6 ++++++
+ .../python-types-python-dateutil.hash               |  3 +++
+ .../python-types-python-dateutil.mk                 | 13 +++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/python-types-python-dateutil/Config.in
+ create mode 100644 package/python-types-python-dateutil/python-types-python-dateutil.hash
+ create mode 100644 package/python-types-python-dateutil/python-types-python-dateutil.mk
 
-diff --git a/package/python-argon2-cffi/python-argon2-cffi.hash b/package/python-argon2-cffi/python-argon2-cffi.hash
-index 09da5855a3..e11195e1e2 100644
---- a/package/python-argon2-cffi/python-argon2-cffi.hash
-+++ b/package/python-argon2-cffi/python-argon2-cffi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/argon2-cffi/json
--md5  b7843e8690c790f8e743d37bb75c25a8  argon2-cffi-21.3.0.tar.gz
--sha256  d384164d944190a7dd7ef22c6aa3ff197da12962bd04b17f64d4e93d934dba5b  argon2-cffi-21.3.0.tar.gz
-+md5  7371c126f21a895b33c4fe7e00ac6fc1  argon2_cffi-23.1.0.tar.gz
-+sha256  879c3e79a2729ce768ebb7d36d4609e3a78a4ca2ec3a9f12286ca057e3d0db08  argon2_cffi-23.1.0.tar.gz
- # Locally computed sha256 checksums
--sha256  bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
-+sha256  b6944d386e87ccf49d9632da083685a4b7624733e686a7fe283dd2d428341d77  LICENSE
-diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
-index 0fb3e50ff3..238271f5f7 100644
---- a/package/python-argon2-cffi/python-argon2-cffi.mk
-+++ b/package/python-argon2-cffi/python-argon2-cffi.mk
-@@ -4,11 +4,15 @@
- #
- ################################################################################
- 
--PYTHON_ARGON2_CFFI_VERSION = 21.3.0
--PYTHON_ARGON2_CFFI_SOURCE = argon2-cffi-$(PYTHON_ARGON2_CFFI_VERSION).tar.gz
--PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/3f/18/20bb5b6bf55e55d14558b57afc3d4476349ab90e0c43e60f27a7c2187289
--PYTHON_ARGON2_CFFI_SETUP_TYPE = flit
-+PYTHON_ARGON2_CFFI_VERSION = 23.1.0
-+PYTHON_ARGON2_CFFI_SOURCE = argon2_cffi-$(PYTHON_ARGON2_CFFI_VERSION).tar.gz
-+PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/31/fa/57ec2c6d16ecd2ba0cf15f3c7d1c3c2e7b5fcb83555ff56d7ab10888ec8f
-+PYTHON_ARGON2_CFFI_SETUP_TYPE = pep517
- PYTHON_ARGON2_CFFI_LICENSE = MIT
- PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
-+PYTHON_ARGON2_CFFI_DEPENDENCIES = \
-+	host-python-hatchling \
-+	host-python-hatch-fancy-pypi-readme \
-+	host-python-hatch-vcs
- 
- $(eval $(python-package))
+diff --git a/package/Config.in b/package/Config.in
+index a0d5339b0a..096aa8829e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1357,6 +1357,7 @@ menu "External python modules"
+ 	source "package/python-txtorcon/Config.in"
+ 	source "package/python-typeguard/Config.in"
+ 	source "package/python-typepy/Config.in"
++	source "package/python-types-python-dateutil/Config.in"
+ 	source "package/python-typing-extensions/Config.in"
+ 	source "package/python-typing-inspect/Config.in"
+ 	source "package/python-u-msgpack/Config.in"
+diff --git a/package/python-types-python-dateutil/Config.in b/package/python-types-python-dateutil/Config.in
+new file mode 100644
+index 0000000000..e2a8bb6341
+--- /dev/null
++++ b/package/python-types-python-dateutil/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_TYPES_PYTHON_DATEUTIL
++	bool "python-types-python-dateutil"
++	help
++	  Typing stubs for python-dateutil.
++
++	  https://github.com/python/typeshed
+diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.hash b/package/python-types-python-dateutil/python-types-python-dateutil.hash
+new file mode 100644
+index 0000000000..ef5e9380cf
+--- /dev/null
++++ b/package/python-types-python-dateutil/python-types-python-dateutil.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/types-python-dateutil/json
++md5  58072922ac0c740121e311e970f003bf  types-python-dateutil-2.8.19.14.tar.gz
++sha256  1f4f10ac98bb8b16ade9dbee3518d9ace017821d94b057a425b069f834737f4b  types-python-dateutil-2.8.19.14.tar.gz
+diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.mk b/package/python-types-python-dateutil/python-types-python-dateutil.mk
+new file mode 100644
+index 0000000000..b230394120
+--- /dev/null
++++ b/package/python-types-python-dateutil/python-types-python-dateutil.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-types-python-dateutil
++#
++################################################################################
++
++PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.8.19.14
++PYTHON_TYPES_PYTHON_DATEUTIL_SOURCE = types-python-dateutil-$(PYTHON_TYPES_PYTHON_DATEUTIL_VERSION).tar.gz
++PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/1b/2d/f189e5c03c22700c4ce5aece4b51bb73fa8adcfd7848629de0fb78af5f6f
++PYTHON_TYPES_PYTHON_DATEUTIL_SETUP_TYPE = setuptools
++PYTHON_TYPES_PYTHON_DATEUTIL_LICENSE = Apache-2.0
++
++$(eval $(python-package))
 -- 
 2.34.1
 
