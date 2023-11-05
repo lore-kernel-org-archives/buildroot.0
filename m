@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E8B0C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:11:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA21EC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:11:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFE3A41B6E;
-	Sun,  5 Nov 2023 21:11:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFE3A41B6E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 634B840095;
+	Sun,  5 Nov 2023 21:11:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 634B840095
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1BEEVWLZvqfR; Sun,  5 Nov 2023 21:11:21 +0000 (UTC)
+	with ESMTP id MsnnGGjaU24G; Sun,  5 Nov 2023 21:11:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D83754194B;
-	Sun,  5 Nov 2023 21:11:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D83754194B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1FE141BF869
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83B9F4194C;
+	Sun,  5 Nov 2023 21:11:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83B9F4194C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 21DA31BF909
  for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED01381F54
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF4BA41962
  for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED01381F54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF4BA41962
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Ik3AxgVvTkO for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mTjidIOThvD8 for <buildroot@lists.busybox.net>;
  Sun,  5 Nov 2023 21:11:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DF3281F40
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DF3281F40
+ by smtp4.osuosl.org (Postfix) with ESMTP id E590140325
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E590140325
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F0F14868A8; Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
+ id D339C868A9; Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Nov 2023 22:01:31 +0100
+Date: Sun, 5 Nov 2023 22:00:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0547add320d5a3da5ec8d70dfd03b8d3aafb995a
-X-Git-Newrev: cc8c3c9317f7caf90c0fe126a967422b4baa1851
+X-Git-Oldrev: 6b931c222b045c1c14278dc887a430601e96f9fe
+X-Git-Newrev: 4be2da2cef371faff39ceb7fa28b948945016fc9
 X-Patchwork-Hint: ignore
-Message-Id: <20231105211104.F0F14868A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiojobs: bump to version
- 1.2.0
+Message-Id: <20231105211104.D339C868A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiodns: bump to version
+ 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc8c3c9317f7caf90c0fe126a967422b4baa1851
+commit: https://git.buildroot.net/buildroot/commit/?id=4be2da2cef371faff39ceb7fa28b948945016fc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-aiojobs/python-aiojobs.hash | 4 ++--
- package/python-aiojobs/python-aiojobs.mk   | 4 ++--
+ package/python-aiodns/python-aiodns.hash | 4 ++--
+ package/python-aiodns/python-aiodns.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiojobs/python-aiojobs.hash b/package/python-aiojobs/python-aiojobs.hash
-index 511953713b..8920e3aecd 100644
---- a/package/python-aiojobs/python-aiojobs.hash
-+++ b/package/python-aiojobs/python-aiojobs.hash
+diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
+index 2cdedc6f95..bf65691b89 100644
+--- a/package/python-aiodns/python-aiodns.hash
++++ b/package/python-aiodns/python-aiodns.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiojobs/json
--md5  18a5b38cc13b2d59a91fdfec64588b4c  aiojobs-1.1.0.tar.gz
--sha256  f0c43dfc4de359052a67df309b593732c32028deef1bb787c7a363da29accde3  aiojobs-1.1.0.tar.gz
-+md5  529a4367f9bc63a482a2962ba54bfd51  aiojobs-1.2.0.tar.gz
-+sha256  a4bcfb6a2d21ad08dea904e9f73040b37657d0c33cc8d77e683e47de5fcf0b12  aiojobs-1.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiodns/json
+-md5  181e11935c78965de2b2b7b0e5efba8d  aiodns-3.0.0.tar.gz
+-sha256  946bdfabe743fceeeb093c8a010f5d1645f708a241be849e17edfb0e49e08cd6  aiodns-3.0.0.tar.gz
++md5  13fdfc38f30c9498e3e23c6f372e40ba  aiodns-3.1.1.tar.gz
++sha256  1073eac48185f7a4150cad7f96a5192d6911f12b4fb894de80a088508c9b3a99  aiodns-3.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  1803dc89455114eefad3b827543343edc2452432fdac29b5edc66c8b66d4cbf3  LICENSE
-diff --git a/package/python-aiojobs/python-aiojobs.mk b/package/python-aiojobs/python-aiojobs.mk
-index 075d807d8b..be0acd3fbc 100644
---- a/package/python-aiojobs/python-aiojobs.mk
-+++ b/package/python-aiojobs/python-aiojobs.mk
+ sha256  eb0455d35129425ed399883cd710923de3e246a510e2eb84d9f00032d0bbec97  LICENSE
+diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
+index 2318dcab3a..f5cbb65334 100644
+--- a/package/python-aiodns/python-aiodns.mk
++++ b/package/python-aiodns/python-aiodns.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOJOBS_VERSION = 1.1.0
-+PYTHON_AIOJOBS_VERSION = 1.2.0
- PYTHON_AIOJOBS_SOURCE = aiojobs-$(PYTHON_AIOJOBS_VERSION).tar.gz
--PYTHON_AIOJOBS_SITE = https://files.pythonhosted.org/packages/99/75/b6d3678d804fffda81ebbac6214c35a4417d5ddbd70ffe7958ad951e64d2
-+PYTHON_AIOJOBS_SITE = https://files.pythonhosted.org/packages/c4/e0/4685393810a267c09edef41ddafd0dd28108d95e1b91019b1843fc6e5b83
- PYTHON_AIOJOBS_SETUP_TYPE = setuptools
- PYTHON_AIOJOBS_LICENSE = Apache-2.0
- PYTHON_AIOJOBS_LICENSE_FILES = LICENSE
+-PYTHON_AIODNS_VERSION = 3.0.0
++PYTHON_AIODNS_VERSION = 3.1.1
+ PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
+-PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/27/79/df72e25df0fdd9bf5a5ab068539731d27c5f2ae5654621ae0c92ceca94cf
++PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/fa/10/4de99e6e67703d8f6b10ea92a4d2a6c5b96a9c0708b75389a00203387925
+ PYTHON_AIODNS_SETUP_TYPE = setuptools
+ PYTHON_AIODNS_LICENSE = MIT
+ PYTHON_AIODNS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
