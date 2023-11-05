@@ -4,84 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 281CDC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 18:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25016C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 18:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAFFB8175C;
-	Sun,  5 Nov 2023 18:23:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAFFB8175C
+	by smtp1.osuosl.org (Postfix) with ESMTP id D040981BC0;
+	Sun,  5 Nov 2023 18:26:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D040981BC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hDCCDLMJNp0U; Sun,  5 Nov 2023 18:23:05 +0000 (UTC)
+	with ESMTP id 8Ba9leRkJRlu; Sun,  5 Nov 2023 18:26:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AFC7818AC;
-	Sun,  5 Nov 2023 18:23:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AFC7818AC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 041F11BF4D6
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:23:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D453C81BC5;
+	Sun,  5 Nov 2023 18:26:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D453C81BC5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1469B1BF4D6
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD9E4418C5
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:23:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD9E4418C5
+ by smtp3.osuosl.org (Postfix) with ESMTP id D915E61021
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D915E61021
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LjMe3M7LqPoC for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 18:23:01 +0000 (UTC)
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6ACF141868
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 18:23:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ACF141868
-Received: by mail-lj1-x231.google.com with SMTP id
- 38308e7fff4ca-2c6b30aca06so49945131fa.3
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 10:23:01 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tNX9rV3QK7jc for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 18:26:21 +0000 (UTC)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5F18961010
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 18:26:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F18961010
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-9dbb3e0ff65so496451166b.1
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 10:26:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699208578; x=1699813378;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=DQDlaGgBZhHCpY7CLbbOtB8hbrSUuA2AkGYUo8CXbCo=;
- b=OVRI+unCoJNNCfLNCuopY+DZKjOG7O6/qr4M1Oxh91TGk2/5bhYX1CuRa1RY1Sp1dh
- t/Mm3ZJaA54472yKL2prr58uSYpa6PIy8DhqmKFvboCWZwC8GmRQzrLvpXegr+ufSGvx
- MmAJZbRyHofSHPNBD3CfTwnPqImErOKEQVhphLaTC7Fiagfb1pMtxFIi3U1Gmpj80bPD
- QlDgTkSIzfbTVENHtr9u4VodgN4mkC0r3pJYZrW2oInvdwyGZ3CrIHtqcbQRFw9lbKlv
- Y9xnFHavF+VyuF+kF0wi+IBT5Lpz5Kn2+iDjYfceq24+ZAdOdK1ZYN2VbI6JsSmCyDLE
- moMg==
-X-Gm-Message-State: AOJu0Yyx+D1LJRZypEsa/giIpFJ8T+KU+2CMb3Mm+4Wxcw68CLZxj445
- JZzIzfrNgV5Hr3w5FfZZxwFPPa756Ks=
-X-Google-Smtp-Source: AGHT+IGkeaLI2CtZu/jv3X9utB+rNrqrTw4MSqfKk07MondQKAPSWompuTqEe2F4JbawznUEKenM4A==
-X-Received: by 2002:a2e:3e1a:0:b0:2bf:ab17:d48b with SMTP id
- l26-20020a2e3e1a000000b002bfab17d48bmr22689684lja.34.1699208578167; 
- Sun, 05 Nov 2023 10:22:58 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- p22-20020a05600c419600b00401d8181f8bsm9395616wmh.25.2023.11.05.10.22.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 10:22:57 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 19:22:55 +0100
-Message-ID: <20231105182255.477909-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+ d=1e100.net; s=20230601; t=1699208779; x=1699813579;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=jduY8/CWmJyJE2o2B+c7HGKZVKwADFta2RQha2KzoFg=;
+ b=rLvk5o6G+I7j07BvdGwbk/s3LdyV1lhy4Qk1XkPNuopg0TjLCArDdAux8aQEWUBL6B
+ LStn8pyuLoVhj+KwZCz9CHlEfr3SHXzTOuk1JqRkckuaOFm7vXraCNXyTLBvKZ/PhnbU
+ zTZ951SxI+DEBp0eRdPaqQ1zatot7hV9KyCKyDK0eVrD5im60WuZxgq4A35pKWpIpEZW
+ KRImvWx1ZJQVC30mcloOGVUiqHLhUNH+lvZ0ZbNKnrRkbnNE47Luzdd3Pj7xsOu3cUZ4
+ MQjiRmFQToWHlzLC1TuMqLjP3oc2q8+R9/anL+OfBDvYeg72U1wJMDnxSyMqVBWVhPq+
+ Jc2A==
+X-Gm-Message-State: AOJu0YyG3DrxIUvr4TKwLR/KeQfWx8phjATzzvlAoSZYGZzIkwvaXPeU
+ vYR4HaNsAFxLBlRFJ4ahcE2OE+vx2xI9ZpqFFz0=
+X-Google-Smtp-Source: AGHT+IHtjU397nvh5Ovq43Ed2BRLvTvFLne3FB3gYoKF4S1ue8/iPry2X1dxBthEan0Yb+2pY8y0Pg==
+X-Received: by 2002:a17:907:1c1a:b0:9ba:33ef:fe4c with SMTP id
+ nc26-20020a1709071c1a00b009ba33effe4cmr12186508ejc.64.1699208779222; 
+ Sun, 05 Nov 2023 10:26:19 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ kj26-20020a170907765a00b00988f168811bsm3258178ejc.135.2023.11.05.10.26.18
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 05 Nov 2023 10:26:18 -0800 (PST)
+Message-ID: <342a893c-af90-4602-b73b-1afd37b34acb@mind.be>
+Date: Sun, 5 Nov 2023 19:26:16 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Reza Arbab <arbab@linux.ibm.com>, buildroot@buildroot.org
+References: <20231009151729.2223963-1-arbab@linux.ibm.com>
+ <20231009151729.2223963-8-arbab@linux.ibm.com>
+In-Reply-To: <20231009151729.2223963-8-arbab@linux.ibm.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699208578; x=1699813378; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DQDlaGgBZhHCpY7CLbbOtB8hbrSUuA2AkGYUo8CXbCo=;
- b=NNTLddB2NbM+rLsnB1kV4SXSkHoYmGsHJRCZHkMFYFr1WbufrYYJsknItQcqEn5Slp
- yQ71n97LsGgOfDq6JGO8X7H8KLQdR1L2su0Oh1QWClQrkKteTZCwijA391L60vFGoWtl
- 2GZyLbVerb2DuXDUbJCkBXAA//NOSfwFjzoW/aq4aCOtBDPSyw7jcBbR/E62+FRFNdsy
- VDNBXhhqXaTFmF7FG4FvKthq7QrTCRZUeeQxGOp+oCZ+vkrKPixk/7sxpAVaBH6NFSh5
- YM+Tv5os0ubdL53OvCs013yzf3I3mq8bamHxCdNxoSc6wtJs6GcFOkrKjkR0f/vTAXqC
- w7Wg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NNTLddB2
-Subject: [Buildroot] [PATCH v2,1/1] package/vde2: bump to version 2.3.3
+ d=mind.be; s=google; t=1699208779; x=1699813579; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=jduY8/CWmJyJE2o2B+c7HGKZVKwADFta2RQha2KzoFg=;
+ b=HZB4BZZg9eTHO7/6xbCds/aNKG7BKAYPbmK2ecGe+ptBMYrnO//zUQV7GLP2jB36Jo
+ D9/yWllqSUtDYpx2MPbDEXs5ldyaXWEt6OUjgOnVYxBnb21Iba5YESaGTYTSwiXZ6SW2
+ OGb5ttha5scUJUr5SQ1Sg3+7i9HlD+L4qzYs16Ro/N0ltg5RPKeU1qy9hzzuMNlBE5Np
+ aqTPxH39spo/mxwk5HsuHyKp4hqLfXKYiStm1oGi6OxLso+QpB5IySS+Bgk23ll8Iaw3
+ UBoSWGCGU+3tA4nPzuq/VU3RmlKlicQWuF1u7Ato3XZUF4okiA/jprBWevezLcRSFG1i
+ F1FA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=HZB4BZZg
+Subject: Re: [Buildroot] [PATCH v3 7/8] package/petitboot: enable user
+ separation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,270 +100,191 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Laurent Vivier <laurent@vivier.eu>, Joel Stanley <joel@jms.id.au>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Switch to github to get latest release
-- Drop first and second patches (already in version)
-- Drop third patch (not needed anymore)
-- Drop BSD-3-Clause and COPYING.slirpvde (slirpvde removed with
-  https://github.com/virtualsquare/vde-2/commit/eda0a1bc1d14061588459676fe6f0a048b7dbd1c
-  https://github.com/virtualsquare/vde-2/commit/14e1c9e06f4dbdddc6fe4e85fc72a1d583b049ad)
-- python removed with
-  https://github.com/virtualsquare/vde-2/commit/2c57c25075fa2d351b8f181d2764af61c4e47de0
-- kernel switch removed with
-  https://github.com/virtualsquare/vde-2/commit/b196ecd5b774f1c85041ce6d2334702911cbd8f3
-- parallel build has been fixed with
-  https://github.com/virtualsquare/vde-2/commit/7dd9ed46d5dca125ca45d679ac9f3acbfb0f9300
-- openssl has been replaced by wolfssl with
-  https://github.com/virtualsquare/vde-2/commit/8599321526d0a31925fe55cabbe132b752cb268a
 
-https://github.com/virtualsquare/vde-2/releases/tag/v2.3.3
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Replace openssl by wolfssl
+On 09/10/2023 17:17, Reza Arbab wrote:
+> Run the petitboot UI as an unprivileged user. This requires using the
+> agetty package instead of the busybox getty utility, running the initial
+> pb-console helper at user login rather than directly.
 
- .checkpackageignore                           |  3 --
- package/vde2/0001-no-cxx.patch                | 22 ----------
- ...-fstp-Add-static-to-inline-functions.patch | 44 -------------------
- ...de_l3-Add-static-to-inline-functions.patch | 37 ----------------
- package/vde2/Config.in                        |  2 +-
- package/vde2/vde2.hash                        |  3 +-
- package/vde2/vde2.mk                          | 24 +++-------
- 7 files changed, 8 insertions(+), 127 deletions(-)
- delete mode 100644 package/vde2/0001-no-cxx.patch
- delete mode 100644 package/vde2/0002-fstp-Add-static-to-inline-functions.patch
- delete mode 100644 package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
+  That sounds counterproductive though? It means you have to log in before the 
+boot menu is displayed? Or perhaps I misunderstand the statement here.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2d921d6f0b..b1adb4e674 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1414,9 +1414,6 @@ package/vboot-utils/0004-Disable-static-futility.patch Upstream
- package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch Upstream
- package/vboot-utils/0006-Update-for-openssl-1.1.patch Upstream
- package/vboot-utils/0007-Make-vboot_version-extern-in-header.patch Upstream
--package/vde2/0001-no-cxx.patch Upstream
--package/vde2/0002-fstp-Add-static-to-inline-functions.patch Upstream
--package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch Upstream
- package/vdr/0001-getloadavg.patch Upstream
- package/vlc/0001-Disable-building-of-statically-linked-vlc-binary.patch Upstream
- package/vlc/0002-automake-add-subdir-objects-option.patch Upstream
-diff --git a/package/vde2/0001-no-cxx.patch b/package/vde2/0001-no-cxx.patch
-deleted file mode 100644
-index 67cefa2bb8..0000000000
---- a/package/vde2/0001-no-cxx.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--configure: do not test for CXX, it's not needed
--
--There is no C++ source file, so no reason to require a C++ compiler.
--
--Reported-by: Peter Korsgaard <jacmet@uclibc.org>
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
-----
--Patch sent upstream
--( not yet in archives, awaits moderator approval... :-/ )
--
--diff -durN vde2-2.3.2.orig/configure.ac vde2-2.3.2/configure.ac
----- vde2-2.3.2.orig/configure.ac	2011-11-23 17:41:19.000000000 +0100
--+++ vde2-2.3.2/configure.ac	2012-12-14 21:56:47.146319686 +0100
--@@ -11,7 +11,6 @@
-- AC_CONFIG_LIBOBJ_DIR(src/common)
-- 
-- # Checks for programs.
---AC_PROG_CXX
-- AC_PROG_CC
-- AC_PROG_INSTALL
-- AC_PROG_LN_S
-diff --git a/package/vde2/0002-fstp-Add-static-to-inline-functions.patch b/package/vde2/0002-fstp-Add-static-to-inline-functions.patch
-deleted file mode 100644
-index 0dbe083d06..0000000000
---- a/package/vde2/0002-fstp-Add-static-to-inline-functions.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 67bc8443ac7e8144a78d84dee30a5cac3b5c99a4 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sun, 27 Aug 2017 23:56:05 +0200
--Subject: [PATCH] fstp: Add static to inline functions
--
--From [1]
--"This is needed to avoid a link error where the inline functions appear
--missing at link time.
--From c99 standard inline function should either be declared static or
--have an extern instance in a c file for linking.
--This fix is necessary to build with gcc 7; for some reason it was not
--trigerred before."
--
--[1] https://git.buildroot.net/buildroot/commit/?id=21133ada326c87627f7bdee4493d8086587c3cca
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- src/vde_switch/fstp.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/vde_switch/fstp.c b/src/vde_switch/fstp.c
--index aab7324..b1e7ee8 100644
----- a/src/vde_switch/fstp.c
--+++ b/src/vde_switch/fstp.c
--@@ -30,14 +30,14 @@ static int numports;
-- #ifdef FSTP
-- #include <fstp.h>
-- /*********************** sending macro used by FSTP & Core ******************/
---void inline ltonstring(unsigned long l,unsigned char *s) {
--+static void inline ltonstring(unsigned long l,unsigned char *s) {
-- 	s[3]=l; l>>=8;
-- 	s[2]=l; l>>=8;
-- 	s[1]=l; l>>=8;
-- 	s[0]=l;
-- }
-- 
---unsigned long inline nstringtol(unsigned char *s) {
--+static unsigned long inline nstringtol(unsigned char *s) {
-- 	return (s[0]<<24)+(s[1]<<16)+(s[2]<<8)+s[3];
-- }
-- 
---- 
--2.9.5
--
-diff --git a/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch b/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
-deleted file mode 100644
-index 7f771dfc7e..0000000000
---- a/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--vde_l3: Add static to inline functions
--
--Add static to inline functions to avoid the following build failure
--with BR2_OPTIMIZE_0:
--
--/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/mips64-buildroot-linux-uclibc/10.3.0/../../../../mips64-buildroot-linux-uclibc/bin/ld: vde_l3.o: in function `ip_output_ready':
--vde_l3.c:(.text+0xb30): undefined reference to `iphead'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/5eeefcdac0b8974a424a885fdc2e82f7cb4b617d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--
--diff -Nura vde2-2.3.2.orig/src/vde_l3/vde_l3.c vde2-2.3.2/src/vde_l3/vde_l3.c
----- vde2-2.3.2.orig/src/vde_l3/vde_l3.c	2022-04-21 11:05:17.393452698 +0200
--+++ vde2-2.3.2/src/vde_l3/vde_l3.c	2022-04-21 11:10:36.509804404 +0200
--@@ -100,17 +100,17 @@
-- };
-- 
-- 
---inline struct vde_ethernet_header *ethhead(struct vde_buff *vdb)
--+static inline struct vde_ethernet_header *ethhead(struct vde_buff *vdb)
-- {
-- 	return (struct vde_ethernet_header*)(vdb->data);
-- }
-- 
---inline struct iphdr *iphead(struct vde_buff *vdb)
--+static inline struct iphdr *iphead(struct vde_buff *vdb)
-- {
-- 	return (struct iphdr*)(vdb->data + 14);
-- }
-- 
---inline void *payload(struct vde_buff *vdb)
--+static inline void *payload(struct vde_buff *vdb)
-- {
-- 	return (uint8_t*)(vdb->data + 14 + sizeof(struct iphdr));
-- }
-diff --git a/package/vde2/Config.in b/package/vde2/Config.in
-index f640a4ae2a..44bdf50de0 100644
---- a/package/vde2/Config.in
-+++ b/package/vde2/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_VDE2
- 	  spawned over a set of physical computers over the Internet.
- 	  VDE is part of the virtualsquare project.
- 
--	  http://vde.sourceforge.net/
-+	  https://github.com/virtualsquare/vde-2/
- 
- comment "vde2 needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
-diff --git a/package/vde2/vde2.hash b/package/vde2/vde2.hash
-index a9e1ea2263..11d6a28279 100644
---- a/package/vde2/vde2.hash
-+++ b/package/vde2/vde2.hash
-@@ -1,5 +1,4 @@
- # Locally computed:
--sha256  cbea9b7e03097f87a6b5e98b07890d2275848f1fe4b9fcda77b8994148bc9542  vde2-2.3.2.tar.bz2
-+sha256  a7d2cc4c3d0c0ffe6aff7eb0029212f2b098313029126dcd12dc542723972379  vde2-2.3.3.tar.gz
- sha256  fb295d0c24b8ef4b39017ac68e772e8e6e839612ce10da12b9f48d1e8e512e2e  COPYING
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.libvdeplug
--sha256  d5ac74315b2d2f9c53f5839e311484f4646a9401b68d02d36f3dab386352e74d  COPYING.slirpvde
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
-index 76d6f352b7..ab4c32143d 100644
---- a/package/vde2/vde2.mk
-+++ b/package/vde2/vde2.mk
-@@ -4,24 +4,21 @@
- #
- ################################################################################
- 
--VDE2_VERSION = 2.3.2
--VDE2_SOURCE = vde2-$(VDE2_VERSION).tar.bz2
--VDE2_SITE = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
--VDE2_LICENSE = GPL-2.0+, LGPL-2.1+, BSD-3-Clause
--VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug COPYING.slirpvde
-+VDE2_VERSION = 2.3.3
-+VDE2_SITE = $(call github,virtualsquare,vde-2,v$(VDE2_VERSION))
-+VDE2_LICENSE = GPL-2.0+, LGPL-2.1+
-+VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug
- VDE2_CPE_ID_VENDOR = vde_project
- VDE2_CPE_ID_PRODUCT = vde
- VDE2_INSTALL_STAGING = YES
- 
--# We touch configure.ac, so we need to autoreconf
-+# From git
- VDE2_AUTORECONF = YES
- 
- # Reasons for enabling/disabling stuff:
- # - tuntap is enabled in the hope we're using a recent-enough toolchain
- #   that does have if_tun.h (virtually everything these days)
--# - kvde_switch is disabled because it requires a patched kernel
--# - cryptcab is disabled to not depend on openSSL
--# - python is disabled to not depend on Python
-+# - cryptcab is disabled to not depend on wolfssl
- # - pcap is disabled to not depend on libpcap
- # - profiling is disabled because we do not want to debug/profile
- #
-@@ -30,25 +27,16 @@ VDE2_AUTORECONF = YES
- VDE2_CONF_OPTS = \
- 	--disable-cryptcab \
- 	--disable-experimental \
--	--disable-kernel-switch \
- 	--disable-pcap \
- 	--disable-profile \
--	--disable-python \
- 	--enable-tuntap
- 
--# Package does not build in parallel due to improper make rules
--VDE2_MAKE = $(MAKE1)
--
- HOST_VDE2_CONF_OPTS = \
- 	--disable-cryptcab \
- 	--disable-experimental \
--	--disable-kernel-switch \
- 	--disable-pcap \
- 	--disable-profile \
--	--disable-python \
- 	--enable-tuntap
- 
--HOST_VDE2_MAKE = $(MAKE1)
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.42.0
+  It's also not clear why it would need agetty instead of busybox getty.
 
+  This doesn't sound like something that should be done by default.
+
+
+> If sudo is installed, with a sudoers policy allowing petituser to
+> perform sudo with no password (or a blank password), the "drop to shell"
+> feature of petitboot will automatically become a root shell.
+
+  It seems to me that the logical thing to do would be to drop into an actual 
+getty, which asks for a login and password.
+
+> 
+> Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+> ---
+>   package/petitboot/Config.in      |  1 +
+>   package/petitboot/S15pb-discover |  4 +++-
+>   package/petitboot/pb-console     |  6 ++++--
+>   package/petitboot/petitboot.mk   | 12 ++++++++++++
+>   package/petitboot/shell_config   | 24 ++++++++++++++++++++++++
+>   package/petitboot/shell_profile  |  2 ++
+>   6 files changed, 46 insertions(+), 3 deletions(-)
+>   create mode 100644 package/petitboot/shell_config
+>   create mode 100644 package/petitboot/shell_profile
+> 
+> diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
+> index 5f1d91e77ecb..0f965e71e628 100644
+> --- a/package/petitboot/Config.in
+> +++ b/package/petitboot/Config.in
+> @@ -16,6 +16,7 @@ config BR2_PACKAGE_PETITBOOT
+>   	select BR2_PACKAGE_KEXEC_LITE if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
+>   	select BR2_PACKAGE_NVME if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
+>   	select BR2_PACKAGE_POWERPC_UTILS if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
+> +	select BR2_PACKAGE_UTIL_LINUX_AGETTY
+>   	help
+>   	  Petitboot is a small kexec-based bootloader
+>   
+> diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
+> index 71ab62d99859..a37e33521f1a 100644
+> --- a/package/petitboot/S15pb-discover
+> +++ b/package/petitboot/S15pb-discover
+> @@ -12,7 +12,9 @@ fi
+>   
+>   start() {
+>   	printf 'Starting %s: ' "$DAEMON"
+> -	mkdir -p /var/log/petitboot
+> +	# shellcheck disable=SC2174 # only apply -m to deepest dir
+> +	mkdir -p -m 0775 /var/log/petitboot
+> +	chown root:petitgroup /var/log/petitboot
+
+  Why is it owned by root and not petituser?
+
+>   
+>   	# shellcheck disable=SC2086 # we need the word splitting
+>   	start-stop-daemon -S -q -b -m -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+> diff --git a/package/petitboot/pb-console b/package/petitboot/pb-console
+> index 407ff3b30232..eea40163d02f 100644
+> --- a/package/petitboot/pb-console
+> +++ b/package/petitboot/pb-console
+> @@ -3,14 +3,16 @@
+>   DAEMON="pb-console"
+>   
+>   PB_CONSOLE_PORT=${2:-"console"}
+> -PB_CONSOLE_ARGS="--getty --detach -- -n -i 0 $PB_CONSOLE_PORT linux"
+> +PB_CONSOLE_ARGS="--getty=/sbin/agetty --detach -- -a petituser -n -i $PB_CONSOLE_PORT linux"
+>   
+>   # shellcheck source=/dev/null
+>   [ -r "/etc/default/petitboot" ] && . "/etc/default/petitboot"
+>   
+>   start() {
+>   	printf 'Starting %s on %s: ' "$DAEMON" "$PB_CONSOLE_PORT"
+> -	mkdir -p /var/log/petitboot
+> +	# shellcheck disable=SC2174 # only apply -m to deepest dir
+> +	mkdir -p -m 0775 /var/log/petitboot
+> +	chown root:petitgroup /var/log/petitboot
+>   
+>   	# shellcheck disable=SC2086 # we need the word splitting
+>   	start-stop-daemon -S -q -x "/usr/libexec/petitboot/$DAEMON" \
+> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+> index ff87f3498734..5b517eb3b1a6 100644
+> --- a/package/petitboot/petitboot.mk
+> +++ b/package/petitboot/petitboot.mk
+> @@ -71,6 +71,10 @@ define PETITBOOT_POST_INSTALL
+>   		$(TARGET_DIR)/usr/sbin/kexec-restart
+>   	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/pb-console \
+>   		$(TARGET_DIR)/etc/init.d/pb-console
+> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/shell_config \
+> +		$(TARGET_DIR)/home/petituser/.shrc
+> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/shell_profile \
+> +		$(TARGET_DIR)/home/petituser/.profile
+>   
+>   	mkdir -p $(TARGET_DIR)/etc/udev/rules.d
+>   	(for port in $(PETITBOOT_GETTY_PORT); do \
+> @@ -84,4 +88,12 @@ endef
+>   
+>   PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL
+>   
+> +define PETITBOOT_USERS
+> +	petituser -1 petitgroup -1 * /home/petituser /bin/sh - petitboot user
+
+  Are petitgroup and petituser standard names? If not, we normally use the 
+package name as username and group name, i.e.
+
+	petitboot -1 petitboot -1 ...
+
+
+  Also, does this user really need a home directory and a shell? It really 
+should be a system user, no? It's only when it falls into the shell that you 
+need an actual shell...
+
+> +endef
+> +
+> +define PETITBOOT_PERMISSIONS
+> +	/var/petitboot d 775 root petitgroup - - - - -
+
+  What is /var/petitboot used for?
+
+> +endef
+> +
+>   $(eval $(autotools-package))
+> diff --git a/package/petitboot/shell_config b/package/petitboot/shell_config
+> new file mode 100644
+> index 000000000000..b10b95baae6c
+> --- /dev/null
+> +++ b/package/petitboot/shell_config
+> @@ -0,0 +1,24 @@
+> +#!/bin/sh
+> +
+> +try_sudo() {
+> +	[ -x "$(command -v sudo)" ] || return
+> +	sudo -K
+> +	echo | sudo -S /bin/true >/dev/null 2>&1 || return
+> +
+> +	echo "No password required, running as root."
+> +	sudo -i
+> +	sudo -K
+> +	exit
+> +}
+> +
+> +reset
+> +
+> +echo "Exiting petitboot. Type 'exit' to return."
+> +echo "You may run 'pb-sos' to gather diagnostic data."
+> +
+> +if [ "$(id -u)" != "0" ]; then
+> +	try_sudo
+> +	export PS1='$ '
+> +else
+> +	export PS1='# '
+> +fi
+> diff --git a/package/petitboot/shell_profile b/package/petitboot/shell_profile
+> new file mode 100644
+> index 000000000000..1ca5e6364dba
+> --- /dev/null
+> +++ b/package/petitboot/shell_profile
+> @@ -0,0 +1,2 @@
+> +export ENV="/home/petituser/.shrc"
+
+  This needs a bit more explanation. Is ENV something that is used by 
+pb-console? How is it evaluated?
+
+  Marked as Changes Requested.
+
+  Regards,
+  Arnout
+
+> +exec /usr/libexec/petitboot/pb-console
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
