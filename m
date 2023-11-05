@@ -4,84 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B33C9C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 16:58:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE434C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 17:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28E8B4013D;
-	Sun,  5 Nov 2023 16:58:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28E8B4013D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7AEB74013F;
+	Sun,  5 Nov 2023 17:07:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7AEB74013F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EFYt0YWM_ml9; Sun,  5 Nov 2023 16:58:32 +0000 (UTC)
+	with ESMTP id emZ37LR1n2UV; Sun,  5 Nov 2023 17:07:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B9CA84013F;
-	Sun,  5 Nov 2023 16:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9CA84013F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D794E1BF584
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 16:58:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4194401E1;
+	Sun,  5 Nov 2023 17:07:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4194401E1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B4091BF45A
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:07:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6C5E4014E
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 16:58:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6C5E4014E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1389B61027
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:07:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1389B61027
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7Evufco0K-ci for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 16:58:28 +0000 (UTC)
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DF1014013F
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 16:58:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF1014013F
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-40806e4106dso22140115e9.1
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 08:58:27 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UJhyGOqK6yIY for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 17:07:30 +0000 (UTC)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1DA0161025
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 17:07:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DA0161025
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-9d8d3b65a67so534327766b.2
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 09:07:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699203505; x=1699808305;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1699204048; x=1699808848;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=3kAWG1m0FhRpiZUGFzUUtivepNtIdKDkZUM5SCb6bck=;
- b=nFBfcGPQVTXK0X1wK/LZXXK48VFnXe1Bx3C1JXXHn8kxFvQUn4+A7o9OkwjKTcAcNR
- 1Fhh491lsQrlKMmvl6C22Li4oKNJqPwMWmxbn18rRJkORt6MKJjq2Jw5msSwSp+HhUCC
- Xsg0uuBVwvZ/1V6tw6w2LWRXd6OMSpkws+oSN4fEu3vcxAZ/1WMmWKCTMATpGJR0hgE/
- 8bt1oed5iO2TMP147Iiti46ErbzhVeS0dKbQpxBX6bkemX1Iy+RjOFkDn8DSparjmnMp
- aUOxVaT2w7VGprtcqDWia3j2nxSDGV0nzGemzvdj7+3R/Ujm8HCPstPMpWluEZMn9wvH
- KYxA==
-X-Gm-Message-State: AOJu0YxZYP65/IS+tR9mwLOFgXvPV8BFL+iRgnlFgJvtOJBbTDKiY1Zx
- wfU+c3Y+gFPjNswHRe0C4fqOkAYU8G8=
-X-Google-Smtp-Source: AGHT+IFhIH/6NNPQO7iFJxvcMx0mcsn2a8qcJyCNjwl+LQPoZJWzkZ+yID0VfAJgZymKr05dQNQGoA==
-X-Received: by 2002:a05:600c:5488:b0:408:3634:b81e with SMTP id
- iv8-20020a05600c548800b004083634b81emr9834962wmb.13.1699203504556; 
- Sun, 05 Nov 2023 08:58:24 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- ha7-20020a05600c860700b004080f0376a0sm9200164wmb.42.2023.11.05.08.58.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 08:58:24 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 17:58:22 +0100
-Message-ID: <20231105165822.94701-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+ bh=4eTHRHZ55qo907DG6w52l2+iUXDE7roajx/VkPsOO54=;
+ b=Sx6gkL3Uec53UNrfQUBnnX0h3lSUy4+RZ4SR1Tv8ixBdoTlcsisWS+rrwljaokbmB6
+ SQvfxcGj973m2A9Rp13OpltzUdvJa9rF+dLDWza83co5/jl5/eu73M23NYO13m+XEjG8
+ KPkbLOA1uwotObWyL9JJIEdgILJmyokWEGo8bS56ER+9zoqo4sWOs7T+oeULXzMqPwx4
+ +yLEWyfeWmzTu8iH80uEflPUFbewU8mvpirUfxVA1Ob2B1ZPRI1MIuws+PKUJeptFQoW
+ JNwzLRU7bxcZOnssjZytlG4a99R18WkOr/pFjczzCu6BXdtq0MCBk3ypQLC73TqPhsvG
+ JbsA==
+X-Gm-Message-State: AOJu0YznE3HWiAVWJ5vfJ29lQxc+rlgNWtoDBd52uRfhIWxJ4tVSUU9/
+ w9nzeVvrMENZ6Y/sBKM1KIAMcUblz6GKOxeHbGNvTWLn17uNVWs42IE=
+X-Google-Smtp-Source: AGHT+IHgiOUmUjREnFNf4ZoSeyMO7W68KixBoV3OepeAqv+ho2D2n5pcjsrGb3MRgmwnjPHKD41YTjk6HHGqim/XOtI=
+X-Received: by 2002:a17:907:c003:b0:9df:867f:f74c with SMTP id
+ ss3-20020a170907c00300b009df867ff74cmr2103580ejc.65.1699204047777; Sun, 05
+ Nov 2023 09:07:27 -0800 (PST)
 MIME-Version: 1.0
+References: <20231103182745.903344-1-adam.duskett@amarulasolutions.com>
+ <20231103213125.GB2875@scaer>
+In-Reply-To: <20231103213125.GB2875@scaer>
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Sun, 5 Nov 2023 10:07:17 -0700
+Message-ID: <CAHDQB6OVYYoG+y7JjcUFs5js_Kqe48z69BskS8MOCV62kpc4LQ@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699203505; x=1699808305; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3kAWG1m0FhRpiZUGFzUUtivepNtIdKDkZUM5SCb6bck=;
- b=W+Qfltj1w0KZpvgzXlauGqgVruIMM/qq1KiAvC80Bngj/XhQhk95g4+4vparx0Q4Jg
- dFFjMdVzYmZl69jC5XGnooLebJwUDJJDkY3082gp8GmrxftNKcyncDI51q/7aPIDj5uY
- XWO5ece8YeGOFBHbr88LZ1sRVWm7s7EzChYIpZTfePqX1lN0HJBS5E2jNZ0RpyNeasrd
- pUCXulK7Qx3HM7IhoqZIzwqZxDWSs9P/U+oaf/MIWTKxs0eB49TUwGE6oxMrYqB76Izm
- UtrcqN4E5aqFvnJE05tzv6+VSCfZyN2iSDHwxynSl9oL60tzODXpLHi7CinkdF7ZxVZX
- gKdg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=W+Qfltj1
-Subject: [Buildroot] [PATCH v2,1/1] package/nut: fix python build
+ d=amarulasolutions.com; s=google; t=1699204048; x=1699808848;
+ darn=buildroot.org; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=4eTHRHZ55qo907DG6w52l2+iUXDE7roajx/VkPsOO54=;
+ b=QubEcDMTPOkLJArlSEn+ujZLrIMs+0B2qPh0DBsr7ONOXZwH8v2o2c8hHVvT3Ds4Z6
+ dk1xvC5zURA4n2CJd6S2sFd8uCGIfX8Lw7hQqV5385saNyUzxSWLuJNyXwQ3gjrd43zu
+ N5aOn3J4/YlKUfrWUlk7qRf2Vu7K6t9ErC1mk=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=QubEcDMT
+Subject: Re: [Buildroot] [PATCH 0/3] Add tainting support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,192 +89,393 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8550149758472196923=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump to version 2.8.1 in
-commit 9c874557aa863d5282ca38b28a379730297496c8 and
-https://github.com/networkupstools/nut/commit/cada4bc8c4051fb961ae7c21d0bb329f79cc330c
-and
-https://github.com/networkupstools/nut/commit/902ce1327e912dfb6198900204b12e6804d1224b:
+--===============8550149758472196923==
+Content-Type: multipart/alternative; boundary="000000000000ab45e506096ac52c"
 
-checking python3 site-packages location... /home/thomas/autobuild/instance-3/output-1/host/lib/python3.11/site-packages
-[...]
- /usr/bin/install -c -m 644 module/PyNUT.py '/home/thomas/autobuild/instance-3/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot/home/thomas/autobuild/instance-3/output-1/host/lib/python3.11/site-packages'
-[...]
-nut: installs files in /home/thomas/autobuild/instance-3/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot//home/thomas/autobuild/instance-3/output-1
+--000000000000ab45e506096ac52c
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes:
- - http://autobuild.buildroot.org/results/0b2d0e292a9872f7ab7c2eeccbb7bb12e4afe36c
+Yes, but to your original points
+https://patchwork.ozlabs.org/project/buildroot/list/?series=3D64340, this i=
+s
+not
+an acceptable solution to put  "NODEJS_SRC_LICENSE +=3D , vendored
+dependencies licenses probably not listed"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Add Upstream link to patch
+in the makefile, because there are several valid instances where you may be
+able to guarantee the integrity of
 
- ...hon.m4-allow-overriding-of-PYTHON-2-.patch | 106 ++++++++++++++++++
- package/nut/nut.mk                            |  15 +++
- 2 files changed, 121 insertions(+)
- create mode 100644 package/nut/0002-m4-nut_check_python.m4-allow-overriding-of-PYTHON-2-.patch
+the licenses and provide hashsums for each of them. Hence, the ability to
+disable the taint check.
 
-diff --git a/package/nut/0002-m4-nut_check_python.m4-allow-overriding-of-PYTHON-2-.patch b/package/nut/0002-m4-nut_check_python.m4-allow-overriding-of-PYTHON-2-.patch
-new file mode 100644
-index 0000000000..d2571cf438
---- /dev/null
-+++ b/package/nut/0002-m4-nut_check_python.m4-allow-overriding-of-PYTHON-2-.patch
-@@ -0,0 +1,106 @@
-+From 511ee899ee687216fa8fcf2231a60941b9e4cf81 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 3 Nov 2023 14:34:54 +0100
-+Subject: [PATCH] m4/nut_check_python.m4: allow overriding of
-+ PYTHON{2,3}_SITE_PACKAGES
-+
-+Allow the end-user to override PYTHON{2,3}_SITE_PACKAGES as this can be
-+useful when cross-compiling
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/networkupstools/nut/pull/2147
-+---
-+ m4/nut_check_python.m4 | 60 +++++++++++++++++++++---------------------
-+ 1 file changed, 30 insertions(+), 30 deletions(-)
-+
-+diff --git a/m4/nut_check_python.m4 b/m4/nut_check_python.m4
-+index 995a3e7c..7f29558e 100644
-+--- a/m4/nut_check_python.m4
-++++ b/m4/nut_check_python.m4
-+@@ -116,17 +116,17 @@ AC_DEFUN([NUT_CHECK_PYTHON],
-+         AM_CONDITIONAL([HAVE_PYTHON], [test -n "${PYTHON}" && test "${PYTHON}" != "no"])
-+         AS_IF([test -n "${PYTHON}" && test "${PYTHON}" != "no"], [
-+             export PYTHON
-+-            AC_MSG_CHECKING([python site-packages location])
-+-            PYTHON_SITE_PACKAGES="`${PYTHON} -c 'import site; print(site.getsitepackages().pop(0))'`"
-+-            AS_CASE(["$PYTHON_SITE_PACKAGES"],
-+-                [*:*], [
-+-                    dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
-+-                    PYTHON_SITE_PACKAGES="`cd "$PYTHON_SITE_PACKAGES" && pwd`"
-+-                    ]
-+-                )
-+-            AC_MSG_RESULT([${PYTHON_SITE_PACKAGES}])
-++            AC_CACHE_CHECK([python site-packages location], [nut_cv_PYTHON_SITE_PACKAGES], [
-++                nut_cv_PYTHON_SITE_PACKAGES="`${PYTHON} -c 'import site; print(site.getsitepackages().pop(0))'`"
-++                AS_CASE(["$nut_cv_PYTHON_SITE_PACKAGES"],
-++                    [*:*], [
-++                        dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
-++                        nut_cv_PYTHON_SITE_PACKAGES="`cd "$nut_cv_PYTHON_SITE_PACKAGES" && pwd`"
-++                        ]
-++                   )
-++               ])
-+             ])
-+-        AC_SUBST([PYTHON_SITE_PACKAGES], [${PYTHON_SITE_PACKAGES}])
-++        AC_SUBST([PYTHON_SITE_PACKAGES], [${nut_cv_PYTHON_SITE_PACKAGES}])
-+         AM_CONDITIONAL([HAVE_PYTHON_SITE_PACKAGES], [test x"${PYTHON_SITE_PACKAGES}" != "x"])
-+     ])
-+ ])
-+@@ -228,17 +228,17 @@ AC_DEFUN([NUT_CHECK_PYTHON2],
-+         AM_CONDITIONAL([HAVE_PYTHON2], [test -n "${PYTHON2}" && test "${PYTHON2}" != "no"])
-+         AS_IF([test -n "${PYTHON2}" && test "${PYTHON2}" != "no"], [
-+             export PYTHON2
-+-            AC_MSG_CHECKING([python2 site-packages location])
-+-            PYTHON2_SITE_PACKAGES="`${PYTHON2} -c 'import site; print(site.getsitepackages().pop(0))'`"
-+-            AS_CASE(["$PYTHON2_SITE_PACKAGES"],
-+-                [*:*], [
-+-                    dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
-+-                    PYTHON2_SITE_PACKAGES="`cd "$PYTHON2_SITE_PACKAGES" && pwd`"
-+-                    ]
-+-                )
-+-            AC_MSG_RESULT([${PYTHON2_SITE_PACKAGES}])
-++            AC_CACHE_CHECK([python2 site-packages location], [nut_cv_PYTHON2_SITE_PACKAGES], [
-++                nut_cv_PYTHON2_SITE_PACKAGES="`${PYTHON2} -c 'import site; print(site.getsitepackages().pop(0))'`"
-++                AS_CASE(["$nut_cv_PYTHON2_SITE_PACKAGES"],
-++                    [*:*], [
-++                        dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
-++                        nut_cv_PYTHON2_SITE_PACKAGES="`cd "$nut_cv_PYTHON2_SITE_PACKAGES" && pwd`"
-++                        ]
-++                    )
-++                ])
-+             ])
-+-        AC_SUBST([PYTHON2_SITE_PACKAGES], [${PYTHON2_SITE_PACKAGES}])
-++        AC_SUBST([PYTHON2_SITE_PACKAGES], [${nut_cv_PYTHON2_SITE_PACKAGES}])
-+         AM_CONDITIONAL([HAVE_PYTHON2_SITE_PACKAGES], [test x"${PYTHON2_SITE_PACKAGES}" != "x"])
-+     ])
-+ ])
-+@@ -340,17 +340,17 @@ AC_DEFUN([NUT_CHECK_PYTHON3],
-+         AM_CONDITIONAL([HAVE_PYTHON3], [test -n "${PYTHON3}" && test "${PYTHON3}" != "no"])
-+         AS_IF([test -n "${PYTHON3}" && test "${PYTHON3}" != "no"], [
-+             export PYTHON3
-+-            AC_MSG_CHECKING([python3 site-packages location])
-+-            PYTHON3_SITE_PACKAGES="`${PYTHON3} -c 'import site; print(site.getsitepackages().pop(0))'`"
-+-            AS_CASE(["$PYTHON3_SITE_PACKAGES"],
-+-                [*:*], [
-+-                    dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
-+-                    PYTHON3_SITE_PACKAGES="`cd "$PYTHON3_SITE_PACKAGES" && pwd`"
-+-                    ]
-+-                )
-+-            AC_MSG_RESULT([${PYTHON3_SITE_PACKAGES}])
-++            AC_CACHE_CHECK([python3 site-packages location], [nut_cv_PYTHON3_SITE_PACKAGES], [
-++                nut_cv_PYTHON3_SITE_PACKAGES="`${PYTHON3} -c 'import site; print(site.getsitepackages().pop(0))'`"
-++                AS_CASE(["$nut_cv_PYTHON3_SITE_PACKAGES"],
-++                    [*:*], [
-++                        dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
-++                        nut_cv_PYTHON3_SITE_PACKAGES="`cd "$nut_cv_PYTHON3_SITE_PACKAGES" && pwd`"
-++                        ]
-++                    )
-++                ])
-+             ])
-+-        AC_SUBST([PYTHON3_SITE_PACKAGES], [${PYTHON3_SITE_PACKAGES}])
-++        AC_SUBST([PYTHON3_SITE_PACKAGES], [${nut_cv_PYTHON3_SITE_PACKAGES}])
-+         AM_CONDITIONAL([HAVE_PYTHON3_SITE_PACKAGES], [test x"${PYTHON3_SITE_PACKAGES}" != "x"])
-+     ])
-+ ])
-+-- 
-+2.42.0
-+
-diff --git a/package/nut/nut.mk b/package/nut/nut.mk
-index ba71319f90..371c783783 100644
---- a/package/nut/nut.mk
-+++ b/package/nut/nut.mk
-@@ -12,6 +12,7 @@ NUT_SELINUX_MODULES = apache nut
- NUT_INSTALL_STAGING = YES
- NUT_DEPENDENCIES = host-pkgconf
- # We're patching m4/nut_compiler_family.m4
-+# We're patching m4/nut_check_python.m4
- NUT_AUTORECONF = YES
- 
- # Put the PID files in a read-write place (/var/run is a tmpfs)
-@@ -20,6 +21,8 @@ NUT_CONF_OPTS = \
- 	--with-altpidpath=/var/run/upsd \
- 	--with-dev \
- 	--without-doc \
-+	--without-python \
-+	--without-python2 \
- 	--with-user=nut \
- 	--with-group=nut
- 
-@@ -107,4 +110,16 @@ else
- NUT_CONF_OPTS += --without-ssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+NUT_DEPENDENCIES += python3
-+NUT_CONF_ENV += nut_cv_PYTHON3_SITE_PACKAGES=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+NUT_CONF_OPTS += \
-+	--with-pynut \
-+	--with-python3
-+else
-+NUT_CONF_OPTS += \
-+	--without-pynut \
-+	--without-python3
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.42.0
+
+Adam Duskett
+
+Senior Embedded Systems Developer
+
+M. +1208-515-8102
+
+adam.duskett@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions BV
+
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+
+T. +31 (0)85 111 9170
+info@amarulasolutions.com
+
+www.amarulasolutions.com
+
+
+
+On Fri, Nov 3, 2023 at 3:31=E2=80=AFPM Yann E. MORIN <yann.morin.1998@free.=
+fr>
+wrote:
+
+> Adam, All,
+>
+> On 2023-11-03 12:27 -0600, Adam Duskett spake thusly:
+> > Originally taken from Angelo Compagnucci's patch series:
+> > https://patchwork.ozlabs.org/project/buildroot/list/?series=3D64340
+> >
+> > When the original patch series was submitted, Buildroot was quite a bit
+> > smaller! With almost 1,000 packages added since then and more and more
+> external
+> > package managers being available for various languages, it is not
+> possible to
+> > package every single dependency needed for some packages.
+> >
+> > Indeed, looking at NPM, for example, some packages rely on tens, if not
+> > hundreds, of others. While this could be better and is indeed quite bad=
+,
+> it is,
+> > unfortunately, the reality we must deal with.
+> >
+> > With this patch series, we add initial tainting support to Buildroot
+> with the
+> > added option to turn the support off by way of the
+> BR2_DISABLE_TAINT_CHECKING
+> > option. This option gives us the best of both worlds: A sane default an=
+d
+> an
+> > option for advanced users to turn off the check if they understand the
+> risks
+> > and can guarantee their build is reproducible.
+>
+> It does not require any such thing as tainted, and is just as simple as
+> this:
+>
+>     diff --git a/package/nodejs/nodejs-src/nodejs-src.mk
+> b/package/nodejs/nodejs-src/nodejs-src.mk
+>     index 3452c93728..2d716d8547 100644
+>     --- a/package/nodejs/nodejs-src/nodejs-src.mk
+>     +++ b/package/nodejs/nodejs-src/nodejs-src.mk
+>     @@ -241,6 +241,7 @@ NODEJS_SRC_MODULES_LIST=3D $(call qstrip,\
+>      # We can only call NPM if there's something to install.
+>      #
+>      ifneq ($(NODEJS_SRC_MODULES_LIST),)
+>     +NODEJS_SRC_LICENSE +=3D , vendored dependencies licenses probably no=
+t
+> listed
+>      NODEJS_SRC_DEPENDENCIES +=3D host-nodejs
+>      define NODEJS_SRC_INSTALL_MODULES
+>         # If you're having trouble with module installation, adding -d
+>         # to the
+>
+> As for reproducibility: if the package is not reproducible, either it is
+> fixed so that it is reproducible, or if that is not possible, then the
+> package should be hidden away behind depends on !BR2_REPRODUCIBLE
+>
+> That's as simple as that, I would say.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >
+> > This patch series has two significant benefits:
+> >   - Taint checking paves the way for additional package managers to be
+> >     incorporated into Buildroot while maintaining reproducible integrit=
+y
+> for
+> >     packages provided by Buildroot.
+> >
+> >   - It tells the user their build is tainted and what packages they
+> >     have selected are causing the taint.
+> >
+> >   - It makes support easier. If a user has a build that is tainted and
+> the
+> >     the problem they are experiencing is with a tainted package; it is
+> >     more straightforward to tell the user they are on their own.
+> >
+> > Adam Duskett (3):
+> >   Makefile: add tainting support
+> >   docs/manual: add information about tainting
+> >   package/nodejs: taint the build when using external modules
+> >
+> >  Config.in                                |  9 +++++++++
+> >  Makefile                                 | 17 +++++++++++++++++
+> >  docs/manual/adding-packages-generic.adoc |  9 +++++++++
+> >  docs/manual/legal-notice.adoc            | 24 ++++++++++++++++++++++++
+> >  package/nodejs/Config.in                 |  3 +++
+> >  package/nodejs/nodejs-src/nodejs-src.mk  |  1 +
+> >  package/pkg-generic.mk                   | 19 +++++++++++++++++++
+> >  7 files changed, 82 insertions(+)
+> >
+> > --
+> > 2.41.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------=
+------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There i=
+s
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------=
+------'
+>
+
+--000000000000ab45e506096ac52c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Yes, but to your original points=C2=A0
+
+<a href=3D"https://patchwork.ozlabs.org/project/buildroot/list/?series=3D64=
+340" rel=3D"noreferrer" target=3D"_blank">https://patchwork.ozlabs.org/proj=
+ect/buildroot/list/?series=3D64340</a>, this is not<div>an acceptable solut=
+ion to put=C2=A0 &quot;NODEJS_SRC_LICENSE +=3D , vendored dependencies lice=
+nses probably not listed&quot;<br clear=3D"all"><div><div dir=3D"ltr" class=
+=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><s=
+pan><p style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom=
+:0pt"><font color=3D"#000000" face=3D"Ubuntu, sans-serif"><span style=3D"fo=
+nt-size:13.3333px">in the makefile, because there are several valid instanc=
+es where you may be able to guarantee the integrity of</span></font></p><p =
+style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><=
+font color=3D"#000000" face=3D"Ubuntu, sans-serif"><span style=3D"font-size=
+:13.3333px">the licenses and provide hashsums for each of them. Hence, the =
+ability to disable the taint check.</span></font></p><p style=3D"line-heigh=
+t:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><br></p><p dir=3D"lt=
+r" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt=
+"><span style=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0=
+,0);background-color:transparent;vertical-align:baseline;white-space:pre-wr=
+ap">Adam Duskett</span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999=
+999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font=
+-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color=
+:transparent;vertical-align:baseline;white-space:pre-wrap">Senior Embedded =
+Systems Developer</span></p><p dir=3D"ltr" style=3D"line-height:1.799999999=
+9999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;fon=
+t-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-colo=
+r:transparent;vertical-align:baseline;white-space:pre-wrap">M. +1208-515-81=
+02</span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-=
+top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;=
+Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;v=
+ertical-align:baseline;white-space:pre-wrap"><a href=3D"mailto:adam.duskett=
+@amarulasolutions.com" target=3D"_blank">adam.duskett@amarulasolutions.com<=
+/a></span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin=
+-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot=
+;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;=
+vertical-align:baseline;white-space:pre-wrap">_____________________________=
+_____</span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;marg=
+in-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&qu=
+ot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparen=
+t;vertical-align:baseline;white-space:pre-wrap"><br></span><span style=3D"f=
+ont-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);background-col=
+or:transparent;vertical-align:baseline;white-space:pre-wrap">Amarula Soluti=
+ons BV</span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;mar=
+gin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&q=
+uot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transpare=
+nt;vertical-align:baseline;white-space:pre-wrap">Joop Geesinkweg 125, 1114 =
+AB, Amsterdam, NL</span></p><p dir=3D"ltr" style=3D"line-height:1.799999999=
+9999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;fon=
+t-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-colo=
+r:transparent;vertical-align:baseline;white-space:pre-wrap">T. +31 (0)85 11=
+1 9170</span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&qu=
+ot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-align:=
+baseline;white-space:pre-wrap"><br></span><span style=3D"font-size:10pt;fon=
+t-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-colo=
+r:transparent;vertical-align:baseline;white-space:pre-wrap"><a href=3D"mail=
+to:info@amarulasolutions.com" target=3D"_blank">info@amarulasolutions.com</=
+a></span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-=
+top:0pt;margin-bottom:0pt"><a href=3D"http://www.amarulasolutions.com/" tar=
+get=3D"_blank"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&=
+quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-alig=
+n:baseline;white-space:pre-wrap">www.amarulasolutions.com</span></a></p><di=
+v><br></div></span></div></div></div><br></div></div><br><div class=3D"gmai=
+l_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Nov 3, 2023 at 3:31=
+=E2=80=AFPM Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr">ya=
+nn.morin.1998@free.fr</a>&gt; wrote:<br></div><blockquote class=3D"gmail_qu=
+ote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,20=
+4);padding-left:1ex">Adam, All,<br>
+<br>
+On 2023-11-03 12:27 -0600, Adam Duskett spake thusly:<br>
+&gt; Originally taken from Angelo Compagnucci&#39;s patch series:<br>
+&gt; <a href=3D"https://patchwork.ozlabs.org/project/buildroot/list/?series=
+=3D64340" rel=3D"noreferrer" target=3D"_blank">https://patchwork.ozlabs.org=
+/project/buildroot/list/?series=3D64340</a><br>
+&gt; <br>
+&gt; When the original patch series was submitted, Buildroot was quite a bi=
+t<br>
+&gt; smaller! With almost 1,000 packages added since then and more and more=
+ external<br>
+&gt; package managers being available for various languages, it is not poss=
+ible to<br>
+&gt; package every single dependency needed for some packages.<br>
+&gt; <br>
+&gt; Indeed, looking at NPM, for example, some packages rely on tens, if no=
+t<br>
+&gt; hundreds, of others. While this could be better and is indeed quite ba=
+d, it is,<br>
+&gt; unfortunately, the reality we must deal with.<br>
+&gt; <br>
+&gt; With this patch series, we add initial tainting support to Buildroot w=
+ith the<br>
+&gt; added option to turn the support off by way of the BR2_DISABLE_TAINT_C=
+HECKING<br>
+&gt; option. This option gives us the best of both worlds: A sane default a=
+nd an<br>
+&gt; option for advanced users to turn off the check if they understand the=
+ risks<br>
+&gt; and can guarantee their build is reproducible.<br>
+<br>
+It does not require any such thing as tainted, and is just as simple as<br>
+this:<br>
+<br>
+=C2=A0 =C2=A0 diff --git a/package/nodejs/nodejs-src/<a href=3D"http://node=
+js-src.mk" rel=3D"noreferrer" target=3D"_blank">nodejs-src.mk</a> b/package=
+/nodejs/nodejs-src/<a href=3D"http://nodejs-src.mk" rel=3D"noreferrer" targ=
+et=3D"_blank">nodejs-src.mk</a><br>
+=C2=A0 =C2=A0 index 3452c93728..2d716d8547 100644<br>
+=C2=A0 =C2=A0 --- a/package/nodejs/nodejs-src/<a href=3D"http://nodejs-src.=
+mk" rel=3D"noreferrer" target=3D"_blank">nodejs-src.mk</a><br>
+=C2=A0 =C2=A0 +++ b/package/nodejs/nodejs-src/<a href=3D"http://nodejs-src.=
+mk" rel=3D"noreferrer" target=3D"_blank">nodejs-src.mk</a><br>
+=C2=A0 =C2=A0 @@ -241,6 +241,7 @@ NODEJS_SRC_MODULES_LIST=3D $(call qstrip,=
+\<br>
+=C2=A0 =C2=A0 =C2=A0# We can only call NPM if there&#39;s something to inst=
+all.<br>
+=C2=A0 =C2=A0 =C2=A0#<br>
+=C2=A0 =C2=A0 =C2=A0ifneq ($(NODEJS_SRC_MODULES_LIST),)<br>
+=C2=A0 =C2=A0 +NODEJS_SRC_LICENSE +=3D , vendored dependencies licenses pro=
+bably not listed<br>
+=C2=A0 =C2=A0 =C2=A0NODEJS_SRC_DEPENDENCIES +=3D host-nodejs<br>
+=C2=A0 =C2=A0 =C2=A0define NODEJS_SRC_INSTALL_MODULES<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # If you&#39;re having trouble with module inst=
+allation, adding -d<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 # to the<br>
+<br>
+As for reproducibility: if the package is not reproducible, either it is<br=
+>
+fixed so that it is reproducible, or if that is not possible, then the<br>
+package should be hidden away behind depends on !BR2_REPRODUCIBLE<br>
+<br>
+That&#39;s as simple as that, I would say.<br>
+<br>
+Regards,<br>
+Yann E. MORIN.<br>
+<br>
+&gt; <br>
+&gt; This patch series has two significant benefits:<br>
+&gt;=C2=A0 =C2=A0- Taint checking paves the way for additional package mana=
+gers to be<br>
+&gt;=C2=A0 =C2=A0 =C2=A0incorporated into Buildroot while maintaining repro=
+ducible integrity for<br>
+&gt;=C2=A0 =C2=A0 =C2=A0packages provided by Buildroot.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0- It tells the user their build is tainted and what packag=
+es they<br>
+&gt;=C2=A0 =C2=A0 =C2=A0have selected are causing the taint.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0- It makes support easier. If a user has a build that is t=
+ainted and the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0the problem they are experiencing is with a tainted=
+ package; it is<br>
+&gt;=C2=A0 =C2=A0 =C2=A0more straightforward to tell the user they are on t=
+heir own.<br>
+&gt; <br>
+&gt; Adam Duskett (3):<br>
+&gt;=C2=A0 =C2=A0Makefile: add tainting support<br>
+&gt;=C2=A0 =C2=A0docs/manual: add information about tainting<br>
+&gt;=C2=A0 =C2=A0package/nodejs: taint the build when using external module=
+s<br>
+&gt; <br>
+&gt;=C2=A0 Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 9 ++++++++=
++<br>
+&gt;=C2=A0 Makefile=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 17 ++++++++=
++++++++++<br>
+&gt;=C2=A0 docs/manual/adding-packages-generic.adoc |=C2=A0 9 +++++++++<br>
+&gt;=C2=A0 docs/manual/legal-notice.adoc=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 | 24 ++++++++++++++++++++++++<br>
+&gt;=C2=A0 package/nodejs/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 3 +++<br>
+&gt;=C2=A0 package/nodejs/nodejs-src/<a href=3D"http://nodejs-src.mk" rel=
+=3D"noreferrer" target=3D"_blank">nodejs-src.mk</a>=C2=A0 |=C2=A0 1 +<br>
+&gt;=C2=A0 package/<a href=3D"http://pkg-generic.mk" rel=3D"noreferrer" tar=
+get=3D"_blank">pkg-generic.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0| 19 +++++++++++++++++++<br>
+&gt;=C2=A0 7 files changed, 82 insertions(+)<br>
+&gt; <br>
+&gt; -- <br>
+&gt; 2.41.0<br>
+&gt; <br>
+&gt; _______________________________________________<br>
+&gt; buildroot mailing list<br>
+&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
+@buildroot.org</a><br>
+&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
+nfo/buildroot</a><br>
+<br>
+-- <br>
+.-----------------.--------------------.------------------.----------------=
+----.<br>
+|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
+Erics&#39; conspiracy: |<br>
+| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
+=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
+| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
+ =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
+| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer" target=3D"_bl=
+ank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=A0 =C2=A0 =
+|=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
+&#39;------------------------------^-------^------------------^------------=
+--------&#39;<br>
+</blockquote></div>
+
+--000000000000ab45e506096ac52c--
+
+--===============8550149758472196923==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8550149758472196923==--
