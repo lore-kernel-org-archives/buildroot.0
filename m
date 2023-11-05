@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA21EC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6445DC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:11:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 634B840095;
-	Sun,  5 Nov 2023 21:11:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 634B840095
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F6B940144;
+	Sun,  5 Nov 2023 21:11:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F6B940144
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MsnnGGjaU24G; Sun,  5 Nov 2023 21:11:34 +0000 (UTC)
+	with ESMTP id y7K-SNgbvRLd; Sun,  5 Nov 2023 21:11:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83B9F4194C;
-	Sun,  5 Nov 2023 21:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83B9F4194C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21DA31BF909
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F58E401F9;
+	Sun,  5 Nov 2023 21:11:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F58E401F9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E8951BF869
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF4BA41962
+ by smtp3.osuosl.org (Postfix) with ESMTP id F287561054
  for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF4BA41962
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F287561054
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mTjidIOThvD8 for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 21:11:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I_iFZAHbbLmG for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E590140325
+ by smtp3.osuosl.org (Postfix) with ESMTP id D50796104D
  for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E590140325
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D50796104D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D339C868A9; Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
+ id C1D37868A8; Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Nov 2023 22:00:24 +0100
+Date: Sun, 5 Nov 2023 21:54:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6b931c222b045c1c14278dc887a430601e96f9fe
-X-Git-Newrev: 4be2da2cef371faff39ceb7fa28b948945016fc9
+X-Git-Oldrev: d5bba26801b352f591451cf73e0b7509de0e6850
+X-Git-Newrev: 6b931c222b045c1c14278dc887a430601e96f9fe
 X-Patchwork-Hint: ignore
-Message-Id: <20231105211104.D339C868A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiodns: bump to version
- 3.1.1
+Message-Id: <20231105211104.C1D37868A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aenum: bump to version
+ 3.1.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4be2da2cef371faff39ceb7fa28b948945016fc9
+commit: https://git.buildroot.net/buildroot/commit/?id=6b931c222b045c1c14278dc887a430601e96f9fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-aiodns/python-aiodns.hash | 4 ++--
- package/python-aiodns/python-aiodns.mk   | 4 ++--
+ package/python-aenum/python-aenum.hash | 4 ++--
+ package/python-aenum/python-aenum.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
-index 2cdedc6f95..bf65691b89 100644
---- a/package/python-aiodns/python-aiodns.hash
-+++ b/package/python-aiodns/python-aiodns.hash
+diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
+index 40c0e55fc5..9c59804d6e 100644
+--- a/package/python-aenum/python-aenum.hash
++++ b/package/python-aenum/python-aenum.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiodns/json
--md5  181e11935c78965de2b2b7b0e5efba8d  aiodns-3.0.0.tar.gz
--sha256  946bdfabe743fceeeb093c8a010f5d1645f708a241be849e17edfb0e49e08cd6  aiodns-3.0.0.tar.gz
-+md5  13fdfc38f30c9498e3e23c6f372e40ba  aiodns-3.1.1.tar.gz
-+sha256  1073eac48185f7a4150cad7f96a5192d6911f12b4fb894de80a088508c9b3a99  aiodns-3.1.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aenum/json
+-md5  c0b78a74cdfacc0bf0cbb42785afaed8  aenum-3.1.11.tar.gz
+-sha256  aed2c273547ae72a0d5ee869719c02a643da16bf507c80958faadc7e038e3f73  aenum-3.1.11.tar.gz
++md5  f3fa11cda9ddaaed4d3f03b35f3a65ea  aenum-3.1.15.tar.gz
++sha256  8cbd76cd18c4f870ff39b24284d3ea028fbe8731a58df3aa581e434c575b9559  aenum-3.1.15.tar.gz
  # Locally computed sha256 checksums
- sha256  eb0455d35129425ed399883cd710923de3e246a510e2eb84d9f00032d0bbec97  LICENSE
-diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
-index 2318dcab3a..f5cbb65334 100644
---- a/package/python-aiodns/python-aiodns.mk
-+++ b/package/python-aiodns/python-aiodns.mk
+ sha256  0db837e38002017b352666c83c8d3216ee5b9b2229375eb2cf4487f8c24e1f8c  aenum/LICENSE
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+index 603fc66d0c..27f9e5cea6 100644
+--- a/package/python-aenum/python-aenum.mk
++++ b/package/python-aenum/python-aenum.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIODNS_VERSION = 3.0.0
-+PYTHON_AIODNS_VERSION = 3.1.1
- PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
--PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/27/79/df72e25df0fdd9bf5a5ab068539731d27c5f2ae5654621ae0c92ceca94cf
-+PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/fa/10/4de99e6e67703d8f6b10ea92a4d2a6c5b96a9c0708b75389a00203387925
- PYTHON_AIODNS_SETUP_TYPE = setuptools
- PYTHON_AIODNS_LICENSE = MIT
- PYTHON_AIODNS_LICENSE_FILES = LICENSE
+-PYTHON_AENUM_VERSION = 3.1.11
++PYTHON_AENUM_VERSION = 3.1.15
+ PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
+-PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/63/6c/a71e18de7c651f384b328be6bccadbbd472aca62f547c1a307b9388d03ca
++PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/d0/f8/33e75863394f42e429bb553e05fda7c59763f0fd6848de847a25b3fbccf6
+ PYTHON_AENUM_SETUP_TYPE = setuptools
+ PYTHON_AENUM_LICENSE = BSD-3-Clause
+ PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
