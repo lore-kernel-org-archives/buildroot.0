@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EFF2C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AD69C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B922414E5;
-	Sun,  5 Nov 2023 21:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B922414E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3498241720;
+	Sun,  5 Nov 2023 21:13:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3498241720
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a-pTxJhpybTx; Sun,  5 Nov 2023 21:12:51 +0000 (UTC)
+	with ESMTP id 4HgoKAqNDC4g; Sun,  5 Nov 2023 21:13:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A45241498;
-	Sun,  5 Nov 2023 21:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A45241498
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4596B40994;
+	Sun,  5 Nov 2023 21:13:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4596B40994
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A4D8E1BF488
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B54401BF488
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECBE161050
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECBE161050
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7946361051
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:11:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7946361051
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CPnpKYlP8cX5 for <buildroot@lists.busybox.net>;
+ with ESMTP id 59d9wXylYd2Y for <buildroot@lists.busybox.net>;
  Sun,  5 Nov 2023 21:11:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33C6C61052
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33C6C61052
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04E4E6104E
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04E4E6104E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31DAF868A9; Sun,  5 Nov 2023 21:11:05 +0000 (UTC)
+ id E6E3D868AB; Sun,  5 Nov 2023 21:11:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Nov 2023 22:04:40 +0100
+Date: Sun, 5 Nov 2023 22:01:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9b4efc44fa34d1a2d1191f66590ac8c7e31d70e2
-X-Git-Newrev: b1506a904c9abf8c8d8ed9a4f6f36f2591b7671d
+X-Git-Oldrev: b5fef7a8389d608b3561c85a317ee50a3e51dc51
+X-Git-Newrev: 0547add320d5a3da5ec8d70dfd03b8d3aafb995a
 X-Patchwork-Hint: ignore
-Message-Id: <20231105211105.31DAF868A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-argon2-cffi: bump to
- version 23.1.0
+Message-Id: <20231105211104.E6E3D868AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiohttp: bump to version
+ 3.8.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,58 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1506a904c9abf8c8d8ed9a4f6f36f2591b7671d
+commit: https://git.buildroot.net/buildroot/commit/?id=0547add320d5a3da5ec8d70dfd03b8d3aafb995a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Migrate to new hatchling pep517 build backend.
-
-License hash changed due to adding contributors:
-https://github.com/hynek/argon2-cffi/commit/1133f3c2bafee1501535de5e5531054570438b1d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-argon2-cffi/python-argon2-cffi.hash |  6 +++---
- package/python-argon2-cffi/python-argon2-cffi.mk   | 12 ++++++++----
- 2 files changed, 11 insertions(+), 7 deletions(-)
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-argon2-cffi/python-argon2-cffi.hash b/package/python-argon2-cffi/python-argon2-cffi.hash
-index 09da5855a3..e11195e1e2 100644
---- a/package/python-argon2-cffi/python-argon2-cffi.hash
-+++ b/package/python-argon2-cffi/python-argon2-cffi.hash
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index ec8334b193..35c899cb0f 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/argon2-cffi/json
--md5  b7843e8690c790f8e743d37bb75c25a8  argon2-cffi-21.3.0.tar.gz
--sha256  d384164d944190a7dd7ef22c6aa3ff197da12962bd04b17f64d4e93d934dba5b  argon2-cffi-21.3.0.tar.gz
-+md5  7371c126f21a895b33c4fe7e00ac6fc1  argon2_cffi-23.1.0.tar.gz
-+sha256  879c3e79a2729ce768ebb7d36d4609e3a78a4ca2ec3a9f12286ca057e3d0db08  argon2_cffi-23.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5  4bb59a17563df9a692c64418224ade12  aiohttp-3.8.5.tar.gz
+-sha256  b9552ec52cc147dbf1944ac7ac98af7602e51ea2dcd076ed194ca3c0d1c7d0bc  aiohttp-3.8.5.tar.gz
++md5  bdf57b82c0d1804f458e10320bb0dcd5  aiohttp-3.8.6.tar.gz
++sha256  b0cf2a4501bff9330a8a5248b4ce951851e415bdcce9dc158e76cfd55e15085c  aiohttp-3.8.6.tar.gz
  # Locally computed sha256 checksums
--sha256  bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
-+sha256  b6944d386e87ccf49d9632da083685a4b7624733e686a7fe283dd2d428341d77  LICENSE
-diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
-index 0fb3e50ff3..238271f5f7 100644
---- a/package/python-argon2-cffi/python-argon2-cffi.mk
-+++ b/package/python-argon2-cffi/python-argon2-cffi.mk
-@@ -4,11 +4,15 @@
+ sha256  9f80d0db7d755a941db4572172c270ecbd8f082ba215ddd095985942ed94a9eb  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index 50b8268070..e814fc9224 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ARGON2_CFFI_VERSION = 21.3.0
--PYTHON_ARGON2_CFFI_SOURCE = argon2-cffi-$(PYTHON_ARGON2_CFFI_VERSION).tar.gz
--PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/3f/18/20bb5b6bf55e55d14558b57afc3d4476349ab90e0c43e60f27a7c2187289
--PYTHON_ARGON2_CFFI_SETUP_TYPE = flit
-+PYTHON_ARGON2_CFFI_VERSION = 23.1.0
-+PYTHON_ARGON2_CFFI_SOURCE = argon2_cffi-$(PYTHON_ARGON2_CFFI_VERSION).tar.gz
-+PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/31/fa/57ec2c6d16ecd2ba0cf15f3c7d1c3c2e7b5fcb83555ff56d7ab10888ec8f
-+PYTHON_ARGON2_CFFI_SETUP_TYPE = pep517
- PYTHON_ARGON2_CFFI_LICENSE = MIT
- PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
-+PYTHON_ARGON2_CFFI_DEPENDENCIES = \
-+	host-python-hatchling \
-+	host-python-hatch-fancy-pypi-readme \
-+	host-python-hatch-vcs
- 
- $(eval $(python-package))
+-PYTHON_AIOHTTP_VERSION = 3.8.5
++PYTHON_AIOHTTP_VERSION = 3.8.6
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/d6/12/6fc7c7dcc84e263940e87cbafca17c1ef28f39dae6c0b10f51e4ccc764ee
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/fd/01/f180d31923751fd20185c96938994823f00918ee5ac7b058edc005382406
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
