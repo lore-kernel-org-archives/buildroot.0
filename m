@@ -4,84 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E546C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 05:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28456C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 05:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30F6B81CA3;
-	Sun,  5 Nov 2023 05:45:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30F6B81CA3
+	by smtp1.osuosl.org (Postfix) with ESMTP id D669881F84;
+	Sun,  5 Nov 2023 05:45:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D669881F84
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ImH3vjkQYyIx; Sun,  5 Nov 2023 05:45:11 +0000 (UTC)
+	with ESMTP id hHQ6m4jtIkxc; Sun,  5 Nov 2023 05:45:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F94781CAF;
-	Sun,  5 Nov 2023 05:45:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F94781CAF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E0C21BF5DF
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 05:45:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13FF1820A6;
+	Sun,  5 Nov 2023 05:45:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13FF1820A6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D6901BF5DF
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 05:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6505081CA3
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBA22414C9
  for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 05:45:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6505081CA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBA22414C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9cyvOlMszYtn for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 05:45:06 +0000 (UTC)
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 695F481BF5
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 05:45:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 695F481BF5
-Received: by mail-il1-x136.google.com with SMTP id
- e9e14a558f8ab-35932aa21a3so13325695ab.2
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 22:45:06 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wlh7jd2QkJ4S for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 05:45:08 +0000 (UTC)
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
+ [IPv6:2607:f8b0:4864:20::12b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D5661403AC
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 05:45:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5661403AC
+Received: by mail-il1-x12b.google.com with SMTP id
+ e9e14a558f8ab-3575c10421aso13094635ab.3
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 22:45:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699163105; x=1699767905;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=qaMODkjWWSIqMoiZh6on/5jhGmt+z9LBTyWcVOA6c3E=;
- b=ZNmeGpQlJ1EchH3O5VYQhy4dWOOLyCAvSdeagwfBrp50oZXXgo5I2pB+YNyMj0KZGf
- UDzQyy4weZzWIv76UuNe9LNeencwDy2a6t4r2H49qfR57BN3V8n2zvlcBBwgi1nyUKDa
- 8T92kq6r6AkH/WTLsM7shPx9FhwXs7ownZN27cgc1mo9PqOAKBSFHNx+ww8T5w1mwqsQ
- Eusna9qdyC8lNKTFgZ0vgfNePXmRn91rIqolj49pyk8pRDII7Dkmcy3DSdxL4iBqSB9R
- RLFcyQaal2uGgwacPi/XjYMWEa3JLVWhw+WXs9kEbKd1TO+TyWroIFyY9L9jRJ3kCAxQ
- H7Qg==
-X-Gm-Message-State: AOJu0YzSeA8i/QT2mzR2D/JIFQEDmm87ARw8MFU8PzjDMU7sDu85v5E5
- wubDzeMcuACI0LREFFup2b3cQaXMWX8=
-X-Google-Smtp-Source: AGHT+IEOsXZ3bjdajQgC9ANStbBv4RewAgRfjg29UtMW6M5htjgJo5uUhpQ24JwqTWa/Odfpx/LTcQ==
-X-Received: by 2002:a05:6e02:2143:b0:357:549f:eca2 with SMTP id
- d3-20020a056e02214300b00357549feca2mr35493971ilv.5.1699163104977; 
- Sat, 04 Nov 2023 22:45:04 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1699163106; x=1699767906;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=gvF15LFvBQY84iwNBpu3TLVx/pTBWpdLdbGbdaNvPss=;
+ b=T1HDotw7HyW1w/CK8AvkfEPBGAmvNKye9Neg5A3CwFxIf1Ilmd1MtQQUtGut40/g/q
+ tgWO1DaczqDRWb/wKCoQMbwTxAw9jIu8MLYgaUUEPlpEoia0sHAbqLWsfGCVFIC3uHWO
+ 2m8PXtmQC40fBtNJO4Nsa/WyjDeGTP9k4wrTd0rsbGALvF1Hg8V5GtyVk61FKqyFYuaN
+ IMuSvW8eCfrjBXkm18op0xR+4kOJFgfRdnAkz/PoBe7qyAYyKBJXNJlDbygemnnZAxoy
+ iXRB/wti5uLCUV64yoCMZXghx2wxdZ89qLxVR/hrMBV5qNZpeZQKEwMN2l6BhO3YQ9et
+ qPXQ==
+X-Gm-Message-State: AOJu0YxNS1p1ulKn6O9UGIfNcQRXlOiu0sFhWZQ1AA40Nf2JlAXZrFuC
+ UjjzWcXKjZPq0Tz3mW4kuUuWvreUur8=
+X-Google-Smtp-Source: AGHT+IEZGdCkac1XP+rce32A/YZcESvIWCkwRk4T4P873p9/iXGSve6W3YYpxxod8SUuM8nWt+//dA==
+X-Received: by 2002:a05:6e02:1bac:b0:357:fb77:63bf with SMTP id
+ n12-20020a056e021bac00b00357fb7763bfmr34825186ili.24.1699163106540; 
+ Sat, 04 Nov 2023 22:45:06 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- v2-20020a056e0213c200b0034e28740e35sm1675313ilj.78.2023.11.04.22.45.04
+ v2-20020a056e0213c200b0034e28740e35sm1675313ilj.78.2023.11.04.22.45.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Nov 2023 22:45:04 -0700 (PDT)
+ Sat, 04 Nov 2023 22:45:05 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 23:44:59 -0600
-Message-Id: <20231105054502.2846404-1-james.hilliard1@gmail.com>
+Date: Sat,  4 Nov 2023 23:45:00 -0600
+Message-Id: <20231105054502.2846404-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231105054502.2846404-1-james.hilliard1@gmail.com>
+References: <20231105054502.2846404-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699163105; x=1699767905; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qaMODkjWWSIqMoiZh6on/5jhGmt+z9LBTyWcVOA6c3E=;
- b=D6j7wNlHzrfavFUj1SSRP1UYzAjlKN2D21yQ+bybI9ruHSyY6jlo3qKBzwf1oAEia9
- kDqIRvDsXRguCsSEr/l5Ax2Tb3Vwlt/p9CClrov6AiSCYMeZg3cPyIgkNBufYTkvm0hO
- zDc6KvdmMVG8gCmTj2znBOq4AX8Y2YwGjDrxIJDYFQ8bsOUKi1SYVOPdYdcYFD+1BbRK
- zvaqiC7LCplmD2P++q7kGXbPjF4vr7o0qmP9tPJLQjqerCnGpegAj3QHkm5MVIbrQdht
- 8ft3ftFYWVGcqDzEKbmnxrg4ZdY5548WTjbIqu90skjBAgIyqbMxfFPBCI7xVQAldqyz
- 2FLQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1699163106; x=1699767906; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gvF15LFvBQY84iwNBpu3TLVx/pTBWpdLdbGbdaNvPss=;
+ b=Vp/T911cUW4MvcgQRGeSOQZHiyl7bZXaZqOKSQ0iKccz3+QN9FupcCacL8aMv4b6dc
+ B9+x/Fev+koju094hMcAsmrGTmUgBnnAuE75ZKddmjtgw7+KJfSNoh9N7mBSyWWf/FWh
+ MaF3Do+YYpT69iQgenUsV2/zEZJGJ3I4yM6ozZ/9aa5BjpIiRwPAwgYYKpoPW27nhaji
+ XpNSXBP+Lz8VeaQLIJJaX5oVx/tRIdcOyYMuaz/MBOFj6SR9KbhdFL3/nzctL0B2QQAx
+ Hydhmlhi2s8aIhW3PnqPR4lRadQOyXSCI3OFpRT+yL5QlGv3NLaNnzOMtFIEsLly6oGJ
+ s8SQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=D6j7wNlH
-Subject: [Buildroot] [PATCH 1/4] package/python-calver: new host package
+ header.a=rsa-sha256 header.s=20230601 header.b=Vp/T911c
+Subject: [Buildroot] [PATCH 2/4] package/python-trove-classifiers: new host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,41 +106,42 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-calver/python-calver.hash |  5 +++++
- package/python-calver/python-calver.mk   | 14 ++++++++++++++
- 2 files changed, 19 insertions(+)
- create mode 100644 package/python-calver/python-calver.hash
- create mode 100644 package/python-calver/python-calver.mk
+ .../python-trove-classifiers.hash                 |  5 +++++
+ .../python-trove-classifiers.mk                   | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+)
+ create mode 100644 package/python-trove-classifiers/python-trove-classifiers.hash
+ create mode 100644 package/python-trove-classifiers/python-trove-classifiers.mk
 
-diff --git a/package/python-calver/python-calver.hash b/package/python-calver/python-calver.hash
+diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
 new file mode 100644
-index 0000000000..ebc054e617
+index 0000000000..26b813eded
 --- /dev/null
-+++ b/package/python-calver/python-calver.hash
++++ b/package/python-trove-classifiers/python-trove-classifiers.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/calver/json
-+md5  e1fd924b9bf953c0b28c49bdfe117d7a  calver-2022.6.26.tar.gz
-+sha256  e05493a3b17517ef1748fbe610da11f10485faa7c416b9d33fd4a52d74894f8b  calver-2022.6.26.tar.gz
++# md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
++md5  2afa6925489403b8025a1b66d990e760  trove-classifiers-2023.10.18.tar.gz
++sha256  2cdfcc7f31f7ffdd57666a9957296089ac72daad4d11ab5005060e5cd7e29939  trove-classifiers-2023.10.18.tar.gz
 +# Locally computed sha256 checksums
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-calver/python-calver.mk b/package/python-calver/python-calver.mk
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
 new file mode 100644
-index 0000000000..2fd5468ed4
+index 0000000000..d0d79d297c
 --- /dev/null
-+++ b/package/python-calver/python-calver.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-trove-classifiers/python-trove-classifiers.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-calver
++# python-trove-classifiers
 +#
 +################################################################################
 +
-+PYTHON_CALVER_VERSION = 2022.6.26
-+PYTHON_CALVER_SOURCE = calver-$(PYTHON_CALVER_VERSION).tar.gz
-+PYTHON_CALVER_SITE = https://files.pythonhosted.org/packages/b5/00/96cbed7c019c49ee04b8a08357a981983db7698ae6de402e57097cefc9ad
-+PYTHON_CALVER_SETUP_TYPE = setuptools
-+PYTHON_CALVER_LICENSE = Apache-2.0
-+PYTHON_CALVER_LICENSE_FILES = LICENSE
++PYTHON_TROVE_CLASSIFIERS_VERSION = 2023.10.18
++PYTHON_TROVE_CLASSIFIERS_SOURCE = trove-classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
++PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/5b/fa/49b6a09e4f389d4d9406d2947a685de1462ffb676ea6e61c50905e27b0f4
++PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
++PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
++PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
++HOST_PYTHON_TROVE_CLASSIFIERS_DEPENDENCIES = host-python-calver
 +
 +$(eval $(host-python-package))
 -- 
