@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09711C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 18:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94444C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 18:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CEC2820C7;
-	Sun,  5 Nov 2023 18:14:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CEC2820C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 378BF820CB;
+	Sun,  5 Nov 2023 18:16:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 378BF820CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5D3YdfFeEtBF; Sun,  5 Nov 2023 18:14:13 +0000 (UTC)
+	with ESMTP id h3GEL_UcBaCU; Sun,  5 Nov 2023 18:16:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A759820C8;
-	Sun,  5 Nov 2023 18:14:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A759820C8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51E49820C9;
+	Sun,  5 Nov 2023 18:16:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51E49820C9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 945671BF4D6
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:14:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 521C91BF4D6
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C6F3820C8
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:14:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C6F3820C8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37A02820C9
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:16:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37A02820C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OYuzsM5A3T9p for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 18:14:09 +0000 (UTC)
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A9155820C7
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 18:14:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9155820C7
-Received: by mail-lj1-x231.google.com with SMTP id
- 38308e7fff4ca-2c5071165d5so50568701fa.0
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 10:14:08 -0800 (PST)
+ with ESMTP id 0KkEJ3rOIsDd for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 18:16:10 +0000 (UTC)
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com
+ [IPv6:2607:f8b0:4864:20::d41])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2B177820C8
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 18:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B177820C8
+Received: by mail-io1-xd41.google.com with SMTP id
+ ca18e2360f4ac-7a93df91813so140125539f.2
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 10:16:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699208045; x=1699812845;
+ d=1e100.net; s=20230601; t=1699208168; x=1699812968;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zXxzbBzcbsrXFUqDJFZeThRIgtHFSd3/UMbMXENIrTQ=;
- b=kTNTZA5Bc2ugx/NaFPJmP39c4AcKz1BSeUFLUf7g7he5o+fQo5/oXiQXH5BfJYKof8
- 641MxuuTh8YzEi303FW+vYlALU2hSGz3jCIXtTtx53bjDc19L9OItCG/+/uYA/SFVnn5
- f+H/ICTkyVKT+nCHeuvB3KwLdvJ3NvkQ+5E6zYctKzvymwQjpws8oDBV8rELvX+5hrnA
- e4KTRa9vgBII/eH2MxJA17pR8+Ni8LqkJ5beiFKvG2bOKt+dseK92G91cTi/KTmIWoAT
- a2HWsVZWn5L1n7tRdiQ8aQfrMGLXkcqDA9dlY0RUhPp2mSvEC9nyW/rUkgUR2G18c1O1
- /twg==
-X-Gm-Message-State: AOJu0Yzy49+vHGM6YFSAqvf8bepgXquSOAo5Hvz4hrqmHqDd13qIx5PZ
- ljnbFaXd1HhmeUq6zWIvXn291u9xjt8=
-X-Google-Smtp-Source: AGHT+IHYiARtVAdE6H9gKS2NVM4Sctuhp6JKpBZG+6H0AtXScQO/zg7HjND5+3VscK3lVabs4n/qpA==
-X-Received: by 2002:ac2:5103:0:b0:507:b0f7:ec92 with SMTP id
- q3-20020ac25103000000b00507b0f7ec92mr17676035lfb.59.1699208045178; 
- Sun, 05 Nov 2023 10:14:05 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- a18-20020a5d5092000000b0032d8354fb43sm7368169wrt.76.2023.11.05.10.14.04
+ bh=GyU45zLPS8CE+kjvPlTeEzyCb6orYipQhyZ/hJ0YyIg=;
+ b=wQGxOIcHOlqxEJAE1a+tQ9w8lfYMO3e7/waJVxu3lwptkf/kkpLetFb2E46887eZk2
+ 5W1vF2b24Clk2zoEQ0OgQhil9O4jq81UjPN7fH7CxRu8OA6qaT/eLxfa7GIIMRMo2oYc
+ Zyv30ZuRCnvYtXKOLNTT9u627ftFZyrW38pSQtY692RqsKkebU9ggaHzl2x+el5N76kn
+ J25+9gc9ndMEHEmOCdrRrilSKNpWu2MStbR66nkqF6AGcJxff9yoabo6pMV50LT4/ILV
+ stGP4svdgHn8BuNvW91yWrmRi47utRWThkFpujwslYaQLIDOupQoapz3MsRQy4kgSxw/
+ rFvA==
+X-Gm-Message-State: AOJu0YxFU1Lsmq21kKq4C+qfJ49gfob9/nNUhVN2BvpcVp/3DG5ac0j5
+ AUJBNQhwjbcs/zEsz+ouzjJDSIA8N1fM1aybI2GWrzPCejg=
+X-Google-Smtp-Source: AGHT+IHUECbKlZndPJ7Ypa/tpMvoYEDZB8gJc3cYzqrjWjO5UNEMt0l9vhgXHEOO55mQFaGXb0jhgA==
+X-Received: by 2002:a05:6e02:2485:b0:359:439b:f25d with SMTP id
+ bt5-20020a056e02248500b00359439bf25dmr15343329ilb.24.1699208168307; 
+ Sun, 05 Nov 2023 10:16:08 -0800 (PST)
+Received: from DESKTOP-OI0KN2B.lan ([172.56.201.196])
+ by smtp.gmail.com with ESMTPSA id
+ o3-20020a62cd03000000b00686b649cdd0sm4492523pfg.86.2023.11.05.10.16.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 10:14:04 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sun, 05 Nov 2023 10:16:07 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 19:14:00 +0100
-Message-ID: <20231105181400.472991-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+Date: Sun,  5 Nov 2023 11:16:04 -0700
+Message-ID: <20231105181605.8687-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699208045; x=1699812845; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1699208168; x=1699812968;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zXxzbBzcbsrXFUqDJFZeThRIgtHFSd3/UMbMXENIrTQ=;
- b=HpiTVrJifaQ+ykbFpkSEX9r4r+a+aJDgLu+BsxAikIVGEIhJJ2qy1cdhTUou6mYR2e
- m9QG9gMEF3Nu24wYplrnU79yq2Qz4zCkBOYU4i/DlN+4s4VsIig6N85WMOgEmAaFxGW8
- hfeZv829CHbgbat/U1+tHWOhz8hX9QOzxKJdLBKoarWBA/lV4BGdf9kUTjgZe3L/YJA5
- 8XRn6gopT3hHUK+eBuaTqLrb+jK/URN4Qc8PzCw9lxS21EQ3ubj3RoS5iAn9vZqs8D8W
- EiixG0c1BNEP0mwKGk33jeZTXtyenckNWqeEAkSwMz25xHI8iRMmRbt/KAjmM/Sdky7a
- qPkA==
+ bh=GyU45zLPS8CE+kjvPlTeEzyCb6orYipQhyZ/hJ0YyIg=;
+ b=l8KrfKFFZ37JoI9uK+BEmw7sp00ljZ9+6ckas7uph5l3zYalIB/ALjHFWAyllCmUS/
+ 9egUDZeWcDYEPPc/wP5JnoHzRAf2uo0y2PegFhPM2QTVBSgbgKropG5kHEc6J1GXpZ9d
+ X6KN15HgqORhhQfo05OogUtzPSq0K8lKz4mrE=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HpiTVrJi
-Subject: [Buildroot] [PATCH 1/1] package/vde2: bump to version 2.3.3
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=l8KrfKFF
+Subject: [Buildroot] [PATCH v2 1/2] package/flutter-pi: bump version to
+ 8f4e9726a18b32822b6e7faf19c044f88bded570
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,263 +93,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Switch to github to get latest release
-- Drop first and second patches (already in version)
-- Drop third patch (not needed anymore)
-- Drop BSD-3-Clause and COPYING.slirpvde (slirpvde removed with
-  https://github.com/virtualsquare/vde-2/commit/eda0a1bc1d14061588459676fe6f0a048b7dbd1c
-  https://github.com/virtualsquare/vde-2/commit/14e1c9e06f4dbdddc6fe4e85fc72a1d583b049ad)
-- python removed with
-  https://github.com/virtualsquare/vde-2/commit/2c57c25075fa2d351b8f181d2764af61c4e47de0
-- kernel switch removed with
-  https://github.com/virtualsquare/vde-2/commit/b196ecd5b774f1c85041ce6d2334702911cbd8f3
-- parallel build has been fixed with
-  https://github.com/virtualsquare/vde-2/commit/7dd9ed46d5dca125ca45d679ac9f3acbfb0f9300
+- Drop upstream 0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
+- Disable new charset converter plugin.
 
-https://github.com/virtualsquare/vde-2/releases/tag/v2.3.3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- .checkpackageignore                           |  3 --
- package/vde2/0001-no-cxx.patch                | 22 ----------
- ...-fstp-Add-static-to-inline-functions.patch | 44 -------------------
- ...de_l3-Add-static-to-inline-functions.patch | 37 ----------------
- package/vde2/Config.in                        |  2 +-
- package/vde2/vde2.hash                        |  3 +-
- package/vde2/vde2.mk                          | 22 +++-------
- 7 files changed, 7 insertions(+), 126 deletions(-)
- delete mode 100644 package/vde2/0001-no-cxx.patch
- delete mode 100644 package/vde2/0002-fstp-Add-static-to-inline-functions.patch
- delete mode 100644 package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
+v1 -> v2: Replace sha256sum due to tar 1.35 in F39. [Thomas]
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2d921d6f0b..b1adb4e674 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1414,9 +1414,6 @@ package/vboot-utils/0004-Disable-static-futility.patch Upstream
- package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch Upstream
- package/vboot-utils/0006-Update-for-openssl-1.1.patch Upstream
- package/vboot-utils/0007-Make-vboot_version-extern-in-header.patch Upstream
--package/vde2/0001-no-cxx.patch Upstream
--package/vde2/0002-fstp-Add-static-to-inline-functions.patch Upstream
--package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch Upstream
- package/vdr/0001-getloadavg.patch Upstream
- package/vlc/0001-Disable-building-of-statically-linked-vlc-binary.patch Upstream
- package/vlc/0002-automake-add-subdir-objects-option.patch Upstream
-diff --git a/package/vde2/0001-no-cxx.patch b/package/vde2/0001-no-cxx.patch
+ ...er_surface-properly-fallback-to-surf.patch | 59 -------------------
+ package/flutter-pi/flutter-pi.hash            |  2 +-
+ package/flutter-pi/flutter-pi.mk              |  3 +-
+ 3 files changed, 3 insertions(+), 61 deletions(-)
+ delete mode 100644 package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
+
+diff --git a/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch b/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
 deleted file mode 100644
-index 67cefa2bb8..0000000000
---- a/package/vde2/0001-no-cxx.patch
+index 7a1a49b3d4..0000000000
+--- a/package/flutter-pi/0001-src-egl_gbm_render_surface-properly-fallback-to-surf.patch
 +++ /dev/null
-@@ -1,22 +0,0 @@
--configure: do not test for CXX, it's not needed
+@@ -1,59 +0,0 @@
+-From 856f9849763535d62ed01b538ba23905875c93f4 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Tue, 26 Sep 2023 20:31:17 +0200
+-Subject: [PATCH] src/egl_gbm_render_surface: properly fallback to surface with
+- no modifier
 -
--There is no C++ source file, so no reason to require a C++ compiler.
+-In 869fa7fcfbeb, we added a fallback to be able to create an EGL sruface
+-when the driver do not support modifiers, like the llvmpipe software
+-renderer (or like some proprietary drivers, like the MALI ones), as
+-reported in #269 [0].
 -
--Reported-by: Peter Korsgaard <jacmet@uclibc.org>
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-However, in c6537673c9b6, there was a big overhaul of renderer
+-infrastructure. That commit lost the with-modifiers code path and only
+-kept the without-modifiers fallback one (i.e. it only kept the call to
+-gbm_surface_create(), not to gbm_surface_create_with_modifiers()).
 -
+-Then in b0d09f5032a4, the with-modifier code path was re-instated, but
+-in a way that made it exclusive with the without-modifiers one. That is,
+-the without-modifiers code path was not a fallback to when the other
+-failed.
+-
+-Re-instate the fallback mechanism as intiially implemented.
+-
+-[0] https://github.com/ardera/flutter-pi/issues/269
+-
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Upstream: https://github.com/ardera/flutter-pi/pull/367
 ----
--Patch sent upstream
--( not yet in archives, awaits moderator approval... :-/ )
+- src/egl_gbm_render_surface.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
 -
--diff -durN vde2-2.3.2.orig/configure.ac vde2-2.3.2/configure.ac
----- vde2-2.3.2.orig/configure.ac	2011-11-23 17:41:19.000000000 +0100
--+++ vde2-2.3.2/configure.ac	2012-12-14 21:56:47.146319686 +0100
--@@ -11,7 +11,6 @@
-- AC_CONFIG_LIBOBJ_DIR(src/common)
+-diff --git a/src/egl_gbm_render_surface.c b/src/egl_gbm_render_surface.c
+-index ce9e5e7..8a58667 100644
+---- a/src/egl_gbm_render_surface.c
+-+++ b/src/egl_gbm_render_surface.c
+-@@ -146,6 +146,7 @@ static int egl_gbm_render_surface_init(
+-     }
+- #endif
 - 
-- # Checks for programs.
---AC_PROG_CXX
-- AC_PROG_CC
-- AC_PROG_INSTALL
-- AC_PROG_LN_S
-diff --git a/package/vde2/0002-fstp-Add-static-to-inline-functions.patch b/package/vde2/0002-fstp-Add-static-to-inline-functions.patch
-deleted file mode 100644
-index 0dbe083d06..0000000000
---- a/package/vde2/0002-fstp-Add-static-to-inline-functions.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 67bc8443ac7e8144a78d84dee30a5cac3b5c99a4 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sun, 27 Aug 2017 23:56:05 +0200
--Subject: [PATCH] fstp: Add static to inline functions
--
--From [1]
--"This is needed to avoid a link error where the inline functions appear
--missing at link time.
--From c99 standard inline function should either be declared static or
--have an extern instance in a c file for linking.
--This fix is necessary to build with gcc 7; for some reason it was not
--trigerred before."
--
--[1] https://git.buildroot.net/buildroot/commit/?id=21133ada326c87627f7bdee4493d8086587c3cca
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- src/vde_switch/fstp.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/vde_switch/fstp.c b/src/vde_switch/fstp.c
--index aab7324..b1e7ee8 100644
----- a/src/vde_switch/fstp.c
--+++ b/src/vde_switch/fstp.c
--@@ -30,14 +30,14 @@ static int numports;
-- #ifdef FSTP
-- #include <fstp.h>
-- /*********************** sending macro used by FSTP & Core ******************/
---void inline ltonstring(unsigned long l,unsigned char *s) {
--+static void inline ltonstring(unsigned long l,unsigned char *s) {
-- 	s[3]=l; l>>=8;
-- 	s[2]=l; l>>=8;
-- 	s[1]=l; l>>=8;
-- 	s[0]=l;
-- }
-- 
---unsigned long inline nstringtol(unsigned char *s) {
--+static unsigned long inline nstringtol(unsigned char *s) {
-- 	return (s[0]<<24)+(s[1]<<16)+(s[2]<<8)+s[3];
-- }
-- 
+-+    gbm_surface = NULL;
+-     if (allowed_modifiers != NULL) {
+-         gbm_surface = gbm_surface_create_with_modifiers(
+-             gbm_device,
+-@@ -158,9 +159,10 @@ static int egl_gbm_render_surface_init(
+-         if (gbm_surface == NULL) {
+-             ok = errno;
+-             LOG_ERROR("Couldn't create GBM surface for rendering. gbm_surface_create_with_modifiers: %s\n", strerror(ok));
+--            return ok;
+-+            LOG_ERROR("Will retry without modifiers\n");
+-         }
+--    } else {
+-+    }
+-+    if (gbm_surface == NULL) {
+-         gbm_surface = gbm_surface_create(
+-             gbm_device,
+-             size.x,
 --- 
--2.9.5
+-2.25.1
 -
-diff --git a/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch b/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
-deleted file mode 100644
-index 7f771dfc7e..0000000000
---- a/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--vde_l3: Add static to inline functions
--
--Add static to inline functions to avoid the following build failure
--with BR2_OPTIMIZE_0:
--
--/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/mips64-buildroot-linux-uclibc/10.3.0/../../../../mips64-buildroot-linux-uclibc/bin/ld: vde_l3.o: in function `ip_output_ready':
--vde_l3.c:(.text+0xb30): undefined reference to `iphead'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/5eeefcdac0b8974a424a885fdc2e82f7cb4b617d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--
--diff -Nura vde2-2.3.2.orig/src/vde_l3/vde_l3.c vde2-2.3.2/src/vde_l3/vde_l3.c
----- vde2-2.3.2.orig/src/vde_l3/vde_l3.c	2022-04-21 11:05:17.393452698 +0200
--+++ vde2-2.3.2/src/vde_l3/vde_l3.c	2022-04-21 11:10:36.509804404 +0200
--@@ -100,17 +100,17 @@
-- };
-- 
-- 
---inline struct vde_ethernet_header *ethhead(struct vde_buff *vdb)
--+static inline struct vde_ethernet_header *ethhead(struct vde_buff *vdb)
-- {
-- 	return (struct vde_ethernet_header*)(vdb->data);
-- }
-- 
---inline struct iphdr *iphead(struct vde_buff *vdb)
--+static inline struct iphdr *iphead(struct vde_buff *vdb)
-- {
-- 	return (struct iphdr*)(vdb->data + 14);
-- }
-- 
---inline void *payload(struct vde_buff *vdb)
--+static inline void *payload(struct vde_buff *vdb)
-- {
-- 	return (uint8_t*)(vdb->data + 14 + sizeof(struct iphdr));
-- }
-diff --git a/package/vde2/Config.in b/package/vde2/Config.in
-index f640a4ae2a..44bdf50de0 100644
---- a/package/vde2/Config.in
-+++ b/package/vde2/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_VDE2
- 	  spawned over a set of physical computers over the Internet.
- 	  VDE is part of the virtualsquare project.
- 
--	  http://vde.sourceforge.net/
-+	  https://github.com/virtualsquare/vde-2/
- 
- comment "vde2 needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
-diff --git a/package/vde2/vde2.hash b/package/vde2/vde2.hash
-index a9e1ea2263..11d6a28279 100644
---- a/package/vde2/vde2.hash
-+++ b/package/vde2/vde2.hash
-@@ -1,5 +1,4 @@
- # Locally computed:
--sha256  cbea9b7e03097f87a6b5e98b07890d2275848f1fe4b9fcda77b8994148bc9542  vde2-2.3.2.tar.bz2
-+sha256  a7d2cc4c3d0c0ffe6aff7eb0029212f2b098313029126dcd12dc542723972379  vde2-2.3.3.tar.gz
- sha256  fb295d0c24b8ef4b39017ac68e772e8e6e839612ce10da12b9f48d1e8e512e2e  COPYING
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.libvdeplug
--sha256  d5ac74315b2d2f9c53f5839e311484f4646a9401b68d02d36f3dab386352e74d  COPYING.slirpvde
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
-index 76d6f352b7..61c19c1ee2 100644
---- a/package/vde2/vde2.mk
-+++ b/package/vde2/vde2.mk
-@@ -4,24 +4,21 @@
+diff --git a/package/flutter-pi/flutter-pi.hash b/package/flutter-pi/flutter-pi.hash
+index f7148963a4..7facac1a9b 100644
+--- a/package/flutter-pi/flutter-pi.hash
++++ b/package/flutter-pi/flutter-pi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e4af79c8f53c15913f52a83a221f099a2a750d023a0bc4560d0db6f15def79a2  flutter-pi-d62e84350d2869b3ec1dfb1af21bfe234c4b817f-br1.tar.gz
++sha256  e76b06bb5e93546b16c85f1f9e01c71a550cb05909e16b67eb0b03690ea38e6f  flutter-pi-8f4e9726a18b32822b6e7faf19c044f88bded570-br1.tar.gz
+ sha256  b34df9d3e1b4e5d1ba70b1740ec74b69f1189b44efd0c96b898b074ef8db1c70  LICENSE
+diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
+index 27f140c177..491c074e13 100644
+--- a/package/flutter-pi/flutter-pi.mk
++++ b/package/flutter-pi/flutter-pi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VDE2_VERSION = 2.3.2
--VDE2_SOURCE = vde2-$(VDE2_VERSION).tar.bz2
--VDE2_SITE = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
--VDE2_LICENSE = GPL-2.0+, LGPL-2.1+, BSD-3-Clause
--VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug COPYING.slirpvde
-+VDE2_VERSION = 2.3.3
-+VDE2_SITE = $(call github,virtualsquare,vde-2,v$(VDE2_VERSION))
-+VDE2_LICENSE = GPL-2.0+, LGPL-2.1+
-+VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug
- VDE2_CPE_ID_VENDOR = vde_project
- VDE2_CPE_ID_PRODUCT = vde
- VDE2_INSTALL_STAGING = YES
- 
--# We touch configure.ac, so we need to autoreconf
-+# From git
- VDE2_AUTORECONF = YES
- 
- # Reasons for enabling/disabling stuff:
- # - tuntap is enabled in the hope we're using a recent-enough toolchain
- #   that does have if_tun.h (virtually everything these days)
--# - kvde_switch is disabled because it requires a patched kernel
- # - cryptcab is disabled to not depend on openSSL
--# - python is disabled to not depend on Python
- # - pcap is disabled to not depend on libpcap
- # - profiling is disabled because we do not want to debug/profile
- #
-@@ -30,25 +27,16 @@ VDE2_AUTORECONF = YES
- VDE2_CONF_OPTS = \
- 	--disable-cryptcab \
- 	--disable-experimental \
--	--disable-kernel-switch \
- 	--disable-pcap \
- 	--disable-profile \
--	--disable-python \
- 	--enable-tuntap
- 
--# Package does not build in parallel due to improper make rules
--VDE2_MAKE = $(MAKE1)
--
- HOST_VDE2_CONF_OPTS = \
- 	--disable-cryptcab \
- 	--disable-experimental \
--	--disable-kernel-switch \
- 	--disable-pcap \
- 	--disable-profile \
--	--disable-python \
- 	--enable-tuntap
- 
--HOST_VDE2_MAKE = $(MAKE1)
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-FLUTTER_PI_VERSION = d62e84350d2869b3ec1dfb1af21bfe234c4b817f
++FLUTTER_PI_VERSION = 8f4e9726a18b32822b6e7faf19c044f88bded570
+ FLUTTER_PI_SITE = https://github.com/ardera/flutter-pi.git
+ FLUTTER_PI_SITE_METHOD = git
+ FLUTTER_PI_LICENSE = MIT
+@@ -27,6 +27,7 @@ FLUTTER_PI_CONF_OPTS = \
+ 	-DENABLE_VULKAN=OFF \
+ 	-DFILESYSTEM_LAYOUT=meta-flutter \
+ 	-DLINT_EGL_HEADERS=OFF \
++	-DBUILD_CHARSET_CONVERTER_PLUGIN=OFF \
+ 	-DTRY_BUILD_GSTREAMER_AUDIO_PLAYER_PLUGIN=OFF \
+ 	-DTRY_BUILD_GSTREAMER_VIDEO_PLAYER_PLUGIN=OFF \
+ 	-DTRY_ENABLE_OPENGL=OFF \
 -- 
-2.42.0
+2.41.0
 
 _______________________________________________
 buildroot mailing list
