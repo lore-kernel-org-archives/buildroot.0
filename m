@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AF2EC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 20:29:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5023EC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 20:30:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFAB840A6F;
-	Sun,  5 Nov 2023 20:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFAB840A6F
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECA8540A71;
+	Sun,  5 Nov 2023 20:30:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA8540A71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IUGs1by2h-8F; Sun,  5 Nov 2023 20:29:50 +0000 (UTC)
+	with ESMTP id ukJ7vtibLmXq; Sun,  5 Nov 2023 20:30:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D34040A90;
-	Sun,  5 Nov 2023 20:29:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D34040A90
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CAB271BF48C
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 20:26:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CAC5240A98;
+	Sun,  5 Nov 2023 20:30:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAC5240A98
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 334031BF48C
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 20:26:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3DD28200D
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 20:26:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3DD28200D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18CD1418A9
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 20:26:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18CD1418A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ey_yBBRlyxE3 for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 20:26:23 +0000 (UTC)
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com
- [IPv6:2607:f8b0:4864:20::643])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA67B81F90
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 20:26:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA67B81F90
-Received: by mail-pl1-x643.google.com with SMTP id
- d9443c01a7336-1cc1ee2d8dfso34387365ad.3
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 12:26:23 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QWCej0VczZ4W for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 20:26:25 +0000 (UTC)
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com
+ [IPv6:2607:f8b0:4864:20::641])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 39E10418A8
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 20:26:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E10418A8
+Received: by mail-pl1-x641.google.com with SMTP id
+ d9443c01a7336-1ccce410660so2339605ad.3
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 12:26:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699215982; x=1699820782;
+ d=1e100.net; s=20230601; t=1699215984; x=1699820784;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=iJcB4OzaDiKOsPoE0DgipAcQyYeyl+enQ02uWVCOnDw=;
- b=IsMF3mDuEwZ8n7DX/b2KbsM/eBv28yfi720vT4pe3hyk6e6qCndYFnqPz6weOLCtTX
- H+tGGgBaEyU5UjSp7iN+U4plwXaxwiT6LQWewb5YiS9Fg1dNr8/SnRcJk6mIM2vA0lPt
- 2bqle89YSQjxCPizP/oTenhtcV14MJ/8GO/WoE3FIh+M/sriwi9W//Sufkl3DHQvD4ih
- O0s7P/rvgrjbPXVFwEvfgito6fYNYnEutl1O2v5Zmuff6of82ZIOs4dlEfjy40kzj+nF
- yGTnFUHLy6N+oHFUmInHTgz9p7MbTXowgoo129BCPCFeIklo63K0rRSzrUHlsHpD9Ez6
- 8BLw==
-X-Gm-Message-State: AOJu0YzZKaNg4caRb1kKVZnQiw5gYDdJrfrx4l/MpymewMQiFrzWg2RS
- QUV9S+jFnh13InHrH3K7jt2REJLCQJ3Ju6qzkrYZ/iUdpp8=
-X-Google-Smtp-Source: AGHT+IHMt9oFjK4rXPoRTImBsIPI3lrRzsj+3fw22ik09UN4JGcHb9YLNmDTvnKiVywHHgFW7dM3eQ==
-X-Received: by 2002:a17:902:d3cc:b0:1cc:9781:4785 with SMTP id
- w12-20020a170902d3cc00b001cc97814785mr9829717plb.50.1699215982479; 
- Sun, 05 Nov 2023 12:26:22 -0800 (PST)
+ bh=zOpc08pVuC5MIPxbSieQtPdFcjGIpbNb2LoGlWHzlvI=;
+ b=BxiblPrc0I++th2wxD4jXIrkqDHCKNihSbtXbGWOgHammzIsANQtIzCG2JrVWyEZab
+ h7nMCNosdNxyQgaRZi7F16vKCGAt91lE8n1IbPrpF1gClRcuRceQ4EsK5mx3Bo1qZdwz
+ hqz4vZjhqnIFjQlogNcRHSDNIaSKxQZzAnOXiKJO+J4oR5YC8BzuTYX4dQl8AEAI4mc8
+ DS2qIqsNySns2xrwmWhYl1SwaUYxTGmAV31CiXBuyNUf9bfC1FzZzWu50pb82bmq5ov5
+ eb6yFXtJkCVsZTLLS//oaPsp6lqLN5+G1VELFpqyAN5qRLllakCGyMC6C1PSHmNMl68Y
+ v3Og==
+X-Gm-Message-State: AOJu0YxNMb4mccwDDIodcbjH8CLhh2cI16g6dap8vzZNn8JaCskGc8Az
+ qHrfqj88VeXPar9t/gUm9M9TyI1sIAeHcn6LeUTCO0vioiA=
+X-Google-Smtp-Source: AGHT+IGnYDzt6cULBLOVkoM9snbOEnhY1QH6JD/C15I/BXB7XSZXl/Xgfb02ot5ikltc+IrUlgpm8A==
+X-Received: by 2002:a17:902:ea0e:b0:1cc:47a6:12bf with SMTP id
+ s14-20020a170902ea0e00b001cc47a612bfmr18808865plg.47.1699215983928; 
+ Sun, 05 Nov 2023 12:26:23 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.201.196])
  by smtp.gmail.com with ESMTPSA id
- z20-20020a170902ee1400b001c735421215sm4478175plb.216.2023.11.05.12.26.21
+ z20-20020a170902ee1400b001c735421215sm4478175plb.216.2023.11.05.12.26.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 12:26:21 -0800 (PST)
+ Sun, 05 Nov 2023 12:26:23 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 13:25:47 -0700
-Message-ID: <20231105202555.359391-16-adam.duskett@amarulasolutions.com>
+Date: Sun,  5 Nov 2023 13:25:48 -0700
+Message-ID: <20231105202555.359391-17-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231105202555.359391-1-adam.duskett@amarulasolutions.com>
 References: <20231105202555.359391-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1699215982; x=1699820782;
+ d=amarulasolutions.com; s=google; t=1699215984; x=1699820784;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=iJcB4OzaDiKOsPoE0DgipAcQyYeyl+enQ02uWVCOnDw=;
- b=gdcVztHVvMyKQ9pBEi+ZTbilY8JRZc5q4sfL5kdSvTh34ZG9QqTbHOapssuSPw1kyZ
- JYsclK6GNK7Atn2IGQJWRyB6Qg0dTyORkP1Y2RJnFeNlArDcuFnmBNmth+cBbXDKUN63
- Vs9ZtkvjcCuhdQl685U0THuuhEDei6NnwSxiI=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=zOpc08pVuC5MIPxbSieQtPdFcjGIpbNb2LoGlWHzlvI=;
+ b=cDVXIc8OYP3FBST3VgsbGKId0MSkObhNFfrX7SdmOcW4gKyAkGx4NTK4vFx5YmUR0B
+ u6tCVEACdNSFSAK5Gfl7EdUNP03YunKsiHhfrbFLDamafMQ2U/LPqoCpePT+sCIdNvyA
+ HKPVMOpfvti4WVlgYLVmMXDmAzphCzqOuYC20=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=gdcVztHV
-Subject: [Buildroot] [PATCH v2 16/24] package/python-versioneer: new package
+ header.b=cDVXIc8O
+Subject: [Buildroot] [PATCH v2 17/24] package/python-constantly: bump
+ version to 23.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,63 +104,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Used with the latest version of python-constantly. It is only needed as a
-host package.
+This package now requires host-python-versioneer to build.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-v1 -> v2: Add this package
+v1 -> v2: Bump the package instead of patching.
 
- DEVELOPERS                                       |  1 +
- package/python-versioneer/python-versioneer.hash |  5 +++++
- package/python-versioneer/python-versioneer.mk   | 14 ++++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/python-versioneer/python-versioneer.hash
- create mode 100644 package/python-versioneer/python-versioneer.mk
+ package/python-constantly/python-constantly.hash | 4 ++--
+ package/python-constantly/python-constantly.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d096ab0449..3334cad77f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -37,6 +37,7 @@ F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-+F:	package/python-versioneer/
- F:	support/testing/tests/package/test_flutter.py
+diff --git a/package/python-constantly/python-constantly.hash b/package/python-constantly/python-constantly.hash
+index 8e646d82ba..7a246e882a 100644
+--- a/package/python-constantly/python-constantly.hash
++++ b/package/python-constantly/python-constantly.hash
+@@ -1,5 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/constantly/json
+-md5  f0762f083d83039758e53f8cf0086eef  constantly-15.1.0.tar.gz
++md5  c090579309b2b34be04385b54b0a5a85  constantly-23.10.4.tar.gz
+ # Locally computed
+-sha256  586372eb92059873e29eba4f9dec8381541b4d3834660707faf8ba59146dfc35  constantly-15.1.0.tar.gz
++sha256  aa92b70a33e2ac0bb33cd745eb61776594dc48764b06c35e0efd050b7f1c7cbd  constantly-23.10.4.tar.gz
+ sha256  020870fcaf4bf9c50b233e331817094fe109b91c0880570fd476f527cfbfc085  LICENSE
+diff --git a/package/python-constantly/python-constantly.mk b/package/python-constantly/python-constantly.mk
+index 783d198d06..466c9bf455 100644
+--- a/package/python-constantly/python-constantly.mk
++++ b/package/python-constantly/python-constantly.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
  
- N:	Adam Heinrich <adam@adamh.cz>
-diff --git a/package/python-versioneer/python-versioneer.hash b/package/python-versioneer/python-versioneer.hash
-new file mode 100644
-index 0000000000..44cbeb1593
---- /dev/null
-+++ b/package/python-versioneer/python-versioneer.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/versioneer/json
-+md5  1703d6ced3656553066fa71e42c5eee6  versioneer-0.29.tar.gz
-+sha256  5ab283b9857211d61b53318b7c792cf68e798e765ee17c27ade9f6c924235731  versioneer-0.29.tar.gz
-+# Locally computed sha256 checksums
-+sha256  b5065838cbac452dfc855ba6e6e031481ad2c68406f70d21ead9321374653e6c  LICENSE
-diff --git a/package/python-versioneer/python-versioneer.mk b/package/python-versioneer/python-versioneer.mk
-new file mode 100644
-index 0000000000..5dbf0dd1c2
---- /dev/null
-+++ b/package/python-versioneer/python-versioneer.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-versioneer
-+#
-+################################################################################
-+
-+PYTHON_VERSIONEER_VERSION = 0.29
-+PYTHON_VERSIONEER_SOURCE = versioneer-$(PYTHON_VERSIONEER_VERSION).tar.gz
-+PYTHON_VERSIONEER_SITE = https://files.pythonhosted.org/packages/32/d7/854e45d2b03e1a8ee2aa6429dd396d002ce71e5d88b77551b2fb249cb382
-+PYTHON_VERSIONEER_SETUP_TYPE = setuptools
-+PYTHON_VERSIONEER_LICENSE = Unlicense
-+PYTHON_VERSIONEER_LICENSE_FILES = LICENSE
-+
-+$(eval $(host-python-package))
+-PYTHON_CONSTANTLY_VERSION = 15.1.0
++PYTHON_CONSTANTLY_VERSION = 23.10.4
+ PYTHON_CONSTANTLY_SOURCE = constantly-$(PYTHON_CONSTANTLY_VERSION).tar.gz
+-PYTHON_CONSTANTLY_SITE = https://pypi.python.org/packages/95/f1/207a0a478c4bb34b1b49d5915e2db574cadc415c9ac3a7ef17e29b2e8951
++PYTHON_CONSTANTLY_SITE = https://files.pythonhosted.org/packages/4d/6f/cb2a94494ff74aa9528a36c5b1422756330a75a8367bf20bd63171fc324d
+ PYTHON_CONSTANTLY_SETUP_TYPE = setuptools
+ PYTHON_CONSTANTLY_LICENSE = MIT
+ PYTHON_CONSTANTLY_LICENSE_FILES = LICENSE
++PYTHON_CONSTANTLY_DEPENDENCIES = host-python-versioneer
+ 
+ $(eval $(python-package))
 -- 
 2.41.0
 
