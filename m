@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CA9AC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 18:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D330C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 18:37:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D5E6820D8;
-	Sun,  5 Nov 2023 18:37:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D5E6820D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2812381F3F;
+	Sun,  5 Nov 2023 18:37:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2812381F3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oPtjcBQeohMg; Sun,  5 Nov 2023 18:37:41 +0000 (UTC)
+	with ESMTP id 6sxK9dF1blNN; Sun,  5 Nov 2023 18:37:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94E3C81F69;
-	Sun,  5 Nov 2023 18:37:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94E3C81F69
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0B4F41BF870
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:37:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35E4481F3D;
+	Sun,  5 Nov 2023 18:37:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35E4481F3D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 05BC51BF4D6
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E45B3401E1
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:37:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E45B3401E1
+ by smtp1.osuosl.org (Postfix) with ESMTP id D30B781F1F
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:37:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D30B781F1F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k8wJ9FZqCEk3 for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 18:37:25 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8B42D400D6
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 18:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B42D400D6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A6E61C0004;
- Sun,  5 Nov 2023 18:37:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BEYrin9C3kr3 for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 18:37:26 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E8B981F2E
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 18:37:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E8B981F2E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 627991BF206;
+ Sun,  5 Nov 2023 18:37:23 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1qzhzt-00FzQR-1Q;
- Sun, 05 Nov 2023 19:37:21 +0100
+ (envelope-from <peko@48ers.dk>) id 1qzhzu-00FzQd-15;
+ Sun, 05 Nov 2023 19:37:22 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 19:37:17 +0100
-Message-Id: <20231105183719.3811015-2-peter@korsgaard.com>
+Date: Sun,  5 Nov 2023 19:37:19 +0100
+Message-Id: <20231105183719.3811015-4-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231105183719.3811015-1-peter@korsgaard.com>
 References: <20231105183719.3811015-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH 2/4] configs/stm32mp157c_dk2_defconfig: unbreak
- TF-A build with GCC >= 12
+Subject: [Buildroot] [PATCH 4/4] configs/avenger96_defconfig: downgrade to
+ TF-A v2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +62,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2l0aCB0aGUgbW92ZSB0byBkZWZhdWx0IHRvIEdDQyAxMiBpbiBjb21taXQgZTAwOTFlNDJlZWY5
-IChwYWNrYWdlL2djYzoKc3dpdGNoIHRvIGdjYyAxMi54IGFzIHRoZSBkZWZhdWx0KSwgVEYtQSBu
-b3cgZmFpbHMgdG8gYnVpbGQgYXMgYSB3YXJuaW5nIGlzCmdlbmVyYXRlZCBhbmQgaXQgYnVpbGRz
-IHdpdGggLVdlcnJvcjoKCiAgQ0MgICAgICBwbGF0L3N0L3N0bTMybXAxL2JsMl9wbGF0X3NldHVw
-LmMKZHJpdmVycy9zdC9pby9pb19zdG0zMmltYWdlLmM6IEluIGZ1bmN0aW9uIOKAmHN0bTMyaW1h
-Z2VfcGFydGl0aW9uX3JlYWTigJk6CmRyaXZlcnMvc3QvaW8vaW9fc3RtMzJpbWFnZS5jOjI0OTox
-MzogZXJyb3I6IOKAmHJlc3VsdOKAmSBtYXkgYmUgdXNlZCB1bmluaXRpYWxpemVkIFstV2Vycm9y
-PW1heWJlLXVuaW5pdGlhbGl6ZWRdCiAgMjQ5IHwgICAgICAgICBpbnQgcmVzdWx0OwogICAgICB8
-ICAgICAgICAgICAgIF5+fn5+fgpjYzE6IGFsbCB3YXJuaW5ncyBiZWluZyB0cmVhdGVkIGFzIGVy
-cm9ycwoKVGhpcyBpcyBmaXhlZCBpbiBURi1BIHYyLjYgd2l0aCBjb21taXQgYzFkNzMyZDBkYjI0
-IChmaXgoaW9fc3RtMzJpbWFnZSk6CnVuaW5pdGlhbGl6ZWQgdmFyaWFibGUgd2FybmluZyksIGJ1
-dCBJIGRvIG5vdCBoYXZlIHRoZSBib2FyZCB0byB2ZXJpZnkgaWYKdjIuNiB3b3Jrcywgc28gaW5z
-dGVhZCBkaXNhYmxlIC1XZXJyb3IgYnkgbWFzc3NpbmcgRT0wLgoKU2lnbmVkLW9mZi1ieTogUGV0
-ZXIgS29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPgotLS0KIGNvbmZpZ3Mvc3RtMzJtcDE1
-N2NfZGsyX2RlZmNvbmZpZyB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
-MSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvc3RtMzJtcDE1N2NfZGsyX2RlZmNv
-bmZpZyBiL2NvbmZpZ3Mvc3RtMzJtcDE1N2NfZGsyX2RlZmNvbmZpZwppbmRleCBjZjI0MzNkNjdl
-Li5hYTBmY2ZhODQzIDEwMDY0NAotLS0gYS9jb25maWdzL3N0bTMybXAxNTdjX2RrMl9kZWZjb25m
-aWcKKysrIGIvY29uZmlncy9zdG0zMm1wMTU3Y19kazJfZGVmY29uZmlnCkBAIC0zMCw3ICszMCw3
-IEBAIEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkU9eQogQlIyX1RBUkdFVF9BUk1fVFJV
-U1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTj15CiBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJ
-Uk1XQVJFX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSJ2Mi41IgogQlIyX1RBUkdFVF9BUk1fVFJVU1RF
-RF9GSVJNV0FSRV9QTEFURk9STT0ic3RtMzJtcDEiCi1CUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJ
-Uk1XQVJFX0FERElUSU9OQUxfVkFSSUFCTEVTPSJTVE0zMk1QX1NETU1DPTEgQUFSQ0gzMl9TUD1z
-cF9taW4gRFRCX0ZJTEVfTkFNRT1zdG0zMm1wMTU3Yy1kazIuZHRiIgorQlIyX1RBUkdFVF9BUk1f
-VFJVU1RFRF9GSVJNV0FSRV9BRERJVElPTkFMX1ZBUklBQkxFUz0iU1RNMzJNUF9TRE1NQz0xIEFB
-UkNIMzJfU1A9c3BfbWluIERUQl9GSUxFX05BTUU9c3RtMzJtcDE1N2MtZGsyLmR0YiBFPTAiCiBC
-UjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0lNQUdFUz0iKi5zdG0zMiIKIEJSMl9UQVJH
-RVRfQVJNX1RSVVNURURfRklSTVdBUkVfTkVFRFNfRFRDPXkKIEJSMl9UQVJHRVRfVUJPT1Q9eQot
-LSAKMi4zOS4yCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Commit 27bf08e4addb78 (configs/avenger96_defconfig: bump ATF version to 2.9
+for binutils 2.39+ support) bumped TF-A, but it unfortunately does not boot
+and instead dies with a panic:
+
+NOTICE:  CPU: STM32MP157AAC Rev.B
+NOTICE:  Model: Arrow Electronics STM32MP157A Avenger96 board
+ERROR:   nvmem node board_id not found
+INFO:    PMIC version = 0x10
+ERROR:   Product_below_2v5=1:
+ERROR:          HSLVEN update is destructive,
+ERROR:          no update as VDD > 2.7V
+PANIC at PC : 0x2fff086f
+
+Exception mode=0x00000016 at: 0x2fff086f
+
+Instead use v2.5 to match the other stm32mp1 boards and use the same E=0
+-Werror workaround.  The avenger95 support is unfortunately broken since
+v2.3 with the introduction of authentication support, so add a patch to the
+DTS to fix that.
+
+Notice that the authentication support was reworked in v2.7 so it is skipped
+for the mp157a variant used on the avenger96, so the patch is not upstreamable.
+
+While we're at it, also drop the debug option for consistency with the other
+boards.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ger96.dts-enable-hash-device-to-unbr.patch | 51 +++++++++++++++++++
+ configs/avenger96_defconfig                   |  6 +--
+ 2 files changed, 54 insertions(+), 3 deletions(-)
+ create mode 100644 board/arrow/avenger96/patches/arm-trusted-firmware/0001-stm32mp157a-avenger96.dts-enable-hash-device-to-unbr.patch
+
+diff --git a/board/arrow/avenger96/patches/arm-trusted-firmware/0001-stm32mp157a-avenger96.dts-enable-hash-device-to-unbr.patch b/board/arrow/avenger96/patches/arm-trusted-firmware/0001-stm32mp157a-avenger96.dts-enable-hash-device-to-unbr.patch
+new file mode 100644
+index 0000000000..8cec0af3b1
+--- /dev/null
++++ b/board/arrow/avenger96/patches/arm-trusted-firmware/0001-stm32mp157a-avenger96.dts-enable-hash-device-to-unbr.patch
+@@ -0,0 +1,51 @@
++From 336dc301e02d64507447f82020ce7a349797bef3 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sun, 5 Nov 2023 14:59:16 +0100
++Subject: [PATCH] stm32mp157a-avenger96.dts: enable hash device to unbreak boot
++ issue
++
++The avenger96 board was forgotten when authentication support was added with
++commit 4bdb1a7a6a1325343 (stm32mp1: add authentication support for
++stm32image), causing a panic when stm32mp_init_auth() is called, so fix it
++similar to how it was done for the STM32MP157C-ED1 board with:
++
++commit b37b52ef8bc05bfd8dcca992d4ba84cd7c5d23bb
++Author: Yann Gautier <yann.gautier@st.com>
++Date:   Tue Oct 13 18:05:06 2020 +0200
++
++    fdts: add missing hash node in STM32MP157C-ED1 board DT
++
++    Without this node, the board fails to boot and panics in the function
++    stm32mp_init_auth().
++
++    Change-Id: Ia54924410dac2a8c94dd6e45d7e93977fe7d87e2
++    Signed-off-by: Yann Gautier <yann.gautier@st.com>
++
++Upstream: N/A - Upstream reworked authentication to skip it for MP157A
++ variant since v2.7, see "feat(st): disable authentication based on
++ part_number"
++ (https://github.com/ARM-software/arm-trusted-firmware/commit/49abdfd8cececb91a4bc7e7b29a30c09dce461c7)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ fdts/stm32mp157a-avenger96.dts | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/fdts/stm32mp157a-avenger96.dts b/fdts/stm32mp157a-avenger96.dts
++index b967736e4..76edecb83 100644
++--- a/fdts/stm32mp157a-avenger96.dts
+++++ b/fdts/stm32mp157a-avenger96.dts
++@@ -271,6 +271,10 @@
++ 	};
++ };
++ 
+++&hash1 {
+++	status = "okay";
+++};
+++
++ &rng1 {
++ 	status = "okay";
++ };
++-- 
++2.39.2
++
+diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
+index adfd7585c4..142f6dd8c9 100644
+--- a/configs/avenger96_defconfig
++++ b/configs/avenger96_defconfig
+@@ -1,6 +1,7 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++BR2_GLOBAL_PATCH_DIR="board/arrow/avenger96/patches"
+ BR2_ROOTFS_OVERLAY="board/arrow/avenger96/overlay/"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ BR2_LINUX_KERNEL=y
+@@ -17,10 +18,9 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb E=0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
