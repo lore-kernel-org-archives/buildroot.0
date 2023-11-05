@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7586C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 03:18:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F044C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 03:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 739CD821F9;
-	Sun,  5 Nov 2023 03:18:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 739CD821F9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06161821FD;
+	Sun,  5 Nov 2023 03:18:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06161821FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uo4n4W_7XatR; Sun,  5 Nov 2023 03:18:17 +0000 (UTC)
+	with ESMTP id w9GA22WfCPP3; Sun,  5 Nov 2023 03:18:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1D9D821D1;
-	Sun,  5 Nov 2023 03:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1D9D821D1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F42D1BF861
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A3FF82200;
+	Sun,  5 Nov 2023 03:18:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A3FF82200
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6982F1BF870
  for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 03:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0687A4042D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 502A060AC9
  for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 03:18:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0687A4042D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 502A060AC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C9uEovqZU9xu for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 03:18:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n8_NXa1SBuEH for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 03:18:13 +0000 (UTC)
 Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
  [IPv6:2607:f8b0:4864:20::d30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F06B40105
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 03:18:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F06B40105
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 72D4060AC6
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 03:18:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72D4060AC6
 Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-7ac61c58d85so144330639f.2
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 20:18:12 -0700 (PDT)
+ ca18e2360f4ac-7ac7b2b1e99so126049939f.2
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 20:18:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699154290; x=1699759090;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=T3ZIsivKv5C13VVVPEo4Lj4ieNn+96mOmFUPILP7VDs=;
- b=XWMRWSAttKdRw4CVi0czXbS899WoRnZ+ZjKcdqSaJiS9zwGVfITzDnOXZcSNLTQ5nO
- tAe2sTWSf2+Kual7cOk0It98n68xJxMGKBgBVgF4LNB443JsjlafhbYe5Fgk0VakbbRt
- OAM4fIEMUhWAsXaL+IWt5MQLvCnST7JP3qH3GfxR0+vYi2+OhKLsfdtbNmFQjNsKVJcr
- SFM8cQ8mWgnjX4lrZj/jG6ujTi5kzE2Z5EoX+nKMIeoOG0KmesMHTC8DWbl3n0fXKOMS
- KrjhxDu/egrNdEwJmqYsW0TQ9STsF/hf+dHZG3cd3AGymm/Wv5ZYcZKCpByqym3AnkRZ
- h59w==
-X-Gm-Message-State: AOJu0YwM07uwujtM73OyAGp7wqCcx+tFlQys0gYPcuRnEgGdlF62iwet
- f/Sc6L3BiE0Yn2mhcGDJsMyY8j5Wb34=
-X-Google-Smtp-Source: AGHT+IH3y0hQa2+NdBF2CpkQy3eMYMuD8Pxn4EvoGyXMCnrBXw5L2CPAYP8c+g5wrjtJY4/MiR9fJg==
-X-Received: by 2002:a05:6602:158b:b0:780:c787:637b with SMTP id
- e11-20020a056602158b00b00780c787637bmr6631004iow.0.1699154290681; 
- Sat, 04 Nov 2023 20:18:10 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1699154292; x=1699759092;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=4ZaiQjFuEjQF75JI2cyvz+Fj7Y+K9rjvKpcnIRNgh7s=;
+ b=AIG7gLBSOVOLtxQIcakW/aO8AB8SbRYGe6QOnl0iBwknlzz/Kic4zHRM+gg+iYK/MH
+ 84KMaRhAdHKb7JD+L0iAX5azzgtpAl/BsOhFgOOu9RY0Kbn160zW6r1SReyRZ22LGGfg
+ U3Zj8pi75TvluUxogbX/eil0JDzTZWw48RAs8b1ANn19RrzfiQxUzcH6UrUdYtyDyJ4r
+ 0pjDxKuU+X9vljr8NNY9uIV4th/uMNZS0pVTzF1XVJyBYTIJdZ8UQeF+rb2CoeX60SR9
+ o1BjGVRRVnphBwRz3I2pm4gTRIiaO3pzGbkwoHgXvd0PHXI2FWTEasg/JzLgLOrsJd9e
+ TnBQ==
+X-Gm-Message-State: AOJu0Yx9WzNdKo9CMo0bX8yH+jQwRUDs+CgDFQAu1ehod//nWkZy1TUr
+ ZTWJWTXtGS81RfrEoT7ArgvScyPrUdI=
+X-Google-Smtp-Source: AGHT+IExevH/ppERwZjsnmQMOffq/EPZpCvwmzxhNRxbsbH6Z3hdDIVCjG9ktL7BKF0Nr0u+atj5fw==
+X-Received: by 2002:a6b:c90f:0:b0:7ac:cede:7b4 with SMTP id
+ z15-20020a6bc90f000000b007accede07b4mr14488709iof.17.1699154292204; 
+ Sat, 04 Nov 2023 20:18:12 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
  y20-20020a5ec814000000b0079216d6f219sm1512187iol.14.2023.11.04.20.18.10
@@ -63,25 +63,29 @@ Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  Sat, 04 Nov 2023 20:18:10 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 21:18:05 -0600
-Message-Id: <20231105031806.2778810-1-james.hilliard1@gmail.com>
+Date: Sat,  4 Nov 2023 21:18:06 -0600
+Message-Id: <20231105031806.2778810-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231105031806.2778810-1-james.hilliard1@gmail.com>
+References: <20231105031806.2778810-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699154290; x=1699759090; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=T3ZIsivKv5C13VVVPEo4Lj4ieNn+96mOmFUPILP7VDs=;
- b=YyTUN5PGiHr6Vgx0FkSipbKhRepN/Xt/eLI2yQz6NVuUAxENPeltpsBLnHJTGPScIw
- NHwtIeNLU0DP7Be7fi7B3oD6EVO0i/8IvvSpoCgl2H+2A4idDFDdYqo5HSY9Jy5KWDFk
- C6PAAh2gq0rTczEWVAfnCgxuzATPSaE3YTnC9Sn313YCwfCQgG2O+4TTawQPSgoTL9qS
- yyISC0q27uL37TN4B17mKZs56yrhDsNj/6n6KvX8U3qzXh2SS6oygo2qi2/+Dpohir6J
- u40KU07FnYTD6qd5ROkzJP72jjUOH9rUDavWij7LQ0HWSa45s9OBF6jtQiMG90uU07Rm
- Hjjw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1699154292; x=1699759092; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4ZaiQjFuEjQF75JI2cyvz+Fj7Y+K9rjvKpcnIRNgh7s=;
+ b=GKHFAjfcsPb5m1eS0SE39r8aksyXHNdCbxYr0H0J51znQBcqVZ31TIpOLRnBqh1/iY
+ QnuAT4HTRoaIFn2yGwmil/5EaMBnJzx8FU+XA7CovyawlrXDoh4IJvYaRnjYfJmjGDS9
+ jL6nnw4XEi3LDrJmPDNjAU1W4aGIY4VRJaUxtSPA4hpXBFjeUS7Qh7luKeecTpw25+zI
+ 1p4KxD6946LgLH2XgaDZ5ve4B5m8c8Eeh7JyVKKuF+yN5W5SyP4O+O58SevAqz0OSAwd
+ glaz6NnmVstIBNA1YewMI4QdkPZyku2KVeLW3sXe16aPYluv55CPg0ND5hIM1xx9qDZJ
+ zDPw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YyTUN5PG
-Subject: [Buildroot] [PATCH 1/2] package/python-versioneer: new host package
+ header.a=rsa-sha256 header.s=20230601 header.b=GKHFAjfc
+Subject: [Buildroot] [PATCH 2/2] package/python-constantly: bump to version
+ 23.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,45 +104,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Add new host-python-versioneer build dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-versioneer/python-versioneer.hash |  5 +++++
- package/python-versioneer/python-versioneer.mk   | 14 ++++++++++++++
- 2 files changed, 19 insertions(+)
- create mode 100644 package/python-versioneer/python-versioneer.hash
- create mode 100644 package/python-versioneer/python-versioneer.mk
+ package/python-constantly/python-constantly.hash | 4 ++--
+ package/python-constantly/python-constantly.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-versioneer/python-versioneer.hash b/package/python-versioneer/python-versioneer.hash
-new file mode 100644
-index 0000000000..44cbeb1593
---- /dev/null
-+++ b/package/python-versioneer/python-versioneer.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/versioneer/json
-+md5  1703d6ced3656553066fa71e42c5eee6  versioneer-0.29.tar.gz
-+sha256  5ab283b9857211d61b53318b7c792cf68e798e765ee17c27ade9f6c924235731  versioneer-0.29.tar.gz
-+# Locally computed sha256 checksums
-+sha256  b5065838cbac452dfc855ba6e6e031481ad2c68406f70d21ead9321374653e6c  LICENSE
-diff --git a/package/python-versioneer/python-versioneer.mk b/package/python-versioneer/python-versioneer.mk
-new file mode 100644
-index 0000000000..5dbf0dd1c2
---- /dev/null
-+++ b/package/python-versioneer/python-versioneer.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-versioneer
-+#
-+################################################################################
-+
-+PYTHON_VERSIONEER_VERSION = 0.29
-+PYTHON_VERSIONEER_SOURCE = versioneer-$(PYTHON_VERSIONEER_VERSION).tar.gz
-+PYTHON_VERSIONEER_SITE = https://files.pythonhosted.org/packages/32/d7/854e45d2b03e1a8ee2aa6429dd396d002ce71e5d88b77551b2fb249cb382
-+PYTHON_VERSIONEER_SETUP_TYPE = setuptools
-+PYTHON_VERSIONEER_LICENSE = Unlicense
-+PYTHON_VERSIONEER_LICENSE_FILES = LICENSE
-+
-+$(eval $(host-python-package))
+diff --git a/package/python-constantly/python-constantly.hash b/package/python-constantly/python-constantly.hash
+index 8e646d82ba..7a246e882a 100644
+--- a/package/python-constantly/python-constantly.hash
++++ b/package/python-constantly/python-constantly.hash
+@@ -1,5 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/constantly/json
+-md5  f0762f083d83039758e53f8cf0086eef  constantly-15.1.0.tar.gz
++md5  c090579309b2b34be04385b54b0a5a85  constantly-23.10.4.tar.gz
+ # Locally computed
+-sha256  586372eb92059873e29eba4f9dec8381541b4d3834660707faf8ba59146dfc35  constantly-15.1.0.tar.gz
++sha256  aa92b70a33e2ac0bb33cd745eb61776594dc48764b06c35e0efd050b7f1c7cbd  constantly-23.10.4.tar.gz
+ sha256  020870fcaf4bf9c50b233e331817094fe109b91c0880570fd476f527cfbfc085  LICENSE
+diff --git a/package/python-constantly/python-constantly.mk b/package/python-constantly/python-constantly.mk
+index 783d198d06..466c9bf455 100644
+--- a/package/python-constantly/python-constantly.mk
++++ b/package/python-constantly/python-constantly.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CONSTANTLY_VERSION = 15.1.0
++PYTHON_CONSTANTLY_VERSION = 23.10.4
+ PYTHON_CONSTANTLY_SOURCE = constantly-$(PYTHON_CONSTANTLY_VERSION).tar.gz
+-PYTHON_CONSTANTLY_SITE = https://pypi.python.org/packages/95/f1/207a0a478c4bb34b1b49d5915e2db574cadc415c9ac3a7ef17e29b2e8951
++PYTHON_CONSTANTLY_SITE = https://files.pythonhosted.org/packages/4d/6f/cb2a94494ff74aa9528a36c5b1422756330a75a8367bf20bd63171fc324d
+ PYTHON_CONSTANTLY_SETUP_TYPE = setuptools
+ PYTHON_CONSTANTLY_LICENSE = MIT
+ PYTHON_CONSTANTLY_LICENSE_FILES = LICENSE
++PYTHON_CONSTANTLY_DEPENDENCIES = host-python-versioneer
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
