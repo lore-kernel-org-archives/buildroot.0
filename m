@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 066CEC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 09:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A31B7C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 10:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84F2561002;
-	Sun,  5 Nov 2023 09:57:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84F2561002
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51EF760B6C;
+	Sun,  5 Nov 2023 10:04:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51EF760B6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V3k0wc8ud7ov; Sun,  5 Nov 2023 09:57:40 +0000 (UTC)
+	with ESMTP id 3JjdzmlHrES8; Sun,  5 Nov 2023 10:04:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E2A460FCE;
-	Sun,  5 Nov 2023 09:57:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E2A460FCE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D40560B89;
+	Sun,  5 Nov 2023 10:04:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D40560B89
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CE4F11BF592
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 09:57:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 257D31BF868
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 10:04:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7E1960FCE
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 09:57:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7E1960FCE
+ by smtp3.osuosl.org (Postfix) with ESMTP id EED1C60B89
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 10:04:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EED1C60B89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MnnHbC6xs-x7 for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 09:57:37 +0000 (UTC)
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8537560FCD
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 09:57:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8537560FCD
-Received: by mail-il1-x134.google.com with SMTP id
- e9e14a558f8ab-359974f4c7eso3567395ab.1
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 01:57:37 -0800 (PST)
+ with ESMTP id SlUchwnwpYTL for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 10:04:01 +0000 (UTC)
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AC92560B6C
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 10:04:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC92560B6C
+Received: by mail-il1-x132.google.com with SMTP id
+ e9e14a558f8ab-3594c100735so8871635ab.1
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 02:04:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699178256; x=1699783056;
+ d=1e100.net; s=20230601; t=1699178640; x=1699783440;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=/Pw+jvpyEAvsq6Qr8Jcn8lydCjIRVR7TkVtDF/bS+1Y=;
- b=GCskR+3TzqaSIQfZAdze9wBwKw4XEmkAIInCFfnzftPA8AsyStZEzL2F/7EonOScpq
- b7py5mfjwvuRY3yqrdkTY8Q2tc0UFje2o0W1WQlU4NmkB8GbTIKe3EEiQ3Kh4K6PXGpq
- RWFENwk/vWxUBy1AJrOZkbFnO4Y/nWaymnGb2gCpzyKYgUmoJETWXRSLruPSTnJenPbn
- qmZrUJ/es5dZkRiDtuWruZtjzl1/n5gkQ7S8GLScQXVPFElrxLrL5s93blm6Z/g4B+3c
- A5hT2km8ecctKAWZL0s34oGG1BnyiHFCG7OS6xsJJTd3E2YrEwpy8hybMA/+DC17k5mH
- Wwlg==
-X-Gm-Message-State: AOJu0YxASJyDu0kBRrTHNE2LVlHJoU43O7/IjCvv+mYb9C6S+hCj26PW
- WfREWLxIt5huu8cwSl9xlqb2ZU9igrI/hA==
-X-Google-Smtp-Source: AGHT+IFkqeTOS3sVAII6xhm66JfqhY/9lpnpNxZY/2bDTvAhMTWQ24ANxzpr/DFFpViuP2urK10F9A==
-X-Received: by 2002:a05:6e02:1282:b0:359:4223:5729 with SMTP id
- y2-20020a056e02128200b0035942235729mr11982679ilq.1.1699178255999; 
- Sun, 05 Nov 2023 01:57:35 -0800 (PST)
+ bh=DoH8SDH9FoAGvVtYgKqdq0w67kIDS9rK3WAPMCRbCm4=;
+ b=TLiB4jhA+lO+a0sRv0+3GC7FpApNyzcUB24s4ATQuBJiaC+dhJQb/bJ90qELUfQRUG
+ sIoNlFe7t/dNa7uamtkoKYt94uhnjm6Py8FdGvqPKAM4eYVlAwdeY3zI94/mYv0FAktS
+ SBawuu5+M9+KRLn5kmnbrtzYQbHBt8Ni9/UKhidtvE9SfNlp/uyxo1A6/bu/vTWt3XXT
+ QkQ6ly99mNZdouGUUeajyMx9Mj4zlAu9rY9vBN2dS0K6C1nt+obgs3afvEbRsFooURJZ
+ HVUDa+rOnnwX/sOnOrlg9nsyKRQLa69TX/MrPNtrRsaJ10kKM9JgRHbN+TV+l4iq3O/h
+ LH9A==
+X-Gm-Message-State: AOJu0YygokFYJc4QZxqSy3+dHPQnXtLWIpEg1yDlONSw38jaO6kKRvRu
+ 57ih1uOWmCQs6TKDegyUjc9nm5Ghr2gr7Q==
+X-Google-Smtp-Source: AGHT+IFXQzlwC3ciPHVrqbYKube2fbhEHRyaurZ/FRZhdOxBQJwhSmwrbsZQsfKoAjNADWSTXdlqDw==
+X-Received: by 2002:a05:6e02:1a61:b0:359:33dd:f470 with SMTP id
+ w1-20020a056e021a6100b0035933ddf470mr7290232ilv.3.1699178640224; 
+ Sun, 05 Nov 2023 02:04:00 -0800 (PST)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- em20-20020a0566384db400b0042b4e2fc546sm1513164jab.140.2023.11.05.01.57.35
+ p8-20020a92c108000000b0034fd4562accsm1781219ile.28.2023.11.05.02.03.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 01:57:35 -0800 (PST)
+ Sun, 05 Nov 2023 02:03:59 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 02:57:31 -0700
-Message-Id: <20231105095731.2951000-1-james.hilliard1@gmail.com>
+Date: Sun,  5 Nov 2023 03:03:58 -0700
+Message-Id: <20231105100358.2959364-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699178256; x=1699783056; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699178640; x=1699783440; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/Pw+jvpyEAvsq6Qr8Jcn8lydCjIRVR7TkVtDF/bS+1Y=;
- b=eo622raR4p3leC9LNGatz2HaQISIo5J8tC7YBd8gR78MFLWasOPLkI+21KXNvkRLjm
- v6y1gDBVtsSaoujPFX32wFWZ962g35z4I+OIJEuFHKwV7h/aAtUGg/MW1qSPpvoDTMUM
- FTLrZunL9xx7b4hqKI1N/mmpUlbRF9oZHFUvU+P7oyDizkISfYRXtH1xS2SkV1WxkeUW
- E9P2vYMSA8RNq0mj2hjLMPa7L/MCHtWEDpq9RYe/408Jd0v1/6A+8ke7ikWZGER37sII
- h3nAdp4HwLXVMtrz0boj31oMX9Y7ZvE/KgLkMsMsAzI7O7CTLbrILPWo5GPV/C1Nt0VI
- 3P5g==
+ bh=DoH8SDH9FoAGvVtYgKqdq0w67kIDS9rK3WAPMCRbCm4=;
+ b=NuEFoJVAaAfUQMFBKBk7kJinE1mKFQEzMihunp6VrU3sj058LGiYDa7OkjhZ7shwEc
+ AvS5FRlpiYyB9PytKBerXG3INtspyZhKSUhEJMstRJ9Fv/kd7smpJRRTzqAPx2meQYdZ
+ Z1egUwzvixq+ECqLl8EjM8zzfNJlQmlUoGWo9CHfivIQIUskfesyGB7Io7Sf4P5V6Dee
+ gXwqbC2+MGa+bvTU1uO2JZ/RnHLvBFwyaKMb8N0DmTDRbtvvgbcdy1jMt4a4ZTTOuIpZ
+ RchgIRJqJpy2aArMpBQsU26LOWG9ENFNsR4M5kgpyTI3hNZjoWVRDLZfa33Nkp/Jj+LM
+ eTYw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eo622raR
-Subject: [Buildroot] [PATCH 1/1] package/python-setuptools: bump to version
- 68.2.2
+ header.a=rsa-sha256 header.s=20230601 header.b=NuEFoJVA
+Subject: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
+ 1.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,104 +95,48 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVmcmVzaCBhZGQgZXhlY3V0YWJsZSBwYXRjaC4KClNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxp
-YXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgotLS0KIC4uLi8wMDAxLWFkZC1leGVjdXRh
-YmxlLnBhdGNoICAgICAgICAgICAgICAgICB8IDI3ICsrKysrKysrKystLS0tLS0tLS0KIC4uLi9w
-eXRob24tc2V0dXB0b29scy9weXRob24tc2V0dXB0b29scy5oYXNoICB8ICA0ICstLQogLi4uL3B5
-dGhvbi1zZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLm1rICAgIHwgIDQgKy0tCiAzIGZpbGVz
-IGNoYW5nZWQsIDE4IGluc2VydGlvbnMoKyksIDE3IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvMDAwMS1hZGQtZXhlY3V0YWJsZS5wYXRjaCBiL3Bh
-Y2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvMDAwMS1hZGQtZXhlY3V0YWJsZS5wYXRjaAppbmRleCBi
-Njg4NzQ1Y2U0Li5kOTMyOThlMTE4IDEwMDY0NAotLS0gYS9wYWNrYWdlL3B5dGhvbi1zZXR1cHRv
-b2xzLzAwMDEtYWRkLWV4ZWN1dGFibGUucGF0Y2gKKysrIGIvcGFja2FnZS9weXRob24tc2V0dXB0
-b29scy8wMDAxLWFkZC1leGVjdXRhYmxlLnBhdGNoCkBAIC0xLDQgKzEsNCBAQAotRnJvbSA5YjNk
-MzA3ZjhmNmExYWY4OGYzZjgxMGY1YTZjZjA4MzU4MzBlMWU4IE1vbiBTZXAgMTcgMDA6MDA6MDAg
-MjAwMQorRnJvbSA5NzUzNzllODRhZTMyMjlmYWM5NGNkMDQ5OWZkNGJhN2JhYTU3NGJhIE1vbiBT
-ZXAgMTcgMDA6MDA6MDAgMjAwMQogRnJvbTogPT9VVEYtOD9xP0o9QzM9QjZyZz0yMEtyYXVzZT89
-IDxqb2VyZy5rcmF1c2VAZW1iZWRkZWQucm9ja3M+CiBEYXRlOiBNb24sIDcgRGVjIDIwMTUgMDE6
-MTQ6MzMgKzAxMDAKIFN1YmplY3Q6IFtQQVRDSF0gYWRkIGV4ZWN1dGFibGUKQEAgLTE1LDEzICsx
-NSwxNCBAQCBmb3JjZSB0aGUgc2hlYmFuZyBsaW5lIGluIGluc3RhbGxlZCBweXRob24gc2NyaXB0
-cy4KIFNpZ25lZC1vZmYtYnk6IEd1c3Rhdm8gWmFjYXJpYXMgPGd1c3Rhdm9AemFjYXJpYXMuY29t
-LmFyPgogU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBm
-cmVlLWVsZWN0cm9ucy5jb20+CiBTaWduZWQtb2ZmLWJ5OiBKw7ZyZyBLcmF1c2UgPGpvZXJnLmty
-YXVzZUBlbWJlZGRlZC5yb2Nrcz4KK1NpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1l
-cy5oaWxsaWFyZDFAZ21haWwuY29tPgogLS0tCiAgc2V0dXB0b29scy9jb21tYW5kL2luc3RhbGwu
-cHkgICAgICAgICB8IDIgKysKICBzZXR1cHRvb2xzL2NvbW1hbmQvaW5zdGFsbF9zY3JpcHRzLnB5
-IHwgOSArKysrKysrKysKICAyIGZpbGVzIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKykKIAogZGlm
-ZiAtLWdpdCBhL3NldHVwdG9vbHMvY29tbWFuZC9pbnN0YWxsLnB5IGIvc2V0dXB0b29scy9jb21t
-YW5kL2luc3RhbGwucHkKLWluZGV4IDcyYjlhM2UuLjY3ODFkMmIgMTAwNjQ0CitpbmRleCA2MDZj
-Y2U5ZDguLmYxNThlMWI1MSAxMDA2NDQKIC0tLSBhL3NldHVwdG9vbHMvY29tbWFuZC9pbnN0YWxs
-LnB5CiArKysgYi9zZXR1cHRvb2xzL2NvbW1hbmQvaW5zdGFsbC5weQogQEAgLTE2LDYgKzE2LDcg
-QEAgY2xhc3MgaW5zdGFsbChvcmlnLmluc3RhbGwpOgpAQCAtMzAsOSArMzEsOSBAQCBpbmRleCA3
-MmI5YTNlLi42NzgxZDJiIDEwMDY0NAogICAgICB1c2VyX29wdGlvbnMgPSBvcmlnLmluc3RhbGwu
-dXNlcl9vcHRpb25zICsgWwogKyAgICAgICAgKCdleGVjdXRhYmxlPScsICdlJywgInNwZWNpZnkg
-ZmluYWwgZGVzdGluYXRpb24gaW50ZXJwcmV0ZXIgcGF0aCIpLAogICAgICAgICAgKCdvbGQtYW5k
-LXVubWFuYWdlYWJsZScsIE5vbmUsICJUcnkgbm90IHRvIHVzZSB0aGlzISIpLAotICAgICAgICAg
-KCdzaW5nbGUtdmVyc2lvbi1leHRlcm5hbGx5LW1hbmFnZWQnLCBOb25lLAotICAgICAgICAgICJ1
-c2VkIGJ5IHN5c3RlbSBwYWNrYWdlIGJ1aWxkZXJzIHRvIGNyZWF0ZSAnZmxhdCcgZWdncyIpLAot
-QEAgLTM4LDYgKzM5LDcgQEAgY2xhc3MgaW5zdGFsbChvcmlnLmluc3RhbGwpOgorICAgICAgICAg
-KAorICAgICAgICAgICAgICdzaW5nbGUtdmVyc2lvbi1leHRlcm5hbGx5LW1hbmFnZWQnLAorQEAg
-LTQ4LDYgKzQ5LDcgQEAgY2xhc3MgaW5zdGFsbChvcmlnLmluc3RhbGwpOgogICAgICAgICAgKQog
-IAogICAgICAgICAgb3JpZy5pbnN0YWxsLmluaXRpYWxpemVfb3B0aW9ucyhzZWxmKQpAQCAtNDEs
-MTAgKzQyLDEwIEBAIGluZGV4IDcyYjlhM2UuLjY3ODFkMmIgMTAwNjQ0CiAgICAgICAgICBzZWxm
-LnNpbmdsZV92ZXJzaW9uX2V4dGVybmFsbHlfbWFuYWdlZCA9IE5vbmUKICAKIGRpZmYgLS1naXQg
-YS9zZXR1cHRvb2xzL2NvbW1hbmQvaW5zdGFsbF9zY3JpcHRzLnB5IGIvc2V0dXB0b29scy9jb21t
-YW5kL2luc3RhbGxfc2NyaXB0cy5weQotaW5kZXggOWNkOGViMC4uNzc4NjE1MCAxMDA2NDQKK2lu
-ZGV4IDcyYjJlNDVjYi4uMTQ2YTBiYjU4IDEwMDY0NAogLS0tIGEvc2V0dXB0b29scy9jb21tYW5k
-L2luc3RhbGxfc2NyaXB0cy5weQogKysrIGIvc2V0dXB0b29scy9jb21tYW5kL2luc3RhbGxfc2Ny
-aXB0cy5weQotQEAgLTEzLDYgKzEzLDEzIEBAIGNsYXNzIGluc3RhbGxfc2NyaXB0cyhvcmlnLmlu
-c3RhbGxfc2NyaXB0cyk6CitAQCAtMTIsNiArMTIsMTMgQEAgY2xhc3MgaW5zdGFsbF9zY3JpcHRz
-KG9yaWcuaW5zdGFsbF9zY3JpcHRzKToKICAgICAgZGVmIGluaXRpYWxpemVfb3B0aW9ucyhzZWxm
-KToKICAgICAgICAgIG9yaWcuaW5zdGFsbF9zY3JpcHRzLmluaXRpYWxpemVfb3B0aW9ucyhzZWxm
-KQogICAgICAgICAgc2VsZi5ub19lcCA9IEZhbHNlCkBAIC01NywxNiArNTgsMTYgQEAgaW5kZXgg
-OWNkOGViMC4uNzc4NjE1MCAxMDA2NDQKICsgICAgICAgICkKICAKICAgICAgZGVmIHJ1bihzZWxm
-KToKLSAgICAgICAgIGltcG9ydCBzZXR1cHRvb2xzLmNvbW1hbmQuZWFzeV9pbnN0YWxsIGFzIGVp
-Ci1AQCAtMzMsNiArNDAsOCBAQCBjbGFzcyBpbnN0YWxsX3NjcmlwdHMob3JpZy5pbnN0YWxsX3Nj
-cmlwdHMpOgorICAgICAgICAgc2VsZi5ydW5fY29tbWFuZCgiZWdnX2luZm8iKQorQEAgLTM4LDYg
-KzQ1LDggQEAgY2xhc3MgaW5zdGFsbF9zY3JpcHRzKG9yaWcuaW5zdGFsbF9zY3JpcHRzKToKICAg
-ICAgICAgICkKICAgICAgICAgIGJzX2NtZCA9IHNlbGYuZ2V0X2ZpbmFsaXplZF9jb21tYW5kKCdi
-dWlsZF9zY3JpcHRzJykKICAgICAgICAgIGV4ZWNfcGFyYW0gPSBnZXRhdHRyKGJzX2NtZCwgJ2V4
-ZWN1dGFibGUnLCBOb25lKQogKyAgICAgICAgaWYgc2VsZi5leGVjdXRhYmxlIGlzIG5vdCBOb25l
-OgogKyAgICAgICAgICAgIGV4ZWNfcGFyYW0gPSBzZWxmLmV4ZWN1dGFibGUKLSAgICAgICAgIHRy
-eToKLSAgICAgICAgICAgICBid19jbWQgPSBzZWxmLmdldF9maW5hbGl6ZWRfY29tbWFuZCgiYmRp
-c3Rfd2luaW5zdCIpCi0gICAgICAgICAgICAgaXNfd2luaW5zdCA9IGdldGF0dHIoYndfY21kLCAn
-X2lzX3J1bm5pbmcnLCBGYWxzZSkKKyAgICAgICAgIHdyaXRlciA9IGVpLlNjcmlwdFdyaXRlcgor
-ICAgICAgICAgaWYgZXhlY19wYXJhbSA9PSBzeXMuZXhlY3V0YWJsZToKKyAgICAgICAgICAgICAj
-IEluIGNhc2UgdGhlIHBhdGggdG8gdGhlIFB5dGhvbiBleGVjdXRhYmxlIGNvbnRhaW5zIGEgc3Bh
-Y2UsIHdyYXAKIC0tIAotMi4zMC4yCisyLjM0LjEKIApkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRo
-b24tc2V0dXB0b29scy9weXRob24tc2V0dXB0b29scy5oYXNoIGIvcGFja2FnZS9weXRob24tc2V0
-dXB0b29scy9weXRob24tc2V0dXB0b29scy5oYXNoCmluZGV4IDQ1NDEzYWYyN2UuLjZlMWRmNDJl
-M2YgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9v
-bHMuaGFzaAorKysgYi9wYWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xz
-Lmhhc2gKQEAgLTEsNCArMSw0IEBACiAjIEZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL3NldHVw
-dG9vbHMvanNvbgotbWQ1ICBjNWU0ZmY2NTU3ZDk5MjA0NDY0YWEzMDBjMGJhZDdkNCAgc2V0dXB0
-b29scy02OC4wLjAudGFyLmd6Ci1zaGEyNTYgIGJhZjFmZGI0MWM2ZGE0Y2QyZWFlNzIyZTEzNTUw
-MGRhOTEzMzMyYWIzZjJmNWM3ZDMzYWY5YjQ5MmFjYjUyMzUgIHNldHVwdG9vbHMtNjguMC4wLnRh
-ci5negorbWQ1ICBkOTY3Y2EyYmE3ZjQ2ZGI4ODdkYWVlMmQ1YzliZDZhMiAgc2V0dXB0b29scy02
-OC4yLjIudGFyLmd6CitzaGEyNTYgIDRhYzE0NzUyNzZkMmYxYzQ4Njg0ODc0MDg5ZmVmY2Q4M2Jk
-NzE2MmRkYWFmYjgxZmFjODY2YmEwZGIyODJhODcgIHNldHVwdG9vbHMtNjguMi4yLnRhci5negog
-c2hhMjU2ICA4NmRhMGYwMWFlYWU0NjM0OGEzYzNkNDY1MTk1ZGMxY2VjY2RlNzlmNzllODc3Njlh
-NjRiOGRhMDRiMmE0NzQxICBMSUNFTlNFCmRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1zZXR1
-cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLm1rIGIvcGFja2FnZS9weXRob24tc2V0dXB0b29scy9w
-eXRob24tc2V0dXB0b29scy5tawppbmRleCAzOWVhZDEwZjU1Li5mMjZmNDI3Y2NjIDEwMDY0NAot
-LS0gYS9wYWNrYWdlL3B5dGhvbi1zZXR1cHRvb2xzL3B5dGhvbi1zZXR1cHRvb2xzLm1rCisrKyBi
-L3BhY2thZ2UvcHl0aG9uLXNldHVwdG9vbHMvcHl0aG9uLXNldHVwdG9vbHMubWsKQEAgLTQsOSAr
-NCw5IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1QWVRIT05fU0VUVVBUT09MU19W
-RVJTSU9OID0gNjguMC4wCitQWVRIT05fU0VUVVBUT09MU19WRVJTSU9OID0gNjguMi4yCiBQWVRI
-T05fU0VUVVBUT09MU19TT1VSQ0UgPSBzZXR1cHRvb2xzLSQoUFlUSE9OX1NFVFVQVE9PTFNfVkVS
-U0lPTikudGFyLmd6Ci1QWVRIT05fU0VUVVBUT09MU19TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRo
-b25ob3N0ZWQub3JnL3BhY2thZ2VzL2RjLzk4LzVmODk2YWYwNjZjMTI4NjY5MjI5ZmYxYWE4MTU1
-M2FjMTRjZmIzZTVlNzRiNmI0NDU5NDEzMmI4NTQwZQorUFlUSE9OX1NFVFVQVE9PTFNfU0lURSA9
-IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy9lZi9jYy85M2Y3MjEzYjJh
-YjVlZDM4M2Y5OGNlODAyMGU2MzJlZjI1NmI0MDZiODU2OTYwNmMzZjE2MGVkOGUxYzkKIFBZVEhP
-Tl9TRVRVUFRPT0xTX0xJQ0VOU0UgPSBNSVQKIFBZVEhPTl9TRVRVUFRPT0xTX0xJQ0VOU0VfRklM
-RVMgPSBMSUNFTlNFCiBQWVRIT05fU0VUVVBUT09MU19DUEVfSURfVkVORE9SID0gcHl0aG9uCi0t
-IAoyLjM0LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-maturin/python-maturin.hash | 2 +-
+ package/python-maturin/python-maturin.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
+index 698b763a55..fcc6a25713 100644
+--- a/package/python-maturin/python-maturin.hash
++++ b/package/python-maturin/python-maturin.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  4f8ce543728abfd83885935452d2189f8847445ead501cd8609f74c8a2b1ae0e  maturin-1.1.0.tar.gz
++sha256  7e2fdc083ae253c0f68f6313a2ad2de423219f09e7fa65ef55189d42128e4cff  maturin-1.3.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
+ sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
+diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
+index d321e7941c..170dee7649 100644
+--- a/package/python-maturin/python-maturin.mk
++++ b/package/python-maturin/python-maturin.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MATURIN_VERSION = 1.1.0
++PYTHON_MATURIN_VERSION = 1.3.1
+ PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
+-PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/7b/78/2814bc0e46a96861aab337fd0404e7937acdb4ce187da239224ab4560d35
++PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/d6/a3/42ff26b2b3011ada67c73db32a9ccf9fa18d459cbef8ed6eefc3b283ee60
+ PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
+ PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
+ PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
