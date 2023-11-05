@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7528BC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 17:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F2F4C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 17:57:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3636400D6;
-	Sun,  5 Nov 2023 17:40:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3636400D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EF07400D6;
+	Sun,  5 Nov 2023 17:57:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EF07400D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TcShkIg1oVst; Sun,  5 Nov 2023 17:40:57 +0000 (UTC)
+	with ESMTP id HIjMNIgPbPF2; Sun,  5 Nov 2023 17:57:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD6EB408D7;
-	Sun,  5 Nov 2023 17:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD6EB408D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B9B771BF45A
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:40:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 944F6408C8;
+	Sun,  5 Nov 2023 17:57:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 944F6408C8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2FCEE1BF342
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92044418A3
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92044418A3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0848882015
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:57:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0848882015
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8G9gg9wcShm4 for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 17:40:53 +0000 (UTC)
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
- [IPv6:2a00:1450:4864:20::12c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 36EC54188F
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 17:40:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36EC54188F
-Received: by mail-lf1-x12c.google.com with SMTP id
- 2adb3069b0e04-507bd644a96so5286668e87.3
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 09:40:52 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ftyVgHN0HyRo for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 17:57:52 +0000 (UTC)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5F8A481FFE
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 17:57:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F8A481FFE
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-507cee17b00so4739505e87.2
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 09:57:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699206051; x=1699810851;
+ d=1e100.net; s=20230601; t=1699207070; x=1699811870;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=kvecd1Cx2tBAMJzO6FqU8WBsP0JrshyCSe1/FDmbcc4=;
- b=O12SipSG7TzUhEmO8KhFRpBcyWRDe7urokNhvoY+wfnWQR0pr0myVQEStPQOq2LfpV
- RL0PydoXAxNrrlwT+087uxLcX5nFC3tj7cw+5P3gYF0ZjPOcWbFVyKOKgXf/2nUPcKQk
- t+mvuWAbbrsjVYIsPtTrywjJALSR3eKt/fGCOOZKtsydH0XUoQHlj38ot/elx60EelZE
- TxB1QBdinD85vw5srI8TKcyItKnvBCzB8P8Jig9qJ1n++j3io4FIwTVLXi7RVAKPjxa6
- 8qqY0TkFXmEXGho+OEL0ApwuNPfhmTezL0Z9EqyFF4b6ag2X/aGf+rqeo8wL55fvFBDk
- msbQ==
-X-Gm-Message-State: AOJu0YyIF+mgfWocFpbNACYXQIVwQz20z0E6ibPHgKvN4cipxtSkP4n5
- LwO1xvwQOKdqz3OHtSlpHCKt7g==
-X-Google-Smtp-Source: AGHT+IFCEuIN0JulDGkKevplzbohrYqFvPTeTM60NjAyrCzUk6wwn8iFo8aRsoH0j98xBBO3VfrSag==
-X-Received: by 2002:ac2:5d22:0:b0:509:4645:b78b with SMTP id
- i2-20020ac25d22000000b005094645b78bmr6867736lfb.10.1699206050477; 
- Sun, 05 Nov 2023 09:40:50 -0800 (PST)
+ bh=UbZVKVT1/rAL1ypzoDp1I8Q3Y2cDsBdmlvsLsWP5hSU=;
+ b=myidtKn/b8lsD2ajpMN5GLTBBwHuiqj0SPljEtiuDEZd53DSW01I5HNLdYy+4Uz6cV
+ RKvNsqFec0yQZ75DNz/SX2oN/s+3h9S3OwZlQNu7qSR2Z1s8PjtYBDARTh/BFd7DvRZT
+ 2SzDwz9wjvK6Tdds4dKgELiAGcKLs+DJWXMxPwuspUmxK7OPaay2gLWjxqyr9H0brg3R
+ gefNzdWKrVyfF3uSanKeXzM7/69cIElQUhz9rTGk7lBPRd6UwuqPakdMDiP35fRxptAk
+ u2KIoiVqwvmMXRJlSkKZazfyjRfbb5X+9aCDuzHOYV/0R+SILpjdLOffCGMNe9zW5Wby
+ zNTA==
+X-Gm-Message-State: AOJu0Ywza8roFX1NbTNRhZOx2Qx+Y964+RQffJ5UDUxDyZcqU703dbbP
+ a6z89V+G6/3BCyY4QLR3iNmFFA==
+X-Google-Smtp-Source: AGHT+IFaEpL3Uhp2nQ9t2WUkrgAKLwoGbzLC1Z1jk0KM2sfAYULQyPf7UiXht5qmzMN84tin+wJzNA==
+X-Received: by 2002:a05:6512:3c98:b0:509:493a:7d64 with SMTP id
+ h24-20020a0565123c9800b00509493a7d64mr9853926lfv.41.1699207069640; 
+ Sun, 05 Nov 2023 09:57:49 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- fd20-20020a056402389400b005400dc94f43sm3405463edb.45.2023.11.05.09.40.49
+ ss25-20020a170907c01900b009dd7bc622fbsm2661555ejc.113.2023.11.05.09.57.48
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 05 Nov 2023 09:40:49 -0800 (PST)
-Message-ID: <ef809271-fc0b-4e08-a085-4c997881b7df@mind.be>
-Date: Sun, 5 Nov 2023 18:40:47 +0100
+ Sun, 05 Nov 2023 09:57:49 -0800 (PST)
+Message-ID: <73d7f53b-b52e-45fd-af74-dd24d2e5bf85@mind.be>
+Date: Sun, 5 Nov 2023 18:57:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: Reza Arbab <arbab@linux.ibm.com>, buildroot@buildroot.org
 References: <20231009151729.2223963-1-arbab@linux.ibm.com>
- <20231009151729.2223963-5-arbab@linux.ibm.com>
-In-Reply-To: <20231009151729.2223963-5-arbab@linux.ibm.com>
+ <20231009151729.2223963-6-arbab@linux.ibm.com>
+In-Reply-To: <20231009151729.2223963-6-arbab@linux.ibm.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699206051; x=1699810851; darn=buildroot.org;
+ d=mind.be; s=google; t=1699207070; x=1699811870; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=kvecd1Cx2tBAMJzO6FqU8WBsP0JrshyCSe1/FDmbcc4=;
- b=EeNzEpZwfkhr0LkwNaoG+1lIKscovd2O2LR020dJvBDkmnqkRMhsw0VFSgMKfsWY8B
- Bl50+uaG5itzMe/95KhCyS95zd2She14B7YdbkEfOvKf52TmOXxtqJxJIJhstrG9nd6e
- 9UWJYjNpVoOKN3WAYdbXOMZPuNmmO9rP6sKpQWynZTuOVIDTwXa4Naip2Mq0d8lkwET3
- rkxZ+XONajFPJ5l5z29b6vyt/ZN1IZ17mFYds0z95W5eLBFUh4mHyAFDshIuwaOcY+nZ
- IdeofJgS/xBq0YZb63tnhglU9/mGAyMYfXp3fJv8+LaDg9gNbp396jXA0ZHzjDjcOgjP
- VlaQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=UbZVKVT1/rAL1ypzoDp1I8Q3Y2cDsBdmlvsLsWP5hSU=;
+ b=eB/iPIOULvS8btF3W73OjdnQXbcM/U1ccMrLMzdOPvsXD+My/8lJih210zGJxO/0R8
+ UzmJgxISLy+7TkTag/EFMDGiaWRvOtSfXxqsKOfUqKEp12eHYY+HS5VsXgf3OVUU1RVf
+ xdUKLttEZEGQtKkOhtxOnQKCP6SAxVvufFGasy2O7V63CuYsXguq9+XqqDtAiEq7RCZR
+ XKXYhj+agoQlUk12pRlyuUVwft3fQ2JEG2u3nbMU1YyS4ll3UvwBnL0niA2jW3DOWAH2
+ O1ZySKahFsXotbTCE0k+JEi5iBQogA04cs5uHiLjuAlpT1RChxWlv7ouv5C/55uMPcx6
+ HOtQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=EeNzEpZw
-Subject: Re: [Buildroot] [PATCH v3 4/8] package/petitboot: prefer kexec-lite
- on powerpc
+ header.a=rsa-sha256 header.s=google header.b=eB/iPIOU
+Subject: Re: [Buildroot] [PATCH v3 5/8] package/petitboot: fix shutdown
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,55 +110,129 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
   Hi Reza,
 
 On 09/10/2023 17:17, Reza Arbab wrote:
-> This is a better choice on devicetree-based platforms.
+> There are a few ways to set HOST_PROG_SHUTDOWN that enable us to
+> successfully kexec the new kernel chosen from the petitboot menu.
+> 
+> 1. HOST_PROG_SHUTDOWN=/usr/libexec/petitboot/bb-kexec-reboot
+>      `- bb-kexec-reboot does 'exec kill -QUIT 1'
+>          |- init sends SIGTERM to pb-console
+>          |   `- pb-console does 'trap 'reset; echo "SIGTERM received, booting..."; sleep 2' SIGTERM'
+>          `- init runs 'null::restart:/usr/sbin/kexec-restart'
+>              `- kexec-restart does '/usr/sbin/kexec -f -e'
+> 
+> 2. HOST_PROG_SHUTDOWN=/usr/sbin/kexec-restart
+>      `- kexec-restart does '/usr/sbin/kexec -f -e'
+> 
+> 3. unset HOST_PROG_SHUTDOWN (default is /sbin/shutdown)
+>      `- petitboot tries, in order:
+>          |- 1. '/sbin/shutdown -r now'
+>          |      `- file not found
+>          |- 2. '/usr/sbin/kexec -e'
+>          `- 3. '/usr/sbin/kexec -e -f'
+> 
+> If we're using busybox init, do (1). This performs a proper shutdown
+> before the kexec, giving us nice console output with a terminal reset
+> and the "booting..." notification. Otherwise, fall back to (2).
+
+  This doesn't explain _why_ this is the proper approach, or why the current one 
+needs to be fixed.
+
+  It seems to me that (1) would be the proper thing to do for sysvinit, openrc 
+and systemd based init as well (not that anyone would be crazy enough to put 
+systemd in a petitboot image, I hope...). So, if I understand correctly, what 
+needs to be fixed is when init is not an actual init, but something trivial like 
+a single shell script. So at the very least, the condition should change I think.
+
+  But then, BR2_INIT_NONE is not a reliable indication that PID 1 is not a real 
+init. So I think it would be better to instead decide at runtime which approach 
+to take. That could be done for instance by looking at /proc/1/exe and comparing 
+it with /sbin/init - if they are the same, we have a real init; if not, we 
+probably have a shell or some such.
+
+  But maybe I misunderstand the reasoning completely.
+
+  Also, why don't we simply always do (2)? The only difference is the message on 
+pb-console, and normally it would anyway be pb-console that triggers the boot so 
+it would already have shown something, I expect?
+
 > 
 > Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
 > ---
->   package/petitboot/Config.in | 7 +++----
->   1 file changed, 3 insertions(+), 4 deletions(-)
+>   package/petitboot/kexec-restart |  8 ++++++++
+>   package/petitboot/petitboot.mk  | 16 ++++++++++++++--
+>   2 files changed, 22 insertions(+), 2 deletions(-)
+>   create mode 100755 package/petitboot/kexec-restart
 > 
-> diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-> index b534b4900e88..4981c165bf76 100644
-> --- a/package/petitboot/Config.in
-> +++ b/package/petitboot/Config.in
-> @@ -11,12 +11,11 @@ config BR2_PACKAGE_PETITBOOT
->   	select BR2_PACKAGE_ELFUTILS
->   	select BR2_PACKAGE_LVM2 # devmapper
->   	select BR2_PACKAGE_NCURSES
-> -	# run-time dependency only
-> +	# run-time dependencies
+> diff --git a/package/petitboot/kexec-restart b/package/petitboot/kexec-restart
+> new file mode 100755
+> index 000000000000..62fbea114513
+> --- /dev/null
+> +++ b/package/petitboot/kexec-restart
+> @@ -0,0 +1,8 @@
+> +#!/bin/sh
+> +
+> +/usr/sbin/kexec -f -e
+> +
+> +while :
+> +do
+> +	sleep 1
+> +done
+> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+> index 0992111cb1ec..5c7913b560b1 100644
+> --- a/package/petitboot/petitboot.mk
+> +++ b/package/petitboot/petitboot.mk
+> @@ -21,7 +21,6 @@ PETITBOOT_CONF_OPTS = \
+>   	--without-twin-x11 \
+>   	$(if $(BR2_PACKAGE_BUSYBOX),--enable-busybox,--disable-busybox) \
+>   	HOST_PROG_KEXEC=/usr/sbin/kexec \
 
-  This is an unrelated change (sorting the runtime dependencies alphabetically 
-and removing the repetition of the comment). Ideally, this should have been a 
-separate commit. Failing that, it should be explained in the commit message. 
-I've done that.
+  This leaves a trailing backslash here, as reported by check-package.
 
->   	select BR2_PACKAGE_KEXEC if !BR2_PACKAGE_KEXEC_LITE
-> -	# run-time dependency only
-> -	select BR2_PACKAGE_POWERPC_UTILS if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
-> -	# run-time dependency only
-> +	select BR2_PACKAGE_KEXEC_LITE if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
+> -	HOST_PROG_SHUTDOWN=/usr/libexec/petitboot/bb-kexec-reboot
+>   
+>   # HPA and Busybox tftp are supported. HPA tftp is part of Buildroot's tftpd
+>   # package.
+> @@ -46,6 +45,17 @@ else
+>   PETITBOOT_CONF_OPTS += --without-fdt
+>   endif
+>   
+> +ifeq ($(BR2_INIT_BUSYBOX),y)
+> +PETITBOOT_CONF_OPTS += HOST_PROG_SHUTDOWN=/usr/libexec/petitboot/bb-kexec-reboot
+> +define PETITBOOT_INITTAB
+> +	grep -q kexec-restart $(TARGET_DIR)/etc/inittab || \
+> +		printf "\nnull::restart:/usr/sbin/kexec-restart\n" >> $(TARGET_DIR)/etc/inittab
 
-  If the user has already selected kexec, then we'll have both kexec and 
-kexec-lite. I don't think that that is a good idea. So instead, I injected a 
-separate commit that introduces BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS, and use 
-that to simplify the condition here and to only select kexec-lite if kexec is 
-not selected:
-
-	select BR2_PACKAGE_KEXEC if !BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS
-	select BR2_PACKAGE_KEXEC_LITE if BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS && 
-!BR2_PACKAGE_KEXEC
+  So, if I understand correctly, previously this wasn't booting _at all_? I 
+mean, it would just reboot instead of kexec'ing like it should?
 
 
+  I've marked the patch as Changes Requested.
 
   Regards,
   Arnout
 
->   	select BR2_PACKAGE_NVME if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
-> +	select BR2_PACKAGE_POWERPC_UTILS if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
->   	help
->   	  Petitboot is a small kexec-based bootloader
->   
+
+> +endef
+> +PETITBOOT_TARGET_FINALIZE_HOOKS += PETITBOOT_INITTAB
+> +else
+> +PETITBOOT_CONF_OPTS += HOST_PROG_SHUTDOWN=/usr/sbin/kexec-restart
+> +endif
+> +
+>   define PETITBOOT_POST_INSTALL
+>   	$(INSTALL) -D -m 0755 $(@D)/utils/bb-kexec-reboot \
+>   		$(TARGET_DIR)/usr/libexec/petitboot/bb-kexec-reboot
+> @@ -53,8 +63,10 @@ define PETITBOOT_POST_INSTALL
+>   		$(TARGET_DIR)/etc/petitboot/boot.d/01-create-default-dtb
+>   	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/90-sort-dtb \
+>   		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
+> -	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
+> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/S15pb-discover \
+>   		$(TARGET_DIR)/etc/init.d/S15pb-discover
+> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/kexec-restart \
+> +		$(TARGET_DIR)/usr/sbin/kexec-restart
+>   	mkdir -p $(TARGET_DIR)/usr/share/udhcpc/default.script.d/
+>   	ln -sf /usr/sbin/pb-udhcpc \
+>   		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
