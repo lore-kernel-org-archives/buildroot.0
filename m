@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38973C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 04:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10B5FC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 04:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA7FF400D6;
-	Sun,  5 Nov 2023 04:23:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA7FF400D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6614C404A5;
+	Sun,  5 Nov 2023 04:35:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6614C404A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v4ySFbN0q5Lr; Sun,  5 Nov 2023 04:23:37 +0000 (UTC)
+	with ESMTP id I89tKjPJhXQk; Sun,  5 Nov 2023 04:35:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D8A3401C2;
-	Sun,  5 Nov 2023 04:23:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D8A3401C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40FDD4042D;
+	Sun,  5 Nov 2023 04:35:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40FDD4042D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D2A7B1BF5A0
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 04:23:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13E6C1BF5A0
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 04:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB0A741A05
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 04:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB0A741A05
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB1FA414C9
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 04:35:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB1FA414C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 60LZHQLyOb3V for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 04:23:31 +0000 (UTC)
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B639041977
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 04:23:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B639041977
-Received: by mail-io1-xd36.google.com with SMTP id
- ca18e2360f4ac-7a692658181so111788739f.1
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 21:23:31 -0700 (PDT)
+ with ESMTP id sM6dxiiITpVS for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 04:35:12 +0000 (UTC)
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EB96441499
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 04:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB96441499
+Received: by mail-io1-xd35.google.com with SMTP id
+ ca18e2360f4ac-7a68b87b265so111644639f.2
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 21:35:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699158210; x=1699763010;
+ d=1e100.net; s=20230601; t=1699158910; x=1699763710;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=dV69C1B9a27+cLyXYVOLN5pExzGmkbEn3WWxMnA/TvI=;
- b=VRcN/qMvk3KB9xc8P1rgk2XK+pvP78L7HPiThHdJiAbwSFQBslTip/VGwYponePh+W
- SLVB9Dfn/zHHTpKWZqe+ETdoXkvjGtRM1tHiVIgsgqd7mjMaUcVg4Hyv4ZXYz2Gc/NWT
- n8dIYTm1kq7w8N5xLbtVNlgzHnt18myEta5AuK9KgDTXL4AmUIhmtCZHjQJnkIPGncLr
- C2yCQ0ZYFD9nMQNzXDMbtqrIRku23ituDwd0wqe7NT2jBZLBWO3sw9O3gavMyIaSx0Yk
- DZKVtZ17zTJq/pin5wRYfppnZn6Fi+xZv6VVlEBhOjlktJ464WMzblMJX8GnG/EdAKwW
- +MDA==
-X-Gm-Message-State: AOJu0YxtdZwuIVWem9LT6mUs2rnyFHAb8+QNqb7xfRsCzydaAAgbHy5k
- nDTlEGncAhg7Iu1EXcyLOhZL6erLizc=
-X-Google-Smtp-Source: AGHT+IEQ5Omm1DlssO/Q3mtqugz6R0F9+eLhiJwwN5oEa9e56KDBoOCRxOneook5onA6Tim/PDhqdA==
-X-Received: by 2002:a05:6602:2e12:b0:794:d833:4a8a with SMTP id
- o18-20020a0566022e1200b00794d8334a8amr33272405iow.0.1699158210239; 
- Sat, 04 Nov 2023 21:23:30 -0700 (PDT)
+ bh=Bul+mYaStSl6PXs3CwfX64Openp5rFboqzookQw14w0=;
+ b=uV/k7skhVrfuHOKrQYIAYIkra3CXLvZ6/D/kDBT5Ygfm2+5EqL4eTFSHJwnPjDrg7/
+ iZpOFjNP01DnSJ/ukpGtWfkmNScL5yuJ3vw6sdY2QKlJAXarYlY294TtiN17pRXSPv7C
+ gDqbRaReion10opVGZaqYWjr0gNqJGCZVSDCTjFLpz2OXCS2bOeL+IT6fkKCT9bNGtoZ
+ 51cHbpXJvFg8o9EB/XbzIOueaF/URyW2DKIpQ5UuCENgorl+BIRXXnduhERT0AuXIJFp
+ aRsT2ASgAjYbtMMW167wMvFYqVlWKjI9eOPZfAiOPGgO59ScMa1TadekWhVw3wCszlcU
+ 3y0Q==
+X-Gm-Message-State: AOJu0YzwQABM9lvIndpIusJovC3O00ZqMZQviNJF+sHFG0QcRe0Rx0vU
+ 5A/o8TtXJAZSHqsmqdOeiutTIF1LAyg=
+X-Google-Smtp-Source: AGHT+IHMuM4tI/kJ691DrfmtWcweM2VAaGWI49U5D+lAYzPRmP9bGxupnl32CfufjDDI4J7LIwNK0Q==
+X-Received: by 2002:a05:6602:2acf:b0:79e:4abd:7be3 with SMTP id
+ m15-20020a0566022acf00b0079e4abd7be3mr32661475iov.15.1699158910463; 
+ Sat, 04 Nov 2023 21:35:10 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- r2-20020a6b5d02000000b0076ffebfc9fasm1671139iob.47.2023.11.04.21.23.29
+ f4-20020a6bdd04000000b0077a1d1029fcsm1584348ioc.28.2023.11.04.21.35.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Nov 2023 21:23:29 -0700 (PDT)
+ Sat, 04 Nov 2023 21:35:10 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 22:23:28 -0600
-Message-Id: <20231105042328.2808899-1-james.hilliard1@gmail.com>
+Date: Sat,  4 Nov 2023 22:35:08 -0600
+Message-Id: <20231105043508.2812013-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699158210; x=1699763010; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699158910; x=1699763710; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=dV69C1B9a27+cLyXYVOLN5pExzGmkbEn3WWxMnA/TvI=;
- b=C2f784J0F+IHXkh2W1Y5c7MvljdzQz/de/Qd8dBnGxaALYw3b2x7Vy56TR+RpT1QZ4
- l3PJoNcHgY++XCNfOPAxLJu6ms27vc/59xlUoCJu1XIzSunD/qedzKffNDxKUyebRUY4
- Z+ZASZxvBLhCDsaAYjGqRflhlwrHaQnr5YBJfd+6T4BWbCVpBowsSdOy/3FBea2UoW/f
- rtlIO7OM0+GxQo+ngEdCL/aiKvSld9BHKq/QEtCC/BMh3INwQrAXH9/fDKFkn6peRtKs
- cHZJdTPrvW0W/PMoxM1aINnO02JK8EOp+Y+ipuU4yD4cJ23wRwOtAfe+CbSQTufj1qV0
- GkZw==
+ bh=Bul+mYaStSl6PXs3CwfX64Openp5rFboqzookQw14w0=;
+ b=b0pUweTprvxtoqY4nwwFH3OUHxShCpUtB4t9tytOpd0421dfqxPew+vVDuoSQlccVh
+ vZe+LQZ5lqWtzPy93FsQVj6IW+HVABCftmKgWyvZbHO6b/g03/9ty7ZgBbGQLCsJBv83
+ ym7wFVKMN3ThA+IeUd2k15rwUqEeB9y9FzB6Vdr6GzpneoiKJv95TlST4hn/sAAgoaZI
+ eVSDTEP+T3E1IgTLKgA8CEMqURuCjEtlyxQq8MfhxhSP9ZZSFuP6Jvri8Kla7SYjjW4E
+ 2eoEjEHJonJWhNmOhKFYJd+/9B2v1SniWOus7UGLDFNpYZciXcvHZeElbpqDJEAIZVll
+ /hPw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=C2f784J0
-Subject: [Buildroot] [PATCH 1/1] package/python-cython: bump to version
- 0.29.36
+ header.a=rsa-sha256 header.s=20230601 header.b=b0pUweTp
+Subject: [Buildroot] [PATCH 1/1] package/python-daemon: bump to version 3.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,7 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+Cc: David Bachelart <david.bachelart@bbright.com>,
  James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -103,39 +102,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-daemon/python-daemon.hash | 6 +++---
+ package/python-daemon/python-daemon.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index dc75d098d3..08ad8f6d84 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
+diff --git a/package/python-daemon/python-daemon.hash b/package/python-daemon/python-daemon.hash
+index 005a969207..695b8fb9b3 100644
+--- a/package/python-daemon/python-daemon.hash
++++ b/package/python-daemon/python-daemon.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5  138dba31e20e178b431a2e403154f906  Cython-0.29.35.tar.gz
--sha256  6e381fa0bf08b3c26ec2f616b19ae852c06f5750f4290118bf986b6f85c8c527  Cython-0.29.35.tar.gz
-+md5  a4d0f9fbc9c137f1a88937cd40e8c5ee  Cython-0.29.36.tar.gz
-+sha256  41c0cfd2d754e383c9eeb95effc9aa4ab847d0c9747077ddd7c0dcb68c3bc01f  Cython-0.29.36.tar.gz
- # Locally computed sha256 checksums
- sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 145e804bd7..47e105c065 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
+-# md5, sha256 https://pypi.org/pypi/python-daemon/json
+-md5  b7397fe73d516dc14921500a1245b41c  python-daemon-2.3.2.tar.gz
+-sha256  3deeb808e72b6b89f98611889e11cc33754f5b2c1517ecfa1aaf25f402051fb5  python-daemon-2.3.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/python-daemon/json
++md5  4c369b8c6d3de956d8f9dfb2c872c284  python-daemon-3.0.1.tar.gz
++sha256  6c57452372f7eaff40934a1c03ad1826bf5e793558e87fef49131e6464b4dae5  python-daemon-3.0.1.tar.gz
+ # Locally computed sha256
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.ASF-2
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL-3
+diff --git a/package/python-daemon/python-daemon.mk b/package/python-daemon/python-daemon.mk
+index aa8019f4be..f4d4205a31 100644
+--- a/package/python-daemon/python-daemon.mk
++++ b/package/python-daemon/python-daemon.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.29.35
-+PYTHON_CYTHON_VERSION = 0.29.36
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/da/a0/298340fb8412574a0b00a0d9856aa27e7038da429b9e31d6825173d1e6bd
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/38/db/df0e99d6c5fe19ee5c981d22aad557be4bdeed3ecfae25d47b84b07f0f98
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-PYTHON_DAEMON_VERSION = 2.3.2
+-PYTHON_DAEMON_SITE = https://files.pythonhosted.org/packages/d9/3c/727b06abb46fead341a2bdad04ba4a4db5395c44c45d8ba0aa82b517e462
++PYTHON_DAEMON_VERSION = 3.0.1
++PYTHON_DAEMON_SITE = https://files.pythonhosted.org/packages/84/50/97b81327fccbb70eb99f3c95bd05a0c9d7f13fb3f4cfd975885110d1205a
+ PYTHON_DAEMON_LICENSE = Apache-2.0 (library), GPL-3.0+ (test, build)
+ PYTHON_DAEMON_LICENSE_FILES = LICENSE.ASF-2 LICENSE.GPL-3
+ PYTHON_DAEMON_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
