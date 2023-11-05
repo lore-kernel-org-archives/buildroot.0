@@ -4,64 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E30EC4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 14:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C9FC4167D
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 14:27:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02BF441916;
-	Sun,  5 Nov 2023 14:24:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02BF441916
+	by smtp4.osuosl.org (Postfix) with ESMTP id E892541919;
+	Sun,  5 Nov 2023 14:27:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E892541919
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lmxYZDw1d_nk; Sun,  5 Nov 2023 14:24:13 +0000 (UTC)
+	with ESMTP id VKIEPaBHfLZR; Sun,  5 Nov 2023 14:27:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34A9741913;
-	Sun,  5 Nov 2023 14:24:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34A9741913
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 833E11BF342
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 14:24:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35E7441915;
+	Sun,  5 Nov 2023 14:27:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35E7441915
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 702E01BF342
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 14:27:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 696A541913
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 14:24:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 696A541913
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4936360FF9
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 14:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4936360FF9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z0bpZB5TTS2w for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 14:24:10 +0000 (UTC)
-Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 95AEC4190D
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 14:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95AEC4190D
-Received: from localhost.localdomain ([84.33.84.190])
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 82tDL-kt9yDE for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 14:27:15 +0000 (UTC)
+Received: from smtpdh20-2.aruba.it (smtpdh20-2.aruba.it [62.149.155.165])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3FCCE60FD0
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 14:27:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FCCE60FD0
+Received: from [192.168.50.162] ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id ze2oqa5ElNmNJze2oq1qEa; Sun, 05 Nov 2023 15:24:06 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 15:24:05 +0100
-Message-Id: <20231105142405.71631-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+ id ze5oq3HfydNYOze5oqIiFs; Sun, 05 Nov 2023 15:27:12 +0100
+Message-ID: <579363d0-a242-444a-aecf-83f21b4e629b@benettiengineering.com>
+Date: Sun, 5 Nov 2023 15:27:12 +0100
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfHZGymYahWMGB2V0dFMkmpSrI5OlMf2Lb3z8A1lAaNIbisWkFmyb1iyblocol2prpknTlg5jZegY8qAR48Z1bhY+Q2MI5/Z5EqOCVkmFiNWIQm8ON6L+
- U5FTzjefe6Bw9a2ZGHGnbF6ZnkGr9UvX6IRMX6lwP1MhMZqqorA1iozZQFjop/qMw0sfufJ5YZnQ6bMdjNWIlBQzDJS4zOKfE90+BgcyKXY5z0y6yKbVEKOk
- 5KPnJJh/E951Ws3Ha7nIdc+cUQChdPjbSTIjmBstl3CsUmyqmrI58Np2KM0BhUbo50soZ1+tyGdSJw1+j70OuwqQgQ+d6sBlyFIkWPILNFLpyuW2ToRiIFMI
- yjm/xl6fPW307V7jGfTatU1ipIQna8iXQnEuva3u9eXsK2zqd/0=
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20231031120713.678783-1-giulio.benetti@benettiengineering.com>
+ <20231101152114.GE114892@scaer>
+ <26fabf07-fc17-421b-9cbb-fb721bf63374@benettiengineering.com>
+ <20231103212151.GA2875@scaer>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20231103212151.GA2875@scaer>
+X-CMAE-Envelope: MS4xfCHYe4S4ByHeZjrOWosk62HvSSZP8ioZHVzf6Fvh0gyeP+T6dusOveQPbYO4z1f3VrbExH/bYV61azy4XQIqehmljttm37Z16W0oZZpaY6o3l6VtfDAm
+ dv62h8OJ8Sf/J+FHupYAknXpCpA8Ysh51RtE313T6w1PHpRDMfyxiJqkP+nLPdSbzxNDKc+w+S4DoOF4O8H6NLPH5iFXh/2hHt1w/gjbLIc+42C6D+w573uL
+ 2B57tuz7nKaZMbC72s5dgTRsrXrrpAseMs9RvQZl6HQGffFlGiYTDWvRMthKcFPATy+R8LgPz0Tz8cjsJ8l+EmeY2wBEKtab8kQLvZd5z9jRaV0EdvBR/5Pp
+ J7EGjILu
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1699194246; bh=eZO4HV6etZuGECS46t1VAF09SqxHuCrIpS595lrnJ84=;
- h=From:To:Subject:Date:MIME-Version;
- b=bVNqdItKnk+VDZWssLWwWIV2I+1W5GpmPu5BFbKGuN9y0CD8oJ+6bBn+GpJhuMm2g
- d5oo/hJr4JfwaJ8goK6ssq3odmgC2gL8rHWIEsKR0Y3j5Q4vrQVDr0zUIJCwAtOodS
- Fh2ZuHE9izUAnkQMSDdSYhB+M52+BO5pZBgpbLv+c8InhmeO1PkuSm9j2yBbpuZXs6
- EdbrRy9R+Rmdm0jAfTkU1VSGwzwwKMWcEiSeRISe3+VvEZhcDRbwITGiu3z2GdzpH+
- 0mtqpYpu/e4v7xFm+GqHYskam3o7+IUhmTxjGotMK9l73WUje7O1thyl/mzzN6YyyO
- Z/EbDLaq98ObQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1699194432; bh=R5Cit/KLLmfNjQ96jxPCAMCb5R6o1zMQ2gYgjuDMI8s=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=df76VfHWURl0Xuuif9ehDSPwHhF1qibkcgD8cIih7+uyzFwgUenoAnLYhPIcm/s0b
+ 4XJGel2aZMoRrIWnvfgaSybow6DlU4qVgaY5VumFGYTA0WqIGMrpUn1qksggrIcuC8
+ kVv5kalnjDc7VGxaOF7k8pV8+HI//nFwUpqpkPzAhuwyN3kr+qHlZdVPHU2dvFCRFM
+ EZKeQjfsb5nDwT5KVNcudFM41fxuM1qStEYL0wTeySYT+1SiAstC7J6WYgZM2RAh1a
+ OvtFe45aMGBwO3gqJK6vmqqYLCvqPva7/1TRP4ine4bJ6HwSYpwcQ2ZqfOYlHJU0kY
+ MUlUyy2f3WMiA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=bVNqdItK
-Subject: [Buildroot] [PATCH] package/nodejs/nodejs-src: fix arch check on
- additional modules
+ header.a=rsa-sha256 header.s=a1 header.b=df76VfHW
+Subject: Re: [Buildroot] [PATCH] package/nodejs/nodejs-src: remove .node
+ files with different architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,42 +79,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Martin Bark <martin@barkynet.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Daniel Price <daniel.price@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Daniel Price <daniel.price@gmail.com>, Martin Bark <martin@barkynet.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-At the moment check-bin-arch script finds NodeJS modules containing
-prebuilt binaries for different architectures and build fails.
-So let check-bin-arch to ignore folder /usr/lib/node_modules by setting
-NODEJS_SRC_BIN_ARCH_EXCLUDE to it.
+Hi Yann, All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/nodejs/nodejs-src/nodejs-src.mk | 3 +++
- 1 file changed, 3 insertions(+)
+On 03/11/23 22:21, Yann E. MORIN wrote:
 
-diff --git a/package/nodejs/nodejs-src/nodejs-src.mk b/package/nodejs/nodejs-src/nodejs-src.mk
-index 6fb550f158..8f934202b0 100644
---- a/package/nodejs/nodejs-src/nodejs-src.mk
-+++ b/package/nodejs/nodejs-src/nodejs-src.mk
-@@ -244,6 +244,9 @@ define NODEJS_SRC_INSTALL_MODULES
- 	# help in diagnosing the problem.
- 	$(NPM) install -g $(NODEJS_SRC_MODULES_LIST)
- endef
-+
-+# Exclude prebuilt binaries with different architectures and OS from check
-+NODEJS_SRC_BIN_ARCH_EXCLUDE = /usr/lib/node_modules/
- endif
- 
- define NODEJS_SRC_INSTALL_STAGING_CMDS
+[ SNIP ]
+
+> 
+> Oh, I was just walking the "npm is a mess anyway, just ignore anything
+> from it, we don't care" road. If we take this stance, then
+> _BIN_ARCH_EXCLUDE is a trivial way to avoid the check-bin-arch issue.
+> 
+> And I am fine if this is the outcome of your investigations.
+> 
+
+Since npm rebuilding is not that easy and fast to deal with I've just 
+sent this patch to temporary exclude the /usr/lib/node_modules folder
+as you've suggested(forgotten to add "Suggested-by: Yann E. MORIN 
+<yann.morin.1998@free.fr>").
+
+Later I hope to find time to deal with npm rebuilding.
+
+Best regards
 -- 
-2.34.1
-
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
