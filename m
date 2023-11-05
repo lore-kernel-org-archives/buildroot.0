@@ -4,82 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB324C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 18:20:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 281CDC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 18:23:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8298481762;
-	Sun,  5 Nov 2023 18:20:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8298481762
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAFFB8175C;
+	Sun,  5 Nov 2023 18:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAFFB8175C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Uap5nBV_VJMQ; Sun,  5 Nov 2023 18:20:20 +0000 (UTC)
+	with ESMTP id hDCCDLMJNp0U; Sun,  5 Nov 2023 18:23:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F615813DD;
-	Sun,  5 Nov 2023 18:20:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F615813DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AFC7818AC;
+	Sun,  5 Nov 2023 18:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AFC7818AC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B9B991BF4D6
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:20:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 041F11BF4D6
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:23:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92ACE4038C
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92ACE4038C
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD9E4418C5
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 18:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD9E4418C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fOI4yyoTj3YX for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 18:20:16 +0000 (UTC)
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 294424035A
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 18:20:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 294424035A
-Received: by mail-ed1-x533.google.com with SMTP id
- 4fb4d7f45d1cf-53e07db272cso6363479a12.3
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 10:20:16 -0800 (PST)
+ with ESMTP id LjMe3M7LqPoC for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 18:23:01 +0000 (UTC)
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
+ [IPv6:2a00:1450:4864:20::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6ACF141868
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 18:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ACF141868
+Received: by mail-lj1-x231.google.com with SMTP id
+ 38308e7fff4ca-2c6b30aca06so49945131fa.3
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 10:23:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699208414; x=1699813214;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1699208578; x=1699813378;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=iBbkqr3IXwMHP4BWVYAQuaydhVGauKucChxyZXysFKE=;
- b=H2rDHvI3ZnsFjLJ3r6CNcvUNcfrqr6Fa/38P5MmPQLbUdRg4XsCoszvWEzIvZeusPa
- EX6C63LIOuW17ji+81+KaSm85zL+ePQ5qyr3rbJu1r2UzGgYwY6hvxFZkAAMzuUYVNVx
- UWZ1J8Iz8TiJ0JDMM1mfx11CRg/ezZIr03I4xg7roJtb/cQYTv0sQXkfcBbUewPxdlf1
- G51VsSYW2uIIcCd+Greel70o08dhrmJy4zkWwC94xTs1ZxQx9AAzXm1yFi3ZLqRqKeUL
- RfYtTtbvDut4NrFkYivQofkUuUWfSnOJ6vtynnqUQzrNcJm9v2Go+tfFbCzkHStTU0ws
- 1AcQ==
-X-Gm-Message-State: AOJu0Yye9SJk58i0UiGbU1GAbD7bZI9vWmyiJqb4tczubzlUv+6cRZ8G
- npepn1ZBRD1Gj7MA0tnkQIZ4TtwcYkITTpLayMg6KA==
-X-Google-Smtp-Source: AGHT+IGEBrlXJObdxqbM4RR9solW89xweqI3HGs6LY4VQwZvKziJqlUtsABLhwfhVLuKtrNFieUni685u4IxCCtpH3I=
-X-Received: by 2002:a17:906:db01:b0:9d5:9ff5:ce with SMTP id
- xj1-20020a170906db0100b009d59ff500cemr10784943ejb.34.1699208414043; Sun, 05
- Nov 2023 10:20:14 -0800 (PST)
+ bh=DQDlaGgBZhHCpY7CLbbOtB8hbrSUuA2AkGYUo8CXbCo=;
+ b=OVRI+unCoJNNCfLNCuopY+DZKjOG7O6/qr4M1Oxh91TGk2/5bhYX1CuRa1RY1Sp1dh
+ t/Mm3ZJaA54472yKL2prr58uSYpa6PIy8DhqmKFvboCWZwC8GmRQzrLvpXegr+ufSGvx
+ MmAJZbRyHofSHPNBD3CfTwnPqImErOKEQVhphLaTC7Fiagfb1pMtxFIi3U1Gmpj80bPD
+ QlDgTkSIzfbTVENHtr9u4VodgN4mkC0r3pJYZrW2oInvdwyGZ3CrIHtqcbQRFw9lbKlv
+ Y9xnFHavF+VyuF+kF0wi+IBT5Lpz5Kn2+iDjYfceq24+ZAdOdK1ZYN2VbI6JsSmCyDLE
+ moMg==
+X-Gm-Message-State: AOJu0Yyx+D1LJRZypEsa/giIpFJ8T+KU+2CMb3Mm+4Wxcw68CLZxj445
+ JZzIzfrNgV5Hr3w5FfZZxwFPPa756Ks=
+X-Google-Smtp-Source: AGHT+IGkeaLI2CtZu/jv3X9utB+rNrqrTw4MSqfKk07MondQKAPSWompuTqEe2F4JbawznUEKenM4A==
+X-Received: by 2002:a2e:3e1a:0:b0:2bf:ab17:d48b with SMTP id
+ l26-20020a2e3e1a000000b002bfab17d48bmr22689684lja.34.1699208578167; 
+ Sun, 05 Nov 2023 10:22:58 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ p22-20020a05600c419600b00401d8181f8bsm9395616wmh.25.2023.11.05.10.22.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 05 Nov 2023 10:22:57 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  5 Nov 2023 19:22:55 +0100
+Message-ID: <20231105182255.477909-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-References: <20231026092701.12345-1-adam.duskett@amarulasolutions.com>
- <20231026092701.12345-18-adam.duskett@amarulasolutions.com>
- <c8d0027d-7754-43da-beb8-670bdb78403b@mind.be>
-In-Reply-To: <c8d0027d-7754-43da-beb8-670bdb78403b@mind.be>
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Sun, 5 Nov 2023 11:20:03 -0700
-Message-ID: <CAHDQB6N8g7gjU=tgcsL6_CRyHZkfnOG4RRadxdGgWK+aBzzh8A@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1699208414; x=1699813214;
- darn=buildroot.org; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=iBbkqr3IXwMHP4BWVYAQuaydhVGauKucChxyZXysFKE=;
- b=KafQI92xCdNrtaf7lKwS3GFp/4s7OxCeqCCOv8ZiTrcgtcl8YbvpU0/+e3/+JVot3H
- rWoCLgipdPjMBtb17kVzF6OKnzX562FBkfs9Zvrb4w4c1IxbOdgxTMIYI+fSu3I7JyeL
- yoviOS2Swj7ladvoHElfRCNzZ0AD64mYxZlZ4=
+ d=gmail.com; s=20230601; t=1699208578; x=1699813378; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=DQDlaGgBZhHCpY7CLbbOtB8hbrSUuA2AkGYUo8CXbCo=;
+ b=NNTLddB2NbM+rLsnB1kV4SXSkHoYmGsHJRCZHkMFYFr1WbufrYYJsknItQcqEn5Slp
+ yQ71n97LsGgOfDq6JGO8X7H8KLQdR1L2su0Oh1QWClQrkKteTZCwijA391L60vFGoWtl
+ 2GZyLbVerb2DuXDUbJCkBXAA//NOSfwFjzoW/aq4aCOtBDPSyw7jcBbR/E62+FRFNdsy
+ VDNBXhhqXaTFmF7FG4FvKthq7QrTCRZUeeQxGOp+oCZ+vkrKPixk/7sxpAVaBH6NFSh5
+ YM+Tv5os0ubdL53OvCs013yzf3I3mq8bamHxCdNxoSc6wtJs6GcFOkrKjkR0f/vTAXqC
+ w7Wg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=KafQI92x
-Subject: Re: [Buildroot] [PATCH 17/30] package/python-systemd: bump version
- to 235
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=NNTLddB2
+Subject: [Buildroot] [PATCH v2,1/1] package/vde2: bump to version 2.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,268 +93,271 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Julien Olivain <ju.o@free.fr>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot@buildroot.org, Mauro Condarelli <mc5686@mclink.it>
-Content-Type: multipart/mixed; boundary="===============3976713077930302384=="
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3976713077930302384==
-Content-Type: multipart/alternative; boundary="000000000000eb36dc06096bc917"
+- Switch to github to get latest release
+- Drop first and second patches (already in version)
+- Drop third patch (not needed anymore)
+- Drop BSD-3-Clause and COPYING.slirpvde (slirpvde removed with
+  https://github.com/virtualsquare/vde-2/commit/eda0a1bc1d14061588459676fe6f0a048b7dbd1c
+  https://github.com/virtualsquare/vde-2/commit/14e1c9e06f4dbdddc6fe4e85fc72a1d583b049ad)
+- python removed with
+  https://github.com/virtualsquare/vde-2/commit/2c57c25075fa2d351b8f181d2764af61c4e47de0
+- kernel switch removed with
+  https://github.com/virtualsquare/vde-2/commit/b196ecd5b774f1c85041ce6d2334702911cbd8f3
+- parallel build has been fixed with
+  https://github.com/virtualsquare/vde-2/commit/7dd9ed46d5dca125ca45d679ac9f3acbfb0f9300
+- openssl has been replaced by wolfssl with
+  https://github.com/virtualsquare/vde-2/commit/8599321526d0a31925fe55cabbe132b752cb268a
 
---000000000000eb36dc06096bc917
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+https://github.com/virtualsquare/vde-2/releases/tag/v2.3.3
 
-Arnout;
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Replace openssl by wolfssl
 
-This is the latest version of python-systemd.
-Here is a quick check I did: https://pypi.org/project/systemd-python/
+ .checkpackageignore                           |  3 --
+ package/vde2/0001-no-cxx.patch                | 22 ----------
+ ...-fstp-Add-static-to-inline-functions.patch | 44 -------------------
+ ...de_l3-Add-static-to-inline-functions.patch | 37 ----------------
+ package/vde2/Config.in                        |  2 +-
+ package/vde2/vde2.hash                        |  3 +-
+ package/vde2/vde2.mk                          | 24 +++-------
+ 7 files changed, 8 insertions(+), 127 deletions(-)
+ delete mode 100644 package/vde2/0001-no-cxx.patch
+ delete mode 100644 package/vde2/0002-fstp-Add-static-to-inline-functions.patch
+ delete mode 100644 package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
 
-Adam Duskett
-
-Senior Embedded Systems Developer
-
-M. +1208-515-8102
-
-adam.duskett@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions BV
-
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-
-T. +31 (0)85 111 9170
-info@amarulasolutions.com
-
-www.amarulasolutions.com
-
-
-
-On Sat, Nov 4, 2023 at 11:59=E2=80=AFAM Arnout Vandecappelle <arnout@mind.b=
-e> wrote:
-
->
->
-> On 26/10/2023 11:26, Adam Duskett wrote:
-> > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> > ---
-> >   package/python-systemd/python-systemd.hash | 4 ++--
-> >   package/python-systemd/python-systemd.mk   | 6 +++---
-> >   2 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/package/python-systemd/python-systemd.hash
-> b/package/python-systemd/python-systemd.hash
-> > index 789b48590d..6cc6639218 100644
-> > --- a/package/python-systemd/python-systemd.hash
-> > +++ b/package/python-systemd/python-systemd.hash
-> > @@ -1,5 +1,5 @@
-> >   # md5 from https://pypi.python.org/pypi/systemd-python/
-> > -md5  5071ea5bcb976186e92a3f5e75df221d  systemd-python-234.tar.gz
-> > +md5  93f3ca09f35719ca6a4edd1d62d38dd4  systemd-python-235.tar.gz
-> >   # Locally computed
-> > -sha256
-> fd0e44bf70eadae45aadc292cb0a7eb5b0b6372cd1b391228047d33895db83e7
-> systemd-python-234.tar.gz
-> > +sha256
-> 4e57f39797fd5d9e2d22b8806a252d7c0106c936039d1e71c8c6b8008e695c0a
-> systemd-python-235.tar.gz
-> >   sha256
-> dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551
-> LICENSE.txt
-> > diff --git a/package/python-systemd/python-systemd.mk
-> b/package/python-systemd/python-systemd.mk
-> > index 3ccfd57ce5..24ba84df76 100644
-> > --- a/package/python-systemd/python-systemd.mk
-> > +++ b/package/python-systemd/python-systemd.mk
-> > @@ -4,10 +4,10 @@
-> >   #
-> >
->  ########################################################################=
-########
-> >
-> > -PYTHON_SYSTEMD_VERSION =3D 234 # Should be kept in sync with
-> $(SYSTEMD_VERSION)
-> > +PYTHON_SYSTEMD_VERSION =3D 235 # Should be kept in sync with
-> $(SYSTEMD_VERSION)
->
->   SYSTEMD_VERSION is 254.5, not 235... What gives?
->
->   (We should anyway probably put that comment in systemd.mk, not so much
-> here...)
->
->   Regards,
->   Arnout
->
-> >   PYTHON_SYSTEMD_SOURCE =3D systemd-python-$(PYTHON_SYSTEMD_VERSION).ta=
-r.gz
-> > -PYTHON_SYSTEMD_SITE =3D
-> https://pypi.python.org/packages/e8/a8/00ba0f605837a8f69523e6c3a4fb14675a=
-6430c163f836540129c50b3aef
-> > -PYTHON_SYSTEMD_SETUP_TYPE =3D distutils
-> > +PYTHON_SYSTEMD_SITE =3D
-> https://files.pythonhosted.org/packages/10/9e/ab4458e00367223bda2dd7ccf08=
-49a72235ee3e29b36dce732685d9b7ad9
-> > +PYTHON_SYSTEMD_SETUP_TYPE =3D setuptools
-> >   PYTHON_SYSTEMD_LICENSE =3D LGPL-2.1
-> >   PYTHON_SYSTEMD_LICENSE_FILES =3D LICENSE.txt
-> >   PYTHON_SYSTEMD_DEPENDENCIES =3D systemd # To be able to link against
-> libsystemd
->
-
---000000000000eb36dc06096bc917
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Arnout;<div><br></div><div>This is the latest version of p=
-ython-systemd.</div><div>Here is a quick check I did:=C2=A0<a href=3D"https=
-://pypi.org/project/systemd-python/">https://pypi.org/project/systemd-pytho=
-n/</a></div><div><br clear=3D"all"><div><div dir=3D"ltr" class=3D"gmail_sig=
-nature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><span><p dir=3D=
-"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:=
-0pt"><span style=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(=
-0,0,0);background-color:transparent;vertical-align:baseline;white-space:pre=
--wrap">Adam Duskett</span></p><p dir=3D"ltr" style=3D"line-height:1.7999999=
-999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;f=
-ont-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-co=
-lor:transparent;vertical-align:baseline;white-space:pre-wrap">Senior Embedd=
-ed Systems Developer</span></p><p dir=3D"ltr" style=3D"line-height:1.799999=
-9999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;=
-font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-c=
-olor:transparent;vertical-align:baseline;white-space:pre-wrap">M. +1208-515=
--8102</span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;marg=
-in-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&qu=
-ot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparen=
-t;vertical-align:baseline;white-space:pre-wrap"><a href=3D"mailto:adam.dusk=
-ett@amarulasolutions.com" target=3D"_blank">adam.duskett@amarulasolutions.c=
-om</a></span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;mar=
-gin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&q=
-uot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transpare=
-nt;vertical-align:baseline;white-space:pre-wrap">__________________________=
-________</span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;m=
-argin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:=
-&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transpa=
-rent;vertical-align:baseline;white-space:pre-wrap"><br></span><span style=
-=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);backgroun=
-d-color:transparent;vertical-align:baseline;white-space:pre-wrap">Amarula S=
-olutions BV</span></p><p dir=3D"ltr" style=3D"line-height:1.799999999999999=
-8;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-fami=
-ly:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:tran=
-sparent;vertical-align:baseline;white-space:pre-wrap">Joop Geesinkweg 125, =
-1114 AB, Amsterdam, NL</span></p><p dir=3D"ltr" style=3D"line-height:1.7999=
-999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10p=
-t;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background=
--color:transparent;vertical-align:baseline;white-space:pre-wrap">T. +31 (0)=
-85 111 9170</span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mo=
-no&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-a=
-lign:baseline;white-space:pre-wrap"><br></span><span style=3D"font-size:10p=
-t;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background=
--color:transparent;vertical-align:baseline;white-space:pre-wrap"><a href=3D=
-"mailto:info@amarulasolutions.com" target=3D"_blank">info@amarulasolutions.=
-com</a></span></p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;ma=
-rgin-top:0pt;margin-bottom:0pt"><a href=3D"http://www.amarulasolutions.com/=
-" target=3D"_blank"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu =
-Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical=
--align:baseline;white-space:pre-wrap">www.amarulasolutions.com</span></a></=
-p><div><br></div></span></div></div></div><br></div></div><br><div class=3D=
-"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Sat, Nov 4, 2023 at =
-11:59=E2=80=AFAM Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be"=
->arnout@mind.be</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" s=
-tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
-ding-left:1ex"><br>
-<br>
-On 26/10/2023 11:26, Adam Duskett wrote:<br>
-&gt; Signed-off-by: Adam Duskett &lt;<a href=3D"mailto:adam.duskett@amarula=
-solutions.com" target=3D"_blank">adam.duskett@amarulasolutions.com</a>&gt;<=
-br>
-&gt; ---<br>
-&gt;=C2=A0 =C2=A0package/python-systemd/python-systemd.hash | 4 ++--<br>
-&gt;=C2=A0 =C2=A0package/python-systemd/<a href=3D"http://python-systemd.mk=
-" rel=3D"noreferrer" target=3D"_blank">python-systemd.mk</a>=C2=A0 =C2=A0| =
-6 +++---<br>
-&gt;=C2=A0 =C2=A02 files changed, 5 insertions(+), 5 deletions(-)<br>
-&gt; <br>
-&gt; diff --git a/package/python-systemd/python-systemd.hash b/package/pyth=
-on-systemd/python-systemd.hash<br>
-&gt; index 789b48590d..6cc6639218 100644<br>
-&gt; --- a/package/python-systemd/python-systemd.hash<br>
-&gt; +++ b/package/python-systemd/python-systemd.hash<br>
-&gt; @@ -1,5 +1,5 @@<br>
-&gt;=C2=A0 =C2=A0# md5 from <a href=3D"https://pypi.python.org/pypi/systemd=
--python/" rel=3D"noreferrer" target=3D"_blank">https://pypi.python.org/pypi=
-/systemd-python/</a><br>
-&gt; -md5=C2=A0 5071ea5bcb976186e92a3f5e75df221d=C2=A0 systemd-python-234.t=
-ar.gz<br>
-&gt; +md5=C2=A0 93f3ca09f35719ca6a4edd1d62d38dd4=C2=A0 systemd-python-235.t=
-ar.gz<br>
-&gt;=C2=A0 =C2=A0# Locally computed<br>
-&gt; -sha256=C2=A0 fd0e44bf70eadae45aadc292cb0a7eb5b0b6372cd1b391228047d338=
-95db83e7=C2=A0 systemd-python-234.tar.gz<br>
-&gt; +sha256=C2=A0 4e57f39797fd5d9e2d22b8806a252d7c0106c936039d1e71c8c6b800=
-8e695c0a=C2=A0 systemd-python-235.tar.gz<br>
-&gt;=C2=A0 =C2=A0sha256=C2=A0 dc626520dcd53a22f727af3ee42c770e56c97a64fe3ad=
-b063799d8ab032fe551=C2=A0 LICENSE.txt<br>
-&gt; diff --git a/package/python-systemd/<a href=3D"http://python-systemd.m=
-k" rel=3D"noreferrer" target=3D"_blank">python-systemd.mk</a> b/package/pyt=
-hon-systemd/<a href=3D"http://python-systemd.mk" rel=3D"noreferrer" target=
-=3D"_blank">python-systemd.mk</a><br>
-&gt; index 3ccfd57ce5..24ba84df76 100644<br>
-&gt; --- a/package/python-systemd/<a href=3D"http://python-systemd.mk" rel=
-=3D"noreferrer" target=3D"_blank">python-systemd.mk</a><br>
-&gt; +++ b/package/python-systemd/<a href=3D"http://python-systemd.mk" rel=
-=3D"noreferrer" target=3D"_blank">python-systemd.mk</a><br>
-&gt; @@ -4,10 +4,10 @@<br>
-&gt;=C2=A0 =C2=A0#<br>
-&gt;=C2=A0 =C2=A0##########################################################=
-######################<br>
-&gt;=C2=A0 =C2=A0<br>
-&gt; -PYTHON_SYSTEMD_VERSION =3D 234 # Should be kept in sync with $(SYSTEM=
-D_VERSION)<br>
-&gt; +PYTHON_SYSTEMD_VERSION =3D 235 # Should be kept in sync with $(SYSTEM=
-D_VERSION)<br>
-<br>
-=C2=A0 SYSTEMD_VERSION is 254.5, not 235... What gives?<br>
-<br>
-=C2=A0 (We should anyway probably put that comment in <a href=3D"http://sys=
-temd.mk" rel=3D"noreferrer" target=3D"_blank">systemd.mk</a>, not so much h=
-ere...)<br>
-<br>
-=C2=A0 Regards,<br>
-=C2=A0 Arnout<br>
-<br>
-&gt;=C2=A0 =C2=A0PYTHON_SYSTEMD_SOURCE =3D systemd-python-$(PYTHON_SYSTEMD_=
-VERSION).tar.gz<br>
-&gt; -PYTHON_SYSTEMD_SITE =3D <a href=3D"https://pypi.python.org/packages/e=
-8/a8/00ba0f605837a8f69523e6c3a4fb14675a6430c163f836540129c50b3aef" rel=3D"n=
-oreferrer" target=3D"_blank">https://pypi.python.org/packages/e8/a8/00ba0f6=
-05837a8f69523e6c3a4fb14675a6430c163f836540129c50b3aef</a><br>
-&gt; -PYTHON_SYSTEMD_SETUP_TYPE =3D distutils<br>
-&gt; +PYTHON_SYSTEMD_SITE =3D <a href=3D"https://files.pythonhosted.org/pac=
-kages/10/9e/ab4458e00367223bda2dd7ccf0849a72235ee3e29b36dce732685d9b7ad9" r=
-el=3D"noreferrer" target=3D"_blank">https://files.pythonhosted.org/packages=
-/10/9e/ab4458e00367223bda2dd7ccf0849a72235ee3e29b36dce732685d9b7ad9</a><br>
-&gt; +PYTHON_SYSTEMD_SETUP_TYPE =3D setuptools<br>
-&gt;=C2=A0 =C2=A0PYTHON_SYSTEMD_LICENSE =3D LGPL-2.1<br>
-&gt;=C2=A0 =C2=A0PYTHON_SYSTEMD_LICENSE_FILES =3D LICENSE.txt<br>
-&gt;=C2=A0 =C2=A0PYTHON_SYSTEMD_DEPENDENCIES =3D systemd # To be able to li=
-nk against libsystemd<br>
-</blockquote></div>
-
---000000000000eb36dc06096bc917--
-
---===============3976713077930302384==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 2d921d6f0b..b1adb4e674 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1414,9 +1414,6 @@ package/vboot-utils/0004-Disable-static-futility.patch Upstream
+ package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch Upstream
+ package/vboot-utils/0006-Update-for-openssl-1.1.patch Upstream
+ package/vboot-utils/0007-Make-vboot_version-extern-in-header.patch Upstream
+-package/vde2/0001-no-cxx.patch Upstream
+-package/vde2/0002-fstp-Add-static-to-inline-functions.patch Upstream
+-package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch Upstream
+ package/vdr/0001-getloadavg.patch Upstream
+ package/vlc/0001-Disable-building-of-statically-linked-vlc-binary.patch Upstream
+ package/vlc/0002-automake-add-subdir-objects-option.patch Upstream
+diff --git a/package/vde2/0001-no-cxx.patch b/package/vde2/0001-no-cxx.patch
+deleted file mode 100644
+index 67cefa2bb8..0000000000
+--- a/package/vde2/0001-no-cxx.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-configure: do not test for CXX, it's not needed
+-
+-There is no C++ source file, so no reason to require a C++ compiler.
+-
+-Reported-by: Peter Korsgaard <jacmet@uclibc.org>
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+----
+-Patch sent upstream
+-( not yet in archives, awaits moderator approval... :-/ )
+-
+-diff -durN vde2-2.3.2.orig/configure.ac vde2-2.3.2/configure.ac
+---- vde2-2.3.2.orig/configure.ac	2011-11-23 17:41:19.000000000 +0100
+-+++ vde2-2.3.2/configure.ac	2012-12-14 21:56:47.146319686 +0100
+-@@ -11,7 +11,6 @@
+- AC_CONFIG_LIBOBJ_DIR(src/common)
+- 
+- # Checks for programs.
+--AC_PROG_CXX
+- AC_PROG_CC
+- AC_PROG_INSTALL
+- AC_PROG_LN_S
+diff --git a/package/vde2/0002-fstp-Add-static-to-inline-functions.patch b/package/vde2/0002-fstp-Add-static-to-inline-functions.patch
+deleted file mode 100644
+index 0dbe083d06..0000000000
+--- a/package/vde2/0002-fstp-Add-static-to-inline-functions.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 67bc8443ac7e8144a78d84dee30a5cac3b5c99a4 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sun, 27 Aug 2017 23:56:05 +0200
+-Subject: [PATCH] fstp: Add static to inline functions
+-
+-From [1]
+-"This is needed to avoid a link error where the inline functions appear
+-missing at link time.
+-From c99 standard inline function should either be declared static or
+-have an extern instance in a c file for linking.
+-This fix is necessary to build with gcc 7; for some reason it was not
+-trigerred before."
+-
+-[1] https://git.buildroot.net/buildroot/commit/?id=21133ada326c87627f7bdee4493d8086587c3cca
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- src/vde_switch/fstp.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/vde_switch/fstp.c b/src/vde_switch/fstp.c
+-index aab7324..b1e7ee8 100644
+---- a/src/vde_switch/fstp.c
+-+++ b/src/vde_switch/fstp.c
+-@@ -30,14 +30,14 @@ static int numports;
+- #ifdef FSTP
+- #include <fstp.h>
+- /*********************** sending macro used by FSTP & Core ******************/
+--void inline ltonstring(unsigned long l,unsigned char *s) {
+-+static void inline ltonstring(unsigned long l,unsigned char *s) {
+- 	s[3]=l; l>>=8;
+- 	s[2]=l; l>>=8;
+- 	s[1]=l; l>>=8;
+- 	s[0]=l;
+- }
+- 
+--unsigned long inline nstringtol(unsigned char *s) {
+-+static unsigned long inline nstringtol(unsigned char *s) {
+- 	return (s[0]<<24)+(s[1]<<16)+(s[2]<<8)+s[3];
+- }
+- 
+--- 
+-2.9.5
+-
+diff --git a/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch b/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
+deleted file mode 100644
+index 7f771dfc7e..0000000000
+--- a/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-vde_l3: Add static to inline functions
+-
+-Add static to inline functions to avoid the following build failure
+-with BR2_OPTIMIZE_0:
+-
+-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/mips64-buildroot-linux-uclibc/10.3.0/../../../../mips64-buildroot-linux-uclibc/bin/ld: vde_l3.o: in function `ip_output_ready':
+-vde_l3.c:(.text+0xb30): undefined reference to `iphead'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/5eeefcdac0b8974a424a885fdc2e82f7cb4b617d
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -Nura vde2-2.3.2.orig/src/vde_l3/vde_l3.c vde2-2.3.2/src/vde_l3/vde_l3.c
+---- vde2-2.3.2.orig/src/vde_l3/vde_l3.c	2022-04-21 11:05:17.393452698 +0200
+-+++ vde2-2.3.2/src/vde_l3/vde_l3.c	2022-04-21 11:10:36.509804404 +0200
+-@@ -100,17 +100,17 @@
+- };
+- 
+- 
+--inline struct vde_ethernet_header *ethhead(struct vde_buff *vdb)
+-+static inline struct vde_ethernet_header *ethhead(struct vde_buff *vdb)
+- {
+- 	return (struct vde_ethernet_header*)(vdb->data);
+- }
+- 
+--inline struct iphdr *iphead(struct vde_buff *vdb)
+-+static inline struct iphdr *iphead(struct vde_buff *vdb)
+- {
+- 	return (struct iphdr*)(vdb->data + 14);
+- }
+- 
+--inline void *payload(struct vde_buff *vdb)
+-+static inline void *payload(struct vde_buff *vdb)
+- {
+- 	return (uint8_t*)(vdb->data + 14 + sizeof(struct iphdr));
+- }
+diff --git a/package/vde2/Config.in b/package/vde2/Config.in
+index f640a4ae2a..44bdf50de0 100644
+--- a/package/vde2/Config.in
++++ b/package/vde2/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_VDE2
+ 	  spawned over a set of physical computers over the Internet.
+ 	  VDE is part of the virtualsquare project.
+ 
+-	  http://vde.sourceforge.net/
++	  https://github.com/virtualsquare/vde-2/
+ 
+ comment "vde2 needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+diff --git a/package/vde2/vde2.hash b/package/vde2/vde2.hash
+index a9e1ea2263..11d6a28279 100644
+--- a/package/vde2/vde2.hash
++++ b/package/vde2/vde2.hash
+@@ -1,5 +1,4 @@
+ # Locally computed:
+-sha256  cbea9b7e03097f87a6b5e98b07890d2275848f1fe4b9fcda77b8994148bc9542  vde2-2.3.2.tar.bz2
++sha256  a7d2cc4c3d0c0ffe6aff7eb0029212f2b098313029126dcd12dc542723972379  vde2-2.3.3.tar.gz
+ sha256  fb295d0c24b8ef4b39017ac68e772e8e6e839612ce10da12b9f48d1e8e512e2e  COPYING
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.libvdeplug
+-sha256  d5ac74315b2d2f9c53f5839e311484f4646a9401b68d02d36f3dab386352e74d  COPYING.slirpvde
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index 76d6f352b7..ab4c32143d 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -4,24 +4,21 @@
+ #
+ ################################################################################
+ 
+-VDE2_VERSION = 2.3.2
+-VDE2_SOURCE = vde2-$(VDE2_VERSION).tar.bz2
+-VDE2_SITE = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
+-VDE2_LICENSE = GPL-2.0+, LGPL-2.1+, BSD-3-Clause
+-VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug COPYING.slirpvde
++VDE2_VERSION = 2.3.3
++VDE2_SITE = $(call github,virtualsquare,vde-2,v$(VDE2_VERSION))
++VDE2_LICENSE = GPL-2.0+, LGPL-2.1+
++VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug
+ VDE2_CPE_ID_VENDOR = vde_project
+ VDE2_CPE_ID_PRODUCT = vde
+ VDE2_INSTALL_STAGING = YES
+ 
+-# We touch configure.ac, so we need to autoreconf
++# From git
+ VDE2_AUTORECONF = YES
+ 
+ # Reasons for enabling/disabling stuff:
+ # - tuntap is enabled in the hope we're using a recent-enough toolchain
+ #   that does have if_tun.h (virtually everything these days)
+-# - kvde_switch is disabled because it requires a patched kernel
+-# - cryptcab is disabled to not depend on openSSL
+-# - python is disabled to not depend on Python
++# - cryptcab is disabled to not depend on wolfssl
+ # - pcap is disabled to not depend on libpcap
+ # - profiling is disabled because we do not want to debug/profile
+ #
+@@ -30,25 +27,16 @@ VDE2_AUTORECONF = YES
+ VDE2_CONF_OPTS = \
+ 	--disable-cryptcab \
+ 	--disable-experimental \
+-	--disable-kernel-switch \
+ 	--disable-pcap \
+ 	--disable-profile \
+-	--disable-python \
+ 	--enable-tuntap
+ 
+-# Package does not build in parallel due to improper make rules
+-VDE2_MAKE = $(MAKE1)
+-
+ HOST_VDE2_CONF_OPTS = \
+ 	--disable-cryptcab \
+ 	--disable-experimental \
+-	--disable-kernel-switch \
+ 	--disable-pcap \
+ 	--disable-profile \
+-	--disable-python \
+ 	--enable-tuntap
+ 
+-HOST_VDE2_MAKE = $(MAKE1)
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.42.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3976713077930302384==--
