@@ -4,84 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05FA7C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 17:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7528BC4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 17:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FD4C408C8;
-	Sun,  5 Nov 2023 17:14:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FD4C408C8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3636400D6;
+	Sun,  5 Nov 2023 17:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3636400D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WmNxVBzofDxx; Sun,  5 Nov 2023 17:14:19 +0000 (UTC)
+	with ESMTP id TcShkIg1oVst; Sun,  5 Nov 2023 17:40:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0F32408AF;
-	Sun,  5 Nov 2023 17:14:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0F32408AF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A9601BF45A
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:14:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD6EB408D7;
+	Sun,  5 Nov 2023 17:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD6EB408D7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B9B771BF45A
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7FF081F81
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:14:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7FF081F81
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92044418A3
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 17:40:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92044418A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6nbwHNkMol-Q for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 17:14:16 +0000 (UTC)
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CFE6D80BD6
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 17:14:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFE6D80BD6
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-32faea0fa1fso1923504f8f.1
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 09:14:15 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8G9gg9wcShm4 for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 17:40:53 +0000 (UTC)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 36EC54188F
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 17:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36EC54188F
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-507bd644a96so5286668e87.3
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 09:40:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699204453; x=1699809253;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=swLOwpIV5MMmPTLuOaa2e9gyZW0oOi6bp/uyDaI8X9c=;
- b=EMLdGZ5EoE713pwCOAQvIKDaeIi8VbaJOHXbbw4xz/7CRbzsyvZKJH2Ze7+vsY6l3J
- iK/jEfqvlGW9TT0QohAKPZAIKPCk9EE/KZWXJRmxvGDtuhukxt+A4eW9yeVD005ZhHWD
- 5bT73PJItwE95EDjjdILm5qYWhdIKzdBct0dmxSGjpBAwVFMc/EOTkcz3j4oc+tBil2X
- 70OHxshNq6TnGfKDaHZQNlANVPTeZS/C+5TSv1iE2lwXWa+0GA0qBtOWzk3fYHOkjgiD
- sBzSA9dgdYFp2yTNdwyrfuwKUqCdwoyTinQV6AgVW63QgckUVayal2QkOI/mZTCvVfTT
- tGsg==
-X-Gm-Message-State: AOJu0YwcEid5F4cZNbn0NfOOjuLBbMCAnULONHNrAzq7rRtN8exGVtkY
- xDcCYeZPEdzO9v8o/gFbd8kTSixp6t4=
-X-Google-Smtp-Source: AGHT+IGhF1/outOA6szV9qrev00cPjAHXTaRjqqdP7giKC5i+BnjVEVNRnTCefhTdWRPTgXMjEawmg==
-X-Received: by 2002:a5d:64ad:0:b0:32d:d973:b546 with SMTP id
- m13-20020a5d64ad000000b0032dd973b546mr10400851wrp.0.1699204452793; 
- Sun, 05 Nov 2023 09:14:12 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- fc13-20020a05600c524d00b004068de50c64sm9559324wmb.46.2023.11.05.09.14.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 09:14:12 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 18:14:08 +0100
-Message-ID: <20231105171408.103503-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+ d=1e100.net; s=20230601; t=1699206051; x=1699810851;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=kvecd1Cx2tBAMJzO6FqU8WBsP0JrshyCSe1/FDmbcc4=;
+ b=O12SipSG7TzUhEmO8KhFRpBcyWRDe7urokNhvoY+wfnWQR0pr0myVQEStPQOq2LfpV
+ RL0PydoXAxNrrlwT+087uxLcX5nFC3tj7cw+5P3gYF0ZjPOcWbFVyKOKgXf/2nUPcKQk
+ t+mvuWAbbrsjVYIsPtTrywjJALSR3eKt/fGCOOZKtsydH0XUoQHlj38ot/elx60EelZE
+ TxB1QBdinD85vw5srI8TKcyItKnvBCzB8P8Jig9qJ1n++j3io4FIwTVLXi7RVAKPjxa6
+ 8qqY0TkFXmEXGho+OEL0ApwuNPfhmTezL0Z9EqyFF4b6ag2X/aGf+rqeo8wL55fvFBDk
+ msbQ==
+X-Gm-Message-State: AOJu0YyIF+mgfWocFpbNACYXQIVwQz20z0E6ibPHgKvN4cipxtSkP4n5
+ LwO1xvwQOKdqz3OHtSlpHCKt7g==
+X-Google-Smtp-Source: AGHT+IFCEuIN0JulDGkKevplzbohrYqFvPTeTM60NjAyrCzUk6wwn8iFo8aRsoH0j98xBBO3VfrSag==
+X-Received: by 2002:ac2:5d22:0:b0:509:4645:b78b with SMTP id
+ i2-20020ac25d22000000b005094645b78bmr6867736lfb.10.1699206050477; 
+ Sun, 05 Nov 2023 09:40:50 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ fd20-20020a056402389400b005400dc94f43sm3405463edb.45.2023.11.05.09.40.49
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 05 Nov 2023 09:40:49 -0800 (PST)
+Message-ID: <ef809271-fc0b-4e08-a085-4c997881b7df@mind.be>
+Date: Sun, 5 Nov 2023 18:40:47 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Reza Arbab <arbab@linux.ibm.com>, buildroot@buildroot.org
+References: <20231009151729.2223963-1-arbab@linux.ibm.com>
+ <20231009151729.2223963-5-arbab@linux.ibm.com>
+In-Reply-To: <20231009151729.2223963-5-arbab@linux.ibm.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699204453; x=1699809253; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=swLOwpIV5MMmPTLuOaa2e9gyZW0oOi6bp/uyDaI8X9c=;
- b=D7gsWDkyPlGmeu0OO88bLzQ/cuR73SCRZhe/x4Gd9tlKNWLnLraY54Rc1vTaOsMgjD
- JJ0WGuX1z4XCc+ZidBK1vvKw+3BLgBmb2HYfhiVxIOm9+ASN/A4mwTXxInDXFx+6cUYf
- 2R3NSqCfXkBBdKPNViZRES1X5RWXXqpdqRSadFKk6Ic9ylqA0fgMaO2mxnLeG+8l0opo
- jCzhkpzFCz7VbWofyrDI3p9JtXBt0SLHjroTYwSvIGkZvtq6JCNSLJCySaO8dcWCM3rF
- A5vfpqhst3pVVq1KJnefgzg540+3WrQ23EyLMxv1jQsxB6vlrxyTleO86uEcxsph8Jcr
- XKJw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=D7gsWDky
-Subject: [Buildroot] [PATCH 1/1] package/kvmtool: add KVMTOOL_CPE_ID_VENDOR
+ d=mind.be; s=google; t=1699206051; x=1699810851; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=kvecd1Cx2tBAMJzO6FqU8WBsP0JrshyCSe1/FDmbcc4=;
+ b=EeNzEpZwfkhr0LkwNaoG+1lIKscovd2O2LR020dJvBDkmnqkRMhsw0VFSgMKfsWY8B
+ Bl50+uaG5itzMe/95KhCyS95zd2She14B7YdbkEfOvKf52TmOXxtqJxJIJhstrG9nd6e
+ 9UWJYjNpVoOKN3WAYdbXOMZPuNmmO9rP6sKpQWynZTuOVIDTwXa4Naip2Mq0d8lkwET3
+ rkxZ+XONajFPJ5l5z29b6vyt/ZN1IZ17mFYds0z95W5eLBFUh4mHyAFDshIuwaOcY+nZ
+ IdeofJgS/xBq0YZb63tnhglU9/mGAyMYfXp3fJv8+LaDg9gNbp396jXA0ZHzjDjcOgjP
+ VlaQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=EeNzEpZw
+Subject: Re: [Buildroot] [PATCH v3 4/8] package/petitboot: prefer kexec-lite
+ on powerpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,37 +100,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Laurent Vivier <laurent@vivier.eu>, Joel Stanley <joel@jms.id.au>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:kvmtool_project:kvmtool is a valid CPE identifier for this
-package:
+  Hi Reza,
 
-  https://nvd.nist.gov/products/cpe/detail/9B4C8068-B4EB-487F-958A-353BD3F494D1
+On 09/10/2023 17:17, Reza Arbab wrote:
+> This is a better choice on devicetree-based platforms.
+> 
+> Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+> ---
+>   package/petitboot/Config.in | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
+> index b534b4900e88..4981c165bf76 100644
+> --- a/package/petitboot/Config.in
+> +++ b/package/petitboot/Config.in
+> @@ -11,12 +11,11 @@ config BR2_PACKAGE_PETITBOOT
+>   	select BR2_PACKAGE_ELFUTILS
+>   	select BR2_PACKAGE_LVM2 # devmapper
+>   	select BR2_PACKAGE_NCURSES
+> -	# run-time dependency only
+> +	# run-time dependencies
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/kvmtool/kvmtool.mk | 1 +
- 1 file changed, 1 insertion(+)
+  This is an unrelated change (sorting the runtime dependencies alphabetically 
+and removing the repetition of the comment). Ideally, this should have been a 
+separate commit. Failing that, it should be explained in the commit message. 
+I've done that.
 
-diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-index df6ae7e0f1..9c58e44876 100644
---- a/package/kvmtool/kvmtool.mk
-+++ b/package/kvmtool/kvmtool.mk
-@@ -17,6 +17,7 @@ KVMTOOL_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib)
- KVMTOOL_LICENSE = GPL-2.0
- KVMTOOL_LICENSE_FILES = COPYING
-+KVMTOOL_CPE_ID_VENDOR = kvmtool_project
- 
- # Disable -Werror, otherwise musl is not happy
- KVMTOOL_MAKE_OPTS = \
--- 
-2.42.0
+>   	select BR2_PACKAGE_KEXEC if !BR2_PACKAGE_KEXEC_LITE
+> -	# run-time dependency only
+> -	select BR2_PACKAGE_POWERPC_UTILS if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
+> -	# run-time dependency only
+> +	select BR2_PACKAGE_KEXEC_LITE if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
 
+  If the user has already selected kexec, then we'll have both kexec and 
+kexec-lite. I don't think that that is a good idea. So instead, I injected a 
+separate commit that introduces BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS, and use 
+that to simplify the condition here and to only select kexec-lite if kexec is 
+not selected:
+
+	select BR2_PACKAGE_KEXEC if !BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS
+	select BR2_PACKAGE_KEXEC_LITE if BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS && 
+!BR2_PACKAGE_KEXEC
+
+
+
+  Regards,
+  Arnout
+
+>   	select BR2_PACKAGE_NVME if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
+> +	select BR2_PACKAGE_POWERPC_UTILS if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
+>   	help
+>   	  Petitboot is a small kexec-based bootloader
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
