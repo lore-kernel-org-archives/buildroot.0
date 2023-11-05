@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCEB2C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 04:43:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25409C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 04:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75B48400D6;
-	Sun,  5 Nov 2023 04:43:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75B48400D6
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3183821CB;
+	Sun,  5 Nov 2023 04:49:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3183821CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qAa7hGDWaL_u; Sun,  5 Nov 2023 04:43:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UNsFngQQjzXq; Sun,  5 Nov 2023 04:49:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A63E401C2;
-	Sun,  5 Nov 2023 04:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A63E401C2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 204AF1BF5A0
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 04:43:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB22E821CD;
+	Sun,  5 Nov 2023 04:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB22E821CD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D20D1BF5A0
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 04:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9F9E60AF2
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 04:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9F9E60AF2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DDF741A06
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 04:49:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DDF741A06
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IqOhg5f07RNP for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 04:43:06 +0000 (UTC)
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com
- [IPv6:2607:f8b0:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BB5F960A99
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 04:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB5F960A99
-Received: by mail-ot1-x32f.google.com with SMTP id
- 46e09a7af769-6ce2988d62eso2244053a34.1
- for <buildroot@buildroot.org>; Sat, 04 Nov 2023 21:43:06 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3xUZ8XV_v40I for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 04:49:32 +0000 (UTC)
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3DC8041A05
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 04:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DC8041A05
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-35749078a59so11478585ab.3
+ for <buildroot@buildroot.org>; Sat, 04 Nov 2023 21:49:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699159385; x=1699764185;
+ d=1e100.net; s=20230601; t=1699159771; x=1699764571;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9OglLUan/LRwPsLBfHls3EMjOO5IZIHuREa5D43Alok=;
- b=DdBFBGKr/SQIeOyltmb5/xJJ1bnn3yxGynDgNzs3Ku2p+VFmAGEtyo2TZ/S/Uk0EDY
- aj/w7dbrXBREzMVfk+jFWW6gxLUW9lIx+enlEZQKy1ttBar6emVeWZiV1zEmy+1Wj7r0
- tzOlqbJBN7gLf7Qrhy2/87HZJE0tv7mDwKK87OBczt9uwh+DnGzPznsu5+yaH8+TnRVs
- FYUs9MvJhyJcmNroGZr1AEmCeLaPWFMelq/lNPIoaj1TVKzHvzJUSd9v0LgtGkLudpgn
- zaQ1l97WZEkGqIx2A5QvCowuycx0U0im4/rHCjW9Lx+uJN3nTTLmQakAKQulZG0maHnD
- u4Ig==
-X-Gm-Message-State: AOJu0YxAFt7jlARQFvbRpnuiCMw0dliwWEVattp62/v69YgnVas9BhKQ
- BbuCBGwqGZL6n9cZut4FBjGSyQQEG0k=
-X-Google-Smtp-Source: AGHT+IFMXH0qrAEfOpTZkLp5K3UHq0MTn8TYeO089oJT4AuHrWA6SuLeozdEd3MXJDkvNkMcUqePpA==
-X-Received: by 2002:a05:6871:8011:b0:1e1:e1f8:ea3e with SMTP id
- sk17-20020a056871801100b001e1e1f8ea3emr27801413oab.1.1699159384862; 
- Sat, 04 Nov 2023 21:43:04 -0700 (PDT)
+ bh=VwOgPua+IfZh/I8B3Z/WKDX+NiWOnKLFMGETca/usdU=;
+ b=KTFj2MaSOxv65J3nQemVj0Ch+b/V/I4IFl6cRUdfhPHQXL5Vj4VgeO9J0kkfUATuzO
+ jg70fg1lxVgFygVR07p+9NzTrO9QfM4kwgq/dLzv5RjHnnH/EqEvvA5a7xMf14xxua6i
+ eQtfLfHV/9EAO/Fc7rv9OSSECu1QQkinsnjM2fPBJ2gayVDUfvMOQvCe2sUR3wpQx10v
+ NwmpHvkWdTspAofMm6/eAuy00QZx1DZGgCkphm203ZbHdCA9BbiZkcx0Bj57pMnPPcAs
+ 0lRjzJTN51hXwJcgmnk6bPglYQyWjoSG/v29md/Z0U9yVz4aZiBlpwcb5/ll4JLVFSMA
+ xTDQ==
+X-Gm-Message-State: AOJu0Yw7WTtnU83e7zBnmD5TXuFAf08c1DZWXh2v1vhfvjTKo3ZFF2MV
+ f43UtFE03IZR6DLKWGAtB+zmts3DMFg=
+X-Google-Smtp-Source: AGHT+IEYSwd/e9+N3C0WDBGOwpfUlQo7kBnsAc46gsvpTZQc+qYt54B9F7cFndyTDj9SIYv4Fs+IRw==
+X-Received: by 2002:a92:cb02:0:b0:359:37e2:29da with SMTP id
+ s2-20020a92cb02000000b0035937e229damr14983748ilo.16.1699159770746; 
+ Sat, 04 Nov 2023 21:49:30 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- z26-20020a029f1a000000b004564b193674sm1419900jal.160.2023.11.04.21.43.04
+ r15-20020a92d98f000000b0035134f1a240sm1627256iln.86.2023.11.04.21.49.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Nov 2023 21:43:04 -0700 (PDT)
+ Sat, 04 Nov 2023 21:49:30 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Nov 2023 22:43:03 -0600
-Message-Id: <20231105044303.2816798-1-james.hilliard1@gmail.com>
+Date: Sat,  4 Nov 2023 22:49:28 -0600
+Message-Id: <20231105044928.2821038-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699159385; x=1699764185; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699159771; x=1699764571; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9OglLUan/LRwPsLBfHls3EMjOO5IZIHuREa5D43Alok=;
- b=V20SiGiRXVOxPzR71IbXKnd+4lWLa7k7pRYIzKXp5YUAogwq/SOLjkAcHQoAGKZT2I
- L0c+l/WoLfKdDFwdJkYbEulhGMTTujnAJEHLfTDuBj2Kp3XFJajN1xe1tdnWM9L/6VEt
- YfyUjKcgtXpcl8T+/5Lkxdt/1aqOUYgpRBAOHYuuGoiOtMknOp7r6aVFbL3HqOoT5Ysk
- RS09Kt2dXgO7PeQIjlM7/fvOQt3OzU+JNCBu9TDyV21h9H5gIpoGJ1oy5SshPU+M/z9H
- SaUO9EQeQ03p0N9Yp9tj+AVx8epXxioRjyi4FCQLybtpk1eybPlxklmcFZB8KyVHC+Rq
- uK6w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=VwOgPua+IfZh/I8B3Z/WKDX+NiWOnKLFMGETca/usdU=;
+ b=NNgCGWqSFRMHuFjJSOPj8OFPTT00J4bmXOZ++E2cxq9FEiY4/qCfcD2RikfY8aFdEb
+ 94E0G3qd7hoDEIM36kN4lNvTI0YYYkoOTSdyge5zaWqFmyTCmMthP9DkkkEGeAm7/+5a
+ 2AdEjEWnFiaeLt0qH9hSb+UMjOs1v3nnDZEOUnPCnlP2J1Z6xqRLgXDP6wtWBMycDlg6
+ GxV9l2jF82CnsLIAgms6/mIJOUNYWDybbfY2LmV6TXwb1OyTtoiqK27vH5fBV8DSzCWk
+ VlglyKcanuaYz1L3/fUXV+Zekdpqt4IDx9lAnZbg9740GRQ7Y1XPQKgRMx16V+cm42Am
+ 1vaw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=V20SiGiR
-Subject: [Buildroot] [PATCH 1/1] package/python-dbus-fast: bump to version
- 2.12.0
+ header.a=rsa-sha256 header.s=20230601 header.b=NNgCGWqS
+Subject: [Buildroot] [PATCH 1/1] package/python-dnspython: bump to version
+ 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,47 +94,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop patch which is now upstream.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-dbus-fast/python-dbus-fast.hash | 4 ++--
- package/python-dbus-fast/python-dbus-fast.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...move-spurious-wheel-build-dependency.patch | 29 -------------------
+ .../python-dnspython/python-dnspython.hash    |  4 +--
+ package/python-dnspython/python-dnspython.mk  |  4 +--
+ 3 files changed, 4 insertions(+), 33 deletions(-)
+ delete mode 100644 package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
 
-diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
-index 83382bfb29..08d2675443 100644
---- a/package/python-dbus-fast/python-dbus-fast.hash
-+++ b/package/python-dbus-fast/python-dbus-fast.hash
+diff --git a/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch b/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
+deleted file mode 100644
+index b43217edad..0000000000
+--- a/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 53b989e4ce32c941d748ad33502600497595914a Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Wed, 2 Nov 2022 14:01:58 -0600
+-Subject: [PATCH] Remove spurious wheel build dependency
+-
+-Wheel isn't a build dependency so it shouldn't be in setup_requires.
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[james.hilliard1@gmail.com: backport from upstream commit
+-53b989e4ce32c941d748ad33502600497595914a]
+----
+- setup.cfg | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/setup.cfg b/setup.cfg
+-index 0abd270..2cb3e06 100644
+---- a/setup.cfg
+-+++ b/setup.cfg
+-@@ -46,7 +46,7 @@ packages =
+-     dns.rdtypes.CH
+- python_requires = >=3.7
+- test_suite = tests
+--setup_requires = setuptools>=44; wheel; setuptools_scm[toml]>=3.4.3
+-+setup_requires = setuptools>=44; setuptools_scm[toml]>=3.4.3
+- 
+- [options.extras_require]
+- DOH = httpx>=0.21.1; h2>=4.1.0; requests; requests-toolbelt
+--- 
+-2.34.1
+-
+diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
+index 29441b41ea..77ffb5dedc 100644
+--- a/package/python-dnspython/python-dnspython.hash
++++ b/package/python-dnspython/python-dnspython.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dbus-fast/json
--md5  810a5b08cc14e269207efa9cb651e86b  dbus_fast-2.7.0.tar.gz
--sha256  9110c689fea4869647ebad3cd80317554c9f77e3825eed2e36f4cb9aec749761  dbus_fast-2.7.0.tar.gz
-+md5  791ce3b0c04099959161a18ae983bf25  dbus_fast-2.12.0.tar.gz
-+sha256  849478e11d251fa4ebb99ce5bfee332cb6383c63ef0bc97bae23cef4e0badf9c  dbus_fast-2.12.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dnspython/json
+-md5  c7172f4115cd7b60fd5037cfcd8f9408  dnspython-2.2.1.tar.gz
+-sha256  0f7569a4a6ff151958b64304071d370daa3243d15941a7beedf0c9fe5105603e  dnspython-2.2.1.tar.gz
++md5  fac4e1580e5e9dfee722cb97bc073722  dnspython-2.4.2.tar.gz
++sha256  8dcfae8c7460a2f84b4072e26f1c9f4101ca20c071649cb7c34e8b6a93d58984  dnspython-2.4.2.tar.gz
  # Locally computed sha256 checksums
- sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
-diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
-index 737406c9ab..b890177c74 100644
---- a/package/python-dbus-fast/python-dbus-fast.mk
-+++ b/package/python-dbus-fast/python-dbus-fast.mk
+ sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
+diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
+index 43030ae476..1459ec8881 100644
+--- a/package/python-dnspython/python-dnspython.mk
++++ b/package/python-dnspython/python-dnspython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DBUS_FAST_VERSION = 2.7.0
-+PYTHON_DBUS_FAST_VERSION = 2.12.0
- PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
--PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/e5/ba/beeaf36821f0164a208e8cbe9adbdc75ce0a6eafdebd4011912a806a4275
-+PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/f5/8c/220fcbe4337b842d730d5752f207fc8efd3a02405c71c329e61218e947b8
- PYTHON_DBUS_FAST_SETUP_TYPE = setuptools
- PYTHON_DBUS_FAST_LICENSE = MIT
- PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
+-PYTHON_DNSPYTHON_VERSION = 2.2.1
++PYTHON_DNSPYTHON_VERSION = 2.4.2
+ PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
+-PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/99/fb/e7cd35bba24295ad41abfdff30f6b4c271fd6ac70d20132fa503c3e768e0
++PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/65/2d/372a20e52a87b2ba0160997575809806111a72e18aa92738daccceb8d2b9
+ PYTHON_DNSPYTHON_LICENSE = ISC
+ PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
+ PYTHON_DNSPYTHON_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
