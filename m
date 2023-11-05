@@ -4,88 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30816C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 09:11:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95AA7C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 09:25:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63B0D60FEB;
-	Sun,  5 Nov 2023 09:11:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63B0D60FEB
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE52361042;
+	Sun,  5 Nov 2023 09:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE52361042
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NCrZdpPipyoX; Sun,  5 Nov 2023 09:11:03 +0000 (UTC)
+	with ESMTP id Bx7ApLpfohyp; Sun,  5 Nov 2023 09:25:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 751B760FF4;
-	Sun,  5 Nov 2023 09:11:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 751B760FF4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8721D1BF578
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 09:10:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D98860FF7;
+	Sun,  5 Nov 2023 09:25:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D98860FF7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DFCB1BF578
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 09:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D29C41952
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 09:10:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D29C41952
+ by smtp2.osuosl.org (Postfix) with ESMTP id 625B2404DB
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 09:25:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 625B2404DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nm0akcFmbz0I for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 09:10:48 +0000 (UTC)
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5EE954193E
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 09:10:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EE954193E
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-7aca968a063so133132839f.0
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 01:10:48 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xdjH58rZLSTD for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 09:25:02 +0000 (UTC)
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 05AE3400A6
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 09:25:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05AE3400A6
+Received: by mail-io1-xd2b.google.com with SMTP id
+ ca18e2360f4ac-7a68d1698adso91853839f.1
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 01:25:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699175447; x=1699780247;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Wi2SYCL0KA0u/r7Lq+JpzlVAG6WLr7oUnPeVtBMooWs=;
- b=vmbVjaZWaPB9IfsLiuXFaivD3w4nfpr6ITOCaJOPT+loyeCi2sTdlhs7tLGyQLviuL
- nH1Iu6QdTO30BzJSKNbDQmVCJBlUFnPTKKnjOrkB0ZLTTRcxDTHV4+MsZ7RCd+V1mx63
- HydtIyUmkKTJqJM6/eR7airnnkQ2XzA0vY5wTSg613zL6qoH9gKW6DYFLUVwRItyBO2Z
- m0rXTyGlEZ3+R0GbXmJ7n2Zp4FUDdYsfvNfzryzEvtcj5v02tvfdZ1LUyrM/qf6bzZ4o
- I3E6O9aGohN+ZZ2SOqW1rD0UpW4kNjT5TLmVKsPRgM7xFqRvCeHrhr0UoSqy+kGCr25U
- gyfw==
-X-Gm-Message-State: AOJu0Yw3+7nuhtLlscw+s4yHGaeMTvjMjG7kD98lr1jAnkHJ6nDzpDhR
- coix/Tl3R8kCcXgWNvtQpOwomLi0ZLh13g==
-X-Google-Smtp-Source: AGHT+IFI8RVuxaPUfFyDqvKnymcIxwgblR/UMAtDnYjTI/HlLFgAJKVfi77myT43gxM5n6OlRl8qnQ==
-X-Received: by 2002:a05:6602:1506:b0:7a9:629f:3c5a with SMTP id
- g6-20020a056602150600b007a9629f3c5amr37473418iow.14.1699175446685; 
- Sun, 05 Nov 2023 01:10:46 -0800 (PST)
+ d=1e100.net; s=20230601; t=1699176300; x=1699781100;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=et46/AZfvgaoCt9iMcvD0Kb1GxURfwNmU/qyqjCg83g=;
+ b=B+HKNr+9gwSwvII/urSBLKfdHsuziZ/nr+vJPafeUz09N5lhXbjl+V/2utzj82a3/Q
+ nzuSW2x6YE3WXITFbQR+YuEIjQ+XXxCHjMFjg2wLN8JKhubCWmyHRcjL6XeZ4L0Pu+AW
+ 4Soe+fFi4KlS+kFbOjRgnyrtyX1MTbYoGbo/1PiLAX5noEpyoVUkNNxAIphNfVcXHZzi
+ t1I2o5x6zLUj4+/+BbtqPr6mI9RjUR7h+P8c4f/8sKe+fiTpjhEEuD3HTcqEAGykERF1
+ b8SdA5bMjkbnNXe53k5o+9Xn+pjiMyKWQdH6Kf1YXRSMEkEC/ukHcnGKwBqXyjnVRPTu
+ kVkg==
+X-Gm-Message-State: AOJu0YzG1MAUpLOftAZwcgxnAeZUYoCYW0+9KZfydOUV0fq9F81Nmiua
+ qInt0RKJ+Ndc2foeLOEjSH5HbyMHotVDnw==
+X-Google-Smtp-Source: AGHT+IEmZGPvghhp1eNeaRGdtoZ9g3TggtE3EkwjqaCtSogxUduPHoIYPNcF5+8xIuMz6b8kx8aISA==
+X-Received: by 2002:a05:6602:341b:b0:795:d33:861f with SMTP id
+ n27-20020a056602341b00b007950d33861fmr7737478ioz.6.1699176300538; 
+ Sun, 05 Nov 2023 01:25:00 -0800 (PST)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- m14-20020a0566380ace00b0043a11ec651asm871207jab.169.2023.11.05.01.10.45
+ i17-20020a02b691000000b0042b3e2e5ca1sm1560774jam.122.2023.11.05.01.24.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 01:10:45 -0800 (PST)
+ Sun, 05 Nov 2023 01:25:00 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 02:10:40 -0700
-Message-Id: <20231105091040.2924287-2-james.hilliard1@gmail.com>
+Date: Sun,  5 Nov 2023 02:24:58 -0700
+Message-Id: <20231105092458.2935993-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231105091040.2924287-1-james.hilliard1@gmail.com>
-References: <20231105091040.2924287-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699175447; x=1699780247; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Wi2SYCL0KA0u/r7Lq+JpzlVAG6WLr7oUnPeVtBMooWs=;
- b=KfMe5/N6qIPebs2aajuUg+Jj1UkiCj56DA+BnczFewd143F5w9Zor/8UYmv2d0RB7T
- 0b3BsmDSn44Qjkhk32fBHnY6T0weN/wMHRPCdGEEW1eT2xwvFELHg4C2jqmO58q6P5eK
- QRLJ8qRMZUrq2jssuD/GVRMQggeqw7LjmFd2r+YHZk/dEIqFal3ycc39iNnsYkbDeQ1Q
- khCUMm3QJFEn9q/VmhS4o0246LaorMhan6lBQerqJPYOLfFtxaZCimTfBEK+Fcs7qB8R
- wR54yigS7etQvnQfEgZVzRtetGQwNoBLLkvE4FJDTKD0TzI6eJ+k0yWplX975Zf6rj6Q
- ozXA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1699176300; x=1699781100; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=et46/AZfvgaoCt9iMcvD0Kb1GxURfwNmU/qyqjCg83g=;
+ b=Y4uF+4ntExVd1cEOXoBw4956FkhPGS868zG78LL2Dg9Qt9AcdJE6kQ9PbpKY2t5Zar
+ 8Evi72uEt6CF3w9gVLyGTSGZxSGidXPHLhNB/W6Ga1CpvFH187NCP/EFW9lBIMMLd8Rj
+ vR/bpyM54LPZGktTK0A0g70iZAVAvxaXfT7/wW4iD1C+DTfbJ9kmXs4YmmGt3fUUjD5H
+ syt1/qazJi9LOckyCE0VvGinv6TgPb59u8XTDSAqbC7IhVRBhroS9sdpuXjzuC5bZgh/
+ Cs0zxr8W1sGNA8JBZDU8ht95AQNmIgtvkICctw6GtvJD7nFLn0e0soLcc1xxTQYqqSqT
+ xApg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=KfMe5/N6
-Subject: [Buildroot] [PATCH 2/2] package/python-keyring: bump to version
- 24.2.0
+ header.a=rsa-sha256 header.s=20230601 header.b=Y4uF+4nt
+Subject: [Buildroot] [PATCH 1/1] package/python-rpds-py: bump to version
+ 0.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,70 +94,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new python-jaraco-classes runtime dependency.
+Migrate from generic pep517 infrastructure to maturin infrastructure.
 
-Add new python-jeepney runtime dependency.
-
-License hash changed due to copyright notice removal:
-https://github.com/jaraco/keyring/commit/5957d58266e479f124b31f30e4322e798fdf386b
+Verified license is still MIT after hash changed.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-keyring/Config.in           | 2 ++
- package/python-keyring/python-keyring.hash | 6 +++---
- package/python-keyring/python-keyring.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-rpds-py/python-rpds-py.hash |  4 ++--
+ package/python-rpds-py/python-rpds-py.mk   | 14 +++-----------
+ 2 files changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
-index 6b33686cbe..6c03317f61 100644
---- a/package/python-keyring/Config.in
-+++ b/package/python-keyring/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_PYTHON_KEYRING
- 	# python-secretstorage -> python-cryptography
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	select BR2_PACKAGE_PYTHON_ENTRYPOINTS # runtime
-+	select BR2_PACKAGE_PYTHON_JARACO_CLASSES # runtime
-+	select BR2_PACKAGE_PYTHON_JEEPNEY # runtime
- 	select BR2_PACKAGE_PYTHON_SECRETSTORAGE # runtime
- 	help
- 	  The Python keyring lib provides a easy way to access the
-diff --git a/package/python-keyring/python-keyring.hash b/package/python-keyring/python-keyring.hash
-index 837743f5c2..50ac3df342 100644
---- a/package/python-keyring/python-keyring.hash
-+++ b/package/python-keyring/python-keyring.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/keyring/json
--md5  a0640ab7525b4fe58061b5999cca5026  keyring-23.13.1.tar.gz
--sha256  ba2e15a9b35e21908d0aaf4e0a47acc52d6ae33444df0da2b49d41a46ef6d678  keyring-23.13.1.tar.gz
-+md5  ed5df85d33c36bb268a79d4472a13312  keyring-24.2.0.tar.gz
-+sha256  ca0746a19ec421219f4d713f848fa297a661a8a8c1504867e55bfb5e09091509  keyring-24.2.0.tar.gz
+diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
+index e42dfbd948..b04aa210d3 100644
+--- a/package/python-rpds-py/python-rpds-py.hash
++++ b/package/python-rpds-py/python-rpds-py.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  3b1087c3c7d55b8730dfaa539147646292074819295812267832ce5b64a0034c  rpds_py-0.9.2.tar.gz
++sha256  87361601241744fff6235e35050addfe34d00508172d2bd4f178193a28727287  rpds_py-0.12.0.tar.gz
  # Locally computed sha256 checksums
--sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-+sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
-index 766139f525..87b51a8960 100644
---- a/package/python-keyring/python-keyring.mk
-+++ b/package/python-keyring/python-keyring.mk
-@@ -4,9 +4,9 @@
+-sha256  8bcb72c82ea8ae74802293c41d93ad7d51434001b0ae45a603a5af0f507aee0a  LICENSE
++sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
+diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
+index 2b5530f237..6f71d02047 100644
+--- a/package/python-rpds-py/python-rpds-py.mk
++++ b/package/python-rpds-py/python-rpds-py.mk
+@@ -4,19 +4,11 @@
  #
  ################################################################################
  
--PYTHON_KEYRING_VERSION = 23.13.1
-+PYTHON_KEYRING_VERSION = 24.2.0
- PYTHON_KEYRING_SOURCE = keyring-$(PYTHON_KEYRING_VERSION).tar.gz
--PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/55/fe/282f4c205add8e8bb3a1635cbbac59d6def2e0891b145aa553a0e40dd2d0
-+PYTHON_KEYRING_SITE = https://files.pythonhosted.org/packages/14/c5/7a2a66489c66ee29562300ddc5be63636f70b4025a74df71466e62d929b1
- PYTHON_KEYRING_SETUP_TYPE = setuptools
- PYTHON_KEYRING_LICENSE = MIT
- PYTHON_KEYRING_LICENSE_FILES = LICENSE
+-PYTHON_RPDS_PY_VERSION = 0.9.2
++PYTHON_RPDS_PY_VERSION = 0.12.0
+ PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
+-PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/da/3c/fa2701bfc5d67f4a23f1f0f4347284c51801e9dbc24f916231c2446647df
+-PYTHON_RPDS_PY_SETUP_TYPE = pep517
++PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/75/be/e3f366aa4cd1e3a814f136773e506fc5423eff903ef0372a251df34e6e45
++PYTHON_RPDS_PY_SETUP_TYPE = maturin
+ PYTHON_RPDS_PY_LICENSE = MIT
+ PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
+-PYTHON_RPDS_PY_DEPENDENCIES = host-python-maturin
+-PYTHON_RPDS_PY_ENV = \
+-	$(PKG_CARGO_ENV) \
+-	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+-# We need to vendor the Cargo crates at download time
+-PYTHON_RPDS_PY_DOWNLOAD_POST_PROCESS = cargo
+-PYTHON_RPDS_PY_DOWNLOAD_DEPENDENCIES = host-rustc
+-PYTHON_RPDS_PY_DL_ENV = $(PKG_CARGO_ENV)
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
