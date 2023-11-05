@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB989C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:09:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86BD8C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 21:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D538418E1;
-	Sun,  5 Nov 2023 21:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D538418E1
+	by smtp4.osuosl.org (Postfix) with ESMTP id B929F4192B;
+	Sun,  5 Nov 2023 21:09:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B929F4192B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A4NGA4oem21c; Sun,  5 Nov 2023 21:09:26 +0000 (UTC)
+	with ESMTP id BhkvJFNa3AXW; Sun,  5 Nov 2023 21:09:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E79541B42;
-	Sun,  5 Nov 2023 21:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E79541B42
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B6EFB1BF488
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:09:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BD1141991;
+	Sun,  5 Nov 2023 21:09:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BD1141991
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F2A611BF488
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:09:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F28982112
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F28982112
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB4EB6104E
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 21:09:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB4EB6104E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5taIPYdEQpNF for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 21:09:14 +0000 (UTC)
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2461882102
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2461882102
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-5401bab7525so6446014a12.2
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 13:09:13 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dgFkk0GS1LKg for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 21:09:39 +0000 (UTC)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D81116104D
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 21:09:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D81116104D
+Received: by mail-ed1-x52f.google.com with SMTP id
+ 4fb4d7f45d1cf-53df747cfe5so6467975a12.2
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 13:09:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699218552; x=1699823352;
+ d=1e100.net; s=20230601; t=1699218577; x=1699823377;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=PXRk+upHnCyn1edT+HaI6QOKITaQkLtFK++ZCn86ipQ=;
- b=OlBbBPY7HVsf/VJfYb1qH8sYbX7j+aOkHWPEXcrqAFMFbAhTAQyCesWtmgSvk1BvXF
- VcE17nsOVnOVh14koZa1j9INK4s+ZcLgdFuD21WxtT3ELK6ZIvy3yy3xzCW+vSNmHRTQ
- 1xElJYBnWBtXVmcRgdeA8Q09paGSzmpRsmxaS/ljh3Uv0N5JFnR9Nlxb4TVLFmHZE3iI
- 2Z1uJZ5x6Ik48RdrOv42ZodIJKy49j3Wu/KY3rqMOjrviPHTlO4/QnFh+3Mhaj/0cPRG
- 3XY/WotA8NCayq4UtoMV+BcsjlkD8cmsWOGYAeCDpppslhkQkdK2Y55b1CvI+CzFZSz1
- 7wjg==
-X-Gm-Message-State: AOJu0Yz0liXEUn3KNbdwFg+xDQ26fVxzAh9T2643pNTn371IWju46wMO
- GmSuUQkpL8V7DemMhq3StCv52haQfN1X1kHqfLE=
-X-Google-Smtp-Source: AGHT+IFik45qFmX74Jy2Nw0tUnZfse0Rv7W+cRJ8ZtFqh5zrTBZrk60QXj0ntCGi1wiwdOwPPMsJqQ==
-X-Received: by 2002:a50:cd84:0:b0:543:dd0:a0d8 with SMTP id
- p4-20020a50cd84000000b005430dd0a0d8mr18148416edi.31.1699218552298; 
- Sun, 05 Nov 2023 13:09:12 -0800 (PST)
+ bh=uKYL41DGId/15RB7zrPubgD/tLuvvfKcOX7S3LiWDQ8=;
+ b=c1P5jEjQHA8w6kHDinGboJgAG0edTXsSIH/ltHNWfbqz+oIrMWZLmTUFO+9y+xMmwQ
+ 156OVZxK3Yl4lWvSY+37xLqNxFJn3yA1Q3B18J8eqURKFGUM5VVzaB4cVuFX+Mqn9vx7
+ wAtTVdUrzynMeJWFSVucOwscaEvb5A4OoksoC+6p++lcb49OqNUI+PfzoAkuM4cGhrnI
+ OseVwhTEmVz88SHM2RdROsTHCYLrLOyKMMXJK592R7/26pXUwzsdI4z/6GLjLxiZGB0T
+ 9/xD72pC9Nx/gHfPW2DLi6rGXz5nfe7pRrDb1J5UkWXmnqJbJUoCzG2BTpTB6HjCY8Eg
+ YUcg==
+X-Gm-Message-State: AOJu0YyvBeLb3kny/viBPn3vMyn05RNb8+J6ZvJpGnUSFX7c5Ey7m1za
+ l2DQJLnLqldW0WQQhePgjZR07A==
+X-Google-Smtp-Source: AGHT+IHt7BT53r5ahXopDVFYBb1mb2liipMSPolNyBUeRHccxpjIc0vymfOSqjrUG1hKLfanZFpAWw==
+X-Received: by 2002:a50:9552:0:b0:543:7201:7c70 with SMTP id
+ v18-20020a509552000000b0054372017c70mr14099813eda.7.1699218577125; 
+ Sun, 05 Nov 2023 13:09:37 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- w27-20020a50d79b000000b005432f45bee9sm3659319edi.19.2023.11.05.13.09.11
+ w27-20020a50d79b000000b005432f45bee9sm3659319edi.19.2023.11.05.13.09.36
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 05 Nov 2023 13:09:11 -0800 (PST)
-Message-ID: <f5bb99db-fe2c-436d-bf7d-a067f6615b19@mind.be>
-Date: Sun, 5 Nov 2023 22:09:10 +0100
+ Sun, 05 Nov 2023 13:09:36 -0800 (PST)
+Message-ID: <7be4568d-5c88-43ab-b29b-99863e7690d0@mind.be>
+Date: Sun, 5 Nov 2023 22:09:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20231104234900.2686730-1-james.hilliard1@gmail.com>
-In-Reply-To: <20231104234900.2686730-1-james.hilliard1@gmail.com>
+References: <20231104235554.2696561-1-james.hilliard1@gmail.com>
+In-Reply-To: <20231104235554.2696561-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699218552; x=1699823352; darn=buildroot.org;
+ d=mind.be; s=google; t=1699218577; x=1699823377; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=PXRk+upHnCyn1edT+HaI6QOKITaQkLtFK++ZCn86ipQ=;
- b=TJBf0gNg9zCGF701ub5/5iCjR3qhbFv5vDqxAzi3OtqR7tsuZ2lzDFejeP8K0/ZM2M
- UIon89Q0hj1c/yrIiDNAoJRFSxDYY1dVIUNxgaN4vWe6uWfJyavda9ICzjivL7SqsY4U
- wMJGOA8H7XiyKydoMukS3m/v/6K5IKUjud+I2CqIlRFruPg74DlpeggXUxJ9Erd5SX1G
- nNLME4KZxTLUUre0KQUfO2ell798/hfIRvfbyLvPy0UT21NeUaYjNKXjfQJb4Kf6EYll
- 7SJ3R41e7hr5/+C02Ao7ebDdMkVDLURAkLwSfn7nMXgXdyUAIlwtrv/tihvB0vgPk2Er
- 0DQw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=uKYL41DGId/15RB7zrPubgD/tLuvvfKcOX7S3LiWDQ8=;
+ b=C35UOxzGiLjfhf6ghcr+K/5Z2CY2rFjgp7c4Cwq9xKY77AeyjODy7nrZw0bY/xQ5pC
+ +0dh7XkTelo1sjRJmsfgsvUl5WrSUCwruxq5U9uf4XpX+GN1vWBTKnKuJ7s3lx/BAOLP
+ ueDLH+Zty43A3o6c2dTjDxHOlIPLSb8QAZw90TrQjBUGxtLT/mnyhbG2+LzIasMkL03/
+ 0D1mfpDVqjDyMW03OThgIQJQVSpskJ0xBa/3QavYBVRU6iquyQUlDaDWUuo91xid7bg+
+ fkrqdlCLsvu08dYA1JwNqS5PKFIlUCpqXv221HA20lTvCQxSk+3iuHgpNJz8FyHxBzqY
+ +6dQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=TJBf0gNg
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-alembic: bump to version
- 1.12.1
+ header.a=rsa-sha256 header.s=google header.b=C35UOxzG
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-alsaaudio: bump to
+ version 0.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,7 +109,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/11/2023 00:49, James Hilliard wrote:
+On 05/11/2023 00:55, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
@@ -118,38 +118,38 @@ On 05/11/2023 00:49, James Hilliard wrote:
   Arnout
 
 > ---
->   package/python-alembic/python-alembic.hash | 4 ++--
->   package/python-alembic/python-alembic.mk   | 4 ++--
+>   package/python-alsaaudio/python-alsaaudio.hash | 4 ++--
+>   package/python-alsaaudio/python-alsaaudio.mk   | 4 ++--
 >   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-alembic/python-alembic.hash b/package/python-alembic/python-alembic.hash
-> index c84c46c84c..df1f4fba02 100644
-> --- a/package/python-alembic/python-alembic.hash
-> +++ b/package/python-alembic/python-alembic.hash
+> diff --git a/package/python-alsaaudio/python-alsaaudio.hash b/package/python-alsaaudio/python-alsaaudio.hash
+> index af3d0faad2..ab8b868b97 100644
+> --- a/package/python-alsaaudio/python-alsaaudio.hash
+> +++ b/package/python-alsaaudio/python-alsaaudio.hash
 > @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/alembic/json
-> -md5  de9d9f92a49a5e3ae5a978018927f474  alembic-1.10.2.tar.gz
-> -sha256  457eafbdc0769d855c2c92cbafe6b7f319f916c80cf4ed02b8f394f38b51b89d  alembic-1.10.2.tar.gz
-> +md5  642d563af853b317f018026f3edd5dba  alembic-1.12.1.tar.gz
-> +sha256  bca5877e9678b454706347bc10b97cb7d67f300320fa5c3a94423e8266e2823f  alembic-1.12.1.tar.gz
+>   # md5, sha256 from https://pypi.org/pypi/pyalsaaudio/json
+> -md5  5408be7d7017ae9272706acb4a543c2f  pyalsaaudio-0.9.2.tar.gz
+> -sha256  e74a66d6c7a6bcceb990df66d3ebc0fe382fc9d765f35f050f9d98c695304b36  pyalsaaudio-0.9.2.tar.gz
+> +md5  720b2e1a47a5fdb587ea1b4eabbd23e6  pyalsaaudio-0.10.0.tar.gz
+> +sha256  e21175500a2bd310ae3867e7991639defc1e2a5c92cf1b9f7083296b346738ab  pyalsaaudio-0.10.0.tar.gz
 >   # Locally computed sha256 checksums
->   sha256  b285268a86f4416eaf4d05b2ae3880c156f7c59a8f935a402bc056eafb33af08  LICENSE
-> diff --git a/package/python-alembic/python-alembic.mk b/package/python-alembic/python-alembic.mk
-> index 4f605b8f60..fd41e0df66 100644
-> --- a/package/python-alembic/python-alembic.mk
-> +++ b/package/python-alembic/python-alembic.mk
+>   sha256  ef6ba930f96986d78082e67c817ac617b9e833d60d5a0460f24c9c674a010935  LICENSE
+> diff --git a/package/python-alsaaudio/python-alsaaudio.mk b/package/python-alsaaudio/python-alsaaudio.mk
+> index 205bfdb86c..0692f4a8e9 100644
+> --- a/package/python-alsaaudio/python-alsaaudio.mk
+> +++ b/package/python-alsaaudio/python-alsaaudio.mk
 > @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_ALEMBIC_VERSION = 1.10.2
-> +PYTHON_ALEMBIC_VERSION = 1.12.1
->   PYTHON_ALEMBIC_SOURCE = alembic-$(PYTHON_ALEMBIC_VERSION).tar.gz
-> -PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/d6/02/66ed327f944f3f85423096c438d7d290da5af21a7aecf9e5b9f09d9e34b2
-> +PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/44/b4/253fe31261d9f5d603d89bd9e6fba1625494a6d761d319902dfe4db59016
->   PYTHON_ALEMBIC_SETUP_TYPE = setuptools
->   PYTHON_ALEMBIC_LICENSE = MIT
->   PYTHON_ALEMBIC_LICENSE_FILES = LICENSE
+> -PYTHON_ALSAAUDIO_VERSION = 0.9.2
+> +PYTHON_ALSAAUDIO_VERSION = 0.10.0
+>   PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
+> -PYTHON_ALSAAUDIO_SITE = https://files.pythonhosted.org/packages/a9/bd/24f576c07953671edfeba2545c3c92c46e97384f622957ecf95967c2b456
+> +PYTHON_ALSAAUDIO_SITE = https://files.pythonhosted.org/packages/e5/f0/411140b1c2d8eea8531233f39103e7ebda560030493e298be6439ce36936
+>   PYTHON_ALSAAUDIO_SETUP_TYPE = setuptools
+>   PYTHON_ALSAAUDIO_LICENSE = Python-2.0
+>   PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
