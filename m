@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEFB5C4332F
-	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 07:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 944F3C4332F
+	for <buildroot@archiver.kernel.org>; Sun,  5 Nov 2023 07:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EE584177B;
-	Sun,  5 Nov 2023 07:21:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EE584177B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E8D241B6F;
+	Sun,  5 Nov 2023 07:27:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E8D241B6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ume0mVemfeat; Sun,  5 Nov 2023 07:21:26 +0000 (UTC)
+	with ESMTP id XwV7j5N_iYLO; Sun,  5 Nov 2023 07:27:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87C7D41761;
-	Sun,  5 Nov 2023 07:21:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87C7D41761
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9E93C1BF584
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 07:21:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 933A141B6B;
+	Sun,  5 Nov 2023 07:26:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 933A141B6B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DFA741BF584
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 07:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DE24404C2
- for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 07:21:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DE24404C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id BCAAE41B6B
+ for <buildroot@lists.busybox.net>; Sun,  5 Nov 2023 07:26:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCAAE41B6B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CuYacDkPrsYC for <buildroot@lists.busybox.net>;
- Sun,  5 Nov 2023 07:21:23 +0000 (UTC)
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 222B8403EA
- for <buildroot@buildroot.org>; Sun,  5 Nov 2023 07:21:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 222B8403EA
-Received: by mail-il1-x12e.google.com with SMTP id
- e9e14a558f8ab-35932aa21a3so13489315ab.2
- for <buildroot@buildroot.org>; Sun, 05 Nov 2023 00:21:22 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DKgAkuFXL9PY for <buildroot@lists.busybox.net>;
+ Sun,  5 Nov 2023 07:26:55 +0000 (UTC)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 793D641B6A
+ for <buildroot@buildroot.org>; Sun,  5 Nov 2023 07:26:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 793D641B6A
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-7a67b9cd230so128486839f.1
+ for <buildroot@buildroot.org>; Sun, 05 Nov 2023 00:26:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699168881; x=1699773681;
+ d=1e100.net; s=20230601; t=1699169214; x=1699774014;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=YFzChSFQA4u8xRUazlNyHAMJRtf2YgYcsPZf3atw37w=;
- b=ggVLHi1/RjVvFQNzNy1ts/VkeY23pNLxqWOStFHTuk3B3PRGg0NrmZeAQs0g8paxU2
- B3SVJFObw/AnkiGmxWhA5bZqiOMzn7a/CkBDQK2EYu4iSPsCo3bwXyjsAlPDBAlji4TD
- Euh4kIU4EtXmGnNGBOeN9fKvXVzbj+KR76qcCRg6M1wdUqrg677HwOUUoHgqC055bsDE
- mT7dp7mtw328OCYiYYi3gUQF3qQEh2u/xFrxRh4eSMga0j6n1uOHtHFbZPEHh8zMu+4a
- f7gO8+q/2vlF3ysB6cuTRw000br7lrakbTbJykb4XBbw2d3KL7S9WyjbF7bVKxWct/ZU
- Z73g==
-X-Gm-Message-State: AOJu0YxVspV0l/xEZ4WZmkFEWTUeQxIvPXszWas0cSXBrbbaOkl6CrM/
- vRQtvJ0/yIi5EbmdU1VaAuQ5yUMiyP4=
-X-Google-Smtp-Source: AGHT+IFFjbwF+PPzWeTXanxnaLsmBe859Gr7R/OYe+ZvrjaGgmJ/aIdDsRMBdE2s7tMEgMzco09PwA==
-X-Received: by 2002:a05:6e02:1ba8:b0:351:4b68:ec3a with SMTP id
- n8-20020a056e021ba800b003514b68ec3amr35126408ili.9.1699168881692; 
- Sun, 05 Nov 2023 00:21:21 -0700 (PDT)
+ bh=x/QrwgcoSFWH2qL/hRMjOlzLQ/J3Yry9IeYdKtHGDBg=;
+ b=J2lmpSx0kLzTcPMn7fDziiLfcSh+ghTAiNqL3pQXaayvW5KrieMiI2AxIiC+XYjfZo
+ rtDl0yoiDs0mdTUejq7exfU9nVv3cMDTd3wNF7ii6Nj85S4URUKcgrciA8vJNstSQSqA
+ 3Ow4sQmOF0ZFLv5Yqcv/x7R4Mek63NVaPfsdiCKNRzJC4UAHK4oAMd5IKRj4C1uuuXwv
+ sSg+PdkETACgj4xB3W0dATTpMp3FATCymxGYhfbl1Vb3H+w6OZNAkOzGgPpFTAsJJ6r0
+ jPeMfcBLxmKD3ISYfZ1mdLVTZ0DNzFmTFWtoalCD8G6k+rhgXsUfCmj1lXU13ewE3FW4
+ PaRg==
+X-Gm-Message-State: AOJu0YwTGfWbJj8wvbLf64Prj6/5t7ElYVbJT4/L8vhfXC2WgV3SEQeZ
+ pCui8i0Re0/eglqQSYchuq+uPBsxL/4=
+X-Google-Smtp-Source: AGHT+IHzucKOPK9jiA8TEMPb7huGSHezS3bDOCbwz3Wl0041mhk+1HdvOtvQwg404kk0jYB8GHpdjw==
+X-Received: by 2002:a05:6602:2b91:b0:7a6:7bbe:5aa0 with SMTP id
+ r17-20020a0566022b9100b007a67bbe5aa0mr33458626iov.0.1699169214065; 
+ Sun, 05 Nov 2023 00:26:54 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- r7-20020a92d447000000b00357409c4e57sm1707968ilm.44.2023.11.05.00.21.21
+ ca9-20020a0566381c0900b0043a1d33a341sm997203jab.81.2023.11.05.00.26.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Nov 2023 00:21:21 -0700 (PDT)
+ Sun, 05 Nov 2023 00:26:53 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  5 Nov 2023 01:21:19 -0600
-Message-Id: <20231105072119.2877363-1-james.hilliard1@gmail.com>
+Date: Sun,  5 Nov 2023 01:26:52 -0600
+Message-Id: <20231105072652.2879462-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699168881; x=1699773681; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699169214; x=1699774014; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=YFzChSFQA4u8xRUazlNyHAMJRtf2YgYcsPZf3atw37w=;
- b=dudt/B7aBdIT5QzCYd9GZgE9jWMbW9ya6M+cYJERv0Xn7y0rMmtgKMq0ucA1NZYJ6i
- 2W0HYOic3YChBmDvcJTw3334ZQ6znC3yMe5xATHZZM0W6apSlpngaOjB8j2FdIqzQXTE
- oxV3KU5zaaFS7NPXzKS9YOxRSLUxJf3lbgA8cZnckFX3rdkmCgjt4PxfXHKCPemNPH5H
- ZYb+024iuuHvCyXaHcCu/ps12M+oNr3HBgN/UHBD7exNPQ6DC7We2yl8GYtwkiTAOSgi
- EoiShmo1AOe6ss7Jm+7eBgYzlF9BY0T63MWFZqGBgUirC/UZHYGa+g4HE+qAdpp7dqNF
- IvkA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=x/QrwgcoSFWH2qL/hRMjOlzLQ/J3Yry9IeYdKtHGDBg=;
+ b=gGplmmDEIC+1owcgXIGgfFJ7gQ9T7Ey6wJF6suNH7Jrcd+UaKwgFzW3PTWwkUgnDcY
+ 2suXEjt65w4YO55h1znk7nMUr0Uyw7sTbZE9bExEpRep6BxkxJEG+npl1XFMucvd9kbd
+ GSoGKYQ3t7y1VGDcEs3uirnUGSDf0ZqxmocMcE+unBDgck7WXa5Bg6cudsvgdKvY60hu
+ ByXx3MHj4LEHpz1gHA7LiqcAuC3p5U2wWOr6YqzkyKxNnI331PgHUINH5uUqOKI9d0UD
+ DdOqX0JdnGGLZGDI7dUhxFxIhbqxnC0DrXjzGcB9S93a8PqRuMziFc/dw40U65opDkj0
+ UOVQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=dudt/B7a
-Subject: [Buildroot] [PATCH 1/1] package/python-greenlet: bump to version
- 3.0.1
+ header.a=rsa-sha256 header.s=20230601 header.b=gGplmmDE
+Subject: [Buildroot] [PATCH 1/1] package/python-gunicorn: bump to version
+ 21.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,47 +94,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Lionel Flandrin <lionel@svkt.org>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop python-setuptools runtime dependency.
+
+Add new python-packaging runtime dependency.
+
+License hash changed due to date update:
+https://github.com/benoitc/gunicorn/commit/378f0d04ec390a754cb819f095bf65bfcc04ed99
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-greenlet/python-greenlet.hash | 4 ++--
- package/python-greenlet/python-greenlet.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-gunicorn/Config.in            |  2 +-
+ package/python-gunicorn/python-gunicorn.hash | 10 +++++-----
+ package/python-gunicorn/python-gunicorn.mk   |  4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
-index f378436beb..2de253e1b5 100644
---- a/package/python-greenlet/python-greenlet.hash
-+++ b/package/python-greenlet/python-greenlet.hash
+diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+index 18f0c034ba..a670dd4814 100644
+--- a/package/python-gunicorn/Config.in
++++ b/package/python-gunicorn/Config.in
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/greenlet/json
--md5  e6637d59015cba7e86f2111e6aa8168b  greenlet-2.0.2.tar.gz
--sha256  e7c8dc13af7db097bed64a051d2dd49e9f0af495c26995c00a9ee842690d34c0  greenlet-2.0.2.tar.gz
-+md5  3905122960191e81410714f7db4835e4  greenlet-3.0.1.tar.gz
-+sha256  816bd9488a94cba78d93e1abb58000e8266fa9cc2aa9ccdd6eb0696acb24005b  greenlet-3.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
- sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
-diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
-index 40f05f667e..7ca1ac1674 100644
---- a/package/python-greenlet/python-greenlet.mk
-+++ b/package/python-greenlet/python-greenlet.mk
+ config BR2_PACKAGE_PYTHON_GUNICORN
+ 	bool "python-gunicorn"
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL # runtime
+ 	help
+ 	  Gunicorn 'Green Unicorn' is a Python WSGI HTTP Server for
+diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
+index cff4915b72..bd4dc1b3ca 100644
+--- a/package/python-gunicorn/python-gunicorn.hash
++++ b/package/python-gunicorn/python-gunicorn.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.python.org/pypi/gunicorn/json
+-md5  db8a7c5c2064000af70286534803bf1d  gunicorn-20.1.0.tar.gz
+-sha256  e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8  gunicorn-20.1.0.tar.gz
+-# Locally computed sha256
+-sha256  789fe11b92e1cabfbcf744b5fcc392c9bd5c6798603a4e89f925b6337984d1df  LICENSE
++# md5, sha256 from https://pypi.org/pypi/gunicorn/json
++md5  cb41319d6929842c5af7003d48c513a2  gunicorn-21.2.0.tar.gz
++sha256  88ec8bff1d634f98e61b9f65bc4bf3cd918a90806c6f5c48bc5603849ec81033  gunicorn-21.2.0.tar.gz
++# Locally computed sha256 checksums
++sha256  fc71b8f2ce774a47090c106ac5d1145359f5c0e25a0d9ab42acacd230f596936  LICENSE
+diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
+index fb747bc00e..03ff5a49df 100644
+--- a/package/python-gunicorn/python-gunicorn.mk
++++ b/package/python-gunicorn/python-gunicorn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GREENLET_VERSION = 2.0.2
-+PYTHON_GREENLET_VERSION = 3.0.1
- PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
--PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/1e/1e/632e55a04d732c8184201238d911207682b119c35cecbb9a573a6c566731
-+PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/54/df/718c9b3e90edba70fa919bb3aaa5c3c8dabf3a8252ad1e93d33c348e5ca4
- PYTHON_GREENLET_SETUP_TYPE = setuptools
- PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
- PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
+-PYTHON_GUNICORN_VERSION = 20.1.0
++PYTHON_GUNICORN_VERSION = 21.2.0
+ PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
+-PYTHON_GUNICORN_SITE = https://files.pythonhosted.org/packages/28/5b/0d1f0296485a6af03366604142ea8f19f0833894db3512a40ed07b2a56dd
++PYTHON_GUNICORN_SITE = https://files.pythonhosted.org/packages/06/89/acd9879fa6a5309b4bf16a5a8855f1e58f26d38e0c18ede9b3a70996b021
+ PYTHON_GUNICORN_SETUP_TYPE = setuptools
+ PYTHON_GUNICORN_LICENSE = MIT
+ PYTHON_GUNICORN_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
