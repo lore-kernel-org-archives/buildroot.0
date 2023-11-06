@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0BF0C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 839A0C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58207410BA;
-	Mon,  6 Nov 2023 22:23:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58207410BA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41524410BA;
+	Mon,  6 Nov 2023 22:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41524410BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oSX4vryVuVEO; Mon,  6 Nov 2023 22:23:09 +0000 (UTC)
+	with ESMTP id OkuWAcihHM5R; Mon,  6 Nov 2023 22:23:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D5EE40E46;
-	Mon,  6 Nov 2023 22:23:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D5EE40E46
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7FFF91BF271
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D82742134;
+	Mon,  6 Nov 2023 22:23:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D82742134
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E0431BF271
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 559AE408E0
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 559AE408E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11EE54168F
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11EE54168F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XlEU0miBsUzo for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9b8y4agunUDW for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B8104095A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E448415D1
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B8104095A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E448415D1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5CF6186B7C; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+ id 7B7DD86B80; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 23:15:32 +0100
+Date: Mon, 6 Nov 2023 23:15:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf056a5e765d9d0061279979f0c8ab55a0032082
-X-Git-Newrev: 998ecc6c93b8b6f4a856388fe6bc2abd8fd399d1
+X-Git-Oldrev: 67ba0c43ac93547022eedd451a5d4bdef5eb7912
+X-Git-Newrev: d40b7584ccc3156b4d8b3526ce48c15c8569b7f3
 X-Patchwork-Hint: ignore
-Message-Id: <20231106222017.5CF6186B7C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flask-cors: bump to version
- 4.0.0
+Message-Id: <20231106222017.7B7DD86B80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-flask-sqlalchemy: bump to
+ version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,59 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=998ecc6c93b8b6f4a856388fe6bc2abd8fd399d1
+commit: https://git.buildroot.net/buildroot/commit/?id=d40b7584ccc3156b4d8b3526ce48c15c8569b7f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop no longer required python-six runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-flask-cors/Config.in              | 1 -
- package/python-flask-cors/python-flask-cors.hash | 4 ++--
- package/python-flask-cors/python-flask-cors.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash | 4 ++--
+ package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-flask-cors/Config.in b/package/python-flask-cors/Config.in
-index e2e84797f9..fc0908e870 100644
---- a/package/python-flask-cors/Config.in
-+++ b/package/python-flask-cors/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_FLASK_CORS
- 	bool "python-flask-cors"
- 	select BR2_PACKAGE_PYTHON_FLASK # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  A Flask extension adding a decorator for CORS support.
- 
-diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
-index 94ec262db8..ced7d9dcea 100644
---- a/package/python-flask-cors/python-flask-cors.hash
-+++ b/package/python-flask-cors/python-flask-cors.hash
+diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
+index 50ca14371d..637733d002 100644
+--- a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
++++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/flask-cors/json
--md5  647ff0632b960ba063a077fb4063077e  Flask-Cors-3.0.10.tar.gz
--sha256  b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de  Flask-Cors-3.0.10.tar.gz
-+md5  0ccfa375e744200243d85719b38cdbc6  Flask-Cors-4.0.0.tar.gz
-+sha256  f268522fcb2f73e2ecdde1ef45e2fd5c71cc48fe03cffb4b441c6d1b40684eb0  Flask-Cors-4.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/flask-sqlalchemy/json
+-md5  cbc5756b7e14683de1a540516159a81a  Flask-SQLAlchemy-3.0.2.tar.gz
+-sha256  16199f5b3ddfb69e0df2f52ae4c76aedbfec823462349dabb21a1b2e0a2b65e9  Flask-SQLAlchemy-3.0.2.tar.gz
++md5  b2439ba29a86fd594e0de4fc0e42ceb6  flask_sqlalchemy-3.1.1.tar.gz
++sha256  e4b68bb881802dda1a7d878b2fc84c06d1ee57fb40b874d3dc97dabfa36b8312  flask_sqlalchemy-3.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
-diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
-index d600157263..bfcaf63c64 100644
---- a/package/python-flask-cors/python-flask-cors.mk
-+++ b/package/python-flask-cors/python-flask-cors.mk
+ sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
+diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
+index ca6fd0c793..2ee53d4b00 100644
+--- a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
++++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLASK_CORS_VERSION = 3.0.10
-+PYTHON_FLASK_CORS_VERSION = 4.0.0
- PYTHON_FLASK_CORS_SOURCE = Flask-Cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
--PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/cf/25/e3b2553d22ed542be807739556c69621ad2ab276ae8d5d2560f4ed20f652
-+PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/c8/b0/bd7130837a921497520f62023c7ba754e441dcedf959a43e6d1fd86e5451
- PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
- PYTHON_FLASK_CORS_LICENSE = MIT
- PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
+-PYTHON_FLASK_SQLALCHEMY_VERSION = 3.0.2
+-PYTHON_FLASK_SQLALCHEMY_SOURCE = Flask-SQLAlchemy-$(PYTHON_FLASK_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_FLASK_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/0b/b7/05a8f9c3f010775275f8dec53e40ff7ea1ae61bf1cfa4b524caf4d3da982
++PYTHON_FLASK_SQLALCHEMY_VERSION = 3.1.1
++PYTHON_FLASK_SQLALCHEMY_SOURCE = flask_sqlalchemy-$(PYTHON_FLASK_SQLALCHEMY_VERSION).tar.gz
++PYTHON_FLASK_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/91/53/b0a9fcc1b1297f51e68b69ed3b7c3c40d8c45be1391d77ae198712914392
+ PYTHON_FLASK_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_FLASK_SQLALCHEMY_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_SQLALCHEMY_LICENSE_FILES = LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
