@@ -4,67 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06AEEC4167D
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45935C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 20:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B16916126D;
-	Mon,  6 Nov 2023 19:45:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B16916126D
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE874612A7;
+	Mon,  6 Nov 2023 20:07:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE874612A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BASwV29CDb4T; Mon,  6 Nov 2023 19:45:32 +0000 (UTC)
+	with ESMTP id SP0JIuZN5_1b; Mon,  6 Nov 2023 20:07:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF050612BC;
-	Mon,  6 Nov 2023 19:45:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF050612BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B49961223;
+	Mon,  6 Nov 2023 20:07:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B49961223
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 26B031BF29F
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:45:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7ED851BF3A4
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 20:07:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C60D41B93
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:45:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C60D41B93
+ by smtp4.osuosl.org (Postfix) with ESMTP id 535DE41DBF
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 20:07:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 535DE41DBF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N2_0D7g-8ZQo for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 19:45:25 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A9EBA41821
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:45:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9EBA41821
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8E3DD1C0005;
- Mon,  6 Nov 2023 19:45:21 +0000 (UTC)
-Date: Mon, 6 Nov 2023 20:45:20 +0100
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231106204520.00ec35d1@windsurf>
-In-Reply-To: <20231105215221.1602465-2-adam.duskett@amarulasolutions.com>
-References: <20231105215221.1602465-1-adam.duskett@amarulasolutions.com>
- <20231105215221.1602465-2-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id sXMzeHwO0Ltb for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 20:07:48 +0000 (UTC)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2231341DA9
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 20:07:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2231341DA9
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-9d242846194so722059466b.1
+ for <buildroot@buildroot.org>; Mon, 06 Nov 2023 12:07:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1699301266; x=1699906066;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=SXp1it542wR9SMG6HeLfOs7V5HOvh775g0eMYxUKc20=;
+ b=s0DGCEYtSLcpGgYDp2GlH1mSczlBJ8WF3nnX9bXvlc8ou3wApIpHcBlNPrvx8GZRUB
+ qCQTuWi4a0uRX+0t8KbZRjnurOCssIgYPoPaY++IMiKIOvTO0m/BJsRsOf1mAH6Nm7UX
+ aZMUaajLf4nwjpEQy2sQ+3Q1j/1r86vsi/1qnlVaMKWMrppc0TT4aP11cRmUFb02+PZb
+ I1EEVnbJXYiD5VtY5GWexnu71P9n194T0LCp8cP5hCx/oS5Zy1gvXdkB2C01qWDPeVkE
+ BLOTwbUNzN52MoxPRyL+QNC88q8H4Ryy/TKTKFtcMn0Fy3H8Jm31/7uLTNTn1A5jKsaM
+ 6y1w==
+X-Gm-Message-State: AOJu0Yxf+JqjeQIyzTgLG3UyB3waauGMRWbNRI/h1UBa9p9ReiomOJ2y
+ JWzem8WN7nXo8wzNcvuNdAQGJQ==
+X-Google-Smtp-Source: AGHT+IHJff+NwyJMIEe0MdAzoI0dY03bstBoxNndsUNV+c0OW9Ro+bzMudlLjKfIQRNXmFZ/enbKHw==
+X-Received: by 2002:a17:907:a0e:b0:9bf:b129:5984 with SMTP id
+ bb14-20020a1709070a0e00b009bfb1295984mr12959307ejc.77.1699301266048; 
+ Mon, 06 Nov 2023 12:07:46 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ f14-20020a170906084e00b009b8dbdd5203sm201118ejd.107.2023.11.06.12.07.44
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 06 Nov 2023 12:07:45 -0800 (PST)
+Message-ID: <dcdce00c-b9c7-4c9b-89f0-a3e81cf0f093@mind.be>
+Date: Mon, 6 Nov 2023 21:07:42 +0100
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ hmaied.benabdellatif@etictelecom.com
+References: <20231106143037.6900-1-hmaied.benabdellatif@etictelecom.com>
+ <20231106203008.0743dabf@windsurf>
+In-Reply-To: <20231106203008.0743dabf@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699299921;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=h6WAx79EDZ9ib6zJf0RtrWFrL242mjZAOQGvhJo/CY0=;
- b=JxF6D/8U+1l7e9wl7alHUO4zM1hpqUpAB7EmyJ0ogn4Rk31uv9lEjs5KdnXejqTAaUdBoz
- Z0s92i3lJUdc8UeEaZ2kTg8wKhBcS9SrAlBaJJnqb+9xzmFvyYOkdd7u9xSMKcW7ovKHMG
- 7/2LUckerx9gSEqI9vYIG/NSWyqKieRUY68pQkEEpNmuURkb1ststRgZMV+PjjXSU+rK1z
- zu0fjVOrvvMgveblvwAPX9LxMWCQV72n9XI4aNlTNEIhKZXpZKho+dZI9xggMXmUJaTsBg
- jkGM6TmkxPDRLCyhiVr9NMeSQQnVgooi7Xa+ySRu4bZciNf9DkbkmulLN012jA==
+ d=mind.be; s=google; t=1699301266; x=1699906066; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=SXp1it542wR9SMG6HeLfOs7V5HOvh775g0eMYxUKc20=;
+ b=Z56/WkUuyNlu/nEW1bXefhKAzMS9cSyixP/6+BsGBWJkyK6GNUdGwypD8bSlzc0pGN
+ I+j/LkdTH+PTQ07skdjkHKIemUcoxqxwaLaazh7GQpkWoEXW3m/msyPE/QVrmdy0pCpV
+ vhusbmHU57uj0x+GHRPUqTExz0dsJpI4ohbdqh99OKsYa/x2Jbocsr5oIW7lNN3DzHw3
+ chNGk57Oux+eVy0/25VKpOAtTeIUeKQV5h1dwcAZLBFzCFZKVdwlpuGlJb0IaHMzjWVY
+ q9rxiB5WSsK9Cz/jDm7zi8qbnwib3CGC1oxnujluJW0knXQ6fRMV35lUR68o1nH8vd/x
+ bS9A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JxF6D/8U
-Subject: Re: [Buildroot] [PATCH 2/5] test_systemd_selinux.py: use timeout
- argument for emulator.login
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Z56/WkUu
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/openldap: bump version to 2.5.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,48 +101,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: David Bender <codehero@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  5 Nov 2023 14:52:18 -0700
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-> self.emulator.timeout_multiplier *= 10 is equivilent to 60 * 10 or 600.
+
+On 06/11/2023 20:30, Thomas Petazzoni via buildroot wrote:
+> Hello,
 > 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->  support/testing/tests/init/test_systemd_selinux.py | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> On Mon,  6 Nov 2023 15:30:37 +0100
+> hmaied.benabdellatif@etictelecom.com wrote:
 > 
-> diff --git a/support/testing/tests/init/test_systemd_selinux.py b/support/testing/tests/init/test_systemd_selinux.py
-> index fab23e3330..d463f91669 100644
-> --- a/support/testing/tests/init/test_systemd_selinux.py
-> +++ b/support/testing/tests/init/test_systemd_selinux.py
-> @@ -21,9 +21,8 @@ class TestSELinuxSystemd(infra.basetest.BRTest):
->          """
->  
->      def wait_boot(self):
-> -        # The complete boot with systemd takes more time than what the default multipler permits
-> -        self.emulator.timeout_multiplier *= 10
-> -        self.emulator.login()
-> +        # The complete boot with systemd takes more time than what the default multiplier permits
+>> From: Hmaied Ben Abdellatif <hmaied.benabdellatif@etictelecom.com>
+>>
+>> Stripping when cross-compiling and libtool static behavior are fixed in 2.5.16.
+> 
+> Could you clarify which issues you are talking about here? I don't see
+> any build failures of openldap in our autobuilders. Do you have some
+> specific Buildroot configurations that are failing? If so, which ones?
 
-I think the wording of the comment no longer made sense, since we're no
-longer tweaking the multiplier. So I've reworded the comment a bit
-(likewise for PATCH 3/5).
+  I think Hmaled means that the 0001-fix_cross_strip.patch is no longer needed 
+because it was fixed upstream.
 
-Thanks!
+  Regards,
+  Arnout
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+> 
+> Thanks!
+> 
+> Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
