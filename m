@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81DD1C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D3ACC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:08:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A2874175F;
-	Mon,  6 Nov 2023 22:08:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A2874175F
+	by smtp4.osuosl.org (Postfix) with ESMTP id D16B742128;
+	Mon,  6 Nov 2023 22:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D16B742128
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id swUgke2cpbHN; Mon,  6 Nov 2023 22:08:09 +0000 (UTC)
+	with ESMTP id 8P6ZeZ0-8FNB; Mon,  6 Nov 2023 22:08:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B879417E5;
-	Mon,  6 Nov 2023 22:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B879417E5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B25791BF271
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:07:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E19C4180B;
+	Mon,  6 Nov 2023 22:08:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E19C4180B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F3A371BF271
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A66E82335
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:07:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A66E82335
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBA7861221
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBA7861221
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uv5I4n9OuWKu for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:07:39 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6FDE882330
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:07:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FDE882330
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9D68840004;
- Mon,  6 Nov 2023 22:07:37 +0000 (UTC)
-Date: Mon, 6 Nov 2023 23:07:37 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20231106230737.0b6544c7@windsurf>
-In-Reply-To: <20231105030437.2772974-1-james.hilliard1@gmail.com>
-References: <20231105030437.2772974-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699308457;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=QTtrx6Wy4EwuyoNOxhdUiygUqzfFMQXMjOOvGgjUOsc=;
- b=fkRBCRWkpTC4+x8XD/NbQlAlb4eixSWoXhS+6jLjpYZh3SE4M1CL4w1qGF31npN/cbJZZI
- Y5D6Q3Z3G9ed8I2+skbZeeZAWMaYwkd/X5YvRAypLV/wP+ECVuAC5LftM07JlbwpTmhEDR
- WtiwLyRYeS/NmPTnDiafuqiryvyVg/jKxOlluU92K9gIj73h7lU9wX4+vM4eF5AF81y9c6
- CX7vOuycQy+vt1U2myoCtvsXm7aVipdMEupJ0a2FXzEcTyeThjexL4dMG1f7wBIRU6Stwa
- jloo2FXMlp/sRamimJdWMB6hfoKOmOHm3Kr7K47EHjZS86AF0JRYSSzsy+Nrzw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fkRBCRWk
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-click: bump to version
- 8.1.7
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zl2Svoou8PCf for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:08:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3DCA60A9E
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3DCA60A9E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DE0F886B5D; Mon,  6 Nov 2023 22:08:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 Nov 2023 23:02:28 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 67df8af1da528c4b393d5929f51455aa6d31d2bd
+X-Git-Newrev: f8ed020fc0111d266830af65fa42847a36cc70ba
+X-Patchwork-Hint: ignore
+Message-Id: <20231106220815.DE0F886B5D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-chardet: bump to version
+ 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +58,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  4 Nov 2023 21:04:37 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f8ed020fc0111d266830af65fa42847a36cc70ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-click/python-click.hash | 4 ++--
->  package/python-click/python-click.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-chardet/python-chardet.hash | 4 ++--
+ package/python-chardet/python-chardet.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
+index 7887dd769d..bf0ed47df6 100644
+--- a/package/python-chardet/python-chardet.hash
++++ b/package/python-chardet/python-chardet.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/chardet/json
+-md5  394bd03d7a258d2771040bfbd5a7bf66  chardet-5.1.0.tar.gz
+-sha256  0d62712b956bc154f85fb0a266e2a3c5913c2967e00348701b32411d6def31e5  chardet-5.1.0.tar.gz
++md5  cc2d8cc9a751641463b4f7cfecad2ffa  chardet-5.2.0.tar.gz
++sha256  1b3b6ff479a8c414bc3fa2c0852995695c4a026dcd6d0633b2dd092ca39c1cf7  chardet-5.2.0.tar.gz
+ # Locally computed
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
+diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
+index 42646aa513..16e5f303b6 100644
+--- a/package/python-chardet/python-chardet.mk
++++ b/package/python-chardet/python-chardet.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CHARDET_VERSION = 5.1.0
++PYTHON_CHARDET_VERSION = 5.2.0
+ PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
+-PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/41/32/cdc91dcf83849c7385bf8e2a5693d87376536ed000807fa07f5eab33430d
++PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/f3/0d/f7b6ab21ec75897ed80c17d79b15951a719226b9fababf1e40ea74d69079
+ PYTHON_CHARDET_SETUP_TYPE = setuptools
+ PYTHON_CHARDET_LICENSE = LGPL-2.1+
+ PYTHON_CHARDET_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
