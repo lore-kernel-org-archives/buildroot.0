@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A658C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 21:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDF68C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 21:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC51341F83;
-	Mon,  6 Nov 2023 21:47:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC51341F83
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9253841F83;
+	Mon,  6 Nov 2023 21:47:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9253841F83
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z0p4lK9o7k3r; Mon,  6 Nov 2023 21:47:03 +0000 (UTC)
+	with ESMTP id zk_qqiywINvN; Mon,  6 Nov 2023 21:47:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD33C41F96;
-	Mon,  6 Nov 2023 21:47:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD33C41F96
+	by smtp4.osuosl.org (Postfix) with ESMTP id 229B6420F2;
+	Mon,  6 Nov 2023 21:47:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 229B6420F2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C67511BF3A6
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:46:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D799A1BF3A6
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 71ACF820B7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E3B481FAE
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:46:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71ACF820B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E3B481FAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4g7iO5VV480f for <buildroot@lists.busybox.net>;
+ with ESMTP id IOq7fTYRq4Vf for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 21:46:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A29A82039
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4944C81FFA
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 21:46:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A29A82039
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4944C81FFA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 44A7386ADE; Mon,  6 Nov 2023 21:46:47 +0000 (UTC)
+ id 37B5286ADC; Mon,  6 Nov 2023 21:46:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 22:45:39 +0100
+Date: Mon, 6 Nov 2023 22:44:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d47fa52df5bc0e1d6e1c0690dd6ee77b92965f35
-X-Git-Newrev: 3b2da40749392319d45869b50f2b8362987eff38
+X-Git-Oldrev: 718a800828cc16131322e5c618c8dde42a8c8123
+X-Git-Newrev: d47fa52df5bc0e1d6e1c0690dd6ee77b92965f35
 X-Patchwork-Hint: ignore
-Message-Id: <20231106214647.44A7386ADE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/system-config-printer: bump to
- version 1.5.18
+Message-Id: <20231106214647.37B5286ADC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vde2: bump to version 2.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,195 +63,258 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b2da40749392319d45869b50f2b8362987eff38
+commit: https://git.buildroot.net/buildroot/commit/?id=d47fa52df5bc0e1d6e1c0690dd6ee77b92965f35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop first patch (already in version)
-- Drop second patch (rejected): cups-config is deprecated in favor of pkg-config
-- Drop autoreconf (no more patches)
-- intltool has been replaced by gettext since
-  https://github.com/OpenPrinting/system-config-printer/commit/e653c1a860aedc306828e60f4b99a80e0d8b3523
+- Switch to github to get latest release
+- Drop first and second patches (already in version)
+- Drop third patch (not needed anymore)
+- Drop BSD-3-Clause and COPYING.slirpvde (slirpvde removed with
+  https://github.com/virtualsquare/vde-2/commit/eda0a1bc1d14061588459676fe6f0a048b7dbd1c
+  https://github.com/virtualsquare/vde-2/commit/14e1c9e06f4dbdddc6fe4e85fc72a1d583b049ad)
+- python removed with
+  https://github.com/virtualsquare/vde-2/commit/2c57c25075fa2d351b8f181d2764af61c4e47de0
+- kernel switch removed with
+  https://github.com/virtualsquare/vde-2/commit/b196ecd5b774f1c85041ce6d2334702911cbd8f3
+- parallel build has been fixed with
+  https://github.com/virtualsquare/vde-2/commit/7dd9ed46d5dca125ca45d679ac9f3acbfb0f9300
+- openssl has been replaced by wolfssl with
+  https://github.com/virtualsquare/vde-2/commit/8599321526d0a31925fe55cabbe132b752cb268a
 
-https://github.com/OpenPrinting/system-config-printer/blob/v1.5.18/NEWS
+https://github.com/virtualsquare/vde-2/releases/tag/v2.3.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  2 -
- ...option-to-disable-xmlto-manual-generation.patch | 73 ----------------------
- ...2-configure-accept-non-system-cups-config.patch | 35 -----------
- .../system-config-printer.hash                     |  2 +-
- .../system-config-printer/system-config-printer.mk | 11 +---
- 5 files changed, 4 insertions(+), 119 deletions(-)
+ .checkpackageignore                                |  3 --
+ package/vde2/0001-no-cxx.patch                     | 22 -----------
+ .../0002-fstp-Add-static-to-inline-functions.patch | 44 ----------------------
+ ...003-vde_l3-Add-static-to-inline-functions.patch | 37 ------------------
+ package/vde2/Config.in                             |  2 +-
+ package/vde2/vde2.hash                             |  3 +-
+ package/vde2/vde2.mk                               | 24 +++---------
+ 7 files changed, 8 insertions(+), 127 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 4fd26a4242..8b591e5276 100644
+index fffd9927a5..4fd26a4242 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1336,8 +1336,6 @@ package/swupdate/swupdate.sh Shellcheck
- package/sylpheed/0001-harden-link-checker-before-accepting-click.patch Upstream
- package/sysprof/0001-define-NT_GNU_BUILD_ID.patch Upstream
- package/sysrepo/S51sysrepo-plugind Indent Shellcheck
--package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch Upstream
--package/system-config-printer/0002-configure-accept-non-system-cups-config.patch Upstream
- package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch Upstream
- package/tar/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch Upstream
- package/targetcli-fb/S50target Shellcheck Variables
-diff --git a/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch b/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
+@@ -1416,9 +1416,6 @@ package/vboot-utils/0004-Disable-static-futility.patch Upstream
+ package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch Upstream
+ package/vboot-utils/0006-Update-for-openssl-1.1.patch Upstream
+ package/vboot-utils/0007-Make-vboot_version-extern-in-header.patch Upstream
+-package/vde2/0001-no-cxx.patch Upstream
+-package/vde2/0002-fstp-Add-static-to-inline-functions.patch Upstream
+-package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch Upstream
+ package/vdr/0001-getloadavg.patch Upstream
+ package/vlc/0001-Disable-building-of-statically-linked-vlc-binary.patch Upstream
+ package/vlc/0002-automake-add-subdir-objects-option.patch Upstream
+diff --git a/package/vde2/0001-no-cxx.patch b/package/vde2/0001-no-cxx.patch
 deleted file mode 100644
-index e2cf395811..0000000000
---- a/package/system-config-printer/0001-Add-option-to-disable-xmlto-manual-generation.patch
+index 67cefa2bb8..0000000000
+--- a/package/vde2/0001-no-cxx.patch
 +++ /dev/null
-@@ -1,73 +0,0 @@
--From 731c8d7e1f9edb527785d61f74031a5e5846554b Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Sun, 25 Jul 2021 16:30:59 -0600
--Subject: [PATCH] Add option to disable xmlto manual generation.
+@@ -1,22 +0,0 @@
+-configure: do not test for CXX, it's not needed
 -
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[james.hilliard1@gmail.com: backport from upstream commit
--95e0b461f5a46c74b00287aca65732ea2fc9d69b]
+-There is no C++ source file, so no reason to require a C++ compiler.
+-
+-Reported-by: Peter Korsgaard <jacmet@uclibc.org>
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
 ----
-- Makefile.am  | 7 ++++++-
-- configure.ac | 5 +++++
-- 2 files changed, 11 insertions(+), 1 deletion(-)
+-Patch sent upstream
+-( not yet in archives, awaits moderator approval... :-/ )
 -
--diff --git a/Makefile.am b/Makefile.am
--index 843ba30d..7facab94 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -209,9 +209,11 @@ else
-- systemd_CLEANFILES=
-- endif
+-diff -durN vde2-2.3.2.orig/configure.ac vde2-2.3.2/configure.ac
+---- vde2-2.3.2.orig/configure.ac	2011-11-23 17:41:19.000000000 +0100
+-+++ vde2-2.3.2/configure.ac	2012-12-14 21:56:47.146319686 +0100
+-@@ -11,7 +11,6 @@
+- AC_CONFIG_LIBOBJ_DIR(src/common)
 - 
--+if XMLTO
-- man_MANS=					\
-- 	man/system-config-printer.1		\
-- 	man/system-config-printer-applet.1
--+endif
-- 
-- dbus_DATA =					\
-- 	dbus/com.redhat.NewPrinterNotification.conf		\
--@@ -274,7 +276,6 @@ EXTRA_DIST=\
-- 	$(bin_SCRIPTS) \
-- 	setup.py \
-- 	$(EXPORT_MODULES) \
---	man/system-config-printer.xml \
-- 	$(dbus_DATA) \
-- 	$(dbusinterfaces_DATA) \
-- 	$(dbusservices_DATA) \
--@@ -297,12 +298,16 @@ EXTRA_DIST=\
-- 	test_PhysicalDevice.py \
-- 	$(appdata_in_files)
-- 
--+if XMLTO
--+EXTRA_DIST+=man/system-config-printer.xml
--+
-- # The man pages are generated from DocBook XML.
-- .stamp-man-pages-built: $(top_srcdir)/man/system-config-printer.xml
-- 	xmlto man -o man $<
-- 	touch .stamp-man-pages-built
-- 
-- $(man_MANS): .stamp-man-pages-built
--+endif
-- 
-- html:	$(EXPORT_MODULES) $(EXPORT_MODULES_GEN)
-- 	rm -rf html
--diff --git a/configure.ac b/configure.ac
--index 811f897a..a2a66889 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -75,6 +75,11 @@ if test "x$with_systemdsystemunitdir" != xno; then
-- fi
-- AM_CONDITIONAL(HAVE_SYSTEMD, [test -n "$with_systemdsystemunitdir" -a "x$with_systemdsystemunitdir" != xno ])
-- 
--+AC_ARG_WITH(xmlto,
--+        [AC_HELP_STRING([--with-xmlto],
--+                [Enable xmlto manual generation @<:@default=yes@:>@])])
--+AM_CONDITIONAL([XMLTO], [test x$with_xmlto != xno])
--+
-- ALL_LINGUAS="ar as ast bg bn_IN bn br bs ca cs cy da de el en_GB es et fa fi fr fur gu he hi hr hu id is it ja kn ko lt lv mai ml mr ms nb nds nl nn oc or pa pl pt_BR pt ro ru si sk sl sr@latin sr sv ta te th tr uk vi zh_CN zh_TW"
-- AC_CONFIG_FILES([
-- Makefile
---- 
--2.25.1
--
-diff --git a/package/system-config-printer/0002-configure-accept-non-system-cups-config.patch b/package/system-config-printer/0002-configure-accept-non-system-cups-config.patch
+- # Checks for programs.
+--AC_PROG_CXX
+- AC_PROG_CC
+- AC_PROG_INSTALL
+- AC_PROG_LN_S
+diff --git a/package/vde2/0002-fstp-Add-static-to-inline-functions.patch b/package/vde2/0002-fstp-Add-static-to-inline-functions.patch
 deleted file mode 100644
-index 9661115bf0..0000000000
---- a/package/system-config-printer/0002-configure-accept-non-system-cups-config.patch
+index 0dbe083d06..0000000000
+--- a/package/vde2/0002-fstp-Add-static-to-inline-functions.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 75db995dda74696123cde2869e4e9b3315b91abd Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 1 Aug 2021 13:40:28 +0200
--Subject: [PATCH] configure: accept non-system cups-config
+@@ -1,44 +0,0 @@
+-From 67bc8443ac7e8144a78d84dee30a5cac3b5c99a4 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sun, 27 Aug 2017 23:56:05 +0200
+-Subject: [PATCH] fstp: Add static to inline functions
 -
--In cross-compilation setups, cups.config might not be installed, and
--might not be in the PATH.
+-From [1]
+-"This is needed to avoid a link error where the inline functions appear
+-missing at link time.
+-From c99 standard inline function should either be declared static or
+-have an extern instance in a c file for linking.
+-This fix is necessary to build with gcc 7; for some reason it was not
+-trigerred before."
 -
--Allow a user to specify the full path to cups-config.
+-[1] https://git.buildroot.net/buildroot/commit/?id=21133ada326c87627f7bdee4493d8086587c3cca
 -
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ----
-- configure.ac | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
+- src/vde_switch/fstp.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/configure.ac b/configure.ac
--index dd013b4a..9f033d18 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -33,7 +33,11 @@ fi
-- AC_SUBST(DESKTOPVENDOR)
-- AC_SUBST(DESKTOPPREFIX)
+-diff --git a/src/vde_switch/fstp.c b/src/vde_switch/fstp.c
+-index aab7324..b1e7ee8 100644
+---- a/src/vde_switch/fstp.c
+-+++ b/src/vde_switch/fstp.c
+-@@ -30,14 +30,14 @@ static int numports;
+- #ifdef FSTP
+- #include <fstp.h>
+- /*********************** sending macro used by FSTP & Core ******************/
+--void inline ltonstring(unsigned long l,unsigned char *s) {
+-+static void inline ltonstring(unsigned long l,unsigned char *s) {
+- 	s[3]=l; l>>=8;
+- 	s[2]=l; l>>=8;
+- 	s[1]=l; l>>=8;
+- 	s[0]=l;
+- }
 - 
---cupsserverbindir="`cups-config --serverbin`"
--+AC_ARG_WITH([cups-config],
--+            [AC_HELP_STRING([--with-cups-config], [Specify the path of cups-config])],,
--+            [with_cups_config=cups-config])
--+
--+cupsserverbindir="`${with_cups_config} --serverbin`"
-- AC_SUBST(cupsserverbindir)
+--unsigned long inline nstringtol(unsigned char *s) {
+-+static unsigned long inline nstringtol(unsigned char *s) {
+- 	return (s[0]<<24)+(s[1]<<16)+(s[2]<<8)+s[3];
+- }
 - 
-- PKG_CHECK_MODULES(GLIB, glib-2.0, has_glib=yes, has_glib=no)
 --- 
--2.25.1
+-2.9.5
 -
-diff --git a/package/system-config-printer/system-config-printer.hash b/package/system-config-printer/system-config-printer.hash
-index 56b7e47650..3bbc870780 100644
---- a/package/system-config-printer/system-config-printer.hash
-+++ b/package/system-config-printer/system-config-printer.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  fbd226ce215bf014213dded81b43b9d4d90470524f5bf7cd21ecc71d4aefa689  system-config-printer-1.5.15.tar.xz
-+sha256  b1a69e1b4ec2add569a87aeca811a37c5361ee6ae327ec852b79e64223e34bee  system-config-printer-1.5.18.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/system-config-printer/system-config-printer.mk b/package/system-config-printer/system-config-printer.mk
-index e275743026..6b101e8400 100644
---- a/package/system-config-printer/system-config-printer.mk
-+++ b/package/system-config-printer/system-config-printer.mk
-@@ -4,18 +4,13 @@
+diff --git a/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch b/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
+deleted file mode 100644
+index 7f771dfc7e..0000000000
+--- a/package/vde2/0003-vde_l3-Add-static-to-inline-functions.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-vde_l3: Add static to inline functions
+-
+-Add static to inline functions to avoid the following build failure
+-with BR2_OPTIMIZE_0:
+-
+-/home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/mips64-buildroot-linux-uclibc/10.3.0/../../../../mips64-buildroot-linux-uclibc/bin/ld: vde_l3.o: in function `ip_output_ready':
+-vde_l3.c:(.text+0xb30): undefined reference to `iphead'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/5eeefcdac0b8974a424a885fdc2e82f7cb4b617d
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -Nura vde2-2.3.2.orig/src/vde_l3/vde_l3.c vde2-2.3.2/src/vde_l3/vde_l3.c
+---- vde2-2.3.2.orig/src/vde_l3/vde_l3.c	2022-04-21 11:05:17.393452698 +0200
+-+++ vde2-2.3.2/src/vde_l3/vde_l3.c	2022-04-21 11:10:36.509804404 +0200
+-@@ -100,17 +100,17 @@
+- };
+- 
+- 
+--inline struct vde_ethernet_header *ethhead(struct vde_buff *vdb)
+-+static inline struct vde_ethernet_header *ethhead(struct vde_buff *vdb)
+- {
+- 	return (struct vde_ethernet_header*)(vdb->data);
+- }
+- 
+--inline struct iphdr *iphead(struct vde_buff *vdb)
+-+static inline struct iphdr *iphead(struct vde_buff *vdb)
+- {
+- 	return (struct iphdr*)(vdb->data + 14);
+- }
+- 
+--inline void *payload(struct vde_buff *vdb)
+-+static inline void *payload(struct vde_buff *vdb)
+- {
+- 	return (uint8_t*)(vdb->data + 14 + sizeof(struct iphdr));
+- }
+diff --git a/package/vde2/Config.in b/package/vde2/Config.in
+index f640a4ae2a..44bdf50de0 100644
+--- a/package/vde2/Config.in
++++ b/package/vde2/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_VDE2
+ 	  spawned over a set of physical computers over the Internet.
+ 	  VDE is part of the virtualsquare project.
+ 
+-	  http://vde.sourceforge.net/
++	  https://github.com/virtualsquare/vde-2/
+ 
+ comment "vde2 needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+diff --git a/package/vde2/vde2.hash b/package/vde2/vde2.hash
+index a9e1ea2263..11d6a28279 100644
+--- a/package/vde2/vde2.hash
++++ b/package/vde2/vde2.hash
+@@ -1,5 +1,4 @@
+ # Locally computed:
+-sha256  cbea9b7e03097f87a6b5e98b07890d2275848f1fe4b9fcda77b8994148bc9542  vde2-2.3.2.tar.bz2
++sha256  a7d2cc4c3d0c0ffe6aff7eb0029212f2b098313029126dcd12dc542723972379  vde2-2.3.3.tar.gz
+ sha256  fb295d0c24b8ef4b39017ac68e772e8e6e839612ce10da12b9f48d1e8e512e2e  COPYING
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.libvdeplug
+-sha256  d5ac74315b2d2f9c53f5839e311484f4646a9401b68d02d36f3dab386352e74d  COPYING.slirpvde
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index 76d6f352b7..ab4c32143d 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -4,24 +4,21 @@
  #
  ################################################################################
  
--SYSTEM_CONFIG_PRINTER_VERSION = 1.5.15
-+SYSTEM_CONFIG_PRINTER_VERSION = 1.5.18
- SYSTEM_CONFIG_PRINTER_SOURCE = system-config-printer-$(SYSTEM_CONFIG_PRINTER_VERSION).tar.xz
- SYSTEM_CONFIG_PRINTER_SITE = https://github.com/OpenPrinting/system-config-printer/releases/download/v$(SYSTEM_CONFIG_PRINTER_VERSION)
- SYSTEM_CONFIG_PRINTER_LICENSE = GPL-2.0+
- SYSTEM_CONFIG_PRINTER_LICENSE_FILES = COPYING
--SYSTEM_CONFIG_PRINTER_DEPENDENCIES = cups host-desktop-file-utils host-intltool host-pkgconf
--
--# 0001-Add-option-to-disable-xmlto-manual-generation.patch
--# 0002-configure-accept-non-system-cups-config.patch
--SYSTEM_CONFIG_PRINTER_AUTORECONF = YES
--
--SYSTEM_CONFIG_PRINTER_CONF_OPTS = --with-cups-config=$(STAGING_DIR)/usr/bin/cups-config
-+SYSTEM_CONFIG_PRINTER_DEPENDENCIES = \
-+	cups host-desktop-file-utils $(TARGET_NLS_DEPENDENCIES) host-pkgconf
+-VDE2_VERSION = 2.3.2
+-VDE2_SOURCE = vde2-$(VDE2_VERSION).tar.bz2
+-VDE2_SITE = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
+-VDE2_LICENSE = GPL-2.0+, LGPL-2.1+, BSD-3-Clause
+-VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug COPYING.slirpvde
++VDE2_VERSION = 2.3.3
++VDE2_SITE = $(call github,virtualsquare,vde-2,v$(VDE2_VERSION))
++VDE2_LICENSE = GPL-2.0+, LGPL-2.1+
++VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug
+ VDE2_CPE_ID_VENDOR = vde_project
+ VDE2_CPE_ID_PRODUCT = vde
+ VDE2_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
- SYSTEM_CONFIG_PRINTER_DEPENDENCIES += libglib2
+-# We touch configure.ac, so we need to autoreconf
++# From git
+ VDE2_AUTORECONF = YES
+ 
+ # Reasons for enabling/disabling stuff:
+ # - tuntap is enabled in the hope we're using a recent-enough toolchain
+ #   that does have if_tun.h (virtually everything these days)
+-# - kvde_switch is disabled because it requires a patched kernel
+-# - cryptcab is disabled to not depend on openSSL
+-# - python is disabled to not depend on Python
++# - cryptcab is disabled to not depend on wolfssl
+ # - pcap is disabled to not depend on libpcap
+ # - profiling is disabled because we do not want to debug/profile
+ #
+@@ -30,25 +27,16 @@ VDE2_AUTORECONF = YES
+ VDE2_CONF_OPTS = \
+ 	--disable-cryptcab \
+ 	--disable-experimental \
+-	--disable-kernel-switch \
+ 	--disable-pcap \
+ 	--disable-profile \
+-	--disable-python \
+ 	--enable-tuntap
+ 
+-# Package does not build in parallel due to improper make rules
+-VDE2_MAKE = $(MAKE1)
+-
+ HOST_VDE2_CONF_OPTS = \
+ 	--disable-cryptcab \
+ 	--disable-experimental \
+-	--disable-kernel-switch \
+ 	--disable-pcap \
+ 	--disable-profile \
+-	--disable-python \
+ 	--enable-tuntap
+ 
+-HOST_VDE2_MAKE = $(MAKE1)
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
