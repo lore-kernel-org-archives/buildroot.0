@@ -4,71 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD42FC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:14:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC5C1C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78B69401FF;
-	Mon,  6 Nov 2023 22:14:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78B69401FF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EF2540E46;
+	Mon,  6 Nov 2023 22:20:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EF2540E46
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VfXH0J6Mm3uT; Mon,  6 Nov 2023 22:14:57 +0000 (UTC)
+	with ESMTP id ZsR4dG-KLFjh; Mon,  6 Nov 2023 22:20:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBE97401DE;
-	Mon,  6 Nov 2023 22:14:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBE97401DE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5B4821BF271
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:14:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EE9641926;
+	Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EE9641926
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DF8711BF271
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F08D415BD
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:14:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F08D415BD
+ by smtp4.osuosl.org (Postfix) with ESMTP id B154B410BA
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B154B410BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vDOljoFwfbU8 for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:14:52 +0000 (UTC)
-Received: from ams.source.kernel.org (ams.source.kernel.org
- [IPv6:2604:1380:4601:e00::1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DBAA8414BD
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:14:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBAA8414BD
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by ams.source.kernel.org (Postfix) with ESMTP id F2A3EB8109B;
- Mon,  6 Nov 2023 22:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4BFC433C8;
- Mon,  6 Nov 2023 22:14:47 +0000 (UTC)
-Message-ID: <e85161b0-0913-4fd5-ac91-f19d200e6d22@kernel.org>
-Date: Tue, 7 Nov 2023 07:14:47 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Arnout Vandecappelle <arnout@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20231030002748.280144-1-dlemoal@kernel.org>
- <5761b87d-4843-4669-bc65-f6e1351e12b7@kernel.org>
- <20231106084314.2458b0c3@windsurf>
- <0f681e5b-2522-462e-9f09-f86694a2d3dc@mind.be>
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <0f681e5b-2522-462e-9f09-f86694a2d3dc@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1699308888;
- bh=Rjp86ACR3fOA5NrrXjDTrs8O1m5Ybx/gWFTpZEvAKto=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
- b=ImqqeqB7wrvOOH/PeMcY1zTZuF+m39JjCgd033xovtOWsDh5oJAh+u9eI+tUzWHEp
- XHpiNPhw9P1EuDpTRXwV1VIvEaHoCIAu6dqPmROWCrIzg+uDS8t0vLb8jpB0UbacPN
- 22N/m20JJ9IvellCBw/T1vxkYcNX/+GoV8TvOqHrAzPf2MYutXbeSo47YTF38QpmvQ
- EcSLnktW8n4oqbJD2osjgdWXH6g2DkzNDMHCi+1saI4BhTa5Y9T+XCeX/AJXIj1+0R
- ytD6Gy9yDqtdFj0INR0JaWAlCj2AzxF/l7RsVw20+5gbvU9dZnaw0+mKfsBX6R/6y8
- FmanJ2JJfgjDg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
- header.a=rsa-sha256 header.s=k20201202 header.b=ImqqeqB7
-Subject: Re: [Buildroot] [PATCH] package/gcc: Fix gcc finale library
- installation
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o8fdmgSgn6al for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB1DB402FD
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB1DB402FD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D12B486B72; Mon,  6 Nov 2023 22:20:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 Nov 2023 23:12:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b9cbe43f38185ef074472cee603b68942fe983d2
+X-Git-Newrev: 43d1d468b778052908a4d6caaa467c02aa3fdf17
+X-Patchwork-Hint: ignore
+Message-Id: <20231106222016.D12B486B72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-crontab: bump to version
+ 3.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,51 +56,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot <buildroot@buildroot.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/7/23 05:18, Arnout Vandecappelle wrote:
-> 
-> 
-> On 06/11/2023 08:43, Thomas Petazzoni via buildroot wrote:
->> On Mon, 6 Nov 2023 11:17:41 +0900
->> Damien Le Moal <dlemoal@kernel.org> wrote:
->>
->>> I received a build failure report (again) for the RISC-V Canaan & Sipeed boards
->>> configs. This patch fixes these build failures.
->>
->> I need to dig deeper into this. We looked into this issue with Romain,
->> and I believe our conclusion is that it was unfortunately more complex
->> than this, because in fact BR2_TOOLCHAIN_HAS_LIBATOMIC is not a fully
->> accurate representation of whether gcc has libatomic or not.
-> 
->   Even so, we could apply this already as a first step that fixes many 
-> configurations, and improve the fix later? Currently there are quite a lot of 
-> configurations for which we simply can't build a toolchain...
-> 
->   BTW, Damien, you forgot the Fixes line:
-> 
-> Fixes: 
-> http://autobuild.buildroot.net/results/98f/98fedf4969c260f73a01b937b9625e66dcd86b3c
+commit: https://git.buildroot.net/buildroot/commit/?id=43d1d468b778052908a4d6caaa467c02aa3fdf17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas, can you add this if you apply the patch ? I can send a v2 of the patch
-as well if you prefer that.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-crontab/python-crontab.hash | 4 ++--
+ package/python-crontab/python-crontab.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> 
-> (there are about 10 failures per day on various architectures, I don't think we 
-> need to enumerate them all.)
-> 
->   Regards,
->   Arnout
-> 
-
--- 
-Damien Le Moal
-Western Digital Research
-
+diff --git a/package/python-crontab/python-crontab.hash b/package/python-crontab/python-crontab.hash
+index d9519096df..10ba469d5a 100644
+--- a/package/python-crontab/python-crontab.hash
++++ b/package/python-crontab/python-crontab.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-crontab/json
+-md5  0a71aa83eed18752c2850632d84cfd89  python-crontab-2.7.1.tar.gz
+-sha256  b21af4647c7bbb848fef2f020616c6b0289dcb9f94b4f991a55310ff9bec5749  python-crontab-2.7.1.tar.gz
++md5  1675bdeeb821441b8b4c35e0a7ba861c  python-crontab-3.0.0.tar.gz
++sha256  79fb7465039ddfd4fb93d072d6ee0d45c1ac8bf1597f0686ea14fd4361dba379  python-crontab-3.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
+diff --git a/package/python-crontab/python-crontab.mk b/package/python-crontab/python-crontab.mk
+index 1c2802ef61..21a9edef9b 100644
+--- a/package/python-crontab/python-crontab.mk
++++ b/package/python-crontab/python-crontab.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CRONTAB_VERSION = 2.7.1
+-PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/6a/b6/94d861e868698b8e3f288f7e4684e30535b0d9a6b38316ee0a3d4d31e6ae
++PYTHON_CRONTAB_VERSION = 3.0.0
++PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/fb/6f/14adf2570e83c90f3f5af1af5225a70f914ba9e7ab9d08e675c5f6887102
+ PYTHON_CRONTAB_SETUP_TYPE = setuptools
+ PYTHON_CRONTAB_LICENSE = LGPL-3.0+
+ PYTHON_CRONTAB_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
