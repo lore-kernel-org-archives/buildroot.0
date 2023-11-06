@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20D7AC4167D
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76FB0C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:10:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD7EC410C6;
-	Mon,  6 Nov 2023 22:09:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD7EC410C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BBDD41921;
+	Mon,  6 Nov 2023 22:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BBDD41921
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N6VYFZgR3Zqm; Mon,  6 Nov 2023 22:09:40 +0000 (UTC)
+	with ESMTP id BAwgIHn5yH9r; Mon,  6 Nov 2023 22:10:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E276D415FB;
-	Mon,  6 Nov 2023 22:09:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E276D415FB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B4BD81BF271
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:08:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D5FF418FA;
+	Mon,  6 Nov 2023 22:10:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D5FF418FA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FEAB1BF271
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:10:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E8B681FC6
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:08:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E8B681FC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30B08418FA
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:10:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30B08418FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aLM885UjN5zL for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:08:22 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B8CBE824CE
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:08:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8CBE824CE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0EE6560002;
- Mon,  6 Nov 2023 22:08:19 +0000 (UTC)
-Date: Mon, 6 Nov 2023 23:08:19 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231106230819.47de147e@windsurf>
-In-Reply-To: <20231104224820.374897-1-fontaine.fabrice@gmail.com>
-References: <20231104224820.374897-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699308500;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=i3lcmm9lz+IPDfnYVPd0PCAy9mfZVuqqm90leDj1KhY=;
- b=U8G0Doo6C+IHzUDw1PJ9xeW6sA5LZ+jqsDE6ef36PJb2KbDYDCpszVsAAunP+54GQG592Z
- TsFBJ/BR/1NoW2cpRoxBOf34wKWNkNwpA/TGYti6NY6+P6pulQ0PEV75EcK02JVqJdv0qG
- R9VtT0aQwZtLRX/YQKk0maR6RLgbZKz2Kd0skM23jISEsgL8viZQbkZfiW+pTjNrayfMg4
- rpKsWyAMWtqcf9ykP+WTwsbns8NMdvIvHL8jL/8RtDEbEdGRKNr/Vo9IKG/Gk2z3WxwEHZ
- R4AesgBA9D4mhS9CpUCcdC1I7bLDh+uyyttmPWUa8Esil6ojE5biU/rDQxg0VA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=U8G0Doo6
-Subject: Re: [Buildroot] [PATCH 1/2] package/freeradius-server: fix python
- handling
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1_VnM8Gs37lC for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:10:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6794F418C7
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:10:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6794F418C7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 54FAD86B74; Mon,  6 Nov 2023 22:10:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 Nov 2023 23:09:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5c40f41b2e715bb39693a188da5a540ae9fa7aef
+X-Git-Newrev: 1c0c67fc1ae146b34475231fb702e7f2e6bf9f8f
+X-Patchwork-Hint: ignore
+Message-Id: <20231106221052.54FAD86B74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32mp157c_dk2_defconfig: unbreak
+ TF-A build with GCC >= 12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +58,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: David GOUARIN <dgouarin@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2481560220606720663=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  4 Nov 2023 23:48:19 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+--===============2481560220606720663==
+Content-Type: text/plain
 
-> python handling is wrong since the addition of the package in commit
-> 736c4c1655d93652a9a7e79235bbe726b3d46176 so disable python(2) and enable
-> python3 if needed
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/freeradius-server/freeradius-server.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=1c0c67fc1ae146b34475231fb702e7f2e6bf9f8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Both applied to master, thanks.
+With the move to default to GCC 12 in commit e0091e42eef9 (package/gcc:
+switch to gcc 12.x as the default), TF-A now fails to build as a warning is
+generated and it builds with -Werror:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  CC      plat/st/stm32mp1/bl2_plat_setup.c
+drivers/st/io/io_stm32image.c: In function ‘stm32image_partition_read’:
+drivers/st/io/io_stm32image.c:249:13: error: ‘result’ may be used uninitialized [-Werror=maybe-uninitialized]
+  249 |         int result;
+      |             ^~~~~~
+cc1: all warnings being treated as errors
+
+This is fixed in TF-A v2.6 with commit c1d732d0db24 (fix(io_stm32image):
+uninitialized variable warning), but I do not have the board to verify if
+v2.6 works, so instead disable -Werror by passsing E=0.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/stm32mp157c_dk2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index cf2433d67e..aa0fcfa843 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -30,7 +30,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb E=0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
+
+--===============2481560220606720663==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2481560220606720663==--
