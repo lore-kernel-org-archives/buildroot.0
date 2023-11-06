@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F38EEC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20D7AC4167D
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A838F417DA;
-	Mon,  6 Nov 2023 22:09:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A838F417DA
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD7EC410C6;
+	Mon,  6 Nov 2023 22:09:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD7EC410C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sCn72ij4JZrR; Mon,  6 Nov 2023 22:09:26 +0000 (UTC)
+	with ESMTP id N6VYFZgR3Zqm; Mon,  6 Nov 2023 22:09:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC0524212A;
-	Mon,  6 Nov 2023 22:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC0524212A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 144731BF951
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:08:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E276D415FB;
+	Mon,  6 Nov 2023 22:09:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E276D415FB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B4BD81BF271
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E25F41C0A
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E25F41C0A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E8B681FC6
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:08:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E8B681FC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hjDwXKhrhLzg for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:08:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21531417CA
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:08:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21531417CA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B34B86B2B; Mon,  6 Nov 2023 22:08:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 23:02:40 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 31f7ec223cbda3c0b260a75a54f521142e055c3f
-X-Git-Newrev: 4a3b7a18f35d5f78868c70a9cb1e9677365a0fb7
-X-Patchwork-Hint: ignore
-Message-Id: <20231106220816.0B34B86B2B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cheroot: bump to version
- 10.0.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aLM885UjN5zL for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:08:22 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B8CBE824CE
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:08:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8CBE824CE
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0EE6560002;
+ Mon,  6 Nov 2023 22:08:19 +0000 (UTC)
+Date: Mon, 6 Nov 2023 23:08:19 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20231106230819.47de147e@windsurf>
+In-Reply-To: <20231104224820.374897-1-fontaine.fabrice@gmail.com>
+References: <20231104224820.374897-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699308500;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=i3lcmm9lz+IPDfnYVPd0PCAy9mfZVuqqm90leDj1KhY=;
+ b=U8G0Doo6C+IHzUDw1PJ9xeW6sA5LZ+jqsDE6ef36PJb2KbDYDCpszVsAAunP+54GQG592Z
+ TsFBJ/BR/1NoW2cpRoxBOf34wKWNkNwpA/TGYti6NY6+P6pulQ0PEV75EcK02JVqJdv0qG
+ R9VtT0aQwZtLRX/YQKk0maR6RLgbZKz2Kd0skM23jISEsgL8viZQbkZfiW+pTjNrayfMg4
+ rpKsWyAMWtqcf9ykP+WTwsbns8NMdvIvHL8jL/8RtDEbEdGRKNr/Vo9IKG/Gk2z3WxwEHZ
+ R4AesgBA9D4mhS9CpUCcdC1I7bLDh+uyyttmPWUa8Esil6ojE5biU/rDQxg0VA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=U8G0Doo6
+Subject: Re: [Buildroot] [PATCH 1/2] package/freeradius-server: fix python
+ handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,64 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: David GOUARIN <dgouarin@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a3b7a18f35d5f78868c70a9cb1e9677365a0fb7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  4 Nov 2023 23:48:19 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Drop no longer required python-six runtime dependency.
+> python handling is wrong since the addition of the package in commit
+> 736c4c1655d93652a9a7e79235bbe726b3d46176 so disable python(2) and enable
+> python3 if needed
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/freeradius-server/freeradius-server.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-cheroot/Config.in           | 1 -
- package/python-cheroot/python-cheroot.hash | 4 ++--
- package/python-cheroot/python-cheroot.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+Both applied to master, thanks.
 
-diff --git a/package/python-cheroot/Config.in b/package/python-cheroot/Config.in
-index bb9b4abbc3..4c907ff8c6 100644
---- a/package/python-cheroot/Config.in
-+++ b/package/python-cheroot/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_CHEROOT
- 	bool "python-cheroot"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_JARACO_FUNCTOOLS # runtime
- 	help
-diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
-index c3556109cd..d103eb6f96 100644
---- a/package/python-cheroot/python-cheroot.hash
-+++ b/package/python-cheroot/python-cheroot.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cheroot/json
--md5  1617fdbaba7d6edbe5b0ff48f7563111  cheroot-9.0.0.tar.gz
--sha256  3d47ad9ee19ecbec144b4758399036692fdbf67a40b96eef1fb1454367b3d338  cheroot-9.0.0.tar.gz
-+md5  be96fa052c54892240f916fbb06cc571  cheroot-10.0.0.tar.gz
-+sha256  59c4a1877fef9969b3c3c080caaaf377e2780919437853fc0d32a9df40b311f0  cheroot-10.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256  e20feeb491a7e98084f15719349e9857aad41c4503c5e479f8815b063dbf7564  LICENSE.md
-diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
-index f75065c7da..86e16f7db2 100644
---- a/package/python-cheroot/python-cheroot.mk
-+++ b/package/python-cheroot/python-cheroot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CHEROOT_VERSION = 9.0.0
-+PYTHON_CHEROOT_VERSION = 10.0.0
- PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
--PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/8c/e7/8e6387d59a352c5799e917a23e7b76771a8bb97322c1ce7e42934d0066c3
-+PYTHON_CHEROOT_SITE = https://files.pythonhosted.org/packages/08/7c/95c154177b16077de0fec1b821b0d8b3df2b59c5c7b3575a9c1bf52a437e
- PYTHON_CHEROOT_LICENSE = BSD-3-Clause
- PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
- PYTHON_CHEROOT_SETUP_TYPE = setuptools
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
