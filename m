@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35EDEC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67989C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:22:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6F784212E;
-	Mon,  6 Nov 2023 22:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6F784212E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1ABED42138;
+	Mon,  6 Nov 2023 22:22:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ABED42138
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ciyWlPJTMa5O; Mon,  6 Nov 2023 22:22:04 +0000 (UTC)
+	with ESMTP id OfK9TMIyWc31; Mon,  6 Nov 2023 22:22:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2DAF42098;
-	Mon,  6 Nov 2023 22:22:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2DAF42098
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27A0E1BF954
+	by smtp4.osuosl.org (Postfix) with ESMTP id 433EA410BA;
+	Mon,  6 Nov 2023 22:22:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 433EA410BA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 402171BF271
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54543612CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7886F4168C
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54543612CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7886F4168C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tJqQDHtE5QrV for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 71Al_ILVfjyD for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35874612C1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48DD7415C3
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35874612C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48DD7415C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E59D86B7A; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+ id 4645886B77; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 23:13:03 +0100
+Date: Mon, 6 Nov 2023 23:15:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d7a908f7305c51069d4ffb7808efc3fb4b3853d0
-X-Git-Newrev: 285b10cb80dc4b5de001a43f62da771a27a104be
+X-Git-Oldrev: f104268c2083511313825a63580fb4d94d3f454f
+X-Git-Newrev: 8916b4ad20f71f8494ccdc3dae4d8e54b1857e44
 X-Patchwork-Hint: ignore
-Message-Id: <20231106222017.1E59D86B7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dbus-fast: bump to version
- 2.12.0
+Message-Id: <20231106222017.4645886B77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-esptool: bump to version
+ 4.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=285b10cb80dc4b5de001a43f62da771a27a104be
+commit: https://git.buildroot.net/buildroot/commit/?id=8916b4ad20f71f8494ccdc3dae4d8e54b1857e44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dbus-fast/python-dbus-fast.hash | 4 ++--
- package/python-dbus-fast/python-dbus-fast.mk   | 4 ++--
+ package/python-esptool/python-esptool.hash | 4 ++--
+ package/python-esptool/python-esptool.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
-index 83382bfb29..08d2675443 100644
---- a/package/python-dbus-fast/python-dbus-fast.hash
-+++ b/package/python-dbus-fast/python-dbus-fast.hash
+diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
+index e1d3188658..25fea229b0 100644
+--- a/package/python-esptool/python-esptool.hash
++++ b/package/python-esptool/python-esptool.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dbus-fast/json
--md5  810a5b08cc14e269207efa9cb651e86b  dbus_fast-2.7.0.tar.gz
--sha256  9110c689fea4869647ebad3cd80317554c9f77e3825eed2e36f4cb9aec749761  dbus_fast-2.7.0.tar.gz
-+md5  791ce3b0c04099959161a18ae983bf25  dbus_fast-2.12.0.tar.gz
-+sha256  849478e11d251fa4ebb99ce5bfee332cb6383c63ef0bc97bae23cef4e0badf9c  dbus_fast-2.12.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/esptool/json
+-md5  fbad6fb6024580fd2645331f92a74555  esptool-4.5.1.tar.gz
+-sha256  e3eb59836123e5ebf793ef639311f7d85645526487d8b1c2b51159b455106b9a  esptool-4.5.1.tar.gz
++md5  17853949fd582550a7c270f08d7691d4  esptool-4.6.2.tar.gz
++sha256  549ef93eef42ee7e9462ce5a53c16df7a0c71d91b3f77e19ec15749804cdf300  esptool-4.6.2.tar.gz
  # Locally computed sha256 checksums
- sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
-diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
-index 737406c9ab..b890177c74 100644
---- a/package/python-dbus-fast/python-dbus-fast.mk
-+++ b/package/python-dbus-fast/python-dbus-fast.mk
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
+index 34bdf6cc96..c0709c64b1 100644
+--- a/package/python-esptool/python-esptool.mk
++++ b/package/python-esptool/python-esptool.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DBUS_FAST_VERSION = 2.7.0
-+PYTHON_DBUS_FAST_VERSION = 2.12.0
- PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
--PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/e5/ba/beeaf36821f0164a208e8cbe9adbdc75ce0a6eafdebd4011912a806a4275
-+PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/f5/8c/220fcbe4337b842d730d5752f207fc8efd3a02405c71c329e61218e947b8
- PYTHON_DBUS_FAST_SETUP_TYPE = setuptools
- PYTHON_DBUS_FAST_LICENSE = MIT
- PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
+-PYTHON_ESPTOOL_VERSION = 4.5.1
++PYTHON_ESPTOOL_VERSION = 4.6.2
+ PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
+-PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/04/80/8eb97d1793cfaf830a4c0a7ea1d8f0674ccba8c23b7d02dcce074b5f44ea
++PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/a3/63/c757f50b606996a7e676f000b40626f65be63b3a10030563929c968e431c
+ PYTHON_ESPTOOL_SETUP_TYPE = setuptools
+ PYTHON_ESPTOOL_LICENSE = GPL-2.0+
+ PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
