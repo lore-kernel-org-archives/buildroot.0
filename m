@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD36FC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA21BC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99361420A9;
-	Mon,  6 Nov 2023 22:21:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99361420A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9365A4095A;
+	Mon,  6 Nov 2023 22:21:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9365A4095A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DSSmnXV6qVFl; Mon,  6 Nov 2023 22:21:24 +0000 (UTC)
+	with ESMTP id mgOLAiVc0Y9H; Mon,  6 Nov 2023 22:21:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C567B420AF;
-	Mon,  6 Nov 2023 22:21:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C567B420AF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 847971BF951
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAD4442098;
+	Mon,  6 Nov 2023 22:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAD4442098
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 058B21BF271
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 64D464168B
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64D464168B
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA7D18133E
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA7D18133E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yD5qOMfM29h7 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gFaX8_caa5HI for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26CF2415BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 15612813BE
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26CF2415BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15612813BE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1529F86B77; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+ id 0371A86B7C; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 23:13:01 +0100
+Date: Mon, 6 Nov 2023 23:12:56 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 34a7ac32b36d30b088151d36eb5b450da7a4e972
-X-Git-Newrev: d7a908f7305c51069d4ffb7808efc3fb4b3853d0
+X-Git-Oldrev: f61f52ade9e5c4b7bccca23b48cdefcb0da4f4c3
+X-Git-Newrev: 29a799afc8643ed584453e589670659791aa8321
 X-Patchwork-Hint: ignore
-Message-Id: <20231106222017.1529F86B77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dataproperty: bump to
- version 1.0.1
+Message-Id: <20231106222017.0371A86B7C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cython: bump to version
+ 0.29.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7a908f7305c51069d4ffb7808efc3fb4b3853d0
+commit: https://git.buildroot.net/buildroot/commit/?id=29a799afc8643ed584453e589670659791aa8321
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 3edec5cc8c..ee5644a7ff 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dataproperty/json
--md5  8c8864a1dc456d25456b5c4de99a3fb6  DataProperty-0.55.0.tar.gz
--sha256  73ccf10f8b123968210438a1a1aa859ea6d5a16b4e1f4d307da7a81b838e79fa  DataProperty-0.55.0.tar.gz
-+md5  aca50cd5f543b7831d8a48ab1c02a152  DataProperty-1.0.1.tar.gz
-+sha256  723e5729fa6e885e127a771a983ee1e0e34bb141aca4ffe1f0bfa7cde34650a4  DataProperty-1.0.1.tar.gz
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index dc75d098d3..08ad8f6d84 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5  138dba31e20e178b431a2e403154f906  Cython-0.29.35.tar.gz
+-sha256  6e381fa0bf08b3c26ec2f616b19ae852c06f5750f4290118bf986b6f85c8c527  Cython-0.29.35.tar.gz
++md5  a4d0f9fbc9c137f1a88937cd40e8c5ee  Cython-0.29.36.tar.gz
++sha256  41c0cfd2d754e383c9eeb95effc9aa4ab847d0c9747077ddd7c0dcb68c3bc01f  Cython-0.29.36.tar.gz
  # Locally computed sha256 checksums
- sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 0feef55310..6cac4f27e5 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
+ sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 145e804bd7..47e105c065 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.55.0
-+PYTHON_DATAPROPERTY_VERSION = 1.0.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/85/6e/627eba99858c486c5b82468e4aaf60808c2e35d1bb768ee5da712b6fe9be
-+PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/48/e2/31ffb67d2a9ab4ff70b106e08ad01a3e7696f8d409457042d1eb18244f82
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-PYTHON_CYTHON_VERSION = 0.29.35
++PYTHON_CYTHON_VERSION = 0.29.36
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/da/a0/298340fb8412574a0b00a0d9856aa27e7038da429b9e31d6825173d1e6bd
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/38/db/df0e99d6c5fe19ee5c981d22aad557be4bdeed3ecfae25d47b84b07f0f98
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
