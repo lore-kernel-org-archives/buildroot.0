@@ -4,84 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF0D6C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 12:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5A94C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 12:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A0054175D;
-	Mon,  6 Nov 2023 12:10:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A0054175D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59C4B417DA;
+	Mon,  6 Nov 2023 12:37:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59C4B417DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RR8p7GDIV5-Y; Mon,  6 Nov 2023 12:10:58 +0000 (UTC)
+	with ESMTP id n1-i4gljJSgg; Mon,  6 Nov 2023 12:37:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F491416E5;
-	Mon,  6 Nov 2023 12:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F491416E5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BF7CC1BF3C1
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 12:10:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFF77417CA;
+	Mon,  6 Nov 2023 12:37:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFF77417CA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 46D091BF3C1
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 12:37:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A41C1416E5
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 12:10:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A41C1416E5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 204358218C
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 12:37:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 204358218C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rVkrbhpSF63U for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 12:10:54 +0000 (UTC)
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4B98E40620
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 12:10:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B98E40620
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4084b0223ccso32445645e9.2
- for <buildroot@buildroot.org>; Mon, 06 Nov 2023 04:10:54 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TvFRM27hCo6k for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 12:37:11 +0000 (UTC)
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
+ [IPv6:2a00:1450:4864:20::132])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D0278216D
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 12:37:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D0278216D
+Received: by mail-lf1-x132.google.com with SMTP id
+ 2adb3069b0e04-5079f6efd64so5403556e87.2
+ for <buildroot@buildroot.org>; Mon, 06 Nov 2023 04:37:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699272652; x=1699877452;
+ d=1e100.net; s=20230601; t=1699274229; x=1699879029;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=NDdDndrLBh3E3GdqQxYYDpnk3ata9pcDGNvOzg0D/Yg=;
- b=BrmBWxA7y+70Rmggjha6q9a4HmLPG4IZOWlqm0jcY1JOQKHzaYXjN+xU3VHcqjVY/H
- DXB/vNv39OnGoXJhuMI2l9LUcaTBfKN5LwIXZzWVIersrOX5RKWK74uwQKjJV/hbEt8n
- MEv2HalnCOTcxZaAAgjwnMnVUC9BinnVTJpIARgH0kgWePysX1I9dJ1BwYDkSHpDaSEM
- fZPtuI+ePRF56WPhRIxooY8qo3gj5vi5+WNAaN4s9C6ATjFuGpENw5I7IV6s+W7RDgbH
- 2ccEt7/WHpAiowFfQ2j5Y0KFiGVqYuTXYCzKWhfZt8WrhWgp4fGnFdz5sjuBGdpMyB5B
- apvQ==
-X-Gm-Message-State: AOJu0YzXYbhfFClQsBxX+aKmsgzgXAfuTCtnA3YSNjq27MXMbBWj915F
- 50Uv2F9Hm9TaiaSDC1gBTTGk1jY0nIjuJg==
-X-Google-Smtp-Source: AGHT+IEjCLiD1ybk3E9Tfv3/x11sVsLlG9g51UwmpkMxYUVcfPMocRpcqXcC0d2VZgp5ioWCEzCIhA==
-X-Received: by 2002:a05:600c:470d:b0:404:f9c1:d5d7 with SMTP id
- v13-20020a05600c470d00b00404f9c1d5d7mr24013423wmo.25.1699272651863; 
- Mon, 06 Nov 2023 04:10:51 -0800 (PST)
-Received: from localhost.localdomain ([89.207.171.79])
- by smtp.gmail.com with ESMTPSA id
- w10-20020a5d680a000000b003143867d2ebsm9342665wru.63.2023.11.06.04.10.50
+ bh=VDWesOaYlBVoH2J4M7rIY3XMkrSGdQnJLc2GozxMSes=;
+ b=JQD6aRGLOvPfltiuVpxHAz3JoB7K5nCywg/vWN5CgHjncpiaQXS8EnJMs/zxUSEdDl
+ 8J533nP8ZqgsLj19K734J50/1HEb6C3ERddMhPx26eK6cYmI/uu2yesBhB1Ejum4Rua6
+ 9Vgbm7ZXqw7GBdXTD8tVrEzwLyVCK87+jOVykRXXGVVjez146UC95yWDoiuJcbvMV8pN
+ UgOYd/T8xhlJ7g0i5hy8QtnwX2kpIYT6dO55Tbfq14cbdvzhgwdSmVO9OR+5aD+oeceP
+ qg0y5vfJVhtrW3NzlnYon/StENcUk91G5V9r6QxGGjCXbPlxcp93vfayxdcWgzrnP6Vp
+ Dtuw==
+X-Gm-Message-State: AOJu0Yww7J6Jku3BXR5+8ZY7KPyyS/dGFhpzB4h80uiSknokYBr1Kk2z
+ kRmW7Z0DykL+8FdNA6HtHMpBahWyoxiC4hcrU5w=
+X-Google-Smtp-Source: AGHT+IHnz0AGoPUhIaS788Vv21IYKEBVt4/WtwyNSQsbTkarx94sceUmlOkZM76fBZl3sRJyw7ayNg==
+X-Received: by 2002:a05:6512:3d8e:b0:507:9854:3b95 with SMTP id
+ k14-20020a0565123d8e00b0050798543b95mr25822646lfv.14.1699274229031; 
+ Mon, 06 Nov 2023 04:37:09 -0800 (PST)
+Received: from arnold.baylibre
+ (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+ by smtp.googlemail.com with ESMTPSA id
+ i8-20020adfb648000000b0032f7cfac0fesm6505695wre.51.2023.11.06.04.37.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Nov 2023 04:10:51 -0800 (PST)
-From: Titouan Christophe <titouanchristophe@gmail.com>
+ Mon, 06 Nov 2023 04:37:08 -0800 (PST)
+From: Corentin Labbe <clabbe@baylibre.com>
 To: buildroot@buildroot.org
-Date: Mon,  6 Nov 2023 13:10:31 +0100
-Message-ID: <20231106121031.57557-1-titouanchristophe@gmail.com>
-X-Mailer: git-send-email 2.42.0
+Date: Mon,  6 Nov 2023 12:37:05 +0000
+Message-Id: <20231106123705.311899-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699272652; x=1699877452; darn=buildroot.org;
+ d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1699274229; x=1699879029;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=NDdDndrLBh3E3GdqQxYYDpnk3ata9pcDGNvOzg0D/Yg=;
- b=eE3QBPxDsj7AYzHDMFOKB4UAU6TgKC1lfr/+RXoOBSpeE5D12K6/SF3YqFYyZBvgqn
- 1HziCbIXNOd0fQELOgNbNowe7LHeAwyePfhIhgKq6VygqGT8wprZ20q4Uhrh8hz4ZCps
- mUpNyPFwEsSQA909B9XJ3Xp7x9QDwJl/X1YE9ssdyM2FL7PwUhTbQeQjuuCU9BILV4iq
- TfjMgW0CuE7pPe4h4poNZr+b6txX69l5T6YxtXaD+GnxrmT/VK/R122JeXyX/vZqTlIk
- WrC+uJYXUxp/2AvDYrGo+pVL7ZtnIT1R04rEzx8t0ZErp1KeYvOV6pvi5SlyMKLiNWod
- hT/g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eE3QBPxD
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v7.2.3
+ bh=VDWesOaYlBVoH2J4M7rIY3XMkrSGdQnJLc2GozxMSes=;
+ b=tP33h8jE5Y639XhFPXRS6P3yhZpOt2p2fZWclJx7WDw1fm4sZyyHhncB3laLAEmt63
+ dIrdwgZElabxeMEyc6F3OC4vbXGAt4jCGuUIfqyGVvn7tsS+jOU1F1O3XFBjsHEybLLY
+ xryTvjXpCxNyvUBrPfeOvKo0p66iYyBj7P2nntNsTHL3Cts8Lr0ZjfmZvr1GQxfxUIa1
+ rV29bWYyWm1jHLzCLbn3JLh90c21GjTV7quU7H/dthlPWnGg2ijXoNliaNL7fkRAlj/2
+ cmcCNNQNiqSDc8epED/B50Rp9l4vDekaYm5TvQpadQBRqgOpMOCCuoni/T+8GPUi+LkT
+ 6bAg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com
+ header.i=@baylibre-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=tP33h8jE
+Subject: [Buildroot] [PATCH 1/1] linux: Use the choosen rootfs compression
+ type when rootfs is builtin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,57 +97,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>,
- Daniel Price <daniel.price@gmail.com>
+Cc: Corentin Labbe <clabbe@baylibre.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From the release notes:
-(see https://github.com/redis/redis/blob/7.2.3/00-RELEASENOTES)
+I have built a buildroot with:
+BR2_TARGET_ROOTFS_CPIO_XZ=y
+BR2_TARGET_ROOTFS_INITRAMFS=y
+With this buildroot produces an images/rootfs.cpio.xz but the kernel still use gzip (CONFIG_INITRAMFS_COMPRESSION_GZIP)
+as compression for a plain rootfs.cpio
 
-    Upgrade urgency: HIGH, Fixes critical bugs affecting most users.
+Setting CONFIG_INITRAMFS_COMPRESSION_XZ in a linux.fragment does not
+work as it seems the fragment is setup before buildroot set
+CONFIG_INITRAMFS_SOURCE which reset the CONFIG_INITRAMFS_COMPRESSION
+choice.
 
-    Bug fixes
-    =========
+So buildroot have to change CONFIG_INITRAMFS_COMPRESSION after setup
+CONFIG_INITRAMFS_SOURCE.
 
-    * Fix file descriptor leak preventing deleted files from freeing disk
-      space on replicas (#12693)
-    * Fix a possible crash after cluster node removal (#12702)
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index d1874d026a..365fbf4063 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  ca999be08800edc6d265379c4c7aafad92f0ee400692e4e2d69829ab4b4c3d08  redis-7.2.2.tar.gz
-+sha256  3e2b196d6eb4ddb9e743088bfc2915ccbb42d40f5a8a3edd8cb69c716ec34be7  redis-7.2.3.tar.gz
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1db5c6046d..d64ebb5119 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -116,6 +116,14 @@ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_XZ) += CONFIG_KERNEL_XZ
+ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_ZSTD) += CONFIG_KERNEL_ZSTD
+ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_UNCOMPRESSED) += CONFIG_KERNEL_UNCOMPRESSED
  
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index a6b58148d2..77cfb1e0b1 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++LINUX_ROOTFS_COMPRESSION_OPT_$(BR2_TARGET_ROOTFS_CPIO_GZIP) += CONFIG_INITRAMFS_COMPRESSION_GZIP
++LINUX_ROOTFS_COMPRESSION_OPT_$(BR2_TARGET_ROOTFS_CPIO_LZ4) += CONFIG_INITRAMFS_COMPRESSION_LZ4
++LINUX_ROOTFS_COMPRESSION_OPT_$(BR2_TARGET_ROOTFS_CPIO_LZMA) += CONFIG_INITRAMFS_COMPRESSION_LZMA
++LINUX_ROOTFS_COMPRESSION_OPT_$(BR2_TARGET_ROOTFS_CPIO_LZO) += CONFIG_INITRAMFS_COMPRESSION_LZO
++LINUX_ROOTFS_COMPRESSION_OPT_$(BR2_TARGET_ROOTFS_CPIO_XZ) += CONFIG_INITRAMFS_COMPRESSION_XZ
++LINUX_ROOTFS_COMPRESSION_OPT_$(BR2_TARGET_ROOTFS_CPIO_ZSTD) += CONFIG_INITRAMFS_COMPRESSION_ZSTD
++LINUX_ROOTFS_COMPRESSION_OPT_$(BR2_TARGET_ROOTFS_CPIO_NONE) += CONFIG_INITRAMFS_COMPRESSION_NONE
++
+ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL),y)
+ LINUX_DEPENDENCIES += host-openssl
+ endif
+@@ -378,6 +386,10 @@ define LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
+ 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
+ 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
+ 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0)
++	$(call KCONFIG_ENABLE_OPT,$(strip $(LINUX_ROOTFS_COMPRESSION_OPT_y)))
++	$(foreach opt, $(LINUX_ROOTFS_COMPRESSION_OPT_),
++		$(call KCONFIG_DISABLE_OPT,$(opt))
++	)
+ endef
+ endif
  
--REDIS_VERSION = 7.2.2
-+REDIS_VERSION = 7.2.3
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
 -- 
-2.42.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
