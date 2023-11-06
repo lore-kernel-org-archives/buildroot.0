@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AB4CC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 650FBC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:34:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03C22421BD;
-	Mon,  6 Nov 2023 22:34:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03C22421BD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 204AA4013A;
+	Mon,  6 Nov 2023 22:34:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 204AA4013A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AyG2bCSW0RU0; Mon,  6 Nov 2023 22:34:44 +0000 (UTC)
+	with ESMTP id P5IVAoJGkqQH; Mon,  6 Nov 2023 22:34:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4775C421E7;
-	Mon,  6 Nov 2023 22:34:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4775C421E7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 101221BF951
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F38440317;
+	Mon,  6 Nov 2023 22:34:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F38440317
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 81B7D1BF271
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52222824D4
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:26:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52222824D4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DB2F61286
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DB2F61286
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y7fK9UlEUdGS for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:26:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GJxyeo9R0rF4 for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:26:08 +0000 (UTC)
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
  [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5143682896
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5143682896
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8ED5E60008;
- Mon,  6 Nov 2023 22:26:05 +0000 (UTC)
-Date: Mon, 6 Nov 2023 23:25:37 +0100
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 599F6612C6
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 599F6612C6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CAC2160003;
+ Mon,  6 Nov 2023 22:26:06 +0000 (UTC)
+Date: Mon, 6 Nov 2023 23:23:45 +0100
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20231106232537.71c5188e@windsurf>
-In-Reply-To: <20231105032004.2779822-1-james.hilliard1@gmail.com>
-References: <20231105032004.2779822-1-james.hilliard1@gmail.com>
+Message-ID: <20231106232345.29986ffd@windsurf>
+In-Reply-To: <20231105071759.2875447-1-james.hilliard1@gmail.com>
+References: <20231105071759.2875447-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699309565;
+ d=bootlin.com; s=gm1; t=1699309567;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=AmeBaa/L+qtdMidFKOmm/eRzJ0ackYo5T8TeGxfUNCE=;
- b=MkHZThxV0TyV4iGnX6Nz5teLdSeSGZLrX1H4PDMQDCKdRcOldHD2GyVYb7IDYMLnPy1x8B
- aDMHA16tKmuK02wIKMDacIx89tRqQdtnZF/LBkJy8ER3i8BqMEI4h8zUmQZznkjN0vsxwi
- LfYmn0WI/Kkd2EGp6KlZipJ464hM2P/83CQedz5WCk+elwd4fEHvvWe5qEzCjmKiMRf2xV
- JWMq/C+dkwkunuk8h1xhYWLQg5NVu2bjdSvdk3PBb2IaFXNSbs/Z2IqPHxMwqppYJT6bPm
- cPNDI0CJqfA7g04x0UD0CDS9MrCN85tmHnUwJmicNx8AENiMPvUTN2FYLBlZBw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=yLEhCxaaqwa8gUogUTpKJW6re0UFaonS3yG4MY7WHog=;
+ b=pFH9Fs9CxORg3yRmd3rn3m+hBS4OG3uXATxmFh81MG8eRzwOjTYpJJvqClKxClnIvsXe8P
+ TgQtM7Qp5BzVUrSH5spMVCFXFGZdeoO06HtsRnV/dCxOqtzCQzZpDQGi5NlHhghiQcY+jk
+ mLvMCt+svZm/neO98ytW8kTYjMm/ifjz7LaUGzfGk9hNsqLf03eeigyUfc+LmQCjn/Svvl
+ erNA7U2HTTcocQLYeWGdWgAiiyMT196HJxOHEVraoM5WY/QZSaEy5rI2ZKghQ5om7UIfJ2
+ 3XFnydHdfR74m0laSOZ2eY5x+0OWyaYh9qRFz39Ta7hmdbbomESxfPAuLWjMvg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MkHZThxV
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-construct: bump to
- version 2.10.69
+ header.s=gm1 header.b=pFH9Fs9C
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-gpiozero: bump to
+ version 2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,21 +77,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Martin =?UTF-8?B?UG92acWhZXI=?= <povik+lin@cutebit.org>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  4 Nov 2023 21:20:04 -0600
+On Sun,  5 Nov 2023 01:17:59 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
+> Drop patch which is now upstream.
+> 
+> Migrate to pypi based sources.
+> 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-construct/python-construct.hash | 6 +++---
->  package/python-construct/python-construct.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  .../0001-Migrate-to-setup.cfg.patch           | 855 ------------------
+>  package/python-gpiozero/python-gpiozero.hash  |   7 +-
+>  package/python-gpiozero/python-gpiozero.mk    |   5 +-
+>  3 files changed, 7 insertions(+), 860 deletions(-)
+>  delete mode 100644 package/python-gpiozero/0001-Migrate-to-setup.cfg.patch
 
 Applied to master, thanks.
 
