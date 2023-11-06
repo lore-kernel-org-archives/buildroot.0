@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D52EDC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48D7BC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:07:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8982B42129;
-	Mon,  6 Nov 2023 22:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8982B42129
+	by smtp4.osuosl.org (Postfix) with ESMTP id F076D417C9;
+	Mon,  6 Nov 2023 22:07:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F076D417C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SIAyh3LtoaOA; Mon,  6 Nov 2023 22:03:15 +0000 (UTC)
+	with ESMTP id G7xdqwSSVwLv; Mon,  6 Nov 2023 22:07:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A6D1415FB;
-	Mon,  6 Nov 2023 22:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A6D1415FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A2E541740;
+	Mon,  6 Nov 2023 22:07:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A2E541740
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C865E1BF947
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:02:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CBA921BF271
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:07:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD731401CC
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:02:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD731401CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1FDA414BD
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:07:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1FDA414BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WDG2wMFTn8Qf for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:02:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50541401AD
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:02:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50541401AD
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3AE3986B2C; Mon,  6 Nov 2023 22:02:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 22:47:26 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3b2da40749392319d45869b50f2b8362987eff38
-X-Git-Newrev: cd24016907771836592f5edd87aa93d4c5d6da1d
-X-Patchwork-Hint: ignore
-Message-Id: <20231106220204.3AE3986B2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nmap: bump to version 7.94
+ with ESMTP id qGoUw8hE9ZjR for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:07:26 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 73D08401CC
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73D08401CC
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6611960005;
+ Mon,  6 Nov 2023 22:07:24 +0000 (UTC)
+Date: Mon, 6 Nov 2023 23:07:23 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20231106230723.3158a1cb@windsurf>
+In-Reply-To: <20231105025144.2765963-1-james.hilliard1@gmail.com>
+References: <20231105025144.2765963-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699308444;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=L4yPoSqnM8IQ6Qnxmk10cCjkg6j9m0FucBEzHXQr2Is=;
+ b=N88wJ7j07d+VCGeNjSVQJCCYgS2AgJFcb8cDHAVesYOj55ZLYJLB4YMgmopMbhL1638Yf+
+ IbzcUyZtAZ348XUOmG7oa25d0aQ0kSuySKSJqZtbfojUzE8vhdxXlFQ6U+ExJcndJU2mTA
+ LR8FbdG/9jz2ET4zcDH5L4I6ZmfpZlSaVkHJIZVgbqUJWh8nHY4XNN16GofZvBk3jxIlPL
+ +MgVot4JUgdcX5EiWPwRWy3J9Jq1FGHZVrQkoBoDQ1yEezK/WggOh6N+BeaMhi3YxBv0vW
+ +ekCL5DtJHG9awyaIe1rZBYSt31i32dQn14yXD5qCnJx5WTYhxNoprQ0B7HWuQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=N88wJ7j0
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-chardet: bump to version
+ 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,61 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd24016907771836592f5edd87aa93d4c5d6da1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  4 Nov 2023 20:51:44 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Update hash of license file:
-Updated the Nmap Public Source License (NPSL) to Version 0.95. This just
-clarifies that the derivative works definition and all other license
-clauses only apply to parties who choose to accept the license in return
-for the special rights granted (such as Nmap redistribution rights). If
-a party can do everything they need to using copyright provisions
-outside of this license such as fair use, we support that and aren't
-trying to claim any control over their work. Versions of Nmap released
-under previous versions of the NPSL may also be used under the NPSL 0.95
-terms.
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-chardet/python-chardet.hash | 4 ++--
+>  package/python-chardet/python-chardet.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-https://nmap.org/changelog#7.94
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/nmap/nmap.hash | 6 +++---
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index dc379f30d4..99c5d5fb07 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -1,5 +1,5 @@
--# From https://nmap.org/dist/sigs/nmap-7.92.tar.bz2.digest.txt (lowercase)
--sha256  a5479f2f8a6b0b2516767d2f7189c386c1dc858d997167d7ec5cfc798c7571a1  nmap-7.92.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.94.tar.bz2.digest.txt (lowercase)
-+sha512  a55cddf9c1d9272243d01251eb3315b26f232d0596818857083222a385398618b428dc2bd8282c3e832527e135a74aeb020ca8609d83d8337342f5d8a04d7f2c  nmap-7.94.tar.bz2
- 
- # Locally calculated
--sha256  133794301a764dfe8a60e38601e56657b7113e0337b452189725bbbed58baea0  LICENSE
-+sha256  9d9a9a763c0e6145172cfe7d8483e23b38ce60b6c79a82e4894242917bdae6d3  LICENSE
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index f22a2295b1..6cd9d96119 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NMAP_VERSION = 7.92
-+NMAP_VERSION = 7.94
- NMAP_SITE = https://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = liblinear libpcap
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
