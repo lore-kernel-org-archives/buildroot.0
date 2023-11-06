@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B1EAC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2AA8C4167D
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:36:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D84C06124C;
-	Mon,  6 Nov 2023 19:36:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D84C06124C
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABF7B61249;
+	Mon,  6 Nov 2023 19:36:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABF7B61249
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1Eq7oNUCdFFh; Mon,  6 Nov 2023 19:36:11 +0000 (UTC)
+	with ESMTP id 7acCj0ebkF6J; Mon,  6 Nov 2023 19:36:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BA4861240;
-	Mon,  6 Nov 2023 19:36:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BA4861240
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CFDED1BF3A1
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:36:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4E7C6126A;
+	Mon,  6 Nov 2023 19:36:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4E7C6126A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C09E71BF3A1
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:36:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5D9461240
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:36:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5D9461240
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B6F38216F
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:36:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B6F38216F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GvuSIVq_j9Gd for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 19:36:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3681611CB
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:36:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3681611CB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2EFE8693A; Mon,  6 Nov 2023 19:36:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 20:34:02 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1978792db23aabdf2edaf3519019a8af81fb3efe
-X-Git-Newrev: 812b981e953b93a6676bc228c007c1c0f7b9499a
-X-Patchwork-Hint: ignore
-Message-Id: <20231106193607.D2EFE8693A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libostree: bump to version 2023.7
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8zfouHSTUnwt for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 19:36:10 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 57DAE8214B
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:36:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57DAE8214B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 704DAFF803;
+ Mon,  6 Nov 2023 19:36:07 +0000 (UTC)
+Date: Mon, 6 Nov 2023 20:36:06 +0100
+To: Marcus Folkesson <marcus.folkesson@gmail.com>
+Message-ID: <20231106203606.2427ac30@windsurf>
+In-Reply-To: <20231106071131.1207382-1-marcus.folkesson@gmail.com>
+References: <20231106071131.1207382-1-marcus.folkesson@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699299367;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=PAoykn1KMWDivdyXNuD22i2Dyu01AZqmJS01TKyHVog=;
+ b=XRt4MELHnKD6hN0pq+zf+KoVaS3/dYcLczqmPfczgw73C2f6bCYwG2UzzJ4v+VaK/Uu/P5
+ IWZPc6kM3q0kRGJOlnj69t3A+Z0omAiccL+SxihxctpT6Sh4i+mDnb2QY0Bvk0qK2HXO2P
+ s1dKnkOBFZZrsud2pvxzhBpgnOYbzcM63eJrjB2xJHUMcVqUHx7z/3RxGWSUB/rt4bvplK
+ aefGRxrYpYMYuASags+qE4EXFFys2gK6tKGOetiSsyyoGrdfWzCklwV4KJy4GvGMfhCemc
+ tVlFpUBGHJBk7dEkHNu6xb6htLQrMCBK9DdVsk64LWWK6TO+0ZbZVqk9hpkCEA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XRt4MELH
+Subject: Re: [Buildroot] [PATCH] package/libostree: bump to version 2023.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,44 +76,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=812b981e953b93a6676bc228c007c1c0f7b9499a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  6 Nov 2023 08:11:31 +0100
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
+>  package/libostree/libostree.hash | 2 +-
+>  package/libostree/libostree.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index d122fee86e..2d8284a99f 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b43c4a373799681989bae12b3a1b94f453068dece6540b8e05a23b834c1037e2  libostree-2023.6.tar.xz
-+sha256  19cda718705f7ac8c018c939c38b1bb8412deaaa04862da98cd9fe9243f073bf  libostree-2023.7.tar.xz
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 15093f4b7a..c1bd5886bf 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOSTREE_VERSION = 2023.6
-+LIBOSTREE_VERSION = 2023.7
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
