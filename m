@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 843DDC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1046BC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CF70612A0;
-	Mon,  6 Nov 2023 19:40:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CF70612A0
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBEC8610AE;
+	Mon,  6 Nov 2023 19:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBEC8610AE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bt6YX79ItRgD; Mon,  6 Nov 2023 19:40:42 +0000 (UTC)
+	with ESMTP id FHfHY_Kfs6Ma; Mon,  6 Nov 2023 19:40:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20C9761240;
-	Mon,  6 Nov 2023 19:40:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20C9761240
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 989E31BF951
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:40:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C65F0612A6;
+	Mon,  6 Nov 2023 19:40:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C65F0612A6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 92BD91BF29F
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D5BA4159B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A7444185E
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D5BA4159B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A7444185E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mc-BMAmgwhbK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t1HLnSdEG6AM for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 19:40:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 48BE84159F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C45E417E7
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48BE84159F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C45E417E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2844586971; Mon,  6 Nov 2023 19:40:25 +0000 (UTC)
+ id 425D086972; Mon,  6 Nov 2023 19:40:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 20:38:43 +0100
+Date: Mon, 6 Nov 2023 20:39:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee389788af8e454251cbdb24d03710b3e1d83abc
-X-Git-Newrev: 2edabebbb417414d429161e0123fb7730bdc0489
+X-Git-Oldrev: c4c555bd57ffdda313cb883be80d9c3d62a5442b
+X-Git-Newrev: 1eb07c1904088b660d8c9b21b44b228cd824bece
 X-Patchwork-Hint: ignore
-Message-Id: <20231106194025.2844586971@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wavemon: bump to version 0.9.5
+Message-Id: <20231106194025.425D086972@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsolv: bump to version 0.7.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,103 +63,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2edabebbb417414d429161e0123fb7730bdc0489
+commit: https://git.buildroot.net/buildroot/commit/?id=1eb07c1904088b660d8c9b21b44b228cd824bece
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Drop patch (already in version)
 
-https://github.com/uoaerg/wavemon/releases/tag/v0.9.5
+https://github.com/openSUSE/libsolv/blob/0.7.25/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
- .../0001-iw_if.h-don-t-include-linux-if.h.patch    | 41 ----------------------
- package/wavemon/wavemon.hash                       |  2 +-
- package/wavemon/wavemon.mk                         |  2 +-
- 4 files changed, 2 insertions(+), 44 deletions(-)
+ .checkpackageignore                            |  1 -
+ package/libsolv/0001-Fix-build-without-C.patch | 49 --------------------------
+ package/libsolv/libsolv.hash                   |  2 +-
+ package/libsolv/libsolv.mk                     |  2 +-
+ 4 files changed, 2 insertions(+), 52 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index ecf4ae9a85..7113382e21 100644
+index 1e35bf77db..0a0df6757a 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1458,7 +1458,6 @@ package/wampcc/0001-Add-RISC-V-endian-detection.patch Upstream
- package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch Upstream
- package/wampcc/0003-Broken-build-on-Windows.patch Upstream
- package/watchdogd/S01watchdogd Indent NotExecutable
--package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch Upstream
- package/webrtc-audio-processing/0001-Proper-detection-of-cxxabi.h-and-execinfo.h.patch Upstream
- package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch Upstream
- package/wilc-driver/0001-cfg80211.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch Upstream
-diff --git a/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch b/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
+@@ -742,7 +742,6 @@ package/libsigrok/0001-Support-glibmm-2.68.patch Upstream
+ package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch Upstream
+ package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch Upstream
+ package/libsigrokdecode/0003-configure-ac-Use-python3-embed-pc-as-a-fallback.patch Upstream
+-package/libsolv/0001-Fix-build-without-C.patch Upstream
+ package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch Upstream
+ package/libsoxr/0001-Add-Libs.private-for-static-linking.patch Upstream
+ package/libspatialindex/0001-allow-building-static-libs.patch Upstream
+diff --git a/package/libsolv/0001-Fix-build-without-C.patch b/package/libsolv/0001-Fix-build-without-C.patch
 deleted file mode 100644
-index 95f54e4b7f..0000000000
---- a/package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
+index 2389aebcde..0000000000
+--- a/package/libsolv/0001-Fix-build-without-C.patch
 +++ /dev/null
-@@ -1,41 +0,0 @@
--From 4ac1482bb40376e47805c3737dfed60abb1dd3b4 Mon Sep 17 00:00:00 2001
+@@ -1,49 +0,0 @@
+-From 5691f58d1f8ce1332b02536e48f1ac5864629c6c Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 22 Dec 2021 00:39:35 +0100
--Subject: [PATCH] iw_if.h: don't include linux/if.h (#109)
+-Date: Sun, 12 Feb 2023 15:27:27 +0100
+-Subject: [PATCH] Fix build without C++
 -
--Don't include linux/if.h to avoid the following build failure:
+-Fix the following build failure without C++:
 -
--In file included from iw_if.h:31:0,
--                 from conf.c:19:
--/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h: At top level:
--/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:143:8: error: redefinition of 'struct ifmap'
-- struct ifmap {
--        ^
--In file included from iw_if.h:26:0,
--                 from conf.c:19:
--/home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/net/if.h:111:8: note: originally defined here
-- struct ifmap
--        ^
+-CMake Error at CMakeLists.txt:1 (PROJECT):
+-  No CMAKE_CXX_COMPILER could be found.
+-
+-  Tell CMake where to find the compiler by setting either the environment
+-  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
+-  to the compiler, or to the compiler name if it is in the PATH.
 -
 -Fixes:
-- - http://autobuild.buildroot.org/results/a6ee162cf04b70b144b54e1ca4b7b2421071c50c
+- - http://autobuild.buildroot.org/results/a7f2176d40f156c319754ef5d3b7fd0decfe754f
 -
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/uoaerg/wavemon/commit/4ac1482bb40376e47805c3737dfed60abb1dd3b4]
+-[Upstream status: https://github.com/openSUSE/libsolv/pull/520]
 ----
-- iw_if.h | 1 -
-- 1 file changed, 1 deletion(-)
+- CMakeLists.txt     | 2 +-
+- ext/CMakeLists.txt | 1 +
+- 2 files changed, 2 insertions(+), 1 deletion(-)
 -
--diff --git a/iw_if.h b/iw_if.h
--index 9e7fa89..6607e0b 100644
----- a/iw_if.h
--+++ b/iw_if.h
--@@ -28,7 +28,6 @@
-- #include <net/ethernet.h>
-- #include <sys/types.h>
-- #include <sys/socket.h>
---#include <linux/if.h>
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 3541f496..f899c49a 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--PROJECT (libsolv)
+-+PROJECT (libsolv C)
 - 
-- /* Definitions from linux/ieee80211.h (not necessarily part of distro headers) */
-- #define WLAN_CAPABILITY_ESS		(1<<0)
-diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
-index 7c685f6500..342f2f7d91 100644
---- a/package/wavemon/wavemon.hash
-+++ b/package/wavemon/wavemon.hash
+- CMAKE_MINIMUM_REQUIRED (VERSION 2.8.5)
+- 
+-diff --git a/ext/CMakeLists.txt b/ext/CMakeLists.txt
+-index f01c0238..589fa946 100644
+---- a/ext/CMakeLists.txt
+-+++ b/ext/CMakeLists.txt
+-@@ -103,6 +103,7 @@ IF (ENABLE_CUDFREPO)
+- ENDIF (ENABLE_CUDFREPO)
+- 
+- IF (ENABLE_HAIKU)
+-+    enable_language(CXX)
+-     SET (libsolvext_SRCS ${libsolvext_SRCS}
+- 	repo_haiku.cpp)
+-     SET (libsolvext_HEADERS ${libsolvext_HEADERS}
+--- 
+-2.39.0
+-
+diff --git a/package/libsolv/libsolv.hash b/package/libsolv/libsolv.hash
+index 162e46e54d..b18a682ccf 100644
+--- a/package/libsolv/libsolv.hash
++++ b/package/libsolv/libsolv.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  e7e4167292136ca7ff12ddeb880904c10f33e97620ea6aa5f7838e859fdb40ed  wavemon-0.9.4.tar.gz
-+sha256  f84c55a40b470f2b98908d20cd0b38ffef6f587daed23b50281c9592df3331c6  wavemon-0.9.5.tar.gz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
-index 50e3fd275e..74917e8392 100644
---- a/package/wavemon/wavemon.mk
-+++ b/package/wavemon/wavemon.mk
+-sha256  968aef452b5493751fa0168cd58745a77c755e202a43fe8d549d791eb16034d5  libsolv-0.7.22.tar.gz
++sha256  b382bba4196b19c36eb34e0ef02546c0b922be601c6f73390c9ab643895b656a  libsolv-0.7.25.tar.gz
+ sha256  57f15acfb29fbef7749779e096a5885c60b716633e34484a21bb717554c0198f  LICENSE.BSD
+diff --git a/package/libsolv/libsolv.mk b/package/libsolv/libsolv.mk
+index 04fdb387fd..2a9f1bf208 100644
+--- a/package/libsolv/libsolv.mk
++++ b/package/libsolv/libsolv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAVEMON_VERSION = 0.9.4
-+WAVEMON_VERSION = 0.9.5
- WAVEMON_SITE = $(call github,uoaerg,wavemon,v$(WAVEMON_VERSION))
- WAVEMON_LICENSE = GPL-3.0+
- WAVEMON_LICENSE_FILES = LICENSE
+-LIBSOLV_VERSION = 0.7.22
++LIBSOLV_VERSION = 0.7.25
+ LIBSOLV_SITE = $(call github,openSUSE,libsolv,$(LIBSOLV_VERSION))
+ LIBSOLV_LICENSE = BSD-3-Clause
+ LIBSOLV_LICENSE_FILES = LICENSE.BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
