@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E64AC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AE08C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B783E4209D;
-	Mon,  6 Nov 2023 22:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B783E4209D
+	by smtp4.osuosl.org (Postfix) with ESMTP id D944E40971;
+	Mon,  6 Nov 2023 22:25:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D944E40971
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r9eirpxZoMNp; Mon,  6 Nov 2023 22:25:32 +0000 (UTC)
+	with ESMTP id 7DJ_GLcYjhC5; Mon,  6 Nov 2023 22:25:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8FCE416E5;
-	Mon,  6 Nov 2023 22:25:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8FCE416E5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6CF221BF951
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02901416E5;
+	Mon,  6 Nov 2023 22:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02901416E5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 710BE1BF954
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F20CE415C8
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F20CE415C8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 220CB612C2
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 220CB612C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v6mqnis6aUbY for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:20:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E4PSHjD-_1F4 for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2943D4168A
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2943D4168A
+ by smtp3.osuosl.org (Postfix) with ESMTP id F06D6612C9
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F06D6612C9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 273B786B7A; Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
+ id E1A7686B7C; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 23:15:47 +0100
+Date: Mon, 6 Nov 2023 23:15:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 38abfd376ee23d879d20db3dc1953df0a1d8ef30
-X-Git-Newrev: ebacc12de08f4ab2f3291b80fe05f49028914b91
+X-Git-Oldrev: b32eef540e4a76780033a7c2ae1e6e948a637de2
+X-Git-Newrev: 5847b7b73550d0a481feff9cf33066af94d84f8f
 X-Patchwork-Hint: ignore
-Message-Id: <20231106222018.273B786B7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jedi: bump to version 0.19.1
+Message-Id: <20231106222017.E1A7686B7C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-httplib2: bump to version
+ 0.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebacc12de08f4ab2f3291b80fe05f49028914b91
+commit: https://git.buildroot.net/buildroot/commit/?id=5847b7b73550d0a481feff9cf33066af94d84f8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jedi/python-jedi.hash | 4 ++--
- package/python-jedi/python-jedi.mk   | 4 ++--
+ package/python-httplib2/python-httplib2.hash | 4 ++--
+ package/python-httplib2/python-httplib2.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
-index dee8810e89..99034d20bb 100644
---- a/package/python-jedi/python-jedi.hash
-+++ b/package/python-jedi/python-jedi.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/jedi/json
--md5  47e89a2b8bedcfeb1527fac37b9ba1b3  jedi-0.18.2.tar.gz
--sha256  bae794c30d07f6d910d32a7048af09b5a39ed740918da923c6b780790ebac612  jedi-0.18.2.tar.gz
-+md5  0951191b506b660bfdb90c3dcd5b3254  jedi-0.19.1.tar.gz
-+sha256  cf0496f3651bc65d7174ac1b7d043eff454892c708a87d1b683e57b569927ffd  jedi-0.19.1.tar.gz
+diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
+index 4da8f26e43..cfbf55a4b0 100644
+--- a/package/python-httplib2/python-httplib2.hash
++++ b/package/python-httplib2/python-httplib2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/httplib2/json
+-md5  b42f508585d988e77eac3980db1fd967  httplib2-0.21.0.tar.gz
+-sha256  fc144f091c7286b82bec71bdbd9b27323ba709cc612568d3000893bfd9cb4b34  httplib2-0.21.0.tar.gz
++md5  7ca0a2bfd95ba4ab4b6e28804cdb94ed  httplib2-0.22.0.tar.gz
++sha256  d7a10bc5ef5ab08322488bde8c726eeee5c8618723fdb399597ec58f3d82df81  httplib2-0.22.0.tar.gz
  # Locally computed sha256 checksums
- sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
- sha256  235e993965d399a25e7d493d25c8622f78718510884b9c051f1f1866b6f34e9d  jedi/third_party/django-stubs/LICENSE.txt
-diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
-index 40de61f0e8..5d54642a07 100644
---- a/package/python-jedi/python-jedi.mk
-+++ b/package/python-jedi/python-jedi.mk
+ sha256  589eec38f72df2be203711d3b8cbece9b908c5e7ff00bc3cab7f63bae9e366b4  LICENSE
+diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
+index 2f4eb98356..9d7061cfac 100644
+--- a/package/python-httplib2/python-httplib2.mk
++++ b/package/python-httplib2/python-httplib2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JEDI_VERSION = 0.18.2
-+PYTHON_JEDI_VERSION = 0.19.1
- PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
--PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/15/02/afd43c5066de05f6b3188f3aa74136a3289e6c30e7a45f351546cab0928c
-+PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/d6/99/99b493cec4bf43176b678de30f81ed003fd6a647a301b9c927280c600f0a
- PYTHON_JEDI_SETUP_TYPE = setuptools
- PYTHON_JEDI_LICENSE = MIT, Apache-2.0 (typeshed)
- PYTHON_JEDI_LICENSE_FILES = LICENSE.txt jedi/third_party/django-stubs/LICENSE.txt jedi/third_party/typeshed/LICENSE
+-PYTHON_HTTPLIB2_VERSION = 0.21.0
++PYTHON_HTTPLIB2_VERSION = 0.22.0
+ PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
+-PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/c2/37/a093aaa902f6b2301f0f2cff5285548dbc4ab9b9a29215eb440381cbb32b
++PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/3d/ad/2371116b22d616c194aa25ec410c9c6c37f23599dcd590502b74db197584
+ PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
+ PYTHON_HTTPLIB2_LICENSE = MIT
+ PYTHON_HTTPLIB2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
