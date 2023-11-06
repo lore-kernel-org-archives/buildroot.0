@@ -4,88 +4,142 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9ED1C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D9AC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 704166118B;
-	Mon,  6 Nov 2023 19:10:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 704166118B
+	by smtp3.osuosl.org (Postfix) with ESMTP id A985461233;
+	Mon,  6 Nov 2023 19:12:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A985461233
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M4oyT5zPLVzi; Mon,  6 Nov 2023 19:09:59 +0000 (UTC)
+	with ESMTP id uhLrphwh5W4z; Mon,  6 Nov 2023 19:12:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A248611ED;
-	Mon,  6 Nov 2023 19:09:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A248611ED
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9529611ED;
+	Mon,  6 Nov 2023 19:12:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9529611ED
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9BF1D1BF3A1
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:09:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F59D1BF3A1
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:12:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54D51611ED
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:09:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54D51611ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA377611ED
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:12:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA377611ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E8P-C25rSbsk for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 19:09:18 +0000 (UTC)
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
- [IPv6:2a00:1450:4864:20::131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2B64260AE7
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:09:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B64260AE7
-Received: by mail-lf1-x131.google.com with SMTP id
- 2adb3069b0e04-507a62d4788so6502990e87.0
- for <buildroot@buildroot.org>; Mon, 06 Nov 2023 11:09:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699297756; x=1699902556;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=TZ3PQ4FnOAanL8tVZRSjnsovTMEneSDhp5MBXJEX5UA=;
- b=X+OiM5rpP1kTN5AwjDUkZefslPQDJNdINRCpqi+IY0GVxk0CYB35GcOnZTblveBmC2
- AdJ3x46dJ943av+c0561ymGKbkKyLaapRoxvcv0cBhAgm75FLGzdeoyADpJsmZtzPiSb
- Zjn5/NXRKI2VJ4gU72JdQKI4WA4oFS+GOu9hn+ZkCJlbZZzrJIvOzRmAzE7qzMiq6OZ1
- OuLr4etJaBHHYl0qSfZdPMlfNzeAXY6SGawrn+fTo2IrMvYs3DYKavnlo0Rx55KF4IG2
- ++rQi3V6iAXLJ+Ay5D4JezF31HVwoHh7io24GSfdDMkuwgKcFii/V8eB0pOIwvYNRjuV
- EF6A==
-X-Gm-Message-State: AOJu0YwTZjDEhrsJy6gRfaKe0Cpx6ZLRsRsLG2YH+B+4kAAzqXAWvmv2
- W0QS3RMDOzwKmAYCP1Yvbtbk6KD5bKk=
-X-Google-Smtp-Source: AGHT+IG+Yaig4fKGTff7U0NvWSKZ8wLeF4ac+MIe6YT47eMRvf9nRC7DSNxHOwfKqSvW3DY4HCtI2Q==
-X-Received: by 2002:a19:f608:0:b0:503:1913:ed8e with SMTP id
- x8-20020a19f608000000b005031913ed8emr20723183lfe.61.1699297755575; 
- Mon, 06 Nov 2023 11:09:15 -0800 (PST)
-Received: from scaer.home ([2a01:cb19:8290:3800:5023:65e3:22e2:e1cc])
- by smtp.gmail.com with ESMTPSA id
- y14-20020a056000108e00b0032dbf6bf7a2sm330900wrw.97.2023.11.06.11.09.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Nov 2023 11:09:15 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Mon,  6 Nov 2023 20:09:12 +0100
-Message-Id: <e9097a9727dce27b9124e803a6c0a58091ec3e34.1699297749.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1699297749.git.yann.morin.1998@free.fr>
-References: <cover.1699297749.git.yann.morin.1998@free.fr>
+ with ESMTP id lQB1z8RZ1IMr for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 19:12:30 +0000 (UTC)
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com
+ (mail-db5eur02on20631.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:fe12::631])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B270261187
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:12:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B270261187
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kE4nFbrRKOXuAAg/GxtDVIoqlvQfNmJsswQKIoypmZOlkiUAhAZEJh/pa5T2j8MDUSGRqT82+atS6QOarnxDiGUoFgYkl6luo5iEiIgq4Rc0DCz3xY9EAkQ+3JVXOlNxwvTTC1vjgEYINCsIYTN+9po2/2wifb8RNbMN+a6JbTIMgPppCd8AW9QIQZZkNcuKuq8U23CzCxTgb7Oj1VS3zegZc7QF9tRztatQL0l991z6w9Ui+nxUWEtIx/eiUF1ldriLkTqr6jWChiNlygUMVvluk2L8DHp5jFBb3RvY0efOqLKSbg2A/1HQZsCzUsfBZ81xck5pz9cxtDLF7qhePQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hKLcYEm4pfdEQ+uFqf4X92JUxikSu+TKXq95Y7rFX/M=;
+ b=cfllFldhgSpp5oHMJt7dRIN4aITk2+TipdoNdxc6SZatlf7l5gti2BX/kC1Kin+sqdf8VhUtlzquJM/M5RSHFpzVp5+4Jtl8f0qAg84wS5WLc2XBwZ2yQ/dDVLv4+fv1/8OaZNzBcXAeVqKPO0jZK2V5bG3lQhG5nI8kJx3DBP+LyawMxAt6Vy+jygtlJ7umRY+CaHkrs8igV3TY3FmxLlKDH9itXvw91CZ3vlgTT48LMBg+//BZS9RcLZvDsBDAakhON7caigUJKdwfF/6RB7dN2nn+zwr1261KKhwNeqkVGokJeG5WG+qU2dyPIRjUX4c7z451PGDwbVjCOM4i6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=othermo.de; dmarc=pass action=none header.from=othermo.de;
+ dkim=pass header.d=othermo.de; arc=none
+Received: from DB9P193MB1644.EURP193.PROD.OUTLOOK.COM (2603:10a6:10:2ae::24)
+ by AS8P193MB2352.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:447::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.27; Mon, 6 Nov
+ 2023 19:12:24 +0000
+Received: from DB9P193MB1644.EURP193.PROD.OUTLOOK.COM
+ ([fe80::67a4:c94:e069:11a7]) by DB9P193MB1644.EURP193.PROD.OUTLOOK.COM
+ ([fe80::67a4:c94:e069:11a7%7]) with mapi id 15.20.6954.028; Mon, 6 Nov 2023
+ 19:12:24 +0000
+Message-ID: <a9454b05-faf1-4b77-9247-79f028735fe1@othermo.de>
+Date: Mon, 6 Nov 2023 20:12:21 +0100
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20231031090114.618913-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20231031090114.618913-1-giulio.benetti@benettiengineering.com>
+X-ClientProxiedBy: FR3P281CA0206.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a5::10) To DB9P193MB1644.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:10:2ae::24)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9P193MB1644:EE_|AS8P193MB2352:EE_
+X-MS-Office365-Filtering-Correlation-Id: b0fbc879-551d-4e5d-be09-08dbdefc4ebb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8DfjhqQX62J8ghDI79Qmdc0HICBCpOQJ2ZTU/mVEbUw3U1ygLd5N0e7RiOAsThRviJL33gCaiYMEipSQbr9VFGjjzPT3/Bhk/QD5wAcpmEkdEmlsJJA/0IHVKfrwrmn2OuEUvL7gztwJlWjhJmu4tHtC11QyQz2hKBmNXfYa4SlTkilARYL4Z7ydoEAc2p4zIMPeHrPuZP9Vd1qVFvNhRWLj9PMNOE2hcXkdUIeyV/uejAoWkujCcnzKexkQAmc8yxNGkKQQSdeGygcUgkfyqZPU3/ldyh1R2V24nVxO8sTNIz4xscezlvCYJ6AcSgp+bCxImBalQ+2+oMvUGO4tOZ9R+cc/ldNar/AIPcrLzy7vZR5KXhkaSOLG3S1RD9MWTt/cbFQGYZapGRG2CJxWJt6+e7M0R5OQCx7KIq4JajdMbdOs/Qe6B2xQ0sKrVyzH0BYa0hIm8kQp6OMvye+PUNmAt2KPPcI7tgheX20mK3GZdUpWetNGSg4P91iYcQSVZIb/XQSBxyg99R5OlfDCa/OxQdi4Ni/OkxA+LrWPgXGnlqwMqg+g0iubYUq+iS2frQf97IOmUNFTFXr0fYfbJOxyQ9GGQQBHJaV2e7ce9vIlo7V/sjWGOA91ZZMCVZeiSMPR+Rz86n43GSovym+068N2gLpyk6LiY6wHIx6Y2R8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DB9P193MB1644.EURP193.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(136003)(366004)(39830400003)(376002)(346002)(396003)(230922051799003)(64100799003)(451199024)(186009)(1800799009)(83380400001)(316002)(38100700002)(6506007)(6666004)(53546011)(6486002)(478600001)(966005)(66574015)(66556008)(54906003)(2616005)(6512007)(66946007)(66476007)(2906002)(41300700001)(31696002)(8676002)(5660300002)(36756003)(4326008)(86362001)(8936002)(44832011)(31686004)(43740500002)(45980500001)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aU1iVFBYWUZvbkJRdDBDcXZ4N3lkNnl4ckRzY24waDJVZldBcVQxNkVjbGVx?=
+ =?utf-8?B?STFLeHUvYTUzU1BDbXBDeExjTkU5UFpVSEZwNzFIQml3aDI5M1V4dWx0VDky?=
+ =?utf-8?B?RWg5NUJQdUtTeVlUUG83WU5uaExJQmo3cXNENDFCc0w0UWFrM3plckx5WUQ1?=
+ =?utf-8?B?Vlo1RVlwd2xPbFhlTFpHRUNPbFd1YS9rR2hMRGNrNUlQMkNwZzMyYXRnZDZo?=
+ =?utf-8?B?dVQvNzI0bDJwaWcwdktNK09EeFN5eW1JcThDY0t1eUlBM25KUXpIMVdxNjJw?=
+ =?utf-8?B?Y1dDdXRyS0FoL3FCbzMwenR1QUpMQ2tncysvZEJEa3NzUE14bzEwOW5Ed2Rr?=
+ =?utf-8?B?UHJDYW8wSDd2QlVvV0o5aDNtT21xUVRiRE5OTENRRW4xNlpROTZuTEladmVy?=
+ =?utf-8?B?blJuWVMva1BlV0h4bllYbkUwK3d1Y0lwZVZoa0E2WUUxcHhNWmE3VG1kTVAv?=
+ =?utf-8?B?ZUlQM29ZbkFXR0t0NzhJNEZXRnYvcVVucWxpU0V2Kzl5OE4xQXV5QzUzMFpt?=
+ =?utf-8?B?WlcxOUh2MEIxWWlJVUtQVTYrRGlPZFVNa0NldVN2amR3SWpsamtrQjRTWGxD?=
+ =?utf-8?B?eEFQVGlabi9uL3VXTmNGTG0yRm05SnlLWCtiaTc0V3JacUNsUVpPeXp0Z3kv?=
+ =?utf-8?B?MDdSNE1PVDFSaUtpNXAwUDVWOU5HMnI0MVdHOEdnUk81blk1WFFBTDhZcStw?=
+ =?utf-8?B?RDRxOU4yS3hHQThnS0RlbURqZjV4c3hKQUp6TEFPSFp4VmxBMTBqUjN0V0JQ?=
+ =?utf-8?B?THI3eDdHc1l0cEd5aXQ4TW1rZE95cHFQTno4SUtQMVpWb2lDQWtUN2luZ1Zj?=
+ =?utf-8?B?YnN5RjQ3NFJGc2c1NzY2dVo5aWVJVlhkaHlmejk2cEVlTGtBWmwzckxIa1Bo?=
+ =?utf-8?B?dUF0UWJ4VW54RFRQbkNyY1NIeS9UVWtOck82N1krMlZqeWJjYldVaDRHUjVW?=
+ =?utf-8?B?djZ0YWlsdElPTDQyeSthVkliT3B1V2ZnOVNuNjlCRkNiR0pYZ3RvQzJqVEZs?=
+ =?utf-8?B?Sk94WGw5WThOLzV4eTAyMlZSN2w1K1RrODIzekxtM1BJNHdhS09WSkE3V1oz?=
+ =?utf-8?B?Z3ljQ1cyR05pZkxTYjFBcExDVE1ocyt3TEU0WnV3RDZ2ditIZURocGo1MHIr?=
+ =?utf-8?B?VXpCOVBCU1hkZ1NYM1NyRjl4RjRLS3ZNOWVYckNaZmhSc1Q5cElBV3l5Z3N4?=
+ =?utf-8?B?SDJsOHNwRUUyWUkwVFpvS0RObEYwdnJXK04yV05HbmlHdy9WVjdockR5dkZC?=
+ =?utf-8?B?WmRpczFQR3QyclBBOHp2OUc0Ky9JekVHSDB6RmlRMExrdm5HU2dYTVVQa1dY?=
+ =?utf-8?B?cUY5RitwYy9Rb24wRXI1UWZzNjhHYk1McTc4ZG1HNVhsSTBteHllcEh4VUNH?=
+ =?utf-8?B?RGJVTk01Z1pZckFRU3RnZGpDdGZ0THA0bnlway9oSkIwaFBsdXAraWhDaHRo?=
+ =?utf-8?B?VFNjY1hPRjVyRE9OVzdNSVRQOEM1R0dnVFNmdk1aVjlVeFB0dTAvTWhEUTk3?=
+ =?utf-8?B?SW9WSTFKVUpDOEU4Zlh4ZTdUeHBWSGxlNEJqL2JERitMdlkwSHh5aVRtdHp2?=
+ =?utf-8?B?dVFhdllxbWY4c0lNVGladTVadFRJaXhKSk4yRmFKTFZDYnF5MWExYndyRlRG?=
+ =?utf-8?B?SWlaVU9ZYmxtNEtKK05yMW10OHR0bmhrbi9lbE8vUnIvTzVUMWVmeXJ1b0VM?=
+ =?utf-8?B?ZGIyUE5IdXN2bGM1Q3ozWE0zVCtrK1NwY0ZheFN5YlcvMFRGQXhVN0RvUXRI?=
+ =?utf-8?B?Z2tJUy9PUmE2Q0xVUmdEeTNYbGE2M3d1ZDFFT1pLRG5BOFFjVm9wNFVUQlBC?=
+ =?utf-8?B?Rk52a2tpRHZiRHFhZCtBUFk1Z0dWVy9UbGVWb0pDdlduUmtQRjFhOUdONExZ?=
+ =?utf-8?B?L0drdnFBcWtNaUZWVTVMalpKQnMzK3ljdG14TTZueDRkNSttYW1aTittcTNp?=
+ =?utf-8?B?eExlQ1FSelJZSklJdkwyUDU3aERhcW40NzJBaExKVnZ1TEx0V25GSEpzbG40?=
+ =?utf-8?B?dlhxQ2RlZUJqQ2QvOHpFdjhmTE5rK1RKazBKU3N5WnlzVmE2WEI4WjdaNGEv?=
+ =?utf-8?B?VU5QTmoxOHpCVlN4QVFTTVo4YjJBQTFIY3lLdWFxMDNBSytNc2FKa1RTK0gw?=
+ =?utf-8?B?Vk1qZlNuajRWSi9Wd1JRWHNIOVlxNmdDSCtBV1kxWm90S1ZnWkpveEh4eGk3?=
+ =?utf-8?B?TmxEaGJBZ2hXYytublBpZUxveU5vaVZuOGNMMU9BeDhJQlNtV01aR3U1VVhG?=
+ =?utf-8?B?WkR0M0tad1dodzd1TGw0anRlNVpnPT0=?=
+X-OriginatorOrg: othermo.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0fbc879-551d-4e5d-be09-08dbdefc4ebb
+X-MS-Exchange-CrossTenant-AuthSource: DB9P193MB1644.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2023 19:12:23.8774 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 85b1b12b-9424-4d9d-b1a2-39f36faa8bc7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hLxt218en6G6a1iLlbPrftDgdCHU7EGN9aFEmLrzUGh+an6QuIDLPqdaQwKc2kpt/BF8Eo7jSfzQ4lz3DFa+heHUBvIjH8h4HimtWgNdIvc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P193MB2352
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699297756; x=1699902556; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=TZ3PQ4FnOAanL8tVZRSjnsovTMEneSDhp5MBXJEX5UA=;
- b=lhiZTO+A1VNqpaHUIeFs0aJ9s0IaWkhm/O2mRrrntrbS9qWNgp2YAlDZEbWdqYZn13
- NfxDeqambPnujy1o8JdmDVNSBkCVc1+ofJdjjFQMGlb5ynCGld5yZ2H1pb0Fhk2VzYE3
- e+fL7I/INpGGby7HIAKROoMXxekAI5b2IugG+ik3Zjh+39OnAZGA0Do25tpwLSgXKtVp
- NoXsTwWhhhJPJBCWXOgkcHf4utDPNbzUp03brr5yIHy1oaOVAWGFvoDBRWA0jGvMoq88
- F8osVdTiC5AOplTZR06NE6MTGSOh0vT8NtyY4uyNuimvVAHXwhsy1Zcjt2qtk51isknR
- rp0w==
+ d=othermo.de; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hKLcYEm4pfdEQ+uFqf4X92JUxikSu+TKXq95Y7rFX/M=;
+ b=eNyL0vbZNsHMvZng6vW+jnJPZcfFoUQKYDWuArdOwjHmT4itACqk/kapKJWIQhUoqOPn1SbWPoZkfmwX1uQc9txMMcGi8GQX42WoWRVvBGpUy+o1FZQQ4ugNT7svaFMjBXz5cNc0u+Pq2tSXQgGwMhCRrj/cH9KsFqUdzxXB5G8=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=lhiZTO+A
-Subject: [Buildroot] [PATCH 1/3 v2] support/download: teach dl-wrapper to
- handle more than one hash file
+ dkim=pass (1024-bit key,
+ unprotected) header.d=othermo.de header.i=@othermo.de header.a=rsa-sha256
+ header.s=selector1 header.b=eNyL0vbZ
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=othermo.de;
+Subject: Re: [Buildroot] [PATCH] package/nodejs: fix additional modules
+ installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,270 +151,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- "Martin Zeiser \(mzeiser\)" <mzeiser@cisco.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Cc: Martin Bark <martin@barkynet.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Daniel Price <daniel.price@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, we expect and only use hash files that lie within the package
-directory, alongside the .mk file. Those hash files are thus bundeld
-with Buildroot.
-
-This implies that only what's known to Buildroot can ever get into those
-hash files. For packages where the version is fixed (or a static
-choice), then we can carry hashes for those known versions.
-
-However, we do have a few packages for which the version is a free-form
-entry, where the user can provide a custom location and/or version. like
-a custom VCS tree and revision, or a custom tarball URL. This means that
-Buildroot has no way to be able to cary hashes for such custom versions.
-
-This means that there is no integrity check that what was downloaded is
-what was expected. For a sha1 in a git tree, this is a minor issue,
-because the sha1 by itself is already a hash of the expected content.
-But for custom tarballs URLs, or for a tag in a VCS, there is indeed no
-integrity check.
-
-Buildroot can't provide such hashes, but interested users may want to
-provide those, and currently there is no (easy) way to do so.
-
-So, we need our download helpers to be able to accept more than one hash
-file to lookup for hashes.
-
-Extend the dl-wrapper and the check-hash helpers thusly, and update the
-legal-info accordingly.
-
-Note that, to be able to pass more than one hash file, we also need to
-re-order the arguments passed to support/download/check-hash, which also
-impies some shuffling in the three places it is called:
-  - 2 in dl-wrapper
-  - 1 in the legal-info infra
-
-That in turn also requires that the legal-license-file macro args get
-re-ordered to have the hash file last; we take the opportunity to also
-move the HOST/TARGET arg to be first, like in the other legal-info
-macros.
-
-Reported-by: "Martin Zeiser (mzeiser)" <mzeiser@cisco.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-
----
-Changes v1 -> v2:
-  - restore legal-info  (Peter K.)
----
- Makefile                    |  2 +-
- package/pkg-generic.mk      |  2 +-
- package/pkg-utils.mk        |  8 ++---
- support/download/check-hash | 64 ++++++++++++++++++++-----------------
- support/download/dl-wrapper | 10 +++---
- 5 files changed, 45 insertions(+), 41 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index ada5b96f08..b9acd7e650 100644
---- a/Makefile
-+++ b/Makefile
-@@ -836,7 +836,7 @@ legal-info-clean:
- .PHONY: legal-info-prepare
- legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
--	@$(call legal-license-file,buildroot,buildroot,support/legal-info/buildroot.hash,COPYING,COPYING,HOST)
-+	@$(call legal-license-file,HOST,buildroot,buildroot,COPYING,COPYING,support/legal-info/buildroot.hash)
- 	@$(call legal-manifest,TARGET,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSES)
- 	@$(call legal-manifest,HOST,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSES)
- 	@$(call legal-manifest,HOST,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 943f8a08c0..6c24be7505 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1138,7 +1138,7 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
- 	$(Q)$$(call legal-warning-pkg,$$($(2)_BASENAME_RAW),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$($(2)_HASH_FILE),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$(F),$$($(2)_DIR)/$$(F),$$($(2)_HASH_FILE))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_REDISTRIBUTE),YES)
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index dcab7d9b2a..b91061a572 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -280,13 +280,13 @@ define legal-manifest # {HOST|TARGET}, pkg, version, license, license-files, sou
- 	echo '"$(2)","$(3)","$(4)","$(5)","$(6)","$(7)","$(8)"' >>$(LEGAL_MANIFEST_CSV_$(1))
- endef
- 
--define legal-license-file # pkgname, pkgname-pkgver, pkg-hashfile, filename, file-fullpath, {HOST|TARGET}
--	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
-+define legal-license-file # {HOST|TARGET}, pkgname, pkgname-pkgver, filename, file-fullpath, pkg-hashfile
-+	mkdir -p $(LICENSE_FILES_DIR_$(1))/$(3)/$(dir $(4)) && \
- 	{ \
--		support/download/check-hash $(3) $(5) $(4); \
-+		support/download/check-hash $(5) $(4) $(6); \
- 		case $${?} in (0|3) ;; (*) exit 1;; esac; \
- 	} && \
--	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
-+	cp $(5) $(LICENSE_FILES_DIR_$(1))/$(3)/$(4)
- endef
- 
- non-virtual-deps = $(foreach p,$(1),$(if $($(call UPPERCASE,$(p))_IS_VIRTUAL),,$(p)))
-diff --git a/support/download/check-hash b/support/download/check-hash
-index 5a47f49bc3..03a6557187 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -3,12 +3,12 @@ set -e
- 
- # Helper to check a file matches its known hash
- # Call it with:
--#   $1: the path of the file containing all the expected hashes
--#   $2: the full path to the temporary file that was downloaded, and
-+#   $1: the full path to the temporary file that was downloaded, and
- #       that is to be checked
--#   $3: the final basename of the file, to which it will be ultimately
-+#   $2: the final basename of the file, to which it will be ultimately
- #       saved as, to be able to match it to the corresponding hashes
- #       in the .hash file
-+#   $*: the paths of the files containing all the expected hashes
- #
- # Exit codes:
- #   0:  the hash file exists and the file to check matches all its hashes,
-@@ -27,28 +27,21 @@ while getopts :q OPT; do
- done
- shift $((OPTIND-1))
- 
--h_file="${1}"
--file="${2}"
--base="${3}"
--
--# Bail early if no hash to check
--if [ -z "${h_file}" ]; then
--    exit 0
--fi
--# Does the hash-file exist?
--if [ ! -f "${h_file}" ]; then
--    printf "WARNING: no hash file for %s\n" "${base}" >&2
--    exit 0
--fi
-+file="${1}"
-+base="${2}"
-+shift 2
-+declare -a h_files=( "${@}" )
- 
- # Check one hash for a file
- # $1: algo hash
- # $2: known hash
- # $3: file (full path)
-+# $4: hash file (full path)
- check_one_hash() {
-     _h="${1}"
-     _known="${2}"
-     _file="${3}"
-+    _h_file="${4}"
- 
-     # Note: md5 is supported, but undocumented on purpose.
-     # Note: sha3 is not supported, since there is currently no implementation
-@@ -70,6 +63,7 @@ check_one_hash() {
-         return 0
-     fi
- 
-+    printf "ERROR: while checking hashes from %s\n" "${_h_file}" >&2
-     printf "ERROR: %s has wrong %s hash:\n" "${base}" "${_h}" >&2
-     printf "ERROR: expected: %s\n" "${_known}" >&2
-     printf "ERROR: got     : %s\n" "${_hash}" >&2
-@@ -79,21 +73,31 @@ check_one_hash() {
- }
- 
- # Do we know one or more hashes for that file?
-+nb_h_files=0
- nb_checks=0
--while read t h f; do
--    case "${t}" in
--        ''|'#'*)
--            # Skip comments and empty lines
--            continue
--            ;;
--        *)
--            if [ "${f}" = "${base}" ]; then
--                check_one_hash "${t}" "${h}" "${file}"
--                : $((nb_checks++))
--            fi
--            ;;
--    esac
--done <"${h_file}"
-+for h_file in "${h_files[@]}"; do
-+    [ -f "${h_file}" ] || continue
-+    : $((nb_h_files++))
-+    while read t h f; do
-+        case "${t}" in
-+            ''|'#'*)
-+                # Skip comments and empty lines
-+                continue
-+                ;;
-+            *)
-+                if [ "${f}" = "${base}" ]; then
-+                    check_one_hash "${t}" "${h}" "${file}" "${h_file}"
-+                    : $((nb_checks++))
-+                fi
-+                ;;
-+        esac
-+    done <"${h_file}"
-+done
-+
-+if [ ${nb_h_files} -eq 0 ]; then
-+    printf "WARNING: no hash file for %s\n" "${base}" >&2
-+    exit 0
-+fi
- 
- if [ ${nb_checks} -eq 0 ]; then
-     case " ${BR_NO_CHECK_HASH_FOR} " in
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 1e8d6058f6..35428faeef 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -21,8 +21,8 @@ export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:lru:qf:e"
- 
- main() {
-     local OPT OPTARG
--    local backend output hfile large_file recurse quiet rc
--    local -a uris
-+    local backend output large_file recurse quiet rc
-+    local -a uris hfiles
- 
-     # Parse our options; anything after '--' is for the backend
-     while getopts ":c:d:D:o:n:N:H:lrf:u:qp:" OPT; do
-@@ -33,7 +33,7 @@ main() {
-         o)  output="${OPTARG}";;
-         n)  raw_base_name="${OPTARG}";;
-         N)  base_name="${OPTARG}";;
--        H)  hfile="${OPTARG}";;
-+        H)  hfiles+=( "${OPTARG}" );;
-         l)  large_file="-l";;
-         r)  recurse="-r";;
-         f)  filename="${OPTARG}";;
-@@ -70,7 +70,7 @@ main() {
-     # - fails at least one of its hashes: force a re-download
-     # - there's no hash (but a .hash file): consider it a hard error
-     if [ -e "${output}" ]; then
--        if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
-+        if support/download/check-hash ${quiet} "${output}" "${output##*/}" "${hfiles[@]}"; then
-             exit 0
-         elif [ ${?} -ne 2 ]; then
-             # Do not remove the file, otherwise it might get re-downloaded
-@@ -154,7 +154,7 @@ main() {
- 
-         # Check if the downloaded file is sane, and matches the stored hashes
-         # for that file
--        if support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
-+        if support/download/check-hash ${quiet} "${tmpf}" "${output##*/}" "${hfiles[@]}"; then
-             rc=0
-         else
-             if [ ${?} -ne 3 ]; then
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhhbmtzIEd1aWxpbywgdGhpcyBmaXhlcyBvdXIgYnVpbGQgcHJvYmxlbSEKCk9uIDMxLjEwLjIz
+IDEwOjAxLCBHaXVsaW8gQmVuZXR0aSB3cm90ZToKPiBBdCB0aGUgbW9tZW50IHRoZSBucG1fY29u
+ZmlnX25vZGVkaXIgaXMgc2V0IHRvIHRoZSBidWlsZCBkaXJlY3RvcnkgYnV0Cj4gbnBtIG5vZGVk
+aXIgbXVzdCBiZSB0aGUgb25lIG9uIHRhcmdldCB0byBmaW5kIHRoZSBleHBlY3RlZCBmaWxlcy4g
+U28gbGV0J3MKPiBzZXQgbnBtX2NvbmZpZ19ub2RlZGlyIHRvICQoVEFSR0VUX0RJUikvdXNyLgo+
+Cj4gRml4ZXM6Cj4gaHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNTgy
+Ngo+Cj4gU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0
+dGllbmdpbmVlcmluZy5jb20+CgpUZXN0ZWQtYnk6IE1hcmN1cyBIb2ZmbWFubiA8bWFyY3VzLmhv
+ZmZtYW5uQG90aGVybW8uZGU+Cgo+IC0tLQo+ICAgcGFja2FnZS9ub2RlanMvbm9kZWpzLm1rIHwg
+MiArLQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4K
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9ub2RlanMvbm9kZWpzLm1rIGIvcGFja2FnZS9ub2RlanMv
+bm9kZWpzLm1rCj4gaW5kZXggMmE4YzU3MDkzMi4uOGY4NjQxMzA0OSAxMDA2NDQKPiAtLS0gYS9w
+YWNrYWdlL25vZGVqcy9ub2RlanMubWsKPiArKysgYi9wYWNrYWdlL25vZGVqcy9ub2RlanMubWsK
+PiBAQCAtMjAsNyArMjAsNyBAQCBOT0RFSlNfQklOX0VOViA9ICQoVEFSR0VUX0NPTkZJR1VSRV9P
+UFRTKSBcCj4gICAgICAgbnBtX2NvbmZpZ19hcmNoPSQoTk9ERUpTX0NQVSkgXAo+ICAgICAgIG5w
+bV9jb25maWdfdGFyZ2V0X2FyY2g9JChOT0RFSlNfQ1BVKSBcCj4gICAgICAgbnBtX2NvbmZpZ19i
+dWlsZF9mcm9tX3NvdXJjZT10cnVlIFwKPiAtICAgICBucG1fY29uZmlnX25vZGVkaXI9JChCVUlM
+RF9ESVIpL25vZGVqcy0kKE5PREVKU19WRVJTSU9OKSBcCj4gKyAgICAgbnBtX2NvbmZpZ19ub2Rl
+ZGlyPSQoVEFSR0VUX0RJUikvdXNyIFwKPiAgICAgICBucG1fY29uZmlnX3ByZWZpeD0kKFRBUkdF
+VF9ESVIpL3VzciBcCj4gICAgICAgbnBtX2NvbmZpZ19jYWNoZT0kKEJVSUxEX0RJUikvLm5wbS1j
+YWNoZQo+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCgpvdGhlcm1vIEdtYkggfCBT
+aXR6IGRlciBHZXNlbGxzY2hhZnQ6IEFsemVuYXUgfCBBbXRzZ2VyaWNodCBBc2NoYWZmZW5idXJn
+OiBIUkIgMTQ3ODMgfCBVU3QtSWROci46IERFMzE5OTc3OTc4IHwgR2VzY2jDpGZ0c2bDvGhydW5n
+OiBEci4gRGVubmlzIE1ldHouCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
