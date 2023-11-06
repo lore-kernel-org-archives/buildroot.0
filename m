@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA0E9C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D01CC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:09:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 401C960AE7;
-	Mon,  6 Nov 2023 19:09:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 401C960AE7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45FE1611ED;
+	Mon,  6 Nov 2023 19:09:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45FE1611ED
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 89P3ukkKgQlg; Mon,  6 Nov 2023 19:09:33 +0000 (UTC)
+	with ESMTP id OXH2NKqXKkUD; Mon,  6 Nov 2023 19:09:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BB746123A;
-	Mon,  6 Nov 2023 19:09:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BB746123A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 74FD11BF3A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 580E761187;
+	Mon,  6 Nov 2023 19:09:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 580E761187
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E9B551BF3A1
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EE736118B
+ by smtp1.osuosl.org (Postfix) with ESMTP id D0871820B7
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:09:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EE736118B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0871820B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0jAFVpgnRWpk for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sd8kSNs4CYgG for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 19:09:18 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4168161187
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A57C181EE4
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:09:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4168161187
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-4083f61322fso35577715e9.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A57C181EE4
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-32dc9ff4a8fso2789716f8f.1
  for <buildroot@buildroot.org>; Mon, 06 Nov 2023 11:09:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1699297756; x=1699902556;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=F9FlBLjyPNUenP/PNIcTzf+AVr/sXbMt8NAXJOLyAyQ=;
- b=EEz4tSJrSsUO+evyeGRPvAG5cBHHCVBRx/nSUe4QqArlTDs2yX+9J7l9MPXGrFt7Hd
- qChOz6R968oECDbGE1+DUy9LgDE3W+5Hc/xMjGvkt3xpJWx6KfTExoAqEvsBG81AmrGP
- +j4wYvzxbK+lEait6MZADntkniMnPolFJ0xJAQUZHpWys7bxiNGmLh1vqxNCyhBflH/u
- sMZ1Gv66LSyZYk/dNmrWmyY2inr34+VteC2uy2yGgphXOPFgk985xCDr+XpCNtl42INN
- sIDq2PpHGObBZ1843PJSVDEHAFhH4n3XOJDkVCkmdv1YyUcpP9AXKJ7PQqdG0Rtpm2pN
- lSTQ==
-X-Gm-Message-State: AOJu0Yw+XrPEQ9fjD9wkZ/lV6SLcTUQvupKnQvM+ZeWc7lgj3pVrQwh8
- aLscDc17wwP78BIp91aQjwc9NO4zGcc=
-X-Google-Smtp-Source: AGHT+IGiA62OndPw7Yo/2pVFnt+HvmRwyoYcS5uDbhFhMs1F6C5nQJNndJBsOErF4WvLDxPUnQ5xoQ==
-X-Received: by 2002:a05:6000:1a8b:b0:32f:8ace:f0b7 with SMTP id
- f11-20020a0560001a8b00b0032f8acef0b7mr18155763wry.12.1699297756083; 
+ bh=N+zmjGcHD4qJBHhCRa/ZrdwoERYoCuh0PWZkdy9VJLU=;
+ b=UAWa42R1UWmk3J74I0hqDVq7o2VoDih11FqoU+kr8vHHIHYU03MXf88cjiqdnTlCBp
+ 86kujabLxa+e8c8yX3hq78O7zCXC9mnjqDRigKJoJmXYpSM4a50mxjDjWmJp80EAUugp
+ TxANzlo9ym+kNZWKio8eK8BC+ZTS1jOmKBp89A/O0AbeZ/e2fCaYjWxhanRhb61kkctf
+ kkELlHlAZUqdCOMWry0A0j+oP2jfEia+5vb00Yq6K1Vji43uH2lu05+ale725njSK1zd
+ CGWD1HNnR9+dgvAO5KgLBaa0cSuRGvnH6T8qo3ka/7Kc2lr2movOoktfzEF5cMBcLGEQ
+ FunA==
+X-Gm-Message-State: AOJu0YztUyLu7v1LP6ZI4lxA/KaetQtpc3lSLZ7jbSeq5kfnexxW1+lk
+ QTvusGiI7PC7OS/vp77rUVVdO5ck3f4=
+X-Google-Smtp-Source: AGHT+IHJUH7E7PGOl4eq6Uo1EjWgEPWg1on6Hs+do8RXBcpHO0LkYYPsaytWWXMvoYy1YHunkCnHgg==
+X-Received: by 2002:a5d:684e:0:b0:32f:b4ab:8cb with SMTP id
+ o14-20020a5d684e000000b0032fb4ab08cbmr7041605wrw.34.1699297756555; 
  Mon, 06 Nov 2023 11:09:16 -0800 (PST)
 Received: from scaer.home ([2a01:cb19:8290:3800:5023:65e3:22e2:e1cc])
  by smtp.gmail.com with ESMTPSA id
- y14-20020a056000108e00b0032dbf6bf7a2sm330900wrw.97.2023.11.06.11.09.15
+ y14-20020a056000108e00b0032dbf6bf7a2sm330900wrw.97.2023.11.06.11.09.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Nov 2023 11:09:15 -0800 (PST)
+ Mon, 06 Nov 2023 11:09:16 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon,  6 Nov 2023 20:09:13 +0100
-Message-Id: <31d36b28454ccf0134e74f2a4b9b11a41a6fc6e5.1699297749.git.yann.morin.1998@free.fr>
+Date: Mon,  6 Nov 2023 20:09:14 +0100
+Message-Id: <c4cb742e3bd2d4c18b6a21338167c17b50fe4986.1699297749.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1699297749.git.yann.morin.1998@free.fr>
 References: <cover.1699297749.git.yann.morin.1998@free.fr>
@@ -74,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=F9FlBLjyPNUenP/PNIcTzf+AVr/sXbMt8NAXJOLyAyQ=;
- b=a3QJndGaX/NkiZCoXUxsXoh4JPA1k1Jxx0r6OauAGh7chXWon2Mh86n0vipawKEFyd
- im2c4l7EPyz0iNvtctFcDEFHfD2mBe9hXp9K5TTP6//h+21+bVxQs+UCj6+tNeRDD1JN
- cCKPz5Ww9tr8KKBXrpp8HZO1ur5FI4SFgjvYC8dC2Sz3SEraEePbLjxKTzSP3CLF0DZm
- ZQj5q5aHP0t8SKzt9ZDPXTraFErTWEKjto8+OzAoU0YjWFq8CyOPLnwc8W35w92DJpBT
- dXWXMJ0ooo21B8HcqZSj3lG1FC/WBNcHziOU3+DX0iHSH5FGAdSBdc+XB7XC33sabUvp
- aaOw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=N+zmjGcHD4qJBHhCRa/ZrdwoERYoCuh0PWZkdy9VJLU=;
+ b=g1zm8hQRUVq1q9ALwc2Vkv1+4cwBAnFcd69fF0tyAjmX0ikmXmYeaQxocpBtbQfvsE
+ XRpLgplMOfEhTs82TZ6nK7OpcnP6UryKYwXK85YlpJKIoOa4Rv5ULG4n1hCsYeZHs9ng
+ BHAVIMdhk7Zl0igIHYcSw84ql9gx2bSEkajgGWr86SKXP5Xrmx2TiNAij8PIME3xxBZH
+ 65rlB5DiQ9dhaWPpwy5edBYrd8fgcihEmDlKXavMdQEDsZaN4OwE7TQnke38rwMwRhto
+ dL1PA2pjkdALpnTWe0HAAASrxkQcmIak/iUnbcWhuEJxxwq+psJcZbSphFSXWYSlFY2O
+ ilow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=a3QJndGa
-Subject: [Buildroot] [PATCH 2/3 v2] package/pkg-download: lookup hash files
- in global-patch-dir
+ header.a=rsa-sha256 header.s=20230601 header.b=g1zm8hQR
+Subject: [Buildroot] [PATCH 3/3 v2] pkg-download: add option to enforce hash
+ checking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,196 +104,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, we expect and only use hash files that lie within the package
-directory, alongside the .mk file. Those hash files are thus bundled
-with Buildroot.
+Currently, when a pacakge is downloaded from a custom location or
+version, Buildroot excludes such a package from the mandatory integrity
+check with hashes, because it was until now not possible to have such
+hashes.
 
-This implies that only what's known to Buildroot can ever get into those
-hash files. For packages where the version is fixed (or a static
-choice), then we can carry hashes for those known versions.
+We now have a mechanism which users can leverage to provide additional
+hashes, and so custom versions or locations can now be checked too.
 
-However, we do have a few packages for which the version is a free-form
-entry, where the user can provide a custom location and/or version.  like
-a custom VCS tree and revision, or a custom tarball URL. This means that
-Buildroot has no way to be able to cary hashes for such custom versions.
+Buildroot has no way to know that hashes have indeed been provided for
+a custom location/version, and so will still happilly ignore an
+unchecked package.
 
-This means that there is no integrity check that what was downloaded is
-what was expected. For a sha1 in a git tree, this is a minor issue,
-because the sha1 by itself is already a hash of the expected content.
-But for custom tarballs URLs, or for a tag in a VCS, there is indeed no
-integrity check.
+However, users who do provide extra hashes most probably do expect that
+no download is done without an integrity check, and thus expect that a
+missing hash not be ignored.
 
-Buildroot can't provide such hashes, but interested users may want to
-provide those, and currently there is no (easy) way to do so.
-
-We leverage the existng global-patch-dir mechanism to look for extra
-hash files. We use the same heuristic that is used for bundled hash
-files, and for each global patch directory <dir>, we use the first file
-to exist among:
- 1. look into <dir>/<package>/<version>/<package>.hash
- 2. look into <dir>/<package>/<package>.hash
+Add an option that users can select to make Buildroot forcibly require
+at least one valid hash, and no invalid hash, for all downloads.
 
 Reported-by: "Martin Zeiser (mzeiser)" <mzeiser@cisco.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
 ---
-Changes v1 -> v2:
-  - drop <dir>/all.hash
----
- Config.in                                  | 10 +++++----
- docs/manual/adding-packages-directory.adoc |  6 ++++++
- docs/manual/customize-patches.adoc         | 24 +++++++++++++++++++++-
- package/pkg-download.mk                    |  2 +-
- package/pkg-generic.mk                     | 14 ++++++++-----
- package/pkg-utils.mk                       |  2 +-
- 6 files changed, 46 insertions(+), 12 deletions(-)
+ Config.in               | 17 +++++++++++++++++
+ package/pkg-download.mk |  5 ++---
+ 2 files changed, 19 insertions(+), 3 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index 7dd49567f6..b344d0e80a 100644
+index b344d0e80a..27f5deb16a 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -674,12 +674,12 @@ config BR2_PACKAGE_OVERRIDE_FILE
- 	  documentation for more details on this feature.
+@@ -709,6 +709,23 @@ config BR2_FORCE_HOST_BUILD
  
- config BR2_GLOBAL_PATCH_DIR
--	string "global patch directories"
-+	string "global patch and hash directories"
- 	help
- 	  You may specify a space separated list of one or more
--	  directories containing global package patches. For a specific
--	  version <packageversion> of a specific package <packagename>,
--	  patches are applied as follows:
-+	  directories containing global package patches and/or hashes.
-+	  For a specific version <packageversion> of a specific package
-+	  <packagename>, patches are looked up as follows:
+ 	  This option will increase build time.
  
- 	  First, the default Buildroot patch set for the package is
- 	  applied from the package's directory in Buildroot.
-@@ -693,6 +693,8 @@ config BR2_GLOBAL_PATCH_DIR
- 	  exists, then all *.patch files in the directory will be
- 	  applied.
- 
-+	  The hash files are looked up similarly to the patches.
++config BR2_DOWNLOAD_FORCE_CHECK_HASHES
++	bool "Force all downloads to have a valid hash"
++	depends on BR2_GLOBAL_PATCH_DIR != ""
++	help
++	  For packages where a custom version or location can be set,
++	  Buildroot does not carry a hash for those custom versions or
++	  locations, so the integrity of such downloads is not verified.
 +
- menu "Advanced"
- 
- config BR2_FORCE_HOST_BUILD
-diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
-index 7150018a3b..5a0f298eb1 100644
---- a/docs/manual/adding-packages-directory.adoc
-+++ b/docs/manual/adding-packages-directory.adoc
-@@ -540,6 +540,12 @@ mercurial) because Buildroot currently does not generate reproducible
- tarballs when source code is fetched from such version control
- systems.
- 
-+Additionally, for packages for which it is possible to specify a custom
-+version (e.g. a custom version string, a remote tarball URL, or a VCS
-+repository location and changeset), Buildroot can't carry hashes for
-+those. It is however possible to xref:customize-hashes[provide a list of
-+extra hashes] that can cover such cases.
++	  Say 'y' here to enforce downloads to have at least one valid
++	  hash (and of course, that all hashes be valid).
 +
- Hashes should only be added in +.hash+ files for files that are
- guaranteed to be stable. For example, patches auto-generated by Github
- are not guaranteed to be stable, and therefore their hashes can change
-diff --git a/docs/manual/customize-patches.adoc b/docs/manual/customize-patches.adoc
-index eb98d1bea2..72e87c3c04 100644
---- a/docs/manual/customize-patches.adoc
-+++ b/docs/manual/customize-patches.adoc
-@@ -1,8 +1,10 @@
- // -*- mode:doc -*- ;
- // vim: set syntax=asciidoc:
- 
-+=== Adding project-specific patches and hashes
++	  Those hashes are looked in files in BR2_GLOBAL_PATCH_DIR,
++	  see above.
 +
- [[customize-patches]]
--=== Adding project-specific patches
-+==== Providing extra patches
- 
- It is sometimes useful to apply 'extra' patches to packages - on top of
- those provided in Buildroot. This might be used to support custom
-@@ -57,3 +59,23 @@ are available at a URL. *Note:* +BR2_LINUX_KERNEL_PATCH+ specifies kernel
- patches that are applied after patches available in +BR2_GLOBAL_PATCH_DIR+,
- as it is done from a post-patch hook of the Linux package.
- 
++comment "Forcing all downloads to have a valid hash needs a global patch and hash directory"
++	depends on BR2_GLOBAL_PATCH_DIR = ""
 +
-+[[customize-hashes]]
-+==== Providing extra hashes
-+
-+Buildroot bundles a xref:adding-packages-hash[list of hashes] against
-+which it checks the integrity of the downloaded archives, or of those
-+it generates locally from VCS checkouts. However, it can only do so
-+for the known versions; for packages where it is possible to specify
-+a custom version (e.g. a custom version string, a remote tarball URL,
-+or a VCS repository location and changeset), Buildroot can't carry
-+hashes for those.
-+
-+For users concerned with the integrity of such downloads, it is possible
-+to provide a list of hashes that Buildroot can use to check arbitrary
-+downloaded files. Those extra hashes are looked up similarly to the
-+extra patches (above); for each directory in +BR2_GLOBAL_PATCH_DIR+,
-+the first file to exist is used to check a package download:
-+
-+* +<global-patch-dir>/<packagename>/<packageversion>/<packagename>.hash+
-+* +<global-patch-dir>/<packagename>/<packagename>.hash+
+ config BR2_REPRODUCIBLE
+ 	bool "Make the build reproducible (experimental)"
+ 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index e5cd83d859..bf1c19e5ec 100644
+index bf1c19e5ec..30eeb6b1fc 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -115,7 +115,7 @@ define DOWNLOAD
+@@ -66,9 +66,7 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
+ gitlab = https://gitlab.com/$(1)/$(2)/-/archive/$(3)
+ 
+ # Expressly do not check hashes for those files
+-# Exported variables default to immediately expanded in some versions of
+-# make, but we need it to be recursively-epxanded, so explicitly assign it.
+-export BR_NO_CHECK_HASH_FOR =
++BR_NO_CHECK_HASH_FOR =
+ 
+ ################################################################################
+ # DOWNLOAD_URIS - List the candidates URIs where to get the package from:
+@@ -110,6 +108,7 @@ endif
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(2)_DL_DIR)
+ 	$(Q)$(EXTRA_ENV) $($(2)_DL_ENV) \
++	BR_NO_CHECK_HASH_FOR="$(if $(BR2_DOWNLOAD_FORCE_CHECK_HASHES),,$(BR_NO_CHECK_HASH_FOR))" \
+ 		flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
+ 		-c '$($(2)_DL_VERSION)' \
  		-d '$($(2)_DL_DIR)' \
- 		-D '$(DL_DIR)' \
- 		-f '$(notdir $(1))' \
--		-H '$($(2)_HASH_FILE)' \
-+		$(foreach f,$($(2)_HASH_FILES),-H '$(f)') \
- 		-n '$($(2)_BASENAME_RAW)' \
- 		-N '$($(2)_RAWNAME)' \
- 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6c24be7505..577a148c1e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -509,11 +509,15 @@ else
- endif
- $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
- 
--$(2)_HASH_FILE = \
-+$(2)_HASH_FILES = \
- 	$$(strip \
--		$$(if $$(wildcard $$($(2)_PKGDIR)/$$($(2)_VERSION)/$$($(2)_RAWNAME).hash),\
--			$$($(2)_PKGDIR)/$$($(2)_VERSION)/$$($(2)_RAWNAME).hash,\
--			$$($(2)_PKGDIR)/$$($(2)_RAWNAME).hash))
-+		$$(foreach d, $$($(2)_PKGDIR) $$(addsuffix /$$($(2)_RAWNAME), $$(call qstrip,$$(BR2_GLOBAL_PATCH_DIR))),\
-+			$$(if $$(wildcard $$(d)/$$($(2)_VERSION)/$$($(2)_RAWNAME).hash),\
-+				$$(d)/$$($(2)_VERSION)/$$($(2)_RAWNAME).hash,\
-+				$$(d)/$$($(2)_RAWNAME).hash\
-+			)\
-+		)\
-+	)
- 
- ifdef $(3)_OVERRIDE_SRCDIR
-   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
-@@ -1138,7 +1142,7 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
- 	$(Q)$$(call legal-warning-pkg,$$($(2)_BASENAME_RAW),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$(F),$$($(2)_DIR)/$$(F),$$($(2)_HASH_FILE))$$(sep))
-+	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$(F),$$($(2)_DIR)/$$(F),$$($(2)_HASH_FILES))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_REDISTRIBUTE),YES)
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index b91061a572..059e86ae0a 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -280,7 +280,7 @@ define legal-manifest # {HOST|TARGET}, pkg, version, license, license-files, sou
- 	echo '"$(2)","$(3)","$(4)","$(5)","$(6)","$(7)","$(8)"' >>$(LEGAL_MANIFEST_CSV_$(1))
- endef
- 
--define legal-license-file # {HOST|TARGET}, pkgname, pkgname-pkgver, filename, file-fullpath, pkg-hashfile
-+define legal-license-file # {HOST|TARGET}, pkgname, pkgname-pkgver, filename, file-fullpath, pkg-hashfiles
- 	mkdir -p $(LICENSE_FILES_DIR_$(1))/$(3)/$(dir $(4)) && \
- 	{ \
- 		support/download/check-hash $(5) $(4) $(6); \
 -- 
 2.25.1
 
