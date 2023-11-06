@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32636C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:26:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E080EC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:26:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCCD142095;
-	Mon,  6 Nov 2023 22:26:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCCD142095
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A77742151;
+	Mon,  6 Nov 2023 22:26:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A77742151
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vCpCmW_a5MW9; Mon,  6 Nov 2023 22:26:39 +0000 (UTC)
+	with ESMTP id K4_4Iq5Sxgz2; Mon,  6 Nov 2023 22:26:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF9884215E;
-	Mon,  6 Nov 2023 22:26:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF9884215E
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0B714212D;
+	Mon,  6 Nov 2023 22:26:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0B714212D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1CAD81BF271
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1FDB51BF271
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0739B415ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2942341665
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0739B415ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2942341665
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6h0ptDUKL9qr for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:20:19 +0000 (UTC)
+ with ESMTP id Y7aiOLCmofMV for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DD9C41686
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DD9C41686
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A0DF415CB
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A0DF415CB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BDAF86B77; Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
+ id 6653C86B77; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 23:15:46 +0100
+Date: Mon, 6 Nov 2023 23:15:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8c10243bcca6a520708a8d298a00bf343aebfcde
-X-Git-Newrev: 38abfd376ee23d879d20db3dc1953df0a1d8ef30
+X-Git-Oldrev: 998ecc6c93b8b6f4a856388fe6bc2abd8fd399d1
+X-Git-Newrev: f650ad66d013506397d7a539c1686473e728ed73
 X-Patchwork-Hint: ignore
-Message-Id: <20231106222018.1BDAF86B77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jaraco-functools: bump to
- version 4.0.0
+Message-Id: <20231106222017.6653C86B77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-flask-login: bump to
+ version 0.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,54 +59,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4600308927249111489=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38abfd376ee23d879d20db3dc1953df0a1d8ef30
+--===============4600308927249111489==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f650ad66d013506397d7a539c1686473e728ed73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to copyright notice removal:
-https://github.com/jaraco/jaraco.functools/commit/5957d58266e479f124b31f30e4322e798fdf386b
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jaraco-functools/python-jaraco-functools.hash | 6 +++---
- package/python-jaraco-functools/python-jaraco-functools.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-flask-login/python-flask-login.hash | 4 ++--
+ package/python-flask-login/python-flask-login.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jaraco-functools/python-jaraco-functools.hash b/package/python-jaraco-functools/python-jaraco-functools.hash
-index a7cbb3daf1..97db6b75fb 100644
---- a/package/python-jaraco-functools/python-jaraco-functools.hash
-+++ b/package/python-jaraco-functools/python-jaraco-functools.hash
+diff --git a/package/python-flask-login/python-flask-login.hash b/package/python-flask-login/python-flask-login.hash
+index c88b70f2d5..af034ae751 100644
+--- a/package/python-flask-login/python-flask-login.hash
++++ b/package/python-flask-login/python-flask-login.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jaraco.functools/json
--md5  f25708d7f38b9264459046fcc0afc8c1  jaraco.functools-3.5.2.tar.gz
--sha256  45b05c158f3ad28731075556ffd4749bd254ec67f91e1eb367dcfebff1151db4  jaraco.functools-3.5.2.tar.gz
-+md5  6683d6f56930d4f0b34157b083813cf3  jaraco.functools-4.0.0.tar.gz
-+sha256  c279cb24c93d694ef7270f970d499cab4d3813f4e08273f95398651a634f0925  jaraco.functools-4.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/flask-login/json
+-md5  8020b22ad7ec6f17034f90117a520633  Flask-Login-0.6.2.tar.gz
+-sha256  c0a7baa9fdc448cdd3dd6f0939df72eec5177b2f7abe6cb82fc934d29caac9c3  Flask-Login-0.6.2.tar.gz
++md5  689564b8b7f3782f0db382b7aa85bbc2  Flask-Login-0.6.3.tar.gz
++sha256  5e23d14a607ef12806c699590b89d0f0e0d67baeec599d75947bf9c147330333  Flask-Login-0.6.3.tar.gz
  # Locally computed sha256 checksums
--sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-+sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-jaraco-functools/python-jaraco-functools.mk b/package/python-jaraco-functools/python-jaraco-functools.mk
-index 8f64c4687e..5637b75629 100644
---- a/package/python-jaraco-functools/python-jaraco-functools.mk
-+++ b/package/python-jaraco-functools/python-jaraco-functools.mk
+ sha256  7a9dfb9c5da204ed1370f3b62c13e2992a12da1da707f47e156897eeb4344e5b  LICENSE
+diff --git a/package/python-flask-login/python-flask-login.mk b/package/python-flask-login/python-flask-login.mk
+index 394fe197e3..ed10c98f5a 100644
+--- a/package/python-flask-login/python-flask-login.mk
++++ b/package/python-flask-login/python-flask-login.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JARACO_FUNCTOOLS_VERSION = 3.5.2
-+PYTHON_JARACO_FUNCTOOLS_VERSION = 4.0.0
- PYTHON_JARACO_FUNCTOOLS_SOURCE = jaraco.functools-$(PYTHON_JARACO_FUNCTOOLS_VERSION).tar.gz
--PYTHON_JARACO_FUNCTOOLS_SITE = https://files.pythonhosted.org/packages/b4/ea/9abca360081de9157668fcc52765989158aaf29b4826f26fcb17852d08e6
-+PYTHON_JARACO_FUNCTOOLS_SITE = https://files.pythonhosted.org/packages/57/7c/fe770e264913f9a49ddb9387cca2757b8d7d26f06735c1bfbb018912afce
- PYTHON_JARACO_FUNCTOOLS_LICENSE = MIT
- PYTHON_JARACO_FUNCTOOLS_LICENSE_FILES = LICENSE
- PYTHON_JARACO_FUNCTOOLS_SETUP_TYPE = setuptools
+-PYTHON_FLASK_LOGIN_VERSION = 0.6.2
++PYTHON_FLASK_LOGIN_VERSION = 0.6.3
+ PYTHON_FLASK_LOGIN_SOURCE = Flask-Login-$(PYTHON_FLASK_LOGIN_VERSION).tar.gz
+-PYTHON_FLASK_LOGIN_SITE = https://files.pythonhosted.org/packages/cc/da/eae45ba9ec58af45b46ef94c6ca04fb211ee57c06421b696e894eb11b064
++PYTHON_FLASK_LOGIN_SITE = https://files.pythonhosted.org/packages/c3/6e/2f4e13e373bb49e68c02c51ceadd22d172715a06716f9299d9df01b6ddb2
+ PYTHON_FLASK_LOGIN_LICENSE = MIT
+ PYTHON_FLASK_LOGIN_LICENSE_FILES = LICENSE
+ PYTHON_FLASK_LOGIN_SETUP_TYPE = setuptools
+
+--===============4600308927249111489==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4600308927249111489==--
