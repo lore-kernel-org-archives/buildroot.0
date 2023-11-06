@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E7DCC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 21:38:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64071C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 21:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9B5040866;
-	Mon,  6 Nov 2023 21:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9B5040866
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A79B41773;
+	Mon,  6 Nov 2023 21:39:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A79B41773
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yCs8Ss1tLSiP; Mon,  6 Nov 2023 21:38:56 +0000 (UTC)
+	with ESMTP id JxNtNotHf1E4; Mon,  6 Nov 2023 21:39:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2DD940901;
-	Mon,  6 Nov 2023 21:38:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2DD940901
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9043A1BF951
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:38:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4285B417BF;
+	Mon,  6 Nov 2023 21:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4285B417BF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DA98A1BF3A6
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:38:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CD78408E3
+ by smtp1.osuosl.org (Postfix) with ESMTP id B1A1A820B1
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:38:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CD78408E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1A1A820B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GE5X8bxQaVCc for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id znxH3EEKqSTW for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 21:38:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 732854207F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64477829BB
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 21:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 732854207F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64477829BB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61CDF86AC1; Mon,  6 Nov 2023 21:38:13 +0000 (UTC)
+ id 5249B86AC0; Mon,  6 Nov 2023 21:38:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 22:36:35 +0100
+Date: Mon, 6 Nov 2023 22:27:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cc4022801b9d9512d122afc967e834df4d2eb48b
-X-Git-Newrev: 68e619142b33a551d79b6896001f1b253bbcbd76
+X-Git-Oldrev: 1ecfe60f134751460f2e7707c6277ec6d43bcbda
+X-Git-Newrev: cc4022801b9d9512d122afc967e834df4d2eb48b
 X-Patchwork-Hint: ignore
-Message-Id: <20231106213813.61CDF86AC1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/git: bump to version 2.42.1
+Message-Id: <20231106213813.5249B86AC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-setuptools-rust: bump to
+ version 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68e619142b33a551d79b6896001f1b253bbcbd76
+commit: https://git.buildroot.net/buildroot/commit/?id=cc4022801b9d9512d122afc967e834df4d2eb48b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bug fix release bump. For the full release notes, see:
+Drop no longer required host-python-typing-extensions.
 
-  https://lore.kernel.org/git/xmqq4ji4m50l.fsf@gitster.g/
-
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
+ package/python-setuptools-rust/python-setuptools-rust.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index d73778ad85..f3f5915c8d 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/python-setuptools-rust/python-setuptools-rust.hash b/package/python-setuptools-rust/python-setuptools-rust.hash
+index f8282277a1..a83288e43a 100644
+--- a/package/python-setuptools-rust/python-setuptools-rust.hash
++++ b/package/python-setuptools-rust/python-setuptools-rust.hash
 @@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  3278210e9fd2994b8484dd7e3ddd9ea8b940ef52170cdb606daa94d887c93b0d  git-2.42.0.tar.xz
-+sha256  8e46fa96bf35a65625d85fde50391e39bc0620d1bb39afb70b96c4a237a1a4f7  git-2.42.1.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 853ec256a0..cb49986c43 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/setuptools-rust/json
+-md5  f7a1602f3c34e9a5bb82603d4d80c9e3  setuptools-rust-1.6.0.tar.gz
+-sha256  c86e734deac330597998bfbc08da45187e6b27837e23bd91eadb320732392262  setuptools-rust-1.6.0.tar.gz
++md5  c5ca990845902dbaa1885f9ad9399988  setuptools-rust-1.8.1.tar.gz
++sha256  94b1dd5d5308b3138d5b933c3a2b55e6d6927d1a22632e509fcea9ddd0f7e486  setuptools-rust-1.8.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b20668c1590582b3882854050ccfbdb7aee1f71a1ffe9eacc4c5aeb08a14161b  LICENSE
+diff --git a/package/python-setuptools-rust/python-setuptools-rust.mk b/package/python-setuptools-rust/python-setuptools-rust.mk
+index a3e4d7a9d3..f07263becf 100644
+--- a/package/python-setuptools-rust/python-setuptools-rust.mk
++++ b/package/python-setuptools-rust/python-setuptools-rust.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.42.0
-+GIT_VERSION = 2.42.1
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-PYTHON_SETUPTOOLS_RUST_VERSION = 1.6.0
++PYTHON_SETUPTOOLS_RUST_VERSION = 1.8.1
+ PYTHON_SETUPTOOLS_RUST_SOURCE = setuptools-rust-$(PYTHON_SETUPTOOLS_RUST_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/0e/c9/6f9de9f7a8404416d5d22484ccdeb138f469cc1e11bbd62a2bd26d5c1385
++PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/f2/40/f1e9fedb88462248e94ea4383cda0065111582a4d5a32ca84acf60ab1107
+ PYTHON_SETUPTOOLS_RUST_SETUP_TYPE = setuptools
+ PYTHON_SETUPTOOLS_RUST_LICENSE = MIT
+ PYTHON_SETUPTOOLS_RUST_LICENSE_FILES = LICENSE
+-HOST_PYTHON_SETUPTOOLS_RUST_DEPENDENCIES = host-rustc host-python-semantic-version host-python-typing-extensions
++HOST_PYTHON_SETUPTOOLS_RUST_DEPENDENCIES = host-rustc host-python-semantic-version
+ 
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
