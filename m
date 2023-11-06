@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7039C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 21:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E7DCC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 21:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 659F7404CC;
-	Mon,  6 Nov 2023 21:38:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 659F7404CC
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9B5040866;
+	Mon,  6 Nov 2023 21:38:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9B5040866
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fQ3TQ1L2LPvs; Mon,  6 Nov 2023 21:38:43 +0000 (UTC)
+	with ESMTP id yCs8Ss1tLSiP; Mon,  6 Nov 2023 21:38:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C35640866;
-	Mon,  6 Nov 2023 21:38:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C35640866
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5AD8A1BF3A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2DD940901;
+	Mon,  6 Nov 2023 21:38:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2DD940901
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9043A1BF951
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41012820B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CD78408E3
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:38:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41012820B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CD78408E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uuXnC1geFFdl for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GE5X8bxQaVCc for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 21:38:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A6B682718
+ by smtp4.osuosl.org (Postfix) with ESMTP id 732854207F
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 21:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A6B682718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 732854207F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 46A3D86ABF; Mon,  6 Nov 2023 21:38:13 +0000 (UTC)
+ id 61CDF86AC1; Mon,  6 Nov 2023 21:38:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 22:27:30 +0100
+Date: Mon, 6 Nov 2023 22:36:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5d4e88a96a41542bcb30cb648f7d8750c48f419
-X-Git-Newrev: 1ecfe60f134751460f2e7707c6277ec6d43bcbda
+X-Git-Oldrev: cc4022801b9d9512d122afc967e834df4d2eb48b
+X-Git-Newrev: 68e619142b33a551d79b6896001f1b253bbcbd76
 X-Patchwork-Hint: ignore
-Message-Id: <20231106213813.46A3D86ABF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/flashrom: fix libftdi build
+Message-Id: <20231106213813.61CDF86AC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/git: bump to version 2.42.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ecfe60f134751460f2e7707c6277ec6d43bcbda
+commit: https://git.buildroot.net/buildroot/commit/?id=68e619142b33a551d79b6896001f1b253bbcbd76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-flashrom depends on libftdi1 since bump to version 1.3.0 in commit
-073b0fc9c1fe9945eccf4b792b948633aae9a9b8:
+Bug fix release bump. For the full release notes, see:
 
-Dependency libftdi1 found: no
-[...]
-/home/autobuild/autobuild/instance-7/output-1/host/lib/gcc/mips64el-buildroot-linux-gnu/12.3.0/../../../../mips64el-buildroot-linux-gnu/bin/ld: libflashrom.a(ft2232_spi.o): in function `send_buf':
-ft2232_spi.c:(.text+0x20): undefined reference to `ftdi_write_data'
+  https://lore.kernel.org/git/xmqq4ji4m50l.fsf@gitster.g/
 
-Fixes:
- - http://autobuild.buildroot.org/results/11fae0933b38d82f15fec37e78298df232321bcd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/flashrom/flashrom.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 1ccef572da..86bfec40cc 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -11,8 +11,8 @@ FLASHROM_LICENSE = GPL-2.0+
- FLASHROM_LICENSE_FILES = COPYING
- FLASHROM_MAKE_OPTS = WARNERROR=no
+diff --git a/package/git/git.hash b/package/git/git.hash
+index d73778ad85..f3f5915c8d 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  3278210e9fd2994b8484dd7e3ddd9ea8b940ef52170cdb606daa94d887c93b0d  git-2.42.0.tar.xz
++sha256  8e46fa96bf35a65625d85fde50391e39bc0620d1bb39afb70b96c4a237a1a4f7  git-2.42.1.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 853ec256a0..cb49986c43 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBFTDI),y)
--FLASHROM_DEPENDENCIES += host-pkgconf libftdi
-+ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
-+FLASHROM_DEPENDENCIES += host-pkgconf libftdi1
- FLASHROM_MAKE_OPTS += \
- 	CONFIG_FT2232_SPI=yes \
- 	CONFIG_USBBLASTER_SPI=yes
+-GIT_VERSION = 2.42.0
++GIT_VERSION = 2.42.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
