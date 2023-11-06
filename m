@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCCA2C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 21:06:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE3D5C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 21:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82532417D2;
-	Mon,  6 Nov 2023 21:06:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82532417D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA271417D2;
+	Mon,  6 Nov 2023 21:06:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA271417D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CAoAJiJL5Utf; Mon,  6 Nov 2023 21:06:02 +0000 (UTC)
+	with ESMTP id dqmwiWnDL2Qq; Mon,  6 Nov 2023 21:06:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8A98417AE;
-	Mon,  6 Nov 2023 21:06:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8A98417AE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 164401BF336
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:06:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E09EA4180D;
+	Mon,  6 Nov 2023 21:06:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E09EA4180D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BF261BF336
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:06:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E27F5417B4
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:05:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E27F5417B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24306612AD
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 21:06:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24306612AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PxbksSiG9Y_s for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KFN0rKUyZlES for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 21:05:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAEAE417AD
+ by smtp3.osuosl.org (Postfix) with ESMTP id B94AB6129E
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 21:05:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAEAE417AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B94AB6129E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7512869A9; Mon,  6 Nov 2023 21:05:58 +0000 (UTC)
+ id 9BD0F869D7; Mon,  6 Nov 2023 21:05:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 22:05:25 +0100
+Date: Mon, 6 Nov 2023 22:05:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d9233db918edc05ceecca78fd23de9110507a231
-X-Git-Newrev: 4ec5e32762757110c26f67c84661841880f94d03
+X-Git-Oldrev: 798d917b8e91f65ae84172673bc304aea3895ee2
+X-Git-Newrev: d9233db918edc05ceecca78fd23de9110507a231
 X-Patchwork-Hint: ignore
-Message-Id: <20231106210558.A7512869A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: fix legal info
+Message-Id: <20231106210558.9BD0F869D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xen: fix selinux module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,36 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ec5e32762757110c26f67c84661841880f94d03
+commit: https://git.buildroot.net/buildroot/commit/?id=d9233db918edc05ceecca78fd23de9110507a231
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For an unknown reason, hash added by commit
-c1d5eada4d4db9eeaa1c44dd1dea95a67c8a70ca is wrong:
+Fix the following refpolicy build failure raised since commit
+64ce823223fece5c106994d9654a126fc6161d6a:
 
->>> host-nodejs-src 20.9.0 Collecting legal info
-ERROR: LICENSE has wrong sha256 hash:
-ERROR: expected: a6871483905199033882d66453649675f0e88ffaa07f9f8acb257ce7504bc758
-ERROR: got     : 93ac846282ce6c5255e00fada2fd2e7e292255239fe58d5502b0a554859e6a3e
+policy/modules/system/xen.te:559:ERROR 'type udev_runtime_t is not within scope' at token ';' on line 628879:
+	allow xm_t udev_runtime_t:dir { open read getattr lock search ioctl add_name remove_name write };
+
+[...]
+
+policy/modules/system/udev.te:205:ERROR 'unknown type systemd_hwdb_t' at token ';' on line 582304:
+        allow udev_t systemd_hwdb_t:file map;
 
 Fixes:
- - http://autobuild.buildroot.org/results/a199f128bc1d59a311f3ae683dcc14a1d6f3bb7b
+ - http://autobuild.buildroot.org/results/849050b00a2ee5983c2324cb955cd533189a0460
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nodejs/nodejs.hash | 2 +-
+ package/xen/xen.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index da027cc17a..2d60437a7c 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -5,4 +5,4 @@ sha256  3c6cea5d614cfbb95d92de43fbc2f8ecd66e431502fe5efc4f3c02637897bd45  node-v
- sha256  9033989810bf86220ae46b1381bdcdc6c83a0294869ba2ad39e1061f1e69217a  node-v20.9.0-linux-x64.tar.xz
- sha256  a23d96810abf0455426b349d47ce5310f33095b7bc0571b9cc510f481c3a4519  node-v20.9.0.tar.xz
- # Locally calculated
--sha256  a6871483905199033882d66453649675f0e88ffaa07f9f8acb257ce7504bc758  LICENSE
-+sha256  93ac846282ce6c5255e00fada2fd2e7e292255239fe58d5502b0a554859e6a3e  LICENSE
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index ad71b14105..80412cca97 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -6,7 +6,7 @@
+ 
+ XEN_VERSION = 4.14.6
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+-XEN_SELINUX_MODULES = xen
++XEN_SELINUX_MODULES = systemd udev xen
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
+ XEN_CPE_ID_VENDOR = xen
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
