@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1046BC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:40:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13C8FC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBEC8610AE;
-	Mon,  6 Nov 2023 19:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBEC8610AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1A87612B4;
+	Mon,  6 Nov 2023 19:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1A87612B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FHfHY_Kfs6Ma; Mon,  6 Nov 2023 19:40:55 +0000 (UTC)
+	with ESMTP id A2rO6POJSG3u; Mon,  6 Nov 2023 19:41:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C65F0612A6;
-	Mon,  6 Nov 2023 19:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C65F0612A6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 92BD91BF29F
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:40:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0197A612B2;
+	Mon,  6 Nov 2023 19:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0197A612B2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 571C61BF29F
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A7444185E
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A7444185E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2321D60E2F
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:40:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2321D60E2F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t1HLnSdEG6AM for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 19:40:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C45E417E7
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C45E417E7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 425D086972; Mon,  6 Nov 2023 19:40:25 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 20:39:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4c555bd57ffdda313cb883be80d9c3d62a5442b
-X-Git-Newrev: 1eb07c1904088b660d8c9b21b44b228cd824bece
-X-Patchwork-Hint: ignore
-Message-Id: <20231106194025.425D086972@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsolv: bump to version 0.7.25
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OXEG0jxG8udn for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 19:40:39 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 06E426125C
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:40:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06E426125C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4E77240002;
+ Mon,  6 Nov 2023 19:40:37 +0000 (UTC)
+Date: Mon, 6 Nov 2023 20:40:36 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20231106204036.3b7c492a@windsurf>
+In-Reply-To: <20231105212453.49399-1-fontaine.fabrice@gmail.com>
+References: <20231105212453.49399-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699299637;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=VRcMK+bZEWMGicBleCxbIBfiYdx4ZtL0h/IEcf0K1+E=;
+ b=oQY5OT49rUYUP2a+rmgqnTPmq+uzLBqvGjrBc+rsWxYngB14MkcjVje6g08riKSU81oA2Q
+ 3RAmcM/8QIAg+VhhdM4U8TVk/6v47LwoPjHLKjyvhR5QY7pHW4VuCgxWKZ1TJRROyfO3gL
+ Vm0C4uBLhvBUFJ1PY9aeWdah26l025ucZnSZRmRj2mudcdairsNtQ/DhzIK/6ngTJeASPy
+ zw35A9mwxySmpfDI7Hy92/BhEUqo1mr2d8LHDHOurWahw2aw0dpERW4R31idU67jaOBD0v
+ N3vntl7kEE0J7ZkDzBalVUCQUNTgAzd0vC19lUnKuVRJlP7Qjz6X0eA5C1OpQQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oQY5OT49
+Subject: Re: [Buildroot] [PATCH 1/1] package/wavemon: bump to version 0.9.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,117 +76,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1eb07c1904088b660d8c9b21b44b228cd824bece
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  5 Nov 2023 22:24:53 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Drop patch (already in version)
+> Drop patch (already in version)
+> 
+> https://github.com/uoaerg/wavemon/releases/tag/v0.9.5
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .checkpackageignore                           |  1 -
+>  ...001-iw_if.h-don-t-include-linux-if.h.patch | 41 -------------------
+>  package/wavemon/wavemon.hash                  |  2 +-
+>  package/wavemon/wavemon.mk                    |  2 +-
+>  4 files changed, 2 insertions(+), 44 deletions(-)
+>  delete mode 100644 package/wavemon/0001-iw_if.h-don-t-include-linux-if.h.patch
 
-https://github.com/openSUSE/libsolv/blob/0.7.25/NEWS
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                            |  1 -
- package/libsolv/0001-Fix-build-without-C.patch | 49 --------------------------
- package/libsolv/libsolv.hash                   |  2 +-
- package/libsolv/libsolv.mk                     |  2 +-
- 4 files changed, 2 insertions(+), 52 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1e35bf77db..0a0df6757a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -742,7 +742,6 @@ package/libsigrok/0001-Support-glibmm-2.68.patch Upstream
- package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch Upstream
- package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch Upstream
- package/libsigrokdecode/0003-configure-ac-Use-python3-embed-pc-as-a-fallback.patch Upstream
--package/libsolv/0001-Fix-build-without-C.patch Upstream
- package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch Upstream
- package/libsoxr/0001-Add-Libs.private-for-static-linking.patch Upstream
- package/libspatialindex/0001-allow-building-static-libs.patch Upstream
-diff --git a/package/libsolv/0001-Fix-build-without-C.patch b/package/libsolv/0001-Fix-build-without-C.patch
-deleted file mode 100644
-index 2389aebcde..0000000000
---- a/package/libsolv/0001-Fix-build-without-C.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 5691f58d1f8ce1332b02536e48f1ac5864629c6c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 12 Feb 2023 15:27:27 +0100
--Subject: [PATCH] Fix build without C++
--
--Fix the following build failure without C++:
--
--CMake Error at CMakeLists.txt:1 (PROJECT):
--  No CMAKE_CXX_COMPILER could be found.
--
--  Tell CMake where to find the compiler by setting either the environment
--  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
--  to the compiler, or to the compiler name if it is in the PATH.
--
--Fixes:
-- - http://autobuild.buildroot.org/results/a7f2176d40f156c319754ef5d3b7fd0decfe754f
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/openSUSE/libsolv/pull/520]
-----
-- CMakeLists.txt     | 2 +-
-- ext/CMakeLists.txt | 1 +
-- 2 files changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 3541f496..f899c49a 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,4 +1,4 @@
---PROJECT (libsolv)
--+PROJECT (libsolv C)
-- 
-- CMAKE_MINIMUM_REQUIRED (VERSION 2.8.5)
-- 
--diff --git a/ext/CMakeLists.txt b/ext/CMakeLists.txt
--index f01c0238..589fa946 100644
----- a/ext/CMakeLists.txt
--+++ b/ext/CMakeLists.txt
--@@ -103,6 +103,7 @@ IF (ENABLE_CUDFREPO)
-- ENDIF (ENABLE_CUDFREPO)
-- 
-- IF (ENABLE_HAIKU)
--+    enable_language(CXX)
--     SET (libsolvext_SRCS ${libsolvext_SRCS}
-- 	repo_haiku.cpp)
--     SET (libsolvext_HEADERS ${libsolvext_HEADERS}
---- 
--2.39.0
--
-diff --git a/package/libsolv/libsolv.hash b/package/libsolv/libsolv.hash
-index 162e46e54d..b18a682ccf 100644
---- a/package/libsolv/libsolv.hash
-+++ b/package/libsolv/libsolv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  968aef452b5493751fa0168cd58745a77c755e202a43fe8d549d791eb16034d5  libsolv-0.7.22.tar.gz
-+sha256  b382bba4196b19c36eb34e0ef02546c0b922be601c6f73390c9ab643895b656a  libsolv-0.7.25.tar.gz
- sha256  57f15acfb29fbef7749779e096a5885c60b716633e34484a21bb717554c0198f  LICENSE.BSD
-diff --git a/package/libsolv/libsolv.mk b/package/libsolv/libsolv.mk
-index 04fdb387fd..2a9f1bf208 100644
---- a/package/libsolv/libsolv.mk
-+++ b/package/libsolv/libsolv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSOLV_VERSION = 0.7.22
-+LIBSOLV_VERSION = 0.7.25
- LIBSOLV_SITE = $(call github,openSUSE,libsolv,$(LIBSOLV_VERSION))
- LIBSOLV_LICENSE = BSD-3-Clause
- LIBSOLV_LICENSE_FILES = LICENSE.BSD
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
