@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CB0DC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FCD5C4167D
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:44:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2256E61291;
-	Mon,  6 Nov 2023 19:44:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2256E61291
+	by smtp3.osuosl.org (Postfix) with ESMTP id 301E361288;
+	Mon,  6 Nov 2023 19:44:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 301E361288
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z5Wt6wDZkqGm; Mon,  6 Nov 2023 19:44:16 +0000 (UTC)
+	with ESMTP id CuyKrRhPc613; Mon,  6 Nov 2023 19:44:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7EB5661215;
-	Mon,  6 Nov 2023 19:44:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EB5661215
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5BC441BF951
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F91D61261;
+	Mon,  6 Nov 2023 19:44:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F91D61261
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 581681BF29F
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:44:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2EF1242088
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2AB94415D0
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:44:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EF1242088
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AB94415D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KkuNG84D0ZKe for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0gFBREUK2J_A for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 19:44:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5000842099
+ by smtp2.osuosl.org (Postfix) with ESMTP id 575CD415D1
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:44:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5000842099
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 575CD415D1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E28F869A2; Mon,  6 Nov 2023 19:44:13 +0000 (UTC)
+ id 33D6B869A0; Mon,  6 Nov 2023 19:44:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 20:43:31 +0100
+Date: Mon, 6 Nov 2023 20:42:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1d554b9a769657b3a4c3263fc71c8028b33475d
-X-Git-Newrev: c9316f21c7d07bfabccb1ab297773b7b83e217a0
+X-Git-Oldrev: 1eb07c1904088b660d8c9b21b44b228cd824bece
+X-Git-Newrev: b1d554b9a769657b3a4c3263fc71c8028b33475d
 X-Patchwork-Hint: ignore
-Message-Id: <20231106194413.3E28F869A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/test/init/test_systemd_selinux.py: use timeout argument for
- emulator.login
+Message-Id: <20231106194413.33D6B869A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/infra/emulator.py: add a
+ timeout argument for the login method
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,34 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9316f21c7d07bfabccb1ab297773b7b83e217a0
+commit: https://git.buildroot.net/buildroot/commit/?id=b1d554b9a769657b3a4c3263fc71c8028b33475d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-self.emulator.timeout_multiplier *= 10 is equivilent to 60 * 10 or 600.
+to override the current value of 60 seconds
+
+As per a suggestion by Thomas, add a timeout argument to override the current
+value of 60 seconds for the emulator.login method.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/init/test_systemd_selinux.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ support/testing/infra/emulator.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/init/test_systemd_selinux.py b/support/testing/tests/init/test_systemd_selinux.py
-index fab23e3330..e9bb3405cd 100644
---- a/support/testing/tests/init/test_systemd_selinux.py
-+++ b/support/testing/tests/init/test_systemd_selinux.py
-@@ -21,9 +21,9 @@ class TestSELinuxSystemd(infra.basetest.BRTest):
-         """
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 02cf486128..09f81eca89 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -84,11 +84,11 @@ class Emulator(object):
  
-     def wait_boot(self):
--        # The complete boot with systemd takes more time than what the default multipler permits
--        self.emulator.timeout_multiplier *= 10
--        self.emulator.login()
-+        # The complete boot with systemd takes more time than what the
-+        # default typically allows
-+        self.emulator.login(timeout=600)
- 
-     def run_tests(self, fstype):
-         kernel = os.path.join(self.builddir, "images", "bzImage")
+     # Wait for the login prompt to appear, and then login as root with
+     # the provided password, or no password if not specified.
+-    def login(self, password=None):
++    def login(self, password=None, timeout=60):
+         # The login prompt can take some time to appear when running multiple
+         # instances in parallel, so set the timeout to a large value
+         index = self.qemu.expect(["buildroot login:", pexpect.TIMEOUT],
+-                                 timeout=60 * self.timeout_multiplier)
++                                 timeout=timeout * self.timeout_multiplier)
+         if index != 0:
+             self.logfile.write("==> System does not boot")
+             raise SystemError("System does not boot")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
