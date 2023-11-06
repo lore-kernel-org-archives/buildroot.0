@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9050BC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B189C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:39:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CAF761249;
-	Mon,  6 Nov 2023 19:38:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CAF761249
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46FB7612A7;
+	Mon,  6 Nov 2023 19:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46FB7612A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FgW608LLqULY; Mon,  6 Nov 2023 19:38:53 +0000 (UTC)
+	with ESMTP id oyKf-qK07P7K; Mon,  6 Nov 2023 19:39:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74106610F0;
-	Mon,  6 Nov 2023 19:38:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74106610F0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A3211BF951
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:38:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4886C60AD8;
+	Mon,  6 Nov 2023 19:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4886C60AD8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 403CE1BF2EA
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:38:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B11D4159B
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:38:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B11D4159B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 19E6C610F0
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:38:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19E6C610F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nKGKaNo_S_eW for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SolC09HhKYC6 for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 19:38:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C762400C5
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:38:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C762400C5
+ by smtp3.osuosl.org (Postfix) with ESMTP id F2AFB60AD8
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:38:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2AFB60AD8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDD1E86955; Mon,  6 Nov 2023 19:38:24 +0000 (UTC)
+ id DFE2F86956; Mon,  6 Nov 2023 19:38:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 20:37:45 +0100
+Date: Mon, 6 Nov 2023 20:37:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3026934aa0a1a6b375d11e322b72476a7f6aedaf
-X-Git-Newrev: ee389788af8e454251cbdb24d03710b3e1d83abc
+X-Git-Oldrev: c9645fd29bf38b5a960aed3eeac36975d64a400a
+X-Git-Newrev: 3026934aa0a1a6b375d11e322b72476a7f6aedaf
 X-Patchwork-Hint: ignore
-Message-Id: <20231106193824.EDD1E86955@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/librtas: bump to version 2.0.5
+Message-Id: <20231106193824.DFE2F86956@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jq: bump to version 1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,117 +63,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee389788af8e454251cbdb24d03710b3e1d83abc
+commit: https://git.buildroot.net/buildroot/commit/?id=3026934aa0a1a6b375d11e322b72476a7f6aedaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop patch (already in version)
-- host-pkgconf is a mandatory dependency to run autoreconf (even when
-  cmocka-based tests are disabled) since
-  https://github.com/ibm-power-utilities/librtas/commit/b62ecd42180d7ac7b32cac6a50802455850a857a
+- Update site to get latest release
+- Drop autoreconf as official tarball is now used
+- _GNU_SOURCE is correctly set since
+  https://github.com/jqlang/jq/commit/52d5988afb5999c71fd24484a93efefa2a9e9a8f
+- maintainer mode is disabled by default since
+  https://github.com/jqlang/jq/commit/54fef09ac39d6fb003367d65709349c43078405e
+- Update hash of COPYING (BSD-2-Clause for Windows build using jv thread
+  added by
+  https://github.com/jqlang/jq/commit/34182cca7babec086bbc93dec209275be896ca9e,
+  mispelling fixed by
+  https://github.com/jqlang/jq/commit/5cebe86a7b90e5718077c5e1d5c2165939d3f3cb)
 
-https://github.com/ibm-power-utilities/librtas/blob/v2.0.5/Changelog
+https://github.com/jqlang/jq/releases/tag/jq-1.7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
- ...001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch | 46 ----------------------
- package/librtas/librtas.hash                       |  2 +-
- package/librtas/librtas.mk                         |  3 +-
- 4 files changed, 3 insertions(+), 49 deletions(-)
+ package/jq/Config.in |  2 +-
+ package/jq/jq.hash   |  4 ++--
+ package/jq/jq.mk     | 17 +++++------------
+ 3 files changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a126d93901..ecf4ae9a85 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -726,7 +726,6 @@ package/libpthsem/0001-fix-build-on-linux-3.x-host.patch Upstream
- package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch Upstream
- package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch Upstream
- package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch Upstream
--package/librtas/0001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch Upstream
- package/librtlsdr/0001-Makefile.am-respect-DESTDIR-with-install-udev-rules.patch Upstream
- package/libselinux/0001-fix-musl-build.patch Upstream
- package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch Upstream
-diff --git a/package/librtas/0001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch b/package/librtas/0001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch
-deleted file mode 100644
-index dd5f944317..0000000000
---- a/package/librtas/0001-configure.ac-remove-LOCAL_CHECK_FLAGS.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 148712f8a559cc613236e9e72b3ce6c24b83c373 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sat, 23 Jul 2022 18:51:37 +0200
--Subject: [PATCH] configure.ac: remove LOCAL_CHECK_FLAGS
--
--These cause problems with Buildroot (the -fstack-protector-all check
--does only a compile test, it should do a link test), and generally the
--decision of using those flags or not should be left to Buildroot.
--
--An issue has been reported upstream at
--https://github.com/ibm-power-utilities/librtas/issues/25 to hopefully
--get a better solution.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- configure.ac | 14 --------------
-- 1 file changed, 14 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index c3429e8..b7208ee 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -24,20 +24,6 @@ AC_TYPE_UID_T
-- AC_TYPE_UINT32_T
-- AC_TYPE_UINT64_T
-- 
---AC_DEFUN([LOCAL_CHECK_FLAGS],[
---  AC_REQUIRE([AX_CHECK_LINK_FLAG])
---  AC_REQUIRE([AX_APPEND_COMPILE_FLAGS])
---  AC_LANG_PUSH([C])
---  AX_APPEND_COMPILE_FLAGS([-Wall])
---  AX_APPEND_COMPILE_FLAGS([-D_FORTIFY_SOURCE=2 -fstack-protector-all])
---  AX_APPEND_COMPILE_FLAGS([-fwrapv -fPIE -Wstack-protector])
---  AX_APPEND_COMPILE_FLAGS([--param=ssp-buffer-size=1])
---  AX_CHECK_LINK_FLAG([-z relro -z now])
---  AX_CHECK_LINK_FLAG([-pie])
---  AC_LANG_POP
---])
---LOCAL_CHECK_FLAGS
---
-- LT_INIT
-- LT_LANG([C])
-- 
---- 
--2.37.1
--
-diff --git a/package/librtas/librtas.hash b/package/librtas/librtas.hash
-index 8d4c4e1912..6f8628cca8 100644
---- a/package/librtas/librtas.hash
-+++ b/package/librtas/librtas.hash
+diff --git a/package/jq/Config.in b/package/jq/Config.in
+index 5edb5d0989..ed2e0fa34f 100644
+--- a/package/jq/Config.in
++++ b/package/jq/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_JQ
+ 	  filter and map and transform structured data with the same
+ 	  ease that sed, awk, grep and friends let you play with text.
+ 
+-	  http://stedolan.github.io/jq/
++	  https://jqlang.github.io/jq/
+ 
+ comment "jq needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/jq/jq.hash b/package/jq/jq.hash
+index 125781385c..6c2db98e87 100644
+--- a/package/jq/jq.hash
++++ b/package/jq/jq.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  1b951422ec9553fa9d5e5e158fd8e298f867f561189fff6817a9540d5661f145  librtas-2.0.3.tar.gz
-+sha256  b4928b300350c12618563a051be01189275853fd8eacaac509c9aa1460991ec4  librtas-2.0.5.tar.gz
- sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING.LESSER
-diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
-index 458d7a0e47..804d6de191 100644
---- a/package/librtas/librtas.mk
-+++ b/package/librtas/librtas.mk
-@@ -4,12 +4,13 @@
+ # Locally calculated
+-sha256  20249104d4df2247253df6df4a980b8be1f5232f03fef7cd41bacb7e6eab04fd  jq-a17dd3248a666d01be75f6b16be37e80e20b0954.tar.gz
+-sha256  c8437d414ca5b394718784c3bf5bdff7f01fee417625fabf1fb722ca263037da  COPYING
++sha256  402a0d6975d946e6f4e484d1a84320414a0ff8eb6cf49d2c11d144d4d344db62  jq-1.7.tar.gz
++sha256  10e974638a41fadfd72357f2f3a4325e20b856c563365128f72feaa406f8c92d  COPYING
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index 7f890f8998..d886459dcc 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -4,25 +4,18 @@
  #
  ################################################################################
  
--LIBRTAS_VERSION = 2.0.3
-+LIBRTAS_VERSION = 2.0.5
- LIBRTAS_SITE = $(call github,ibm-power-utilities,librtas,v$(LIBRTAS_VERSION))
- LIBRTAS_LICENSE = LGPL-2.1+
- LIBRTAS_LICENSE_FILES = COPYING.LESSER
- LIBRTAS_INSTALL_STAGING = YES
- # From git
- LIBRTAS_AUTORECONF = YES
-+LIBRTAS_DEPENDENCIES = host-pkgconf
+-JQ_VERSION = a17dd3248a666d01be75f6b16be37e80e20b0954
+-JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
++JQ_VERSION = 1.7
++JQ_SITE = https://github.com/jqlang/jq/releases/download/jq-$(JQ_VERSION)
+ JQ_LICENSE = MIT (code), ICU (decNumber), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
+ JQ_CPE_ID_VENDOR = jq_project
+ JQ_INSTALL_STAGING = YES
  
- $(eval $(autotools-package))
+-# currently using git version directly
+-JQ_AUTORECONF = YES
+-
+ # uses c99 specific features
+-# _GNU_SOURCE added to fix gcc6+ host compilation
+-# (https://github.com/stedolan/jq/issues/1598)
+-JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_GNU_SOURCE"
+-HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99 -D_GNU_SOURCE"
++JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
++HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99"
+ 
+-# jq explicitly enables maintainer mode, which we don't need/want
+-JQ_CONF_OPTS += --disable-maintainer-mode
+-HOST_JQ_CONF_OPTS += --disable-maintainer-mode --without-oniguruma
++HOST_JQ_CONF_OPTS += --without-oniguruma
+ 
+ ifeq ($(BR2_PACKAGE_ONIGURUMA),y)
+ JQ_DEPENDENCIES += oniguruma
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
