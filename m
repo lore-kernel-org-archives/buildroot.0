@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52771C4167D
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 13:20:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F86EC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 13:20:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC2AD4034F;
-	Mon,  6 Nov 2023 13:20:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC2AD4034F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56755419D3;
+	Mon,  6 Nov 2023 13:20:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56755419D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ylfow5vdc8tP; Mon,  6 Nov 2023 13:20:10 +0000 (UTC)
+	with ESMTP id oinmHzid11AS; Mon,  6 Nov 2023 13:20:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16C324175F;
-	Mon,  6 Nov 2023 13:20:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16C324175F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E5CF91BF2EA
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 13:19:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CF9D41F94;
+	Mon,  6 Nov 2023 13:20:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CF9D41F94
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 523001BF2EA
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 13:19:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA73C60AE7
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 13:19:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA73C60AE7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CAE44000B
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 13:19:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CAE44000B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rd_WqMGNzfdV for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TcLzPIpPabHF for <buildroot@lists.busybox.net>;
  Mon,  6 Nov 2023 13:19:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F352761181
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA2D44012D
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 13:19:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F352761181
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA2D44012D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E196986911; Mon,  6 Nov 2023 13:19:13 +0000 (UTC)
+ id D767186910; Mon,  6 Nov 2023 13:19:13 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 13:41:43 +0100
+Date: Mon, 6 Nov 2023 13:39:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 509e05f7af9e69248b1e8f1f4efe1d553ef34ea2
-X-Git-Newrev: d4b2fc9ae8a45cbfbb853706019aa19e467f3ae8
+X-Git-Oldrev: 6f10cd7f8fda3f67d24520575dda3eb19c468b1f
+X-Git-Newrev: 509e05f7af9e69248b1e8f1f4efe1d553ef34ea2
 X-Patchwork-Hint: ignore
-Message-Id: <20231106131913.E196986911@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{avro-c,
- python-avro}: bump to version 1.11.3
+Message-Id: <20231106131913.D767186910@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-async-timeout: bump to
+ version 4.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,68 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4b2fc9ae8a45cbfbb853706019aa19e467f3ae8
+commit: https://git.buildroot.net/buildroot/commit/?id=509e05f7af9e69248b1e8f1f4efe1d553ef34ea2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/avro-c/avro-c.hash           | 4 ++--
- package/avro-c/avro-c.mk             | 2 +-
- package/python-avro/python-avro.hash | 4 ++--
- package/python-avro/python-avro.mk   | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-async-timeout/python-async-timeout.hash | 4 ++--
+ package/python-async-timeout/python-async-timeout.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/avro-c/avro-c.hash b/package/avro-c/avro-c.hash
-index b52a787ed5..83b5759a16 100644
---- a/package/avro-c/avro-c.hash
-+++ b/package/avro-c/avro-c.hash
+diff --git a/package/python-async-timeout/python-async-timeout.hash b/package/python-async-timeout/python-async-timeout.hash
+index 0ecf1ef5ae..d46489396f 100644
+--- a/package/python-async-timeout/python-async-timeout.hash
++++ b/package/python-async-timeout/python-async-timeout.hash
 @@ -1,5 +1,5 @@
--# From https://downloads.apache.org/avro/avro-1.11.1/c/avro-c-1.11.1.tar.gz.sha512
--sha512  e72e8c245a8b86326bc18a5d5127e9beeaceaf805e8a62760fd88d627e29954c750346485bb43822df408c8a172d910c27ddf7e3815bddbdb04d16c54d859323  avro-c-1.11.1.tar.gz
-+# From https://downloads.apache.org/avro/avro-1.11.3/c/avro-c-1.11.3.tar.gz.sha512
-+sha512  56ce8c6f0b06b779679a6e7a2b738ec94277920e9b3d7c6f1062a0b47db80b90dccf89df9d977ec1f120211f7c2f33845e18df4961818e5c5cc93aaec18e1302  avro-c-1.11.3.tar.gz
- 
- # License files
- sha256  d62488d6ba17132e92c23c03c80bfedc848267f96ab36489fec860f76cf6819a  LICENSE
-diff --git a/package/avro-c/avro-c.mk b/package/avro-c/avro-c.mk
-index f217c1d7ed..d7efdc2003 100644
---- a/package/avro-c/avro-c.mk
-+++ b/package/avro-c/avro-c.mk
-@@ -5,7 +5,7 @@
+ # md5, sha256 from https://pypi.org/pypi/async-timeout/json
+-md5  10571272b2e0fab839ec23f8293bf482  async-timeout-4.0.2.tar.gz
+-sha256  2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15  async-timeout-4.0.2.tar.gz
++md5  9bf7b764a7310cb063c1c261c21342e4  async-timeout-4.0.3.tar.gz
++sha256  4640d96be84d82d02ed59ea2b7105a0f7b33abe8703703cd0ab0bf87c427522f  async-timeout-4.0.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  e18d7bb8f513e2c46bb585c94b585bd30720dd3ccb21ddb0786f72d16658f92c  LICENSE
+diff --git a/package/python-async-timeout/python-async-timeout.mk b/package/python-async-timeout/python-async-timeout.mk
+index b3c5f79e45..9760b8ae25 100644
+--- a/package/python-async-timeout/python-async-timeout.mk
++++ b/package/python-async-timeout/python-async-timeout.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # When updating the version, please also update python-avro
--AVRO_C_VERSION = 1.11.1
-+AVRO_C_VERSION = 1.11.3
- AVRO_C_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_C_VERSION)/c
- AVRO_C_LICENSE = Apache-2.0
- AVRO_C_LICENSE_FILES = LICENSE
-diff --git a/package/python-avro/python-avro.hash b/package/python-avro/python-avro.hash
-index 0d457a11fd..e57b6a722b 100644
---- a/package/python-avro/python-avro.hash
-+++ b/package/python-avro/python-avro.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.apache.org/avro/avro-1.11.1/py/avro-1.11.1.tar.gz.sha512
--sha512  bce5983cd7ed20be848cca41d143f16bf5bab57edc010d590fc1268405de4267e028ff7ec740282a03034aff5aa528feadb2be4e71ee6879b3080e0a9e19cb37  avro-1.11.1.tar.gz
-+# From https://downloads.apache.org/avro/avro-1.11.3/py/avro-1.11.3.tar.gz.sha512
-+sha512  c2066b4dd8b55b0534fb5bb8fc5a81abcef76ab46458b666c98732811f632c34062c1a0cefaf370aa0843c1cad5bd822f9a6ef0ad88cda5177519a3d3c73072d  avro-1.11.3.tar.gz
- 
- # License files
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  avro/LICENSE
-diff --git a/package/python-avro/python-avro.mk b/package/python-avro/python-avro.mk
-index 6193cbbd8e..4e9db9fefc 100644
---- a/package/python-avro/python-avro.mk
-+++ b/package/python-avro/python-avro.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update avro-c
--PYTHON_AVRO_VERSION = 1.11.1
-+PYTHON_AVRO_VERSION = 1.11.3
- PYTHON_AVRO_SITE = \
- 	https://www-eu.apache.org/dist/avro/avro-$(PYTHON_AVRO_VERSION)/py
- PYTHON_AVRO_SOURCE = avro-$(PYTHON_AVRO_VERSION).tar.gz
+-PYTHON_ASYNC_TIMEOUT_VERSION = 4.0.2
++PYTHON_ASYNC_TIMEOUT_VERSION = 4.0.3
+ PYTHON_ASYNC_TIMEOUT_SOURCE = async-timeout-$(PYTHON_ASYNC_TIMEOUT_VERSION).tar.gz
+-PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/54/6e/9678f7b2993537452710ffb1750c62d2c26df438aa621ad5fa9d1507a43a
++PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/87/d6/21b30a550dafea84b1b8eee21b5e23fa16d010ae006011221f33dcd8d7f8
+ PYTHON_ASYNC_TIMEOUT_LICENSE = Apache-2.0
+ PYTHON_ASYNC_TIMEOUT_LICENSE_FILES = LICENSE
+ PYTHON_ASYNC_TIMEOUT_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
