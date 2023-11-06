@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2726C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C64CBC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 22:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 989A2402A2;
-	Mon,  6 Nov 2023 22:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 989A2402A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E4EF40907;
+	Mon,  6 Nov 2023 22:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E4EF40907
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KINrbFlwXjqR; Mon,  6 Nov 2023 22:24:53 +0000 (UTC)
+	with ESMTP id t85h0HPt3ONA; Mon,  6 Nov 2023 22:25:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82C0040155;
-	Mon,  6 Nov 2023 22:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82C0040155
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 604DE1BF271
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93ACB409FA;
+	Mon,  6 Nov 2023 22:25:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93ACB409FA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 66DB21BF951
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 78ECD612C7
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1E65415C3
  for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 22:20:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78ECD612C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1E65415C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PlPZVNDdbiUo for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 344hiozKrv2g for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 22:20:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4127A612C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1C9141665
  for <buildroot@buildroot.org>; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4127A612C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1C9141665
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2943686B7B; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
+ id D98D786B77; Mon,  6 Nov 2023 22:20:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 Nov 2023 23:15:25 +0100
+Date: Mon, 6 Nov 2023 23:15:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 285b10cb80dc4b5de001a43f62da771a27a104be
-X-Git-Newrev: 7e5958d07774f02b4360f04a4e373a76f0b9a011
+X-Git-Oldrev: 18abda1791e3ca09f96b5ca106431c5d3bce8673
+X-Git-Newrev: b32eef540e4a76780033a7c2ae1e6e948a637de2
 X-Patchwork-Hint: ignore
-Message-Id: <20231106222017.2943686B7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dnspython: bump to version
- 2.4.2
+Message-Id: <20231106222017.D98D786B77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-hatch-fancy-pypi-readme:
+ bump to version 23.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,95 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e5958d07774f02b4360f04a4e373a76f0b9a011
+commit: https://git.buildroot.net/buildroot/commit/?id=b32eef540e4a76780033a7c2ae1e6e948a637de2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop patch which is now upstream.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
- ...01-Remove-spurious-wheel-build-dependency.patch | 29 ----------------------
- package/python-dnspython/python-dnspython.hash     |  4 +--
- package/python-dnspython/python-dnspython.mk       |  4 +--
- 4 files changed, 4 insertions(+), 34 deletions(-)
+ .../python-hatch-fancy-pypi-readme.hash                               | 4 ++--
+ .../python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8b591e5276..2feecbcb73 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1123,7 +1123,6 @@ package/python-crossbar/0001-Avoid-intentional-syntax-error.patch Upstream
- package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch Upstream
- package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch Upstream
- package/python-daphne/0001-remove-pytest-runner-requirement.patch Upstream
--package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch Upstream
- package/python-m2crypto/0001-Mitigate-the-Bleichenbacher-timing-attacks-in-the-RSA-decryption-API-CVE-2020-25657.patch Upstream
- package/python-pybind/0001-pybind11-commands.py-support-STAGING_DIR.patch Upstream
- package/python-pylibftdi/0001-do-not-use-find-library.patch Upstream
-diff --git a/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch b/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
-deleted file mode 100644
-index b43217edad..0000000000
---- a/package/python-dnspython/0001-Remove-spurious-wheel-build-dependency.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 53b989e4ce32c941d748ad33502600497595914a Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Wed, 2 Nov 2022 14:01:58 -0600
--Subject: [PATCH] Remove spurious wheel build dependency
--
--Wheel isn't a build dependency so it shouldn't be in setup_requires.
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[james.hilliard1@gmail.com: backport from upstream commit
--53b989e4ce32c941d748ad33502600497595914a]
-----
-- setup.cfg | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/setup.cfg b/setup.cfg
--index 0abd270..2cb3e06 100644
----- a/setup.cfg
--+++ b/setup.cfg
--@@ -46,7 +46,7 @@ packages =
--     dns.rdtypes.CH
-- python_requires = >=3.7
-- test_suite = tests
---setup_requires = setuptools>=44; wheel; setuptools_scm[toml]>=3.4.3
--+setup_requires = setuptools>=44; setuptools_scm[toml]>=3.4.3
-- 
-- [options.extras_require]
-- DOH = httpx>=0.21.1; h2>=4.1.0; requests; requests-toolbelt
---- 
--2.34.1
--
-diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
-index 29441b41ea..77ffb5dedc 100644
---- a/package/python-dnspython/python-dnspython.hash
-+++ b/package/python-dnspython/python-dnspython.hash
+diff --git a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
+index 1b287072b7..d9fdb88e1f 100644
+--- a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
++++ b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dnspython/json
--md5  c7172f4115cd7b60fd5037cfcd8f9408  dnspython-2.2.1.tar.gz
--sha256  0f7569a4a6ff151958b64304071d370daa3243d15941a7beedf0c9fe5105603e  dnspython-2.2.1.tar.gz
-+md5  fac4e1580e5e9dfee722cb97bc073722  dnspython-2.4.2.tar.gz
-+sha256  8dcfae8c7460a2f84b4072e26f1c9f4101ca20c071649cb7c34e8b6a93d58984  dnspython-2.4.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/hatch_fancy_pypi_readme/json
+-md5  588776ea8e3608714d4cbba16dffa92b  hatch_fancy_pypi_readme-22.8.0.tar.gz
+-sha256  da91282ca09601c18aded8e378daf8b578c70214866f0971156ee9bb9ce6c26a  hatch_fancy_pypi_readme-22.8.0.tar.gz
++md5  8755cce1a4a4d5e5d84992089801acbf  hatch_fancy_pypi_readme-23.1.0.tar.gz
++sha256  b1df44063094af1e8248ceacd47a92c9cf313d6b9823bf66af8a927c3960287d  hatch_fancy_pypi_readme-23.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
-diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
-index 43030ae476..1459ec8881 100644
---- a/package/python-dnspython/python-dnspython.mk
-+++ b/package/python-dnspython/python-dnspython.mk
+ sha256  e69ea57f96e599e617f61af3e85bf326b87e833994709fb5e5908a81197730a2  LICENSE.txt
+diff --git a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
+index f28721181a..6195a30436 100644
+--- a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
++++ b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DNSPYTHON_VERSION = 2.2.1
-+PYTHON_DNSPYTHON_VERSION = 2.4.2
- PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
--PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/99/fb/e7cd35bba24295ad41abfdff30f6b4c271fd6ac70d20132fa503c3e768e0
-+PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/65/2d/372a20e52a87b2ba0160997575809806111a72e18aa92738daccceb8d2b9
- PYTHON_DNSPYTHON_LICENSE = ISC
- PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
- PYTHON_DNSPYTHON_SETUP_TYPE = setuptools
+-PYTHON_HATCH_FANCY_PYPI_README_VERSION = 22.8.0
++PYTHON_HATCH_FANCY_PYPI_README_VERSION = 23.1.0
+ PYTHON_HATCH_FANCY_PYPI_README_SOURCE = hatch_fancy_pypi_readme-$(PYTHON_HATCH_FANCY_PYPI_README_VERSION).tar.gz
+-PYTHON_HATCH_FANCY_PYPI_README_SITE = https://files.pythonhosted.org/packages/4e/ab/9b48589d6e3a2f72cc1e8f5221c28ff28fcdf116dbbd6e9beb946054212d
++PYTHON_HATCH_FANCY_PYPI_README_SITE = https://files.pythonhosted.org/packages/85/a6/58d585eba4321bf2e7a4d1ed2af141c99d88c1afa4b751926be160f09325
+ PYTHON_HATCH_FANCY_PYPI_README_LICENSE = MIT
+ PYTHON_HATCH_FANCY_PYPI_README_LICENSE_FILES = LICENSE.txt
+ PYTHON_HATCH_FANCY_PYPI_README_SETUP_TYPE = pep517
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
