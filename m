@@ -4,84 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B112C4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 20:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78613C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 20:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1E1A408AD;
-	Mon,  6 Nov 2023 20:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1E1A408AD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BEE741F7C;
+	Mon,  6 Nov 2023 20:18:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BEE741F7C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HeXythe5zoZH; Mon,  6 Nov 2023 20:15:20 +0000 (UTC)
+	with ESMTP id sJD1IRA64fw7; Mon,  6 Nov 2023 20:18:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 07917401F0;
-	Mon,  6 Nov 2023 20:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07917401F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A30241F4E;
+	Mon,  6 Nov 2023 20:18:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A30241F4E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF8831BF3A4
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 20:15:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D1251BF3A4
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 20:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E4AC401F0
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 20:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E4AC401F0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 450F941F4E
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 20:18:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 450F941F4E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lm1cC3axLghR for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 20:15:16 +0000 (UTC)
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 59A3B4013A
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 20:15:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59A3B4013A
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-32da7ac5c4fso3019858f8f.1
- for <buildroot@buildroot.org>; Mon, 06 Nov 2023 12:15:16 -0800 (PST)
+ with ESMTP id M2mxL_HcOgJh for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 20:18:10 +0000 (UTC)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5132841F37
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 20:18:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5132841F37
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-9c3aec5f326so1191947366b.1
+ for <buildroot@buildroot.org>; Mon, 06 Nov 2023 12:18:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699301713; x=1699906513;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=hGuMOAURrvZG+pXk0TujADnUBbc5HC5dfm+Q68PeSsQ=;
- b=hOpgWZHF+eNWjUVe1ffXCcSCg6y8IJthOq6Duj+UJ8rwJzycMgCql379HhJf/+BI9z
- lBRlgcIFErwkshkCbo5sOOJoE3j2YJMElZu20Ya/kiD3Y7aHI2FziP0MeJdlvq5Tzi4I
- ULoa5ZtZTImM5cVXvkgUDJmgbcDw0DXhDy28enWjSGFTf0RkI03zgWrJfPJGaqQRWJMk
- vdj0byAHYqum12OEmVT4QNXrjZGFVLZsWkrYBgEzaKrto7dXrm74n15rb+mfGnK20Ocl
- 2MCnzlCupF4j1iv1y8hErpyEBAyN5G8LQR+oea2MYiQPbIxntKZBUG30ZU5gBlG2u1PM
- JSqw==
-X-Gm-Message-State: AOJu0YzvXLXeTzAvk9rgA+giIOETNeuIzfysctsFuam8hkoK3V4nXo31
- FUvme0Lmm0M7AAS1m0TQQP6RtIVxD4w=
-X-Google-Smtp-Source: AGHT+IFMmDw2xib8kjJ/MsxmKpgFEkVJHtvDBqBC3QxCtPC8UsidHXRFY3cWiue2qWQgjdER82/JZg==
-X-Received: by 2002:a5d:4c91:0:b0:32d:aabf:1db3 with SMTP id
- z17-20020a5d4c91000000b0032daabf1db3mr21953372wrs.24.1699301713023; 
- Mon, 06 Nov 2023 12:15:13 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- y11-20020adff6cb000000b0032fc609c118sm444524wrp.66.2023.11.06.12.15.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Nov 2023 12:15:12 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  6 Nov 2023 21:15:09 +0100
-Message-ID: <20231106201509.8600-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+ d=1e100.net; s=20230601; t=1699301888; x=1699906688;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=xKd0iHTVmVBgoBgcrTnh7KlHnFW5oIhroLPlk+EppHc=;
+ b=dJFZpluZc6pMX05vV4UZclJMXYekgV6jVXSyOTAUielBhwktkMg/2kChUGPc6LmgXp
+ wSr0kqwxkwj2O5WlzczYmBsb9H6w4clyNbkTyuk3whkNGWdWU2X+i6iKxQMAB/G3CY+x
+ 6JEEIANTGfgn5VZPvrlx/++xar1oU9z++jvcQZYW7Dy3W//vfDFZNQmjx9VBFBIabyLn
+ lkYMrtMc7J/Xvk/c8QfVsjA2YU0H6EC8kK+yH5escNKqr9qOgVtc1meHpsURokVGg/Fy
+ M/O8PIy7de5YRzSKFyl83XGvTL+9J8q4rXG+r6pDHMXI3/SVWTXdnTDtf17GtCr3yosK
+ BP/w==
+X-Gm-Message-State: AOJu0Yza3lVdICeysuPKgmZMzglMvV2dH2rcSFrDpAI7OlrggSVI+2Jh
+ xPZnuFdr8MOvYcQ1umQkQ92wD60OuNMcJFNngBU=
+X-Google-Smtp-Source: AGHT+IFxqkHnNrkvIIIFOLAhFAKLFSgf4pknpIED5tvGRDEVY5ieGZYS9UKPk66enPmQ5qHzA16vYA==
+X-Received: by 2002:a17:906:19c:b0:9ad:8641:e91b with SMTP id
+ 28-20020a170906019c00b009ad8641e91bmr510841ejb.11.1699301888144; 
+ Mon, 06 Nov 2023 12:18:08 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ y11-20020a170906448b00b009ae69c303aasm210146ejo.137.2023.11.06.12.18.06
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 06 Nov 2023 12:18:07 -0800 (PST)
+Message-ID: <0f681e5b-2522-462e-9f09-f86694a2d3dc@mind.be>
+Date: Mon, 6 Nov 2023 21:18:04 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Damien Le Moal <dlemoal@kernel.org>
+References: <20231030002748.280144-1-dlemoal@kernel.org>
+ <5761b87d-4843-4669-bc65-f6e1351e12b7@kernel.org>
+ <20231106084314.2458b0c3@windsurf>
+In-Reply-To: <20231106084314.2458b0c3@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699301713; x=1699906513; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hGuMOAURrvZG+pXk0TujADnUBbc5HC5dfm+Q68PeSsQ=;
- b=Z1unS+1jiwo/I1MFM6Rx52VqxfT/xZuDN1bylsfF1L+K1Owis5y5G37VVxv2rQnPQc
- 2ilqZ6ZR+sdqt/g0gje8UtnUoDBwJscIv8AxSujH1S/QmxptMRmz96IYJ4X+Uy+Wf8D0
- Ptg81YIGBc1uTHXD1o/v309yhCv5OChuPUFPLDHocQKH8bIb2LCffsprtfQ6urpUmvZV
- l82MbraXltyjDR3Q2/Xxnr2b8XZLHqpL6IllZf7gZMSy13m7S5hkAqIaEPs0ypfoCPzD
- ExbRhec/DyVViN7CJ/6Mx/aKhyj/Y5t0aaJjnLZ0TiJrwf1FiBlAuehKYTm8y+i9WEW5
- HWCQ==
+ d=mind.be; s=google; t=1699301888; x=1699906688; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=xKd0iHTVmVBgoBgcrTnh7KlHnFW5oIhroLPlk+EppHc=;
+ b=MhwAnrWhmeS/PwFdfyadqRqILno9SNdg6eK2os+d/Nrdpv7CSkfEin1LuABubQ3sVI
+ 4l/BbqYu7YIVKdHRodd2LAF+naz66BML4LkP2QXIXcAGoUrP4dZ05WqUJ8WlEXKw+cxq
+ raVUf/QkJT9SqTAIzrtkdASsWRusFTuGk3g0LZzWZmMl7+sQeR04L9sfqN/YXskqkPrQ
+ uZg+DoLb+yHsyNdLfw6gso8faXVA4pFYmW7FXBxsnyXs0O0XZedOTQrzpXYVophOqKgx
+ qfbX06h+wd9/4aSqdmWJ6raqlF1pPRooO39rJ3guxZDj6ZH309Wim4+swzSP+Mq3+xYY
+ pf2Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Z1unS+1j
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: fix legal info
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=MhwAnrWh
+Subject: Re: [Buildroot] [PATCH] package/gcc: Fix gcc finale library
+ installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,43 +102,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Daniel Price <daniel.price@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Martin Bark <martin@barkynet.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For an unknown reason, hash added by commit
-c1d5eada4d4db9eeaa1c44dd1dea95a67c8a70ca is wrong:
 
->>> host-nodejs-src 20.9.0 Collecting legal info
-ERROR: LICENSE has wrong sha256 hash:
-ERROR: expected: a6871483905199033882d66453649675f0e88ffaa07f9f8acb257ce7504bc758
-ERROR: got     : 93ac846282ce6c5255e00fada2fd2e7e292255239fe58d5502b0a554859e6a3e
 
-Fixes:
- - http://autobuild.buildroot.org/results/a199f128bc1d59a311f3ae683dcc14a1d6f3bb7b
+On 06/11/2023 08:43, Thomas Petazzoni via buildroot wrote:
+> On Mon, 6 Nov 2023 11:17:41 +0900
+> Damien Le Moal <dlemoal@kernel.org> wrote:
+> 
+>> I received a build failure report (again) for the RISC-V Canaan & Sipeed boards
+>> configs. This patch fixes these build failures.
+> 
+> I need to dig deeper into this. We looked into this issue with Romain,
+> and I believe our conclusion is that it was unfortunately more complex
+> than this, because in fact BR2_TOOLCHAIN_HAS_LIBATOMIC is not a fully
+> accurate representation of whether gcc has libatomic or not.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/nodejs/nodejs.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Even so, we could apply this already as a first step that fixes many 
+configurations, and improve the fix later? Currently there are quite a lot of 
+configurations for which we simply can't build a toolchain...
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index da027cc17a..2d60437a7c 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -5,4 +5,4 @@ sha256  3c6cea5d614cfbb95d92de43fbc2f8ecd66e431502fe5efc4f3c02637897bd45  node-v
- sha256  9033989810bf86220ae46b1381bdcdc6c83a0294869ba2ad39e1061f1e69217a  node-v20.9.0-linux-x64.tar.xz
- sha256  a23d96810abf0455426b349d47ce5310f33095b7bc0571b9cc510f481c3a4519  node-v20.9.0.tar.xz
- # Locally calculated
--sha256  a6871483905199033882d66453649675f0e88ffaa07f9f8acb257ce7504bc758  LICENSE
-+sha256  93ac846282ce6c5255e00fada2fd2e7e292255239fe58d5502b0a554859e6a3e  LICENSE
--- 
-2.42.0
+  BTW, Damien, you forgot the Fixes line:
+
+Fixes: 
+http://autobuild.buildroot.net/results/98f/98fedf4969c260f73a01b937b9625e66dcd86b3c
+
+(there are about 10 failures per day on various architectures, I don't think we 
+need to enumerate them all.)
+
+  Regards,
+  Arnout
 
 _______________________________________________
 buildroot mailing list
