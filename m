@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB57CC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 07:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3DC1C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 07:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66A0141E34;
-	Mon,  6 Nov 2023 07:43:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66A0141E34
+	by smtp4.osuosl.org (Postfix) with ESMTP id 554AD41E40;
+	Mon,  6 Nov 2023 07:48:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 554AD41E40
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bp_XQ-qYOSmm; Mon,  6 Nov 2023 07:43:23 +0000 (UTC)
+	with ESMTP id 9Y0FX5ZWVFbY; Mon,  6 Nov 2023 07:48:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDD7B41E27;
-	Mon,  6 Nov 2023 07:43:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDD7B41E27
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E41611BF368
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 07:43:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AAB041E3C;
+	Mon,  6 Nov 2023 07:48:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AAB041E3C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 28DA51BF368
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 07:48:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9ACBD610D2
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 07:43:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ACBD610D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 016BF41E3C
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 07:48:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 016BF41E3C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oxfMJY6DWT_s for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 07:43:18 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3C51C610D0
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 07:43:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C51C610D0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3719B20003;
- Mon,  6 Nov 2023 07:43:15 +0000 (UTC)
-Date: Mon, 6 Nov 2023 08:43:14 +0100
-To: Damien Le Moal <dlemoal@kernel.org>
-Message-ID: <20231106084314.2458b0c3@windsurf>
-In-Reply-To: <5761b87d-4843-4669-bc65-f6e1351e12b7@kernel.org>
-References: <20231030002748.280144-1-dlemoal@kernel.org>
- <5761b87d-4843-4669-bc65-f6e1351e12b7@kernel.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qlq0scXiUrTL for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 07:48:55 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CAF1641E35
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 07:48:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAF1641E35
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B284F40002;
+ Mon,  6 Nov 2023 07:48:51 +0000 (UTC)
+Date: Mon, 6 Nov 2023 08:48:50 +0100
+To: enki <enki@fsck.pl>
+Message-ID: <20231106084850.1d0f01ce@windsurf>
+In-Reply-To: <18ba1050ead.e92a523a459223.2327298946072754198@fsck.pl>
+References: <18b80c0ce62.cb399136547843.6065948676717076989@fsck.pl>
+ <20231030132841.3052429-1-enki@fsck.pl>
+ <20231104143527.075bd95d@windsurf>
+ <18ba1050ead.e92a523a459223.2327298946072754198@fsck.pl>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699256595;
+ d=bootlin.com; s=gm1; t=1699256932;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=VCr0UBp258Ag8dysmeghSAvHa9YgD0x55Ahccva00Y8=;
- b=ZkLUFE2m1Gq0C1MUQQFXVe3911HpYN6+dmG5MLdOv/YHTrxdWAvh11rpPVrEVpnU8j8t3N
- eBng+ijmIA4uxeUUjWlHTDUWXlVqqz3uCt9+GLdy63M42wZGrbGGi2HfgHaT9yUd33yvqX
- iWZEsLyvDYG6OvKgOsjC28mUjF6T0p3g9QrcqO715GTgo6DYSnPQJX/0GU2DVcK+xbOMRk
- 84Uuos+tR/n3t1kC6fSx7B3uk/8aTC+x6tHQnZRvDAywbkJyWON6iPxs8Y8ftnZu70Vluj
- HLfxnnWTHhJgBwurjvoDidsGTpIZ3V9PNw+FGO7pOUtkWS0JdPEV3US5ysrFFw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Jun0ojhvfpmr2rfj76cuysXrwyB6ryCHVvBl/qmdB7s=;
+ b=SBvbqjx2VUzKyQ36JojWtUoElD5Hzf2gG8ziE09nnFd/KgsJ3kvYrhJejy4C/FrneUr2Cn
+ 7Pzt8JXuBMDMIxXDHAXWXX88YKnYR4K36HwYMROieuT3a4tdfQTg3bBEIjO/qQTT2ohV1Q
+ 9ulj5dlYqmkVgoKpb3ZiyBicyVScI+HeM20UZU5AHY2Y5+57bf8eZ3UT8+XHfU1vlapY6c
+ ZOO52mo6cac6yH9reD7LLOGWetsec/Wf2hCeMv0mthSmjafmlZB11SQYBnzutAazhXUSfU
+ idNI/+AxQBcZMROJWt+yZ22vLSsSXanO2Fv0w+mqFEn5WhaKIht0XKVZsSRYHA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZkLUFE2m
-Subject: Re: [Buildroot] [PATCH] package/gcc: Fix gcc finale library
- installation
+ header.s=gm1 header.b=SBvbqjx2
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/spirv-tools: fix build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,22 +79,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot <buildroot@buildroot.org>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 6 Nov 2023 11:17:41 +0900
-Damien Le Moal <dlemoal@kernel.org> wrote:
+On Sun, 05 Nov 2023 20:45:45 +0100
+enki <enki@fsck.pl> wrote:
 
-> I received a build failure report (again) for the RISC-V Canaan & Sipeed boards
-> configs. This patch fixes these build failures.
+> Right, the initial patch also added a dependency on the C++ compiler. I reworked it after Yann's reply to be applied on top of the 
+> already applied C++17 requirement patch. I forgot to adjust the list of Fixed: builds. 
+> This should now be ok only referencing BR2_STATIC_LIBS cases.
 
-I need to dig deeper into this. We looked into this issue with Romain,
-and I believe our conclusion is that it was unfortunately more complex
-than this, because in fact BR2_TOOLCHAIN_HAS_LIBATOMIC is not a fully
-accurate representation of whether gcc has libatomic or not.
+Thanks for the feedback. Could you send an updated patch, with an
+improved/update commit log?
+
+Thanks a lot,
 
 Thomas
 -- 
