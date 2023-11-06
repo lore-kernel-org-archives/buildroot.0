@@ -4,62 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8335FC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 10:36:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA87C4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 10:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18DE541464;
-	Mon,  6 Nov 2023 10:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18DE541464
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6ADD41193;
+	Mon,  6 Nov 2023 10:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6ADD41193
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vMJp1Qh4fl9f; Mon,  6 Nov 2023 10:36:17 +0000 (UTC)
+	with ESMTP id Zu8dhf-MAxwT; Mon,  6 Nov 2023 10:40:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09D1C41467;
-	Mon,  6 Nov 2023 10:36:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09D1C41467
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B62741464;
+	Mon,  6 Nov 2023 10:40:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B62741464
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 196A41BF316
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 10:36:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 64A2D1BF316
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 10:40:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6149812DA
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 10:36:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6149812DA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DC6B82064
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 10:40:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DC6B82064
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fDPkEMRXxRqP for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 10:36:12 +0000 (UTC)
-X-Greylist: delayed 365 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 06 Nov 2023 10:36:12 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ED83812CC
-Received: from smtprelay06.ispgateway.de (smtprelay06.ispgateway.de
- [80.67.18.29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5ED83812CC
- for <buildroot@busybox.net>; Mon,  6 Nov 2023 10:36:12 +0000 (UTC)
-Received: from [84.146.220.100] (helo=mail.go-sys.de)
- by smtprelay06.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.96.1)
- (envelope-from <mf@go-sys.de>) id 1qzwrr-0000Cg-2Q
- for buildroot@busybox.net; Mon, 06 Nov 2023 11:30:04 +0100
-Received: from mail.go-sys.de (192.168.1.9) by mail.go-sys.de (192.168.1.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 6 Nov
- 2023 11:30:02 +0100
-Received: from go-sys.de (192.168.1.154) by mail.go-sys.de (192.168.1.9) with
- Microsoft SMTP Server id 15.1.2507.34 via Frontend Transport;
- Mon, 6 Nov 2023 11:30:02 +0100
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Mon, 6 Nov 2023 11:29:59 +0100
-Message-ID: <20231106102959.15047-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+ with ESMTP id Cvj8BKGwvuuy for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 10:40:40 +0000 (UTC)
+Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E5B8C8205A
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 10:40:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5B8C8205A
+Received: from tarshish (unknown [10.0.8.3])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id BC8884402AC;
+ Mon,  6 Nov 2023 12:39:43 +0200 (IST)
+References: <20231106102651.2796878-1-jamie.gibbons@microchip.com>
+User-agent: mu4e 1.9.21; emacs 29.1
+To: Jamie Gibbons <jamie.gibbons@microchip.com>
+Date: Mon, 06 Nov 2023 12:39:50 +0200
+In-reply-to: <20231106102651.2796878-1-jamie.gibbons@microchip.com>
+Message-ID: <87msvrf9lp.fsf@tarshish>
 MIME-Version: 1.0
-X-C2ProcessedOrg: 5fa85167-cd6f-46be-bafe-19070fe3dac3
-X-CrossPremisesHeadersFilteredBySendConnector: mail.go-sys.de
-X-OrganizationHeadersPreserved: mail.go-sys.de
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.28.5
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1699267183;
+ bh=0Nkcu2FrivkFTs7OU+w7/USvqHwuHgrnmaCbB423ZTI=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=URQXvsSARPu6JS7EJq2HJxNEGGP6RrE6bm6F6burZtJczAFHqvlF0mqACgrEZrvWU
+ UzV3h4nlcRXZDXiXcL153hX8ku8KycOU7euhocIPB9VeZhvxjygPKbwaiPJg32PUEi
+ d4HWWpQ/ZjEZFd/SiybUxs58A26t4sq6FW8bizE2LraGvzlmn3BqciIcCtlafrl4ys
+ mFF3WjatzHmlBdX0MQn7e9UY2670FlU7vqcZFhuGBXCZx9OmZQlfHhFI5E0XKzrPv8
+ KrF6q6y5wCUZvG90yLerKVj2gyg05SkJmQGMVj50XA2zFNRELrhg996nG7oBfi/GNy
+ yvzvVYkgI9y5Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=URQXvsSA
+Subject: Re: [Buildroot] [PATCH 1/1]
+ package/microchip-hss-payload-generator: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,45 +72,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Conor Dooley <Conor.Dooley@microchip.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Jamie,
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index dde33bb9b6..7a28d5efc8 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.28.3.tar.gz.sig
--sha256  7acb8679652701a2504d734e2ba7543ec1a83e310498ddd22fd44bf965eb5518  SDL2-2.28.3.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.28.5.tar.gz.sig
-+sha256  332cb37d0be20cb9541739c61f79bae5a477427d79ae85e352089afdaf6666e4  SDL2-2.28.5.tar.gz
- # Locally calculated
- sha256  9928507f684c1965d07f2b6ef4b4723d5efc2f6b4ab731f743a413c51c319927  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 840a7283d2..4646e7d1f8 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDL2_VERSION = 2.28.3
-+SDL2_VERSION = 2.28.5
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+On Mon, Nov 06 2023, Jamie Gibbons via buildroot wrote:
+
+> Bump package version to latest release.
+>
+> Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+> ---
+>  .../microchip-hss-payload-generator.hash                        | 1 +
+>  .../microchip-hss-payload-generator.mk                          | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git
+> a/package/microchip-hss-payload-generator/microchip-hss-payload-generator.hash
+> b/package/microchip-hss-payload-generator/microchip-hss-payload-generator.hash
+> index 69e05e18af..f827d2b752 100644
+> --- a/package/microchip-hss-payload-generator/microchip-hss-payload-generator.hash
+> +++ b/package/microchip-hss-payload-generator/microchip-hss-payload-generator.hash
+> @@ -1,3 +1,4 @@
+>  # Locally calculated
+>  sha256  f6f69412caf886e88abbf26de0dee1db790c790b89571f2f0def1e2f3620f057  microchip-hss-payload-generator-2023.06.tar.gz
+
+This stale hash should be removed.
+
+baruch
+
+> +sha256  447771d4219176acc69c6d945ff40a0f3d0c5cbe63619927bc61b9e52ab05136  microchip-hss-payload-generator-2023.09.tar.gz
+>  sha256  0b67b1d44bcad078580fc5d8e9580a48a9466b769db58aeb1631d4c5ef97e08a  tools/hss-payload-generator/LICENSE.md
+> diff --git
+> a/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
+> b/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
+> index 63ae22ed60..4c3ca93dfe 100644
+> --- a/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
+> +++ b/package/microchip-hss-payload-generator/microchip-hss-payload-generator.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_VERSION = 2023.06
+> +HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_VERSION = 2023.09
+>  HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_SITE = $(call
+> github,polarfire-soc,hart-software-services,v$(HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR_VERSION))
+>  # Some parts of the repository are under different licenses, but we
+>  # are only building/installing the code in
+
+
 -- 
-2.20.1
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
