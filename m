@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E4ECC4332F
-	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99DEAC4332F
+	for <buildroot@archiver.kernel.org>; Mon,  6 Nov 2023 19:30:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E766F61244;
-	Mon,  6 Nov 2023 19:30:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E766F61244
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3092F61245;
+	Mon,  6 Nov 2023 19:30:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3092F61245
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H6NOYDU_bFNf; Mon,  6 Nov 2023 19:30:18 +0000 (UTC)
+	with ESMTP id FCAW4ZYjHb7B; Mon,  6 Nov 2023 19:30:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31F056124C;
-	Mon,  6 Nov 2023 19:30:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31F056124C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DA6461BF3A1
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:30:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D34161240;
+	Mon,  6 Nov 2023 19:30:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D34161240
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BDE021BF3A1
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:30:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B318B40899
- for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:30:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B318B40899
+ by smtp2.osuosl.org (Postfix) with ESMTP id A248B41598
+ for <buildroot@lists.busybox.net>; Mon,  6 Nov 2023 19:30:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A248B41598
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id koTxi9YVP5-q for <buildroot@lists.busybox.net>;
- Mon,  6 Nov 2023 19:30:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9S-0nLOXmCCV for <buildroot@lists.busybox.net>;
+ Mon,  6 Nov 2023 19:30:33 +0000 (UTC)
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6EE59404CA
- for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:30:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EE59404CA
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5439A240003;
- Mon,  6 Nov 2023 19:30:09 +0000 (UTC)
-Date: Mon, 6 Nov 2023 20:30:08 +0100
-To: hmaied.benabdellatif@etictelecom.com
-Message-ID: <20231106203008.0743dabf@windsurf>
-In-Reply-To: <20231106143037.6900-1-hmaied.benabdellatif@etictelecom.com>
-References: <20231106143037.6900-1-hmaied.benabdellatif@etictelecom.com>
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6BEBE41596
+ for <buildroot@buildroot.org>; Mon,  6 Nov 2023 19:30:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BEBE41596
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8AE6B240006;
+ Mon,  6 Nov 2023 19:30:31 +0000 (UTC)
+Date: Mon, 6 Nov 2023 20:30:31 +0100
+To: Fabio Estevam <festevam@gmail.com>
+Message-ID: <20231106203031.383ad134@windsurf>
+In-Reply-To: <20231106162102.2874943-1-festevam@gmail.com>
+References: <20231106162102.2874943-1-festevam@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699299009;
+ d=bootlin.com; s=gm1; t=1699299031;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=+hCovxTOBDa5nlkjRmB1Fl+2Xs+8VAxuYVsG5fE91oQ=;
- b=oqrLJvXCTVuGFWkbdQpNqxVEtPl7PBVIHMZ+ZhjKOo0YeR9psLhmBDZGD24VvK2/R4BX1z
- 4x2XBtmc7UY0yM3f+cU/aTTlPfX2onr8wbx7zWDh/Xo56FeRR7/LB4DUcMZ1jT3aAeUcdV
- fRvtywB7CvG0Nd9cuo8PMX5HY1QMinmNZZdauJR1miYTtMxGylftECug+SCpOOZX8bJ9nW
- R/MWEPDzTy5owq3OSNaLK5fs6QDmXJZxbFbMW2CwH1xdXbZjtLAsBMxLyBCCE4NG8w41pP
- ydgNQz1RzYsnDXyxcTf58fKzMU2NOnlU4mGjxkVVcN/RGnqElSm+uKk1FiWH7w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=QQSCiVMKrzgE9X09DDdIuf7xmsEgzvw8hdx0eyXjb+Y=;
+ b=KrQHAr4QqZtf13RnOWi6APkmD8cj4Izy0iEiMz6n6inSwSDJoqb/JmcL4CYABho50OgIon
+ xeSyl+V1KeZ9cyLxGD3B/PAaCqNDexneuV0BXz5iJzXWs5LYC92J2PWUGrBTCCC+btCA7X
+ MwVK7V/ZhmNJv7mF5G/7Zp6xzHZhXPY0Axwttw1f34UWsSS8lwnTzcH9KXYIGENSwPMuPa
+ U31hvxpE0BmfGK3jA8rOO0J9mpWCCZWv4wBPg7CsZ+N/zY44SPmotEHnIVIUP4+IWZHd18
+ z798HJFo5asDIh4GjBDE6I1vZmmyktEcqx8JFERtn8qmmQbPNB+bP1hc1ncE/Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oqrLJvXC
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/openldap: bump version to 2.5.16
+ header.s=gm1 header.b=KrQHAr4Q
+Subject: Re: [Buildroot] [PATCH] configs/warp7: bump Kernel and U-Boot
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,31 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: David Bender <codehero@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Mon,  6 Nov 2023 13:21:02 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-On Mon,  6 Nov 2023 15:30:37 +0100
-hmaied.benabdellatif@etictelecom.com wrote:
-
-> From: Hmaied Ben Abdellatif <hmaied.benabdellatif@etictelecom.com>
+> Bump U-Boot to 2023.10 and kernel to version 6.6.
 > 
-> Stripping when cross-compiling and libtool static behavior are fixed in 2.5.16.
+> There was a change in the location of the devicetrees for arm32
+> platforms, so adjust it accordingly.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  configs/warp7_defconfig | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Could you clarify which issues you are talking about here? I don't see
-any build failures of openldap in our autobuilders. Do you have some
-specific Buildroot configurations that are failing? If so, which ones?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
