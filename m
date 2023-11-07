@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EF8CC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 21:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D8BC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 21:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 162E160D52;
-	Tue,  7 Nov 2023 21:36:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 162E160D52
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA07860C2B;
+	Tue,  7 Nov 2023 21:36:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA07860C2B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c0BniVjhL8Ew; Tue,  7 Nov 2023 21:36:31 +0000 (UTC)
+	with ESMTP id oux60Pb88yVi; Tue,  7 Nov 2023 21:36:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 341FF60D4F;
-	Tue,  7 Nov 2023 21:36:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 341FF60D4F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1E98A1BF5A8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04F9A60D77;
+	Tue,  7 Nov 2023 21:36:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04F9A60D77
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C1CDE1BF5A8
  for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:35:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA48A81A81
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7005440448
  for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:35:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA48A81A81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7005440448
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C1kgYkCuoHiH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d__PQjsTZ6ub for <buildroot@lists.busybox.net>;
  Tue,  7 Nov 2023 21:35:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 76BC381A50
+ by smtp2.osuosl.org (Postfix) with ESMTP id 534C440182
  for <buildroot@buildroot.org>; Tue,  7 Nov 2023 21:35:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76BC381A50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 534C440182
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 630DE86C29; Tue,  7 Nov 2023 21:35:49 +0000 (UTC)
+ id 3691986C23; Tue,  7 Nov 2023 21:35:49 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 7 Nov 2023 22:31:43 +0100
+Date: Tue, 7 Nov 2023 11:50:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f59da331afea8d0db7a126565587f3405c50872f
-X-Git-Newrev: cbc5691ab298c89f6bd02b06a0a790ab531f2b55
+X-Git-Oldrev: e091e31831122b60b084bd755e94df4dfe7188d2
+X-Git-Newrev: 243cfc70c88b90d4f3cdf7df3eec9df8d0b24938
 X-Patchwork-Hint: ignore
-Message-Id: <20231107213549.630DE86C29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs/nodejs-src: fix arch check
- on additional modules
+Message-Id: <20231107213549.3691986C23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dtschema: bump to version
+ 2023.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,72 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbc5691ab298c89f6bd02b06a0a790ab531f2b55
+commit: https://git.buildroot.net/buildroot/commit/?id=243cfc70c88b90d4f3cdf7df3eec9df8d0b24938
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Node modules available on the npm registry, may contain prebuild
-binaries for various targets and/or ABIs; for example., there might be
-ARM. AArch64, x86_64 binaries for glibc or musl, for Linux or Darwin.
-Needless to say, those binaries will most often not match the current
-target architecture; as such, check-bin-arch will whine loudly as
-reported in #15823:
-
-    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-arm/node.napi.armv6.node" is "ARM", should be "AArch64"
-    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/android-arm/node.napi.armv7.node" is "ARM", should be "AArch64"
-    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-arm/node.napi.armv7.node" is "ARM", should be "AArch64"
-    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64/node.napi.glibc.node" is "Advanced Micro Devices X86-64", should be "AArch64"
-    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64/node.napi.musl.node" is "Advanced Micro Devices X86-64", should be "AArch64"
-
-The proper solution would be to remove all those prebuilt binaries, and
-request npm to forcefully rebuild the proper binary for the current
-architecture; alas, there is no option to tell npm to do so.
-
-Doing it manually would not be easy either, as such modules might be
-retrieved as part of the "vendoring" for another module that the user
-has requested, and be pretty deep in the dependency chain; trying to fix
-this properly would be a nightmare: it would require that we manually
-inspect the depednency chain, and install dependent modules one by one,
-recursively, re-implementing the same logic npm has when multiple
-verions of the same module are installed as part of different branches
-of the depenency tree, all while detecting prebuilds and removing them
-before installing the mpdule (hence decorrelating download and install,
-which is not trivial to do with npm alone).
-
-We also can't simply remove all the prebuilds, because it is not known
-whether the location ("<module>/prebuilds/") is standardised, or a
-convention with the path noted somewhere in the package metadata, and
-how deep they would be in the tree, and whether that could conflict with
-arbitrary files...
-
-Instead, we will consider that npm has a sane heuristic to detect
-whether it should indeed rebuilt the modules, and that node has a sane
-heuristic to know which binary to load at runtime, and we will leave the
-prebuilt binaries in place and just exclude them from being checked.
-
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=15823
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Tested-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/nodejs/nodejs-src/nodejs-src.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/python-dtschema/python-dtschema.hash | 4 ++--
+ package/python-dtschema/python-dtschema.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nodejs/nodejs-src/nodejs-src.mk b/package/nodejs/nodejs-src/nodejs-src.mk
-index 6fb550f158..8f934202b0 100644
---- a/package/nodejs/nodejs-src/nodejs-src.mk
-+++ b/package/nodejs/nodejs-src/nodejs-src.mk
-@@ -244,6 +244,9 @@ define NODEJS_SRC_INSTALL_MODULES
- 	# help in diagnosing the problem.
- 	$(NPM) install -g $(NODEJS_SRC_MODULES_LIST)
- endef
-+
-+# Exclude prebuilt binaries with different architectures and OS from check
-+NODEJS_SRC_BIN_ARCH_EXCLUDE = /usr/lib/node_modules/
- endif
+diff --git a/package/python-dtschema/python-dtschema.hash b/package/python-dtschema/python-dtschema.hash
+index 734ff3f681..a391e4ab21 100644
+--- a/package/python-dtschema/python-dtschema.hash
++++ b/package/python-dtschema/python-dtschema.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/dtschema/json
+-md5  3fd3ba2d98ad320c06277274ca40d045  dtschema-2022.12.tar.gz
+-sha256  f532d433a915e507d4b426b7ef57a6730d23c0938b682fb4866f9dfa80a58ec6  dtschema-2022.12.tar.gz
++md5  bb0ecd8b8680b76f7cb55da002f58d62  dtschema-2023.9.tar.gz
++sha256  52c6d271065155ca134d8a0bcf7e0ebed67b3991acbbd7a98b74eb8642f67d87  dtschema-2023.9.tar.gz
+ # Locally computed sha256 checksums
+ sha256  ca0d66263406dc684fe9db60577b234f65ffdf620d7e041c708e969447b69111  LICENSE.txt
+diff --git a/package/python-dtschema/python-dtschema.mk b/package/python-dtschema/python-dtschema.mk
+index dbdf43160c..0fc13073f8 100644
+--- a/package/python-dtschema/python-dtschema.mk
++++ b/package/python-dtschema/python-dtschema.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- define NODEJS_SRC_INSTALL_STAGING_CMDS
+-PYTHON_DTSCHEMA_VERSION = 2022.12
++PYTHON_DTSCHEMA_VERSION = 2023.9
+ PYTHON_DTSCHEMA_SOURCE = dtschema-$(PYTHON_DTSCHEMA_VERSION).tar.gz
+-PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/f2/61/7d7e907ea6eed33708ce07766258b961fe476221fbd2e759a1921487e381
++PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/24/97/daa9109a854727cd4e1a715e4123198e5abd47db10c131de5bc0cef0acc3
+ PYTHON_DTSCHEMA_SETUP_TYPE = setuptools
+ PYTHON_DTSCHEMA_LICENSE = BSD-2-Clause
+ PYTHON_DTSCHEMA_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
