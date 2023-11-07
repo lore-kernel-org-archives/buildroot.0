@@ -4,68 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 252E1C4167B
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 21:52:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A436CC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 21:56:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6B9560C0F;
-	Tue,  7 Nov 2023 21:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6B9560C0F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C2EE608D8;
+	Tue,  7 Nov 2023 21:56:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C2EE608D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R0WCQQPBz_iI; Tue,  7 Nov 2023 21:52:10 +0000 (UTC)
+	with ESMTP id os6IiJFhZ6bD; Tue,  7 Nov 2023 21:56:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7BAE60D4F;
-	Tue,  7 Nov 2023 21:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7BAE60D4F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C6A951BF5A8
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:52:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7298C60C0F;
+	Tue,  7 Nov 2023 21:56:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7298C60C0F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C9F481BF5A8
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A44B84176A
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A44B84176A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D53D403E7
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D53D403E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VuUNAIHKBp-S for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 21:52:05 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90B644176C
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 21:52:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90B644176C
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:251d:f18c:43f3:5a5b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B561113F86E;
- Tue,  7 Nov 2023 22:51:57 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 07 Nov 2023 22:51:57 +0100
-Date: Tue, 7 Nov 2023 22:51:57 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-Message-ID: <20231107215157.GN229059@scaer>
-References: <20231031090114.618913-1-giulio.benetti@benettiengineering.com>
- <a9454b05-faf1-4b77-9247-79f028735fe1@othermo.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <a9454b05-faf1-4b77-9247-79f028735fe1@othermo.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1699393924;
- bh=k9W7A4g4CLFA/KaKthd0HCzPtSm+ebe2UjuhbGOt0bk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=lwdwQ0QjBysg+vDEsC7V9I2/rT7yvIAdGEd+8bUjxEPCQKV6vcyLj3QREbr4Wazid
- +pVrT1srZPnJ+ljyaRjk3OzpSEmaL0OT4DhRrDy1FxwabjYIq90gSItJzwop3kC6Vg
- pZjxLC8Si4HYt5AT/cbpGj3+FMkwBEZlqgxVv1jjVxMPJ7r6pP9x7GFgOoaqDH5mMR
- oN9LkyDrVvbQ4KPtEaVKtK6R5EW/Q16FRPcOCuXIGd+bfy5/i9BMLW/VUICCwTxfwf
- vN6L+OGZLnzLAPdGenuNZOWdfNMVVlJGRbFl3/QD82m6km4oj11v2YsFJ1+5A+B+Gm
- Xmxq2AX29PJKQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lwdwQ0Qj
-Subject: Re: [Buildroot] [PATCH] package/nodejs: fix additional modules
- installation
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HAQWvXk_I4fZ for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 21:56:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D67BE40182
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 21:56:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D67BE40182
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B45BB86C43; Tue,  7 Nov 2023 21:56:07 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 7 Nov 2023 22:54:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 359eb5072d832aaab9328cbc84e57f0fb093f998
+X-Git-Newrev: b660402b5722c8b4c0ead8739dc2ec2f6a8dfa11
+X-Patchwork-Hint: ignore
+Message-Id: <20231107215607.B45BB86C43@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: add patch for
+ compatibility with curl 8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,58 +57,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Daniel Price <daniel.price@gmail.com>, Martin Bark <martin@barkynet.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TWFyY3VzLCBBbGwsCgpPbiAyMDIzLTExLTA2IDIwOjEyICswMTAwLCBNYXJjdXMgSG9mZm1hbm4g
-dmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gVGhhbmtzIEd1aWxpbywgdGhpcyBmaXhlcyBv
-dXIgYnVpbGQgcHJvYmxlbSEKPiAKPiBPbiAzMS4xMC4yMyAxMDowMSwgR2l1bGlvIEJlbmV0dGkg
-d3JvdGU6Cj4gPkF0IHRoZSBtb21lbnQgdGhlIG5wbV9jb25maWdfbm9kZWRpciBpcyBzZXQgdG8g
-dGhlIGJ1aWxkIGRpcmVjdG9yeSBidXQKPiA+bnBtIG5vZGVkaXIgbXVzdCBiZSB0aGUgb25lIG9u
-IHRhcmdldCB0byBmaW5kIHRoZSBleHBlY3RlZCBmaWxlcy4gU28gbGV0J3MKPiA+c2V0IG5wbV9j
-b25maWdfbm9kZWRpciB0byAkKFRBUkdFVF9ESVIpL3Vzci4KPiA+Cj4gPkZpeGVzOgo+ID5odHRw
-czovL2J1Z3MuYnVzeWJveC5uZXQvc2hvd19idWcuY2dpP2lkPTE1ODI2Cj4gPgo+ID5TaWduZWQt
-b2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5n
-LmNvbT4KPiBUZXN0ZWQtYnk6IE1hcmN1cyBIb2ZmbWFubiA8bWFyY3VzLmhvZmZtYW5uQG90aGVy
-bW8uZGU+CgpUaGFua3MgZm9yIHByb3ZpZGluZyB5b3VyIHRlc3RlZC1ieSB0YWcuCgpIb3dldmVy
-LCBzaW5jZSBJIGNoYW5nZWQgdGhlIHBhdGNoIHRvIHVzZSBTVEFHSU5HX0RJUiBpbnN0ZWFkIG9m
-ClRBUkdFVF9ESVIsIEkgZHJvcHBlZCB5b3VyIHRlc3RlZC1ieSwgYmVjYXVzZSB0aGUgbmV3IGNv
-ZGUgaXMgbm93IHRvbwpkaWZmZXJlbnQgZnJvbSB3aGF0IHlvdSB0ZXN0ZWQuCgpTdGlsbCwgc2Vl
-aW5nIGEgVGVzdGVkLWJ5IHRhZyBvbiBzdWNoIGEgcGF0Y2ggZ2F2ZSBtZSBlbm91Z2ggaW50ZXJl
-c3QKdG8gbG9vayBkZWVwZXIgYW5kIGludmVzdGlnYXRlIHRvIGZpbmQgdGhlIGFjdHVhbCBpc3N1
-ZSBhbmQgY29tZSB1cCB3aXRoCmEgYmV0dGVyIGZpeC4gU28sIHRoYW5rIHlvdSEKClJlZ2FyZHMs
-Cllhbm4gRS4gTU9SSU4uCgo+ID4tLS0KPiA+ICBwYWNrYWdlL25vZGVqcy9ub2RlanMubWsgfCAy
-ICstCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4g
-Pgo+ID5kaWZmIC0tZ2l0IGEvcGFja2FnZS9ub2RlanMvbm9kZWpzLm1rIGIvcGFja2FnZS9ub2Rl
-anMvbm9kZWpzLm1rCj4gPmluZGV4IDJhOGM1NzA5MzIuLjhmODY0MTMwNDkgMTAwNjQ0Cj4gPi0t
-LSBhL3BhY2thZ2Uvbm9kZWpzL25vZGVqcy5tawo+ID4rKysgYi9wYWNrYWdlL25vZGVqcy9ub2Rl
-anMubWsKPiA+QEAgLTIwLDcgKzIwLDcgQEAgTk9ERUpTX0JJTl9FTlYgPSAkKFRBUkdFVF9DT05G
-SUdVUkVfT1BUUykgXAo+ID4gICAgICBucG1fY29uZmlnX2FyY2g9JChOT0RFSlNfQ1BVKSBcCj4g
-PiAgICAgIG5wbV9jb25maWdfdGFyZ2V0X2FyY2g9JChOT0RFSlNfQ1BVKSBcCj4gPiAgICAgIG5w
-bV9jb25maWdfYnVpbGRfZnJvbV9zb3VyY2U9dHJ1ZSBcCj4gPi0gICAgIG5wbV9jb25maWdfbm9k
-ZWRpcj0kKEJVSUxEX0RJUikvbm9kZWpzLSQoTk9ERUpTX1ZFUlNJT04pIFwKPiA+KyAgICAgbnBt
-X2NvbmZpZ19ub2RlZGlyPSQoVEFSR0VUX0RJUikvdXNyIFwKPiA+ICAgICAgbnBtX2NvbmZpZ19w
-cmVmaXg9JChUQVJHRVRfRElSKS91c3IgXAo+ID4gICAgICBucG1fY29uZmlnX2NhY2hlPSQoQlVJ
-TERfRElSKS8ubnBtLWNhY2hlCj4gPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cj4gCj4gb3RoZXJtbyBHbWJIIHwgU2l0eiBkZXIgR2VzZWxsc2NoYWZ0OiBBbHplbmF1IHwgQW10
-c2dlcmljaHQgQXNjaGFmZmVuYnVyZzogSFJCIDE0NzgzIHwgVVN0LUlkTnIuOiBERTMxOTk3Nzk3
-OCB8IEdlc2Now6RmdHNmw7xocnVuZzogRHIuIERlbm5pcyBNZXR6Lgo+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlz
-dAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
-LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4K
-fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
-IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVz
-aWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYx
-IDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAg
-VGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAv
-IFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
-LS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=b660402b5722c8b4c0ead8739dc2ec2f6a8dfa11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This upstream patch restores the connectivity check functionality with
+libcurl 8.4.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=15835
+
+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-make-curl-timeout-callback-non-repeating.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch b/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
+new file mode 100644
+index 0000000000..8e25805d0c
+--- /dev/null
++++ b/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
+@@ -0,0 +1,44 @@
++From abc6e1cf258ab332bed161036a358bbe9c2d1e90 Mon Sep 17 00:00:00 2001
++From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
++Date: Fri, 13 Oct 2023 16:46:09 +0000
++Subject: [PATCH] connectivity: Make curl timeout callback non-repeating.
++
++This reverts commit 05c31da4d9.
++
++In the linked commit the callback was made repeating on the assumption
++that forward progress would result in the callback getting canceled in
++cb_data_complete. However, this assumption does not hold since a timeout
++callback does not guarantee completion (or error out) of a request.
++
++curl tweaked some internals in v8.4.0 and started giving 0 timeouts, and
++a repeating callback is firing back-to-back without making any progress
++in doing so.
++
++Revert the change and make the callback non-repeating again.
++
++Fixes: 05c31da4d9cb ('connectivity: don't cancel curl timerfunction from timeout')
++Upstream: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/abc6e1cf258ab332bed161036a358bbe9c2d1e90
++Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
++---
++ src/core/nm-connectivity.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/core/nm-connectivity.c b/src/core/nm-connectivity.c
++index 92de44f17d..d8b0004c38 100644
++--- a/src/core/nm-connectivity.c
+++++ b/src/core/nm-connectivity.c
++@@ -406,9 +406,10 @@ _con_curl_timeout_cb(gpointer user_data)
++ {
++     NMConnectivityCheckHandle *cb_data = user_data;
++ 
+++    cb_data->concheck.curl_timer = 0;
++     _con_curl_check_connectivity(cb_data->concheck.curl_mhandle, CURL_SOCKET_TIMEOUT, 0);
++     _complete_queued(cb_data->self);
++-    return G_SOURCE_CONTINUE;
+++    return G_SOURCE_REMOVE;
++ }
++ 
++ static int
++-- 
++GitLab
++
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
