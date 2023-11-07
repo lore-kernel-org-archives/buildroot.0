@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DFB0C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 10:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C88C4167B
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 10:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D58D342158;
-	Tue,  7 Nov 2023 10:47:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D58D342158
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62BBE421DB;
+	Tue,  7 Nov 2023 10:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62BBE421DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FhH40N4wP4X5; Tue,  7 Nov 2023 10:47:54 +0000 (UTC)
+	with ESMTP id LyClBGRjDMRS; Tue,  7 Nov 2023 10:48:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25B2E42150;
-	Tue,  7 Nov 2023 10:47:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25B2E42150
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 88BFF1BF370
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:47:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F86542161;
+	Tue,  7 Nov 2023 10:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F86542161
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 35D141BF370
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:48:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EE8E61125
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:47:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EE8E61125
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1AA15408C0
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AA15408C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V6E2DIz_XZo8 for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 10:47:50 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F1E5160B15
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 10:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E5160B15
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9A8096000E;
- Tue,  7 Nov 2023 10:47:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E_2rDGOP1j3f for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 10:48:21 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 98CF140158
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 10:48:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98CF140158
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 16890FF80D;
+ Tue,  7 Nov 2023 10:48:17 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r0JcW-00H6DO-2a;
- Tue, 07 Nov 2023 11:47:44 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r0Jd3-00H6E8-1f;
+ Tue, 07 Nov 2023 11:48:17 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 References: <cover.1699297749.git.yann.morin.1998@free.fr>
- <31d36b28454ccf0134e74f2a4b9b11a41a6fc6e5.1699297749.git.yann.morin.1998@free.fr>
-Date: Tue, 07 Nov 2023 11:47:44 +0100
-In-Reply-To: <31d36b28454ccf0134e74f2a4b9b11a41a6fc6e5.1699297749.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 6 Nov 2023 20:09:13 +0100")
-Message-ID: <875y2dyh4f.fsf@48ers.dk>
+ <c4cb742e3bd2d4c18b6a21338167c17b50fe4986.1699297749.git.yann.morin.1998@free.fr>
+Date: Tue, 07 Nov 2023 11:48:17 +0100
+In-Reply-To: <c4cb742e3bd2d4c18b6a21338167c17b50fe4986.1699297749.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 6 Nov 2023 20:09:14 +0100")
+Message-ID: <871qd1yh3i.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/3 v2] package/pkg-download: lookup hash
- files in global-patch-dir
+Subject: Re: [Buildroot] [PATCH 3/3 v2] pkg-download: add option to enforce
+ hash checking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,41 +72,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Currently, we expect and only use hash files that lie within the package
- > directory, alongside the .mk file. Those hash files are thus bundled
- > with Buildroot.
+ > Currently, when a pacakge is downloaded from a custom location or
+ > version, Buildroot excludes such a package from the mandatory integrity
+ > check with hashes, because it was until now not possible to have such
+ > hashes.
 
- > This implies that only what's known to Buildroot can ever get into those
- > hash files. For packages where the version is fixed (or a static
- > choice), then we can carry hashes for those known versions.
+ > We now have a mechanism which users can leverage to provide additional
+ > hashes, and so custom versions or locations can now be checked too.
 
- > However, we do have a few packages for which the version is a free-form
- > entry, where the user can provide a custom location and/or version.  like
- > a custom VCS tree and revision, or a custom tarball URL. This means that
- > Buildroot has no way to be able to cary hashes for such custom versions.
+ > Buildroot has no way to know that hashes have indeed been provided for
+ > a custom location/version, and so will still happilly ignore an
+ > unchecked package.
 
- > This means that there is no integrity check that what was downloaded is
- > what was expected. For a sha1 in a git tree, this is a minor issue,
- > because the sha1 by itself is already a hash of the expected content.
- > But for custom tarballs URLs, or for a tag in a VCS, there is indeed no
- > integrity check.
+ > However, users who do provide extra hashes most probably do expect that
+ > no download is done without an integrity check, and thus expect that a
+ > missing hash not be ignored.
 
- > Buildroot can't provide such hashes, but interested users may want to
- > provide those, and currently there is no (easy) way to do so.
-
- > We leverage the existng global-patch-dir mechanism to look for extra
- > hash files. We use the same heuristic that is used for bundled hash
- > files, and for each global patch directory <dir>, we use the first file
- > to exist among:
- >  1. look into <dir>/<package>/<version>/<package>.hash
- >  2. look into <dir>/<package>/<package>.hash
+ > Add an option that users can select to make Buildroot forcibly require
+ > at least one valid hash, and no invalid hash, for all downloads.
 
  > Reported-by: "Martin Zeiser (mzeiser)" <mzeiser@cisco.com>
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
- > ---
- > Changes v1 -> v2:
- >   - drop <dir>/all.hash
 
 Committed, thanks.
 
