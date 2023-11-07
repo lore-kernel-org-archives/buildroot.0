@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C21BEC4167D
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 21:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83873C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 21:49:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B15260D4F;
-	Tue,  7 Nov 2023 21:49:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B15260D4F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D28E60D51;
+	Tue,  7 Nov 2023 21:49:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D28E60D51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7qOZRZEFj6CQ; Tue,  7 Nov 2023 21:49:06 +0000 (UTC)
+	with ESMTP id KT1O4GG2a7cN; Tue,  7 Nov 2023 21:49:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C29AA60C0F;
-	Tue,  7 Nov 2023 21:49:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C29AA60C0F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8F65B1BF5A8
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:48:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EE9260C2B;
+	Tue,  7 Nov 2023 21:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EE9260C2B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 14CE71BF5A8
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:49:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66ACE403E7
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:48:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66ACE403E7
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFD6360D4F
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFD6360D4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SAQs1hRMhjxT for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 21:48:40 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BB0A740182
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 21:48:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB0A740182
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 662F740003;
- Tue,  7 Nov 2023 21:48:35 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r0Tw3-00HWPZ-1R;
- Tue, 07 Nov 2023 22:48:35 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PWlIrZwzccMd for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 21:49:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1DB8660C0F
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 21:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DB8660C0F
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EA5F286C36; Tue,  7 Nov 2023 21:49:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20231101113444.E6EA286323@busybox.osuosl.org>
-Date: Tue, 07 Nov 2023 22:48:35 +0100
-In-Reply-To: <20231101113444.E6EA286323@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Wed, 1 Nov 2023 12:34:29 +0100")
-Message-ID: <87pm0lute4.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/nettle: add missing host-gmp
- dependency
+To: buildroot@buildroot.org
+Date: Tue, 7 Nov 2023 22:46:01 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: ad032c5b771bfbe098f23fb89f0683343f26470f
+X-Git-Newrev: 0424ba8b8af72daf0503cf8f6a11df536e2ebafd
+X-Patchwork-Hint: ignore
+Message-Id: <20231107214926.EA5F286C36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/nettle: add
+ missing dependency on host-m4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0424ba8b8af72daf0503cf8f6a11df536e2ebafd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=db3a730e8ce42b8f70f469eafe53e9e5981e57b7
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+nettle uses m4 during its build process. Without it, the build fails
+with:
 
- > Since the generic package infrastructure removed auto derivation of
- > host dependencies [1] (2016.08), the host dependencies must be
- > explicitly set.
+m4 ./m4-utils.m4 ./asm.m4 config.m4 machine.m4 aes-decrypt-internal.asm >aes-decrypt-internal.s
+/bin/sh: 1: m4: not found
 
- > While adding the nettle host variant [2] the gmp dependency was not
- > duplicated and host-nettle was built without host-gmp (or built with
- > gmp installed on the build machine).
+For the target package this is not visible, as the existing gmp
+dependency pulls in host-m4. But technically speaking, nettle needs
+host-m4 directly, so it makes sense to have this dependency.
 
- > While building host-gnutls required for building mkeficapsule u-boot
- > tool, the configure script check if Libhogweed (nettle's companion
- > library) is build with libgmp support.
+For the host package, it clearly fails to build, but probably isn't
+very visible as most systems have m4 installed system-wide: this was
+noticed when building inside Buildroot's minimal Docker
+container. There are no recorded autobuilder failures for this issue.
 
- > If internal toolchain is used, luckily host-gmp is built before
- > building host-nettle (and host-gnutls). But when using prebuilt
- > external toolchain, following error shows up :
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d4ca1b03c0d6f34d10d10cab06ca28c24a7d296d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nettle/nettle.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- > Libhogweed (nettle's companion library) 3.6 was not found. Note that you must compile nettle with gmp support.
-
- > [1] https://gitlab.com/buildroot.org/buildroot/-/commit/4bdb067e380e72c3a6cb9c6ccf3791a6cf8661e0
- > [2] https://gitlab.com/buildroot.org/buildroot/-/commit/dac6e3011883ce3b35cbf64ec156186153bf0032
- > [3] https://gitlab.com/gnutls/gnutls/-/commit/eb24bfa808ee029e9b3b198d66d29256eea3fd08
-
- > Signed-off-by: Fabien Thomas <fabien.thomas@smile.fr>
- > Reviewed-by: Romain Naour <romain.naour@smile.fr>
- > Acked-by: Romain Naour <romain.naour@smile.fr>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2023.02.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index dd4dfbbe38..cd4a589568 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -6,7 +6,7 @@
+ 
+ NETTLE_VERSION = 3.8.1
+ NETTLE_SITE = https://ftp.gnu.org/gnu/nettle
+-NETTLE_DEPENDENCIES = gmp
++NETTLE_DEPENDENCIES = host-m4 gmp
+ NETTLE_INSTALL_STAGING = YES
+ NETTLE_LICENSE = Dual GPL-2.0+/LGPL-3.0+
+ NETTLE_LICENSE_FILES = COPYING.LESSERv3 COPYINGv2
+@@ -15,6 +15,8 @@ NETTLE_CPE_ID_VENDOR = nettle_project
+ # with static linking
+ NETTLE_CONF_OPTS = --disable-openssl
+ 
++HOST_NETTLE_DEPENDENCIES = host-m4
++
+ # ARM assembly requires v6+ ISA
+ ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
+ NETTLE_CONF_OPTS += --disable-assembler
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
