@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A94D1C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 00:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48C94C4167B
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 00:46:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0326842110;
-	Tue,  7 Nov 2023 00:37:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0326842110
+	by smtp4.osuosl.org (Postfix) with ESMTP id E51A942032;
+	Tue,  7 Nov 2023 00:46:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E51A942032
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V6gpsHJbM7Q6; Tue,  7 Nov 2023 00:37:09 +0000 (UTC)
+	with ESMTP id mEeEylTQ5CrT; Tue,  7 Nov 2023 00:46:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EEC142108;
-	Tue,  7 Nov 2023 00:37:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EEC142108
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7DB431BF34D
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 00:37:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28DFA4201F;
+	Tue,  7 Nov 2023 00:46:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28DFA4201F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B2B51BF34D
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 00:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E651612F9
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 00:37:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E651612F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6478A8239A
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 00:46:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6478A8239A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nWecLJ8R2PHF for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 00:37:03 +0000 (UTC)
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2FF05612F8
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 00:37:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FF05612F8
-Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-7a996357550so199237639f.2
- for <buildroot@buildroot.org>; Mon, 06 Nov 2023 16:37:03 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IIbUpxbgm0VL for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 00:46:49 +0000 (UTC)
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E9FA82376
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 00:46:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E9FA82376
+Received: by mail-io1-xd2a.google.com with SMTP id
+ ca18e2360f4ac-7a94c5538aeso189342839f.3
+ for <buildroot@buildroot.org>; Mon, 06 Nov 2023 16:46:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699317422; x=1699922222;
+ d=1e100.net; s=20230601; t=1699318008; x=1699922808;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=xCY4kzl3Sa9QUecGMboM918eLJuGovn/rFuAHyuodho=;
- b=NQ/MCJYLH5fIyzqczR3+p5EIIaeatCso2RsZz+yPd3Qcf2w1Sfi6/QXrM8L1Y+055Z
- M8SzKJKQLPvrX8YCLHJxuo7TtZaHaA1F5gm9RNMefKIw+yYv5gZPLASkuLU5ziM/NgSA
- WiYVp4DyD1bJbmuzd1ZFD5m/KMSgsrbRvlusR6g23insDWYezxJ1G/KUmWSpG/LSYglb
- Ug3CKp3w+agibwpuWOp+grPne/kadKIuyH+FyAEbk+K7a0UAALddJ9eKYmUnFpSrbphl
- uHgIaiJp2vNx8RDS0//gU1W705Ix9JLvRsozUv3KOgVq5lcwSn6UQwMvMkF3O2oiTW4i
- mGwA==
-X-Gm-Message-State: AOJu0YyYqwdeOtSndmbJtbNdkbdDeIQdSoySfv/ea5LsszWQF+TG7YXF
- o3Lnks1qvMQN9c5J4WijoRiI4OosbQg=
-X-Google-Smtp-Source: AGHT+IGrWPQxM4xpOfplaepTh9Qwuz9LPr+HssZ9E39NDllj/XcabRWVBnW8Nk4vlweWtWKRw72mlw==
-X-Received: by 2002:a05:6602:2c83:b0:7a9:63c5:a737 with SMTP id
- i3-20020a0566022c8300b007a963c5a737mr40788967iow.5.1699317421743; 
- Mon, 06 Nov 2023 16:37:01 -0800 (PST)
+ bh=phyqVgw3xqcYh/5e50p0SEItC8Ena3Fkt9lK9lMcp1g=;
+ b=Je5tpTPEq1CUw1hCEpQZrVxq1WAuTYKqo7nT7MXWLXxlBE/m2MsoXhbOa9dN49Y9+t
+ zVuMU4Xk4YiTtpOZ60DxUPfq1vRl2/5OmJFy3/U4efRJwTZ6h7i/PKM8k1sN0pAQ0hCR
+ d5t2F/dgKa/BqG6O1AIlO2Ynhcvi4B8Q/m9MXxB1Ogb5Nm7w8VMSMut/s0n5hV1nD2i+
+ gnjhN3CzuzCmMJqwcvCp677Bv9akeaWE93QPTfBnVgEvYjBQ9qoac64sHNRrmd42gvFW
+ ZaByBGNJJhDgmsF6wU8N7MKFhxHPtu70ziYyWnwpXCE1DmgucR4ln/eOJmW2xhC8Q6yp
+ KOSA==
+X-Gm-Message-State: AOJu0YywaUB+7uHANev7Yi/zVLq6WKq48W/2gYWCtuNZJQsjuuOKdbHl
+ JozgvDIXC+bdLlzKfL7i1fTSzHQ4pDA=
+X-Google-Smtp-Source: AGHT+IFCYHe2g4Rs9lEroSbXPzQuXoqApzZ2GVzcCoL6OsjYhmHQCV3hmF0f2BRql0ubthejsAqafg==
+X-Received: by 2002:a05:6e02:1d04:b0:350:f2a0:5c44 with SMTP id
+ i4-20020a056e021d0400b00350f2a05c44mr1458968ila.2.1699318008255; 
+ Mon, 06 Nov 2023 16:46:48 -0800 (PST)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- b18-20020a029a12000000b0042b48d372aasm2472145jal.100.2023.11.06.16.37.00
+ q7-20020a056e020c2700b003524d2ea34dsm2790358ilg.10.2023.11.06.16.46.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Nov 2023 16:37:01 -0800 (PST)
+ Mon, 06 Nov 2023 16:46:47 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  6 Nov 2023 17:36:39 -0700
-Message-Id: <20231107003639.3101034-1-james.hilliard1@gmail.com>
+Date: Mon,  6 Nov 2023 17:46:46 -0700
+Message-Id: <20231107004646.3444628-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699317422; x=1699922222; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699318008; x=1699922808; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xCY4kzl3Sa9QUecGMboM918eLJuGovn/rFuAHyuodho=;
- b=HkOxddo6RKyDD/4SLEsiCujqT2dDthmq07FWsovpZglqukUjrZiPBFSXefVcbiyJmk
- Dq1i1Htcc+wYedzqEIptx2D8bAbmA2Y49Fh4DRGEYLPS3gczeSKsEbpfsL7/2R7KCdoR
- uORRZ5+ENE2MxiZrVArx+V+8em7FKvdAr4O4ik+aGp3GODZsmST0WfKTC9a9QC6hD35g
- FGyCFZ9f87UW+05+d01fTZumrplChk6JtoqncNaoGEDCXUT0Vqd+dc3FWyct/lhQ0P3z
- Pwuv7CZH+8J07Sammi+vqgne6SqLfdO8PDeTR/ggownIxX7R+YUpDV3/cKiNtlqAkt3o
- a7tA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=phyqVgw3xqcYh/5e50p0SEItC8Ena3Fkt9lK9lMcp1g=;
+ b=kSTKexkGFQeYjcH51nN75yWJ415UmAJqywkAo+k0DRe8RJe4s7gyirNc8X3vQhckD5
+ YUxV6pIdtt1rJ1D5mo0i5vJnjjEgGF1c1dGtcy8BnOGXxvkkfuaLhVJCL5/OTrlN0rXp
+ adeR6PrPJ6B9iq7+3oVocAw2T1TOCVs7Un12RxoBXYtjMvYjJzRwii8nMHJWEVOfrFtX
+ y6dkVX9iSqdkUV53n0XvJZWrk84aFq9Dd+TgkKPVOvFsqPZzazm5Req5//tjEWl+JaXY
+ wAqz9o7c6yZgvmyaAm0gYR0/HAVM55UYI1BoJvB0hi7vViIqhTSLFfmfhsWKkwMBpSvP
+ oIFg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HkOxddo6
-Subject: [Buildroot] [PATCH 1/1] package/python-lark: bump to version 1.1.8
+ header.a=rsa-sha256 header.s=20230601 header.b=kSTKexkG
+Subject: [Buildroot] [PATCH 1/1] package/python-libusb1: bump to version
+ 3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-lark/python-lark.hash | 4 ++--
- package/python-lark/python-lark.mk   | 4 ++--
+ package/python-libusb1/python-libusb1.hash | 4 ++--
+ package/python-libusb1/python-libusb1.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-lark/python-lark.hash b/package/python-lark/python-lark.hash
-index 6e192684a8..9ea778c8da 100644
---- a/package/python-lark/python-lark.hash
-+++ b/package/python-lark/python-lark.hash
+diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
+index 86dea08c89..effecd8531 100644
+--- a/package/python-libusb1/python-libusb1.hash
++++ b/package/python-libusb1/python-libusb1.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/lark/json
--md5  b9048974c5ce56997e9e536dda475159  lark-1.1.5.tar.gz
--sha256  4b534eae1f9af5b4ea000bea95776350befe1981658eea3820a01c37e504bb4d  lark-1.1.5.tar.gz
-+md5  124c36ea3b68783f06cea5fe6ee8a6f2  lark-1.1.8.tar.gz
-+sha256  7ef424db57f59c1ffd6f0d4c2b705119927f566b68c0fe1942dddcc0e44391a5  lark-1.1.8.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/libusb1/json
+-md5  ffbb02bf9aa49f973a6a58112aed7b06  libusb1-3.0.0.tar.gz
+-sha256  5792a9defee40f15d330a40d9b1800545c32e47ba7fc66b6f28f133c9fcc8538  libusb1-3.0.0.tar.gz
++md5  7b4f094786d1dfc8d011c7649d8ccb97  libusb1-3.1.0.tar.gz
++sha256  4ee9b0a55f8bd0b3ea7017ae919a6c1f439af742c4a4b04543c5fd7af89b828c  libusb1-3.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  8263e5652d07cecb3adadf05140b65e70cfa169ecec5f520fe1671479ce12a83  LICENSE
-diff --git a/package/python-lark/python-lark.mk b/package/python-lark/python-lark.mk
-index c08fc2cabd..9cb30abb65 100644
---- a/package/python-lark/python-lark.mk
-+++ b/package/python-lark/python-lark.mk
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
+index 48a0b1dea3..39fd7e40d3 100644
+--- a/package/python-libusb1/python-libusb1.mk
++++ b/package/python-libusb1/python-libusb1.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LARK_VERSION = 1.1.5
-+PYTHON_LARK_VERSION = 1.1.8
- PYTHON_LARK_SOURCE = lark-$(PYTHON_LARK_VERSION).tar.gz
--PYTHON_LARK_SITE = https://files.pythonhosted.org/packages/a2/25/8e16de418fc83bb00dabaf8c7110bc45a90bf5481a70aa5f1668fcea73bc
-+PYTHON_LARK_SITE = https://files.pythonhosted.org/packages/12/1c/b466b58dacac15ffefce9bcb5128e18948a143849610a7d5300f31920be0
- PYTHON_LARK_SETUP_TYPE = setuptools
- PYTHON_LARK_LICENSE = MIT
- PYTHON_LARK_LICENSE_FILES = LICENSE
+-PYTHON_LIBUSB1_VERSION = 3.0.0
++PYTHON_LIBUSB1_VERSION = 3.1.0
+ PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
+-PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/f4/83/59bf75e74e0c4859ea63eae0c7da660c1dcb78b31667d4a5f735d52f5974
++PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/af/19/53ecbfb96d6832f2272d13b84658c360802fcfff7c0c497ab8f6bf15ac40
+ PYTHON_LIBUSB1_SETUP_TYPE = setuptools
+ PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
+ PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
 -- 
 2.34.1
 
