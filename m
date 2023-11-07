@@ -4,51 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EBBBC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 12:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EE3EC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 12:50:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4233D81214;
-	Tue,  7 Nov 2023 12:44:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4233D81214
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F27581285;
+	Tue,  7 Nov 2023 12:50:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F27581285
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ijIWqYNOpXzW; Tue,  7 Nov 2023 12:44:57 +0000 (UTC)
+	with ESMTP id pzbYFT3_pMUl; Tue,  7 Nov 2023 12:50:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 679F080C35;
-	Tue,  7 Nov 2023 12:44:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 679F080C35
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B958D1BF39E
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 12:44:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E94188125B;
+	Tue,  7 Nov 2023 12:50:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E94188125B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D3AC1BF39E
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 12:50:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9223A80C14
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 12:44:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9223A80C14
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4506141807
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 12:50:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4506141807
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OIYO7T9KaO9f for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 12:44:52 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2AF1380C0A
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 12:44:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AF1380C0A
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E14521C000C;
- Tue,  7 Nov 2023 12:44:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1r0LRo-00HE9m-0d;
- Tue, 07 Nov 2023 13:44:48 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U_G_A8juHrZM for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 12:50:07 +0000 (UTC)
+X-Greylist: delayed 474 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 07 Nov 2023 12:50:06 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D00174138F
+Received: from mail.hostpark.net (mail.hostpark.net [212.243.197.30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D00174138F
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 12:50:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.hostpark.net (Postfix) with ESMTP id DD26C168F9;
+ Tue,  7 Nov 2023 13:42:08 +0100 (CET)
+X-Virus-Scanned: by Hostpark/NetZone Mailprotection at hostpark.net
+Received: from mail.hostpark.net ([127.0.0.1])
+ by localhost (mail0.hostpark.net [127.0.0.1]) (amavisd-new, port 10224)
+ with ESMTP id YaAVduJ6xlEz; Tue,  7 Nov 2023 13:42:08 +0100 (CET)
+Received: from customer (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mail.hostpark.net (Postfix) with ESMTPSA id 7CE0A168ED;
+ Tue,  7 Nov 2023 13:42:08 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Tue,  7 Nov 2023 13:44:38 +0100
-Message-Id: <20231107124439.4105974-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+Date: Tue,  7 Nov 2023 13:41:56 +0100
+Message-ID: <20231107124157.594529-1-christian@klarinett.li>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] utils/add-custom-hashes: add script to manage
- global patch dir hashes
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=klarinett.li; h=
+ content-transfer-encoding:mime-version:x-mailer:message-id:date
+ :date:subject:subject:from:from; s=sel2011a; t=1699360928; bh=+N
+ /fTqBpZ/L1MYSCSccIzVzeUs+KpFvRVFJtqN6Dm8s=; b=IMFuvqUso8TVPbLzvj
+ l9bhHYYjCveWnswIU0GrDsy3TO1K/G7NEGaSFvs68P2U2XOD+mVLS+cRLp6MDvtn
+ nsQdH/ahIoJgvUfYU4PtFby+1lloFXOl1PxF55QI2p2MEl8vkDjwxGraWzQhx/X5
+ aWnjBy//VK4mSCA8sJHjMk0aE=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=klarinett.li header.i=@klarinett.li
+ header.a=rsa-sha256 header.s=sel2011a header.b=IMFuvqUs
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: add patch for
+ compatibility with curl 8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,152 +78,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Christian Hitz via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Hitz <christian@klarinett.li>
+Cc: Christian Hitz <christian.hitz@bbv.ch>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a script to manage the .hash files in the BR2_GLOBAL_PATCH_DIR for
-packages using custom versions.
+From: Christian Hitz <christian.hitz@bbv.ch>
 
-To use it, run in a configured Buildroot directory, E.G.
+This upstream patch restores the connectivity check functionality with
+libcurl 8.4.
 
-  make foo_defconfig; ./utils/add-custom-hashes
-
-We support multiple patch directories in BR2_GLOBAL_PATCH_DIR.  If multiple
-directories are specified then use the last one as that is likely to be the
-most specific one.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
 ---
- docs/manual/customize-patches.adoc |   2 +
- utils/add-custom-hashes            | 103 +++++++++++++++++++++++++++++
- 2 files changed, 105 insertions(+)
- create mode 100755 utils/add-custom-hashes
+Backport to: 2023.02.x, 2023.08.x
+---
+ ...-curl-timeout-callback-non-repeating.patch | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
 
-diff --git a/docs/manual/customize-patches.adoc b/docs/manual/customize-patches.adoc
-index 72e87c3c04..f33bbcdde7 100644
---- a/docs/manual/customize-patches.adoc
-+++ b/docs/manual/customize-patches.adoc
-@@ -79,3 +79,5 @@ the first file to exist is used to check a package download:
- 
- * +<global-patch-dir>/<packagename>/<packageversion>/<packagename>.hash+
- * +<global-patch-dir>/<packagename>/<packagename>.hash+
-+
-+The +utils/add-custom-hashes+ script can be used to generate these files.
-diff --git a/utils/add-custom-hashes b/utils/add-custom-hashes
-new file mode 100755
-index 0000000000..857ca3dd4c
+diff --git a/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch b/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
+new file mode 100644
+index 0000000000..8e25805d0c
 --- /dev/null
-+++ b/utils/add-custom-hashes
-@@ -0,0 +1,103 @@
-+#!/usr/bin/env bash
-+set -e
++++ b/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
+@@ -0,0 +1,44 @@
++From abc6e1cf258ab332bed161036a358bbe9c2d1e90 Mon Sep 17 00:00:00 2001
++From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
++Date: Fri, 13 Oct 2023 16:46:09 +0000
++Subject: [PATCH] connectivity: Make curl timeout callback non-repeating.
 +
-+# Add hash files for packages with custom versions for
-+# BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+#
-+# Run in a configured Buildroot directory, E.G.
-+# make foo_defconfig; ./utils/add-custom-hashes
++This reverts commit 05c31da4d9.
 +
-+# print BR-style message
-+# message <info message>
-+message() {
-+    tput smso 2>/dev/null
-+    echo "$*"
-+    tput rmso 2>/dev/null
-+}
++In the linked commit the callback was made repeating on the assumption
++that forward progress would result in the callback getting canceled in
++cb_data_complete. However, this assumption does not hold since a timeout
++callback does not guarantee completion (or error out) of a request.
 +
-+# print error message and exit
-+# die <error message>
-+die() {
-+    echo "Error: $*" >&2
-+    exit 1
-+}
++curl tweaked some internals in v8.4.0 and started giving 0 timeouts, and
++a repeating callback is firing back-to-back without making any progress
++in doing so.
 +
-+# get package(s) for download file, if any
-+# get_pkgs <json> <file>
-+get_pkgs() {
-+    jq --arg file "$2" -r \
-+       'to_entries[] | select(.value.downloads[0].source == $file) | .key | strings' "$1"
-+}
++Revert the change and make the callback non-repeating again.
 +
-+# get download dir for package
-+# get_pkg_dl_dir <json> <package>
-+get_pkg_dl_dir() {
-+    jq --arg pkg "$2" -r '.[$pkg].dl_dir | strings' "$1"
-+}
++Fixes: 05c31da4d9cb ('connectivity: don't cancel curl timerfunction from timeout')
++Upstream: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/abc6e1cf258ab332bed161036a358bbe9c2d1e90
++Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
++---
++ src/core/nm-connectivity.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+# generate hash file for download file
-+# gen_hash <dir> <file>
-+gen_hash() {
-+    (
-+        cd "$1" && printf '# Locally calculated\nsha256  ' && sha256sum "$2"
-+    )
-+}
++diff --git a/src/core/nm-connectivity.c b/src/core/nm-connectivity.c
++index 92de44f17d..d8b0004c38 100644
++--- a/src/core/nm-connectivity.c
+++++ b/src/core/nm-connectivity.c
++@@ -406,9 +406,10 @@ _con_curl_timeout_cb(gpointer user_data)
++ {
++     NMConnectivityCheckHandle *cb_data = user_data;
++ 
+++    cb_data->concheck.curl_timer = 0;
++     _con_curl_check_connectivity(cb_data->concheck.curl_mhandle, CURL_SOCKET_TIMEOUT, 0);
++     _complete_queued(cb_data->self);
++-    return G_SOURCE_CONTINUE;
+++    return G_SOURCE_REMOVE;
++ }
++ 
++ static int
++-- 
++GitLab
 +
-+command -v jq || die 'Script needs jq'
-+
-+[ -e .config ] || \
-+  die "No .config found, please run this in a configured Buildroot (O=) directory"
-+
-+message Collecting data
-+
-+eval "$(make -s VARS='TOPDIR DL_DIR BR_NO_CHECK_HASH_FOR BR2_GLOBAL_PATCH_DIR' QUOTED_VARS=YES printvars)"
-+# global patch dir may already have quotes
-+BR2_GLOBAL_PATCH_DIR=$(echo "$BR2_GLOBAL_PATCH_DIR" | tr -d '"')
-+
-+[ -n "$BR2_GLOBAL_PATCH_DIR" ] || die "No BR2_GLOBAL_PATCH_DIR defined, nothing to do"
-+[ -n "$BR_NO_CHECK_HASH_FOR" ] || die "No packages without hashes found, nothing to do"
-+
-+[ -d "$TOPDIR" ] || die "TOPDIR ($TOPDIR) does not look correct"
-+[ -d "$DL_DIR" ] || die "DL_DIR ($DL_DIR) does not look correct"
-+
-+# patch dir may contain multiple dirs, use the last one
-+# shellcheck disable=SC2086 # we need the word splitting
-+set -- $BR2_GLOBAL_PATCH_DIR
-+if [ $# -gt 1 ]; then
-+    BR2_GLOBAL_PATCH_DIR="${!#}";
-+    message BR2_GLOBAL_PATCH_DIR contains multiple directories, using "$BR2_GLOBAL_PATCH_DIR"
-+fi
-+
-+# patch dir may be relative to TOPDIR
-+case "$BR2_GLOBAL_PATCH_DIR" in
-+    /*) ;;
-+    *) BR2_GLOBAL_PATCH_DIR="$TOPDIR/$BR2_GLOBAL_PATCH_DIR"
-+       ;;
-+esac
-+
-+[ -d "$BR2_GLOBAL_PATCH_DIR" ] \
-+  || die "BR2_GLOBAL_PATCH_DIR ($BR2_GLOBAL_PATCH_DIR) does not look correct"
-+
-+trap 'rm -f "$JSON"' EXIT
-+JSON=$(mktemp)
-+make show-info > "$JSON"
-+
-+# ensure files have been downloaded, but without checking
-+make BR2_DOWNLOAD_FORCE_CHECK_HASHES= source
-+
-+message Updating hashes
-+
-+for file in $BR_NO_CHECK_HASH_FOR; do
-+    for pkg in $(get_pkgs "$JSON" "$file"); do
-+        HASHFILE="$BR2_GLOBAL_PATCH_DIR/$pkg/$pkg.hash"
-+        PKG_DL_DIR=$(get_pkg_dl_dir "$JSON" "$pkg")
-+        message "Adding hash for $file to $HASHFILE"
-+        mkdir -p "${HASHFILE%/*}"
-+        gen_hash "$DL_DIR/$PKG_DL_DIR" "$file" > "$HASHFILE"
-+    done
-+done
-+
-+message Verifying hashes
-+
-+make clean
-+make BR2_DOWNLOAD_FORCE_CHECK_HASHES=y source
 -- 
-2.39.2
+2.42.0
 
 _______________________________________________
 buildroot mailing list
