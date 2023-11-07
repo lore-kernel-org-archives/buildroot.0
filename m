@@ -4,83 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92741C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 22:17:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7D4AC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 22:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E14E60AE7;
-	Tue,  7 Nov 2023 22:17:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E14E60AE7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F31D60D6B;
+	Tue,  7 Nov 2023 22:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F31D60D6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J8KNloiH1PoW; Tue,  7 Nov 2023 22:17:57 +0000 (UTC)
+	with ESMTP id 8Tcyfo1JFhVz; Tue,  7 Nov 2023 22:23:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C55E60ACA;
-	Tue,  7 Nov 2023 22:17:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C55E60ACA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3FC411BF59B
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 22:17:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0325660D62;
+	Tue,  7 Nov 2023 22:23:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0325660D62
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E1021BF59B
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 22:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 115D981AF4
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 22:17:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 115D981AF4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76D0D416BA
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 22:23:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76D0D416BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id srtChA-Sb61m for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 22:17:53 +0000 (UTC)
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com
- [IPv6:2607:f8b0:4864:20::432])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B8FDA81AA7
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 22:17:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8FDA81AA7
-Received: by mail-pf1-x432.google.com with SMTP id
- d2e1a72fcca58-6b7f0170d7bso6181287b3a.2
- for <buildroot@buildroot.org>; Tue, 07 Nov 2023 14:17:53 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eE_DFSEbjEyj for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 22:23:18 +0000 (UTC)
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
+ [IPv6:2607:f8b0:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 65E01415FF
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 22:23:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65E01415FF
+Received: by mail-pf1-x42b.google.com with SMTP id
+ d2e1a72fcca58-6b709048f32so5716324b3a.0
+ for <buildroot@buildroot.org>; Tue, 07 Nov 2023 14:23:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699395473; x=1700000273;
+ d=1e100.net; s=20230601; t=1699395797; x=1700000597;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=fU0AXXyPScDGxY0LFQz1o3H+RIbG0KdUg7/zZdtqaiY=;
- b=WKJ+xo/w4QYO9DFuB5YVBfQxfEkWvRaGNf11KtVHjRL0UjaabsEQMWvEjNA6TsEpeJ
- YhjcUzuMgQKlW+ae9HHR70o4Meug5/0v63TvdWV1Rv01vCCNZ+YP/Xam7AcnAD4egKoh
- GJfrqNLKCP1cs18y0Ca18ZM0DesX6JeuXz/pcGvDPwsHK7wIJF2ggpsvMgoXyUareQDR
- UX3LM7k+AaD1UX3anGjoqUMB1oyUjJgEylRiTM+0AgwvXfkpXmFeYtcikEBVm3LXbsTB
- xTBdvlcPeXf/abg5tQ/u/ujRQKfsHgXACbu7/M85gMpQn0GkcseVAjs0+WWTfS8ugF0N
- THPQ==
-X-Gm-Message-State: AOJu0Yz/7clE+r9V+yKlSUrc3DgxGHWkugsSAEFEyzKcjRPLIniORfFb
- LYXWaLYDC7bWMfvCshmxxUKFzNH4IVWn5tt3SbBuKg==
-X-Google-Smtp-Source: AGHT+IF9UDuzgGfJIpYfwo6V/mciXmixX54oqblumh47UVl9n1OLQbXJOJ17adbt3IJNeJ4uF8pYIQ==
-X-Received: by 2002:a05:6a20:728e:b0:17e:1f9a:91f5 with SMTP id
- o14-20020a056a20728e00b0017e1f9a91f5mr354216pzk.44.1699395472724; 
- Tue, 07 Nov 2023 14:17:52 -0800 (PST)
+ bh=XrfbaLaFYl8Um8yKFnoFnQb0Ec3rceIfWprwc9PqbpI=;
+ b=OQgA1/Rh1llci2iMiehtUM61+aKaGLnvHxZr4j08Xd+S4VctYppGjud1xUzDfL/rtl
+ qFflL+udgPoimYq/qYftuxxVHn3xwEFy02fG6Me+P8FM3WsfZcvacrUxhwOidgOQ8Uzm
+ 5ux+dRr0dDdMnFLIi9wtMFv6VVPJzmWyb0qt6da/SocPuyAM6nOFocfmmil+wXhZNQyb
+ T94q8Mjn9NBSdeqRULgFhwTESPaEZVmBEnWTE4wZBANcWwBqWAJvWIBtc6k2orI/Wd/c
+ qP55pgO+KYwHvUA9VvA6yBmc4CM6EWYtl1osiAUtYlSzwiGMTPmxb9x88p0zNefRuDYk
+ IgmA==
+X-Gm-Message-State: AOJu0YwxiKn4i62s+u6ySoMVgRk51jqdGRMIZilRpUZKMxL/dnWivQ/g
+ 48VEgA/sEmgaBZrOOsZs3FoLGhDRm5Rcq+oAgn0Qkw==
+X-Google-Smtp-Source: AGHT+IEecc2nn/Ken0NHvXw40JYpApa2q97Brc3uH8BESezWp8+1JWxK9lf/3veyem3jeiben96KmQ==
+X-Received: by 2002:a05:6a21:66c7:b0:181:b23a:b88c with SMTP id
+ ze7-20020a056a2166c700b00181b23ab88cmr372570pzb.49.1699395797521; 
+ Tue, 07 Nov 2023 14:23:17 -0800 (PST)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- r18-20020aa78452000000b006c34768a37fsm7671380pfn.114.2023.11.07.14.17.51
+ c12-20020aa7880c000000b006c33ae95898sm7704294pfo.78.2023.11.07.14.23.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Nov 2023 14:17:52 -0800 (PST)
+ Tue, 07 Nov 2023 14:23:03 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Tue,  7 Nov 2023 14:17:45 -0800
-Message-ID: <20231107221745.2722636-1-christian@aperture.us>
+Date: Tue,  7 Nov 2023 14:23:01 -0800
+Message-ID: <20231107222301.2757057-1-christian@aperture.us>
 X-Mailer: git-send-email 2.42.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1699395473; x=1700000273; darn=buildroot.org;
+ d=aperture.us; s=google; t=1699395797; x=1700000597; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=fU0AXXyPScDGxY0LFQz1o3H+RIbG0KdUg7/zZdtqaiY=;
- b=Tl8ApVYVisStbEOLEVFYvdPZRTCx37Az4CdtJ8zisJBJ+p1NCwzrlrdzAng79tA6yC
- XHp6bIdJRA2/6NrjgwoOFjHgKydo2xKZW9kuDxleWDllpP2F0kiLNj2V9aZR9YjMOKoT
- ldChj2ci898GxjgrFHbehBcHkN6F3gZ4ZDjXEe3fgPqlTiNWZtMaBR+JaPIwoylCQD3H
- OP1U1gjG6xb3D45UtXi55w4xZ7DcjkmPwviIwUcd8yV8Tf6Cq7/PJpBQpFzVCDxmCO6C
- PTdu1Ra3xJluQGQyDPIJNIiAnifmskdrWdROhJeCAjz0DTCAKHRm04XOFdoUjzLYJDP2
- kscQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=XrfbaLaFYl8Um8yKFnoFnQb0Ec3rceIfWprwc9PqbpI=;
+ b=kCQYjTgzeaxS9XDK/IPyh4biHqOci5xoY1MSVhBR/8lcLVp6LwYJEWc9PQm70fLeI7
+ 3y/LQ2xgQ6sDR50u2tuFsjYDK5hTW+doA9NjeLZ1eV3cfDtSm9J0QBGENoGvji8nxKm5
+ CQXKXaa0EgLeGh5klJxWLwI60T5kRbbqwuos5ASqSHBrlVwGCLTNkTxAPML0TD68MLcR
+ 6Izg9I9KLoqI9CTLkiXCje7np8/7amWTyPPjTfi//XyfTVvi4TJo2gwrqwW3soc7JZ+T
+ m6TC7iK95ifu1UqQEF6PQdB+PIqTs61uejhG7MNO4TYIC7KqmbhBvWaeYzfjjNcBYBaq
+ k7NA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=Tl8ApVYV
-Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump to go1.21.4
+ header.a=rsa-sha256 header.s=google header.b=kCQYjTgz
+Subject: [Buildroot] [PATCH v1 1/1] package/containerd: bump version to
+ v1.7.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,41 +103,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Go version 1.21.4 includes the following security fixes:
+The eighth patch release for containerd 1.7 contains various fixes and updates.
 
-CVE-2023-45283: path/filepath: recognize \??\ as a Root Local Device path prefix.
-CVE-2023-45284: path/filepath: recognize device names with trailing spaces and superscripts
-
-https://go.dev/doc/devel/release#go1.21.4
+https://github.com/containerd/containerd/releases/tag/v1.7.8
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 9499f50964..74b18a9b38 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 450d1d1081..5524a1a44e 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
 @@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  186f2b6f8c8b704e696821b09ab2041a5c1ee13dcbc3156a13adcf75931ee488  go1.21.3.src.tar.gz
-+sha256  47b26a83d2b65a3c1c1bcace273b69bee49a7a7b5168a7604ded3d26a37bd787  go1.21.4.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index ef27f32835..7bd7866a05 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Computed locally
+-sha256  4c6042b13746a803766d76b07f756d03678a33a944b52c0b832c238609db1b2e  containerd-1.7.7.tar.gz
++sha256  891b84e614b491ab1d3bd5c8f4fb119e4929c24762e149e83e181e72d687f706  containerd-1.7.8.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 7c130770c0..61a8472ddd 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.21.3
-+GO_VERSION = 1.21.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-CONTAINERD_VERSION = 1.7.7
++CONTAINERD_VERSION = 1.7.8
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 -- 
 2.42.1
 
