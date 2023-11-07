@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E8FC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 16:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 134BFC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 16:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B647812AE;
-	Tue,  7 Nov 2023 16:58:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B647812AE
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB15580C15;
+	Tue,  7 Nov 2023 16:58:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB15580C15
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HmOvt6WphNnZ; Tue,  7 Nov 2023 16:58:16 +0000 (UTC)
+	with ESMTP id dS8yzY-ufIOV; Tue,  7 Nov 2023 16:58:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48A7D813FF;
-	Tue,  7 Nov 2023 16:58:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48A7D813FF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CF4011BF370
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 16:58:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2B72812CC;
+	Tue,  7 Nov 2023 16:58:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2B72812CC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DD93D1BF370
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 16:58:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B680080C29
+ by smtp3.osuosl.org (Postfix) with ESMTP id C2DD660F14
  for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 16:58:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B680080C29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2DD660F14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zl7nJZA-1OTG for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jlkp48z7LZHU for <buildroot@lists.busybox.net>;
  Tue,  7 Nov 2023 16:57:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 519C280C15
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F01E60F00
  for <buildroot@buildroot.org>; Tue,  7 Nov 2023 16:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 519C280C15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F01E60F00
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D1F686BE5; Tue,  7 Nov 2023 16:57:59 +0000 (UTC)
+ id 486E886BE7; Tue,  7 Nov 2023 16:57:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 Nov 2023 17:50:23 +0100
+Date: Tue, 7 Nov 2023 17:52:19 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 198e834ee3d8630d4d2e5f60b760b37d373736ac
-X-Git-Newrev: fc9689c1e28e414fb17fd4dbf702dbb3cb603045
+X-Git-Oldrev: fc9689c1e28e414fb17fd4dbf702dbb3cb603045
+X-Git-Newrev: 0f2bcb5cff58c4acc2d88db1a03b7ec189b850d2
 X-Patchwork-Hint: ignore
-Message-Id: <20231107165759.3D1F686BE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libopenssl: bump
- to version 1.1.1w
+Message-Id: <20231107165759.486E886BE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/openvpn: bump
+ version to 2.5.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc9689c1e28e414fb17fd4dbf702dbb3cb603045
+commit: https://git.buildroot.net/buildroot/commit/?id=0f2bcb5cff58c4acc2d88db1a03b7ec189b850d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This maybe the last patch for OpenSSL 1.1.1 LTS, it had reached
-end-of-life on 2023-09-11.
+Changelog:
+https://github.com/OpenVPN/openvpn/blob/v2.5.9/Changes.rst
+
+This is a small bugfix release, and the last version for 2.5.x
 
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 4541087c07..cf28d4e05b 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1v.tar.gz.sha256
--sha256  d6697e2871e77238460402e9362d47d18382b15ef9f246aba6c7bd780d38a6b0  openssl-1.1.1v.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1w.tar.gz.sha256
-+sha256  cf3098950cb4d853ad95c0841f1f9c6d3dc102dccfcacd521d93925208b76ac8  openssl-1.1.1w.tar.gz
- 
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index fe68a20ed1..651283a828 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 0959b7f838..a60362a09c 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  08340a389905c84196b6cd750add1bc0fa2d46a1afebfd589c24120946c13e68  openvpn-2.5.7.tar.gz
++sha256  8794b7125998c68f30de654267a702b9581454ca1e7061511fcc5f99fea4bd32  openvpn-2.5.9.tar.gz
+ sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 5c602e0448..1e47b75557 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.1.1v
-+LIBOPENSSL_VERSION = 1.1.1w
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+-OPENVPN_VERSION = 2.5.7
++OPENVPN_VERSION = 2.5.9
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
+ OPENVPN_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
