@@ -4,54 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2834BC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 13:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E9EEC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 13:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7DFD402A7;
-	Tue,  7 Nov 2023 13:30:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7DFD402A7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B5C341828;
+	Tue,  7 Nov 2023 13:59:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B5C341828
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VLU1vKLKPmjE; Tue,  7 Nov 2023 13:30:06 +0000 (UTC)
+	with ESMTP id HUkhfiQ-MRwk; Tue,  7 Nov 2023 13:59:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E457402E6;
-	Tue,  7 Nov 2023 13:30:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E457402E6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6317D1BF95D
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:30:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3EC741819;
+	Tue,  7 Nov 2023 13:59:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3EC741819
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D41681BF215
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:59:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49E7E40128
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:30:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49E7E40128
+ by smtp1.osuosl.org (Postfix) with ESMTP id B9047821BC
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:59:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9047821BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CGBD9s7wktuO for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 13:30:01 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9316D4026D
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 13:30:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9316D4026D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AAA7420012;
- Tue,  7 Nov 2023 13:29:58 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r0M9W-00HG1a-08;
- Tue, 07 Nov 2023 14:29:58 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IX2XdwAjoiyv for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 13:59:23 +0000 (UTC)
+Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 137DB821B4
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 13:59:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 137DB821B4
+Received: by smtpng3.m.smailru.net with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1r0Mbw-00087Q-0Q; Tue, 07 Nov 2023 16:59:20 +0300
 To: buildroot@buildroot.org
-References: <20231107124439.4105974-1-peter@korsgaard.com>
-Date: Tue, 07 Nov 2023 14:29:58 +0100
-In-Reply-To: <20231107124439.4105974-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 7 Nov 2023 13:44:38 +0100")
-Message-ID: <87wmutwv1l.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Date: Tue,  7 Nov 2023 16:59:17 +0300
+Message-Id: <20231107135917.1008132-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] utils/add-custom-hashes: add script to
- manage global patch dir hashes
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD99FFD3FA9E0A670D85D07EAF5B36B0256E213751273FCFE2600894C459B0CD1B91A719DD14425D12B374B7C9FC03E99EE8702D10429002E15B9C4F2611CB3DCF4
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7CE4525FFB91B9BBCEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637991D0D3E51C637188F08D7030A58E5AD1A62830130A00468AEEEE3FBA3A834EE7353EFBB55337566F9C8F5978A750CBCD92A389035B991A2AED47A02BF2070DF1DF9E95F17B0083B26EA987F6312C9EC1E561CDFBCA1751F6FD1C55BDD38FC3FD2E47CDBA5A96583C09775C1D3CA48CF0BE004AA24E73514117882F4460429724CE54428C33FAD30A8DF7F3B2552694AC26CFBAC0749D213D2E47CDBA5A9658378DA827A17800CE79FEEBCD9E13F050E9FA2833FD35BB23DF004C906525384302BEBFE083D3B9BA71A620F70A64A45A98AA50765F79006370669898C38A383F16D1867E19FE1407959CC434672EE6371089D37D7C0E48F6C8AA50765F7900637BC468E7E89D8C5D6EFF80C71ABB335746BA297DBC24807EABDAD6C7F3747799A
+X-C1DE0DAB: 0D63561A33F958A5F3370D13A63523466C812CF66DF83CD3800696E7FB627DA2F87CCE6106E1FC07E67D4AC08A07B9B065B78C30F681404D9C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF67A185C7288CF7681CCAFEF6FB4FAA6B13B5F98BBB178C06C00B59B3BF47F2E5A4BD9291AB2A84562B33B16BC67043E05725B5128399DC4E608851E3F446BC8640B08DDBC5CE87D002C26D483E81D6BEEB84411BD425175970A7FB4ED9620804ADE12199CE9660BE
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojoiosMWyUVRfgVJ+PpbX1tA==
+X-Mailru-Sender: 689FA8AB762F7393590D8C940224AE3380ADB4F83962AD3EA28FC8D56D65F4C298CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; s=mail4; 
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=UEhQVidablH68K/dPJexQAG6kshuV8bPXrnz9ZDd34M=; 
+ t=1699365563;x=1699455563; 
+ b=ehkTiCp/bY5ZyBBA3pZJpjM5iW8Zyu1UFMnrJgS1ka5ik8wSfjTZ2mhUXxUpqFvUziSJ3K8i9OWNPT/NtuR/Mto4q04FCZCqd6w3NZVE0WtzQRLGbpR/TkfZgRZPsIQywK7dUhbdLoSvhabJw+ONuUX6k0T95tVdU5ME6cO+Q9IrC9R35MDWjhk5Le32yS+a4wawaOj3oJBnMxzeQKMXE8hjwHvd2SOUJYH95sSXwY8UA4tJd14MG5eS0UyTtHtPheSppCKuwuTqsh+R/9eGsbJmqPgiuJPOWEhwmEthe5NGp3z9JaiL+fcauhC9pCYsz8uGDr2eyIgJq2Mo05z+ng==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=ehkTiCp/
+X-Mailman-Original-Authentication-Results: smtpng3.m.smailru.net; auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: [Buildroot] [PATCH 1/1] package/libosmium: add optional GDAL
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,101 +75,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ package/libosmium/libosmium.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Add a script to manage the .hash files in the BR2_GLOBAL_PATCH_DIR for
- > packages using custom versions.
-
- > To use it, run in a configured Buildroot directory, E.G.
-
- >   make foo_defconfig; ./utils/add-custom-hashes
-
- > We support multiple patch directories in BR2_GLOBAL_PATCH_DIR.  If multiple
- > directories are specified then use the last one as that is likely to be the
- > most specific one.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- >  docs/manual/customize-patches.adoc |   2 +
- >  utils/add-custom-hashes            | 103 +++++++++++++++++++++++++++++
- >  2 files changed, 105 insertions(+)
- >  create mode 100755 utils/add-custom-hashes
-
- > diff --git a/docs/manual/customize-patches.adoc b/docs/manual/customize-patches.adoc
- > index 72e87c3c04..f33bbcdde7 100644
- > --- a/docs/manual/customize-patches.adoc
- > +++ b/docs/manual/customize-patches.adoc
- > @@ -79,3 +79,5 @@ the first file to exist is used to check a package download:
+diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
+index 753255556c..c39e7d0152 100644
+--- a/package/libosmium/libosmium.mk
++++ b/package/libosmium/libosmium.mk
+@@ -31,4 +31,8 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LIBOSMIUM_DEPENDENCIES += zlib
+ endif
  
- >  * +<global-patch-dir>/<packagename>/<packageversion>/<packagename>.hash+
- >  * +<global-patch-dir>/<packagename>/<packagename>.hash+
- > +
- > +The +utils/add-custom-hashes+ script can be used to generate these files.
- > diff --git a/utils/add-custom-hashes b/utils/add-custom-hashes
- > new file mode 100755
- > index 0000000000..857ca3dd4c
- > --- /dev/null
- > +++ b/utils/add-custom-hashes
- > @@ -0,0 +1,103 @@
- > +#!/usr/bin/env bash
- > +set -e
- > +
- > +# Add hash files for packages with custom versions for
- > +# BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- > +#
- > +# Run in a configured Buildroot directory, E.G.
- > +# make foo_defconfig; ./utils/add-custom-hashes
- > +
- > +# print BR-style message
- > +# message <info message>
- > +message() {
- > +    tput smso 2>/dev/null
- > +    echo "$*"
- > +    tput rmso 2>/dev/null
- > +}
- > +
- > +# print error message and exit
- > +# die <error message>
- > +die() {
- > +    echo "Error: $*" >&2
- > +    exit 1
- > +}
- > +
- > +# get package(s) for download file, if any
- > +# get_pkgs <json> <file>
- > +get_pkgs() {
- > +    jq --arg file "$2" -r \
- > +       'to_entries[] | select(.value.downloads[0].source == $file) | .key | strings' "$1"
- > +}
- > +
- > +# get download dir for package
- > +# get_pkg_dl_dir <json> <package>
- > +get_pkg_dl_dir() {
- > +    jq --arg pkg "$2" -r '.[$pkg].dl_dir | strings' "$1"
- > +}
- > +
- > +# generate hash file for download file
- > +# gen_hash <dir> <file>
- > +gen_hash() {
- > +    (
- > +        cd "$1" && printf '# Locally calculated\nsha256  ' && sha256sum "$2"
- > +    )
- > +}
- > +
- > +command -v jq || die 'Script needs jq'
-
-Ups, this was a last minute addition, the stdout of command -v should be
-redirected to /dev/null.
-
++ifeq ($(BR2_PACKAGE_GDAL),y)
++LIBOSMIUM_DEPENDENCIES += gdal
++endif
++
+ $(eval $(cmake-package))
 -- 
-Bye, Peter Korsgaard
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
