@@ -1,99 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7E4EC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 13:23:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2834BC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 13:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B05A82F4A;
-	Tue,  7 Nov 2023 13:23:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B05A82F4A
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7DFD402A7;
+	Tue,  7 Nov 2023 13:30:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7DFD402A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G1WTZOVvdONy; Tue,  7 Nov 2023 13:23:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VLU1vKLKPmjE; Tue,  7 Nov 2023 13:30:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E902A82AC3;
-	Tue,  7 Nov 2023 13:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E902A82AC3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E19721BF370
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:23:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E457402E6;
+	Tue,  7 Nov 2023 13:30:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E457402E6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6317D1BF95D
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B55F0822FA
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:23:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B55F0822FA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49E7E40128
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:30:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49E7E40128
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GO46PpvCsyK3 for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 13:23:47 +0000 (UTC)
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1617282C4D
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 13:23:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1617282C4D
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
- by mx1.sberdevices.ru (Postfix) with ESMTP id 9449A10001B;
- Tue,  7 Nov 2023 16:23:43 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 9449A10001B
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru
- [172.16.192.107])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mx1.sberdevices.ru (Postfix) with ESMTPS;
- Tue,  7 Nov 2023 16:23:43 +0300 (MSK)
-Received: from sberdevices (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
- (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.37; Tue, 7 Nov
- 2023 16:23:43 +0300
-To: <buildroot@buildroot.org>
-Date: Tue, 7 Nov 2023 16:23:23 +0300
-Message-ID: <20231107132323.3324587-1-ovlevin@salutedevices.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CGBD9s7wktuO for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 13:30:01 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9316D4026D
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 13:30:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9316D4026D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AAA7420012;
+ Tue,  7 Nov 2023 13:29:58 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r0M9W-00HG1a-08;
+ Tue, 07 Nov 2023 14:29:58 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+References: <20231107124439.4105974-1-peter@korsgaard.com>
+Date: Tue, 07 Nov 2023 14:29:58 +0100
+In-Reply-To: <20231107124439.4105974-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 7 Nov 2023 13:44:38 +0100")
+Message-ID: <87wmutwv1l.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 181168 [Nov 07 2023]
-X-KSMG-AntiSpam-Version: 6.0.0.2
-X-KSMG-AntiSpam-Envelope-From: ovlevin@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 543 543
- 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4,
- {Tracking_from_domain_doesnt_match_to}, 100.64.160.123:7.1.2;
- p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1; 127.0.0.199:7.1.2;
- d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;
- salutedevices.com:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960,
- bases: 2023/11/07 09:01:00 #22417210
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=salutedevices.com; s=mail; t=1699363423;
- bh=ax1UjLV+Ud1cMMvDx4xUynLK0XhDpjRp1+xlCGuAI70=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
- b=YHbLiZXOEGz1kH/TDCtq4ccjg4kgykBHnph/VhNOJg6smwG14P9zU+ssXGnifvRyg
- zLmptWCMMnYd2GaXaJCPb2YkgrY7b/uazQYuZr14qogsBGgSz85tQrU4mJB71ZX/6W
- 9fB9n7e5y2IMbuJ2FEHbqTvmOOwT1AVnPwwZ1U83SAyoD5jfCC642LEZGLEupNkLKT
- cXRmzPVzPwnJkVrXz6DmeSPkPv3Nmbf/B6+v/gfSxDenGJQhO104RN0YzVPLZYyVEC
- MGc1ufwgJUIl02iIfcxM3tCSCPW9pITPuEACoDRwW/T64W5aaBp8S15KEfDAvswyHx
- YkZhaJxrXAg+w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=salutedevices.com
- header.i=@salutedevices.com header.a=rsa-sha256 header.s=mail
- header.b=YHbLiZXO
-Subject: [Buildroot] [PATCH 1/1] package: dhcpcd: fix dhcpcd binary not
- stripped
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] utils/add-custom-hashes: add script to
+ manage global patch dir hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,57 +63,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Oleg Lyovin via buildroot <buildroot@buildroot.org>
-Reply-To: Oleg Lyovin <ovlevin@salutedevices.com>
-Cc: John Stile <johns@msli.com>, olegartys@gmail.com,
- Oleg Lyovin <ovlevin@salutedevices.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-By default dhcpcd installed with 555 permissions as it is
-configured in its Makefile.inc. Since 'w' bit is missing,
-strip fails and dhcpcd binary installed non-stripped.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On ARM GCC 12 glibc configuration strip saves over 1MB of disk space.
+ > Add a script to manage the .hash files in the BR2_GLOBAL_PATCH_DIR for
+ > packages using custom versions.
 
-Signed-off-by: Oleg Lyovin <ovlevin@salutedevices.com>
----
- package/dhcpcd/dhcpcd.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ > To use it, run in a configured Buildroot directory, E.G.
 
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index a194bce323..ba1481e83d 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -17,6 +17,9 @@ DHCPCD_CONFIG_OPTS = \
- 	--os=linux \
- 	--privsepuser=dhcpcd
+ >   make foo_defconfig; ./utils/add-custom-hashes
+
+ > We support multiple patch directories in BR2_GLOBAL_PATCH_DIR.  If multiple
+ > directories are specified then use the last one as that is likely to be the
+ > most specific one.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  docs/manual/customize-patches.adoc |   2 +
+ >  utils/add-custom-hashes            | 103 +++++++++++++++++++++++++++++
+ >  2 files changed, 105 insertions(+)
+ >  create mode 100755 utils/add-custom-hashes
+
+ > diff --git a/docs/manual/customize-patches.adoc b/docs/manual/customize-patches.adoc
+ > index 72e87c3c04..f33bbcdde7 100644
+ > --- a/docs/manual/customize-patches.adoc
+ > +++ b/docs/manual/customize-patches.adoc
+ > @@ -79,3 +79,5 @@ the first file to exist is used to check a package download:
  
-+DHCPCD_MAKE_OPTS = \
-+	BINMODE=755
-+
- ifeq ($(BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP),y)
- DHCPCD_CONFIG_OPTS += --enable-privsep
- else
-@@ -43,11 +46,11 @@ define DHCPCD_CONFIGURE_CMDS
- endef
- 
- define DHCPCD_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(DHCPCD_MAKE_OPTS) all
- endef
- 
- define DHCPCD_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(DHCPCD_MAKE_OPTS) install DESTDIR=$(TARGET_DIR)
- endef
- 
- # When network-manager is enabled together with dhcpcd, it will use
+ >  * +<global-patch-dir>/<packagename>/<packageversion>/<packagename>.hash+
+ >  * +<global-patch-dir>/<packagename>/<packagename>.hash+
+ > +
+ > +The +utils/add-custom-hashes+ script can be used to generate these files.
+ > diff --git a/utils/add-custom-hashes b/utils/add-custom-hashes
+ > new file mode 100755
+ > index 0000000000..857ca3dd4c
+ > --- /dev/null
+ > +++ b/utils/add-custom-hashes
+ > @@ -0,0 +1,103 @@
+ > +#!/usr/bin/env bash
+ > +set -e
+ > +
+ > +# Add hash files for packages with custom versions for
+ > +# BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ > +#
+ > +# Run in a configured Buildroot directory, E.G.
+ > +# make foo_defconfig; ./utils/add-custom-hashes
+ > +
+ > +# print BR-style message
+ > +# message <info message>
+ > +message() {
+ > +    tput smso 2>/dev/null
+ > +    echo "$*"
+ > +    tput rmso 2>/dev/null
+ > +}
+ > +
+ > +# print error message and exit
+ > +# die <error message>
+ > +die() {
+ > +    echo "Error: $*" >&2
+ > +    exit 1
+ > +}
+ > +
+ > +# get package(s) for download file, if any
+ > +# get_pkgs <json> <file>
+ > +get_pkgs() {
+ > +    jq --arg file "$2" -r \
+ > +       'to_entries[] | select(.value.downloads[0].source == $file) | .key | strings' "$1"
+ > +}
+ > +
+ > +# get download dir for package
+ > +# get_pkg_dl_dir <json> <package>
+ > +get_pkg_dl_dir() {
+ > +    jq --arg pkg "$2" -r '.[$pkg].dl_dir | strings' "$1"
+ > +}
+ > +
+ > +# generate hash file for download file
+ > +# gen_hash <dir> <file>
+ > +gen_hash() {
+ > +    (
+ > +        cd "$1" && printf '# Locally calculated\nsha256  ' && sha256sum "$2"
+ > +    )
+ > +}
+ > +
+ > +command -v jq || die 'Script needs jq'
+
+Ups, this was a last minute addition, the stdout of command -v should be
+redirected to /dev/null.
+
 -- 
-2.42.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
