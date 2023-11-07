@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C88C4167B
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 10:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C09BC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 10:49:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62BBE421DB;
-	Tue,  7 Nov 2023 10:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62BBE421DB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AE204215E;
+	Tue,  7 Nov 2023 10:49:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AE204215E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LyClBGRjDMRS; Tue,  7 Nov 2023 10:48:25 +0000 (UTC)
+	with ESMTP id mor5fgR-7CNI; Tue,  7 Nov 2023 10:49:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F86542161;
-	Tue,  7 Nov 2023 10:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F86542161
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 35D141BF370
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:48:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7730C42158;
+	Tue,  7 Nov 2023 10:49:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7730C42158
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E11EA1BF370
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:49:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1AA15408C0
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AA15408C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9B8542158
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:49:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9B8542158
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E_2rDGOP1j3f for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 10:48:21 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 98CF140158
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 10:48:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98CF140158
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 16890FF80D;
- Tue,  7 Nov 2023 10:48:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r0Jd3-00H6E8-1f;
- Tue, 07 Nov 2023 11:48:17 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oKTqcecY9tDs for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 10:49:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7BDD4213D
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 10:49:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7BDD4213D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B633A86BC1; Tue,  7 Nov 2023 10:49:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <cover.1699297749.git.yann.morin.1998@free.fr>
- <c4cb742e3bd2d4c18b6a21338167c17b50fe4986.1699297749.git.yann.morin.1998@free.fr>
-Date: Tue, 07 Nov 2023 11:48:17 +0100
-In-Reply-To: <c4cb742e3bd2d4c18b6a21338167c17b50fe4986.1699297749.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 6 Nov 2023 20:09:14 +0100")
-Message-ID: <871qd1yh3i.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 3/3 v2] pkg-download: add option to enforce
- hash checking
+To: buildroot@buildroot.org
+Date: Tue, 7 Nov 2023 11:48:46 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d36710e36fc4698c8fae71675bcff7395246006
+X-Git-Newrev: e091e31831122b60b084bd755e94df4dfe7188d2
+X-Patchwork-Hint: ignore
+Message-Id: <20231107104913.B633A86BC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] pkg-download: add option to enforce hash
+ checking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +57,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Martin Zeiser \(mzeiser\)" <mzeiser@cisco.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e091e31831122b60b084bd755e94df4dfe7188d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Currently, when a pacakge is downloaded from a custom location or
- > version, Buildroot excludes such a package from the mandatory integrity
- > check with hashes, because it was until now not possible to have such
- > hashes.
+Currently, when a package is downloaded from a custom location or
+version, Buildroot excludes such a package from the mandatory integrity
+check with hashes, because it was until now not possible to have such
+hashes.
 
- > We now have a mechanism which users can leverage to provide additional
- > hashes, and so custom versions or locations can now be checked too.
+We now have a mechanism which users can leverage to provide additional
+hashes, and so custom versions or locations can now be checked too.
 
- > Buildroot has no way to know that hashes have indeed been provided for
- > a custom location/version, and so will still happilly ignore an
- > unchecked package.
+Buildroot has no way to know that hashes have indeed been provided for
+a custom location/version, and so will still happily ignore an
+unchecked package.
 
- > However, users who do provide extra hashes most probably do expect that
- > no download is done without an integrity check, and thus expect that a
- > missing hash not be ignored.
+However, users who do provide extra hashes most probably do expect that
+no download is done without an integrity check, and thus expect that a
+missing hash not be ignored.
 
- > Add an option that users can select to make Buildroot forcibly require
- > at least one valid hash, and no invalid hash, for all downloads.
+Add an option that users can select to make Buildroot forcibly require
+at least one valid hash, and no invalid hash, for all downloads.
 
- > Reported-by: "Martin Zeiser (mzeiser)" <mzeiser@cisco.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reported-by: "Martin Zeiser (mzeiser)" <mzeiser@cisco.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in               | 17 +++++++++++++++++
+ package/pkg-download.mk |  5 ++---
+ 2 files changed, 19 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in b/Config.in
+index b344d0e80a..27f5deb16a 100644
+--- a/Config.in
++++ b/Config.in
+@@ -709,6 +709,23 @@ config BR2_FORCE_HOST_BUILD
+ 
+ 	  This option will increase build time.
+ 
++config BR2_DOWNLOAD_FORCE_CHECK_HASHES
++	bool "Force all downloads to have a valid hash"
++	depends on BR2_GLOBAL_PATCH_DIR != ""
++	help
++	  For packages where a custom version or location can be set,
++	  Buildroot does not carry a hash for those custom versions or
++	  locations, so the integrity of such downloads is not verified.
++
++	  Say 'y' here to enforce downloads to have at least one valid
++	  hash (and of course, that all hashes be valid).
++
++	  Those hashes are looked in files in BR2_GLOBAL_PATCH_DIR,
++	  see above.
++
++comment "Forcing all downloads to have a valid hash needs a global patch and hash directory"
++	depends on BR2_GLOBAL_PATCH_DIR = ""
++
+ config BR2_REPRODUCIBLE
+ 	bool "Make the build reproducible (experimental)"
+ 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index bf1c19e5ec..30eeb6b1fc 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -66,9 +66,7 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
+ gitlab = https://gitlab.com/$(1)/$(2)/-/archive/$(3)
+ 
+ # Expressly do not check hashes for those files
+-# Exported variables default to immediately expanded in some versions of
+-# make, but we need it to be recursively-epxanded, so explicitly assign it.
+-export BR_NO_CHECK_HASH_FOR =
++BR_NO_CHECK_HASH_FOR =
+ 
+ ################################################################################
+ # DOWNLOAD_URIS - List the candidates URIs where to get the package from:
+@@ -110,6 +108,7 @@ endif
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(2)_DL_DIR)
+ 	$(Q)$(EXTRA_ENV) $($(2)_DL_ENV) \
++	BR_NO_CHECK_HASH_FOR="$(if $(BR2_DOWNLOAD_FORCE_CHECK_HASHES),,$(BR_NO_CHECK_HASH_FOR))" \
+ 		flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
+ 		-c '$($(2)_DL_VERSION)' \
+ 		-d '$($(2)_DL_DIR)' \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
