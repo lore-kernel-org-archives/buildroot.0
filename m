@@ -4,67 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66689C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 21:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92741C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 22:17:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 152CF60C0F;
-	Tue,  7 Nov 2023 21:56:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 152CF60C0F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E14E60AE7;
+	Tue,  7 Nov 2023 22:17:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E14E60AE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 05zQzYQ1sGir; Tue,  7 Nov 2023 21:56:25 +0000 (UTC)
+	with ESMTP id J8KNloiH1PoW; Tue,  7 Nov 2023 22:17:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2465660D6E;
-	Tue,  7 Nov 2023 21:56:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2465660D6E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B9A41BF5A8
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:56:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C55E60ACA;
+	Tue,  7 Nov 2023 22:17:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C55E60ACA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FC411BF59B
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 22:17:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 807C6403E7
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:56:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 807C6403E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 115D981AF4
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 22:17:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 115D981AF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9gIWYNlSuveY for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 21:56:20 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 858E440182
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 21:56:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 858E440182
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:251d:f18c:43f3:5a5b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id BBB3913F899;
- Tue,  7 Nov 2023 22:56:15 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 07 Nov 2023 22:56:15 +0100
-Date: Tue, 7 Nov 2023 22:56:15 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Christian Hitz <christian@klarinett.li>
-Message-ID: <20231107215615.GO229059@scaer>
-References: <20231107124157.594529-1-christian@klarinett.li>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id srtChA-Sb61m for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 22:17:53 +0000 (UTC)
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com
+ [IPv6:2607:f8b0:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B8FDA81AA7
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 22:17:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8FDA81AA7
+Received: by mail-pf1-x432.google.com with SMTP id
+ d2e1a72fcca58-6b7f0170d7bso6181287b3a.2
+ for <buildroot@buildroot.org>; Tue, 07 Nov 2023 14:17:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1699395473; x=1700000273;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=fU0AXXyPScDGxY0LFQz1o3H+RIbG0KdUg7/zZdtqaiY=;
+ b=WKJ+xo/w4QYO9DFuB5YVBfQxfEkWvRaGNf11KtVHjRL0UjaabsEQMWvEjNA6TsEpeJ
+ YhjcUzuMgQKlW+ae9HHR70o4Meug5/0v63TvdWV1Rv01vCCNZ+YP/Xam7AcnAD4egKoh
+ GJfrqNLKCP1cs18y0Ca18ZM0DesX6JeuXz/pcGvDPwsHK7wIJF2ggpsvMgoXyUareQDR
+ UX3LM7k+AaD1UX3anGjoqUMB1oyUjJgEylRiTM+0AgwvXfkpXmFeYtcikEBVm3LXbsTB
+ xTBdvlcPeXf/abg5tQ/u/ujRQKfsHgXACbu7/M85gMpQn0GkcseVAjs0+WWTfS8ugF0N
+ THPQ==
+X-Gm-Message-State: AOJu0Yz/7clE+r9V+yKlSUrc3DgxGHWkugsSAEFEyzKcjRPLIniORfFb
+ LYXWaLYDC7bWMfvCshmxxUKFzNH4IVWn5tt3SbBuKg==
+X-Google-Smtp-Source: AGHT+IF9UDuzgGfJIpYfwo6V/mciXmixX54oqblumh47UVl9n1OLQbXJOJ17adbt3IJNeJ4uF8pYIQ==
+X-Received: by 2002:a05:6a20:728e:b0:17e:1f9a:91f5 with SMTP id
+ o14-20020a056a20728e00b0017e1f9a91f5mr354216pzk.44.1699395472724; 
+ Tue, 07 Nov 2023 14:17:52 -0800 (PST)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ r18-20020aa78452000000b006c34768a37fsm7671380pfn.114.2023.11.07.14.17.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 07 Nov 2023 14:17:52 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Tue,  7 Nov 2023 14:17:45 -0800
+Message-ID: <20231107221745.2722636-1-christian@aperture.us>
+X-Mailer: git-send-email 2.42.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231107124157.594529-1-christian@klarinett.li>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1699394178;
- bh=NlWDbXFg08bNTnH4cGqNkTAbYulF4hMeMmCY88wrRos=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dsQ+BvhA3BiybWmZeMdiLK2L6PcqFoTswoyBMa0YjkPqK6IrtrUyJdEIcQoHeYiua
- lV1TdfS4VhG0OWeYNLT1mRM/uhdsdL+P88d4A+E4Q4392RAzCggTT716mCWgxw0t72
- 5zbyK04DPPNL2dG5LqsaSpDWfjlkD8NH1z31Uz6XxGVan5YC5mWzLxbCgtiBFXZACl
- foQojYBzzU8V9F1D4VXMOXkXbnGoxgeG9xowAB7h9N9Jna7ax9cO9o7fwTyYcJpZzS
- bO0lD/Igy0rG4Es8SwrQN5IKrzQbciYSQ3hkBmPO5AMc2AbHS99xbslY3gdw/kqtwe
- OwsDBj6WTRadw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dsQ+BvhA
-Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: add patch for
- compatibility with curl 8.4
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1699395473; x=1700000273; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=fU0AXXyPScDGxY0LFQz1o3H+RIbG0KdUg7/zZdtqaiY=;
+ b=Tl8ApVYVisStbEOLEVFYvdPZRTCx37Az4CdtJ8zisJBJ+p1NCwzrlrdzAng79tA6yC
+ XHp6bIdJRA2/6NrjgwoOFjHgKydo2xKZW9kuDxleWDllpP2F0kiLNj2V9aZR9YjMOKoT
+ ldChj2ci898GxjgrFHbehBcHkN6F3gZ4ZDjXEe3fgPqlTiNWZtMaBR+JaPIwoylCQD3H
+ OP1U1gjG6xb3D45UtXi55w4xZ7DcjkmPwviIwUcd8yV8Tf6Cq7/PJpBQpFzVCDxmCO6C
+ PTdu1Ra3xJluQGQyDPIJNIiAnifmskdrWdROhJeCAjz0DTCAKHRm04XOFdoUjzLYJDP2
+ kscQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
+ header.a=rsa-sha256 header.s=google header.b=Tl8ApVYV
+Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump to go1.21.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,99 +92,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Hitz <christian.hitz@bbv.ch>, buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Christian, All,
+Go version 1.21.4 includes the following security fixes:
 
-On 2023-11-07 13:41 +0100, Christian Hitz via buildroot spake thusly:
-> From: Christian Hitz <christian.hitz@bbv.ch>
-> 
-> This upstream patch restores the connectivity check functionality with
-> libcurl 8.4.
-> 
-> Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+CVE-2023-45283: path/filepath: recognize \??\ as a Root Local Device path prefix.
+CVE-2023-45284: path/filepath: recognize device names with trailing spaces and superscripts
 
-Applied to master, thanks.
+https://go.dev/doc/devel/release#go1.21.4
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> ---
-> Backport to: 2023.02.x, 2023.08.x
-> ---
->  ...-curl-timeout-callback-non-repeating.patch | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
-> 
-> diff --git a/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch b/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
-> new file mode 100644
-> index 0000000000..8e25805d0c
-> --- /dev/null
-> +++ b/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
-> @@ -0,0 +1,44 @@
-> +From abc6e1cf258ab332bed161036a358bbe9c2d1e90 Mon Sep 17 00:00:00 2001
-> +From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
-> +Date: Fri, 13 Oct 2023 16:46:09 +0000
-> +Subject: [PATCH] connectivity: Make curl timeout callback non-repeating.
-> +
-> +This reverts commit 05c31da4d9.
-> +
-> +In the linked commit the callback was made repeating on the assumption
-> +that forward progress would result in the callback getting canceled in
-> +cb_data_complete. However, this assumption does not hold since a timeout
-> +callback does not guarantee completion (or error out) of a request.
-> +
-> +curl tweaked some internals in v8.4.0 and started giving 0 timeouts, and
-> +a repeating callback is firing back-to-back without making any progress
-> +in doing so.
-> +
-> +Revert the change and make the callback non-repeating again.
-> +
-> +Fixes: 05c31da4d9cb ('connectivity: don't cancel curl timerfunction from timeout')
-> +Upstream: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/abc6e1cf258ab332bed161036a358bbe9c2d1e90
-> +Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
-> +---
-> + src/core/nm-connectivity.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/core/nm-connectivity.c b/src/core/nm-connectivity.c
-> +index 92de44f17d..d8b0004c38 100644
-> +--- a/src/core/nm-connectivity.c
-> ++++ b/src/core/nm-connectivity.c
-> +@@ -406,9 +406,10 @@ _con_curl_timeout_cb(gpointer user_data)
-> + {
-> +     NMConnectivityCheckHandle *cb_data = user_data;
-> + 
-> ++    cb_data->concheck.curl_timer = 0;
-> +     _con_curl_check_connectivity(cb_data->concheck.curl_mhandle, CURL_SOCKET_TIMEOUT, 0);
-> +     _complete_queued(cb_data->self);
-> +-    return G_SOURCE_CONTINUE;
-> ++    return G_SOURCE_REMOVE;
-> + }
-> + 
-> + static int
-> +-- 
-> +GitLab
-> +
-> -- 
-> 2.42.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 9499f50964..74b18a9b38 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  186f2b6f8c8b704e696821b09ab2041a5c1ee13dcbc3156a13adcf75931ee488  go1.21.3.src.tar.gz
++sha256  47b26a83d2b65a3c1c1bcace273b69bee49a7a7b5168a7604ded3d26a37bd787  go1.21.4.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index ef27f32835..7bd7866a05 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.21.3
++GO_VERSION = 1.21.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.42.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
