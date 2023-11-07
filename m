@@ -4,85 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 997F8C4167B
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 13:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7E4EC4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 13:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3030B8135E;
-	Tue,  7 Nov 2023 13:17:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3030B8135E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B05A82F4A;
+	Tue,  7 Nov 2023 13:23:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B05A82F4A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FQ1qvHgbhVwX; Tue,  7 Nov 2023 13:17:00 +0000 (UTC)
+	with ESMTP id G1WTZOVvdONy; Tue,  7 Nov 2023 13:23:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D60081353;
-	Tue,  7 Nov 2023 13:16:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D60081353
+	by smtp1.osuosl.org (Postfix) with ESMTP id E902A82AC3;
+	Tue,  7 Nov 2023 13:23:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E902A82AC3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E04501BF370
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:16:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E19721BF370
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:23:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B9E2681353
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:16:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9E2681353
+ by smtp1.osuosl.org (Postfix) with ESMTP id B55F0822FA
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 13:23:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B55F0822FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XjRmDS5cSSm7 for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 13:16:56 +0000 (UTC)
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6C17781309
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 13:16:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C17781309
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-53dfc28a2afso9537013a12.1
- for <buildroot@buildroot.org>; Tue, 07 Nov 2023 05:16:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699363014; x=1699967814;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=qbIUOPQ6Pm2id7FZ6LhGGB7aM0TFWHh9F47YAWWsQHU=;
- b=RyOmUSrM/DwiRjpg79jjuujStlWqFPN89BvQsgrOKqsSV07qnHeGjfojftSOzWVbJa
- Bce1ukrARGtD2czhvrYUGY0xRru/F6cejLgWa7yTkOc2husgUEzmqDRW/JZTWc41jrRn
- SknPgubEwtP6GwNLqB6UMhUoSWPm9JiyItHqYI4JK4U/XUT3R/fwOePuj35sCq/goOPg
- EVUjeYSGjL5Al3MF+ppQM3jBXeRURhFvgJ43GGscyYLIF1WOr7sQLJ8zV+Prn1h6Egmo
- g+TpsMFnJuPHyCquVVFbx8Pyy1jF865Y+J0Gtxmm7hUjEIWDW1grV62dmfm+vr/Km6lx
- vrXA==
-X-Gm-Message-State: AOJu0Yw9Gfwqsb4YGZNWluhnt5Tu59SH9EijT08CbZmk2DA8RwZll3TN
- L/J0xsoXE6YoBgUGodFiO59++eBcjCh3i5HipkIT4w==
-X-Google-Smtp-Source: AGHT+IHUr3ON4zB2MF7WKtl+zOdjjsVuCdqRR5rWNBvwBW4n4kx9W/zLu9hJpBLVq+NavCgeDh0DtA==
-X-Received: by 2002:a17:906:ef0e:b0:9b2:765b:273b with SMTP id
- f14-20020a170906ef0e00b009b2765b273bmr18113988ejs.70.1699363014419; 
- Tue, 07 Nov 2023 05:16:54 -0800 (PST)
-Received: from localhost.localdomain (ip-89-177-240-140.bb.vodafone.cz.
- [89.177.240.140]) by smtp.gmail.com with ESMTPSA id
- n16-20020a170906379000b009c5c5c2c59csm1052002ejc.149.2023.11.07.05.16.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 Nov 2023 05:16:54 -0800 (PST)
-From: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>
-To: buildroot@buildroot.org
-Date: Tue,  7 Nov 2023 14:16:26 +0100
-Message-Id: <20231107131627.424088-1-sairon@sairon.cz>
+ with ESMTP id GO46PpvCsyK3 for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 13:23:47 +0000 (UTC)
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1617282C4D
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 13:23:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1617282C4D
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+ by mx1.sberdevices.ru (Postfix) with ESMTP id 9449A10001B;
+ Tue,  7 Nov 2023 16:23:43 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 9449A10001B
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru
+ [172.16.192.107])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx1.sberdevices.ru (Postfix) with ESMTPS;
+ Tue,  7 Nov 2023 16:23:43 +0300 (MSK)
+Received: from sberdevices (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.37; Tue, 7 Nov
+ 2023 16:23:43 +0300
+To: <buildroot@buildroot.org>
+Date: Tue, 7 Nov 2023 16:23:23 +0300
+Message-ID: <20231107132323.3324587-1-ovlevin@salutedevices.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 181168 [Nov 07 2023]
+X-KSMG-AntiSpam-Version: 6.0.0.2
+X-KSMG-AntiSpam-Envelope-From: ovlevin@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 543 543
+ 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4,
+ {Tracking_from_domain_doesnt_match_to}, 100.64.160.123:7.1.2;
+ p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1; 127.0.0.199:7.1.2;
+ d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;
+ salutedevices.com:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960,
+ bases: 2023/11/07 09:01:00 #22417210
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sairon.cz; s=google; t=1699363014; x=1699967814; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qbIUOPQ6Pm2id7FZ6LhGGB7aM0TFWHh9F47YAWWsQHU=;
- b=XQ/H4wxuK20xmv0NheS/wsjEtHJLL7byPJ9kjftg1fuNI768pO8+e1HkG5gnvW7yc3
- NIFCazzhcja7gzEwg75t3lt9DCrRtyYq7w9leB53IQNiA2zhbu9F4o0h4v410vmunVWZ
- 4sgBGOxAX3IQPI+I/+ohHCNR6UFDBICXq/W95Filru73JhOUaQwsOEVwzVsdWDBiBcd2
- 4dR0r6KBJhJu4Y57rRXznKTiNirdSxUflNHg41EEAdzRylQByEazr7K85i40PoAmL8PK
- 4twllQMJMPnNofNgjksdKg2VcGik36Lj3dYD65zSCgLsTJlXC58R8uq6+E33vc0KJqXe
- Jvsg==
+ d=salutedevices.com; s=mail; t=1699363423;
+ bh=ax1UjLV+Ud1cMMvDx4xUynLK0XhDpjRp1+xlCGuAI70=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+ b=YHbLiZXOEGz1kH/TDCtq4ccjg4kgykBHnph/VhNOJg6smwG14P9zU+ssXGnifvRyg
+ zLmptWCMMnYd2GaXaJCPb2YkgrY7b/uazQYuZr14qogsBGgSz85tQrU4mJB71ZX/6W
+ 9fB9n7e5y2IMbuJ2FEHbqTvmOOwT1AVnPwwZ1U83SAyoD5jfCC642LEZGLEupNkLKT
+ cXRmzPVzPwnJkVrXz6DmeSPkPv3Nmbf/B6+v/gfSxDenGJQhO104RN0YzVPLZYyVEC
+ MGc1ufwgJUIl02iIfcxM3tCSCPW9pITPuEACoDRwW/T64W5aaBp8S15KEfDAvswyHx
+ YkZhaJxrXAg+w==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz
- header.a=rsa-sha256 header.s=google header.b=XQ/H4wxu
-Subject: [Buildroot] [PATCH v2] package/linux-firmware: add RTL8851/RTL8852
- firmware
+ dkim=pass (2048-bit key) header.d=salutedevices.com
+ header.i=@salutedevices.com header.a=rsa-sha256 header.s=mail
+ header.b=YHbLiZXO
+Subject: [Buildroot] [PATCH 1/1] package: dhcpcd: fix dhcpcd binary not
+ stripped
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,33 +105,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>,
- Bernd Kuhls <bernd@kuhls.net>, "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Oleg Lyovin via buildroot <buildroot@buildroot.org>
+Reply-To: Oleg Lyovin <ovlevin@salutedevices.com>
+Cc: John Stile <johns@msli.com>, olegartys@gmail.com,
+ Oleg Lyovin <ovlevin@salutedevices.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIGZpcm13YXJlIGZpbGVzIGZvciBSVEw4ODUxIGFuZCBSVEw4ODUyIGNhcmRzIHVzZWQgYnkg
-dGhlIHJ0bGJ0IGRyaXZlci4KClNpZ25lZC1vZmYtYnk6IEphbiDEjGVybcOhayA8c2Fpcm9uQHNh
-aXJvbi5jej4KLS0tCiBwYWNrYWdlL2xpbnV4LWZpcm13YXJlL2xpbnV4LWZpcm13YXJlLm1rIHwg
-NyArKysrKystCiAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
-CgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9saW51eC1maXJtd2FyZS9saW51eC1maXJtd2FyZS5tayBi
-L3BhY2thZ2UvbGludXgtZmlybXdhcmUvbGludXgtZmlybXdhcmUubWsKaW5kZXggYzJjZjBmZWMx
-OS4uOTY5MDVkZDkwOSAxMDA2NDQKLS0tIGEvcGFja2FnZS9saW51eC1maXJtd2FyZS9saW51eC1m
-aXJtd2FyZS5taworKysgYi9wYWNrYWdlL2xpbnV4LWZpcm13YXJlL2xpbnV4LWZpcm13YXJlLm1r
-CkBAIC05MCw3ICs5MCwxMiBAQCBMSU5VWF9GSVJNV0FSRV9GSUxFUyArPSBcCiAJcnRsX2J0L3J0
-bDg4MjFjX2NvbmZpZy5iaW4gcnRsX2J0L3J0bDg4MjFjX2Z3LmJpbiBcCiAJcnRsX2J0L3J0bDg4
-MjJiX2NvbmZpZy5iaW4gcnRsX2J0L3J0bDg4MjJiX2Z3LmJpbiBcCiAJcnRsX2J0L3J0bDg4MjJj
-c19jb25maWcuYmluIHJ0bF9idC9ydGw4ODIyY3NfZncuYmluIFwKLQlydGxfYnQvcnRsODgyMmN1
-X2NvbmZpZy5iaW4gcnRsX2J0L3J0bDg4MjJjdV9mdy5iaW4KKwlydGxfYnQvcnRsODgyMmN1X2Nv
-bmZpZy5iaW4gcnRsX2J0L3J0bDg4MjJjdV9mdy5iaW4gXAorCXJ0bF9idC9ydGw4ODUxYnVfZncu
-YmluIHJ0bF9idC9ydGw4ODUxYnVfY29uZmlnLmJpbiBcCisJcnRsX2J0L3J0bDg4NTJhdV9mdy5i
-aW4gcnRsX2J0L3J0bDg4NTJhdV9jb25maWcuYmluIFwKKwlydGxfYnQvcnRsODg1MmJ1X2Z3LmJp
-biBydGxfYnQvcnRsODg1MmJ1X2NvbmZpZy5iaW4gXAorCXJ0bF9idC9ydGw4ODUyY3VfZncuYmlu
-IHJ0bF9idC9ydGw4ODUyY3VfY29uZmlnLmJpbiBcCisJcnRsX2J0L3J0bDg4NTJjdV9md192Mi5i
-aW4KIExJTlVYX0ZJUk1XQVJFX0FMTF9MSUNFTlNFX0ZJTEVTICs9IExJQ0VOQ0UucnRsd2lmaV9m
-aXJtd2FyZS50eHQKIGVuZGlmCiAKLS0gCjIuMzQuMQoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+By default dhcpcd installed with 555 permissions as it is
+configured in its Makefile.inc. Since 'w' bit is missing,
+strip fails and dhcpcd binary installed non-stripped.
+
+On ARM GCC 12 glibc configuration strip saves over 1MB of disk space.
+
+Signed-off-by: Oleg Lyovin <ovlevin@salutedevices.com>
+---
+ package/dhcpcd/dhcpcd.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index a194bce323..ba1481e83d 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -17,6 +17,9 @@ DHCPCD_CONFIG_OPTS = \
+ 	--os=linux \
+ 	--privsepuser=dhcpcd
+ 
++DHCPCD_MAKE_OPTS = \
++	BINMODE=755
++
+ ifeq ($(BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP),y)
+ DHCPCD_CONFIG_OPTS += --enable-privsep
+ else
+@@ -43,11 +46,11 @@ define DHCPCD_CONFIGURE_CMDS
+ endef
+ 
+ define DHCPCD_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(DHCPCD_MAKE_OPTS) all
+ endef
+ 
+ define DHCPCD_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(DHCPCD_MAKE_OPTS) install DESTDIR=$(TARGET_DIR)
+ endef
+ 
+ # When network-manager is enabled together with dhcpcd, it will use
+-- 
+2.42.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
