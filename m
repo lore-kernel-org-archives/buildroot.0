@@ -4,50 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 455E1C4167B
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 15:56:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22021C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 16:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5C5741793;
-	Tue,  7 Nov 2023 15:56:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5C5741793
+	by smtp4.osuosl.org (Postfix) with ESMTP id B586E421FC;
+	Tue,  7 Nov 2023 16:15:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B586E421FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id koVkLZrvnY81; Tue,  7 Nov 2023 15:56:29 +0000 (UTC)
+	with ESMTP id Z0wxXQNHUlm5; Tue,  7 Nov 2023 16:15:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F30E41763;
-	Tue,  7 Nov 2023 15:56:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F30E41763
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 231231BF32E
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 15:56:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECE03421F8;
+	Tue,  7 Nov 2023 16:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECE03421F8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A810A1BF27A
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 16:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0895041848
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 15:56:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0895041848
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8158B61396
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 16:15:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8158B61396
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xQtlaiZUQL01 for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 15:56:24 +0000 (UTC)
-X-Greylist: delayed 693 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 07 Nov 2023 15:56:23 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E45DA41844
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E45DA41844
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 15:56:23 +0000 (UTC)
-Feedback-ID: 3578:1022:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1849453095; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 07 Nov 2023 15:44:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue,  7 Nov 2023 10:44:24 -0500
-Message-Id: <20231107154424.1602940-1-wdouglass@carnegierobotics.com>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id V8QvAPlPRZoY for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 16:15:48 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EF47D61024
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 16:15:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF47D61024
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:251d:f18c:43f3:5a5b])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id ED6D113F8C2;
+ Tue,  7 Nov 2023 17:15:39 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 07 Nov 2023 17:15:39 +0100
+Date: Tue, 7 Nov 2023 17:15:39 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20231107161539.GD229059@scaer>
+References: <20231031120713.678783-1-giulio.benetti@benettiengineering.com>
+ <20231101152114.GE114892@scaer>
+ <26fabf07-fc17-421b-9cbb-fb721bf63374@benettiengineering.com>
+ <20231103212151.GA2875@scaer>
+ <579363d0-a242-444a-aecf-83f21b4e629b@benettiengineering.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/opencv4: bump version to 4.8.1
+Content-Disposition: inline
+In-Reply-To: <579363d0-a242-444a-aecf-83f21b4e629b@benettiengineering.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1699373745;
+ bh=fJoeBNaPiDuNW3nTqOkWGlOJdiD2niGZLct2U4RUJqU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=lsQXWIPHz4Lo6E6TtyQ91WQ0J2CG62tXtluLOdkM8a/VElozzQ+HUeJG/TGzwb6+O
+ HR+XC/mInWc6YvCPaU8a19Hkc+SroAoEtPCdtp+PIhQ6bno4e7RBkiaveKhatrwTk8
+ hRAqIVIqW2k6W9jf7Yg4jbmuP969REjY8K4FG8EsU3/E4mLgGcLJtpHYNtqPFHQCCv
+ tZTh+YXzi6s9WopMC/Q5iAkd/AnMMcDinUPp69un9OD0Z47K8CSAEq+x/5mf3CyWnQ
+ J7Ql/J8ZLtj4gvAzrUYTqR7nAIdEOsat/U0CWfPS2gKIbxq+I2kxNfBn6Zfnx1mJqG
+ 1nLg9I2gFZ6pg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lsQXWIPH
+Subject: Re: [Buildroot] [PATCH] package/nodejs/nodejs-src: remove .node
+ files with different architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,72 +80,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Woodrow Douglass via buildroot <buildroot@buildroot.org>
-Reply-To: Woodrow Douglass <wdouglass@carnegierobotics.com>
-Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org, Daniel Price <daniel.price@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Martin Bark <martin@barkynet.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Also, bump package/opencv4-contrib to keep in lock-step. This should address CVE-2023-2617 and CVE-2023-2618
+Giulio, All,
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
----
- package/opencv4-contrib/opencv4-contrib.hash | 2 +-
- package/opencv4-contrib/opencv4-contrib.mk   | 2 +-
- package/opencv4/opencv4.hash                 | 2 +-
- package/opencv4/opencv4.mk                   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+On 2023-11-05 15:27 +0100, Giulio Benetti spake thusly:
+> On 03/11/23 22:21, Yann E. MORIN wrote:
+> >Oh, I was just walking the "npm is a mess anyway, just ignore anything
+> >from it, we don't care" road. If we take this stance, then
+> >_BIN_ARCH_EXCLUDE is a trivial way to avoid the check-bin-arch issue.
+[--SNIP--]
+> Since npm rebuilding is not that easy and fast to deal with I've just sent
+> this patch to temporary exclude the /usr/lib/node_modules folder
+> as you've suggested(forgotten to add "Suggested-by: Yann E. MORIN
+> <yann.morin.1998@free.fr>").
+> 
+> Later I hope to find time to deal with npm rebuilding.
 
-diff --git a/package/opencv4-contrib/opencv4-contrib.hash b/package/opencv4-contrib/opencv4-contrib.hash
-index 4f15162e50..954a0c2beb 100644
---- a/package/opencv4-contrib/opencv4-contrib.hash
-+++ b/package/opencv4-contrib/opencv4-contrib.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1777d5fd2b59029cf537e5fd6f8aa68d707075822f90bde683fcde086f85f7a7  opencv4-contrib-4.6.0.tar.gz
-+sha256  0c082a0b29b3118f2a0a1856b403bb098643af7b994a0080f402a12159a99c6e  opencv4-contrib-4.8.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
-index 81c45c6e02..52d2682b26 100644
---- a/package/opencv4-contrib/opencv4-contrib.mk
-+++ b/package/opencv4-contrib/opencv4-contrib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCV4_CONTRIB_VERSION = 4.6.0
-+OPENCV4_CONTRIB_VERSION = 4.8.1
- OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
- OPENCV4_CONTRIB_INSTALL_TARGET = FALSE
- OPENCV4_CONTRIB_LICENSE = Apache-2.0
-diff --git a/package/opencv4/opencv4.hash b/package/opencv4/opencv4.hash
-index 419b420917..2736752633 100644
---- a/package/opencv4/opencv4.hash
-+++ b/package/opencv4/opencv4.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1ec1cba65f9f20fe5a41fda1586e01c70ea0c9a6d7b67c9e13edf0cfe2239277  opencv4-4.6.0.tar.gz
-+sha256  62f650467a60a38794d681ae7e66e3e8cfba38f445e0bf87867e2f2cdc8be9d5  opencv4-4.8.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index 2a05de42fb..74cec511a9 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCV4_VERSION = 4.6.0
-+OPENCV4_VERSION = 4.8.1
- OPENCV4_SITE = $(call github,opencv,opencv,$(OPENCV4_VERSION))
- OPENCV4_INSTALL_STAGING = YES
- OPENCV4_LICENSE = Apache-2.0
+I think tht it might in fact be what we're doing already, as we use:
+    npm_config_build_from_source=true
+
+in the environment when we call npm.
+
+However, I was not able to find any reference to those options... :-/
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.39.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
