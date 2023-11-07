@@ -4,65 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEF75C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 10:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45075C4332F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 10:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 560E94214F;
-	Tue,  7 Nov 2023 10:43:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 560E94214F
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6F0A4213D;
+	Tue,  7 Nov 2023 10:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6F0A4213D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jcKJZaVxESgz; Tue,  7 Nov 2023 10:43:11 +0000 (UTC)
+	with ESMTP id Xzm500KebwdX; Tue,  7 Nov 2023 10:46:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98FAC41803;
-	Tue,  7 Nov 2023 10:43:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98FAC41803
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B952D1BF370
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:43:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EC7642013;
+	Tue,  7 Nov 2023 10:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EC7642013
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A76BE1BF370
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:46:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9009361334
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:43:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9009361334
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FE6E42012
+ for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 10:46:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FE6E42012
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TGqxozOW30vD for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 10:43:06 +0000 (UTC)
-Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B02FE612EB
- for <buildroot@buildroot.org>; Tue,  7 Nov 2023 10:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B02FE612EB
-Received: by smtpng3.m.smailru.net with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1r0JXy-0004Kd-JV; Tue, 07 Nov 2023 13:43:03 +0300
-To: buildroot@buildroot.org
-Date: Tue,  7 Nov 2023 13:43:00 +0300
-Message-Id: <20231107104300.918114-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZJPOI2hITIOK for <buildroot@lists.busybox.net>;
+ Tue,  7 Nov 2023 10:46:20 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6445F42011
+ for <buildroot@buildroot.org>; Tue,  7 Nov 2023 10:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6445F42011
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EC4D41C0007;
+ Tue,  7 Nov 2023 10:46:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r0Jb6-00H6BS-0n;
+ Tue, 07 Nov 2023 11:46:16 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <cover.1699297749.git.yann.morin.1998@free.fr>
+ <e9097a9727dce27b9124e803a6c0a58091ec3e34.1699297749.git.yann.morin.1998@free.fr>
+Date: Tue, 07 Nov 2023 11:46:16 +0100
+In-Reply-To: <e9097a9727dce27b9124e803a6c0a58091ec3e34.1699297749.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 6 Nov 2023 20:09:12 +0100")
+Message-ID: <87a5rpyh6v.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: 78E4E2B564C1792B
-X-77F55803: 4F1203BC0FB41BD9DD83A8ACFE75317590AE4B9F68355E47A66D42917648982000894C459B0CD1B9A0C7E997ADB64444C591A2D55851867E0295A8694E475E859799EF890AE2F2A9
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE78CB87876C5D626D4EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F790063702DFA59B3C994360EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B73AB1701401CD87115615D4A32DF0D0FC957C454FB70FC7D20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C07734D68A6916D8318941B15DA834481FA18204E546F3947C62E6B8B4347DBC1CF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F7900637CA37C9946A8B9E41389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC8C7ADC89C2F0B2A5E2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8BB9CEE4F2B4A90F8475ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-C1DE0DAB: 0D63561A33F958A52B0A4A43D6394B500673F003412A2B370FB76DD771BE18D0F87CCE6106E1FC07E67D4AC08A07B9B04E7D9683544204AF9C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF6643A3CF3680D14720F2D02BE976F510D80C702E3876DBEF984A7B881BAEAA16AF1510F4A86D2C812B33B16BC67043E08E9ECC7A542AD91BE0FB0DDDF3D9B2CB40B08DDBC5CE87D002C26D483E81D6BEEB84411BD425175970A7FB4ED9620804ADE12199CE9660BE
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojoiosMWyUVRc86vu/Ae/oMQ==
-X-Mailru-Sender: 689FA8AB762F7393590D8C940224AE3369158770A29989355AA54B00522325F398CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; s=mail4; 
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=0z1IEd7cag6XhNjQEd94qlRNc3r00ja6mDXxI4DiWUY=; 
- t=1699353785;x=1699443785; 
- b=Yfw5aIy7xNpjKzmPC1/TR9S9jrIlyV5b983zNM7LLixB7wKlG4+El2Q/wno5LpqexCkAIcreEx/Co20oZiZCl7bmLf/j81CmGWWdG1rCy3m6c9ueC2HTqPVrT+01/LuNWl1afXowGgtZf514vlXona1JFpx/uxmJx+ETCF8VYl/7phk7esfEKlsbpBYsOBAtDzhBFNuF9mCcPijXAzLagc9AOR892Hmhmqwx7U/1Mb684JGE2m0h1eE1qDUnkggMgFGpVvd0VtEPYF2iWnlYnIZ1l3b/gtoDpK/CcNmHvezQ/0NDWOqB87Gal3/ys4L6JkvkS1B7WIBoOJ1Z9Fw+Rg==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
- header.a=rsa-sha256 header.s=mail4 header.b=Yfw5aIy7
-X-Mailman-Original-Authentication-Results: smtpng3.m.smailru.net; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/libosmium: bump version to 2.20.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/3 v2] support/download: teach dl-wrapper
+ to handle more than one hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,47 +64,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: "Martin Zeiser \(mzeiser\)" <mzeiser@cisco.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release-notes: https://github.com/osmcode/libosmium/releases/tag/v2.20.0
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/libosmium/libosmium.hash | 2 +-
- package/libosmium/libosmium.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Currently, we expect and only use hash files that lie within the package
+ > directory, alongside the .mk file. Those hash files are thus bundeld
+ > with Buildroot.
 
-diff --git a/package/libosmium/libosmium.hash b/package/libosmium/libosmium.hash
-index b055aa21ea..37bcdd267c 100644
---- a/package/libosmium/libosmium.hash
-+++ b/package/libosmium/libosmium.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6911a8ca8e81d49205357177982df908af11376919f93b814cccf02f1d4d63e3  libosmium-2.19.0.tar.gz
-+sha256  3d3e0873c6aaabb3b2ef4283896bebf233334891a7a49f4712af30ca6ed72477  libosmium-2.20.0.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
-diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
-index 2725130e72..753255556c 100644
---- a/package/libosmium/libosmium.mk
-+++ b/package/libosmium/libosmium.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOSMIUM_VERSION = 2.19.0
-+LIBOSMIUM_VERSION = 2.20.0
- LIBOSMIUM_SITE = $(call github,osmcode,libosmium,v$(LIBOSMIUM_VERSION))
- LIBOSMIUM_LICENSE = BSL-1.0
- LIBOSMIUM_LICENSE_FILES = LICENSE
+ > This implies that only what's known to Buildroot can ever get into those
+ > hash files. For packages where the version is fixed (or a static
+ > choice), then we can carry hashes for those known versions.
+
+ > However, we do have a few packages for which the version is a free-form
+ > entry, where the user can provide a custom location and/or version. like
+ > a custom VCS tree and revision, or a custom tarball URL. This means that
+ > Buildroot has no way to be able to cary hashes for such custom versions.
+
+ > This means that there is no integrity check that what was downloaded is
+ > what was expected. For a sha1 in a git tree, this is a minor issue,
+ > because the sha1 by itself is already a hash of the expected content.
+ > But for custom tarballs URLs, or for a tag in a VCS, there is indeed no
+ > integrity check.
+
+ > Buildroot can't provide such hashes, but interested users may want to
+ > provide those, and currently there is no (easy) way to do so.
+
+ > So, we need our download helpers to be able to accept more than one hash
+ > file to lookup for hashes.
+
+ > Extend the dl-wrapper and the check-hash helpers thusly, and update the
+ > legal-info accordingly.
+
+ > Note that, to be able to pass more than one hash file, we also need to
+ > re-order the arguments passed to support/download/check-hash, which also
+ > impies some shuffling in the three places it is called:
+ >   - 2 in dl-wrapper
+ >   - 1 in the legal-info infra
+
+ > That in turn also requires that the legal-license-file macro args get
+ > re-ordered to have the hash file last; we take the opportunity to also
+ > move the HOST/TARGET arg to be first, like in the other legal-info
+ > macros.
+
+ > Reported-by: "Martin Zeiser (mzeiser)" <mzeiser@cisco.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - restore legal-info  (Peter K.)
+
+Committed, thanks.
+
 -- 
-2.40.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
