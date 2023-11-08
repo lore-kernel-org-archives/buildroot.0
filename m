@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E011C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 09:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 774B6C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 09:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94C4661010;
-	Wed,  8 Nov 2023 09:26:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94C4661010
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3062860FD7;
+	Wed,  8 Nov 2023 09:27:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3062860FD7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id abfu5ljGhvzj; Wed,  8 Nov 2023 09:26:46 +0000 (UTC)
+	with ESMTP id z8zNqG9WUtm6; Wed,  8 Nov 2023 09:27:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E60E261004;
-	Wed,  8 Nov 2023 09:26:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E60E261004
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4A1D71BF423
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 09:26:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7ADC361004;
+	Wed,  8 Nov 2023 09:27:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ADC361004
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 892111BF423
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 09:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CC6E40960
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 09:26:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CC6E40960
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61A7B61010
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 09:27:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61A7B61010
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B3TlquBOWgXA for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 09:26:43 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D26484095E
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 09:26:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D26484095E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AD8C54000B;
- Wed,  8 Nov 2023 09:26:40 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r0epc-000BNw-13;
- Wed, 08 Nov 2023 10:26:40 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lbKjHQvQ58a2 for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 09:27:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B83361004
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 09:27:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B83361004
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7946286C9A; Wed,  8 Nov 2023 09:27:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231101181546.25564-1-fontaine.fabrice@gmail.com>
-Date: Wed, 08 Nov 2023 10:26:40 +0100
-In-Reply-To: <20231101181546.25564-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 1 Nov 2023 19:15:46 +0100")
-Message-ID: <878r78tx2n.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-web2py: security bump to
- version 2.26.1
+To: buildroot@buildroot.org
+Date: Wed, 8 Nov 2023 10:22:41 +0100
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 316ca9cab96d30f62c397341316609ce07605b96
+X-Git-Newrev: 2abaf905ae84ee874192236bf7ae66b25b8eeb2f
+X-Patchwork-Hint: ignore
+Message-Id: <20231108092718.7946286C9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x]
+ package/perl-lwp-protocol-https: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +57,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2abaf905ae84ee874192236bf7ae66b25b8eeb2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
- > Fix CVE-2023-45158: An OS command injection vulnerability exists in
- > web2py 2.24.1 and earlier. When the product is configured to use
- > notifySendHandler for logging (not the default configuration), a crafted
- > web request may execute an arbitrary OS command on the web server using
- > the product.
+cpe:2.3:a:lwp\:\:protocol\:\:https_project:lwp\:\:protocol\:\:https is a
+valid CPE identifier for this package:
 
- > https://jvn.jp/en/jp/JVN80476432
- > https://github.com/web2py/web2py/compare/v2.24.1...v2.26.1
+  https://nvd.nist.gov/products/cpe/detail/804408BE-097D-4FE3-B6DB-29324871C6B9
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b32e4fa760f55f3b240d38b166b9dcb4103bbdfb)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed to 2023.02.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
+index 0663820b2e..6cbe4b33da 100644
+--- a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
++++ b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
+@@ -9,6 +9,8 @@ PERL_LWP_PROTOCOL_HTTPS_SOURCE = LWP-Protocol-https-$(PERL_LWP_PROTOCOL_HTTPS_VE
+ PERL_LWP_PROTOCOL_HTTPS_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LWP_PROTOCOL_HTTPS_LICENSE = Artistic or GPL-1.0+
+ PERL_LWP_PROTOCOL_HTTPS_LICENSE_FILES = LICENSE
++PERL_LWP_PROTOCOL_HTTPS_CPE_ID_VENDOR = lwp\:\:protocol\:\:https_project
++PERL_LWP_PROTOCOL_HTTPS_CPE_ID_PRODUCT = lwp\:\:protocol\:\:https
+ PERL_LWP_PROTOCOL_HTTPS_DISTNAME = LWP-Protocol-https
+ 
+ $(eval $(perl-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
