@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86708C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 19:26:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58D14C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 20:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AB0F41BF2;
-	Wed,  8 Nov 2023 19:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AB0F41BF2
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDD0D60A92;
+	Wed,  8 Nov 2023 20:23:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDD0D60A92
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YeHdvYSvklWa; Wed,  8 Nov 2023 19:26:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HRQnmdpjmb7F; Wed,  8 Nov 2023 20:23:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7797241686;
-	Wed,  8 Nov 2023 19:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7797241686
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D81A60A7D;
+	Wed,  8 Nov 2023 20:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D81A60A7D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7313C1BF966
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 19:25:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A99761BF282
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 20:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D51A41686
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 19:25:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D51A41686
+ by smtp4.osuosl.org (Postfix) with ESMTP id 821A4416D4
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 20:23:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 821A4416D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RK6yxBrjrPQY for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 19:25:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7761241675
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 19:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7761241675
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 64EC686D2F; Wed,  8 Nov 2023 19:25:30 +0000 (UTC)
+ with ESMTP id YU8c7wec9yXV for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 20:23:16 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0CC5D415ED
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 20:23:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CC5D415ED
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B6DE20007;
+ Wed,  8 Nov 2023 20:23:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r0p4y-001DkE-1V;
+ Wed, 08 Nov 2023 21:23:12 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 20:08:07 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: cd8bf27f72454d34797dbf58ce1709868ee49a6f
-X-Git-Newrev: 648d91888ac6159fe062c5d87a07cc9b23c3dc18
-X-Patchwork-Hint: ignore
-Message-Id: <20231108192530.64EC686D2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/mender: add
- MENDER_CPE_ID_VENDOR
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20231103203039.3042294-1-bernd@kuhls.net>
+Date: Wed, 08 Nov 2023 21:23:12 +0100
+In-Reply-To: <20231103203039.3042294-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Fri, 3 Nov 2023 21:30:39 +0100")
+Message-ID: <87cywkq9jj.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/tor: security bump version to
+ 0.4.8.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,40 +63,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=648d91888ac6159fe062c5d87a07cc9b23c3dc18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-cpe:2.3:a:northern.tech:mender is a valid CPE identifier for this
-package:
+ > Release notes:
+ > https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+ > https://forum.torproject.org/t/security-release-0-4-7-16-and-0-4-8-8/10064
 
-  https://nvd.nist.gov/products/cpe/detail/F90CE0C3-FCE6-40AA-8C0D-EDE2C81BD67B
+ > Fixes TROVE-2023-004.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f4a9cdb1f85c376c18a432208ce62c7d45d7b6da)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mender/mender.mk | 1 +
- 1 file changed, 1 insertion(+)
+.. which is still not public :/
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 724295f784..ee1398244b 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -7,6 +7,7 @@
- MENDER_VERSION = 3.4.0
- MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
- MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
-+MENDER_CPE_ID_VENDOR = northern.tech
- 
- # Vendor license paths generated with:
- #    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
+I have instead bumped 2023.02.x and 2023.08.x to 0.4.7.16, which
+contains the same fix.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
