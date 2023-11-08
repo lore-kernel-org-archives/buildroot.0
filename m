@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA9EAC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:23:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EB0BC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 09:20:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 877BA40948;
-	Wed,  8 Nov 2023 07:23:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 877BA40948
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1628360FD7;
+	Wed,  8 Nov 2023 09:20:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1628360FD7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fWSY9zps4IiH; Wed,  8 Nov 2023 07:23:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xwccEJ6LCger; Wed,  8 Nov 2023 09:20:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B2C040734;
-	Wed,  8 Nov 2023 07:23:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B2C040734
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A6BF60FB2;
+	Wed,  8 Nov 2023 09:20:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A6BF60FB2
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8FD3F1BF487
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:23:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A90541BF423
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 09:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 652EB408BC
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:23:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 652EB408BC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DBCA4094F
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 09:20:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DBCA4094F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XGi3l9brlAwL for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 07:23:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 53DA040734
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 07:23:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53DA040734
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FE1786C67; Wed,  8 Nov 2023 07:23:08 +0000 (UTC)
+ with ESMTP id JbNKpJ-ycmaA for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 09:20:18 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8002D4094C
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 09:20:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8002D4094C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C5B9C0003;
+ Wed,  8 Nov 2023 09:20:15 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r0ejO-000B3s-2f;
+ Wed, 08 Nov 2023 10:20:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 08:21:39 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: fb42a4bb79b282f34669fd2da3c6b9d42a255f4f
-X-Git-Newrev: 588e9a6e87ca3479c5648765693658f3051aa295
-X-Patchwork-Hint: ignore
-Message-Id: <20231108072308.3FE1786C67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/conmon: fix
- static build
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+References: <20231017173611.2881905-1-adam.duskett@amarulasolutions.com>
+Date: Wed, 08 Nov 2023 10:20:14 +0100
+In-Reply-To: <20231017173611.2881905-1-adam.duskett@amarulasolutions.com>
+ (Adam Duskett's message of "Tue, 17 Oct 2023 19:36:10 +0200")
+Message-ID: <87leb8txdd.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2] package/openjdk-bin: bump OpenJDK17
+ version to 17.0.8.1+1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,84 +63,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Tudor Holton <buildroot@tudorholton.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=588e9a6e87ca3479c5648765693658f3051aa295
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Adam" == Adam Duskett <adam.duskett@amarulasolutions.com> writes:
 
-Fix the following static build failure raised since commit
-8144dd1b4cca2d5c89e329b0497f49f512c9caed which fixed dynamic build but
-broke static build:
+ > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-src/seccomp_notify.c:10:10: fatal error: dlfcn.h: No such file or directory
-   10 | #include <dlfcn.h>
-      |          ^~~~~~~~~
+Committed to 2023.02.x and 2023.08.x, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/71b4f35b3150183c7b44bc3897f01b0019e10ebe
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5e10a0678196a708eeb99b4a87006798bfab1572)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...001-src-seccomp_notify.c-fix-static-build.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/package/conmon/0001-src-seccomp_notify.c-fix-static-build.patch b/package/conmon/0001-src-seccomp_notify.c-fix-static-build.patch
-new file mode 100644
-index 0000000000..afffa909c8
---- /dev/null
-+++ b/package/conmon/0001-src-seccomp_notify.c-fix-static-build.patch
-@@ -0,0 +1,44 @@
-+From 6cfcea9a16017f2a49cd792d39ebd9c86395946a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 1 Nov 2023 16:45:21 +0100
-+Subject: [PATCH] src/seccomp_notify.c: fix static build
-+
-+Fix the following static build failure raised even when seccomp is
-+disabled:
-+
-+src/seccomp_notify.c:10:10: fatal error: dlfcn.h: No such file or directory
-+   10 | #include <dlfcn.h>
-+      |          ^~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/71b4f35b3150183c7b44bc3897f01b0019e10ebe
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/containers/conmon/issues/462
-+---
-+ src/seccomp_notify.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/seccomp_notify.c b/src/seccomp_notify.c
-+index 8d34d9d..bf738ea 100644
-+--- a/src/seccomp_notify.c
-++++ b/src/seccomp_notify.c
-+@@ -7,7 +7,6 @@
-+ 
-+ #include <errno.h>
-+ #include <sys/ioctl.h>
-+-#include <dlfcn.h>
-+ #include <sys/wait.h>
-+ #include <sys/mount.h>
-+ #include <signal.h>
-+@@ -19,6 +18,7 @@
-+ 
-+ #ifdef USE_SECCOMP
-+ 
-++#include <dlfcn.h>
-+ #include <sys/sysmacros.h>
-+ #include <linux/seccomp.h>
-+ #include <seccomp.h>
-+-- 
-+2.42.0
-+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
