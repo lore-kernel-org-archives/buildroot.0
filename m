@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05786C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:07:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D1DBC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC66940642;
-	Wed,  8 Nov 2023 07:07:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC66940642
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD278408D8;
+	Wed,  8 Nov 2023 07:08:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD278408D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RNyMcFpX84Z5; Wed,  8 Nov 2023 07:07:49 +0000 (UTC)
+	with ESMTP id 6oMsMqjwdw3k; Wed,  8 Nov 2023 07:08:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E86E4074E;
-	Wed,  8 Nov 2023 07:07:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E86E4074E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C4361BF424
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB543408B0;
+	Wed,  8 Nov 2023 07:08:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB543408B0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B225B1BF47F
  for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:07:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6618A60759
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A2174074E
  for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:07:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6618A60759
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A2174074E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Scqf16xbZzjc for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id J1WferMsvqwX for <buildroot@lists.busybox.net>;
  Wed,  8 Nov 2023 07:07:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E36E60008
+ by smtp2.osuosl.org (Postfix) with ESMTP id 84A9240642
  for <buildroot@buildroot.org>; Wed,  8 Nov 2023 07:07:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E36E60008
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84A9240642
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DAF886C6E; Wed,  8 Nov 2023 07:07:46 +0000 (UTC)
+ id 728F986C6D; Wed,  8 Nov 2023 07:07:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 08:05:06 +0100
+Date: Wed, 8 Nov 2023 08:00:19 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 2b7b49c0652f4da88e43c925d635b15d4103247b
-X-Git-Newrev: 8de47d6babe3edd1a40ce650e4f5cc6a006013d8
+X-Git-Oldrev: f9ac3042a04cfbc3d9cf793d1ec96173980756ac
+X-Git-Newrev: 2b7b49c0652f4da88e43c925d635b15d4103247b
 X-Patchwork-Hint: ignore
-Message-Id: <20231108070746.7DAF886C6E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/mpd: update to
- version 0.23.14
+Message-Id: <20231108070746.728F986C6D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/lxc: bump to
+ version 5.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8de47d6babe3edd1a40ce650e4f5cc6a006013d8
+commit: https://git.buildroot.net/buildroot/commit/?id=2b7b49c0652f4da88e43c925d635b15d4103247b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Bug fixes in decoder (flac, mad), mixer (wasapi),
-libfmt, systemd detection
+https://discuss.linuxcontainers.org/t/lxc-5-0-3-lts-has-been-released/17708
 
-Change log:
-	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.14/NEWS
-
-Tested on:
-	i386 (build, run)
-	x86_64 (build)
-	Aarch64 (build, run)
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 27fc59029f1f813f2a11e95cfcdccf14562cef51)
+(cherry picked from commit cc85e9dea5c1a66cbfec6224786ee04d110d5e29)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
+ package/lxc/lxc.hash | 2 +-
+ package/lxc/lxc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 8683b02e3b..4ee4967556 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  a96b01e6fbbb7e8ab25eb7c15d5c811c62eb19b76d143a802f51674791f1d519  mpd-0.23.13.tar.xz
-+sha256  85b9a67426d528ae9fb849eb3b10faf52d4b18d22b1fd71088e6d9a388b509d2  mpd-0.23.14.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index f03a459b8c..4dbd7a6d1d 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 2dd983a361..8b3365ddfc 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  bea08d2e49efcee34fa58acd2bc95c0adc64d291c07f4cfaf4ac1d8ac5a36f45  lxc-5.0.2.tar.gz
++sha256  2693a4c654dcfdafb3aa95c262051d8122afa1b6f5cef1920221ebbdee934d07  lxc-5.0.3.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 4a4d3a6212..b2afb978e6 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).13
-+MPD_VERSION = $(MPD_VERSION_MAJOR).14
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost fmt
+-LXC_VERSION = 5.0.2
++LXC_VERSION = 5.0.3
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
