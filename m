@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A276FC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 22:19:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EB57C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 22:21:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3299060B5D;
-	Wed,  8 Nov 2023 22:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3299060B5D
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBB9A60B5D;
+	Wed,  8 Nov 2023 22:21:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBB9A60B5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0kT5GAL_STs3; Wed,  8 Nov 2023 22:19:33 +0000 (UTC)
+	with ESMTP id xjXifNqKAnQ5; Wed,  8 Nov 2023 22:21:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80B5860AFC;
-	Wed,  8 Nov 2023 22:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80B5860AFC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CE4060AFC;
+	Wed,  8 Nov 2023 22:21:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CE4060AFC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A85D71BF966
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:19:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 896791BF40B
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:21:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B8CC60AFC
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:19:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B8CC60AFC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E1A260AFC
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:21:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E1A260AFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EpA1FBrUH9ep for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 22:19:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6CB560A7E
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 22:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6CB560A7E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A353886D81; Wed,  8 Nov 2023 22:19:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 23:18:52 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d208906c7a0bc2d621794f4a8bac452acc31d9d
-X-Git-Newrev: 14ae33c669afa8e4efb77d127e8ac83f5d721e3b
-X-Patchwork-Hint: ignore
-Message-Id: <20231108221930.A353886D81@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_ruby.py: new runtime test
+ with ESMTP id RrYkQ2BrGqqc for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 22:20:59 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D666060A7E
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 22:20:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D666060A7E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B9F240002;
+ Wed,  8 Nov 2023 22:20:55 +0000 (UTC)
+Date: Wed, 8 Nov 2023 23:20:55 +0100
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20231108232055.1bdf92f1@windsurf>
+In-Reply-To: <ZQgJZxHHCj8iLCdW@waldemar-brodkorb.de>
+References: <ZQgJZxHHCj8iLCdW@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699482056;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=n80NtxJD+6q/+XUSRQdXyVmCmmbt6vp6d2zcWD5om3Q=;
+ b=iXYShB53ZT9vZQr1dH4jiRYmPD8vH8G/6nFBEaDxHKfbdtpHD3Ry8p9lfqt5ZHYK/D9dkQ
+ /aegSPBr5kHKG/3NxC3LbdsyWjU4M5D7j3pmLjkE2wVAM4tX5I7u3mXlOos/lHT3hApRG4
+ iTowWq2vuyYNVXNiTLFY0wtgzjlR9aqM9FpwZx/d/8NIwmoLlTG0Kw8FmitchX0mNseyas
+ S3KbVDcPQIj70/fd+02rYxXNQNPk1ENY8l737TjXIXHDyoSMLABVqc0+NOL022ayXVpiAJ
+ b0WjsxQNyKc5taZ0yu4wsohPZBgWyPYPxoPK3AQfk+on1z7i373hDY0w+bTawg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iXYShB53
+Subject: Re: [Buildroot] [PATCH] support/testing/tests/package/test_ruby.py:
+ new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,74 +77,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14ae33c669afa8e4efb77d127e8ac83f5d721e3b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Waldmar,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                 |  1 +
- support/testing/tests/package/test_ruby.py | 34 ++++++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
+On Mon, 18 Sep 2023 10:25:11 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 145e73199c..12257fae8c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3096,6 +3096,7 @@ F:	package/mksh/
- F:	package/ruby/
- F:	package/uclibc/
- F:	package/uclibc-ng-test/
-+F:	support/testing/tests/package/test_ruby.py
- 
- N:	Will Newton <will.newton@gmail.com>
- F:	package/enchant/
-diff --git a/support/testing/tests/package/test_ruby.py b/support/testing/tests/package/test_ruby.py
-new file mode 100644
-index 0000000000..5d4c0031fb
---- /dev/null
-+++ b/support/testing/tests/package/test_ruby.py
-@@ -0,0 +1,34 @@
-+import os
-+import infra.basetest
-+
-+
-+class TestRuby(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_RUBY=y
-+        BR2_PACKAGE_ZLIB=y
-+        """
-+
-+    def version_test(self):
-+        cmd = "ruby -v"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+    def zlib_test(self, timeout=-1):
-+        cmd = "ruby -e 'require \"zlib\"'"
-+        _, exit_code = self.emulator.run(cmd, timeout)
-+        self.assertEqual(exit_code, 0)
-+
-+    def login(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+        self.version_test()
-+        self.zlib_test()
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  support/testing/tests/package/test_ruby.py | 42 ++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_ruby.py
+
+The entry in the DEVELOPERS file was missing.
+
+> diff --git a/support/testing/tests/package/test_ruby.py b/support/testing/tests/package/test_ruby.py
+> new file mode 100644
+> index 0000000000..bedd9afb1c
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_ruby.py
+> @@ -0,0 +1,42 @@
+> +import os
+> +
+> +import infra.basetest
+> +
+> +
+> +class TestRubyBase(infra.basetest.BRTest):
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +        """
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
+> +    interpreter = "ruby"
+> +
+> +    def login(self):
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv5",
+> +                           kernel="builtin",
+> +                           options=["-initrd", cpio_file])
+> +        self.emulator.login()
+> +
+> +class TestRuby(TestRubyBase):
+
+With just one test, there really wasn't a good reason to split into two
+classes. So I've re-grouped the whole thing into just one class. We can
+always split things later if we get more tests, and we need to
+factorize some parts.
+
+Applied with those changes, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
