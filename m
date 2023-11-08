@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 445FCC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 09:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F4BC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 09:29:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC35260FB2;
-	Wed,  8 Nov 2023 09:29:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC35260FB2
+	by smtp3.osuosl.org (Postfix) with ESMTP id D53C161007;
+	Wed,  8 Nov 2023 09:29:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D53C161007
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p3AcjgV5srtw; Wed,  8 Nov 2023 09:29:44 +0000 (UTC)
+	with ESMTP id vzxidotPqSsG; Wed,  8 Nov 2023 09:29:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FB1561045;
-	Wed,  8 Nov 2023 09:29:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FB1561045
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC31E1BF954
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3EBE61010;
+	Wed,  8 Nov 2023 09:29:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3EBE61010
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AEC451BF97F
  for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 09:29:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 914DC4098F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7DEC241726
  for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 09:29:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 914DC4098F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DEC241726
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q9CwYaT8ktx6 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GOPAAgEijo8m for <buildroot@lists.busybox.net>;
  Wed,  8 Nov 2023 09:29:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8133D40979
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9791A416E7
  for <buildroot@buildroot.org>; Wed,  8 Nov 2023 09:29:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8133D40979
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9791A416E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E34686CA6; Wed,  8 Nov 2023 09:29:26 +0000 (UTC)
+ id 7A13086CA7; Wed,  8 Nov 2023 09:29:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 10:23:55 +0100
+Date: Wed, 8 Nov 2023 10:26:05 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: dc3280178f1c14680194dd83e85958eb7357a48d
-X-Git-Newrev: aa8bb58d819257dfe53b9c6fa879fd1852e71f85
+X-Git-Oldrev: aa8bb58d819257dfe53b9c6fa879fd1852e71f85
+X-Git-Newrev: 14324da2c8a292d65f4bc9acf96c34fdfc39649e
 X-Patchwork-Hint: ignore
-Message-Id: <20231108092926.6E34686CA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- package/perl-lwp-protocol-https: add CPE variables
+Message-Id: <20231108092926.7A13086CA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python-web2py:
+ bump to version 2.24.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa8bb58d819257dfe53b9c6fa879fd1852e71f85
+commit: https://git.buildroot.net/buildroot/commit/?id=14324da2c8a292d65f4bc9acf96c34fdfc39649e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-cpe:2.3:a:lwp\:\:protocol\:\:https_project:lwp\:\:protocol\:\:https is a
-valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/detail/804408BE-097D-4FE3-B6DB-29324871C6B9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b32e4fa760f55f3b240d38b166b9dcb4103bbdfb)
+(cherry picked from commit 51c497c90fb4fb009338d223f669fb47f4900e39)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-web2py/python-web2py.hash | 2 +-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
-index 0663820b2e..6cbe4b33da 100644
---- a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
-+++ b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
-@@ -9,6 +9,8 @@ PERL_LWP_PROTOCOL_HTTPS_SOURCE = LWP-Protocol-https-$(PERL_LWP_PROTOCOL_HTTPS_VE
- PERL_LWP_PROTOCOL_HTTPS_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LWP_PROTOCOL_HTTPS_LICENSE = Artistic or GPL-1.0+
- PERL_LWP_PROTOCOL_HTTPS_LICENSE_FILES = LICENSE
-+PERL_LWP_PROTOCOL_HTTPS_CPE_ID_VENDOR = lwp\:\:protocol\:\:https_project
-+PERL_LWP_PROTOCOL_HTTPS_CPE_ID_PRODUCT = lwp\:\:protocol\:\:https
- PERL_LWP_PROTOCOL_HTTPS_DISTNAME = LWP-Protocol-https
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index c0ce0cc352..03c71db8a5 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  f4066d76290b333bc1bb1cf4c23b612eebde712b7112e90a72e7609a14690d2c  python-web2py-2.23.1.tar.gz
++sha256  db42d52097d43fa797c29f9ce1493d7356f192dd0c2590ec56f36022252c284b  python-web2py-2.24.1.tar.gz
+ sha256  2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 2a666cae17..91c041f6f2 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(perl-package))
+-PYTHON_WEB2PY_VERSION = 2.23.1
++PYTHON_WEB2PY_VERSION = 2.24.1
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
