@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 800E3C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 21:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2623AC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 21:14:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36C9C81BD9;
-	Wed,  8 Nov 2023 21:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36C9C81BD9
+	by smtp1.osuosl.org (Postfix) with ESMTP id D47C481D65;
+	Wed,  8 Nov 2023 21:14:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D47C481D65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f9IcNqENwSW2; Wed,  8 Nov 2023 21:12:51 +0000 (UTC)
+	with ESMTP id z2kqxeJBQVo4; Wed,  8 Nov 2023 21:14:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F55382039;
-	Wed,  8 Nov 2023 21:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F55382039
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 172AC1BF4DD
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 21:10:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E2D981C46;
+	Wed,  8 Nov 2023 21:14:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E2D981C46
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0DAAE1BF4DD
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 21:14:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDFC2400FB
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 21:10:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDFC2400FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA84360AD5
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 21:14:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA84360AD5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WTFkVsLWasmD for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 21:10:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 72CB54023B
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 21:10:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72CB54023B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6144A86D65; Wed,  8 Nov 2023 21:10:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ufp-qsrGApqE for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 21:14:09 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1AB8560AAF
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 21:14:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AB8560AAF
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F681E0002;
+ Wed,  8 Nov 2023 21:14:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r0psE-001GeX-2X;
+ Wed, 08 Nov 2023 22:14:06 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 21:51:29 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: ed0ba7481759bcc6cca3a833b1ed2b520b311c7e
-X-Git-Newrev: 73a2491b7823420473bb6e0c7ae28031efbb257d
-X-Patchwork-Hint: ignore
-Message-Id: <20231108211053.6144A86D65@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x]
- package/freeradius-server: fix redis handling
+To: <yann.morin@orange.com>
+References: <cover.1698941362.git.yann.morin@orange.com>
+ <8647e9778bb35b421a4a989e0b69b6a4d18968cd.1698941362.git.yann.morin@orange.com>
+Date: Wed, 08 Nov 2023 22:14:06 +0100
+In-Reply-To: <8647e9778bb35b421a4a989e0b69b6a4d18968cd.1698941362.git.yann.morin@orange.com>
+ (yann morin's message of "Thu, 2 Nov 2023 17:09:20 +0100")
+Message-ID: <87msvoosm9.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/8] package/pkg-cargo: don't expand license
+ info when empty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,63 +64,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73a2491b7823420473bb6e0c7ae28031efbb257d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>>   <yann.morin@orange.com> writes:
 
-redis handling is wrong since the addition of the package in commit
-736c4c1655d93652a9a7e79235bbe726b3d46176. Indeed, freeradius-server
-needs hiredis, not redis
+ > From: "Yann E. MORIN" <yann.morin@orange.com>
+ > The cargo infrastructure automatically expands the list of licenses with
+ > a little blurb that the licenses for vendored dependencies might be
+ > missing in the list.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5a8d6014c747b228758b1adc76b3e6519c6e30cc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/freeradius-server/freeradius-server.mk | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ > However, when a package does not define a license, the resulting text is
+ > sub-optimal, resulting in a manifest that contains (with a leading
+ > comma, yes):
 
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index af3320eb44..5a560d9153 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
-@@ -71,6 +71,17 @@ FREERADIUS_SERVER_CONF_OPTS += \
- 	--without-rlm_ippool
- endif
- 
-+ifeq ($(BR2_PACKAGE_HIREDIS),y)
-+FREERADIUS_SERVER_CONF_OPTS += \
-+	--with-rlm_redis \
-+	--with-rlm_rediswho
-+FREERADIUS_SERVER_DEPENDENCIES += hiredis
-+else
-+FREERADIUS_SERVER_CONF_OPTS += \
-+	--without-rlm_redis \
-+	--without-rlm_rediswho
-+endif
-+
- ifeq ($(BR2_PACKAGE_JSON_C)$(BR2_PACKAGE_LIBCURL),yy)
- FREERADIUS_SERVER_CONF_OPTS += --with-rlm_rest
- FREERADIUS_SERVER_DEPENDENCIES += json-c libcurl
-@@ -150,13 +161,6 @@ else
- FREERADIUS_SERVER_CONF_OPTS += --without-readline
- endif
- 
--ifeq ($(BR2_PACKAGE_REDIS),y)
--FREERADIUS_SERVER_CONF_OPTS += --with-rlm_redis --with-rlm_rediswho
--FREERADIUS_SERVER_DEPENDENCIES += redis
--else
--FREERADIUS_SERVER_CONF_OPTS += --without-rlm_redis --without-rlm_rediswho
--endif
--
- ifeq ($(BR2_PACKAGE_SQLITE),y)
- FREERADIUS_SERVER_CONF_OPTS += --with-rlm_sql_sqlite
- FREERADIUS_SERVER_DEPENDENCIES += sqlite
+ >     , vendored dependencies licenses probably not listed
+
+ > In that case, pointing out some unkown licensing terms may be part of
+ > unkonwn licensing terms is superfluous.
+
+ > Instead, just let the legal infra do its job, and report an "unkown"
+ > license altogether.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+
+Committed to 2023.02.x and 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
