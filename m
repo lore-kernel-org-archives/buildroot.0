@@ -1,68 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06B1CC4332F
-	for <buildroot@archiver.kernel.org>; Tue,  7 Nov 2023 21:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53B3BC4167D
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 18:10:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3FC7608A6;
-	Tue,  7 Nov 2023 21:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3FC7608A6
+	by smtp2.osuosl.org (Postfix) with ESMTP id D61F540136;
+	Wed,  8 Nov 2023 18:10:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D61F540136
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B6oReoZJ7oJ7; Wed,  8 Nov 2023 18:10:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF5454012A;
+	Wed,  8 Nov 2023 18:10:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF5454012A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 56BE31BF951
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 18:10:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DAD660AAA
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 18:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DAD660AAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ypPSTjlzNXSK; Tue,  7 Nov 2023 21:57:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1374D60761;
-	Tue,  7 Nov 2023 21:57:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1374D60761
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7EBA91BF5A8
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:57:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6472A81C26
- for <buildroot@lists.busybox.net>; Tue,  7 Nov 2023 21:57:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6472A81C26
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L5NtztNhSBqC for <buildroot@lists.busybox.net>;
- Tue,  7 Nov 2023 21:57:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26BDA81C40
- for <buildroot@uclibc.org>; Tue,  7 Nov 2023 21:57:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26BDA81C40
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 1015C86C45; Tue,  7 Nov 2023 21:57:47 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Tue, 07 Nov 2023 21:57:46 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2023.02.6
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-15835-163-CGS0Q2WKp5@https.bugs.busybox.net/>
-In-Reply-To: <bug-15835-163@https.bugs.busybox.net/>
-References: <bug-15835-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rjoZf3xhF1wg for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 18:10:25 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CD23460A9F
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 18:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD23460A9F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8BDA240002;
+ Wed,  8 Nov 2023 18:10:21 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r0n0O-000yGH-2s;
+ Wed, 08 Nov 2023 19:10:20 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+References: <20231103184428.1029306-1-adam.duskett@amarulasolutions.com>
+Date: Wed, 08 Nov 2023 19:10:20 +0100
+In-Reply-To: <20231103184428.1029306-1-adam.duskett@amarulasolutions.com>
+ (Adam Duskett's message of "Fri, 3 Nov 2023 12:44:28 -0600")
+Message-ID: <87pm0kqfoz.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15835] Incompatibility between network-manager and
- libcurl 8.4
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-django: security bump to
+ 4.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,36 +63,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15835
+>>>>> "Adam" == Adam Duskett <adam.duskett@amarulasolutions.com> writes:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+ >  - Fixed a regression in Django 4.2 that caused a crash of QuerySet.aggregate()
+ >    with aggregates referencing expressions containing subqueries (#34798).
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+ >  - Restored, following a regression in Django 4.2, creating
+ >    varchar/text_pattern_ops indexes on CharField and TextField with
+ >    deterministic collations on PostgreSQL (#34932).
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Christian, All,
+ > Tested on Fedora 39 with:
+ > ./support/testing/run-tests tests.package.test_python_django
 
-Thanks for the report. We believe this has now been fixed with your commit:
+ > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-    b660402b5722  package/network-manager: add patch for compatibility with
-curl 8.4
+While this indeed is a security fix, it seems to be for a Windows-only
+issue:
 
-If you still have the issue, please reopen this bug.
+https://www.djangoproject.com/weblog/2023/nov/01/security-releases/
 
-Regards,
-Yann E. MORIN.
+Anyway, for 2023.02.x and 2023.08.x I have instead bumped to 4.1.13,
+which contains the same fix.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
