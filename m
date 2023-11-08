@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57843C4167B
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 23:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 152A0C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 23:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB12240015;
-	Wed,  8 Nov 2023 23:44:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB12240015
+	by smtp2.osuosl.org (Postfix) with ESMTP id A350E40015;
+	Wed,  8 Nov 2023 23:47:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A350E40015
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CUaOjtv3A98o; Wed,  8 Nov 2023 23:44:25 +0000 (UTC)
+	with ESMTP id bSkS85MJzpWl; Wed,  8 Nov 2023 23:47:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3AF040296;
-	Wed,  8 Nov 2023 23:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3AF040296
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF6E81BF29D
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 23:44:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 87FA040296;
+	Wed,  8 Nov 2023 23:47:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87FA040296
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E9CE1BF29D
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 23:47:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8309D41B81
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 23:44:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8309D41B81
+ by smtp3.osuosl.org (Postfix) with ESMTP id 449C560E27
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 23:47:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 449C560E27
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iu_6ajySUs9p for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 23:44:20 +0000 (UTC)
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A2BD41B51
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 23:44:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A2BD41B51
-Received: by mail-io1-xd34.google.com with SMTP id
- ca18e2360f4ac-7a67bc84c87so9999439f.0
- for <buildroot@buildroot.org>; Wed, 08 Nov 2023 15:44:20 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5utikjO0QsSK for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 23:47:36 +0000 (UTC)
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 56EC060E22
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 23:47:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56EC060E22
+Received: by mail-il1-x131.google.com with SMTP id
+ e9e14a558f8ab-35749078a59so1181015ab.3
+ for <buildroot@buildroot.org>; Wed, 08 Nov 2023 15:47:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699487059; x=1700091859;
+ d=1e100.net; s=20230601; t=1699487255; x=1700092055;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=cLyErKnmaPDuyhyeQ9fBltBJb7q5dYppIqW2beczlcA=;
- b=AodTZQ11Hz0QaLLu716iPDSBkCHtjqa0MA0cySh3crVRVEUNVlD/KZS+yUQBHuE41Y
- NQNxzmwB4y2LnHLrYl0ezCOhkgisP3Y2X/A7TzAypqnbaQ6EzJL1jt7ndpVykVirpF6B
- Lh54gg0lw2v6sC+YH3AbgSO+QKXyZgB8wcv127BW4ZIc1Wpue6MZKWRnFRB/0Qo2eGQ4
- k9I4/7IEqdgMoMNxh58c2WR1reOqexxfgl1ArFiSzBLLCZBH0WNWcemQxAs3vKDfb3ox
- HPmIzri9IpT5wkummwYobvKGfPZzGUuQhxfbV99FVfYM5OINKhGoOGeMCVVQImi4+TzN
- 2/vQ==
-X-Gm-Message-State: AOJu0Ywj1tB8uBrvmJKu7fAFPx/tAzc92jQbRSpfZtU7lAYOJERlS0QM
- XTofM+tLgBActD6EzUnJdt6nmW9LXgc=
-X-Google-Smtp-Source: AGHT+IHVPeJ+0gu952dfJZ3sK1G/BjaDn2dqTD44F/cnm7U2O3E5OfwJk6FwSzT9BvXixW39OAO9bQ==
-X-Received: by 2002:a05:6602:2c4e:b0:7a9:77ac:5446 with SMTP id
- x14-20020a0566022c4e00b007a977ac5446mr83433iov.21.1699487058619; 
- Wed, 08 Nov 2023 15:44:18 -0800 (PST)
+ bh=ihqVxonzwxfy8EJ6CdtKPS4bvueZmRpngF4ZWPhQ1L4=;
+ b=aiWyT2E3X8B094QP4DL57h+/LFec4qKzZTSI/TMHQDVKezH8U0PUr4jt+JcI5ddcmB
+ fMxPnKSiweMzGfQ4ZCbo/b0KJukk7M5zZFYyC1AvCAdb1hNbHRYU4IY2ebMGzpJR4kRP
+ rUxq1cd1OHHGSUc9LpTHIL0D3IZrRnwntb7npgKmU4DRgbHIMlYTPC3LQJoKHkkiFlfd
+ vcWlsHW6vMVsCgTDSv3Lu3siUlNIr4wmnepdyNZ5k7DGZefMy/0DCZrYtDX9XoL3FU1B
+ Ck6MZPiXufddvWEPqpZeK+S2HiplUUn5247+VvoN8Qe3o5/zGazZLtO341hO/4gdZ3jc
+ IDtg==
+X-Gm-Message-State: AOJu0YxYxzltQ7ZMvQQfNhS+8iw0GxvMEzbpbwFeVCb/oXf6Lexcd3el
+ bmegNODapT7LkxlEnPDzczUOK8+xIAE=
+X-Google-Smtp-Source: AGHT+IEWJSkppCiySGtw+usVW4zmRDqH4pRHFA0R/vSDA0Vx4X8gKAzr3t0W33QVBI8kyXFvioILIw==
+X-Received: by 2002:a05:6e02:20c3:b0:357:a640:3235 with SMTP id
+ 3-20020a056e0220c300b00357a6403235mr4387245ilq.29.1699487254991; 
+ Wed, 08 Nov 2023 15:47:34 -0800 (PST)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- p15-20020a02b38f000000b004623612f1b1sm3702114jan.85.2023.11.08.15.44.17
+ t12-20020a92dc0c000000b00359d1a8ce74sm65677iln.40.2023.11.08.15.47.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Nov 2023 15:44:18 -0800 (PST)
+ Wed, 08 Nov 2023 15:47:34 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  8 Nov 2023 16:44:12 -0700
-Message-Id: <20231108234412.3653223-1-james.hilliard1@gmail.com>
+Date: Wed,  8 Nov 2023 16:47:32 -0700
+Message-Id: <20231108234732.3654779-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699487059; x=1700091859; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699487255; x=1700092055; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=cLyErKnmaPDuyhyeQ9fBltBJb7q5dYppIqW2beczlcA=;
- b=YyrrB+6JmYQ6owDctnD+taLr2CKu+5UztBcg8p9GwCMSqcRFXUW0MZULmL1ZOMHd2o
- a9dVubh9J7FFyfEpk22OfF+R0kB7t7ESUxHJ1AZzsl4I4UFLOjSjsOtjribO6UhfEyWk
- LKyvugAofrWHUk0FVkh5Sw8S5BizNWZZWMxSr5rG4ykY5dRW92oSVcICQAZ/Vv6ivDNF
- 8ZYFiCF+RbeHynGQq9iH0XQ37laV0iu8E20ab9b9TucaIYaobGupEe0gY+f6BkVMYUu5
- J+jAcoFou3XkYACbLEPmvcUDAonRV67Xj2G5JIthhzgN/uXg2BzfZILDSu84FH9i4BvT
- Qx/Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ihqVxonzwxfy8EJ6CdtKPS4bvueZmRpngF4ZWPhQ1L4=;
+ b=VJw5lRujNXNtHyn/+okNBQ1w81riQBhSsbf5e8/cpjS51++ZfbCfwrUOGJP2y8RChr
+ JM+pW1oXQ4i5hWVSz+SpoFPauVy8LfwaGAPHYLfkVyGUNLvoEpGphfy42MD1xp9FUAcT
+ ivgl2jltK9oJwcZunkq7UTSe6XCpbKR9WLGL8al2nONGR6h9yB9PWfXuAP7cjLAn6KF2
+ hZB/Av6cXXmr0zQIJHVismIckmzBqnzcqIAgPy+2DP6xuvACoRXa/7B11vsyBmuQ2aT3
+ pZNQNu/eFxrcEQAy7akJzzJwZ+QLo7r3qzKN7/IemvfjRYEE+6yeV5qKAZWMQ80ayE1k
+ cxFQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YyrrB+6J
-Subject: [Buildroot] [PATCH 1/1] package/python-mistune: bump to version
- 3.0.2
+ header.a=rsa-sha256 header.s=20230601 header.b=VJw5lRuj
+Subject: [Buildroot] [PATCH 1/1] package/python-modbus-tk: bump to version
+ 1.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +94,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,38 +103,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-mistune/python-mistune.hash | 4 ++--
- package/python-mistune/python-mistune.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-modbus-tk/python-modbus-tk.hash | 5 +++--
+ package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index 161f2ed6ff..7dee76cfa2 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mistune/json
--md5  a4437edb22cf6519a7c61730fecb1a3f  mistune-2.0.4.tar.gz
--sha256  9ee0a66053e2267aba772c71e06891fa8f1af6d4b01d5e84e267b4570d4d9808  mistune-2.0.4.tar.gz
-+md5  8c02b3476d0343e0a4c75a2321729f01  mistune-3.0.2.tar.gz
-+sha256  fc7f93ded930c92394ef2cb6f04a8aabab4117a91449e72dcc8dfa646a508be8  mistune-3.0.2.tar.gz
+diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
+index c486e49715..c7f4ac2dd4 100644
+--- a/package/python-modbus-tk/python-modbus-tk.hash
++++ b/package/python-modbus-tk/python-modbus-tk.hash
+@@ -1,5 +1,6 @@
+-# sha256 from https://pypi.org/pypi/modbus-tk/json
+-sha256  893514bbd8c92118d20a19979e0239e7cb2a63f8f1795a0271e57def09d11770  modbus_tk-1.1.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
++md5  2e66c361d3e4591a19be1259ef50fdf7  modbus_tk-1.1.3.tar.gz
++sha256  690fa7bb86ea978992465d2d61c8b5acc639ce0e8b833a0aa96d4dd172c5644a  modbus_tk-1.1.3.tar.gz
  # Locally computed sha256 checksums
- sha256  539013fd8e19f744f8bf0e27a532bbff54cd689ecef7a800f56ae5dc824be870  LICENSE
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index 1e4bb71903..ac900c82ba 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
+ sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
+ sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
+diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
+index 30056bb207..d8552e57a6 100644
+--- a/package/python-modbus-tk/python-modbus-tk.mk
++++ b/package/python-modbus-tk/python-modbus-tk.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MISTUNE_VERSION = 2.0.4
-+PYTHON_MISTUNE_VERSION = 3.0.2
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
--PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/cd/9b/0f98334812f548a5ee4399b76e33752a74fc7bb976f5efb34d962f03d585
-+PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/ef/c8/f0173fe3bf85fd891aee2e7bcd8207dfe26c2c683d727c5a6cc3aec7b628
- PYTHON_MISTUNE_LICENSE = BSD-3-Clause
- PYTHON_MISTUNE_LICENSE_FILES = LICENSE
- PYTHON_MISTUNE_SETUP_TYPE = setuptools
+-PYTHON_MODBUS_TK_VERSION = 1.1.2
++PYTHON_MODBUS_TK_VERSION = 1.1.3
+ PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
+-PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/ce/e9/30d86eb912bf868b8c97698b5747f10cf72dc26c674fd030249bc3275484
++PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8d/9f/5963e30dba160dbc646b76c59ca8136709c7fe9002bbaaa3cf1e1bb0404b
+ PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
+ PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
+ PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
 -- 
 2.34.1
 
