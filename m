@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB752C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 13:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81800C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 13:46:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F3ED81992;
-	Wed,  8 Nov 2023 13:46:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F3ED81992
+	by smtp1.osuosl.org (Postfix) with ESMTP id 41C9681F6A;
+	Wed,  8 Nov 2023 13:46:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41C9681F6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 93TksStXCMva; Wed,  8 Nov 2023 13:46:02 +0000 (UTC)
+	with ESMTP id qMP6RPHG5TBb; Wed,  8 Nov 2023 13:46:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4E018198A;
-	Wed,  8 Nov 2023 13:46:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4E018198A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 941021BF3DE
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 13:46:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5077281F61;
+	Wed,  8 Nov 2023 13:46:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5077281F61
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 533741BF3DE
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 13:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A8DE610B0
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 13:46:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A8DE610B0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3823B40ABE
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 13:46:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3823B40ABE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dIJ3yP6BF6P7 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IhSdt7vl4CUt for <buildroot@lists.busybox.net>;
  Wed,  8 Nov 2023 13:45:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC50F61087
+ by smtp2.osuosl.org (Postfix) with ESMTP id B941040ACD
  for <buildroot@buildroot.org>; Wed,  8 Nov 2023 13:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC50F61087
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B941040ACD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6E4F86CE2; Wed,  8 Nov 2023 13:45:59 +0000 (UTC)
+ id 83D5F86CB9; Wed,  8 Nov 2023 13:45:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 14:40:59 +0100
+Date: Wed, 8 Nov 2023 14:37:18 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 9239fc105e316a90570f8fa8b69e55d766ca24ac
-X-Git-Newrev: d797aee1411b5687b19f50a1c6b8ece5dbe5b671
+X-Git-Oldrev: ffedde670193881edcf401faf49483c12bf78a3b
+X-Git-Newrev: 9239fc105e316a90570f8fa8b69e55d766ca24ac
 X-Patchwork-Hint: ignore
-Message-Id: <20231108134559.A6E4F86CE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/zabbix: add
- missing BR2_OPTIMIZE_FAST
+Message-Id: <20231108134559.83D5F86CB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ boot/arm-trusted-firmware: set BUILD_STRING to package version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d797aee1411b5687b19f50a1c6b8ece5dbe5b671
+commit: https://git.buildroot.net/buildroot/commit/?id=9239fc105e316a90570f8fa8b69e55d766ca24ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Add missing BR2_OPTIMIZE_FAST dependency to BR2_PACKAGE_ZABBIX_SERVER
-to avoid the following build failure raised since commit
-e702a05d8998a1f2416225eb62b43b6585738fe9:
+TF-A prints a version string at boot which includes the version number as
+specified in the Makefile and additional "build" information, specified by
+the BUILD_STRING parameter:
 
-checking for Zabbix server/proxy database selection... error
-configure: error: No database selected for Zabbix server/proxy. Use --with-mysql or --with-oracle or --with-postgresql or --with-sqlite3.
+https://trustedfirmware-a.readthedocs.io/en/v2.9/getting_started/build-options.html
 
-Fixes:
- - http://autobuild.buildroot.org/results/ab403b45761c82f49a9380564bf10d3e7ae935f2
+BUILD_STRING: Input string for VERSION_STRING, which allows the TF-A build
+to be uniquely identified.  Defaults to the current git commit id.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This is implemented as:
+
+ # Default build string (git branch and commit)
+ ifeq (${BUILD_STRING},)
+	BUILD_STRING  :=  $(shell git describe --always --dirty --tags 2> /dev/null)
+ endif
+
+https://github.com/ARM-software/arm-trusted-firmware/blob/master/Makefile#L225-L228
+
+Which is never correct in the context of Buildroot, as the TF-A build
+directory is never a git repo, and git will move up the directory tree and
+possibly and (possibly) pick up the git version of Buildroot instead.
+
+To fix that, explicitly set BUILD_STRING to the version of the package.
+Pass it before BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES so it
+can still be overridden by the user if needed.
+
+strings images/tf-a-* | egrep '^v2\.'
+v2.9(debug):2023.08-859-g99d78b52a0
+v2.9(debug):v2.9
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6da2b51a66a848cc9a7346302227fd4740fc7e67)
+(cherry picked from commit 5a8a7530bfb37017c08f768693f7581992dc033c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zabbix/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
-index 377c0ff692..af677f782e 100644
---- a/package/zabbix/Config.in
-+++ b/package/zabbix/Config.in
-@@ -26,7 +26,7 @@ config BR2_PACKAGE_ZABBIX_SERVER
- 	depends on BR2_USE_MMU # mysql, postgresql
- 	depends on \
- 		(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS) || \
--		(BR2_USE_WCHAR && !BR2_STATIC_LIBS)
-+		(BR2_USE_WCHAR && !BR2_STATIC_LIBS && !BR2_OPTIMIZE_FAST)
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBEVENT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 1164c81410..a2674ec3c4 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -60,6 +60,7 @@ endif
  
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
++	BUILD_STRING=$(ARM_TRUSTED_FIRMWARE_VERSION) \
+ 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
+ 	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
+ 	TARGET_BOARD=$(ARM_TRUSTED_FIRMWARE_TARGET_BOARD)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
