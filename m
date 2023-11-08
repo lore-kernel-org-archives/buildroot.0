@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D1DBC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46DE4C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:09:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD278408D8;
-	Wed,  8 Nov 2023 07:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD278408D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4F4A40640;
+	Wed,  8 Nov 2023 07:09:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4F4A40640
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6oMsMqjwdw3k; Wed,  8 Nov 2023 07:08:03 +0000 (UTC)
+	with ESMTP id Tyd42-mQysQI; Wed,  8 Nov 2023 07:09:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB543408B0;
-	Wed,  8 Nov 2023 07:08:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB543408B0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B225B1BF47F
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:07:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B798240642;
+	Wed,  8 Nov 2023 07:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B798240642
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AE3F61BF47F
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A2174074E
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:07:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A2174074E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9497B41706
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:09:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9497B41706
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J1WferMsvqwX for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 07:07:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84A9240642
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 07:07:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84A9240642
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 728F986C6D; Wed,  8 Nov 2023 07:07:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b0ZZRmXMpRQt for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 07:09:10 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 89B6E410E4
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 07:09:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89B6E410E4
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A514E0009;
+ Wed,  8 Nov 2023 07:09:08 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r0cgV-0007Qu-36;
+ Wed, 08 Nov 2023 08:09:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 08:00:19 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: f9ac3042a04cfbc3d9cf793d1ec96173980756ac
-X-Git-Newrev: 2b7b49c0652f4da88e43c925d635b15d4103247b
-X-Patchwork-Hint: ignore
-Message-Id: <20231108070746.728F986C6D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/lxc: bump to
- version 5.0.3
+To: Christian Stewart <christian@aperture.us>
+References: <20231107221745.2722636-1-christian@aperture.us>
+Date: Wed, 08 Nov 2023 08:09:07 +0100
+In-Reply-To: <20231107221745.2722636-1-christian@aperture.us> (Christian
+ Stewart's message of "Tue, 7 Nov 2023 14:17:45 -0800")
+Message-ID: <874jhwvi0c.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: security bump to go1.21.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +62,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b7b49c0652f4da88e43c925d635b15d4103247b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Christian" == Christian Stewart <christian@aperture.us> writes:
 
-https://discuss.linuxcontainers.org/t/lxc-5-0-3-lts-has-been-released/17708
+ > Go version 1.21.4 includes the following security fixes:
+ > CVE-2023-45283: path/filepath: recognize \??\ as a Root Local Device path prefix.
+ > CVE-2023-45284: path/filepath: recognize device names with trailing spaces and superscripts
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cc85e9dea5c1a66cbfec6224786ee04d110d5e29)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lxc/lxc.hash | 2 +-
- package/lxc/lxc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > https://go.dev/doc/devel/release#go1.21.4
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 2dd983a361..8b3365ddfc 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  bea08d2e49efcee34fa58acd2bc95c0adc64d291c07f4cfaf4ac1d8ac5a36f45  lxc-5.0.2.tar.gz
-+sha256  2693a4c654dcfdafb3aa95c262051d8122afa1b6f5cef1920221ebbdee934d07  lxc-5.0.3.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 4a4d3a6212..b2afb978e6 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > Signed-off-by: Christian Stewart <christian@aperture.us>
+
+Committed, thanks.
+
+Can you also send a 1.20.11 bump for 2023.08.x / 2023.02.x?
+
+> ---
+ >  package/go/go.hash | 2 +-
+ >  package/go/go.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/package/go/go.hash b/package/go/go.hash
+ > index 9499f50964..74b18a9b38 100644
+ > --- a/package/go/go.hash
+ > +++ b/package/go/go.hash
+ > @@ -1,3 +1,3 @@
+ >  # From https://go.dev/dl
+ > -sha256  186f2b6f8c8b704e696821b09ab2041a5c1ee13dcbc3156a13adcf75931ee488  go1.21.3.src.tar.gz
+ > +sha256  47b26a83d2b65a3c1c1bcace273b69bee49a7a7b5168a7604ded3d26a37bd787  go1.21.4.src.tar.gz
+ >  sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+ > diff --git a/package/go/go.mk b/package/go/go.mk
+ > index ef27f32835..7bd7866a05 100644
+ > --- a/package/go/go.mk
+ > +++ b/package/go/go.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
--LXC_VERSION = 5.0.2
-+LXC_VERSION = 5.0.3
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+ > -GO_VERSION = 1.21.3
+ > +GO_VERSION = 1.21.4
+ >  GO_SITE = https://storage.googleapis.com/golang
+ >  GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+ > -- 
+
+ > 2.42.1
+
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
