@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01DB0C4167D
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:06:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91D1FC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:07:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A270F408B4;
-	Wed,  8 Nov 2023 07:06:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A270F408B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C9B040642;
+	Wed,  8 Nov 2023 07:07:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C9B040642
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kOuBNr8hrfDO; Wed,  8 Nov 2023 07:06:55 +0000 (UTC)
+	with ESMTP id H5uM_8ppLVZy; Wed,  8 Nov 2023 07:07:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B11C24071B;
-	Wed,  8 Nov 2023 07:06:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B11C24071B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 471FA1BF47F
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:06:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4963408B0;
+	Wed,  8 Nov 2023 07:07:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4963408B0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1457D1BF424
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:06:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20CEF60D70
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:06:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20CEF60D70
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECF04408E1
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:06:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECF04408E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id driSk8tNBg9s for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ippHLFwkxAUY for <buildroot@lists.busybox.net>;
  Wed,  8 Nov 2023 07:06:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09E5F60C0C
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3026408E0
  for <buildroot@buildroot.org>; Wed,  8 Nov 2023 07:06:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09E5F60C0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3026408E0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DCD4A86C3D; Wed,  8 Nov 2023 07:06:37 +0000 (UTC)
+ id CDCA486C68; Wed,  8 Nov 2023 07:06:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 07:59:15 +0100
+Date: Wed, 8 Nov 2023 07:58:35 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 83a3854e5a5711c22729e5f23463f8eacc3631a6
-X-Git-Newrev: 04eb2f3efe1a33ef0c8122223ffe917d826fd1e4
+X-Git-Oldrev: a17b1842370444cfbd51cc588a7061734375b3a5
+X-Git-Newrev: 83a3854e5a5711c22729e5f23463f8eacc3631a6
 X-Patchwork-Hint: ignore
-Message-Id: <20231108070637.DCD4A86C3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/reproc: fix build
+Message-Id: <20231108070637.CDCA486C68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/snort3: fix build
  with gcc >= 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,108 +63,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04eb2f3efe1a33ef0c8122223ffe917d826fd1e4
+commit: https://git.buildroot.net/buildroot/commit/?id=83a3854e5a5711c22729e5f23463f8eacc3631a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
 Fix the following build failure with gcc >= 13:
 
-In file included from /home/buildroot/autobuild/instance-1/output-1/build/reproc-14.2.4/reproc++/src/reproc.cpp:1:
-/home/buildroot/autobuild/instance-1/output-1/build/reproc-14.2.4/reproc++/include/reproc++/reproc.hpp:95:5: error: declaration of 'reproc::options::<unnamed struct> reproc::options::env' changes meaning of 'env' [-Wchanges-meaning]
-   95 |   } env = {};
-      |     ^~~
-/home/buildroot/autobuild/instance-1/output-1/build/reproc-14.2.4/reproc++/include/reproc++/reproc.hpp:91:5: note: used here to mean 'class reproc::env'
-   91 |     env::type behavior;
-      |     ^~~
+In file included from /home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.cc:25:
+/home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:59:25: error: 'uint32_t' has not been declared
+   59 |     void set_batch_size(uint32_t);
+      |                         ^~~~~~~~
+/home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:62:5: error: 'uint32_t' does not name a type
+   62 |     uint32_t get_batch_size() const { return (batch_size == BATCH_SIZE_UNSET) ? BATCH_SIZE_DEFAULT : batch_size; }
+      |     ^~~~~~~~
+/home/thomas/autobuild/instance-1/output-1/build/snort3-3.1.40.0/src/packet_io/sfdaq_config.h:26:1: note: 'uint32_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+   25 | #include <vector>
+  +++ |+#include <cstdint>
+   26 |
 
 Fixes:
- - http://autobuild.buildroot.org/results/11feca3698154c255938ab3b25a34429135c31f8
+ - http://autobuild.buildroot.org/results/c91a74bad542f32693f2e31412fba70446fd3959
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b652a546eb4a25b396a5d6b305df4b0003e3f214)
+(cherry picked from commit 709c8cc37e37bbd89c9e6a6296c1adefe03bbe93)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-reproc-Try-to-fix-gcc-13-build.patch      | 37 ++++++++++++++++++++++
- package/reproc/0002-Fix-gcc-13-build.patch         | 28 ++++++++++++++++
- 2 files changed, 65 insertions(+)
+ ...ild-fix-cstdint-related-clearlinux-errors.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/package/reproc/0001-reproc-Try-to-fix-gcc-13-build.patch b/package/reproc/0001-reproc-Try-to-fix-gcc-13-build.patch
+diff --git a/package/snort3/0001-Pull-request-3925-build-fix-cstdint-related-clearlinux-errors.patch b/package/snort3/0001-Pull-request-3925-build-fix-cstdint-related-clearlinux-errors.patch
 new file mode 100644
-index 0000000000..22b21bcbc7
+index 0000000000..4f24ee72d4
 --- /dev/null
-+++ b/package/reproc/0001-reproc-Try-to-fix-gcc-13-build.patch
-@@ -0,0 +1,37 @@
-+From 0b23d88894ccedde04537fa23ea55cb2f8365342 Mon Sep 17 00:00:00 2001
-+From: Daan De Meyer <daan.j.demeyer@gmail.com>
-+Date: Sat, 18 Mar 2023 19:38:19 +0100
-+Subject: [PATCH] reproc++: Try to fix gcc 13 build
++++ b/package/snort3/0001-Pull-request-3925-build-fix-cstdint-related-clearlinux-errors.patch
+@@ -0,0 +1,60 @@
++From 154cf0312b3652bdfdf241e6883d7c6de9b85e01 Mon Sep 17 00:00:00 2001
++From: "Maya Dagon (mdagon)" <mdagon@cisco.com>
++Date: Mon, 24 Jul 2023 08:06:50 +0000
++Subject: [PATCH] Pull request #3925: build: fix cstdint related clearlinux
++ errors
 +
-+Upstream: https://github.com/DaanDeMeyer/reproc/commit/0b23d88894ccedde04537fa23ea55cb2f8365342
++Merge in SNORT/snort3 from ~MDAGON/snort3:clearlinux to master
++
++Squashed commit of the following:
++
++commit 7ef2bc13851ffa2bf7908964242859a8c05ddd96
++Author: maya dagon <mdagon@cisco.com>
++Date:   Thu Jul 20 14:34:01 2023 -0400
++
++    build: fix cstdint related clearlinux errors
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/snort3/snort3/commit/154cf0312b3652bdfdf241e6883d7c6de9b85e01
 +---
-+ reproc++/include/reproc++/reproc.hpp | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++ src/js_norm/js_identifier_ctx.h       | 1 +
++ src/packet_io/sfdaq_config.h          | 1 +
++ src/service_inspectors/wizard/magic.h | 1 +
++ 3 files changed, 3 insertions(+)
 +
-+diff --git a/reproc++/include/reproc++/reproc.hpp b/reproc++/include/reproc++/reproc.hpp
-+index ab6f1394..e883ecec 100644
-+--- a/reproc++/include/reproc++/reproc.hpp
-++++ b/reproc++/include/reproc++/reproc.hpp
-+@@ -88,7 +88,7 @@ struct redirect {
++diff --git a/src/utils/js_identifier_ctx.h b/src/utils/js_identifier_ctx.h
++index b8d5121a2c..6ef1ce2b23 100644
++--- a/src/utils/js_identifier_ctx.h
+++++ b/src/utils/js_identifier_ctx.h
++@@ -20,6 +20,7 @@
++ #ifndef JS_IDENTIFIER_CTX
++ #define JS_IDENTIFIER_CTX
 + 
-+ struct options {
-+   struct {
-+-    env::type behavior;
-++    enum env::type behavior;
-+     /*! Implicitly converts from any STL container of string pairs to the
-+     environment format expected by `reproc_start`. */
-+     class env extra;
-+@@ -97,9 +97,9 @@ struct options {
-+   const char *working_directory = nullptr;
+++#include <cstdint>
++ #include <list>
++ #include <string>
++ #include <unordered_map>
++diff --git a/src/packet_io/sfdaq_config.h b/src/packet_io/sfdaq_config.h
++index 990c45785b..f4c1042bc3 100644
++--- a/src/packet_io/sfdaq_config.h
+++++ b/src/packet_io/sfdaq_config.h
++@@ -21,6 +21,7 @@
++ #ifndef SFDAQ_CONFIG_H
++ #define SFDAQ_CONFIG_H
 + 
-+   struct {
-+-    redirect in;
-+-    redirect out;
-+-    redirect err;
-++    struct redirect in;
-++    struct redirect out;
-++    struct redirect err;
-+     bool parent;
-+     bool discard;
-+     FILE *file;
-diff --git a/package/reproc/0002-Fix-gcc-13-build.patch b/package/reproc/0002-Fix-gcc-13-build.patch
-new file mode 100644
-index 0000000000..3e06a2a396
---- /dev/null
-+++ b/package/reproc/0002-Fix-gcc-13-build.patch
-@@ -0,0 +1,28 @@
-+From 9f399675b821e175f85ac3ee6e3fd2e6056573eb Mon Sep 17 00:00:00 2001
-+From: Daan De Meyer <daan.j.demeyer@gmail.com>
-+Date: Fri, 21 Apr 2023 19:36:45 +0200
-+Subject: [PATCH] Fix gcc 13 build
-+
-+Upstream: https://github.com/DaanDeMeyer/reproc/commit/9f399675b821e175f85ac3ee6e3fd2e6056573eb
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ reproc++/include/reproc++/reproc.hpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/reproc++/include/reproc++/reproc.hpp b/reproc++/include/reproc++/reproc.hpp
-+index b52f495e..7b614a94 100644
-+--- a/reproc++/include/reproc++/reproc.hpp
-++++ b/reproc++/include/reproc++/reproc.hpp
-+@@ -88,10 +88,10 @@ struct redirect {
+++#include <cstdint>
++ #include <string>
++ #include <vector>
 + 
-+ struct options {
-+   struct {
-+-    enum env::type behavior;
-++    reproc::env::type behavior;
-+     /*! Implicitly converts from any STL container of string pairs to the
-+     environment format expected by `reproc_start`. */
-+-    class env extra;
-++    reproc::env extra;
-+   } env = {};
++diff --git a/src/service_inspectors/wizard/magic.h b/src/service_inspectors/wizard/magic.h
++index fa24d0b5a4..b9477eb95c 100644
++--- a/src/service_inspectors/wizard/magic.h
+++++ b/src/service_inspectors/wizard/magic.h
++@@ -21,6 +21,7 @@
++ #define MAGIC_H
 + 
-+   const char *working_directory = nullptr;
++ #include <cassert>
+++#include <cstdint>
++ #include <string>
++ #include <vector>
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
