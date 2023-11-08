@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A48B0C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBB62C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 52B5A40642;
-	Wed,  8 Nov 2023 07:09:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52B5A40642
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8611440640;
+	Wed,  8 Nov 2023 07:09:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8611440640
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d2QIKiMUJPTw; Wed,  8 Nov 2023 07:09:41 +0000 (UTC)
+	with ESMTP id S4PzjjHw2Z1x; Wed,  8 Nov 2023 07:09:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6FDCA40900;
-	Wed,  8 Nov 2023 07:09:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FDCA40900
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FA344074E;
+	Wed,  8 Nov 2023 07:09:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FA344074E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0A99F1BF47F
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:09:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 91DE11BF47F
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6924408B0
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9DBD408BF
  for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:09:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6924408B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9DBD408BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YF0IZbGESbF5 for <buildroot@lists.busybox.net>;
+ with ESMTP id cYafvkEQKYq0 for <buildroot@lists.busybox.net>;
  Wed,  8 Nov 2023 07:09:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B1BB940930
+ by smtp2.osuosl.org (Postfix) with ESMTP id C57E440948
  for <buildroot@buildroot.org>; Wed,  8 Nov 2023 07:09:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1BB940930
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C57E440948
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B18086C79; Wed,  8 Nov 2023 07:09:29 +0000 (UTC)
+ id A634E86C7A; Wed,  8 Nov 2023 07:09:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 08:07:44 +0100
+Date: Wed, 8 Nov 2023 08:08:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b660402b5722c8b4c0ead8739dc2ec2f6a8dfa11
-X-Git-Newrev: bf1d1a9b7a7e3441810a9caa557e38724856899e
+X-Git-Oldrev: bf1d1a9b7a7e3441810a9caa557e38724856899e
+X-Git-Newrev: fd41e442f0fdd2cc0c4ba2d33d08721fde114e44
 X-Patchwork-Hint: ignore
-Message-Id: <20231108070929.9B18086C79@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: security bump to go1.21.4
+Message-Id: <20231108070929.A634E86C7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/containerd: bump version to v1.7.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,45 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf1d1a9b7a7e3441810a9caa557e38724856899e
+commit: https://git.buildroot.net/buildroot/commit/?id=fd41e442f0fdd2cc0c4ba2d33d08721fde114e44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Go version 1.21.4 includes the following security fixes:
+The eighth patch release for containerd 1.7 contains various fixes and updates.
 
-CVE-2023-45283: path/filepath: recognize \??\ as a Root Local Device path prefix.
-CVE-2023-45284: path/filepath: recognize device names with trailing spaces and superscripts
-
-https://go.dev/doc/devel/release#go1.21.4
+https://github.com/containerd/containerd/releases/tag/v1.7.8
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 9499f50964..74b18a9b38 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index 450d1d1081..5524a1a44e 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
 @@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  186f2b6f8c8b704e696821b09ab2041a5c1ee13dcbc3156a13adcf75931ee488  go1.21.3.src.tar.gz
-+sha256  47b26a83d2b65a3c1c1bcace273b69bee49a7a7b5168a7604ded3d26a37bd787  go1.21.4.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index ef27f32835..7bd7866a05 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Computed locally
+-sha256  4c6042b13746a803766d76b07f756d03678a33a944b52c0b832c238609db1b2e  containerd-1.7.7.tar.gz
++sha256  891b84e614b491ab1d3bd5c8f4fb119e4929c24762e149e83e181e72d687f706  containerd-1.7.8.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 7c130770c0..61a8472ddd 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.21.3
-+GO_VERSION = 1.21.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-CONTAINERD_VERSION = 1.7.7
++CONTAINERD_VERSION = 1.7.8
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
