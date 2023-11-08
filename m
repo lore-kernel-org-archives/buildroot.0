@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78E3FC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 22:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0093BC4167B
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 22:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20E7F60B93;
-	Wed,  8 Nov 2023 22:26:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20E7F60B93
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0EEF60BB5;
+	Wed,  8 Nov 2023 22:27:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0EEF60BB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3CB8Ha6Ge-oU; Wed,  8 Nov 2023 22:26:52 +0000 (UTC)
+	with ESMTP id TjA4ayTYUWIF; Wed,  8 Nov 2023 22:27:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 529B760B6F;
-	Wed,  8 Nov 2023 22:26:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 529B760B6F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A13091BF40B
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:26:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDAFC60B8E;
+	Wed,  8 Nov 2023 22:27:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDAFC60B8E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C72271BF40B
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86F5F60B6F
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:26:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86F5F60B6F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9DA5D81DEC
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:27:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DA5D81DEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mm7xdC4ywIha for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 22:26:48 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6859860AAF
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 22:26:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6859860AAF
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E56260004;
- Wed,  8 Nov 2023 22:26:44 +0000 (UTC)
-Date: Wed, 8 Nov 2023 23:26:44 +0100
-To: Oleg Lyovin via buildroot <buildroot@buildroot.org>
-Message-ID: <20231108232644.24817d72@windsurf>
-In-Reply-To: <20231107132323.3324587-1-ovlevin@salutedevices.com>
-References: <20231107132323.3324587-1-ovlevin@salutedevices.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699482405;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=QTpomQNRZSmrRXpX7zdycbSNM1km88TJkX6RYMGtH/Y=;
- b=VY8Dqf6WX5sKOejUV6+b+Ll5z0x0PvkQw2aN1y6NXSZC+G+3uBCGAJV5LyUZtzJNZAvJA4
- B6VdE6qbLQ1H60bStiIPkHafj3pOc++JwSUHDbitsScFQh0D975u7I1T+vhPNzhAYqXNHU
- mNs2oFdzZ1rPRCC/7/nq0aO8rWQ0c//oKiG8lFh8VWX+Kcigv9qAXDup8Sp6cjxFjE7pHH
- M8K+fKwUp8rEY4PaJN2k7FmtaTiqmNfwNyrT6fKClpFD6QoGyezQ46xmaivcxbw+YI5Y6h
- L/rqqhLuITTawCvGwhVQwEiUxWUXRWX+8opTgo1qigq/ISGnQaFVrHaJpPpHtg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VY8Dqf6W
-Subject: Re: [Buildroot] [PATCH 1/1] package: dhcpcd: fix dhcpcd binary not
- stripped
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jvdQbQ-YpZ47 for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 22:27:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E8C281B53
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 22:27:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E8C281B53
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2B46086D8B; Wed,  8 Nov 2023 22:27:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 8 Nov 2023 23:26:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 14ae33c669afa8e4efb77d127e8ac83f5d721e3b
+X-Git-Newrev: e3e844a1f9227c88a25236e4f2bdacb2cc214e4a
+X-Patchwork-Hint: ignore
+Message-Id: <20231108222714.2B46086D8B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libosmium: add optional GDAL
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,45 +58,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: John Stile <johns@msli.com>, olegartys@gmail.com,
- Oleg Lyovin <ovlevin@salutedevices.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Oleg,
+commit: https://git.buildroot.net/buildroot/commit/?id=e3e844a1f9227c88a25236e4f2bdacb2cc214e4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 7 Nov 2023 16:23:23 +0300
-Oleg Lyovin via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libosmium/libosmium.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> By default dhcpcd installed with 555 permissions as it is
-> configured in its Makefile.inc. Since 'w' bit is missing,
-> strip fails and dhcpcd binary installed non-stripped.
-
-Wow, very good finding!
-
-> On ARM GCC 12 glibc configuration strip saves over 1MB of disk space.
-
-Could you clarify in which configuration you found that over 1 MB of
-disk space gets saved?
-
-Here, my dhcpcd binary, unstripped looks like this:
-
--r-xr-xr-x. 1 thomas thomas 327K  8 nov.  23:22 dhcpcd
-
-So, 327 KB. How can 1 MB be saved?
-
-(Note: of course this doesn't remove anything to the relevance of your
-patch, but I'm curious how you got that number).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
+index 2725130e72..b96c084b69 100644
+--- a/package/libosmium/libosmium.mk
++++ b/package/libosmium/libosmium.mk
+@@ -31,4 +31,8 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LIBOSMIUM_DEPENDENCIES += zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GDAL),y)
++LIBOSMIUM_DEPENDENCIES += gdal
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
