@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98292C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:05:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51856C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 07:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DC284074E;
-	Wed,  8 Nov 2023 07:05:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DC284074E
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED6F040640;
+	Wed,  8 Nov 2023 07:06:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED6F040640
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n5QePyRj1b68; Wed,  8 Nov 2023 07:05:33 +0000 (UTC)
+	with ESMTP id GveYVlUlsxHQ; Wed,  8 Nov 2023 07:06:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A86F40640;
-	Wed,  8 Nov 2023 07:05:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A86F40640
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F0FE1BF424
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:05:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFC8240642;
+	Wed,  8 Nov 2023 07:06:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFC8240642
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 078521BF424
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:06:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3928F60C20
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:05:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3928F60C20
+ by smtp4.osuosl.org (Postfix) with ESMTP id D474F410E4
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 07:06:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D474F410E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5dktmbc9y9Kp for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 07:05:28 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1A7C560C0C
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 07:05:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A7C560C0C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DCE10E0002;
- Wed,  8 Nov 2023 07:05:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r0ccu-00074M-0r;
- Wed, 08 Nov 2023 08:05:24 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VW_e2bJo0bIZ for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 07:06:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D5B3408E1
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 07:06:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D5B3408E1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EAE1E86C69; Wed,  8 Nov 2023 07:06:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Andreas Ziegler <br015@umbiko.net>
-References: <20231019065715.1892348-1-br015@umbiko.net>
-Date: Wed, 08 Nov 2023 08:05:24 +0100
-In-Reply-To: <20231019065715.1892348-1-br015@umbiko.net> (Andreas Ziegler's
- message of "Thu, 19 Oct 2023 08:57:15 +0200")
-Message-ID: <878r78vi6j.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/mpd: update to version 0.23.14
+To: buildroot@buildroot.org
+Date: Wed, 8 Nov 2023 08:00:12 +0100
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 04eb2f3efe1a33ef0c8122223ffe917d826fd1e4
+X-Git-Newrev: 283e882ca6635d6f57e5094e08e118c23ee3ae7b
+X-Patchwork-Hint: ignore
+Message-Id: <20231108070637.EAE1E86C69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/lxc: bump to
+ version 5.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,31 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Andreas" == Andreas Ziegler <br015@umbiko.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=283e882ca6635d6f57e5094e08e118c23ee3ae7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
- > Bug fixes in decoder (flac, mad), mixer (wasapi),
- > libfmt, systemd detection
+https://discuss.linuxcontainers.org/t/lxc-5-0-3-lts-has-been-released/17708
 
- > Change log:
- > 	https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.23.14/NEWS
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit cc85e9dea5c1a66cbfec6224786ee04d110d5e29)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lxc/lxc.hash | 2 +-
+ package/lxc/lxc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Tested on:
- > 	i386 (build, run)
- > 	x86_64 (build)
- > 	Aarch64 (build, run)
-
- > Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-
-Committed to 2023.02.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 2dd983a361..8b3365ddfc 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  bea08d2e49efcee34fa58acd2bc95c0adc64d291c07f4cfaf4ac1d8ac5a36f45  lxc-5.0.2.tar.gz
++sha256  2693a4c654dcfdafb3aa95c262051d8122afa1b6f5cef1920221ebbdee934d07  lxc-5.0.3.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 4a4d3a6212..b2afb978e6 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 5.0.2
++LXC_VERSION = 5.0.3
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
