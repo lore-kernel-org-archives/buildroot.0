@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97353C4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 22:31:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59049C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 22:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 424F8605AF;
-	Wed,  8 Nov 2023 22:31:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 424F8605AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FA4560669;
+	Wed,  8 Nov 2023 22:33:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FA4560669
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IVqo8b3cOhvJ; Wed,  8 Nov 2023 22:31:43 +0000 (UTC)
+	with ESMTP id 2bM33bPEkRYu; Wed,  8 Nov 2023 22:33:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7619F606B0;
-	Wed,  8 Nov 2023 22:31:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7619F606B0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13E0A1BF40B
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:31:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FBED606B0;
+	Wed,  8 Nov 2023 22:33:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FBED606B0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 23DFD1BF40B
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:33:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBC4140139
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:31:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBC4140139
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF22F81F7E
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 22:32:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF22F81F7E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qcmY30tcrfQF for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 22:31:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C943640114
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 22:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C943640114
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B039886D97; Wed,  8 Nov 2023 22:31:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 23:28:53 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e3e844a1f9227c88a25236e4f2bdacb2cc214e4a
-X-Git-Newrev: a01490397e4cc11155b3c396ded382eefeef4f12
-X-Patchwork-Hint: ignore
-Message-Id: <20231108223139.B039886D97@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencv4: security bump to version
- 4.8.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mKCuK1IxEqzu for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 22:32:55 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C18C81F0F
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 22:32:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C18C81F0F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 23D5B240005;
+ Wed,  8 Nov 2023 22:32:51 +0000 (UTC)
+Date: Wed, 8 Nov 2023 23:32:51 +0100
+To: Woodrow Douglass via buildroot <buildroot@buildroot.org>
+Message-ID: <20231108233251.7cc6779f@windsurf>
+In-Reply-To: <20231107154424.1602940-1-wdouglass@carnegierobotics.com>
+References: <20231107154424.1602940-1-wdouglass@carnegierobotics.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1699482772;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ZL/8myEWAxSr3EpZFNzzcfSSYHWKvH5g2wyxWsSH0I8=;
+ b=nV+4XOxjKdMDJcqXKgiP1qR+WDKBoJIcnMUv7ia0V2aUH42IxWwCBTIHdku0o97bCdsKg7
+ iH1lfB8LfNeGUKqXQmSoizHSP8Xn5yV18iKv+NGysmU6e8yW6sjP/KRbnkqyIk5kNBHaeK
+ q0oTmJrUTFM2eYJHV9YhEJcN8hW/eehkETd4jc6/HMMpwi+mTsGOyDcd6tdb1Z9n20h7DF
+ KZANzzDh9ysk4o9NiP3ZnlPzCJ8vpGAxEWeVdsThckdbT7mJpEnp5h1ntFJ1+eLYPzdxXX
+ 1CfyWF7qf2R75nB1s+tcvPU/mG1wW+geaE1xD562BCmnCSZkdoI8J3L7ry8HTA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=nV+4XOxj
+Subject: Re: [Buildroot] [PATCH 1/1] package/opencv4: bump version to 4.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,73 +76,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a01490397e4cc11155b3c396ded382eefeef4f12
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Woodrow,
 
-Also, bump package/opencv4-contrib to in lock-step.
+On Tue,  7 Nov 2023 10:44:24 -0500
+Woodrow Douglass via buildroot <buildroot@buildroot.org> wrote:
 
-This addresses both CVE-2023-2617 and CVE-2023-2618, that have been
-fixed in OpenCV 4.8.0.
+> Also, bump package/opencv4-contrib to keep in lock-step. This should address CVE-2023-2617 and CVE-2023-2618
+> 
+> Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/opencv4-contrib/opencv4-contrib.hash | 2 +-
- package/opencv4-contrib/opencv4-contrib.mk   | 2 +-
- package/opencv4/opencv4.hash                 | 2 +-
- package/opencv4/opencv4.mk                   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+Thanks a lot for the patch!
 
-diff --git a/package/opencv4-contrib/opencv4-contrib.hash b/package/opencv4-contrib/opencv4-contrib.hash
-index 4f15162e50..954a0c2beb 100644
---- a/package/opencv4-contrib/opencv4-contrib.hash
-+++ b/package/opencv4-contrib/opencv4-contrib.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1777d5fd2b59029cf537e5fd6f8aa68d707075822f90bde683fcde086f85f7a7  opencv4-contrib-4.6.0.tar.gz
-+sha256  0c082a0b29b3118f2a0a1856b403bb098643af7b994a0080f402a12159a99c6e  opencv4-contrib-4.8.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
-index 81c45c6e02..52d2682b26 100644
---- a/package/opencv4-contrib/opencv4-contrib.mk
-+++ b/package/opencv4-contrib/opencv4-contrib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCV4_CONTRIB_VERSION = 4.6.0
-+OPENCV4_CONTRIB_VERSION = 4.8.1
- OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
- OPENCV4_CONTRIB_INSTALL_TARGET = FALSE
- OPENCV4_CONTRIB_LICENSE = Apache-2.0
-diff --git a/package/opencv4/opencv4.hash b/package/opencv4/opencv4.hash
-index 419b420917..2736752633 100644
---- a/package/opencv4/opencv4.hash
-+++ b/package/opencv4/opencv4.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1ec1cba65f9f20fe5a41fda1586e01c70ea0c9a6d7b67c9e13edf0cfe2239277  opencv4-4.6.0.tar.gz
-+sha256  62f650467a60a38794d681ae7e66e3e8cfba38f445e0bf87867e2f2cdc8be9d5  opencv4-4.8.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index 2a05de42fb..74cec511a9 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCV4_VERSION = 4.6.0
-+OPENCV4_VERSION = 4.8.1
- OPENCV4_SITE = $(call github,opencv,opencv,$(OPENCV4_VERSION))
- OPENCV4_INSTALL_STAGING = YES
- OPENCV4_LICENSE = Apache-2.0
+The commit title should have mentioned that's it's a security bump. The
+commit log should also be more affirmative: "should address" is not
+good enough. Does it address, or doesn't it?
+
+Both CVEs are fixed in OpenCV 4.7.0, so bumping from 4.6.0 to 4.8.1
+indeed brings the fixes for those CVEs.
+
+I adjusted the commit title and commit log and pushed to master. Thanks
+for your contribution!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
