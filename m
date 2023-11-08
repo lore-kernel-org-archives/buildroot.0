@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 121CBC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 12:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87394C4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 12:28:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF88E418BE;
-	Wed,  8 Nov 2023 12:28:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF88E418BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C294417FC;
+	Wed,  8 Nov 2023 12:28:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C294417FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T5Nd0ciUQrO4; Wed,  8 Nov 2023 12:28:31 +0000 (UTC)
+	with ESMTP id lzpTHnO85C-V; Wed,  8 Nov 2023 12:28:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E79734187D;
-	Wed,  8 Nov 2023 12:28:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E79734187D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CE2261BF4E4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F9DB41820;
+	Wed,  8 Nov 2023 12:28:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F9DB41820
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D640C1BF954
  for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 12:28:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A842A41805
+ by smtp1.osuosl.org (Postfix) with ESMTP id B0CD981F1D
  for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 12:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A842A41805
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0CD981F1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sMOPp-n-kHwW for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eNANWArM8fpn for <buildroot@lists.busybox.net>;
  Wed,  8 Nov 2023 12:28:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA82D417FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC8D481EFD
  for <buildroot@buildroot.org>; Wed,  8 Nov 2023 12:28:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA82D417FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC8D481EFD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3BD986CB7; Wed,  8 Nov 2023 12:28:25 +0000 (UTC)
+ id C76E986C93; Wed,  8 Nov 2023 12:28:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 13:21:32 +0100
+Date: Wed, 8 Nov 2023 13:27:24 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: e91d46937f9c9a056a782c1c7bf4bffc3cfaf7dd
-X-Git-Newrev: 9dbb7a112c0d2e307fe0417a8bbd29a619520c92
+X-Git-Oldrev: 9dbb7a112c0d2e307fe0417a8bbd29a619520c92
+X-Git-Newrev: 6b2e2e737bdabc6fe9c8d6b51198ee785eef64af
 X-Patchwork-Hint: ignore
-Message-Id: <20231108122825.B3BD986CB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/libupnp: bump to
- version 1.14.18
+Message-Id: <20231108122825.C76E986C93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libgeos: drop
+ DISABLE_GEOS_INLINE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dbb7a112c0d2e307fe0417a8bbd29a619520c92
+commit: https://git.buildroot.net/buildroot/commit/?id=6b2e2e737bdabc6fe9c8d6b51198ee785eef64af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-https://github.com/pupnp/pupnp/blob/release-1.14.18/ChangeLog
+DISABLE_GEOS_INLINE has ben dropped since version 3.11.0 and
+https://github.com/libgeos/geos/commit/1516e42eeae3b3114585f1e94a0e723d835f7757
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bca9f4c98b28b06f74414d7a6475f4545f2daaee)
+(cherry picked from commit 5868ce7a50c84bdacb5c2636f5eeaa958ba9f1a0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgeos/libgeos.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index fcb231cff6..6fd4678c0d 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  025d7aee1ac5ca8f0bd99cb58b83fcfca0efab0c5c9c1d48f72667fe40788a4e  libupnp-1.14.13.tar.bz2
-+sha256  16a7cee93ce2868ae63ab1a8164dc7de43577c59983b9f61293a310d6888dceb  libupnp-1.14.18.tar.bz2
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 8c6ae005a0..f8551a2a0d 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index e0931dbb30..70f8ca3495 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -19,10 +19,6 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+ LIBGEOS_CXXFLAGS += -O0
+ endif
  
--LIBUPNP_VERSION = 1.14.13
-+LIBUPNP_VERSION = 1.14.18
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = \
- 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
+-ifeq ($(BR2_arm)$(BR2_armeb),y)
+-LIBGEOS_CONF_OPTS += -DDISABLE_GEOS_INLINE=ON
+-endif
+-
+ ifeq ($(BR2_or1k),y)
+ LIBGEOS_CXXFLAGS += -mcmodel=large
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
