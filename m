@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A54BCC4332F
-	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 12:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53B1DC4332F
+	for <buildroot@archiver.kernel.org>; Wed,  8 Nov 2023 12:29:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59ED0417DC;
-	Wed,  8 Nov 2023 12:28:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59ED0417DC
+	by smtp4.osuosl.org (Postfix) with ESMTP id D86CE417FF;
+	Wed,  8 Nov 2023 12:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D86CE417FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KHr88TWUoZSW; Wed,  8 Nov 2023 12:28:58 +0000 (UTC)
+	with ESMTP id yEaXAfFujHWl; Wed,  8 Nov 2023 12:29:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6046B41805;
-	Wed,  8 Nov 2023 12:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6046B41805
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0AE3C1BF97F
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 12:28:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 748E8417DC;
+	Wed,  8 Nov 2023 12:29:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 748E8417DC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B08231BF4E4
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 12:29:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5B8481EFD
- for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 12:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5B8481EFD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84BE0417DC
+ for <buildroot@lists.busybox.net>; Wed,  8 Nov 2023 12:29:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84BE0417DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V1jVkMxSeubM for <buildroot@lists.busybox.net>;
- Wed,  8 Nov 2023 12:28:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cv0I-y3wWNcV for <buildroot@lists.busybox.net>;
+ Wed,  8 Nov 2023 12:29:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEE5881F18
- for <buildroot@buildroot.org>; Wed,  8 Nov 2023 12:28:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEE5881F18
+ by smtp4.osuosl.org (Postfix) with ESMTP id A90C64179C
+ for <buildroot@buildroot.org>; Wed,  8 Nov 2023 12:29:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A90C64179C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D334386CB9; Wed,  8 Nov 2023 12:28:25 +0000 (UTC)
+ id 8D9F786CBB; Wed,  8 Nov 2023 12:29:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 8 Nov 2023 13:27:31 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 6b2e2e737bdabc6fe9c8d6b51198ee785eef64af
-X-Git-Newrev: d41ff469b5a9bdf136ba72dc631ee7a4ffab0b9a
+Date: Wed, 8 Nov 2023 13:21:28 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 4baa08fd9167a6eba6a5ef9ea1e68e04770576a8
+X-Git-Newrev: 311731068909b68ccda803eb03e090d84e6ada41
 X-Patchwork-Hint: ignore
-Message-Id: <20231108122825.D334386CB9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/libgeos: needs
- gcc >= 4.9
+Message-Id: <20231108122935.8D9F786CBB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libupnp: bump to
+ version 1.14.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,79 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d41ff469b5a9bdf136ba72dc631ee7a4ffab0b9a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=311731068909b68ccda803eb03e090d84e6ada41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-libgeos needs gcc >= 4.9 since bump to version 3.12.0 in commit
-16727d4595dd1972a46e92bbd2260a896cc19b60 and
-https://github.com/libgeos/geos/commit/289ed4efb26a9944f4385381e1574184b1e7448e:
-
-In file included from /home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/src/algorithm/ConvexHull.cpp:30:0:
-/home/thomas/autobuild/instance-0/output-1/build/libgeos-3.12.0/include/geos/util.h:38:12: error: 'std::make_unique' has not been declared
- using std::make_unique;
-            ^
-
-This dependency is propagated to libgeos only reverse dependency,
-postgis.
-
-Fixes:
- - http://autobuild.buildroot.org/results/56bb572fb1d56d45dbb950a73b9b888239fa6968
+https://github.com/pupnp/pupnp/blob/release-1.14.18/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f0d4bf1df5838c3aba678ca21d6ce2214f0466e0)
+(cherry picked from commit bca9f4c98b28b06f74414d7a6475f4545f2daaee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgeos/Config.in | 4 +++-
- package/postgis/Config.in | 6 +++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/libupnp/libupnp.hash | 2 +-
+ package/libupnp/libupnp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index 8411627d43..2a27c6f2a4 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEOS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
- 	help
- 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
-@@ -13,7 +14,8 @@ config BR2_PACKAGE_LIBGEOS
+diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
+index fcb231cff6..6fd4678c0d 100644
+--- a/package/libupnp/libupnp.hash
++++ b/package/libupnp/libupnp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  025d7aee1ac5ca8f0bd99cb58b83fcfca0efab0c5c9c1d48f72667fe40788a4e  libupnp-1.14.13.tar.bz2
++sha256  16a7cee93ce2868ae63ab1a8164dc7de43577c59983b9f61293a310d6888dceb  libupnp-1.14.18.tar.bz2
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index 8c6ae005a0..f8551a2a0d 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://trac.osgeo.org/geos
- 
--comment "libgeos needs a toolchain w/ C++, wchar, threads not binutils bug 27597"
-+comment "libgeos needs a toolchain w/ C++, wchar, gcc >= 4.9, threads not binutils bug 27597"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		   !BR2_TOOLCHAIN_HAS_THREADS || \
-+		   !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		   BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
-diff --git a/package/postgis/Config.in b/package/postgis/Config.in
-index 405c5c723a..7d42390677 100644
---- a/package/postgis/Config.in
-+++ b/package/postgis/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_POSTGIS
- 	bool "postgis"
- 	depends on BR2_PACKAGE_POSTGRESQL_FULL
- 	depends on BR2_INSTALL_LIBSTDCPP # libgeos, proj
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgeos
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgeos, proj
- 	depends on BR2_USE_WCHAR # libgeos, proj
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 # libgeos
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_POSTGIS
- 
- 	  https://postgis.net/
- 
--comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.7, not binutils bug 27597"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
-+comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.9, not binutils bug 27597"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+-LIBUPNP_VERSION = 1.14.13
++LIBUPNP_VERSION = 1.14.18
+ LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
+ LIBUPNP_SITE = \
+ 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
