@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF75FC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 00:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E283C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 00:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3169640490;
-	Thu,  9 Nov 2023 00:09:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3169640490
+	by smtp2.osuosl.org (Postfix) with ESMTP id 80E7B40491;
+	Thu,  9 Nov 2023 00:16:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80E7B40491
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GoLaGOTCsFFG; Thu,  9 Nov 2023 00:09:18 +0000 (UTC)
+	with ESMTP id nolXpnPk0Mw4; Thu,  9 Nov 2023 00:16:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D53D40491;
-	Thu,  9 Nov 2023 00:09:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D53D40491
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B215A1BF966
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 00:09:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 779334049A;
+	Thu,  9 Nov 2023 00:16:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 779334049A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 850011BF966
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 00:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8520881FEB
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 00:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8520881FEB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C7C241C36
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 00:16:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C7C241C36
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UX4xheWi-2jQ for <buildroot@lists.busybox.net>;
- Thu,  9 Nov 2023 00:09:14 +0000 (UTC)
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
- [IPv6:2607:f8b0:4864:20::129])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B576981EDB
- for <buildroot@buildroot.org>; Thu,  9 Nov 2023 00:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B576981EDB
-Received: by mail-il1-x129.google.com with SMTP id
- e9e14a558f8ab-359045af665so1287805ab.2
- for <buildroot@buildroot.org>; Wed, 08 Nov 2023 16:09:14 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U3rtLEfSwKRW for <buildroot@lists.busybox.net>;
+ Thu,  9 Nov 2023 00:16:15 +0000 (UTC)
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E96941BC0
+ for <buildroot@buildroot.org>; Thu,  9 Nov 2023 00:16:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E96941BC0
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-35809893291so1384695ab.1
+ for <buildroot@buildroot.org>; Wed, 08 Nov 2023 16:16:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699488553; x=1700093353;
+ d=1e100.net; s=20230601; t=1699488974; x=1700093774;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=DOQQqKuipH2W1ZOWkVDFxj/HMvlIHJ8JAdvLUen4blU=;
- b=p+GZ+sp2tDr1nxo+ft8Uno4UBRblH+DeepQCcIDP3tEigEtTNnx9/2nDGN+G98fe0c
- 5yBuEGjJWdOqao8+Pqu7yFKjTovsLbqBwmSEQruVFdn1KoyzvlerKMrWQAd2v7fGJXx+
- 1GQRLAewoD8eNAOIGg8jeidM4MlMWwcOa/srNsBmN/vBOoIOj3faB8BTby/+q8Ad3DQj
- XQwTneN7UfrGXR9Q9n2wBF6Tki+ZkkzfJF+BfaCIELIDA5Qn+p0mNaaRV+ZQibERqlXp
- cZntqPPfD0ZP7NFAybxKVq0bel+8IiAy7pIyYJUBuDqYqioceLQaZclVIwWiV9uVPXMT
- gGMg==
-X-Gm-Message-State: AOJu0Yyr36M2/aXkCEzNriqROj3LiPxOn7pOSwCktjCi3JWwM2ZnQ9O5
- WaZ6Ra57RFaY/Y32SJR0DFoOM5Qkq2E=
-X-Google-Smtp-Source: AGHT+IHlMD8wBJpwUrST0Z8XaZTZ9DLuxtoK/8A1nohuWzwtXclgG2JzLVcowa4NqdeVrjXY4E3c3w==
-X-Received: by 2002:a05:6e02:1a21:b0:359:4223:5731 with SMTP id
- g1-20020a056e021a2100b0035942235731mr3536350ile.30.1699488553410; 
- Wed, 08 Nov 2023 16:09:13 -0800 (PST)
+ bh=OD380BN6R1dwSg005nb3vXV5EYRwyNAWH9Iuxrq+3L4=;
+ b=p9B6wzfL32ec3cERBGgzD0lANJZjOB8aRbJ9WiUmlCwIeYrtarIy+yboEVAIJoOTPR
+ Oh0LHp3bTmMcEm+lxf/Kq2zB5gG/I6L6wQnfJIvv+A16aATBG0+T8TZ6fYksBlP4Ane6
+ qFpXUg1Scau/WCLnpsD654HNU0jTDC3StMG2tCYtPTSBma3As355iWysP0L5KNTfmc/s
+ I5LJ686KpbFtgBms7Vl34puTk2WRs2xPpIALVmTO1DFdylFmYwqoeOxvumER8siw6dM4
+ /fQNeh1957c6mhEBn/gMr1UVVNG8J9e/HTHkCmAwSUGya+5Wm2XM8hLX6jMK62MHgRWK
+ ExOw==
+X-Gm-Message-State: AOJu0Yy+n1aExXZ/LDzTzttyQsAKsI8m2/rZUFzdqyXRiN4rY5xbLRyL
+ vMqXIjLw7W8C0lYytxkUPVPk6x1Nfus=
+X-Google-Smtp-Source: AGHT+IHOTJe40nELkutHJ9oRXdJK54H5Sydj0CAnteSPAs84KORRJ4LdK4bQF6/H3bL6wtgYU7yGZA==
+X-Received: by 2002:a05:6e02:156f:b0:359:4a25:fab with SMTP id
+ k15-20020a056e02156f00b003594a250fabmr3999656ilu.5.1699488973702; 
+ Wed, 08 Nov 2023 16:16:13 -0800 (PST)
 Received: from james-x399.localdomain (71-33-131-93.hlrn.qwest.net.
  [71.33.131.93]) by smtp.gmail.com with ESMTPSA id
- m8-20020a02c888000000b0044cda7ec75fsm3651660jao.62.2023.11.08.16.09.12
+ h3-20020a02c723000000b00437a3c128dfsm3680827jao.108.2023.11.08.16.16.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Nov 2023 16:09:13 -0800 (PST)
+ Wed, 08 Nov 2023 16:16:13 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  8 Nov 2023 17:09:11 -0700
-Message-Id: <20231109000911.3667161-1-james.hilliard1@gmail.com>
+Date: Wed,  8 Nov 2023 17:16:12 -0700
+Message-Id: <20231109001612.3671745-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699488553; x=1700093353; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1699488974; x=1700093774; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DOQQqKuipH2W1ZOWkVDFxj/HMvlIHJ8JAdvLUen4blU=;
- b=UcSKJsYVkDDv93lHPpMpHKq+pbXHL8qBrIJI6YxykSkiFpkIsXA51fkwtQXpmsVV0x
- OjEFyAvrH1kWQvt0r7kLgYD5SfRgX+nRzcTTb8jrYcXGYAJ6mMXu7yQdrmqH2lEgjYSN
- inJuuIqv/P2g9LbG8YVgRkAZYSxe4Hmha9rttmWz3dzxZ80RxmwVbNZIEUFeGiVFyDZO
- EDHa0q2AnqstUdM2zWfHvhmejBRuElwe6zQrwqSRXnLcdfp7UyI6QG/nIgJYu/Y/t+gv
- ODT7VBf5piSf7hOZwq2vPFJGvRNTpq8PxHY2fw5RrFmVQ+rqDrswHvBXeQ5Ilb+Aknl+
- MhVA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=OD380BN6R1dwSg005nb3vXV5EYRwyNAWH9Iuxrq+3L4=;
+ b=QGANMinvmBbEsAnK9B/RtK8rQMx/YWhYMHZuV1A7IRiy//GCV7lcfXIduj8HkNtu4P
+ XUQi0ZvwIwXUbUT2lgnUXTKeuHFsarU73nCw8Ad8zFVfPzEJOnNzYI/wirJknPxSGttW
+ sKweb9ZEdBw22fb3hewHVnizFmvakAmMUyj9dtpiSLXzbsKay2HTMU6IGY0jRsBQPSZM
+ gnmfqWPidQe7JB4yQDHMbN0bzC1tGSa/4p8ApqdpxKcJ3tBodo72HWLdBTKVvGgNZNEe
+ zLQljQpkCHWmdzwlnC/gkAAvFiKXRSorHurxcUBrZtMWz2vU8uLQMgE9dCGsiB/DDKwh
+ x7+Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=UcSKJsYV
-Subject: [Buildroot] [PATCH 1/1] package/python-netaddr: bump to version
- 0.9.0
+ header.a=rsa-sha256 header.s=20230601 header.b=QGANMinv
+Subject: [Buildroot] [PATCH 1/1] package/python-networkx: bump to version
+ 3.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,40 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-netaddr/python-netaddr.hash | 8 ++++----
- package/python-netaddr/python-netaddr.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-networkx/python-networkx.hash | 4 ++--
+ package/python-networkx/python-networkx.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
-index d55390aad3..04dc9797f6 100644
---- a/package/python-netaddr/python-netaddr.hash
-+++ b/package/python-netaddr/python-netaddr.hash
+diff --git a/package/python-networkx/python-networkx.hash b/package/python-networkx/python-networkx.hash
+index 96ef9777da..b9fe50fd9c 100644
+--- a/package/python-networkx/python-networkx.hash
++++ b/package/python-networkx/python-networkx.hash
 @@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/netaddr/json
--md5  34cad578473b66ad77bc3b2a7613ed4a  netaddr-0.8.0.tar.gz
--# Locally computed
--sha256  d6cc57c7a07b1d9d2e917aa8b36ae8ce61c35ba3fcd1b83ca31c5a0ee2b5a243  netaddr-0.8.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/netaddr/json
-+md5  0c89e96501370d2538ecadca372e55a9  netaddr-0.9.0.tar.gz
-+sha256  7b46fa9b1a2d71fd5de9e4a3784ef339700a53a08c8040f08baf5f1194da0128  netaddr-0.9.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  0e53de62547787462f41eefb5cee31a14f7ea767ba0362c6f9304f1742486d47  LICENSE
-diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
-index e3ffe4e85b..1f78f04210 100644
---- a/package/python-netaddr/python-netaddr.mk
-+++ b/package/python-netaddr/python-netaddr.mk
+ # md5, sha256 from https://pypi.org/pypi/networkx/json
+-md5  1bfbb5cd184b486feae8345f541a5e50  networkx-3.0.tar.gz
+-sha256  9a9992345353618ae98339c2b63d8201c381c2944f38a2ab49cb45a4c667e412  networkx-3.0.tar.gz
++md5  e81583dcb3d929b60660721912f3faed  networkx-3.2.1.tar.gz
++sha256  9f1bb5cf3409bf324e0a722c20bdb4c20ee39bf1c30ce8ae499c8502b0b5e0c6  networkx-3.2.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  50b5a27cb43f7a20cede7aa7b9ab2033552e0412c9a1fde51d38885c1417e95f  LICENSE.txt
+diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
+index d369df1a04..e463dca40a 100644
+--- a/package/python-networkx/python-networkx.mk
++++ b/package/python-networkx/python-networkx.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_NETADDR_VERSION = 0.8.0
-+PYTHON_NETADDR_VERSION = 0.9.0
- PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
--PYTHON_NETADDR_SITE = https://pypi.python.org/packages/c3/3b/fe5bda7a3e927d9008c897cf1a0858a9ba9924a6b4750ec1824c9e617587
-+PYTHON_NETADDR_SITE = https://files.pythonhosted.org/packages/48/4c/2491bfdb868c3f40d985037fa64a3903c125f45d7d3025640e05715db7a3
- PYTHON_NETADDR_LICENSE = BSD-3-Clause
- PYTHON_NETADDR_LICENSE_FILES = LICENSE
- PYTHON_NETADDR_SETUP_TYPE = setuptools
+-PYTHON_NETWORKX_VERSION = 3.0
++PYTHON_NETWORKX_VERSION = 3.2.1
+ PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
+-PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/99/f9/d45c9ecf50a6b67a200e0bbd324201b5cd777dfc0e6c8f6d1620ce5a7ada
++PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/c4/80/a84676339aaae2f1cfdf9f418701dd634aef9cc76f708ef55c36ff39c3ca
+ PYTHON_NETWORKX_LICENSE = BSD-3-Clause
+ PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
+ PYTHON_NETWORKX_CPE_ID_VENDOR = python
 -- 
 2.34.1
 
