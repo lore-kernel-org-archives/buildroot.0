@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA3C3C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 12:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0E9FC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 12:52:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 745AB6131A;
-	Thu,  9 Nov 2023 12:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 745AB6131A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25ED4607C7;
+	Thu,  9 Nov 2023 12:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25ED4607C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ehn70818bOBq; Thu,  9 Nov 2023 12:52:33 +0000 (UTC)
+	with ESMTP id 730rBi3Q0R_x; Thu,  9 Nov 2023 12:52:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C726260F1E;
-	Thu,  9 Nov 2023 12:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C726260F1E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2215B1BF40F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50F9460F1E;
+	Thu,  9 Nov 2023 12:52:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50F9460F1E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 87BE01BF40F
  for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 12:52:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF8D660F1E
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 12:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF8D660F1E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 608C240A48
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 12:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 608C240A48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X3av83WUuf9Y for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ADZHd2fm1s7n for <buildroot@lists.busybox.net>;
  Thu,  9 Nov 2023 12:52:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4274960A9B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E97E40A44
  for <buildroot@buildroot.org>; Thu,  9 Nov 2023 12:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4274960A9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E97E40A44
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30D0F8614F; Thu,  9 Nov 2023 12:52:30 +0000 (UTC)
+ id 3E0EC86DFB; Thu,  9 Nov 2023 12:52:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 9 Nov 2023 13:47:25 +0100
+Date: Thu, 9 Nov 2023 13:48:02 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: c286101af860755e7d879b0132c56af09d4fb413
-X-Git-Newrev: c284d6bba0944ae3af609312ab2411e525787d28
+X-Git-Oldrev: c284d6bba0944ae3af609312ab2411e525787d28
+X-Git-Newrev: d8191f154660d28c9dce63b5a2d96c75c7023436
 X-Patchwork-Hint: ignore
-Message-Id: <20231109125230.30D0F8614F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/nano: really
- disable nanorc for !BR2_PACKAGE_FILE
+Message-Id: <20231109125230.3E0EC86DFB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libzlib: Switch
+ to using HTTPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c284d6bba0944ae3af609312ab2411e525787d28
+commit: https://git.buildroot.net/buildroot/commit/?id=d8191f154660d28c9dce63b5a2d96c75c7023436
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Commit 3c4fa30f7abf (package/nano: fix tiny build) tried to explicitly
-disable libmagic/coloring/nanorc, but accidently passed 2x
---disable-libmagic instead of --disable-nanorc.  Fix that.
+Switch to using HTTPS for downloading libzlib from zlib.net.
 
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(zlib.net doesn't default to HTTPS but does suggest HTTPS in the permalink
+for the latest zlib release. Also works better with some corporate firewalls
+that get suspicious about zlib for some reason.)
+
+Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3c71477f663c64bf7e3455e235f610fe17d0956c)
+(cherry picked from commit 5b139e2a8ded312e3b4a0939b35e6888a3d73076)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nano/nano.mk | 2 +-
+ package/libzlib/libzlib.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 8a2003b92a..8b93527bec 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -34,7 +34,7 @@ ifeq ($(BR2_PACKAGE_FILE),y)
- NANO_DEPENDENCIES += file
- NANO_CONF_OPTS += --enable-libmagic --enable-color --enable-nanorc
- else
--NANO_CONF_OPTS += --disable-libmagic --disable-libmagic --disable-color
-+NANO_CONF_OPTS += --disable-libmagic --disable-color --disable-nanorc
- endif # BR2_PACKAGE_FILE
- endif # BR2_PACKAGE_NANO_TINY
+diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
+index e344cc7ad9..b6193a6767 100644
+--- a/package/libzlib/libzlib.mk
++++ b/package/libzlib/libzlib.mk
+@@ -6,7 +6,7 @@
  
+ LIBZLIB_VERSION = 1.2.13
+ LIBZLIB_SOURCE = zlib-$(LIBZLIB_VERSION).tar.xz
+-LIBZLIB_SITE = http://www.zlib.net
++LIBZLIB_SITE = https://www.zlib.net
+ LIBZLIB_LICENSE = Zlib
+ LIBZLIB_LICENSE_FILES = LICENSE
+ LIBZLIB_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
