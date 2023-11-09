@@ -4,66 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E308C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 10:25:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3460C4167D
+	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 11:10:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EBE83612EB;
-	Thu,  9 Nov 2023 10:25:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBE83612EB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AE01612BB;
+	Thu,  9 Nov 2023 11:10:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AE01612BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VTg38Um0BjYQ; Thu,  9 Nov 2023 10:25:13 +0000 (UTC)
+	with ESMTP id X3zEc5WuO5qG; Thu,  9 Nov 2023 11:10:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05231612E2;
-	Thu,  9 Nov 2023 10:25:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05231612E2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A5B860AB9;
+	Thu,  9 Nov 2023 11:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A5B860AB9
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4BE891BF3FF
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 10:25:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EFE141BF352
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 11:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2288140136
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 10:25:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2288140136
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4380409F3
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 11:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4380409F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3ZBNt4PGWDOZ for <buildroot@lists.busybox.net>;
- Thu,  9 Nov 2023 10:25:08 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 26104400EA
- for <buildroot@buildroot.org>; Thu,  9 Nov 2023 10:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26104400EA
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 63277FF813;
- Thu,  9 Nov 2023 10:25:05 +0000 (UTC)
-Date: Thu, 9 Nov 2023 11:25:04 +0100
-To: Jon Henrik =?UTF-8?B?QmrDuHJuc3RhZA==?= via buildroot
- <buildroot@buildroot.org>
-Message-ID: <20231109112504.34c46c6e@windsurf>
-In-Reply-To: <20231109080919.530366-1-jonhenrik@qbee.io>
-References: <20231109080919.530366-1-jonhenrik@qbee.io>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id 96Druu2r62IL for <buildroot@lists.busybox.net>;
+ Thu,  9 Nov 2023 11:10:23 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4302C40119
+ for <buildroot@buildroot.org>; Thu,  9 Nov 2023 11:10:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4302C40119
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 13E3520010;
+ Thu,  9 Nov 2023 11:10:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r12vT-001rhD-0y;
+ Thu, 09 Nov 2023 12:10:19 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ thomas.petazzoni@bootlin.com
+References: <20231009143440.1776155-1-adam.duskett@amarulasolutions.com>
+Date: Thu, 09 Nov 2023 12:10:19 +0100
+In-Reply-To: <20231009143440.1776155-1-adam.duskett@amarulasolutions.com>
+ (Adam Duskett's message of "Mon, 9 Oct 2023 16:34:40 +0200")
+Message-ID: <87cywjp4h0.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1699525505;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/CeyfsNpGl/XQUEJXPJNmtRcqrPKio7ZNPbbCqnX4Fs=;
- b=Bbq39ucwszqtKpVO4y2C40bg9xCc22V1hvoMTPHaBBGFVN8fSp6d3T17WSYxPeaxvpSdCS
- AH0O8/SjHutJc4ds7g3tT5rJbzqg7LZTEc5RDhWaxUEtAf6RlvQPRVBKFyA09mIPrjLYc/
- fws02rx7I6qbJ9Jo76XAodhG+iOSBOQkYkYSGFd8ZTJVSZ1Cg0pPqRlpiHuN1Kc6W014a/
- rKLulvZnIuMtjYKALdBMczE31H+svccZfA5OCmqEcV+o+0WG852BzeSPSlARoKmwzYeSaw
- nolUXSawhYozVxYjkqRQ6KhUgVihzxvoVpRrDqek1k+UPLeS/KXAEcSx/BgD8g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Bbq39ucw
-Subject: Re: [Buildroot] [PATCH 1/1] package/qbee-agent: new package
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: select linux-pam if
+ refpolicy upstream is selected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,114 +64,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jon Henrik =?UTF-8?B?QmrDuHJuc3RhZA==?= <jonhenrik@qbee.io>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSm9uLAoKVGhhbmtzIGEgbG90IGZvciB0aGlzIGNvbnRyaWJ1dGlvbi4gU2VlIGJlbG93
-IGEgc21hbGwgbnVtYmVyIG9mCmNvbW1lbnRzL3F1ZXN0aW9ucy4KCk9uIFRodSwgIDkgTm92IDIw
-MjMgMDk6MDk6MTkgKzAxMDAKSm9uIEhlbnJpayBCasO4cm5zdGFkIHZpYSBidWlsZHJvb3QgPGJ1
-aWxkcm9vdEBidWlsZHJvb3Qub3JnPiB3cm90ZToKCj4gVGhpcyBwYXRjaCBhZGQgcWJlZS1hZ2Vu
-dCwgYW4gb3BlbiBzb3VyY2UgZGV2aWNlIG1hbmFnZW1lbnQgc29mdHdhcmUKPiBmb3IgTGludXgg
-ZGV2aWNlcy4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKb24gSGVucmlrIEJqw7hybnN0YWQgPGpvbmhl
-bnJpa0BxYmVlLmlvPgo+IC0tLQo+ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAg
-IHwgIDEgKwo+ICBwYWNrYWdlL3FiZWUtYWdlbnQvQ29uZmlnLmluICAgICAgIHwgMTYgKysrKysr
-KysrKysKPiAgcGFja2FnZS9xYmVlLWFnZW50L3FiZWUtYWdlbnQuaGFzaCB8ICAzICsrCj4gIHBh
-Y2thZ2UvcWJlZS1hZ2VudC9xYmVlLWFnZW50Lm1rICAgfCA0NSArKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysKPiAgNCBmaWxlcyBjaGFuZ2VkLCA2NSBpbnNlcnRpb25zKCspCgpDb3VsZCB5
-b3UgYWRkIGFuIGVudHJ5IGluIHRoZSBERVZFTE9QRVJTIGZpbGUgZm9yIHRoaXMgcGFja2FnZSwg
-dGhhdAphc3NvY2lhdGVzIHlvdXIgbmFtZS9lLW1haWwgd2l0aCB0aGUgcGFja2FnZSwgc28gdGhh
-dCB3ZSBjYW4gbm90aWZ5IHlvdQp3aGVuIHRoZXJlIGFyZSBidWlsZCBmYWlsdXJlcywgb3IgbmVl
-ZGVkIHNlY3VyaXR5IHVwZGF0ZXM/Cgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBi
-L3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggY2U0NmQzMGZlZC4uMWZlZjM2NWMzNSAxMDA2NDQK
-PiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4gQEAg
-LTI3NDEsNiArMjc0MSw3IEBAIG1lbnUgIlN5c3RlbSB0b29scyIKPiAgCXNvdXJjZSAicGFja2Fn
-ZS9wcm9jcy9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvcHNtaXNjL0NvbmZpZy5pbiIK
-PiAgCXNvdXJjZSAicGFja2FnZS9wd2dlbi9Db25maWcuaW4iCj4gKyAgc291cmNlICJwYWNrYWdl
-L3FiZWUtYWdlbnQvQ29uZmlnLmluIgoKVGhlIGluZGVudGF0aW9uIGlzIG5vdCBjb3JyZWN0IGhl
-cmUuCgo+ICAJc291cmNlICJwYWNrYWdlL3F1b3RhL0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFj
-a2FnZS9xdW90YXRvb2wvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL3JhdWMvQ29uZmln
-LmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3FiZWUtYWdlbnQvQ29uZmlnLmluIGIvcGFja2Fn
-ZS9xYmVlLWFnZW50L0NvbmZpZy5pbgo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAw
-MDAwMDAwMC4uOWNjN2Y1Yzg4Zgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3FiZWUt
-YWdlbnQvQ29uZmlnLmluCj4gQEAgLTAsMCArMSwxNiBAQAo+ICtjb25maWcgQlIyX1BBQ0tBR0Vf
-UUJFRV9BR0VOVAo+ICsJYm9vbCAicWJlZS1hZ2VudCIKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9P
-UEVOU1NIIGlmICFCUjJfUEFDS0FHRV9EUk9QQkVBUl9DTElFTlQgICMgcnVudGltZQo+ICsJc2Vs
-ZWN0IEJSMl9QQUNLQUdFX0lQVEFCTEVTICAjIHJ1bnRpbWUKPiArCXNlbGVjdCBCUjJfUEFDS0FH
-RV9CVVNZQk9YX1NIT1dfT1RIRVJTICAjIHJ1bnRpbWUKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9T
-SEFET1cgICMgcnVudGltZQo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0JBU0ggICMgcnVudGltZQoK
-TWlub3Igbml0OiBvbmx5IG9uZSBzcGFjZSBiZWZvcmUgdGhlICIjIHJ1bnRpbWUiIGNvbW1lbnQu
-Cgo+ICsJaGVscAo+ICsJICBRYmVlIGlzIGEgZGV2aWNlIG1hbmFnZW1lbnQgcGxhdGZvcm0gdGhh
-dCBjb21wcmlzZQo+ICsJICBvZiBhbiBvcGVuLXNvdXJjZSBhZ2VudCBhbmQgYSBob3N0ZWQgU2Fh
-UyBiYWNrZW5kLgo+ICsJICBUaGlzIGNvbmZpZyBpbnN0YWxscyBwcmUtYnVpbHQgc3RhdGljIGJp
-bmFyaWVzIG1hZGUKPiArCSAgd2l0aCB0aGUgb2ZmaWNpYWwgcHVibGljIHNpZ25pbmcga2V5IGZv
-ciBxYmVlLmlvLiBUaGUKPiArCSAgYmluYXJpZXMgd2lsbCB3b3JrIHNlYW1sZXNzbHkgd2l0aCB0
-aGUgcWJlZS5pbyBkZXZpY2UKPiArCSAgbWFuYWdlbWVudCBiYWNrZW5kLgoKUGxlYXNlIHB1dCBv
-bmUgZW1wdHkgbGluZSBiZXR3ZW4gdGhlIGhlbHAgdGV4dCBhbmQgdGhlIHVwc3RyZWFtIFVSTC4K
-CkJ1dCB0aGUgYmlnZ2VyIHF1ZXN0aW9uIGlzIHdoeSBkbyB3ZSBwYWNrYWdlIGEgcHJlLWJ1aWx0
-IHN0YXRpYyBiaW5hcnksCnJhdGhlciB0aGFuIGJ1aWxkaW5nIGZyb20gc291cmNlPwoKQWxzbywg
-aWYgdGhpcyBwYWNrYWdlIGlzIHByb3ZpZGVkIHdpdGggcHJlLWJ1aWx0IGJpbmFyaWVzLCB0aGVu
-IG1vc3QKbGlrZWx5IGl0IGlzIG9ubHkgc3VwcG9ydGVkIGZvciBhIHNwZWNpZmljIHN1YnNldCBv
-ZiBDUFUgYXJjaGl0ZWN0dXJlcywKc28geW91IG5lZWQgc29tZSAiZGVwZW5kcyBvbiIuIElmIHlv
-dSBob3dldmVyIGRlY2lkZSB0byBidWlsZCBpZiBmcm9tCnNvdXJjZSwgaXQgc2hvdWxkIGhhdmU6
-CgoJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX0dPX1RBUkdFVF9BUkNIX1NVUFBPUlRTCgo+
-ICsJICBodHRwczovL2dpdGh1Yi5jb20vcWJlZS1pby9xYmVlLWFnZW50Cj4gKwkgIGh0dHBzOi8v
-cWJlZS5pbwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3FiZWUtYWdlbnQvcWJlZS1hZ2VudC5oYXNo
-IGIvcGFja2FnZS9xYmVlLWFnZW50L3FiZWUtYWdlbnQuaGFzaAo+IG5ldyBmaWxlIG1vZGUgMTAw
-NjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uZTNhODEyOThlMAo+IC0tLSAvZGV2L251bGwKPiArKysg
-Yi9wYWNrYWdlL3FiZWUtYWdlbnQvcWJlZS1hZ2VudC5oYXNoCj4gQEAgLTAsMCArMSwzIEBACgpQ
-bGVhc2UgYWRkIGEgY29tbWVudCB0aGF0IHNheXMgd2hlcmUgdGhlIGhhc2ggY29tZXMgZnJvbS4g
-SWYgaXQncyBqdXN0CmNhbGN1bGF0ZWQgbG9jYWxseSBieSB5b3UsIHRoZW46CgojIExvY2FsbHkg
-Y2FsY3VsYXRlZAoKPiArbWQ1ICA2ZTRkYzczMjNiOTlkOGM1YTk4MWI3YjJjNWRhNGY2NiAgcWJl
-ZS1hZ2VudC0yMDIzLjQ0LnRhci5nego+ICtzaGExICBhMGQwMmMxMTgwZmQ5NzIyOGYyMzg1OWE4
-ZGVhOTFmZTgxYTMxNjI2ICBxYmVlLWFnZW50LTIwMjMuNDQudGFyLmd6Cj4gK3NoYTI1NiAgZWRj
-ZjMxOWM0Y2UxN2U5ODQ0ZGY1OThmYTc5NmFhODczMDNhMWJmMjM4Mjk5ZGJlZWI0MWM5NGZmNWRl
-NWUxZCAgcWJlZS1hZ2VudC0yMDIzLjQ0LnRhci5negoKVGhlIHNoYTI1NiBoYXNoIGlzIHN1ZmZp
-Y2llbnQuCgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3FiZWUtYWdlbnQvcWJlZS1hZ2VudC5tayBi
-L3BhY2thZ2UvcWJlZS1hZ2VudC9xYmVlLWFnZW50Lm1rCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-PiBpbmRleCAwMDAwMDAwMDAwLi40ZTI2MWQ2YmY0Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3Bh
-Y2thZ2UvcWJlZS1hZ2VudC9xYmVlLWFnZW50Lm1rCj4gQEAgLTAsMCArMSw0NSBAQAo+ICsjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgcWJlZS1hZ2VudCBwYWNrYWdlCj4gKyMKPiAr
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArCj4gK1FCRUVfQUdFTlRfVkVSU0lPTiA9IDIwMjMu
-NDQKPiArI1FCRUVfQUdFTlRfU09VUkNFID0gcWJlZS1hZ2VudC0kKFFCRUVfQUdFTlRfVkVSU0lP
-TikudGFyLmd6Cj4gK1FCRUVfQUdFTlRfU0lURSA9IGh0dHBzOi8vY2RuLnFiZWUuaW8vc29mdHdh
-cmUvcWJlZS1hZ2VudC8kKFFCRUVfQUdFTlRfVkVSU0lPTikvYmluYXJpZXMKPiArUUJFRV9BR0VO
-VF9MSUNFTlNFID0gQXBhY2hlLTIuMAoKSXMgdGhlcmUgYXJlIGxpY2Vuc2UgZmlsZT8KCj4gKwo+
-ICtpZmVxICgkKEJSMl9hcm0pLHkpCj4gK1FCRUVfQUdFTlRfR09BUkNIID0gYXJtCj4gK2Vsc2Ug
-aWZlcSAoJChCUjJfYWFyY2g2NCkseSkKPiArUUJFRV9BR0VOVF9HT0FSQ0ggPSBhcm02NAo+ICtl
-bHNlIGlmZXEgKCQoQlIyX2kzODYpLHkpCj4gK1FCRUVfQUdFTlRfR09BUkNIID0gMzg2Cj4gK2Vs
-c2UgaWZlcSAoJChCUjJfeDg2XzY0KSx5KQo+ICtRQkVFX0FHRU5UX0dPQVJDSCA9IGFtZDY0Cj4g
-K2VuZGlmCgpQZXJoYXBzIHlvdSBjYW4gZGlyZWN0bHkgdXNlICQoR09fR09BUkNIKSA/Cgo+ICtk
-ZWZpbmUgUUJFRV9BR0VOVF9CVUlMRF9DTURTCj4gK2VuZGVmCgpKdXN0IGRvbid0IGRlZmluZSBi
-dWlsZCBjb21tYW5kcyBpbiB0aGlzIGNhc2UuCgo+ICtkZWZpbmUgUUJFRV9BR0VOVF9JTlNUQUxM
-X1RBUkdFVF9DTURTCj4gKwkkKElOU1RBTEwpIC1tIDA3NTUgJChARCkvcWJlZS1hZ2VudC0kKFFC
-RUVfQUdFTlRfVkVSU0lPTikvcWJlZS1hZ2VudC0kKFFCRUVfQUdFTlRfR09BUkNIKSAkKFRBUkdF
-VF9ESVIpL3Vzci9iaW4vcWJlZS1hZ2VudAoKSXQncyBhIGJpdCBzdXJwcmlzaW5nLCB3aHkgZG8g
-eW91IGhhdmUgYQpxYmVlLWFnZW50LSQoUUJFRV9BR0VOVF9WRVJTSU9OKSA/IEl0IGxvb2tzIGxp
-a2UgeW91ciB0YXJiYWxsIGhhcyBvbmUKdG9vIG1hbnkgcGF0aCBlbWJlZGRlZCBtYXliZT8gSWYg
-c28sIHlvdSBjYW4gZG86CgpRQkVFX0FHRU5UX1NUUklQX0NPTVBPTkVOVFMgPSAyCgp0aGlzIHdp
-bGwgc2ltcGxpZnkgdGhlIHBhdGhzLgoKPiArCSQoSU5TVEFMTCkgLWQgLW0gMDcwMCAkKFRBUkdF
-VF9ESVIpL2V0Yy9xYmVlL3Bwa2V5cwoKTm8gbmVlZCB0byBkbyB0aGlzLi4uCgo+ICsJJChJTlNU
-QUxMKSAtbSAwNjAwICQoQEQpL3FiZWUtYWdlbnQtJChRQkVFX0FHRU5UX1ZFUlNJT04pL3NoYXJl
-L3NzbC9jYS5jZXJ0ICQoVEFSR0VUX0RJUikvZXRjL3FiZWUvcHBrZXlzL2NhLmNlcnQKCi4uLiBq
-dXN0IGFkZCAtRCBhcyBhbiBvcHRpb24gaGVyZSwgd2hpY2ggd2lsbCBjcmVhdGUgYWxsIG5lZWRl
-ZApkZXN0aW5hdGlvbiBkaXJlY3Rvcmllcy4KCj4gK2VuZGVmCj4gKwo+ICtkZWZpbmUgUUJFRV9B
-R0VOVF9JTlNUQUxMX0lOSVRfU1lTVEVNRAo+ICsJJChJTlNUQUxMKSAtRCAtbSAwNjQ0ICQoQEQp
-L3FiZWUtYWdlbnQtJChRQkVFX0FHRU5UX1ZFUlNJT04pL2luaXQtc2NyaXB0cy9zeXN0ZW1kL3Fi
-ZWUtYWdlbnQuc2VydmljZSBcCj4gKwkgICQoVEFSR0VUX0RJUikvdXNyL2xpYi9zeXN0ZW1kL3N5
-c3RlbS9xYmVlLWFnZW50LnNlcnZpY2UKClRhYiBmb3IgdGhlIGluZGVudGF0aW9uLgoKPiArZW5k
-ZWYKPiArCj4gK2RlZmluZSBRQkVFX0FHRU5UX0lOU1RBTExfSU5JVF9TWVNWCj4gKwkkKElOU1RB
-TEwpIC1EIC1tIDc1NSAkKEBEKS9xYmVlLWFnZW50LSQoUUJFRV9BR0VOVF9WRVJTSU9OKS9pbml0
-LXNjcmlwdHMvc3lzdmluaXQvcWJlZS1hZ2VudCBcCj4gKwkgICQoVEFSR0VUX0RJUikvZXRjL2lu
-aXQuZC9TOTlxYmVlLWFnZW50CgpMaWtld2lzZS4KClRoYW5rcyBhIGxvdCEKClRob21hcwotLSAK
-VGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51
-eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29t
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+>>>>> "Adam" == Adam Duskett <adam.duskett@amarulasolutions.com> writes:
+
+ > linux-pam is required to login via OpenSSH if the upstream refpolicy for
+ > SELinux is enaabled, as linux-pam handles changing user contexts. If a
+ > user wants to make their own policy and use a refpolicy via git, we of course
+ > should let them do so. As such, only select linux-pam if the upstream version
+ > of refpolicy is selected.
+
+ > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ > ---
+ >  package/openssh/Config.in | 1 +
+ >  1 file changed, 1 insertion(+)
+
+ > diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+ > index 08d3c7d391..e7d8f46c07 100644
+ > --- a/package/openssh/Config.in
+ > +++ b/package/openssh/Config.in
+ > @@ -3,6 +3,7 @@ config BR2_PACKAGE_OPENSSH
+ >  	depends on BR2_USE_MMU # fork()
+ >  	select BR2_PACKAGE_OPENSSL
+ >  	select BR2_PACKAGE_ZLIB
+ > +	select BR2_PACKAGE_LINUX_PAM if BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION
+
+Hmm, we cannot do that without taking the dependencies on linux-pam into
+consideration:
+
+config BR2_PACKAGE_OPENSSH
+        bool "openssh"
+        depends on BR2_USE_MMU # fork()
+
+..
+
+config BR2_PACKAGE_REFPOLICY
+        bool "refpolicy"
+        depends on BR2_TOOLCHAIN_HAS_THREADS # libsepol
+        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsepol
+        depends on BR2_HOST_GCC_AT_LEAST_5 # host-setools -> host-libsepol
+
+..
+
+config BR2_PACKAGE_LINUX_PAM
+        bool "linux-pam"
+        depends on BR2_ENABLE_LOCALE
+        depends on BR2_USE_WCHAR
+        depends on !BR2_STATIC_LIBS
+        depends on BR2_USE_MMU # fork()
+        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+
+So there is no guarantee that locale, wchar and !static are
+available. You either need to propagate these dependencies to openssh if
+the standard refpolicy is used or only select if they are / display a
+warning otherwise.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
