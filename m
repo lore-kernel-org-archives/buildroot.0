@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3ED4C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 21:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB57FC4332F
+	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 21:07:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6286E417B9;
-	Thu,  9 Nov 2023 21:07:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6286E417B9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78B9B417CB;
+	Thu,  9 Nov 2023 21:07:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78B9B417CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZGdjZbjUV5y4; Thu,  9 Nov 2023 21:07:12 +0000 (UTC)
+	with ESMTP id 3epXGh9-VUiV; Thu,  9 Nov 2023 21:07:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B05E417C5;
-	Thu,  9 Nov 2023 21:07:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B05E417C5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ECD141BF312
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 21:05:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A1C440354;
+	Thu,  9 Nov 2023 21:07:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A1C440354
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 67F211BF990
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 21:05:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F2C482175
+ by smtp3.osuosl.org (Postfix) with ESMTP id B991560F7E
  for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 21:05:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F2C482175
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B991560F7E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uds_KSIKVO9n for <buildroot@lists.busybox.net>;
- Thu,  9 Nov 2023 21:05:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qHDfjhXpwTaG for <buildroot@lists.busybox.net>;
+ Thu,  9 Nov 2023 21:05:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB18882110
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC12F61499
  for <buildroot@buildroot.org>; Thu,  9 Nov 2023 21:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB18882110
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC12F61499
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C985786E93; Thu,  9 Nov 2023 21:05:42 +0000 (UTC)
+ id DBDF486E95; Thu,  9 Nov 2023 21:05:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 9 Nov 2023 21:58:01 +0100
+Date: Thu, 9 Nov 2023 21:58:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 20d6625eb1f6d807c1c6878d56a5a8d557993d15
-X-Git-Newrev: 4ab85dc04e49cc33ce6f5f7df1081db3f14fa4fb
+X-Git-Oldrev: 8903773f7e81be279b9cf32f522a3763ba26529e
+X-Git-Newrev: c616c640d2a56c7abed356abb5566b4b1b72b217
 X-Patchwork-Hint: ignore
-Message-Id: <20231109210542.C985786E93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-modbus-tk: bump to version
- 1.1.3
+Message-Id: <20231109210542.DBDF486E95@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-msgfy: bump to version 0.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ab85dc04e49cc33ce6f5f7df1081db3f14fa4fb
+commit: https://git.buildroot.net/buildroot/commit/?id=c616c640d2a56c7abed356abb5566b4b1b72b217
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-modbus-tk/python-modbus-tk.hash | 5 +++--
- package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-msgfy/python-msgfy.hash | 4 ++--
+ package/python-msgfy/python-msgfy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-index c486e49715..c7f4ac2dd4 100644
---- a/package/python-modbus-tk/python-modbus-tk.hash
-+++ b/package/python-modbus-tk/python-modbus-tk.hash
-@@ -1,5 +1,6 @@
--# sha256 from https://pypi.org/pypi/modbus-tk/json
--sha256  893514bbd8c92118d20a19979e0239e7cb2a63f8f1795a0271e57def09d11770  modbus_tk-1.1.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
-+md5  2e66c361d3e4591a19be1259ef50fdf7  modbus_tk-1.1.3.tar.gz
-+sha256  690fa7bb86ea978992465d2d61c8b5acc639ce0e8b833a0aa96d4dd172c5644a  modbus_tk-1.1.3.tar.gz
+diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
+index 9f5bfe4804..2517afbb48 100644
+--- a/package/python-msgfy/python-msgfy.hash
++++ b/package/python-msgfy/python-msgfy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/msgfy/json
+-md5  1727a08a0cf7fb704045168c71993280  msgfy-0.2.0.tar.gz
+-sha256  37c907cccb19afe73ce44111a21b410b685be92c9c44496bc4381fd93c5ad7b6  msgfy-0.2.0.tar.gz
++md5  ef3c61804003f4356119f7d00c5932f9  msgfy-0.2.1.tar.gz
++sha256  161024732591444cc05ca3982a010005932005ec861467dead49349447a91671  msgfy-0.2.1.tar.gz
  # Locally computed sha256 checksums
- sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
- sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-index 30056bb207..d8552e57a6 100644
---- a/package/python-modbus-tk/python-modbus-tk.mk
-+++ b/package/python-modbus-tk/python-modbus-tk.mk
+ sha256  fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
+diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
+index 4100a912b2..8565c2210e 100644
+--- a/package/python-msgfy/python-msgfy.mk
++++ b/package/python-msgfy/python-msgfy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MODBUS_TK_VERSION = 1.1.2
-+PYTHON_MODBUS_TK_VERSION = 1.1.3
- PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
--PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/ce/e9/30d86eb912bf868b8c97698b5747f10cf72dc26c674fd030249bc3275484
-+PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8d/9f/5963e30dba160dbc646b76c59ca8136709c7fe9002bbaaa3cf1e1bb0404b
- PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
- PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
- PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+-PYTHON_MSGFY_VERSION = 0.2.0
++PYTHON_MSGFY_VERSION = 0.2.1
+ PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
+-PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/c6/2a/663ef86625f34ee4165da1eb824442cfb1f676e892946d7fe39a8c775682
++PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/51/0e/b78151a63e8c5cab745e90ed7b4a741dba5439a8538636bf6a5da72bad23
+ PYTHON_MSGFY_SETUP_TYPE = setuptools
+ PYTHON_MSGFY_LICENSE = MIT
+ PYTHON_MSGFY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
