@@ -1,68 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37DACC4332F
-	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 11:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BAA2C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 15:01:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBB10612DC;
-	Thu,  9 Nov 2023 11:07:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBB10612DC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YxKDYFUJZnVf; Thu,  9 Nov 2023 11:07:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 092CD60ADE;
-	Thu,  9 Nov 2023 11:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 092CD60ADE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3A14D1BF352
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 11:07:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07C6E400C1
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 11:07:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07C6E400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 19B4540165;
+	Thu,  9 Nov 2023 15:01:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19B4540165
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YOyCPmf3XGqq for <buildroot@lists.busybox.net>;
- Thu,  9 Nov 2023 11:07:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C7EFE40A67
- for <buildroot@uclibc.org>; Thu,  9 Nov 2023 11:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7EFE40A67
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B16978284C; Thu,  9 Nov 2023 11:07:14 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Thu, 09 Nov 2023 11:07:14 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2023.08.2
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: minor
-X-Bugzilla-Who: justin.brown@fandingo.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15847-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UR4D7RQa8uYV; Thu,  9 Nov 2023 15:01:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A43540166;
+	Thu,  9 Nov 2023 15:01:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A43540166
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BE671BF31F
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 15:01:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 819F4814A0
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 15:01:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 819F4814A0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GBCLeVapCJnV for <buildroot@lists.busybox.net>;
+ Thu,  9 Nov 2023 15:01:42 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1D942813CF
+ for <buildroot@uclibc.org>; Thu,  9 Nov 2023 15:01:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D942813CF
+Received: from relay4-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::224])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 0B9B9C8D2C
+ for <buildroot@uclibc.org>; Thu,  9 Nov 2023 14:57:20 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8E6FCE0004;
+ Thu,  9 Nov 2023 14:57:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r16T4-002Unw-0K;
+ Thu, 09 Nov 2023 15:57:14 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20231002195159.3053254-1-bernd@kuhls.net>
+ <20231002205144.GD2957__28552.5928296678$1696279934$gmane$org@scaer>
+ <pan$e4c2e$65ef9aa7$60d9f1ab$55fd2db7@ID-313208.user.individual.net>
+Date: Thu, 09 Nov 2023 15:57:14 +0100
+In-Reply-To: <pan$e4c2e$65ef9aa7$60d9f1ab$55fd2db7@ID-313208.user.individual.net>
+ (Bernd Kuhls's message of "Tue, 03 Oct 2023 13:12:10 +0200")
+Message-ID: <87il6bnfed.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15847] New: Systemd: Incorrect Permission on
- /usr/lib/systemd
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcp: fix cross build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,77 +66,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@uclibc.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15847
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-            Bug ID: 15847
-           Summary: Systemd: Incorrect Permission on /usr/lib/systemd
-           Product: buildroot
-           Version: 2023.08.2
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: justin.brown@fandingo.org
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+ > Am Mon, 2 Oct 2023 22:51:44 +0200 schrieb Yann E. MORIN:
+ >> So your patch looks like it is correct.
+ >> 
+ >> However, I would challenge it on other grounds: ISC decided to stop
+ >> maintaing dhcp starting end of 2022, almost a year ago, when they
+ >> released the last version of dhcp.
+ >> 
+ >> Should we just drop that package now and be done with it?
 
-I'm trying to use systemd as my init and systemd-networkd as my connection
-manager. There appears to be a problem with the file permissions that prevent
-networkd from starting. 
+ > Hi Yann,
 
+ > my patch follows Peter's intention:
+ > "If it is dead upstream and hard to fix then that naturally makes it 
+ > harder to do, but the intention is to fix it."
+ > http://lists.busybox.net/pipermail/buildroot/2022-April/640709.html
 
-CONFIG:
-=======
+.. Which was a discussion about supporting it during the support period
+of Buildroot 2022.02.x, but OK.
 
-I'm tracking origin/master and am up to date with fd41e442f0f from Nov. 7th. My
-defconfig is qemu_x86_64_defconfig with two modifications: BR2_INIT_SYSTEMD=y
-(including BR2_PACKAGE_SYSTEMD_NETWORKD=y) and a BR2_ROOTFS_OVERLAY that
-provides a etc/systemd/network/01.network basic DHCP unit file. (Plus the
-additional both required and optional linux.config modifications for systemd
-specified at https://github.com/systemd/systemd/blob/main/README.) 
-
-
-PROBLEM:
-========
-
-The systemd package creates a systemd-network user, and the
-systemd-networkd.service unit executes as that user. However, the file
-permissions prohibit this non-root user from executing
-/usr/lib/systemd/systemd-networkd:
-
-
-# ls -ald /usr/lib/systemd/
-drwxrwx---   13 root     root          2048 Nov  9 10:10 /usr/lib/systemd/
-
-# ls -al /usr/lib/systemd/systemd-networkd
--rwxr-xr-x    1 root     root       1579456 Nov  9 10:10
-/usr/lib/systemd/systemd-networkd
-
-
-Note that the /usr/lib/systemd directory does not allow the necessary o=rx
-permissions for a non-root user to access these binaries.
-
-
-REQUEST:
-========
-
-I'm not well versed in writing makefiles, yet. But from a sh perspective, the
-solution seems to be that the systemd package makefile needs to do the
-equivalent of:
-
-chmod o+rx /usr/lib/systemd
+Maybe we should consider dropping it for 2024.02.x.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
