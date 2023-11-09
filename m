@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98D38C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 16:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08723C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 16:59:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B4AA41693;
-	Thu,  9 Nov 2023 16:59:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B4AA41693
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FDBA416F2;
+	Thu,  9 Nov 2023 16:59:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FDBA416F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B9seZdLEirOs; Thu,  9 Nov 2023 16:59:37 +0000 (UTC)
+	with ESMTP id eBPuTKMaREFd; Thu,  9 Nov 2023 16:59:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26CE941686;
-	Thu,  9 Nov 2023 16:59:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26CE941686
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E0521BF215
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 16:59:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E23E941693;
+	Thu,  9 Nov 2023 16:59:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E23E941693
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 821341BF215
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 16:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB72A60F6B
- for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 16:59:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB72A60F6B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67D9F41F07
+ for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 16:59:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67D9F41F07
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DoSqAkOH4Ixk for <buildroot@lists.busybox.net>;
- Thu,  9 Nov 2023 16:59:33 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D7A9560F36
- for <buildroot@buildroot.org>; Thu,  9 Nov 2023 16:59:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7A9560F36
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 352D96000A;
- Thu,  9 Nov 2023 16:59:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yS6ZP57QxOpu for <buildroot@lists.busybox.net>;
+ Thu,  9 Nov 2023 16:59:47 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A7C52401A2
+ for <buildroot@buildroot.org>; Thu,  9 Nov 2023 16:59:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7C52401A2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 333CDFF80A;
+ Thu,  9 Nov 2023 16:59:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r18NM-002daq-2J;
- Thu, 09 Nov 2023 17:59:28 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r18Na-002dbd-1z;
+ Thu, 09 Nov 2023 17:59:42 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Reza Arbab <arbab@linux.ibm.com>
 References: <20231009151729.2223963-1-arbab@linux.ibm.com>
- <20231009151729.2223963-2-arbab@linux.ibm.com>
-Date: Thu, 09 Nov 2023 17:59:28 +0100
-In-Reply-To: <20231009151729.2223963-2-arbab@linux.ibm.com> (Reza Arbab's
- message of "Mon, 9 Oct 2023 10:17:22 -0500")
-Message-ID: <87a5rmoob3.fsf@48ers.dk>
+ <20231009151729.2223963-4-arbab@linux.ibm.com>
+Date: Thu, 09 Nov 2023 17:59:42 +0100
+In-Reply-To: <20231009151729.2223963-4-arbab@linux.ibm.com> (Reza Arbab's
+ message of "Mon, 9 Oct 2023 10:17:24 -0500")
+Message-ID: <875y2aooap.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v3 1/8] package/petitboot: fix menu comment
+Subject: Re: [Buildroot] [PATCH v3 3/8] package/petitboot: use default
+ logfile dir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,7 +73,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Reza" == Reza Arbab <arbab@linux.ibm.com> writes:
 
- > The comment should appear if threads aren't enabled, not when they are.
+ > All the petitboot components assume /var/log/petitboot by default;
+ > pb-console can also put multiple logs there and pb-sos collects that
+ > directory when creating a diagnostic tarball.
+
+ > Defer to this default when launching pb-discover. If someone wants to
+ > override, let's call the file /etc/default/petitboot which makes more
+ > sense to be shared by all the components.
+
  > Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
 
 Committed to 2023.08.x, thanks.
