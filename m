@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EB06C4332F
-	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 21:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B331C4332F
+	for <buildroot@archiver.kernel.org>; Thu,  9 Nov 2023 21:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C73E0417FE;
-	Thu,  9 Nov 2023 21:06:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C73E0417FE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1408440018;
+	Thu,  9 Nov 2023 21:06:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1408440018
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lRCas0PR4uLO; Thu,  9 Nov 2023 21:06:29 +0000 (UTC)
+	with ESMTP id bFhprIpLAdpf; Thu,  9 Nov 2023 21:06:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 52AB140354;
-	Thu,  9 Nov 2023 21:06:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52AB140354
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 18FD31BF990
+	by smtp2.osuosl.org (Postfix) with ESMTP id CEDA7417C7;
+	Thu,  9 Nov 2023 21:06:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEDA7417C7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CAC11BF995
  for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 21:05:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8528760F1B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00148403C9
  for <buildroot@lists.busybox.net>; Thu,  9 Nov 2023 21:05:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8528760F1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00148403C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id clUzbJUj65SY for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JvFLU-ZMdqT7 for <buildroot@lists.busybox.net>;
  Thu,  9 Nov 2023 21:05:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BAC0C60F7E
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1679417BB
  for <buildroot@buildroot.org>; Thu,  9 Nov 2023 21:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAC0C60F7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1679417BB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7F7386E95; Thu,  9 Nov 2023 21:05:42 +0000 (UTC)
+ id BEDAD86D96; Thu,  9 Nov 2023 21:05:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 9 Nov 2023 21:57:43 +0100
+Date: Thu, 9 Nov 2023 21:57:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d6e9553bef5c2d3aba42c1af0b81767ecb655e0d
-X-Git-Newrev: bea0baf6ba5e61acadba8ccc13ca664a1923228d
+X-Git-Oldrev: 24872df6783860d80f40cbdecf663729ec6c3999
+X-Git-Newrev: 20d6625eb1f6d807c1c6878d56a5a8d557993d15
 X-Patchwork-Hint: ignore
-Message-Id: <20231109210542.A7F7386E95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-marshmallow: bump to
- version 3.20.1
+Message-Id: <20231109210542.BEDAD86D96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-mistune: bump to version
+ 3.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bea0baf6ba5e61acadba8ccc13ca664a1923228d
+commit: https://git.buildroot.net/buildroot/commit/?id=20d6625eb1f6d807c1c6878d56a5a8d557993d15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-marshmallow/python-marshmallow.hash | 4 ++--
- package/python-marshmallow/python-marshmallow.mk   | 4 ++--
+ package/python-mistune/python-mistune.hash | 4 ++--
+ package/python-mistune/python-mistune.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-marshmallow/python-marshmallow.hash b/package/python-marshmallow/python-marshmallow.hash
-index dc277d16e5..cb60216a26 100644
---- a/package/python-marshmallow/python-marshmallow.hash
-+++ b/package/python-marshmallow/python-marshmallow.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/marshmallow/json
--md5  3cf5c42917509a199c3105466435c425  marshmallow-3.19.0.tar.gz
--sha256  90032c0fd650ce94b6ec6dc8dfeb0e3ff50c144586462c389b81a07205bedb78  marshmallow-3.19.0.tar.gz
-+md5  c6093f980a650b1088bbc5610055a05c  marshmallow-3.20.1.tar.gz
-+sha256  5d2371bbe42000f2b3fb5eaa065224df7d8f8597bc19a1bbfa5bfe7fba8da889  marshmallow-3.20.1.tar.gz
+diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
+index 161f2ed6ff..7dee76cfa2 100644
+--- a/package/python-mistune/python-mistune.hash
++++ b/package/python-mistune/python-mistune.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mistune/json
+-md5  a4437edb22cf6519a7c61730fecb1a3f  mistune-2.0.4.tar.gz
+-sha256  9ee0a66053e2267aba772c71e06891fa8f1af6d4b01d5e84e267b4570d4d9808  mistune-2.0.4.tar.gz
++md5  8c02b3476d0343e0a4c75a2321729f01  mistune-3.0.2.tar.gz
++sha256  fc7f93ded930c92394ef2cb6f04a8aabab4117a91449e72dcc8dfa646a508be8  mistune-3.0.2.tar.gz
  # Locally computed sha256 checksums
- sha256  759dc79c383ad79340c6e41f712e80407fe0d2cb3cbaad1ed98aa9c3e28a602c  LICENSE
- sha256  f982e6fd97ba00973e94605b972ff04894b22c4fa937b868828b32ae8f0a7c2e  docs/license.rst
-diff --git a/package/python-marshmallow/python-marshmallow.mk b/package/python-marshmallow/python-marshmallow.mk
-index ba6da6b29c..afd4068f44 100644
---- a/package/python-marshmallow/python-marshmallow.mk
-+++ b/package/python-marshmallow/python-marshmallow.mk
+ sha256  539013fd8e19f744f8bf0e27a532bbff54cd689ecef7a800f56ae5dc824be870  LICENSE
+diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
+index 1e4bb71903..ac900c82ba 100644
+--- a/package/python-mistune/python-mistune.mk
++++ b/package/python-mistune/python-mistune.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARSHMALLOW_VERSION = 3.19.0
-+PYTHON_MARSHMALLOW_VERSION = 3.20.1
- PYTHON_MARSHMALLOW_SOURCE = marshmallow-$(PYTHON_MARSHMALLOW_VERSION).tar.gz
--PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/5e/59/dd465e5ab0ccb879c410f88c75189a19fd437b12cd9a03b31579aef58709
-+PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/e4/e0/3e49c0f91f3e8954806c1076f4eae2c95a9d3ed2546f267c683b877d327b
- PYTHON_MARSHMALLOW_SETUP_TYPE = setuptools
- PYTHON_MARSHMALLOW_LICENSE = MIT
- PYTHON_MARSHMALLOW_LICENSE_FILES = LICENSE
+-PYTHON_MISTUNE_VERSION = 2.0.4
++PYTHON_MISTUNE_VERSION = 3.0.2
+ PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
+-PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/cd/9b/0f98334812f548a5ee4399b76e33752a74fc7bb976f5efb34d962f03d585
++PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/ef/c8/f0173fe3bf85fd891aee2e7bcd8207dfe26c2c683d727c5a6cc3aec7b628
+ PYTHON_MISTUNE_LICENSE = BSD-3-Clause
+ PYTHON_MISTUNE_LICENSE_FILES = LICENSE
+ PYTHON_MISTUNE_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
