@@ -4,74 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A851EC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 16:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5634C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 16:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5188F421DC;
-	Fri, 10 Nov 2023 16:46:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5188F421DC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C65B41F16;
+	Fri, 10 Nov 2023 16:49:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C65B41F16
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hZC9_W4NLf5h; Fri, 10 Nov 2023 16:46:54 +0000 (UTC)
+	with ESMTP id uuh6sB9GfP6m; Fri, 10 Nov 2023 16:49:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A9094240A;
-	Fri, 10 Nov 2023 16:46:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A9094240A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 443BF1BF97F
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 16:46:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34E9E421DC;
+	Fri, 10 Nov 2023 16:49:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34E9E421DC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E6191BF97F
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 16:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E5E760F80
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 16:46:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E5E760F80
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10995421DC
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 16:49:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10995421DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zky4LKcgId7h for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 16:46:28 +0000 (UTC)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com
- [209.85.128.43])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E3EAF60BE3
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 16:46:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3EAF60BE3
-Received: by mail-wm1-f43.google.com with SMTP id
- 5b1f17b1804b1-4083dbc43cfso14721495e9.3
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 08:46:27 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ijN3NxZgmc8Z for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 16:49:35 +0000 (UTC)
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com
+ [IPv6:2607:f8b0:4864:20::112d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B63E641F16
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 16:49:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B63E641F16
+Received: by mail-yw1-x112d.google.com with SMTP id
+ 00721157ae682-5a8628e54d4so19602867b3.0
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 08:49:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699634785; x=1700239585;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=kzvn3s2hGPRdtjyKp+vEZpA7BPh/8HY4fFpU8TrIeBs=;
- b=bLJgjec/r0Oo3VHifSbT017V38plHikFtz9akUa4qUyOIB8PYCyOOOzntWaOom+lHx
- jsqQkFizpW2XBGj+HzdUqvkpxQfERJjRNL18DRGKly2wg/+oX7kRLgInM/iOMOrPOZC7
- 3tqrueiEl1B3sNqX1VuGLglUmI/BHLjGHaBxkzX7G/lGM9M1Nu9YZlOyfR7cmF8/w8BS
- s9pxYuLD8q9RIYbOPCj4HzFYuQ5xceHDrzIK1w2zz6R+pCFerR1UoxApz9SnoLmTc5uc
- fWnLTb9xrl2zhmgL7twZkIvsTdrAHXnMGE8wYr9FDsJgVvdqfMSVXC3TG73QUr47UWIO
- bcuw==
-X-Gm-Message-State: AOJu0YyjP8sbdrx3wlUCmAHVMF+GgWUc/bg+jL3sKBIvllz9wnnU60+5
- blqP4FmjUgt73ehPiRE9HbmjxXwnGhjsm5kp
-X-Google-Smtp-Source: AGHT+IGlYradY/en5CI7rXGvU21nXb4aNMyd8cuEiS8uUipRu0LaUzLBeT1aBXvHeNBLVFA7RxfXTQ==
-X-Received: by 2002:a05:600c:3ca8:b0:401:73b2:f043 with SMTP id
- bg40-20020a05600c3ca800b0040173b2f043mr7592381wmb.1.1699634784556; 
- Fri, 10 Nov 2023 08:46:24 -0800 (PST)
-Received: from localhost.localdomain ([2a02:a03f:eb68:2f00:afce:9bf:b5dc:c3a0])
- by smtp.gmail.com with ESMTPSA id
- bd13-20020a05600c1f0d00b004065daba6casm5712828wmb.46.2023.11.10.08.46.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Nov 2023 08:46:24 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 17:46:17 +0100
-Message-Id: <20231110164617.569602-3-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231110164617.569602-1-thomas@devoogdt.com>
-References: <Thomas Devoogdt
- <20231001165218.1960930-3-thomas.devoogdt@barco.com>
- <20231110164617.569602-1-thomas@devoogdt.com>
+ d=1e100.net; s=20230601; t=1699634974; x=1700239774;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=BjXg43jALRVpQDLhjIxva1fLa1wzblEElyqDeN3mErI=;
+ b=l/f6B1W5TFIYjOiWhLuolIFCkb+eBVS1jyXAT+VOcpR+vqXY3OAvhME1j8B7BZWRK2
+ DbjtkMt4FfCa1HzHOLeY874/+Ef9dtIRgAO8u7D9EjlRSZkVS6wNRjpjjhzkHIgXIxC6
+ ufiiv9cmu/f1zaea/I10rfGd1XyoYVk46hpJZhdhBg24YigcF44VhHV4YRIEdjw8QQO2
+ oCzwnDHaxLxVcsprMBdirkARoNx92JjS1WGB3h1nLJ1UJAjm8NNiBojUxr+vF+weHq3b
+ qfxfd9zBxVylEKOPmXlhCQ8vW5a9pZlCx5bQ6jMR8f1LYuEylxFWEWfWpIqzb5nUJdbF
+ anTg==
+X-Gm-Message-State: AOJu0YxN6BqYXN9grjWZHl9Miza11kpzDmcN2z55n0zowodMEshVlT/7
+ sD1VFdqsdyGdkahMK4I2gVj6lKGaB6RWyREdaOE=
+X-Google-Smtp-Source: AGHT+IH716/KLuVGwItlYQOJn3Sev8P2YCyU3HnpeJykSeRiN7pj4zHPTcXvFgC7kgGjxwByVojkQid/1iu9HWmzIsg=
+X-Received: by 2002:a81:5403:0:b0:589:e815:8d71 with SMTP id
+ i3-20020a815403000000b00589e8158d71mr1942082ywb.11.1699634974450; Fri, 10 Nov
+ 2023 08:49:34 -0800 (PST)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v5 3/3] package/webkitgtk: bump to version 2.42.2
+References: <20231012103210.2915871-1-adam.duskett@amarulasolutions.com>
+ <20231108215536.7a780fe2@windsurf>
+In-Reply-To: <20231108215536.7a780fe2@windsurf>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri, 10 Nov 2023 09:49:23 -0700
+Message-ID: <CAFSsvmqmULY+=X8bx-mv0k0Boj4RgZD5LBQ=4gVz+KV_TO_ndQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1699634974; x=1700239774; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=BjXg43jALRVpQDLhjIxva1fLa1wzblEElyqDeN3mErI=;
+ b=hHqjbtu4QlnRYP9XLv7fMLD+3rAeyUZdjrEKfdemtjEngMn+G1uXsQZDZMhVCnQkdz
+ PzVn5rKN4y00YEgrkzncI+m061rGmhuNB6i3MNV6+wC0u3cgzWphf56A3Q1+BT3Gt4Kn
+ VSSsS9M2hLrUR+NbJ/X59+yq8j+RCC3LYQtM9IL3deHUIF+L4knRke5NCrpZIlGUyQzU
+ JRt9re/tzYydqGwDSvFCspieg0wTd8sys5SjxAeyFuNniKwRNI9/yUXgyKi/g9/xeyWa
+ +sW7tvrgzkmtx7y0+D9mtpWCJ3O3Muw3Iya2eIQepsVQ/KUGtDmSjMm3a2H0rD7qx/Tb
+ TkpA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=hHqjbtu4
+Subject: Re: [Buildroot] [PATCH 00/12] SELinux: Basic config enforcing mode
+ support.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,192 +91,248 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas@devoogdt.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Marek Belisko <marek.belisko@open-nandra.com>,
+ Antoine Tenart <atenart@kernel.org>, Sen Hastings <sen@phobosdpl.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, buildroot@buildroot.org,
+ Norbert Lange <nolange79@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: multipart/mixed; boundary="===============5867591933941944853=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update to a new major release.
+--===============5867591933941944853==
+Content-Type: multipart/alternative; boundary="000000000000e669df0609cf1a36"
 
-Release notes:
+--000000000000e669df0609cf1a36
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://webkitgtk.org/2023/09/15/webkitgtk2.42.0-released.html
-https://webkitgtk.org/2023/09/27/webkitgtk2.42.1-released.html
-https://webkitgtk.org/2023/11/10/webkitgtk2.42.2-released.html
+Hey Thomas, sorry for the late reply!
 
-Security notes:
+Refpolicy itself is just that, a reference policy. Quite a few gaps are
+missing with several packages.
+In fact, Fedora/RHEL have their own policy based on the refpolicy package
+found here:
+https://github.com/fedora-selinux/selinux-policy because refpolicy itself
+is not adequate for a complete
+system in enforcing mode.
 
-https://webkitgtk.org/security/WSA-2023-0008.html
+Also note, that the yocto selinux layer went another route and patches
+refpolicy instead of providing separate
+selinux policy files.
 
-- USE_JPEGXL is enabled by default now [1], so add a libjxl if used.
+To summarize: These are necessary because refpolicy is not complete nor
+suitable for a system running in
+enforcing mode.
 
-- ENABLE_GLES2 has been dropped, so drop it also here [2].
-  Instead, enable USE_OPENGL_OR_ES if libgles is present. Beware that also
-  libegl is needed for USE_OPENGL_OR_ES, but that one is most of the time a
-  dependency for libgles, so leave it out here.
+On Wed, Nov 8, 2023 at 1:55=E2=80=AFPM Thomas Petazzoni via buildroot <
+buildroot@buildroot.org> wrote:
 
-- Also raise the minimal GCC version to 10.2, which is required since webkitgtk-2.42.x [3].
-  Similar to commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4,
-  we do check on >= GCC 10, because we can't check on >= GCC 10.2.
+> Hello Adam,
+>
+> On Thu, 12 Oct 2023 12:31:57 +0200
+> Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+>
+> > SELinux support in Buildroot is currently outstanding! However, one las=
+t
+> major
+> > issue remains: Enforcing mode needs to work out of the box correctly,
+> without
+> > denials, at least with a minimal defconfig.
+> >
+> > This patch series seeks to remedy this problem with a basic set of
+> policies in
+> > several commonly selected packages to allow a user who wishes to use
+> SELinux in
+> > enforcing mode the ability to do so without having to spend several hou=
+rs
+> > writing the same policy that everyone who wishes to do the same thing
+> would
+> > have to do.
+> >
+> > The packages I have selected are based on the pc_x86_64_bios_defconfig
+> with all
+> > of the selinux packages selected because it was the most straightforwar=
+d
+> option
+> > I had to create a small, bootable system in Virtual Manager with ssh
+> support to
+> > quickly build out a policy that didn't generate any denials in
+> > /var/log/audit.log.
+> >
+> > I want to address Yann's questions from a previous discussion on IRC:
+> >   Q) What will be the maintenance effort?
+> >   A) Minimal after this patch series. As you will see, most policies ar=
+e
+> only a
+> >      few lines long!
+> >
+> >   Q) How much time will we invest when we bump a package or add a
+> dependency?
+> >   A) Usually none! If a package bump/new dependency requires new
+> permissions to
+> >      the SELinux policy, this is a good thing! We should step back and
+> question
+> >      why a package previously accessing only files and libraries
+> suddenly needs
+> >      to (e.g.), change permissions on a /dev/ device!
+>
+> Thanks a lot for working on this.
+>
+> However, I'd like to understand why these policy files need to be in
+> Buildroot. For example, you're adding some policy for OpenSSH. But
+> Buildroot just builds upstream OpenSSH with no change. Why do we need
+> some policy specifically in Buildroot for OpenSSH that cannot be in
+> upstream refpolicy?
+>
+> Back when Antoine T=C3=A9nart (which you have in Cc) was working on this,
+> and also my colleague Maxime Chevallier (which I have added in Cc),
+> their plan was to make it possible to use the upstream refpolicy for a
+> Buildroot system, by contributing changes to the refpolicy (and they
+> contributed quite a few).
+>
+> Why are we not continuing on this approach?
+>
+> Or is your policy a "from scratch" policy that can be used as a
+> complete alternative to the upstream refpolicy?
+>
+> (Note: we will clearly want a runtime test case for this.)
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
 
-[1] https://github.com/WebKit/WebKit/commit/93865414f33190c57e293a80492e10edc461d7f0
-[2] https://github.com/WebKit/WebKit/commit/cfe917fec45bf72c371087ece034feee8454f1b4
-[3] https://github.com/WebKit/WebKit/commit/133498aaee8f44443d9e3b2a08be4a4b77b93fc9
+--000000000000e669df0609cf1a36
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
----
- v2: n/a
- v3:
- - replace for package/webkitgtk: add a USE_OPENGL_OR_ES config option
- - 2.42.0 needs an extra bunch of patches, so bump to immediately to 2.42.1
- v4:
- - fixed incomplete git massage (a ____ line splits the git message apparently)
- - re-added patches with upstream cherry-pick and hash
- v5:
- - 2.42.1 needs an extra bunch of patches, so bump to immediately to 2.42.2
----
- ...e-when-gstreamer-support-is-disabled.patch | 36 -------------------
- package/webkitgtk/Config.in                   |  6 ++--
- package/webkitgtk/webkitgtk.hash              |  6 ++--
- package/webkitgtk/webkitgtk.mk                | 16 ++++++---
- 4 files changed, 17 insertions(+), 47 deletions(-)
- delete mode 100644 package/webkitgtk/0001-Fix-build-failure-when-gstreamer-support-is-disabled.patch
+<div dir=3D"ltr">Hey Thomas, sorry for the late reply!<div><br></div><div>R=
+efpolicy itself is just that, a reference policy. Quite a few gaps are miss=
+ing with several packages.</div><div>In fact, Fedora/RHEL have their own po=
+licy based on the refpolicy package found here:</div><div><a href=3D"https:=
+//github.com/fedora-selinux/selinux-policy">https://github.com/fedora-selin=
+ux/selinux-policy</a> because refpolicy itself is not adequate for a comple=
+te</div><div>system in enforcing mode.</div><div><br></div><div>Also note, =
+that the yocto selinux layer went another route and patches refpolicy inste=
+ad of providing separate</div><div>selinux policy files.=C2=A0</div><div><b=
+r></div><div>To summarize: These are necessary because refpolicy is not com=
+plete nor suitable for a system running in<br></div><div>enforcing mode.</d=
+iv></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_att=
+r">On Wed, Nov 8, 2023 at 1:55=E2=80=AFPM Thomas Petazzoni via buildroot &l=
+t;<a href=3D"mailto:buildroot@buildroot.org">buildroot@buildroot.org</a>&gt=
+; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px=
+ 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hello A=
+dam,<br>
+<br>
+On Thu, 12 Oct 2023 12:31:57 +0200<br>
+Adam Duskett &lt;<a href=3D"mailto:adam.duskett@amarulasolutions.com" targe=
+t=3D"_blank">adam.duskett@amarulasolutions.com</a>&gt; wrote:<br>
+<br>
+&gt; SELinux support in Buildroot is currently outstanding! However, one la=
+st major<br>
+&gt; issue remains: Enforcing mode needs to work out of the box correctly, =
+without<br>
+&gt; denials, at least with a minimal defconfig.<br>
+&gt; <br>
+&gt; This patch series seeks to remedy this problem with a basic set of pol=
+icies in<br>
+&gt; several commonly selected packages to allow a user who wishes to use S=
+ELinux in<br>
+&gt; enforcing mode the ability to do so without having to spend several ho=
+urs<br>
+&gt; writing the same policy that everyone who wishes to do the same thing =
+would<br>
+&gt; have to do.<br>
+&gt; <br>
+&gt; The packages I have selected are based on the pc_x86_64_bios_defconfig=
+ with all<br>
+&gt; of the selinux packages selected because it was the most straightforwa=
+rd option<br>
+&gt; I had to create a small, bootable system in Virtual Manager with ssh s=
+upport to<br>
+&gt; quickly build out a policy that didn&#39;t generate any denials in<br>
+&gt; /var/log/audit.log.<br>
+&gt; <br>
+&gt; I want to address Yann&#39;s questions from a previous discussion on I=
+RC:<br>
+&gt;=C2=A0 =C2=A0Q) What will be the maintenance effort?<br>
+&gt;=C2=A0 =C2=A0A) Minimal after this patch series. As you will see, most =
+policies are only a<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 few lines long!<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0Q) How much time will we invest when we bump a package or =
+add a dependency?<br>
+&gt;=C2=A0 =C2=A0A) Usually none! If a package bump/new dependency requires=
+ new permissions to<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 the SELinux policy, this is a good thing! We shoul=
+d step back and question<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 why a package previously accessing only files and =
+libraries suddenly needs<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 to (e.g.), change permissions on a /dev/ device!<b=
+r>
+<br>
+Thanks a lot for working on this.<br>
+<br>
+However, I&#39;d like to understand why these policy files need to be in<br=
+>
+Buildroot. For example, you&#39;re adding some policy for OpenSSH. But<br>
+Buildroot just builds upstream OpenSSH with no change. Why do we need<br>
+some policy specifically in Buildroot for OpenSSH that cannot be in<br>
+upstream refpolicy?<br>
+<br>
+Back when Antoine T=C3=A9nart (which you have in Cc) was working on this,<b=
+r>
+and also my colleague Maxime Chevallier (which I have added in Cc),<br>
+their plan was to make it possible to use the upstream refpolicy for a<br>
+Buildroot system, by contributing changes to the refpolicy (and they<br>
+contributed quite a few).<br>
+<br>
+Why are we not continuing on this approach?<br>
+<br>
+Or is your policy a &quot;from scratch&quot; policy that can be used as a<b=
+r>
+complete alternative to the upstream refpolicy?<br>
+<br>
+(Note: we will clearly want a runtime test case for this.)<br>
+<br>
+Best regards,<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div>
 
-diff --git a/package/webkitgtk/0001-Fix-build-failure-when-gstreamer-support-is-disabled.patch b/package/webkitgtk/0001-Fix-build-failure-when-gstreamer-support-is-disabled.patch
-deleted file mode 100644
-index 3fa23b215b..0000000000
---- a/package/webkitgtk/0001-Fix-build-failure-when-gstreamer-support-is-disabled.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 9b31965cdf362768e86f7e592e59e68fb3351261 Mon Sep 17 00:00:00 2001
--From: Matt Turner <mattst88@gmail.com>
--Date: Tue, 8 Aug 2023 16:51:25 -0700
--Subject: [PATCH] Fix build failure when gstreamer support is disabled
-- https://bugs.webkit.org/show_bug.cgi?id=259931 https://bugs.gentoo.org/911663
--
--Reviewed by Carlos Alberto Lopez Perez.
--
--* Source/WebCore/loader/MixedContentChecker.cpp:
--
--Canonical link: https://commits.webkit.org/260527.429@fix-build
--
--(cherry picked from commit f5ceef5bf2e3c4d7203a37b9e2d2fdd9b1bb2732)
--
--Upstream: https://github.com/WebKit/WebKit/commit/f5ceef5bf2e3c4d7203a37b9e2d2fdd9b1bb2732
--Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-----
-- Source/WebCore/loader/MixedContentChecker.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/Source/WebCore/loader/MixedContentChecker.cpp b/Source/WebCore/loader/MixedContentChecker.cpp
--index 9b4c7fe62020..ac4733bc08bc 100644
----- a/Source/WebCore/loader/MixedContentChecker.cpp
--+++ b/Source/WebCore/loader/MixedContentChecker.cpp
--@@ -33,6 +33,8 @@
-- #include "ContentSecurityPolicy.h"
-- #include "Document.h"
-- #include "Frame.h"
--+#include "FrameLoader.h"
--+#include "FrameLoaderClient.h"
-- #include "SecurityOrigin.h"
-- 
-- namespace WebCore {
---- 
--2.42.0
--
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index cb10784133..ace1b8739f 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -16,12 +16,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 
--comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 9, host gcc >= 4.9"
-+comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 10, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
- 		!BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 
-@@ -32,7 +32,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 7f50f1aa7b..59782732c3 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.40.5.tar.xz.sums
--sha1  2f4d06b021115eb4106177f7d5f534f45b5d3b2e  webkitgtk-2.40.5.tar.xz
--sha256  7de051a263668621d91a61a5eb1c3771d1a7cec900043d4afef06c326c16037f  webkitgtk-2.40.5.tar.xz
-+# From https://www.webkitgtk.org/releases/webkitgtk-2.42.2.tar.xz.sums
-+sha1  05bec6a824e46f043b865478735bc8395249510e  webkitgtk-2.42.2.tar.xz
-+sha256  5720aa3e8627f1b9f63252187d4df0f8233ae71d697b1796ebfbe5ca750bd118  webkitgtk-2.42.2.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 9c68fe73cf..611d7f65d3 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.40.5
-+WEBKITGTK_VERSION = 2.42.2
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
-@@ -73,6 +73,13 @@ else
- WEBKITGTK_CONF_OPTS += -DENABLE_INTROSPECTION=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBJXL),y)
-+WEBKITGTK_CONF_OPTS += -DUSE_JPEGXL=ON
-+WEBKITGTK_DEPENDENCIES += libjxl
-+else
-+WEBKITGTK_CONF_OPTS += -DUSE_JPEGXL=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
- WEBKITGTK_CONF_OPTS += -DENABLE_GAMEPAD=ON
- WEBKITGTK_DEPENDENCIES += libmanette
-@@ -80,12 +87,11 @@ else
- WEBKITGTK_CONF_OPTS += -DENABLE_GAMEPAD=OFF
- endif
- 
--# Use GLES if available and desktop GL is not.
--ifeq ($(BR2_PACKAGE_HAS_LIBGL):$(BR2_PACKAGE_HAS_LIBGLES),:y)
--WEBKITGTK_CONF_OPTS += -DENABLE_GLES2=ON
-+ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
-+WEBKITGTK_CONF_OPTS += -DUSE_OPENGL_OR_ES=ON
- WEBKITGTK_DEPENDENCIES += libgles
- else
--WEBKITGTK_CONF_OPTS += -DENABLE_GLES2=OFF
-+WEBKITGTK_CONF_OPTS += -DUSE_OPENGL_OR_ES=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGBM),y)
--- 
-2.34.1
+--000000000000e669df0609cf1a36--
+
+--===============5867591933941944853==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5867591933941944853==--
