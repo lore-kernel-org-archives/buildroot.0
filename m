@@ -4,78 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34BA6C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 08:43:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB82AC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 09:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0CE34012A;
-	Fri, 10 Nov 2023 08:43:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0CE34012A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54AA8400BD;
+	Fri, 10 Nov 2023 09:01:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54AA8400BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k54iR61bbvZT; Fri, 10 Nov 2023 08:43:25 +0000 (UTC)
+	with ESMTP id slICdEXvH4t6; Fri, 10 Nov 2023 09:01:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D3A340182;
-	Fri, 10 Nov 2023 08:43:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D3A340182
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E85DE1BF2FF
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 08:43:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 144164012A;
+	Fri, 10 Nov 2023 09:01:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 144164012A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 121831BF2FF
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 09:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA0594012A
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 08:43:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA0594012A
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9C2A4174E
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 09:01:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9C2A4174E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aorzX50P-W8F for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 08:43:21 +0000 (UTC)
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com
- [IPv6:2607:f8b0:4864:20::112b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E89DD40182
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 08:43:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E89DD40182
-Received: by mail-yw1-x112b.google.com with SMTP id
- 00721157ae682-5a822f96aedso21948647b3.2
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 00:43:20 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vdUm5ktEcahD for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 09:01:32 +0000 (UTC)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7537E4168B
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 09:01:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7537E4168B
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-32f87b1c725so1166566f8f.3
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 01:01:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699605799; x=1700210599;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FCAkeC4A8bn8kHflaZoAIeOi0yrRgDA8pmY6wRZNjP0=;
- b=NIznnaONC7XXZis21SgJbe1iOb8s+8mrrlG/XqBuuFFZFreweCwSLWvCh8lA1mshoG
- Knb7vYF+4lZjqwa86xAeqGr86cLgKW86FZemnPnKwpVdsLcJ7qf11okhuXBD8moU7zuh
- hEyurQ/QShltWPWFDq6rKz5JbDbIlEZQr0+Y9pf2uDWhtDin9wpTdfsYiqwUg1pECWfB
- vN5Ywf5a2wswSkgsJeWanI+BCt9bNVv5cLV2C5nUMeeMyHT48RaO9sJtZAQydT9Nrzyc
- CSLHYsF8r0sFONDprrH0lwkaENVAqfLoM17qfJ68YrVhEaH8oXSIABdVZGfbCasO7388
- eDoQ==
-X-Gm-Message-State: AOJu0YznCXFXx0f7Sw9IHebgQfZseIMr75aMLdhP2SDlBWU8lrbn2AkX
- i4RCq6cYp77617bfR+G4jvA/y6CDlXxAeZZhzmNnSQ==
-X-Google-Smtp-Source: AGHT+IE7l0YbxWGJ+NpcgbLkVSB9dHo7f4nOAHLky/vmmjLIzionzToW89fe80cvgCK1J73sdj19DcEFFHZgTlSuI7A=
-X-Received: by 2002:a0d:fb84:0:b0:5a7:db09:5067 with SMTP id
- l126-20020a0dfb84000000b005a7db095067mr7512052ywf.20.1699605799581; Fri, 10
- Nov 2023 00:43:19 -0800 (PST)
+ d=1e100.net; s=20230601; t=1699606889; x=1700211689;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=n+SWT+xo2a1FD38Qf8sWwYEWd0KAw3PItm9Z8HBRl6E=;
+ b=Ef74evcUvyFCa9LY0mZh/JblMB0i14e/ukpsrS2KSrKrJzB+08hbEsWTC5MZ5Cvc1x
+ WtqrlHqH3SOWND9hI4EQAy+Ag0SJEnZYIOLZXmzioBWD43RX7lRKbOdMTZS0eJloOD4t
+ 2GPwHWAbLUW5G8/G9dYJXwHRTcYVfc3BDaA/2bToSU3qJIuESXhc60Tvs1BUOSs9axEW
+ Up2JW2V3X6px9P+ImnQBlIcpeDC0T4IEIWYZ2FwekVglYP2pAAvpzbA/YmpddNvEXuCx
+ rktUp2m7gQ40JlXB+bUn1R8pbVyXxI2OMiuudW9Sl9Sd0w7jqgO/sssZsCa0upX/0w0c
+ ec9w==
+X-Gm-Message-State: AOJu0YzQ2Y8yBH9m5xLKiKNYtq8gyBKp27HD6OJ2DpBJLf2ZyNW1lISF
+ mdIjHpMs6DDHHEDkKjgP0BQGRw==
+X-Google-Smtp-Source: AGHT+IGIz/ZWiyUMtmQCNbB6G4yEzJA3Z39mk/USTeT2CelEaYcqAfue8Iv1X7TsPpHX5UgZY32y3w==
+X-Received: by 2002:a5d:4e4e:0:b0:32f:8a7f:f00f with SMTP id
+ r14-20020a5d4e4e000000b0032f8a7ff00fmr5720015wrt.60.1699606889248; 
+ Fri, 10 Nov 2023 01:01:29 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ m8-20020a056000024800b003197869bcd7sm1480530wrz.13.2023.11.10.01.01.27
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 10 Nov 2023 01:01:27 -0800 (PST)
+Message-ID: <f730a063-dc3c-4937-bc76-24b17c57d6a4@mind.be>
+Date: Fri, 10 Nov 2023 10:01:25 +0100
 MIME-Version: 1.0
-References: <20231109142009.3490104-1-jonhenrik@qbee.io>
- <20231109142009.3490104-2-jonhenrik@qbee.io>
- <ZU0CyWbfy97yxwCZ@tl-lnx-nyma7486-2>
-In-Reply-To: <ZU0CyWbfy97yxwCZ@tl-lnx-nyma7486-2>
-Date: Fri, 10 Nov 2023 09:43:08 +0100
-Message-ID: <CAC3uuetUVp69a-_mQ-MEpCB2r=fD7qiKDD6M5paOxgnj0Faj7A@mail.gmail.com>
-To: yann.morin@orange.com
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Reza Arbab <arbab@linux.ibm.com>
+References: <20231009151729.2223963-1-arbab@linux.ibm.com>
+ <20231009151729.2223963-8-arbab@linux.ibm.com>
+ <342a893c-af90-4602-b73b-1afd37b34acb@mind.be>
+ <624ea15d-6d09-48b3-a004-42cd3d3b67df@arbab-vm>
+In-Reply-To: <624ea15d-6d09-48b3-a004-42cd3d3b67df@arbab-vm>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=qbee.io; s=google; t=1699605799; x=1700210599; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=FCAkeC4A8bn8kHflaZoAIeOi0yrRgDA8pmY6wRZNjP0=;
- b=AChyTt+3+3+tQkrNb8rHzS+IN5R5a+oj5gDbImnvIOH5Ak8RB5u/p7IY/J/mJBswrM
- TIBPj7CzxyM7sL17Ke+UOQEDdM8zx0dCVvsA1hnFarHqT3IIdsrQdYLFqMnJegf0M9i1
- 87O9hVQkp19Mb7eujDkZCtu3LKNB9LcSoEAP0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=qbee.io header.i=@qbee.io
- header.a=rsa-sha256 header.s=google header.b=AChyTt+3
-Subject: Re: [Buildroot] [PATCH 1/1] package/qbee-agent: new package
+ d=mind.be; s=google; t=1699606889; x=1700211689; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=n+SWT+xo2a1FD38Qf8sWwYEWd0KAw3PItm9Z8HBRl6E=;
+ b=Mzf75HX+Fx+X2HMTNS3QLEuvwNIp8cWe4opQupd7OTjiqOZnfIfjByKKN0ggGsZ/q4
+ RU/TzVq3b3Bp+MpDYh+/kjD/w8Ltym/iXpUStmy7tJWkKD1F78fWFlbAQ7jRoeGFtvlL
+ HJ95yYD3FHqUDaCHYikr87kpbAdmjJnmRDYzLu3Cs9kTofAmPR0ioJdluDCArGCGdBlC
+ AshKcgUTUHykpCeoC+N89dklGDE3Iuys1dxpn37XU7FP0EbmiAT43uRLiJL7dZqg4TrV
+ 2108aBGNVSs9QEo3/pGxSLoDEqVWX0vDTCzkWPzCVbbVHH8ZpbV61LIgVfB1cSHPgIs3
+ /PAw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Mzf75HX+
+Subject: Re: [Buildroot] [PATCH v3 7/8] package/petitboot: enable user
+ separation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,376 +102,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Jon_Henrik_Bj=C3=B8rnstad_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?Q?Jon_Henrik_Bj=C3=B8rnstad?= <jonhenrik@qbee.io>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2525039130871010591=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Joel Stanley <joel@jms.id.au>, Laurent Vivier <laurent@vivier.eu>,
+ buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2525039130871010591==
-Content-Type: multipart/alternative; boundary="000000000000f151570609c84fa7"
-
---000000000000f151570609c84fa7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Yann,
-
-Thanks for your feedback.
-
-I wrote a cover letter based in an initial review of the patch that
-attempted to explain why the choice to install pre-compiled static binaries
-was made (Subject: [PATCH 0/1] Regarding review of qbee-agent patch)
-
-However, it seems the approach I've chosen is not the optimal one. I'll
-attempt to redo the patch with your feedback in mind.
-
-I'm fairly new to the buildroot community and I'm still learning the ropes
-:)
-
-Thanks again!
-
-With best regards,
-
-Jon Henrik Bj=C3=B8rnstad
-
-On Thu, Nov 9, 2023 at 5:03=E2=80=AFPM <yann.morin@orange.com> wrote:
-
-> Jon, All,
->
-> On 2023-11-09 15:20 +0100, Jon Henrik Bj=C3=B8rnstad via buildroot spake =
-thusly:
-> > This patch add qbee-agent, an open source device management software
-> > for Linux devices.
-> [--SNIP--]
-> > diff --git a/package/qbee-agent/qbee-agent.hash
-> b/package/qbee-agent/qbee-agent.hash
-> > new file mode 100644
-> > index 0000000000..b7e311405f
-> > --- /dev/null
-> > +++ b/package/qbee-agent/qbee-agent.hash
-> > @@ -0,0 +1,2 @@
-> > +# Locally calculated
-> > +sha256
-> edcf319c4ce17e9844df598fa796aa87303a1bf238299dbeeb41c94ff5de5e1d
-> qbee-agent-2023.44.tar.gz
-> > diff --git a/package/qbee-agent/qbee-agent.mk b/package/qbee-agent/
-> qbee-agent.mk
-> > new file mode 100644
-> > index 0000000000..aded6b72f4
-> > --- /dev/null
-> > +++ b/package/qbee-agent/qbee-agent.mk
-> > @@ -0,0 +1,42 @@
-> >
-> +########################################################################=
-########
-> > +#
-> > +# qbee-agent package
-> > +#
-> >
-> +########################################################################=
-########
-> > +
-> > +QBEE_AGENT_VERSION =3D 2023.44
-> > +QBEE_AGENT_SITE =3D
-> https://cdn.qbee.io/software/qbee-agent/$(QBEE_AGENT_VERSION)/binaries
-> > +QBEE_AGENT_LICENSE =3D Apache-2.0
->
-> There is the go source code on:
->     https://github.com/qbee-io/qbee-agent
->
-> So, why do you download a prebuilt pacakge?
-> Why can't you use the buidlroot go pacakge infrastructure?
->
-> See:
->
-> https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_go=
-_packages
->
-> Basically, that would look like (omitting licensing and stuff):
->
->     QBEE_AGENT_VERSION =3D 2023.44
->     QBEE_AGENT_SITE =3D $(call
-> github,qbee-io,qbee-agent,$(QBEE_AGENT_VERSION))
->
->     $(eval $(golang-pacakge))
->
-> Then, maybe you need to specify a few other variables, see the manual:
->     QBEE_AGENT_GOMOD
->     QBEE_AGENT_BUILD_TARGETS
->     QBEE_AGENT_INSTALL_BINS
->
-> Regards,
-> Yann E. MORIN.
->
-> > +ifeq ($(BR2_arm),y)
-> > +QBEE_AGENT_GOARCH =3D arm
-> > +else ifeq ($(BR2_aarch64),y)
-> > +QBEE_AGENT_GOARCH =3D arm64
-> > +else ifeq ($(BR2_i386),y)
-> > +QBEE_AGENT_GOARCH =3D 386
-> > +else ifeq ($(BR2_x86_64),y)
-> > +QBEE_AGENT_GOARCH =3D amd64
-> > +endif
-> > +
-> > +QBEE_AGENT_STRIP_COMPONENTS =3D 2
-> > +
-> > +define QBEE_AGENT_INSTALL_TARGET_CMDS
-> > +     $(INSTALL) -m 0755 $(@D)/qbee-agent-$(QBEE_AGENT_GOARCH)
-> $(TARGET_DIR)/usr/bin/qbee-agent
-> > +     $(INSTALL) -D -m 0600 $(@D)/share/ssl/ca.cert
-> $(TARGET_DIR)/etc/qbee/ppkeys/ca.cert
-> > +endef
-> > +
-> > +define QBEE_AGENT_INSTALL_INIT_SYSTEMD
-> > +     $(INSTALL) -D -m 0644
-> $(@D)/init-scripts/systemd/qbee-agent.service \
-> > +             $(TARGET_DIR)/usr/lib/systemd/system/qbee-agent.service
-> > +endef
-> > +
-> > +define QBEE_AGENT_INSTALL_INIT_SYSV
-> > +     $(INSTALL) -D -m 755 $(@D)/init-scripts/sysvinit/qbee-agent \
-> > +             $(TARGET_DIR)/etc/init.d/S99qbee-agent
-> > +endef
-> > +
-> > +define QBEE_AGENT_LINUX_CONFIG_FIXUPS
-> > +     $(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
-> > +endef
-> > +
-> > +$(eval $(generic-package))
-> > --
-> > 2.25.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
->                                         ____________
-> .-----------------.--------------------:       _    :------------------.
-> |  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-> |                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-> | +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-> | yann.morin (at) orange.com           |_=3D"    ,--' | / \ HTML MAIL    =
-|
-> '--------------------------------------:______/_____:------------------'
->
->
-> _________________________________________________________________________=
-___________________________________
-> Ce message et ses pieces jointes peuvent contenir des informations
-> confidentielles ou privilegiees et ne doivent donc
-> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez
-> recu ce message par erreur, veuillez le signaler
-> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages
-> electroniques etant susceptibles d'alteration,
-> Orange decline toute responsabilite si ce message a ete altere, deforme o=
-u
-> falsifie. Merci.
->
-> This message and its attachments may contain confidential or privileged
-> information that may be protected by law;
-> they should not be distributed, used or copied without authorisation.
-> If you have received this email in error, please notify the sender and
-> delete this message and its attachments.
-> As emails may be altered, Orange is not liable for messages that have bee=
-n
-> modified, changed or falsified.
-> Thank you.
->
-
---000000000000f151570609c84fa7
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi Yann,</div><div><br></div><div>Thanks for your fee=
-dback.</div><div><br></div><div>I wrote a cover letter based in an initial =
-review of the patch that attempted to explain why the choice to install pre=
--compiled static binaries was made (Subject: [PATCH 0/1] Regarding review o=
-f qbee-agent patch)</div><div><br></div><div>However, it seems the approach=
- I&#39;ve chosen is not the optimal one. I&#39;ll attempt to redo the patch=
- with your feedback in mind.</div><div><br></div><div>I&#39;m fairly new to=
- the buildroot community and I&#39;m still learning the ropes :)<br></div><=
-div><br></div><div>Thanks again!</div><div><br></div><div>With best regards=
-,</div><div><br></div><div>Jon Henrik Bj=C3=B8rnstad<br></div></div><br><di=
-v class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, Nov 9=
-, 2023 at 5:03=E2=80=AFPM &lt;<a href=3D"mailto:yann.morin@orange.com" targ=
-et=3D"_blank">yann.morin@orange.com</a>&gt; wrote:<br></div><blockquote cla=
-ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
-rgb(204,204,204);padding-left:1ex">Jon, All,<br>
-<br>
-On 2023-11-09 15:20 +0100, Jon Henrik Bj=C3=B8rnstad via buildroot spake th=
-usly:<br>
-&gt; This patch add qbee-agent, an open source device management software<b=
-r>
-&gt; for Linux devices.<br>
-[--SNIP--]<br>
-&gt; diff --git a/package/qbee-agent/qbee-agent.hash b/package/qbee-agent/q=
-bee-agent.hash<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..b7e311405f<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/qbee-agent/qbee-agent.hash<br>
-&gt; @@ -0,0 +1,2 @@<br>
-&gt; +# Locally calculated<br>
-&gt; +sha256=C2=A0 edcf319c4ce17e9844df598fa796aa87303a1bf238299dbeeb41c94f=
-f5de5e1d=C2=A0 qbee-agent-2023.44.tar.gz<br>
-&gt; diff --git a/package/qbee-agent/<a href=3D"http://qbee-agent.mk" rel=
-=3D"noreferrer" target=3D"_blank">qbee-agent.mk</a> b/package/qbee-agent/<a=
- href=3D"http://qbee-agent.mk" rel=3D"noreferrer" target=3D"_blank">qbee-ag=
-ent.mk</a><br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..aded6b72f4<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/qbee-agent/<a href=3D"http://qbee-agent.mk" rel=3D"noref=
-errer" target=3D"_blank">qbee-agent.mk</a><br>
-&gt; @@ -0,0 +1,42 @@<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +#<br>
-&gt; +# qbee-agent package<br>
-&gt; +#<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +<br>
-&gt; +QBEE_AGENT_VERSION =3D 2023.44<br>
-&gt; +QBEE_AGENT_SITE =3D <a href=3D"https://cdn.qbee.io/software/qbee-agen=
-t/$(QBEE_AGENT_VERSION)/binaries" rel=3D"noreferrer" target=3D"_blank">http=
-s://cdn.qbee.io/software/qbee-agent/$(QBEE_AGENT_VERSION)/binaries</a><br>
-&gt; +QBEE_AGENT_LICENSE =3D Apache-2.0<br>
-<br>
-There is the go source code on:<br>
-=C2=A0 =C2=A0 <a href=3D"https://github.com/qbee-io/qbee-agent" rel=3D"nore=
-ferrer" target=3D"_blank">https://github.com/qbee-io/qbee-agent</a><br>
-<br>
-So, why do you download a prebuilt pacakge?<br>
-Why can&#39;t you use the buidlroot go pacakge infrastructure?<br>
-<br>
-See:<br>
-=C2=A0 =C2=A0 <a href=3D"https://buildroot.org/downloads/manual/manual.html=
-#_infrastructure_for_go_packages" rel=3D"noreferrer" target=3D"_blank">http=
-s://buildroot.org/downloads/manual/manual.html#_infrastructure_for_go_packa=
-ges</a><br>
-<br>
-Basically, that would look like (omitting licensing and stuff):<br>
-<br>
-=C2=A0 =C2=A0 QBEE_AGENT_VERSION =3D 2023.44<br>
-=C2=A0 =C2=A0 QBEE_AGENT_SITE =3D $(call github,qbee-io,qbee-agent,$(QBEE_A=
-GENT_VERSION))<br>
-<br>
-=C2=A0 =C2=A0 $(eval $(golang-pacakge))<br>
-<br>
-Then, maybe you need to specify a few other variables, see the manual:<br>
-=C2=A0 =C2=A0 QBEE_AGENT_GOMOD<br>
-=C2=A0 =C2=A0 QBEE_AGENT_BUILD_TARGETS<br>
-=C2=A0 =C2=A0 QBEE_AGENT_INSTALL_BINS<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
-&gt; +ifeq ($(BR2_arm),y)<br>
-&gt; +QBEE_AGENT_GOARCH =3D arm<br>
-&gt; +else ifeq ($(BR2_aarch64),y)<br>
-&gt; +QBEE_AGENT_GOARCH =3D arm64<br>
-&gt; +else ifeq ($(BR2_i386),y)<br>
-&gt; +QBEE_AGENT_GOARCH =3D 386<br>
-&gt; +else ifeq ($(BR2_x86_64),y)<br>
-&gt; +QBEE_AGENT_GOARCH =3D amd64<br>
-&gt; +endif<br>
-&gt; +<br>
-&gt; +QBEE_AGENT_STRIP_COMPONENTS =3D 2<br>
-&gt; +<br>
-&gt; +define QBEE_AGENT_INSTALL_TARGET_CMDS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(INSTALL) -m 0755 $(@D)/qbee-agent-$(QBEE_AGENT_=
-GOARCH) $(TARGET_DIR)/usr/bin/qbee-agent<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(INSTALL) -D -m 0600 $(@D)/share/ssl/ca.cert $(T=
-ARGET_DIR)/etc/qbee/ppkeys/ca.cert<br>
-&gt; +endef<br>
-&gt; +<br>
-&gt; +define QBEE_AGENT_INSTALL_INIT_SYSTEMD<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(INSTALL) -D -m 0644 $(@D)/init-scripts/systemd/=
-qbee-agent.service \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_DIR)/usr/lib=
-/systemd/system/qbee-agent.service<br>
-&gt; +endef<br>
-&gt; +<br>
-&gt; +define QBEE_AGENT_INSTALL_INIT_SYSV<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(INSTALL) -D -m 755 $(@D)/init-scripts/sysvinit/=
-qbee-agent \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_DIR)/etc/ini=
-t.d/S99qbee-agent<br>
-&gt; +endef<br>
-&gt; +<br>
-&gt; +define QBEE_AGENT_LINUX_CONFIG_FIXUPS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)<br>
-&gt; +endef<br>
-&gt; +<br>
-&gt; +$(eval $(generic-package))<br>
-&gt; -- <br>
-&gt; 2.25.1<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-<br>
--- <br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ________=
-____<br>
-.-----------------.--------------------:=C2=A0 =C2=A0 =C2=A0 =C2=A0_=C2=A0 =
-=C2=A0 :------------------.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded |=C2=A0 =C2=A0 __/ )=C2=A0=
- =C2=A0| /&quot;\ ASCII RIBBON |<br>
-|=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| Software=
-=C2=A0 Designer |=C2=A0 _/ - /&#39;=C2=A0 =C2=A0| \ / CAMPAIGN=C2=A0 =C2=A0=
- =C2=A0|<br>
-| +33 638.411.245 &#39;--------------------: (_=C2=A0 =C2=A0 `--, |=C2=A0 X=
-=C2=A0 AGAINST=C2=A0 =C2=A0 =C2=A0 |<br>
-| yann.morin (at) <a href=3D"http://orange.com" rel=3D"noreferrer" target=
-=3D"_blank">orange.com</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|_=3D&qu=
-ot;=C2=A0 =C2=A0 ,--&#39; | / \ HTML MAIL=C2=A0 =C2=A0 |<br>
-&#39;--------------------------------------:______/_____:------------------=
-&#39;<br>
-<br>
-___________________________________________________________________________=
-_________________________________<br>
-Ce message et ses pieces jointes peuvent contenir des informations confiden=
-tielles ou privilegiees et ne doivent donc<br>
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu=
- ce message par erreur, veuillez le signaler<br>
-a l&#39;expediteur et le detruire ainsi que les pieces jointes. Les message=
-s electroniques etant susceptibles d&#39;alteration,<br>
-Orange decline toute responsabilite si ce message a ete altere, deforme ou =
-falsifie. Merci.<br>
-<br>
-This message and its attachments may contain confidential or privileged inf=
-ormation that may be protected by law;<br>
-they should not be distributed, used or copied without authorisation.<br>
-If you have received this email in error, please notify the sender and dele=
-te this message and its attachments.<br>
-As emails may be altered, Orange is not liable for messages that have been =
-modified, changed or falsified.<br>
-Thank you.<br>
-</blockquote></div>
-
---000000000000f151570609c84fa7--
-
---===============2525039130871010591==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2525039130871010591==--
+CgpPbiAwOS8xMS8yMDIzIDE3OjE2LCBSZXphIEFyYmFiIHdyb3RlOgo+IE9uIFN1biwgTm92IDA1
+LCAyMDIzIGF0IDA3OjI2OjE2UE0gKzAxMDAsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+
+PiBPbiAwOS8xMC8yMDIzIDE3OjE3LCBSZXphIEFyYmFiIHdyb3RlOgo+Pj4gUnVuIHRoZSBwZXRp
+dGJvb3QgVUkgYXMgYW4gdW5wcml2aWxlZ2VkIHVzZXIuIFRoaXMgcmVxdWlyZXMgdXNpbmcgdGhl
+Cj4+PiBhZ2V0dHkgcGFja2FnZSBpbnN0ZWFkIG9mIHRoZSBidXN5Ym94IGdldHR5IHV0aWxpdHks
+IHJ1bm5pbmcgdGhlIGluaXRpYWwKPj4+IHBiLWNvbnNvbGUgaGVscGVyIGF0IHVzZXIgbG9naW4g
+cmF0aGVyIHRoYW4gZGlyZWN0bHkuCj4+Cj4+IFRoYXQgc291bmRzIGNvdW50ZXJwcm9kdWN0aXZl
+IHRob3VnaD8gSXQgbWVhbnMgeW91IGhhdmUgdG8gbG9nIGluIGJlZm9yZSB0aGUgCj4+IGJvb3Qg
+bWVudSBpcyBkaXNwbGF5ZWQ/IE9yIHBlcmhhcHMgSSBtaXN1bmRlcnN0YW5kIHRoZSBzdGF0ZW1l
+bnQgaGVyZS4KPj4KPj4gSXQncyBhbHNvIG5vdCBjbGVhciB3aHkgaXQgd291bGQgbmVlZCBhZ2V0
+dHkgaW5zdGVhZCBvZiBidXN5Ym94IGdldHR5Lgo+IAo+IFNvcnJ5LCBJIGRpZG4ndCBleHBsYWlu
+IGl0IHZlcnkgd2VsbC4gVGhlIGNoYWluIGdvZXMgbGlrZSB0aGlzOgo+IAo+IDEuIC9ldGMvaW5p
+dC5kL3BiLWNvbnNvbGUgc3RhcnQgY29uc29sZSA+IDIuIC91c3IvbGliZXhlYy9wZXRpdGJvb3Qv
+cGItY29uc29sZSAtLWdldHR5IC0tZGV0YWNoIC0tIC1uIC1pIDAgY29uc29sZSBsaW51eAo+IDMu
+IC9zYmluL2dldHR5IC1sL3Vzci9saWJleGVjL3BldGl0Ym9vdC9wYi1jb25zb2xlIC1uIC1pIDAg
+Y29uc29sZSBsaW51eAo+IDQuIC91c3IvbGliZXhlYy9wZXRpdGJvb3QvcGItY29uc29sZQo+IDUu
+IC91c3Ivc2Jpbi9wZXRpYm9vdC1uYwo+IAo+IEFmdGVyIHRoZSBjaGFuZ2U6Cj4gCj4gMS4gL2V0
+Yy9pbml0LmQvcGItY29uc29sZSBzdGFydCBjb25zb2xlCj4gMi4gL3Vzci9saWJleGVjL3BldGl0
+Ym9vdC9wYi1jb25zb2xlIC0tZ2V0dHk9L3NiaW4vYWdldHR5IC0tZGV0YWNoIC0tIC1hIAo+IHBl
+dGl0dXNlciAtbiAtaSBjb25zb2xlIGxpbnV4Cj4gMy4gL3NiaW4vYWdldHR5IC1hIHBldGl0dXNl
+ciAtbiAtaSBjb25zb2xlIGxpbnV4CgogIEhvdyBkaWQgdGhlIC1sIG9wdGlvbiBkaXNhcHBlYXIg
+aGVyZT8gSXMgdGhhdCBkdWUgdG8gLS1nZXR0eT0gaW5zdGVhZCBvZiAtLWdldHR5PwoKICBBbnl3
+YXksIHRoZSBvbmx5IHJlYXNvbiB0byB1c2UgYWdldHR5IGlzIGZvciB0aGUgLWEgb3B0aW9uLiBD
+YW4ndCB3ZSBhY2hpZXZlIAp0aGUgc2FtZSBieSB1c2luZyBzdT8gSS5lLiBjcmVhdGUgYSB3cmFw
+cGVyIHNjcmlwdCBhcm91bmQgcGItY29uc29sZSB0aGF0IGRvZXMgCnNvbWV0aGluZyBsaWtlCgpl
+eGVjIHN1IC1zIC91c3IvbGliZXhlYy9wZXRpdGJvb3QvcGItY29uc29sZSBwZXRpdHVzZXIKCj4g
+NC4gL2hvbWUvcGV0aXR1c2VyLy5wcm9maWxlCgogIFNvbWV0aGluZyBJIGRpZG4ndCB0b3VjaCBp
+biBteSBlYXJsaWVyIHJldmlldzogSSBkb24ndCB0aGluayAucHJvZmlsZSBpcyB0aGUgCnJpZ2h0
+IHBsYWNlIHRvIHNldCB0aGlzIHVwLiBFaXRoZXIgcGV0aXR1c2VyIGlzIGEgbm9ybWFsIHVzZXIg
+LSBpbiB0aGF0IGNhc2UgCmxvZ2dpbmcgaW4gdGhyb3VnaCBzb21lIG90aGVyIG1lYW5zIChlLmcu
+IHNzaCwgc3Vkbykgc2hvdWxkIGdpdmUgYSBub3JtYWwgc2hlbGwuIApJIGFzc3VtZSB5b3UgY2Fu
+IHRlbGwgcGItY29uc29sZSB3aGljaCAic2hlbGwiIHRvIHVzZSBpbiB0aGUgImRyb3AgdG8gc2hl
+bGwiIGNhc2UuCgoKPiA1LiAvdXNyL2xpYmV4ZWMvcGV0aXRib290L3BiLWNvbnNvbGUKPiA2LiAv
+dXNyL3NiaW4vcGV0aWJvb3QtbmMKPiAKPiBCZWNhdXNlIHdlJ3JlIHVzaW5nIHRoZSAtYSAoYXV0
+b2xvZ2luKSBmZWF0dXJlIG9mIGFnZXR0eSwgZXZlcnl0aGluZyBmcm9tICg0KSAKPiBkb3duIGlz
+IHJ1bm5pbmcgYXMgcGV0aXR1c2VyLiBJZiB5b3Ugc2VsZWN0ICJkcm9wIHRvIHNoZWxsIiBmcm9t
+IHRoZSBtZW51LCB5b3UgCj4gdGhlbiBhbHNvIGRvCj4gCj4gNy4gL2hvbWUvcGV0aXR1c2VyLy5z
+aHJjICh0aGUgJEVOViBzZXQgaW4gLnByb2ZpbGUpCj4gOC4gL2Jpbi9zaAo+IAo+Pj4gSWYgc3Vk
+byBpcyBpbnN0YWxsZWQsIHdpdGggYSBzdWRvZXJzIHBvbGljeSBhbGxvd2luZyBwZXRpdHVzZXIg
+dG8KPj4+IHBlcmZvcm0gc3VkbyB3aXRoIG5vIHBhc3N3b3JkIChvciBhIGJsYW5rIHBhc3N3b3Jk
+KSwgdGhlICJkcm9wIHRvIHNoZWxsIgo+Pj4gZmVhdHVyZSBvZiBwZXRpdGJvb3Qgd2lsbCBhdXRv
+bWF0aWNhbGx5IGJlY29tZSBhIHJvb3Qgc2hlbGwuCj4+Cj4+IEl0IHNlZW1zIHRvIG1lIHRoYXQg
+dGhlIGxvZ2ljYWwgdGhpbmcgdG8gZG8gd291bGQgYmUgdG8gZHJvcCBpbnRvIGFuIGFjdHVhbCAK
+Pj4gZ2V0dHksIHdoaWNoIGFza3MgZm9yIGEgbG9naW4gYW5kIHBhc3N3b3JkLgo+IAo+IEF0IHRo
+aXMgcG9pbnQgd2UncmUgYWxyZWFkeSBydW5uaW5nIGdldHR5IGFuZCAoYXV0bylsb2dnZWQgaW4g
+YXMKPiBwZXRpdHVzZXIuIFRoZSBzdWRvIGludGVncmF0aW9uIGFsbG9zIHN5c3RlbS1zcGVjaWZp
+YyBmbGV4aWJpbGl0eSBpbiBpZi9ob3cgdGhlIAo+IHRoZSBzaGVsbCBtYXkgYmUgZWxldmF0ZWQu
+IEFzIHBldGl0dXNlciwgdGhlIHNoZWxsIGhhcyBwZXJtaXNzaW9uIHRvIGNvbGxlY3QgCj4gZGlh
+Z25vc3RpY3MvbG9ncyBieSBydW5uaW5nIHBiLXNvcy4KCiAgSSdtIGFueXdheSB3cm9uZyAtIGdl
+dHR5IG9yIGxvZ2luIGFyZSBub3Qgc2V0dWlkLCB0aGV5IG5lZWQgdG8gYmUgZXhlY3V0ZWQgYXMg
+CnJvb3QsIHNvIHBldGl0dXNlciBjYW4ndCBzdGFydCB0aGVtLgoKPj4+IC0tLSBhL3BhY2thZ2Uv
+cGV0aXRib290L1MxNXBiLWRpc2NvdmVyCj4+PiArKysgYi9wYWNrYWdlL3BldGl0Ym9vdC9TMTVw
+Yi1kaXNjb3Zlcgo+Pj4gQEAgLTEyLDcgKzEyLDkgQEAgZmkKPj4+IMKgc3RhcnQoKSB7Cj4+PiDC
+oMKgwqDCoCBwcmludGYgJ1N0YXJ0aW5nICVzOiAnICIkREFFTU9OIgo+Pj4gLcKgwqDCoCBta2Rp
+ciAtcCAvdmFyL2xvZy9wZXRpdGJvb3QKPj4+ICvCoMKgwqAgIyBzaGVsbGNoZWNrIGRpc2FibGU9
+U0MyMTc0ICMgb25seSBhcHBseSAtbSB0byBkZWVwZXN0IGRpcgo+Pj4gK8KgwqDCoCBta2RpciAt
+cCAtbSAwNzc1IC92YXIvbG9nL3BldGl0Ym9vdAo+Pj4gK8KgwqDCoCBjaG93biByb290OnBldGl0
+Z3JvdXAgL3Zhci9sb2cvcGV0aXRib290Cj4+Cj4+IFdoeSBpcyBpdCBvd25lZCBieSByb290IGFu
+ZCBub3QgcGV0aXR1c2VyPwo+IAo+IEkgZG9uJ3Qgc2VlIGFueSByZWFzb24gd2h5IGl0IGNvdWxk
+bid0IGJlIG93bmVkIGJ5IHBldGl0dXNlci4KPiAKPj4+IEBAIC04NCw0ICs4OCwxMiBAQCBlbmRl
+Zgo+Pj4gwqBQRVRJVEJPT1RfUE9TVF9JTlNUQUxMX1RBUkdFVF9IT09LUyArPSBQRVRJVEJPT1Rf
+UE9TVF9JTlNUQUxMCj4+PiArZGVmaW5lIFBFVElUQk9PVF9VU0VSUwo+Pj4gK8KgwqDCoCBwZXRp
+dHVzZXIgLTEgcGV0aXRncm91cCAtMSAqIC9ob21lL3BldGl0dXNlciAvYmluL3NoIC0gcGV0aXRi
+b290IHVzZXIKPj4KPj4gQXJlIHBldGl0Z3JvdXAgYW5kIHBldGl0dXNlciBzdGFuZGFyZCBuYW1l
+cz8gSWYgbm90LCB3ZSBub3JtYWxseSB1c2UgdGhlIAo+PiBwYWNrYWdlIG5hbWUgYXMgdXNlcm5h
+bWUgYW5kIGdyb3VwIG5hbWUsIGkuZS4KPj4KPj4gwqDCoMKgwqBwZXRpdGJvb3QgLTEgcGV0aXRi
+b290IC0xIC4uLgo+IAo+IEkgdGhpbmsgd2UgY291bGQgY2hhbmdlIHBldGl0dXNlciB0byBwZXRp
+dGJvb3QsIGJ1dCB0aGVyZSBpcyBhIGhhcmRjb2RlZCAKPiByZWZlcmVuY2UgdG8gcGV0aXRncm91
+cCBpbiB0aGUgY29kZToKPiAKPiAgwqAgZGlzY292ZXIvZGlzY292ZXItc2VydmVyLmM6wqDCoMKg
+wqAgZ3JvdXAgPSBnZXRncm5hbSgicGV0aXRncm91cCIpOwoKICBTb3VuZHMgbGlrZSBwZXRpdGdy
+b3VwIGlzIGF0IGxlYXN0IGEgc3RhbmRhcmQgbmFtZSwgYW5kIGluIHRoYXQgY2FzZSBwZXRpdHVz
+ZXIgCmZpdHMgbmljZWx5IChhbmQgSSBhc3N1bWUgaXQgaXMgYWxyZWFkeSB1c2VkIF9zb21ld2hl
+cmVfIGF0IGxlYXN0KS4gU28gT0sgdG8gCmtlZXAgcGV0aXR1c2VyL3BldGl0Z3JvdXAuIFBsZWFz
+ZSBzYXkgc29tZXRoaW5nIGFib3V0IHRoaXMgaW4gdGhlIGNvbW1pdCBtZXNzYWdlIAood2Ugd2Fu
+dCB0aGUgaGlzdG9yeSB0byBzaG93IHdoeSB3ZSBjaG9zZSAicGV0aXR1c2VyIiByYXRoZXIgdGhh
+biB0aGUgbW9yZSAKdHlwaWNhbCAicGV0aXRib290IiBmb3IgdGhlIHVzZXJuYW1lKS4KCgo+Pj4g
+K2RlZmluZSBQRVRJVEJPT1RfUEVSTUlTU0lPTlMKPj4+ICvCoMKgwqAgL3Zhci9wZXRpdGJvb3Qg
+ZCA3NzUgcm9vdCBwZXRpdGdyb3VwIC0gLSAtIC0gLQoKICBHaXZlbiB0aGUgaW5mb3JtYXRpb24g
+YmVsb3csIHdoeSBpcyBpdCBpbiBwZXRpdGdyb3VwPyBJZiBwYi1kaXNjb3ZlciBpcyBqdXN0IApn
+b2luZyB0byBjcmVhdGUgZGlyZWN0b3JpZXMgdGhlcmUgb24gd2hpY2ggaXQgY2FuIG1vdW50IHRo
+aW5ncywgaXQncyBub3QgdmVyeSAKdXNlZnVsIGZvciBwYi1jb25zb2xlIHRvIGhhdmUgd3JpdGUg
+YWNjZXNzIHRvIGl0LCByaWdodD8gVW5sZXNzIHBiLWNvbnNvbGUgbmVlZHMgCnRvIGRlbGV0ZSB0
+aG9zZSBkaXJlY3RvcmllcyBvciByZW5hbWUgdGhlbT8KCj4+Cj4+IFdoYXQgaXMgL3Zhci9wZXRp
+dGJvb3QgdXNlZCBmb3I/Cj4gCj4gVGhhdCBpcyB3aGVyZSBwYi1kaXNjb3ZlciBtb3VudHMgZGV2
+aWNlcywgbG9va2luZyBmb3IgYm9vdCBzb3VyY2VzOgo+IAo+ICDCoCAvdmFyL3BldGl0Ym9vdC9t
+bnQvZGV2L252bWUwbjFwMS9ncnViMi9ncnViLmNmZwo+ICDCoCAvdmFyL3BldGl0Ym9vdC9tbnQv
+ZGV2L252bWUwbjFwMS92bWxpbnV4CgogIENvdWxkIHlvdSBtZW50aW9uIHRoaXMgaW4gdGhlIGNv
+bW1pdCBtZXNzYWdlIGFzIHdlbGw/CgogIFRoZSBjb21taXQgbWVzc2FnZSBpcyBnb2luZyB0byBn
+cm93IHByZXR0eSBsYXJnZSwgYnV0IHRoYXQncyBmaW5lLgoKICBSZWdhcmRzLAogIEFybm91dAoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
