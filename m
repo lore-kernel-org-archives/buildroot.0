@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 240FCC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 11:54:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD0D9C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 11:54:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5321838C9;
-	Fri, 10 Nov 2023 11:54:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5321838C9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 826E783886;
+	Fri, 10 Nov 2023 11:54:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 826E783886
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uZodjEwyBzYl; Fri, 10 Nov 2023 11:54:18 +0000 (UTC)
+	with ESMTP id GFEfYGL0zRjN; Fri, 10 Nov 2023 11:54:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2393083883;
-	Fri, 10 Nov 2023 11:54:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2393083883
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6EAB91BF3E1
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:53:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA50183868;
+	Fri, 10 Nov 2023 11:54:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA50183868
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E3E31BF3E1
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:54:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46D87400CE
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D87400CE
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBA0341F8A
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:54:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBA0341F8A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mzQVeG4QS5aT for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5PBDj7qIicmh for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 11:54:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8EB5F400DD
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EB5F400DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15BF841F71
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 11:54:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15BF841F71
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C26E86EE8; Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
+ id 05C2886E16; Fri, 10 Nov 2023 11:54:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 12:50:32 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: c9e4f18658ecc07c78492cea0d3e644ba9313f1d
-X-Git-Newrev: 8e407fcc2b43a0cbbc6db8b205cc14be394d9825
+Date: Fri, 10 Nov 2023 12:49:39 +0100
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: f9b20cb21de358d6b3b2266bd541899b4783fa47
+X-Git-Newrev: 8208fbb393e53e68ebf9e956447dfec5d4989e33
 X-Patchwork-Hint: ignore
-Message-Id: <20231110115336.7C26E86EE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- support/testing/tests/package/test_python_django.py: fix timeout
- calculation.
+Message-Id: <20231110115443.05C2886E16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x]
+ support/testing/tests/package/test_lxc.py: use timeout argument for
+ emulator.login
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e407fcc2b43a0cbbc6db8b205cc14be394d9825
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8208fbb393e53e68ebf9e956447dfec5d4989e33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-timeout = 35 * self.emulator.timeout_multiplier
-[...]
-        self.assertRunOk(cmd, timeout=timeout)
-
-Gets re-multiplied by self.emulator.timeout_multiplier in self.emulator.run().
-Drop multiplying the timeout by self.emulator.timeout_multiplier to fix this
-issue.
+self.emulator.timeout_multiplier *= 10 is equivilent to 60 * 10 or 600.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9a81c7a7a4629cc009b05195c9b4e37a582287ea)
+(cherry picked from commit 4889ac89b8438cfaba0708338fb52d553110c1a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_python_django.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/test_lxc.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
-index 0b7d35bb6a..e1ca50f6d8 100644
---- a/support/testing/tests/package/test_python_django.py
-+++ b/support/testing/tests/package/test_python_django.py
-@@ -6,7 +6,7 @@ class TestPythonDjango(TestPythonPackageBase):
-     sample_scripts = ["tests/package/sample_python_django.py"]
+diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
+index 5be4782e2d..0d03087a2c 100644
+--- a/support/testing/tests/package/test_lxc.py
++++ b/support/testing/tests/package/test_lxc.py
+@@ -33,9 +33,9 @@ class TestLxc(infra.basetest.BRTest):
+         self.assertRunOk(cmd, 120)
  
-     def run_sample_scripts(self):
--        timeout = 35 * self.emulator.timeout_multiplier
-+        timeout = 35
+     def wait_boot(self):
+-        # the complete boot with systemd takes more time than what the default multipler permits
+-        self.emulator.timeout_multiplier *= 10
+-        self.emulator.login()
++        # the complete boot with systemd takes more time than what the
++        # default typically allows
++        self.emulator.login(timeout=600)
  
-         cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
-         self.assertRunOk(cmd, timeout=timeout)
+     def setup_run_test_container(self):
+         self.run_ok("lxc-create -n lxc_iperf3 -t none -f /usr/share/lxc/config/minimal-iperf3.conf")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
