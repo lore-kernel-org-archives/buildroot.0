@@ -4,83 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1477C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 15:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D19CC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 15:58:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A92C60A9B;
-	Fri, 10 Nov 2023 15:58:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A92C60A9B
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFBC760D88;
+	Fri, 10 Nov 2023 15:58:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFBC760D88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rRN54JwT1XXJ; Fri, 10 Nov 2023 15:58:35 +0000 (UTC)
+	with ESMTP id s5HAs0VFGuVQ; Fri, 10 Nov 2023 15:58:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE38B60B99;
-	Fri, 10 Nov 2023 15:58:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE38B60B99
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1C296174F;
+	Fri, 10 Nov 2023 15:58:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1C296174F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AFAB11BF37B
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8F7321BF37B
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87F6A42241
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87F6A42241
+ by smtp4.osuosl.org (Postfix) with ESMTP id 761E342038
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 761E342038
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XxpMpiSPMSF1 for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 15:58:31 +0000 (UTC)
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com
- [IPv6:2607:f8b0:4864:20::444])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 83A9D42038
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 15:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83A9D42038
-Received: by mail-pf1-x444.google.com with SMTP id
- d2e1a72fcca58-6b709048f32so2006305b3a.0
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 07:58:31 -0800 (PST)
+ with ESMTP id 1JWgT6MsvTF4 for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 15:58:32 +0000 (UTC)
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com
+ [IPv6:2607:f8b0:4864:20::441])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 93EA742244
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 15:58:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93EA742244
+Received: by mail-pf1-x441.google.com with SMTP id
+ d2e1a72fcca58-6c396ef9a3dso2060363b3a.1
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 07:58:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699631910; x=1700236710;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ZLyzpwhgRTtsGqZlXgtWuOSWUmesBXQ1wkl0Mzk9DGE=;
- b=SFlj9bT/sVGV3iNaPIVhFJiwk0VhbKlhrKHxcUckp7RMwSAaHhZkpW5Do1q+0pgDL2
- GAbJOYpt/32neDxH+VCZjis72HIJZqHdjQj9ZVPVi9Aq216LzQlFOa3qPZaT26Yl4OIW
- kvZVv1ScTPgSTWZJ8hG7Eyet0VTbNbmCWrk3gMjRVp+iZvlsdi2MKmeSddrQduaEijpX
- 7m6IyusSWi2GSMFDoY6QdPBHpLJnBCZzd6XKtrOU712ykg4I7+UFXsMWsAtKB9AbgNS1
- MXeGRm3AR6Tz5XpmaxU2CE0/hYFyCfnYt46tI2wM7hyapgmketrdUBqWxm3cH447zDu0
- lkVg==
-X-Gm-Message-State: AOJu0YwoXRqhfllBftgQBjHrFePkNByMIz5nkqN5AQYYOcHtsoS+aRAU
- SsZbdMVe037TrQxu9SxiQzJH0E9AamNqwRvge+RfsVkD7rM=
-X-Google-Smtp-Source: AGHT+IGzeoPCFBIqJ5FRnHSfvZEw0WmKnIKGq6zJW7hVD7RA11Wg5I8YvjZ97uD5jeEdSnHf1ptvQw==
-X-Received: by 2002:a05:6a00:1707:b0:68e:2d59:b1f3 with SMTP id
- h7-20020a056a00170700b0068e2d59b1f3mr8732824pfc.13.1699631910318; 
- Fri, 10 Nov 2023 07:58:30 -0800 (PST)
+ d=1e100.net; s=20230601; t=1699631911; x=1700236711;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=4RxTYYAZVetyVk5yuYIjwnXPFOf6P4LCrZZujCJE/kc=;
+ b=ByCr1xnVJsWHBBByGNqDIYg5hxr7mKX67MspZQ7Qzkti5yVr5DoWSQFr2h61r4kFAY
+ Jv74nwdNRCkSE8IgCj8RW4RQnMpfZWsWUB4qEiptQM27E3scBXWJvPQwR2bCsgEV1T82
+ mQNVfI/VHYg6wVm2/Bk2vf1hAGdtlGYEyAVL1/xOwaiblIKe2Ha4sjVlqff4Czc9d3YQ
+ B6xlxhID16LlYursY3ZvWclloKCzSNmbOq2v03K0iKEvwoSmgfHip58iDc8nKuC0+9FA
+ DMTVCN0k0f27XLuOMuo1XbTOTcMc2uVq5bx+oi9oJFFeJKHop5Zi8DnFbVbmW69rJk+Y
+ uA/g==
+X-Gm-Message-State: AOJu0YzS+jRsEfQ+qZuiByQ7kZHIZAAh5KM2smymNeEJGZZm5p5RIk8R
+ DOmDOiL3Hm24WS4eXQ2lLpmuyixTlQoswY2MyvYSAQRmM48=
+X-Google-Smtp-Source: AGHT+IHaV9xuPgwIWdKOMrIBN6JxHAoyLnHiV9L1fOXukh4bpYo6kg7PpgaWAcmqTxgn4TRmH57jvQ==
+X-Received: by 2002:a05:6a21:7185:b0:181:1cfa:4106 with SMTP id
+ wq5-20020a056a21718500b001811cfa4106mr10576926pzb.62.1699631911576; 
+ Fri, 10 Nov 2023 07:58:31 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.201.106])
  by smtp.gmail.com with ESMTPSA id
- p55-20020a056a0026f700b006c2d53e0b5fsm12796153pfw.57.2023.11.10.07.58.29
+ p55-20020a056a0026f700b006c2d53e0b5fsm12796153pfw.57.2023.11.10.07.58.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Nov 2023 07:58:29 -0800 (PST)
+ Fri, 10 Nov 2023 07:58:30 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 08:58:19 -0700
-Message-ID: <20231110155826.10416-1-adam.duskett@amarulasolutions.com>
+Date: Fri, 10 Nov 2023 08:58:20 -0700
+Message-ID: <20231110155826.10416-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231110155826.10416-1-adam.duskett@amarulasolutions.com>
+References: <20231110155826.10416-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1699631910; x=1700236710;
+ d=amarulasolutions.com; s=google; t=1699631911; x=1700236711;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ZLyzpwhgRTtsGqZlXgtWuOSWUmesBXQ1wkl0Mzk9DGE=;
- b=bzovzOXsqrpwvypO3PP4o3S/WpPjZR6NuIo1/1I+/E2zStuXEpt5Uga08XK4u0NA9x
- rZDDWCRqC78veJzz1exRmZBA6z4He6aO9uUCD7KWuzhGsPWFQ4XMa0IdZptJRcvWFhVV
- 4mfA96CsukF6YlZMfnJ0rQu6gJqZIdSdLXIxc=
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4RxTYYAZVetyVk5yuYIjwnXPFOf6P4LCrZZujCJE/kc=;
+ b=DVWC7437TXs2ud8j0TkYol3X00sQW3386WT4PY6brMacy62sN3j51QDia8+7Tb1nQ0
+ gBdL7agU3uMhqdebEqwrUbDha+CK+EUIwOum/FJTI1MTQF+73/qtF3YThK0/MwZyYgM3
+ zyXdrWOpW2Ub6LkqjxmBbbGRmptsKMLqjzgU8=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=bzovzOXs
-Subject: [Buildroot] [PATCH v3 0/7] Python3: bump version to 3.12.0
+ header.b=DVWC7437
+Subject: [Buildroot] [PATCH v3 1/7] package/python-systemd: bump version to
+ 235
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,121 +102,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hopefully the last series to commit!
+Remove the "# Should be kept in sync with $(SYSTEMD_VERSION)" line from
+python-systemd.mk, as this package is not updated on a regular basis and does
+not keep up to date with systemd.
 
-Changes:
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+v1 -> v2: Remove the "# Should be kept in sync with $(SYSTEMD_VERSION)" line.
 
-  - Drop python-pygame with a new message about compilation failures.
-  - Squash Bernd's patch series into the python 3.12.0 version bump patch
-  - Add "package" at the end of the Config.in.legacy python-crossbar help
-  - Add a Config.in.legacy option for python-pygame
+ package/python-systemd/python-systemd.hash | 4 ++--
+ package/python-systemd/python-systemd.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Adam Duskett (7):
-  package/python-systemd: bump version to 235
-  package/python-versioneer: new package
-  package/python-constantly: bump version to 23.10.4
-  package/python-pygame: drop package
-  package/python-crossbar: drop package
-  package/scons: bump version to 4.5.2
-  package/python3: bump version to 3.12.0
-
- Config.in.legacy                              |  23 ++++
- DEVELOPERS                                    |   3 +-
- package/Config.in                             |   2 -
- .../python-constantly/python-constantly.hash  |   4 +-
- .../python-constantly/python-constantly.mk    |   5 +-
- .../0001-Avoid-intentional-syntax-error.patch |  29 -----
- ...s-min.txt-drop-indirect-dependencies.patch |  74 ------------
- ...ice-wap-use-markupsafe-instead-of-we.patch |  53 ---------
- package/python-crossbar/Config.in             |  71 -----------
- package/python-crossbar/python-crossbar.hash  |   5 -
- package/python-crossbar/python-crossbar.mk    |  14 ---
- package/python-pygame/Config.in               |  50 --------
- package/python-pygame/python-pygame.hash      |   3 -
- package/python-pygame/python-pygame.mk        | 111 ------------------
- package/python-systemd/python-systemd.hash    |   4 +-
- package/python-systemd/python-systemd.mk      |   6 +-
- .../python-versioneer/python-versioneer.hash  |   5 +
- .../python-versioneer/python-versioneer.mk    |  14 +++
- ...e-the-build-of-pyc-files-conditional.patch |  24 ++--
- ...taddrinfo-configure-test-when-cross-.patch |   2 +-
- ...re-to-disable-the-build-of-certain-e.patch | 108 -----------------
- ...-header-paths-for-cross-compilation.patch} |  31 ++---
- ...tch => 0004-Serial-ioctl-workaround.patch} |   0
- ...ook-in-usr-lib-termcap-for-libraries.patch |  31 -----
- ...g.sh.in-ensure-sed-invocations-only.patch} |   0
- ...0006-Add-an-option-to-disable-pydoc.patch} |  50 ++------
- .../0006-Don-t-add-multiarch-paths.patch      |  37 ------
- .../0007-Abort-on-failed-module-build.patch   |  30 -----
- ...07-Add-an-option-to-disable-lib2to3.patch} |  74 +++++-------
- ... 0008-Add-an-option-to-disable-IDLE.patch} |  43 ++-----
- ...e-shebang-of-Python-scripts-for-cros.patch |  35 ------
- ...hon-config.sh-don-t-reassign-prefix.patch} |   0
- ...d-an-option-to-disable-the-tk-module.patch |  79 +++++++++++++
- ...fix-building-on-older-distributions.patch} |  12 +-
- ...p-CC-print-multiarch-output-for-mus.patch} |   2 +-
- ...option-to-disable-the-sqlite3-module.patch |  62 ----------
- ...ng-doesn-t-set-errno-when-encryptio.patch} |   0
- ...d-an-option-to-disable-the-tk-module.patch |  77 ------------
- ...-option-to-disable-the-curses-module.patch |  61 ----------
- .../0016-Add-an-option-to-disable-expat.patch |  82 -------------
- ...-Add-an-option-to-disable-CJK-codecs.patch |  30 -----
- .../0018-Add-an-option-to-disable-NIS.patch   |  33 ------
- ...Add-an-option-to-disable-unicodedata.patch |  30 -----
- ...021-Add-an-option-to-disable-decimal.patch |  54 ---------
- ...on-to-disable-the-ossaudiodev-module.patch |  30 -----
- ...an-option-to-disable-openssl-support.patch |  30 -----
- ...ption-to-disable-the-readline-module.patch |  30 -----
- ...to-disable-zlib-bzip2-and-xz-modules.patch |  42 -------
- ...Add-an-option-to-disable-uuid-module.patch |  33 ------
- ...ion-to-disable-the-berkeleydb-module.patch |  30 -----
- package/python3/python3.hash                  |   6 +-
- package/python3/python3.mk                    |  81 ++++++++-----
- package/scons/scons.hash                      |   4 +-
- package/scons/scons.mk                        |   9 +-
- 54 files changed, 274 insertions(+), 1484 deletions(-)
- delete mode 100644 package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
- delete mode 100644 package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
- delete mode 100644 package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
- delete mode 100644 package/python-crossbar/Config.in
- delete mode 100644 package/python-crossbar/python-crossbar.hash
- delete mode 100644 package/python-crossbar/python-crossbar.mk
- delete mode 100644 package/python-pygame/Config.in
- delete mode 100644 package/python-pygame/python-pygame.hash
- delete mode 100644 package/python-pygame/python-pygame.mk
- create mode 100644 package/python-versioneer/python-versioneer.hash
- create mode 100644 package/python-versioneer/python-versioneer.mk
- delete mode 100644 package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
- rename package/python3/{0004-Adjust-library-header-paths-for-cross-compilation.patch => 0003-Adjust-library-header-paths-for-cross-compilation.patch} (64%)
- rename package/python3/{0008-Serial-ioctl-workaround.patch => 0004-Serial-ioctl-workaround.patch} (100%)
- delete mode 100644 package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch
- rename package/python3/{0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch => 0005-Misc-python-config.sh.in-ensure-sed-invocations-only.patch} (100%)
- rename package/python3/{0011-Add-an-option-to-disable-pydoc.patch => 0006-Add-an-option-to-disable-pydoc.patch} (54%)
- delete mode 100644 package/python3/0006-Don-t-add-multiarch-paths.patch
- delete mode 100644 package/python3/0007-Abort-on-failed-module-build.patch
- rename package/python3/{0012-Add-an-option-to-disable-lib2to3.patch => 0007-Add-an-option-to-disable-lib2to3.patch} (59%)
- rename package/python3/{0020-Add-an-option-to-disable-IDLE.patch => 0008-Add-an-option-to-disable-IDLE.patch} (57%)
- delete mode 100644 package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
- rename package/python3/{0026-python-config.sh-don-t-reassign-prefix.patch => 0009-python-config.sh-don-t-reassign-prefix.patch} (100%)
- create mode 100644 package/python3/0010-Add-an-option-to-disable-the-tk-module.patch
- rename package/python3/{0028-fix-building-on-older-distributions.patch => 0011-fix-building-on-older-distributions.patch} (82%)
- rename package/python3/{0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch => 0012-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch} (97%)
- delete mode 100644 package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch
- rename package/python3/{0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch => 0013-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} (100%)
- delete mode 100644 package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
- delete mode 100644 package/python3/0015-Add-an-option-to-disable-the-curses-module.patch
- delete mode 100644 package/python3/0016-Add-an-option-to-disable-expat.patch
- delete mode 100644 package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch
- delete mode 100644 package/python3/0018-Add-an-option-to-disable-NIS.patch
- delete mode 100644 package/python3/0019-Add-an-option-to-disable-unicodedata.patch
- delete mode 100644 package/python3/0021-Add-an-option-to-disable-decimal.patch
- delete mode 100644 package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch
- delete mode 100644 package/python3/0023-Add-an-option-to-disable-openssl-support.patch
- delete mode 100644 package/python3/0024-Add-an-option-to-disable-the-readline-module.patch
- delete mode 100644 package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
- delete mode 100644 package/python3/0027-Add-an-option-to-disable-uuid-module.patch
- delete mode 100644 package/python3/0030-Add-an-option-to-disable-the-berkeleydb-module.patch
-
+diff --git a/package/python-systemd/python-systemd.hash b/package/python-systemd/python-systemd.hash
+index 789b48590d..6cc6639218 100644
+--- a/package/python-systemd/python-systemd.hash
++++ b/package/python-systemd/python-systemd.hash
+@@ -1,5 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/systemd-python/
+-md5  5071ea5bcb976186e92a3f5e75df221d  systemd-python-234.tar.gz
++md5  93f3ca09f35719ca6a4edd1d62d38dd4  systemd-python-235.tar.gz
+ # Locally computed
+-sha256  fd0e44bf70eadae45aadc292cb0a7eb5b0b6372cd1b391228047d33895db83e7  systemd-python-234.tar.gz
++sha256  4e57f39797fd5d9e2d22b8806a252d7c0106c936039d1e71c8c6b8008e695c0a  systemd-python-235.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.txt
+diff --git a/package/python-systemd/python-systemd.mk b/package/python-systemd/python-systemd.mk
+index 3ccfd57ce5..fdc5d7e278 100644
+--- a/package/python-systemd/python-systemd.mk
++++ b/package/python-systemd/python-systemd.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SYSTEMD_VERSION = 234 # Should be kept in sync with $(SYSTEMD_VERSION)
++PYTHON_SYSTEMD_VERSION = 235
+ PYTHON_SYSTEMD_SOURCE = systemd-python-$(PYTHON_SYSTEMD_VERSION).tar.gz
+-PYTHON_SYSTEMD_SITE = https://pypi.python.org/packages/e8/a8/00ba0f605837a8f69523e6c3a4fb14675a6430c163f836540129c50b3aef
+-PYTHON_SYSTEMD_SETUP_TYPE = distutils
++PYTHON_SYSTEMD_SITE = https://files.pythonhosted.org/packages/10/9e/ab4458e00367223bda2dd7ccf0849a72235ee3e29b36dce732685d9b7ad9
++PYTHON_SYSTEMD_SETUP_TYPE = setuptools
+ PYTHON_SYSTEMD_LICENSE = LGPL-2.1
+ PYTHON_SYSTEMD_LICENSE_FILES = LICENSE.txt
+ PYTHON_SYSTEMD_DEPENDENCIES = systemd # To be able to link against libsystemd
 -- 
 2.41.0
 
