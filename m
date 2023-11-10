@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD22C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 12:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6836EC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 12:27:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B56B839B4;
-	Fri, 10 Nov 2023 12:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B56B839B4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25E07836A5;
+	Fri, 10 Nov 2023 12:27:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25E07836A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UGVYmS_8Wvn3; Fri, 10 Nov 2023 12:27:07 +0000 (UTC)
+	with ESMTP id gbd3MS405nhQ; Fri, 10 Nov 2023 12:27:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD7B8839BC;
-	Fri, 10 Nov 2023 12:27:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD7B8839BC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 547761BF37C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AE3E839BB;
+	Fri, 10 Nov 2023 12:27:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AE3E839BB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A8ED21BF37C
  for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 12:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E35F839BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9010060FB7
  for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 12:27:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E35F839BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9010060FB7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fPKRwxcWZ4zX for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zW9OKNOEZO4K for <buildroot@lists.busybox.net>;
  Fri, 10 Nov 2023 12:27:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C2CD839B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FE1760BAD
  for <buildroot@buildroot.org>; Fri, 10 Nov 2023 12:27:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C2CD839B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FE1760BAD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B2BD86F32; Fri, 10 Nov 2023 12:27:03 +0000 (UTC)
+ id 0C90586F32; Fri, 10 Nov 2023 12:27:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 13:24:03 +0100
+Date: Fri, 10 Nov 2023 13:00:22 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 12ad22701863ca9472c49c7cb27bcef4708581b0
-X-Git-Newrev: ef14ff2a718448f418b65efecbfaddb9d90c3d24
+X-Git-Oldrev: 8e407fcc2b43a0cbbc6db8b205cc14be394d9825
+X-Git-Newrev: 182f767ad9a10abfb00eb738aae54ccaba6311f2
 X-Patchwork-Hint: ignore
-Message-Id: <20231110122703.3B2BD86F32@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x]
- configs/stm32mp157c_odyssey_defconfig: use a fixed TF-A version
+Message-Id: <20231110122703.0C90586F32@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/kvmtool: add
+ KVMTOOL_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef14ff2a718448f418b65efecbfaddb9d90c3d24
+commit: https://git.buildroot.net/buildroot/commit/?id=182f767ad9a10abfb00eb738aae54ccaba6311f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Commit f20589cbc7a (configs/stm32mp157c_odyssey: new defconfig) forgot to
-specify a fixed TF-A version, so do that now.
+cpe:2.3:a:kvmtool_project:kvmtool is a valid CPE identifier for this
+package:
 
-When the defconfig was added, the default version was v2.5 - So use that.
-Similarly to the other stm32mp1 defconfigs, this needs disabling -Werror
-with E=0 to fix a build issue with GCC >= 12.
+  https://nvd.nist.gov/products/cpe/detail/9B4C8068-B4EB-487F-958A-353BD3F494D1
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 69ac9fdbc46f28dbc6f013200e5cf13dd6f0c2aa)
+(cherry picked from commit 718a800828cc16131322e5c618c8dde42a8c8123)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/stm32mp157c_odyssey_defconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/kvmtool/kvmtool.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/stm32mp157c_odyssey_defconfig b/configs/stm32mp157c_odyssey_defconfig
-index 6b699830b1..ddcb4d4d2d 100644
---- a/configs/stm32mp157c_odyssey_defconfig
-+++ b/configs/stm32mp157c_odyssey_defconfig
-@@ -17,8 +17,10 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-odyssey.dtb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-odyssey.dtb E=0"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
+diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
+index df6ae7e0f1..9c58e44876 100644
+--- a/package/kvmtool/kvmtool.mk
++++ b/package/kvmtool/kvmtool.mk
+@@ -17,6 +17,7 @@ KVMTOOL_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_ZLIB),zlib)
+ KVMTOOL_LICENSE = GPL-2.0
+ KVMTOOL_LICENSE_FILES = COPYING
++KVMTOOL_CPE_ID_VENDOR = kvmtool_project
+ 
+ # Disable -Werror, otherwise musl is not happy
+ KVMTOOL_MAKE_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
