@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C79BC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 13:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E2BC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 13:39:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C05940584;
-	Fri, 10 Nov 2023 13:38:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C05940584
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1FB541930;
+	Fri, 10 Nov 2023 13:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1FB541930
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XQel4aiWwW-c; Fri, 10 Nov 2023 13:38:52 +0000 (UTC)
+	with ESMTP id ob5qM8jdZuI1; Fri, 10 Nov 2023 13:39:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 11CCA40533;
-	Fri, 10 Nov 2023 13:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11CCA40533
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5667C41926;
+	Fri, 10 Nov 2023 13:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5667C41926
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3AFF21BF997
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 13:38:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE4E91BF997
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 13:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12A0840584
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E53A40533
  for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 13:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12A0840584
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E53A40533
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZjcmaOdGsAjW for <buildroot@lists.busybox.net>;
+ with ESMTP id H4zAJBG3lTmc for <buildroot@lists.busybox.net>;
  Fri, 10 Nov 2023 13:38:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C82EC40533
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE925402BC
  for <buildroot@buildroot.org>; Fri, 10 Nov 2023 13:38:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C82EC40533
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE925402BC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5EDD86F61; Fri, 10 Nov 2023 13:38:34 +0000 (UTC)
+ id 9D76386F5F; Fri, 10 Nov 2023 13:38:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 14:30:35 +0100
+Date: Fri, 10 Nov 2023 14:29:55 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 106a8d940fc4d92daf9595e4786ae0ace66d7f2d
-X-Git-Newrev: 7a27887903e6cb182b01bb877b5be8f287053b86
+X-Git-Oldrev: 10a4451b26dff1a570513421efa55ad9dea0674e
+X-Git-Newrev: b3fb71b1d7eb7969ce988acdd4fa2e7215dbfcd3
 X-Patchwork-Hint: ignore
-Message-Id: <20231110133834.B5EDD86F61@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] pkg-download: add option
- to enforce hash checking
+Message-Id: <20231110133834.9D76386F5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] support/download: teach
+ dl-wrapper to handle more than one hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,89 +63,261 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a27887903e6cb182b01bb877b5be8f287053b86
+commit: https://git.buildroot.net/buildroot/commit/?id=b3fb71b1d7eb7969ce988acdd4fa2e7215dbfcd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Currently, when a package is downloaded from a custom location or
-version, Buildroot excludes such a package from the mandatory integrity
-check with hashes, because it was until now not possible to have such
-hashes.
+Currently, we expect and only use hash files that lie within the package
+directory, alongside the .mk file. Those hash files are thus bundled
+with Buildroot.
 
-We now have a mechanism which users can leverage to provide additional
-hashes, and so custom versions or locations can now be checked too.
+This implies that only what's known to Buildroot can ever get into those
+hash files. For packages where the version is fixed (or a static
+choice), then we can carry hashes for those known versions.
 
-Buildroot has no way to know that hashes have indeed been provided for
-a custom location/version, and so will still happily ignore an
-unchecked package.
+However, we do have a few packages for which the version is a free-form
+entry, where the user can provide a custom location and/or version. like
+a custom VCS tree and revision, or a custom tarball URL. This means that
+Buildroot has no way to be able to cary hashes for such custom versions.
 
-However, users who do provide extra hashes most probably do expect that
-no download is done without an integrity check, and thus expect that a
-missing hash not be ignored.
+This means that there is no integrity check that what was downloaded is
+what was expected. For a sha1 in a git tree, this is a minor issue,
+because the sha1 by itself is already a hash of the expected content.
+But for custom tarballs URLs, or for a tag in a VCS, there is indeed no
+integrity check.
 
-Add an option that users can select to make Buildroot forcibly require
-at least one valid hash, and no invalid hash, for all downloads.
+Buildroot can't provide such hashes, but interested users may want to
+provide those, and currently there is no (easy) way to do so.
+
+So, we need our download helpers to be able to accept more than one hash
+file to lookup for hashes.
+
+Extend the dl-wrapper and the check-hash helpers thusly, and update the
+legal-info accordingly.
+
+Note that, to be able to pass more than one hash file, we also need to
+re-order the arguments passed to support/download/check-hash, which also
+impies some shuffling in the three places it is called:
+  - 2 in dl-wrapper
+  - 1 in the legal-info infra
+
+That in turn also requires that the legal-license-file macro args get
+re-ordered to have the hash file last; we take the opportunity to also
+move the HOST/TARGET arg to be first, like in the other legal-info
+macros.
 
 Reported-by: "Martin Zeiser (mzeiser)" <mzeiser@cisco.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e091e31831122b60b084bd755e94df4dfe7188d2)
+(cherry picked from commit f91e89b6e64d4ad092c359a658a8ee22e848ce66)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in               | 17 +++++++++++++++++
- package/pkg-download.mk |  5 ++---
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ Makefile                    |  2 +-
+ package/pkg-generic.mk      |  2 +-
+ package/pkg-utils.mk        |  8 +++---
+ support/download/check-hash | 64 ++++++++++++++++++++++++---------------------
+ support/download/dl-wrapper | 10 +++----
+ 5 files changed, 45 insertions(+), 41 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 339c28f29c..d3bf6000ca 100644
---- a/Config.in
-+++ b/Config.in
-@@ -699,6 +699,23 @@ config BR2_FORCE_HOST_BUILD
+diff --git a/Makefile b/Makefile
+index 6abbca4414..a2aea47fa8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -830,7 +830,7 @@ legal-info-clean:
+ .PHONY: legal-info-prepare
+ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
+-	@$(call legal-license-file,buildroot,buildroot,support/legal-info/buildroot.hash,COPYING,COPYING,HOST)
++	@$(call legal-license-file,HOST,buildroot,buildroot,COPYING,COPYING,support/legal-info/buildroot.hash)
+ 	@$(call legal-manifest,TARGET,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSES)
+ 	@$(call legal-manifest,HOST,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSES)
+ 	@$(call legal-manifest,HOST,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 597424148c..ad2741a22e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1132,7 +1132,7 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
+ 	$(Q)$$(call legal-warning-pkg,$$($(2)_BASENAME_RAW),cannot save license ($(2)_LICENSE_FILES not defined))
+ else
+-	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$($(2)_HASH_FILE),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
++	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$(F),$$($(2)_DIR)/$$(F),$$($(2)_HASH_FILE))$$(sep))
+ endif # license files
  
- 	  This option will increase build time.
+ ifeq ($$($(2)_REDISTRIBUTE),YES)
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index dcab7d9b2a..b91061a572 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -280,13 +280,13 @@ define legal-manifest # {HOST|TARGET}, pkg, version, license, license-files, sou
+ 	echo '"$(2)","$(3)","$(4)","$(5)","$(6)","$(7)","$(8)"' >>$(LEGAL_MANIFEST_CSV_$(1))
+ endef
  
-+config BR2_DOWNLOAD_FORCE_CHECK_HASHES
-+	bool "Force all downloads to have a valid hash"
-+	depends on BR2_GLOBAL_PATCH_DIR != ""
-+	help
-+	  For packages where a custom version or location can be set,
-+	  Buildroot does not carry a hash for those custom versions or
-+	  locations, so the integrity of such downloads is not verified.
-+
-+	  Say 'y' here to enforce downloads to have at least one valid
-+	  hash (and of course, that all hashes be valid).
-+
-+	  Those hashes are looked in files in BR2_GLOBAL_PATCH_DIR,
-+	  see above.
-+
-+comment "Forcing all downloads to have a valid hash needs a global patch and hash directory"
-+	depends on BR2_GLOBAL_PATCH_DIR = ""
-+
- config BR2_REPRODUCIBLE
- 	bool "Make the build reproducible (experimental)"
- 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 44cc178dea..078470808e 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -66,9 +66,7 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
- gitlab = https://gitlab.com/$(1)/$(2)/-/archive/$(3)
+-define legal-license-file # pkgname, pkgname-pkgver, pkg-hashfile, filename, file-fullpath, {HOST|TARGET}
+-	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
++define legal-license-file # {HOST|TARGET}, pkgname, pkgname-pkgver, filename, file-fullpath, pkg-hashfile
++	mkdir -p $(LICENSE_FILES_DIR_$(1))/$(3)/$(dir $(4)) && \
+ 	{ \
+-		support/download/check-hash $(3) $(5) $(4); \
++		support/download/check-hash $(5) $(4) $(6); \
+ 		case $${?} in (0|3) ;; (*) exit 1;; esac; \
+ 	} && \
+-	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
++	cp $(5) $(LICENSE_FILES_DIR_$(1))/$(3)/$(4)
+ endef
  
- # Expressly do not check hashes for those files
--# Exported variables default to immediately expanded in some versions of
--# make, but we need it to be recursively-epxanded, so explicitly assign it.
--export BR_NO_CHECK_HASH_FOR =
-+BR_NO_CHECK_HASH_FOR =
+ non-virtual-deps = $(foreach p,$(1),$(if $($(call UPPERCASE,$(p))_IS_VIRTUAL),,$(p)))
+diff --git a/support/download/check-hash b/support/download/check-hash
+index 5a47f49bc3..03a6557187 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -3,12 +3,12 @@ set -e
  
- ################################################################################
- # DOWNLOAD_URIS - List the candidates URIs where to get the package from:
-@@ -110,6 +108,7 @@ endif
- define DOWNLOAD
- 	$(Q)mkdir -p $($(2)_DL_DIR)
- 	$(Q)$(EXTRA_ENV) $($(2)_DL_ENV) \
-+	BR_NO_CHECK_HASH_FOR="$(if $(BR2_DOWNLOAD_FORCE_CHECK_HASHES),,$(BR_NO_CHECK_HASH_FOR))" \
- 		flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
- 		-c '$($(2)_DL_VERSION)' \
- 		-d '$($(2)_DL_DIR)' \
+ # Helper to check a file matches its known hash
+ # Call it with:
+-#   $1: the path of the file containing all the expected hashes
+-#   $2: the full path to the temporary file that was downloaded, and
++#   $1: the full path to the temporary file that was downloaded, and
+ #       that is to be checked
+-#   $3: the final basename of the file, to which it will be ultimately
++#   $2: the final basename of the file, to which it will be ultimately
+ #       saved as, to be able to match it to the corresponding hashes
+ #       in the .hash file
++#   $*: the paths of the files containing all the expected hashes
+ #
+ # Exit codes:
+ #   0:  the hash file exists and the file to check matches all its hashes,
+@@ -27,28 +27,21 @@ while getopts :q OPT; do
+ done
+ shift $((OPTIND-1))
+ 
+-h_file="${1}"
+-file="${2}"
+-base="${3}"
+-
+-# Bail early if no hash to check
+-if [ -z "${h_file}" ]; then
+-    exit 0
+-fi
+-# Does the hash-file exist?
+-if [ ! -f "${h_file}" ]; then
+-    printf "WARNING: no hash file for %s\n" "${base}" >&2
+-    exit 0
+-fi
++file="${1}"
++base="${2}"
++shift 2
++declare -a h_files=( "${@}" )
+ 
+ # Check one hash for a file
+ # $1: algo hash
+ # $2: known hash
+ # $3: file (full path)
++# $4: hash file (full path)
+ check_one_hash() {
+     _h="${1}"
+     _known="${2}"
+     _file="${3}"
++    _h_file="${4}"
+ 
+     # Note: md5 is supported, but undocumented on purpose.
+     # Note: sha3 is not supported, since there is currently no implementation
+@@ -70,6 +63,7 @@ check_one_hash() {
+         return 0
+     fi
+ 
++    printf "ERROR: while checking hashes from %s\n" "${_h_file}" >&2
+     printf "ERROR: %s has wrong %s hash:\n" "${base}" "${_h}" >&2
+     printf "ERROR: expected: %s\n" "${_known}" >&2
+     printf "ERROR: got     : %s\n" "${_hash}" >&2
+@@ -79,21 +73,31 @@ check_one_hash() {
+ }
+ 
+ # Do we know one or more hashes for that file?
++nb_h_files=0
+ nb_checks=0
+-while read t h f; do
+-    case "${t}" in
+-        ''|'#'*)
+-            # Skip comments and empty lines
+-            continue
+-            ;;
+-        *)
+-            if [ "${f}" = "${base}" ]; then
+-                check_one_hash "${t}" "${h}" "${file}"
+-                : $((nb_checks++))
+-            fi
+-            ;;
+-    esac
+-done <"${h_file}"
++for h_file in "${h_files[@]}"; do
++    [ -f "${h_file}" ] || continue
++    : $((nb_h_files++))
++    while read t h f; do
++        case "${t}" in
++            ''|'#'*)
++                # Skip comments and empty lines
++                continue
++                ;;
++            *)
++                if [ "${f}" = "${base}" ]; then
++                    check_one_hash "${t}" "${h}" "${file}" "${h_file}"
++                    : $((nb_checks++))
++                fi
++                ;;
++        esac
++    done <"${h_file}"
++done
++
++if [ ${nb_h_files} -eq 0 ]; then
++    printf "WARNING: no hash file for %s\n" "${base}" >&2
++    exit 0
++fi
+ 
+ if [ ${nb_checks} -eq 0 ]; then
+     case " ${BR_NO_CHECK_HASH_FOR} " in
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 1e8d6058f6..35428faeef 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -21,8 +21,8 @@ export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:lru:qf:e"
+ 
+ main() {
+     local OPT OPTARG
+-    local backend output hfile large_file recurse quiet rc
+-    local -a uris
++    local backend output large_file recurse quiet rc
++    local -a uris hfiles
+ 
+     # Parse our options; anything after '--' is for the backend
+     while getopts ":c:d:D:o:n:N:H:lrf:u:qp:" OPT; do
+@@ -33,7 +33,7 @@ main() {
+         o)  output="${OPTARG}";;
+         n)  raw_base_name="${OPTARG}";;
+         N)  base_name="${OPTARG}";;
+-        H)  hfile="${OPTARG}";;
++        H)  hfiles+=( "${OPTARG}" );;
+         l)  large_file="-l";;
+         r)  recurse="-r";;
+         f)  filename="${OPTARG}";;
+@@ -70,7 +70,7 @@ main() {
+     # - fails at least one of its hashes: force a re-download
+     # - there's no hash (but a .hash file): consider it a hard error
+     if [ -e "${output}" ]; then
+-        if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
++        if support/download/check-hash ${quiet} "${output}" "${output##*/}" "${hfiles[@]}"; then
+             exit 0
+         elif [ ${?} -ne 2 ]; then
+             # Do not remove the file, otherwise it might get re-downloaded
+@@ -154,7 +154,7 @@ main() {
+ 
+         # Check if the downloaded file is sane, and matches the stored hashes
+         # for that file
+-        if support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
++        if support/download/check-hash ${quiet} "${tmpf}" "${output##*/}" "${hfiles[@]}"; then
+             rc=0
+         else
+             if [ ${?} -ne 3 ]; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
