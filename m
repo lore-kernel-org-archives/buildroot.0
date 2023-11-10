@@ -4,84 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86FA9C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 20:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D963C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 20:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20B864173D;
-	Fri, 10 Nov 2023 20:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20B864173D
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC9D242858;
+	Fri, 10 Nov 2023 20:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC9D242858
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AOgAhOsOpkMW; Fri, 10 Nov 2023 20:55:02 +0000 (UTC)
+	with ESMTP id cCGGjakhIvMT; Fri, 10 Nov 2023 20:59:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF88D41823;
-	Fri, 10 Nov 2023 20:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF88D41823
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 210F41BF2C4
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 20:55:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20E5742717;
+	Fri, 10 Nov 2023 20:59:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20E5742717
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1869D1BF2B6
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 20:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE660415C8
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 20:54:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE660415C8
+ by smtp1.osuosl.org (Postfix) with ESMTP id E0A6683B3E
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 20:59:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0A6683B3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lQrBr0GKRNZv for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 20:54:58 +0000 (UTC)
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com
- [IPv6:2607:f8b0:4864:20::b30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A51B41521
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 20:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A51B41521
-Received: by mail-yb1-xb30.google.com with SMTP id
- 3f1490d57ef6-daead9cde1eso2559032276.2
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 12:54:58 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tc0p3XGaBXaA for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 20:59:01 +0000 (UTC)
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
+ [IPv6:2a00:1450:4864:20::233])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C683F83AD2
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 20:59:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C683F83AD2
+Received: by mail-lj1-x233.google.com with SMTP id
+ 38308e7fff4ca-2c79d8b67f3so18015111fa.0
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 12:59:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699649697; x=1700254497;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=MH7f5/ddOzXJVCZHy5JzrFNlrN/3bBKNnMMNyjZNK8Q=;
- b=oSNdD7DNbmS/a2+0O8dNNFaGkKRoeCZ1N+zsnmQqwBPQeFm5eWF+UWvai6N5932r17
- uiZZehNTelllyqL3AuzDHRx/2r7cQAW1CsjMhRBpoosOufh1GdljYhaDciL0DDT/4+ph
- N3Zy+FHYYbBop7mfe1aGpcRfJ1OebygURfQ2ryXnub4dIF3Qq2N5eeCH9bU+ThedbTFo
- OWolxTss00sfXGFBMBYl5WfT//BkinmxsK+ZWiVAj7r7mkIvG+PM8cWUkAtGtzTN2I6S
- sggjKhJ3QmSMKob4850Yt66BEoT51fo4jypSH5BEHYsTZW9dh7laYimUvN1OuBxszF1g
- Gpag==
-X-Gm-Message-State: AOJu0Yx+gM+VXk+Rpa62aEAcKP538W7PkHSZNzyH9SmCoHNtltQgeD7f
- u+tNW3jqP6BMi7l1HsawmObUjjtedBEKDWuLgPQ=
-X-Google-Smtp-Source: AGHT+IF8ZZBYzls7hvj75/0PB+/EAijVz39pAoW32E+2AGaCzHCqTOXJS8MrjV9vMU/UQrxWcOWNx1nst7Fr6G1nezU=
-X-Received: by 2002:a25:d784:0:b0:da3:b603:8314 with SMTP id
- o126-20020a25d784000000b00da3b6038314mr379747ybg.0.1699649696959; Fri, 10 Nov
- 2023 12:54:56 -0800 (PST)
+ d=1e100.net; s=20230601; t=1699649938; x=1700254738;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=yr3aJcyDh2pq0j70O2k5vniZe+Qbt7YO/AlZQ81v5zI=;
+ b=HJ1OCK5mdBiAOWO5gubYP72wJpLznQLopFHBQdmeyBtZcVkJfOqtBxGSGBlziKSEsT
+ fvZc2jpY12JEozqwfRCT4QRDs2zsNxj1pLD+XTrwfyDsXGx59jm9eOEcPILCMoJgrb/D
+ Sa1dKsphDIBCCBPoJthD52MEKDHGCil/0gj0NLzUgs8MBlOv2bi4M+rdbpbGwjmXQpUe
+ YbwHR+9IYfgWDomzHhkKE1UlNGrZ0tphrVg45KbN8hgxplJrGWW1gvVm2aYE2G5dFwNv
+ SVbrxXy126SZ05ofD9Z0ZcMm1upogaoPcLh9x8fNZOLWCR70SjpFyh4CBgVtKtGLPZhY
+ b0Dw==
+X-Gm-Message-State: AOJu0YwKuIX9xfP9yV9UoO3Gxhxbhqrh1XyVajg2Ucx0r0BYZAwfqBsX
+ lNvZATgbi33w4OPEyDq5Jw478g==
+X-Google-Smtp-Source: AGHT+IHC5ROoTKg1SyrUfyuQYA/kwJISEKC+e96hAelE4946Rz+XRytNzifPxc0aUTh3EzS6It7rUg==
+X-Received: by 2002:ac2:58f8:0:b0:509:cde:952b with SMTP id
+ v24-20020ac258f8000000b005090cde952bmr157224lfo.10.1699649938503; 
+ Fri, 10 Nov 2023 12:58:58 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ fi5-20020a170906da0500b009e5db336137sm74719ejb.196.2023.11.10.12.58.56
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 10 Nov 2023 12:58:57 -0800 (PST)
+Message-ID: <34732d2f-f136-4a6a-857f-16ddf05bb31a@mind.be>
+Date: Fri, 10 Nov 2023 21:58:55 +0100
 MIME-Version: 1.0
-References: <20231012103210.2915871-1-adam.duskett@amarulasolutions.com>
- <20231108215536.7a780fe2@windsurf>
- <CAFSsvmqmULY+=X8bx-mv0k0Boj4RgZD5LBQ=4gVz+KV_TO_ndQ@mail.gmail.com>
- <bf35c736-8d92-4b84-97ab-fefc4ef2be15@mind.be>
-In-Reply-To: <bf35c736-8d92-4b84-97ab-fefc4ef2be15@mind.be>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 10 Nov 2023 13:54:45 -0700
-Message-ID: <CAFSsvmpjafVwN2JRAB_fjGoKoqa6ZJPqSwKQt+7ye6C74ipNCw@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
+References: <20231105202555.359391-1-adam.duskett@amarulasolutions.com>
+ <20231105202555.359391-18-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20231105202555.359391-18-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699649697; x=1700254497; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=MH7f5/ddOzXJVCZHy5JzrFNlrN/3bBKNnMMNyjZNK8Q=;
- b=loqebW6DTXur9URQivRLnOQhWwoxoYH19HzzhtRk46nepSVWJmXIFJHyYfxX8Ohf+R
- 02At9fFeUa1W9yqyBoBd1pVx+np52R4evmMwsPbJ92aWzq46UKCAUHkT6rpJowBIZ3Uu
- fjIyU6hZvqSssROgonDy5xFqkzZ96q13NmkRP2NRUXWb1gXnh/kgjERjassWk4WUD8Mz
- jPRI4eM1P92GqrAg9r/kbIM7c/gW5NDPz0YK2sH6Q9EZHSCGK3nC4u0BEmtUohhP8brr
- 55owHEsTf0KvSmdQ7neRz7iPh9CQxUde05UnKJQM/QYhjra5fOJ/OhW5+vgFVhb8JqH8
- gGEA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=loqebW6D
-Subject: Re: [Buildroot] [PATCH 00/12] SELinux: Basic config enforcing mode
- support.
+ d=mind.be; s=google; t=1699649938; x=1700254738; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=yr3aJcyDh2pq0j70O2k5vniZe+Qbt7YO/AlZQ81v5zI=;
+ b=RmepNroB0wku+jF/y0IH1c/0mV9+ZLs832GyU5Twlaz6sGKFgxaHTOJ4OaC78YuQRX
+ FTSBV991kEgpLHN9kgDK+x2ZU7wClT/AKPvC/OG4TU9dx18AUNlGWvZDF726YM59gU9L
+ gRo6a2z7Qo4X3BsgC/rrHLac/XtMjebAXgA2GL+87AZqsL7ZUPlgZhfo+O23OcfAc6EX
+ +jes7WyPbBPPlXAA2FDWjWylnoI91qGyy2A3zrxeuIxocembZiLI51EGtpp5/iu4LF4H
+ H5yBF3cZ+y8dBXX/g84bDR7sBVo1F2+bUGYTQo8O9AAx+wYV4OrzPIOt4246jW+agbss
+ Iz4w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=RmepNroB
+Subject: Re: [Buildroot] [PATCH v2 18/24] package/python-pyxb: Drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,482 +99,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Marek Belisko <marek.belisko@open-nandra.com>,
- Antoine Tenart <atenart@kernel.org>, Sen Hastings <sen@phobosdpl.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: multipart/mixed; boundary="===============4042135499503912070=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4042135499503912070==
-Content-Type: multipart/alternative; boundary="0000000000006e10130609d2880e"
 
---0000000000006e10130609d2880e
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hello Arnout:
+On 05/11/2023 21:25, Adam Duskett wrote:
+> The last time python-pyxb was updated according to pypi.org is in 2017.
+> As there are no maintainers listed for the package, and the package uses
+> distutils which has been removed in Python 3.12.0, remove the package.
 
-To answer your questions:
+  It seems there was a mistake here...
 
-Q) If there is anything we need to change, why would such a change not be
-acceptable for upstream refpolicy?
-A) I am, but one person and I don't have time to submit all the small
-changes for refpolicy.
+- James is listed as a developer (with wildcard).
+- James submitted a patch on Oct 1 (long before the first attempt to bump to 
+3.12.0) to switch to setuptools [1].
 
-Q) How come our SELinux runtime tests don't fail if the upstream refpolicy
-doesn't work?
-A) Our tests are not performed in enforcing mode.
+  That said, I don't think anyone will actually miss pyxb...
 
-Q)  That seems like a much saner approach - I'd expect the diff to be prett=
-y
-small. Also, I expect that we need to make any changes that Yocto needs to
-make
-as well - which is all the more reason to upstream them!
-A)
-https://github.com/ni/meta-selinux/tree/nilrt/master/kirkstone/recipes-secu=
-rity/refpolicy/refpolicy
-      There are currently 74 patches to refpolicy they have made. All of
-them have been submitted
-       upstream and all of them have been deemed Inappropriate [embedded
-specific.]
-       So not only is the diff not small, it would be enormous compared to
-this patch series.
+  Regards,
+  Arnout
 
-Q) Why does upstream refpolicy provide a "reference" that is not suitable
-for
-actual use?
-A) Ask them! It's quite frustrating! Even RHEL/Fedora does not use
-refpolicy, but instead, a fork they made!
+[1] 
+https://patchwork.ozlabs.org/project/buildroot/patch/20231001091943.1772441-1-james.hilliard1@gmail.com/
 
-Thanks!
 
-Adam
 
-On Fri, Nov 10, 2023 at 12:40=E2=80=AFPM Arnout Vandecappelle <arnout@mind.=
-be>
-wrote:
-
->
->
-> On 10/11/2023 17:49, Adam Duskett wrote:
-> > Hey Thomas, sorry for the late reply!
-> >
-> > Refpolicy itself is just that, a reference policy.
->
->   If refpolicy only provides a reference policy, how can Buildroot do any
-> better? We don't do any weird things with packages, so any policy that is
-> applicable to Buildroot is applicable to everyone.
->
-> > Quite a few gaps are missing
-> > with several packages.
-> > In fact, Fedora/RHEL have their own policy based on the refpolicy
-> package found
-> > here:
-> > https://github.com/fedora-selinux/selinux-policy
-> > <https://github.com/fedora-selinux/selinux-policy> because refpolicy
-> itself is
-> > not adequate for a complete
-> > system in enforcing mode.
->
->   The basic question is: if there is anything we need to change, why woul=
-d
-> such
-> a change not be acceptable for upstream refpolicy?
->
->   Also, how come our SELinux runtime tests don't fail if the upstream
-> refpolicy
-> doesn't work?
->
->
-> > Also note, that the yocto selinux layer went another route and patches
-> refpolicy
-> > instead of providing separate
-> > selinux policy files.
->
->   That seems like a much saner approach - I'd expect the diff to be prett=
-y
-> small. Also, I expect that any changes that yocto needs to make, we need
-> to do
-> as well - which is all the more reason to upstream them!
->
->
-> > To summarize: These are necessary because refpolicy is not complete nor
-> suitable
-> > for a system running in
-> > enforcing mode.
->
->   Why does upstream refpolicy provide a "reference" that is not suitable
-> for
-> actual use?
->
->
->   Not I know next to nothing about SELinux, I may be missing something
-> glaringly
-> obvious. Please consider all of the above questions as honest questions,
-> not as
-> snide remarks.
->
->   Regards,
->   Arnout
->
-> >
-> > On Wed, Nov 8, 2023 at 1:55=E2=80=AFPM Thomas Petazzoni via buildroot
-> > <buildroot@buildroot.org <mailto:buildroot@buildroot.org>> wrote:
-> >
-> >     Hello Adam,
-> >
-> >     On Thu, 12 Oct 2023 12:31:57 +0200
-> >     Adam Duskett <adam.duskett@amarulasolutions.com
-> >     <mailto:adam.duskett@amarulasolutions.com>> wrote:
-> >
-> >      > SELinux support in Buildroot is currently outstanding! However,
-> one last
-> >     major
-> >      > issue remains: Enforcing mode needs to work out of the box
-> correctly, without
-> >      > denials, at least with a minimal defconfig.
-> >      >
-> >      > This patch series seeks to remedy this problem with a basic set =
-of
-> >     policies in
-> >      > several commonly selected packages to allow a user who wishes to
-> use
-> >     SELinux in
-> >      > enforcing mode the ability to do so without having to spend
-> several hours
-> >      > writing the same policy that everyone who wishes to do the same
-> thing would
-> >      > have to do.
-> >      >
-> >      > The packages I have selected are based on the
-> pc_x86_64_bios_defconfig
-> >     with all
-> >      > of the selinux packages selected because it was the most
-> straightforward
-> >     option
-> >      > I had to create a small, bootable system in Virtual Manager with
-> ssh
-> >     support to
-> >      > quickly build out a policy that didn't generate any denials in
-> >      > /var/log/audit.log.
-> >      >
-> >      > I want to address Yann's questions from a previous discussion on
-> IRC:
-> >      >   Q) What will be the maintenance effort?
-> >      >   A) Minimal after this patch series. As you will see, most
-> policies are
-> >     only a
-> >      >      few lines long!
-> >      >
-> >      >   Q) How much time will we invest when we bump a package or add =
-a
-> dependency?
-> >      >   A) Usually none! If a package bump/new dependency requires new
-> >     permissions to
-> >      >      the SELinux policy, this is a good thing! We should step
-> back and
-> >     question
-> >      >      why a package previously accessing only files and libraries
-> suddenly
-> >     needs
-> >      >      to (e.g.), change permissions on a /dev/ device!
-> >
-> >     Thanks a lot for working on this.
-> >
-> >     However, I'd like to understand why these policy files need to be i=
-n
-> >     Buildroot. For example, you're adding some policy for OpenSSH. But
-> >     Buildroot just builds upstream OpenSSH with no change. Why do we ne=
-ed
-> >     some policy specifically in Buildroot for OpenSSH that cannot be in
-> >     upstream refpolicy?
-> >
-> >     Back when Antoine T=C3=A9nart (which you have in Cc) was working on=
- this,
-> >     and also my colleague Maxime Chevallier (which I have added in Cc),
-> >     their plan was to make it possible to use the upstream refpolicy fo=
-r
-> a
-> >     Buildroot system, by contributing changes to the refpolicy (and the=
-y
-> >     contributed quite a few).
-> >
-> >     Why are we not continuing on this approach?
-> >
-> >     Or is your policy a "from scratch" policy that can be used as a
-> >     complete alternative to the upstream refpolicy?
-> >
-> >     (Note: we will clearly want a runtime test case for this.)
-> >
-> >     Best regards,
-> >
-> >     Thomas
-> >     --
-> >     Thomas Petazzoni, co-owner and CEO, Bootlin
-> >     Embedded Linux and Kernel engineering and training
-> >     https://bootlin.com <https://bootlin.com>
-> >     _______________________________________________
-> >     buildroot mailing list
-> >     buildroot@buildroot.org <mailto:buildroot@buildroot.org>
-> >     https://lists.buildroot.org/mailman/listinfo/buildroot
-> >     <https://lists.buildroot.org/mailman/listinfo/buildroot>
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---0000000000006e10130609d2880e
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hello Arnout:</div><div><br></div><div>To answer=C2=
-=A0your questions:</div><div><br></div><div>Q) If there is anything we need=
- to change, why would such a change not be acceptable for upstream refpolic=
-y?<br></div><div>A) I am, but one person and I don&#39;t have time to submi=
-t all the small changes for refpolicy.</div><div><br></div><div>Q) How come=
- our SELinux runtime tests don&#39;t fail if the upstream refpolicy doesn&#=
-39;t work?</div><div>A) Our tests are not performed in enforcing mode.</div=
-><div><br></div><div>Q)=C2=A0 That seems like a much saner approach - I&#39=
-;d expect the diff to be pretty</div>small. Also, I expect that we need to =
-make any changes that Yocto needs to make<br>as well - which is all the mor=
-e reason to upstream them!<div>A)=C2=A0=C2=A0<a href=3D"https://github.com/=
-ni/meta-selinux/tree/nilrt/master/kirkstone/recipes-security/refpolicy/refp=
-olicy">https://github.com/ni/meta-selinux/tree/nilrt/master/kirkstone/recip=
-es-security/refpolicy/refpolicy</a></div><div>=C2=A0 =C2=A0 =C2=A0 There ar=
-e currently 74 patches to refpolicy they have made. All of them have been s=
-ubmitted</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0upstream and all of them have=
- been deemed Inappropriate [embedded specific.]</div><div>=C2=A0 =C2=A0 =C2=
-=A0 =C2=A0So not only is the diff not small, it would be enormous compared =
-to this patch series.</div><div><br></div><div>Q) Why does upstream refpoli=
-cy provide a &quot;reference&quot; that is not suitable for</div>actual use=
-?<div>A) Ask them! It&#39;s quite frustrating! Even RHEL/Fedora does not us=
-e refpolicy, but instead, a fork they made!</div><div><br><div>Thanks!</div=
-><div><br></div><div>Adam</div><br><div class=3D"gmail_quote"><div dir=3D"l=
-tr" class=3D"gmail_attr">On Fri, Nov 10, 2023 at 12:40=E2=80=AFPM Arnout Va=
-ndecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&gt; wr=
-ote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
- 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
-<br>
-On 10/11/2023 17:49, Adam Duskett wrote:<br>
-&gt; Hey Thomas, sorry for the late reply!<br>
-&gt; <br>
-&gt; Refpolicy itself is just that, a reference policy.<br>
-<br>
-=C2=A0 If refpolicy only provides a reference policy, how can Buildroot do =
-any <br>
-better? We don&#39;t do any weird things with packages, so any policy that =
-is <br>
-applicable to Buildroot is applicable to everyone.<br>
-<br>
-&gt; Quite a few gaps are missing <br>
-&gt; with several packages.<br>
-&gt; In fact, Fedora/RHEL have their own policy based on the refpolicy pack=
-age found <br>
-&gt; here:<br>
-&gt; <a href=3D"https://github.com/fedora-selinux/selinux-policy" rel=3D"no=
-referrer" target=3D"_blank">https://github.com/fedora-selinux/selinux-polic=
-y</a> <br>
-&gt; &lt;<a href=3D"https://github.com/fedora-selinux/selinux-policy" rel=
-=3D"noreferrer" target=3D"_blank">https://github.com/fedora-selinux/selinux=
--policy</a>&gt; because refpolicy itself is <br>
-&gt; not adequate for a complete<br>
-&gt; system in enforcing mode.<br>
-<br>
-=C2=A0 The basic question is: if there is anything we need to change, why w=
-ould such <br>
-a change not be acceptable for upstream refpolicy?<br>
-<br>
-=C2=A0 Also, how come our SELinux runtime tests don&#39;t fail if the upstr=
-eam refpolicy <br>
-doesn&#39;t work?<br>
-<br>
-<br>
-&gt; Also note, that the yocto selinux layer went another route and patches=
- refpolicy <br>
-&gt; instead of providing separate<br>
-&gt; selinux policy files.<br>
-<br>
-=C2=A0 That seems like a much saner approach - I&#39;d expect the diff to b=
-e pretty <br>
-small. Also, I expect that any changes that yocto needs to make, we need to=
- do <br>
-as well - which is all the more reason to upstream them!<br>
-<br>
-<br>
-&gt; To summarize: These are necessary because refpolicy is not complete no=
-r suitable <br>
-&gt; for a system running in<br>
-&gt; enforcing mode.<br>
-<br>
-=C2=A0 Why does upstream refpolicy provide a &quot;reference&quot; that is =
-not suitable for <br>
-actual use?<br>
-<br>
-<br>
-=C2=A0 Not I know next to nothing about SELinux, I may be missing something=
- glaringly <br>
-obvious. Please consider all of the above questions as honest questions, no=
-t as <br>
-snide remarks.<br>
-<br>
-=C2=A0 Regards,<br>
-=C2=A0 Arnout<br>
-<br>
-&gt; <br>
-&gt; On Wed, Nov 8, 2023 at 1:55=E2=80=AFPM Thomas Petazzoni via buildroot =
-<br>
-&gt; &lt;<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">build=
-root@buildroot.org</a> &lt;mailto:<a href=3D"mailto:buildroot@buildroot.org=
-" target=3D"_blank">buildroot@buildroot.org</a>&gt;&gt; wrote:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Hello Adam,<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0On Thu, 12 Oct 2023 12:31:57 +0200<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Adam Duskett &lt;<a href=3D"mailto:adam.duskett@ama=
-rulasolutions.com" target=3D"_blank">adam.duskett@amarulasolutions.com</a><=
-br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:adam.duskett@amarulaso=
-lutions.com" target=3D"_blank">adam.duskett@amarulasolutions.com</a>&gt;&gt=
-; wrote:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; SELinux support in Buildroot is currently out=
-standing! However, one last<br>
-&gt;=C2=A0 =C2=A0 =C2=A0major<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; issue remains: Enforcing mode needs to work o=
-ut of the box correctly, without<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; denials, at least with a minimal defconfig.<b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; This patch series seeks to remedy this proble=
-m with a basic set of<br>
-&gt;=C2=A0 =C2=A0 =C2=A0policies in<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; several commonly selected packages to allow a=
- user who wishes to use<br>
-&gt;=C2=A0 =C2=A0 =C2=A0SELinux in<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; enforcing mode the ability to do so without h=
-aving to spend several hours<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; writing the same policy that everyone who wis=
-hes to do the same thing would<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; have to do.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; The packages I have selected are based on the=
- pc_x86_64_bios_defconfig<br>
-&gt;=C2=A0 =C2=A0 =C2=A0with all<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; of the selinux packages selected because it w=
-as the most straightforward<br>
-&gt;=C2=A0 =C2=A0 =C2=A0option<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; I had to create a small, bootable system in V=
-irtual Manager with ssh<br>
-&gt;=C2=A0 =C2=A0 =C2=A0support to<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; quickly build out a policy that didn&#39;t ge=
-nerate any denials in<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; /var/log/audit.log.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; I want to address Yann&#39;s questions from a=
- previous discussion on IRC:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0Q) What will be the maintenance e=
-ffort?<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0A) Minimal after this patch serie=
-s. As you will see, most policies are<br>
-&gt;=C2=A0 =C2=A0 =C2=A0only a<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 few lines long!<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0Q) How much time will we invest w=
-hen we bump a package or add a dependency?<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0A) Usually none! If a package bum=
-p/new dependency requires new<br>
-&gt;=C2=A0 =C2=A0 =C2=A0permissions to<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 the SELinux policy, this =
-is a good thing! We should step back and<br>
-&gt;=C2=A0 =C2=A0 =C2=A0question<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 why a package previously =
-accessing only files and libraries suddenly<br>
-&gt;=C2=A0 =C2=A0 =C2=A0needs<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 to (e.g.), change permiss=
-ions on a /dev/ device!<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Thanks a lot for working on this.<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0However, I&#39;d like to understand why these polic=
-y files need to be in<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Buildroot. For example, you&#39;re adding some poli=
-cy for OpenSSH. But<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Buildroot just builds upstream OpenSSH with no chan=
-ge. Why do we need<br>
-&gt;=C2=A0 =C2=A0 =C2=A0some policy specifically in Buildroot for OpenSSH t=
-hat cannot be in<br>
-&gt;=C2=A0 =C2=A0 =C2=A0upstream refpolicy?<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Back when Antoine T=C3=A9nart (which you have in Cc=
-) was working on this,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0and also my colleague Maxime Chevallier (which I ha=
-ve added in Cc),<br>
-&gt;=C2=A0 =C2=A0 =C2=A0their plan was to make it possible to use the upstr=
-eam refpolicy for a<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Buildroot system, by contributing changes to the re=
-fpolicy (and they<br>
-&gt;=C2=A0 =C2=A0 =C2=A0contributed quite a few).<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Why are we not continuing on this approach?<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Or is your policy a &quot;from scratch&quot; policy=
- that can be used as a<br>
-&gt;=C2=A0 =C2=A0 =C2=A0complete alternative to the upstream refpolicy?<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0(Note: we will clearly want a runtime test case for=
- this.)<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Best regards,<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Thomas<br>
-&gt;=C2=A0 =C2=A0 =C2=A0-- <br>
-&gt;=C2=A0 =C2=A0 =C2=A0Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Embedded Linux and Kernel engineering and training<=
-br>
-&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://bootlin.com" rel=3D"noreferrer" =
-target=3D"_blank">https://bootlin.com</a> &lt;<a href=3D"https://bootlin.co=
-m" rel=3D"noreferrer" target=3D"_blank">https://bootlin.com</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0_______________________________________________<br>
-&gt;=C2=A0 =C2=A0 =C2=A0buildroot mailing list<br>
-&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"mailto:buildroot@buildroot.org" target=
-=3D"_blank">buildroot@buildroot.org</a> &lt;mailto:<a href=3D"mailto:buildr=
-oot@buildroot.org" target=3D"_blank">buildroot@buildroot.org</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://lists.buildroot.org/mailman/list=
-info/buildroot" rel=3D"noreferrer" target=3D"_blank">https://lists.buildroo=
-t.org/mailman/listinfo/buildroot</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://lists.buildroot.org/mailman/=
-listinfo/buildroot" rel=3D"noreferrer" target=3D"_blank">https://lists.buil=
-droot.org/mailman/listinfo/buildroot</a>&gt;<br>
-&gt; <br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-</blockquote></div></div></div>
-
---0000000000006e10130609d2880e--
-
---===============4042135499503912070==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+> v1 -> v2: Drop the Config option for python-pyxb in this patch.
+> 
+>   Config.in.legacy                     |  7 +++++++
+>   package/Config.in                    |  1 -
+>   package/python-pyxb/Config.in        |  8 --------
+>   package/python-pyxb/python-pyxb.hash |  4 ----
+>   package/python-pyxb/python-pyxb.mk   | 14 --------------
+>   5 files changed, 7 insertions(+), 27 deletions(-)
+>   delete mode 100644 package/python-pyxb/Config.in
+>   delete mode 100644 package/python-pyxb/python-pyxb.hash
+>   delete mode 100644 package/python-pyxb/python-pyxb.mk
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 6fef2318b0..312d53943c 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,13 @@ endif
+>   
+>   comment "Legacy options removed in 2023.11"
+>   
+> +config BR2_PACKAGE_PYTHON_PYXB
+> +	bool "python-pyxb removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  python-pyxb has been removed due to being abandoned and
+> +	  distutils no longer being supported in python 3.12.0.
+> +
+>   config BR2_PACKAGE_OPENJDK_VERSION_11
+>   	bool "openjdk 11 has been removed"
+>   	select BR2_LEGACY
+> diff --git a/package/Config.in b/package/Config.in
+> index a0d5339b0a..32347fe4e8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1268,7 +1268,6 @@ menu "External python modules"
+>   	source "package/python-pytz/Config.in"
+>   	source "package/python-pyudev/Config.in"
+>   	source "package/python-pyusb/Config.in"
+> -	source "package/python-pyxb/Config.in"
+>   	source "package/python-pyyaml/Config.in"
+>   	source "package/python-pyzmq/Config.in"
+>   	source "package/python-qrcode/Config.in"
+> diff --git a/package/python-pyxb/Config.in b/package/python-pyxb/Config.in
+> deleted file mode 100644
+> index 6555ed80b6..0000000000
+> --- a/package/python-pyxb/Config.in
+> +++ /dev/null
+> @@ -1,8 +0,0 @@
+> -config BR2_PACKAGE_PYTHON_PYXB
+> -	bool "python-pyxb"
+> -	help
+> -	  PyXB is a pure Python package that generates Python code for
+> -	  classes that correspond to data structures defined by
+> -	  XMLSchema.
+> -
+> -	  http://pyxb.sourceforge.net/
+> diff --git a/package/python-pyxb/python-pyxb.hash b/package/python-pyxb/python-pyxb.hash
+> deleted file mode 100644
+> index f24cd42e5a..0000000000
+> --- a/package/python-pyxb/python-pyxb.hash
+> +++ /dev/null
+> @@ -1,4 +0,0 @@
+> -# md5 from https://pypi.python.org/pypi/PyXB/json, sha256 locally computed
+> -md5  4303573fc7094ce4664c5b71cd4bdb48  PyXB-1.2.6.tar.gz
+> -sha256  2a00f38dd1d87b88f92d79bc5a09718d730419b88e814545f472bbd5a3bf27b4  PyXB-1.2.6.tar.gz
+> -sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/python-pyxb/python-pyxb.mk b/package/python-pyxb/python-pyxb.mk
+> deleted file mode 100644
+> index 6af10b51e7..0000000000
+> --- a/package/python-pyxb/python-pyxb.mk
+> +++ /dev/null
+> @@ -1,14 +0,0 @@
+> -################################################################################
+> -#
+> -# python-pyxb
+> -#
+> -################################################################################
+> -
+> -PYTHON_PYXB_VERSION = 1.2.6
+> -PYTHON_PYXB_SOURCE = PyXB-$(PYTHON_PYXB_VERSION).tar.gz
+> -PYTHON_PYXB_SITE = https://pypi.python.org/packages/e3/09/4fdb190ea2b7cb43d6d3e745276ee69f4d6181be70fcbfda7df3c5f72f0e
+> -PYTHON_PYXB_LICENSE = Apache-2.0
+> -PYTHON_PYXB_LICENSE_FILES = LICENSE
+> -PYTHON_PYXB_SETUP_TYPE = distutils
+> -
+> -$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4042135499503912070==--
