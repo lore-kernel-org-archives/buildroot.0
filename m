@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F752C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 13:37:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2A1CC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 13:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35795420A8;
-	Fri, 10 Nov 2023 13:37:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35795420A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 79382402BC;
+	Fri, 10 Nov 2023 13:38:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79382402BC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ouN6sMGOf4JR; Fri, 10 Nov 2023 13:38:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0479E40584;
+	Fri, 10 Nov 2023 13:38:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0479E40584
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 00F531BF3E1
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 13:38:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC1E641F71
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 13:38:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC1E641F71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jk5-2iC8HQ0z; Fri, 10 Nov 2023 13:37:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EADCD421EE;
-	Fri, 10 Nov 2023 13:37:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EADCD421EE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D3F0C1BF997
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 13:37:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D3CD60FDB
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 13:37:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D3CD60FDB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZIM_4Ew825vE for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 13:37:23 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qLimMYe6hk8l for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 13:38:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 868B560FD1
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 13:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 868B560FD1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B967B4219E
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 13:38:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B967B4219E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7474086F4D; Fri, 10 Nov 2023 13:37:23 +0000 (UTC)
+ id A987B86F60; Fri, 10 Nov 2023 13:38:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 14:29:32 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 752a0a7a8e282f1e669b810e83c5bf83eb9e6d76
-X-Git-Newrev: de187fe97bfd51489851a647f2239b8cfc69aad1
+Date: Fri, 10 Nov 2023 14:30:00 +0100
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: b3fb71b1d7eb7969ce988acdd4fa2e7215dbfcd3
+X-Git-Newrev: 106a8d940fc4d92daf9595e4786ae0ace66d7f2d
 X-Patchwork-Hint: ignore
-Message-Id: <20231110133723.7474086F4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pkg-download:
+Message-Id: <20231110133834.A987B86F60@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/pkg-download:
  lookup hash files in global-patch-dir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de187fe97bfd51489851a647f2239b8cfc69aad1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=106a8d940fc4d92daf9595e4786ae0ace66d7f2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
 Currently, we expect and only use hash files that lie within the package
 directory, alongside the .mk file. Those hash files are thus bundled
@@ -210,7 +210,7 @@ index 0718f21aad..44cc178dea 100644
  		-N '$($(2)_RAWNAME)' \
  		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e70ed48266..328bf6760e 100644
+index ad2741a22e..a976a526a1 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
 @@ -509,11 +509,15 @@ else
