@@ -4,55 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A74CFC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 11:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44D94C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 11:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A1D9836A5;
-	Fri, 10 Nov 2023 11:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A1D9836A5
+	by smtp1.osuosl.org (Postfix) with ESMTP id F175C837CE;
+	Fri, 10 Nov 2023 11:53:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F175C837CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EWieYgr9iXEr; Fri, 10 Nov 2023 11:51:59 +0000 (UTC)
+	with ESMTP id 1UVPih4Xx2ab; Fri, 10 Nov 2023 11:53:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B18FD8366E;
-	Fri, 10 Nov 2023 11:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B18FD8366E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F3E4837BC;
+	Fri, 10 Nov 2023 11:53:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F3E4837BC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B7E881BF3E1
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:51:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 698AD1BF3E1
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:53:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 91CAD41F65
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:51:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91CAD41F65
+ by smtp4.osuosl.org (Postfix) with ESMTP id 430F841F8A
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 430F841F8A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OMsyRyWC8mng for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 11:51:29 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B125641AEC
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 11:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B125641AEC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B906860006;
- Fri, 10 Nov 2023 11:51:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r1Q2n-003LRJ-0F;
- Fri, 10 Nov 2023 12:51:25 +0100
+ with ESMTP id Z6URA1Y7Rp_R for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8489141F71
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8489141F71
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7333C86EE7; Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-References: <20231105215221.1602465-1-adam.duskett@amarulasolutions.com>
- <20231105215221.1602465-4-adam.duskett@amarulasolutions.com>
-Date: Fri, 10 Nov 2023 12:51:25 +0100
-In-Reply-To: <20231105215221.1602465-4-adam.duskett@amarulasolutions.com>
- (Adam Duskett's message of "Sun, 5 Nov 2023 14:52:20 -0700")
-Message-ID: <87bkc1n7wi.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 4/5] test_python_django.py: fix timeout
- calculation.
+To: buildroot@buildroot.org
+Date: Fri, 10 Nov 2023 12:50:26 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 6ff63490d1ca805250cb1ecd7ebfc359a19d9943
+X-Git-Newrev: c9e4f18658ecc07c78492cea0d3e644ba9313f1d
+X-Patchwork-Hint: ignore
+Message-Id: <20231110115336.7333C86EE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ support/testing/tests/package/test_lxc.py: use timeout argument for
+ emulator.login
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,28 +58,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adam" == Adam Duskett <adam.duskett@amarulasolutions.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c9e4f18658ecc07c78492cea0d3e644ba9313f1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > timeout = 35 * self.emulator.timeout_multiplier
- > [...]
- >         self.assertRunOk(cmd, timeout=timeout)
+self.emulator.timeout_multiplier *= 10 is equivilent to 60 * 10 or 600.
 
- > Gets re-multiplied by self.emulator.timeout_multiplier in self.emulator.run().
- > Drop multiplying the timeout by self.emulator.timeout_multiplier to fix this
- > issue.
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4889ac89b8438cfaba0708338fb52d553110c1a1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/testing/tests/package/test_lxc.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-
-Committed to 2023.02.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
+index f66b31f3ba..5a37df7a38 100644
+--- a/support/testing/tests/package/test_lxc.py
++++ b/support/testing/tests/package/test_lxc.py
+@@ -32,9 +32,9 @@ class TestLxc(infra.basetest.BRTest):
+         self.assertRunOk(cmd, 120)
+ 
+     def wait_boot(self):
+-        # the complete boot with systemd takes more time than what the default multipler permits
+-        self.emulator.timeout_multiplier *= 10
+-        self.emulator.login()
++        # the complete boot with systemd takes more time than what the
++        # default typically allows
++        self.emulator.login(timeout=600)
+ 
+     def setup_run_test_container(self):
+         self.run_ok("lxc-create -n lxc_iperf3 -t none -f /usr/share/lxc/config/minimal-iperf3.conf")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
