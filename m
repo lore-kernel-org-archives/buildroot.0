@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7862AC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 11:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 240FCC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 11:54:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 328678350D;
-	Fri, 10 Nov 2023 11:54:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 328678350D
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5321838C9;
+	Fri, 10 Nov 2023 11:54:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5321838C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q8rloTelQv8a; Fri, 10 Nov 2023 11:54:05 +0000 (UTC)
+	with ESMTP id uZodjEwyBzYl; Fri, 10 Nov 2023 11:54:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69D1283863;
-	Fri, 10 Nov 2023 11:54:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69D1283863
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2393083883;
+	Fri, 10 Nov 2023 11:54:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2393083883
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B43F31BF3E1
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:53:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6EAB91BF3E1
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BA8440B4C
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:53:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BA8440B4C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46D87400CE
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 11:53:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D87400CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KYSMsszq7WDd for <buildroot@lists.busybox.net>;
+ with ESMTP id mzQVeG4QS5aT for <buildroot@lists.busybox.net>;
  Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77D28400CE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8EB5F400DD
  for <buildroot@buildroot.org>; Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77D28400CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EB5F400DD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61B9D86EE4; Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
+ id 7C26E86EE8; Fri, 10 Nov 2023 11:53:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 12:50:16 +0100
+Date: Fri, 10 Nov 2023 12:50:32 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 48eeb36d4dda77b87f17965d2be1626b7d0c0e92
-X-Git-Newrev: 21f2727b4e0668e363192f438828a3fca38aa491
+X-Git-Oldrev: c9e4f18658ecc07c78492cea0d3e644ba9313f1d
+X-Git-Newrev: 8e407fcc2b43a0cbbc6db8b205cc14be394d9825
 X-Patchwork-Hint: ignore
-Message-Id: <20231110115336.61B9D86EE4@busybox.osuosl.org>
+Message-Id: <20231110115336.7C26E86EE8@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2023.02.x]
- support/testing/infra/emulator.py: add a timeout argument for the login
- method
+ support/testing/tests/package/test_python_django.py: fix timeout
+ calculation.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21f2727b4e0668e363192f438828a3fca38aa491
+commit: https://git.buildroot.net/buildroot/commit/?id=8e407fcc2b43a0cbbc6db8b205cc14be394d9825
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-to override the current value of 60 seconds
+timeout = 35 * self.emulator.timeout_multiplier
+[...]
+        self.assertRunOk(cmd, timeout=timeout)
 
-As per a suggestion by Thomas, add a timeout argument to override the current
-value of 60 seconds for the emulator.login method.
+Gets re-multiplied by self.emulator.timeout_multiplier in self.emulator.run().
+Drop multiplying the timeout by self.emulator.timeout_multiplier to fix this
+issue.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b1d554b9a769657b3a4c3263fc71c8028b33475d)
+(cherry picked from commit 9a81c7a7a4629cc009b05195c9b4e37a582287ea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/infra/emulator.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_python_django.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 02cf486128..09f81eca89 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -84,11 +84,11 @@ class Emulator(object):
+diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
+index 0b7d35bb6a..e1ca50f6d8 100644
+--- a/support/testing/tests/package/test_python_django.py
++++ b/support/testing/tests/package/test_python_django.py
+@@ -6,7 +6,7 @@ class TestPythonDjango(TestPythonPackageBase):
+     sample_scripts = ["tests/package/sample_python_django.py"]
  
-     # Wait for the login prompt to appear, and then login as root with
-     # the provided password, or no password if not specified.
--    def login(self, password=None):
-+    def login(self, password=None, timeout=60):
-         # The login prompt can take some time to appear when running multiple
-         # instances in parallel, so set the timeout to a large value
-         index = self.qemu.expect(["buildroot login:", pexpect.TIMEOUT],
--                                 timeout=60 * self.timeout_multiplier)
-+                                 timeout=timeout * self.timeout_multiplier)
-         if index != 0:
-             self.logfile.write("==> System does not boot")
-             raise SystemError("System does not boot")
+     def run_sample_scripts(self):
+-        timeout = 35 * self.emulator.timeout_multiplier
++        timeout = 35
+ 
+         cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
+         self.assertRunOk(cmd, timeout=timeout)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
