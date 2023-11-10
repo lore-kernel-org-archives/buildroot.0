@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D19CC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 15:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE076C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 15:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFBC760D88;
-	Fri, 10 Nov 2023 15:58:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFBC760D88
+	by smtp3.osuosl.org (Postfix) with ESMTP id 894656F4E7;
+	Fri, 10 Nov 2023 15:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 894656F4E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s5HAs0VFGuVQ; Fri, 10 Nov 2023 15:58:49 +0000 (UTC)
+	with ESMTP id vqplI5SHEwBE; Fri, 10 Nov 2023 15:59:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1C296174F;
-	Fri, 10 Nov 2023 15:58:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1C296174F
+	by smtp3.osuosl.org (Postfix) with ESMTP id B87FC6165C;
+	Fri, 10 Nov 2023 15:59:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B87FC6165C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8F7321BF37B
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 113E71BF37B
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 761E342038
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 761E342038
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE43642244
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE43642244
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1JWgT6MsvTF4 for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 15:58:32 +0000 (UTC)
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com
- [IPv6:2607:f8b0:4864:20::441])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 93EA742244
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 15:58:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93EA742244
-Received: by mail-pf1-x441.google.com with SMTP id
- d2e1a72fcca58-6c396ef9a3dso2060363b3a.1
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 07:58:32 -0800 (PST)
+ with ESMTP id TxA4-eQXg8RM for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 15:58:35 +0000 (UTC)
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com
+ [IPv6:2607:f8b0:4864:20::444])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07EF342241
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 15:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07EF342241
+Received: by mail-pf1-x444.google.com with SMTP id
+ d2e1a72fcca58-6bd73395bceso1771142b3a.0
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 07:58:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699631911; x=1700236711;
+ d=1e100.net; s=20230601; t=1699631914; x=1700236714;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=4RxTYYAZVetyVk5yuYIjwnXPFOf6P4LCrZZujCJE/kc=;
- b=ByCr1xnVJsWHBBByGNqDIYg5hxr7mKX67MspZQ7Qzkti5yVr5DoWSQFr2h61r4kFAY
- Jv74nwdNRCkSE8IgCj8RW4RQnMpfZWsWUB4qEiptQM27E3scBXWJvPQwR2bCsgEV1T82
- mQNVfI/VHYg6wVm2/Bk2vf1hAGdtlGYEyAVL1/xOwaiblIKe2Ha4sjVlqff4Czc9d3YQ
- B6xlxhID16LlYursY3ZvWclloKCzSNmbOq2v03K0iKEvwoSmgfHip58iDc8nKuC0+9FA
- DMTVCN0k0f27XLuOMuo1XbTOTcMc2uVq5bx+oi9oJFFeJKHop5Zi8DnFbVbmW69rJk+Y
- uA/g==
-X-Gm-Message-State: AOJu0YzS+jRsEfQ+qZuiByQ7kZHIZAAh5KM2smymNeEJGZZm5p5RIk8R
- DOmDOiL3Hm24WS4eXQ2lLpmuyixTlQoswY2MyvYSAQRmM48=
-X-Google-Smtp-Source: AGHT+IHaV9xuPgwIWdKOMrIBN6JxHAoyLnHiV9L1fOXukh4bpYo6kg7PpgaWAcmqTxgn4TRmH57jvQ==
-X-Received: by 2002:a05:6a21:7185:b0:181:1cfa:4106 with SMTP id
- wq5-20020a056a21718500b001811cfa4106mr10576926pzb.62.1699631911576; 
- Fri, 10 Nov 2023 07:58:31 -0800 (PST)
+ bh=Q26Z7PcYV0bfrht4aG85dLfTPzD+OdbrhTU8qT0hsAw=;
+ b=e4+R+EKekmCL2qYODU9lzjsIrpw0i2+QHmMXwbVqRsqbXbn4qAp2AJZJqT5ta0p+Cr
+ FOZ4YviF7n6zohl/4xI05OwxwQabLHtqnYNKG8wMGc3GDdIE21aDebR6LSzu5DDkO6aV
+ ZkKX6iFlfoXckj8Bne2MPOkZo9wgKQHRixldHy6z1zmmOLCMQBd+/UaLODlWbon68L84
+ WhetP2Y4pmsWRtGd0fTkm0H97DqEcaOt+aWY3GBzYBbQywtuCQpo1Em0t1OKJ+hTSkYf
+ 9V86OXp/ik7eBA7cEdTsnHfomJ8a6fB4C5iKhN+2bfOOTUf3xDFSYEzP/My8KPmawqKG
+ YYBg==
+X-Gm-Message-State: AOJu0YxiZyTtuagpCpPSnPl0zXAb7ckQICpAW6Ra/nEBTY9TOcQKQuf8
+ P3xQdMPbVHn2Wb25m1P4ig79zdAFYif52p6osBwe4jlWzGw=
+X-Google-Smtp-Source: AGHT+IHYJVV40sNnBDxtkeHmBeZeR24sdgd4dsDh5UkkIxCNJFQio0jxN0ygkLHJYJ6Azc/bkihcVQ==
+X-Received: by 2002:a05:6a00:1c8f:b0:6c4:d78d:498e with SMTP id
+ y15-20020a056a001c8f00b006c4d78d498emr4317477pfw.2.1699631912686; 
+ Fri, 10 Nov 2023 07:58:32 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.201.106])
  by smtp.gmail.com with ESMTPSA id
- p55-20020a056a0026f700b006c2d53e0b5fsm12796153pfw.57.2023.11.10.07.58.30
+ p55-20020a056a0026f700b006c2d53e0b5fsm12796153pfw.57.2023.11.10.07.58.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Nov 2023 07:58:30 -0800 (PST)
+ Fri, 10 Nov 2023 07:58:32 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 08:58:20 -0700
-Message-ID: <20231110155826.10416-2-adam.duskett@amarulasolutions.com>
+Date: Fri, 10 Nov 2023 08:58:21 -0700
+Message-ID: <20231110155826.10416-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231110155826.10416-1-adam.duskett@amarulasolutions.com>
 References: <20231110155826.10416-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1699631911; x=1700236711;
+ d=amarulasolutions.com; s=google; t=1699631914; x=1700236714;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=4RxTYYAZVetyVk5yuYIjwnXPFOf6P4LCrZZujCJE/kc=;
- b=DVWC7437TXs2ud8j0TkYol3X00sQW3386WT4PY6brMacy62sN3j51QDia8+7Tb1nQ0
- gBdL7agU3uMhqdebEqwrUbDha+CK+EUIwOum/FJTI1MTQF+73/qtF3YThK0/MwZyYgM3
- zyXdrWOpW2Ub6LkqjxmBbbGRmptsKMLqjzgU8=
+ bh=Q26Z7PcYV0bfrht4aG85dLfTPzD+OdbrhTU8qT0hsAw=;
+ b=S+KUHiW/xavNzXarBO3DL/zVy9ZGIXuTikuEJf68YtGysgslw0nbl0XIB5ZVpmjxn5
+ 1IdFmJt0cZaAPs2MYIfGvoAcEO2ZF2ePnuhU7sTsPFcTpyO0RghPSpKkMzCqZpXy2a4H
+ VRJdOoMDrwNnpwD5dUZnr5SNaubGibi3XS1hQ=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=DVWC7437
-Subject: [Buildroot] [PATCH v3 1/7] package/python-systemd: bump version to
- 235
+ header.b=S+KUHiW/
+Subject: [Buildroot] [PATCH v3 2/7] package/python-versioneer: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,48 +101,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove the "# Should be kept in sync with $(SYSTEMD_VERSION)" line from
-python-systemd.mk, as this package is not updated on a regular basis and does
-not keep up to date with systemd.
+Used with the latest version of python-constantly. It is only needed as a
+host package.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-v1 -> v2: Remove the "# Should be kept in sync with $(SYSTEMD_VERSION)" line.
+v1 -> v2: Add this package
 
- package/python-systemd/python-systemd.hash | 4 ++--
- package/python-systemd/python-systemd.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS                                       |  1 +
+ package/python-versioneer/python-versioneer.hash |  5 +++++
+ package/python-versioneer/python-versioneer.mk   | 14 ++++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/python-versioneer/python-versioneer.hash
+ create mode 100644 package/python-versioneer/python-versioneer.mk
 
-diff --git a/package/python-systemd/python-systemd.hash b/package/python-systemd/python-systemd.hash
-index 789b48590d..6cc6639218 100644
---- a/package/python-systemd/python-systemd.hash
-+++ b/package/python-systemd/python-systemd.hash
-@@ -1,5 +1,5 @@
- # md5 from https://pypi.python.org/pypi/systemd-python/
--md5  5071ea5bcb976186e92a3f5e75df221d  systemd-python-234.tar.gz
-+md5  93f3ca09f35719ca6a4edd1d62d38dd4  systemd-python-235.tar.gz
- # Locally computed
--sha256  fd0e44bf70eadae45aadc292cb0a7eb5b0b6372cd1b391228047d33895db83e7  systemd-python-234.tar.gz
-+sha256  4e57f39797fd5d9e2d22b8806a252d7c0106c936039d1e71c8c6b8008e695c0a  systemd-python-235.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.txt
-diff --git a/package/python-systemd/python-systemd.mk b/package/python-systemd/python-systemd.mk
-index 3ccfd57ce5..fdc5d7e278 100644
---- a/package/python-systemd/python-systemd.mk
-+++ b/package/python-systemd/python-systemd.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d80931e84a..359714bdb5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -38,6 +38,7 @@ F:	package/flutter-gallery/
+ F:	package/flutter-pi/
+ F:	package/flutter-sdk-bin/
+ F:	package/python-kmod/
++F:	package/python-versioneer/
+ F:	support/testing/tests/package/test_firewalld.py
+ F:	support/testing/tests/package/test_flutter.py
  
--PYTHON_SYSTEMD_VERSION = 234 # Should be kept in sync with $(SYSTEMD_VERSION)
-+PYTHON_SYSTEMD_VERSION = 235
- PYTHON_SYSTEMD_SOURCE = systemd-python-$(PYTHON_SYSTEMD_VERSION).tar.gz
--PYTHON_SYSTEMD_SITE = https://pypi.python.org/packages/e8/a8/00ba0f605837a8f69523e6c3a4fb14675a6430c163f836540129c50b3aef
--PYTHON_SYSTEMD_SETUP_TYPE = distutils
-+PYTHON_SYSTEMD_SITE = https://files.pythonhosted.org/packages/10/9e/ab4458e00367223bda2dd7ccf0849a72235ee3e29b36dce732685d9b7ad9
-+PYTHON_SYSTEMD_SETUP_TYPE = setuptools
- PYTHON_SYSTEMD_LICENSE = LGPL-2.1
- PYTHON_SYSTEMD_LICENSE_FILES = LICENSE.txt
- PYTHON_SYSTEMD_DEPENDENCIES = systemd # To be able to link against libsystemd
+diff --git a/package/python-versioneer/python-versioneer.hash b/package/python-versioneer/python-versioneer.hash
+new file mode 100644
+index 0000000000..44cbeb1593
+--- /dev/null
++++ b/package/python-versioneer/python-versioneer.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/versioneer/json
++md5  1703d6ced3656553066fa71e42c5eee6  versioneer-0.29.tar.gz
++sha256  5ab283b9857211d61b53318b7c792cf68e798e765ee17c27ade9f6c924235731  versioneer-0.29.tar.gz
++# Locally computed sha256 checksums
++sha256  b5065838cbac452dfc855ba6e6e031481ad2c68406f70d21ead9321374653e6c  LICENSE
+diff --git a/package/python-versioneer/python-versioneer.mk b/package/python-versioneer/python-versioneer.mk
+new file mode 100644
+index 0000000000..5dbf0dd1c2
+--- /dev/null
++++ b/package/python-versioneer/python-versioneer.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-versioneer
++#
++################################################################################
++
++PYTHON_VERSIONEER_VERSION = 0.29
++PYTHON_VERSIONEER_SOURCE = versioneer-$(PYTHON_VERSIONEER_VERSION).tar.gz
++PYTHON_VERSIONEER_SITE = https://files.pythonhosted.org/packages/32/d7/854e45d2b03e1a8ee2aa6429dd396d002ce71e5d88b77551b2fb249cb382
++PYTHON_VERSIONEER_SETUP_TYPE = setuptools
++PYTHON_VERSIONEER_LICENSE = Unlicense
++PYTHON_VERSIONEER_LICENSE_FILES = LICENSE
++
++$(eval $(host-python-package))
 -- 
 2.41.0
 
