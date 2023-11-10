@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52D6BC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 21:11:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AFC5C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 21:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0784042850;
-	Fri, 10 Nov 2023 21:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0784042850
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D48742717;
+	Fri, 10 Nov 2023 21:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D48742717
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BoQeQ-Q0CbAO; Fri, 10 Nov 2023 21:11:25 +0000 (UTC)
+	with ESMTP id BNplPrJ6D276; Fri, 10 Nov 2023 21:11:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46183426D2;
-	Fri, 10 Nov 2023 21:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46183426D2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 107C51BF997
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F85442847;
+	Fri, 10 Nov 2023 21:11:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F85442847
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D15FE1BF41B
  for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:11:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE4F183C6C
+ by smtp3.osuosl.org (Postfix) with ESMTP id D26E960B88
  for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE4F183C6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D26E960B88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PqY3B05uWeOJ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eZgPA9PAegXV for <buildroot@lists.busybox.net>;
  Fri, 10 Nov 2023 21:11:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C89E83C9F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 035636F6F7
  for <buildroot@buildroot.org>; Fri, 10 Nov 2023 21:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C89E83C9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 035636F6F7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED1E086FEA; Fri, 10 Nov 2023 21:11:08 +0000 (UTC)
+ id E057786FE9; Fri, 10 Nov 2023 21:11:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 22:09:24 +0100
+Date: Fri, 10 Nov 2023 22:06:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6273b2f85d1d18f7f7afc8d3e321df134b36c2b3
-X-Git-Newrev: ab3d5a5f5e9be354f8fcde9ebd85eebc21c4379c
+X-Git-Oldrev: 53931943ebeb60f57736d01f490351ddc971574f
+X-Git-Newrev: 6273b2f85d1d18f7f7afc8d3e321df134b36c2b3
 X-Patchwork-Hint: ignore
-Message-Id: <20231110211108.ED1E086FEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/scons: bump version to 4.5.2
+Message-Id: <20231110211108.E057786FE9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-constantly: bump version to
+ 23.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab3d5a5f5e9be354f8fcde9ebd85eebc21c4379c
+commit: https://git.buildroot.net/buildroot/commit/?id=6273b2f85d1d18f7f7afc8d3e321df134b36c2b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch to setuptools
-- Update License hash due to a year change: 2019 -> 2021
-- Install the packages to the site-packages directory, or else packages using
-  scons fail to build with import errors.
-
-Tested with benejson, gpsd, and mongodb.
+This package now requires host-python-versioneer to build.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/scons/scons.hash | 4 ++--
- package/scons/scons.mk   | 9 +++++----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-constantly/python-constantly.hash | 4 ++--
+ package/python-constantly/python-constantly.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/scons/scons.hash b/package/scons/scons.hash
-index a72fbaee5a..48b5077b2e 100644
---- a/package/scons/scons.hash
-+++ b/package/scons/scons.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7801f3f62f654528e272df780be10c0e9337e897650b62ddcee9f39fde13f8fb  scons-3.1.2.tar.gz
--sha256  72ed889165fb28378cadac14552be4a959f1ebab6b148abb5dd2b49712c3c6f6  LICENSE.txt
-+sha256  ce26aac95d350a79a4192196b0beac3cb24f4ccabce0123eb28d3370f576f072  SCons-4.5.2.tar.gz
-+sha256  2f6ac9a1fc98394d18b80dba9bedb9d5626006d44db3fecf7cf3e21cff7e8b1c  LICENSE
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index 6b75d3ddca..ffd6abf609 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -4,14 +4,15 @@
+diff --git a/package/python-constantly/python-constantly.hash b/package/python-constantly/python-constantly.hash
+index 8e646d82ba..7a246e882a 100644
+--- a/package/python-constantly/python-constantly.hash
++++ b/package/python-constantly/python-constantly.hash
+@@ -1,5 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/constantly/json
+-md5  f0762f083d83039758e53f8cf0086eef  constantly-15.1.0.tar.gz
++md5  c090579309b2b34be04385b54b0a5a85  constantly-23.10.4.tar.gz
+ # Locally computed
+-sha256  586372eb92059873e29eba4f9dec8381541b4d3834660707faf8ba59146dfc35  constantly-15.1.0.tar.gz
++sha256  aa92b70a33e2ac0bb33cd745eb61776594dc48764b06c35e0efd050b7f1c7cbd  constantly-23.10.4.tar.gz
+ sha256  020870fcaf4bf9c50b233e331817094fe109b91c0880570fd476f527cfbfc085  LICENSE
+diff --git a/package/python-constantly/python-constantly.mk b/package/python-constantly/python-constantly.mk
+index 783d198d06..466c9bf455 100644
+--- a/package/python-constantly/python-constantly.mk
++++ b/package/python-constantly/python-constantly.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--SCONS_VERSION = 3.1.2
-+SCONS_VERSION = 4.5.2
-+SCONS_SOURCE = SCons-$(SCONS_VERSION).tar.gz
- SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
- SCONS_LICENSE = MIT
--SCONS_LICENSE_FILES = LICENSE.txt
--SCONS_SETUP_TYPE = distutils
-+SCONS_LICENSE_FILES = LICENSE
-+SCONS_SETUP_TYPE = setuptools
+-PYTHON_CONSTANTLY_VERSION = 15.1.0
++PYTHON_CONSTANTLY_VERSION = 23.10.4
+ PYTHON_CONSTANTLY_SOURCE = constantly-$(PYTHON_CONSTANTLY_VERSION).tar.gz
+-PYTHON_CONSTANTLY_SITE = https://pypi.python.org/packages/95/f1/207a0a478c4bb34b1b49d5915e2db574cadc415c9ac3a7ef17e29b2e8951
++PYTHON_CONSTANTLY_SITE = https://files.pythonhosted.org/packages/4d/6f/cb2a94494ff74aa9528a36c5b1422756330a75a8367bf20bd63171fc324d
+ PYTHON_CONSTANTLY_SETUP_TYPE = setuptools
+ PYTHON_CONSTANTLY_LICENSE = MIT
+ PYTHON_CONSTANTLY_LICENSE_FILES = LICENSE
++PYTHON_CONSTANTLY_DEPENDENCIES = host-python-versioneer
  
- HOST_SCONS_INSTALL_OPTS = \
--	--install-lib=$(HOST_DIR)/lib/scons-$(SCONS_VERSION)
-+	--install-lib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
- 
- $(eval $(host-python-package))
- 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
