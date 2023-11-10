@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65DFEC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 21:05:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F223C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 21:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D6B142861;
-	Fri, 10 Nov 2023 21:05:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D6B142861
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A3E94218B;
+	Fri, 10 Nov 2023 21:05:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A3E94218B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Taiw40cmnr8a; Fri, 10 Nov 2023 21:05:26 +0000 (UTC)
+	with ESMTP id l9W1709H8gTe; Fri, 10 Nov 2023 21:05:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C2AB4218B;
-	Fri, 10 Nov 2023 21:05:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C2AB4218B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F2A231BF997
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:05:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BC4E42858;
+	Fri, 10 Nov 2023 21:05:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BC4E42858
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AB111BF99A
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D86BF81EEF
+ by smtp3.osuosl.org (Postfix) with ESMTP id D70626F70E
  for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:05:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D86BF81EEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D70626F70E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r7F0VEfjfPsF for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i-IN0T3Oerdu for <buildroot@lists.busybox.net>;
  Fri, 10 Nov 2023 21:05:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E02DD81EFD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 076456F6F7
  for <buildroot@buildroot.org>; Fri, 10 Nov 2023 21:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E02DD81EFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 076456F6F7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD18586FCE; Fri, 10 Nov 2023 21:05:07 +0000 (UTC)
+ id E87AF86FCB; Fri, 10 Nov 2023 21:05:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 22:01:44 +0100
+Date: Fri, 10 Nov 2023 22:01:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10e7866f396a5f32739d269d2bf110bb1e6d71f8
-X-Git-Newrev: 013061755d928e96399c0e4e964a03dc623a8425
+X-Git-Oldrev: aaa315b6a7171f0239676964d524bd19b18219dc
+X-Git-Newrev: 2a36024a6301826d90ce3375e11724008e659a9b
 X-Patchwork-Hint: ignore
-Message-Id: <20231110210507.CD18586FCE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-hatchling: bump to version
- 1.18.0
+Message-Id: <20231110210507.E87AF86FCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-referencing: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,55 +63,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=013061755d928e96399c0e4e964a03dc623a8425
+commit: https://git.buildroot.net/buildroot/commit/?id=2a36024a6301826d90ce3375e11724008e659a9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add new host-python-trove-classifiers build dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-hatchling/python-hatchling.hash | 4 ++--
- package/python-hatchling/python-hatchling.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/Config.in                                  |  1 +
+ package/python-referencing/Config.in               |  9 +++++++++
+ package/python-referencing/python-referencing.hash |  5 +++++
+ package/python-referencing/python-referencing.mk   | 17 +++++++++++++++++
+ 4 files changed, 32 insertions(+)
 
-diff --git a/package/python-hatchling/python-hatchling.hash b/package/python-hatchling/python-hatchling.hash
-index 154c1fdcac..ebb412d197 100644
---- a/package/python-hatchling/python-hatchling.hash
-+++ b/package/python-hatchling/python-hatchling.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/hatchling/json
--md5  5a6e2fd0c877feea7e71b9d72bbdbed9  hatchling-1.12.2.tar.gz
--sha256  8a6d719d96653a0f3901072b12710c9c3cc934f9061b443775c6789b45333495  hatchling-1.12.2.tar.gz
-+md5  43f7203cacb6c3c178b93149b8a8151d  hatchling-1.18.0.tar.gz
-+sha256  50e99c3110ce0afc3f7bdbadff1c71c17758e476731c27607940cfa6686489ca  hatchling-1.18.0.tar.gz
- # Locally computed sha256 checksums
- sha256  7f143a8127ad4873862d70854b5bd2abd0085aa73e64fd2b08704a3b9f5c07fc  LICENSE.txt
-diff --git a/package/python-hatchling/python-hatchling.mk b/package/python-hatchling/python-hatchling.mk
-index 61aa1a6c23..f13e6d3e28 100644
---- a/package/python-hatchling/python-hatchling.mk
-+++ b/package/python-hatchling/python-hatchling.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_HATCHLING_VERSION = 1.12.2
-+PYTHON_HATCHLING_VERSION = 1.18.0
- PYTHON_HATCHLING_SOURCE = hatchling-$(PYTHON_HATCHLING_VERSION).tar.gz
--PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/f5/ea/3ed5a7ecdd8a8f7e84cffd3b5ec24279a09ce2694c218ff922c35c6f1a77
-+PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/e3/57/87da2c5adc173950ebe9f1acce4d5f2cd0a960783992fd4879a899a0b637
- PYTHON_HATCHLING_LICENSE = MIT
- PYTHON_HATCHLING_LICENSE_FILES = LICENSE.txt
- PYTHON_HATCHLING_SETUP_TYPE = pep517
-@@ -14,6 +14,7 @@ HOST_PYTHON_HATCHLING_DEPENDENCIES = \
- 	host-python-editables \
- 	host-python-packaging \
- 	host-python-pathspec \
--	host-python-pluggy
-+	host-python-pluggy \
-+	host-python-trove-classifiers
- 
- $(eval $(host-python-package))
+diff --git a/package/Config.in b/package/Config.in
+index dac5058bbe..967091081d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1276,6 +1276,7 @@ menu "External python modules"
+ 	source "package/python-redis/Config.in"
+ 	source "package/python-reedsolo/Config.in"
+ 	source "package/python-reentry/Config.in"
++	source "package/python-referencing/Config.in"
+ 	source "package/python-regex/Config.in"
+ 	source "package/python-remi/Config.in"
+ 	source "package/python-request-id/Config.in"
+diff --git a/package/python-referencing/Config.in b/package/python-referencing/Config.in
+new file mode 100644
+index 0000000000..273c42543e
+--- /dev/null
++++ b/package/python-referencing/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_REFERENCING
++	bool "python-referencing"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-rpds-py
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_RPDS_PY # runtime
++	help
++	  JSON Referencing + Python.
++
++	  https://github.com/python-jsonschema/referencing
+diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
+new file mode 100644
+index 0000000000..d4f3dce5a4
+--- /dev/null
++++ b/package/python-referencing/python-referencing.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/referencing/json
++md5  617d973b9ce86b6f74b2216c6f3af5c9  referencing-0.30.2.tar.gz
++sha256  794ad8003c65938edcdbc027f1933215e0d0ccc0291e3ce20a4d87432b59efc0  referencing-0.30.2.tar.gz
++# Locally computed sha256 checksums
++sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
+diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
+new file mode 100644
+index 0000000000..4d11c99deb
+--- /dev/null
++++ b/package/python-referencing/python-referencing.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-referencing
++#
++################################################################################
++
++PYTHON_REFERENCING_VERSION = 0.30.2
++PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
++PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/e1/43/d3f6cf3e1ec9003520c5fb31dc363ee488c517f09402abd2a1c90df63bbb
++PYTHON_REFERENCING_SETUP_TYPE = pep517
++PYTHON_REFERENCING_LICENSE = MIT
++PYTHON_REFERENCING_LICENSE_FILES = COPYING
++PYTHON_REFERENCING_DEPENDENCIES = \
++	host-python-hatchling \
++	host-python-hatch-vcs
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
