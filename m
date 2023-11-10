@@ -4,89 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 451A6C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 21:02:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D83EC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 21:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE6B142726;
-	Fri, 10 Nov 2023 21:02:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE6B142726
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08C194193B;
+	Fri, 10 Nov 2023 21:04:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08C194193B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0B6KRQI6lLhD; Fri, 10 Nov 2023 21:02:30 +0000 (UTC)
+	with ESMTP id D-ianOv8KXSK; Fri, 10 Nov 2023 21:04:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAE65426AA;
-	Fri, 10 Nov 2023 21:02:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAE65426AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id D747B426AA;
+	Fri, 10 Nov 2023 21:04:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D747B426AA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 625661BF2C4
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:02:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 878FC1BF2C4
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:04:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4807183B3E
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:02:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4807183B3E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5FCA383B3E
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:04:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FCA383B3E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rFIfGUtcGDDR for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 21:02:26 +0000 (UTC)
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2FF6D83B25
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 21:02:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FF6D83B25
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-9d10f94f70bso401417066b.3
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 13:02:26 -0800 (PST)
+ with ESMTP id c-l_3v7tapYm for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 21:04:14 +0000 (UTC)
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
+ [IPv6:2a00:1450:4864:20::235])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3205483B25
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 21:04:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3205483B25
+Received: by mail-lj1-x235.google.com with SMTP id
+ 38308e7fff4ca-2c7c7544c78so19020781fa.2
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 13:04:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699650144; x=1700254944;
+ d=1e100.net; s=20230601; t=1699650252; x=1700255052;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Uh+bIA29zNWMg9sd2xL1vooKZcOCBgRtbDDqOIbTpY8=;
- b=rX5Hy+U6C24RAqCCqjzXbwsUO+jILi3KEUA/hO3sxnMyfEXkDaTQFwNM9wZ+F3q4Qz
- AUUw+5PSQhn1gIpYy1kA9j0LrVt2FginEEEgdrNmW4C+blbtBY0f1eNACumrnRofXbMt
- 9OFV6xoYOt2lWH0VzNgI5abi5ZSqtN5z3J9ycDg1YawnIHypvXcnqdnZcPsyjy5Oi3/d
- hhm+Jphz9z988rtEFuN4nbifzlgOZqQQf2ZjtZG4zS1h4EmOKD6nxE7FQN7Q89k7uc+7
- d/Ut5P9cBo9lEjDdbofA58oyLPRBzNFDYchYvsEAFfsS0uJsPEWynGHzepolUS/ybUIf
- mgCQ==
-X-Gm-Message-State: AOJu0YzAV8aX0PQMmsGxV2q4DnOnmcoV4etU6dNCwUBbpmkR4z5cXw8P
- nDnXMQX39XkhM2NshA+o3Y4inQ==
-X-Google-Smtp-Source: AGHT+IEhWcpB+uPMJQsoaLG6UVQMYn5GFtA8Kpy9wr5UB2T1I9XRWFzIM9tcheIb/6gNzlrHbetK4A==
-X-Received: by 2002:a17:906:7cb:b0:9ae:673a:88c8 with SMTP id
- m11-20020a17090607cb00b009ae673a88c8mr94750ejc.21.1699650144330; 
- Fri, 10 Nov 2023 13:02:24 -0800 (PST)
+ bh=VO3O76ZX619MbDJtQkJe02BwZo3tU7fWlam7ihuSMw8=;
+ b=AgA/mQBvJgfu18y5hDayrsZHSghXPJQ4cxaSv6aNGXzWJA67oz0VqCtTn7shQYRo7y
+ IPx0sOViAxisGBF5d2J/qOvgz2cJmtbVNhqp4Nl2AgWmz/AITnH7NFpRU53SYW/YFJVU
+ a5Z+C7Q1Rhstntp041dWGK1y0W/XKnB2p/wM7w6E+qnzp2PRYv8HKYATUjZ4dY7aTikq
+ BQgNHY7BfNlC0haBIz9Nfg8SU2OryD0hNb2f+lzZdM/NQEzhOYbMV30HJ8yHOmz5qAnc
+ gbex0RqghlUMy+c6QKORv5wsQhidfwa5sNCKn8ywQZNaskAZlHSeGu6O7HJoSnuu1Nag
+ KCyw==
+X-Gm-Message-State: AOJu0Yze4SX+RmEcgORGm3kcP3jk96uoER8zm++lw9G2PY/xeVXoMBkG
+ LkkYJ0BwKkWhn80L/KCHUp0AwQ==
+X-Google-Smtp-Source: AGHT+IHkhLsPAXO+uq8pRCJ2p27mU8UUTPzk04mPIfaH/kv7pE6zt935skPOJuA+0gaW5TZgH0UPew==
+X-Received: by 2002:a2e:a262:0:b0:2bf:7fad:229b with SMTP id
+ k2-20020a2ea262000000b002bf7fad229bmr260389ljm.37.1699650252085; 
+ Fri, 10 Nov 2023 13:04:12 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- dv22-20020a170906b81600b009e5f2e02e68sm77988ejb.222.2023.11.10.13.02.23
+ dv22-20020a170906b81600b009e5f2e02e68sm79795ejb.222.2023.11.10.13.04.11
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 10 Nov 2023 13:02:23 -0800 (PST)
-Message-ID: <d366dd82-5067-4908-871e-db80210c740b@mind.be>
-Date: Fri, 10 Nov 2023 22:02:20 +0100
+ Fri, 10 Nov 2023 13:04:11 -0800 (PST)
+Message-ID: <0ba6d565-bcec-4653-8979-c8d42c7f191f@mind.be>
+Date: Fri, 10 Nov 2023 22:04:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20231105054502.2846404-1-james.hilliard1@gmail.com>
-In-Reply-To: <20231105054502.2846404-1-james.hilliard1@gmail.com>
+References: <20231105085546.2919443-1-james.hilliard1@gmail.com>
+In-Reply-To: <20231105085546.2919443-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1699650144; x=1700254944; darn=buildroot.org;
+ d=mind.be; s=google; t=1699650252; x=1700255052; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=Uh+bIA29zNWMg9sd2xL1vooKZcOCBgRtbDDqOIbTpY8=;
- b=XHbn8uYSKCYrFpCQc9ph+qz1tQEppn++hr/CIXnWVR7dref2WMye57lgNlId+b8yGl
- 0WKbCPVGziI02BtjWFgt1zgTlsk38XvWUCkz4LRdwhxBLknAepeFOpZys+2sIiF8f6mJ
- jeJdA0EyKTtetr/EJFVZnAjZPXRH4yO3CdYzStR1PIe9R1xmTzWkHp9k9J3N3k2vyzXd
- s8b2h2pNurr/5EZS0olusThbD1m2lzhEtMUPw3hj+kAt419LkFNVPDAgGHY7W9/PNe6M
- F6OuyK8urFWas0ddGib1f4qO3Z4xPM7Ks4s36yPlHHjqryeyotNn1Ec5dLuJont4c8is
- jGWg==
+ bh=VO3O76ZX619MbDJtQkJe02BwZo3tU7fWlam7ihuSMw8=;
+ b=WuECA6IUxIWejNPCbqNF1qAeScHSBxTkC1Q9cDr4qy7VTFiQ3jWTX5FAlocQkWsXpJ
+ jJ+212QeUmMGDmBbi7WQg3BjrUN75wiIo1d3B+J6t3ZdX6juIPTsxMU5sQsGwB3cAfNz
+ kQCQfWS0ZdJPDwCbuhdOZKPMezvlLiws0SoPAzd38gJ1YWxk355W1LinkCP5vFixbtWr
+ HCGWccPIHm0cdOFFmCp7eSO3+0rOaAOZOdZKIFiySCQVtJ83g25ZiTUeirvvKzbygpXO
+ tZV5pgRGAtn/74Zxqeoss1dRmV6h0khmgT6Ewxpi9GXsKnxhxIh6x5eb1PWnIKJwQr0G
+ Bt/A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=XHbn8uYS
-Subject: Re: [Buildroot] [PATCH 1/4] package/python-calver: new host package
+ header.a=rsa-sha256 header.s=google header.b=WuECA6IU
+Subject: Re: [Buildroot] [PATCH 1/3] package/python-referencing: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,7 +109,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/11/2023 06:44, James Hilliard wrote:
+On 05/11/2023 09:55, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied series to master, thanks.
@@ -118,43 +118,76 @@ On 05/11/2023 06:44, James Hilliard wrote:
   Arnout
 
 > ---
->   package/python-calver/python-calver.hash |  5 +++++
->   package/python-calver/python-calver.mk   | 14 ++++++++++++++
->   2 files changed, 19 insertions(+)
->   create mode 100644 package/python-calver/python-calver.hash
->   create mode 100644 package/python-calver/python-calver.mk
+>   package/Config.in                               |  1 +
+>   package/python-referencing/Config.in            |  9 +++++++++
+>   .../python-referencing/python-referencing.hash  |  5 +++++
+>   .../python-referencing/python-referencing.mk    | 17 +++++++++++++++++
+>   4 files changed, 32 insertions(+)
+>   create mode 100644 package/python-referencing/Config.in
+>   create mode 100644 package/python-referencing/python-referencing.hash
+>   create mode 100644 package/python-referencing/python-referencing.mk
 > 
-> diff --git a/package/python-calver/python-calver.hash b/package/python-calver/python-calver.hash
+> diff --git a/package/Config.in b/package/Config.in
+> index a0d5339b0a..6a2f1cad1a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1276,6 +1276,7 @@ menu "External python modules"
+>   	source "package/python-redis/Config.in"
+>   	source "package/python-reedsolo/Config.in"
+>   	source "package/python-reentry/Config.in"
+> +	source "package/python-referencing/Config.in"
+>   	source "package/python-regex/Config.in"
+>   	source "package/python-remi/Config.in"
+>   	source "package/python-request-id/Config.in"
+> diff --git a/package/python-referencing/Config.in b/package/python-referencing/Config.in
 > new file mode 100644
-> index 0000000000..ebc054e617
+> index 0000000000..273c42543e
 > --- /dev/null
-> +++ b/package/python-calver/python-calver.hash
+> +++ b/package/python-referencing/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_REFERENCING
+> +	bool "python-referencing"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-rpds-py
+> +	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+> +	select BR2_PACKAGE_PYTHON_RPDS_PY # runtime
+> +	help
+> +	  JSON Referencing + Python.
+> +
+> +	  https://github.com/python-jsonschema/referencing
+> diff --git a/package/python-referencing/python-referencing.hash b/package/python-referencing/python-referencing.hash
+> new file mode 100644
+> index 0000000000..d4f3dce5a4
+> --- /dev/null
+> +++ b/package/python-referencing/python-referencing.hash
 > @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/calver/json
-> +md5  e1fd924b9bf953c0b28c49bdfe117d7a  calver-2022.6.26.tar.gz
-> +sha256  e05493a3b17517ef1748fbe610da11f10485faa7c416b9d33fd4a52d74894f8b  calver-2022.6.26.tar.gz
+> +# md5, sha256 from https://pypi.org/pypi/referencing/json
+> +md5  617d973b9ce86b6f74b2216c6f3af5c9  referencing-0.30.2.tar.gz
+> +sha256  794ad8003c65938edcdbc027f1933215e0d0ccc0291e3ce20a4d87432b59efc0  referencing-0.30.2.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/python-calver/python-calver.mk b/package/python-calver/python-calver.mk
+> +sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING
+> diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
 > new file mode 100644
-> index 0000000000..2fd5468ed4
+> index 0000000000..4d11c99deb
 > --- /dev/null
-> +++ b/package/python-calver/python-calver.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/python-referencing/python-referencing.mk
+> @@ -0,0 +1,17 @@
 > +################################################################################
 > +#
-> +# python-calver
+> +# python-referencing
 > +#
 > +################################################################################
 > +
-> +PYTHON_CALVER_VERSION = 2022.6.26
-> +PYTHON_CALVER_SOURCE = calver-$(PYTHON_CALVER_VERSION).tar.gz
-> +PYTHON_CALVER_SITE = https://files.pythonhosted.org/packages/b5/00/96cbed7c019c49ee04b8a08357a981983db7698ae6de402e57097cefc9ad
-> +PYTHON_CALVER_SETUP_TYPE = setuptools
-> +PYTHON_CALVER_LICENSE = Apache-2.0
-> +PYTHON_CALVER_LICENSE_FILES = LICENSE
+> +PYTHON_REFERENCING_VERSION = 0.30.2
+> +PYTHON_REFERENCING_SOURCE = referencing-$(PYTHON_REFERENCING_VERSION).tar.gz
+> +PYTHON_REFERENCING_SITE = https://files.pythonhosted.org/packages/e1/43/d3f6cf3e1ec9003520c5fb31dc363ee488c517f09402abd2a1c90df63bbb
+> +PYTHON_REFERENCING_SETUP_TYPE = pep517
+> +PYTHON_REFERENCING_LICENSE = MIT
+> +PYTHON_REFERENCING_LICENSE_FILES = COPYING
+> +PYTHON_REFERENCING_DEPENDENCIES = \
+> +	host-python-hatchling \
+> +	host-python-hatch-vcs
 > +
-> +$(eval $(host-python-package))
+> +$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
