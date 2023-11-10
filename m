@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C7B8C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 20:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E42EC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 20:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E070341A13;
-	Fri, 10 Nov 2023 20:11:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E070341A13
+	by smtp2.osuosl.org (Postfix) with ESMTP id 17F6941A45;
+	Fri, 10 Nov 2023 20:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17F6941A45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 95NxxlY6BFrw; Fri, 10 Nov 2023 20:11:43 +0000 (UTC)
+	with ESMTP id OaAxh5ZilTcd; Fri, 10 Nov 2023 20:11:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 908EB41A2D;
-	Fri, 10 Nov 2023 20:11:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 908EB41A2D
+	by smtp2.osuosl.org (Postfix) with ESMTP id D15A541A10;
+	Fri, 10 Nov 2023 20:11:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D15A541A10
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2DEBA1BF997
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 20:11:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8BA5F1BF2C4
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 20:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1190C41A0E
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0A7E41A00
  for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 20:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1190C41A0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0A7E41A00
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hf1I3XYMYdkq for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 20:11:25 +0000 (UTC)
+ with ESMTP id HCRPf0jSWMBn for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 20:11:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAFBE41A00
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 20:11:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAFBE41A00
+ by smtp2.osuosl.org (Postfix) with ESMTP id 559CE41A06
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 20:11:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 559CE41A06
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C850786F79; Fri, 10 Nov 2023 20:11:25 +0000 (UTC)
+ id 44A7D86F78; Fri, 10 Nov 2023 20:11:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 18:43:04 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 99148db45619c37dd446c6f8ef8678bd1d533fe9
-X-Git-Newrev: 4f5c3b99f9eddc7e5cf8b0156c2778b09413f10d
+Date: Fri, 10 Nov 2023 18:37:32 +0100
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 7a27887903e6cb182b01bb877b5be8f287053b86
+X-Git-Newrev: 2b32574c3fab38b6636213248173d21a3876e7f2
 X-Patchwork-Hint: ignore
-Message-Id: <20231110201125.C850786F79@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/network-manager:
- add patch for compatibility with curl 8.4
+Message-Id: <20231110201126.44A7D86F78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x]
+ package/nodejs/nodejs-src: fix arch check on additional modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +63,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f5c3b99f9eddc7e5cf8b0156c2778b09413f10d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2b32574c3fab38b6636213248173d21a3876e7f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-This upstream patch restores the connectivity check functionality with
-libcurl 8.4.
+Node modules available on the npm registry, may contain prebuild
+binaries for various targets and/or ABIs; for example., there might be
+ARM. AArch64, x86_64 binaries for glibc or musl, for Linux or Darwin.
+Needless to say, those binaries will most often not match the current
+target architecture; as such, check-bin-arch will whine loudly as
+reported in #15823:
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=15835
+    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-arm/node.napi.armv6.node" is "ARM", should be "AArch64"
+    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/android-arm/node.napi.armv7.node" is "ARM", should be "AArch64"
+    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-arm/node.napi.armv7.node" is "ARM", should be "AArch64"
+    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64/node.napi.glibc.node" is "Advanced Micro Devices X86-64", should be "AArch64"
+    ERROR: architecture for "/usr/lib/node_modules/node-red-node-serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64/node.napi.musl.node" is "Advanced Micro Devices X86-64", should be "AArch64"
 
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
-Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+The proper solution would be to remove all those prebuilt binaries, and
+request npm to forcefully rebuild the proper binary for the current
+architecture; alas, there is no option to tell npm to do so.
+
+Doing it manually would not be easy either, as such modules might be
+retrieved as part of the "vendoring" for another module that the user
+has requested, and be pretty deep in the dependency chain; trying to fix
+this properly would be a nightmare: it would require that we manually
+inspect the depednency chain, and install dependent modules one by one,
+recursively, re-implementing the same logic npm has when multiple
+verions of the same module are installed as part of different branches
+of the depenency tree, all while detecting prebuilds and removing them
+before installing the mpdule (hence decorrelating download and install,
+which is not trivial to do with npm alone).
+
+We also can't simply remove all the prebuilds, because it is not known
+whether the location ("<module>/prebuilds/") is standardised, or a
+convention with the path noted somewhere in the package metadata, and
+how deep they would be in the tree, and whether that could conflict with
+arbitrary files...
+
+Instead, we will consider that npm has a sane heuristic to detect
+whether it should indeed rebuilt the modules, and that node has a sane
+heuristic to know which binary to load at runtime, and we will leave the
+prebuilt binaries in place and just exclude them from being checked.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=15823
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b660402b5722c8b4c0ead8739dc2ec2f6a8dfa11)
+(cherry picked from commit cbc5691ab298c89f6bd02b06a0a790ab531f2b55)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-make-curl-timeout-callback-non-repeating.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/nodejs/nodejs.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch b/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
-new file mode 100644
-index 0000000000..8e25805d0c
---- /dev/null
-+++ b/package/network-manager/0001-connectivity-make-curl-timeout-callback-non-repeating.patch
-@@ -0,0 +1,44 @@
-+From abc6e1cf258ab332bed161036a358bbe9c2d1e90 Mon Sep 17 00:00:00 2001
-+From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
-+Date: Fri, 13 Oct 2023 16:46:09 +0000
-+Subject: [PATCH] connectivity: Make curl timeout callback non-repeating.
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index b8e57e567d..413213db55 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -261,6 +261,9 @@ define NODEJS_INSTALL_MODULES
+ 	# help in diagnosing the problem.
+ 	$(NPM) install -g $(NODEJS_MODULES_LIST)
+ endef
 +
-+This reverts commit 05c31da4d9.
-+
-+In the linked commit the callback was made repeating on the assumption
-+that forward progress would result in the callback getting canceled in
-+cb_data_complete. However, this assumption does not hold since a timeout
-+callback does not guarantee completion (or error out) of a request.
-+
-+curl tweaked some internals in v8.4.0 and started giving 0 timeouts, and
-+a repeating callback is firing back-to-back without making any progress
-+in doing so.
-+
-+Revert the change and make the callback non-repeating again.
-+
-+Fixes: 05c31da4d9cb ('connectivity: don't cancel curl timerfunction from timeout')
-+Upstream: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/abc6e1cf258ab332bed161036a358bbe9c2d1e90
-+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
-+---
-+ src/core/nm-connectivity.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/core/nm-connectivity.c b/src/core/nm-connectivity.c
-+index 92de44f17d..d8b0004c38 100644
-+--- a/src/core/nm-connectivity.c
-++++ b/src/core/nm-connectivity.c
-+@@ -406,9 +406,10 @@ _con_curl_timeout_cb(gpointer user_data)
-+ {
-+     NMConnectivityCheckHandle *cb_data = user_data;
-+ 
-++    cb_data->concheck.curl_timer = 0;
-+     _con_curl_check_connectivity(cb_data->concheck.curl_mhandle, CURL_SOCKET_TIMEOUT, 0);
-+     _complete_queued(cb_data->self);
-+-    return G_SOURCE_CONTINUE;
-++    return G_SOURCE_REMOVE;
-+ }
-+ 
-+ static int
-+-- 
-+GitLab
-+
++# Exclude prebuilt binaries with different architectures and OS from check
++NODEJS_BIN_ARCH_EXCLUDE = /usr/lib/node_modules/
+ endif
+ 
+ define NODEJS_INSTALL_STAGING_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
