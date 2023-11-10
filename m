@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAE3AC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 21:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52985C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 21:06:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6037A42867;
-	Fri, 10 Nov 2023 21:06:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6037A42867
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8C7940281;
+	Fri, 10 Nov 2023 21:06:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8C7940281
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vnTCYID7UPiX; Fri, 10 Nov 2023 21:06:32 +0000 (UTC)
+	with ESMTP id q3xui_-Gd1Fo; Fri, 10 Nov 2023 21:06:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5872E4287E;
-	Fri, 10 Nov 2023 21:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5872E4287E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A60C1BF41B
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:05:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB0DD42862;
+	Fri, 10 Nov 2023 21:06:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB0DD42862
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B1F11BF41B
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:05:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 539E181EEF
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:05:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 539E181EEF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2FB666F6F3
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 21:05:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FB666F6F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V33Bi8admCTd for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pMdeTSP7dYVG for <buildroot@lists.busybox.net>;
  Fri, 10 Nov 2023 21:05:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC69881CE3
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 21:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC69881CE3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C2E16F703
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 21:05:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C2E16F703
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA6F486FCF; Fri, 10 Nov 2023 21:05:07 +0000 (UTC)
+ id 1D1EE86FCB; Fri, 10 Nov 2023 21:05:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Nov 2023 22:01:45 +0100
+Date: Fri, 10 Nov 2023 22:01:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 013061755d928e96399c0e4e964a03dc623a8425
-X-Git-Newrev: aaa315b6a7171f0239676964d524bd19b18219dc
+X-Git-Oldrev: 64fc2dd727ba07db1a3494a2aeafc79d171f1780
+X-Git-Newrev: 554ecdf49a8eeb1e2e3b3ba02d9337344330ffc1
 X-Patchwork-Hint: ignore
-Message-Id: <20231110210507.DA6F486FCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-filelock: bump to version
- 3.13.1
+Message-Id: <20231110210508.1D1EE86FCB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jeepney: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaa315b6a7171f0239676964d524bd19b18219dc
+commit: https://git.buildroot.net/buildroot/commit/?id=554ecdf49a8eeb1e2e3b3ba02d9337344330ffc1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-filelock/python-filelock.hash | 4 ++--
- package/python-filelock/python-filelock.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                          |  1 +
+ package/python-jeepney/Config.in           |  6 ++++++
+ package/python-jeepney/python-jeepney.hash |  5 +++++
+ package/python-jeepney/python-jeepney.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
-index 4ef7afed00..3013cb6789 100644
---- a/package/python-filelock/python-filelock.hash
-+++ b/package/python-filelock/python-filelock.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/filelock/json
--md5  40eeb4a2963e1b07b8eab12b5db08418  filelock-3.9.0.tar.gz
--sha256  7b319f24340b51f55a2bf7a12ac0755a9b03e718311dac567a0f4f7fabd2f5de  filelock-3.9.0.tar.gz
-+md5  368d00d1946b89c910d4bf1da68b5a66  filelock-3.13.1.tar.gz
-+sha256  521f5f56c50f8426f5e03ad3b281b490a87ef15bc6c526f168290f0c7148d44e  filelock-3.13.1.tar.gz
- # Locally computed sha256 checksums
- sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
-diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
-index 02759935ad..a32517b1ad 100644
---- a/package/python-filelock/python-filelock.mk
-+++ b/package/python-filelock/python-filelock.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FILELOCK_VERSION = 3.9.0
-+PYTHON_FILELOCK_VERSION = 3.13.1
- PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
--PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/0b/dc/eac02350f06c6ed78a655ceb04047df01b02c6b7ea3fc02d4df24ca87d24
-+PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/70/70/41905c80dcfe71b22fb06827b8eae65781783d4a14194bce79d16a013263
- PYTHON_FILELOCK_SETUP_TYPE = pep517
- PYTHON_FILELOCK_LICENSE = Public Domain
- PYTHON_FILELOCK_LICENSE_FILES = LICENSE
+diff --git a/package/Config.in b/package/Config.in
+index 10d6393523..5a3410d758 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1128,6 +1128,7 @@ menu "External python modules"
+ 	source "package/python-jaraco-classes/Config.in"
+ 	source "package/python-jaraco-functools/Config.in"
+ 	source "package/python-jedi/Config.in"
++	source "package/python-jeepney/Config.in"
+ 	source "package/python-jinja2/Config.in"
+ 	source "package/python-jmespath/Config.in"
+ 	source "package/python-json-schema-validator/Config.in"
+diff --git a/package/python-jeepney/Config.in b/package/python-jeepney/Config.in
+new file mode 100644
+index 0000000000..700176e12f
+--- /dev/null
++++ b/package/python-jeepney/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_JEEPNEY
++	bool "python-jeepney"
++	help
++	  Low-level, pure Python DBus protocol wrapper.
++
++	  https://gitlab.com/takluyver/jeepney
+diff --git a/package/python-jeepney/python-jeepney.hash b/package/python-jeepney/python-jeepney.hash
+new file mode 100644
+index 0000000000..31a5bac183
+--- /dev/null
++++ b/package/python-jeepney/python-jeepney.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/jeepney/json
++md5  7e2151e9197c751ceca6550bc6b3294c  jeepney-0.8.0.tar.gz
++sha256  5efe48d255973902f6badc3ce55e2aa6c5c3b3bc642059ef3a91247bcfcc5806  jeepney-0.8.0.tar.gz
++# Locally computed sha256 checksums
++sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
+diff --git a/package/python-jeepney/python-jeepney.mk b/package/python-jeepney/python-jeepney.mk
+new file mode 100644
+index 0000000000..ac4c0283a8
+--- /dev/null
++++ b/package/python-jeepney/python-jeepney.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-jeepney
++#
++################################################################################
++
++PYTHON_JEEPNEY_VERSION = 0.8.0
++PYTHON_JEEPNEY_SOURCE = jeepney-$(PYTHON_JEEPNEY_VERSION).tar.gz
++PYTHON_JEEPNEY_SITE = https://files.pythonhosted.org/packages/d6/f4/154cf374c2daf2020e05c3c6a03c91348d59b23c5366e968feb198306fdf
++PYTHON_JEEPNEY_SETUP_TYPE = flit
++PYTHON_JEEPNEY_LICENSE = MIT
++PYTHON_JEEPNEY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
