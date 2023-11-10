@@ -1,81 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBDD4C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 14:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1477C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 15:58:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 880CC4193A;
-	Fri, 10 Nov 2023 14:35:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 880CC4193A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7jUXZDMK9sl6; Fri, 10 Nov 2023 14:35:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 390524193D;
-	Fri, 10 Nov 2023 14:35:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 390524193D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 70DE11BF3F9
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 14:35:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A26F60FEC
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 14:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A26F60FEC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A92C60A9B;
+	Fri, 10 Nov 2023 15:58:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A92C60A9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KMGiP96PDRXC for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 14:35:27 +0000 (UTC)
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8039560EB6
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 14:35:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8039560EB6
-Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 10 Nov 2023 15:35:23 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Nov 2023 15:35:24 +0100
-Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 10 Nov 2023 15:35:22 +0100
-Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Fri, 10 Nov 2023 15:35:21 +0100
-From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.03,291,1694728800"; d="scan'208";a="65357825"
-Date: Fri, 10 Nov 2023 15:35:21 +0100
-To: Jon Henrik =?utf-8?Q?Bj=C3=B8rnstad?= <jonhenrik@qbee.io>
-Message-ID: <ZU4/qQFOtk6cI7oO@tl-lnx-nyma7486-2>
-References: <20231110104504.2340403-1-jonhenrik@qbee.io>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rRN54JwT1XXJ; Fri, 10 Nov 2023 15:58:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE38B60B99;
+	Fri, 10 Nov 2023 15:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE38B60B99
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AFAB11BF37B
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 87F6A42241
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 15:58:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87F6A42241
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XxpMpiSPMSF1 for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 15:58:31 +0000 (UTC)
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com
+ [IPv6:2607:f8b0:4864:20::444])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 83A9D42038
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 15:58:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83A9D42038
+Received: by mail-pf1-x444.google.com with SMTP id
+ d2e1a72fcca58-6b709048f32so2006305b3a.0
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 07:58:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1699631910; x=1700236710;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ZLyzpwhgRTtsGqZlXgtWuOSWUmesBXQ1wkl0Mzk9DGE=;
+ b=SFlj9bT/sVGV3iNaPIVhFJiwk0VhbKlhrKHxcUckp7RMwSAaHhZkpW5Do1q+0pgDL2
+ GAbJOYpt/32neDxH+VCZjis72HIJZqHdjQj9ZVPVi9Aq216LzQlFOa3qPZaT26Yl4OIW
+ kvZVv1ScTPgSTWZJ8hG7Eyet0VTbNbmCWrk3gMjRVp+iZvlsdi2MKmeSddrQduaEijpX
+ 7m6IyusSWi2GSMFDoY6QdPBHpLJnBCZzd6XKtrOU712ykg4I7+UFXsMWsAtKB9AbgNS1
+ MXeGRm3AR6Tz5XpmaxU2CE0/hYFyCfnYt46tI2wM7hyapgmketrdUBqWxm3cH447zDu0
+ lkVg==
+X-Gm-Message-State: AOJu0YwoXRqhfllBftgQBjHrFePkNByMIz5nkqN5AQYYOcHtsoS+aRAU
+ SsZbdMVe037TrQxu9SxiQzJH0E9AamNqwRvge+RfsVkD7rM=
+X-Google-Smtp-Source: AGHT+IGzeoPCFBIqJ5FRnHSfvZEw0WmKnIKGq6zJW7hVD7RA11Wg5I8YvjZ97uD5jeEdSnHf1ptvQw==
+X-Received: by 2002:a05:6a00:1707:b0:68e:2d59:b1f3 with SMTP id
+ h7-20020a056a00170700b0068e2d59b1f3mr8732824pfc.13.1699631910318; 
+ Fri, 10 Nov 2023 07:58:30 -0800 (PST)
+Received: from DESKTOP-OI0KN2B.lan ([172.56.201.106])
+ by smtp.gmail.com with ESMTPSA id
+ p55-20020a056a0026f700b006c2d53e0b5fsm12796153pfw.57.2023.11.10.07.58.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Nov 2023 07:58:29 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Fri, 10 Nov 2023 08:58:19 -0700
+Message-ID: <20231110155826.10416-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231110104504.2340403-1-jonhenrik@qbee.io>
-X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX603.corporate.adroot.infra.ftgroup
- (10.115.26.31) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1699626926; x=1731162926;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=SwZaneaEs7yBvjmYqYq73hdU+YOfruMqxxZtVlj1QQw=;
- b=nF87cocrEk4GjoMbzunAaF8FitUc2EUvF9JXr1OEC66/SZlFA5L0PM07
- Z3dIwSmD1eqncY5FIffGpFAc9VUSraCl7FYr0yBnEg6rS/msfowNHsF0y
- QZx29R/DIQ4HQ7r1aFBQ8bIg3JhzsRouFfl9a0Ex5Ph5VLR5wxXCONKrg
- jegyxBDf2d1sxeQDrkLk3wQrcb+oxR/xLwOik34orNpJLu0KZujuFDnyl
- uu/7HXc8ffEwY2t0Y6LF0twOkn3hMKr4JwabePRgqYiQ0V92yb7u4tm/8
- tAEYt2MEaonKLHoUCM8sL/n30iM1UXhpQ5tUU2Fbo/Q2WdFIocc/6WqOy
- Q==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=nF87cocr
-Subject: Re: [Buildroot] [PATCH 1/1] package/qbee-agent: new package
+ d=amarulasolutions.com; s=google; t=1699631910; x=1700236710;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ZLyzpwhgRTtsGqZlXgtWuOSWUmesBXQ1wkl0Mzk9DGE=;
+ b=bzovzOXsqrpwvypO3PP4o3S/WpPjZR6NuIo1/1I+/E2zStuXEpt5Uga08XK4u0NA9x
+ rZDDWCRqC78veJzz1exRmZBA6z4He6aO9uUCD7KWuzhGsPWFQ4XMa0IdZptJRcvWFhVV
+ 4mfA96CsukF6YlZMfnJ0rQu6gJqZIdSdLXIxc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=bzovzOXs
+Subject: [Buildroot] [PATCH v3 0/7] Python3: bump version to 3.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,135 +92,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sm9uLCBBbGwsCgpPbiAyMDIzLTExLTEwIDExOjQ1ICswMTAwLCBKb24gSGVucmlrIEJqw7hybnN0
-YWQgdmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gVGhpcyBwYXRjaCBhZGQgcWJlZS1hZ2Vu
-dCwgYW4gb3BlbiBzb3VyY2UgZGV2aWNlIG1hbmFnZW1lbnQgc29mdHdhcmUKPiBmb3IgTGludXgg
-ZGV2aWNlcy4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKb24gSGVucmlrIEJqw7hybnN0YWQgPGpvbmhl
-bnJpa0BxYmVlLmlvPgo+IC0tLQpbLS1TTklQLS1dCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWJl
-ZS1hZ2VudC9Db25maWcuaW4gYi9wYWNrYWdlL3FiZWUtYWdlbnQvQ29uZmlnLmluCj4gbmV3IGZp
-bGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi5jMzVlYWJmZjkxCj4gLS0tIC9kZXYv
-bnVsbAo+ICsrKyBiL3BhY2thZ2UvcWJlZS1hZ2VudC9Db25maWcuaW4KPiBAQCAtMCwwICsxLDE4
-IEBACj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9RQkVFX0FHRU5UCj4gKwlib29sICJxYmVlLWFnZW50
-Igo+ICsJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX0dPX1RBUkdFVF9BUkNIX1NVUFBPUlRT
-Cj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTlNTSCBpZiAhQlIyX1BBQ0tBR0VfRFJPUEJFQVJf
-Q0xJRU5UICMgcnVudGltZQo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0lQVEFCTEVTICMgcnVudGlt
-ZQo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0JVU1lCT1hfU0hPV19PVEhFUlMgIyBydW50aW1lCj4g
-KwlzZWxlY3QgQlIyX1BBQ0tBR0VfU0hBRE9XICMgcnVudGltZQo+ICsJc2VsZWN0IEJSMl9QQUNL
-QUdFX0JBU0ggIyBydW50aW1lCj4gKwloZWxwCj4gKwkgIFFiZWUgaXMgYSBkZXZpY2UgbWFuYWdl
-bWVudCBwbGF0Zm9ybSB0aGF0IGNvbXByaXNlCj4gKwkgIG9mIGFuIG9wZW4tc291cmNlIGFnZW50
-IGFuZCBhIGhvc3RlZCBTYWFTIGJhY2tlbmQuCgpJcyB0aGVyZSBhIHB1YmxpYyBpbXBsZW1lbnRh
-dGlvbiBmb3IgdGhhdCBiYWNrZW5kPwoKPiArCSAgVGhpcyBjb25maWcgaW5zdGFsbHMgcHJlLWJ1
-aWx0IHN0YXRpYyBiaW5hcmllcyBtYWRlCgpUaGF0IGlzIG5vIGxvbmdlciB0aGUgY2FzZS4gOy0p
-Cgo+ICsJICB3aXRoIHRoZSBvZmZpY2lhbCBwdWJsaWMgc2lnbmluZyBrZXkgZm9yIHFiZWUuaW8u
-IFRoZQo+ICsJICBiaW5hcmllcyB3aWxsIHdvcmsgc2VhbWxlc3NseSB3aXRoIHRoZSBxYmVlLmlv
-IGRldmljZQo+ICsJICBtYW5hZ2VtZW50IGJhY2tlbmQuCgpTZWUgYmVsb3cgZm9yIHRoYXQga2V5
-Li4uCgpbLS1TTklQLS1dCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWJlZS1hZ2VudC9xYmVlLWFn
-ZW50Lm1rIGIvcGFja2FnZS9xYmVlLWFnZW50L3FiZWUtYWdlbnQubWsKPiBuZXcgZmlsZSBtb2Rl
-IDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmY1NjgzNzJlMDEKPiAtLS0gL2Rldi9udWxsCj4g
-KysrIGIvcGFja2FnZS9xYmVlLWFnZW50L3FiZWUtYWdlbnQubWsKPiBAQCAtMCwwICsxLDM5IEBA
-Cj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMKPiArIyBxYmVlLWFnZW50IHBhY2thZ2UK
-PiArIwo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsKPiArUUJFRV9BR0VOVF9WRVJTSU9O
-ID0gMjAyMy40NAo+ICtRQkVFX0FHRU5UX1NJVEUgPSAkKGNhbGwgZ2l0aHViLHFiZWUtaW8scWJl
-ZS1hZ2VudCwkKFFCRUVfQUdFTlRfVkVSU0lPTikpCj4gK1FCRUVfQUdFTlRfTElDRU5TRSA9IEFw
-YWNoZS0yLjAKPiArUUJFRV9BR0VOVF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+ICsKPiArUUJF
-RV9BR0VOVF9DT01NSVRfSUQgPSA1ODI5MDAzNTYyMjI4NjBiZmM0MDU2N2VhMzU5OTQxYzlkMzRm
-NDk5CgpXaHkgaXMgdGhlIGNvbW1pdCBoYXNoIGltcG9ydGFudD8gSG93IGNhbiB3ZSBlbnN1cmUg
-dGhhdCwgaW4gYSBmdXR1cmUKdmVyc2lvbiBidW1wIGluIFFCRUVfQUdFTlRfVkVSU0lPTiwgd2Ug
-ZW5zdXJlIHRoZSBjb21taXQgaGFzaCBpcwp1cGRhdGVkPyBDYW4gd2UgdXNlIHRoZSBfVkVSU0lP
-TiBpbnN0ZWFkIG9mIHRoZSBoYXNoPwoKQXMgZmFyIGFzIEkgY2FuIHNlZSwgaXQgaXMgb25seSB1
-c2VkIHRvIHNldCBhcHAuQ29tbWl0LCB3aGljaCBpbiB0dXJuIGlzCm9ubHkgdXNlZCB0byBkaXNw
-bGF5IHRoYXQgdG8gdGhlIHVzZXIsIGluIGFkZGl0aW9uIHRvIHRoZSB2ZXJzaW9uCnN0cmluZy4g
-U28sIHRoYXQgZG9lcyBub3Qgc2VlbSB2ZXJ5IGltcG9ydGFudCwgYW5kIHJlLXVzaW5nIF9WRVJT
-SU9OCmxvb2tzIGxpa2UgaXQgd291bGQgYmUgT0ssIGFzIGl0IGlzIGEgdGFnLgoKPiArUUJFRV9B
-R0VOVF9QVUJMSUNfU0lHTklOR19LRVkgPSB6NW1VRmFXLTN0M1dSSWprVXIyZFZPelBnR3czb3lS
-LXR6QmxJbkdmejQ0LkVKRXhMaUpleDFYN25UN3A2WFR4Tzhram1Ha3Y2aWs2MFhNenZNZS04N2cK
-CldoYXQgaXMgdGhpcyBrZXkgdmFsaWQgZm9yPwoKSSBjYW4gc2VlIHRoYXQgaXQgaXMgZGlmZmVy
-ZW50IGZyb20gdGhlIG9uZSBvbiBnaXRodWI6CgogICAgaHR0cHM6Ly9naXRodWIuY29tL3FiZWUt
-aW8vcWJlZS1hZ2VudC9ibG9iL21haW4vTWFrZWZpbGUjTDEwCgogICAgUFVCTElDX1NJR05JTkdf
-S0VZPXhTSGJVQkc3TFR1TmZYZDN6b2Q0RVg4X0VzOEZUQ0lOZ3JqdngxV1hGRTQucGxDSHpsREFl
-YjNJV1cxd0s2UDZwYU1SWU80ZjhxY2VWM2xyTkNxTnBXbwoKQ2FuIHdlIGV4dHJhY3QgdGhlIGtl
-eSBmcm9tIHRoZSBNYWtlZmlsZSByYXRoZXIgdGhhbiBoYXZlIG91ciBvd24gaGVyZT8KCkFsc28s
-IHRoZSBjb21tZW50IGp1c3QgYWJvdmUgdGhhdCBrZXkgc3RhdGVzICJGb3IgcHJvZHVjdGlvbiBy
-ZWxlYXNlLCBpdAptdXN0IGJlIHJlcGxhY2VkIHdpdGggdGhlIGNvcnJlY3QgcHVibGljIGtleSIu
-IEhvdyBjYW4gdGhpcyBiZSBhY2hpZXZlZAppbiB0aGUgY29udGV4dCBvZiBCdWlsZHJvb3Q/IE9y
-IGlzIHRoZSBvbmUgeW91IHByb3ZpZGVkIHRoZSBhY3R1YWwKcHJvZHVjdGlvbiBwdWJsaWMga2V5
-PwoKTXkgcHJldmlvdXMgc3VnZ2VzdGlvbiB3YXMgdG8gZ2l2ZSB0aGUgdXNlciB0aGUgb3B0aW9u
-IHRvIHByb3ZpZGUgdGhlaXIKb3duIGtleS4gV2h5IGNhbid0IHdlIGRvIHRoYXQ/Cgo+ICtRQkVF
-X0FHRU5UX0xERkxBR1MgPSAtcyAtdyBcCj4gKwktWCBnaXRodWIuY29tL3FiZWUtaW8vcWJlZS1h
-Z2VudC9hcHAuVmVyc2lvbj0kKFFCRUVfQUdFTlRfVkVSU0lPTikgXAo+ICsJLVggZ2l0aHViLmNv
-bS9xYmVlLWlvL3FiZWUtYWdlbnQvYXBwLkNvbW1pdD0kKFFCRUVfQUdFTlRfQ09NTUlUX0lEKSBc
-Cj4gKwktWCBnaXRodWIuY29tL3FiZWUtaW8vcWJlZS1hZ2VudC9hcHAvYmluYXJ5LlB1YmxpY1Np
-Z25pbmdLZXk9JChRQkVFX0FHRU5UX1BVQkxJQ19TSUdOSU5HX0tFWSkKPiArCj4gK2RlZmluZSBR
-QkVFX0FHRU5UX0lOU1RBTExfVEFSR0VUX0NNRFMKPiArCSQoSU5TVEFMTCkgLW0gMDc1NSAkKEBE
-KS9iaW4vcWJlZS1hZ2VudCAkKFRBUkdFVF9ESVIpL3Vzci9iaW4vcWJlZS1hZ2VudAoKVGhhdCBw
-YXJ0IHNob3VkIG5vdCBiZSBuZWNlc3NhcnksIGFzIHRoaXMgaXMgdGhlIGRlZmF1bHQgb2YgdGhl
-CmdvbGFuZy1wYWNrYWdlIGluZnJhIFswXTsgeW91IGp1c3QgbmVlZCB0byBpbnN0YWxsIHRoZSAu
-Y2VydCBhcyBhCnBvc3QtaW5zdGFsbCBob29rOgoKICAgIGRlZmluZSBRQkVFX0FHRU5UX0lOU1RB
-TExfQ0VSVAogICAgICAgICQoSU5TVEFMTCkgLUQgLW0gMDYwMCAkKEBEKS9wYWNrYWdlL3NoYXJl
-L3NzbC9jYS5jZXJ0ICQoVEFSR0VUX0RJUikvZXRjL3FiZWUvcHBrZXlzL2NhLmNlcnQKICAgIGVu
-ZGVmCiAgICBRQkVFX0FHRU5UX1BPU1RfVEFSR0VUX0lOU1RBTExfSE9PS1MgKz0gUUJFRV9BR0VO
-VF9JTlNUQUxMX0NFUlQKClswXSBodHRwczovL2J1aWxkcm9vdC5vcmcvZG93bmxvYWRzL21hbnVh
-bC9tYW51YWwuaHRtbCNfaW5mcmFzdHJ1Y3R1cmVfZm9yX2dvX3BhY2thZ2VzCgo+ICsJJChJTlNU
-QUxMKSAtRCAtbSAwNjAwICQoQEQpL3BhY2thZ2Uvc2hhcmUvc3NsL2NhLmNlcnQgJChUQVJHRVRf
-RElSKS9ldGMvcWJlZS9wcGtleXMvY2EuY2VydAo+ICtlbmRlZgo+ICsKPiArZGVmaW5lIFFCRUVf
-QUdFTlRfSU5TVEFMTF9JTklUX1NZU1RFTUQKPiArCSQoSU5TVEFMTCkgLUQgLW0gMDY0NCAkKEBE
-KS9wYWNrYWdlL2luaXQtc2NyaXB0cy9zeXN0ZW1kL3FiZWUtYWdlbnQuc2VydmljZSBcCj4gKwkJ
-JChUQVJHRVRfRElSKS91c3IvbGliL3N5c3RlbWQvc3lzdGVtL3FiZWUtYWdlbnQuc2VydmljZQo+
-ICtlbmRlZgo+ICsKPiArZGVmaW5lIFFCRUVfQUdFTlRfSU5TVEFMTF9JTklUX1NZU1YKPiArCSQo
-SU5TVEFMTCkgLUQgLW0gNzU1ICQoQEQpL3BhY2thZ2UvaW5pdC1zY3JpcHRzL3N5c3Zpbml0L3Fi
-ZWUtYWdlbnQgXAo+ICsJCSQoVEFSR0VUX0RJUikvZXRjL2luaXQuZC9TOTlxYmVlLWFnZW50Cj4g
-K2VuZGVmCj4gKwo+ICtkZWZpbmUgUUJFRV9BR0VOVF9MSU5VWF9DT05GSUdfRklYVVBTCj4gKwkk
-KGNhbGwgS0NPTkZJR19FTkFCTEVfT1BULENPTkZJR19UVU4pCj4gK2VuZGVmCgpXaHkgaXMgVFVO
-IG5lZWRlZCBpbnRoZSBrZXJuZWw/CgpEbyBub3QgaGVzaXRhdGUgdG8gZXhwbGFpbiB0aGluZ3Mg
-aW4gdGhlIGNvbW1pdCBsb2csIGV2ZW4gaWYgdGhleSBsb29rCnRyaXZpYWwgdG8geW91IDsgZXZl
-biBqdXN0IGEgbGl0dGxlIHNlbnRlbmNlIGlzIE9LIChlLmcuIHRvdGFsbHkgbWFkZS11cApqdXN0
-aWZpY2F0aW9uOiAiVFVOIGlzIG5lZWRlZCBiZWFjdXNlIHFiZWUtYWdlbnQgY3JlYXRlcyBhIHZw
-bi1saWtlCnR1bm5lbCB0byB0aGUgc2VydmVyIGFuZCByb3V0ZXMgYWxsIHRoZSBjb21tdW5pY2F0
-aW9ucyB0aHJvdWdoIHRoYXQKdHVubmVsIikuCgpTbywgbm93IEkgdGhpbmsgdGhlIHBhY2thZ2Ug
-aXMgcXVpdGUgT0sgYXMgcGVyIHRoZSBCdWlsZHJvb3QgY29kaW5nCnJ1bGVzIPCfkY0sIHdpdGgg
-b25seSB2ZXJ0IG1pbm9yIHRoaW5zIChjb21tZW50IGluIENvbmZpZy5pbiwgZHJvcHBpbmcKX0NP
-TU1JVF9IQVNILCBjb21taXQgbG9nIHdpdGggYSBiaXQgbW9yZSBleHBsYW5hdGlvbnMpLgoKVGhl
-IHJlc3Qgb2YgdGhlIHF1ZXN0aW9ucyBtb3N0bHkgcmV2b2x2ZSBhcm91bmQgdGhlIGtleSwgYW5k
-IGhvdyB3ZSBjYW4KbWFuYWdlIHRoYXQuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiArJChl
-dmFsICQoZ29sYW5nLXBhY2thZ2UpKQo+IC0tIAo+IDIuMjUuMQo+IAo+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlz
-dAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIF9fX19fX19fX19fXwouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0t
-LS0tLS0tLS0tLS06ICAgICAgIF8gICAgOi0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBN
-T1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAgICBfXy8gKSAgIHwgLyJcIEFTQ0lJIFJJQkJP
-TiB8CnwgICAgICAgICAgICAgICAgIHwgU29mdHdhcmUgIERlc2lnbmVyIHwgIF8vIC0gLycgICB8
-IFwgLyBDQU1QQUlHTiAgICAgfAp8ICszMyA2MzguNDExLjI0NSAnLS0tLS0tLS0tLS0tLS0tLS0t
-LS06IChfICAgIGAtLSwgfCAgWCAgQUdBSU5TVCAgICAgIHwKfCB5YW5uLm1vcmluIChhdCkgb3Jh
-bmdlLmNvbSAgICAgICAgICAgfF89IiAgICAsLS0nIHwgLyBcIEhUTUwgTUFJTCAgICB8CictLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLTpfX19fX18vX19fX186LS0tLS0tLS0t
-LS0tLS0tLS0tJwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fDQpDZSBtZXNzYWdlIGV0IHNlcyBwaWVjZXMgam9pbnRlcyBwZXV2ZW50IGNvbnRlbmly
-IGRlcyBpbmZvcm1hdGlvbnMgY29uZmlkZW50aWVsbGVzIG91IHByaXZpbGVnaWVlcyBldCBuZSBk
-b2l2ZW50IGRvbmMNCnBhcyBldHJlIGRpZmZ1c2VzLCBleHBsb2l0ZXMgb3UgY29waWVzIHNhbnMg
-YXV0b3Jpc2F0aW9uLiBTaSB2b3VzIGF2ZXogcmVjdSBjZSBtZXNzYWdlIHBhciBlcnJldXIsIHZl
-dWlsbGV6IGxlIHNpZ25hbGVyDQphIGwnZXhwZWRpdGV1ciBldCBsZSBkZXRydWlyZSBhaW5zaSBx
-dWUgbGVzIHBpZWNlcyBqb2ludGVzLiBMZXMgbWVzc2FnZXMgZWxlY3Ryb25pcXVlcyBldGFudCBz
-dXNjZXB0aWJsZXMgZCdhbHRlcmF0aW9uLA0KT3JhbmdlIGRlY2xpbmUgdG91dGUgcmVzcG9uc2Fi
-aWxpdGUgc2kgY2UgbWVzc2FnZSBhIGV0ZSBhbHRlcmUsIGRlZm9ybWUgb3UgZmFsc2lmaWUuIE1l
-cmNpLg0KDQpUaGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25m
-aWRlbnRpYWwgb3IgcHJpdmlsZWdlZCBpbmZvcm1hdGlvbiB0aGF0IG1heSBiZSBwcm90ZWN0ZWQg
-YnkgbGF3Ow0KdGhleSBzaG91bGQgbm90IGJlIGRpc3RyaWJ1dGVkLCB1c2VkIG9yIGNvcGllZCB3
-aXRob3V0IGF1dGhvcmlzYXRpb24uDQpJZiB5b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGlu
-IGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYW5kIGRlbGV0ZSB0aGlzIG1lc3NhZ2Ug
-YW5kIGl0cyBhdHRhY2htZW50cy4NCkFzIGVtYWlscyBtYXkgYmUgYWx0ZXJlZCwgT3JhbmdlIGlz
-IG5vdCBsaWFibGUgZm9yIG1lc3NhZ2VzIHRoYXQgaGF2ZSBiZWVuIG1vZGlmaWVkLCBjaGFuZ2Vk
-IG9yIGZhbHNpZmllZC4NClRoYW5rIHlvdS4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Hopefully the last series to commit!
+
+Changes:
+
+  - Drop python-pygame with a new message about compilation failures.
+  - Squash Bernd's patch series into the python 3.12.0 version bump patch
+  - Add "package" at the end of the Config.in.legacy python-crossbar help
+  - Add a Config.in.legacy option for python-pygame
+
+Adam Duskett (7):
+  package/python-systemd: bump version to 235
+  package/python-versioneer: new package
+  package/python-constantly: bump version to 23.10.4
+  package/python-pygame: drop package
+  package/python-crossbar: drop package
+  package/scons: bump version to 4.5.2
+  package/python3: bump version to 3.12.0
+
+ Config.in.legacy                              |  23 ++++
+ DEVELOPERS                                    |   3 +-
+ package/Config.in                             |   2 -
+ .../python-constantly/python-constantly.hash  |   4 +-
+ .../python-constantly/python-constantly.mk    |   5 +-
+ .../0001-Avoid-intentional-syntax-error.patch |  29 -----
+ ...s-min.txt-drop-indirect-dependencies.patch |  74 ------------
+ ...ice-wap-use-markupsafe-instead-of-we.patch |  53 ---------
+ package/python-crossbar/Config.in             |  71 -----------
+ package/python-crossbar/python-crossbar.hash  |   5 -
+ package/python-crossbar/python-crossbar.mk    |  14 ---
+ package/python-pygame/Config.in               |  50 --------
+ package/python-pygame/python-pygame.hash      |   3 -
+ package/python-pygame/python-pygame.mk        | 111 ------------------
+ package/python-systemd/python-systemd.hash    |   4 +-
+ package/python-systemd/python-systemd.mk      |   6 +-
+ .../python-versioneer/python-versioneer.hash  |   5 +
+ .../python-versioneer/python-versioneer.mk    |  14 +++
+ ...e-the-build-of-pyc-files-conditional.patch |  24 ++--
+ ...taddrinfo-configure-test-when-cross-.patch |   2 +-
+ ...re-to-disable-the-build-of-certain-e.patch | 108 -----------------
+ ...-header-paths-for-cross-compilation.patch} |  31 ++---
+ ...tch => 0004-Serial-ioctl-workaround.patch} |   0
+ ...ook-in-usr-lib-termcap-for-libraries.patch |  31 -----
+ ...g.sh.in-ensure-sed-invocations-only.patch} |   0
+ ...0006-Add-an-option-to-disable-pydoc.patch} |  50 ++------
+ .../0006-Don-t-add-multiarch-paths.patch      |  37 ------
+ .../0007-Abort-on-failed-module-build.patch   |  30 -----
+ ...07-Add-an-option-to-disable-lib2to3.patch} |  74 +++++-------
+ ... 0008-Add-an-option-to-disable-IDLE.patch} |  43 ++-----
+ ...e-shebang-of-Python-scripts-for-cros.patch |  35 ------
+ ...hon-config.sh-don-t-reassign-prefix.patch} |   0
+ ...d-an-option-to-disable-the-tk-module.patch |  79 +++++++++++++
+ ...fix-building-on-older-distributions.patch} |  12 +-
+ ...p-CC-print-multiarch-output-for-mus.patch} |   2 +-
+ ...option-to-disable-the-sqlite3-module.patch |  62 ----------
+ ...ng-doesn-t-set-errno-when-encryptio.patch} |   0
+ ...d-an-option-to-disable-the-tk-module.patch |  77 ------------
+ ...-option-to-disable-the-curses-module.patch |  61 ----------
+ .../0016-Add-an-option-to-disable-expat.patch |  82 -------------
+ ...-Add-an-option-to-disable-CJK-codecs.patch |  30 -----
+ .../0018-Add-an-option-to-disable-NIS.patch   |  33 ------
+ ...Add-an-option-to-disable-unicodedata.patch |  30 -----
+ ...021-Add-an-option-to-disable-decimal.patch |  54 ---------
+ ...on-to-disable-the-ossaudiodev-module.patch |  30 -----
+ ...an-option-to-disable-openssl-support.patch |  30 -----
+ ...ption-to-disable-the-readline-module.patch |  30 -----
+ ...to-disable-zlib-bzip2-and-xz-modules.patch |  42 -------
+ ...Add-an-option-to-disable-uuid-module.patch |  33 ------
+ ...ion-to-disable-the-berkeleydb-module.patch |  30 -----
+ package/python3/python3.hash                  |   6 +-
+ package/python3/python3.mk                    |  81 ++++++++-----
+ package/scons/scons.hash                      |   4 +-
+ package/scons/scons.mk                        |   9 +-
+ 54 files changed, 274 insertions(+), 1484 deletions(-)
+ delete mode 100644 package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+ delete mode 100644 package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
+ delete mode 100644 package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
+ delete mode 100644 package/python-crossbar/Config.in
+ delete mode 100644 package/python-crossbar/python-crossbar.hash
+ delete mode 100644 package/python-crossbar/python-crossbar.mk
+ delete mode 100644 package/python-pygame/Config.in
+ delete mode 100644 package/python-pygame/python-pygame.hash
+ delete mode 100644 package/python-pygame/python-pygame.mk
+ create mode 100644 package/python-versioneer/python-versioneer.hash
+ create mode 100644 package/python-versioneer/python-versioneer.mk
+ delete mode 100644 package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
+ rename package/python3/{0004-Adjust-library-header-paths-for-cross-compilation.patch => 0003-Adjust-library-header-paths-for-cross-compilation.patch} (64%)
+ rename package/python3/{0008-Serial-ioctl-workaround.patch => 0004-Serial-ioctl-workaround.patch} (100%)
+ delete mode 100644 package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch
+ rename package/python3/{0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch => 0005-Misc-python-config.sh.in-ensure-sed-invocations-only.patch} (100%)
+ rename package/python3/{0011-Add-an-option-to-disable-pydoc.patch => 0006-Add-an-option-to-disable-pydoc.patch} (54%)
+ delete mode 100644 package/python3/0006-Don-t-add-multiarch-paths.patch
+ delete mode 100644 package/python3/0007-Abort-on-failed-module-build.patch
+ rename package/python3/{0012-Add-an-option-to-disable-lib2to3.patch => 0007-Add-an-option-to-disable-lib2to3.patch} (59%)
+ rename package/python3/{0020-Add-an-option-to-disable-IDLE.patch => 0008-Add-an-option-to-disable-IDLE.patch} (57%)
+ delete mode 100644 package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
+ rename package/python3/{0026-python-config.sh-don-t-reassign-prefix.patch => 0009-python-config.sh-don-t-reassign-prefix.patch} (100%)
+ create mode 100644 package/python3/0010-Add-an-option-to-disable-the-tk-module.patch
+ rename package/python3/{0028-fix-building-on-older-distributions.patch => 0011-fix-building-on-older-distributions.patch} (82%)
+ rename package/python3/{0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch => 0012-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch} (97%)
+ delete mode 100644 package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch
+ rename package/python3/{0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch => 0013-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} (100%)
+ delete mode 100644 package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
+ delete mode 100644 package/python3/0015-Add-an-option-to-disable-the-curses-module.patch
+ delete mode 100644 package/python3/0016-Add-an-option-to-disable-expat.patch
+ delete mode 100644 package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch
+ delete mode 100644 package/python3/0018-Add-an-option-to-disable-NIS.patch
+ delete mode 100644 package/python3/0019-Add-an-option-to-disable-unicodedata.patch
+ delete mode 100644 package/python3/0021-Add-an-option-to-disable-decimal.patch
+ delete mode 100644 package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch
+ delete mode 100644 package/python3/0023-Add-an-option-to-disable-openssl-support.patch
+ delete mode 100644 package/python3/0024-Add-an-option-to-disable-the-readline-module.patch
+ delete mode 100644 package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
+ delete mode 100644 package/python3/0027-Add-an-option-to-disable-uuid-module.patch
+ delete mode 100644 package/python3/0030-Add-an-option-to-disable-the-berkeleydb-module.patch
+
+-- 
+2.41.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
