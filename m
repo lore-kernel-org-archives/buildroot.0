@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D013C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 12:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 987DFC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 10 Nov 2023 12:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C55D382151;
-	Fri, 10 Nov 2023 12:21:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C55D382151
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D280838C0;
+	Fri, 10 Nov 2023 12:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D280838C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sLtOXRL1WuPO; Fri, 10 Nov 2023 12:21:21 +0000 (UTC)
+	with ESMTP id CIi8CoE1CErs; Fri, 10 Nov 2023 12:22:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23C7782139;
-	Fri, 10 Nov 2023 12:21:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23C7782139
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DC8F61BF852
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 12:21:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B838C835A6;
+	Fri, 10 Nov 2023 12:22:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B838C835A6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EACD71BF852
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 12:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B63C241B92
- for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 12:21:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B63C241B92
+ by smtp2.osuosl.org (Postfix) with ESMTP id C0BF84058E
+ for <buildroot@lists.busybox.net>; Fri, 10 Nov 2023 12:21:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0BF84058E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fTzreNerchkO for <buildroot@lists.busybox.net>;
- Fri, 10 Nov 2023 12:21:17 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7C84F41B74
- for <buildroot@buildroot.org>; Fri, 10 Nov 2023 12:21:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C84F41B74
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 71B6EC0007;
- Fri, 10 Nov 2023 12:21:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L2g2zGXdeo7W for <buildroot@lists.busybox.net>;
+ Fri, 10 Nov 2023 12:21:26 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F2E7340533
+ for <buildroot@buildroot.org>; Fri, 10 Nov 2023 12:21:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2E7340533
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F2B3260002;
+ Fri, 10 Nov 2023 12:21:23 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r1QVd-003oXQ-2E;
- Fri, 10 Nov 2023 13:21:13 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r1QVn-003pYY-1U;
+ Fri, 10 Nov 2023 13:21:23 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20231104224820.374897-1-fontaine.fabrice@gmail.com>
-Date: Fri, 10 Nov 2023 13:21:13 +0100
-In-Reply-To: <20231104224820.374897-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 4 Nov 2023 23:48:19 +0100")
-Message-ID: <8734xdn6iu.fsf@48ers.dk>
+ <20231104224820.374897-2-fontaine.fabrice@gmail.com>
+Date: Fri, 10 Nov 2023 13:21:23 +0100
+In-Reply-To: <20231104224820.374897-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 4 Nov 2023 23:48:20 +0100")
+Message-ID: <87y1f5lry4.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/freeradius-server: fix python
- handling
+Subject: Re: [Buildroot] [PATCH 2/2] package/freeradius-server: fix python
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,9 +72,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > python handling is wrong since the addition of the package in commit
- > 736c4c1655d93652a9a7e79235bbe726b3d46176 so disable python(2) and enable
- > python3 if needed
+ > Fix the following build failure raised since bump to version 3.2.3 in
+ > commit 4155139365247ea702bb536848dd1e771f98f0d2:
+
+ > In file included from /home/thomas/autobuild/instance-1/output-1/host/include/python3.11/Python.h:38,
+ >                  from src/modules/rlm_python3/rlm_python3.c:37:
+ > /home/thomas/autobuild/instance-1/output-1/host/include/python3.11/pyport.h:596:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+ >   596 | #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+ >       |  ^~~~~
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/36143ab06b66a047aa2247ea66b1df0d6c1cbd66
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
