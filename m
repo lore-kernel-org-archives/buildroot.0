@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4DC9C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 13:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64F8CC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 13:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69AF6610DA;
-	Sat, 11 Nov 2023 13:42:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69AF6610DA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D9FC610DA;
+	Sat, 11 Nov 2023 13:42:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D9FC610DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BuAiy-mXcSPj; Sat, 11 Nov 2023 13:42:10 +0000 (UTC)
+	with ESMTP id UtGqxZbU6iHz; Sat, 11 Nov 2023 13:42:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACF4E6114A;
-	Sat, 11 Nov 2023 13:42:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACF4E6114A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4EFEB1BF870
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64EDA6114A;
+	Sat, 11 Nov 2023 13:42:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64EDA6114A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 25D8A1BF577
  for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:41:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 23B0240191
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:41:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23B0240191
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0A9C827AF
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:41:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0A9C827AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4vc6Fo7LvRzA for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0lNUtIhgwPPm for <buildroot@lists.busybox.net>;
  Sat, 11 Nov 2023 13:41:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA75E40A45
+ by smtp1.osuosl.org (Postfix) with ESMTP id 981668266C
  for <buildroot@buildroot.org>; Sat, 11 Nov 2023 13:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA75E40A45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 981668266C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9742486EB8; Sat, 11 Nov 2023 13:41:15 +0000 (UTC)
+ id 81FA986ECE; Sat, 11 Nov 2023 13:41:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Nov 2023 14:39:34 +0100
+Date: Sat, 11 Nov 2023 14:38:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 437352bd5bd7ce9822f8c416b591bdbaf74dc751
-X-Git-Newrev: 9b410042a1a673cc7a9214776ee5fdb69e68a6a3
+X-Git-Oldrev: b8c92f7d4819d60d36d05340815e71c75952c601
+X-Git-Newrev: e1741bcdd0654dd68d29f9a43012e87faa00ae3e
 X-Patchwork-Hint: ignore
-Message-Id: <20231111134115.9742486EB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-hts: bump version to
- 20.6.4-Nexus
+Message-Id: <20231111134115.81FA986ECE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tor: security bump version to
+ 0.4.8.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b410042a1a673cc7a9214776ee5fdb69e68a6a3
+commit: https://git.buildroot.net/buildroot/commit/?id=e1741bcdd0654dd68d29f9a43012e87faa00ae3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+https://forum.torproject.org/t/security-release-0-4-8-9/10155
+
+Fixes TROVE-2023-006.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
- package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-index c9fe1cfe6a..4a0ccb2467 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index fc128e0fcf..dafa6d43d8 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.8.8.tar.gz.sha256sum
+-sha256  21bbe908cafeabff04636d26293540aa9366eb1cf389bc65dc2476c93e688004  tor-0.4.8.8.tar.gz
++# From https://dist.torproject.org/tor-0.4.8.9.tar.gz.sha256sum
++sha256  59bb7d8890f6131b4ce5344f3dcea5deb2182b7f4f10ff0cb4e4d81f11b2cf65  tor-0.4.8.9.tar.gz
  # Locally computed
--sha256  8febdacb795eb724456f88af5c55a6e0a5393447f673b2be72d1ca9276479cdd  kodi-pvr-hts-20.6.3-Nexus.tar.gz
-+sha256  bce8fe803665121ab7cb20d13e76515a96cf9ef342ef109611e2df2ab144d3b5  kodi-pvr-hts-20.6.4-Nexus.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index 04de82dc64..d9bf682b38 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index b054bc55bb..455ba2b551 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_HTS_VERSION = 20.6.3-Nexus
-+KODI_PVR_HTS_VERSION = 20.6.4-Nexus
- KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPL-2.0+
- KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
+-TOR_VERSION = 0.4.8.8
++TOR_VERSION = 0.4.8.9
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
