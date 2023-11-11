@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64F8CC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 13:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99F6CC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 13:43:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D9FC610DA;
-	Sat, 11 Nov 2023 13:42:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D9FC610DA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5363C610C6;
+	Sat, 11 Nov 2023 13:43:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5363C610C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UtGqxZbU6iHz; Sat, 11 Nov 2023 13:42:23 +0000 (UTC)
+	with ESMTP id BNTJ9gYiU9_Y; Sat, 11 Nov 2023 13:43:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64EDA6114A;
-	Sat, 11 Nov 2023 13:42:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64EDA6114A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 25D8A1BF577
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:41:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8D1B60AA5;
+	Sat, 11 Nov 2023 13:43:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8D1B60AA5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 91BF21BF577
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:43:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0A9C827AF
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:41:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0A9C827AF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A48A40C01
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:43:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A48A40C01
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0lNUtIhgwPPm for <buildroot@lists.busybox.net>;
- Sat, 11 Nov 2023 13:41:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 981668266C
- for <buildroot@buildroot.org>; Sat, 11 Nov 2023 13:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 981668266C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81FA986ECE; Sat, 11 Nov 2023 13:41:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ljGFYCbD-KbI for <buildroot@lists.busybox.net>;
+ Sat, 11 Nov 2023 13:42:59 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3854B40A45
+ for <buildroot@buildroot.org>; Sat, 11 Nov 2023 13:42:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3854B40A45
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F3226FF805;
+ Sat, 11 Nov 2023 13:42:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r1oGF-006U3D-0v;
+ Sat, 11 Nov 2023 14:42:55 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 11 Nov 2023 14:38:44 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b8c92f7d4819d60d36d05340815e71c75952c601
-X-Git-Newrev: e1741bcdd0654dd68d29f9a43012e87faa00ae3e
-X-Patchwork-Hint: ignore
-Message-Id: <20231111134115.81FA986ECE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tor: security bump version to
- 0.4.8.9
+To: Oleg Lyovin via buildroot <buildroot@buildroot.org>
+References: <20231107132323.3324587-1-ovlevin@salutedevices.com>
+Date: Sat, 11 Nov 2023 14:42:55 +0100
+In-Reply-To: <20231107132323.3324587-1-ovlevin@salutedevices.com> (Oleg Lyovin
+ via buildroot's message of "Tue, 7 Nov 2023 16:23:23 +0300")
+Message-ID: <87bkc0iexs.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package: dhcpcd: fix dhcpcd binary not
+ stripped
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +63,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: John Stile <johns@msli.com>, olegartys@gmail.com,
+ Oleg Lyovin <ovlevin@salutedevices.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1741bcdd0654dd68d29f9a43012e87faa00ae3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Oleg" == Oleg Lyovin via buildroot <buildroot@buildroot.org> writes:
 
-Release notes:
-https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
-https://forum.torproject.org/t/security-release-0-4-8-9/10155
+ > By default dhcpcd installed with 555 permissions as it is
+ > configured in its Makefile.inc. Since 'w' bit is missing,
+ > strip fails and dhcpcd binary installed non-stripped.
 
-Fixes TROVE-2023-006.
+ > On ARM GCC 12 glibc configuration strip saves over 1MB of disk space.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Oleg Lyovin <ovlevin@salutedevices.com>
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index fc128e0fcf..dafa6d43d8 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.8.tar.gz.sha256sum
--sha256  21bbe908cafeabff04636d26293540aa9366eb1cf389bc65dc2476c93e688004  tor-0.4.8.8.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.9.tar.gz.sha256sum
-+sha256  59bb7d8890f6131b4ce5344f3dcea5deb2182b7f4f10ff0cb4e4d81f11b2cf65  tor-0.4.8.9.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index b054bc55bb..455ba2b551 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.4.8.8
-+TOR_VERSION = 0.4.8.9
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
