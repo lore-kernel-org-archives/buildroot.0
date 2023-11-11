@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E284C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 13:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E99EC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 13:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F24A540C03;
-	Sat, 11 Nov 2023 13:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F24A540C03
+	by smtp3.osuosl.org (Postfix) with ESMTP id B42B0610B9;
+	Sat, 11 Nov 2023 13:30:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B42B0610B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RI1tR8eWYpYk; Sat, 11 Nov 2023 13:26:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AeDmqI70xNTg; Sat, 11 Nov 2023 13:30:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C98940BFC;
-	Sat, 11 Nov 2023 13:26:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C98940BFC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D41B610A1;
+	Sat, 11 Nov 2023 13:30:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D41B610A1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F08E21BF3BD
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:26:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3BAC61BF3BD
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA16341B27
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:26:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA16341B27
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14DA341B8F
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:30:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14DA341B8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a_zbEP0s3nef for <buildroot@lists.busybox.net>;
- Sat, 11 Nov 2023 13:26:40 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D9E9A418FE
- for <buildroot@buildroot.org>; Sat, 11 Nov 2023 13:26:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9E9A418FE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 166B560013;
- Sat, 11 Nov 2023 13:26:37 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r1o0T-006Sw4-1m;
- Sat, 11 Nov 2023 14:26:37 +0100
+ with ESMTP id 37ObWpE0LtI4 for <buildroot@lists.busybox.net>;
+ Sat, 11 Nov 2023 13:30:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F86841B8B
+ for <buildroot@buildroot.org>; Sat, 11 Nov 2023 13:30:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F86841B8B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 25E3086C56; Sat, 11 Nov 2023 13:30:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20231108223139.B039886D97@busybox.osuosl.org>
-Date: Sat, 11 Nov 2023 14:26:37 +0100
-In-Reply-To: <20231108223139.B039886D97@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Wed, 8 Nov 2023 23:28:53 +0100")
-Message-ID: <875y28ju9e.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/opencv4: security bump to
- version 4.8.1
+To: buildroot@buildroot.org
+Date: Sat, 11 Nov 2023 14:16:02 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 4f5c3b99f9eddc7e5cf8b0156c2778b09413f10d
+X-Git-Newrev: bfe5459626377cf71d48a7b1a230502d978cb212
+X-Patchwork-Hint: ignore
+Message-Id: <20231111133047.25E3086C56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/go: security bump
+ to version 1.20.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bfe5459626377cf71d48a7b1a230502d978cb212
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=a01490397e4cc11155b3c396ded382eefeef4f12
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes the following (Windows only) security issues:
 
- > Also, bump package/opencv4-contrib to in lock-step.
+CVE-2023-45283: path/filepath: recognize \??\ as a Root Local Device path prefix.
+CVE-2023-45284: path/filepath: recognize device names with trailing spaces and superscripts
 
- > This addresses both CVE-2023-2617 and CVE-2023-2618, that have been
- > fixed in OpenCV 4.8.0.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2023.02.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/go/go.hash b/package/go/go.hash
+index a4aafbe6e4..12a9dfd5da 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  72d2f51805c47150066c103754c75fddb2c19d48c9219fa33d1e46696c841dbb  go1.20.10.src.tar.gz
++sha256  d355c5ae3a8f7763c9ec9dc25153aae373958cbcb60dd09e91a8b56c7621b2fc  go1.20.11.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index c3f88b8682..e6fd46d15c 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.20.10
++GO_VERSION = 1.20.11
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
