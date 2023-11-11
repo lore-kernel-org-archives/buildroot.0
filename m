@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B54C3C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 13:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DA7FC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 13:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71DA660BE7;
-	Sat, 11 Nov 2023 13:31:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71DA660BE7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32DBF610FE;
+	Sat, 11 Nov 2023 13:32:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32DBF610FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5wtoH996_RvY; Sat, 11 Nov 2023 13:31:54 +0000 (UTC)
+	with ESMTP id v2zSkEQERfuP; Sat, 11 Nov 2023 13:32:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4080610F8;
-	Sat, 11 Nov 2023 13:31:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4080610F8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1FA3D1BF3BD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69520610F2;
+	Sat, 11 Nov 2023 13:32:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69520610F2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E13C31BF3BD
  for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:30:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04A1F40C01
+ by smtp1.osuosl.org (Postfix) with ESMTP id BAED6822F0
  for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 13:30:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04A1F40C01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAED6822F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 51OI74XqD1zH for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Eko-ypL3axEc for <buildroot@lists.busybox.net>;
  Sat, 11 Nov 2023 13:30:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB68240A45
+ by smtp1.osuosl.org (Postfix) with ESMTP id A40E0822EA
  for <buildroot@buildroot.org>; Sat, 11 Nov 2023 13:30:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB68240A45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A40E0822EA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B828C86C5B; Sat, 11 Nov 2023 13:30:57 +0000 (UTC)
+ id 942ED86C56; Sat, 11 Nov 2023 13:30:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Nov 2023 14:26:08 +0100
+Date: Sat, 11 Nov 2023 14:18:20 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 9301784cf8039444b8954f88da05aac6cf2bb40d
-X-Git-Newrev: dc1d056476c5f82003c7acfa85c8eef483b7041c
+X-Git-Oldrev: 51ba58a112736b915cacc96d7e9f8597c08f9275
+X-Git-Newrev: 8b09097f4f2082afca7760a7d5172d29bd0eacbf
 X-Patchwork-Hint: ignore
-Message-Id: <20231111133057.B828C86C5B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/opencv4: security
- bump to version 4.8.1
+Message-Id: <20231111133057.942ED86C56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/go: security bump
+ to version 1.20.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,69 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc1d056476c5f82003c7acfa85c8eef483b7041c
+commit: https://git.buildroot.net/buildroot/commit/?id=8b09097f4f2082afca7760a7d5172d29bd0eacbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Also, bump package/opencv4-contrib to in lock-step.
+Fixes the following (Windows only) security issues:
 
-This addresses both CVE-2023-2617 and CVE-2023-2618, that have been
-fixed in OpenCV 4.8.0.
+CVE-2023-45283: path/filepath: recognize \??\ as a Root Local Device path prefix.
+CVE-2023-45284: path/filepath: recognize device names with trailing spaces and superscripts
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a01490397e4cc11155b3c396ded382eefeef4f12)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv4-contrib/opencv4-contrib.hash | 2 +-
- package/opencv4-contrib/opencv4-contrib.mk   | 2 +-
- package/opencv4/opencv4.hash                 | 2 +-
- package/opencv4/opencv4.mk                   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opencv4-contrib/opencv4-contrib.hash b/package/opencv4-contrib/opencv4-contrib.hash
-index 4f15162e50..954a0c2beb 100644
---- a/package/opencv4-contrib/opencv4-contrib.hash
-+++ b/package/opencv4-contrib/opencv4-contrib.hash
+diff --git a/package/go/go.hash b/package/go/go.hash
+index a4aafbe6e4..12a9dfd5da 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1777d5fd2b59029cf537e5fd6f8aa68d707075822f90bde683fcde086f85f7a7  opencv4-contrib-4.6.0.tar.gz
-+sha256  0c082a0b29b3118f2a0a1856b403bb098643af7b994a0080f402a12159a99c6e  opencv4-contrib-4.8.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
-index 81c45c6e02..52d2682b26 100644
---- a/package/opencv4-contrib/opencv4-contrib.mk
-+++ b/package/opencv4-contrib/opencv4-contrib.mk
+ # From https://go.dev/dl
+-sha256  72d2f51805c47150066c103754c75fddb2c19d48c9219fa33d1e46696c841dbb  go1.20.10.src.tar.gz
++sha256  d355c5ae3a8f7763c9ec9dc25153aae373958cbcb60dd09e91a8b56c7621b2fc  go1.20.11.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index c3f88b8682..e6fd46d15c 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENCV4_CONTRIB_VERSION = 4.6.0
-+OPENCV4_CONTRIB_VERSION = 4.8.1
- OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
- OPENCV4_CONTRIB_INSTALL_TARGET = FALSE
- OPENCV4_CONTRIB_LICENSE = Apache-2.0
-diff --git a/package/opencv4/opencv4.hash b/package/opencv4/opencv4.hash
-index 419b420917..2736752633 100644
---- a/package/opencv4/opencv4.hash
-+++ b/package/opencv4/opencv4.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1ec1cba65f9f20fe5a41fda1586e01c70ea0c9a6d7b67c9e13edf0cfe2239277  opencv4-4.6.0.tar.gz
-+sha256  62f650467a60a38794d681ae7e66e3e8cfba38f445e0bf87867e2f2cdc8be9d5  opencv4-4.8.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index 2a05de42fb..74cec511a9 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-GO_VERSION = 1.20.10
++GO_VERSION = 1.20.11
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
--OPENCV4_VERSION = 4.6.0
-+OPENCV4_VERSION = 4.8.1
- OPENCV4_SITE = $(call github,opencv,opencv,$(OPENCV4_VERSION))
- OPENCV4_INSTALL_STAGING = YES
- OPENCV4_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
