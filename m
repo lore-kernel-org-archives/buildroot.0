@@ -4,89 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD63EC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 11:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B062BC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 11:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DD0B4210D;
-	Sat, 11 Nov 2023 11:37:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DD0B4210D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 117BA41E40;
+	Sat, 11 Nov 2023 11:44:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 117BA41E40
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PhVB7TlAAVa5; Sat, 11 Nov 2023 11:37:42 +0000 (UTC)
+	with ESMTP id X1jsRorZ6i-D; Sat, 11 Nov 2023 11:44:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7110841E40;
-	Sat, 11 Nov 2023 11:37:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7110841E40
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B3E781BF400
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 11:37:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 628DA417E2;
+	Sat, 11 Nov 2023 11:44:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 628DA417E2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AB4E81BF400
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 11:44:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 91EE06106D
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 11:37:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91EE06106D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 924B083938
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 11:44:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 924B083938
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wcuB6_D25kvm for <buildroot@lists.busybox.net>;
- Sat, 11 Nov 2023 11:37:38 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0277061013
- for <buildroot@buildroot.org>; Sat, 11 Nov 2023 11:37:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0277061013
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40839652b97so21393695e9.3
- for <buildroot@buildroot.org>; Sat, 11 Nov 2023 03:37:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699702656; x=1700307456;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=aOeTk22o9EEeB+e7VyDSIHH/cTILb5ozhChCBB7OpvY=;
- b=QQBJW61eDTuABXFJzKlVWWdqWb5k4djwF9yOkdxWz+OEd47uGmhlh3HvXoKiortQoZ
- Ax9OM8OxCX4iWXxSUWXPKr1i4SBCrXzXtDl5FveRPkG1FRURAzs66sHNQ6cglruPfDjW
- nrB8FrU/55fpRPLd4M/5g7ehBELbgP2WBkCSkmL3KIxqx7voDQHr6R55E0RJGgIRMbtX
- F/jqkvUygVVc61Ku4FRCukEvzso1q5jKO9TObDW7z+NA3k35gBqgRNAB9S6szuyyYkMA
- GndWcfjGH/BFffgWl1cHSlnlAgufHJqvTQRqaeuzHWAewxUXtdpV4yCFvCXAuvTanfbj
- tH/w==
-X-Gm-Message-State: AOJu0YybyxXFxzdIYTmYhC+Z21cIUcNB7CmB2eRbTGKzolTIWWT7hkSp
- tHixR/fzVdWHs99UKcU2oxRY8uG8ae8aQq0mdOo=
-X-Google-Smtp-Source: AGHT+IH66lsCsXQPg14384cpTj6VqRTHgJNJpbYnswzwz8XEMZgGCNlsBzlc+1idXZpS5DLlkdMPbA==
-X-Received: by 2002:a7b:cbd0:0:b0:407:58e1:24ed with SMTP id
- n16-20020a7bcbd0000000b0040758e124edmr1532177wmi.39.1699702655644; 
- Sat, 11 Nov 2023 03:37:35 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- e6-20020a05600c218600b00405c7591b09sm1910681wme.35.2023.11.11.03.37.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Nov 2023 03:37:35 -0800 (PST)
-From: Romain Naour <romain.naour@smile.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HdozApSlZNW0 for <buildroot@lists.busybox.net>;
+ Sat, 11 Nov 2023 11:44:02 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1B9B483883
+ for <buildroot@buildroot.org>; Sat, 11 Nov 2023 11:44:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B9B483883
+Received: from fli4l.lan.fli4l (p4fd6c5aa.dip0.t-ipconnect.de [79.214.197.170])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 60D70A4C104F
+ for <buildroot@buildroot.org>; Sat, 11 Nov 2023 12:43:59 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48788)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
+ (envelope-from <bernd@kuhls.net>) id 1r1mP9-0005O2-0M
+ for buildroot@buildroot.org; Sat, 11 Nov 2023 12:43:59 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 11 Nov 2023 12:37:31 +0100
-Message-ID: <20231111113731.859747-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.41.0
+Date: Sat, 11 Nov 2023 12:43:56 +0100
+Message-Id: <20231111114358.2674610-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1699702656; x=1700307456;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=aOeTk22o9EEeB+e7VyDSIHH/cTILb5ozhChCBB7OpvY=;
- b=W7dIX1yqURIl+PhTZwvp1ouBVDFsUAu9tvpESpIfxCSpWVm/WvThrXE2ErDAf4JZ9n
- f7EnnNVBKfA06qigg7hO2jMfiijD/dZn8Dcg9tud6RtzEhi95pYzhvnm0/jndjc2jS2Y
- qv0NJBATwgX+QX7b2hVv4dD6H7eOrvK87ZBFyRpZvC6SCyK0Dh5vIF1FW52NToQ/eZ4E
- FkwlA7e0l2rJJsmss2A9QVP1DzrO868AxuFdkK6UvIZbsQlbwpZJby9Y51XPHvCGrCXn
- 7CJyywcy0qsZwjM22+QUev3d9ikP7QyOl7jiV18GaZlYHwG1vQhH7BKv/Llz7ESxDp0w
- u9MQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=W7dIX1yq
-Subject: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: print error log
- if the runtime test fail
+ d=kuhls.net; 
+ s=kas202306131828; t=1699703039;
+ bh=WSTkvzDEDvD6TgWTAjhFcGr7c+2dTcJt0BIe9u5AZzY=;
+ h=From:To:Subject:Date:From;
+ b=nmYAHARPlUwkdApNjMeFkSgZV+FjCX5/Kb8CYJKl75KbsLMJg5q43b9WUab01tV4d
+ 5AZncijK7BRezi6F1CBBDZ9h5Af/NR52Dat1w2PmdFiAAPQw6rQH4k1dxRqAD9R3Sy
+ hhcgG8aKWIKv0JkCbZxwbO9jtLKsyFAPeusWkrR60roV1sc3J3X4FdpfqjkOqA/LHd
+ eipsr6hh283QkgLoVdwVN6dm4g8ad2PKABK0erykuvipBrItLdt0nLmdHk5PlL3dsG
+ OaxCjCKIRRgurtPTLJeHdq3z4vgm3EebqU0/NZXBae36V9C37P4qfhjnDGQxOHmpgT
+ cvrqLFNDeIlfQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=nmYAHARP
+Subject: [Buildroot] [PATCH 1/3] package/kodi-pvr-hts: bump version to
+ 20.6.4-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,64 +75,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When an error occurs, the gitlab-ci job log doesn't contain any useful
-information than the name of the failing test:
-
-  FAIL: test_run (tests.package.test_python_paho_mqtt.TestPythonPahoMQTT)
-
-In order to encourage contributors to investigate issues reported by
-gitlab-ci, we want to print the last lines of the log file (build or
-runtime).
-
-Unfortunately, gitlab-ci job log completely strips lines ending with
-CRCRLF [1][2]. We have to take a look at the gitlab-ci raw log to see
-the complete log [3].
-
-To workaround this issue, remove crlf from qemu serial stdio log
-while printing in the gitlab-ci job log (we don't want to change
-the log file generated by support/testing/run-tests and saved as
-artefacts).
-
-[1] https://gitlab.com/gitlab-org/gitlab/-/issues/218771
-[2] https://gitlab.com/kubu93/buildroot/-/jobs/5492937691
-[3] https://gitlab.com/kubu93/buildroot/-/jobs/5492937691/raw
-
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- support/misc/gitlab-ci.yml.in | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 4d9acbc3d3..db206432aa 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -103,7 +103,16 @@ before_script:
-     script:
-         - TEST_CASE_NAME=${CI_JOB_NAME}
-         - echo "Starting runtime test ${TEST_CASE_NAME}"
--        - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
-+        - |
-+            ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME} || {
-+                echo 'Failed runtime test last output'
-+                if [ -f test-output/*-run.log ]; then
-+                    tail -200 test-output/*-run.log | sed 's/\r\r$//'
-+                else
-+                    tail -200 test-output/*-build.log
-+                fi
-+                exit 1
-+            }
-     retry:
-         max: 2
-         when:
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index c9fe1cfe6a..4a0ccb2467 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8febdacb795eb724456f88af5c55a6e0a5393447f673b2be72d1ca9276479cdd  kodi-pvr-hts-20.6.3-Nexus.tar.gz
++sha256  bce8fe803665121ab7cb20d13e76515a96cf9ef342ef109611e2df2ab144d3b5  kodi-pvr-hts-20.6.4-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index 04de82dc64..d9bf682b38 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_HTS_VERSION = 20.6.3-Nexus
++KODI_PVR_HTS_VERSION = 20.6.4-Nexus
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+ KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
 -- 
-2.41.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
