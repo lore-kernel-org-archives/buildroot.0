@@ -4,71 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A14DCC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 16:19:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3BFBC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 11 Nov 2023 16:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1677B41ED8;
-	Sat, 11 Nov 2023 16:19:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1677B41ED8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 782D0402F3;
+	Sat, 11 Nov 2023 16:20:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 782D0402F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9AluCb5ABEws; Sat, 11 Nov 2023 16:19:46 +0000 (UTC)
+	with ESMTP id R6VBiCIhYSnK; Sat, 11 Nov 2023 16:19:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4592341E8A;
-	Sat, 11 Nov 2023 16:19:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4592341E8A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 581201BF38A
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 16:19:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C27D40293;
+	Sat, 11 Nov 2023 16:19:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C27D40293
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C998D1BF38A
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 16:19:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CC6D40A92
- for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 16:19:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CC6D40A92
+ by smtp1.osuosl.org (Postfix) with ESMTP id B07D882346
+ for <buildroot@lists.busybox.net>; Sat, 11 Nov 2023 16:19:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B07D882346
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tvt11ksns9t7 for <buildroot@lists.busybox.net>;
- Sat, 11 Nov 2023 16:19:43 +0000 (UTC)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com
- [209.85.128.51])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D190D40191
- for <buildroot@buildroot.org>; Sat, 11 Nov 2023 16:19:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D190D40191
-Received: by mail-wm1-f51.google.com with SMTP id
- 5b1f17b1804b1-40a4d04af5cso2982385e9.0
- for <buildroot@buildroot.org>; Sat, 11 Nov 2023 08:19:42 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id laFGASU0e6_p for <buildroot@lists.busybox.net>;
+ Sat, 11 Nov 2023 16:19:44 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com
+ [209.85.221.49])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 97E0A8232D
+ for <buildroot@buildroot.org>; Sat, 11 Nov 2023 16:19:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97E0A8232D
+Received: by mail-wr1-f49.google.com with SMTP id
+ ffacd0b85a97d-32da9ef390fso1900527f8f.2
+ for <buildroot@buildroot.org>; Sat, 11 Nov 2023 08:19:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699719580; x=1700324380;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=1m7pgoZFOkLRCRyWwvENrkSwwUBIgGyIXKaDwEjimCM=;
- b=SyqEL8l8mxHiBHRsUkw5fby04/qiDt8w7CzBdYWyk6vOUVawBoBJ2n1s06NoofLUFl
- GFQNGccThISInuh6sHiRzMatjuapbfNd5ed6dlYRR8AGCHSvZLHGcMLoxVuaguMgEYBb
- 7yaNLTpzKUMFVaZSsjjkGMDZEhmfZGhs/OPIg5NByPM8Mg3HGo6bR83ZjkwfvBAMM3df
- X4hDRNF1EERhES3YHUWCN8Z/1aIVxDAdcghHXWyufqo+raxyluzhh3QW9ijnlA2NijRX
- a/PUwh6EpWP4tVLSMMAsxhwIDm/YeuajLs2P86Lp6VKaRLaarc1InKkwRwWpC+1CW2FM
- 6eUg==
-X-Gm-Message-State: AOJu0YyU4OBYMNZZ1IRaK/dZ3hYXPYCgCwaKtxJuPmmlOwzv75Bd0Dqi
- e0XFXDa7aluEovhdgPZgSiQI7moWPMWghA==
-X-Google-Smtp-Source: AGHT+IHFaYmm11AdXJ8Cuuny/mX/1Q3ZLtlyO+UmNStcZUkOTsVAdmbBXhElu1n2hYYfKeWbXDubqg==
-X-Received: by 2002:adf:fe8d:0:b0:319:785a:fce0 with SMTP id
- l13-20020adffe8d000000b00319785afce0mr1327674wrr.26.1699719579919; 
- Sat, 11 Nov 2023 08:19:39 -0800 (PST)
+ d=1e100.net; s=20230601; t=1699719582; x=1700324382;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=0JWrhmUplZcGkY9feZrBqFUjcPwThtg0acPtt+dLo/Y=;
+ b=maJC1LWYfUB2NoATJ4TFDWDRi44EiKcg749a1gN/I5NJGunUl0NeIsdy3NUyjdXmk8
+ 4Pt0yw6cJloQwjH9F+97cYzAUORvOAikiFxC6ukq1st4p6oWQvc3x0jJfc9W4+2sqXhS
+ E7sMqDAJt8FaZOEFIWSeSr2+iDhhmDeFPpa9+FsVIQm1iwgoioAOeivxWosMErP/srh7
+ MMyhq5/9R6EyB5jWsmAyGf4bCJR1bWVu5YUj+Q7t2NHaOwC2AEKFLrSQB2C7GzT/lk3X
+ 9TjLRSkUYZprdgrHHPhln3NYGz9Omky/th2B+gH6yHiGKA1Rmys0zImIf3QunTzf59n5
+ Z/MA==
+X-Gm-Message-State: AOJu0Yxx7Hig3vNpcShADkCssoVjM+13P0Lss8Ko6Q7j0M0ipkWNeTPX
+ FDOsPxMeMswLT4kxgQWceFLZMS/jZZN8/Q==
+X-Google-Smtp-Source: AGHT+IFn4LvLyKu1wCW1hAaAL4x+rgbSsEbB72d1fRiQseFfTQaHuMURWgmz/TnqTHD5Ibs5+fMiDA==
+X-Received: by 2002:a05:6000:1567:b0:321:6bed:1646 with SMTP id
+ 7-20020a056000156700b003216bed1646mr1999544wrz.14.1699719581919; 
+ Sat, 11 Nov 2023 08:19:41 -0800 (PST)
 Received: from localhost.localdomain
  ([2a02:a03f:eb68:2f00:ddfd:ab02:5d95:c69d])
  by smtp.gmail.com with ESMTPSA id
- b6-20020adff246000000b0032da40fd7bdsm1743380wrp.24.2023.11.11.08.19.39
+ b6-20020adff246000000b0032da40fd7bdsm1743380wrp.24.2023.11.11.08.19.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Nov 2023 08:19:39 -0800 (PST)
+ Sat, 11 Nov 2023 08:19:41 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 Nov 2023 17:19:31 +0100
-Message-Id: <20231111161932.914611-1-thomas@devoogdt.com>
+Date: Sat, 11 Nov 2023 17:19:32 +0100
+Message-Id: <20231111161932.914611-2-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231111161932.914611-1-thomas@devoogdt.com>
+References: <20231111161932.914611-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/2] package/libsoup3: bump to 3.4.4
+Subject: [Buildroot] [PATCH v1 2/2] package/at-spi2-core: bump to 2.50.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,39 +91,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 News:
- - https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.3.news
- - https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.4.news
+ - https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.4.news
+ - https://download.gnome.org/sources/at-spi2-core/2.49/at-spi2-core-2.49.1.news
+ - https://download.gnome.org/sources/at-spi2-core/2.49/at-spi2-core-2.49.90.news
+ - https://download.gnome.org/sources/at-spi2-core/2.49/at-spi2-core-2.49.91.news
+ - https://download.gnome.org/sources/at-spi2-core/2.50/at-spi2-core-2.50.0.news
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/libsoup3/libsoup3.hash | 4 ++--
- package/libsoup3/libsoup3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/at-spi2-core/at-spi2-core.hash | 4 ++--
+ package/at-spi2-core/at-spi2-core.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
-index 01313b394b..11e48b42aa 100644
---- a/package/libsoup3/libsoup3.hash
-+++ b/package/libsoup3/libsoup3.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.2.sha256sum
--sha256  78c8fa37cb152d40ec8c4a148d6155e2f6947f3f1602a7cda3a31ad40f5ee2f3  libsoup-3.4.2.tar.xz
-+# From https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.4.sha256sum
-+sha256  291c67725f36ed90ea43efff25064b69c5a2d1981488477c05c481a3b4b0c5aa  libsoup-3.4.4.tar.xz
- # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
-index 9e66b6ebd2..76105cec4e 100644
---- a/package/libsoup3/libsoup3.mk
-+++ b/package/libsoup3/libsoup3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+index 8f856e1cac..4257ba03a7 100644
+--- a/package/at-spi2-core/at-spi2-core.hash
++++ b/package/at-spi2-core/at-spi2-core.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/at-spi2-core/2.48/at-spi2-core-2.48.3.sha256sum
+-sha256  37316df43ca9989ce539d54cf429a768c28bb38a0b34950beadd0421827edf55  at-spi2-core-2.48.3.tar.xz
++# From https://download.gnome.org/sources/at-spi2-core/2.50/at-spi2-core-2.50.0.sha256sum
++sha256  e9f5a8c8235c9dd963b2171de9120301129c677dde933955e1df618b949c4adc  at-spi2-core-2.50.0.tar.xz
+ 
+ # locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+index 0ca5bc1817..828280de1a 100644
+--- a/package/at-spi2-core/at-spi2-core.mk
++++ b/package/at-spi2-core/at-spi2-core.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- LIBSOUP3_VERSION_MAJOR = 3.4
--LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).2
-+LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).4
- LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
- LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
- LIBSOUP3_LICENSE = LGPL-2.0+
+-AT_SPI2_CORE_VERSION_MAJOR = 2.48
+-AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).3
++AT_SPI2_CORE_VERSION_MAJOR = 2.50
++AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
+ AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+ AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+ AT_SPI2_CORE_LICENSE = LGPL-2.1+
 -- 
 2.34.1
 
