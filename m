@@ -1,50 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1AC6C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 12 Nov 2023 14:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCA27C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 12 Nov 2023 18:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 916124061C;
-	Sun, 12 Nov 2023 14:10:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 916124061C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 547B8820DB;
+	Sun, 12 Nov 2023 18:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 547B8820DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fvL8buIJ6LNy; Sun, 12 Nov 2023 14:10:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5nyRHz8lJrYm; Sun, 12 Nov 2023 18:01:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D632841563;
-	Sun, 12 Nov 2023 14:10:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D632841563
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98B3F1BF476
- for <buildroot@lists.busybox.net>; Sun, 12 Nov 2023 14:09:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8753820D2;
+	Sun, 12 Nov 2023 18:01:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8753820D2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A5EB1BF3F3
+ for <buildroot@lists.busybox.net>; Sun, 12 Nov 2023 18:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62D124169E
- for <buildroot@lists.busybox.net>; Sun, 12 Nov 2023 14:09:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62D124169E
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7412820D2
+ for <buildroot@lists.busybox.net>; Sun, 12 Nov 2023 18:01:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7412820D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id safcKDkX0-rW for <buildroot@lists.busybox.net>;
- Sun, 12 Nov 2023 14:09:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 54D3341523
- for <buildroot@buildroot.org>; Sun, 12 Nov 2023 14:09:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54D3341523
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2832787077; Sun, 12 Nov 2023 14:09:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o5SaPp8eTDxH for <buildroot@lists.busybox.net>;
+ Sun, 12 Nov 2023 18:01:06 +0000 (UTC)
+Received: from smtpdh18-2.aruba.it (smtpdh18-2.aruba.it [62.149.155.133])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 23E44820CF
+ for <buildroot@buildroot.org>; Sun, 12 Nov 2023 18:01:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23E44820CF
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 2Elarmb71tD7I2Elar1TKg; Sun, 12 Nov 2023 19:01:02 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 Nov 2023 15:08:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 01932fec171d2d548d20e64e0236e8f6161d689b
-X-Git-Newrev: ed0be8ab1d4af5af04b204a00fc4e62d5c36aaa9
-X-Patchwork-Hint: ignore
-Message-Id: <20231112140939.2832787077@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsoup3: bump to 3.4.4
+Date: Sun, 12 Nov 2023 19:01:01 +0100
+Message-Id: <20231112180101.1451451-2-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231112180101.1451451-1-giulio.benetti@benettiengineering.com>
+References: <20231112180101.1451451-1-giulio.benetti@benettiengineering.com>
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfP5WRadMN4W+i/fqau5GcSHdx0qUJmLFrq7WBeTgqGam5qGzt1xWsHllSNKp1cjN0aF2dIYXqvkTouDuNMw4o9vLTymm24B55dNPK7wCShqJKI6YUawk
+ 9rNwBPBf1Lb940Bz3l9ykMTz2/DRHQiQv7f6UHjebQg+uz4c8vGfo44TkxhVZa6QSrKZ2AWAdiqKxLQoTYqhH072Qizjp6HvOu0FzZoGCNZ/yIonmod7k5Of
+ u+mOODphIBAKqftRuM0+twoShaAcdxi0YJvqDHlxy2okfWAkN0DfNDJMSt9rdxeNuOysK3EGZOfCK8CHd2tRxg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1699812062; bh=65aM1Mpysq+igqco5gnCPo64/NLHaQeUtgJN1yeKpE4=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=LC8H78ybKSBdNoLvZwZCJmr58fx0wQNKk5Wkavazht1+9Ox9ngesM7m9gbIsrdyxg
+ BPpKL8zsJU3wrgQUh4F8cxTkxzDAPk5LBaouJ0uVA1K1nNKYU6OGDkktDYmIRZgQYD
+ fhICB0emLJdgA/hPJt+TXNVR7aTDj4m3monkcClJK3vGZcnPwh2o6i/3fUZheZUy7S
+ PdJtVFmnI15ToPyGGYX1JjVlitox0aLcKYd7lxHIxXpyPJV+N3vlC95MeWlI+u+sj8
+ BtXUDMWoc8s5HnnaLwX7MLpMDU2fhro6NQc/TR+mmJxHsn40U5tLdLczcZ8u/Jv+Lf
+ vwiQtk99Y6atA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=LC8H78yb
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to mongoose and
+ swupdate
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,50 +74,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed0be8ab1d4af5af04b204a00fc4e62d5c36aaa9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-News:
- - https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.3.news
- - https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.4.news
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libsoup3/libsoup3.hash | 4 ++--
- package/libsoup3/libsoup3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
-index 01313b394b..11e48b42aa 100644
---- a/package/libsoup3/libsoup3.hash
-+++ b/package/libsoup3/libsoup3.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.2.sha256sum
--sha256  78c8fa37cb152d40ec8c4a148d6155e2f6947f3f1602a7cda3a31ad40f5ee2f3  libsoup-3.4.2.tar.xz
-+# From https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.4.sha256sum
-+sha256  291c67725f36ed90ea43efff25064b69c5a2d1981488477c05c481a3b4b0c5aa  libsoup-3.4.4.tar.xz
- # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
-index 9e66b6ebd2..76105cec4e 100644
---- a/package/libsoup3/libsoup3.mk
-+++ b/package/libsoup3/libsoup3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBSOUP3_VERSION_MAJOR = 3.4
--LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).2
-+LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).4
- LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
- LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
- LIBSOUP3_LICENSE = LGPL-2.0+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 69350fbb95..c0c3eefba6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1241,6 +1241,7 @@ F:	package/libtracefs
+ F:	package/linux-tools/linux-tool-rtla.mk.in
+ F:	package/mali-driver/
+ F:	package/minicom/
++F:	package/mongoose/
+ F:	package/mmc-utils/
+ F:	package/nfs-utils/
+ F:	package/python-libconf/
+@@ -1259,6 +1260,7 @@ F:	package/sunxi-mali-utgard/
+ F:	package/sunxi-mali-utgard-driver/
+ F:	package/sunxi-tools/
+ F:	package/swugenerator/
++F:	package/swupdate/
+ F:	package/trace-cmd/
+ F:	package/udisks/
+ F:	package/wilc-driver/
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
