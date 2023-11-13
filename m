@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 186EDC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:52:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC8D4C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C50C0410AC;
-	Mon, 13 Nov 2023 21:52:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C50C0410AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97B85409A2;
+	Mon, 13 Nov 2023 21:52:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97B85409A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HQJ5d2VGN3Nf; Mon, 13 Nov 2023 21:52:24 +0000 (UTC)
+	with ESMTP id IHGQgA-36QOV; Mon, 13 Nov 2023 21:52:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18BDB409A2;
-	Mon, 13 Nov 2023 21:52:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18BDB409A2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E08DE1BF389
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:52:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E79EC4175E;
+	Mon, 13 Nov 2023 21:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E79EC4175E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E262E1BF389
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C1ACA4018F
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1ACA4018F
+ by smtp4.osuosl.org (Postfix) with ESMTP id C84B4420AA
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:52:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C84B4420AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rOlnSsyB67-5 for <buildroot@lists.busybox.net>;
- Mon, 13 Nov 2023 21:52:14 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7EB5D40199
- for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EB5D40199
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BC3831C0003;
- Mon, 13 Nov 2023 21:52:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id otaQCXY30pOj for <buildroot@lists.busybox.net>;
+ Mon, 13 Nov 2023 21:52:23 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B554A410AC
+ for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B554A410AC
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 90AC2FF806;
+ Mon, 13 Nov 2023 21:52:19 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r2eqq-00BYyh-0G;
- Mon, 13 Nov 2023 22:52:12 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r2eqw-00BYym-2P;
+ Mon, 13 Nov 2023 22:52:18 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 References: <20231112194326.2539029-1-peter@korsgaard.com>
- <20231112194326.2539029-3-peter@korsgaard.com>
-Date: Mon, 13 Nov 2023 22:52:12 +0100
-In-Reply-To: <20231112194326.2539029-3-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 12 Nov 2023 20:43:24 +0100")
-Message-ID: <877cmle2yb.fsf@48ers.dk>
+ <20231112194326.2539029-4-peter@korsgaard.com>
+Date: Mon, 13 Nov 2023 22:52:18 +0100
+In-Reply-To: <20231112194326.2539029-4-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 12 Nov 2023 20:43:25 +0100")
+Message-ID: <8734x9e2y5.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 3/4] package/tar: add upstream patch for
- CVE-2022-48303
+Subject: Re: [Buildroot] [PATCH 4/4] support/dependencies/check-host-tar.sh:
+ blacklist tar 1.35+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,15 +73,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2022-48303: GNU Tar through 1.34 has a one-byte out-of-bounds read
- > that results in use of uninitialized memory for a conditional jump.
- > Exploitation to change the flow of control has not been demonstrated.  The
- > issue occurs in from_header in list.c via a V7 archive in which mtime has
- > approximately 11 whitespace characters.
+ > GNU tar 1.35 changed the behaviour for the devmajor/devminor fields,
+ > breaking the download hash validation.  For details, see:
+
+ > https://lists.gnu.org/archive/html/info-gnu/2023-07/msg00005.html
+ > https://patchwork.ozlabs.org/project/buildroot/patch/20231018141155.533944-1-vfazio@gmail.com/
+
+ > To work around this issue, blacklist tar 1.35+ similar to how we do it for
+ > pre-1.27 versions so Buildroot falls back to building host-tar (which is
+ > currently 1.34).
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed after adding the TAR_IGNORE_CVES entry for this, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
