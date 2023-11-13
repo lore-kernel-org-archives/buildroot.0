@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 380A9C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:49:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 105FBC4167D
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2F8541D73;
-	Mon, 13 Nov 2023 21:49:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2F8541D73
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0B9B41B42;
+	Mon, 13 Nov 2023 21:49:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0B9B41B42
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pOiPdpKR5wvn; Mon, 13 Nov 2023 21:49:29 +0000 (UTC)
+	with ESMTP id 2Aw2cS8IK9OU; Mon, 13 Nov 2023 21:49:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 106C941BC1;
-	Mon, 13 Nov 2023 21:49:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 106C941BC1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DF4641BF389
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:49:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E089B41BC1;
+	Mon, 13 Nov 2023 21:49:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E089B41BC1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 52A431BF389
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C52C641BC1
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:49:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C52C641BC1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B86D401CA
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B86D401CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yfubYseQVxwk for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cdt4nnHccx77 for <buildroot@lists.busybox.net>;
  Mon, 13 Nov 2023 21:49:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15EF341909
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1672E4018F
  for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:49:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15EF341909
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1672E4018F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 026A0870DE; Mon, 13 Nov 2023 21:49:25 +0000 (UTC)
+ id E814C870F5; Mon, 13 Nov 2023 21:49:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Nov 2023 22:47:25 +0100
+Date: Mon, 13 Nov 2023 22:43:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 15bfec42c26ca0663d3fe9a86b833dabe88c0553
-X-Git-Newrev: b368f78a4ee9bd720b0e94ad423c7bcd1ec88c1a
+X-Git-Oldrev: 29fb06a3fb0b043e7850575b67789fef3424f235
+X-Git-Newrev: 15bfec42c26ca0663d3fe9a86b833dabe88c0553
 X-Patchwork-Hint: ignore
-Message-Id: <20231113214926.026A0870DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: add Giulio Benetti to mongoose
- and swupdate
+Message-Id: <20231113214925.E814C870F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mongoose: bump to version 7.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +62,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b368f78a4ee9bd720b0e94ad423c7bcd1ec88c1a
+commit: https://git.buildroot.net/buildroot/commit/?id=15bfec42c26ca0663d3fe9a86b833dabe88c0553
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update hash of license file (date updated with
+https://github.com/cesanta/mongoose/commit/d7eb3db60bdbf42ebce0cd03924f815ed0c490e6)
+
+https://github.com/cesanta/mongoose/releases/tag/7.12
+https://github.com/cesanta/mongoose/releases/tag/7.11
+https://github.com/cesanta/mongoose/releases/tag/7.10
+https://github.com/cesanta/mongoose/releases/tag/7.9
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mongoose/mongoose.hash | 4 ++--
+ package/mongoose/mongoose.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index be4eaa59e6..1f26e9bc81 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1236,6 +1236,7 @@ F:	package/libnss/
- F:	package/libnvme/
- F:	package/mali-driver/
- F:	package/minicom/
-+F:	package/mongoose/
- F:	package/mmc-utils/
- F:	package/nfs-utils/
- F:	package/python-libconf/
-@@ -1254,6 +1255,7 @@ F:	package/sunxi-mali-utgard/
- F:	package/sunxi-mali-utgard-driver/
- F:	package/sunxi-tools/
- F:	package/swugenerator/
-+F:	package/swupdate/
- F:	package/trace-cmd/
- F:	package/udisks/
- F:	package/wilc-driver/
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index ffef9f446c..ed5db5ebf6 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  55073dcd427ab9475731ad855e417884f4fbfb24b7d5694f6cabadbee1329f16  mongoose-7.8.tar.gz
+-sha256  b41c293820074278291813af9f181918154875c94d744a90bf4eec331be28ac5  LICENSE
++sha256  91e719e164816b349be3cb71293927f3f6abbe3fb02187e2d9b5e56f542c2063  mongoose-7.12.tar.gz
++sha256  4ba646f5a7012d8b52f3a74398e446f56960dde0572f7241a2215430da5dd5a2  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 0693f7553a..74594ff48c 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGOOSE_VERSION = 7.8
++MONGOOSE_VERSION = 7.12
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
