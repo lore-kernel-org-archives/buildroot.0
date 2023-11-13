@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9368C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 12:55:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D8C3C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 12:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 675C6817BD;
-	Mon, 13 Nov 2023 12:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 675C6817BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id E83F781E6B;
+	Mon, 13 Nov 2023 12:55:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E83F781E6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aq5zsWExgB2t; Mon, 13 Nov 2023 12:55:13 +0000 (UTC)
+	with ESMTP id VtJc7JH7VdW7; Mon, 13 Nov 2023 12:55:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85FED8175F;
-	Mon, 13 Nov 2023 12:55:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85FED8175F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E0F581BF3BE
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 12:55:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29A3D81E0D;
+	Mon, 13 Nov 2023 12:55:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29A3D81E0D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F09F31BF3BE
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 12:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B15E940A40
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 12:55:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B15E940A40
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7711418AF
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 12:55:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7711418AF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jLc0VhPOchv7 for <buildroot@lists.busybox.net>;
- Mon, 13 Nov 2023 12:55:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qw8PwirOy93o for <buildroot@lists.busybox.net>;
+ Mon, 13 Nov 2023 12:55:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 393CA408C9
- for <buildroot@buildroot.org>; Mon, 13 Nov 2023 12:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 393CA408C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 12064418AD
+ for <buildroot@buildroot.org>; Mon, 13 Nov 2023 12:55:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12064418AD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 242C0870AD; Mon, 13 Nov 2023 12:55:09 +0000 (UTC)
+ id 018DF870AD; Mon, 13 Nov 2023 12:55:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Nov 2023 13:54:33 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 7a992a31a2c8a1b2a1b0b402e0c13a23d91f23a5
-X-Git-Newrev: 0f1bdbc9cc7549026032c808a0dd8ccaeb6bd653
+Date: Mon, 13 Nov 2023 13:52:47 +0100
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: dc1d056476c5f82003c7acfa85c8eef483b7041c
+X-Git-Newrev: 817d6ca340c99cd2542b3d3c6bd1bf5627cea73d
 X-Patchwork-Hint: ignore
-Message-Id: <20231113125509.242C0870AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
+Message-Id: <20231113125525.018DF870AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] {linux,
  linux-headers}: bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1, 5, 6}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f1bdbc9cc7549026032c808a0dd8ccaeb6bd653
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=817d6ca340c99cd2542b3d3c6bd1bf5627cea73d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
@@ -72,30 +72,17 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 [Peter: drop 6.5.x / 6.6.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
  linux/linux.hash                     | 12 ++++++------
  package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0e75228006..317127747f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.1.61" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.1.62" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 diff --git a/linux/linux.hash b/linux/linux.hash
-index 5ba88e1902..3e4dfff2e6 100644
+index 5b51ac7d41..aff7360669 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
+@@ -1,13 +1,13 @@
  # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  9626ec84a39ecb009bf11a271dd520941159c165d4e62f82e3a77b79d20ff27d  linux-6.4.16.tar.xz
 -sha256  ad2c9d12fc36e2dde4796a3eec8f4ddca2e278098f4e555b6e6f5f03ef6964ce  linux-6.1.61.tar.xz
 +sha256  b9fd616facd6becfceef88b9be718d0f16625cab3fe81d11384802a7091e85ec  linux-6.1.62.tar.xz
  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
@@ -114,10 +101,10 @@ index 5ba88e1902..3e4dfff2e6 100644
  sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
  sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 87ef924821..e13c3ca28a 100644
+index 135f0f952f..7ef240428b 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -384,12 +384,12 @@ endchoice
+@@ -400,12 +400,12 @@ endchoice
  
  config BR2_DEFAULT_KERNEL_HEADERS
  	string
@@ -133,9 +120,9 @@ index 87ef924821..e13c3ca28a 100644
 +	default "5.10.200"	if BR2_KERNEL_HEADERS_5_10
 +	default "5.15.138"	if BR2_KERNEL_HEADERS_5_15
 +	default "6.1.62"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.4.16"	if BR2_KERNEL_HEADERS_6_4
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
