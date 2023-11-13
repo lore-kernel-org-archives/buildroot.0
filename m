@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC8D4C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAFF5C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97B85409A2;
-	Mon, 13 Nov 2023 21:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97B85409A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id A252941EB5;
+	Mon, 13 Nov 2023 21:53:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A252941EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IHGQgA-36QOV; Mon, 13 Nov 2023 21:52:36 +0000 (UTC)
+	with ESMTP id nHHYl-sRtDrW; Mon, 13 Nov 2023 21:53:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E79EC4175E;
-	Mon, 13 Nov 2023 21:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E79EC4175E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E262E1BF389
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:52:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D60E5410AC;
+	Mon, 13 Nov 2023 21:53:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D60E5410AC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ED9BA1BF389
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:53:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C84B4420AA
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:52:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C84B4420AA
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6D7881E67
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:53:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6D7881E67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id otaQCXY30pOj for <buildroot@lists.busybox.net>;
- Mon, 13 Nov 2023 21:52:23 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B554A410AC
- for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:52:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B554A410AC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 90AC2FF806;
- Mon, 13 Nov 2023 21:52:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r2eqw-00BYym-2P;
- Mon, 13 Nov 2023 22:52:18 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m8PKtsJAm-L4 for <buildroot@lists.busybox.net>;
+ Mon, 13 Nov 2023 21:53:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1F5581E61
+ for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1F5581E61
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DE0BA8710A; Mon, 13 Nov 2023 21:53:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20231112194326.2539029-1-peter@korsgaard.com>
- <20231112194326.2539029-4-peter@korsgaard.com>
-Date: Mon, 13 Nov 2023 22:52:18 +0100
-In-Reply-To: <20231112194326.2539029-4-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 12 Nov 2023 20:43:25 +0100")
-Message-ID: <8734x9e2y5.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 4/4] support/dependencies/check-host-tar.sh:
- blacklist tar 1.35+
+Date: Mon, 13 Nov 2023 22:49:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bcd879d5e2bda7e570084be7d6009cd1ff4aeafd
+X-Git-Newrev: b32a46e2a8acf896eda29ae5ceae48151a949d55
+X-Patchwork-Hint: ignore
+Message-Id: <20231113215303.DE0BA8710A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "package/tar: allowing building
+ even on non-Y2038 compliant systems"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,31 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Vincent Fazio <vfazio@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b32a46e2a8acf896eda29ae5ceae48151a949d55
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > GNU tar 1.35 changed the behaviour for the devmajor/devminor fields,
- > breaking the download hash validation.  For details, see:
+This reverts commit 7f1088f9cae9f191740423a0084bb31f94af2e75.
 
- > https://lists.gnu.org/archive/html/info-gnu/2023-07/msg00005.html
- > https://patchwork.ozlabs.org/project/buildroot/patch/20231018141155.533944-1-vfazio@gmail.com/
+We're going back to tar 1.34, so this needs to be reverted as well.
 
- > To work around this issue, blacklist tar 1.35+ similar to how we do it for
- > pre-1.27 versions so Buildroot falls back to building host-tar (which is
- > currently 1.34).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tar/tar.mk | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 8a612b6f45..eea112ebc7 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -7,15 +7,9 @@
+ TAR_VERSION = 1.35
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
+-# --exec-prefix=/: busybox installs in /bin, so we need tar to install
+-# as well in /bin so that we don't end up with two different tar
+-#
+-# --disable-year2038: tells the configure script to not abort if the
+-# system is not Y2038 compliant. tar will support year2038 if the
+-# system is compliant even with this option passed
+-TAR_CONF_OPTS = \
+-	--exec-prefix=/ \
+-	--disable-year2038
++# busybox installs in /bin, so we need tar to install as well in /bin
++# so that we don't end up with two different tar
++TAR_CONF_OPTS = --exec-prefix=/
+ TAR_LICENSE = GPL-3.0+
+ TAR_LICENSE_FILES = COPYING
+ TAR_CPE_ID_VENDOR = gnu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
