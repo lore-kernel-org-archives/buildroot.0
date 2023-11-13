@@ -4,60 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68495C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:42:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B30D1C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:43:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 031DD41E41;
-	Mon, 13 Nov 2023 21:42:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 031DD41E41
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54A2141EB5;
+	Mon, 13 Nov 2023 21:43:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54A2141EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wP0GE60TZNi4; Mon, 13 Nov 2023 21:42:42 +0000 (UTC)
+	with ESMTP id A4Fd9V9pkjUg; Mon, 13 Nov 2023 21:43:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 493F541DB9;
-	Mon, 13 Nov 2023 21:42:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 493F541DB9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 85DA31BF389
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:42:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7B0441EFE;
+	Mon, 13 Nov 2023 21:43:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7B0441EFE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CE731BF389
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 665324018F
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:42:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 665324018F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42D7781E6C
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42D7781E6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bPNj6E_Rk187 for <buildroot@lists.busybox.net>;
- Mon, 13 Nov 2023 21:42:37 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C30A40129
- for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:42:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C30A40129
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FAE0240006;
- Mon, 13 Nov 2023 21:42:33 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r2ehU-00BY1h-2C;
- Mon, 13 Nov 2023 22:42:32 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wy6CINuVHlnM for <buildroot@lists.busybox.net>;
+ Mon, 13 Nov 2023 21:42:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CE1081E3E
+ for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:42:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CE1081E3E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1779F870DF; Mon, 13 Nov 2023 21:42:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-References: <20231018111357.2898095-1-neal.frager@amd.com>
- <20231031121222.1dfa4035@booty>
- <CH2PR12MB50042DEEED0FC5E7D3BBCA99F0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
- <20231031133415.1d89db5a@windsurf>
- <8a0d97bb-2fe5-4e09-8e95-b928a431ce1e@amd.com>
- <CH2PR12MB5004A3E0B5725A32D422E945F0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
- <87bkce21br.fsf@48ers.dk> <20231113181023.34bf6492@booty>
-Date: Mon, 13 Nov 2023 22:42:32 +0100
-In-Reply-To: <20231113181023.34bf6492@booty> (Luca Ceresoli's message of "Mon, 
- 13 Nov 2023 18:10:23 +0100")
-Message-ID: <87wmule3ef.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2 1/1] configs/zynq_zc702_defconfig: new
- defconfig
+To: buildroot@buildroot.org
+Date: Mon, 13 Nov 2023 22:42:10 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3b654626316613a74d0c40cdec6379a2cb399857
+X-Git-Newrev: 29fb06a3fb0b043e7850575b67789fef3424f235
+X-Patchwork-Hint: ignore
+Message-Id: <20231113214252.1779F870DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynq_zc702_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,61 +56,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Simek, Michal" <michal.simek@amd.com>, "Frager,
- Neal" <neal.frager@amd.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>, romain.naour@gmail.com
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Luca" == Luca Ceresoli <luca.ceresoli@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=29fb06a3fb0b043e7850575b67789fef3424f235
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi,
- > On Tue, 31 Oct 2023 17:39:36 +0100
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+This patch adds support for Xilinx Zynq ZC702 starter kit.
 
- >> >>>>> "Frager," == Frager, Neal <neal.frager@amd.com> writes:  
- >> 
- >> Hi,
- >> 
- >> > The remaining question is just a matter of how many zynq, zynqmp and
- >> > versal defconfigs is the right amount for buildroot?  I would like to
- >> > be able to support the following 11 boards, if it would be ok for the
- >> > buildroot community.  5 of these 11 are already included in
- >> > buildroot.  
- >> 
- >> > zynq_zc702
- >> > zynq_zc706
- >> > zynqmp_zcu102
- >> > zynqmp_zcu104
- >> > zynqmp_zcu106
- >> > zynqmp_kria_kd240
- >> > zynqmp_kria_kr260
- >> > zynqmp_kria_kv260
- >> > versal_vck190
- >> > versal_vek280 (coming next year)
- >> > versal_vmk180  
- >> 
- >> > In exchange, I would be ok with dropping the zynq_qmtech board and
- >> > possibly one of the zynq_zed
- >> > boards.  
- >> 
- >> I think the main issue with a lot of defconfigs is maintaining them (but
- >> you already do that) and the CI overhead from building all of them.
- >> 
- >> I guess we could come up with some logic to skip some of the zynq*
- >> defconfigs from the Gitlab CI setup. Romain, any good ideas?
+ZC702 features can be found here:
+https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html
 
- > After the discussion it seems quite clear that the patch is useful, and
- > the CI aspects can perhaps be sorted out, so:
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS                   |  1 +
+ configs/zynq_zc702_defconfig | 33 +++++++++++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+)
 
- > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 359714bdb5..be4eaa59e6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2207,6 +2207,7 @@ F:	board/versal/
+ F:	board/zynq/
+ F:	board/zynqmp/
+ F:	configs/versal_vck190_defconfig
++F:	configs/zynq_zc702_defconfig
+ F:	configs/zynq_zc706_defconfig
+ F:	configs/zynqmp_kria_kv260_defconfig
+ F:	configs/zynqmp_zcu102_defconfig
+diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
+new file mode 100644
+index 0000000000..e85285a832
+--- /dev/null
++++ b/configs/zynq_zc702_defconfig
+@@ -0,0 +1,33 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE=y
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc702"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc702"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
