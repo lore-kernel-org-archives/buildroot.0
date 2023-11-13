@@ -4,55 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB061C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68495C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 21:42:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EFCE41BDD;
-	Mon, 13 Nov 2023 21:27:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EFCE41BDD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 031DD41E41;
+	Mon, 13 Nov 2023 21:42:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 031DD41E41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JH2leywkntGr; Mon, 13 Nov 2023 21:27:29 +0000 (UTC)
+	with ESMTP id wP0GE60TZNi4; Mon, 13 Nov 2023 21:42:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F077D41BF2;
-	Mon, 13 Nov 2023 21:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F077D41BF2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 493F541DB9;
+	Mon, 13 Nov 2023 21:42:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 493F541DB9
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4DD961BF389
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:27:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 85DA31BF389
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31B8240129
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:27:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31B8240129
+ by smtp2.osuosl.org (Postfix) with ESMTP id 665324018F
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 21:42:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 665324018F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rVhBhj9fBgqc for <buildroot@lists.busybox.net>;
- Mon, 13 Nov 2023 21:27:24 +0000 (UTC)
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E5B3F400C6
- for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:27:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5B3F400C6
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id CD59E1814B9; Mon, 13 Nov 2023 22:27:19 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Mon, 13 Nov 2023 22:27:06 +0100
-Message-Id: <20231113212707.1229840-1-buildroot@heine.tech>
+ with ESMTP id bPNj6E_Rk187 for <buildroot@lists.busybox.net>;
+ Mon, 13 Nov 2023 21:42:37 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C30A40129
+ for <buildroot@buildroot.org>; Mon, 13 Nov 2023 21:42:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C30A40129
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FAE0240006;
+ Mon, 13 Nov 2023 21:42:33 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r2ehU-00BY1h-2C;
+ Mon, 13 Nov 2023 22:42:32 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+References: <20231018111357.2898095-1-neal.frager@amd.com>
+ <20231031121222.1dfa4035@booty>
+ <CH2PR12MB50042DEEED0FC5E7D3BBCA99F0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20231031133415.1d89db5a@windsurf>
+ <8a0d97bb-2fe5-4e09-8e95-b928a431ce1e@amd.com>
+ <CH2PR12MB5004A3E0B5725A32D422E945F0A0A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <87bkce21br.fsf@48ers.dk> <20231113181023.34bf6492@booty>
+Date: Mon, 13 Nov 2023 22:42:32 +0100
+In-Reply-To: <20231113181023.34bf6492@booty> (Luca Ceresoli's message of "Mon, 
+ 13 Nov 2023 18:10:23 +0100")
+Message-ID: <87wmule3ef.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1699910840; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=6n6Uudou0Tf6tZUJHMyztevz2XuWeCO00bZ7VNpCc/s=;
- b=q9Rcu+jTN+/P5OruK9FXXSkABNCD2gq07TIq3mXf9PM8VWYUsOSOlFH20zosINoRtsbjIY
- so93sFWUQJYkjN2fsI7B6ZtHneeQz8K1+zJ4LLMWI08RI9fT5lSvuApjm1PJmClbQDOxvV
- 0tj0JVOsPT3MXSoXmMEp9VzSsBs5ess=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=q9Rcu+jT
-Subject: [Buildroot] [PATCH v2] package/libabseil-cpp: bump to version
- 20230802.1
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/1] configs/zynq_zc702_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,192 +69,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Robert Rose <robertroyrose@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Francis Laniel <flaniel@linux.microsoft.com>
+Cc: "Simek, Michal" <michal.simek@amd.com>, "Frager,
+ Neal" <neal.frager@amd.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>, romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-abseil and other google tools are now subject to
-"Google's Foundational C++ Support Policy" [0][1]. This currently mandates
-gcc 7.3.1 and C++14 as minimum versions.
+>>>>> "Luca" == Luca Ceresoli <luca.ceresoli@bootlin.com> writes:
 
-Since we don't have guards for patch versions of gcc 7 use gcc 8 as minimum.
+ > Hi,
+ > On Tue, 31 Oct 2023 17:39:36 +0100
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
-[0] https://github.com/abseil/abseil-cpp/releases/tag/20230125.0
-[1] https://github.com/google/oss-policies-info/blob/b842c39db88e6569dfe2cf98be434b03507cb503/foundational-cxx-support-matrix.md
+ >> >>>>> "Frager," == Frager, Neal <neal.frager@amd.com> writes:  
+ >> 
+ >> Hi,
+ >> 
+ >> > The remaining question is just a matter of how many zynq, zynqmp and
+ >> > versal defconfigs is the right amount for buildroot?  I would like to
+ >> > be able to support the following 11 boards, if it would be ok for the
+ >> > buildroot community.  5 of these 11 are already included in
+ >> > buildroot.  
+ >> 
+ >> > zynq_zc702
+ >> > zynq_zc706
+ >> > zynqmp_zcu102
+ >> > zynqmp_zcu104
+ >> > zynqmp_zcu106
+ >> > zynqmp_kria_kd240
+ >> > zynqmp_kria_kr260
+ >> > zynqmp_kria_kv260
+ >> > versal_vck190
+ >> > versal_vek280 (coming next year)
+ >> > versal_vmk180  
+ >> 
+ >> > In exchange, I would be ok with dropping the zynq_qmtech board and
+ >> > possibly one of the zynq_zed
+ >> > boards.  
+ >> 
+ >> I think the main issue with a lot of defconfigs is maintaining them (but
+ >> you already do that) and the CI overhead from building all of them.
+ >> 
+ >> I guess we could come up with some logic to skip some of the zynq*
+ >> defconfigs from the Gitlab CI setup. Romain, any good ideas?
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ > After the discussion it seems quite clear that the patch is useful, and
+ > the CI aspects can perhaps be sorted out, so:
 
----
+ > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-v1 -> v2:
-- bump minimum gcc from 7 to 8
----
- package/collectd/Config.in               | 6 +++---
- package/falcosecurity-libs/Config.in     | 2 +-
- package/grpc/Config.in                   | 6 +++---
- package/libabseil-cpp/Config.in          | 6 +++---
- package/libabseil-cpp/libabseil-cpp.hash | 2 +-
- package/libabseil-cpp/libabseil-cpp.mk   | 6 +++---
- package/sysdig/Config.in                 | 6 +++---
- 7 files changed, 17 insertions(+), 17 deletions(-)
+Committed, thanks.
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index a431da79f1..d3b686771d 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -683,15 +683,15 @@ config BR2_PACKAGE_COLLECTD_GRPC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
- 	depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # grpc -> libabseil-cpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # grpc -> libabseil-cpp
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
- 	select BR2_PACKAGE_GRPC
- 	help
- 	  Send/receive values using the gRPC protocol.
- 
--comment "grpc needs a toolchain w/ C++, gcc >= 5"
-+comment "grpc needs a toolchain w/ C++, gcc >= 8"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
- 
-diff --git a/package/falcosecurity-libs/Config.in b/package/falcosecurity-libs/Config.in
-index f101883384..028a0ed28b 100644
---- a/package/falcosecurity-libs/Config.in
-+++ b/package/falcosecurity-libs/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_FALCOSECURITY_LIBS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # grpc, gtest
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # grpc -> libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # jq, protobuf, tbb
- 	depends on !BR2_STATIC_LIBS # protobuf, tbb
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index db6425819b..afe0ea8450 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
- 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -19,9 +19,9 @@ config BR2_PACKAGE_GRPC
- 
- 	  http://github.com/grpc/grpc
- 
--comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 5"
-+comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index 45f339ff26..7b65ec40d0 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBABSEIL_CPP
- 	bool "libabseil-cpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++14
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -31,7 +31,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP
- 
- 	  https://github.com/abseil/abseil-cpp
- 
--comment "libabseil-cpp needs a toolchain w/ gcc >= 4.9, C++, threads, dynamic library"
-+comment "libabseil-cpp needs a toolchain w/ gcc >= 8, C++, threads, dynamic library"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-index 808bdbab29..c3fc0d85e1 100644
---- a/package/libabseil-cpp/libabseil-cpp.hash
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  91ac87d30cc6d79f9ab974c51874a704de9c2647c40f6932597329a282217ba8  libabseil-cpp-20220623.1.tar.gz
-+sha256  987ce98f02eefbaf930d6e38ab16aa05737234d7afbab2d5c4ea7adbe50c28ed  libabseil-cpp-20230802.1.tar.gz
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-index ceda106b7d..a5dfc8eb19 100644
---- a/package/libabseil-cpp/libabseil-cpp.mk
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
-@@ -4,19 +4,19 @@
- #
- ################################################################################
- 
--LIBABSEIL_CPP_VERSION = 20220623.1
-+LIBABSEIL_CPP_VERSION = 20230802.1
- LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
- LIBABSEIL_CPP_LICENSE = Apache-2.0
- LIBABSEIL_CPP_LICENSE_FILES = LICENSE
- LIBABSEIL_CPP_INSTALL_STAGING = YES
- 
- LIBABSEIL_CPP_CONF_OPTS = \
--	-DCMAKE_CXX_STANDARD=11 \
-+	-DCMAKE_CXX_STANDARD=14 \
- 	-DABSL_ENABLE_INSTALL=ON \
- 	-DABSL_USE_GOOGLETEST_HEAD=OFF
- 
- HOST_LIBABSEIL_CPP_CONF_OPTS = \
--	-DCMAKE_CXX_STANDARD=11 \
-+	-DCMAKE_CXX_STANDARD=14 \
- 	-DABSL_ENABLE_INSTALL=ON \
- 	-DABSL_USE_GOOGLETEST_HEAD=OFF
- 
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index c0a631bd49..3a3670f5cb 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # falcosecurity-libs
- 	depends on BR2_LINUX_KERNEL # falcosecurity-libs
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # falcosecurity-libs
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # falcosecurity-libs -> grpc -> libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # falcosecurity-libs
- 	depends on !BR2_STATIC_LIBS # falcosecurity-libs
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # falcosecurity-libs
-@@ -23,12 +23,12 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  https://github.com/draios/sysdig/wiki
- 
--comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 5, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
-+comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_USES_GLIBC \
- 		|| !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
