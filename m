@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF6F6C4167D
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 13:02:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 789A6C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 13:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D98982120;
-	Mon, 13 Nov 2023 13:02:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D98982120
+	by smtp1.osuosl.org (Postfix) with ESMTP id 296D181ED4;
+	Mon, 13 Nov 2023 13:03:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 296D181ED4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CqssNq7XTRim; Mon, 13 Nov 2023 13:02:57 +0000 (UTC)
+	with ESMTP id Tg2EBRerdpX1; Mon, 13 Nov 2023 13:03:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80C6A81EDF;
-	Mon, 13 Nov 2023 13:02:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80C6A81EDF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 992A11BF476
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 13:02:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5172082145;
+	Mon, 13 Nov 2023 13:03:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5172082145
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 800091BF476
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 13:02:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E2C640A81
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 13:02:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E2C640A81
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59D226058C
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 13:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59D226058C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id puAD72RPPcI7 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id blK0kyQU0RTQ for <buildroot@lists.busybox.net>;
  Mon, 13 Nov 2023 13:02:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69C66408C9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AD1B60740
  for <buildroot@buildroot.org>; Mon, 13 Nov 2023 13:02:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69C66408C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AD1B60740
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58029870BE; Mon, 13 Nov 2023 13:02:53 +0000 (UTC)
+ id 77D16813AF; Mon, 13 Nov 2023 13:02:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Nov 2023 13:57:55 +0100
+Date: Mon, 13 Nov 2023 14:00:45 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 817d6ca340c99cd2542b3d3c6bd1bf5627cea73d
-X-Git-Newrev: 5c4c23ccebdae2d01a64123c0472eb229806e7bd
+X-Git-Oldrev: f90dedabf421d40e373c60368048e805ba319c37
+X-Git-Newrev: 943a1d15cf7f16a3a23da7794fe262e33eb47aac
 X-Patchwork-Hint: ignore
-Message-Id: <20231113130253.58029870BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/openvpn: bump
- version to 2.6.6
+Message-Id: <20231113130253.77D16813AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package: dhcpcd: fix
+ dhcpcd binary not stripped
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c4c23ccebdae2d01a64123c0472eb229806e7bd
+commit: https://git.buildroot.net/buildroot/commit/?id=943a1d15cf7f16a3a23da7794fe262e33eb47aac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
-https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+By default dhcpcd installed with 555 permissions as it is
+configured in its Makefile.inc. Since 'w' bit is missing,
+strip fails and dhcpcd binary installed non-stripped.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c68987b9c429fce0abc977ed73cd2d744fe46846)
+On ARM GCC 12 glibc configuration strip saves over 1MB of disk space.
+
+Signed-off-by: Oleg Lyovin <ovlevin@salutedevices.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 72c3f87efacbf593abebe798321f9ecda7adc2d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dhcpcd/dhcpcd.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 16bffb7e57..b4fd3a9646 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  e34efdb9a3789a760cfc91d57349dfb1e31da169c98c06cb490c6a8a015638e2  openvpn-2.6.5.tar.gz
-+sha256  3b074f392818b31aa529b84f76e8b5e4ad03fca764924f46d906bceaaf421034  openvpn-2.6.6.tar.gz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 2d27fdab45..619a22c3b3 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index a194bce323..ba1481e83d 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -17,6 +17,9 @@ DHCPCD_CONFIG_OPTS = \
+ 	--os=linux \
+ 	--privsepuser=dhcpcd
  
--OPENVPN_VERSION = 2.6.5
-+OPENVPN_VERSION = 2.6.6
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
- OPENVPN_LICENSE = GPL-2.0
++DHCPCD_MAKE_OPTS = \
++	BINMODE=755
++
+ ifeq ($(BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP),y)
+ DHCPCD_CONFIG_OPTS += --enable-privsep
+ else
+@@ -43,11 +46,11 @@ define DHCPCD_CONFIGURE_CMDS
+ endef
+ 
+ define DHCPCD_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(DHCPCD_MAKE_OPTS) all
+ endef
+ 
+ define DHCPCD_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(DHCPCD_MAKE_OPTS) install DESTDIR=$(TARGET_DIR)
+ endef
+ 
+ # When network-manager is enabled together with dhcpcd, it will use
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
