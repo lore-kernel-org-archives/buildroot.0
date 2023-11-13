@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15B72C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 18:55:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 929BAC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 18:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AFD4A40133;
-	Mon, 13 Nov 2023 18:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFD4A40133
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2499840106;
+	Mon, 13 Nov 2023 18:55:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2499840106
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lhWJ0rPOVZo0; Mon, 13 Nov 2023 18:55:23 +0000 (UTC)
+	with ESMTP id fIlyH28Tg-vC; Mon, 13 Nov 2023 18:55:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD2F940106;
-	Mon, 13 Nov 2023 18:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD2F940106
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9AFEC40042;
+	Mon, 13 Nov 2023 18:55:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AFEC40042
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 169B11BF228
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 18:55:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D7E11BF228
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 18:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E34AE60D70
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 18:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E34AE60D70
+ by smtp3.osuosl.org (Postfix) with ESMTP id 130F660A9C
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 18:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 130F660A9C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4aAo9Sljj-wh for <buildroot@lists.busybox.net>;
+ with ESMTP id FoqS6JV-ISxO for <buildroot@lists.busybox.net>;
  Mon, 13 Nov 2023 18:55:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F47360A9C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 195EF60A88
  for <buildroot@buildroot.org>; Mon, 13 Nov 2023 18:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F47360A9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 195EF60A88
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0DDA6870D1; Mon, 13 Nov 2023 18:55:20 +0000 (UTC)
+ id 04D00870D0; Mon, 13 Nov 2023 18:55:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Nov 2023 19:53:39 +0100
+Date: Mon, 13 Nov 2023 19:52:52 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 83b09400dd2d8c60be7ebab9416d13d8dc1ef57f
-X-Git-Newrev: aaee2d9943fa2dcde59d1932a544fc8011952d86
+X-Git-Oldrev: 943a1d15cf7f16a3a23da7794fe262e33eb47aac
+X-Git-Newrev: 83b09400dd2d8c60be7ebab9416d13d8dc1ef57f
 X-Patchwork-Hint: ignore
-Message-Id: <20231113185520.0DDA6870D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/libmemcached:
- force CMAKE_BUILD_TYPE
+Message-Id: <20231113185520.04D00870D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] utils/add-custom-hashes:
+ add script to manage global patch dir hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,149 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaee2d9943fa2dcde59d1932a544fc8011952d86
+commit: https://git.buildroot.net/buildroot/commit/?id=83b09400dd2d8c60be7ebab9416d13d8dc1ef57f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Force CMAKE_BUILD_TYPE to Release to avoid the following build failure
-with c-icap or php-memcached raised since bump to version 1.1.4 and
-switch to cmake-package in commit
-7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
+Add a script to manage the .hash files in the BR2_GLOBAL_PATCH_DIR for
+packages using custom versions.
 
-Fixes:
- - http://autobuild.buildroot.org/results/bca84915550a72f1dc89c8661cba2545d6bc96ef
- - http://autobuild.buildroot.org/results/b140d225208e7fa44b935a119e74347caf710e55
+To use it, run in a configured Buildroot directory, E.G.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: use +=]
+  make foo_defconfig; ./utils/add-custom-hashes
+
+We support multiple patch directories in BR2_GLOBAL_PATCH_DIR.  If multiple
+directories are specified then use the last one as that is likely to be the
+most specific one.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d23bcbd2bb76fb157624d18e88ce33fd9a964fbe)
+[Peter: silence command -v invocation]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4984d0f230d0962270beb195966603f1d5a56300)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmemcached/libmemcached.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ docs/manual/customize-patches.txt |   2 +
+ utils/add-custom-hashes           | 103 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 105 insertions(+)
 
-diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-index bd63d78c97..f64ab5ec48 100644
---- a/package/libmemcached/libmemcached.mk
-+++ b/package/libmemcached/libmemcached.mk
-@@ -14,6 +14,10 @@ LIBMEMCACHED_LICENSE = BSD-3-Clause
- LIBMEMCACHED_LICENSE_FILES = LICENSE
- LIBMEMCACHED_CPE_ID_VENDOR = awesome
+diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
+index 72e87c3c04..f33bbcdde7 100644
+--- a/docs/manual/customize-patches.txt
++++ b/docs/manual/customize-patches.txt
+@@ -79,3 +79,5 @@ the first file to exist is used to check a package download:
  
-+# Force Release otherwise libraries will be suffixed by -dbg which will raise
-+# unexpected build failures with packages that use libmemcached (e.g. c-icap)
-+LIBMEMCACHED_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
+ * +<global-patch-dir>/<packagename>/<packageversion>/<packagename>.hash+
+ * +<global-patch-dir>/<packagename>/<packagename>.hash+
 +
- ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBMEMCACHED_DEPENDENCIES += libevent
- LIBMEMCACHED_CONF_OPTS += -DENABLE_MEMASLAP=ON
++The +utils/add-custom-hashes+ script can be used to generate these files.
+diff --git a/utils/add-custom-hashes b/utils/add-custom-hashes
+new file mode 100755
+index 0000000000..20e48d8ef3
+--- /dev/null
++++ b/utils/add-custom-hashes
+@@ -0,0 +1,103 @@
++#!/usr/bin/env bash
++set -e
++
++# Add hash files for packages with custom versions for
++# BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++#
++# Run in a configured Buildroot directory, E.G.
++# make foo_defconfig; ./utils/add-custom-hashes
++
++# print BR-style message
++# message <info message>
++message() {
++    tput smso 2>/dev/null
++    echo "$*"
++    tput rmso 2>/dev/null
++}
++
++# print error message and exit
++# die <error message>
++die() {
++    echo "Error: $*" >&2
++    exit 1
++}
++
++# get package(s) for download file, if any
++# get_pkgs <json> <file>
++get_pkgs() {
++    jq --arg file "$2" -r \
++       'to_entries[] | select(.value.downloads[0].source == $file) | .key | strings' "$1"
++}
++
++# get download dir for package
++# get_pkg_dl_dir <json> <package>
++get_pkg_dl_dir() {
++    jq --arg pkg "$2" -r '.[$pkg].dl_dir | strings' "$1"
++}
++
++# generate hash file for download file
++# gen_hash <dir> <file>
++gen_hash() {
++    (
++        cd "$1" && printf '# Locally calculated\nsha256  ' && sha256sum "$2"
++    )
++}
++
++command -v jq >/dev/null || die 'Script needs jq'
++
++[ -e .config ] || \
++  die "No .config found, please run this in a configured Buildroot (O=) directory"
++
++message Collecting data
++
++eval "$(make -s VARS='TOPDIR DL_DIR BR_NO_CHECK_HASH_FOR BR2_GLOBAL_PATCH_DIR' QUOTED_VARS=YES printvars)"
++# global patch dir may already have quotes
++BR2_GLOBAL_PATCH_DIR=$(echo "$BR2_GLOBAL_PATCH_DIR" | tr -d '"')
++
++[ -n "$BR2_GLOBAL_PATCH_DIR" ] || die "No BR2_GLOBAL_PATCH_DIR defined, nothing to do"
++[ -n "$BR_NO_CHECK_HASH_FOR" ] || die "No packages without hashes found, nothing to do"
++
++[ -d "$TOPDIR" ] || die "TOPDIR ($TOPDIR) does not look correct"
++[ -d "$DL_DIR" ] || die "DL_DIR ($DL_DIR) does not look correct"
++
++# patch dir may contain multiple dirs, use the last one
++# shellcheck disable=SC2086 # we need the word splitting
++set -- $BR2_GLOBAL_PATCH_DIR
++if [ $# -gt 1 ]; then
++    BR2_GLOBAL_PATCH_DIR="${!#}";
++    message BR2_GLOBAL_PATCH_DIR contains multiple directories, using "$BR2_GLOBAL_PATCH_DIR"
++fi
++
++# patch dir may be relative to TOPDIR
++case "$BR2_GLOBAL_PATCH_DIR" in
++    /*) ;;
++    *) BR2_GLOBAL_PATCH_DIR="$TOPDIR/$BR2_GLOBAL_PATCH_DIR"
++       ;;
++esac
++
++[ -d "$BR2_GLOBAL_PATCH_DIR" ] \
++  || die "BR2_GLOBAL_PATCH_DIR ($BR2_GLOBAL_PATCH_DIR) does not look correct"
++
++trap 'rm -f "$JSON"' EXIT
++JSON=$(mktemp)
++make show-info > "$JSON"
++
++# ensure files have been downloaded, but without checking
++make BR2_DOWNLOAD_FORCE_CHECK_HASHES= source
++
++message Updating hashes
++
++for file in $BR_NO_CHECK_HASH_FOR; do
++    for pkg in $(get_pkgs "$JSON" "$file"); do
++        HASHFILE="$BR2_GLOBAL_PATCH_DIR/$pkg/$pkg.hash"
++        PKG_DL_DIR=$(get_pkg_dl_dir "$JSON" "$pkg")
++        message "Adding hash for $file to $HASHFILE"
++        mkdir -p "${HASHFILE%/*}"
++        gen_hash "$DL_DIR/$PKG_DL_DIR" "$file" > "$HASHFILE"
++    done
++done
++
++message Verifying hashes
++
++make clean
++make BR2_DOWNLOAD_FORCE_CHECK_HASHES=y source
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
