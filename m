@@ -4,81 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6C28C4332F
-	for <buildroot@archiver.kernel.org>; Sun, 12 Nov 2023 22:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C3C5C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 00:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FB3860B89;
-	Sun, 12 Nov 2023 22:17:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FB3860B89
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA14560B94;
+	Mon, 13 Nov 2023 00:58:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA14560B94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K52rMowuQ56u; Sun, 12 Nov 2023 22:17:19 +0000 (UTC)
+	with ESMTP id FG0Wll29a5s4; Mon, 13 Nov 2023 00:58:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70ABD60B30;
-	Sun, 12 Nov 2023 22:17:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70ABD60B30
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9E4271BF2B3
- for <buildroot@lists.busybox.net>; Sun, 12 Nov 2023 22:17:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20DF860AAE;
+	Mon, 13 Nov 2023 00:58:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20DF860AAE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CC221BF947
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 00:58:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E7B040385
- for <buildroot@lists.busybox.net>; Sun, 12 Nov 2023 22:17:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E7B040385
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B6FE81FAF
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 00:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B6FE81FAF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QCPMx3ZwUPVl for <buildroot@lists.busybox.net>;
- Sun, 12 Nov 2023 22:17:13 +0000 (UTC)
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com
- [IPv6:2607:f8b0:4864:20::b2c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 41CB8401D8
- for <buildroot@buildroot.org>; Sun, 12 Nov 2023 22:17:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41CB8401D8
-Received: by mail-yb1-xb2c.google.com with SMTP id
- 3f1490d57ef6-d9b9adaf291so3560512276.1
- for <buildroot@buildroot.org>; Sun, 12 Nov 2023 14:17:13 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qwq0S96PtdMB for <buildroot@lists.busybox.net>;
+ Mon, 13 Nov 2023 00:58:55 +0000 (UTC)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 43A6681FAC
+ for <buildroot@buildroot.org>; Mon, 13 Nov 2023 00:58:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43A6681FAC
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4083f613275so32064485e9.2
+ for <buildroot@buildroot.org>; Sun, 12 Nov 2023 16:58:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1699827432; x=1700432232;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1699837133; x=1700441933;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=xnE/gVJEN/oJ353/W1dx1Iwyr5fh1faf7hliJdIGUNE=;
- b=e8O79OB9gnyGVPc6JVskio9+Z2Evu/vCde9XZU01TKH1fqpXqRf1TOqngz0uLwWS2G
- Ov4qkNn44K09AgKQSH/APxPeiJ9d3xNjiRIE+B5HIpCZ5meuljmTmdDG4PeMeDXW1cDa
- QnLQctKLS9gjWpfQZdUnevAOyTyMtO8KdVEIDNEaSwbMZ9VB4olO9cFV/+O+GLDdBn7c
- OSFF9/dpQIsSeT4D2Vrp4ArRb/rsrNRkeSazii9b8LesDQnFOvSCKTW3rMhGH7auXyNu
- EsPYs9AYB7m6vy2o+Y9St5ikYXGLww0Kltz9PlWNR/DEC2eqttJQHK2RmczAwyEgIci9
- OT3g==
-X-Gm-Message-State: AOJu0YxmSN96CwRd21jc7kEZACG4dtKKGSlzzlrmNQfzzYv8T18zVMsE
- Br6w1CuPq2X4Se48F7wcT+Kh3bNVpn2RjhQwr1c=
-X-Google-Smtp-Source: AGHT+IGSU5AJ642EOapwT5DPz17Uwi+IvGvBMy5tvSE2s51D4zek3ibY7vbYAvFY6k3EWCRyIap1F5FSxCHgZihXWsQ=
-X-Received: by 2002:a25:b18e:0:b0:d9c:a3b8:f39d with SMTP id
- h14-20020a25b18e000000b00d9ca3b8f39dmr2764506ybj.65.1699827431888; Sun, 12
- Nov 2023 14:17:11 -0800 (PST)
+ bh=6RmFGKEujT3pwafxAYGOs/kvM/n2IeeK6figvl7aPdw=;
+ b=oroyRXeHhdmGLYKfep7QWVUXPeLT4DQfRil2NVYW01npfAT7qn2VjGMKNvuo/vffPF
+ Z4B605uh2ay/n6NvuFDkDGIS59jkO/mlBwm/cKVUds44vfMDWvK0Rd3Sb39/gXPXFzLr
+ NRpPpWLKvC+luGQlYQ8nmrWP7KXkzsadHggPd1MzJTFfv9wZdAt1uVv4Uv7VkfzOzLsL
+ ToM0Va1MgsMTunNU49+2nmb/rlT6fWnaKaxcDn0Mav/eQwfbIMYvHKtxZ5Gfl8ZwnEla
+ JwcQ99n9NYreyqK+9cXn8zlwPWqYAKqJKAWnm4ShceQKhGivAKZWIaw9RRutWNSGRmt2
+ YkzA==
+X-Gm-Message-State: AOJu0YxSwDXLikLskTDx63E+4xOGHpCUMUUHvbzKpY3iFW8RZXMhgfc4
+ 8rivV4M2iYXrhDmCKDU+sfrufVmJP6wwVg==
+X-Google-Smtp-Source: AGHT+IHeQEBBpCNQ1YkwPejGkITYVEhEnAHcqlR/R5LUaZ+33g8ZMngcW8IdN4RbdEQ8+NmBg8ugSg==
+X-Received: by 2002:a1c:790b:0:b0:409:7aa9:a903 with SMTP id
+ l11-20020a1c790b000000b004097aa9a903mr4367958wme.19.1699837133045; 
+ Sun, 12 Nov 2023 16:58:53 -0800 (PST)
+Received: from cuervo.lan ([78.30.17.56]) by smtp.gmail.com with ESMTPSA id
+ c20-20020a05600c0ad400b0040588d85b3asm11912268wmr.15.2023.11.12.16.58.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 12 Nov 2023 16:58:52 -0800 (PST)
+From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
+ <salvador.joseluis@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 13 Nov 2023 01:58:34 +0100
+Message-ID: <20231113005833.3858363-2-salvador.joseluis@gmail.com>
+X-Mailer: git-send-email 2.42.1
 MIME-Version: 1.0
-References: <20230608175538.1347170-1-salvador.joseluis@gmail.com>
- <20230726233012.50b0ac6c@windsurf>
-In-Reply-To: <20230726233012.50b0ac6c@windsurf>
-From: =?UTF-8?Q?Jos=C3=A9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
-Date: Sun, 12 Nov 2023 23:17:18 +0100
-Message-ID: <CAH+XeQZT9LpE2pE7ENKK9Tx-6aaW7EP+aHZP-XYEP+q6mGj8aQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1699827432; x=1700432232; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=xnE/gVJEN/oJ353/W1dx1Iwyr5fh1faf7hliJdIGUNE=;
- b=hgr6xjEEEoFJMFCvv1D0Wzprm+p6UbzhmWy87jJkhSSM6E2uU6KpqAeo9byCB3BIQJ
- 8qQ7tAhSC8SO4FKELfQrQeDn1dmqnQGyQCr515FRd8ByqTkaRlU8cPgXAinovo4H7XRB
- nf230ylcgj0QQoWl2q3e1s016fU1O3HqvE6yuA37VhVDA5VU2Y/23rpBQb+ju0hk43Eq
- x1C9mrYGV4pdy8Pm/R3LKPOAKhlhAoSqg7cfoo6IwBLdT5t3uA3VsJKK5oTi6FB1hzVA
- yAxfcNZsvR17So3V/okFRMbmCfvSIg92yiKyDY30sawqsmEHsj3ke1eVEyBHyg6hMzGl
- OU5A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1699837133; x=1700441933; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6RmFGKEujT3pwafxAYGOs/kvM/n2IeeK6figvl7aPdw=;
+ b=dR2FDpw2kpEGYOpvRk/SO6mFAvQsFps3xOTxI9E4RJ8BVi+Ll83APACZI0UUU1y2wf
+ GEgLtsPykugtCZv/yE4Avd8MhJxIYt5tAZnqGxd0fBVT3xmi9lG9tljt0dfvGQWDYSua
+ +z6lW53BM8gOwxh5XaBCQnn/8RlFJ5I3z10/4NK0O/uJ+JujFpUtLAEBsAHLJ1m26nFZ
+ yhlLLS4jkwtPPCF3WX2hYuSlzObbUn8K/OViSvEOx30v/zNyiX4KdJsbIfNFkkgI03nH
+ HKHUDD6wrxzig2aAd2JVTxZAGVQL5OSqJfhA6hgSYYdU6TEekHDP5KRjt8XJdzYFv8GV
+ 7Jnw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=hgr6xjEE
-Subject: Re: [Buildroot] [PATCH] package/zfs: fix autotools crosscompilations
+ header.a=rsa-sha256 header.s=20230601 header.b=dR2FDpw2
+Subject: [Buildroot] [PATCH] package/zfs: bump version to 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,116 +93,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>,
- Michael Zimmermann <sigmaepsilon92@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4099089581418697398=="
+Cc: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
+ <salvador.joseluis@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4099089581418697398==
-Content-Type: multipart/alternative; boundary="00000000000041dc8c0609fbea1f"
-
---00000000000041dc8c0609fbea1f
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hello Thomas,
-
-Here is the same patch but with some explanation:
-https://patchwork.ozlabs.org/project/buildroot/patch/20231112221115.2289525=
--3-salvador.joseluis@gmail.com/
-
-Greetings.
-
-El mi=C3=A9, 26 jul 2023 a las 23:30, Thomas Petazzoni (<
-thomas.petazzoni@bootlin.com>) escribi=C3=B3:
-
-> Hello Jos=C3=A9,
->
-> On Thu,  8 Jun 2023 19:55:38 +0200
-> Jos=C3=A9 Luis Salvador Rufo <salvador.joseluis@gmail.com> wrote:
->
-> > Signed-off-by: Jos=C3=A9 Luis Salvador Rufo <salvador.joseluis@gmail.co=
-m>
->
-> Thanks for the contribution, but unfortunately we cannot apply this
-> patch: it does not explain anything about which "autotools
-> crosscompilations" issues it is fixing. Are these failures visible in
-> the autobuilders? If so, what link? If not, what configuration/setup
-> exhibits the problem, what is the error message, how does the patch fix
-> the issue?
->
-> Could you send an updated patch with a non-empty commit log that
-> contains a sufficient amount of detail for us to properly
-> review/understand the change?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
-
---00000000000041dc8c0609fbea1f
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello Thomas,<div><br></div><div>Here is the same patch bu=
-t with some explanation:</div><div><a href=3D"https://patchwork.ozlabs.org/=
-project/buildroot/patch/20231112221115.2289525-3-salvador.joseluis@gmail.co=
-m/">https://patchwork.ozlabs.org/project/buildroot/patch/20231112221115.228=
-9525-3-salvador.joseluis@gmail.com/</a><br></div><div><br></div><div>Greeti=
-ngs.</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gm=
-ail_attr">El mi=C3=A9, 26 jul 2023 a las 23:30, Thomas Petazzoni (&lt;<a hr=
-ef=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>=
-&gt;) escribi=C3=B3:<br></div><blockquote class=3D"gmail_quote" style=3D"ma=
-rgin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:=
-1ex">Hello Jos=C3=A9,<br>
-<br>
-On Thu,=C2=A0 8 Jun 2023 19:55:38 +0200<br>
-Jos=C3=A9 Luis Salvador Rufo &lt;<a href=3D"mailto:salvador.joseluis@gmail.=
-com" target=3D"_blank">salvador.joseluis@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; Signed-off-by: Jos=C3=A9 Luis Salvador Rufo &lt;<a href=3D"mailto:salv=
-ador.joseluis@gmail.com" target=3D"_blank">salvador.joseluis@gmail.com</a>&=
-gt;<br>
-<br>
-Thanks for the contribution, but unfortunately we cannot apply this<br>
-patch: it does not explain anything about which &quot;autotools<br>
-crosscompilations&quot; issues it is fixing. Are these failures visible in<=
-br>
-the autobuilders? If so, what link? If not, what configuration/setup<br>
-exhibits the problem, what is the error message, how does the patch fix<br>
-the issue?<br>
-<br>
-Could you send an updated patch with a non-empty commit log that<br>
-contains a sufficient amount of detail for us to properly<br>
-review/understand the change?<br>
-<br>
-Thanks!<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
-
---00000000000041dc8c0609fbea1f--
-
---===============4099089581418697398==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4099089581418697398==--
+UmVtb3ZlZCBiYWNrcG9ydGVkIHBhdGNoOgotIGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuemZzL3pm
+cy9jb21taXQvYmMzZjEyYmZhYzE1MmEwYzI4OTUxY2VjOTIzNDBiYTE0ZjljY2VlOS5wYXRjaAoK
+VXBkYXRlZCBaRlMgdGVzdCB0byBwYXNzIHRoaXMgbmV3IHZlcnNpb24uCgpTaWduZWQtb2ZmLWJ5
+OiBKb3PDqSBMdWlzIFNhbHZhZG9yIFJ1Zm8gPHNhbHZhZG9yLmpvc2VsdWlzQGdtYWlsLmNvbT4K
+LS0tCiBwYWNrYWdlL3pmcy96ZnMuaGFzaCAgICAgICAgICAgICAgICAgICAgICB8IDUgKystLS0K
+IHBhY2thZ2UvemZzL3pmcy5tayAgICAgICAgICAgICAgICAgICAgICAgIHwgMyArLS0KIHN1cHBv
+cnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfemZzLnB5IHwgNCArKy0tCiAzIGZpbGVzIGNo
+YW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNr
+YWdlL3pmcy96ZnMuaGFzaCBiL3BhY2thZ2UvemZzL3pmcy5oYXNoCmluZGV4IDNhNzNlNWU5NGYu
+LmIwMmM0OTIzNGEgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvemZzL3pmcy5oYXNoCisrKyBiL3BhY2th
+Z2UvemZzL3pmcy5oYXNoCkBAIC0xLDYgKzEsNSBAQAotIyBGcm9tIGh0dHBzOi8vZ2l0aHViLmNv
+bS9vcGVuemZzL3pmcy9yZWxlYXNlcy9kb3dubG9hZC96ZnMtMi4xLjEyL3pmcy0yLjEuMTIuc2hh
+MjU2LmFzYwotc2hhMjU2ICA2NGRhYTI2YWVkM2UxMmM5MzFmNmY0NDEzZDc1MjdjNGViZGI4ZGEz
+NTQxNmIzNTYxNTJiNWY5ZmRkNGM2ZTZkICB6ZnMtMi4xLjEyLnRhci5negotc2hhMjU2ICA5NmEy
+NzM1M2ZlNzE3ZmYyYzhiOTVkZWI4YjAwOWM0ZWI3NTAzMDNjNjQwMGUyZDhhMjU4MmFiMWVjMTJi
+MjVhICBiYzNmMTJiZmFjMTUyYTBjMjg5NTFjZWM5MjM0MGJhMTRmOWNjZWU5LnBhdGNoCisjIExv
+Y2FsbHkgY29tcHV0ZWQKK3NoYTI1NiAgNDIwMzVmZDA1OWZhYTI1YTA5Y2Q1MTFiMjRhNTdiOGFk
+MTI4NWNiNjkxMjdmMmEwMDQzYjk4NTYyYzVlYzY5MCAgemZzLTIuMi4wLnRhci5negogCiAjIEhh
+c2ggZm9yIGxpY2Vuc2UgZmlsZXM6CiBzaGEyNTYgIDFmZmI3MGMzM2M0Zjc5ZjA0ZTk0N2ZhY2M1
+Yzc4NTFmMjg5NjA5MjU2YWFjYjQ3ZmMxMTVmNzAwNDI3ZDk1MjAgIExJQ0VOU0UKZGlmZiAtLWdp
+dCBhL3BhY2thZ2UvemZzL3pmcy5tayBiL3BhY2thZ2UvemZzL3pmcy5tawppbmRleCBmMDQ2MWVh
+OWVjLi5kODU5NTZjOThiIDEwMDY0NAotLS0gYS9wYWNrYWdlL3pmcy96ZnMubWsKKysrIGIvcGFj
+a2FnZS96ZnMvemZzLm1rCkBAIC00LDkgKzQsOCBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMKIAotWkZTX1ZFUlNJT04gPSAyLjEuMTIKK1pGU19WRVJTSU9OID0gMi4yLjAKIFpGU19TSVRF
+ID0gaHR0cHM6Ly9naXRodWIuY29tL29wZW56ZnMvemZzL3JlbGVhc2VzL2Rvd25sb2FkL3pmcy0k
+KFpGU19WRVJTSU9OKQotWkZTX1BBVENIID0gaHR0cHM6Ly9naXRodWIuY29tL29wZW56ZnMvemZz
+L2NvbW1pdC9iYzNmMTJiZmFjMTUyYTBjMjg5NTFjZWM5MjM0MGJhMTRmOWNjZWU5LnBhdGNoCiBa
+RlNfU0VMSU5VWF9NT0RVTEVTID0gemZzCiBaRlNfTElDRU5TRSA9IENEREwKIFpGU19MSUNFTlNF
+X0ZJTEVTID0gTElDRU5TRSBDT1BZUklHSFQKZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90
+ZXN0cy9wYWNrYWdlL3Rlc3RfemZzLnB5IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uv
+dGVzdF96ZnMucHkKaW5kZXggMWYwMWRkZDc2OC4uMjdkYmMyODY5YiAxMDA2NDQKLS0tIGEvc3Vw
+cG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF96ZnMucHkKKysrIGIvc3VwcG9ydC90ZXN0
+aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF96ZnMucHkKQEAgLTQwLDExICs0MCwxMSBAQCBjbGFzcyBU
+ZXN0WmZzQmFzZShpbmZyYS5iYXNldGVzdC5CUlRlc3QpOgogCiAgICAgICAgIGNtZHMgPSBbCiAg
+ICAgICAgICAgICAjIEluaXQKLSAgICAgICAgICAgICJtb2Rwcm9iZSB6ZnMiLAorICAgICAgICAg
+ICAgIm1vZHByb2JlIHpmcyAmJiBzbGVlcCAyIiwKICAgICAgICAgICAgICJtb3VudCAtbyByZW1v
+dW50LHNpemU9MTMyTSAvdG1wIiwKICAgICAgICAgICAgICJmYWxsb2NhdGUgLWwgNjRNIC90bXAv
+Y29udGFpbmVyMS5yYXciLAogICAgICAgICAgICAgImZhbGxvY2F0ZSAtbCA2NE0gL3RtcC9jb250
+YWluZXIyLnJhdyIsCi0gICAgICAgICAgICAienBvb2wgY3JlYXRlIC1tIC9wb29sIHBvb2wgcmFp
+ZHogL3RtcC9jb250YWluZXIxLnJhdyAvdG1wL2NvbnRhaW5lcjIucmF3IiwKKyAgICAgICAgICAg
+ICJ6cG9vbCBjcmVhdGUgcG9vbCByYWlkeiAvdG1wL2NvbnRhaW5lcjEucmF3IC90bXAvY29udGFp
+bmVyMi5yYXciLAogICAgICAgICAgICAgImRkIGlmPS9kZXYvdXJhbmRvbSBicz0xTSBjb3VudD04
+IG9mPS9wb29sL3VyYW5kb20iLAogICAgICAgICAgICAgInNoYTI1NnN1bSAvcG9vbC91cmFuZG9t
+ID4gL3RtcC91cmFuZG9tLnNoYTI1NiIsCiAgICAgICAgICAgICAjIENoZWNrIFpGUwotLSAKMi40
+Mi4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
