@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 929BAC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 18:55:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C29C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 13 Nov 2023 18:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2499840106;
-	Mon, 13 Nov 2023 18:55:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2499840106
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B55640042;
+	Mon, 13 Nov 2023 18:56:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B55640042
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fIlyH28Tg-vC; Mon, 13 Nov 2023 18:55:37 +0000 (UTC)
+	with ESMTP id EskEGz9ejU4H; Mon, 13 Nov 2023 18:56:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9AFEC40042;
-	Mon, 13 Nov 2023 18:55:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AFEC40042
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8D9840133;
+	Mon, 13 Nov 2023 18:56:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8D9840133
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3D7E11BF228
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 18:55:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FA0B1BF228
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 18:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 130F660A9C
- for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 18:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 130F660A9C
+ by smtp3.osuosl.org (Postfix) with ESMTP id DCDD960D70
+ for <buildroot@lists.busybox.net>; Mon, 13 Nov 2023 18:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCDD960D70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FoqS6JV-ISxO for <buildroot@lists.busybox.net>;
- Mon, 13 Nov 2023 18:55:20 +0000 (UTC)
+ with ESMTP id 6dezXCGRAzDH for <buildroot@lists.busybox.net>;
+ Mon, 13 Nov 2023 18:56:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 195EF60A88
- for <buildroot@buildroot.org>; Mon, 13 Nov 2023 18:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 195EF60A88
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A2A660A9C
+ for <buildroot@buildroot.org>; Mon, 13 Nov 2023 18:56:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A2A660A9C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 04D00870D0; Mon, 13 Nov 2023 18:55:20 +0000 (UTC)
+ id DDC43870D8; Mon, 13 Nov 2023 18:56:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 13 Nov 2023 19:52:52 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 943a1d15cf7f16a3a23da7794fe262e33eb47aac
-X-Git-Newrev: 83b09400dd2d8c60be7ebab9416d13d8dc1ef57f
+Date: Mon, 13 Nov 2023 19:52:57 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 481e7ebc4eef384acfaa8c8cd5a6554f7ae69882
+X-Git-Newrev: 622f810f5a3d96d37a7144af9c24d0fae4c5d403
 X-Patchwork-Hint: ignore
-Message-Id: <20231113185520.04D00870D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] utils/add-custom-hashes:
+Message-Id: <20231113185632.DDC43870D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] utils/add-custom-hashes:
  add script to manage global patch dir hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83b09400dd2d8c60be7ebab9416d13d8dc1ef57f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=622f810f5a3d96d37a7144af9c24d0fae4c5d403
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Add a script to manage the .hash files in the BR2_GLOBAL_PATCH_DIR for
 packages using custom versions.
