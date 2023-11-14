@@ -1,74 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75E73C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 14 Nov 2023 13:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5222C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 14 Nov 2023 15:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CE9F82271;
-	Tue, 14 Nov 2023 13:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CE9F82271
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bc5DI9jc5_eq; Tue, 14 Nov 2023 13:11:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33D1A8219A;
-	Tue, 14 Nov 2023 13:11:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33D1A8219A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 78C761BF2B4
- for <buildroot@lists.busybox.net>; Tue, 14 Nov 2023 13:11:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 524DC612E3
- for <buildroot@lists.busybox.net>; Tue, 14 Nov 2023 13:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 524DC612E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 681EF61107;
+	Tue, 14 Nov 2023 15:25:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 681EF61107
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w4Ud_TqSqMIh for <buildroot@lists.busybox.net>;
- Tue, 14 Nov 2023 13:11:23 +0000 (UTC)
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4D96E6119C
- for <buildroot@buildroot.org>; Tue, 14 Nov 2023 13:11:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D96E6119C
-Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1r2tCJ-0036Kv-Th; Tue, 14 Nov 2023 14:11:20 +0100
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id efd4e205;
- Tue, 14 Nov 2023 13:11:19 +0000 (UTC)
-Date: Tue, 14 Nov 2023 15:11:18 +0200
-Message-ID: <20231114151118.GF1974649@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-In-Reply-To: <20231110164617.569602-3-thomas@devoogdt.com>
-References: <Thomas Devoogdt
- <20231001165218.1960930-3-thomas.devoogdt@barco.com>
- <20231110164617.569602-1-thomas@devoogdt.com>
- <20231110164617.569602-3-thomas@devoogdt.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id klikOaHMsD9b; Tue, 14 Nov 2023 15:25:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85F6F60FE2;
+	Tue, 14 Nov 2023 15:25:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85F6F60FE2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 136B21BF292
+ for <buildroot@lists.busybox.net>; Tue, 14 Nov 2023 15:25:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF9A981235
+ for <buildroot@lists.busybox.net>; Tue, 14 Nov 2023 15:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF9A981235
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id abM-cniNaQpi for <buildroot@lists.busybox.net>;
+ Tue, 14 Nov 2023 15:25:14 +0000 (UTC)
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
+ [148.163.158.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 647AA81228
+ for <buildroot@buildroot.org>; Tue, 14 Nov 2023 15:25:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 647AA81228
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+ by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 3AEFH71m027622; Tue, 14 Nov 2023 15:25:13 GMT
+Received: from ppma23.wdc07v.mail.ibm.com
+ (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+ by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ucbd908yj-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Tue, 14 Nov 2023 15:25:12 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+ by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 3AEE6PsP011661; Tue, 14 Nov 2023 15:25:11 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+ by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uanekgjc0-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Tue, 14 Nov 2023 15:25:11 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com
+ [10.241.53.105])
+ by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
+ 3AEFPBGg10355352
+ (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 14 Nov 2023 15:25:11 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id 26C4E5805F;
+ Tue, 14 Nov 2023 15:25:11 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id 19B0658061;
+ Tue, 14 Nov 2023 15:25:11 +0000 (GMT)
+Received: from arbab-laptop.localdomain (unknown [9.53.178.221])
+ by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+ Tue, 14 Nov 2023 15:25:11 +0000 (GMT)
+Received: from arbab-laptop.austin.ibm.com (localhost [IPv6:::1])
+ by arbab-laptop.localdomain (Postfix) with ESMTPS id 9A4AD171EB0;
+ Tue, 14 Nov 2023 09:25:10 -0600 (CST)
+Date: Tue, 14 Nov 2023 09:25:09 -0600
+From: Reza Arbab <arbab@linux.ibm.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <7b237806-e04d-4c50-aad6-b3ae21e5fb7a@arbab-laptop>
+Mail-Followup-To: Arnout Vandecappelle <arnout@mind.be>,
+ buildroot@buildroot.org, Laurent Vivier <laurent@vivier.eu>,
+ Joel Stanley <joel@jms.id.au>
+References: <20231009151729.2223963-1-arbab@linux.ibm.com>
+ <20231009151729.2223963-8-arbab@linux.ibm.com>
+ <342a893c-af90-4602-b73b-1afd37b34acb@mind.be>
+ <624ea15d-6d09-48b3-a004-42cd3d3b67df@arbab-vm>
+ <f730a063-dc3c-4937-bc76-24b17c57d6a4@mind.be>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=NG8kSZQN679eY2h3CfioR/CQxmEDJD7QcGCPQlBT9+o=; b=es/WkBXHJFwR+BjyrtTeq+u19V
- OqGvJ0Upjeiq8fX6clcILIy2lJwbtSQW1FSGya4/vMQ8DMVCaAw5JZM394WT4Ee8oVGu37h9PoI+W
- iWnmf9ZrjWAPB9GETXPdT7CzRPVF/BqOegjl/+l8Pa1Rw8BtV7l31DF0QU48mIIfiVTevAwP0yAi6
- /zc9ZSM6paWvevHbhUgfR83UNBklNuVghpC0xq6PSHDaSn4gCaBEacPl6eNRxAXlKClx6RhjK1yhL
- qrWmdQ9Zk7cRb13v6KO+HcgnhUg9/SOoyl4TCS2kXd0OE284pX+2F4ftf/AYEhq1ebRiiWknnFsd/
- oPRHjXdg==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=es/WkBXH
-Subject: Re: [Buildroot] [PATCH v5 3/3] package/webkitgtk: bump to version
- 2.42.2
+Content-Disposition: inline
+In-Reply-To: <f730a063-dc3c-4937-bc76-24b17c57d6a4@mind.be>
+Organization: IBM Linux Technology Center
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3eMZ1pBzETphWBYuaR2hXibtAOL5fMK3
+X-Proofpoint-GUID: 3eMZ1pBzETphWBYuaR2hXibtAOL5fMK3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-14_14,2023-11-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 spamscore=0
+ adultscore=0 phishscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 impostorscore=0 mlxlogscore=676 priorityscore=1501 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
+ definitions=main-2311140118
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=FMsqwphx9t1doXsZ0aSgwSjZGqjDWK28SRhOnwKtcdM=;
+ b=MwHlfZl7sK7x9WEKLkMkzOppsKxeYH2FFxN7pCj/1LsN1FsswxyFTJCwNEA6a/FK/CbU
+ Rpw8d4K269L3L+qL9cDaEctDikT0+IQLPqPs11o/4cr+QRsJuEuIwha8x56+sapqk0iQ
+ p9PMZ7wMXr603oB214HrwlOU4C7+GR9Wu74O/F9Nn1FcUDC0OBn1viCHnL98ZA5CFc2F
+ hwmJvmW6L/4NeFdiE0HGsiQab7TXgm/dzqLnbcG7gx5sZaNJAoM78QQzEMbjCFmLYV0S
+ l/TtHj276v07tU9m5mhsrs74zNH0jd0C3t8O3FXylAmjTVP0Jdq7WZQXOA9rFLdmSilI Fw== 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
+ header.a=rsa-sha256 header.s=pp1 header.b=MwHlfZl7
+Subject: Re: [Buildroot] [PATCH v3 7/8] package/petitboot: enable user
+ separation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,89 +122,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4154066847651470665=="
+Cc: Joel Stanley <joel@jms.id.au>, Laurent Vivier <laurent@vivier.eu>,
+ buildroot@buildroot.org
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Fri, Nov 10, 2023 at 10:01:25AM +0100, Arnout Vandecappelle wrote:
+>On 09/11/2023 17:16, Reza Arbab wrote:
+>>On Sun, Nov 05, 2023 at 07:26:16PM +0100, Arnout Vandecappelle wrote:
+>>>It's also not clear why it would need agetty instead of busybox getty.
+>>
+>>Sorry, I didn't explain it very well. The chain goes like this:
+>>
+>>1. /etc/init.d/pb-console start console
+>>2. /usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 console =
+linux
+>>3. /sbin/getty -l/usr/libexec/petitboot/pb-console -n -i 0 console linux
+>>4. /usr/libexec/petitboot/pb-console
+>>5. /usr/sbin/petiboot-nc
+>>
+>>After the change:
+>>
+>>1. /etc/init.d/pb-console start console
+>>2. /usr/libexec/petitboot/pb-console --getty=3D/sbin/agetty --detach -- -=
+a petituser -n -i console linux
+>>3. /sbin/agetty -a petituser -n -i console linux
+>
+> How did the -l option disappear here? Is that due to --getty=3D instead o=
+f --getty?
 
---===============4154066847651470665==
-Content-Type: multipart/signed; boundary="E87jvqAZVvr2JT1M"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
+Not because of --getty=3D exactly, but you've got the right idea. The =
 
+script does not add -l if it sees -a.
 
---E87jvqAZVvr2JT1M
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+> Anyway, the only reason to use agetty is for the -a option. Can't we =
 
-SGkgVGhvbWFzLAoKVGhhbmtzIGZvciB0aGUgcGF0Y2ggc2V0IHdpdGggdGhlIGZpeGVzIGFuZCB0
-aGUgdXBkYXRlIHRvIDIuNDIueCwgSSBoYXZlCnJldmlld2VkIGFuZCB0ZXN0ZWQgdGhlIG90aGVy
-IHR3byBwYXRjaGVzICh0aGV5IGFyZSBnb29kISkgYnV0IHRoaXMgb25lCm5lZWRzIG9uZSBtb3Jl
-IGNoYW5nZSBiZWZvcmUgaXQgY2FuIGJlIG1lcmdlZCwgcGxlYXNlIHJlYWQgdGhlIGNvbW1lbnQK
-YmVsb3cuCgpPbiBGcmksIDEwIE5vdiAyMDIzIDE3OjQ2OjE3ICswMTAwIFRob21hcyBEZXZvb2dk
-dCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4gd3JvdGU6Cj4gVXBkYXRlIHRvIGEgbmV3IG1ham9yIHJl
-bGVhc2UuCj4gCj4gUmVsZWFzZSBub3RlczoKPiAKPiBodHRwczovL3dlYmtpdGd0ay5vcmcvMjAy
-My8wOS8xNS93ZWJraXRndGsyLjQyLjAtcmVsZWFzZWQuaHRtbAo+IGh0dHBzOi8vd2Via2l0Z3Rr
-Lm9yZy8yMDIzLzA5LzI3L3dlYmtpdGd0azIuNDIuMS1yZWxlYXNlZC5odG1sCj4gaHR0cHM6Ly93
-ZWJraXRndGsub3JnLzIwMjMvMTEvMTAvd2Via2l0Z3RrMi40Mi4yLXJlbGVhc2VkLmh0bWwKPiAK
-PiBTZWN1cml0eSBub3RlczoKPiAKPiBodHRwczovL3dlYmtpdGd0ay5vcmcvc2VjdXJpdHkvV1NB
-LTIwMjMtMDAwOC5odG1sCj4gCj4gLSBVU0VfSlBFR1hMIGlzIGVuYWJsZWQgYnkgZGVmYXVsdCBu
-b3cgWzFdLCBzbyBhZGQgYSBsaWJqeGwgaWYgdXNlZC4KPiAKPiAtIEVOQUJMRV9HTEVTMiBoYXMg
-YmVlbiBkcm9wcGVkLCBzbyBkcm9wIGl0IGFsc28gaGVyZSBbMl0uCj4gICBJbnN0ZWFkLCBlbmFi
-bGUgVVNFX09QRU5HTF9PUl9FUyBpZiBsaWJnbGVzIGlzIHByZXNlbnQuIEJld2FyZSB0aGF0IGFs
-c28KPiAgIGxpYmVnbCBpcyBuZWVkZWQgZm9yIFVTRV9PUEVOR0xfT1JfRVMsIGJ1dCB0aGF0IG9u
-ZSBpcyBtb3N0IG9mIHRoZSB0aW1lIGEKPiAgIGRlcGVuZGVuY3kgZm9yIGxpYmdsZXMsIHNvIGxl
-YXZlIGl0IG91dCBoZXJlLgo+IAo+IC0gQWxzbyByYWlzZSB0aGUgbWluaW1hbCBHQ0MgdmVyc2lv
-biB0byAxMC4yLCB3aGljaCBpcyByZXF1aXJlZCBzaW5jZSB3ZWJraXRndGstMi40Mi54IFszXS4K
-PiAgIFNpbWlsYXIgdG8gY29tbWl0IGVjMWZmODAyZGY5YTBmMTdkZDJiNzM0YmE1MzZhNWUyMDZh
-YTVhYTQsCj4gICB3ZSBkbyBjaGVjayBvbiA+PSBHQ0MgMTAsIGJlY2F1c2Ugd2UgY2FuJ3QgY2hl
-Y2sgb24gPj0gR0NDIDEwLjIuCj4gCj4gWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9XZWJLaXQvV2Vi
-S2l0L2NvbW1pdC85Mzg2NTQxNGYzMzE5MGM1N2UyOTNhODA0OTJlMTBlZGM0NjFkN2YwCj4gWzJd
-IGh0dHBzOi8vZ2l0aHViLmNvbS9XZWJLaXQvV2ViS2l0L2NvbW1pdC9jZmU5MTdmZWM0NWJmNzJj
-MzcxMDg3ZWNlMDM0ZmVlZTg0NTRmMWI0Cj4gWzNdIGh0dHBzOi8vZ2l0aHViLmNvbS9XZWJLaXQv
-V2ViS2l0L2NvbW1pdC8xMzM0OThhYWVlOGY0NDQ0M2Q5ZTNiMmEwOGJlNGE0Yjc3YjkzZmM5Cj4g
-Cj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIERldm9vZ2R0IDx0aG9tYXMuZGV2b29nZHRAYmFyY28u
-Y29tPgo+IC0tLQo+ICB2Mjogbi9hCj4gIHYzOgo+ICAtIHJlcGxhY2UgZm9yIHBhY2thZ2Uvd2Vi
-a2l0Z3RrOiBhZGQgYSBVU0VfT1BFTkdMX09SX0VTIGNvbmZpZyBvcHRpb24KPiAgLSAyLjQyLjAg
-bmVlZHMgYW4gZXh0cmEgYnVuY2ggb2YgcGF0Y2hlcywgc28gYnVtcCB0byBpbW1lZGlhdGVseSB0
-byAyLjQyLjEKPiAgdjQ6Cj4gIC0gZml4ZWQgaW5jb21wbGV0ZSBnaXQgbWFzc2FnZSAoYSBfX19f
-IGxpbmUgc3BsaXRzIHRoZSBnaXQgbWVzc2FnZSBhcHBhcmVudGx5KQo+ICAtIHJlLWFkZGVkIHBh
-dGNoZXMgd2l0aCB1cHN0cmVhbSBjaGVycnktcGljayBhbmQgaGFzaAo+ICB2NToKPiAgLSAyLjQy
-LjEgbmVlZHMgYW4gZXh0cmEgYnVuY2ggb2YgcGF0Y2hlcywgc28gYnVtcCB0byBpbW1lZGlhdGVs
-eSB0byAyLjQyLjIKClBhdGNoICIwMDAyLVdQRS1HVEstRXh0ZW5zaW9uc0dMT3BlbkdMRVMuY3Bw
-LXVzZXMtR0xFUzMtc3ltYm9scy0ucGF0Y2giIGFsc28KbmVlZHMgdG8gYmUgcmVtb3ZlZDogaXQg
-ZG9lcyBub3QgYXBwbHkgYmVjYXVzZSB0aGUgZml4IGhhcyBiZWVuIGltcG9ydGVkCnVwc3RyZWFt
-IGFuZCBpcyBwYXJ0IG9mIHRoZSAyLjQyLnggcmVsZWFzZXMuCgo+IC0tLQo+ICAuLi5lLXdoZW4t
-Z3N0cmVhbWVyLXN1cHBvcnQtaXMtZGlzYWJsZWQucGF0Y2ggfCAzNiAtLS0tLS0tLS0tLS0tLS0t
-LS0tCj4gIHBhY2thZ2Uvd2Via2l0Z3RrL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICB8ICA2
-ICsrLS0KPiAgcGFja2FnZS93ZWJraXRndGsvd2Via2l0Z3RrLmhhc2ggICAgICAgICAgICAgIHwg
-IDYgKystLQo+ICBwYWNrYWdlL3dlYmtpdGd0ay93ZWJraXRndGsubWsgICAgICAgICAgICAgICAg
-fCAxNiArKysrKystLS0KPiAgNCBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCA0NyBk
-ZWxldGlvbnMoLSkKPgo+IFsuLi5dCgpDaGVlcnMsCuKAlEFkcmnDoW4K
+>achieve the same by using su? I.e. create a wrapper script around =
 
---E87jvqAZVvr2JT1M
-Content-Type: application/pgp-signature; name="signature.asc"
+>pb-console that does something like
+>
+>exec su -s /usr/libexec/petitboot/pb-console petituser
 
------BEGIN PGP SIGNATURE-----
+It's tricky. "pb-console --getty" runs getty which runs pb-console =
 
-iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZVNx9wAKCRCRxVnb5MkS
-O4zPAJwPI3Ga413mSlYwDnQKcFknpH1kyACff4hT0TA7PxjyFeS2zUkCPkm2Bg4=
-=p7qY
------END PGP SIGNATURE-----
+again, so at least that first invocation has be done as root. Instead of =
 
---E87jvqAZVvr2JT1M--
+a wrapper, it can be made to work by adding this at the right place in =
 
---===============4154066847651470665==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+pb-console:
 
+     # If we're root, rerun as petituser
+     if [ "$(id -u)" =3D "0" ]; then
+	exec su -s "$0" petituser $@
+     fi
+
+I'm not sure if patching pb-console is preferable to depending on =
+
+"agetty -a" and .profile?
+
+>>4. /home/petituser/.profile
+>
+> Something I didn't touch in my earlier review: I don't think .profile =
+
+>is the right place to set this up. Either petituser is a normal user - =
+
+>in that case logging in through some other means (e.g. ssh, sudo) =
+
+>should give a normal shell.
+
+In .profile, I can do
+
+     if [ "$PPID" =3D "1" ]; then
+	exec /usr/libexec/petitboot/pb-console
+     fi
+
+so it only runs when petituser is logging in by getty/agetty and not =
+
+through ssh or sudo.
+
+>>>>+define PETITBOOT_PERMISSIONS
+>>>>+=A0=A0=A0 /var/petitboot d 775 root petitgroup - - - - -
+>
+> Given the information below, why is it in petitgroup? If pb-discover =
+
+>is just going to create directories there on which it can mount =
+
+>things, it's not very useful for pb-console to have write access to =
+
+>it, right? Unless pb-console needs to delete those directories or =
+
+>rename them?
+
+You're right, I think /var/petitboot is really only used by pb-discover =
+
+(root), so we can probably drop this.
+
+I'll revise and split all this stuff into more than one patch so it's =
+
+easier to understand when looking through the git log.
+
+-- =
+
+Reza Arbab
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4154066847651470665==--
