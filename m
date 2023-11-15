@@ -1,87 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C5D1C072A2
-	for <buildroot@archiver.kernel.org>; Wed, 15 Nov 2023 16:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E6C7C072A2
+	for <buildroot@archiver.kernel.org>; Wed, 15 Nov 2023 18:12:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1324340A01;
-	Wed, 15 Nov 2023 16:40:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1324340A01
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F9AF6080A;
+	Wed, 15 Nov 2023 18:12:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F9AF6080A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qYZsi27VZwop; Wed, 15 Nov 2023 18:12:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB72E606D3;
+	Wed, 15 Nov 2023 18:12:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB72E606D3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 680551BF951
+ for <buildroot@lists.busybox.net>; Wed, 15 Nov 2023 18:12:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E4A641E9D
+ for <buildroot@lists.busybox.net>; Wed, 15 Nov 2023 18:12:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E4A641E9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oVQJou-zjMuI; Wed, 15 Nov 2023 16:40:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 415494169B;
-	Wed, 15 Nov 2023 16:40:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 415494169B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E47F1BF333
- for <buildroot@lists.busybox.net>; Wed, 15 Nov 2023 16:39:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3571980EA2
- for <buildroot@lists.busybox.net>; Wed, 15 Nov 2023 16:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3571980EA2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XTxgYtuBuLYX for <buildroot@lists.busybox.net>;
- Wed, 15 Nov 2023 16:39:51 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8F64980E3F
- for <buildroot@busybox.net>; Wed, 15 Nov 2023 16:39:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F64980E3F
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-40906fc54fdso57609355e9.0
- for <buildroot@busybox.net>; Wed, 15 Nov 2023 08:39:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700066389; x=1700671189;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=kqwroL0JPEH8OBBuSLtDklAD3vqDzvEIOVoZOUGJWgk=;
- b=gfUbjKmUNbofkKMNjag9dLteLUvctlMJInvsk7RCYYOgeeN1yDV8Al3WpRipvVvev9
- Ysqj1vFqXQSmeohCb3Ebo4g97Y0pnkg5droAJRR4DtIIXFjkPF8dkJF67YfekUxCq+3i
- vQSDd/lCCxms8BuQCnpk65c1qTIDr1s50JnX1MG92DsurAg5s24vFFocWe92XRhWRNUD
- kx79t4G6uxArrQGtjeplbYklB1CpIQWgJvtiRPoUBJM3gfhvhzHbhNtEonoKcYiv5nUR
- CgAonzwsEGG1hXKG5XheLQBTdijj4myRRGq8rkPZWvkCdZz1k/O5legeoZ+b/nC6pF8E
- 4GQw==
-X-Gm-Message-State: AOJu0Yz6s+FHZmfM6jwKP4sLCpbjPvv+GsqAw2vb1CH5H3rXCzjtzQaR
- HO66pxNcoga6E+4WOb9hY15PsyNwI3A=
-X-Google-Smtp-Source: AGHT+IG92TH0wlN2Hs6iVocCA1ww1eUKu5vUbmTGDpnBUnihlKcMjpHPmD667hrZuPWV6Kp2YMZByQ==
-X-Received: by 2002:a5d:6043:0:b0:331:3bda:a841 with SMTP id
- j3-20020a5d6043000000b003313bdaa841mr11525388wrt.9.1700066389073; 
- Wed, 15 Nov 2023 08:39:49 -0800 (PST)
-Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- c10-20020a5d63ca000000b0032d81837433sm10954841wrw.30.2023.11.15.08.39.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 15 Nov 2023 08:39:48 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Wed, 15 Nov 2023 17:39:02 +0100
-Message-Id: <20231115163903.445858-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.39.2
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E8KKww3kfdXm for <buildroot@lists.busybox.net>;
+ Wed, 15 Nov 2023 18:12:53 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1F5D841E6B
+ for <buildroot@buildroot.org>; Wed, 15 Nov 2023 18:12:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F5D841E6B
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4bfd:4134:b6ff:e4a7])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 903D560137;
+ Wed, 15 Nov 2023 19:12:43 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 15 Nov 2023 19:12:43 +0100
+Date: Wed, 15 Nov 2023 19:12:43 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: "Frager, Neal" <neal.frager@amd.com>
+Message-ID: <20231115181243.GK996011@scaer>
+References: <20231020114236.4129636-1-neal.frager@amd.com>
+ <20231020114236.4129636-3-neal.frager@amd.com>
+ <20231031134317.4ce2349e@windsurf>
+ <CH2PR12MB5004C8F27820E2EC98FC5232F0A7A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20231101125048.01553f76@windsurf>
+ <CH2PR12MB50049049609F6BE2EF07D89FF0A7A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20231101134205.GC114892@scaer>
+ <CH2PR12MB50048B7684BF4AB7C79CC87DF0B2A@CH2PR12MB5004.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700066389; x=1700671189; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kqwroL0JPEH8OBBuSLtDklAD3vqDzvEIOVoZOUGJWgk=;
- b=gKANUX0xQH2ZNAGjMEYda+D/7Ew4LokHoEhS9JYH+VvtWyWfB5mP4uyFh3P8nK3Ce6
- 5MTqEY4wIKZ9qxBdrMczAcGsmfATjkSLmmI4v8AWwr8mGxpz7TrvZv4FGdv09I1GqLmF
- rh69zMTdlAzmq+GuC7ZslE1U1UHx7aynqZUZBplN9eCwnPNl7svW/G+l5xJaF+cC8BdW
- zA0QGWZdNISr2+fPTkljpewH6d0pDVcV9qoKP5Us3BMEkaVJUK0rvzDXtS78IGSP6AJX
- 5kub2sTMgZxV3aJuKH26z9KrCbEx8RB+0qEc6n6Kxi0WkSVXE+h/BnW/aOGgNa9NJEoC
- tCoQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=gKANUX0x
-Subject: [Buildroot] [PATCH 1/2] package/lualdap: bump to version 1.4.0
+Content-Disposition: inline
+In-Reply-To: <CH2PR12MB50048B7684BF4AB7C79CC87DF0B2A@CH2PR12MB5004.namprd12.prod.outlook.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1700071969;
+ bh=01GEP2c/lInviiNTKY/LT21QcTlIpG4W5S8racoM7vs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=IkyqlXJcJd01XcVTUYp4zSgSt0uYECXVdKpTAPgq/H5pS3SKD+p1hlUHlGy0E2sMM
+ Og+AKLMZ3PmQCjVgQwm4mqixp4OfWb/xmLAPI3DilJbnLU5zV9LlkeKsJDWlimJhGG
+ kajzMzCFd+YzDUOpuc2SU62xNhWeCnYCkgq+FXw3SNs54KlrqRTM8rV8qKVPtrIYje
+ Ft/bfssFcSmkt4kGPaqA6hxFV3t03KRfI2yfSS23ZyvnLnre2irj+JfZg1hw4+/Y5Q
+ kUyR1niKm0iO8v2ZyEozMuk8CBk5Df0OSDUzgtZSsBvjRscOxLtZBhRZhGj7CXM4WY
+ WMBT3jaT3bnwA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=IkyqlXJc
+Subject: Re: [Buildroot] [PATCH v6 03/10] package/newlib-bare-metal: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,42 +83,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Simek, Michal" <michal.simek@amd.com>, "Erkiaga Elorza,
+ Ibai" <ibai.erkiaga-elorza@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Neal Frager via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lualdap/lualdap.hash | 2 +-
- package/lualdap/lualdap.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Neal, All,
 
-diff --git a/package/lualdap/lualdap.hash b/package/lualdap/lualdap.hash
-index 97aa3b570..62d8d20ab 100644
---- a/package/lualdap/lualdap.hash
-+++ b/package/lualdap/lualdap.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  c1772077ebfd02e082e89583701ef27dd348dc76ae015247f21a2756f5fac0ae  lualdap-1.3.1-1.src.rock
-+sha256  865b915a3ff16b9663b76a77e89ec54a5028ccfe95e85ad704efbaa144a608f8  lualdap-1.4.0-1.src.rock
- sha256  b9b75da18d1e1147ec47bff508ffdce831da07dc371891b9057cf1c422660af4  lualdap/docs/license.md
-diff --git a/package/lualdap/lualdap.mk b/package/lualdap/lualdap.mk
-index 375754180..a6fc612b7 100644
---- a/package/lualdap/lualdap.mk
-+++ b/package/lualdap/lualdap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUALDAP_VERSION = 1.3.1-1
-+LUALDAP_VERSION = 1.4.0-1
- LUALDAP_SUBDIR = lualdap
- LUALDAP_LICENSE = MIT
- LUALDAP_LICENSE_FILES = $(LUALDAP_SUBDIR)/docs/license.md
+On 2023-11-14 05:47 +0000, Frager, Neal via buildroot spake thusly:
+[--SNIP--]
+> I finally got the time to get back on this, but there appears to be another issue.
+> When I use the following for installing the newlib in the sysroot staging area:
+> NEWLIB_BARE_METAL_INSTALL_STAGING_OPTS = \
+> 	DESTDIR=$(HOST_GCC_BARE_METAL_SYSROOT) \
+> 	Install
+> I get the following error message:
+> /usr/bin/install: cannot create regular file '/buildroot/output/host/microblazeel-xilinx-elf/sysroot/usr/microblazeel-xilinx-elf/lib': No such file or directory
+
+I had a very quick glance at the newlib Makefile, and it seems it might
+not be totally parallel-safe, especially for installation, so maybe:
+
+    NEWLIB_BARE_METAL_MAKE = $(MAKE1)
+
+Can you try that, please?
+
+> This is because newlib tries to install libraries to this directory before the autotools runs the following command later on:
+> /usr/bin/mkdir -p '/buildroot/output/host/microblazeel-xilinx-elf/sysroot/usr/microblazeel-xilinx-elf/lib'
+> 
+> I have a hack solution by manually doing the mkdir in advance, but this should not be needed.
+> The autotools should make all the directories that are needed for the install.
+
+The issue is that newlib is not really an autotools package: the
+Makefile is generated from Makefile.in, itself generated by autogen
+(https://www.gnu.org/software/autogen/) which, AFAIK, is not part of the
+autotools suite.
+
+So, newlib uses autoconf, but does not use automake, and thus uses a
+custom Makefile template, which might explain why it is not
+parallel-safe.
+
+Regards,
+Yann E. MORIN.
+
+> Would you be able to look at the pkg-autotools to see if we can fix this problem at its root by creating the lib directory from the beginning of install_staging?
+> 
+> Thank you for your help!
+> 
+> Best regards,
+> Neal Frager
+> AMD
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.39.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
