@@ -4,60 +4,150 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D52D0C47071
-	for <buildroot@archiver.kernel.org>; Thu, 16 Nov 2023 06:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09391C197A0
+	for <buildroot@archiver.kernel.org>; Thu, 16 Nov 2023 10:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4FDBE82158;
-	Thu, 16 Nov 2023 06:47:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FDBE82158
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E5BF83123;
+	Thu, 16 Nov 2023 10:20:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E5BF83123
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9tAsz9370EXE; Thu, 16 Nov 2023 06:47:31 +0000 (UTC)
+	with ESMTP id B9LQRhIciLj4; Thu, 16 Nov 2023 10:20:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4555B8215A;
-	Thu, 16 Nov 2023 06:47:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4555B8215A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DC1661BF328
- for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 06:47:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F4F883112;
+	Thu, 16 Nov 2023 10:20:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F4F883112
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ED54B1BF32C
+ for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 10:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D96941909
- for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 06:47:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D96941909
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FDE0830E3
+ for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 10:20:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FDE0830E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ksd-TOy1hshc for <buildroot@lists.busybox.net>;
- Thu, 16 Nov 2023 06:47:26 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB59140468
- for <buildroot@buildroot.org>; Thu, 16 Nov 2023 06:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB59140468
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B814BFF805
- for <buildroot@buildroot.org>; Thu, 16 Nov 2023 06:47:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P0TAybIP2Wp6 for <buildroot@lists.busybox.net>;
+ Thu, 16 Nov 2023 10:20:48 +0000 (UTC)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam11on20601.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eae::601])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 77325830C5
+ for <buildroot@buildroot.org>; Thu, 16 Nov 2023 10:20:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77325830C5
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sl/ms4tdfWQK2Vs9l4nevvlGYPNReSgmNMaCtWX5m2Uke5MiO1eGE+zZaCtVoJ6AHVf9Cpnv24m8kYCyT9N8uWLQVKQDeM/gUyZBKc6uUAM7hB01BD8vj3hccb0L9DwjTabWdiQLtMkGjvDaXuVGl3laNLzLGKR7/Oz1BNr0mvZrVE+okXBFQKD9l2U8rK3e98xNjTJ4gdHtgUI5/NM8+80nDmLFRJ95k8ksHPyZW3k2rpufs24wGGBuneUY1iyZYhJ/ARmCFDW/1c8HJqUP6Jn4Ka/KhU+Tel25SV4skoXnOyqFCcvZJRssgqFfzeom0GiewG9sNrnN8RO1NDS6Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ePTOGo2iy9r1ym5qy2Ov8Fe2dljWaA9bh/xEN8+Qv8o=;
+ b=UV+jS6ttV40olGNzTuGUqpE6WiOr4DRUfiQmesqItV8jNwlSv4+q6VRpdoKADTqiwHd8tODeyaYhj1TVKQPf1OTRuQUxVIguUC+2sZtjxsd0FBhRLObnUFxSdHfKXv8o1c1vh+S5mIGdloMLP3ryFbHchYrjQy0mcnrF+FoLNisgmNbdUXmKR8lP7E5FYGTwx52mfWzYynmWi1G6EY2scpk2G8oGHSVR6kGoFPiu9EAm/qstrOETliaQ0CB4Ro1HXClqUpaO/Ob0DBbQ1AXOr0kChYOZJdH2HEwHXl5T+X+h+2CyAZ1CZCaNXxr0Fgi91r1I53VL/SCjBQ0GGFGtxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by BL1PR12MB5031.namprd12.prod.outlook.com (2603:10b6:208:31a::5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.21; Thu, 16 Nov
+ 2023 10:20:44 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::cd8a:4814:157c:bbe]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::cd8a:4814:157c:bbe%7]) with mapi id 15.20.7002.021; Thu, 16 Nov 2023
+ 10:20:44 +0000
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thread-Topic: [Buildroot] [PATCH v6 03/10] package/newlib-bare-metal: new
+ package
+Thread-Index: AQHaA0qXU55l7C7pwkan+EbiGTH5Q7Bj6Q6AgAGBHmCAAAKNAIAAGPkwgAAGH4CAE+RT0IACZ+6AgAEJChA=
+Date: Thu, 16 Nov 2023 10:20:43 +0000
+Message-ID: <CH2PR12MB5004D2C28BD2A2DF2B983C98F0B0A@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20231020114236.4129636-1-neal.frager@amd.com>
+ <20231020114236.4129636-3-neal.frager@amd.com>
+ <20231031134317.4ce2349e@windsurf>
+ <CH2PR12MB5004C8F27820E2EC98FC5232F0A7A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20231101125048.01553f76@windsurf>
+ <CH2PR12MB50049049609F6BE2EF07D89FF0A7A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20231101134205.GC114892@scaer>
+ <CH2PR12MB50048B7684BF4AB7C79CC87DF0B2A@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20231115181243.GK996011@scaer>
+In-Reply-To: <20231115181243.GK996011@scaer>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|BL1PR12MB5031:EE_
+x-ms-office365-filtering-correlation-id: f544bbb6-54b5-47b0-a13c-08dbe68db105
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Anuv/5+0755sxEfMJBlYD2H6qMa7RDykIoSIaGOODJ0RIK2h4O042ejxA9eT/7q2DiSaAYCZVL7HiHxk0iwI3MzYpEve8w+Lo/ocRfkmrkOQB+TBdNCAM11b4EBGn+y9EMHY1fhycI3VXm1GXmSz8rcMtYLHRzmsmj2Hh91Qj2eEabD+05u+Gos0KZYUEBgCQI9CF9xn63SvHcmgxZjGRbjJS2wohkPYJ+Sf1ZELYkVyE9IPkivleGg9MyYHjPJ0AEH8sw109z3MzP/BYf3ectvfp2lQYrOi47nQm3eIsbNiduBfee2/g1Rz1yFOUopAnvVbZpSauCt7/Q/ZA4Frn+hhb1DQuUJkLzdGgqp+b9PPlNPzt2Ny9skTWFzjlNaWLMNcO2ZWg+Rbh2hR5m1xnfp4qKnDTekTK3oyAlSB3Qp48bW061bODbsXxC8jZIKMZht/w9KFrPe9XNEe00blsIFOC1IvYGXefPBs1LCpJdcNmYcfW8wfH/bA2vYci+AdZiiCbXi8Jl6UDzdLntD7rdE0vxYL4AnO4POJCly+k5YDcWs1Bk1Pt/hFDTL1ZoNX8bWesWVdlja9zk/pSQ7vXkjv/8Me2/icncxgjVOGZmUQX6df1yn/3x3GONuMP85ABxjUN9x3WnSrQkROaORIVQ==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230031)(346002)(366004)(376002)(39860400002)(396003)(136003)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(38100700002)(38070700009)(122000001)(55016003)(83380400001)(9686003)(7696005)(6506007)(71200400001)(478600001)(86362001)(5660300002)(41300700001)(66476007)(76116006)(66946007)(66446008)(54906003)(66556008)(316002)(64756008)(6916009)(8676002)(8936002)(4326008)(52536014)(33656002)(2906002)(41080700001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QnFDR294OXVQQW5VaU93YmNER3JvR25ubHZIeU05SDJLMUdCNXowTkJPNHJj?=
+ =?utf-8?B?TVF6cStJV3l5cEIwcDliTFkzR0JNYU5scExEOHg5cWxVNnhBT0dzS1pnNWRq?=
+ =?utf-8?B?OHZkeTFoTFhCcTFKWmlmS2JYeVhPUCs0ODE1R2hUaWo2QVZIWWcxTFBFYkhr?=
+ =?utf-8?B?cWptZzAvUE1RY0RCbFROM3ErajVDUjYzSlRNdE1iRUIwTXNnZEE2ejIxNmtT?=
+ =?utf-8?B?ZW15cWxqbjdvUnBnQlhHMkw0aS9BSFExVCtQM25yL0dJa0RGL2V5Y1hzeGF1?=
+ =?utf-8?B?LzFHUnRCcG9hNEo0WGNtc0VVb3F1QTRqekZCRkpUYW1Gb2RUMUQwdXJxbjZ3?=
+ =?utf-8?B?ajJxWVJYUUd2VjMzVUhZcllOckZOWFBxRkhvWmIyWkkxNzZMUndsNzVHUFBP?=
+ =?utf-8?B?K0puK0F6LzZ5dVJvQWgxMkFFU0Uvc1Z6V3BsUGhYY2MycnM5U2xOUjR2djZY?=
+ =?utf-8?B?dVNzd1hPd1Radjk2NmlpNHhIUjZ6SGVycjRicktYOHJjZWIwQTFBUzVRazZr?=
+ =?utf-8?B?MVRwZ0Z4MzNWMm1UeVlxL2t1VGV5bmp3UmQ0eHg3SllqSUk0TTZhekVtRHRl?=
+ =?utf-8?B?UXZBREEzZ2RkQzQ0T1lueTE0VlVyd3ZUdTdHeDFrajVaNTRVUzNxQ2tERjNw?=
+ =?utf-8?B?ZXYrbENxRmNhVDhZOS80a05jNmJhOForMmZhUmd5Zjd1b3B6Mm1TRE1INUpO?=
+ =?utf-8?B?VkhBZzgvZFZTTlJSOG1rSnN6N0xmdERQUmcyYzdVUmlCeTNseStQMDJZRmxy?=
+ =?utf-8?B?amlYTmtEbUtFRHh1dVQ1cEpFQWxjeUxjQ3dIa1RxOVBQdkJzOHc4NFdrRHdD?=
+ =?utf-8?B?UCtxMjB6UVJBTjdBMXhKeHo5NjVBTUhvaEVaM0NiV0RoeWxmUlI3OEhaak5K?=
+ =?utf-8?B?YjZHNFlrbys5V0hqVzJTVDk4dWZhRk5sVnVyOHByUE52SzNHUUlSajE0bkFO?=
+ =?utf-8?B?ZitSaEVNQ2x6eFlmY3RXSEdsY2dsVWlxbWVOQ1hWSGFUb2swYWVzOTV0NFlm?=
+ =?utf-8?B?VmdJT2FUQi8raTNHYkQ3OFBkeUdPRHZtaTZyMUhHZVdqUHN0aEZ5WWsxQUY3?=
+ =?utf-8?B?QzZDaENLTUwzSklHQ211NVFBZTNWbXF1Z3ZYNDhDcmlLYmpFSmdKNnQ5emEv?=
+ =?utf-8?B?NzVGc3piMS9yVTJZTnVGWVNmVk45czA2WFkzSm96Z3lGS2NINGpScmw1cXVN?=
+ =?utf-8?B?bWhhWGljQmZNbFUrYXZDa1AzK1ZkRjI2SXF2Z2hJQ0RLTENhdVloLzRkV0Y0?=
+ =?utf-8?B?SXMxMmF6bDExQ01tU3A3elJ6bk5YdFZEWHl0SEdNNVpSVmdKWDlkakRrcFU5?=
+ =?utf-8?B?N1Vad0c2cXpNdXdKcnhmSGd1cTlTeEdYK2ljQnFienlYMEliMVdJSmRENHFR?=
+ =?utf-8?B?MDB3cVF5cmk1S0Q2cld3aGJsL2ltemdtRFRSWGxvbEMyZDRJV2VMOEs1bitM?=
+ =?utf-8?B?ZkRXcGluVWl5aS9IRUE2eEw1SjFTZFkwZitLWUp5RlJsOUg1NXY2UWZ0WHRU?=
+ =?utf-8?B?MDZHcEZEZTNjS0lsd3RCNHZ4Wmd2TmdaYTJGcTZKb1hNTm12RkNuRnd0VStj?=
+ =?utf-8?B?TENjRE0vend0Uk9HTVU0Z085aUo0UFphSk03TkM3QTg1WGtZaFhrNjF3UWNO?=
+ =?utf-8?B?YzVyV29UK2dBTlkvSUpTVGtTS1FwcXhiTHBlZFhQT1lMcEtsTVA0NzVlTlNt?=
+ =?utf-8?B?ZXFoNTQvOS82MnhaaitXcWJHa21zUC82eUI1ckt4RmlVNStFZnJKVkV3ZGhy?=
+ =?utf-8?B?dlRVSEMxM0QzVCtmaW4yTi9nNHZ2VXhBTkIrSFlhUXdSWUVmN0FUZHJCZG9X?=
+ =?utf-8?B?RThTWXh6NTUzQ3JFenVpUjZkaFkyZ0x5a2xFaktkcDZueVl6ZDVZdlpmTUZt?=
+ =?utf-8?B?SlNSUXdYUEVzaCtyekZrQWdqbWd0akpuQXlQMS9UUFp4YVQ2Z0Z3MW03Wjl2?=
+ =?utf-8?B?Nmh1bzZIRzNsekw2ODgxRWpOVmpGZTB3UnlsdFBlUEJHczlTanVDaDBRQmda?=
+ =?utf-8?B?aUpoVERIanNzMGk2ZWdHc2ZpbG1jcmJZaGRJcmRZb2JwZHRvaVV1SDJTcHR6?=
+ =?utf-8?B?NFlBZjhmQnNQQW4rZkF0MEdGNTNEV0xaYXpWZVEzYU5uUSt3MW1DWVdjT1F5?=
+ =?utf-8?B?Y3VCSHpTK3c4R2VRRDlqaWhNT1ZQOEtxSVpEbHUyQWhGUXJZdnFhM002Qmtq?=
+ =?utf-8?Q?a0xCNwI5CHn1pQmZMV4mQWU=3D?=
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Thu, 16 Nov 2023 06:47:22 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20231116064728.8D96941909@smtp2.osuosl.org>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f544bbb6-54b5-47b0-a13c-08dbe68db105
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2023 10:20:43.7415 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QQIdyaBhKmQSgPZJvDnozpTzr9+e/RnFuKiv7N/1IQ9yB9oBVfHPYNziz+l+fdpO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5031
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1700117242; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=c7RGb0BD8bG68iF8MpSQN3WtQ8+1d6KNUffHVwdsekY=;
- b=EDh2VtPt2bQsOU4fg+TjoiIZ9tPnbbdRDN3KL+kJwylrY8A+x1Om7sco+JZdrppwJ5S+GT
- fjxOAYzYDV8uzhSd4RhZO7nU6y7iNJFZtTbwmvpKguBiEIl2K1DMH1mKuJEfvcbaOJ+30w
- FaC9LQfkDBbJw2hunmqk9uZZo+c2vQYXk0E8Gh4pXBplNzCZUYxVDse6Dz+5emsWx3oS9A
- 91IBVPpFohs710GhjDF8mIzsAulyI6Apy6p4QqzdGJfWAVM2AgInUqIx1MHSER/FRhTxty
- gjDb+KJeKyLlicVpin05n9hP/Cu2ms3cWB4n1M3KEMqgF+P50nEBTlbiMwjb7g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EDh2VtPt
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-11-15
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ePTOGo2iy9r1ym5qy2Ov8Fe2dljWaA9bh/xEN8+Qv8o=;
+ b=NZFBKEbh/MZbYAs71J0TvumIo6VDggFueLkQU1FygK5VwxB4nbFsaKrh2rfFbXtxWtd2jHNpWym54HYqNVKyxSUuSMla0rnHc2RfMCMzWjxVVYuvtkSutdOYmxZf0q/lAASNDH8mg6Y4qhpQ/pEkb12vpY29ggm+tw3//677Z+s=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=NZFBKEbh
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v6 03/10] package/newlib-bare-metal: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,178 +159,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "Simek, Michal" <michal.simek@amd.com>, "Erkiaga Elorza,
+ Ibai" <ibai.erkiaga-elorza@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Neal Frager via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hi Yann,
 
-Autobuild statistics for 2023-11-15
-===================================
+> I finally got the time to get back on this, but there appears to be another issue.
+> When I use the following for installing the newlib in the sysroot staging area:
+> NEWLIB_BARE_METAL_INSTALL_STAGING_OPTS = \
+> 	DESTDIR=$(HOST_GCC_BARE_METAL_SYSROOT) \
+> 	Install
+> I get the following error message:
+> /usr/bin/install: cannot create regular file 
+> '/buildroot/output/host/microblazeel-xilinx-elf/sysroot/usr/microblaze
+> el-xilinx-elf/lib': No such file or directory
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  9  | 10  |  1  | 20  |
-  2023.08.x  | 14  | 10  |  1  | 25  |
-    master   | 32  | 42  |  1  | 75  |
+> I had a very quick glance at the newlib Makefile, and it seems it might not be totally parallel-safe, especially for installation, so maybe:
 
-Classification of failures by reason for master
------------------------------------------------
+>    NEWLIB_BARE_METAL_MAKE = $(MAKE1)
 
-                       unknown | 7 
-                libressl-3.8.2 | 5 
-                elfutils-0.189 | 3 
-              host-rust-1.71.1 | 2 
-          python-msgpack-1.0.7 | 2 
-               apcupsd-3.14.14 | 1 
-                   bird-2.0.12 | 1 
-                  cc-tool-0.27 | 1 
-           crucible-2023.04.12 | 1 
-          cryptodev-linux-1.13 | 1 
-               dbus-glib-0.112 | 1 
-           dmraid-1.0.0.rc16-3 | 1 
-              e2fsprogs-1.47.0 | 1 
-         gobject-introspection | 1 
-  gobject-introspection-1.76.1 | 1 
-        host-sentry-cli-2.20.3 | 1 
-          libcamera-apps-1.3.0 | 1 
-                libselinux-3.5 | 1 
- Makefile:727: target-finalize | 1 
-               mariadb-10.11.4 | 1 
-                   openrc-0.51 | 1 
-           python-bcrypt-4.0.1 | 1 
-    python-cryptography-39.0.2 | 1 
-           python-numpy-1.25.0 | 1 
-         python-rpds-py-0.12.0 | 1 
-uclibc-ng-test-0f303c63fab7... | 1 
-               valgrind-3.22.0 | 1 
-                 weston-12.0.1 | 1 
-                xenomai-3.0.10 | 1 
+> Can you try that, please?
 
+Yes, you were right.  newlib has an issue with parallel installation.  
+Using $(MAKE1) or "make -j1" solves the problem.
 
-Detail of failures for master
------------------------------
+Now I am encountering another issue.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   s390x     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/82553464dfad97a33f01c8429f28b35b85b13d55 |     
-  mips64el   |          bird-2.0.12           | NOK | http://autobuild.buildroot.net/results/255d3435aaf60416d7c64a9db34065bdb1613b64 |     
-   x86_64    |          cc-tool-0.27          | NOK | http://autobuild.buildroot.net/results/b594d9fa24b4093416c309b197918c6dd2180628 |     
-  mips64el   |      crucible-2023.04.12       | NOK | http://autobuild.buildroot.net/results/3d47ddf7e49752bd5aaf8825da33a328538e60e6 |     
-    i686     |      cryptodev-linux-1.13      | NOK | http://autobuild.buildroot.net/results/25efb3d2a78521b3c73a0af24ece2ca27172b198 | ORPH
-   sparc     |        dbus-glib-0.112         | NOK | http://autobuild.buildroot.net/results/a6f35858a138de9db80ea48d67e22d44b72a82f2 | ORPH
-   sh4eb     |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/c85193f453e6d4fe6e15e2b49fa6a76194b819cc | ORPH
-    sh4a     |        e2fsprogs-1.47.0        | NOK | http://autobuild.buildroot.net/results/aa81d3b7792726f6d75757d5a3653c7bfd42a120 | ORPH
-microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/5f1c377d44622ab5e1b710cb9c2f4b969886b037 | ORPH
-microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/c3c1931b49767423830fc931151d4e396dd0b537 | ORPH
- microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/1941da41e51b18c0fc262ba4bec9f3a34cf69533 | ORPH
- microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/3df87b092d426c85f916b829cbed4a51aa1a7e33 |     
-   sh4eb     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/9053b5cf7359539deae57097ce50281b97b8c02a | ORPH
-powerpc64le  |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/a1f5112267120f33ccca266a7da6f79d77fefd65 |     
-powerpc64le  |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/d52db76d48192520db02548953fa9d4933a0d88b |     
-    or1k     |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/0ffcdec24b35aea1091d04b65a12eb645ac6cb5c |     
- aarch64_be  |      libcamera-apps-1.3.0      | NOK | http://autobuild.buildroot.net/results/fa80921e76418d43d938f2930464b87451db077c |     
-   mips64    |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/c1a9ddbe250d49b58c0f61016fc65039e4baede4 | ORPH
-microblazeel |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/be1104a507a48cc78c73f92412f4c68230f30fc1 | ORPH
-    mips     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/9788de4d7cf70c2e27907e4b1cc3e171119569e3 | ORPH
-   s390x     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/db865834a551f9b9ae3e0497580520067886be1f | ORPH
-   mips64    |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/88ea760232d5c06bacbc5cd0aa85b3e7ff7f5c7f | ORPH
-    sh4      |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/b8204ff7087aac9047f61506044c4d02dec0a2c6 |     
-   nios2     | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/cb70a2ac89973fe100a6b05f90fa090159aa2de0 |     
-   x86_64    |        mariadb-10.11.4         | NOK | http://autobuild.buildroot.net/results/98ca05673d26f93af6c9d0930a5169a97024ea29 | ORPH
-   x86_64    |          openrc-0.51           | NOK | http://autobuild.buildroot.net/results/1ae481b310a0b1b8489e6eddbe3be02a6c7b4c16 |     
-    mips     |      python-bcrypt-4.0.1       | NOK | http://autobuild.buildroot.net/results/d244dd6315c7cda0eedb095e2900600aed4db547 |     
-   armeb     |   python-cryptography-39.0.2   | NOK | http://autobuild.buildroot.net/results/bddc58ae65b7990492cd2a89a25fe8efa4f0ead4 |     
-    i686     |      python-msgpack-1.0.7      | NOK | http://autobuild.buildroot.net/results/a3ca7ff0f41dd7b1496d1ba38913c2740f67f9a2 |     
-   sh4eb     |      python-msgpack-1.0.7      | NOK | http://autobuild.buildroot.net/results/3dcf83f89d20f4df66ce361df0f7e575f5763a68 |     
-   mipsel    |      python-numpy-1.25.0       | NOK | http://autobuild.buildroot.net/results/855cf1903928be7b27e7d05bc1c1718823117b95 |     
-    mips     |     python-rpds-py-0.12.0      | NOK | http://autobuild.buildroot.net/results/40c5b54c1d27d3b59e4187e6e6ef17ea99a661d4 |     
-   mipsel    | uclibc-ng-test-0f303c63fab7... | NOK | http://autobuild.buildroot.net/results/5bc1040b3acd1fe9a9ee2af9d78d53e824c72626 |     
-    mips     |            unknown             | NOK | http://autobuild.buildroot.net/results/7f06827b9066f198fb41050d7598b2b9d163f171 |     
-  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/681b4ba5bb197be49286660b8e0cd339ad10d35e |     
-  sparc64    |            unknown             | NOK | http://autobuild.buildroot.net/results/0e207bee0ff1f288ea1bcace6dbaacf2fa721d3d |     
-  sparc64    |            unknown             | NOK | http://autobuild.buildroot.net/results/80d94cbebbccbb611a2c3cb28ea78bdff11f7e3f |     
-    arc      |            unknown             | NOK | http://autobuild.buildroot.net/results/f8c87eb26796d8bd74ab18170cfc890117faa20c |     
- microblaze  |            unknown             | NOK | http://autobuild.buildroot.net/results/1e9c5572c4de87002755cc31516bd676193ba445 |     
-   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/c41a29c0f1754d7ad3a193e75f956bfa9a4d55e7 |     
-    mips     |        valgrind-3.22.0         | NOK | http://autobuild.buildroot.net/results/2ca78ec1d74cf348e62b99d40796e3db526ef814 | ORPH
- microblaze  |         weston-12.0.1          | NOK | http://autobuild.buildroot.net/results/08c54c40d7c07c9c465ff96358c1b52fb7a08dd3 |     
-   nios2     |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/8d68acc56c03f015831608361e34496dc933a388 |     
+newlib is installing correctly to the /buildroot/output/host/microblazeel-xilinx-elf/sysroot directory.
 
+However, gcc does not seem to be able to find it when building, as I am getting the following build error:
+/buildroot/output/host/lib/gcc/microblazeel-xilinx-elf/13.2.0/include/stdint.h:9:16: fatal error: stdint.h: No such file or directory
 
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
+When installing newlib as a host package, the stdint.h can be found here:
+/buildroot/output/host/microblazeel-xilinx-elf/include/stdint.h
 
-                  check-0.15.2 | 1 
-                elfutils-0.186 | 1 
-       freeradius-server-3.2.3 | 1 
-glibc-2.36-118-g22955ad8518... | 1 
-         gobject-introspection | 1 
-google-breakpad-c85eb4a59b6... | 1 
-               host-go-1.20.11 | 1 
-              host-rust-1.67.1 | 1 
-                    parted-3.5 | 1 
-       python-stack-data-0.6.2 | 1 
-                       unknown | 1 
+And the microblaze gcc finds it.
 
+When installing newlib to the gcc sysroot as a target package, the stdint.h is found here:
+/buildroot/output/host/microblazeel-xilinx-elf/sysroot/usr/microblazeel-xilinx-elf/include/stdint.h
 
-Detail of failures for 2023.02.x
---------------------------------
+And the microblaze gcc does not find it.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  mips64el   |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/db62e0b1d03fc312e33c7d7ed6a10e0664947763 | ORPH
- microblaze  |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/112f574452c10fdd5853be6209b521b3bb750308 | ORPH
-   nios2     |    freeradius-server-3.2.3     | NOK | http://autobuild.buildroot.net/results/4239b0c0752324551468e0ca45e6a0ed5dec8032 |     
-    arc      | glibc-2.36-118-g22955ad8518... | NOK | http://autobuild.buildroot.net/results/8bb756b8d04f253e6978737ff4bd3f9d3ff98403 |     
- microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/9902eee25788e68cf4cd8356153a1bfb7638a4c7 |     
-    arm      | google-breakpad-c85eb4a59b6... | NOK | http://autobuild.buildroot.net/results/eb7fc15f429601fe8461ace7f44808dbdcc3b8cb |     
-   x86_64    |        host-go-1.20.11         | NOK | http://autobuild.buildroot.net/results/15b84f20d14deba6253be18980d64d2119a952ad |     
-   x86_64    |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/fa88516c03c7daee9fcae9d0d3f654b50e0ea2c8 |     
-    arm      |           parted-3.5           | NOK | http://autobuild.buildroot.net/results/438b5f40e8b393801f36c691d239e298998cb9d2 |     
-   x86_64    |    python-stack-data-0.6.2     | NOK | http://autobuild.buildroot.net/results/92699193533d4e9d31dce7eeee945985e74e5a0f |     
-microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/b5d1423d58e0832b614266eae9331e230f340c60 |     
+If I simply create the following symbolic links:
+/buildroot/output/host/microblazeel-xilinx-elf/sysroot/usr/include -> /buildroot/output/host/microblazeel-xilinx-elf/sysroot/usr/microblazeel-xilinx-elf/include
+/buildroot/output/host/microblazeel-xilinx-elf/sysroot/usr/lib -> /buildroot/output/host/microblazeel-xilinx-elf/sysroot/usr/microblazeel-xilinx-elf/lib
 
+Then everything works, and I can build correctly.
 
-Classification of failures by reason for 2023.08.x
---------------------------------------------------
+How would you recommend I solve this?
+Should I be creating these symbolic links or is there a way to install to 
+'sysroot/usr/include' and 'sysroot/usr/lib' without the 'microblazeel-xilinx-elf' directory?
 
-                   bird-2.0.12 | 1 
-             dahdi-linux-3.2.0 | 1 
-                elfutils-0.189 | 1 
-         gobject-introspection | 1 
-              host-rust-1.71.1 | 1 
-              libcamera-v0.0.5 | 1 
-               libglib2-2.76.1 | 1 
-                  libnfc-1.8.0 | 1 
-            luaossl-20220711-0 | 1 
-                       unknown | 1 
-                xenomai-3.0.10 | 1 
+Thank you for your help!
 
-
-Detail of failures for 2023.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sh4aeb    |          bird-2.0.12           | NOK | http://autobuild.buildroot.net/results/5d91f96b3cfd31e632c29d18fadf66691b52edd4 |     
-    mips     |       dahdi-linux-3.2.0        | NOK | http://autobuild.buildroot.net/results/7254635ab426df31edb3da37af9bba7f620a3c3b |     
-microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/ab8f24ae28096847d1204b03d206df68367a9600 | ORPH
-microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/c8f77ab2635b5425a34bf3d7d25c0db74b75aa00 |     
- powerpc64   |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/f3ac5826157fae76ce1ed3f185d08c4ab796baff |     
-    or1k     |        libcamera-v0.0.5        | NOK | http://autobuild.buildroot.net/results/d2e782900b48f5076cad39c7ca9194d532e08da8 |     
-   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/a10e410a9c629f44833564cc80c9c2bc4007217f |     
-    or1k     |          libnfc-1.8.0          | NOK | http://autobuild.buildroot.net/results/0646a88f84092c2370709e7a64699233f8fb9e6a |     
-   x86_64    |       luaossl-20220711-0       | NOK | http://autobuild.buildroot.net/results/7e1099773ff96e0bd343c8a081cae13ff3c0e212 |     
-   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/d19fbaf36ec8c693aaebf6e9f71a3178dc361bda |     
-   nios2     |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/ffd4c0725fdda134907b1e8b3126d08d7b6f5e2d |     
-
-
-
--- 
-http://autobuild.buildroot.net
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
