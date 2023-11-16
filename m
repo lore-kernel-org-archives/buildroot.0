@@ -1,107 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D47CC072A2
-	for <buildroot@archiver.kernel.org>; Wed, 15 Nov 2023 22:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B306AC47071
+	for <buildroot@archiver.kernel.org>; Thu, 16 Nov 2023 06:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 100B7614F3;
-	Wed, 15 Nov 2023 22:00:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 100B7614F3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 130F68175D;
+	Thu, 16 Nov 2023 06:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 130F68175D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZIl44OVgfzFr; Wed, 15 Nov 2023 22:00:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5NokTN4Lut4d; Thu, 16 Nov 2023 06:12:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2783E60AF8;
-	Wed, 15 Nov 2023 22:00:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2783E60AF8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 575188174F;
+	Thu, 16 Nov 2023 06:12:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 575188174F
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 09E761BF228
- for <buildroot@lists.busybox.net>; Wed, 15 Nov 2023 21:59:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 42AE31BF308
+ for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 06:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4EE481ECF
- for <buildroot@lists.busybox.net>; Wed, 15 Nov 2023 21:59:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4EE481ECF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C85A8174F
+ for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 06:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C85A8174F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WBu5rlO9UZSK for <buildroot@lists.busybox.net>;
- Wed, 15 Nov 2023 21:59:47 +0000 (UTC)
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0C1FA81F05
- for <buildroot@buildroot.org>; Wed, 15 Nov 2023 21:59:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C1FA81F05
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 3AFLrQXG032220; Wed, 15 Nov 2023 21:59:45 GMT
-Received: from ppma11.dal12v.mail.ibm.com
- (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
- by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ud5en17ak-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Wed, 15 Nov 2023 21:59:45 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
- by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id
- 3AFKJ03F024846; Wed, 15 Nov 2023 21:59:44 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
- by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uapn1sypc-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Wed, 15 Nov 2023 21:59:44 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com
- [10.241.53.100])
- by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 3AFLxhgR22676088
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Wed, 15 Nov 2023 21:59:44 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id A559758063;
- Wed, 15 Nov 2023 21:59:43 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 938815805D;
- Wed, 15 Nov 2023 21:59:43 +0000 (GMT)
-Received: from arbab-laptop.localdomain (unknown [9.53.178.221])
- by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTPS;
- Wed, 15 Nov 2023 21:59:43 +0000 (GMT)
-Received: by arbab-laptop.localdomain (Postfix, from userid 152845)
- id B39B35E00873; Wed, 15 Nov 2023 15:59:42 -0600 (CST)
-From: Reza Arbab <arbab@linux.ibm.com>
+ with ESMTP id HbA88LE6W0cG for <buildroot@lists.busybox.net>;
+ Thu, 16 Nov 2023 06:12:33 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 03B8381551
+ for <buildroot@buildroot.org>; Thu, 16 Nov 2023 06:12:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03B8381551
+Received: from fli4l.lan.fli4l (p54a1b359.dip0.t-ipconnect.de [84.161.179.89])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E893BA4C0339
+ for <buildroot@buildroot.org>; Thu, 16 Nov 2023 07:12:29 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39984)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
+ (envelope-from <bernd@kuhls.net>) id 1r3Vc5-0004fV-0B
+ for buildroot@buildroot.org; Thu, 16 Nov 2023 07:12:29 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 15 Nov 2023 15:59:31 -0600
-Message-Id: <20231115215931.860940-6-arbab@linux.ibm.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20231115215931.860940-1-arbab@linux.ibm.com>
-References: <20231115215931.860940-1-arbab@linux.ibm.com>
+Date: Thu, 16 Nov 2023 07:12:29 +0100
+Message-Id: <20231116061229.13306-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MVWj88G1d_fNgxNi7gk4kPYa6n5zZw3-
-X-Proofpoint-GUID: MVWj88G1d_fNgxNi7gk4kPYa6n5zZw3-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-15_20,2023-11-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=999 priorityscore=1501 suspectscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
- definitions=main-2311150173
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=ZQiMnfsJEplY9xqXLqs67KhRjYxFTyDNfxA14fjScIQ=;
- b=MCbWeujCPAb3VCmJ/7wtu37Gw1e8OsiZNumGexFXEWNIF3ccQll+7/wH0SQWZQUQOTrw
- 5NOjlNeymwBj40Vpbd1HSQzEOLBYvOMlVJGZjpYtdi6ug1VMynupB+vmcoWj83ESjpR/
- zrlt4LvEK6tQTzsinhf5bT1eDq3cpqEcrvvjyjK3/xpIfOitjSeEc6o6rdfZVry9OH7V
- jbYKDbjqxEjv4CKLzfxzGtIbEtMp5BnhTI4N7qoDU6M46J0CUsooucEtetwR4KZt3v3U
- uRa+fEQjwtomQ04OyZ3l9rRXjZtqlpY7VY5PjlffSDT3VRUoS3nCD4pntDJK6+dSh6CN ig== 
+ d=kuhls.net; 
+ s=kas202306131828; t=1700115149;
+ bh=SGz8Y7Zk8yLh3ZHynkLkQfzVR7CwWnIIpjE+9kwFEss=;
+ h=From:To:Subject:Date:From;
+ b=a/PZIXOflmG3S5wANvVX+B7igxygWKUH236sdsDfnFA1F87RLlMNMU1Qm5CExWnbD
+ Bta4sYF/UBEjstX0tBdp7rAFp3B6a5H+NexiCcDHDaZi7H1sp/6Kts63/cADEHpeOK
+ Byg7UvkX8bOcI6s0etgvv//qgfP+jjfRpWSmflvW+36xlKEFixid53sofuf0q7s2LO
+ 0TtzBFbU5r21plv/SijaJOgy6FrPJ0X+T9F1QxMmo8NahBmhbAPUiPUb6fIaj046B7
+ 34S4QxlUm5B+haY57r4Biv3rTTVjaQoFHwgFNsSDJe5v8k8W3P5Nt1Nirx4DrxOdWW
+ 1x/pGvtttn5ng==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
- header.a=rsa-sha256 header.s=pp1 header.b=MCbWeujC
-Subject: [Buildroot] [PATCH v4 5/5] package/petitboot: run UI as non-root
- user
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=a/PZIXOf
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-hts: bump version to
+ 20.6.5-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,135 +75,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Laurent Vivier <laurent@vivier.eu>, Joel Stanley <joel@jms.id.au>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Though the petitboot UI is a user application, it is currently being
-run by root only because we use getty to display it on the console.
+Changelog of this bugfix release:
+https://github.com/kodi-pvr/pvr.hts/blob/Nexus/pvr.hts/changelog.txt
 
-Create an unprivileged user to run the UI instead. The unix socket the
-pb-discover daemon sets up is accessible to "petitgroup", so that should
-be the gid, with arbitrary uid "petituser" to match.
-
-This is currently the chain of processes leading to the UI:
-
-1. /etc/init.d/pb-console start console
-2. /usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 console linux
-3. /sbin/getty -l/usr/libexec/petitboot/pb-console -n -i 0 console linux
-4. /usr/libexec/petitboot/pb-console
-5. /usr/sbin/petitboot-nc
-
-Instead of (3) running the pb-console helper directly with "getty -l",
-we can use "agetty -a" to autologin petituser, and run pb-console via
-petituser's login shell:
-
-1. /etc/init.d/pb-console start console
-2. /usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i console linux
-3. /sbin/agetty -a petituser -n -i console linux
-4. /home/petituser/.profile
-5. /usr/libexec/petitboot/pb-console
-6. /usr/sbin/petiboot-nc
-
-Here, everything from (4) down is running as petituser. In (4), use
-$PPID to determine if we're logging in via getty, so that logging in by
-other means will give a normal shell.
-
-Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/petitboot/Config.in      | 1 +
- package/petitboot/S15pb-discover | 4 +++-
- package/petitboot/pb-console     | 6 ++++--
- package/petitboot/petitboot.mk   | 6 ++++++
- package/petitboot/shell_profile  | 3 +++
- 5 files changed, 17 insertions(+), 3 deletions(-)
- create mode 100644 package/petitboot/shell_profile
+ package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-index 46327903ed2e..b17ce3253b74 100644
---- a/package/petitboot/Config.in
-+++ b/package/petitboot/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_PETITBOOT
- 	select BR2_PACKAGE_KEXEC_LITE if BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS && !BR2_PACKAGE_KEXEC
- 	select BR2_PACKAGE_NVME if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
- 	select BR2_PACKAGE_POWERPC_UTILS if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
-+	select BR2_PACKAGE_UTIL_LINUX_AGETTY
- 	help
- 	  Petitboot is a small kexec-based bootloader
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index 4a0ccb2467..046d234d71 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bce8fe803665121ab7cb20d13e76515a96cf9ef342ef109611e2df2ab144d3b5  kodi-pvr-hts-20.6.4-Nexus.tar.gz
++sha256  bd58fc85543447f918ee567192c87a3beb3f6e2c3fc116abe1f584514d202ada  kodi-pvr-hts-20.6.5-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index d9bf682b38..7e667ae1aa 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
-index 71ab62d99859..9e8f6c87f8bb 100644
---- a/package/petitboot/S15pb-discover
-+++ b/package/petitboot/S15pb-discover
-@@ -12,7 +12,9 @@ fi
- 
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
--	mkdir -p /var/log/petitboot
-+	# shellcheck disable=SC2174 # only apply -m to deepest dir
-+	mkdir -p -m 0775 /var/log/petitboot
-+	chown petituser:petitgroup /var/log/petitboot
- 
- 	# shellcheck disable=SC2086 # we need the word splitting
- 	start-stop-daemon -S -q -b -m -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-diff --git a/package/petitboot/pb-console b/package/petitboot/pb-console
-index 407ff3b30232..8b23b2233dee 100644
---- a/package/petitboot/pb-console
-+++ b/package/petitboot/pb-console
-@@ -3,14 +3,16 @@
- DAEMON="pb-console"
- 
- PB_CONSOLE_PORT=${2:-"console"}
--PB_CONSOLE_ARGS="--getty --detach -- -n -i 0 $PB_CONSOLE_PORT linux"
-+PB_CONSOLE_ARGS="--getty=/sbin/agetty --detach -- -a petituser -n -i $PB_CONSOLE_PORT linux"
- 
- # shellcheck source=/dev/null
- [ -r "/etc/default/petitboot" ] && . "/etc/default/petitboot"
- 
- start() {
- 	printf 'Starting %s on %s: ' "$DAEMON" "$PB_CONSOLE_PORT"
--	mkdir -p /var/log/petitboot
-+	# shellcheck disable=SC2174 # only apply -m to deepest dir
-+	mkdir -p -m 0775 /var/log/petitboot
-+	chown petituser:petitgroup /var/log/petitboot
- 
- 	# shellcheck disable=SC2086 # we need the word splitting
- 	start-stop-daemon -S -q -x "/usr/libexec/petitboot/$DAEMON" \
-diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-index 3d29d103b518..929e0574f6f9 100644
---- a/package/petitboot/petitboot.mk
-+++ b/package/petitboot/petitboot.mk
-@@ -76,6 +76,8 @@ define PETITBOOT_POST_INSTALL
- 		$(TARGET_DIR)/etc/init.d/pb-console
- 	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/pb-shell \
- 		$(TARGET_DIR)/usr/libexec/petitboot/pb-shell
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/shell_profile \
-+		$(TARGET_DIR)/home/petituser/.profile
- 
- 	mkdir -p $(TARGET_DIR)/etc/udev/rules.d
- 	for port in $(PETITBOOT_GETTY_PORT); do \
-@@ -89,4 +91,8 @@ endef
- 
- PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL
- 
-+define PETITBOOT_USERS
-+	petituser -1 petitgroup -1 * /home/petituser /bin/sh - petitboot user
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/petitboot/shell_profile b/package/petitboot/shell_profile
-new file mode 100644
-index 000000000000..a958ca4402f2
---- /dev/null
-+++ b/package/petitboot/shell_profile
-@@ -0,0 +1,3 @@
-+if [ "$PPID" = "1" ]; then
-+	exec /usr/libexec/petitboot/pb-console
-+fi
+-KODI_PVR_HTS_VERSION = 20.6.4-Nexus
++KODI_PVR_HTS_VERSION = 20.6.5-Nexus
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+ KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
 -- 
-2.39.3
+2.39.2
 
 _______________________________________________
 buildroot mailing list
