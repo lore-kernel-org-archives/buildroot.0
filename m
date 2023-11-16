@@ -4,61 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C991C54FB9
-	for <buildroot@archiver.kernel.org>; Thu, 16 Nov 2023 13:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38849C5ACB3
+	for <buildroot@archiver.kernel.org>; Thu, 16 Nov 2023 14:02:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7921830C5;
-	Thu, 16 Nov 2023 13:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7921830C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id BED6283852;
+	Thu, 16 Nov 2023 14:02:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BED6283852
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o9ILyNbc1pxs; Thu, 16 Nov 2023 13:51:45 +0000 (UTC)
+	with ESMTP id KiskprRNLv6m; Thu, 16 Nov 2023 14:02:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC17E830E6;
-	Thu, 16 Nov 2023 13:51:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC17E830E6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 246FF1BF966
- for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 13:51:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0856583834;
+	Thu, 16 Nov 2023 14:02:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0856583834
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 815A01BF32C
+ for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 14:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE4AF41463
- for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 13:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE4AF41463
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5291383834
+ for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 14:02:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5291383834
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7AuaQXrf5EZi for <buildroot@lists.busybox.net>;
- Thu, 16 Nov 2023 13:51:40 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 600EA40C06
- for <buildroot@buildroot.org>; Thu, 16 Nov 2023 13:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 600EA40C06
-Received: by mail.gandi.net (Postfix) with ESMTPA id 373A860009;
- Thu, 16 Nov 2023 13:51:37 +0000 (UTC)
-To: Buildroot List <buildroot@buildroot.org>
-Date: Thu, 16 Nov 2023 14:51:35 +0100
-Message-ID: <20231116135136.2337261-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.41.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KVPXbtgEv8O0 for <buildroot@lists.busybox.net>;
+ Thu, 16 Nov 2023 14:02:14 +0000 (UTC)
+Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 688A2837D3
+ for <buildroot@buildroot.org>; Thu, 16 Nov 2023 14:02:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 688A2837D3
+Received: from tarshish (unknown [10.0.8.3])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 9878B440F4F;
+ Thu, 16 Nov 2023 16:01:06 +0200 (IST)
+References: <20231116135136.2337261-1-thomas.petazzoni@bootlin.com>
+User-agent: mu4e 1.10.7; emacs 29.1
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 16 Nov 2023 16:01:03 +0200
+In-reply-to: <20231116135136.2337261-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87zfzdzti5.fsf@tarshish>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1700142697;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=1Gjgg7O0Ckn/40q0LiiXmps7laPvh23yBqj0se6QH60=;
- b=ISgOO2kWb7NjrHGeYD2bXxs99C0+uf4NaqAV684irHRyEkNOOBQxFLF4J5YakR7QV/C+7P
- RXIjEUMODnnP/iU2c7BTkwDMKguUqsyQ4648oaI/YR0EnfZQFAeKUh4KrnBuA4/ggrAhRb
- aL2IOlJtRkExPy5AN3eust2RCULkhnlAM+YAMD0MHVSdshh5RVeY7zm4HOGTgDpBVud6B3
- Io5JgtWiKu0dKzEfBssraD9Fj06YhL88Q+DdWlD5zBz0o7//naAH9XBpxHv3MK6iw+My7m
- zi6e95GqQppt9wbWn8BDKjWrhQxbMEYBBLCSfeBSgMo8oscYuAeJrbCT61/ndw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ISgOO2kW
-Subject: [Buildroot] [PATCH] package/netsnmp: revert back to 5.9.3,
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1700143266;
+ bh=sTNNwgJPmsJFJrjA/glMlcdhCFVHQGaI/PfTKt1v4Wk=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=bMLc0mGsj0Zr5aNBkBDz78B+N6U2c9qLzYknAhJT4ktCQE9g4DTk+ReYNz8vNOCBL
+ lSSZRAJP3eVcLa+CzyE/861SnX2slMhKJdfsv+Qx0w8QhbZtUm5XCAXwiHotb3YKPe
+ rx38iGshnEt8n3kdmmSNPPEsjDCX3B4jwyiU4jijYPTtu4/bj8fQq1ptbumxPPiXah
+ eR9PSuXdoUlQKHO+9vGbUkPY4JUXPq5cMrJlPJwYADBFNZz/5jMmO/NvCFdVhV3H6P
+ rMxT/cWI5YGM8RT53HayU41YIepOh6jbtNMWF5bT2nXrQzndcHFCSXjlzkQ/N1aruZ
+ Wno4IvJEEPQuA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=bMLc0mGs
+Subject: Re: [Buildroot] [PATCH] package/netsnmp: revert back to 5.9.3,
  backport security fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -71,211 +72,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In commit 13fc9dcb34926e9b6310b23662920c55c96d83a1, netsnmp was bumped
-from 5.9.3 to 5.9.4 to fix two CVEs.
 
-However, even though it's a minor version bump, there are actually 163
-commits upstream between those two minor releases, and some of them
-are breaking existing use-cases. In particular upstream
-a2cb167514ac0c7e1b04e8f151e0b015501362e0 now requires that config_()
-macros in MIB files are terminated with a semicolon, causing a build
-breakage with existing MIB files that were totally valid with 5.9.3.
+On Thu, Nov 16 2023, Thomas Petazzoni via buildroot wrote:
+> In commit 13fc9dcb34926e9b6310b23662920c55c96d83a1, netsnmp was bumped
+> from 5.9.3 to 5.9.4 to fix two CVEs.
+>
+> However, even though it's a minor version bump, there are actually 163
+> commits upstream between those two minor releases, and some of them
+> are breaking existing use-cases. In particular upstream
+> a2cb167514ac0c7e1b04e8f151e0b015501362e0 now requires that config_()
+> macros in MIB files are terminated with a semicolon, causing a build
+> breakage with existing MIB files that were totally valid with 5.9.3.
+>
+> This commit therefore proposes to revert back to 5.9.3, by reverting
+> those two commits:
+>
+> 56caafceab3ec12669ccb7aa6fc8b653778064e1 package/netsnmp: fix musl build
+> 13fc9dcb34926e9b6310b23662920c55c96d83a1 package/netsnmp: security bump to version 5.9.4
+>
+> and instead revert the one upstream commit that fixes both CVEs.
 
-This commit therefore proposes to revert back to 5.9.3, by reverting
-those two commits:
+s/revert/backport/, I guess?
 
-56caafceab3ec12669ccb7aa6fc8b653778064e1 package/netsnmp: fix musl build
-13fc9dcb34926e9b6310b23662920c55c96d83a1 package/netsnmp: security bump to version 5.9.4
+baruch
 
-and instead revert the one upstream commit that fixes both CVEs.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-Note: for master, we probably want to keep the bump to 5.9.4, as it's
-upstream decision. This commit is really intended for
-2023.02.x (perhaps other maintenance branches), where we don't want to
-break things for users.
----
- ...onfiguration-of-NETSNMP_FD_MASK_TYPE.patch | 38 ----------
- ...agent-disallow-SET-with-NULL-varbind.patch | 72 +++++++++++++++++++
- package/netsnmp/netsnmp.hash                  |  6 +-
- package/netsnmp/netsnmp.mk                    |  6 +-
- 4 files changed, 80 insertions(+), 42 deletions(-)
- delete mode 100644 package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch
- create mode 100644 package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-
-diff --git a/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch b/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch
-deleted file mode 100644
-index 91a00aec27..0000000000
---- a/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From a62169f1fa358be8f330ea8519ade0610fac525b Mon Sep 17 00:00:00 2001
--From: Adam Gajda <adgajda@users.noreply.github.com>
--Date: Mon, 2 Oct 2023 16:40:31 +0200
--Subject: [PATCH] Fix configuration of NETSNMP_FD_MASK_TYPE
--
--Upstream: https://github.com/net-snmp/net-snmp/commit/a62169f1fa358be8f330ea8519ade0610fac525b
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure                        | 2 +-
-- configure.d/config_project_types | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/configure b/configure
--index 9f0a173d8a..945a27c663 100755
----- a/configure
--+++ b/configure
--@@ -30871,7 +30871,7 @@ CFLAGS="$CFLAGS -Werror"
-- 
-- { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for the type of fd_set::fds_bits" >&5
-- printf %s "checking for the type of fd_set::fds_bits... " >&6; }
---for type in __fd_mask __int32_t unknown; do
--+for type in __fd_mask __int32_t long\ int unknown; do
--   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-- 
--diff --git a/configure.d/config_project_types b/configure.d/config_project_types
--index 1b4c66b95e..a78e8ebb06 100644
----- a/configure.d/config_project_types
--+++ b/configure.d/config_project_types
--@@ -66,7 +66,7 @@ netsnmp_save_CFLAGS=$CFLAGS
-- CFLAGS="$CFLAGS -Werror"
-- 
-- AC_MSG_CHECKING([for the type of fd_set::fds_bits])
---for type in __fd_mask __int32_t unknown; do
--+for type in __fd_mask __int32_t long\ int unknown; do
--   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-- #include <sys/select.h>
-- #include <stddef.h>
-diff --git a/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch b/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-new file mode 100644
-index 0000000000..3a6321d7a7
---- /dev/null
-+++ b/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-@@ -0,0 +1,72 @@
-+From b07627fa67c686b07d1eab123cf3e4887a2a93aa Mon Sep 17 00:00:00 2001
-+From: Bill Fenner <fenner@gmail.com>
-+Date: Fri, 25 Nov 2022 08:41:24 -0800
-+Subject: [PATCH] snmp_agent: disallow SET with NULL varbind
-+
-+Upstream: https://github.com/net-snmp/net-snmp/commit/4589352dac3ae111c7621298cf231742209efd9b
-+
-+[Thomas: this commit was merged as part of
-+https://github.com/net-snmp/net-snmp/pull/490/commits, which fixes
-+https://github.com/net-snmp/net-snmp/issues/474 (CVE-2022-44792) and
-+https://github.com/net-snmp/net-snmp/issues/475 (CVE-2022-44793). The
-+other two commits merged as part of this pull request are related to
-+adding a non-regression test for this, which is not relevant for the
-+security fix itself.]
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ agent/snmp_agent.c | 32 ++++++++++++++++++++++++++++++++
-+ 1 file changed, 32 insertions(+)
-+
-+diff --git a/agent/snmp_agent.c b/agent/snmp_agent.c
-+index 867d0c166f..3f678fe2df 100644
-+--- a/agent/snmp_agent.c
-++++ b/agent/snmp_agent.c
-+@@ -3719,12 +3719,44 @@ netsnmp_handle_request(netsnmp_agent_session *asp, int status)
-+     return 1;
-+ }
-+ 
-++static int
-++check_set_pdu_for_null_varbind(netsnmp_agent_session *asp)
-++{
-++    int i;
-++    netsnmp_variable_list *v = NULL;
-++
-++    for (i = 1, v = asp->pdu->variables; v != NULL; i++, v = v->next_variable) {
-++	if (v->type == ASN_NULL) {
-++	    /*
-++	     * Protect SET implementations that do not protect themselves
-++	     * against wrong type.
-++	     */
-++	    DEBUGMSGTL(("snmp_agent", "disallowing SET with NULL var for varbind %d\n", i));
-++	    asp->index = i;
-++	    return SNMP_ERR_WRONGTYPE;
-++	}
-++    }
-++    return SNMP_ERR_NOERROR;
-++}
-++
-+ int
-+ handle_pdu(netsnmp_agent_session *asp)
-+ {
-+     int             status, inclusives = 0;
-+     netsnmp_variable_list *v = NULL;
-+ 
-++#ifndef NETSNMP_NO_WRITE_SUPPORT
-++    /*
-++     * Check for ASN_NULL in SET request
-++     */
-++    if (asp->pdu->command == SNMP_MSG_SET) {
-++	status = check_set_pdu_for_null_varbind(asp);
-++	if (status != SNMP_ERR_NOERROR) {
-++	    return status;
-++	}
-++    }
-++#endif /* NETSNMP_NO_WRITE_SUPPORT */
-++
-+     /*
-+      * for illegal requests, mark all nodes as ASN_NULL 
-+      */
-+-- 
-+2.41.0
-+
-diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-index 7898941271..e1e9d10898 100644
---- a/package/netsnmp/netsnmp.hash
-+++ b/package/netsnmp/netsnmp.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature at
--# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.4/net-snmp-5.9.4.tar.gz.asc
--# using key 6E6718AEF1EB5C65C32D1B2A356BC0B552D53CAB
--sha256  8b4de01391e74e3c7014beb43961a2d6d6fa03acc34280b9585f4930745b0544  net-snmp-5.9.4.tar.gz
-+# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.3/net-snmp-5.9.3.tar.gz.asc
-+# using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
-+sha256  2097f29b7e1bf3f1300b4bae52fa2308d0bb8d5d3998dbe02f9462a413a2ef0a  net-snmp-5.9.3.tar.gz
- 
- # Hash for license file
- sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index b5cda30a7b..fafd604879 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -4,13 +4,17 @@
- #
- ################################################################################
- 
--NETSNMP_VERSION = 5.9.4
-+NETSNMP_VERSION = 5.9.3
- NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
- NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
- NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_CPE_ID_VENDOR = net-snmp
- NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
-+# 0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-+NETSNMP_IGNORE_CVES = \
-+	CVE-2022-44792 \
-+	CVE-2022-44793
- NETSNMP_SELINUX_MODULES = snmp
- NETSNMP_INSTALL_STAGING = YES
- NETSNMP_CONF_ENV = \
 -- 
-2.41.0
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
