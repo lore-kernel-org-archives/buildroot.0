@@ -4,88 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CAAEC54FB9
-	for <buildroot@archiver.kernel.org>; Thu, 16 Nov 2023 14:51:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 525D0C197A0
+	for <buildroot@archiver.kernel.org>; Thu, 16 Nov 2023 19:21:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3003402F3;
-	Thu, 16 Nov 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3003402F3
+	by smtp2.osuosl.org (Postfix) with ESMTP id C85A640C39;
+	Thu, 16 Nov 2023 19:21:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C85A640C39
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9LA-3bigkoqB; Thu, 16 Nov 2023 14:51:24 +0000 (UTC)
+	with ESMTP id UzjQmMuLDikB; Thu, 16 Nov 2023 19:21:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2660419E9;
-	Thu, 16 Nov 2023 14:51:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2660419E9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 74D021BF363
- for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 14:51:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 25D494119B;
+	Thu, 16 Nov 2023 19:21:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25D494119B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 946C81BF387
+ for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 19:20:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D22A6FA7A
- for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 14:51:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D22A6FA7A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D755819F3
+ for <buildroot@lists.busybox.net>; Thu, 16 Nov 2023 19:20:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D755819F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pVPDh5T1FMnU for <buildroot@lists.busybox.net>;
- Thu, 16 Nov 2023 14:51:19 +0000 (UTC)
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 66D486FA83
- for <buildroot@buildroot.org>; Thu, 16 Nov 2023 14:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66D486FA83
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4083ac51d8aso7673245e9.2
- for <buildroot@buildroot.org>; Thu, 16 Nov 2023 06:51:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700146277; x=1700751077;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=H+lMO5z8QiLr5aklmzNRRbaambJXus+LpvvYd0++dys=;
- b=s8VMAAgz50KNOlZAiiSgaDprX9YuMX32PMuzb865vVcqO9O1T7qLKwfrZK/KMrlc21
- fK7kGlj1048ShD9FbqgMg/8ZggRz/BjSmgwiZPlOPS22wGL0UuWRDH6fKubDhIB0vAQu
- 7fvwwOAoCfGXRi7ENWNjquRYG6+T5Oqtbo+2m4e11HpvMS+9P0582jzEGMncwYyeuvJn
- m/1r/nr5kSJge7RxlLczMTGABJU5Y3yqAL+iiNveuQEOtA22E4DKGQGtI4bLFq8rLXrG
- gJ2qc4xHZJorpupw07LDG97uzxDuCCjUPmEVkAYD+VJaWqHe0Km/iTv3tevHFX68TNnO
- /5xg==
-X-Gm-Message-State: AOJu0Yw/X65wLxPg1FHC9WxA7x2D1yM7LdZOg0Ma2H6Po9krIp0p0U39
- XITVLsVxJCHV9Wws8O9t1zY=
-X-Google-Smtp-Source: AGHT+IEI4VW4q/KhBSFs9OSblAOmavDSFn3s2z04dzn9/jiLL1kA5KiTcIiOEf+XBZxL0/cv+E3EZg==
-X-Received: by 2002:a05:600c:6001:b0:409:7d0:d20b with SMTP id
- az1-20020a05600c600100b0040907d0d20bmr13552060wmb.24.1700146276834; 
- Thu, 16 Nov 2023 06:51:16 -0800 (PST)
-Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
- [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- bg39-20020a05600c3ca700b0040a487758dcsm4076455wmb.6.2023.11.16.06.51.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 16 Nov 2023 06:51:16 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-To: thomas@devoogdt.com
-Date: Thu, 16 Nov 2023 15:51:12 +0100
-Message-ID: <20231116145113.1828682-1-thomas.devoogdt@barco.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231113090031.3931589-1-thomas@devoogdt.com>
-References: <20231113090031.3931589-1-thomas@devoogdt.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2zWAZUalP-Sy for <buildroot@lists.busybox.net>;
+ Thu, 16 Nov 2023 19:20:57 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E41E8817B1
+ for <buildroot@buildroot.org>; Thu, 16 Nov 2023 19:20:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E41E8817B1
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 5232AB00576;
+ Thu, 16 Nov 2023 20:20:46 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:44678])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 16 Nov 2023 20:20:46 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700146277; x=1700751077; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=H+lMO5z8QiLr5aklmzNRRbaambJXus+LpvvYd0++dys=;
- b=C0OXEGpqWYQ0GN4dTDj8lMHVdDuCNOmzajoH9tx/JezA4jAoA7YluTy2HeeQKRirTu
- 2S2TQkDPn9u65F5oytsO5e1m0M7GnI7yLkxYfLieOVeIhBKamN8LzCMimqp9PPz7CGWd
- S7gpgPdB937XUcKaI4EIcKJcAeYRJt0g2xGbvqfTB+m8zM77OWtAZIB4Q5WtML7O3px1
- SH0iA3+3u/NqMZcdmUywCTMWGH+Og09YET7DsgXpoDde5Er9WVjIv9FM9F+l3dJtLCH6
- NSyTVljG9LT/cNiw9NhSiG2ZMH9s1tW3Qv18Y290pCepjugP0J46UC/fYoBM1hdB92H2
- FaWg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=C0OXEGpq
-Subject: [Buildroot] [PATCH v3] package/cairo: bump to 1.18.0
+Date: Thu, 16 Nov 2023 20:20:46 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Neal Frager <neal.frager@amd.com>
+In-Reply-To: <20231116130131.3660078-1-neal.frager@amd.com>
+References: <20231116130131.3660078-1-neal.frager@amd.com>
+User-Agent: Webmail Free/1.6.5
+Message-ID: <c3a1fa258bf88bebe374d6e628831e12@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1700162454;
+ bh=jb7OHXsdwNFrmuhfLV7sPEnxjYy0Pa4w2iPUayGhJLw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=l7CpjnB6sKiuFIqN86CADfuMtClMsVHbEl6x4cBSwl09uUo023zdwGcQpNiTzcpza
+ u00aHxR9H2A5Ys63hB1UomSwoJoWvOT1tBlfn2Opd0/retfWusoHGZT23rw07BEJBK
+ VEKN0SGp4lX3ShZEe0IJhtmf9VeTRP8QQddRBDSkpj9v1+GdQDMbLAibmPGkU7lH+F
+ WYyxfp3ZNjdATfqg5aw2d0zwfxCAM+LVGSabb7jHBJUqVIO0S6G05VWAJbs5gp6uST
+ aqOjGgDiqLRatcPSTg7SwIVsjcbdcWvZMFogTz28jaQRII1BLmZBkjZjsCsVl5vgUY
+ S+IIkgCUgIM3w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=l7CpjnB6
+Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynq_qmtech_defconfig:
+ deprecate board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,642 +77,640 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: eric.le.bihan.dev@free.fr, fontaine.fabrice@gmail.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: martin.chabot@gmail.com, luca.ceresoli@bootlin.com, juju@cotds.org,
+ thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas@devoogdt.com>
+Hi Neal, All,
 
-News:
- - https://www.cairographics.org/news/cairo-1.17.2/
- - https://www.cairographics.org/news/cairo-1.17.4/
- - https://www.cairographics.org/news/cairo-1.17.8/
- - https://www.cairographics.org/news/cairo-1.18.0/
+My board for this defconfig is no longer functional. It will be hard for
+me to maintain it. So it can be removed now.
 
-Support for the meson build system was added in 1.17.4,
-while support for autotools was dropped in 1.17.8.
+On 16/11/2023 14:01, Neal Frager wrote:
+> This is a proposal to deprecate support for the zynq qmtech board.  The
+> zynq_qmtech_defconfig has not been maintained for 3 years, and is now 
+> using
+> a very out of date u-boot and Linux kernel.  Since there are 4 other 
+> zynq7000
+> defconfigs available in buildroot, do we still require support for this 
+> board?
 
-Some options are renamed/dropped so fix that along.
- - GL and GLES drawing has been dropped in 1.17.8.
- - The XML surface has been removed in 1.18.0.
+Acked-by: Julien Olivain <ju.o@free.fr>
 
-Patches:
- - drop 0001-fix-nofork-build.patch, upstream: [1]
- - drop 0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch, upstream: [2]
- - drop 0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch, upstream: [3]
- - drop 0004-Fix-mask-usage-in-image-compositor.patch, upstream: [4]
- - add 0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch, upstream: [5]
- - add 0002-meson.build-fix-x11-build.patch, upstream: [6]
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  .checkpackageignore                           |   1 -
+>  DEVELOPERS                                    |   2 -
+>  ...0001-DTS-for-QMTech-Zynq-starter-kit.patch | 418 ------------------
+>  board/qmtech/zynq/readme.txt                  |  76 ----
+>  configs/zynq_qmtech_defconfig                 |  33 --
+>  5 files changed, 530 deletions(-)
+>  delete mode 100644 
+> board/qmtech/zynq/patches/linux/0001-DTS-for-QMTech-Zynq-starter-kit.patch
+>  delete mode 100644 board/qmtech/zynq/readme.txt
+>  delete mode 100644 configs/zynq_qmtech_defconfig
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index 0663149d01..dd3829add6 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -76,7 +76,6 @@ 
+> board/qemu/microblazebe-mmu/0001-net-xilinx-xemaclite-add-2.00.b-revision.patch
+>  
+> board/qemu/microblazeel-mmu/0001-net-xilinx-xemaclite-add-2.00.b-revision.patch 
+> Upstream
+>  board/qemu/x86/post-build.sh Shellcheck
+>  board/qemu/x86_64/post-build.sh Shellcheck
+> -board/qmtech/zynq/patches/linux/0001-DTS-for-QMTech-Zynq-starter-kit.patch 
+> Upstream
+>  board/radxa/rockpi-n8/post-build.sh Shellcheck
+>  board/raspberrypi/post-build.sh Shellcheck
+>  board/raspberrypi/post-image.sh Shellcheck
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 1f26e9bc81..a42fb769d3 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1707,14 +1707,12 @@ F:	configs/ts7680_defconfig
+>  F:	package/paho-mqtt-c
+> 
+>  N:	Julien Olivain <ju.o@free.fr>
+> -F:	board/qmtech/zynq/
+>  F:	board/spike/
+>  F:	board/technexion/imx8mmpico/
+>  F:	board/technexion/imx8mpico/
+>  F:	configs/imx8mmpico_defconfig
+>  F:	configs/imx8mpico_defconfig
+>  F:	configs/spike_riscv64_defconfig
+> -F:	configs/zynq_qmtech_defconfig
+>  F:	package/fluid-soundfont/
+>  F:	package/fluidsynth/
+>  F:	package/glslsandbox-player/
+> diff --git 
+> a/board/qmtech/zynq/patches/linux/0001-DTS-for-QMTech-Zynq-starter-kit.patch 
+> b/board/qmtech/zynq/patches/linux/0001-DTS-for-QMTech-Zynq-starter-kit.patch
+> deleted file mode 100644
+> index 86d8e387de..0000000000
+> --- 
+> a/board/qmtech/zynq/patches/linux/0001-DTS-for-QMTech-Zynq-starter-kit.patch
+> +++ /dev/null
+> @@ -1,418 +0,0 @@
+> -From 22d955122ac0f7ac74ab74aadebf6b8edaf0bbbd Mon Sep 17 00:00:00 2001
+> -From: Julien Olivain <juju@cotds.org>
+> -Date: Sun, 15 Dec 2019 18:45:40 +0100
+> -Subject: [PATCH] DTS for QMTech Zynq starter kit
+> -
+> -Signed-off-by: Martin Chabot <martin.chabot@gmail.com>
+> -Signed-off-by: Julien Olivain <juju@cotds.org>
+> ----
+> - arch/arm/boot/dts/zynq-qmtech.dts | 397 
+> ++++++++++++++++++++++++++++++
+> - 1 file changed, 397 insertions(+)
+> - create mode 100644 arch/arm/boot/dts/zynq-qmtech.dts
+> -
+> -diff --git a/arch/arm/boot/dts/zynq-qmtech.dts 
+> b/arch/arm/boot/dts/zynq-qmtech.dts
+> -new file mode 100644
+> -index 000000000000..c6081dc0080e
+> ---- /dev/null
+> -+++ b/arch/arm/boot/dts/zynq-qmtech.dts
+> -@@ -0,0 +1,397 @@
+> -+// SPDX-License-Identifier: GPL-2.0+
+> -+/*
+> -+ *  Copyright (C) 2011 - 2015 Xilinx
+> -+ *  Copyright (C) 2012 National Instruments Corp.
+> -+ *  Copyright (C) 2019 Martin Chabot <martin.chabot@gmail.com>
+> -+ */
+> -+
+> -+/* Derived from:
+> -+ * 
+> https://github.com/Xilinx/linux-xlnx/blob/xilinx-v2019.2.01/arch/arm/boot/dts/zynq-zc702.dts
+> -+ */
+> -+
+> -+/dts-v1/;
+> -+#include "zynq-7000.dtsi"
+> -+
+> -+/ {
+> -+	model = "QMTECH XC7Z010 Starter Kit";
+> -+	compatible = "xlnx,zynq-qmtech", "xlnx,zynq-zc702", 
+> "xlnx,zynq-7000";
+> -+
+> -+	aliases {
+> -+		ethernet0 = &gem0;
+> -+		i2c0 = &i2c0;
+> -+		serial0 = &uart1;
+> -+		spi0 = &qspi;
+> -+		mmc0 = &sdhci0;
+> -+	};
+> -+
+> -+	memory@0 {
+> -+		device_type = "memory";
+> -+		reg = <0x0 0x20000000>;
+> -+	};
+> -+
+> -+	chosen {
+> -+		bootargs = "";
+> -+		stdout-path = "serial0:115200n8";
+> -+	};
+> -+
+> -+	leds {
+> -+		compatible = "gpio-leds";
+> -+
+> -+		ds23 {
+> -+			label = "ds23";
+> -+			gpios = <&gpio0 10 0>;
+> -+			linux,default-trigger = "heartbeat";
+> -+		};
+> -+	};
+> -+
+> -+};
+> -+
+> -+&amba {
+> -+	ocm: sram@fffc0000 {
+> -+		compatible = "mmio-sram";
+> -+		reg = <0xfffc0000 0x10000>;
+> -+	};
+> -+};
+> -+
+> -+&clkc {
+> -+	ps-clk-frequency = <33333333>;
+> -+};
+> -+
+> -+&gem0 {
+> -+	status = "okay";
+> -+	phy-mode = "rgmii-id";
+> -+	phy-handle = <&ethernet_phy>;
+> -+
+> -+	ethernet_phy: ethernet-phy@0 {
+> -+		reg = <0>;
+> -+		device_type = "ethernet-phy";
+> -+	};
+> -+};
+> -+
+> -+&gpio0 {
+> -+	pinctrl-names = "default";
+> -+	pinctrl-0 = <&pinctrl_gpio0_default>;
+> -+};
+> -+
+> -+&i2c0 {
+> -+	status = "disabled";
+> -+	clock-frequency = <400000>;
+> -+	pinctrl-names = "default", "gpio";
+> -+	pinctrl-0 = <&pinctrl_i2c0_default>;
+> -+	pinctrl-1 = <&pinctrl_i2c0_gpio>;
+> -+	scl-gpios = <&gpio0 50 0>;
+> -+	sda-gpios = <&gpio0 51 0>;
+> -+
+> -+	i2c-mux@74 {
+> -+		compatible = "nxp,pca9548";
+> -+		#address-cells = <1>;
+> -+		#size-cells = <0>;
+> -+		reg = <0x74>;
+> -+
+> -+		i2c@0 {
+> -+			#address-cells = <1>;
+> -+			#size-cells = <0>;
+> -+			reg = <0>;
+> -+			si570: clock-generator@5d {
+> -+				#clock-cells = <0>;
+> -+				compatible = "silabs,si570";
+> -+				temperature-stability = <50>;
+> -+				reg = <0x5d>;
+> -+				factory-fout = <156250000>;
+> -+				clock-frequency = <148500000>;
+> -+			};
+> -+		};
+> -+
+> -+		i2c@1 {
+> -+			#address-cells = <1>;
+> -+			#size-cells = <0>;
+> -+			reg = <1>;
+> -+			adv7511: hdmi-tx@39 {
+> -+				compatible = "adi,adv7511";
+> -+				reg = <0x39>;
+> -+				adi,input-depth = <8>;
+> -+				adi,input-colorspace = "yuv422";
+> -+				adi,input-clock = "1x";
+> -+				adi,input-style = <3>;
+> -+				adi,input-justification = "right";
+> -+			};
+> -+		};
+> -+
+> -+		i2c@2 {
+> -+			#address-cells = <1>;
+> -+			#size-cells = <0>;
+> -+			reg = <2>;
+> -+			eeprom@54 {
+> -+				compatible = "atmel,24c08";
+> -+				reg = <0x54>;
+> -+			};
+> -+		};
+> -+
+> -+		i2c@3 {
+> -+			#address-cells = <1>;
+> -+			#size-cells = <0>;
+> -+			reg = <3>;
+> -+			gpio@21 {
+> -+				compatible = "ti,tca6416";
+> -+				reg = <0x21>;
+> -+				gpio-controller;
+> -+				#gpio-cells = <2>;
+> -+			};
+> -+		};
+> -+
+> -+		i2c@4 {
+> -+			#address-cells = <1>;
+> -+			#size-cells = <0>;
+> -+			reg = <4>;
+> -+			rtc@51 {
+> -+				compatible = "nxp,pcf8563";
+> -+				reg = <0x51>;
+> -+			};
+> -+		};
+> -+
+> -+		i2c@7 {
+> -+			#address-cells = <1>;
+> -+			#size-cells = <0>;
+> -+			reg = <7>;
+> -+			hwmon@52 {
+> -+				compatible = "ti,ucd9248";
+> -+				reg = <52>;
+> -+			};
+> -+			hwmon@53 {
+> -+				compatible = "ti,ucd9248";
+> -+				reg = <53>;
+> -+			};
+> -+			hwmon@54 {
+> -+				compatible = "ti,ucd9248";
+> -+				reg = <54>;
+> -+			};
+> -+		};
+> -+	};
+> -+};
+> -+
+> -+&pinctrl0 {
+> -+	pinctrl_can0_default: can0-default {
+> -+		mux {
+> -+			function = "can0";
+> -+			groups = "can0_9_grp";
+> -+		};
+> -+
+> -+		conf {
+> -+			groups = "can0_9_grp";
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+		};
+> -+
+> -+		conf-rx {
+> -+			pins = "MIO46";
+> -+			bias-high-impedance;
+> -+		};
+> -+
+> -+		conf-tx {
+> -+			pins = "MIO47";
+> -+			bias-disable;
+> -+		};
+> -+	};
+> -+
+> -+	pinctrl_gem0_default: gem0-default {
+> -+		mux {
+> -+			function = "ethernet0";
+> -+			groups = "ethernet0_0_grp";
+> -+		};
+> -+
+> -+		conf {
+> -+			groups = "ethernet0_0_grp";
+> -+			slew-rate = <0>;
+> -+			io-standard = <4>;
+> -+		};
+> -+
+> -+		conf-rx {
+> -+			pins = "MIO22", "MIO23", "MIO24", "MIO25", "MIO26", "MIO27";
+> -+			bias-high-impedance;
+> -+			low-power-disable;
+> -+		};
+> -+
+> -+		conf-tx {
+> -+			pins = "MIO16", "MIO17", "MIO18", "MIO19", "MIO20", "MIO21";
+> -+			bias-disable;
+> -+			low-power-enable;
+> -+		};
+> -+
+> -+		mux-mdio {
+> -+			function = "mdio0";
+> -+			groups = "mdio0_0_grp";
+> -+		};
+> -+
+> -+		conf-mdio {
+> -+			groups = "mdio0_0_grp";
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+			bias-disable;
+> -+		};
+> -+	};
+> -+
+> -+	pinctrl_gpio0_default: gpio0-default {
+> -+		mux {
+> -+			function = "gpio0";
+> -+			groups = "gpio0_7_grp", "gpio0_8_grp", "gpio0_9_grp",
+> -+				 "gpio0_10_grp", "gpio0_11_grp", "gpio0_12_grp",
+> -+				 "gpio0_13_grp", "gpio0_14_grp";
+> -+		};
+> -+
+> -+		conf {
+> -+			groups = "gpio0_7_grp", "gpio0_8_grp", "gpio0_9_grp",
+> -+				 "gpio0_10_grp", "gpio0_11_grp", "gpio0_12_grp",
+> -+				 "gpio0_13_grp", "gpio0_14_grp";
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+		};
+> -+
+> -+		conf-pull-up {
+> -+			pins = "MIO9", "MIO10", "MIO11", "MIO12", "MIO13", "MIO14";
+> -+			bias-pull-up;
+> -+		};
+> -+
+> -+		conf-pull-none {
+> -+			pins = "MIO7", "MIO8";
+> -+			bias-disable;
+> -+		};
+> -+	};
+> -+
+> -+	pinctrl_i2c0_default: i2c0-default {
+> -+		mux {
+> -+			groups = "i2c0_10_grp";
+> -+			function = "i2c0";
+> -+		};
+> -+
+> -+		conf {
+> -+			groups = "i2c0_10_grp";
+> -+			bias-pull-up;
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+		};
+> -+	};
+> -+
+> -+	pinctrl_i2c0_gpio: i2c0-gpio {
+> -+		mux {
+> -+			groups = "gpio0_50_grp", "gpio0_51_grp";
+> -+			function = "gpio0";
+> -+		};
+> -+
+> -+		conf {
+> -+			groups = "gpio0_50_grp", "gpio0_51_grp";
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+		};
+> -+	};
+> -+
+> -+	pinctrl_sdhci0_default: sdhci0-default {
+> -+		mux {
+> -+			groups = "sdio0_2_grp";
+> -+			function = "sdio0";
+> -+		};
+> -+
+> -+		conf {
+> -+			groups = "sdio0_2_grp";
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+			bias-disable;
+> -+		};
+> -+
+> -+		mux-cd {
+> -+			groups = "gpio0_0_grp";
+> -+			function = "sdio0_cd";
+> -+		};
+> -+
+> -+		conf-cd {
+> -+			groups = "gpio0_0_grp";
+> -+			bias-high-impedance;
+> -+			bias-pull-up;
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+		};
+> -+
+> -+		mux-wp {
+> -+			groups = "gpio0_15_grp";
+> -+			function = "sdio0_wp";
+> -+		};
+> -+
+> -+		conf-wp {
+> -+			groups = "gpio0_15_grp";
+> -+			bias-high-impedance;
+> -+			bias-pull-up;
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+		};
+> -+	};
+> -+
+> -+	pinctrl_uart1_default: uart1-default {
+> -+		mux {
+> -+			groups = "uart1_10_grp";
+> -+			function = "uart1";
+> -+		};
+> -+
+> -+		conf {
+> -+			groups = "uart1_10_grp";
+> -+			slew-rate = <0>;
+> -+			io-standard = <1>;
+> -+		};
+> -+
+> -+		conf-rx {
+> -+			pins = "MIO25";
+> -+			bias-high-impedance;
+> -+		};
+> -+
+> -+		conf-tx {
+> -+			pins = "MIO24";
+> -+			bias-disable;
+> -+		};
+> -+	};
+> -+};
+> -+
+> -+&qspi {
+> -+	u-boot,dm-pre-reloc;
+> -+	status = "disabled";
+> -+	is-dual = <0>;
+> -+	num-cs = <1>;
+> -+	flash@0 {
+> -+		compatible = "n25q128a11";
+> -+		reg = <0x0>;
+> -+		spi-tx-bus-width = <1>;
+> -+		spi-rx-bus-width = <4>;
+> -+		spi-max-frequency = <50000000>;
+> -+		#address-cells = <1>;
+> -+		#size-cells = <1>;
+> -+		partition@qspi-fsbl-uboot {
+> -+			label = "qspi-fsbl-uboot";
+> -+			reg = <0x0 0x100000>;
+> -+		};
+> -+		partition@qspi-linux {
+> -+			label = "qspi-linux";
+> -+			reg = <0x100000 0x500000>;
+> -+		};
+> -+		partition@qspi-device-tree {
+> -+			label = "qspi-device-tree";
+> -+			reg = <0x600000 0x20000>;
+> -+		};
+> -+		partition@qspi-rootfs {
+> -+			label = "qspi-rootfs";
+> -+			reg = <0x620000 0x5E0000>;
+> -+		};
+> -+		partition@qspi-bitstream {
+> -+			label = "qspi-bitstream";
+> -+			reg = <0xC00000 0x400000>;
+> -+		};
+> -+	};
+> -+};
+> -+
+> -+&sdhci0 {
+> -+	u-boot,dm-pre-reloc;
+> -+	status = "okay";
+> -+};
+> -+
+> -+&uart1 {
+> -+	u-boot,dm-pre-reloc;
+> -+	status = "okay";
+> -+	pinctrl-names = "default";
+> -+	pinctrl-0 = <&pinctrl_uart1_default>;
+> -+};
+> ---
+> -2.23.0
+> -
+> diff --git a/board/qmtech/zynq/readme.txt 
+> b/board/qmtech/zynq/readme.txt
+> deleted file mode 100644
+> index 5fb95bb90b..0000000000
+> --- a/board/qmtech/zynq/readme.txt
+> +++ /dev/null
+> @@ -1,76 +0,0 @@
+> -*******************************
+> -QMTECH Zynq XC7Z010 Starter Kit
+> -*******************************
+> -
+> -This file documents the Buildroot support for the QMTECH [1] Zynq
+> -XC7Z010 Starter Kit [2]. It is a low cost (~55$) Zynq based
+> -development board. The board user manual is available at
+> -[3]. Additional files are available on Github [4].
+> -
+> -
+> -Build
+> -=====
+> -
+> -First, configure Buildroot for the QMTECH Zynq board:
+> -
+> -  make zynq_qmtech_defconfig
+> -
+> -Build all components:
+> -
+> -  make
+> -
+> -You will find in output/images/ the following files:
+> -  - boot.bin
+> -  - boot.vfat
+> -  - devicetree.dtb
+> -  - rootfs.cpio
+> -  - rootfs.cpio.gz
+> -  - rootfs.cpio.uboot
+> -  - rootfs.tar
+> -  - sdcard.img
+> -  - u-boot.bin
+> -  - u-boot.img
+> -  - uImage
+> -  - zynq-qmtech.dtb
+> -
+> -
+> -Create a bootable micro SD card
+> -===============================
+> -
+> -To determine the device associated to the micro SD card have a look in
+> -the /proc/partitions file:
+> -
+> -  cat /proc/partitions
+> -
+> -Buildroot prepares a bootable "sdcard.img" image in the output/images/
+> -directory, ready to be dumped on a micro SD card. Launch the following
+> -command as root:
+> -
+> -  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+> -
+> -*** WARNING! This will destroy all the card content. Use with care! 
+> ***
+> -
+> -
+> -Boot the QMTECH Zynq board
+> -==========================
+> -
+> -To boot your newly created system:
+> -- put a mini USB cable into the J4 Debug USB Port and connect using a
+> -  terminal emulator at 115200 bps, 8n1,
+> -- put the prepared micro SD card in the J2 micro SD card slot,
+> -- plug the 5V power supply on the JP4 barrel jack.
+> -
+> -Enjoy!
+> -
+> -
+> -[1]. QMTECH:
+> -     http://www.chinaqmtech.com/
+> -
+> -[2]. QMTECH Zynq XC7Z010 Starter Kit Product Page:
+> -     http://www.chinaqmtech.com/xilinx_zynq_soc
+> -
+> -[3]. QMTECH Zynq XC7Z010 Starter Kit Hardware User Manual:
+> -     http://www.chinaqmtech.com/filedownload/32552
+> -
+> -[4]. QMTECH Github:
+> -     https://github.com/ChinaQMTECH/ZYNQ_STARTER_KIT
+> diff --git a/configs/zynq_qmtech_defconfig 
+> b/configs/zynq_qmtech_defconfig
+> deleted file mode 100644
+> index f536b80f57..0000000000
+> --- a/configs/zynq_qmtech_defconfig
+> +++ /dev/null
+> @@ -1,33 +0,0 @@
+> -BR2_arm=y
+> -BR2_cortex_a9=y
+> -BR2_ARM_ENABLE_NEON=y
+> -BR2_ARM_ENABLE_VFP=y
+> -BR2_GLOBAL_PATCH_DIR="board/qmtech/zynq/patches"
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> -BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+> -BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+> -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+> -BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call 
+> github,Xilinx,linux-xlnx,xilinx-v2019.2.01)/linux-xilinx-v2019.2.01.tar.gz"
+> -BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+> -BR2_LINUX_KERNEL_UIMAGE=y
+> -BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+> -BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-qmtech"
+> -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> -BR2_TARGET_ROOTFS_EXT2=y
+> -BR2_TARGET_ROOTFS_EXT2_4=y
+> -BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call 
+> github,jolivain,u-boot-xlnx,xilinx-v2019.2.qmtech.1)/uboot-xilinx-v2019.2.qmtech.1.tar.gz"
+> -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_qmtech"
+> -BR2_TARGET_UBOOT_NEEDS_DTC=y
+> -BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+> -BR2_TARGET_UBOOT_FORMAT_IMG=y
+> -BR2_TARGET_UBOOT_SPL=y
+> -BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+> -BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> -BR2_PACKAGE_HOST_GENIMAGE=y
+> -BR2_PACKAGE_HOST_MTOOLS=y
+> --
+> 2.25.1
 
-[1]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/cb2357f481396820ec954dc4b69eafc01a8d162a
-[2]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/90e85c2493fdfa3551f202ff10282463f1e36645
-[3]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0
-[4]: https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be
-[5]: https://gitlab.freedesktop.org/cairo/cairo/-/issues/792
-[6]: https://gitlab.freedesktop.org/cairo/cairo/-/issues/613
+Best regards,
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
----
-v2: added -std=gnu11 (allow inline int declaration in if loop, 99 caused some directives problems)
-v3: enabled host-zlib, needed for librsvg
----
- ...private.h-fix-missing-FT_Color-error.patch |  32 +++
- package/cairo/0001-fix-nofork-build.patch     |  29 ---
- ...vailable-in-cairo_ft_apply_variation.patch |  33 ----
- .../0002-meson.build-fix-x11-build.patch      |  29 +++
- ...or_tolerance_normalized-fix-infinite.patch |  39 ----
- ...4-Fix-mask-usage-in-image-compositor.patch |  56 ------
- package/cairo/Config.in                       |  34 ++--
- package/cairo/cairo.hash                      |   6 +-
- package/cairo/cairo.mk                        | 182 ++++++------------
- 9 files changed, 135 insertions(+), 305 deletions(-)
- create mode 100644 package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
- delete mode 100644 package/cairo/0001-fix-nofork-build.patch
- delete mode 100644 package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
- create mode 100644 package/cairo/0002-meson.build-fix-x11-build.patch
- delete mode 100644 package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
- delete mode 100644 package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
-
-diff --git a/package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch b/package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
-new file mode 100644
-index 0000000000..3b18d8077b
---- /dev/null
-+++ b/package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
-@@ -0,0 +1,32 @@
-+From da698db0c20507f0e07492cbe40dbaf1c9053f71 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sun, 12 Nov 2023 09:58:05 +0100
-+Subject: [PATCH] cairo-ft-private.h: fix missing FT_Color error
-+
-+In file included from ../src/cairo-colr-glyph-render.c:37:
-+../src/cairo-ft-private.h:87:30: error: unknown type name 'FT_Color'
-+   87 |                              FT_Color               *palette,
-+      |                              ^~~~~~~~
-+
-+Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/issues/792
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ src/cairo-ft-private.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/cairo-ft-private.h b/src/cairo-ft-private.h
-+index 836f7e523..6b0e30223 100644
-+--- a/src/cairo-ft-private.h
-++++ b/src/cairo-ft-private.h
-+@@ -43,6 +43,8 @@
-+ 
-+ #if CAIRO_HAS_FT_FONT
-+ 
-++#include FT_COLOR_H
-++
-+ CAIRO_BEGIN_DECLS
-+ 
-+ typedef struct _cairo_ft_unscaled_font cairo_ft_unscaled_font_t;
-+-- 
-+2.34.1
-+
-diff --git a/package/cairo/0001-fix-nofork-build.patch b/package/cairo/0001-fix-nofork-build.patch
-deleted file mode 100644
-index 702e9910a5..0000000000
---- a/package/cairo/0001-fix-nofork-build.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--test: fix build when SHOULD_FORK is false
--
--The code in test/cairo-test-runner.c properly takes into account
--platforms that do have fork() support, and uses the SHOULD_FORK define
--to know whether fork is available or not.
--
--However, this SHOULD_FORK macro is used to guard the inclusion of
--<unistd.h>, which is needed to get the prototype of other functions
--(namely readlink and getppid), that are used in portions of this file
--not guarded by SHOULD_FORK.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/test/cairo-test-runner.c
--===================================================================
----- a/test/cairo-test-runner.c
--+++ b/test/cairo-test-runner.c
--@@ -36,10 +36,10 @@
-- #include <pixman.h> /* for version information */
-- 
-- #define SHOULD_FORK HAVE_FORK && HAVE_WAITPID
---#if SHOULD_FORK
-- #if HAVE_UNISTD_H
-- #include <unistd.h>
-- #endif
--+#if SHOULD_FORK
-- #if HAVE_SIGNAL_H
-- #include <signal.h>
-- #endif
-diff --git a/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch b/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
-deleted file mode 100644
-index 10e000d16f..0000000000
---- a/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 90e85c2493fdfa3551f202ff10282463f1e36645 Mon Sep 17 00:00:00 2001
--From: Carlos Garcia Campos <cgarcia@igalia.com>
--Date: Mon, 19 Nov 2018 12:33:07 +0100
--Subject: [PATCH] ft: Use FT_Done_MM_Var instead of free when available in
-- cairo_ft_apply_variations
--
--Fixes a crash when using freetype >= 2.9
--[Retrieved from:
--https://gitlab.freedesktop.org/cairo/cairo/-/commit/90e85c2493fdfa3551f202ff10282463f1e36645]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/cairo-ft-font.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/cairo-ft-font.c b/src/cairo-ft-font.c
--index 325dd61b4..981973f78 100644
----- a/src/cairo-ft-font.c
--+++ b/src/cairo-ft-font.c
--@@ -2393,7 +2393,11 @@ skip:
-- done:
--         free (coords);
--         free (current_coords);
--+#if HAVE_FT_DONE_MM_VAR
--+        FT_Done_MM_Var (face->glyph->library, ft_mm_var);
--+#else
--         free (ft_mm_var);
--+#endif
--     }
-- }
-- 
---- 
--2.24.1
--
-diff --git a/package/cairo/0002-meson.build-fix-x11-build.patch b/package/cairo/0002-meson.build-fix-x11-build.patch
-new file mode 100644
-index 0000000000..fd17397586
---- /dev/null
-+++ b/package/cairo/0002-meson.build-fix-x11-build.patch
-@@ -0,0 +1,29 @@
-+From 840e3ad20f8536d9857876ca2f5161896b68ab9b Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sun, 12 Nov 2023 10:44:13 +0100
-+Subject: [PATCH] meson.build: fix x11 build
-+
-+../../br-test-pkg/arm-aarch64/build/cairo-1.18.0/meson.build:381:13: ERROR: Can not run test applications in this cross environment.
-+
-+Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/issues/613
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 9efe91978..9864b8699 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -369,7 +369,7 @@ if x11_dep.found() and xext_dep.found()
-+ 
-+   # Can skip the run check by providing the result in a cross file or
-+   # native file as bool property value.
-+-  prop = meson.get_external_property('ipc_rmid_deferred_release', 'auto')
-++  prop = meson.get_external_property('ipc_rmid_deferred_release', 'false')
-+   # We don't know the type of prop (bool, string) but need to differentiate
-+   # between a set value (bool) or the fallback value (string), so convert to
-+   # a string and check the string value.
-+-- 
-+2.34.1
-+
-diff --git a/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch b/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
-deleted file mode 100644
-index 078e90fa42..0000000000
---- a/package/cairo/0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0 Mon Sep 17 00:00:00 2001
--From: Heiko Lewin <hlewin@gmx.de>
--Date: Sun, 1 Aug 2021 11:16:03 +0000
--Subject: [PATCH] _arc_max_angle_for_tolerance_normalized: fix infinite loop
--
--[Retrieved from:
--https://gitlab.freedesktop.org/cairo/cairo/-/commit/ab2c5ee21e5f3d3ee4b3f67cfcd5811a4f99c3a0]
--Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-----
-- src/cairo-arc.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/cairo-arc.c b/src/cairo-arc.c
--index 390397bae..1c891d1a0 100644
----- a/src/cairo-arc.c
--+++ b/src/cairo-arc.c
--@@ -90,16 +90,18 @@ _arc_max_angle_for_tolerance_normalized (double tolerance)
-- 	{ M_PI / 11.0,  9.81410988043554039085e-09 },
--     };
--     int table_size = ARRAY_LENGTH (table);
--+    const int max_segments = 1000; /* this value is chosen arbitrarily. this gives an error of about 1.74909e-20 */
-- 
--     for (i = 0; i < table_size; i++)
-- 	if (table[i].error < tolerance)
-- 	    return table[i].angle;
-- 
--     ++i;
--+
--     do {
-- 	angle = M_PI / i++;
-- 	error = _arc_error_normalized (angle);
---    } while (error > tolerance);
--+    } while (error > tolerance && i < max_segments);
-- 
--     return angle;
-- }
---- 
--2.38.1
--
-diff --git a/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch b/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
-deleted file mode 100644
-index 54a95593c5..0000000000
---- a/package/cairo/0004-Fix-mask-usage-in-image-compositor.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 03a820b173ed1fdef6ff14b4468f5dbc02ff59be Mon Sep 17 00:00:00 2001
--From: Heiko Lewin <heiko.lewin@worldiety.de>
--Date: Tue, 15 Dec 2020 16:48:19 +0100
--Subject: [PATCH] Fix mask usage in image-compositor
--
--[Retrieved from
--https://gitlab.freedesktop.org/cairo/cairo/-/commit/03a820b173ed1fdef6ff14b4468f5dbc02ff59be]
--[Removed changes in test/ directory to remove binary diff so that the
--patch can be applied by `patch` tool]
--Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-----
-- src/cairo-image-compositor.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/src/cairo-image-compositor.c b/src/cairo-image-compositor.c
--index bbf4cf228..2352c478e 100644
----- a/src/cairo-image-compositor.c
--+++ b/src/cairo-image-compositor.c
--@@ -2601,14 +2601,14 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-- 		    unsigned num_spans)
-- {
--     cairo_image_span_renderer_t *r = abstract_renderer;
---    uint8_t *m;
--+    uint8_t *m, *base = (uint8_t*)pixman_image_get_data(r->mask);
--     int x0;
-- 
--     if (num_spans == 0)
-- 	return CAIRO_STATUS_SUCCESS;
-- 
--     x0 = spans[0].x;
---    m = r->_buf;
--+    m = base;
--     do {
-- 	int len = spans[1].x - spans[0].x;
-- 	if (len >= r->u.composite.run_length && spans[0].coverage == 0xff) {
--@@ -2646,7 +2646,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-- 				      spans[0].x, y,
-- 				      spans[1].x - spans[0].x, h);
-- 
---	    m = r->_buf;
--+	    m = base;
-- 	    x0 = spans[1].x;
-- 	} else if (spans[0].coverage == 0x0) {
-- 	    if (spans[0].x != x0) {
--@@ -2675,7 +2675,7 @@ _inplace_src_spans (void *abstract_renderer, int y, int h,
-- #endif
-- 	    }
-- 
---	    m = r->_buf;
--+	    m = base;
-- 	    x0 = spans[1].x;
-- 	} else {
-- 	    *m++ = spans[0].coverage;
---- 
--2.38.1
--
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 0c87a2904b..caa6c37195 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
- 	help
- 	  Cairo is a 2D graphics library with support for multiple
- 	  output devices. Currently supported output targets include
-@@ -15,34 +16,35 @@ config BR2_PACKAGE_CAIRO
- 
- if BR2_PACKAGE_CAIRO
- 
--config BR2_PACKAGE_CAIRO_PS
--	bool "postscript support"
--	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_CAIRO_PDF
--
--config BR2_PACKAGE_CAIRO_PDF
--	bool "pdf support"
--	select BR2_PACKAGE_ZLIB
--
- config BR2_PACKAGE_CAIRO_PNG
- 	bool "png support"
- 	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_ZLIB
--
--config BR2_PACKAGE_CAIRO_SCRIPT
--	bool "script support"
--	select BR2_PACKAGE_CAIRO_PNG
- 
- config BR2_PACKAGE_CAIRO_SVG
- 	bool "svg support"
- 	select BR2_PACKAGE_CAIRO_PNG
--	select BR2_PACKAGE_CAIRO_PDF
- 
- config BR2_PACKAGE_CAIRO_TEE
- 	bool "tee support"
- 
-+config BR2_PACKAGE_CAIRO_ZLIB
-+	bool "zlib support"
-+	select BR2_PACKAGE_ZLIB
-+
-+config BR2_PACKAGE_CAIRO_SCRIPT
-+	bool "script support"
-+	select BR2_PACKAGE_CAIRO_ZLIB
-+
-+config BR2_PACKAGE_CAIRO_PS
-+	bool "postscript support"
-+	select BR2_PACKAGE_CAIRO_ZLIB
-+
-+config BR2_PACKAGE_CAIRO_PDF
-+	bool "pdf support"
-+	select BR2_PACKAGE_CAIRO_ZLIB
-+
- config BR2_PACKAGE_CAIRO_XML
- 	bool "xml support"
--	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_CAIRO_ZLIB
- 
- endif
-diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
-index 3b93e24a22..df9c693bad 100644
---- a/package/cairo/cairo.hash
-+++ b/package/cairo/cairo.hash
-@@ -1,7 +1,5 @@
--# From https://www.cairographics.org/releases/cairo-1.16.0.tar.xz.sha1
--sha1  00e81842ae5e81bb0343108884eb5205be0eac14  cairo-1.16.0.tar.xz
--# Calculated based on the hash above
--sha256  5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331  cairo-1.16.0.tar.xz
-+# From https://www.cairographics.org/releases/cairo-1.18.0.tar.xz.sha256sum
-+sha256  243a0736b978a33dee29f9cca7521733b78a65b5418206fef7bd1c3d4cf10b64  cairo-1.18.0.tar.xz
- 
- # Hash for license files:
- sha256  67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf  COPYING
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 7bc8f92deb..8641ee0785 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CAIRO_VERSION = 1.16.0
-+CAIRO_VERSION = 1.18.0
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
- CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
-@@ -12,175 +12,101 @@ CAIRO_CPE_ID_VENDOR = cairographics
- CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
- 
--# 0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
--CAIRO_IGNORE_CVES += CVE-2018-19876
--# 0003-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch
--CAIRO_IGNORE_CVES += CVE-2019-6462
--# 0004-Fix-mask-usage-in-image-compositor.patch
--CAIRO_IGNORE_CVES += CVE-2020-35492
--
--CAIRO_CONF_ENV = LIBS="$(CAIRO_LIBS)"
-+CAIRO_CFLAGS = $(TARGET_CFLAGS) -std=gnu11
-+CAIRO_LDFLAGS = $(TARGET_LDFLAGS)
- 
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
--CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
--endif
--
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
--CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
-+CAIRO_CFLAGS += -mxgot
- endif
- 
- # cairo can use C++11 atomics when available, so we need to link with
- # libatomic for the architectures who need libatomic.
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--CAIRO_LIBS += -latomic
-+CAIRO_LDFLAGS += -latomic
- endif
- 
- CAIRO_CONF_OPTS = \
--	--enable-trace=no \
--	--enable-interpreter=no
--
--CAIRO_DEPENDENCIES = host-pkgconf fontconfig pixman
-+	-Ddwrite=disabled \
-+	-Dfontconfig=enabled \
-+	-Dquartz=disabled \
-+	-Dtests=disabled \
-+	-Dspectre=disabled \
-+	-Dsymbol-lookup=disabled \
-+	-Dgtk_doc=false
-+CAIRO_DEPENDENCIES = \
-+	host-pkgconf \
-+	fontconfig \
-+	pixman
- 
- # Just the bare minimum to make other host-* packages happy
- HOST_CAIRO_CONF_OPTS = \
--	--enable-trace=no \
--	--enable-interpreter=no \
--	--disable-directfb \
--	--enable-ft \
--	--enable-gobject \
--	--disable-glesv2 \
--	--disable-vg \
--	--disable-xlib \
--	--disable-xcb \
--	--without-x \
--	--disable-xlib-xrender \
--	--disable-ps \
--	--disable-pdf \
--	--enable-png \
--	--enable-script \
--	--disable-svg \
--	--disable-tee \
--	--disable-xml
-+	-Dfontconfig=enabled \
-+	-Dfreetype=enabled \
-+	-Dpng=enabled \
-+	-Dquartz=disabled \
-+	-Dtee=disabled \
-+	-Dxcb=disabled \
-+	-Dxlib=disabled \
-+	-Dzlib=enabled \
-+	-Dtests=disabled \
-+	-Dglib=enabled \
-+	-Dspectre=disabled \
-+	-Dsymbol-lookup=disabled \
-+	-Dgtk_doc=false
- HOST_CAIRO_DEPENDENCIES = \
- 	host-freetype \
- 	host-fontconfig \
- 	host-libglib2 \
- 	host-libpng \
- 	host-pixman \
--	host-pkgconf
--
--# DirectFB svg support rely on Cairo and Cairo DirectFB support depends on
--# DirectFB. Break circular dependency by disabling DirectFB support in Cairo
--# (which is experimental)
--ifeq ($(BR2_PACKAGE_DIRECTFB)x$(BR2_PACKAGE_DIRECTFB_SVG),yx)
--CAIRO_CONF_OPTS += --enable-directfb
--CAIRO_DEPENDENCIES += directfb
--else
--CAIRO_CONF_OPTS += --disable-directfb
--endif
--
--ifeq ($(BR2_PACKAGE_FREETYPE),y)
--CAIRO_CONF_OPTS += --enable-ft
--CAIRO_DEPENDENCIES += freetype
--else
--CAIRO_CONF_OPTS += --disable-ft
--endif
--
--ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
--CAIRO_DEPENDENCIES += libexecinfo
--CAIRO_LIBS += -lexecinfo
--endif
--
--ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
--CAIRO_CONF_OPTS += --enable-gobject
--CAIRO_DEPENDENCIES += libglib2
--else
--CAIRO_CONF_OPTS += --disable-gobject
--endif
--
--# Can use GL or GLESv2 but not both
--ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
--CAIRO_CONF_OPTS += --enable-gl --disable-glesv2
--CAIRO_DEPENDENCIES += libgl
--else
--ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
--CAIRO_CONF_OPTS += --disable-gl --enable-glesv2
--CAIRO_DEPENDENCIES += libgles
--else
--CAIRO_CONF_OPTS += --disable-gl --disable-glesv2
--endif
--endif
--
--ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
--CAIRO_CONF_OPTS += --enable-vg
--CAIRO_DEPENDENCIES += libopenvg
--else
--CAIRO_CONF_OPTS += --disable-vg
--endif
-+	host-pkgconf \
-+	host-zlib
- 
- ifeq ($(BR2_PACKAGE_LZO),y)
- CAIRO_DEPENDENCIES += lzo
- endif
- 
--ifeq ($(BR2_PACKAGE_XORG7),y)
--CAIRO_CONF_OPTS += --enable-xlib --enable-xcb --with-x
--CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext
--else
--CAIRO_CONF_OPTS += --disable-xlib --disable-xcb --without-x
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
--CAIRO_CONF_OPTS += --enable-xlib-xrender
--CAIRO_DEPENDENCIES += xlib_libXrender
--else
--CAIRO_CONF_OPTS += --disable-xlib-xrender
--endif
--
--ifeq ($(BR2_PACKAGE_CAIRO_PS),y)
--CAIRO_CONF_OPTS += --enable-ps
--CAIRO_DEPENDENCIES += zlib
--else
--CAIRO_CONF_OPTS += --disable-ps
--endif
--
--ifeq ($(BR2_PACKAGE_CAIRO_PDF),y)
--CAIRO_CONF_OPTS += --enable-pdf
--CAIRO_DEPENDENCIES += zlib
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+CAIRO_CONF_OPTS += -Dfreetype=enabled
-+CAIRO_DEPENDENCIES += freetype
- else
--CAIRO_CONF_OPTS += --disable-pdf
-+CAIRO_CONF_OPTS += -Dfreetype=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_CAIRO_PNG),y)
--CAIRO_CONF_OPTS += --enable-png
-+CAIRO_CONF_OPTS += -Dpng=enabled
- CAIRO_DEPENDENCIES += libpng
- else
--CAIRO_CONF_OPTS += --disable-png
-+CAIRO_CONF_OPTS += -Dpng=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_CAIRO_SCRIPT),y)
--CAIRO_CONF_OPTS += --enable-script
-+ifeq ($(BR2_PACKAGE_CAIRO_TEE),y)
-+CAIRO_CONF_OPTS += -Dtee=enabled
- else
--CAIRO_CONF_OPTS += --disable-script
-+CAIRO_CONF_OPTS += -Dtee=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_CAIRO_SVG),y)
--CAIRO_CONF_OPTS += --enable-svg
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+CAIRO_CONF_OPTS += -Dxcb=enabled -Dxlib=enabled -Dxlib-xcb=enabled
-+CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXrender
- else
--CAIRO_CONF_OPTS += --disable-svg
-+CAIRO_CONF_OPTS += -Dxcb=disabled -Dxlib=disabled -Dxlib-xcb=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_CAIRO_TEE),y)
--CAIRO_CONF_OPTS += --enable-tee
-+ifeq ($(BR2_PACKAGE_CAIRO_ZLIB),y)
-+CAIRO_CONF_OPTS += -Dzlib=enabled
-+CAIRO_DEPENDENCIES += zlib
- else
--CAIRO_CONF_OPTS += --disable-tee
-+CAIRO_CONF_OPTS += -Dzlib=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_CAIRO_XML),y)
--CAIRO_CONF_OPTS += --enable-xml
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+CAIRO_CONF_OPTS += -Dglib=enabled
-+CAIRO_DEPENDENCIES += libglib2
- else
--CAIRO_CONF_OPTS += --disable-xml
-+CAIRO_CONF_OPTS += -Dglib=disabled
- endif
- 
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(meson-package))
-+$(eval $(host-meson-package))
--- 
-2.42.0
-
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
