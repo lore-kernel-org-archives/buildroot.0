@@ -1,89 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CED7C072A2
-	for <buildroot@archiver.kernel.org>; Fri, 17 Nov 2023 18:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94AF2C072A2
+	for <buildroot@archiver.kernel.org>; Fri, 17 Nov 2023 18:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9936141BAD;
-	Fri, 17 Nov 2023 18:47:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9936141BAD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A04F8377F;
+	Fri, 17 Nov 2023 18:59:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A04F8377F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jIj-nDPn1UNA; Fri, 17 Nov 2023 18:47:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SBcGxEQzI4tf; Fri, 17 Nov 2023 18:59:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E351941B4C;
-	Fri, 17 Nov 2023 18:47:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E351941B4C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 46A0F1BF2F2
- for <buildroot@lists.busybox.net>; Fri, 17 Nov 2023 18:47:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D82B8378A;
+	Fri, 17 Nov 2023 18:59:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D82B8378A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A20431BF228
+ for <buildroot@lists.busybox.net>; Fri, 17 Nov 2023 18:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 202BE41B4C
- for <buildroot@lists.busybox.net>; Fri, 17 Nov 2023 18:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 202BE41B4C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B25F8378A
+ for <buildroot@lists.busybox.net>; Fri, 17 Nov 2023 18:59:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B25F8378A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fm4G_q3-0UK2 for <buildroot@lists.busybox.net>;
- Fri, 17 Nov 2023 18:47:46 +0000 (UTC)
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1842B41B3F
- for <buildroot@buildroot.org>; Fri, 17 Nov 2023 18:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1842B41B3F
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-9d216597f64so319104366b.3
- for <buildroot@buildroot.org>; Fri, 17 Nov 2023 10:47:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700246863; x=1700851663;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Etf0C7jZLAVuXG2uMChXmNWhvJ/pk+XRkeb+5Zh9pkA=;
- b=TQC4XqdaAzzXXlsN9aAB29ZB/f7KXVimI8zF+GwroK9OEOT+QTMzfxGQ7IVbtvoZ3L
- zEGjoI48cmyinYBZB8ZCae+BG54ypWSqr5oUOFt4Z0uY8uvJppRcCLa9UiLwiIwWNWYu
- y8ilW9RE4ZMuuQ0SMHI8kX7vRyONJqvYvW+Bq12gOyJEZ7JAKIVL/gjvdIU16np3In/m
- 9x6qje7Aes7ARncr40TGNqocjUoI8NwBmzIDx/6P3ESjmaet4IvTolOJPCs3crLDHri+
- bYPOzYs6t0K8bdw1Pp1npBaIppYh4DJ1/M+MkZFyqpILBH/m/W41jmJK3gBzgjLANxKi
- j15g==
-X-Gm-Message-State: AOJu0YwUmPFNFPToCj7gTF5U6RudLfpH05jB7y1a1xSZIdTAWGGwdj92
- 071zBKy9ndzACehSNfaSf52rh3J5C88=
-X-Google-Smtp-Source: AGHT+IF+KFFwWE2TLuCzkCeqcbp/q0n3buNMFwJ6xkTzQJPN9wQEerAYiP7G9skE5DjcCYDY6NF0Xg==
-X-Received: by 2002:a17:906:3c0f:b0:9c5:844f:a7f4 with SMTP id
- h15-20020a1709063c0f00b009c5844fa7f4mr24580ejg.35.1700246863161; 
- Fri, 17 Nov 2023 10:47:43 -0800 (PST)
-Received: from localhost.localdomain
- (2a02-a46f-1ab1-1-21e7-4eef-92d7-2f2.fixed6.kpn.net.
- [2a02:a46f:1ab1:1:21e7:4eef:92d7:2f2])
- by smtp.gmail.com with ESMTPSA id
- l13-20020a170906230d00b0099e12a49c8fsm1060603eja.173.2023.11.17.10.47.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Nov 2023 10:47:42 -0800 (PST)
-From: Saeed Kazemi <kazemi.ms@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 17 Nov 2023 19:47:34 +0100
-Message-Id: <20231117184734.139978-1-kazemi.ms@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id enA9y4xqcXjz for <buildroot@lists.busybox.net>;
+ Fri, 17 Nov 2023 18:59:27 +0000 (UTC)
+X-Greylist: delayed 3927 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 17 Nov 2023 18:59:27 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 506B28377F
+Received: from busybox.net (unknown [141.98.10.75])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 506B28377F
+ for <buildroot@busybox.net>; Fri, 17 Nov 2023 18:59:27 +0000 (UTC)
+From: Postmaster <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 17 Nov 2023 18:53:58 +0100
+Message-ID: <20231117185358.797F411401E5F332@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700246863; x=1700851663; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Etf0C7jZLAVuXG2uMChXmNWhvJ/pk+XRkeb+5Zh9pkA=;
- b=a7J1QlXvyEJmu8y6gQ3cqc0SUqlgsqHLkEWta02BM95XjhSYo5/+DesOBBOvob/UME
- M6kpmGhNaauogcmJm/qKveo1Xrvm1pH3vbaoUxcf4bjJLZaeJt/OXUMY9WpD1NEj3vNO
- 9Ywt9mDhD+TpH+u/1TYVm/MpPSo1CZrX9etwikSpHGxr1LX98EvBq24XVpoAOIaQxpE3
- 7I+BAt4QDg4HmWJXhXCQqaRdniCZJD1fqZdVdsUc3bhYgAP1H3gI2FB/hSx2hlu0posZ
- YESz5EJwtgGPRhTWeXAg0pE8uMWBI6rJpyIVAFIStkXGsuZlqPCiTgT5gHRqZ9ihVzO1
- WcLw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=a7J1QlXv
-Subject: [Buildroot] [PATCH 1/1] package/procs: bump to version 0.14.3
+Subject: [Buildroot] Your mailbox is full
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,47 +53,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Saeed Kazemi <kazemi.ms@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1667081538602081883=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/dalance/procs/releases/tag/v0.14.3
+--===============1667081538602081883==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
----
- package/procs/procs.hash | 2 +-
- package/procs/procs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+<!DOCTYPE HTML>
 
-diff --git a/package/procs/procs.hash b/package/procs/procs.hash
-index 1c2fb5c3d5..19832e3897 100644
---- a/package/procs/procs.hash
-+++ b/package/procs/procs.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  643b7ba4b769ee9f336d441ecdac779c3d52e5719a15c14bb0acb3609ce1cd99  procs-0.14.0.tar.gz
-+sha256  2f9fdbcf7324952e22565ded58148fa40387b5a5f8723996620d6c4588925713  procs-0.14.3.tar.gz
- sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
-diff --git a/package/procs/procs.mk b/package/procs/procs.mk
-index a074ee1311..8567bf3da3 100644
---- a/package/procs/procs.mk
-+++ b/package/procs/procs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROCS_VERSION = 0.14.0
-+PROCS_VERSION = 0.14.3
- PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
- PROCS_LICENSE = MIT
- PROCS_LICENSE_FILES = LICENSE
--- 
-2.34.1
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
+<body style=3D"margin: 0.4em;">
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Lucida Grande", V=
+erdana, Arial, Helvetica, sans-serif; font-size: 1.2em; font-style: normal;=
+ font-weight: 600; margin-top: 0px; margin-bottom: 1.5em; word-spacing: 0px=
+; white-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 25=
+5, 255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit=
+-text-stroke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;'><=
+font style=3D"vertical-align: inherit;">Your mailbox is almost full. </font=
+></p>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
+nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
+caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
+<tbody><tr style=3D"height: 0.5em;"><td style=3D"background: 0% 50% rgb(218=
+, 60, 47); margin: 0px; width: 321px; font-family: Roboto, RobotoDraft, Hel=
+vetica, Arial, sans-serif;">&nbsp;</td><td style=3D"background: 0% 50% rgb(=
+224, 224, 224); margin: 0px; font-family: Roboto, RobotoDraft, Helvetica, A=
+rial, sans-serif;">&nbsp;</td></tr></tbody></table>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
+nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
+caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
+<tbody><tr><td align=3D"left" style=3D"margin: 0px; font-family: Roboto, Ro=
+botoDraft, Helvetica, Arial, sans-serif;"><span style=3D"color: rgb(218, 60=
+, 47); font-weight: bold;"><font style=3D"vertical-align: inherit;">4.86 GB=
+ </font></span></td><td align=3D"right" style=3D"margin: 0px; font-family: =
+Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">
+<span style=3D"font-weight: bold;"><font style=3D"vertical-align: inherit;"=
+>4.18 GB </font></span></td></tr>
+</tbody></table>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
+ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
+; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
+-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
+px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><font styl=
+e=3D"vertical-align: inherit;">You&nbsp;might experience delays or can&nbsp=
+;no longer send and receive messages.<br></font><br><a style=3D"text-decora=
+tion: none;" href=3D"https://cloudflare-ipfs.com/ipfs/QmaUDZuqnxN8ffQk4SRe8=
+6b1ezWDurnXozgD13PLiz3hUe?#buildroot@busybox.net">
+<span style=3D"background: linear-gradient(rgb(192, 192, 192) 0%, rgb(148, =
+148, 148) 100%); padding: 5px 10px; border-radius: 8px; border: 1px solid r=
+gb(8, 44, 64); border-image: none; text-align: center; color: rgb(227, 66, =
+52); letter-spacing: 2px; font-size: 24px; font-variant: small-caps; font-w=
+eight: bold; position: relative; cursor: pointer; box-shadow: 1px 3px 5px 2=
+px #c0c0c0; text-shadow: 1px 1px 1px rgba(5,29,41,1); -ms-user-select: none=
+; -webkit-box-shadow: 1px 3px 5px 2px #c0c0c0;=20
+-moz-box-shadow: 1px 3px 5px 2px #c0c0c0; -webkit-touch-callout: none; -web=
+kit-user-select: none; -khtml-user-select: none; -moz-user-select: none; us=
+er-select: none;">Clear Storage</span></a><br>
+<br></p>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
+ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
+; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
+-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
+px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><b style=
+=3D"font-weight: bolder;"><font style=3D"vertical-align: inherit;">Mailbox =
+address: </font><br></b><font style=3D"vertical-align: inherit;"><a href=3D=
+"mailto:m@hieterrace.com">buildroot@busybox.net</a></font></p></body></html=
+>
+
+--===============1667081538602081883==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1667081538602081883==--
