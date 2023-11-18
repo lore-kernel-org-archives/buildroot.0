@@ -1,87 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C401C2BB3F
-	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 16:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85ADFC2BB3F
+	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 18:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3ABC282189;
-	Sat, 18 Nov 2023 16:27:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ABC282189
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C16C60C22;
+	Sat, 18 Nov 2023 18:13:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C16C60C22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LcwHqnRmeKJX; Sat, 18 Nov 2023 16:27:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CECEvWDOZlSN; Sat, 18 Nov 2023 18:13:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78FE082183;
-	Sat, 18 Nov 2023 16:27:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78FE082183
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AFBF01BF2F4
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 16:27:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5234A60838;
+	Sat, 18 Nov 2023 18:13:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5234A60838
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BDE551BF25F
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 18:13:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 800B841855
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 16:27:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 800B841855
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9467E400CB
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 18:13:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9467E400CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0h4a4UrCgDzp for <buildroot@lists.busybox.net>;
- Sat, 18 Nov 2023 16:27:30 +0000 (UTC)
-X-Greylist: delayed 3090 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 18 Nov 2023 16:27:30 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CD8141841
-Received: from out203-205-251-53.mail.qq.com (out203-205-251-53.mail.qq.com
- [203.205.251.53])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3CD8141841
- for <buildroot@buildroot.org>; Sat, 18 Nov 2023 16:27:29 +0000 (UTC)
-X-QQ-FEAT: oHWrrGTW1dC2rQ4SYB6o3zego2AKJXPB
-X-QQ-SSF: 00000000000000F0000000000000
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-X-QQ-XMAILINFO: Mi/i+wq2NsJqzhHsIVvRy8M3mxo/XYdsu+X3jTF0zVPbKcJQYqP+hrzl6letiG
- DR8q+8MPjnIzEFFcBYFawhBvPmgM68YK921QSPYr8h3R0fquPTt7qHm3pnz1BlyEtXFy4aUomADLd
- mxLdbyBHqn1y8BGiC/2fPOXBB3MKQJBwf28MU+lLqAC7vhtZNnQw4RyEPMjr+QJV91/gObh+8nGql
- zktzWSc29hOO32II+0q9fLPLIsycu/L54wa1zAyRY51+umR4A4QxIn2QYBqAklJm2RP3rN/wYv+Qx
- DZEuXcHsrj38ybeYWtsrs8w3MNnS58+9JBpgVSG4RUdVUaJC2tucbtB8gVuFUT0GKyoy5dE8uM7/2
- oyttTUzY9IceFD/y0AqqMcxJSPDc9PLJbs0yVjTWoQS1gOfyVua+87X6TtmKegsSmAeayl7orDe6b
- 518jFf/mYbLO1mQAHBQibMXNYtyCzqCw8oCMM74s1BrLpKi6t1wmD6K2roSZMxtu6uLNlxiv/7qnh
- 2fpNHGUMFYfzLz79f3MibnTwWjHio2ZMXOhu7oX318OpzuMjqLDjyUahgnzbAAPQwPeL/yn9ktdaf
- 2osMHrSE3aNGxnHfLN79ICo5Kkw5UXtzHZnkKHHjwfRNxN8KSKAAMdHHLkMyrRZbxG/q6DyE1MvNl
- MddvfvEuGF3Om2ohomZABT2+SkAMJ+pF9+0wX7ZdHH6MBjLgTjVi/NMjI7i9OyT9fQEA7fV2sjJhj
- pCllsLjZwU1cFxJBrGfI6DMxZEV4CwR3LuvSI+ZitWAfeGr1Mw6DmdG8r5VkI2ZEvIhMsam3fHeT3
- 9Lj5h0url38lVQ7UfiCmbcj9SXlBDbIZAGGjhv0BgFBW5vg7Teu9i9MYoO+pJ6Oz4fOKwyYapjAJ4
- 61hQLkdM0IeAMF/VMjW5Tu3GOGIMkBxGvtiiGpfTuN3vS/GtcFXIS0NEnWIkig0TFufaBCQCDZec1
- uaxwPT1oflgPWPn7ApSdQcEIGaiTY=
-X-HAS-ATTACH: no
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 120.245.14.161
-In-Reply-To: <20231118162041.GH996011@scaer>
-References: <tencent_D6A6E9BF418910070340A731CA97A2A5C606@qq.com>
- <20231118162041.GH996011@scaer>
-X-QQ-STYLE: 
-X-QQ-mid: webmail281t1700324832t6382734
-To: "=?ISO-8859-1?B?WWFubiBFLiBNT1JJTg==?=" <yann.morin.1998@free.fr>
-Mime-Version: 1.0
-Date: Sun, 19 Nov 2023 00:27:12 +0800
-X-Priority: 3
-Message-ID: <tencent_DC70840134189F7E29598A6CB2FFE797280A@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id srxO6plA3kaJ for <buildroot@lists.busybox.net>;
+ Sat, 18 Nov 2023 18:13:19 +0000 (UTC)
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 52C9E400DA
+ for <buildroot@buildroot.org>; Sat, 18 Nov 2023 18:13:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52C9E400DA
+Received: from pps.filterd (m0346902.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 3AIHxsau015138; Sat, 18 Nov 2023 18:13:18 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3uepn9t6sq-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Sat, 18 Nov 2023 18:13:18 +0000
+Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 3AIIDGK2021139
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Sat, 18 Nov 2023 18:13:17 GMT
+Received: from help.localdomain (snat-utc-mailhub.rockwellcollins.com
+ [10.172.224.19])
+ by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 3AIIDFDD013755
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Sat, 18 Nov 2023 18:13:16 GMT
+X-Received: from bspbox.kirk (kirk.rockwellcollins.lab [10.148.204.208])
+ by help.localdomain (Postfix) with ESMTP id A145220098;
+ Sat, 18 Nov 2023 12:13:15 -0600 (CST)
+To: buildroot@buildroot.org
+Date: Sat, 18 Nov 2023 18:13:08 +0000
+Message-ID: <20231118181308.55690-1-brandon.maier@collins.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-18_14,2023-11-17_01,2023-05-22_02
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-18_14,2023-11-17_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ malwarescore=0 spamscore=0
+ mlxlogscore=806 mlxscore=0 phishscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
+ definitions=main-2311180138
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ phishscore=0 mlxscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=897 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
+ definitions=main-2311180139
+X-Proofpoint-ORIG-GUID: wTKQZj2AakXPGKFYgbdUS1Ji_xsFywgd
+X-Proofpoint-GUID: wTKQZj2AakXPGKFYgbdUS1Ji_xsFywgd
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ priorityscore=1501 mlxlogscore=831 bulkscore=0 suspectscore=0
+ impostorscore=0 mlxscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0
+ spamscore=0 adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311180138
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=qq.com; s=s201512; 
- t=1700324833; bh=S23QZJRXTv1ObFfaupPulwIdVaMv6uJMoj25sfNIpJk=;
- h=In-Reply-To:References:From:To:Cc:Subject:Date;
- b=X6DDZHuqDuYeRzLTT+ftuUwzEBvxRArcSJRLvU9lCkOSvd85FvlYbkK7THzLtoyeL
- rPd8jJrlpKBjRdCww05WrlDXenyoxYIb6BP4PCoKh+NBJetxl/KdX2GNL/JD1PxqXS
- kac4kZfZFtg2A702H3w1wgoOqVG0sA/3u9W+Dy/A=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.a=rsa-sha256
- header.s=s201512 header.b=X6DDZHuq
-Subject: Re: [Buildroot] [PATCH 1/1 RESEND] package/wiringX: add GPIO
- library wiringX
+ d=collins.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=POD051818; bh=rXMik++7ptkTDj4wpi0HVOnH/kKmuJM8+3dLIw9E0nA=;
+ b=Y2wC2ITjwWlA4A7yXjbdg9KzUToIHwoieJuht6eXmApQE5K/pDBFED1zYoZNJMUkJfTA
+ 6idHrZtkqI1ESvcqpVzWzrFwTX3p4UE0k0aRu0dGTpqFjWHeeEFcQep6Geh0JBe4D6VO
+ ONAHcRvDReO7aubASQAMdRGQSFia7y1DPU78R17q78iAJq1gaIsHf5Q/L0tl49f9+qeX
+ M0wQ0+b4hQI4TclJQ4uN2L70E24Qx87db2HsgO0wwdJkc9YKqcxepj75+R5dEW+Qy/ea
+ yWsm7Up98uN1DAoUb3hVmbJSh8kmvdK4UIeA6LuqHQUGmHT/vV9B0TvAOj7t0G2FfaAE 5A== 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
+ header.a=rsa-sha256 header.s=POD051818 header.b=Y2wC2ITj
+Subject: [Buildroot] [PATCH 1/1] package/Makefile.in: add PARALLEL_JOBS to
+ post-build/post-image scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,57 +109,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: hanyuan-z via buildroot <buildroot@buildroot.org>
-Reply-To: =?ISO-8859-1?B?aGFueXVhbi16?= <hanyuan-z@qq.com>
-Cc: =?ISO-8859-1?B?cy5tYXJ0aW40OQ==?= <s.martin49@gmail.com>,
- =?ISO-8859-1?B?YnVpbGRyb290?= <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============4312870962969938132=="
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Brandon Maier <brandon.maier@collins.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
+Post-build, post-image, and other build scripts may run some commands in
+parallel, for example to parallelize xargs, Makefiles, etc. Export
+PARALLEL_JOBS to these scripts so they can enforce the same job limits
+that other Buildroot packages use.
 
---===============4312870962969938132==
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_6558E5E0_153B4120_4651AEA9"
-Content-Transfer-Encoding: 8Bit
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+---
+ docs/manual/customize-post-image.adoc | 4 ++--
+ docs/manual/customize-rootfs.adoc     | 1 +
+ docs/manual/debugging-buildroot.adoc  | 1 +
+ package/Makefile.in                   | 3 ++-
+ 4 files changed, 6 insertions(+), 3 deletions(-)
 
-This is a multi-part message in MIME format.
-
-------=_NextPart_6558E5E0_153B4120_4651AEA9
-Content-Type: text/plain;
-	charset="ISO-8859-1"
-Content-Transfer-Encoding: base64
-
-SGVsbG8gWWFubiwNCg0KVGhhbmtzIGZvciB5b3VyIHBhdGllbmNlIGFuZCBoZWxwISBOb3cg
-SSBhbSBtb3JlIGNsZWFyIGFib3V0IHRoZSB3aG9sZSBzaXR1YXRpb24uIFRoaXMgbWF0dGVy
-IGNvdWxkIGJlIHRlbXBvcmFyaWx5IG1hcmtlZCBhcyBzb2x2ZWQuIFRoYW5rcyBhZ2FpbiBm
-b3IgeW91ciB1bmRlcnN0YW5kaW5nIQ0KDQoNCllvdXJzLA0KSGFueXVhbg==
-
-------=_NextPart_6558E5E0_153B4120_4651AEA9
-Content-Type: text/html;
-	charset="ISO-8859-1"
-Content-Transfer-Encoding: base64
-
-SGVsbG8gWWFubiw8ZGl2Pjxicj48L2Rpdj48ZGl2PlRoYW5rcyBmb3IgeW91ciBwYXRpZW5j
-ZSBhbmQgaGVscCEgTm93IEkgYW0gbW9yZSBjbGVhciBhYm91dCB0aGUgd2hvbGUgc2l0dWF0
-aW9uLiBUaGlzIG1hdHRlciBjb3VsZCBiZSB0ZW1wb3JhcmlseSBtYXJrZWQgYXMgc29sdmVk
-LiBUaGFua3MgYWdhaW4gZm9yIHlvdXIgdW5kZXJzdGFuZGluZyE8L2Rpdj48ZGl2Pjxicj48
-L2Rpdj48ZGl2PllvdXJzLDwvZGl2PjxkaXY+SGFueXVhbjwvZGl2Pg==
-
-------=_NextPart_6558E5E0_153B4120_4651AEA9--
-
-
---===============4312870962969938132==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/docs/manual/customize-post-image.adoc b/docs/manual/customize-post-image.adoc
+index 5308093d06..4197cf6710 100644
+--- a/docs/manual/customize-post-image.adoc
++++ b/docs/manual/customize-post-image.adoc
+@@ -28,8 +28,8 @@ different sets of arguments to each script.
+ 
+ Again just like for the post-build scripts, the scripts have access to
+ the environment variables +BR2_CONFIG+, +HOST_DIR+, +STAGING_DIR+,
+-+TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+ and
+-+BASE_DIR+.
+++TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+, +BASE_DIR+,
++and +PARALLEL_JOBS+.
+ 
+ The post-image scripts will be executed as the user that executes
+ Buildroot, which should normally _not_ be the root user. Therefore, any
+diff --git a/docs/manual/customize-rootfs.adoc b/docs/manual/customize-rootfs.adoc
+index d5d8b9288f..43ece5a332 100644
+--- a/docs/manual/customize-rootfs.adoc
++++ b/docs/manual/customize-rootfs.adoc
+@@ -69,6 +69,7 @@ In addition, you may also use these environment variables:
+   - +BINARIES_DIR+: the place where all binary files (aka images) are
+     stored
+   - +BASE_DIR+: the base output directory
++  - +PARALLEL_JOBS+: the number of jobs to use when running parallel processes.
+ 
+ Below three more methods of customizing the target filesystem are
+ described, but they are not recommended.
+diff --git a/docs/manual/debugging-buildroot.adoc b/docs/manual/debugging-buildroot.adoc
+index f575fc48ee..b9068ead52 100644
+--- a/docs/manual/debugging-buildroot.adoc
++++ b/docs/manual/debugging-buildroot.adoc
+@@ -41,3 +41,4 @@ The script has access to the following variables:
+   - +BINARIES_DIR+: the place where all binary files (aka images) are
+     stored
+   - +BASE_DIR+: the base output directory
++  - +PARALLEL_JOBS+: the number of jobs to use when running parallel processes.
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 9fbe960759..796be6fda8 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -341,7 +341,8 @@ EXTRA_ENV = \
+ 	BR2_DL_DIR=$(BR2_DL_DIR) \
+ 	BUILD_DIR=$(BUILD_DIR) \
+ 	CONFIG_DIR=$(CONFIG_DIR) \
+-	O=$(CANONICAL_O)
++	O=$(CANONICAL_O) \
++	PARALLEL_JOBS=$(PARALLEL_JOBS)
+ 
+ ################################################################################
+ # settings we need to pass to configure
+-- 
+2.41.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4312870962969938132==--
-
