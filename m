@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E2EFC2BB3F
-	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 14:00:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 226CDC2BB3F
+	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 14:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C44F7410D4;
-	Sat, 18 Nov 2023 14:00:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C44F7410D4
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD26640981;
+	Sat, 18 Nov 2023 14:00:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD26640981
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fdLCFrzn6BCo; Sat, 18 Nov 2023 14:00:09 +0000 (UTC)
+	with ESMTP id XqTr1BPB9GnN; Sat, 18 Nov 2023 14:00:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 209ED40997;
-	Sat, 18 Nov 2023 14:00:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 209ED40997
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0B54F1BF2C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id D74CA4171B;
+	Sat, 18 Nov 2023 14:00:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D74CA4171B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6909C1BF2C2
  for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 14:00:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E665B60AA4
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 14:00:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E665B60AA4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41B21403C4
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 14:00:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41B21403C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xf_TzgkIfjMx for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EYKqvsfWb54B for <buildroot@lists.busybox.net>;
  Sat, 18 Nov 2023 14:00:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D5E560A9A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EC4F400DD
  for <buildroot@buildroot.org>; Sat, 18 Nov 2023 14:00:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D5E560A9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EC4F400DD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1688686DFC; Sat, 18 Nov 2023 14:00:05 +0000 (UTC)
+ id 24FAA86EA2; Sat, 18 Nov 2023 14:00:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 Nov 2023 14:57:16 +0100
+Date: Sat, 18 Nov 2023 14:57:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0a1d415dc325ab95f43b750f2ec153db1e9f6ddf
-X-Git-Newrev: 986a160cbe5c492acfda9bbf2048b1501d570072
+X-Git-Oldrev: 986a160cbe5c492acfda9bbf2048b1501d570072
+X-Git-Newrev: 1cb0853489b8b908c56ff7e770aa940b5ed992ec
 X-Patchwork-Hint: ignore
-Message-Id: <20231118140005.1688686DFC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/eza: bump to version
- 0.16.0
+Message-Id: <20231118140005.24FAA86EA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/procs: bump to version
+ 0.14.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=986a160cbe5c492acfda9bbf2048b1501d570072
+commit: https://git.buildroot.net/buildroot/commit/?id=1cb0853489b8b908c56ff7e770aa940b5ed992ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-https://github.com/eza-community/eza/releases/tag/v0.16.0
+https://github.com/dalance/procs/releases/tag/v0.14.3
 
 Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/eza/eza.hash | 2 +-
- package/eza/eza.mk   | 2 +-
+ package/procs/procs.hash | 2 +-
+ package/procs/procs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eza/eza.hash b/package/eza/eza.hash
-index 39923ceb48..64f46759d7 100644
---- a/package/eza/eza.hash
-+++ b/package/eza/eza.hash
+diff --git a/package/procs/procs.hash b/package/procs/procs.hash
+index 1c2fb5c3d5..19832e3897 100644
+--- a/package/procs/procs.hash
++++ b/package/procs/procs.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  2dac8aa41433eeaa07c4eabdf557b7e134c3fda9ba9edb8ab57959354856e20c  eza-0.14.0.tar.gz
-+sha256  11e6127a615744b52d52d66ebcdf9e5366f62746e8123b3eec00e35a057db988  eza-0.16.0.tar.gz
- sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
-diff --git a/package/eza/eza.mk b/package/eza/eza.mk
-index a327de0dcc..b11c1a1e7f 100644
---- a/package/eza/eza.mk
-+++ b/package/eza/eza.mk
+-sha256  643b7ba4b769ee9f336d441ecdac779c3d52e5719a15c14bb0acb3609ce1cd99  procs-0.14.0.tar.gz
++sha256  2f9fdbcf7324952e22565ded58148fa40387b5a5f8723996620d6c4588925713  procs-0.14.3.tar.gz
+ sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
+diff --git a/package/procs/procs.mk b/package/procs/procs.mk
+index a074ee1311..8567bf3da3 100644
+--- a/package/procs/procs.mk
++++ b/package/procs/procs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EZA_VERSION = 0.14.0
-+EZA_VERSION = 0.16.0
- EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
- EZA_LICENSE = MIT
- EZA_LICENSE_FILES = LICENCE
+-PROCS_VERSION = 0.14.0
++PROCS_VERSION = 0.14.3
+ PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
+ PROCS_LICENSE = MIT
+ PROCS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
