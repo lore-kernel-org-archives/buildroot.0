@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A24C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:14:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BBF1C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:14:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82B9941720;
-	Mon,  4 Dec 2023 20:14:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82B9941720
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC77141728;
+	Mon,  4 Dec 2023 20:14:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC77141728
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jXw8cj-jkjyx; Mon,  4 Dec 2023 20:14:34 +0000 (UTC)
+	with ESMTP id Nwfo8Bg-2XyV; Mon,  4 Dec 2023 20:14:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A42384177A;
-	Mon,  4 Dec 2023 20:14:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A42384177A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 17F891BF977
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AD3041720;
+	Mon,  4 Dec 2023 20:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AD3041720
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 22A151BF97A
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3CE308216F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CBD360FF9
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CE308216F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CBD360FF9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EcUxvr6lBLw6 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8kgmNiZpmhsN for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C7E4C80BDE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FC0860592
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7E4C80BDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FC0860592
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5ED2879B9; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
+ id 7046C879BA; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 Nov 2023 16:06:01 +0100
+Date: Sat, 18 Nov 2023 15:16:43 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: da909bf2383a9f47a181d41f285a2e73565cdfc5
-X-Git-Newrev: b41d4494a64b538ca0df2b3f18d19ae0a2e8a46a
+X-Git-Oldrev: 44f138f44087a172c87865563ca6e3392f9e23df
+X-Git-Newrev: 40038a56324cde8cbe9ae8be44f90828498a830f
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201327.C5ED2879B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-logbook: bump to version
- 1.7.0.post0
+Message-Id: <20231204201327.7046C879BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8192eu: bump to version
+ 2023-11-13 on branch 5.11.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b41d4494a64b538ca0df2b3f18d19ae0a2e8a46a
+commit: https://git.buildroot.net/buildroot/commit/?id=40038a56324cde8cbe9ae8be44f90828498a830f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+It supports up to Linux 6.7.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-logbook/python-logbook.hash | 4 ++--
- package/python-logbook/python-logbook.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/rtl8192eu/rtl8192eu.hash | 2 +-
+ package/rtl8192eu/rtl8192eu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
-index d77acad76e..8761945de6 100644
---- a/package/python-logbook/python-logbook.hash
-+++ b/package/python-logbook/python-logbook.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/logbook/json
--md5  719970ea22dd274797bb4328161d700f  Logbook-1.5.3.tar.gz
--sha256  66f454ada0f56eae43066f604a222b09893f98c1adc18df169710761b8f32fe8  Logbook-1.5.3.tar.gz
-+md5  cbb7e5fb2d6325f42a323b0000127393  Logbook-1.7.0.post0.tar.gz
-+sha256  a5e8016701ca3beea6a390b0ba1541037f663543ca508ccd36cfdc841639cdd7  Logbook-1.7.0.post0.tar.gz
- # Locally computed sha256 checksums
- sha256  2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
-diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
-index 8f02e9b945..e47e78d26e 100644
---- a/package/python-logbook/python-logbook.mk
-+++ b/package/python-logbook/python-logbook.mk
-@@ -4,11 +4,12 @@
+diff --git a/package/rtl8192eu/rtl8192eu.hash b/package/rtl8192eu/rtl8192eu.hash
+index 8528689670..e27acba124 100644
+--- a/package/rtl8192eu/rtl8192eu.hash
++++ b/package/rtl8192eu/rtl8192eu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  665a8f857b3881554edd6d5e5e6c8f058b8ecfecf921817993e861d48e214d36  rtl8192eu-ac8517206e14f70babbeed68e136ee23c85cba3d.tar.gz
++sha256  2326902c27aee022bd1f6e49e8dbf789b08613e660385c23ded8038074d7929b  rtl8192eu-a928f08c1dd4f9a1e84d85811a543e974551bc4f.tar.gz
+diff --git a/package/rtl8192eu/rtl8192eu.mk b/package/rtl8192eu/rtl8192eu.mk
+index 9ae29d9940..a2fde6fef0 100644
+--- a/package/rtl8192eu/rtl8192eu.mk
++++ b/package/rtl8192eu/rtl8192eu.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LOGBOOK_VERSION = 1.5.3
-+PYTHON_LOGBOOK_VERSION = 1.7.0.post0
- PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
--PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/2f/d9/16ac346f7c0102835814cc9e5b684aaadea101560bb932a2403bd26b2320
-+PYTHON_LOGBOOK_SITE = https://files.pythonhosted.org/packages/cc/98/c1d93c1d7593f58515333a6217aa4ae647d9ee9c1aa2dfdf77b28b7bb7c7
- PYTHON_LOGBOOK_SETUP_TYPE = setuptools
- PYTHON_LOGBOOK_LICENSE = BSD-3-Clause
- PYTHON_LOGBOOK_LICENSE_FILES = LICENSE
-+PYTHON_LOGBOOK_DEPENDENCIES = host-python-cython
+-RTL8192EU_VERSION = ac8517206e14f70babbeed68e136ee23c85cba3d
++RTL8192EU_VERSION = a928f08c1dd4f9a1e84d85811a543e974551bc4f
+ RTL8192EU_SITE = $(call github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
+ RTL8192EU_LICENSE = GPL-2.0
  
- $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
