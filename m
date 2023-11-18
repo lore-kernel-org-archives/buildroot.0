@@ -4,67 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08ADDC2BB3F
-	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 15:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93C6DC2BB3F
+	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 15:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A42B7404A1;
-	Sat, 18 Nov 2023 15:16:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A42B7404A1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23AB9400EC;
+	Sat, 18 Nov 2023 15:31:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23AB9400EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NK4k0FRY5Qdz; Sat, 18 Nov 2023 15:16:44 +0000 (UTC)
+	with ESMTP id BhH515gvTqXB; Sat, 18 Nov 2023 15:31:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79CAF40519;
-	Sat, 18 Nov 2023 15:16:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79CAF40519
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A3C01BF47E
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 15:16:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D921404A1;
+	Sat, 18 Nov 2023 15:31:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D921404A1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D3F6B1BF38C
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 15:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52AC582198
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 15:16:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52AC582198
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC13A4161C
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 15:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC13A4161C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GF8SQ6AH6w4v for <buildroot@lists.busybox.net>;
- Sat, 18 Nov 2023 15:16:40 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4F1A082197
- for <buildroot@buildroot.org>; Sat, 18 Nov 2023 15:16:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F1A082197
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4173:7e62:c00c:757b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9076478050A;
- Sat, 18 Nov 2023 16:16:35 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 18 Nov 2023 16:16:35 +0100
-Date: Sat, 18 Nov 2023 16:16:35 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Antoine Coutant <antoine.coutant@smile.fr>
-Message-ID: <20231118151635.GG996011@scaer>
-References: <20231117155033.69419-1-antoine.coutant@smile.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231117155033.69419-1-antoine.coutant@smile.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1700320598;
- bh=qtUZWJOy/zjGNHUf/rfg73VbYCMf9/tTWbeZLHR9sos=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ZmR2Yjq+JfE+PaV3yXn9mfpnsrZ4lAIWONuz8Cq+sCWE6f7oTWBPa+M61UvENGRBW
- 3XW0upHP3wHwXwrDtjWF/aOvvAmYUhtKO0G7gZJHQLsQmZgipGGDeewepWf23zKFJy
- SNVIMZtoDiGOSufQatUe0bTIMGb2vDHkkOW6nagYZk+yVl1aA99gLDrOq6f0X80nFl
- +s/P6SJLl90NLezdhBElBFkcDJeao7PoJRrVc45RWzoRz0iTvFWFw9k3FQBmmlkbB9
- y88EC37s2VsO+PPTx5zFCEdd0a8+XO/5JyZfJK2Cl1GPiNT+YDdokPlAh58ubgUPds
- aRCIitYuI3G4Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZmR2Yjq+
-Subject: Re: [Buildroot] [PATCH] board/khadas/vim3: add the path of the
- devicetree in extlinux.conf
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aUb2_oHJQzYm for <buildroot@lists.busybox.net>;
+ Sat, 18 Nov 2023 15:31:22 +0000 (UTC)
+Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com
+ [203.205.221.164])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A753041498
+ for <buildroot@buildroot.org>; Sat, 18 Nov 2023 15:31:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A753041498
+X-QQ-FEAT: oHWrrGTW1dC2rQ4SYB6o3zego2AKJXPB
+X-QQ-SSF: 00000000000000F0000000000000
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+X-QQ-XMAILINFO: OfOeDWHjrjE/1G4FI7nT3o0tt3EGVUZo59VdBLsGQTJnUYKsP3ikiaQ/2gNbBt
+ EbdkoB5C5xaQZhkdSsiYuIYdz+YYBkwLPdsv9DTFqK8ZwQRRiHDw1lPE+cDVQvOXyRdmD6LRtoIRX
+ ike7Y/yZwN+Ws+I7L/zUxCNCJ/Wkx6J5dCyFx2MD9TdcVYSBsW1pZGdFfDAwyZZwerWlXjt+Gf5mB
+ YvxjXjE2zDOohEQ0P6somp4LhhgfMHxb7rz6C3n9t47nh2I6zY/qlTJ41VzXIY2jMNrtU70lEAETw
+ Ixodg5H5u5vOR03Xfn/tieHH1Hyuos/XNCYCXvnuOX6yiNFvphpNCkLZMhh+EVaOiZ3PDMzM4Sq1X
+ ROfIfk3PavyOVxddZ/JfOfQ/nY26nNKTjSs+8sCgoa4W6fJqIehJqudJo/Xtcx/DuyI88d403hPXx
+ zNXDJ2n7WITHxQtl3Bk3MQuHU+o/yLXL/JORfOBb/tD1pgr7V7+JA279Hxx3OWgtZIVelUClX9xTa
+ nP3pQd+L+HkOP97ERz0+6nSTHMP4YLI5VQbjPvrE1SU2ZJKHuItDiL2E9i3nLc0O436fDvpXLp72B
+ hFeEtZVmz/qEaQhM0cJyijE4YYdh3nJvt6XGoTz5QJmZhDt74sCzhHocQEUtciOu/e8jGEaHYuRrS
+ LaSTJ/KKtl7xIw0JkYdDIufD5WMumgmh8N2qiXcUf1PiZ6v6YOpeTvrkOvey7sfuWNnV/UCO/ZyT+
+ yXUGOrJd93Oe22dQy37UzIIaEHajL0Axpdf8fvYIh5+C8ggpYwKSVtJSJdbIuSAqlUXWbI/VXXB2s
+ dSYCOJCcmARHhKnXgFJu4TvSlmGFZT8+KUIZ1wGJkocB1Re2j2UCyQYzVUScuCEDSTuArA49jX2Nl
+ bTnuausUFghqzADXqnJpfM5+C7zSn/4JBkgRUrKBcPtxMZNZFplquYSl55TEJcgQxnf5DMMzczsGd
+ F1Af2Q/zp3uEwBEH99WMcZEg5ko90Xiw/2t3Pi9dyGIZnsz9TPyaEiJ0I7es4135Tupl4HEfpcMc7
+ gEWS01tKhe66LQ77xfnFvkmTwgvEia2+2y3OT/kZqC6iU5D0KeEWyHUqv7LJnt4D/mgAPx+qL/hDK
+ vN7qOeRQBz19gvCZ2oukWmtc
+X-HAS-ATTACH: no
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 120.245.14.161
+X-QQ-STYLE: 
+X-QQ-mid: webmail281t1700321473t770734
+To: "=?gb18030?B?eWFubi5tb3Jpbi4xOTk4?=" <yann.morin.1998@free.fr>
+Mime-Version: 1.0
+Date: Sat, 18 Nov 2023 23:31:12 +0800
+X-Priority: 3
+Message-ID: <tencent_D6A6E9BF418910070340A731CA97A2A5C606@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=qq.com; s=s201512; 
+ t=1700321473; bh=jOjhV/ugfFmxw94OmfHCNzGCSg4JqcbImSfIoNVe8bQ=;
+ h=From:To:Cc:Subject:Date;
+ b=XL8n16X4tACyqek4lwsnhkD3ZLISi8jg941rp0K4qyOuVmIeC979vAaxtwvQDlJbg
+ SR7li2nKoFSvm35nZMLHmGiH8/vMvm+K2Tp8JW92uPn2E+dURXefmf8FUa3NVUMw6z
+ dIJeuZ8CGsaUVjKTaAc1OcCMP/4kj/ImvW/sWIJE=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.a=rsa-sha256
+ header.s=s201512 header.b=XL8n16X4
+Subject: Re: [Buildroot] [PATCH 1/1 RESEND] package/wiringX: add GPIO
+ library wiringX
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,96 +90,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: romain.naour@smile.fr, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: hanyuan-z via buildroot <buildroot@buildroot.org>
+Reply-To: =?gb18030?B?aGFueXVhbi16?= <hanyuan-z@qq.com>
+Cc: =?gb18030?B?cy5tYXJ0aW40OQ==?= <s.martin49@gmail.com>,
+ =?gb18030?B?aGFueXVhbi16?= <hanyuan-z@qq.com>,
+ =?gb18030?B?YnVpbGRyb290?= <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============8334608341649478943=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Antoine, All,
+This is a multi-part message in MIME format.
 
-On 2023-11-17 16:50 +0100, Antoine Coutant spake thusly:
-> Without this patch, the devicetree used by linux at runtime is
-> the u_boot devicetree.
-> 
-> While using rusticl on the khadas vim3 board with the default
-> extlinux.conf, mesa's panfrost driver return "gpu shed timeout"
-> errors. Adding "devicetree /meson-g12b-khadas-vim3.dtb" to the
-> extlinux.conf file solve the problem. Linux successfully boot
-> with and without the change but without this patch the devicetree
-> used by linux at runtime is the u-boot devicetree.
-> 
-> The differences between the u-boot devicetree and the linux
-> devicetree are:
-> -The u-boot devicetree contains two more nodes than the linux devicetree. Those nodes are:
->     - smbios : compatible option is set to "u-boot,sysinfo-smbios".
->     - __symbols__ : present if -@ or --symbols is used during the devicetree compilation.
-> -Most of u-boot devicetree nodes have a "phandle" property.
-> -SoC and vpu have a "u-boot,dm-pre-reloc;" property.
-> -Some aliases are different.
-> -The u-boot operating points tables contains more nodes.
-> The size difference between the u-boot devicetree and the linux
-> devicetree is approximately 3.5kB.
-> 
-> During runtime, the linux devicetree have the "phandle" and
-> "u-boot,dm-pre-reloc;" properties and the smbios node. So,
-> The runtime devicetree is the one from u-boot.
-> 
-> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
+--===============8334608341649478943==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_6558D8C0_1372C520_1463393D"
+Content-Transfer-Encoding: 8Bit
 
-Thanks for the extensive description!
+This is a multi-part message in MIME format.
 
-Applied to master, thanks.
+------=_NextPart_6558D8C0_1372C520_1463393D
+Content-Type: text/plain;
+	charset="gb18030"
+Content-Transfer-Encoding: base64
 
-Regards,
-Yann E. MORIN.
+SGVsbG8gWWFubiwNCg0KSSBhcG9sb2dpemUgZm9yIG15IG1pc3VuZGVyc3RhbmRpbmcgb2Yg
+dGhlIFJFU0VORCB3b3JkLiBCdXQgSaGvZCBsaWtlIHRvIGdpdmUgbXkgcmVhc29ucyBmb3Ig
+dGhlIGVtYWlsoa9zIHJlc2VuZGluZy4NCg0KVGhpcyBlbWFpbCBhbmQgdGhlIGFjY29tcGFu
+eWluZyBwYXRjaCBoYWQgYmVlbiBzZW50IGZvciBtb3JlIHRoYW4gb25lIG1vbnRoLCBob3dl
+dmVyLCB1bmZvcnR1bmF0ZWx5LCBJIHN0aWxsIGdldCBubyByZXBseSwgZXZlbiBpZiBJIHdy
+aXRlIGFuIGVtYWlsIGFnYWluIHRvIFNhbXVlbC4gSSBhbSBub3QgY2xlYXIgd2hhdCBoYXBw
+ZW5lZC4gTWF5YmUgbXkgZW1haWwgaXMgYmxvY2tlZCBieSBnbWFpbCBieSBkZWZhdWx0PyBT
+byBJIHRyaWVkIHRvIGVtYWlsIHRvIHlvdS4NCg0KT25jZSBhZ2FpbiwgSSBhbSBzaW5jZXJl
+bHkgc29ycnkgZm9yIGFueSBpbmNvbnZlbmllbmNlIGNhdXNlZCBieSBteSByZXBlYXRlZCBh
+dHRlbXB0cyB0byBjb250YWN0IHlvdS4gSSBhcHByZWNpYXRlIHlvdXIgdW5kZXJzdGFuZGlu
+ZyBhbmQgYXNzaXN0YW5jZSBpbiB0aGlzIG1hdHRlci4NCg0KVGhhbmtzIQ0KDQpLaW5kIHJl
+Z2FyZHMsDQpIYW55dWFu
 
-> ---
-> 
-> Without this patch, there is 18 lines modified in the runtime
-> devicetree compared to the u-boot devicetree. These 18 same lines
-> are also modified in the runtime devicetree with this patch
-> compared to the linux devicetree. Those lines may be modified by
-> u-boot during the boot process.
-> The 18 lines added/modified by u-boot during the boot process are:
-> -The comments about the device tree characteristics are modified.
-> -The memreserve is added.
-> -A serial number is added.
-> -The u-boot version is added.
-> -The bootargs are added.
-> -The CVBS framebuffer is enabled.
-> -The local-mac-address is set.
-> -The memory size is modified.
-> ---
->  board/khadas/vim3/extlinux.conf | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/board/khadas/vim3/extlinux.conf b/board/khadas/vim3/extlinux.conf
-> index fede99b502..2b1544a5cc 100644
-> --- a/board/khadas/vim3/extlinux.conf
-> +++ b/board/khadas/vim3/extlinux.conf
-> @@ -1,4 +1,5 @@
->  default buildroot
->  label buildroot
->     kernel /Image
-> +   devicetree /meson-g12b-a311d-khadas-vim3.dtb
->  append root=/dev/mmcblk0p2 rootwait console=ttyAML0,115200
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+------=_NextPart_6558D8C0_1372C520_1463393D
+Content-Type: text/html;
+	charset="gb18030"
+Content-Transfer-Encoding: base64
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+SGVsbG8gWWFubiw8YnI+PGJyPkkgYXBvbG9naXplIGZvciBteSBtaXN1bmRlcnN0YW5kaW5n
+IG9mIHRoZSBSRVNFTkQgd29yZC4gQnV0IEmhr2QgbGlrZSB0byBnaXZlIG15IHJlYXNvbnMg
+Zm9yIHRoZSBlbWFpbKGvcyByZXNlbmRpbmcuPGJyPjxicj5UaGlzIGVtYWlsIGFuZCB0aGUg
+YWNjb21wYW55aW5nIHBhdGNoIGhhZCBiZWVuIHNlbnQgZm9yIG1vcmUgdGhhbiBvbmUgbW9u
+dGgsIGhvd2V2ZXIsIHVuZm9ydHVuYXRlbHksIEkgc3RpbGwgZ2V0IG5vIHJlcGx5LCBldmVu
+IGlmIEkgd3JpdGUgYW4gZW1haWwgYWdhaW4gdG8gU2FtdWVsLiBJIGFtIG5vdCBjbGVhciB3
+aGF0IGhhcHBlbmVkLiBNYXliZSBteSBlbWFpbCBpcyBibG9ja2VkIGJ5IGdtYWlsIGJ5IGRl
+ZmF1bHQ/IFNvIEkgdHJpZWQgdG8gZW1haWwgdG8geW91Ljxicj48YnI+T25jZSBhZ2Fpbiwg
+SSBhbSBzaW5jZXJlbHkgc29ycnkgZm9yIGFueSBpbmNvbnZlbmllbmNlIGNhdXNlZCBieSBt
+eSByZXBlYXRlZCBhdHRlbXB0cyB0byBjb250YWN0IHlvdS4gSSBhcHByZWNpYXRlIHlvdXIg
+dW5kZXJzdGFuZGluZyBhbmQgYXNzaXN0YW5jZSBpbiB0aGlzIG1hdHRlci48YnI+PGJyPlRo
+YW5rcyE8YnI+PGJyPktpbmQgcmVnYXJkcyw8YnI+SGFueXVhbg==
+
+------=_NextPart_6558D8C0_1372C520_1463393D--
+
+
+--===============8334608341649478943==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8334608341649478943==--
+
