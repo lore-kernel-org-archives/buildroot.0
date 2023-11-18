@@ -4,84 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9785EC54E76
-	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 19:45:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D10DDC2BB3F
+	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 20:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0666E60D53;
-	Sat, 18 Nov 2023 19:45:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0666E60D53
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6856A60D75;
+	Sat, 18 Nov 2023 20:13:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6856A60D75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S65KP78GMkA2; Sat, 18 Nov 2023 19:45:35 +0000 (UTC)
+	with ESMTP id m4Pw0ui_AosG; Sat, 18 Nov 2023 20:13:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A58760B3F;
-	Sat, 18 Nov 2023 19:45:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A58760B3F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A5E401BF34C
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 19:45:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB94260AC1;
+	Sat, 18 Nov 2023 20:13:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB94260AC1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A874F1BF277
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 20:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7CD6640162
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 19:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CD6640162
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8EE85417D7
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 20:13:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EE85417D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c3iu8Gc3xMLK for <buildroot@lists.busybox.net>;
- Sat, 18 Nov 2023 19:45:31 +0000 (UTC)
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 291F340106
- for <buildroot@buildroot.org>; Sat, 18 Nov 2023 19:45:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 291F340106
-Received: by mail-pj1-x1036.google.com with SMTP id
- 98e67ed59e1d1-28098ebd5aeso2551753a91.0
- for <buildroot@buildroot.org>; Sat, 18 Nov 2023 11:45:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700336729; x=1700941529;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=lDcpha3NUhsv3MEc2m0AHylHUbQDiMNcaEMdHANQ9YQ=;
- b=j7xjQJj2lNJxPTk+rJiHJ+wBG39F6PwQzTlsCGJeevf+2WaNp0RAm+0TMvai82Sazm
- Nk43Us1EnF64GnUV2qaDeUBntaiq8DRBGWa9ewtkiqRXp5C1h5RJQQFcjcPiA11/yW7x
- vHyyVQ5PNwdBOtfMk8s1PV/BxjgjO6kYbjl2ueMR261uL7pfWwS2nI7oNUNh2NKq/I8r
- RESvq13zwOIVK98M3AE7XMqDyuGME2xFRbf+9/BtR8kj2GFFvep2y3F6W6q7pBBjIDTP
- QoGnWbT3JGJciqOkt2Ua8u8Q4X7I6BV+J7Rm3/ARdFOyzhfKfxg3oHdonCvOYQj/XKsX
- N7TA==
-X-Gm-Message-State: AOJu0YyQqR3k/TELMbCK5WY7ggnFIX7l9FmyNs2BrCOhHKKTdX7LmsfI
- JpIj5SZPhAwaqnnWSnVYUwtCQN0DlQy8/qETiFPYOA==
-X-Google-Smtp-Source: AGHT+IHUMndC5Uxx9MSjPFuEgW5gAiN7o2+Ez4++9lT4ClGroCAtSt3FRQcV8EeZdAGaRQus8UDDkA==
-X-Received: by 2002:a17:90b:3ecb:b0:283:a71:63be with SMTP id
- rm11-20020a17090b3ecb00b002830a7163bemr2854731pjb.0.1700336729504; 
- Sat, 18 Nov 2023 11:45:29 -0800 (PST)
-Received: from DESKTOP-OI0KN2B.lan ([172.56.201.106])
- by smtp.gmail.com with ESMTPSA id
- nr2-20020a17090b240200b0027d0de51454sm5137688pjb.19.2023.11.18.11.45.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 Nov 2023 11:45:29 -0800 (PST)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qmXL-9rW9naC for <buildroot@lists.busybox.net>;
+ Sat, 18 Nov 2023 20:13:48 +0000 (UTC)
+Received: from smtpdh18-2.aruba.it (smtpdh18-2.aruba.it [62.149.155.133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AA15D417C7
+ for <buildroot@buildroot.org>; Sat, 18 Nov 2023 20:13:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA15D417C7
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 4RhIruXXJKAXe4RhIrJhm7; Sat, 18 Nov 2023 21:13:44 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sat, 18 Nov 2023 12:45:26 -0700
-Message-ID: <20231118194526.467059-1-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.42.0
+Date: Sat, 18 Nov 2023 21:13:43 +0100
+Message-Id: <20231118201343.3351692-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1700336729; x=1700941529;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lDcpha3NUhsv3MEc2m0AHylHUbQDiMNcaEMdHANQ9YQ=;
- b=KIUaIaxX9gMybslREz4xB/rSlQAkG3MKRJNKAj7mgSiAOqx7mmxuPJ9dmmw2MDkp55
- cyoHz2VZZ9k7rmYrlWwNvmk0lDJcT2UUQFt2S3XeBMqAcVUOkYZ20QTXzpNJm7fq9xHF
- gtlxt5aZhTD8M0phLYsqnya9P1PoSn8uAb728=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=KIUaIaxX
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: downgrade GCC version
- requirements to 10
+X-CMAE-Envelope: MS4xfD7RmT3jVZevx1Z0hScouv6dgkpTakoQqsYaCL53udlpfzTssA9Nbg5V7S3TWp6puyYGpnjg8Yq4exUXba//SZfWDr63vp4aiZHqMGQLtFmeicGH4RjH
+ ssJPT5FlwfPHvJd+X6SygABTY25LhLm8KtaIRAb//17rKJFmqgP2OzYFx5OJgemCLTAD1Se3hEeiyyUh0oHMLwKtXxzdNTv+JrG0DBwRKePWdRbhQ/8L0W0c
+ 9ijbnYRxK5Jsqo/PySiQ22zh7qDNMh08ciKs7t357BI=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1700338424; bh=u37CNfFn5mzXvtIf7Z3fjBJwLcxkP2VMI5934swpgOg=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=WZxUgtPbktpMkKH/tG6bi9EwV+ZCVIhprEFV8WrfcYD4LJ4H9RMTdMEa9c9pTnzOL
+ 30ysvncnNfpEMxLQ7pmGTCA3WVblyO5QZd7F85nqZzu8J8pnzzxSetnEyAvPQSQ7N4
+ EUGavLa2Gx6XJVkYSaCoYMt+CoXDhdqD+tqRmt/o31VavF2rWQqGA+8S1wvInpiWrK
+ k3xo1AMqlesS0KmaCPGumJ+Vz1bUcw9oDQbFJ1BwjmW+soUcnyASVDpS3TRAXVXCmm
+ MRZgcqxc0S53CdLshIfJSeMnlUzwLqrvkTfCVbuD28FrK1vEzn2TaADpm9cwHrEpa5
+ QAs65GMBKoJsQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=WZxUgtPb
+Subject: [Buildroot] [for-next] package/esp-hosted: bump to version
+ 2023-11-10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,53 +72,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-NodeJS requires GCC 10.1. However, GCC 10.1 is the first GCC release.
-As such, we can safely downgrade the GCC version requirements to 10.
+Drop local patch applied upstream:
+https://github.com/espressif/esp-hosted/commit/12b0ca9c46094c86eb76b5f0eaa626f868efaec8
 
-Tested with: run-tests tests.package.test_nodejs using Debian 11 and
-gcc 10.2.1.
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/nodejs/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ ...st-fix-build-failure-when-CONFIG_PM-.patch | 33 -------------------
+ package/esp-hosted/esp-hosted.hash            |  2 +-
+ package/esp-hosted/esp-hosted.mk              |  2 +-
+ 3 files changed, 2 insertions(+), 35 deletions(-)
+ delete mode 100644 package/esp-hosted/0001-esp_hosted_ng-host-fix-build-failure-when-CONFIG_PM-.patch
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 72770095d0..50d1360715 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -7,19 +7,19 @@ config BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+diff --git a/package/esp-hosted/0001-esp_hosted_ng-host-fix-build-failure-when-CONFIG_PM-.patch b/package/esp-hosted/0001-esp_hosted_ng-host-fix-build-failure-when-CONFIG_PM-.patch
+deleted file mode 100644
+index abbc64a434..0000000000
+--- a/package/esp-hosted/0001-esp_hosted_ng-host-fix-build-failure-when-CONFIG_PM-.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 56920e3ce04aa2eadb529a6787200789bf1c3925 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Wed, 9 Aug 2023 23:16:52 +0200
+-Subject: [PATCH] esp_hosted_ng: host: fix build failure when CONFIG_PM is not
+- defined
+-
+-wiphy->wowlan is not defined when CONFIG_PM is not enabled so let's
+-guard the assignment to wiphy->wowlan according to option CONFIG_PM.
+-
+-Upstream: https://github.com/espressif/esp-hosted/pull/254
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- esp_hosted_ng/host/esp_cfg80211.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/esp_hosted_ng/host/esp_cfg80211.c b/esp_hosted_ng/host/esp_cfg80211.c
+-index 70fdbb9773..d3c4108c29 100644
+---- a/esp_hosted_ng/host/esp_cfg80211.c
+-+++ b/esp_hosted_ng/host/esp_cfg80211.c
+-@@ -638,7 +638,9 @@ int esp_cfg80211_register(struct esp_adapter *adapter)
+- 	wiphy->max_scan_ie_len = 1000;
+- 	wiphy->max_sched_scan_ssids = 10;
+- 	wiphy->signal_type = CFG80211_SIGNAL_TYPE_MBM;
+-+#ifdef CONFIG_PM
+- 	wiphy->wowlan = &esp_wowlan_support;
+-+#endif
+- 
+- 	/* Advertise SAE support */
+- 	wiphy->features |= NL80211_FEATURE_SAE;
+--- 
+-2.34.1
+-
+diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
+index c17fe262a1..fa8c216a74 100644
+--- a/package/esp-hosted/esp-hosted.hash
++++ b/package/esp-hosted/esp-hosted.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3310845b2324bda5774b91bcdd3f47621126f4a0011a0f61e31b0ad4a44db2f5  esp-hosted-11e90f185a5a9922343e73e44032816a0e3ddedb.tar.gz
++sha256  b238a83d98dd77b123ca0ce879febe003098a64220ff25c297d272df7018f337  esp-hosted-63f12ead9c4a77d372b24f3420c85e9018bec80b.tar.gz
+ sha256  ed57d96d27be775b22f9571d3724ef84e0d0b8f24b805ec7f87a32189de19a9c  LICENSE
+diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
+index 7491c46512..a11ce47636 100644
+--- a/package/esp-hosted/esp-hosted.mk
++++ b/package/esp-hosted/esp-hosted.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 11, wchar, host gcc >= 11"
-+comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 10, wchar, host gcc >= 10"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
--		!BR2_HOST_GCC_AT_LEAST_11 || !BR2_TOOLCHAIN_GCC_AT_LEAST_11 || !BR2_USE_WCHAR
-+		!BR2_HOST_GCC_AT_LEAST_10 || !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_NODEJS
- 	bool "nodejs"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
--	depends on BR2_HOST_GCC_AT_LEAST_11
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+	depends on BR2_HOST_GCC_AT_LEAST_10
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
+-ESP_HOSTED_VERSION = 11e90f185a5a9922343e73e44032816a0e3ddedb
++ESP_HOSTED_VERSION = 63f12ead9c4a77d372b24f3420c85e9018bec80b
+ ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,$(ESP_HOSTED_VERSION))
+ ESP_HOSTED_DEPENDENCIES = linux
+ ESP_HOSTED_LICENSE = GPL-2.0
 -- 
-2.42.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
