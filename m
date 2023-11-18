@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9152BC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:14:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47357C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:14:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46862416F8;
-	Mon,  4 Dec 2023 20:14:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46862416F8
+	by smtp4.osuosl.org (Postfix) with ESMTP id F01194176D;
+	Mon,  4 Dec 2023 20:14:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F01194176D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tEWP8MSQz2iX; Mon,  4 Dec 2023 20:14:09 +0000 (UTC)
+	with ESMTP id ekqC0hU-aL78; Mon,  4 Dec 2023 20:14:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 999634175D;
-	Mon,  4 Dec 2023 20:14:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 999634175D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6AA691BF97D
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 387D941770;
+	Mon,  4 Dec 2023 20:14:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 387D941770
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 078A51BF31D
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FFB241753
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41FF74173C
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FFB241753
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41FF74173C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3EURx7SkyZoS for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rbDYX6zuw50O for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A9A64011A
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4752416C5
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A9A64011A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4752416C5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47F22879B7; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
+ id B138D879B6; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 Nov 2023 14:57:16 +0100
+Date: Sat, 18 Nov 2023 15:51:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0a1d415dc325ab95f43b750f2ec153db1e9f6ddf
-X-Git-Newrev: 986a160cbe5c492acfda9bbf2048b1501d570072
+X-Git-Oldrev: b6d4b0170fc181f86116aa3bcc39a538cce25144
+X-Git-Newrev: d153e58d13f262f96c6c7c9a2bc0d31b76c8973d
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201327.47F22879B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/eza: bump to version 0.16.0
+Message-Id: <20231204201327.B138D879B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: bump version to 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,47 +57,87 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3514524634031077091=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=986a160cbe5c492acfda9bbf2048b1501d570072
+--===============3514524634031077091==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d153e58d13f262f96c6c7c9a2bc0d31b76c8973d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/eza-community/eza/releases/tag/v0.16.0
+Removed backported patch:
+- https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
 
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+Updated ZFS test to pass this new version; drop the explicit /pool
+mountpoint option to rely on the default location (which happens to be
+/pool already).
+
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/eza/eza.hash | 2 +-
- package/eza/eza.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zfs/zfs.hash                      | 5 ++---
+ package/zfs/zfs.mk                        | 3 +--
+ support/testing/tests/package/test_zfs.py | 4 ++--
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/eza/eza.hash b/package/eza/eza.hash
-index 39923ceb48..64f46759d7 100644
---- a/package/eza/eza.hash
-+++ b/package/eza/eza.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2dac8aa41433eeaa07c4eabdf557b7e134c3fda9ba9edb8ab57959354856e20c  eza-0.14.0.tar.gz
-+sha256  11e6127a615744b52d52d66ebcdf9e5366f62746e8123b3eec00e35a057db988  eza-0.16.0.tar.gz
- sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
-diff --git a/package/eza/eza.mk b/package/eza/eza.mk
-index a327de0dcc..b11c1a1e7f 100644
---- a/package/eza/eza.mk
-+++ b/package/eza/eza.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index 3a73e5e94f..b02c49234a 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,6 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.1.12/zfs-2.1.12.sha256.asc
+-sha256  64daa26aed3e12c931f6f4413d7527c4ebdb8da35416b356152b5f9fdd4c6e6d  zfs-2.1.12.tar.gz
+-sha256  96a27353fe717ff2c8b95deb8b009c4eb750303c6400e2d8a2582ab1ec12b25a  bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
++# Locally computed
++sha256  42035fd059faa25a09cd511b24a57b8ad1285cb69127f2a0043b98562c5ec690  zfs-2.2.0.tar.gz
+ 
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index f0461ea9ec..d85956c98b 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--EZA_VERSION = 0.14.0
-+EZA_VERSION = 0.16.0
- EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
- EZA_LICENSE = MIT
- EZA_LICENSE_FILES = LICENCE
+-ZFS_VERSION = 2.1.12
++ZFS_VERSION = 2.2.0
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+-ZFS_PATCH = https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
+ ZFS_SELINUX_MODULES = zfs
+ ZFS_LICENSE = CDDL
+ ZFS_LICENSE_FILES = LICENSE COPYRIGHT
+diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
+index 1f01ddd768..27dbc2869b 100644
+--- a/support/testing/tests/package/test_zfs.py
++++ b/support/testing/tests/package/test_zfs.py
+@@ -40,11 +40,11 @@ class TestZfsBase(infra.basetest.BRTest):
+ 
+         cmds = [
+             # Init
+-            "modprobe zfs",
++            "modprobe zfs && sleep 2",
+             "mount -o remount,size=132M /tmp",
+             "fallocate -l 64M /tmp/container1.raw",
+             "fallocate -l 64M /tmp/container2.raw",
+-            "zpool create -m /pool pool raidz /tmp/container1.raw /tmp/container2.raw",
++            "zpool create pool raidz /tmp/container1.raw /tmp/container2.raw",
+             "dd if=/dev/urandom bs=1M count=8 of=/pool/urandom",
+             "sha256sum /pool/urandom > /tmp/urandom.sha256",
+             # Check ZFS
+
+--===============3514524634031077091==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3514524634031077091==--
