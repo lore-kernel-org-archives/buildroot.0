@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E20EC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC4EBC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:13:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9BA041743;
-	Mon,  4 Dec 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9BA041743
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D05E41609;
+	Mon,  4 Dec 2023 20:13:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D05E41609
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5wHB_g4TZSuj; Mon,  4 Dec 2023 20:13:32 +0000 (UTC)
+	with ESMTP id 22NQgjMJz5YI; Mon,  4 Dec 2023 20:13:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B29544172A;
-	Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B29544172A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 576641BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C845E416DE;
+	Mon,  4 Dec 2023 20:13:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C845E416DE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 636F91BF977
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C46D8216C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C78460FF7
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C46D8216C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C78460FF7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e4CifyEMtuR1 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kyylN4b28kPX for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 986C280BD5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66E90600C7
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 986C280BD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66E90600C7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 849F1879B8; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
+ id 52A57879B8; Mon,  4 Dec 2023 20:13:27 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 Nov 2023 15:21:30 +0100
+Date: Sat, 18 Nov 2023 14:57:22 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 00df26337744aadc64b950a9f75ec84ae602c208
-X-Git-Newrev: 3afe877f52e4571500f11a63d000c540d02c6488
+X-Git-Oldrev: 986a160cbe5c492acfda9bbf2048b1501d570072
+X-Git-Newrev: 1cb0853489b8b908c56ff7e770aa940b5ed992ec
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201327.849F1879B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-testmore: bump to version 0.3.7
+Message-Id: <20231204201327.52A57879B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/procs: bump to version 0.14.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3afe877f52e4571500f11a63d000c540d02c6488
+commit: https://git.buildroot.net/buildroot/commit/?id=1cb0853489b8b908c56ff7e770aa940b5ed992ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff COPYRIGHT:
-    -Copyright (C) 2009-2021 Francois Perrad.
-    +Copyright (C) 2009-2023 Francois Perrad.
+Release notes:
+https://github.com/dalance/procs/releases/tag/v0.14.3
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/lua-testmore/lua-testmore.hash | 4 ++--
- package/lua-testmore/lua-testmore.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/procs/procs.hash | 2 +-
+ package/procs/procs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-testmore/lua-testmore.hash b/package/lua-testmore/lua-testmore.hash
-index 1f435709f4..634b95c6e6 100644
---- a/package/lua-testmore/lua-testmore.hash
-+++ b/package/lua-testmore/lua-testmore.hash
+diff --git a/package/procs/procs.hash b/package/procs/procs.hash
+index 1c2fb5c3d5..19832e3897 100644
+--- a/package/procs/procs.hash
++++ b/package/procs/procs.hash
 @@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  b3e57955888aba3974d6f5a21219214e2803a38e4623671f7d9d9e0f1851e608  lua-testmore-0.3.6-1.src.rock
--sha256  37a3afb014325b98f0ad919cb40bc9d5a948120e5260e75b9d00c198d350da6d  lua-TestMore-0.3.6/COPYRIGHT
-+sha256  acef148e10e312f262d9390c3cdbb9fdd3d5541f0dbeb4c35b8c37fbf95cb52f  lua-testmore-0.3.7-1.src.rock
-+sha256  7cb577fd111373b813a9ec47e43c30cb318b771290e0b60e780b6a710116888d  lua-TestMore-0.3.7/COPYRIGHT
-diff --git a/package/lua-testmore/lua-testmore.mk b/package/lua-testmore/lua-testmore.mk
-index e3cc7b7bdb..aaf2c13069 100644
---- a/package/lua-testmore/lua-testmore.mk
-+++ b/package/lua-testmore/lua-testmore.mk
+ # Locally computed
+-sha256  643b7ba4b769ee9f336d441ecdac779c3d52e5719a15c14bb0acb3609ce1cd99  procs-0.14.0.tar.gz
++sha256  2f9fdbcf7324952e22565ded58148fa40387b5a5f8723996620d6c4588925713  procs-0.14.3.tar.gz
+ sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
+diff --git a/package/procs/procs.mk b/package/procs/procs.mk
+index a074ee1311..8567bf3da3 100644
+--- a/package/procs/procs.mk
++++ b/package/procs/procs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_TESTMORE_VERSION = 0.3.6-1
-+LUA_TESTMORE_VERSION = 0.3.7-1
- LUA_TESTMORE_NAME_UPSTREAM = lua-TestMore
- LUA_TESTMORE_LICENSE = MIT
- LUA_TESTMORE_LICENSE_FILES = $(LUA_TESTMORE_SUBDIR)/COPYRIGHT
+-PROCS_VERSION = 0.14.0
++PROCS_VERSION = 0.14.3
+ PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
+ PROCS_LICENSE = MIT
+ PROCS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
