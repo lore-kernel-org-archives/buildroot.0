@@ -4,75 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42E36C2BB3F
-	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 15:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD02C2BB3F
+	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 16:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE91F81FC0;
-	Sat, 18 Nov 2023 15:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE91F81FC0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99EA782155;
+	Sat, 18 Nov 2023 16:20:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99EA782155
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aMvBjwMXhasq; Sat, 18 Nov 2023 15:43:06 +0000 (UTC)
+	with ESMTP id dwOQGY45Z9na; Sat, 18 Nov 2023 16:20:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 182ED8200F;
-	Sat, 18 Nov 2023 15:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 182ED8200F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E2C41BF38C
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 15:43:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E83F68213F;
+	Sat, 18 Nov 2023 16:20:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E83F68213F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 006401BF2F4
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 16:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 356864187F
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 15:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 356864187F
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9EE281298
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 16:20:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9EE281298
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bDKZJAkJMIPj for <buildroot@lists.busybox.net>;
- Sat, 18 Nov 2023 15:43:01 +0000 (UTC)
-Received: from out203-205-221-245.mail.qq.com (out203-205-221-245.mail.qq.com
- [203.205.221.245])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2926741877
- for <buildroot@buildroot.org>; Sat, 18 Nov 2023 15:43:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2926741877
-Received: from smtpclient.apple ([120.245.20.22])
- by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
- id 7662EA6A; Sat, 18 Nov 2023 23:29:38 +0800
-X-QQ-mid: xmsmtpt1700321378tx3x90cdb
-Message-ID: <tencent_1946493A872A809D31D057B4A5F5A6D0FF06@qq.com>
-X-QQ-XMAILINFO: OZsapEVPoiO6p98ZxRMYrnkzrw9J3AwEDVMUR+t0tNOjRrkRNmcA8Kg7E/a1g6
- NtHx9GWR1K/CJafPqsB7LP4ugPgpJl8/7YT+sk2ojncjXLM1YD4rcfHbWIpxKcAwG0wME4srQifT
- qjd+Y8BiwoBxRVc3N2eUcE2O4RK3jK5GNzNXyWh15ChgWvp2BlcA73PnAFco39PJpfTccJFhCiSs
- BgXdW6hb73aYK9H9V4GAM2uHGixySaFnhXXUCeH/MLfPKFr6yH/CBLKdq4HrgOzuF8wh5b1mO9LB
- zqTFeRFJ1SNp3nC9e3X30DIK/SM/dmpe47PEsTw3gcZgDV37Td1yEO6Vt5dJdATG/tUywTT1RwUY
- yJyJKFxYdKA4j3iLjUdPnT3UTBsAqWlGYiq6QnaOzxQJsWNm2DXuaVF/gPESfzh+l2ca2V3V6Ouc
- RGpOQ0HhdBiia3fCxE/hzgB0tFugYEhTaUNmWW/OLR4HoV+Df4M5RYDSNs63hNrqWNfkB2g3I6+p
- tOU0khUcDDc11CmQ0sXPWv7nI7Hcvz/gThWb0yMg9OaJLkfTXVAefRbj8k56h2UUFf6ivFFd6Ud7
- 4lbfrrWT2Ge0q2+YP6ydZx36RMvrSWQm95Qzms+0KG80vX+1qCKpJxbLVZM8iwF9LE5kEwFOffk1
- IH75DcQLl0To8xETijVwB9vqTP49AOo7Hv1EB9KSJXLkPOuN45NVdSTvSwTK2jQHzpu/iuPJRtKU
- aesEO+l7JKEKcHslnW0SUuRBndWcV4dG/1xrgTGkr+IKpXNrrLFi3+UoeBRofTZO7hOY7VoRHLsk
- Ljaqvt7MOPTqlziitH8LxD2EhaZoNrSt4bwYiEVlskwnT1mVyVwhPyC1Lnvd4ecr/SXSG40gEBY6
- Hn6d8q5erAr9ATd5cmTpek8s7gt0nD1XJt9a9aozo0VC+0Qac7TCIxviH2hwBgsa1RHNT7X+dl/v
- EkFSSSZMYywqdMgldfwsC1Tm/NNR/9INvbhKkgXooxwuDLQ0IfsA==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.100.2.1.4\))
-In-Reply-To: <20231118151127.GF996011@scaer>
-Date: Sat, 18 Nov 2023 23:29:27 +0800
-X-OQ-MSGID: <8FB2CF37-894B-4E9C-B068-983D361F4EEA@qq.com>
-References: <tencent_757F73E3FFB48495C31F20C1B8F0CBDBD205@qq.com>
- <20231118151127.GF996011@scaer>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailer: Apple Mail (2.3774.100.2.1.4)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=qq.com; s=s201512; 
- t=1700322177; bh=LmxCy9HHYwt+a0atFp5KpMK6kDFuD7oJLP7oW5vezHk=;
- h=Subject:From:In-Reply-To:Date:Cc:References:To;
- b=e55A5tM+KaPaqDOz/NG77LT8kOZyGulNvKQxT3NBEEEpEYAe2Rm/oX0pOdR+7TEdD
- GsB2lCOhqQeLTeqBWTesHRKSUbAQSTLOuiebgS2GoGpoCg9n37ohoHXUUKitIhUrro
- IQt+nhptqvh5rqRsg61hyq1OcCg258Pt/NQxHe70=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.a=rsa-sha256
- header.s=s201512 header.b=e55A5tM+
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H0D7uC7GgrPl for <buildroot@lists.busybox.net>;
+ Sat, 18 Nov 2023 16:20:47 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7D0F080EC9
+ for <buildroot@buildroot.org>; Sat, 18 Nov 2023 16:20:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D0F080EC9
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4173:7e62:c00c:757b])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 89D967802D6;
+ Sat, 18 Nov 2023 17:20:41 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 18 Nov 2023 17:20:41 +0100
+Date: Sat, 18 Nov 2023 17:20:41 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: hanyuan-z <hanyuan-z@qq.com>
+Message-ID: <20231118162041.GH996011@scaer>
+References: <tencent_D6A6E9BF418910070340A731CA97A2A5C606@qq.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <tencent_D6A6E9BF418910070340A731CA97A2A5C606@qq.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1700324444;
+ bh=ZkLZouT1aPYL8C0ylC7apDkgv/JKN+LAKk++V8BRnn0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=iKxak1t58pDlKcI3JWOwBYBC9powRmhxJZEy4lXPQd3gHFEcBUKJBUf3I3McQoXbP
+ n8T3DrMywIzZ08xcejsZP9VKIyIGpqzm0tm4XIcNLFY3YRJipyLdQjlI1gA/lTv6E+
+ jgve7Amu5aFsC07ShazCmafG6kq8tZlEXOdYuK6/EVCuxTe0z6jUWnrAKnZNOfCjUO
+ gnLw359T652Pe3kxipc2IeYoMLchMgfF8YRowItC6ynyZdBEGVA9TRmvcW7dpZO/f5
+ gIjf426WVWUjxSri08YBqDV+Qr7HSaVNZUaH3kGfMxKj8zZQSKhq6KOQPviUBbGoLR
+ qPG4CbFyZoKgg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=iKxak1t5
 Subject: Re: [Buildroot] [PATCH 1/1 RESEND] package/wiringX: add GPIO
  library wiringX
 X-BeenThere: buildroot@buildroot.org
@@ -86,26 +76,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: hanyuan via buildroot <buildroot@buildroot.org>
-Reply-To: hanyuan <hanyuan-z@qq.com>
-Cc: Samuel Martin <s.martin49@gmail.com>, Hanyuan Zhao <hanyuan-z@qq.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "s.martin49" <s.martin49@gmail.com>, buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gWWFubiwKCkkgYXBvbG9naXplIGZvciBteSBtaXN1bmRlcnN0YW5kaW5nIG9mIHRoZSBS
-RVNFTkQgd29yZC4gQnV0IEnigJlkIGxpa2UgdG8gZ2l2ZSBteSByZWFzb25zIGZvciB0aGUgZW1h
-aWzigJlzIHJlc2VuZGluZy4KClRoaXMgZW1haWwgYW5kIHRoZSBhY2NvbXBhbnlpbmcgcGF0Y2gg
-aGFkIGJlZW4gc2VudCBmb3IgbW9yZSB0aGFuIG9uZSBtb250aCwgaG93ZXZlciwgdW5mb3J0dW5h
-dGVseSwgSSBzdGlsbCBnZXQgbm8gcmVwbHksIGV2ZW4gaWYgSSB3cml0ZSBhbiBlbWFpbCBhZ2Fp
-biB0byBTYW11ZWwuIEkgYW0gbm90IGNsZWFyIHdoYXQgaGFwcGVuZWQuIE1heWJlIG15IGVtYWls
-IGlzIGJsb2NrZWQgYnkgZ21haWwgYnkgZGVmYXVsdD8gU28gSSB0cmllZCB0byBlbWFpbCB0byB5
-b3UuCgpPbmNlIGFnYWluLCBJIGFtIHNpbmNlcmVseSBzb3JyeSBmb3IgYW55IGluY29udmVuaWVu
-Y2UgY2F1c2VkIGJ5IG15IHJlcGVhdGVkIGF0dGVtcHRzIHRvIGNvbnRhY3QgeW91LiBJIGFwcHJl
-Y2lhdGUgeW91ciB1bmRlcnN0YW5kaW5nIGFuZCBhc3Npc3RhbmNlIGluIHRoaXMgbWF0dGVyLgoK
-VGhhbmtzIQoKS2luZCByZWdhcmRzLApIYW55dWFuCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+Hanyuan, All,
+
+On 2023-11-18 23:31 +0800, hanyuan-z spake thusly:
+> I apologize for my misunderstanding of the RESEND word. But I
+> This email and the accompanying patch had been sent for more than one month,
+
+Yes, I understand it can be a bit distressing, but as I pointed out, we
+have almost 200 patches pending from review:
+    https://patchwork.ozlabs.org/project/buildroot/list/
+
+Everything that is listed on there is not forgotten; we'll eventually
+get to it.
+
+> however, unfortunately, I still get no reply, even if I
+> write an email again to Samuel. I am not clear what happened. Maybe my
+> email is blocked by gmail by default? So I tried to email to
+> you.
+
+Yes, Samuel has not been contributing to the Buildroot project for quite
+a while now, and he's been unresponsive shortly afterwads (but was OK
+last I managed to talk to him).
+
+> Once again, I am sincerely sorry for any inconvenience caused by my
+> repeated attempts to contact you. I appreciate your
+> understanding and assistance in this matter.
+
+There is not much that you can do except just keep waiting a little
+bit...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
