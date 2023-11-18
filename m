@@ -1,51 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D69DC2BB3F
-	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 19:16:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9785EC54E76
+	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 19:45:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1438A400AB;
-	Sat, 18 Nov 2023 19:16:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1438A400AB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0666E60D53;
+	Sat, 18 Nov 2023 19:45:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0666E60D53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OMmmlvit066v; Sat, 18 Nov 2023 19:16:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S65KP78GMkA2; Sat, 18 Nov 2023 19:45:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFEDC4011A;
-	Sat, 18 Nov 2023 19:16:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFEDC4011A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A58760B3F;
+	Sat, 18 Nov 2023 19:45:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A58760B3F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7247C1BF39D
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 19:15:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A5E401BF34C
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 19:45:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A1E14011A
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 19:15:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A1E14011A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CD6640162
+ for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 19:45:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CD6640162
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9KeEICO6WM5P for <buildroot@lists.busybox.net>;
- Sat, 18 Nov 2023 19:15:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06E9A400AB
- for <buildroot@buildroot.org>; Sat, 18 Nov 2023 19:15:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06E9A400AB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E0D1A872F7; Sat, 18 Nov 2023 19:15:57 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ with ESMTP id c3iu8Gc3xMLK for <buildroot@lists.busybox.net>;
+ Sat, 18 Nov 2023 19:45:31 +0000 (UTC)
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
+ [IPv6:2607:f8b0:4864:20::1036])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 291F340106
+ for <buildroot@buildroot.org>; Sat, 18 Nov 2023 19:45:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 291F340106
+Received: by mail-pj1-x1036.google.com with SMTP id
+ 98e67ed59e1d1-28098ebd5aeso2551753a91.0
+ for <buildroot@buildroot.org>; Sat, 18 Nov 2023 11:45:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1700336729; x=1700941529;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=lDcpha3NUhsv3MEc2m0AHylHUbQDiMNcaEMdHANQ9YQ=;
+ b=j7xjQJj2lNJxPTk+rJiHJ+wBG39F6PwQzTlsCGJeevf+2WaNp0RAm+0TMvai82Sazm
+ Nk43Us1EnF64GnUV2qaDeUBntaiq8DRBGWa9ewtkiqRXp5C1h5RJQQFcjcPiA11/yW7x
+ vHyyVQ5PNwdBOtfMk8s1PV/BxjgjO6kYbjl2ueMR261uL7pfWwS2nI7oNUNh2NKq/I8r
+ RESvq13zwOIVK98M3AE7XMqDyuGME2xFRbf+9/BtR8kj2GFFvep2y3F6W6q7pBBjIDTP
+ QoGnWbT3JGJciqOkt2Ua8u8Q4X7I6BV+J7Rm3/ARdFOyzhfKfxg3oHdonCvOYQj/XKsX
+ N7TA==
+X-Gm-Message-State: AOJu0YyQqR3k/TELMbCK5WY7ggnFIX7l9FmyNs2BrCOhHKKTdX7LmsfI
+ JpIj5SZPhAwaqnnWSnVYUwtCQN0DlQy8/qETiFPYOA==
+X-Google-Smtp-Source: AGHT+IHUMndC5Uxx9MSjPFuEgW5gAiN7o2+Ez4++9lT4ClGroCAtSt3FRQcV8EeZdAGaRQus8UDDkA==
+X-Received: by 2002:a17:90b:3ecb:b0:283:a71:63be with SMTP id
+ rm11-20020a17090b3ecb00b002830a7163bemr2854731pjb.0.1700336729504; 
+ Sat, 18 Nov 2023 11:45:29 -0800 (PST)
+Received: from DESKTOP-OI0KN2B.lan ([172.56.201.106])
+ by smtp.gmail.com with ESMTPSA id
+ nr2-20020a17090b240200b0027d0de51454sm5137688pjb.19.2023.11.18.11.45.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 18 Nov 2023 11:45:29 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 18 Nov 2023 19:23:51 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b41d4494a64b538ca0df2b3f18d19ae0a2e8a46a
-X-Git-Newrev: a743087593a5fd5b33e2650591cada09929c27a6
-X-Patchwork-Hint: ignore
-Message-Id: <20231118191557.E0D1A872F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/memtest86: bump to
- version 6.20
+Date: Sat, 18 Nov 2023 12:45:26 -0700
+Message-ID: <20231118194526.467059-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1700336729; x=1700941529;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=lDcpha3NUhsv3MEc2m0AHylHUbQDiMNcaEMdHANQ9YQ=;
+ b=KIUaIaxX9gMybslREz4xB/rSlQAkG3MKRJNKAj7mgSiAOqx7mmxuPJ9dmmw2MDkp55
+ cyoHz2VZZ9k7rmYrlWwNvmk0lDJcT2UUQFt2S3XeBMqAcVUOkYZ20QTXzpNJm7fq9xHF
+ gtlxt5aZhTD8M0phLYsqnya9P1PoSn8uAb728=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=KIUaIaxX
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: downgrade GCC version
+ requirements to 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,140 +93,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a743087593a5fd5b33e2650591cada09929c27a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+NodeJS requires GCC 10.1. However, GCC 10.1 is the first GCC release.
+As such, we can safely downgrade the GCC version requirements to 10.
 
-- bumped package version to 6.20
-- as 6.20 prebuilt version is not available on same download site but
-  source code is released at https://github.com/memtest86plus/memtest86plus/releases
-  so updated mk file to download source from git release
-- prebuilt binary not found in 6.20 package and also README.md
-  does not mention any toolchain limitation for compilation
-  so added source build command depending on 32-bit or 64-bit x86 target.
-- corrected License file name
-- installed memtest binaries to image folder like other bootable
-  images(grub , kernel) are copied.
-- updated config help as per package README.md
+Tested with: run-tests tests.package.test_nodejs using Debian 11 and
+gcc 10.2.1.
 
-Signed-off-by: Kalpesh Panchal <kalpesh.panchal2@collins.com>
-Signed-off-by: Abhishek Anand <abhishek.anand@collins.com>
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-[yann.morin.1998@free.fr:
-  - fix check-package errors
-  - fix hash file
-  - better install commands
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/memtest86/Config.in      | 35 +++++++++++++++++++++++++++--------
- package/memtest86/memtest86.hash |  4 ++--
- package/memtest86/memtest86.mk   | 29 ++++++++++++++++++++++-------
- 3 files changed, 51 insertions(+), 17 deletions(-)
+ package/nodejs/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/memtest86/Config.in b/package/memtest86/Config.in
-index 79c0161020..c9a8cf749f 100644
---- a/package/memtest86/Config.in
-+++ b/package/memtest86/Config.in
-@@ -14,14 +14,33 @@ config BR2_PACKAGE_MEMTEST86
- 	  back again and verifies whether the result of the read is the
- 	  same as what was written to memory.
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 72770095d0..50d1360715 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -7,19 +7,19 @@ config BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
  
--	  Memtest86+ will only work on 32-bit or 64-bit x86 targets.
--	  It boots as an i486 program and autodetects hardware. It can
--	  be added to the grub2 boot menu by adding the following
--	  lines to the bottom of /boot/grub/grub.cfg - note the use of
--	  linux16.
--
--	  menuentry "Memtest86+" {
--	    linux16 /boot/memtest86+.bin
-+	  Memtest86+ will only work on 32-bit or 64-bit x86 targets. It
-+	  boots and autodetects hardware. Refer README.md for boot
-+	  options.
-+
-+	  It can be loaded and run either directly by a PC BIOS (legacy
-+	  or UEFI) or via an intermediate bootloader that supports the
-+	  Linux 16-bit, 32-bit, 64-bit, or EFI handover boot protocol.
-+
-+	  It can be added to the grub2 boot menu by adding the following
-+	  lines to the bottom of grub.cfg
-+
-+	  Example for legacy BIOS using the Linux 16-bit boot protocol,
-+	  with built-in support for USB keyboards or running on a serial
-+	  line:
-+
-+	  menuentry "Start Memtest86+ (USB keyboards)" {
-+	      linux16 /boot/memtest.bin keyboard=both
-+	  }
-+	  menuentry "Start Memtest86+ (serial line)" {
-+	      linux16 /boot/memtest.bin console=ttyS0,115200
-+	  }
-+
-+	  Or for UEFI BIOS using the Linux 32-bit or 64-bit boot
-+	  protocols, using USB keyboard:
-+
-+	  menuentry "Start Memtest86+ (USB keyboards)" {
-+	      linux /EFI/BOOT/memtest.efi keyboard=both
- 	  }
+-comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 11, wchar, host gcc >= 11"
++comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 10, wchar, host gcc >= 10"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-		!BR2_HOST_GCC_AT_LEAST_11 || !BR2_TOOLCHAIN_GCC_AT_LEAST_11 || !BR2_USE_WCHAR
++		!BR2_HOST_GCC_AT_LEAST_10 || !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || !BR2_USE_WCHAR
  
- 	  Other boot loaders will have similar requirements.
-diff --git a/package/memtest86/memtest86.hash b/package/memtest86/memtest86.hash
-index 559ae0ac6c..695e6a234b 100644
---- a/package/memtest86/memtest86.hash
-+++ b/package/memtest86/memtest86.hash
-@@ -1,3 +1,3 @@
- # locally computed using sha256sum
--sha256  142127b7953fbd829b1057fb64a78d3340c2b771484230a7347e94530a0d9039  memtest86+-5.01.tar.gz
--sha256  2e15e2174b86640d7fbfcb62b51d9182062d9db71d66a46e5b01d736c68150ea  README
-+sha256  463b2db66128e45c96be76136272e2ee940f1319804b1b88cc2ef04edccd01d8  memtest86-6.20.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/memtest86/memtest86.mk b/package/memtest86/memtest86.mk
-index eb071cc29d..c0f85755fe 100644
---- a/package/memtest86/memtest86.mk
-+++ b/package/memtest86/memtest86.mk
-@@ -4,15 +4,30 @@
- #
- ################################################################################
- 
--MEMTEST86_VERSION = 5.01
--MEMTEST86_SOURCE = memtest86+-$(MEMTEST86_VERSION).tar.gz
--MEMTEST86_SITE = http://www.memtest.org/download/$(MEMTEST86_VERSION)
-+MEMTEST86_VERSION = 6.20
-+MEMTEST86_SITE = $(call github,memtest86plus,memtest86plus,v$(MEMTEST86_VERSION))
- MEMTEST86_LICENSE = GPL-2.0
--MEMTEST86_LICENSE_FILES = README
-+MEMTEST86_LICENSE_FILES = LICENSE
-+MEMTEST86_INSTALL_IMAGES = YES
-+MEMTEST86_INSTALL_TARGET = NO
- 
--# memtest86+ is sensitive to toolchain changes, use the shipped binary version
--define MEMTEST86_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/precomp.bin $(TARGET_DIR)/boot/memtest86+.bin
-+ifeq ($(BR2_i386),y)
-+MEMTEST86_BUILD_DIR = build32
-+else
-+ifeq ($(BR2_x86_64),y)
-+MEMTEST86_BUILD_DIR = build64
-+endif
-+endif
-+
-+define MEMTEST86_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(MEMTEST86_BUILD_DIR)
-+endef
-+
-+define MEMTEST86_INSTALL_IMAGES_CMDS
-+	$(foreach ext, bin efi, \
-+		$(INSTALL) -m 0755 -D $(@D)/$(MEMTEST86_BUILD_DIR)/memtest.$(ext) \
-+			$(BINARIES_DIR)/memtest.$(ext)
-+	)
- endef
- 
- $(eval $(generic-package))
+ config BR2_PACKAGE_NODEJS
+ 	bool "nodejs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_11
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	depends on BR2_HOST_GCC_AT_LEAST_10
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	depends on BR2_USE_WCHAR
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
+-- 
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
