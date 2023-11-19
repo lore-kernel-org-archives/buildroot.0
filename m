@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06744C54E76
-	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 22:15:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E94CC072A2
+	for <buildroot@archiver.kernel.org>; Sun, 19 Nov 2023 06:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5BC260A69;
-	Sat, 18 Nov 2023 22:15:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5BC260A69
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z-Tkulm2fC5B; Sat, 18 Nov 2023 22:15:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE5DA60A65;
-	Sat, 18 Nov 2023 22:15:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE5DA60A65
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EBD941BF354
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 22:14:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C24FA417B4
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 22:14:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C24FA417B4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53151418FA;
+	Sun, 19 Nov 2023 06:39:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53151418FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JfESRHR8AzSz for <buildroot@lists.busybox.net>;
- Sat, 18 Nov 2023 22:14:30 +0000 (UTC)
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2712B417B3
- for <buildroot@buildroot.org>; Sat, 18 Nov 2023 22:14:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2712B417B3
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-1cf50cc2f85so6125905ad.1
- for <buildroot@buildroot.org>; Sat, 18 Nov 2023 14:14:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700345669; x=1700950469;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=jk5RwTrecdBK3QoOBYQXw6rMlpy1oOO9qt5VABIG0v8=;
- b=QuTj5QseD591VD8NSTl7QmuPh8Bkc24TMB4x1hVse0OQYz7yGGjNRYeOsfpH1Z+xBu
- aBgDpzlc15CAzY2bO/Gz8id+o5Arl2OPCs4AVvieQ6Y+GHpAK+n+v/+5a8MKU3dJ4/Ns
- Fu9/irywBlVbCwouvyXunBD97X7l42NKEPuwp0dyAPz16845aYUyLjv7GD9E3jHitPyX
- NAL6k+pAnRRPDiZtPKN46niqux80K3q0FV03le7//GsTU+6+gYHL94NlyZIbBnNPTv7r
- NwCDnB54S6WGMRFhIFFE1G2nOKlH0/6d0+tbn5Lbj+sk9GFTo0BNFjknasmcJB1rSc1/
- +EwQ==
-X-Gm-Message-State: AOJu0YzCNNHpuv8TpQB/oAMo0zw0NOYXFKevvrUmKc5By7u5jFFJFvbb
- v69X0MhkjiYIMt17SkYGN0+VWGemXt+XMkidgPr5AA==
-X-Google-Smtp-Source: AGHT+IGL9t/A3BDR5fiVr6rmyDlU5+6oVgykw/FFl02JTxz7BrfSxlv2brdohQNk3qrTfONQupJU6Q==
-X-Received: by 2002:a17:903:2c7:b0:1ca:29f:4b06 with SMTP id
- s7-20020a17090302c700b001ca029f4b06mr4514174plk.2.1700345668720; 
- Sat, 18 Nov 2023 14:14:28 -0800 (PST)
-Received: from DESKTOP-OI0KN2B.lan ([172.56.201.106])
- by smtp.gmail.com with ESMTPSA id
- x6-20020a170902ea8600b001cc20dd8825sm3403361plb.213.2023.11.18.14.14.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 Nov 2023 14:14:27 -0800 (PST)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Sat, 18 Nov 2023 15:14:14 -0700
-Message-ID: <20231118221414.1369987-4-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231118221414.1369987-1-adam.duskett@amarulasolutions.com>
-References: <20231118221414.1369987-1-adam.duskett@amarulasolutions.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l_NI5cyZb5rp; Sun, 19 Nov 2023 06:39:10 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F7C2418E2;
+	Sun, 19 Nov 2023 06:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F7C2418E2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A36E91BF335
+ for <buildroot@lists.busybox.net>; Sun, 19 Nov 2023 06:39:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3269160B55
+ for <buildroot@lists.busybox.net>; Sun, 19 Nov 2023 06:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3269160B55
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tUX0a-_Jh3H4 for <buildroot@lists.busybox.net>;
+ Sun, 19 Nov 2023 06:39:05 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2715660B14
+ for <buildroot@buildroot.org>; Sun, 19 Nov 2023 06:39:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2715660B14
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 76CEE40009
+ for <buildroot@buildroot.org>; Sun, 19 Nov 2023 06:39:01 +0000 (UTC)
 MIME-Version: 1.0
+To: buildroot@buildroot.org
+Date: Sun, 19 Nov 2023 06:39:01 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20231119063907.3269160B55@smtp3.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1700345669; x=1700950469;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=jk5RwTrecdBK3QoOBYQXw6rMlpy1oOO9qt5VABIG0v8=;
- b=p0DeIsBuECY+4z+rc5SZ51oi0e7gKf9B60DUNMF0bRI7Yf2pT4XxdanFVskWJtTQPC
- XCZbzXlHZKi7/yMP+M2RlreB4DCmRYN0l+aSbcNogxLr9/XGkDOseeZWDrEgVhxulZm2
- lCWPXFf7oVACUPLmmZDB0fFXc52GSII2B3WwE=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=p0DeIsBu
-Subject: [Buildroot] [PATCH/next v2 9/9] package/flutter-gallery: clean up
- install_target_cmds
+ d=bootlin.com; s=gm1; 
+ t=1700375941; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=M1QJEaow8Rey6Sd5zf/LkiMeCq2nX1XuPb9fuesKNLA=;
+ b=mHbrofSqvh4AKbkBetCJX0WRJlxA4h00+CJucIVP9bRITxlgJbOFRFbFnbWkuBW4uB44tT
+ MgH02nrDHz5EQjQBjEET5kEpc2MdMnXq3fb6EvVMWVxYurQoh/EB7YXRyYyS6JmJL650fu
+ yY/HhL+KTI80U98QNte3Bq2gK1Lq93BhOKQNrqOHF+TiBn0K5eiF32tzah3I/euqhlyvKG
+ X04cv9rC3VeA8MmRB3tWPaX/tkMsHPDZ3ihxVKDmjhC7+6qlJfnwTKWCgtKxHhuz1IXQz4
+ oI52pfltoCyDovVbZ5wU3ezn3lHKkB7ROyvr7epmmKi5En/K2Dt5eKuPwJuZFw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mHbrofSq
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-11-18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,62 +69,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove and create the kernel_blob.bin file in the flutter_assets directory:
+Hello,
 
-  When Flutter compiles the source code, it creates the kernel_blob.bin file,
-  a Dart Kernel Bytecode of the application.
+Autobuild statistics for 2023-11-18
+===================================
 
-  If kernel_blob.bin exists inside the flutter_assets directory, then the
-  application source code can be extracted with nothing more than apktool.
-  Not only is this a security risk, it's also redundant and a waste of space.
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  3  |  5  |  0  |  8  |
+  2023.08.x  |  5  |  5  |  0  | 10  |
+    master   | 13  |  8  |  0  | 21  |
 
-  Removing the kernel_blob.bin file generated for flutter-gallery saves 86M!
-  Because this package is a reference package, and some applications may check
-  if the kernel_blob.bin file exists, we also touch a blank kernel_blob.bin
-  file.
+Classification of failures by reason for master
+-----------------------------------------------
 
-Do not use relative symlinks:
-  Users may not install their applications in the
-  /usr/share/flutter/${package_name} directory. Because this is a reference
-  application, we should use exact symlinks to icudtl.dat and
-  libflutter_engine.so. Besides, the output of ls -la looks cleaner as well!
+                host-go-1.21.4 | 1 
+                libressl-3.8.2 | 1 
+                   linux-6.6.1 | 1 
+                    pppd-2.5.0 | 1 
+                    putty-0.79 | 1 
+         python-rpds-py-0.12.0 | 1 
+                python3-3.11.6 | 1 
+                       unknown | 1 
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
-v1 -> v2: Add a far more comprehensive git log explaining the reasoning of the
-          changes. [Yann]
 
- package/flutter-gallery/flutter-gallery.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Detail of failures for master
+-----------------------------
 
-diff --git a/package/flutter-gallery/flutter-gallery.mk b/package/flutter-gallery/flutter-gallery.mk
-index 5299b18134..492b426510 100644
---- a/package/flutter-gallery/flutter-gallery.mk
-+++ b/package/flutter-gallery/flutter-gallery.mk
-@@ -46,10 +46,12 @@ define FLUTTER_GALLERY_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/libapp.so \
- 		$(FLUTTER_GALLERY_INSTALL_DIR)/lib/libapp.so
- 
--	ln -sf ../../../$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
-+	ln -sf /usr/share/flutter/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
- 	$(FLUTTER_GALLERY_INSTALL_DIR)/data/
- 
--	ln -sf ../../../../../lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
-+	ln -sf /usr/lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
-+	$(RM) $(FLUTTER_GALLERY_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
-+	touch $(FLUTTER_GALLERY_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
- endef
- 
- $(eval $(generic-package))
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   s390x     |         host-go-1.21.4         | NOK | http://autobuild.buildroot.net/results/c3913822eba997ec8d1146dceda1225573f9bef5 |     
+  powerpc    |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/38d648a4374d8326308133b8f5bc4575edca8c31 | ORPH
+    arc      |          linux-6.6.1           | NOK | http://autobuild.buildroot.net/results/1c56670851f6a3780b4924c78894c0545ee8c020 | ORPH
+  sparc64    |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/8a07d0455a0551d58a9c569bc8b09f03f47faf4c |     
+   armeb     |           putty-0.79           | NOK | http://autobuild.buildroot.net/results/36b7c93d12bf079cd7dd0627eccd21a7daf2e40e |     
+   mipsel    |     python-rpds-py-0.12.0      | NOK | http://autobuild.buildroot.net/results/89272b52872e36efd5e4294e29d23a1d9e05cc30 |     
+   x86_64    |         python3-3.11.6         | NOK | http://autobuild.buildroot.net/results/dabfa795524734e9b68300276aa535dc3e2d216b |     
+   sparc     |            unknown             | NOK | http://autobuild.buildroot.net/results/27369ecd1c8ada4cda17d80c5c0bc355be6d913e |     
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+                  check-0.15.2 | 1 
+                elfutils-0.186 | 1 
+                  ffmpeg-4.4.4 | 1 
+     linux-5.10.162-cip24-rt10 | 1 
+                   perl-5.36.0 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/282ef3b54a79a51f2bd1d888223e69d0d8383562 | ORPH
+microblazeel |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/e5bee8f2c819f5cfb4c6ea3edf3e038f06f051d7 | ORPH
+    arc      |          ffmpeg-4.4.4          | NOK | http://autobuild.buildroot.net/results/b0c67cff24d2c26810329b88b6e998b7e6cb0596 |     
+  sparc64    |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/8e6a158329481d67e42162beab85a14831242295 | ORPH
+   nios2     |          perl-5.36.0           | NOK | http://autobuild.buildroot.net/results/abcc5967da0a2466ca1e971c9cab988865810a5a |     
+
+
+Classification of failures by reason for 2023.08.x
+--------------------------------------------------
+
+                 apache-2.4.58 | 1 
+check-11970a7e112dfe243a2e6... | 1 
+              host-rust-1.71.1 | 1 
+            quickjs-2021-03-27 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2023.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv64    |         apache-2.4.58          | NOK | http://autobuild.buildroot.net/results/7b27234816c3705aebbf48a3fb656627c4af9de5 |     
+   armeb     | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/8709ba67aee4f108a41939d6339f887f078a2cf5 | ORPH
+powerpc64le  |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/08f86ff084d8142287a560bb6c4d35f092243bcc |     
+    arm      |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/705d13c102e89b47d06ae67faa7de647c980bbd7 |     
+   arceb     |            unknown             | NOK | http://autobuild.buildroot.net/results/d49ad342a2991f61a0d6c3b82eb2b45a02e6e236 |     
+
+
+
 -- 
-2.42.0
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
