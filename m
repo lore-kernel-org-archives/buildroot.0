@@ -4,93 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD32C072A2
-	for <buildroot@archiver.kernel.org>; Sun, 19 Nov 2023 20:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DB95C072A2
+	for <buildroot@archiver.kernel.org>; Sun, 19 Nov 2023 20:44:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 203B84004A;
-	Sun, 19 Nov 2023 20:41:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 203B84004A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1595F4010F;
+	Sun, 19 Nov 2023 20:44:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1595F4010F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K6u8oxii3ERb; Sun, 19 Nov 2023 20:41:40 +0000 (UTC)
+	with ESMTP id styILfZ_xs-e; Sun, 19 Nov 2023 20:44:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 910A04010F;
-	Sun, 19 Nov 2023 20:41:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 910A04010F
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE9D440189;
+	Sun, 19 Nov 2023 20:43:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE9D440189
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 476591BF2C7
- for <buildroot@lists.busybox.net>; Sun, 19 Nov 2023 20:41:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 137881BF2C7
+ for <buildroot@lists.busybox.net>; Sun, 19 Nov 2023 20:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 17EBE81E03
- for <buildroot@lists.busybox.net>; Sun, 19 Nov 2023 20:41:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17EBE81E03
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED9C881E03
+ for <buildroot@lists.busybox.net>; Sun, 19 Nov 2023 20:43:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED9C881E03
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s70o7ZRp_kkH for <buildroot@lists.busybox.net>;
- Sun, 19 Nov 2023 20:41:35 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3695081DCB
- for <buildroot@buildroot.org>; Sun, 19 Nov 2023 20:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3695081DCB
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-507962561adso5437475e87.0
- for <buildroot@buildroot.org>; Sun, 19 Nov 2023 12:41:34 -0800 (PST)
+ with ESMTP id a_mcFgH3KZOX for <buildroot@lists.busybox.net>;
+ Sun, 19 Nov 2023 20:43:56 +0000 (UTC)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF6C881DCB
+ for <buildroot@buildroot.org>; Sun, 19 Nov 2023 20:43:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF6C881DCB
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-9d0b4dfd60dso489209966b.1
+ for <buildroot@buildroot.org>; Sun, 19 Nov 2023 12:43:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700426492; x=1701031292;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ d=1e100.net; s=20230601; t=1700426633; x=1701031433;
+ h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=CtzAitLQmJeBvQGh8evrIjAubad02lZRiCAwQMOrljE=;
- b=AQHG3s3tSq4YGGF0DbSe4IFnHseEW4CHr12txJwcAslmUYTWwVUGHhAltVaGQw1zzo
- p6VNNMTsK6aamDmak+ol9TDz+PJbYYr+v6q0D9mg6ukkn41CcE1otTYv9Sru2ehwnzUh
- guErkzfLJRsKRXLKPeV36B8uhPiGWbWWWS76HnwGGEDrVCNejDpQ3vo3VZPAHhAgJpWo
- 4+2QvGAc5twq8jJ1rJT1lkKvx6tWCpNEyoRxo4kSwNZtAmjMtPweLHRG5q9TXdzuWF91
- vo5J4l4I5EUVExsaiywt5MLT8ipyUBRaHKMx+CP726FppVXk++YW459u8SymmnI/X3fA
- /0Qw==
-X-Gm-Message-State: AOJu0Yxoov3sjrd1on8y/VnN04TZn9rFa3pv3E37TuMj/33aO79emq2Q
- VSmSbFMKzB/1ImuqHyLPRFdeXQ==
-X-Google-Smtp-Source: AGHT+IFrYZxg8PltTV/JAUNEjK2Ev1VlC//ArsH5PJlnqvbPFJWo4JDbSuDV87duAyblcDpH8jILVw==
-X-Received: by 2002:a05:6512:1031:b0:50a:a2ba:d7c7 with SMTP id
- r17-20020a056512103100b0050aa2bad7c7mr2969221lfr.39.1700426492387; 
- Sun, 19 Nov 2023 12:41:32 -0800 (PST)
+ bh=7fV5QREEu2SpYuiSpqYXAu6eBNeEXfqBWTNciS0N3AU=;
+ b=qZSXgkYyX4LgxOdh2CBvzg+WL77s+M9lyTDF8H9FBvXRMzq1RpuLTa6BmDX0gMYKQP
+ szQ3ZEnNEy0g9XrzMuGqgb1zzmBy+DfZnCQZSegx7iu1jdQZs+72OA2t5DsqvdfyMz5A
+ gOVFICfyz2eKqlPb3ROrGky0qLW127bHqEW7i08SF5yunimbdbLGZZSwBslKCWLkwrLV
+ fFIyhLdwVVJXfyoaDEZpvvFePZY5guRDmmaiyKwqn+zJLLsLN8vMRqeGJ2Fi5gBB3Rrt
+ Q5Lamo9jomT4/VRcTmAHkAL7HV7cEe2Vch6aSSS4Znn18Jd1WsuLvKsjn2eKwqj9LnD1
+ uI0Q==
+X-Gm-Message-State: AOJu0YxfjxOeCuWf8txk3dhWF4kxHKEjrFOthxxWO4YF6O+U9POcn1m2
+ 1IGFbOZBJGSutz9n5ZUlNAu86A==
+X-Google-Smtp-Source: AGHT+IFsdQXRwVCq/AccaNZiH/cZrBcL+Sf9/3W20gETB9vLhyk5JdWV/CDE4C2oCSUP4om5j+LQuA==
+X-Received: by 2002:a17:906:74d6:b0:9fa:54f7:b81b with SMTP id
+ z22-20020a17090674d600b009fa54f7b81bmr4191246ejl.6.1700426633528; 
+ Sun, 19 Nov 2023 12:43:53 -0800 (PST)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- f10-20020a50a6ca000000b0053dd8898f75sm2993192edc.81.2023.11.19.12.41.31
+ p20-20020a170906a01400b009adc77fe164sm3158683ejy.66.2023.11.19.12.43.52
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 19 Nov 2023 12:41:31 -0800 (PST)
-Message-ID: <f94bff36-c607-4d9c-98f8-2b37a3425e80@mind.be>
-Date: Sun, 19 Nov 2023 21:41:29 +0100
+ Sun, 19 Nov 2023 12:43:52 -0800 (PST)
+Message-ID: <75d4ac75-ee6a-4a5b-af29-7eee2fa11580@mind.be>
+Date: Sun, 19 Nov 2023 21:43:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Adam Duskett <adam.duskett@amarulasolutions.com>
+To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
 References: <20231118221206.1369389-1-adam.duskett@amarulasolutions.com>
  <20231118221206.1369389-5-adam.duskett@amarulasolutions.com>
- <20231119082120.GM996011@scaer>
- <CAHDQB6OGJb-HzXTUBosu4dzb=pnkUiJ0RU=xE3PF0eWCqVa2yg@mail.gmail.com>
- <20231119194534.GN996011@scaer>
-In-Reply-To: <20231119194534.GN996011@scaer>
+In-Reply-To: <20231118221206.1369389-5-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1700426492; x=1701031292; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ d=mind.be; s=google; t=1700426633; x=1701031433; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=CtzAitLQmJeBvQGh8evrIjAubad02lZRiCAwQMOrljE=;
- b=AldtpnhssFn1vfHWO2KGlG4hibxDhSqoMkDW41ik9pLWzaqiJxB/vLw4d8QhnkUkLX
- HfMVaSs52F+uBwshmxyLUdF9SgmopaD3e8omJuhEUPq+fh2U5470b0IwWRs4oGpDipef
- 924lCxgU6bec48xDXwQPc6TsSmiC1L+f5Poah0UyXgvlgoaOt9IuX9VkiaFXT9Ko/LdE
- OAVnX5L9k+k5SmwBMaP50vcx/0HdGiEuDnEbIl2lZK2Pnp+3qL7/IWtzrF6iJo9XYVkG
- cEKwtZUiwnL6S9nDgkyXOA9+FN/20HBPP+ZoUuPJG+RUuHgTijZw3mRmslx2YLFBHeun
- JQjg==
+ bh=7fV5QREEu2SpYuiSpqYXAu6eBNeEXfqBWTNciS0N3AU=;
+ b=F6JaBLMjjC/AAGLjFLodvotM5rLoKEPcg8chlD+XsozZl2i7TrtX8x23br6Uccw4BZ
+ B5cZOVx/eYbQCTGpkwi1ot1qmRpuqfDRRBXLAHsE/2E4zoHMV0wKaINa7rykFbs83RVq
+ rSoaasr04zDu9JPb6FsRiOO+xoSNETAl69OVI9uu69IO9CgH9+Ikrq2DzKdISyZTK/Yh
+ OD5pt86La1CS8XXprM42GXf3CC8gULnzm93qyxkQg+N9ZzGXGQcoOqNH2xTpBLdIaI6Y
+ 8pviWb1gw2Zbm2RfFZjC6TqYBi9WCop/AVms5kqr1yES6DJYMLNj04TrzCtzp9x3x3yZ
+ e8ew==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Aldtpnhs
+ header.a=rsa-sha256 header.s=google header.b=F6JaBLMj
 Subject: Re: [Buildroot] [PATCH/next v2 5/9]
  package/flutter-sdk-bin/Config.in.host: add pub-cache location option
 X-BeenThere: buildroot@buildroot.org
@@ -106,147 +102,82 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxOS8xMS8yMDIzIDIwOjQ1LCBZYW5uIEUuIE1PUklOIHdyb3RlOgo+IEFkYW0sIEFsbCwK
-PiAKPiBPbiAyMDIzLTExLTE5IDEwOjQ3IC0wNzAwLCBBZGFtIER1c2tldHQgc3Bha2UgdGh1c2x5
-Ogo+PiBUaGlzIG9uZSB3ZSBzaG91bGQgZGlzY3Vzcy4KPiAKPiBUaGlzIGlzIGV4YWN0bHkgd2hh
-dCBhIHJldmlldyBpcyBmb3IuCj4gCj4+IFdoaWxlIGl0J3MgcmVhc29uYWJsZSB0byBzZXQgYSBk
-ZWZhdWx0wqB0byBlaXRoZXIgZGwvZmx1dHRlci1wdWItY2FjaGUgb3IgZGwvcHViLWNhY2hlICh5
-b3VyIGNob2ljZSBvYnZpb3VzbHkhKSwKPiAKPiBJIHdhcyB0aGlua2luZyBtb3JlIGxpa2Ugd2Ug
-ZGlkIGZvciBjYXJnbywgYXMgSSBoaW50ZWQgZWFybGllciBieQo+IHBvaW50aW5nIHRvIHRoZSBj
-b21taXQgd2hpY2ggaW50cm9kdWNlZCBpdCAoODQ1MGI3NjkxODcwKToKPiAKPiAgICAgIEJSX0NB
-UkdPX0hPTUUgPSAkKERMX0RJUikvYnItY2FyZ28taG9tZQo+IAo+IFNvOgo+IAo+ICAgICAgRkxV
-VFRFUl9TREtfQklOX1BVQl9DQUNIRSA9ICQoRExfRElSKS9ici1mbHV0dGVyLXB1Yi1jYWNoZQoK
-ICArMQoKPiAKPiAoQXMgVGhvbWFzIHBvaW50ZWQgb3V0IG9uIElSQywgRExfRElSIGlzIGp1c3Qg
-dGhlIGludGVybmFsIHZhcmlhYmxlIHRoYXQKPiBnZXRzIHNldCBmcm9tIEJSMl9ETF9ESVI7IGlu
-IGFsbCBwcmFjdGljYWwgbWF0dGVycywgdGhleSBhcmUgdGhlIHNhbWUuKQo+IAo+PiB3ZSBzaG91
-bGQgc3RpbGwgaGF2ZSB0aGlzIGFzIGEgY29uZmlndXJhYmxlIHN0cmluZy4KPj4gMSkgVGhlIHdv
-cmsgaXMgYWxyZWFkeSBkb25lLCBhbmQgbW9zdCB1c2VycyB3b24ndCBjaGFuZ2UgdGhlIGRlZmF1
-bHQuCj4gCj4gIlRoZSB3b3JrIGlzIGRvbmUiIGlzIG5vdCBhIHZhbGlkIGFyZ3VtZW50IGZvciBh
-cHBseWluZyBhIHBhdGNoLAo+IG90aGVyd2lzZSB3ZSB3b3VsZCBqdXN0IGJsaW5kbHkgYXBwbHkg
-YWxsIGFuZCBldmVyeSBwYXRjaGVzIHRoYXQgYXJlCj4gc3VibWl0dGVkLCBvbiB0aGUgcmF0aW9u
-YWxlIHRoYXQgInRoZSB3b3JrIGlzIGRvbmUiLgo+IAo+PiAyKSBXaGVuIGRldmVsb3BpbmcgYW4g
-YXBwbGljYXRpb24sIHRoZSBwdWItY2FjaGUgZGlyZWN0b3J5IG1heSBiZSBzb21ld2hlcmUgbW9y
-ZSBjb252ZW5pZW50wqBmb3IgdGhlIGRldmVsb3Blci4KPj4gIMKgIMKgIMKgTWF5YmUgdGhleSB3
-YW50IHRvIHVzZSB+Ly5wdWItY2FjaGUsIG9yIGluIG15IGNhc2UgL2hvbWUvYWRhbS9wcm9qZWN0
-cy8ke2NvbXBhbnl9LyR7cHJvamVjdH0vcHViLWNhY2hlCj4+IFRoaXMgYWxsb3dzIHVzZXJzIHRv
-IG5vdCBoYXZlIHRvIHJlLWRvd25sb2FkIHRoZSBwdWItY2FjaGUgaWYgaXQgYWxyZWFkeSBleGlz
-dHMgb24gdGhlaXIgc3lzdGVtLgo+IAo+IElmIG9uZSB3YW50cyB0byBhdm9pZCByZS1kb3dubG9h
-ZGluZyBzdHVmZiBhZ2FpbiBhbmQgYWdhaW4sIG9uZSBoYXMKPiBhbHJlYWR5IHNldCBCUjJfRExf
-RElSIGluIHRoZWlyIGVudmlyb25tZW50IGFuZCB0aHVzIHN0b3JpbmcgdGhlIGZsdXR0ZXIKPiBw
-dWItY2FjaGUgdGhlcmUsIGlzIGluZGVlZCBleGFjdGx5IHdoYXQgd2Ugd2FudCB0byBkby4KPiAK
-PiBBcyBmb3Igc2hhcmluZyB0aGUgcHViLWNhY2hlIHdpdGggc29tZXRoaW5nIG91dHNpZGUgb2Yg
-QnVpbGRyb290LCBJCj4gd291bGQgYXJndWUgYWdhaW5zdC4gU2hhcmluZyB3aXRoIHRoZSBvdXNp
-ZGUgd29ybGQgbWVhbnMgd2Ugbm8gbG9uZ2VyCj4gaGF2ZSBleGNsdXNpdml0eSwgYW5kIHRodXMg
-d2UgcmlzayBjb25mbGljdHMgb24gYWNjZXNzLiBXZSBuZXZlcgo+IGFjY291bnQgZm9yIG91dC1v
-Zi1CdWlsZHJvb3QgdXNlIG9mIG91ciBjYWNoZXMuCgogIEFGQUlVLCB0aGlzIGlzIGEgY2FjaGUg
-dGhhdCBpcyBub3QgbWFuYWdlZCBieSBCdWlsZHJvb3QgYXQgYWxsLCBidXQgcmF0aGVyIGl0IApp
-cyBtYW5hZ2VkIGJ5IHdoYXRldmVyIGZsdXR0ZXIgdG9vbCB3ZSBhcmUgdXNpbmcgdG8gbWFuYWdl
-IGRvd25sb2Fkcy4gQUZBSVUsIHRoZSAKZG93bmxvYWRzIGFjdHVhbGx5IGhhcHBlbiBkdXJpbmcg
-dGhlIGJ1aWxkIHJhdGhlciB0aGFuIHRoZSBkb3dubG9hZCBzdGFnZSAKZXZlbi4uLiBTbyBJIGRv
-bid0IHRoaW5rICJ3ZSBubyBsb25nZXIgaGF2ZSBleGNsdXNpdml0eSIgaXMgcmVhbGx5IG11Y2gg
-b2YgYSBmYWN0b3IuCgogIFRoYXQgc2FpZCwgSSBkbyB0aGluayB0aGlzIGlzIGVub3VnaCBvZiBh
-IGNvcm5lciBjYXNlIHRoYXQgaXQgZG9lc24ndCBuZWVkIGEgCmNvbmZpZyBvcHRpb24uIEl0J3Mg
-ZWFzeSBlbm91Z2ggdG8gc3ltbGluayBkbC9ici1mbHV0dGVyLXB1Yi1jYWNoZSB0byB3aGVyZWV2
-ZXIgCnlvdXIgZmx1dHRlciBjYWNoZSBpcy4KCiAgUmVnYXJkcywKICBBcm5vdXQKCgo+IAo+IFJl
-Z2FyZHMsCj4gWWFubiBFLiBNT1JJTi4KPiAKPj4gQXMgVGhvbWFzIHNlZW1zIGludGVyZXN0ZWQg
-aW4gRmx1dHRlciwgSSdsbCBhbHNvIGJyaW5nIGhpbSBpbiBmb3IgaGlzIHRob3VnaHRzLgo+PiBU
-aGFua3Mgc28gbXVjaCBmb3IgdGhlIHF1aWNrIHJlc3BvbnNlIQo+PiBBZGFtIER1c2tldHQKPj4K
-Pj4gU2VuaW9yIEVtYmVkZGVkIFN5c3RlbXMgRGV2ZWxvcGVyCj4+Cj4+IFsxXWFkYW0uZHVza2V0
-dEBhbWFydWxhc29sdXRpb25zLmNvbQo+Pgo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4+Cj4+IEFtYXJ1bGEgU29sdXRpb25zIEJWCj4+Cj4+IEpvb3AgR2Vlc2lua3dlZyAx
-MjUsIDExMTQgQUIsIEFtc3RlcmRhbSwgTkwKPj4KPj4gVC4gKzMxICgwKTg1IDExMSA5MTcwCj4+
-IFsyXWluZm9AYW1hcnVsYXNvbHV0aW9ucy5jb20KPj4KPj4gWzNdd3d3LmFtYXJ1bGFzb2x1dGlv
-bnMuY29tCj4+Cj4+IE9uIFN1biwgTm92IDE5LCAyMDIzIGF0IDE6MjHigK9BTSBZYW5uIEUuIE1P
-UklOIDwgWzRdeWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgo+Pgo+PiAgICBPbiAyMDIz
-LTExLTE4IDE1OjEyIC0wNzAwLCBBZGFtIER1c2tldHQgc3Bha2UgdGh1c2x5Ogo+PiAgICA+IFdo
-ZW4gcnVubmluZyB0aGUgY29tbWFuZCAiZmx1dHRlciBwdWIgZ2V0LCIgdGhlIHBsdWdpbnMgYXJl
-IHN0b3JlZCBpbiB0aGUKPj4gICAgPiBwdWItY2FjaGUgZGlyZWN0b3J5IGFsb25nIHdpdGggdGhl
-aXIgc2hhMjU2c3VtIGhhc2hlcy4gVGhlIGRlZmF1bHQgbG9jYXRpb24KPj4gICAgPiBvZiB0aGUg
-cHViLWNhY2hlIGRpcmVjdG9yeSBpcyAkKEhPU1RfRElSKS9zaGFyZS9mbHV0dGVyL3Nkay8ucHVi
-LWNhY2hlLgo+PiAgICA+IFdoaWxlIHRoZSBhYm92ZSBsb2NhdGlvbiBpcyBhIHBlcmZlY3RseSBh
-Y2NlcHRhYmxlIGNob2ljZSBieSBkZWZhdWx0LCB1c2Vycwo+PiAgICA+IG1heSB3YW50IHRvIGRl
-ZmluZSBhbiBhbHRlcm5hdGUgbG9jYXRpb24gdG8gcHJldmVudCBkb3dubG9hZGluZyBhbGwgb2Yg
-dGhlCj4+ICAgID4gcGx1Z2lucyBvbiBlYWNoIGZyZXNoIGJ1aWxkIG9mIGEgRmx1dHRlciBhcHBs
-aWNhdGlvbiwgYW5kIHRoZXkgbWF5IHdhbnQgdG8KPj4gICAgPiBjb21taXQgdGhlIHB1Yi1jYWNo
-ZSBkaXJlY3RvcnkgdG8gdGhlaXIgcHJvamVjdC4KPj4gICAgPgo+PiAgICA+IEFkZCB0aGUgbmV3
-IG9wdGlvbiBCUjJfUEFDS0FHRV9IT1NUX0ZMVVRURVJfU0RLX0JJTl9QVUJfQ0FDSEVfTE9DQVRJ
-T04gdG8gdGhlCj4+ICAgID4gZmx1dHRlci1zZGstYmluL0NvbmZpZy5pbi5ob3N0IGZpbGUsIGFu
-ZCBzZXQgdGhlIGRlZmF1bHQgdG8gdGhlIGN1cnJlbnQKPj4gICAgPiBkZWZhdWx0IG9mICQoSE9T
-VF9ESVIpL3NoYXJlL2ZsdXR0ZXIvc2RrLy5wdWItY2FjaGUuCj4+Cj4+ICAgIFNvLCB0aGlzIGlz
-IGZvciBjYWNoaW5nIHRoZSBkb3dubG9hZGVkIGFydGVmYWN0cy4gSXQgc2hvdWxkIHByb2JhYmx5
-IGJlCj4+ICAgIG5vbi1jb25maWd1cmFibGUsIGFuZCBzaG91bGQgYmUgbW92ZWQgaW50byBhIHN1
-Yi1kaXJlY3RvcnkgaW9mCj4+ICAgIEJSMl9ETF9ESVIsIGxpa2Ugd2UgaGF2ZSBmb3IgY2FyZ286
-Cj4+Cj4+ICAgIMKgIMKgIDg0NTBiNzY5MTg3MCBwYWNrYWdlL3BrZy1jYXJnbzogbW92ZSBDQVJH
-T19IT01FIGludG8gRExfRElSCj4+Cj4+ICAgIFNvIEkgd291bGQgc3VnZ2VzdCB0aGF0IHdlIGRv
-IHNpbWlsYXIgZm9yIHRoZSBmbHV0dGVyIGRvd25sb2FkIGNhY2hlLgo+Pgo+PiAgICBBcyBmb3Ig
-d2FudGVkIHRvIGNvbW1pdCB0aGF0IGRvd25sYWRlZCBzdHVmZiB0byBnaXQ6IGlmIHBlb3BsZSB3
-YW50Cj4+ICAgIHRoYXQsIHRoZW4gdGhleSB3b3VsZCBhbHNvIHdhbnQgdG8gY29tbWl0IGFsbCBv
-ZnRoZSBkb3dubG9hZCBzdHVmZiwgc28KPj4gICAganVzdCBoYXZlIHRoZW0gcG9pbnQgQlIyX0RM
-X0RJUiB0byBhIHN1Yi1kaXIgb2YgdGhlaXIgb3V0dGVyIHJlcG9zaXRvcnkuCj4+Cj4+ICAgIFJl
-Z2FyZHMsCj4+ICAgIFlhbm4gRS4gTU9SSU4uCj4+Cj4+ICAgID4gU2lnbmVkLW9mZi1ieTogQWRh
-bSBEdXNrZXR0IDwgWzVdYWRhbS5kdXNrZXR0QGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+PiAgICA+
-IC0tLQo+PiAgICA+wqAgcGFja2FnZS9mbHV0dGVyLXNkay1iaW4vQ29uZmlnLmluLmhvc3TCoCDC
-oCDCoHwgMTEgKysrKysrKysrKysKPj4gICAgPsKgIHBhY2thZ2UvZmx1dHRlci1zZGstYmluLyBb
-Nl1mbHV0dGVyLXNkay1iaW4ubWsgfMKgIDIgKy0KPj4gICAgPsKgIDIgZmlsZXMgY2hhbmdlZCwg
-MTIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+PiAgICA+Cj4+ICAgID4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvZmx1dHRlci1zZGstYmluL0NvbmZpZy5pbi5ob3N0IGIvcGFja2FnZS9mbHV0
-dGVyLXNkay1iaW4vQ29uZmlnLmluLmhvc3QKPj4gICAgPiBpbmRleCBhNDg3MTRlYTdmLi4wZTMx
-YThlMGZhIDEwMDY0NAo+PiAgICA+IC0tLSBhL3BhY2thZ2UvZmx1dHRlci1zZGstYmluL0NvbmZp
-Zy5pbi5ob3N0Cj4+ICAgID4gKysrIGIvcGFja2FnZS9mbHV0dGVyLXNkay1iaW4vQ29uZmlnLmlu
-Lmhvc3QKPj4gICAgPiBAQCAtMTQsMyArMTQsMTQgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0hPU1Rf
-RkxVVFRFUl9TREtfQklOCj4+ICAgID7CoCDCoCDCoCDCoCDCoGZyZWUgYW5kIG9wZW4gc291cmNl
-Lgo+PiAgICA+Cj4+ICAgID7CoCDCoCDCoCDCoCDCoCBbN11odHRwczovL2ZsdXR0ZXIuZGV2Lwo+
-PiAgICA+ICsKPj4gICAgPiAraWYgQlIyX1BBQ0tBR0VfSE9TVF9GTFVUVEVSX1NES19CSU5fQVJD
-SF9TVVBQT1JUUwo+PiAgICA+ICsKPj4gICAgPiArY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfRkxV
-VFRFUl9TREtfQklOX1BVQl9DQUNIRV9MT0NBVElPTgo+PiAgICA+ICvCoCDCoCDCoHN0cmluZyAi
-cHViLWNhY2hlIGxvY2F0aW9uIgo+PiAgICA+ICvCoCDCoCDCoGRlZmF1bHQgIiQoSE9TVF9ESVIp
-L3NoYXJlL2ZsdXR0ZXIvc2RrLy5wdWItY2FjaGUiCj4+ICAgID4gK8KgIMKgIMKgaGVscAo+PiAg
-ICA+ICvCoCDCoCDCoCDCoERpcmVjdG9yeSB0byBzdG9yZSBjYWNoZWQgcGFja2FnZXMgdXNlZCBi
-eSBQdWIgd2l0aAo+PiAgICA+ICvCoCDCoCDCoCDCoERhcnQvRmx1dHRlci4KPj4gICAgPiArCj4+
-ICAgID4gK2VuZGlmCj4+ICAgID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZmx1dHRlci1zZGstYmlu
-LyBbOF1mbHV0dGVyLXNkay1iaW4ubWsgYi9wYWNrYWdlL2ZsdXR0ZXItc2RrLWJpbi8gWzldZmx1
-dHRlci1zZGstYmluLm1rCj4+ICAgID4gaW5kZXggOTQ2MTE0OGRmYi4uNjQ3MWMxMWQ0ZSAxMDA2
-NDQKPj4gICAgPiAtLS0gYS9wYWNrYWdlL2ZsdXR0ZXItc2RrLWJpbi8gWzEwXWZsdXR0ZXItc2Rr
-LWJpbi5tawo+PiAgICA+ICsrKyBiL3BhY2thZ2UvZmx1dHRlci1zZGstYmluLyBbMTFdZmx1dHRl
-ci1zZGstYmluLm1rCj4+ICAgID4gQEAgLTk1LDQgKzk1LDQgQEAgSE9TVF9GTFVUVEVSX1NES19C
-SU5fREFSVF9CSU4gPSBcCj4+ICAgID7CoCAkKGV2YWwgJChob3N0LWdlbmVyaWMtcGFja2FnZSkp
-Cj4+ICAgID4KPj4gICAgPsKgICMgRm9yIHRhcmdldCBwYWNrYWdlcyB0byBsb2NhdGUgc2FpZCBw
-dWItY2FjaGUKPj4gICAgPiAtRkxVVFRFUl9TREtfQklOX1BVQl9DQUNIRSA9ICQoSE9TVF9GTFVU
-VEVSX1NES19CSU5fU0RLKS8ucHViLWNhY2hlCj4+ICAgID4gK0ZMVVRURVJfU0RLX0JJTl9QVUJf
-Q0FDSEUgPSAkKGNhbGwgcXN0cmlwLCQoQlIyX1BBQ0tBR0VfSE9TVF9GTFVUVEVSX1NES19CSU5f
-UFVCX0NBQ0hFX0xPQ0FUSU9OKSkKPj4gICAgPiAtLQo+PiAgICA+IDIuNDIuMAo+PiAgICA+Cj4+
-ICAgID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4g
-ICAgPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4+ICAgID4gWzEyXWJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCj4+ICAgID4gWzEzXWh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo+Pgo+PiAgICAtLQo+PiAgICAuLS0tLS0tLS0tLS0tLS0tLS0uLS0t
-LS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0t
-Lgo+PiAgICB8wqAgWWFubiBFLiBNT1JJTsKgIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFT
-Q0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cj4+ICAgIHwgKzMzIDY2MiAzNzYgMDU2
-IHwgU29mdHdhcmXCoCBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTsKgIMKgIMKgfMKgIF9fXwo+PiAg
-ICDCoCDCoHwKPj4gICAgfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOsKg
-IFjCoCBBR0FJTlNUwqAgwqAgwqAgfMKgIFxlL8KgIFRoZXJlIGlzIG5vwqAgfAo+PiAgICB8IFsx
-NF1odHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMwqAg
-wqAgfMKgIMKgdsKgIMKgY29uc3BpcmFjeS7CoCB8Cj4+ICAgICctLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0t
-LS0nCj4+Cj4+IExpbmtzOgo+PiAxLiBtYWlsdG86YWRhbS5kdXNrZXR0QGFtYXJ1bGFzb2x1dGlv
-bnMuY29tCj4+IDIuIG1haWx0bzppbmZvQGFtYXJ1bGFzb2x1dGlvbnMuY29tCj4+IDMuIGh0dHA6
-Ly93d3cuYW1hcnVsYXNvbHV0aW9ucy5jb20vCj4+IDQuIG1haWx0bzp5YW5uLm1vcmluLjE5OThA
-ZnJlZS5mcgo+PiA1LiBtYWlsdG86YWRhbS5kdXNrZXR0QGFtYXJ1bGFzb2x1dGlvbnMuY29tCj4+
-IDYuIGh0dHA6Ly9mbHV0dGVyLXNkay1iaW4ubWsKPj4gNy4gaHR0cHM6Ly9mbHV0dGVyLmRldi8K
-Pj4gOC4gaHR0cDovL2ZsdXR0ZXItc2RrLWJpbi5tawo+PiA5LiBodHRwOi8vZmx1dHRlci1zZGst
-YmluLm1rCj4+IDEwLiBodHRwOi8vZmx1dHRlci1zZGstYmluLm1rCj4+IDExLiBodHRwOi8vZmx1
-dHRlci1zZGstYmluLm1rCj4+IDEyLiBtYWlsdG86YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPj4g
-MTMuIGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo+PiAxNC4gaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLwo+IAo+PiBfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiBidWlsZHJvb3QgbWFpbGluZyBs
-aXN0Cj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+IAo+IApfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 18/11/2023 23:12, Adam Duskett wrote:
+> When running the command "flutter pub get," the plugins are stored in the
+> pub-cache directory along with their sha256sum hashes. The default location
+> of the pub-cache directory is $(HOST_DIR)/share/flutter/sdk/.pub-cache.
+> While the above location is a perfectly acceptable choice by default, users
+> may want to define an alternate location to prevent downloading all of the
+> plugins on each fresh build of a Flutter application, and they may want to
+> commit the pub-cache directory to their project.
+> 
+> Add the new option BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_PUB_CACHE_LOCATION to the
+> flutter-sdk-bin/Config.in.host file, and set the default to the current
+> default of $(HOST_DIR)/share/flutter/sdk/.pub-cache.
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+>   package/flutter-sdk-bin/Config.in.host     | 11 +++++++++++
+>   package/flutter-sdk-bin/flutter-sdk-bin.mk |  2 +-
+>   2 files changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/flutter-sdk-bin/Config.in.host b/package/flutter-sdk-bin/Config.in.host
+> index a48714ea7f..0e31a8e0fa 100644
+> --- a/package/flutter-sdk-bin/Config.in.host
+> +++ b/package/flutter-sdk-bin/Config.in.host
+> @@ -14,3 +14,14 @@ config BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
+>   	  free and open source.
+>   
+>   	  https://flutter.dev/
+> +
+> +if BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
+> +
+> +config BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_PUB_CACHE_LOCATION
+> +	string "pub-cache location"
+> +	default "$(HOST_DIR)/share/flutter/sdk/.pub-cache"
+> +	help
+> +	  Directory to store cached packages used by Pub with
+> +	  Dart/Flutter.
+> +
+> +endif
+> diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+> index 9461148dfb..6471c11d4e 100644
+> --- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
+> +++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+> @@ -95,4 +95,4 @@ HOST_FLUTTER_SDK_BIN_DART_BIN = \
+>   $(eval $(host-generic-package))
+>   
+>   # For target packages to locate said pub-cache
+> -FLUTTER_SDK_BIN_PUB_CACHE = $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
+> +FLUTTER_SDK_BIN_PUB_CACHE = $(call qstrip,$(BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_PUB_CACHE_LOCATION))
+
+  What about this code?
+
+# Remove the cache, as we will run precache after setting up flutter and dart
+# with the new config options.
+define HOST_FLUTTER_SDK_BIN_BUILD_CMDS
+         mkdir -p $(HOST_FLUTTER_SDK_BIN_SDK)
+         rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
+         cd $(@D) && \
+                 $(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter precache;
+endef
+
+
+  Either this code is needed and the idea of a shared cache is void, and it 
+really shouldn't be in DL_DIR at all. Or it is not needed and it should be 
+removed, with an explanation about why this "setting up flutter and dart with 
+the new config optoins" doesn't actually apply.
+
+  Regards,
+  Arnout
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
