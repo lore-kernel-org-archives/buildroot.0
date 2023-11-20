@@ -4,63 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BA66C54E76
-	for <buildroot@archiver.kernel.org>; Mon, 20 Nov 2023 10:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BC6CC197A0
+	for <buildroot@archiver.kernel.org>; Mon, 20 Nov 2023 13:55:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 128518175D;
-	Mon, 20 Nov 2023 10:52:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 128518175D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12D3C80E73;
+	Mon, 20 Nov 2023 13:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12D3C80E73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d0KxlrUdrz6n; Mon, 20 Nov 2023 10:51:59 +0000 (UTC)
+	with ESMTP id f4HpxGulYvoS; Mon, 20 Nov 2023 13:55:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5553F81755;
-	Mon, 20 Nov 2023 10:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5553F81755
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7B1D51BF35E
- for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 10:51:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C4C680C1C;
+	Mon, 20 Nov 2023 13:54:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C4C680C1C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E885D1BF340
+ for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 13:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53EAC60B20
- for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 10:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53EAC60B20
+ by smtp1.osuosl.org (Postfix) with ESMTP id C23AD80BF6
+ for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 13:54:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C23AD80BF6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xm0Zz7V6Uxtz for <buildroot@lists.busybox.net>;
- Mon, 20 Nov 2023 10:51:52 +0000 (UTC)
-Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1EEF960B06
- for <buildroot@buildroot.org>; Mon, 20 Nov 2023 10:51:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EEF960B06
-Received: from tarshish (unknown [10.0.8.3])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id D299C44064C;
- Mon, 20 Nov 2023 12:50:38 +0200 (IST)
-References: <20231120103304.89728-1-bstruempfel@ultratronik.de>
- <20231120103304.89728-2-bstruempfel@ultratronik.de>
-User-agent: mu4e 1.10.7; emacs 29.1
-To: Boerge Struempfel <boerge.struempfel@gmail.com>
-Date: Mon, 20 Nov 2023 12:46:33 +0200
-In-reply-to: <20231120103304.89728-2-bstruempfel@ultratronik.de>
-Message-ID: <87a5r8zoho.fsf@tarshish>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EWwwf64QC4hk for <buildroot@lists.busybox.net>;
+ Mon, 20 Nov 2023 13:54:56 +0000 (UTC)
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EE4C80BC7
+ for <buildroot@buildroot.org>; Mon, 20 Nov 2023 13:54:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EE4C80BC7
+Received: from pwmachine.numericable.fr (85-170-33-133.rev.numericable.fr
+ [85.170.33.133])
+ by linux.microsoft.com (Postfix) with ESMTPSA id C34A120B74C1;
+ Mon, 20 Nov 2023 05:54:53 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C34A120B74C1
+From: Francis Laniel <flaniel@linux.microsoft.com>
+To: buildroot@buildroot.org
+Date: Mon, 20 Nov 2023 14:54:43 +0100
+Message-Id: <20231120135443.45265-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1700477438;
- bh=8/eCRlPVu1pkUMTUFu4AohFnKKBumepyPbOG/78BU2k=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=gZFVL1S7uJOzxxzNVFXtk1Y2vqSQJQGQ8SGHp6Y5LsiI/QEwrkN37naWdoef3FPwH
- 6TNIfbR9wZ91opUCKZL8BjTTghr4d8B/SgpPuoJ7frHCWsMIg9ja8eXwaIKFVgi3w5
- GnHHOMhMyJPSGH3v9oOthrYXcWIQXkFILhfSUoPI/IHrvAK7nQ8nUrTr7oYZdBFtDL
- TVlK0zVrsD7znuaIAxC0uY1JPKPaYmcEzno4FowMkMFjo3JBPyjpgR6ik/4nhEQCud
- HeSGPuPUnUoeH5co8WwCWHJJUHjK1TmvmG7L2O9WttfNo2VjI8SVcCAdV5UqPRCF2V
- vfzoRGvgdQdxA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=gZFVL1S7
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/libgpiod2: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=linux.microsoft.com; 
+ s=default; t=1700488494;
+ bh=DWnuRKl8Hmzqo2fCoRRl19oQGwMAv9NfA4IfnpR6SL8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=nGHonYM/fTXQ6QeS/rRL4WjNWSOkQl1nJSIFa4qHoGNcJ+BgWmAE6lmu9V/GNWmyn
+ 1KXDS1ZDf+YSis3jYgxKzSZNk/IvEFnTuDsyZrocRxT43FrkVePXa9AsXSyf2CxtLs
+ jmuZD8pntG02Rs007CROqVFew+Rj7hdM19mjyppQ=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
+ header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
+ header.b=nGHonYM/
+Subject: [Buildroot] [PATCH] package/tbb: bump to version 2021.11.0.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,80 +69,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot@buildroot.org, vfazio@xes-inc.com, bonet@grenoble.cnrs.fr,
- bstruempfel@ultratronik.de
+Cc: Francis Laniel <flaniel@linux.microsoft.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Boerge,
+Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+---
+ package/tbb/tbb.hash | 2 +-
+ package/tbb/tbb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Nov 20 2023, Boerge Struempfel wrote:
-> diff --git a/package/libgpiod2/libgpiod2.mk b/package/libgpiod2/libgpiod2.mk
-> new file mode 100644
-> index 0000000000..e9e68339a8
-> --- /dev/null
-> +++ b/package/libgpiod2/libgpiod2.mk
-> @@ -0,0 +1,44 @@
-> +################################################################################
-> +#
-> +# libgpiod2
-> +#
-> +################################################################################
-> +
-> +# Be careful when bumping versions.
-> +# Dependency on kernel header versions may change.
-> +LIBGPIOD2_VERSION = 2.1
-> +LIBGPIOD2_SOURCE = libgpiod-$(LIBGPIOD2_VERSION).tar.xz
-> +LIBGPIOD2_SITE = https://www.kernel.org/pub/software/libs/libgpiod
-> +LIBGPIOD2_LICENSE = LGPL-2.1+
-> +LIBGPIOD2_LICENSE_FILES = COPYING
-> +LIBGPIOD2_INSTALL_STAGING = YES
-> +LIBGPIOD2_DEPENDENCIES = host-pkgconf host-autoconf-archive
-> +# We're patching configure.ac
-
-Are we? I don't see patches here. It looks like the tar file includes a
-generated configure script. Is autoreconf still necessary?
-
-baruch
-
-> +LIBGPIOD2_AUTORECONF = YES
-> +LIBGPIOD2_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
-> +LIBGPIOD2_CONF_OPTS = --disable-tests --disable-examples
-> +
-> +ifeq ($(BR2_PACKAGE_LIBGPIOD2_TOOLS),y)
-> +LIBGPIOD2_CONF_OPTS += --enable-tools
-> +else
-> +LIBGPIOD2_CONF_OPTS += --disable-tools
-> +endif
-> +
-> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-> +LIBGPIOD2_CONF_OPTS += --enable-bindings-cxx
-> +else
-> +LIBGPIOD2_CONF_OPTS += --disable-bindings-cxx
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +LIBGPIOD2_CONF_OPTS += --enable-bindings-python
-> +LIBGPIOD2_DEPENDENCIES += python3
-> +LIBGPIOD2_CONF_ENV += \
-> +	PYTHON=$(HOST_DIR)/bin/python3 \
-> +	PYTHON_CPPFLAGS="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
-> +	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
-> +else
-> +LIBGPIOD2_CONF_OPTS += --disable-bindings-python
-> +endif
-> +
-> +$(eval $(autotools-package))
-
-
+diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
+index 085d54109a..4d2cb10da8 100644
+--- a/package/tbb/tbb.hash
++++ b/package/tbb/tbb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  487023a955e5a3cc6d3a0d5f89179f9b6c0ae7222613a7185b0227ba0c83700b  tbb-2021.10.0.tar.gz
++sha256  782ce0cab62df9ea125cdea253a50534862b563f1d85d4cda7ad4e77550ac363  tbb-2021.11.0.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
+diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
+index 75cca5e99d..1b0afbb889 100644
+--- a/package/tbb/tbb.mk
++++ b/package/tbb/tbb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TBB_VERSION = 2021.10.0
++TBB_VERSION = 2021.11.0
+ TBB_SITE = $(call github,01org,tbb,v$(TBB_VERSION))
+ TBB_INSTALL_STAGING = YES
+ TBB_LICENSE = Apache-2.0
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
