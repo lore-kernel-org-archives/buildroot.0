@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3E3CC197A0
-	for <buildroot@archiver.kernel.org>; Mon, 20 Nov 2023 08:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE8ACC197A0
+	for <buildroot@archiver.kernel.org>; Mon, 20 Nov 2023 10:33:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D58D60B05;
-	Mon, 20 Nov 2023 08:54:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D58D60B05
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42ED28148B;
+	Mon, 20 Nov 2023 10:33:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42ED28148B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m24v1d_-0HsH; Mon, 20 Nov 2023 08:54:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jMewGDe8YJar; Mon, 20 Nov 2023 10:33:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE2A860AE4;
-	Mon, 20 Nov 2023 08:54:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE2A860AE4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CE88E1BF5DD
- for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 08:54:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C27C81587;
+	Mon, 20 Nov 2023 10:33:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C27C81587
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B5E21BF35E
+ for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 10:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7A2F60AE4
- for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 08:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7A2F60AE4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E39140459
+ for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 10:33:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E39140459
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1L7_Sh6rR-94 for <buildroot@lists.busybox.net>;
- Mon, 20 Nov 2023 08:54:08 +0000 (UTC)
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
- [IPv6:2607:f8b0:4864:20::1031])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 18006606DC
- for <buildroot@buildroot.org>; Mon, 20 Nov 2023 08:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18006606DC
-Received: by mail-pj1-x1031.google.com with SMTP id
- 98e67ed59e1d1-280165bba25so2749714a91.2
- for <buildroot@buildroot.org>; Mon, 20 Nov 2023 00:54:08 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EXxMvQ_NdwbR for <buildroot@lists.busybox.net>;
+ Mon, 20 Nov 2023 10:33:53 +0000 (UTC)
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3CB0140424
+ for <buildroot@buildroot.org>; Mon, 20 Nov 2023 10:33:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CB0140424
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-548b54ed16eso1180554a12.0
+ for <buildroot@buildroot.org>; Mon, 20 Nov 2023 02:33:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700470447; x=1701075247;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=+LcaZ5kn1f/l9q8dCcwfm+jH3QFzHeVrPFHiqvPFAKw=;
- b=iD0eoqe576gRRAlBaAjPq7/bzcOhl+QkbJZyWoRWwz1OQrju7n3qpE0HZfngTeHcIv
- o29SmX2pLzPBioNAmels3H1QZ6nkfcoFc/PKUGlHXEAekVUIcL7pit2HMeCPBgcXxjH6
- a6yM7qMn/MEi04mlI7Aa2/74c9+CRFduqcH8PPAfqDTNddDlSL8MJ/tMRwbPRuBtFVi4
- Pw0+Ncydd5SgBCJqqoUZF99+5+rUJlazntLxYxp3lXEpNef0SKjdm1UJtjZQYWpTQL7v
- AXMQGJClXviFvhQ8R50NK2W/0X4U5EpX/L1gBBBJ9u2IzcLwxd8XQgCu2MefUwXmkvX/
- co8Q==
-X-Gm-Message-State: AOJu0YwLIleruiWLUMS7IvFILtn3605TL05NduzoONphBXBenwD6nLOM
- EFy0pPOrFrqtd2HPrTh1YNVSo2rnLJb5fYQ+CbQ=
-X-Google-Smtp-Source: AGHT+IFNT8l+MWwYaeeRF8sKu9iDHfiJIzdt+Ty0XLVZdh6Qlk5qgmxoksGA/W471SMWrhBi7Px+F441sgmcIaFvdAA=
-X-Received: by 2002:a17:90a:142:b0:280:699:c5c with SMTP id
- z2-20020a17090a014200b0028006990c5cmr4848325pje.21.1700470447372; Mon, 20 Nov
- 2023 00:54:07 -0800 (PST)
+ d=1e100.net; s=20230601; t=1700476431; x=1701081231;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=r8dFEA//q7yr6uH+Lm77y2FOK+N8anX6kVGslNidoH0=;
+ b=R2FW6DPatSXB8fUiirXrx7btRSUmCyg782vvOyHjfVBAz6q++R1DEkYRKdNSZGtxXt
+ P92Fb8BQjbFzceGnqeHFaxgpX1pS1sS5UqkFj6c74uURLkRQBryKj5YHFnBXSppoTMBz
+ d9gnyuXpvKBZHwMVUJffAaB89teJufDyrVqndwDrZVQFfk39trLbBVO4n0IJeoVfrErl
+ B+xPY42lkSCanEEZD4nxLTL6RnZwTUZzgIMKQ370Md51Z6EAwrznCrI6BNWrWBrbLjEE
+ SZGgivJYHRLJuip1Lf3r6JXfIDM9MYiQaKx+vd04yENQObUS6GQ9uTv0TQWQFUCbihEq
+ dn+g==
+X-Gm-Message-State: AOJu0Yw2HYmuBVCVZJQCIURExENZIkOTUv4bvsIvJE1LkFic2f8wY6Hc
+ 4FeXzv+LpvyfM8WaH+z45pQ=
+X-Google-Smtp-Source: AGHT+IGdf0BsQGFru0/Omcfs7t2CBOm0dE+g9fO6tKfRFccqIHlc24XEB/ue6rtRK3dKSHrC68SGzw==
+X-Received: by 2002:a17:906:3bcb:b0:9e5:d618:d6c1 with SMTP id
+ v11-20020a1709063bcb00b009e5d618d6c1mr5609701ejf.19.1700476430947; 
+ Mon, 20 Nov 2023 02:33:50 -0800 (PST)
+Received: from wslxew193.ultratronik.de (mail.ultratronik.de. [82.100.224.114])
+ by smtp.gmail.com with ESMTPSA id
+ i14-20020a170906090e00b009ae57888718sm3732153ejd.207.2023.11.20.02.33.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Nov 2023 02:33:50 -0800 (PST)
+From: Boerge Struempfel <boerge.struempfel@gmail.com>
+X-Google-Original-From: Boerge Struempfel <bstruempfel@ultratronik.de>
+To: 
+Date: Mon, 20 Nov 2023 11:32:56 +0100
+Message-ID: <20231120103304.89728-1-bstruempfel@ultratronik.de>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-References: <20231115100222.29685-1-bstruempfel@ultratronik.de>
- <8950d51a-3b99-4aea-bd2f-473fd32d8f78@grenoble.cnrs.fr>
- <CAEktqcuLCaKbRZpPQDTRCK-3QYxA-s=mHcRyFW6Az7civD41Vw@mail.gmail.com>
- <7affda22-14f6-4bdd-be82-719476b9b993@grenoble.cnrs.fr>
-In-Reply-To: <7affda22-14f6-4bdd-be82-719476b9b993@grenoble.cnrs.fr>
-From: =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Date: Mon, 20 Nov 2023 09:53:56 +0100
-Message-ID: <CAEktqcvgw4+NKD8GN2vK29iC0N15Z++ao3qA+u3PJnFh3VvA+w@mail.gmail.com>
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700470447; x=1701075247; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=+LcaZ5kn1f/l9q8dCcwfm+jH3QFzHeVrPFHiqvPFAKw=;
- b=iOGYZqsoW8HBI3zTeF+DQ6v9xIOQnVchRUt+On/lYNSFG0SEBrtdr5ZuJ+ix7ofbkG
- wXpEqg3vcsT70RizCnh5GDtRJ9T5EOeH8RAau+JYSx58yRrVZ3i4Hqkvs2lVLp7C9vhh
- alZOknNPKAVC/O1oYjASzAgAfvFaxJZwuOs8GQXeKd0k0nFNFmgamrw+XKIO6zLLOjwY
- YoGumCgJxrwUsDg0m5m6qCAOtC+UgDZiycm42Q3cJrNYxbN8b84KCMEyQKe/7S/4J78y
- GQqx3XZea85L4fw3Ss4RdEKsLPTQxrva9OUCToOD2/B638bbZPi7QmkcpyVz++7WOVNr
- z1pA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1700476431; x=1701081231; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=r8dFEA//q7yr6uH+Lm77y2FOK+N8anX6kVGslNidoH0=;
+ b=KqBPCnC87NTYlbEIO+ron9vXYiLmAeuig48QaViiehCroluDbyQofcnvdNpjM9yX72
+ LQ12b7EFQ8HmhMIxaZynU0OAtnbj/f2XFqOPRwt1huZEKRaqTMw6mmtKNni9/n7e/W0b
+ RcQPe0AvZ8hZL8g5RWsqcrXDqlHtW/9HLqnr5G9HzKNlfaA6Qp7qmyg697mz6c2zsh3q
+ BIT0N6eRxDvHdcP5mmI6e8qVKrGsGIffWDDnXbmRKnnVX6mKxnMWuJW3dNrb8xot9S1A
+ uy4yKYuimQZoAumAW/O5RG+Rm1kQfhgFDD3I4PXkZEDxeNHQNLiYhb29rUgtKxbsAmhf
+ lqmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=iOGYZqso
-Subject: Re: [Buildroot] [PATCH 0/2] Adding support for gpiod v2.0 and higher
+ header.a=rsa-sha256 header.s=20230601 header.b=KqBPCnC8
+Subject: [Buildroot] [PATCH v2 0/2] Adding support for gpiod v2.0 and higher
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,24 +94,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: bstruempfel@ultratronik.de, vfazio@xes-inc.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: vfazio@xes-inc.com, bonet@grenoble.cnrs.fr, bstruempfel@ultratronik.de,
+ buildroot@buildroot.org, boerge.struempfel@gmail.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRWRnYXIsCgpPbiBXZWQsIE5vdiAxNSwgMjAyMyBhdCAxOjEz4oCvUE0gRWRnYXIgQm9uZXQg
-PGJvbmV0QGdyZW5vYmxlLmNucnMuZnI+IHdyb3RlOgo+Cj4gQWJvdXQgdGhlIG5hbWUgImxpYmdw
-aW9kMiIsIELDtnJnZSBTdHLDvG1wZmVsIHdyb3RlOgo+ID4gRG8geW91IGhhdmUgYW4gaWRlYSBm
-b3IgYSBiZXR0ZXIgbmFtZT8gTWF5YmUgbGliZ3Bpb2R2MiBpbiBvcmRlciB0bwo+ID4gbWFrZSBh
-IGRpc3RpbmN0aW9uIHRvIHRoZSBkZWJpYW4gcGFja2FnZT8KPgo+IE9yICJsaWJncGlvZC12MiI/
-IFRvIGJlIGhvbmVzdCwgSSBkb24ndCBsaWtlIGVpdGhlci4gImxpYmdwaW9kMiIgc2VlbXMKPiB0
-aGUgbW9zdCBjb25zaXN0ZW50IHdpdGggY3VycmVudCBwcmFjdGljZS4gSSBmZWVsIGEgYml0IHNv
-cnJ5IGFzIEkganVzdAo+IHdhbnRlZCB0byBwb2ludCBvdXQgYSBwb3RlbnRpYWwgaXNzdWUsIGFu
-ZCBJIGhhdmUgbm8gc29sdXRpb24gdG8KPiBwcm9wb3NlLiA6LSgKClRoYW5rcyBmb3IgcG9pbnRp
-bmcgdGhhdCBvdXQuIEkgYWxzbyB0aGluayB0aGF0IGxpYmdwaW9kMiBzZWVtcyB0byBiZSB0aGUK
-bW9zdCBjb25zaXN0ZW50IHNvbHV0aW9uLiBUaGVyZWZvcmUsIEkgd291bGQgYmUgaW4gZmF2b3Ig
-b2Yga2VlcGluZyB0aGUKbmFtZSBsaWJwZ2lvZDIuCgo+Cj4gUmVnYXJkcywKPgo+IEVkZ2FyLgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Since libgpiod v2.0 breaks its api, and leads to
+compilation issues with multiple other packages,
+we introduce libgpiod v2.0 as a new package libgpiod2.
+Furthermore swupdate is updated to support both the
+old libpgiod and the new libgpiod2 package.
+
+---
+
+v1: https://lists.buildroot.org/pipermail/buildroot/2023-November/679675.html
+
+Changes from v1:
+  - Added myself to DEVELOPERS for the new libgpiod2 package
+  - Removed the dependency on the linux headers
+  - Updated from version 2.0.2 to 2.1
+  - Added comment in the commit message to swap the dependency in the future
+  - Added a note in the commit message, that the libgpiod2 does not correspond to the libgpiod2 debian package
+  - Updated the help text to explain the difference between libgpiod and libgpiod2
+
+
+Boerge Struempfel (2):
+  package/libgpiod2: new package
+  package/swupdate: Add compatibility to libgpiod2
+
+ DEVELOPERS                                    |   3 +
+ package/Config.in                             |   1 +
+ package/libgpiod2/Config.in                   |  27 +++
+ package/libgpiod2/libgpiod2.hash              |   4 +
+ package/libgpiod2/libgpiod2.mk                |  44 ++++
+ ...cfw-Refactored-switch_mode-signature.patch |  74 +++++++
+ ...pio-chip-and-lines-in-gpio-structure.patch | 129 +++++++++++
+ .../0004-ucfw-Refactored-gpio-handling.patch  | 132 +++++++++++
+ ...d-compatibility-with-libgpiod-v2-api.patch | 209 ++++++++++++++++++
+ package/swupdate/Config.in                    |   4 +-
+ package/swupdate/swupdate.mk                  |   5 +-
+ 11 files changed, 629 insertions(+), 3 deletions(-)
+ create mode 100644 package/libgpiod2/Config.in
+ create mode 100644 package/libgpiod2/libgpiod2.hash
+ create mode 100644 package/libgpiod2/libgpiod2.mk
+ create mode 100644 package/swupdate/0002-ucfw-Refactored-switch_mode-signature.patch
+ create mode 100644 package/swupdate/0003-ucfw-Save-the-gpio-chip-and-lines-in-gpio-structure.patch
+ create mode 100644 package/swupdate/0004-ucfw-Refactored-gpio-handling.patch
+ create mode 100644 package/swupdate/0005-ucfw-Add-compatibility-with-libgpiod-v2-api.patch
+
+-- 
+2.42.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
