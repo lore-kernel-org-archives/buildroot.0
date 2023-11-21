@@ -4,84 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62A8FC61D92
-	for <buildroot@archiver.kernel.org>; Tue, 21 Nov 2023 17:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CA5BC61D85
+	for <buildroot@archiver.kernel.org>; Tue, 21 Nov 2023 18:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EED5A8135B;
-	Tue, 21 Nov 2023 17:47:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EED5A8135B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05E4680BFB;
+	Tue, 21 Nov 2023 18:03:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05E4680BFB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pYob0wnbopmK; Tue, 21 Nov 2023 17:47:40 +0000 (UTC)
+	with ESMTP id mPlkvwWVZdP3; Tue, 21 Nov 2023 18:03:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B5C781312;
-	Tue, 21 Nov 2023 17:47:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B5C781312
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 620A41BF5D7
- for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 17:47:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56C81812DB;
+	Tue, 21 Nov 2023 18:03:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56C81812DB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 252CE1BF5D7
+ for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 18:03:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A3E640078
- for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 17:47:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A3E640078
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE3584113A
+ for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 18:03:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE3584113A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6t24qjXJIBPX for <buildroot@lists.busybox.net>;
- Tue, 21 Nov 2023 17:47:36 +0000 (UTC)
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com
- [IPv6:2607:f8b0:4864:20::f29])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 762DE4004B
- for <buildroot@buildroot.org>; Tue, 21 Nov 2023 17:47:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 762DE4004B
-Received: by mail-qv1-xf29.google.com with SMTP id
- 6a1803df08f44-671357f0209so21929256d6.0
- for <buildroot@buildroot.org>; Tue, 21 Nov 2023 09:47:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700588855; x=1701193655;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=icIpdSRhouL4+LIgGFAuQY7b4h0ooRqLZdO6aWGqoF8=;
- b=DCCDYxGFEf4Ho+JIZI+8GBLupvyRIWC6GRTdIzvyhz/lqAItClB0Of2dM36PFHnRTb
- p1z+YbDe+CP/AvK05+TfayZ9sNBIxossfq/V7qt3QkkwHDIOw8azhETDvrGihVR00AXp
- +fsOqsvrDlYT705gm6n6+F+VdYbwaeOG2qUVPT3xiecuQdADPamQMCKROyTRFohPC1Cy
- W76otk6XRngjOvS67Ugfgc4yAASc2PzOajX0mWX9tCfu3VhZwu3kUtDhr99F+PMrEQx0
- lh4jalXsR0JvPU2mjvUKTTPQ3GfBFKu3VWq+9cMYXIYCBhaPNC5DXJFE4w8bUfp9eZde
- ajOw==
-X-Gm-Message-State: AOJu0Ywq7bFw9ARVLxfS6ML328FtPqrGrNWB9ZKnD3CdXllItWxnKS6p
- rPkaCSDhGgLSao9yiSSkYZsIOL9NcYcAMQ==
-X-Google-Smtp-Source: AGHT+IFRS1D5DKas3C9yd+6VlknWCa8Eb6l1VzNblWR+cD455I4GYIqDdvPa4pbEnEd4jTN4FxktCg==
-X-Received: by 2002:a05:6214:f26:b0:655:d82d:2fd0 with SMTP id
- iw6-20020a0562140f2600b00655d82d2fd0mr14905110qvb.21.1700588855089; 
- Tue, 21 Nov 2023 09:47:35 -0800 (PST)
-Received: from localhost.localdomain (c-68-36-104-89.hsd1.mi.comcast.net.
- [68.36.104.89]) by smtp.gmail.com with ESMTPSA id
- pm14-20020ad446ce000000b00677fb735738sm3637402qvb.34.2023.11.21.09.47.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Nov 2023 09:47:34 -0800 (PST)
-From: Byron Gallagher <trippgallagher98@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xtfNRFohZrRx for <buildroot@lists.busybox.net>;
+ Tue, 21 Nov 2023 18:03:50 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9123840C08
+ for <buildroot@buildroot.org>; Tue, 21 Nov 2023 18:03:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9123840C08
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3B0FF13FA41;
+ Tue, 21 Nov 2023 19:03:46 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 21 Nov 2023 12:47:22 -0500
-Message-Id: <20231121174722.4164-1-trippgallagher98@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue, 21 Nov 2023 19:03:39 +0100
+Message-ID: <20231121180339.3015360-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700588855; x=1701193655; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=icIpdSRhouL4+LIgGFAuQY7b4h0ooRqLZdO6aWGqoF8=;
- b=T72I8CiyC/P01+wtzrQG/AuCYH92cpqJdFcfsNiGnzx6UPLH9+tA+huvyG70Tt0Ksl
- HpnAweHX+sY6syszysia1YBG9s1SvEZXG9aCWB9/VDJdCSlule+lN/4O78AL3avVptrn
- 79emi/0FfIIifbQR4l4zDZqTvqVSCXjdhrwxicQkfmCECJOIWbRKLe3kJfcpvkWi7Ys5
- LO1/T0ozDTsi7hL8vP2wcQ5m18o2mPBA0/nnlO3ZUczCIZC5tlK0vyscpFMTz5K4LeGX
- rvTarQ21bYpK/7/XdR4vwsrzngUQ5pqtg/sDZU4EMz6wV3h0rFMEk+GXavOkqzcEgGgB
- ycNg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=T72I8Ciy
-Subject: [Buildroot] [PATCH] package/socat: fix static openssl compatibility
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1700589827;
+ bh=wvjfbSgLK7/XjyXjbfzmyyuSYOPxN+r4ppMTIwS5Xdo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=qVgrMg6zeWcd29Eyc4A63zShyws5Gof3hl350j3hxkdAK/7MPK55hMRw98Q6wRtPo
+ 2IcyY6gX5U5hbP9Wf9/2hd6scMfWcFVz8H3P4mF4vcWkk3kqzyG6MDS6n9OsBhwpWv
+ ajBBJXyfZwvJS2C0BFTBAXBJFzqbing8i9BNHu+r0MRT5TpXH9YGQ/WjdC4bpWKTxd
+ unlJ2TbibR1Ao8VzeGZl2NzBsW0yI6bbpcvkLJpHQ7O9aKaudfNfJUBxWm6HcEYH5d
+ WPlkNhfru6kEKp8nyULj0jPbm0x0W4MjCsWV4iFGIypl8/RisuXhgboq/by+JtFYQr
+ hcp7mjSfuGl6Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qVgrMg6z
+Subject: [Buildroot] [PATCH next 1/1] package/rdma-core: bump to version
+ v49.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,82 +71,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Byron Gallagher <trippgallagher98@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-4028ee71743a25af172809e098e4c8eb61bf55f4 disables static openssl
-compatibility due to issues linking against zlib.
+For change log, see:
+https://github.com/linux-rdma/rdma-core/releases/tag/v49.0
 
-This patch re-enables the functionality by patching socat's
-autoconf to include zlib when locating openssl. Bug also reported
-upstream via socat@dest-unreach.org.
-
-Signed-off-by: Byron Gallagher <trippgallagher98@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...-build-link-against-zlib-for-openssl.patch | 35 +++++++++++++++++++
- package/socat/socat.mk                        |  2 +-
- 2 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100644 package/socat/0003-build-link-against-zlib-for-openssl.patch
+Patch tested on branch next at commit a743087 with commands:
 
-diff --git a/package/socat/0003-build-link-against-zlib-for-openssl.patch b/package/socat/0003-build-link-against-zlib-for-openssl.patch
-new file mode 100644
-index 0000000000..3851d5bcab
---- /dev/null
-+++ b/package/socat/0003-build-link-against-zlib-for-openssl.patch
-@@ -0,0 +1,35 @@
-+From 0434a4674a012a35f6390d9afc4812de59a394ab Mon Sep 17 00:00:00 2001
-+From: Byron Gallagher <trippgallagher98@gmail.com>
-+Date: Tue, 21 Nov 2023 12:25:18 -0500
-+Subject: [PATCH] build: link against zlib for openssl
-+
-+If openssl is static, socat will not find it due to autoconf
-+failures on AC_TRY_LINK without -lz.
-+
-+Signed-off-by: Byron Gallagher <trippgallagher98@gmail.com>
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 9d60473..ae0e6bd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -580,12 +580,12 @@ if test -n "$WITH_OPENSSL" -a "$sc_cv_have_openssl_ssl_h" = 'yes'; then
-+       if test -n "$OPENSSL_BASE"; then
-+ 	L="$OPENSSL_BASE/lib"; LIBS="$LIBS -L$L -lssl -lcrypto"
-+       else
-+-	LIBS="$LIBS -lssl -lcrypto"
-++	LIBS="$LIBS -lssl -lcrypto -lz"
-+       fi
-+       AC_TRY_LINK([#include <openssl/ssl.h>],
-+        [SSL_library_init();ERR_error_string()],
-+        [sc_cv_have_libssl='yes'],
-+-       [ LIBS="$LIBS -lcrypto"
-++       [ LIBS="$LIBS -lcrypto -lz"
-+        AC_TRY_LINK([#include <openssl/ssl.h>],
-+        [SSL_library_init()],
-+ 	  [sc_cv_have_libssl='yes'],
-+-- 
-+2.34.1
-+
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index f958f26522..0741605687 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -39,7 +39,7 @@ SOCAT_DEPENDENCIES = host-autoconf
- # incompatibile license (GPL-3.0+)
- SOCAT_CONF_OPTS = --disable-readline
+    make check-package
+    ...
+    0 warnings generated
+
+    utils/test-pkg -a -p rdma-core
+    ...
+    45 builds, 5 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_rdma_core
+    ...
+    OK
+---
+ package/rdma-core/rdma-core.hash | 2 +-
+ package/rdma-core/rdma-core.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
+index f0f2448a8f..fc1d319123 100644
+--- a/package/rdma-core/rdma-core.hash
++++ b/package/rdma-core/rdma-core.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  e78abaa3ed16771bc6c40b538fe27082429363b86b6ce47636bb57a59238b2be  rdma-core-48.0.tar.gz
++sha256  1ea2c2678d48be0b179871e9ae8c58ceab11a0c5b69315a332ff51dd607180b7  rdma-core-49.0.tar.gz
+ sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
+ sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
+diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
+index 41f10d44f6..5f8989b3bd 100644
+--- a/package/rdma-core/rdma-core.mk
++++ b/package/rdma-core/rdma-core.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBOPENSSL):$(BR2_STATIC_LIBS),y:)
-+ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- SOCAT_DEPENDENCIES += openssl
- else
- SOCAT_CONF_OPTS += --disable-openssl
+-RDMA_CORE_VERSION = 48.0
++RDMA_CORE_VERSION = 49.0
+ RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
+ RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
+ RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
 -- 
-2.34.1
+2.42.0
 
 _______________________________________________
 buildroot mailing list
