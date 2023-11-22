@@ -1,46 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02483C61D9B
-	for <buildroot@archiver.kernel.org>; Wed, 22 Nov 2023 17:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70B95C27C40
+	for <buildroot@archiver.kernel.org>; Wed, 22 Nov 2023 20:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79FCC41563;
-	Wed, 22 Nov 2023 17:31:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79FCC41563
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD75961068;
+	Wed, 22 Nov 2023 20:19:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD75961068
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ErSqyErzjspS; Wed, 22 Nov 2023 17:31:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XM-NmHXA1sgL; Wed, 22 Nov 2023 20:19:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B067400A6;
-	Wed, 22 Nov 2023 17:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B067400A6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D0C91BF588
- for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 17:31:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAE8F610A6;
+	Wed, 22 Nov 2023 20:19:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAE8F610A6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AA091BF3E3
+ for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 20:19:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 27D8381FAD
- for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 17:31:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27D8381FAD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52E2C40869
+ for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 20:19:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52E2C40869
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SaxgVBNRKTIc for <buildroot@lists.busybox.net>;
- Wed, 22 Nov 2023 17:31:33 +0000 (UTC)
-Received: from busybox.net (unknown [91.92.253.41])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8862981F74
- for <buildroot@busybox.net>; Wed, 22 Nov 2023 17:31:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8862981F74
-From: Noreply@busybox.net
-To: buildroot@busybox.net
-Date: 22 Nov 2023 18:31:30 +0100
-Message-ID: <20231122183130.7BBD76F6878ED31E@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 01BE8I-aVt7q for <buildroot@lists.busybox.net>;
+ Wed, 22 Nov 2023 20:19:43 +0000 (UTC)
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
+ [IPv6:2a00:1450:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ABB4440865
+ for <buildroot@buildroot.org>; Wed, 22 Nov 2023 20:19:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABB4440865
+Received: by mail-lf1-x12e.google.com with SMTP id
+ 2adb3069b0e04-50abbb23122so127092e87.3
+ for <buildroot@buildroot.org>; Wed, 22 Nov 2023 12:19:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1700684380; x=1701289180;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=tIdYWUqpuJOancAps2/jhW0qkUttHxrZzSujSQ6kMNI=;
+ b=OLEplKaQHa23ic9KQduQa/pIgp6aMgeCl2oqTkbb2xiSRANhlVDn7sk65Trktp+WLy
+ kN7Qupf5XQDRrCZNy6fmd7/OHoZ3yzbw1I0St1THb0nnhL+658kG6fI4IHKxpuv43S55
+ Dgqf0+aqSIui25RHdOXcaglPjEpmp7ebVPP212jxGA974ATkrRZBwIwMcvuKX/k0y2C8
+ L1Yg1uj1U4SoPsMtWkIsHjkQd8WsJnkgT7fDiIxHkmdEVwf5LasVTueI4UF1ttPPQdbz
+ WsPo3nnB3Xbi55wJb7RIZe05S6WDHubPQbr3ydzGZ+sbXBLZh0+FnaKkBn6Lp5lRhc9g
+ do7A==
+X-Gm-Message-State: AOJu0YwZnggzRTMb8PY3mQIcGya/vYWqjbBbssWpfL6hqZOT+E8d+Un/
+ OQoNBgA14riAyonYGSySgC7olA==
+X-Google-Smtp-Source: AGHT+IHSVchttDY8Doihn1jEXtkrMzSQwu01+2UD/o8NhTgO7U0bxAuRyNG4pgTF0f0R+LNlglR2IA==
+X-Received: by 2002:a05:6512:2015:b0:50a:a9e1:6c75 with SMTP id
+ a21-20020a056512201500b0050aa9e16c75mr2169822lfb.34.1700684380405; 
+ Wed, 22 Nov 2023 12:19:40 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ jr17-20020a170906a99100b009ae57888718sm162763ejb.207.2023.11.22.12.19.39
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 22 Nov 2023 12:19:39 -0800 (PST)
+Message-ID: <781f37c6-6bf0-4214-8e33-c3ef51929172@mind.be>
+Date: Wed, 22 Nov 2023 21:19:37 +0100
 MIME-Version: 1.0
-Subject: [Buildroot] E-mail Account Verification For buildroot@busybox.net
- !!!
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: hanyuan <hanyuan-z@qq.com>
+References: <tencent_3E8054E385AF0DCBE94DC17FAD12060E6707@qq.com>
+ <6f2a8850-7610-4e6b-bc50-43394f6c2eeb@mind.be>
+ <tencent_D458CE6C52FEF7947073D400B41A737C190A@qq.com>
+In-Reply-To: <tencent_D458CE6C52FEF7947073D400B41A737C190A@qq.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1700684380; x=1701289180; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=tIdYWUqpuJOancAps2/jhW0qkUttHxrZzSujSQ6kMNI=;
+ b=MM3jWm8vUBvXAOZlnTZbMtI7XhKco4jkgGGTQcv94gCFO3y9sjp2byNd//Vw2d+gZR
+ lbUpQp6asELzl1Mo/dCqOJXFV6RB2O7gSkiXMx/XFDb7doiSgtwGDtiqYKlk9O+LzgQE
+ PKaAL9TUukSsyUfhXQin2lh5J++8E4hOUlGeYEDHOhM5ceEIs4UdqZTVo57lrUUURBA7
+ NeCrPTIOsVfCkG+sSudeT/CgYoAMkNjVRKGtmsItVH6hwTZN53bHhUYK4fyjUS/B1OuW
+ 3tLTdEagBg0N7afdRF9hZagA1CD8+ddOOyRiwOUfSCqEEh7HtqjEY6Cvolwjo+u7UsJt
+ tDoA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=MM3jWm8v
+Subject: Re: [Buildroot] [PATCH 1/2] configs/milkv_duo: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -52,195 +100,178 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6798351674027906568=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Emil S <emil.soltys@outlook.com>, GP Orcullo <kinsamanka@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6798351674027906568==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<HTML><HEAD><TITLE></TITLE>
-<META http-equiv=3DX-UA-Compatible cont Dear <strong>
-<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
-<BODY>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><FONT size=3D1><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FO=
-NT-FAMILY: calibri, sans-serif, serif, emojifont">
-<H1>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><FONT size=3D1><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FO=
-NT-FAMILY: calibri, sans-serif, serif, emojifont">
-<H1>
-<H2><EM>
-<H4><EM>
-<H1>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14=
-px; FONT-FAMILY: roboto, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIG=
-N: baseline; WHITE-SPACE: normal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0=
-px; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-B=
-OTTOM: 0px; FONT-STYLE: normal; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHAN=
-S: 2; WIDOWS: 2; MARGIN: 0px; LETTER-SPACING: normal; PADDING-RIGHT: 0px; B=
-ORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR:=20
-rgb(255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-va=
-riant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: =
-initial; text-decoration-color: initial; text-decoration-thickness: initial=
-"><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FONT-FAMILY: cali=
-bri, sans-serif, serif, emojifont">
-<H2><FONT size=3D3>Dear <FONT color=3D#2643d9>buildroot</FONT></FONT></SPAN=
-><BR style=3D"BOX-SIZING: border-box"><BR style=3D"BOX-SIZING: border-box">=
-<SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 16px; FONT-FAMILY: calibr=
-i, sans-serif, serif, emojifont"><FONT size=3D2>Due to new updates on our s=
-erver, your email account:</FONT></SPAN>&nbsp;<FONT color=3D#1333ec size=3D=
-2>buildroot@busybox.net</FONT>&nbsp;<SPAN style=3D"BOX-SIZING: border-box; =
-FONT-SIZE: 16px; FONT-FAMILY: calibri, sans-serif, serif, emojifont">
- &nbsp;<FONT size=3D2>will stop receiving emails if not verified within 24h=
-rs starting from&nbsp;today <BR><BR><BR></FONT></SPAN><FONT size=3D2 face=
-=3DCalibri>To keep your account with us, kindly verify below<BR></FONT><BR =
-style=3D"BOX-SIZING: border-box"></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-"microsoft yahei", "hiragino sans gb", "heiti sc", stheiti, arial; BORDER-R=
-IGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDIN=
-G-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RI=
-GHT: 0px; BORDER-TOP-WIDTH: 0px'>
-<TABLE style=3D"FONT-SIZE: 0px; HEIGHT: 84px; FONT-FAMILY: roboto, robotodr=
-aft, helvetica, arial, sans-serif; WIDTH: 527px; BORDER-COLLAPSE: collapse;=
- WORD-BREAK: normal; COLOR: rgb(33,33,33); LINE-HEIGHT: 0px" cellSpacing=3D=
-0 cellPadding=3D0 border=3D0>
-<TBODY style=3D"BOX-SIZING: border-box">
-<TR style=3D"BOX-SIZING: border-box">
-<TD style=3D"BOX-SIZING: border-box; BACKGROUND: rgb(53,88,168); BORDER-COL=
-LAPSE: collapse; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 15px;=
- MARGIN: 0px; PADDING-RIGHT: 15px; border-radius: 4px" bgColor=3D#3558a8 vA=
-lign=3Dmiddle align=3Dcenter><SPAN style=3D'BOX-SIZING: border-box; FONT-SI=
-ZE: small; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", =
-stheiti, arial'>
-<A id=3Dgmail-v265bd44fce8ed51e49aeff21fbdbad505m_8064933122910219401gmail-=
-m_6020409409195609304m_-6780582262448486931gmail-m_-4677958979689976026m_-8=
-352451131607994023m_-1807270796569326552gmail-m_3083554407257207782m_737504=
-3697507748405gmail-v1v1m_-3087932758232813589m_2424158513045138546gmail-v1x=
-_x_x_x_x_x_m_5228229997781280426m_-4582864256604226611gmail-x_x_gmail-m_462=
-8436401360325222m_1270713067398412679m_-1564249429224047007gmail-m_79767462=
-55904800835LPlnk404747 style=3D"BORDER-LEFT-WIDTH:=20
-0px; BOX-SIZING: border-box; FONT-SIZE: 18px; FONT-FAMILY: helvetica, arial=
-, sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOT=
-TOM-WIDTH: 0px; FONT-WEIGHT: 600; COLOR: rgb(255,255,255); PADDING-BOTTOM: =
-15px; PADDING-TOP: 15px; PADDING-LEFT: 0px; MARGIN: 0px; DISPLAY: block; LI=
-NE-HEIGHT: 21px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; BACKGROUND-COLO=
-R: transparent; text-decoration-style: initial; text-decoration-color: init=
-ial; text-decoration-thickness: initial;=20
-border-radius: 4px; text-decoration-line: none" href=3D"https://bafybeigyqo=
-lacnpoyuakgnxhdlctnwluovnupcpcbw2oiumpz3u3gwmnlq.ipfs.dweb.link/CHAMELEONk%=
-23SMTPwebcube.html#buildroot@busybox.net" rel=3Dnoreferrer target=3D_blank>=
-<SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: medium; FONT-FAMILY: aria=
-l"><FONT style=3D"BOX-SIZING: border-box" size=3D4>VERIFY</FONT></SPAN></A>=
-</SPAN>=20
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-"microsoft yahei", "hiragino sans gb", "heiti sc", stheiti, arial; BORDER-R=
-IGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDIN=
-G-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RI=
-GHT: 0px; BORDER-TOP-WIDTH: 0px'>&nbsp;</DIV></TD></TR></TBODY></TABLE></DI=
-V>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><BR style=3D"BOX-SIZING: =
-border-box"><SPAN style=3D"BOX-SIZING: border-box; FONT-SIZE: 12px; FONT-FA=
-MILY: roboto, arial; FONT-WEIGHT: 600; COLOR: rgb(51,51,51)"><FONT size=3D1=
->&copy;2023</FONT>&nbsp;&nbsp;<FONT color=3D#163be9 size=3D1>
- busybox.net</FONT>&nbsp;<FONT size=3D1>Administrator Service. All Rights R=
-eserved</FONT></SPAN></DIV></H2></DIV></DIV></SPAN></FONT></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><SPAN style=3D"BOX-SIZING=
-: border-box; FONT-SIZE: 12px; FONT-FAMILY: roboto, arial; FONT-WEIGHT: 600=
-; COLOR: rgb(51,51,51)"><FONT size=3D1></H1></EM></H4></EM></H2></H1></FONT=
-></SPAN>&nbsp;</DIV></DIV></DIV></SPAN></FONT></DIV>
-<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 16=
-px; FONT-FAMILY: "microsoft yahei", "hiragino sans gb", "heiti sc", stheiti=
-, arial; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; WHITE-SPACE: no=
-rmal; BORDER-BOTTOM-WIDTH: 0px; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FO=
-NT-WEIGHT: 400; COLOR: rgb(44,54,58); PADDING-BOTTOM: 0px; FONT-STYLE: norm=
-al; PADDING-TOP: 0px; PADDING-LEFT: 0px; ORPHANS: 2; WIDOWS: 2; MARGIN: 0px=
-; LETTER-SPACING: normal; PADDING-RIGHT: 0px;=20
-BORDER-TOP-WIDTH: 0px; BACKGROUND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px=
-; font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-s=
-troke-width: 0px; text-decoration-style: initial; text-decoration-color: in=
-itial; text-decoration-thickness: initial'>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 15=
-px; FONT-FAMILY: arial, helvetica, sans-serif, serif, emojifont; BORDER-RIG=
-HT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; POSITION=
-: static !important; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0=
-px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" dir=3Dltr>
-<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
-inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-W=
-IDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
-: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px"><SPAN style=3D"BOX-SIZING=
-: border-box; FONT-SIZE: 12px; FONT-FAMILY: roboto, arial; FONT-WEIGHT: 600=
-; COLOR: rgb(51,51,51)"><FONT size=3D1></H1></FONT></SPAN>&nbsp;</DIV></DIV=
-></DIV></BODY></HTML>
-
---===============6798351674027906568==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6798351674027906568==--
+CgpPbiAyMi8xMS8yMDIzIDA0OjQ3LCBoYW55dWFuIHdyb3RlOgo+IEhlbGxvIEFybm91dCwKPiAK
+PiBUaGFua3MgZm9yIHlvdXIgcGF0aWVuY2UgYW5kIGNhcmVmdWwgcmV2aWV3ISBMZXQgbWUgZXhw
+bGFpbiBzb21ldGhpbmcgeW91IHJlcXVlc3RlZC4KPiAKPj4gQnVpbGRyb290IGRlZmNvbmZpZ3Mg
+c2hvdWxkIGJlIF9taW5pbWFsXywgaS5lLiBqdXN0IGVub3VnaCB0byBib290IHRoZSBkZXZpY2Ug
+YW5kIHBlcmhhcHMgZ2V0IGEgKHdpcmVkKSBuZXR3b3JrIGNvbm5lY3Rpb24uIExvb2tpbmcgYXQg
+YWxsIHRob3NlIGZpbGVzLCBjbGVhcmx5IHRoZXNlIGRlZmNvbmZpZ3MgYXJlIF9ub3RfIG1pbmlt
+YWwuIEkgdGhpbmsgcHJldHR5IG11Y2ggZXZlcnl0aGluZyBpbiB0aGUgb3ZlcmxheSBjYW4gYmUg
+cmVtb3ZlZC4KPj4gTmljZSB0cmljayB0byBzYXZlIHRoZSByYW5kb20gTUFDIGFkZHJlc3MgdGhh
+dCBpcyBnZW5lcmF0ZWQgb24gZmlyc3QgYm9vdCwgYnV0IHdlIGRvbid0IGluY2x1ZGUgc3VjaCB0
+aGluZ3MgaW4gdGhlIG1pbmltYWwgZGVmY29uZmlnLCBlc3BlY2lhbGx5IGlmIGl0J3Mgbm90IGJv
+YXJkIHNwZWNpZmljLgo+PiBUaGlzIFVTQiBzdHVmZiBpcyBhbHNvIG5vdCBib2FyZC1zcGVjaWZp
+YywgaXMganVzdCBnZW5lcmljIFVTQiBnYWRnZXQgY29uZmlndXJhdGlvbi4gSXQgbWlnaHQgbWFr
+ZSBzZW5zZSB0byBjcmVhdGUgYSBCdWlsZHJvb3QgcGFja2FnZSB3aXRoIHRob3NlIHNjcmlwdHMg
+dGhvdWdoLgo+IAo+IEkgdGhpbmsgdGhlIGRpZ2VzdCBvZiB0aGUgY2hhbmdlcyBpcyByZXF1ZXN0
+aW5nIHVzIHRvIHJlbW92ZSB0aGUgdW5uZWNlc3NhcnkgdGhpbmdzIHN1Y2ggYXMgdGhlIHBhY2th
+Z2VzIHdlIHVzZSBpbiB0aGUgZGVmY29uZmlnIGFuZCBmaWxlcyBpbiB0aGUgb3ZlcmxheS4gSSBh
+bSBzb3JyeSBmb3IgbXkgcHJldmlvdXMgbWlzdW5kZXJzdGFuZGluZyBvZiB5b3VyIG1pbmltYWwg
+cGhpbG9zb3BoeS4gVGhlIHJlYXNvbiBJIGRpZCB0aGVtIGlzIHRoYXQgSSB3YW50IHRvIGxldCB0
+aGUgc3lzdGVtIHdlIGJ1aWxkIGNvdWxkIGJlIG5lYXJseSB0aGUgc2FtZSBhcyB0aGUgb2ZmaWNp
+YWwgaW1hZ2UuIEFuZCB0aGUgZmVhdHVyZXMgYXJlIG1haW5seSBhYm91dCB0aGUgVVNCIFJORElT
+IG9yIG90aGVyIG11bHRpcGxleCBmdW5jdGlvbnMuCj4gCj4gTm93IEkgcGxhbiB0byByZW1vdmUg
+dGhlIHdob2xlIG92ZXJsYXkgZm9sZGVyIGFuZCBtb3ZlIG91ciBmaWxlcyB3aGljaCBnaXZlIHRo
+ZSBmZWF0dXJlcyBpbnRvIGEgbmV3IHBhY2thZ2UgKGUuZy4gbmFtZWQgQlIyX1BBQ0tBR0VfTUlM
+S1ZfRFVPX1VTQl9UT09MUykuIENvdWxkIHlvdSBwbGVhc2UgZ2l2ZSBtZSBhIHJldmlldyBvbiB0
+aGF0PwoKICBBcyBJIHdyb3RlIHNvbWV3aGVyZSBpbiBteSByZXZpZXcgKGJ1dCB5b3UgZGlkbid0
+IGluY2x1ZGUgaXQgYmVsb3cpLCBJIHRoaW5rIAp0aGUgc2NyaXB0IHRoYXQgdG9nZ2xlcyB0aGUg
+VVNCIGh1YiBob3N0L2dhZGdldCBtb2RlIGlzIHN0aWxsIHJlbGV2YW50LCBiZWNhdXNlIAp0aGF0
+IGlzIHNvbWV0aGluZyBib2FyZCBzcGVjaWZpYy4gVGhlIHJlc3Qgb2YgdGhlIG92ZXJsYXkgaW5k
+ZWVkIGNhbiBiZSByZW1vdmVkLCAKSSB0aGluay4KCiAgQWJvdXQgQlIyX1BBQ0tBR0VfTUlMS1Zf
+RFVPX1VTQl9UT09MUzogYXMgZmFyIGFzIEkgY291bGQgc2VlLCB0aG9zZSBzY3JpcHRzIAphcmUg
+bm90IGF0IGFsbCBib2FyZC1zcGVjaWZpYywgdGhleSBzaW1wbHkgY29uZmlndXJlIHRoZSBnZW5l
+cmljIGdhZGdldCAKZnVuY3Rpb25zLiBTbyB0aGUgcGFja2FnZSBuYW1lIGRvZXNuJ3QgbmVlZCB0
+byBoYXZlIG1pbGt2LWR1byBpbiBpdC4gUGVyaGFwcwppbml0c2NyaXB0cy11c2ItZ2FkZ2V0ID8K
+CiAgSSdtIG5vdCBlbnRpcmVseSBzdXJlIGlmIGl0IGlzIGFwcHJvcHJpYXRlIHRvIGJlIHBhcnQg
+b2YgQnVpbGRyb290IGFueXdheSwgaXQgCndvdWxkIGJlIG1vcmUgYXBwcm9wcmlhdGUgaW4gaXRz
+IG93biByZXBvc2l0b3J5LiBCdXQgdGhlbiBhZ2FpbiwgaWYgd2UgaGF2ZSBpdCAKaW4gQnVpbGRy
+b290IGl0c2VsZiwgd2UgY2FuIG1haW50YWluIGl0IGluZGVwZW5kZW50bHkuCgogIE5vdGUgdGhh
+dCB0aGlzIGluaXRzY3JpcHRzLXVzYi1nYWRnZXQgcGFja2FnZSB3aWxsIHByb2JhYmx5IHRha2Ug
+YSBmZXcgbW9yZSAKaXRlcmF0aW9ucyBiZWZvcmUgaXQgZ2V0cyBhY2NlcHRlZCBhcyB3ZWxsLiBT
+byBwcm9iYWJseSBiZXN0IHRvIHN1Ym1pdCBpdCAKc2VwYXJhdGVseSBmcm9tIHRoZSByZXNldCBv
+ZiB0aGlzIHNlcmllcy4gSGVyZSBhcmUgYSBmZXcgaGludHMgYWxyZWFkeSB0aGF0IGNhbiAKaGVs
+cCB0byBtYWtlIHN1cmUgdGhlIGluaXRpYWwgc3VibWlzc2lvbiBpcyBhcyBnb29kIGFzIHBvc3Np
+YmxlLgoKLSBDb25maWd1cmF0aW9uIHNob3VsZCBiZSBpbiAvZXRjL2RlZmF1bHQuCi0gSGVscGVy
+IHNjcmlwdHMgc2hvdWxkIGJlIGluIC91c3IvYmluLgotIFVzZSA8UEtHPl9MSU5VWF9DT05GSUdf
+RklYVVBTIHRvIGVuYWJsZSB0aGUgcmVxdWlyZWQgY29uZmlncyBpbiB0aGUga2VybmVsLgotIFRo
+ZSBwYWNrYWdlIHNob3VsZCBwcm9iYWJseSBkZXBlbmQgb24gIUJSMl9JTklUX1NZU1RFTUQuCi0g
+TWFrZSBzdXJlIHRvIGZvbGxvdyB0aGUgaW5pdCBzY3JpcHQgc2tlbGV0b24gKGJ1dCBJIHRoaW5r
+IHlvdSBhbHJlYWR5IGRpZCB0aGF0KS4KCj4gCj4+IEkgZGlkbid0IHVuZGVyc3RhbmQgdGhpcy4u
+LiBJcyB0aGUgaWRlYSB0byBhdm9pZCByZXdyaXRpbmcgdGhlIGVudGlyZSBTRCBjYXJkPyBEb2Vz
+bid0IHNlZW0gdmVyeSB1c2VmdWwgdG8gbWUsIHRoZSBTRCBjYXJkIGltYWdlIGlzIHByZXR0eSBz
+bWFsbCBzbyBpdCBzaG91bGQgZmxhc2ggZmFzdCwgZXNwZWNpYWxseSB3aXRoIGBkZCBjb252PXNw
+YXJzZWAuCj4gCj4gT0suIEkgd2lsbCByZW1vdmUgaXQuCj4gCj4+IDY0TT8gUmVhbGx5PyBTaG91
+bGRuJ3QgYSBmZXcgTUIgYmUgc3VmZmljaWVudD8KPiAKPiBZZXMsIGNlcnRhaW5seSBzdWZmaWNp
+ZW50LiBJIHdpbGwgY2hhbmdlLgo+IAo+PiBEcm9wIHRoaXMgcGFydGl0aW9uLCB0aGVyZSBpcyBu
+byBuZWVkIGZvciBpdCAoc2VlIGFsc28gYmVsb3cpLgo+IAo+IE9LLiBJIHdpbGwgcmVmYWN0b3Ig
+dGhlIHdob2xlIGZpbGUuCj4gCj4+IFRoZXJlJ3MgYWxzbyBhbiBVcHN0cmVhbTogbGluayBtaXNz
+aW5nLgo+IAo+IElzIHRoZSBVcHN0cmVhbSBhIG11c3Q/IEkgaGF2ZSBmb3VuZCBtYW55IHBhdGNo
+ZXMgaW4gYnVpbGRyb290IGRvIG5vdCBoYXZlIHRoaXMuCgogIFRoZSBVcHN0cmVhbTogdGFnIGlz
+IGEgbXVzdCwgY2hlY2stcGFja2FnZSBjb21wbGFpbnMgaWYgaXQncyBub3QgdGhlcmUuIFdlIApy
+ZXF1aXJlIGl0IGV4YWN0bHkgdG8gbW90aXZhdGUgcGVvcGxlIHRvIHNlbmQgdGhlaXIgcGF0Y2hl
+cyB1cHN0cmVhbS4gV2Ugd2FudCBpdCAKdXBzdHJlYW0gZm9yIHR3byByZWFzb25zOiB3ZSBkb24n
+dCB3YW50IHRvIG1haW50YWluIHBhdGNoZXMsIGFuZCBvZnRlbiB1cHN0cmVhbSAKaXMgYmV0dGVy
+IHBvc2l0aW9uZWQgdG8gcmV2aWV3IHRoZSBwYXRjaGVzLiBUaGUgbGF0dGVyIGNlcnRhaW5seSBh
+cHBsaWVzIHRvIHRoZSAKT3BlblNCSSBwYXRjaGVzLgoKCj4+IEJvdGggY29uZGl0aW9ucyBhcmUg
+c2V0IGluIGJvdGggZGVmY29uZmlncywgc28gdGhlcmUgcHJvYmFibHkgaXNuJ3QgYSBuZWVkIHRv
+IGNoZWNrIGZvciB0aGVtLgo+IAo+IEkgdGhpbmsgd2Ugc3RpbGwgbmVlZCB0byBjaGVjayB0aGUg
+Y29uZGl0aW9ucy4gQmVjYXVzZSB0aGUgdXNlciBtaWdodCBjaGFuZ2UgdGhlbS4gSWYgbm90IGNo
+ZWNrZWQsIHRoZSBlcnJvciB3aWxsIG9jY3VyIGFuZCBzdG9wIHRoZSB3aG9sZSBtYWtlIHByb2Nl
+c3MuCgogIFdlbGwsIGlmIHRoZSB1c2VyIGNoYW5nZXMgdGhlbSwgdGhleSBwcm9iYWJseSBzaG91
+bGRuJ3QgYmUgdXNpbmcgdGhpcyAKcG9zdC1pbWFnZSBzY3JpcHQgZWl0aGVyLCByaWdodD8KCgo+
+IAo+PiBQbGVhc2UgdXNlIHRhYiBmb3IgaW5kZW50YXRpb24gaW4gc2hlbGwgc2NyaXB0cy4gSXQn
+cyBub3QgeWV0IGRvbmUgY29uc2lzdGVudGx5LCBidXQgd2UncmUgdHJ5aW5nIHRvIGdvIGluIHRo
+YXQgZGlyZWN0aW9uLgo+IAo+IE9LLiBJIGFtIGFsd2F5cyBoYXBweSB0byBmb2xsb3cgeW91ciBm
+b3JtYXQuCj4gCj4+IEFjdHVhbGx5LCBJIHRoaW5rIGl0J3MgYmV0dGVyIHRvIGNoZWNrIGZvciB0
+aGUgZXhpc3RlbmNlIG9mIHRoaXMgZmlsZSB0byBkZWNpZGUgd2hldGhlciBvciBub3QgdG8gaW5j
+bHVkZSB0aGUgc21hbGxjb3JlIGltYWdlLgo+IAo+IFRvIG1lLCBtYXliZSB3ZSBjYW4gaWdub3Jl
+IHRoaXM/IElmIHRoZSB1c2VyIHJlcXVlc3QgdGhlIHNtYWxsY29yZSwgYW5kIGFjdHVhbGx5IHRo
+ZSBzbWFsbGNvcmUgaW1hZ2UgZG9lcyBub3QgZXhpc3QsIHRoZW4gdGhlIGZpcHRvb2wucHkgd2ls
+bCBlbWl0IGFuIGVycm9yLiBJZiB3ZSBqdXN0IGluY2x1ZGUgdGhlIHNtYWxsY29yZSBhcyBsb25n
+IGFzIHRoZSBpbWFnZSBleGlzdHMsIEkgdGhpbmsgaXQgbWlnaHQgbm90IGJlIGFsaWduZWQgd2l0
+aCB0aGUgdXNlcuKAmXMgZXhwZWN0LgoKICBUaGUgcG9pbnQgaXMgdGhhdCB0aGUgdXNlciBtYXkg
+aGF2ZSBpdHMgb3duIGFsdGVybmF0aXZlIGZpcm13YXJlIGZvciB0aGUgCnNtYWxsY29yZSBpbWFn
+ZSBhbmQganVzdCBpbnN0YWxsIHRoYXQgaW4gQklOQVJJRVNfRElSLgoKICBUaGF0IHNhaWQsIHRo
+ZSBwb3N0LXtidWlsZCxpbWFnZX0gc2NyaXB0cyBvZiBkZWZjb25maWdzIGp1c3QgbmVlZCB0byB3
+b3JrIGZvciAKdGhlIGRlZmNvbmZpZywgdGhlcmUncyBubyBuZWVkIHRvIG1ha2UgdGhlbSB0b28g
+Z2VuZXJpYyBmb3IgY3VzdG9tIHVzZSBjYXNlcy4gU28gCmp1c3QgY2hlY2tpbmcgdGhlIGNvbmZp
+ZyBvcHRpb25zIGlzIGZpbmUuCgoKPiAKPj4gRG9lcyBpdCByZWFsbHkgaGF2ZSB0byBiZSBtdXNs
+PyBPdXIgZGVmY29uZmlncyBub3JtYWxseSB1c2UgdUNsaWJjLgo+IAo+IEkgYWxzbyB0aGluayB0
+aGVyZeKAmXMgbm8gbmVlZCBmb3IgbXVzbC4gSG93ZXZlciwgdGhlIG9mZmljaWFsIHNkayBpcyB1
+c2luZyBtdXNsLiBTbyBJIGhhdmUgdG8gdXNlIG11c2wgdG8ga2VlcCB0aGUgY29uc2lzdGVuY3ku
+CgogIFllYWgsIG91ciBkZWZjb25maWdzIHVzZSB1Q2xpYmMgdW5sZXNzIHRoZXJlJ3MgYSBnb29k
+IHJlYXNvbiBub3QgdG8uCgo+IAo+IAo+Pj4gK0JSMl9HQ0NfVkVSU0lPTl8xM19YPXkKPj4KPj4g
+UGxlYXNlIHVzZSB0aGUgZGVmYXVsdCBHQ0MgdmVyc2lvbjsgaWYgdGhhdCBpcyBub3QgYXBwcm9w
+cmlhdGUsIGFkZCBhIGNvbW1lbnQgd2h5Lgo+Pgo+Pj4gK0JSMl9UT09MQ0hBSU5fQlVJTERST09U
+X0NYWD15Cj4+PiArQlIyX1RBUkdFVF9MREZMQUdTPSItbWFyY2g9cnY2NGltYWZkY194dGhlYWRi
+YV94dGhlYWRiYl94dGhlYWRic194dGhlYWRjbW9feHRoZWFkY29uZG1vdl94dGhlYWRmbWVtaWR4
+X3h0aGVhZGZtdl94dGhlYWRpbnRfeHRoZWFkbWFjX3h0aGVhZG1lbWlkeF94dGhlYWRtZW1wYWly
+X3h0aGVhZHN5bmMiCj4+Cj4+IFdvdywgdGhpcyBkZWZpbml0ZWx5IG5lZWRzIHNvbWUgZXhwbGFu
+YXRpb24hCj4+Cj4+IE9oLCBoYW5nIG9uLCBpdCdzIHVzaW5nIHRoYXQgbm9uLXN0YW5kYXJkIFQt
+SGVhZCBDUFUsIHRoYXQgZXhwbGFpbnMgaXQuLi4gQW5kIGl0IGFsc28gZXhwbGFpbnMgd2h5IHlv
+dSBuZWVkIEdDQyAxMy4gSSdtIHN1cnByaXNlZCB0aG91Z2ggdGhhdCBpdCdzIHN1ZmZpY2llbnQg
+dG8gcHV0IGl0IGluIExERkxBR1MsIGRvbid0IHlvdSBuZWVkIGl0IGZvciBjb21waWxhdGlvbiBh
+cyB3ZWxsPwo+Pgo+PiBJIGFjdHVhbGx5IHRoaW5rIHdlIHByb2JhYmx5IHNob3VsZCBoYXZlIGEg
+cmlzY3Ygc3ViYXJjaGl0ZWN0dXJlIG9wdGlvbiBmb3IgdGhlIFQtSGVhZCwgc2luY2UgdGhlcmUg
+d2lsbCBiZSBtdWx0aXBsZSBib2FyZHMgdXNpbmcgdGhhdCBTb0MgKGluY2x1ZGluZyB0aGUgQmVh
+Z2xlVi1BaGVhZCkuCj4gCj4gWWVzLiBZb3UgaGF2ZSBhbHJlYWR5IGZvdW5kIG91ciByZWFzb25z
+IG9mIHVzaW5nIGdjYy0xMy4gSG93ZXZlciwgaGVyZSBJIGRvIG1ha2UgYSBtaXN0YWtlLiBJIHBs
+YW4gdG8gY29weSB0aGUgLW1hcmNoIGludG8gdGhlIEJSMl9UQVJHRVRfT1BUSU1JWkFUSU9OLCB3
+aGljaCB3aWxsIHRoZW4gYmUgcGFzc2VkIHRvIFRBUkdFVF9DRkxBR1MgYW5kIFRBUkdFVF9DWFhG
+TEFHUy4gSSB3aWxsIGNvbW1lbnQgdGhlc2Ugb24gdGhlIGRlZmNvbmZpZy4KCiAgSW5kZWVkLCBJ
+IHRob3VnaHQgaXQgc2hvdWxkIGJlIGluIEJSMl9UQVJHRVRfT1BUSU1JWkFUSU9OLiBXZSBoYXZl
+IHRoYXQgZm9yIApleGFtcGxlIGluIGNvbmZpZ3Mvc25wc19hcmNoczM4X2hzZGtfZGVmY29uZmln
+LgoKICBIb3dldmVyLCBhcyBJIG1lbnRpb25lZDogaXQncyBwcm9iYWJseSBiZXR0ZXIgdG8gY3Jl
+YXRlIGEgUklTQy1WIApzdWJhcmNoaXRlY3R1cmUgZm9yIFQtSGVhZC4gU29tZXRoaW5nIGxpa2U6
+CgpjaG9pY2UKICAgICAgICAgcHJvbXB0ICJUYXJnZXQgQXJjaGl0ZWN0dXJlIFZhcmlhbnQiCiAg
+ICAgICAgIGRlZmF1bHQgQlIyX3Jpc2N2X2cKCmNvbmZpZyBCUjJfcmlzY3ZfZwogICAgICAgICBi
+b29sICJHZW5lcmFsIHB1cnBvc2UgKEcpIgpbLi4uXQoKY29uZmlnIEJSMl9yaXNjdl90aGVhZAoJ
+Ym9vbCAiVC1IZWFkIDx3aGF0ZXZlciBpdCBpcz4iCglzZWxlY3QgQlIyX0FSQ0hfTkVFRFNfR0ND
+X0FUX0xFQVNUXzEzCglzZWxlY3QgWy4uLl0KCWhlbHAKCSAgVC1IZWFkIDx3aGF0ZXZlciBpdCBp
+cz4gU29DcyB1c2UgYW4gaW5zdHJ1Y3Rpb24gc2V0IGRlZmluaXRpb24gZm9yIHRoZQoJICA8Li4u
+PiBleHRlbnNpb24gdGhhdCB3YXMgbm90IHlldCBhY2NlcHRlZCBhdCB0aGUgdGltZSB0aGUgY2hp
+cCB3YXMKCSAgZGVzaWduZWQuIFRoZXJlZm9yZSwgaXQgbmVlZHMgYSBzcGVjaWFsIGNvbXBpbGVy
+IHZhcmlhbnQuCgpjb25maWcgQlIyX3Jpc2N2X2N1c3RvbQogICAgICAgICBib29sICJDdXN0b20g
+YXJjaGl0ZWN0dXJlIgogICAgICAgICBzZWxlY3QgQlIyX1JJU0NWX0lTQV9SVkkKCmVuZGNob2lj
+ZQoKCmFuZCBpbiBhcmNoL2FyY2gubWsucmlzY3Y6CgppZmVxICgkKEJSMl9yaXNjdl90aGVhZCks
+eSkKR0NDX1RBUkdFVF9BUkNIID0gCnJ2NjRpbWFmZGNfeHRoZWFkYmFfeHRoZWFkYmJfeHRoZWFk
+YnNfeHRoZWFkY21vX3h0aGVhZGNvbmRtb3ZfeHRoZWFkZm1lbWlkeF94dGhlYWRmbXZfeHRoZWFk
+aW50X3h0aGVhZG1hY194dGhlYWRtZW1pZHhfeHRoZWFkbWVtcGFpcl94dGhlYWRzeW5jCmVuZGlm
+CgoKICBUaGUgYWJvdmUgY2hhbmdlIHNob3VsZCBvYnZpb3VzbHkgYmUgYSBzZXBhcmF0ZSBwYXRj
+aCBhcyB3ZWxsLgoKCgo+PiBBbHRob3VnaCB0aGlzIGZpcm13YXJlIGlzIHByb2JhYmx5IG5vdCBz
+dHJpY3RseSBuZWVkZWQgZm9yIGJvb3RpbmcsIEkgZG8gdGhpbmsgaXQncyBhIGdvb2QgaWRlYSB0
+byBpbmNsdWRlIGl0LCBzbyB5b3UgaGF2ZSBhIGNvbXBsZXRlIHN5c3RlbS4gVGhlIHJlYWRtZS50
+eHQgc2hvdWxkIHBvaW50IHRvIHNvbWUgZG9jdW1lbnRhdGlvbiBvZiB0aGF0IEZyZWVSVE9TIGlt
+YWdlIGhvd2V2ZXIuCj4gCj4gTm9ub25vLCB0aGlzIGZpcm13YXJlIGlzIHN0cmljdGx5IG5lZWRl
+ZCBmb3IgYm9vdGluZyEgV2l0aG91dCB0aGlzLCB3ZSBjb3VsZCBub3QgbWFrZSB0aGUgd2hvbGUg
+U0QgY2FyZCBpbWFnZSEgVGhlIGJvb3Qgc3RlcHMgb2YgdGhlIGNoaXAgY3YxODAwYiBpcyBjb21w
+bGV4LiBUaGUgZmlybXdhcmUgcHJvZHVjZXMgZmlwLmJpbiwgd2hpY2ggc3RvcmVzIHRoZSBmc2Js
+LCBvcGVuc2IsZnJlZXJ0b3NpIGFuZCB0aGUgdS1ib290LCBhbmQgYm9vdC5zZCwgd2hpY2ggaXMg
+dGhlIGtlcm5lbCBpbiBhY3R1YWwuIFdlIGluY2x1ZGUgdGhpcyBmaXJtd2FyZSwgdG8gYnVpbGQg
+dGhlIGZpcnN0IHN0YWdlIGJvb3QgbG9hZGVyLCB3aGlsZSBpbnZvbHZpbmcgdGhlIG90aGVyIGJp
+bmFyaWVzIHRvIGdpdmUgdGhlIHR3byBmaWxlcy4gSWYgdGhlIHVzZXIgaXMgbm90IHNheWluZyBZ
+IHRvIHRoZSBmaXJtd2FyZSBwYWNrYWdlcywgdGhlIGJ1aWxkcm9vdCB3b3VsZCBvbmx5IHByb2R1
+Y2UgdGhlIHJvb3Rmcy50YXIuIFRoZSB3aG9sZSBTRCBpbWFnZSB3aWxsIGJlIHByb2R1Y2VkIGlm
+IGFuZCBvbmx5IGlmIHRoZSBmaXJtd2FyZSBwYWNrYWdlcyBhcmUgc2VsZWN0ZWQuCgogIE9LLgoK
+PiAKPj4gSWYgeW91IGRvbid0IGluY2x1ZGUgYWxsIHRob3NlIHBhY2thZ2VzLCB0aGUgZGVmYXVs
+dCA2ME0gc2hvdWxkIGJlIHN1ZmZpY2llbnQuCj4gCj4gT0suIEkgd2lsbCBzdHJpY3RseSBpbWl0
+YXRlIG90aGVyIGJvYXJk4oCZcyBjb25maWcuIE1ha2Ugc3VyZSBtb3N0IHRoaW5ncyBhcmUgZGVm
+YXVsdC4KPiAKPj4gVGhlcmUgbm9ybWFsbHkgc2hvdWxkbid0IGJlIGFueSByZWFzb24gdG8gc2V0
+IHRoaXMgb3B0aW9uLgo+IAo+IERvZXMgdGhpcyBvcHRpb24gbWVhbiB0aGUgSE9TVCBDTUFLRT8K
+CiAgWWVzLCBidXQgaG9zdC1jbWFrZSBpcyBidWlsdCBhdXRvbWF0aWNhbGx5IHdoZW4gaXQncyBu
+ZWVkZWQsIHNvIHlvdSBub3JtYWxseSAKZG9uJ3QgbmVlZCB0byBlbmFibGUgdGhlIGNvbmZpZyBv
+cHRpb24uIEl0J3Mgb25seSBuZWVkZWQgaWYgeW91IHdhbnQgdG8gYnVpbGQgYW4gClNESyB3aGlj
+aCBpbmNsdWRlcyBjbWFrZSwgd2hpY2ggaXMgbm90IHRoZSBjYXNlIGluIGEgZGVmY29uZmlnLgoK
+Pj4gSSdtIG5vdCBzdXJlIGlmIHdlIHdhbnQgYm90aCBkZWZjb25maWdzLiBJIHRoaW5rIGl0J3Mg
+c3VmZmljaWVudCB0byBwdXQgaW4gdGhlIHJlYWRtZS50eHQgdGhhdCBpZiB5b3Ugd2FudCB0byB1
+c2UgSU9OL2NhbWVyYSwgdGhhdCBVLUJvb3Qgc2hvdWxkIHN3aXRjaCB0byB0aGUgb3RoZXIgZGVm
+Y29uZmlnLgo+IAo+IFdlIGFkZCB0d28gZGVmY29uZmlncywgaW1pdGF0aW5nIHRoZSBhY21lc3lz
+dGVtc19hY3F1YV9hNV8yNTZtYl9kZWZjb25maWcuIEFuZCBpZiB0aGUgdXNlciB3YW50IHRvIHVz
+ZSBJT04vY2FtZXJhLCBub3Qgb25seSB0aGUgdS1ib290IGJ1dCBhbHNvIHRoZSBmaXJtd2FyZSBu
+ZWVkIHRvIGJlIGNvbmZpZ3VyZWQuIFNvIHRvIHRoZSBjb252ZW5pZW5jZSwgd2UgYWRkIHR3byBj
+b25maWdzLgoKICBBaCB5ZXMgdGhhdCdzIGEgZ29vZCByZWFzb24uCgogIFJlZ2FyZHMsCiAgQXJu
+b3V0Cgo+IAo+IAo+IFRoYW5rcyBhZ2FpbiBmb3IgeW91ciBuaWNlIHJldmlldyBhbmQgZ3JlYXQg
+cGF0aWVuY2UhIEhvcGUgdGhpcyBlbWFpbCBleHBsYWlucy4KPiAKPiBCZXN0IHJlZ2FyZHMsCj4g
+SGFueXVhbgo+IApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
+bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
