@@ -4,86 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EAF3C61D85
-	for <buildroot@archiver.kernel.org>; Wed, 22 Nov 2023 01:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C70BFC072A2
+	for <buildroot@archiver.kernel.org>; Wed, 22 Nov 2023 03:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE3D8408C9;
-	Wed, 22 Nov 2023 01:47:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE3D8408C9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50977408F3;
+	Wed, 22 Nov 2023 03:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50977408F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jWeiWaYMvRZZ; Wed, 22 Nov 2023 01:47:52 +0000 (UTC)
+	with ESMTP id fD8S88c2c2mZ; Wed, 22 Nov 2023 03:47:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6519E408DA;
-	Wed, 22 Nov 2023 01:47:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6519E408DA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6170F40873;
+	Wed, 22 Nov 2023 03:47:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6170F40873
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 225301BF3B0
- for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 01:47:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6F8441BF5A7
+ for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 03:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEFA281393
- for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 01:47:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEFA281393
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4146F813C1
+ for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 03:47:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4146F813C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LUBS_uWs0ZEK for <buildroot@lists.busybox.net>;
- Wed, 22 Nov 2023 01:47:36 +0000 (UTC)
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A24C481371
- for <buildroot@buildroot.org>; Wed, 22 Nov 2023 01:47:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A24C481371
-Received: by mail-pl1-x632.google.com with SMTP id
- d9443c01a7336-1ce627400f6so35585825ad.2
- for <buildroot@buildroot.org>; Tue, 21 Nov 2023 17:47:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700617655; x=1701222455;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=xn/g3lYIn+TNmTeXazD9dtbRrV8io0mbAdFJ/+w4kQk=;
- b=q8p5CcrMq+UeqJct3uBRCHxZg1TBJ5AZZsITRwoRneV5X2YtWJHm5pjLqE1T27kNyP
- JP+aZR90GMph5ZIUa4pMe2Dz5Wc6SzAblCnhEr2Z0dDeareNXNP5RvoRcKo6wlUL1APa
- YrK6Xg4FiVTSEMn+EZMsnIiAukPp8npZiDyOreYb/cRyHK7U48m65krezQ3kdkUIoYIP
- DptGHTvxIAECPIjHlR1SRj9a3PDucelvFb7G2eIUTw2E2IJVG9r5OV/jnqWvZbMhOsVP
- UwhCGsvBv1AICZMLBvUcQnzKw4t5HEsmvNbk7gInaqhO8WxQG4BTQTzOvSH3ZH4F2sgl
- dgbw==
-X-Gm-Message-State: AOJu0YyMzyfLhRh7utg3Akp1wcDveFN3VlnBWO9M4ukTEHYTH+pe9z3F
- 7Lhw8bE2qrRNXVrCfndkWq/L3VdZjR+kNPa6+MfpeA==
-X-Google-Smtp-Source: AGHT+IFYc3addjoojvRbtar8IUgQ83oSEn162wivYXU9TWLrHfPZsAow/LvpEUZaOydidHTBym5EsQ==
-X-Received: by 2002:a17:902:9f8f:b0:1cf:678a:6536 with SMTP id
- g15-20020a1709029f8f00b001cf678a6536mr954647plq.6.1700617654922; 
- Tue, 21 Nov 2023 17:47:34 -0800 (PST)
-Received: from DESKTOP-OI0KN2B.lan ([172.56.201.106])
- by smtp.gmail.com with ESMTPSA id
- c5-20020a170902d90500b001bc5dc0cd75sm8549565plz.180.2023.11.21.17.47.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Nov 2023 17:47:34 -0800 (PST)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Tue, 21 Nov 2023 18:47:30 -0700
-Message-ID: <20231122014730.2795697-2-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231122014730.2795697-1-adam.duskett@amarulasolutions.com>
-References: <20231122014730.2795697-1-adam.duskett@amarulasolutions.com>
-MIME-Version: 1.0
+ with ESMTP id EYf3F5v71Ypp for <buildroot@lists.busybox.net>;
+ Wed, 22 Nov 2023 03:47:35 +0000 (UTC)
+X-Greylist: delayed 131165 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 22 Nov 2023 03:47:33 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C566813B6
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com
+ [162.62.57.49])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7C566813B6
+ for <buildroot@buildroot.org>; Wed, 22 Nov 2023 03:47:32 +0000 (UTC)
+Received: from smtpclient.apple ([183.173.157.237])
+ by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+ id BCE226C7; Wed, 22 Nov 2023 11:47:14 +0800
+X-QQ-mid: xmsmtpt1700624834ti4m1v8o2
+Message-ID: <tencent_D458CE6C52FEF7947073D400B41A737C190A@qq.com>
+X-QQ-XMAILINFO: MR/iVh5QLeieSm5egYzda/UUJwv+2RMvDIIjhkh+f3+9nwaGyb60iD2/LOOUrg
+ SFaRXSrf243P3vVnOO9EeuQLjUtnjnN9Tzmf6y0kJTUui8jK+jKoB4qErLc6nI1IiTySpmSpCEwe
+ RO9n8fM8ScbHqEUQQM3IA1Z91WZ+Qff35xp/IOzIGmlQdr4vNRLGP01ovtNbRwhUj/eEqUjx0Y3d
+ GdGqCtVY+YUa/9OVbtHUavPNULRiraeDU1tdaGWwQjUVSxLFbpW/Uu8UNBKH87w7cvoToMo76wTq
+ mo72GrgFvOHAELUoptuI7aM/KblxSHyzHCwJGdhEgCA/pQL+ImPYXKlRcdH7l2itDJxVu0PRlZav
+ u8Kf0TQzOj53wMQ6lDVDUG2tz9Wz/3WsZyESBImWTi9D9qdtyer5ZL2YFDZsFsWj1BYiFubChtPF
+ HKHH+h+wv1A1Zmu2FlPQdhKhv87qDU/PHIRFW5kKUFzuxQGvOuefr3T8N2SAls9rxpGkUyrwW6wU
+ e5A4+mqoO2tGv+N/IsUx/wzSIOEe+COswrbpsG0aPgAqeJ8U/kJon78BqUO6THtEFSv4vNEkbukS
+ 87kKnLlPxbMU28/gdbleb+lxW67hMkqCU1OkYCQm+jrsif2pqasLdGoZg3nzwsw5YX9lvwpxDy7w
+ SwlNyekPJLYrHt6YYaspHUagYuTawR9WsrXsIiqqlIBl4Q9OzL+xNHQdpR01eEWEP/eocOzmFqDp
+ OIyMn6uS5cKq2MraJfhi17/Z56RMhf5BInYL9MmQfFzKGlBBSM5TZe+l3tzEJ9H4JuwPXT5PvNjd
+ BY7Ke7wmDmutbIhPhHSeIW9Ligwsz6QSUhf++5mnxxqvNzGAeNZNIpAxa6ZLMzYG09Rz8NwVv1Ol
+ QurfzRldBbhMkeAIxLjU3zqxhvjJjC9zs1gJ/ffrJNBMAS9BlABRzLLamq6Z8xS6HZHfiwHfPp0d
+ o1uPx47XYLqfXdQpohgmYFBv5s/ZXkDFpR8VPsN9bnZBd+suLIsfrRTd4qMXItxAL/sR8GTgM=
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.100.2.1.4\))
+In-Reply-To: <6f2a8850-7610-4e6b-bc50-43394f6c2eeb@mind.be>
+Date: Wed, 22 Nov 2023 11:47:04 +0800
+X-OQ-MSGID: <8AA02674-B22F-4643-B15C-08FE140507FB@qq.com>
+References: <tencent_3E8054E385AF0DCBE94DC17FAD12060E6707@qq.com>
+ <6f2a8850-7610-4e6b-bc50-43394f6c2eeb@mind.be>
+To: Arnout Vandecappelle <arnout@mind.be>
+X-Mailer: Apple Mail (2.3774.100.2.1.4)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1700617655; x=1701222455;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xn/g3lYIn+TNmTeXazD9dtbRrV8io0mbAdFJ/+w4kQk=;
- b=T2aTOJMxs36uEkOm3mMMnvXIU/OmWhHXkOHSeCOO0XVQSO6LyMU+AfCUTITmvh9JWe
- Id24uEhnrcniR1NyBtNynFzi4AlGbIkBI/ct4pXVzGu8ENm6uuYaPiyQEMPiykktyC8V
- pFhlMiQqvY4hKpR+VOuMgez86benNOpek0LPY=
+ d=qq.com; s=s201512; 
+ t=1700624836; bh=EgwZdxR3FCAoeh29PBOuzTrpQZHCtVgtUs8HiKwK+E8=;
+ h=Subject:From:In-Reply-To:Date:Cc:References:To;
+ b=FJJxsTHXyqErK2Om+htfXOuLo85CXhytL5cLlh1zlw2ehZzbB0Pe2ODXzeAzzJJtR
+ xflY7wTeiLyOYthbjH0brSvgfuLiPqp5ryO2nyWwQcHTLsmTVHLV50E4oCGrAAmx5i
+ jsjHvUhx/CJo1rhEEEsi1NkzXZLduqlMU81wP3Ao=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=T2aTOJMx
-Subject: [Buildroot] [PATCH/next 2/2] package/ivi-homescreen: new package
+ dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.a=rsa-sha256
+ header.s=s201512 header.b=FJJxsTHX
+Subject: Re: [Buildroot] [PATCH 1/2] configs/milkv_duo: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,435 +87,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: hanyuan via buildroot <buildroot@buildroot.org>
+Reply-To: hanyuan <hanyuan-z@qq.com>
+Cc: Emil S <emil.soltys@outlook.com>, GP Orcullo <kinsamanka@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-flutter-pi is great for small projects, but has a few shortcomings:
- - It doesn't work at all with wayland.
- - It lacks several plugins that ivi-homescreen supports.
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- DEVELOPERS                                 |   1 +
- package/Config.in                          |   1 +
- package/ivi-homescreen/Config.in           | 142 ++++++++++++++
- package/ivi-homescreen/ivi-homescreen.hash |   3 +
- package/ivi-homescreen/ivi-homescreen.mk   | 216 +++++++++++++++++++++
- 5 files changed, 363 insertions(+)
- create mode 100644 package/ivi-homescreen/Config.in
- create mode 100644 package/ivi-homescreen/ivi-homescreen.hash
- create mode 100644 package/ivi-homescreen/ivi-homescreen.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1f26e9bc81..a09037636c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -37,6 +37,7 @@ F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-+F:	package/ivi-homescreen/
- F:	package/python-kmod/
- F:	package/python-versioneer/
- F:	support/testing/tests/package/test_firewalld.py
-diff --git a/package/Config.in b/package/Config.in
-index c971127759..9c2bd1dfa8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -350,6 +350,7 @@ comment "Graphic libraries"
- 	source "package/freerdp/Config.in"
- 	source "package/graphicsmagick/Config.in"
- 	source "package/imagemagick/Config.in"
-+	source "package/ivi-homescreen/Config.in"
- 	source "package/libglvnd/Config.in"
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
-diff --git a/package/ivi-homescreen/Config.in b/package/ivi-homescreen/Config.in
-new file mode 100644
-index 0000000000..fc625adf64
---- /dev/null
-+++ b/package/ivi-homescreen/Config.in
-@@ -0,0 +1,142 @@
-+menuconfig BR2_PACKAGE_IVI_HOMESCREEN
-+	bool "ivi-homescreen"
-+	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_FLUTTER_ENGINE
-+	select BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	select BR2_PACKAGE_WAYLAND_UTILS
-+	help
-+	  Toyota's Flutter Embedder that communicates with Wayland
-+	  compositors.
-+	  Features:
-+	  - Strongly Typed (C++)
-+	  - Lightweight
-+	  - Platform Channels enabled/disabled via CMake
-+	  - OpenGL Texture Framework
-+	  - Compositor Sub-surface/Region support
-+	  - Vulkan / EGL backend support
-+
-+	  https://github.com/toyota-connected/ivi-homescreen
-+
-+if BR2_PACKAGE_IVI_HOMESCREEN
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_DART_VM_LOGGING
-+	bool "Dart VM console redirection"
-+
-+comment "dependency-less plugins"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_ACCESSIBILITY_PLUGIN
-+	bool "Accessibility"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_COMP_REGION_PLUGIN
-+	bool "Compositor Region"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_COMP_SURF_PLUGIN
-+	bool "Compositor Surface"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_DESKTOP_WINDOW_PLUGIN
-+	bool "Desktop Window"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_FILE_SELECTOR_PLUGIN
-+	bool "File Selector"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_GO_ROUTER_PLUGIN
-+	bool "Go Router"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_INTEGRATION_TEST_PLUGIN
-+	bool "Flutter Integration Test support"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_ISOLATE_PLUGIN
-+	bool "Isolate"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_KEYBOARD_MANAGER_PLUGIN
-+	bool "Keyboard Manager"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_KEY_EVENT_PLUGIN
-+	bool "Key Event"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_LOGGING_PLUGIN
-+	bool "Logging Plugin"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_MOUSE_CURSOR_PLUGIN
-+	bool "Mouse Cursor"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_PACKAGE_INFO_PLUGIN
-+	bool "PackageInfo"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_PLUGIN
-+	bool "Platform"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEW_PLUGIN
-+	bool "PlatformView"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_RESTORATION_PLUGIN
-+	bool "Restoration"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN
-+	bool "Text Input"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_URL_LAUNCHER_PLUGIN
-+	bool "URL Launcher"
-+
-+comment "plugins with external dependencies"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN
-+	bool "Flutter Secure Storage"
-+	select BR2_PACKAGE_LIBSECRET
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN
-+	bool "Google Sign In manager"
-+	select BR2_PACKAGE_LIBCURL
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN
-+	bool "GStreamer"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
-+
-+comment "GStreamer plugin needs an EGL backend"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_HAS_LIBEGL
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN
-+	bool "OpenGL Texture"
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+
-+comment "OpenGL texture plugin needs an EGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL
-+
-+comment "textures"
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_EGL_TEXTURE
-+	bool "EGL"
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+
-+comment "EGL textures needs an EGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_NAVI_RENDER_EGL_TEXTURE
-+	bool "Navi"
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+
-+comment "Navi textures needs an EGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL
-+
-+config BR2_PACKAGE_IVI_HOMESCREEN_TEST_EGL_TEXTURE
-+	bool "Test"
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+
-+comment "Test textures needs an EGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL
-+
-+endif # BR2_PACKAGE_IVI_HOMESCREEN
-+
-+comment "flutter-auto needs flutter-engine"
-+	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_FLUTTER_ENGINE
-diff --git a/package/ivi-homescreen/ivi-homescreen.hash b/package/ivi-homescreen/ivi-homescreen.hash
-new file mode 100644
-index 0000000000..8803bcf2cd
---- /dev/null
-+++ b/package/ivi-homescreen/ivi-homescreen.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  c5a920894e8102a1838a1a46499cb94fda3a80a4e4e30e976e15b7d2e99eab51  ivi-homescreen-569b1b53873cea0a3dc0584a63824038cfb01a52-br1.tar.gz
-+sha256  6b96fa0a3def85caaf466caa2bd82d4ca4f22d106ff88f97a00c537c00cc714b  LICENSE
-diff --git a/package/ivi-homescreen/ivi-homescreen.mk b/package/ivi-homescreen/ivi-homescreen.mk
-new file mode 100644
-index 0000000000..ae4435fedd
---- /dev/null
-+++ b/package/ivi-homescreen/ivi-homescreen.mk
-@@ -0,0 +1,216 @@
-+################################################################################
-+#
-+# ivi-homescreen
-+#
-+################################################################################
-+
-+IVI_HOMESCREEN_VERSION = 569b1b53873cea0a3dc0584a63824038cfb01a52
-+IVI_HOMESCREEN_SITE = https://github.com/toyota-connected/ivi-homescreen.git
-+IVI_HOMESCREEN_SITE_METHOD = git
-+IVI_HOMESCREEN_LICENSE = Apache-2.0
-+IVI_HOMESCREEN_LICENSE_FILES = LICENSE
-+IVI_HOMESCREEN_DEPENDENCIES = \
-+	host-flutter-sdk-bin \
-+	flutter-engine \
-+	libxkbcommon \
-+	wayland \
-+	wayland-protocols \
-+	wayland-utils
-+
-+IVI_HOMESCREEN_CONF_OPTS = \
-+	-DBUILD_DOC=OFF \
-+	-DBUILD_TEXTURE_NAVI_EGL_ROUTING=OFF \
-+	-DBUILD_UNIT_TESTS=OFF
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
-+IVI_HOMESCREEN_CONF_OPTS += \
-+	-DBUILD_BACKEND_WAYLAND_EGL=ON \
-+	-DBUILD_EGL_TRANSPARENCY=ON \
-+	-DBUILD_EGL_ENABLE_3D=ON \
-+	-DBUILD_EGL_ENABLE_MULTISAMPLE=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += \
-+	-DBUILD_BACKEND_WAYLAND_EGL=OFF \
-+	-DBUILD_EGL_TRANSPARENCY=OFF \
-+	-DBUILD_EGL_ENABLE_3D=OFF \
-+	-DBUILD_EGL_ENABLE_MULTISAMPLE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_VULKAN=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_VULKAN=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_DRM=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_DRM=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_DART_VM_LOGGING),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DENABLE_DART_VM_LOGGING=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DENABLE_DART_VM_LOGGING=OFF
-+endif
-+
-+# dependency-less plugins
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_ACCESSIBILITY_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_ACCESSIBILITY=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_ACCESSIBILITY=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_COMP_REGION_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_COMP_REGION=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_COMP_REGION=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_COMP_SURF_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_COMP_SURF=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_COMP_SURF=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_DESKTOP_WINDOW_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_DESKTOP_WINDOW=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_DESKTOP_WINDOW=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_FILE_SELECTOR_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_FILE_SELECTOR=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_FILE_SELECTOR=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_GO_ROUTER_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GO_ROUTER=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GO_ROUTER=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_INTEGRATION_TEST_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_INTEGRATION_TEST=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_INTEGRATION_TEST=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_ISOLATE_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_ISOLATE=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_ISOLATE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_KEYBOARD_MANAGER_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_KEYBOARD_MANAGER=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_KEYBOARD_MANAGER=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_KEY_EVENT_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_KEY_EVENT=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_KEY_EVENT=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_LOGGING_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_LOGGING=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_LOGGING=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_MOUSE_CURSOR_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_MOUSE_CURSOR=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_MOUSE_CURSOR=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_PACKAGE_INFO_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_PACKAGE_INFO=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_PACKAGE_INFO=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_PLATFORM=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_PLATFORM=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEW_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_PLATFORM_VIEW=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_PLATFORM_VIEW=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_RESTORATION_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_RESTORATION=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_RESTORATION=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_TEXT_INPUT=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_TEXT_INPUT=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_URL_LAUNCHER_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_URL_LAUNCHER=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_URL_LAUNCHER=OFF
-+endif
-+
-+# "plugins with external dependencies"
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN),y)
-+IVI_HOMESCREEN_DEPENDENCIES += libsecret
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_SECURE_STORAGE=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_SECURE_STORAGE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN),y)
-+IVI_HOMESCREEN_DEPENDENCIES += libcurl
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GOOGLE_SIGN_IN=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GOOGLE_SIGN_IN=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN),y)
-+IVI_HOMESCREEN_DEPENDENCIES += ffmpeg gstreamer1 gst1-plugins-base
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GSTREAMER_EGL=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GSTREAMER_EGL=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_OPENGL_TEXTURE=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_OPENGL_TEXTURE=OFF
-+endif
-+
-+# Textures
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_EGL_TEXTURE),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_TEXTURE_EGL=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_TEXTURE_EGL=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_NAVI_RENDER_EGL_TEXTURE),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_TEXTURE_NAVI_RENDER_EGL=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_TEXTURE_NAVI_RENDER_EGL=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_TEST_EGL_TEXTURE),y)
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_TEXTURE_TEST_EGL=ON
-+else
-+IVI_HOMESCREEN_CONF_OPTS += -DBUILD_TEXTURE_TEST_EGL=OFF
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.42.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQXJub3V0LAoKVGhhbmtzIGZvciB5b3VyIHBhdGllbmNlIGFuZCBjYXJlZnVsIHJldmll
+dyEgTGV0IG1lIGV4cGxhaW4gc29tZXRoaW5nIHlvdSByZXF1ZXN0ZWQuCgo+IEJ1aWxkcm9vdCBk
+ZWZjb25maWdzIHNob3VsZCBiZSBfbWluaW1hbF8sIGkuZS4ganVzdCBlbm91Z2ggdG8gYm9vdCB0
+aGUgZGV2aWNlIGFuZCBwZXJoYXBzIGdldCBhICh3aXJlZCkgbmV0d29yayBjb25uZWN0aW9uLiBM
+b29raW5nIGF0IGFsbCB0aG9zZSBmaWxlcywgY2xlYXJseSB0aGVzZSBkZWZjb25maWdzIGFyZSBf
+bm90XyBtaW5pbWFsLiBJIHRoaW5rIHByZXR0eSBtdWNoIGV2ZXJ5dGhpbmcgaW4gdGhlIG92ZXJs
+YXkgY2FuIGJlIHJlbW92ZWQuCj4gTmljZSB0cmljayB0byBzYXZlIHRoZSByYW5kb20gTUFDIGFk
+ZHJlc3MgdGhhdCBpcyBnZW5lcmF0ZWQgb24gZmlyc3QgYm9vdCwgYnV0IHdlIGRvbid0IGluY2x1
+ZGUgc3VjaCB0aGluZ3MgaW4gdGhlIG1pbmltYWwgZGVmY29uZmlnLCBlc3BlY2lhbGx5IGlmIGl0
+J3Mgbm90IGJvYXJkIHNwZWNpZmljLgo+IFRoaXMgVVNCIHN0dWZmIGlzIGFsc28gbm90IGJvYXJk
+LXNwZWNpZmljLCBpcyBqdXN0IGdlbmVyaWMgVVNCIGdhZGdldCBjb25maWd1cmF0aW9uLiBJdCBt
+aWdodCBtYWtlIHNlbnNlIHRvIGNyZWF0ZSBhIEJ1aWxkcm9vdCBwYWNrYWdlIHdpdGggdGhvc2Ug
+c2NyaXB0cyB0aG91Z2guCgpJIHRoaW5rIHRoZSBkaWdlc3Qgb2YgdGhlIGNoYW5nZXMgaXMgcmVx
+dWVzdGluZyB1cyB0byByZW1vdmUgdGhlIHVubmVjZXNzYXJ5IHRoaW5ncyBzdWNoIGFzIHRoZSBw
+YWNrYWdlcyB3ZSB1c2UgaW4gdGhlIGRlZmNvbmZpZyBhbmQgZmlsZXMgaW4gdGhlIG92ZXJsYXku
+IEkgYW0gc29ycnkgZm9yIG15IHByZXZpb3VzIG1pc3VuZGVyc3RhbmRpbmcgb2YgeW91ciBtaW5p
+bWFsIHBoaWxvc29waHkuIFRoZSByZWFzb24gSSBkaWQgdGhlbSBpcyB0aGF0IEkgd2FudCB0byBs
+ZXQgdGhlIHN5c3RlbSB3ZSBidWlsZCBjb3VsZCBiZSBuZWFybHkgdGhlIHNhbWUgYXMgdGhlIG9m
+ZmljaWFsIGltYWdlLiBBbmQgdGhlIGZlYXR1cmVzIGFyZSBtYWlubHkgYWJvdXQgdGhlIFVTQiBS
+TkRJUyBvciBvdGhlciBtdWx0aXBsZXggZnVuY3Rpb25zLgoKTm93IEkgcGxhbiB0byByZW1vdmUg
+dGhlIHdob2xlIG92ZXJsYXkgZm9sZGVyIGFuZCBtb3ZlIG91ciBmaWxlcyB3aGljaCBnaXZlIHRo
+ZSBmZWF0dXJlcyBpbnRvIGEgbmV3IHBhY2thZ2UgKGUuZy4gbmFtZWQgQlIyX1BBQ0tBR0VfTUlM
+S1ZfRFVPX1VTQl9UT09MUykuIENvdWxkIHlvdSBwbGVhc2UgZ2l2ZSBtZSBhIHJldmlldyBvbiB0
+aGF0PwoKPiBJIGRpZG4ndCB1bmRlcnN0YW5kIHRoaXMuLi4gSXMgdGhlIGlkZWEgdG8gYXZvaWQg
+cmV3cml0aW5nIHRoZSBlbnRpcmUgU0QgY2FyZD8gRG9lc24ndCBzZWVtIHZlcnkgdXNlZnVsIHRv
+IG1lLCB0aGUgU0QgY2FyZCBpbWFnZSBpcyBwcmV0dHkgc21hbGwgc28gaXQgc2hvdWxkIGZsYXNo
+IGZhc3QsIGVzcGVjaWFsbHkgd2l0aCBgZGQgY29udj1zcGFyc2VgLgoKT0suIEkgd2lsbCByZW1v
+dmUgaXQuCgo+IDY0TT8gUmVhbGx5PyBTaG91bGRuJ3QgYSBmZXcgTUIgYmUgc3VmZmljaWVudD8K
+ClllcywgY2VydGFpbmx5IHN1ZmZpY2llbnQuIEkgd2lsbCBjaGFuZ2UuCgo+IERyb3AgdGhpcyBw
+YXJ0aXRpb24sIHRoZXJlIGlzIG5vIG5lZWQgZm9yIGl0IChzZWUgYWxzbyBiZWxvdykuCgpPSy4g
+SSB3aWxsIHJlZmFjdG9yIHRoZSB3aG9sZSBmaWxlLgoKPiBUaGVyZSdzIGFsc28gYW4gVXBzdHJl
+YW06IGxpbmsgbWlzc2luZy4KCklzIHRoZSBVcHN0cmVhbSBhIG11c3Q/IEkgaGF2ZSBmb3VuZCBt
+YW55IHBhdGNoZXMgaW4gYnVpbGRyb290IGRvIG5vdCBoYXZlIHRoaXMuCgo+IEJvdGggY29uZGl0
+aW9ucyBhcmUgc2V0IGluIGJvdGggZGVmY29uZmlncywgc28gdGhlcmUgcHJvYmFibHkgaXNuJ3Qg
+YSBuZWVkIHRvIGNoZWNrIGZvciB0aGVtLgoKSSB0aGluayB3ZSBzdGlsbCBuZWVkIHRvIGNoZWNr
+IHRoZSBjb25kaXRpb25zLiBCZWNhdXNlIHRoZSB1c2VyIG1pZ2h0IGNoYW5nZSB0aGVtLiBJZiBu
+b3QgY2hlY2tlZCwgdGhlIGVycm9yIHdpbGwgb2NjdXIgYW5kIHN0b3AgdGhlIHdob2xlIG1ha2Ug
+cHJvY2Vzcy4KCj4gUGxlYXNlIHVzZSB0YWIgZm9yIGluZGVudGF0aW9uIGluIHNoZWxsIHNjcmlw
+dHMuIEl0J3Mgbm90IHlldCBkb25lIGNvbnNpc3RlbnRseSwgYnV0IHdlJ3JlIHRyeWluZyB0byBn
+byBpbiB0aGF0IGRpcmVjdGlvbi4KCk9LLiBJIGFtIGFsd2F5cyBoYXBweSB0byBmb2xsb3cgeW91
+ciBmb3JtYXQuCgo+IEFjdHVhbGx5LCBJIHRoaW5rIGl0J3MgYmV0dGVyIHRvIGNoZWNrIGZvciB0
+aGUgZXhpc3RlbmNlIG9mIHRoaXMgZmlsZSB0byBkZWNpZGUgd2hldGhlciBvciBub3QgdG8gaW5j
+bHVkZSB0aGUgc21hbGxjb3JlIGltYWdlLgoKVG8gbWUsIG1heWJlIHdlIGNhbiBpZ25vcmUgdGhp
+cz8gSWYgdGhlIHVzZXIgcmVxdWVzdCB0aGUgc21hbGxjb3JlLCBhbmQgYWN0dWFsbHkgdGhlIHNt
+YWxsY29yZSBpbWFnZSBkb2VzIG5vdCBleGlzdCwgdGhlbiB0aGUgZmlwdG9vbC5weSB3aWxsIGVt
+aXQgYW4gZXJyb3IuIElmIHdlIGp1c3QgaW5jbHVkZSB0aGUgc21hbGxjb3JlIGFzIGxvbmcgYXMg
+dGhlIGltYWdlIGV4aXN0cywgSSB0aGluayBpdCBtaWdodCBub3QgYmUgYWxpZ25lZCB3aXRoIHRo
+ZSB1c2Vy4oCZcyBleHBlY3QuCgo+IERvZXMgaXQgcmVhbGx5IGhhdmUgdG8gYmUgbXVzbD8gT3Vy
+IGRlZmNvbmZpZ3Mgbm9ybWFsbHkgdXNlIHVDbGliYy4KCkkgYWxzbyB0aGluayB0aGVyZeKAmXMg
+bm8gbmVlZCBmb3IgbXVzbC4gSG93ZXZlciwgdGhlIG9mZmljaWFsIHNkayBpcyB1c2luZyBtdXNs
+LiBTbyBJIGhhdmUgdG8gdXNlIG11c2wgdG8ga2VlcCB0aGUgY29uc2lzdGVuY3kuCgoKPj4gK0JS
+Ml9HQ0NfVkVSU0lPTl8xM19YPXkKPiAKPiBQbGVhc2UgdXNlIHRoZSBkZWZhdWx0IEdDQyB2ZXJz
+aW9uOyBpZiB0aGF0IGlzIG5vdCBhcHByb3ByaWF0ZSwgYWRkIGEgY29tbWVudCB3aHkuCj4gCj4+
+ICtCUjJfVE9PTENIQUlOX0JVSUxEUk9PVF9DWFg9eQo+PiArQlIyX1RBUkdFVF9MREZMQUdTPSIt
+bWFyY2g9cnY2NGltYWZkY194dGhlYWRiYV94dGhlYWRiYl94dGhlYWRic194dGhlYWRjbW9feHRo
+ZWFkY29uZG1vdl94dGhlYWRmbWVtaWR4X3h0aGVhZGZtdl94dGhlYWRpbnRfeHRoZWFkbWFjX3h0
+aGVhZG1lbWlkeF94dGhlYWRtZW1wYWlyX3h0aGVhZHN5bmMiCj4gCj4gV293LCB0aGlzIGRlZmlu
+aXRlbHkgbmVlZHMgc29tZSBleHBsYW5hdGlvbiEKPiAKPiBPaCwgaGFuZyBvbiwgaXQncyB1c2lu
+ZyB0aGF0IG5vbi1zdGFuZGFyZCBULUhlYWQgQ1BVLCB0aGF0IGV4cGxhaW5zIGl0Li4uIEFuZCBp
+dCBhbHNvIGV4cGxhaW5zIHdoeSB5b3UgbmVlZCBHQ0MgMTMuIEknbSBzdXJwcmlzZWQgdGhvdWdo
+IHRoYXQgaXQncyBzdWZmaWNpZW50IHRvIHB1dCBpdCBpbiBMREZMQUdTLCBkb24ndCB5b3UgbmVl
+ZCBpdCBmb3IgY29tcGlsYXRpb24gYXMgd2VsbD8KPiAKPiBJIGFjdHVhbGx5IHRoaW5rIHdlIHBy
+b2JhYmx5IHNob3VsZCBoYXZlIGEgcmlzY3Ygc3ViYXJjaGl0ZWN0dXJlIG9wdGlvbiBmb3IgdGhl
+IFQtSGVhZCwgc2luY2UgdGhlcmUgd2lsbCBiZSBtdWx0aXBsZSBib2FyZHMgdXNpbmcgdGhhdCBT
+b0MgKGluY2x1ZGluZyB0aGUgQmVhZ2xlVi1BaGVhZCkuCgpZZXMuIFlvdSBoYXZlIGFscmVhZHkg
+Zm91bmQgb3VyIHJlYXNvbnMgb2YgdXNpbmcgZ2NjLTEzLiBIb3dldmVyLCBoZXJlIEkgZG8gbWFr
+ZSBhIG1pc3Rha2UuIEkgcGxhbiB0byBjb3B5IHRoZSAtbWFyY2ggaW50byB0aGUgQlIyX1RBUkdF
+VF9PUFRJTUlaQVRJT04sIHdoaWNoIHdpbGwgdGhlbiBiZSBwYXNzZWQgdG8gVEFSR0VUX0NGTEFH
+UyBhbmQgVEFSR0VUX0NYWEZMQUdTLiBJIHdpbGwgY29tbWVudCB0aGVzZSBvbiB0aGUgZGVmY29u
+ZmlnLgoKPiBBbHRob3VnaCB0aGlzIGZpcm13YXJlIGlzIHByb2JhYmx5IG5vdCBzdHJpY3RseSBu
+ZWVkZWQgZm9yIGJvb3RpbmcsIEkgZG8gdGhpbmsgaXQncyBhIGdvb2QgaWRlYSB0byBpbmNsdWRl
+IGl0LCBzbyB5b3UgaGF2ZSBhIGNvbXBsZXRlIHN5c3RlbS4gVGhlIHJlYWRtZS50eHQgc2hvdWxk
+IHBvaW50IHRvIHNvbWUgZG9jdW1lbnRhdGlvbiBvZiB0aGF0IEZyZWVSVE9TIGltYWdlIGhvd2V2
+ZXIuCgpOb25vbm8sIHRoaXMgZmlybXdhcmUgaXMgc3RyaWN0bHkgbmVlZGVkIGZvciBib290aW5n
+ISBXaXRob3V0IHRoaXMsIHdlIGNvdWxkIG5vdCBtYWtlIHRoZSB3aG9sZSBTRCBjYXJkIGltYWdl
+ISBUaGUgYm9vdCBzdGVwcyBvZiB0aGUgY2hpcCBjdjE4MDBiIGlzIGNvbXBsZXguIFRoZSBmaXJt
+d2FyZSBwcm9kdWNlcyBmaXAuYmluLCB3aGljaCBzdG9yZXMgdGhlIGZzYmwsIG9wZW5zYixmcmVl
+cnRvc2kgYW5kIHRoZSB1LWJvb3QsIGFuZCBib290LnNkLCB3aGljaCBpcyB0aGUga2VybmVsIGlu
+IGFjdHVhbC4gV2UgaW5jbHVkZSB0aGlzIGZpcm13YXJlLCB0byBidWlsZCB0aGUgZmlyc3Qgc3Rh
+Z2UgYm9vdCBsb2FkZXIsIHdoaWxlIGludm9sdmluZyB0aGUgb3RoZXIgYmluYXJpZXMgdG8gZ2l2
+ZSB0aGUgdHdvIGZpbGVzLiBJZiB0aGUgdXNlciBpcyBub3Qgc2F5aW5nIFkgdG8gdGhlIGZpcm13
+YXJlIHBhY2thZ2VzLCB0aGUgYnVpbGRyb290IHdvdWxkIG9ubHkgcHJvZHVjZSB0aGUgcm9vdGZz
+LnRhci4gVGhlIHdob2xlIFNEIGltYWdlIHdpbGwgYmUgcHJvZHVjZWQgaWYgYW5kIG9ubHkgaWYg
+dGhlIGZpcm13YXJlIHBhY2thZ2VzIGFyZSBzZWxlY3RlZC4KCj4gSWYgeW91IGRvbid0IGluY2x1
+ZGUgYWxsIHRob3NlIHBhY2thZ2VzLCB0aGUgZGVmYXVsdCA2ME0gc2hvdWxkIGJlIHN1ZmZpY2ll
+bnQuCgpPSy4gSSB3aWxsIHN0cmljdGx5IGltaXRhdGUgb3RoZXIgYm9hcmTigJlzIGNvbmZpZy4g
+TWFrZSBzdXJlIG1vc3QgdGhpbmdzIGFyZSBkZWZhdWx0LgoKPiBUaGVyZSBub3JtYWxseSBzaG91
+bGRuJ3QgYmUgYW55IHJlYXNvbiB0byBzZXQgdGhpcyBvcHRpb24uCgpEb2VzIHRoaXMgb3B0aW9u
+IG1lYW4gdGhlIEhPU1QgQ01BS0U/Cgo+IEknbSBub3Qgc3VyZSBpZiB3ZSB3YW50IGJvdGggZGVm
+Y29uZmlncy4gSSB0aGluayBpdCdzIHN1ZmZpY2llbnQgdG8gcHV0IGluIHRoZSByZWFkbWUudHh0
+IHRoYXQgaWYgeW91IHdhbnQgdG8gdXNlIElPTi9jYW1lcmEsIHRoYXQgVS1Cb290IHNob3VsZCBz
+d2l0Y2ggdG8gdGhlIG90aGVyIGRlZmNvbmZpZy4KCldlIGFkZCB0d28gZGVmY29uZmlncywgaW1p
+dGF0aW5nIHRoZSBhY21lc3lzdGVtc19hY3F1YV9hNV8yNTZtYl9kZWZjb25maWcuIEFuZCBpZiB0
+aGUgdXNlciB3YW50IHRvIHVzZSBJT04vY2FtZXJhLCBub3Qgb25seSB0aGUgdS1ib290IGJ1dCBh
+bHNvIHRoZSBmaXJtd2FyZSBuZWVkIHRvIGJlIGNvbmZpZ3VyZWQuIFNvIHRvIHRoZSBjb252ZW5p
+ZW5jZSwgd2UgYWRkIHR3byBjb25maWdzLgoKClRoYW5rcyBhZ2FpbiBmb3IgeW91ciBuaWNlIHJl
+dmlldyBhbmQgZ3JlYXQgcGF0aWVuY2UhIEhvcGUgdGhpcyBlbWFpbCBleHBsYWlucy4KCkJlc3Qg
+cmVnYXJkcywKSGFueXVhbgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
