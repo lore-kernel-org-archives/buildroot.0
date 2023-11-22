@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1BB5C61D97
-	for <buildroot@archiver.kernel.org>; Wed, 22 Nov 2023 11:46:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66119C61D99
+	for <buildroot@archiver.kernel.org>; Wed, 22 Nov 2023 15:54:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 336324059B;
-	Wed, 22 Nov 2023 11:46:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 336324059B
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF837612DB;
+	Wed, 22 Nov 2023 15:54:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF837612DB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QQsS8npWUQ5f; Wed, 22 Nov 2023 15:54:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 477FF612B9;
+	Wed, 22 Nov 2023 15:54:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 477FF612B9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 56C011BF263
+ for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 15:54:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B23741171
+ for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 15:54:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B23741171
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H5JWpq1HX6_A; Wed, 22 Nov 2023 11:46:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 300B640374;
-	Wed, 22 Nov 2023 11:46:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 300B640374
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B744F1BF20D
- for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 11:46:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8FF8481386
- for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 11:46:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FF8481386
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BBoPp7KjHqpe for <buildroot@lists.busybox.net>;
- Wed, 22 Nov 2023 11:46:12 +0000 (UTC)
-Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 334F081379
- for <buildroot@buildroot.org>; Wed, 22 Nov 2023 11:46:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 334F081379
-Received: from [192.168.50.162] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 5lgFr47YG9W4O5lgFrpQtw; Wed, 22 Nov 2023 12:46:08 +0100
-Message-ID: <d55f0a0d-7190-4e92-bf7e-bf1cb1b710b9@benettiengineering.com>
-Date: Wed, 22 Nov 2023 12:46:07 +0100
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f6costwut4kT for <buildroot@lists.busybox.net>;
+ Wed, 22 Nov 2023 15:54:32 +0000 (UTC)
+X-Greylist: delayed 310 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 22 Nov 2023 15:54:32 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A05F4116E
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A05F4116E
+ for <buildroot@buildroot.org>; Wed, 22 Nov 2023 15:54:31 +0000 (UTC)
+Received: from evilbit.green-communications.fr ([85.168.41.102]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis)
+ id 1MWAWq-1qpwCk49AA-00XYtn; Wed, 22 Nov 2023 16:49:17 +0100
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+To: buildroot@buildroot.org
+Date: Wed, 22 Nov 2023 16:47:36 +0100
+Message-ID: <20231122154837.31838-1-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20231121220706.506553-1-fontaine.fabrice@gmail.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20231121220706.506553-1-fontaine.fabrice@gmail.com>
-X-CMAE-Envelope: MS4xfBBn4PUd+ngMgx2OkYrR3LwaSFaNWpjxAEm4w+HuQRaCsg2sQnma/jJTFsGQBTY7bOzwtrKe10sGDsRXr6CQCycoh4FIMcq4G6K44XCZCPeGJaaqui37
- fNc/IgHXJm8vH9OLCJiiXumRW1u9xT2lCbGaLp5lVSlPxs1FiflMuloDBCfnyjFlHHmPU7TOiO9ed1i5AFOnELkVZXHCc/dSymtpguLZvx7PUqYaa+kcm07c
- +L3/NGuRIRmaq/QSkKSCuA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1700653568; bh=NZXSkCfOgLJcI5OxDTvSK9IIlusslcVN8r1REM1VJ+U=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=jeujB75K/RWY+Eg0Nem6PctjqqOJJ+jssBHqhN/e+LN1GOH+aPNnLcwMzbPSbYhXN
- h3cIkNJaVzr/CcuC44LbD5vBpNWLrSssiCVQkTHuPyWKFsOdDSaJiqY+tQMH1S+aLU
- UXwtqPw//yysXyjSQgE0Tueu+7mwqNKyDD2/L8FST0g4N51B2l9A+C1mbEavFl/UxJ
- LYUxmbBU/5+mMGq6kDxMgdw94X92EVPhbrwZgqjHVPxy5zWRn+Rs+w416NyFg2qbfP
- sQWdLoD4c4tbq0LWaeRXRVRG+LqlLqvFrU9d/mIdIlw9WuvNHwzUgMxpDN5iaOh//c
- MbQHx9CPez+Zw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=jeujB75K
-Subject: Re: [Buildroot] [PATCH 1/1] package/libblockdev: drop unrecognized
- options
+X-Provags-ID: V03:K1:RLOOq/eD7TnjVrli27L85dNM5ehdoKJhpPa/YardDG6k3N/gvKs
+ 2UFA3Smb/0094ulSOlPppfed/VmyoLnk3KoSmqDQAberVY2NAhvBsm/lkwO+mESzqYKighH
+ BTYm5BtSZwwjNaOahv0G6LK3fOlYHLky4jPGnBjeLe9Y2/lWpIukCrCMejgGiy673KtjjqE
+ 7X5EbWlt2TEwtn8VnIS/w==
+UI-OutboundReport: notjunk:1;M01:P0:xUsfCZSNcX0=;EWrmyxknmqnTkJ6Bq8z8XR3146r
+ gHhuaW6cin9Jy6BcDm5fNr5twruhLRI5uBgoKEWkl1WTcbVZUP+UzZnX4nTRQ0P9seOP/bDRF
+ QO3IdUEGa8oZkQfUP4geZH7ARdtWAtC9uwKqhmpCumHc5k9m1pJHR2yJk72Ky6VYmNs7sQ9rG
+ T8GuhozglTkB7M7g+1hGfqx1LjwQL+0/5Xb/mKrVIY1hRIae2yBHKqWRNQCJ8Ri4FR+NSUACB
+ pB4Du7QgomA8YhASW1Ag+uYux8u8KM/FDn9lxjEMUEOt51WigV8y3zoS9lS48jliF8PQYcnNw
+ 8VFGwmPo5W9GWPQGUqL87J1axr5GgLTdUHCpUB7AuAJuYUogQTUhKBC7XxesnpnzpFH7v/Y4f
+ 9qDKNp/mcHS/VMNOelNg2N+2k3TwTvriY6ZWjteXtlFYbMsfDEA/HHNbDOECEa4E81NHNeAVM
+ LcxbAG+pbCTudszfcbMVoI7XPKYgOKl0coVKGK2qOOXFRV+A33sf3Z46pEU/SK9uPS7DeCAWm
+ kKDbnvyof2J1vC+EUZg5W/UX5of2lEJD/NQ1DSpPEbnHVObIYC6PKIuVcZNdFKm5XKYwsvRY/
+ ksC6Biy6sBQQKQN3mlP/1UEjiDc8jWFo4u432JoNDgm54lJeoGXCzmebmP/qmK84YEK2WzjbL
+ 7/jkKzF1r6pulv9trZG1xErgXDORJg1HT8fM0uBopxm3xCkoQVbKy+GBr3gSME6l2OJ2fNIC9
+ k8uw4DqimvM87WMZ+Z406K6aC08T9jLY/hDZwmqtu/9qhbu8EqUt9Bn7NCbsB+6GSk5FC7q45
+ BBUf9UBs1s82PiCujfrp31k8W45c4OREqOOkZ/KZORiJGpRYYoUV8oFwXPeprcV1WibnWCj3Y
+ WKdi0UhagXlNRbQ==
+Subject: [Buildroot] [PATCH 1/1] package/gcc: fix disabling the documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,65 +75,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice,
+gcc.mk attempts to disable building the documentation by setting
+MAKEINFO=missing, but it is not working.  If makeinfo is installed
+and recent enough, gcc still uses it.  This can be checked easily:
 
-On 21/11/23 23:07, Fabrice Fontaine wrote:
-> The following options were wrongly kept when bumping to version 3.0.3 in
-> commit 18420d9b6b424492741cba495cc2e7a28a409e8b:
->   - dmraid (dropped since
->     https://github.com/storaged-project/libblockdev/commit/d174944a85169efae3bac0b6e76498e3d0c6c240)
->   - bcache and kbd (dropped since
->     https://github.com/storaged-project/libblockdev/commit/c1ff1c87e31fb2820a5694637eb221f590eb9451)
->   - python2 (dropped since
->     https://github.com/storaged-project/libblockdev/commit/8fc33b834529d3d18a73112e4c77ea0a5d26d62c)
->   - vdo (dropped since
->     https://github.com/storaged-project/libblockdev/commit/e51faac2a952da33925e3ccab0f4f0fdf3986cd3)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+grep BUILD_INFO='info' host-gcc-initial-*/build/gcc/config.log
 
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+It happens because the root ./configure script will check
+$MAKEINFO --version (aka 'missing --version') and will overwrite it with
+MAKEINFO='missing makeinfo' because the version does not match.
 
-Thank you
-Best regards
+Having MAKEINFO='missing makeinfo' is a problem because
+'missing makeinfo' will actually attempt to run 'makeinfo' before
+failing with an error message.  If makeinfo is installed on the host,
+then 'missing makeinfo' will successfully run makeinfo anyway.
+
+Many gcc subprojects will check $MAKEINFO --version and enable building
+the documentation if it is recent enough.  This patch overrides these
+checks by forcing gcc_cv_prog_makeinfo_modern=no.
+
+Building the GCC documentation can fail with the wrong makeinfo version.
+It happened at least when building GCC 11.3.0 with makeinfo 7.1.
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+
+---
+
+This patch is mostly useful when backported to 2023.02
+---
+ package/gcc/gcc.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 9a164c8374..93bc46643c 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -91,9 +91,12 @@ HOST_GCC_COMMON_CONF_OPTS += --with-debug-prefix-map=$(BASE_DIR)=buildroot
+ endif
+ 
+ # Don't build documentation. It takes up extra space / build time,
+-# and sometimes needs specific makeinfo versions to work
++# and sometimes needs specific makeinfo versions to work. Override the check
++# for a modern makeinfo otherwise the configure scripts will still enable it.
+ HOST_GCC_COMMON_CONF_ENV = \
+ 	MAKEINFO=missing
++HOST_GCC_COMMON_MAKE_OPTS = \
++	gcc_cv_prog_makeinfo_modern=no
+ 
+ GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+@@ -298,7 +301,7 @@ HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
+ # For gcc-final, the gcc logic to detect whether SSP support is
+ # available or not in the C library is not working properly for
+ # uClibc, so let's be explicit as well.
+-HOST_GCC_COMMON_MAKE_OPTS = \
++HOST_GCC_COMMON_MAKE_OPTS += \
+ 	gcc_cv_libc_provides_ssp=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+ 
+ ifeq ($(BR2_CCACHE),y)
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-
-> ---
->   package/libblockdev/libblockdev.mk | 7 +------
->   1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-> index 3bbc221cc5..e0fca2b95c 100644
-> --- a/package/libblockdev/libblockdev.mk
-> +++ b/package/libblockdev/libblockdev.mk
-> @@ -16,20 +16,15 @@ LIBBLOCKDEV_AUTORECONF = YES
->   LIBBLOCKDEV_CONF_OPTS = \
->   	--disable-introspection \
->   	--with-loop \
-> -	--without-bcache \
->   	--without-btrfs \
->   	--without-dm \
-> -	--without-dmraid \
->   	--without-escrow \
-> -	--without-kbd \
->   	--without-lvm_dbus \
->   	--without-mpath \
->   	--without-nvdimm \
-> -	--without-python2 \
->   	--without-python3 \
->   	--without-s390 \
-> -	--without-tools \
-> -	--without-vdo
-> +	--without-tools
->   
->   ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
->   LIBBLOCKDEV_DEPENDENCIES += cryptsetup keyutils
+2.42.0
 
 _______________________________________________
 buildroot mailing list
