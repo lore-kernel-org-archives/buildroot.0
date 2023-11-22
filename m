@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DE73C5ACB3
-	for <buildroot@archiver.kernel.org>; Sat, 18 Nov 2023 16:17:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69EF6C61D92
+	for <buildroot@archiver.kernel.org>; Wed, 22 Nov 2023 08:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8F5B821E1;
-	Sat, 18 Nov 2023 16:17:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8F5B821E1
+	by smtp4.osuosl.org (Postfix) with ESMTP id C080941BC4;
+	Wed, 22 Nov 2023 08:58:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C080941BC4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TDojBPuETNbv; Sat, 18 Nov 2023 16:17:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sw8IIKuB4IaB; Wed, 22 Nov 2023 08:58:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43A25820D4;
-	Sat, 18 Nov 2023 16:17:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43A25820D4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A5FB416C5;
+	Wed, 22 Nov 2023 08:58:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A5FB416C5
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7D8231BF2F4
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 16:17:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C08651BF2AB
+ for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 08:58:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CF95404EC
- for <buildroot@lists.busybox.net>; Sat, 18 Nov 2023 16:17:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CF95404EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3C8C40272
+ for <buildroot@lists.busybox.net>; Wed, 22 Nov 2023 08:58:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3C8C40272
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ithfHKv4EPQV for <buildroot@lists.busybox.net>;
- Sat, 18 Nov 2023 16:17:18 +0000 (UTC)
+ with ESMTP id UGzO9fHtQKqD for <buildroot@lists.busybox.net>;
+ Wed, 22 Nov 2023 08:58:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B229404A1
- for <buildroot@uclibc.org>; Sat, 18 Nov 2023 16:17:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B229404A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10CD140018
+ for <buildroot@uclibc.org>; Wed, 22 Nov 2023 08:58:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10CD140018
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 36E1581F87; Sat, 18 Nov 2023 16:17:18 +0000 (UTC)
+ id DD39586115; Wed, 22 Nov 2023 08:58:23 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 18 Nov 2023 16:17:17 +0000
+Date: Wed, 22 Nov 2023 08:58:23 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2023.08.3
+X-Bugzilla-Version: 2023.08.2
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: arnout@mind.be
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: WONTFIX
+X-Bugzilla-Severity: minor
+X-Bugzilla-Who: justin.brown@fandingo.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-15856-163-Uzdlbl15fE@https.bugs.busybox.net/>
-In-Reply-To: <bug-15856-163@https.bugs.busybox.net/>
-References: <bug-15856-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15847-163-fKQSkqBg1N@https.bugs.busybox.net/>
+In-Reply-To: <bug-15847-163@https.bugs.busybox.net/>
+References: <bug-15847-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15856] Using BR2_CONFIG= on a different
- file-system than O= (build outputs) fails with kconfig syncconfig error
+Subject: [Buildroot] [Bug 15847] Systemd: Incorrect Permission on
+ /usr/lib/systemd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,29 +79,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15856
+https://bugs.busybox.net/show_bug.cgi?id=15847
 
-Arnout Vandecappelle <arnout@mind.be> changed:
+--- Comment #2 from fandingo <justin.brown@fandingo.org> ---
+Sorry for the delayed response. I've been working on my project on and off, and
+I've done tons of builds since posting this report. The o=rx permissions aren't
+getting set. I'm wondering if you have some kind of umask of ACL setting on
+your host OS that's makes it work for you. 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
+I ended up doing with a device_table.txt:
 
---- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
-> and one also specifies `BR2_CONFIG`
-
-BR2_CONFIG is not something that is supposed to be overridden. It is supposed
-to reside in the same location as the output directory.
-
-We will not accept patches that fix this specific problem you have.
-
-What is your use case for putting the configuration file outside of the output
-directory? Perhaps we can find a better solution for this specific use case.
-However, please discuss this on the mailing list [1] rather than in the bug
-tracker.
-
-[1] https://lists.buildroot.org/mailman/listinfo/buildroot
+# <name>                                <type>  <mode>  <uid>   <gid>   <major>
+<minor> <start> <inc>   <count>
+/usr/lib/systemd                        d       755     0       0       -      
+-       -       -       -
 
 -- 
 You are receiving this mail because:
