@@ -1,89 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCDDFC5AD4C
-	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 15:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DD06C61D97
+	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 17:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8156361342;
-	Thu, 23 Nov 2023 15:38:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8156361342
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WMvB8eza3Nrd; Thu, 23 Nov 2023 15:38:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C90C660C15;
-	Thu, 23 Nov 2023 15:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C90C660C15
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A80721BF410
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:38:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78C3F403FB
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:38:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78C3F403FB
+	by smtp2.osuosl.org (Postfix) with ESMTP id C33E140519;
+	Thu, 23 Nov 2023 17:40:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C33E140519
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3-i7kjPhslb7 for <buildroot@lists.busybox.net>;
- Thu, 23 Nov 2023 15:38:47 +0000 (UTC)
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 732DB403AF
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 15:38:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 732DB403AF
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-40b27b498c3so6966055e9.0
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 07:38:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700753925; x=1701358725;
- h=in-reply-to:references:from:subject:cc:to:message-id:date
- :content-transfer-encoding:mime-version:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=cW4qOqRZ2nN9QXIquFl4alLA1a3lH03FJ6Hd+1tBJpI=;
- b=SxADZnu5XJME9V0V15u4U3Pw8Tdmd/k3C0uAI154ah3mUOIJ2MLiWr27zwRILDeyR5
- 3+3thzheA3WIURG5GZWIaoTFbotRQaGS5H/NgnGtrNC6gMJVmlB+I4xHbAr8rrIDkScD
- Ko/q8CFtne4TTC0EH3manjUrhjcrivF81F/K1o2SwUd9/tLEQ0PnE1cN5t9F9swSuIAb
- uSmVweFRkLPc4Bg+ulrMMzeJE+wRM277WQSqKS0U304G3tfFhMaR3+xikZ+AybWG8eMO
- W0KGIPL+s0uT0J26Etr11F5ju1CEXhLxKr3ZitAqOlSoLldXellwDEGyAjfZT/NW4oSa
- vRww==
-X-Gm-Message-State: AOJu0Ywgg+6LgO1q1FW3yx3iPfCrPLwLBU4j52MzE7CI+p5xZcMk/U5u
- lChtKSflZdbqaK/tI15oDBBXzQ==
-X-Google-Smtp-Source: AGHT+IH3/Pxhwl/fM3ic/08c1kXv8yiNgORWx6YOTvoOaURflzfroVdfXDRWTJ2/pKkSGCQ2Y/rE/A==
-X-Received: by 2002:a05:600c:1d27:b0:40b:3440:c802 with SMTP id
- l39-20020a05600c1d2700b0040b3440c802mr2574498wms.35.1700753925485; 
- Thu, 23 Nov 2023 07:38:45 -0800 (PST)
-Received: from localhost ([2a01:e0a:ce:f2f0:3a7c:76ff:fe01:6f05])
- by smtp.gmail.com with ESMTPSA id
- fs27-20020a05600c3f9b00b0040b36787913sm2349683wmb.13.2023.11.23.07.38.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 23 Nov 2023 07:38:45 -0800 (PST)
-Mime-Version: 1.0
-Date: Thu, 23 Nov 2023 16:38:44 +0100
-Message-Id: <CX6AY6UA72ZB.3SRZZAYMXMZPP@rtone.fr>
-To: =?utf-8?q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>
-From: =?utf-8?q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>
-X-Mailer: aerc 0.15.2
-References: <20231121193448.1151936-1-gael.portay@rtone.fr>
- <20231123111233.24b5dbf2@windsurf> <CX6AO4BXYX52.FL7MGXII8KB8@rtone.fr>
-In-Reply-To: <CX6AO4BXYX52.FL7MGXII8KB8@rtone.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rtone.fr; s=google; t=1700753925; x=1701358725; darn=buildroot.org;
- h=in-reply-to:references:from:subject:cc:to:message-id:date
- :content-transfer-encoding:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=cW4qOqRZ2nN9QXIquFl4alLA1a3lH03FJ6Hd+1tBJpI=;
- b=Muel4X/jB+T2lVbNj6D1koKnQDN9QMqpVRbCPcT3FSiCwBiwPLUik7/qIub4CJwzA0
- Ak8o7LTP/p5OCTDC8bwNMW+pYJJaUgjC2gvxNgmebpDIypLgKCFV22PWBdpOHEl3/a0h
- ALcFEQQGuVHNwnj2xtleSMNphadmKR+dHNwsg=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=rtone.fr header.i=@rtone.fr
- header.a=rsa-sha256 header.s=google header.b=Muel4X/j
-Subject: Re: [Buildroot] [v1 0/4] [PATCH 0/3] Add support for Pi5
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eQB4fny4ghFu; Thu, 23 Nov 2023 17:40:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7EDE40549;
+	Thu, 23 Nov 2023 17:40:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7EDE40549
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EA43B1BF3DD
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 17:40:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF73341FBF
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 17:40:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF73341FBF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MF6fTIZEbxep for <buildroot@lists.busybox.net>;
+ Thu, 23 Nov 2023 17:40:02 +0000 (UTC)
+Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4BAFD41FB8
+ for <buildroot@buildroot.org>; Thu, 23 Nov 2023 17:40:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BAFD41FB8
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 6DgErHsQa54nL6DgErkul8; Thu, 23 Nov 2023 18:39:58 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Thu, 23 Nov 2023 18:39:57 +0100
+Message-Id: <20231123173957.2385041-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfPRsb+wTnWNdH/Phcvu1J5EzUYAz1+BR5dEFwYhCgWpS6rieVXumxA3MJZsw5JMhkVoqRU0zewjj37AiqNuJUF+6pEAGgYuJjQaTwocZLseNCraYAzAb
+ DzXxQ8yw/NkCvue0m8ur/mgjBUuqHTc1p8z7eyOoeBh0ddyzhKG9Y0oTREpblgJb5QGW1pw0TCO5Nbn5+MDzUZXiWlHSnTm1yhAhGRhuSDxV79Bjftw4WKc1
+ GLxIuklfH0xmoxbexrr35CS/OnNwTXqxBBWZFKbr5BvjdGz8x5ykSeZ+n7EuRr1+vtj0oIGd+KObOYWUOLtRTQBIa7b18JtVN6ByOTO1DU0DyEv4SE2aKHNj
+ Z1ap/WGmAER6dTnl+wQfbNSY3wRZiZ5khkrD3GH3VY+JS0qso6nz5jKtd//+YCU5J4rlD97d
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1700761198; bh=Ho3xq7IAvf+c65x7elA/oqF2Mtd5yEO37GDA0T01UHk=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=PbKkgWndrxMtr1wnNYnfc8Fi5zZHkwd/12Xkbi2lnIKB9h/9Fa2d9LKRhzJ0+l/Ig
+ gQed+uLF7OhsQiftjlXO7Xwio08Tmx1vvdneM4W/eXHC+e/D8CL+yedQ9Qgi0uC0qz
+ gEmt7GBa0CvAN3+yfP8MoQSHDZsQVAYLtN/dq8cyaljOC1nEA70BqnQF/fKj3KNGms
+ LkAV41z9nS9aZc4tOeLp0GWIug87LWpEKom0oiZceOht0KfpdQx9lcg8cYAeWZ8Mt/
+ 48A63hWjwdQQdh766TAeLJ8P/xAN92RA/yWzP2mngjVFyqN5afvvlByiG1U3JHDfQ5
+ YqTaIdA8HnRqA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=PbKkgWnd
+Subject: [Buildroot] [PATCH] package/swupdate: workaround runtime update
+ failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,40 +73,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Martin Bark <martin@barkynet.com>, Julien
- Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Jim Reinhart <jimr@tekvox.com>, Matthew Maron <matthewm@tekvox.com>,
+ James Autry <jautry@tekvox.com>,
+ Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1IE5vdiAyMywgMjAyMyBhdCA0OjI1IFBNIENFVCwgR2HDq2wgUE9SVEFZIHdyb3RlOgo+
-IE9uIFRodSBOb3YgMjMsIDIwMjMgYXQgMTE6MTIgQU0gQ0VULCBUaG9tYXMgUGV0YXp6b25pIHdy
-b3RlOgo+ID4gT24gVHVlLCAyMSBOb3YgMjAyMyAyMDozNDo0NCArMDEwMAo+ID4gR2HDq2wgUE9S
-VEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4gd3JvdGU6Cj4gPgo+ID4gPiBUaGUgb3V0cHV0IGJv
-b3RzIGZpbmUgYW5kIGl0IHJ1bnMgZ2V0dHkgb24gdWFydCBhbmQgdmlydHVhbCB0dHkgaWYgaXQg
-aXMKPiA+ID4gYnVpbHQgdXNpbmcgdGhlIHRvb2xjaGFpbiBidWlsdCBieSBidWlsZHJvb3QuCj4g
-PiA+IAo+ID4gPiBUaGUgb3V0cHV0IGJvb3RzIHRoZSBrZXJuZWwgYnV0IHRoZSBrZXJuZWwgY2Fu
-bm90IHJ1biB0aGUgaW5pdCBwcm9jZXNzCj4gPiA+IGlmIGl0IGlzIGJ1aWx0IHVzaW5nIHRoZSBi
-b290bGluIHByZWJ1aWx0IHRvb2xjaGFpbi4gU29tZXRoaW5nIGlzIGJyb2tlbgo+ID4gPiBkdWUg
-dG8gdGhlIDE2ayBNTVUgcGFnZS1zaXplIDooCj4gPgo+ID4gSSAqdGhpbmsqIHRoaXMgaXMgZXhw
-ZWN0ZWQuIFRoZSBCb290bGluIHRvb2xjaGFpbnMgYXJlIGJ1aWx0IGZvciB0aGUKPiA+IGRlZmF1
-bHQgcGFnZSBzaXplIG9mIDRLQiwgc28gdGhlIGxpYmMgaW4gdGhvc2UgdG9vbGNoYWlucyBleHBl
-Y3RzIDRLQgo+ID4gcGFnZXMsIGFuZCB0aGlzIGJyZWFrcyBpZiB5b3UgbWl4IGl0IHdpdGggY29k
-ZSB0aGF0IHdhcyBidWlsdCBmb3IgMTYgS0IKPiA+IHBhZ2Ugc2l6ZS4KPiA+Cj4KPiBPa2F5LiBT
-byBpdCBuZWVkcyB0byBzaGlwIG11bHRpcGxlIHRvb2xjaGFpbnMsIG9uZSBwZXIgcGFnZS1zaXpl
-PyBPcgo+IG1heWJlIHRoZXJlIGlzIGEgY29tcGlsZXIgZmxhZyBvciB3aGF0c29ldmVyOyBJIHNh
-dyBhIGxpbmtlciBmbGFnLiBJCj4ga25vdyBub3RoaW5nIGFib3V0IHRoYXQgZm9yIG5vdy4gSSBu
-ZWVkIHRvIGRpZyBpbi4KPgo+IEJUVywgSSB3b25kZXIgaG93IHRoZSBSYXNwYmVycnkgT1MgZGVh
-bHMgd2l0aCBhbiBpbWFnZSB3b3JraW5nIGZvciBib3RoCj4gNGsgYW5kIDE2ayBpbiBhIHNpbmds
-ZSB1c2VybGFuZDsgbWF5YmUgaXQgaXMganVzdCBhIG1hdHRlciBvZiB0b29sY2hhaW4uCj4KPiA+
-ID4gUXVlc3Rpb246IHRoZSBkZXZpY2UtdHJlZSBvdmVybGF5cyBhcmUgdGFrZW4gZnJvbSB0aGUg
-cnBpLWZpcm13YXJlOyBpcwo+ID4gPiB0aGVyZSBhIHBsYW4gdG8gY29tcGlsZSB0aGUgb25lIGZy
-b20gdGhlIGRvd25zdHJlYW0ga2VybmVsIHNvdXJjZXMKPiA+ID4gaW5zdGVhZD8gYnkgdHdlYWtp
-bmcgdGhlIGxpbnV4Lm1rIG1heWJlPwoKSSBoYXZlIGp1c3QgdGVzdGVkIHdpdGggdGhlIHRvb2xj
-aGFpbiAiQXJtIEFBcmNoNjQgMTIuMi5yZWwxIiBhbmQgaXQKd29ya3MhIEl0IGlzIGp1c3QgYSBt
-YXR0ZXIgb2YgdG9vbGNoYWluLgoKR2HDq2wKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+
+If SWUpdate is built using -Os optimization it will fail to update using
+Mongoose webserver randomly and always while using option
+installed-directly in .swu file generation. So let's workaround the bug
+by building with -O3.
+
+Reported upstream:
+https://groups.google.com/g/swupdate/c/oHMihNw8ZHA
+
+Cc: Jim Reinhart <jimr@tekvox.com>
+Cc: James Autry <jautry@tekvox.com>
+Cc: Matthew Maron <matthewm@tekvox.com>
+Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/swupdate/swupdate.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index ea4a5a62e5..7801be07ce 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -217,10 +217,19 @@ endif
+ SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
+ SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ 
++SWUPDATE_CFLAGS = $(TARGET_CFLAGS)
++
++# Workaround update failure showing up with -Os
++# Reported here:
++# https://groups.google.com/g/swupdate/c/oHMihNw8ZHA
++ifeq ($(BR2_OPTIMIZE_S),y)
++SWUPDATE_CFLAGS += -O3
++endif
++
+ SWUPDATE_MAKE_OPTS = \
+ 	SWU_VER="$(SWUPDATE_VERSION) (Buildroot $(BR2_VERSION_FULL))" \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+-	CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++	CONFIG_EXTRA_CFLAGS="$(SWUPDATE_CFLAGS)" \
+ 	CONFIG_EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
+ 
+ define SWUPDATE_KCONFIG_FIXUP_CMDS
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
