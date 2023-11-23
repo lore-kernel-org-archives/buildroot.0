@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4BDC5AD4C
-	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 10:12:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCE3CC61D85
+	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 10:15:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E267B8146D;
-	Thu, 23 Nov 2023 10:12:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E267B8146D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D5548128B;
+	Thu, 23 Nov 2023 10:15:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D5548128B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FS3m3UOom4x2; Thu, 23 Nov 2023 10:12:42 +0000 (UTC)
+	with ESMTP id DALp9ghCQcSf; Thu, 23 Nov 2023 10:15:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 397D88146E;
-	Thu, 23 Nov 2023 10:12:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 397D88146E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C6901BF48D
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 10:12:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1E2780C21;
+	Thu, 23 Nov 2023 10:15:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1E2780C21
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4EA981BF48D
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 10:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54DF061046
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 10:12:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54DF061046
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24CDD41DC5
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 10:15:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24CDD41DC5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id joLZORhAWFUR for <buildroot@lists.busybox.net>;
- Thu, 23 Nov 2023 10:12:38 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AFCD36102F
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 10:12:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFCD36102F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5FCC340005;
- Thu, 23 Nov 2023 10:12:34 +0000 (UTC)
-Date: Thu, 23 Nov 2023 11:12:33 +0100
-To: =?UTF-8?B?R2HDq2w=?= PORTAY <gael.portay@rtone.fr>
-Message-ID: <20231123111233.24b5dbf2@windsurf>
-In-Reply-To: <20231121193448.1151936-1-gael.portay@rtone.fr>
-References: <20231121193448.1151936-1-gael.portay@rtone.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KbG4mABBHBrs for <buildroot@lists.busybox.net>;
+ Thu, 23 Nov 2023 10:15:32 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E2EA841BD1
+ for <buildroot@buildroot.org>; Thu, 23 Nov 2023 10:15:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2EA841BD1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DE400C0015;
+ Thu, 23 Nov 2023 10:15:28 +0000 (UTC)
+Date: Thu, 23 Nov 2023 11:15:28 +0100
+To: Byron Gallagher <trippgallagher98@gmail.com>
+Message-ID: <20231123111528.3f88828e@windsurf>
+In-Reply-To: <20231121174722.4164-1-trippgallagher98@gmail.com>
+References: <20231121174722.4164-1-trippgallagher98@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1700734354;
+ d=bootlin.com; s=gm1; t=1700734529;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=xrbJYyVYpoNPnAatssOkPEBZXvQ3uohVuOsup6a2ins=;
- b=nOb6Xq/1HyGVdl6XbXGZO4hDK0JCXCtTHFJeGBBWWJ2LHuD8M3VXrx7EoIBnCDMRIco4g7
- vUhjdVrH7MSkIFy5zFIPCQN7DWIv6cHX12qLpQXr90FFhx++lw45GZdPhAPTa0H7re31ey
- adCrCwKzMN9c59DllExn//CrcsgFKGKdwijbYXKxexSB5URJ99OcS54cL73Nx2kzjg+HVb
- eCo4UMk/SUw/oLLwgQ46j/Syams/5GeyTufh1UYA0Y4j8Xj2cc2KQbm2H0qjIwFLvRGGjr
- XDzWzHsGI7i1O86i+6QuZ1+lolu53WMDealUJY6UB7xPCCVAMe97ss2LcKUxXg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=axPyXl0smzvDab5CAthyTZOULbxAxrLanNjjAmqKgVY=;
+ b=UoHV74D0JNWTlf3UugQs5Dzek+SlMHOZ7NEoklnSohJeW3AV+CXi9qgMVARq8BL0p1xXV9
+ FGZz3LVqoXwxIfge77H6Iwi95V3iP5JnkeS4N0Mv4bJtm3n6qmUNt83FfDNoaU7nAzs7ms
+ khWC4I0FzT01Nrz8zD8LmnP7QNYHiYF6qmtQtMG/xUH3dcSEtrZrpEWJt5XxCS0whIIJnW
+ 99n0kI4uSBIe0x0IaoUcynE37i5+OzCN7fy73d/kKUa8k+XBgsSpAkA1hGQto+s6x31Xyr
+ DRNb2zN+jsLLTY8zc0fjOt8SxREXcUMRs6vVqszBqNUXBgYm0tigDCnEFwKBTg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nOb6Xq/1
-Subject: Re: [Buildroot] [v1 0/4] [PATCH 0/3] Add support for Pi5
+ header.s=gm1 header.b=UoHV74D0
+Subject: Re: [Buildroot] [PATCH] package/socat: fix static openssl
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,36 +77,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCAyMSBOb3YgMjAyMyAyMDozNDo0NCArMDEwMApHYcOrbCBQT1JUQVkgPGdhZWwucG9y
-dGF5QHJ0b25lLmZyPiB3cm90ZToKCj4gVGhlIG91dHB1dCBib290cyBmaW5lIGFuZCBpdCBydW5z
-IGdldHR5IG9uIHVhcnQgYW5kIHZpcnR1YWwgdHR5IGlmIGl0IGlzCj4gYnVpbHQgdXNpbmcgdGhl
-IHRvb2xjaGFpbiBidWlsdCBieSBidWlsZHJvb3QuCj4gCj4gVGhlIG91dHB1dCBib290cyB0aGUg
-a2VybmVsIGJ1dCB0aGUga2VybmVsIGNhbm5vdCBydW4gdGhlIGluaXQgcHJvY2Vzcwo+IGlmIGl0
-IGlzIGJ1aWx0IHVzaW5nIHRoZSBib290bGluIHByZWJ1aWx0IHRvb2xjaGFpbi4gU29tZXRoaW5n
-IGlzIGJyb2tlbgo+IGR1ZSB0byB0aGUgMTZrIE1NVSBwYWdlLXNpemUgOigKCkkgKnRoaW5rKiB0
-aGlzIGlzIGV4cGVjdGVkLiBUaGUgQm9vdGxpbiB0b29sY2hhaW5zIGFyZSBidWlsdCBmb3IgdGhl
-CmRlZmF1bHQgcGFnZSBzaXplIG9mIDRLQiwgc28gdGhlIGxpYmMgaW4gdGhvc2UgdG9vbGNoYWlu
-cyBleHBlY3RzIDRLQgpwYWdlcywgYW5kIHRoaXMgYnJlYWtzIGlmIHlvdSBtaXggaXQgd2l0aCBj
-b2RlIHRoYXQgd2FzIGJ1aWx0IGZvciAxNiBLQgpwYWdlIHNpemUuCgo+IFF1ZXN0aW9uOiB0aGUg
-ZGV2aWNlLXRyZWUgb3ZlcmxheXMgYXJlIHRha2VuIGZyb20gdGhlIHJwaS1maXJtd2FyZTsgaXMK
-PiB0aGVyZSBhIHBsYW4gdG8gY29tcGlsZSB0aGUgb25lIGZyb20gdGhlIGRvd25zdHJlYW0ga2Vy
-bmVsIHNvdXJjZXMKPiBpbnN0ZWFkPyBieSB0d2Vha2luZyB0aGUgbGludXgubWsgbWF5YmU/CgpU
-aGUgcHJvYmxlbSBoZXJlIGlzIHRoYXQgaXQgd291bGQgYmUgYSB0d2VhayBpbiBsaW51eC5tayB0
-aGF0IGlzCnNwZWNpZmljIHRvIGhvdyB0aGUgZG93bnN0cmVhbSBSUGkga2VybmVsIGRvZXMgaXQu
-IEJ1dCB0aGUgbWFpbmxpbmUKa2VybmVsIGhhcyBncm93biBzdXBwb3J0IGZvciBidWlsZGluZyBE
-VCBvdmVybGF5cyB0b28uIElzIGl0IHNpbWlsYXIgdG8KaG93IHRoZSBkb3duc3RyZWFtIFJQaSBr
-ZXJuZWwgZG9lcyBpdD8KCldoaWNoIHR3ZWFrIHdvdWxkIGJlIG5lZWRlZCBpbiBsaW51eC5tayB0
-byBidWlsZCBvdmVybGF5cyBpbiB0aGUKZG93bnN0cmVhbSBSUGkga2VybmVsPwoKVGhvbWFzCi0t
-IApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExp
-bnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5j
-b20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello Byron,
+
+On Tue, 21 Nov 2023 12:47:22 -0500
+Byron Gallagher <trippgallagher98@gmail.com> wrote:
+
+> +diff --git a/configure.ac b/configure.ac
+> +index 9d60473..ae0e6bd 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -580,12 +580,12 @@ if test -n "$WITH_OPENSSL" -a "$sc_cv_have_openssl_ssl_h" = 'yes'; then
+> +       if test -n "$OPENSSL_BASE"; then
+> + 	L="$OPENSSL_BASE/lib"; LIBS="$LIBS -L$L -lssl -lcrypto"
+> +       else
+> +-	LIBS="$LIBS -lssl -lcrypto"
+> ++	LIBS="$LIBS -lssl -lcrypto -lz"
+
+The downside of this is that socat is then directly linked to libz even
+when it's not needed (dynamic linking situation).
+
+The correct/ideal way of handling this is to use pkg-config, as it
+properly says whether we need -lssl -lcrypto (dynamic linking case) or
+-lssl -lcrypto -lz (static linking case), without hardcoding this in
+socat itself.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
