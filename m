@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D3F2C27C40
-	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 00:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C46EAC61D99
+	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 00:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE28181F11;
-	Thu, 23 Nov 2023 00:09:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE28181F11
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D64C81F9B;
+	Thu, 23 Nov 2023 00:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D64C81F9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qi8QfI4AXKKM; Thu, 23 Nov 2023 00:09:45 +0000 (UTC)
+	with ESMTP id YVkFcC-eSBD6; Thu, 23 Nov 2023 00:09:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCAE481F17;
-	Thu, 23 Nov 2023 00:09:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCAE481F17
+	by smtp1.osuosl.org (Postfix) with ESMTP id C57FC81F74;
+	Thu, 23 Nov 2023 00:09:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C57FC81F74
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4870C1BF4D6
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 00:08:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C53961BF4D6
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 00:08:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2157941759
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BF5B415FB
  for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 00:08:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2157941759
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BF5B415FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2h98ARc5g2mm for <buildroot@lists.busybox.net>;
- Thu, 23 Nov 2023 00:08:35 +0000 (UTC)
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com
- [IPv6:2607:f8b0:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2CE74415FB
+ with ESMTP id 9xoeArGeSWMH for <buildroot@lists.busybox.net>;
+ Thu, 23 Nov 2023 00:08:36 +0000 (UTC)
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com
+ [IPv6:2607:f8b0:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07F2C4168E
  for <buildroot@buildroot.org>; Thu, 23 Nov 2023 00:08:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CE74415FB
-Received: by mail-pf1-x435.google.com with SMTP id
- d2e1a72fcca58-6cb749044a2so382312b3a.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07F2C4168E
+Received: by mail-pf1-x429.google.com with SMTP id
+ d2e1a72fcca58-6cb749044a2so382328b3a.0
  for <buildroot@buildroot.org>; Wed, 22 Nov 2023 16:08:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700698113; x=1701302913;
+ d=1e100.net; s=20230601; t=1700698115; x=1701302915;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=UEM/MaaoYORX/HSIMjpG0X1PB5/ak6eGqIBtibX6e2Y=;
- b=Tz1f7gDeg875aLBIEUIPC9bbhr9aW+/XyDQLi30mUYx5Oy79BaUjrsDq9kRfHArjtM
- 9bB4Q0JxBTXdyXJYVbzyym2mE0mCEjwwA7KNcxXxUkYthSeb5MWA0ANwTSqbQbNsMjQo
- Ytue+QreimMrLg1BX8uSSSh1DWiddZcl7ljP54ekDgp1JX5Jqp2u5AU3TU18eTBW3vFk
- dk8BDin+7jNy7JsDVRnzOqirrcdPh/9IRqfQrd7tluAkHECEYnxd5VzY96nfpXlPGp7E
- IrXlmc0JObgwZ3R98xdlNdO32RK+oJHJjTg42NrPC1DVp77nAURTFvdffzmn2e3vqOJB
- 7Yrw==
-X-Gm-Message-State: AOJu0YwQOONh30o+cMOj7llpKKh84JBrG1ThcEaSgM7TR0QIlvKkbDtm
- At12As1mjCxDZ29+1r4vnNSmeTBteMoREr56mXI=
-X-Google-Smtp-Source: AGHT+IG7U3i29A8TJ67XiGvJaZiYZSd9r0VDNK4M1Lt3pvp6obdo9gCMB1zq9LJPmeWcp5f3WWz1mQ==
-X-Received: by 2002:a05:6a00:4387:b0:6cb:e3c5:7cb3 with SMTP id
- bt7-20020a056a00438700b006cbe3c57cb3mr868416pfb.16.1700698113185; 
- Wed, 22 Nov 2023 16:08:33 -0800 (PST)
+ bh=2FC1aI5oikdphHe2aCAqC/EvW/IgixcfYZvO1we7Q98=;
+ b=GAzQGXALanZzFCs60dhS8dm8hJenv+PBEQr1qO4x12daBC3xkN4ff7hHspL7MghJoD
+ 8c0X4nLPhBLRf23zoSY6HKpfBQU7MFqmR4y9VtWZ6rPZ2Ei8lWD/TykqEUhJeN47oSNM
+ R7gLIxCDqO6bkn0Wbbhgz7gvYfv9/pszy0IIwnFvZHESOF51CXDGd8QAHgpkYk/XkL19
+ PitFmFySINGiQMUOfTCtjG/rEVK2nZv84GvNxcEYp9FOAXne2/qYms0MRutAALz/MWT/
+ 3VeGA+I9uTFoMqFRqgHFMFDhNGq5+WRwiTcn2mhgKz+7CGfgtX2KOgXZ/cZ/PTJc740Z
+ T08Q==
+X-Gm-Message-State: AOJu0YxoQnT29Lw3Wklt6eJfXudF1oNUrJKj5K51UfV1qeK7wf3xf8EM
+ Sdn87GmqnXl0U4MhpkJn0bWms3dm47V/zuIvLyI=
+X-Google-Smtp-Source: AGHT+IGBYLDIBDdDV+L4o7Lj4MJfnl4GvgDABZAPljoCVUwQFzcJIwpx0Fsg8l+8Bh7T2rR2wyZ5pg==
+X-Received: by 2002:a05:6a00:1f05:b0:6bd:7cbd:15ae with SMTP id
+ be5-20020a056a001f0500b006bd7cbd15aemr4129809pfb.26.1700698114805; 
+ Wed, 22 Nov 2023 16:08:34 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.200.138])
  by smtp.gmail.com with ESMTPSA id
- fb6-20020a056a002d8600b006cb907e8059sm56858pfb.9.2023.11.22.16.08.31
+ fb6-20020a056a002d8600b006cb907e8059sm56858pfb.9.2023.11.22.16.08.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Nov 2023 16:08:32 -0800 (PST)
+ Wed, 22 Nov 2023 16:08:34 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 22 Nov 2023 17:08:12 -0700
-Message-ID: <20231123000819.488595-7-adam.duskett@amarulasolutions.com>
+Date: Wed, 22 Nov 2023 17:08:13 -0700
+Message-ID: <20231123000819.488595-8-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231123000819.488595-1-adam.duskett@amarulasolutions.com>
 References: <20231123000819.488595-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1700698113; x=1701302913;
+ d=amarulasolutions.com; s=google; t=1700698115; x=1701302915;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=UEM/MaaoYORX/HSIMjpG0X1PB5/ak6eGqIBtibX6e2Y=;
- b=grWed3ZZjVKYzhzT5v0x+V3VXvkV1KlFBV5tPXlK7GzeODVIbVJkDUirMYBm7ZOihq
- 6ulhmtqsETmoIWEitYXdvS1PeZaA7z/b2b3Yzwf55i7Tp1rWfavijcpYmOHcN9jgh5i7
- 7FgeTsoXme8B7V8lq6uCdJ3FYuwiV+PPlNum4=
+ bh=2FC1aI5oikdphHe2aCAqC/EvW/IgixcfYZvO1we7Q98=;
+ b=PaXPyKtmzD6oenU8aYZH9JezmRcZAE1FuX6VtJj8N8DOzaWWenBEZD5LgwQ1I0J9EV
+ Loki4IwvccdGLyf1qxseDsnn+3PbLhbLG4LqXUh94rEEmkbviR+q3W7pCgtysKzcR9xN
+ POTxi/tsaNDcIwyIwSzZYE+q+C9SNE4iJWASc=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=grWed3ZZ
-Subject: [Buildroot] [PATCH/next 06/13] package/foot: new package
+ header.b=PaXPyKtm
+Subject: [Buildroot] [PATCH/next 07/13] package/ncurses: install foot
+ terminfo if foot is selected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,161 +100,29 @@ Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Adam Duskett <adam.duskett@amarulasolutions.com>,
  Raphael Pavlidis <raphael.pavlidis@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is the default terminal sway uses.
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/foot/Config.in | 36 +++++++++++++++++++++++++++++
- package/foot/foot.hash |  3 +++
- package/foot/foot.mk   | 51 ++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 92 insertions(+)
- create mode 100644 package/foot/Config.in
- create mode 100644 package/foot/foot.hash
- create mode 100644 package/foot/foot.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a8cdd8e5a9..f368cb5d06 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -35,6 +35,7 @@ N:	Adam Duskett <adam.duskett@amarulasolutions.com>
- F:	package/depot-tools/
- F:	package/dmenu-wayland/
- F:	package/fcft/
-+F:	package/foot/
- F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-pi/
-diff --git a/package/Config.in b/package/Config.in
-index 6d0e84c4c4..891a862349 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -314,6 +314,7 @@ comment "Graphic applications"
- 	source "package/cage/Config.in"
- 	source "package/cog/Config.in"
- 	source "package/dmenu-wayland/Config.in"
-+	source "package/foot/Config.in"
- 	source "package/fswebcam/Config.in"
- 	source "package/ghostscript/Config.in"
- 	source "package/glmark2/Config.in"
-diff --git a/package/foot/Config.in b/package/foot/Config.in
-new file mode 100644
-index 0000000000..a3894c5469
---- /dev/null
-+++ b/package/foot/Config.in
-@@ -0,0 +1,36 @@
-+config BR2_PACKAGE_FOOT
-+	bool "foot"
-+	depends on !BR2_STATIC_LIBS # wayland -> dlfcn.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # fcft, wayland
-+	select BR2_PACKAGE_FCFT
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_TLLIST
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	help
-+	  A fast, lightweight and minimalistic Wayland terminal
-+	  emulator.
-+	  NOTE: foot needs a working UTF-8 locale (BR2_GENERATE_LOCALE)
-+
-+	  https://codeberg.org/dnkl/foot
-+
-+if BR2_PACKAGE_FOOT
-+
-+config BR2_PACKAGE_FOOT_GRAPHEME_CLUSTERING
-+	bool "grapheme-clustering"
-+	select BR2_PACKAGE_UTF8PROC
-+	help
-+	  Enables grapheme clustering.
-+
-+config BR2_PACKAGE_FOOT_THEMES
-+	bool "themes"
-+	help
-+	  Install themes (predefined color schemes)
-+
-+endif # BR2_PACKAGE_FOOT
-+
-+comment "foot needs a toolchain w/ dynamic library, threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/foot/foot.hash b/package/foot/foot.hash
-new file mode 100644
-index 0000000000..1b99ed9518
---- /dev/null
-+++ b/package/foot/foot.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  0e02af376e5f4a96eeb90470b7ad2e79a1d660db2a7d1aa772be43c7db00e475  1.16.2.tar.gz
-+sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
-diff --git a/package/foot/foot.mk b/package/foot/foot.mk
-new file mode 100644
-index 0000000000..ab965bedf5
---- /dev/null
-+++ b/package/foot/foot.mk
-@@ -0,0 +1,51 @@
-+################################################################################
-+#
-+# foot
-+#
-+################################################################################
-+
-+FOOT_VERSION = 1.16.2
-+FOOT_SOURCE = $(FOOT_VERSION).tar.gz
-+FOOT_SITE = https://codeberg.org/dnkl/foot/archive
-+FOOT_LICENSE = MIT
-+FOOT_LICENSE_FILES = LICENSE
-+FOOT_DEPENDENCIES = \
-+	fcft \
-+	fontconfig \
-+	freetype \
-+	libutempter \
-+	libxkbcommon \
-+	pixman \
-+	tllist \
-+	wayland \
-+	wayland-protocols
-+
-+FOOT_CONF_OPTS = \
-+	-Ddocs=disabled \
-+	-Dtests=false
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+FOOT_DEPENDENCIES += systemd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBUTEMPTER),y)
-+FOOT_DEPENDENCIES += libutempter
-+FOOT_CONF_OPTS += -Dutmp-backend='libutempter'
-+else
-+FOOT_CONF_OPTS += -Dutmp-backend='none'
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FOOT_GRAPHEME_CLUSTERING),y)
-+FOOT_DEPENDENCIES += utf8proc
-+FOOT_CONF_OPTS += -Dgrapheme-clustering=enabled
-+else
-+FOOT_CONF_OPTS += -Dgrapheme-clustering=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FOOT_THEMES),y)
-+FOOT_CONF_OPTS += -Dthemes=true
-+else
-+FOOT_CONF_OPTS += -Dthemes=false
-+endif
-+
-+$(eval $(meson-package))
--- 
-2.42.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbSBmb290L0lOU1RBTEwubWQ6CmBgYApBcyBvZiBuY3Vyc2VzIDIwMjEtMDctMzEsIG5jdXJz
+ZXMgaW5jbHVkZXMgYSB2ZXJzaW9uIG9mIGZvb3TigJlzCnRlcm1pbmZvLiAqKlRoZSByZWNvbW1l
+bmRhdGlvbiBpcyB0byB1c2UgdGhvc2UqKiwgYW5kIG9ubHkgaW5zdGFsbCB0aGUKdGVybWluZm8g
+ZGVmaW5pdGlvbnMgZnJvbSB0aGlzIGdpdCByZXBvIGlmIHRoZSBzeXN0ZW3igJlzIG5jdXJzZXMK
+cHJlZGF0ZXMgMjAyMS0wNy0zMS4KYGBgCgpTbyBpdCBpcyBiZXN0IHRvIGZvbGxvdyB0aGUgaW5z
+dHJ1Y3Rpb25zIGFuZCBpbnN0YWxsIHRoZSBmb290IHRlcm1pbmZvCnByb3ZpZGVkIGJ5IG5jdXJz
+ZXMuCgpTaWduZWQtb2ZmLWJ5OiBBZGFtIER1c2tldHQgPGFkYW0uZHVza2V0dEBhbWFydWxhc29s
+dXRpb25zLmNvbT4KLS0tCiBwYWNrYWdlL25jdXJzZXMvbmN1cnNlcy5tayB8IDcgKysrKysrKwog
+MSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbmN1
+cnNlcy9uY3Vyc2VzLm1rIGIvcGFja2FnZS9uY3Vyc2VzL25jdXJzZXMubWsKaW5kZXggM2I4MDVj
+YjFmZC4uMDBlMWMwZDQyNCAxMDA2NDQKLS0tIGEvcGFja2FnZS9uY3Vyc2VzL25jdXJzZXMubWsK
+KysrIGIvcGFja2FnZS9uY3Vyc2VzL25jdXJzZXMubWsKQEAgLTczLDYgKzczLDEzIEBAIE5DVVJT
+RVNfVEVSTUlORk9fRklMRVMgPSBcCiAJeC94dGVybS14ZnJlZTg2IFwKIAkkKGNhbGwgcXN0cmlw
+LCQoQlIyX1BBQ0tBR0VfTkNVUlNFU19BRERJVElPTkFMX1RFUk1JTkZPKSkKIAoraWZlcSAoJChC
+UjJfUEFDS0FHRV9GT09UKSx5KQorTkNVUlNFU19URVJNSU5GT19GSUxFUyArPSBcCisJZi9mb290
+IFwKKwlmL2Zvb3QrYmFzZSBcCisJZi9mb290LWRpcmVjdAorZW5kaWYKKwogaWZlcSAoJChCUjJf
+UEFDS0FHRV9OQ1VSU0VTX1dDSEFSKSx5KQogTkNVUlNFU19DT05GX09QVFMgKz0gLS1lbmFibGUt
+d2lkZWMKIE5DVVJTRVNfTElCX1NVRkZJWCA9IHcKLS0gCjIuNDIuMAoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
