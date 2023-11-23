@@ -4,83 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A667C61D85
-	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 19:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD8CFC5AD4C
+	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 19:15:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6B6E82125;
-	Thu, 23 Nov 2023 19:13:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6B6E82125
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E5EA82009;
+	Thu, 23 Nov 2023 19:15:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E5EA82009
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ci-eljRKbruL; Thu, 23 Nov 2023 19:13:49 +0000 (UTC)
+	with ESMTP id YrgJOGT-fD62; Thu, 23 Nov 2023 19:15:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04F8B82142;
-	Thu, 23 Nov 2023 19:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04F8B82142
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8F3A31BF28B
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 19:13:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB8AD82123;
+	Thu, 23 Nov 2023 19:15:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB8AD82123
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EAC971BF28B
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 19:15:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6848482142
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 19:13:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6848482142
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2AF440590
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 19:15:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2AF440590
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZIFH9--MZQ_G for <buildroot@lists.busybox.net>;
- Thu, 23 Nov 2023 19:13:46 +0000 (UTC)
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB84482125
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 19:13:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB84482125
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-9ff26d7c0a6so168904166b.2
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 11:13:45 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 27WuikD8_PZd for <buildroot@lists.busybox.net>;
+ Thu, 23 Nov 2023 19:15:11 +0000 (UTC)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A0DA40297
+ for <buildroot@buildroot.org>; Thu, 23 Nov 2023 19:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A0DA40297
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-548ce39b101so1631277a12.2
+ for <buildroot@buildroot.org>; Thu, 23 Nov 2023 11:15:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700766824; x=1701371624;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=HixY6/pOiqmtibgb63fPayuu1L6UzpuQHvGGL8Op3Lc=;
- b=Nr9UpW44juFaPLJCSsIlKYsgjw1ykqJrrA2B4lhrz0vFuqr/GZ9A2aoYjd2tqFGuFb
- zVLNX8JmyPO/gaNqO5J1yiE1GjzJ3ISOUYU00MWGS3eQvmpVeKNNL5FhBRuQjukvB4le
- FUY54LqQ3/kqqUlh3Icag6dS9wDYtO0qMwWjofA7mQ6zwUkekMHVZb5zTQp+/fHo4fLz
- HPy4sAkBFewiaOMeOv0SklMsu3jv9R/Sby0VT257tD/VZlI1AYTyFt+JLKeXMEJftymC
- ESuGxr6f/1b8lJc29lCAOFUf65iq1hBjD+69qRFVC75uZPMSSRW5HeJBVid7LHbjo+NI
- zBMA==
-X-Gm-Message-State: AOJu0Yyogfo1GTppjaijpGrEhrYjTrZTekQ3oZMYYqN2oL+sB4hD8Ut7
- S93koZ8VjhXmuB2DgXY70r+Kzkayws9aQWg9t7JPUQ==
-X-Google-Smtp-Source: AGHT+IHV5tCZm/5bFnBt8GFOsovkPwMLeAI4LBI+ySEYMdvgE0S4R4x319XFEoHsPLWf3dhe9jFs9WATxzbDKDaMHMk=
-X-Received: by 2002:a17:906:ca55:b0:a04:e6d8:dbc with SMTP id
- jx21-20020a170906ca5500b00a04e6d80dbcmr175653ejb.42.1700766823963; Thu, 23
- Nov 2023 11:13:43 -0800 (PST)
+ d=1e100.net; s=20230601; t=1700766909; x=1701371709;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=tDPfjbSP9xDyY5KhNVE8/VcY5XA32/RZ+NqZnQ4zNjM=;
+ b=KZJXDkOs8vUt4h7rvfwguWO/ZvAv4SPMRm5Og5KbReWjmVFwzAp9PSQ6cbI/3IkTal
+ sqdG84xhBOzqFd+PcpfS/NiGouIdWTFT4ypn9MvSA+i7ZN59m8RpvwnGZgfGIefkCbru
+ AZxk+75qDNSavOONKW7E6Ga7/G+S1co1QtKG6Sin8ffmdvhG+Bnqd4pbl49fZLqHXD1i
+ Q5IYoiY+bdyTxe/80mkUdxP5YmdrGjk/DXpWeVmfp7wQL7e6gP4PyzIHEnjsCS256d2n
+ HWelVMVzODN+rsNJ54lgVws29t05hWNy3mKrEpsPP1KPJFdI9qxhKzOQsjP7ysPutyr4
+ JMFQ==
+X-Gm-Message-State: AOJu0YzJhSjgMNr8U6LCJnhDJr1hc2t/1qUeu3O9mDT+JcSQeYkHx8ru
+ aSToRAiwa5UD775Xb+unk40p88X3EfPqdYsUJjvhojopUV3vzw==
+X-Google-Smtp-Source: AGHT+IHB4jvJ0xDS4h17hK0IGT17xJtVTy8hANI6NcQTaf4tQQfa8ixW5gi8K3zcjeBsqBVs0AtwI/3nrQzcSwzDI8Y=
+X-Received: by 2002:a17:906:fd46:b0:9ff:ca67:789d with SMTP id
+ wi6-20020a170906fd4600b009ffca67789dmr168650ejb.31.1700766908677; Thu, 23 Nov
+ 2023 11:15:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20231123000819.488595-1-adam.duskett@amarulasolutions.com>
- <20231123000819.488595-3-adam.duskett@amarulasolutions.com>
- <20231123144454.50fd7944@windsurf>
- <CAHDQB6NSD3y2mwAZocqQ4Z4V6uD7LQaJ6hdp6xqHh7cB6_AYcg@mail.gmail.com>
-In-Reply-To: <CAHDQB6NSD3y2mwAZocqQ4Z4V6uD7LQaJ6hdp6xqHh7cB6_AYcg@mail.gmail.com>
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Thu, 23 Nov 2023 12:13:32 -0700
-Message-ID: <CAHDQB6M3-hgq+Pdyz=fS3G=f4xh_OLJXLEmkfKZpi87qQEEqLg@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Dave Rathnow <drathnow@gmail.com>
+Date: Thu, 23 Nov 2023 12:14:57 -0700
+Message-ID: <CAPH1yshB_JnFEZQNTTmA5hbYOiX0YfsDvnUbdmy7H6TbT_T3Ag@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1700766824; x=1701371624;
- darn=buildroot.org; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=HixY6/pOiqmtibgb63fPayuu1L6UzpuQHvGGL8Op3Lc=;
- b=fBGIIE0sxmoqORh8wqkMgPcRqhcMMsHDxvzn5mB83ioGx+efTyEGQ7IAhiSSUzBUQR
- 4//q/tQwnNZe60R2wQueVBsBT7Ws4uN1Y0pg1ljBlqa78udiJ6XXlXF2Wl58+bAU+21y
- kqU4suRBwi84OfxVk9Haw5SdQ4hRF/zzND4QM=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=fBGIIE0s
-Subject: Re: [Buildroot] [PATCH/next 02/13] package/dmenu-wayland: new
- package
+ d=gmail.com; s=20230601; t=1700766909; x=1701371709; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=tDPfjbSP9xDyY5KhNVE8/VcY5XA32/RZ+NqZnQ4zNjM=;
+ b=HZvizdAlHrmQmzl5e/KFq73CDzbK16drzJgzRiwA8YQEm/O+mSnoRX2ZtWTmS61HCD
+ 6n67QoGLgM7747DEWt8u4/vur7XIxZreidZ/L7RlK0xSHnaIj7ftIkL9WKq3P6gQ8495
+ mtz/RIvGyk8QmrXfHqPa60YdhrCEkGNlp2rRVtpCaT0KSWEigS3/e9n3Xxj72mmJwJU5
+ Rj41ka1wOl8Z36A0XQWjyHfDz+SND3BERRNpWTp6r5Uunc06PwLsjB31lGdW1E2VKxuA
+ Bky9xdScOoJaBBba0GYX3ADaXfeXoA6xWEQ1uoNHupSoW49rV6aLIwIWjVlGAhjKar1d
+ k1zQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=HZvizdAl
+Subject: [Buildroot] Broken build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,335 +86,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0293402739256589230=="
+Content-Type: multipart/mixed; boundary="===============7965908618948104423=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0293402739256589230==
-Content-Type: multipart/alternative; boundary="000000000000636f6d060ad6a25b"
+--===============7965908618948104423==
+Content-Type: multipart/alternative; boundary="0000000000007002b0060ad6a7f9"
 
---000000000000636f6d060ad6a25b
+--0000000000007002b0060ad6a7f9
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Forgot to mention, does it really matter if I use
-ln -sf dmenu-wl $(TARGET_DIR)/usr/bin/dmenu vs what is there now? Does it
-not achieve the same goal?
+Hello,
 
-Thanks!
+A couple of years ago, Bootln built us a kernel using Buildroot.  I took
+all the build scripts and source code required to build that kernel and
+moved them to our own local git repository.  At the time everything
+built fine, and the last time I tried--about a year ago--it was working but
+I recently tried to build it and I'm getting the error below.  I don't have
+the deep knowledge of Buildroot and how it obtains all its sources
+and packages but I thought I had moved everything we needed to our local
+repository.  Can anyone tell me if I've missed something?
 
-Adam Duskett
+Thanks,
+Dave.
 
-Senior Embedded Systems Developer
+arget/etc/lighttpd/conf.d/mime.conf
+>>> linux-tools  Extracting
+>>> linux f593d9e1e347488358872bc8618180db7aca685c Downloading
+Initialized empty Git repository in
+/home/fgdev/projects/buildroot/dl/linux/git/.git/
+Fetching all references
+remote: TF401019: The Git repository with name or identifier linux does not
+exist or you do not have permissions for the operation you are attempting.
+fatal: Could not read from remote repository.
 
-M. +1208-515-8102
+Please make sure you have the correct access rights
+and the repository exists.
+Detected a corrupted git cache.
+Removing it and starting afresh.
+Initialized empty Git repository in
+/home/fgdev/projects/buildroot/dl/linux/git/.git/
+Fetching all references
+remote: TF401019: The Git repository with name or identifier linux does not
+exist or you do not have permissions for the operation you are attempting.
+fatal: Could not read from remote repository.
 
-adam.duskett@amarulasolutions.com
+Please make sure you have the correct access rights
+and the repository exists.
+Detected a corrupted git cache.
+This is the second time in a row; bailing out
+--2023-11-23 11:49:35--
+http://sources.buildroot.net/linux/linux-f593d9e1e347488358872bc8618180db7aca685c.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)...
+2606:4700:20::ac43:4838, 2606:4700:20::681a:125, 2606:4700:20::681a:25, ...
+Connecting to sources.buildroot.net
+(sources.buildroot.net)|2606:4700:20::ac43:4838|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+2023-11-23 11:49:35 ERROR 404: Not Found.
 
-__________________________________
+--2023-11-23 11:49:35--
+http://sources.buildroot.net/linux-f593d9e1e347488358872bc8618180db7aca685c.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)...
+2606:4700:20::ac43:4838, 2606:4700:20::681a:125, 2606:4700:20::681a:25, ...
+Connecting to sources.buildroot.net
+(sources.buildroot.net)|2606:4700:20::ac43:4838|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+2023-11-23 11:49:35 ERROR 404: Not Found.
 
+make[1]: *** [package/pkg-generic.mk:146:
+/home/fgdev/projects/buildroot/output/build/linux-f593d9e1e347488358872bc8618180db7aca685c/.stamp_downloaded]
+Error 1
+make: *** [Makefile:84: _all] Error 2
 
-Amarula Solutions BV
-
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-
-T. +31 (0)85 111 9170
-info@amarulasolutions.com
-
-www.amarulasolutions.com
-
-
-
-On Thu, Nov 23, 2023 at 12:12=E2=80=AFPM Adam Duskett <
-adam.duskett@amarulasolutions.com> wrote:
-
-> Hey Thomas;
->
-> lib2 -> glib2
->
-> "I think listing the first order dependency is enough." Not sure what you
-> mean.
->
-> Using the github macro wouldn't work as the release is quite old and lack=
-s
-> an absurd amount
-> of features and fixes.
->
->
-> Adam Duskett
->
-> Senior Embedded Systems Developer
->
-> adam.duskett@amarulasolutions.com
->
-> __________________________________
->
->
-> Amarula Solutions BV
->
-> Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
->
-> T. +31 (0)85 111 9170
-> info@amarulasolutions.com
->
-> www.amarulasolutions.com
->
->
->
-> On Thu, Nov 23, 2023 at 6:44=E2=80=AFAM Thomas Petazzoni <
-> thomas.petazzoni@bootlin.com> wrote:
->
->> Hello Adam,
->>
->> On Wed, 22 Nov 2023 17:08:08 -0700
->> Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
->>
->> > diff --git a/package/dmenu-wayland/Config.in
->> b/package/dmenu-wayland/Config.in
->> > new file mode 100644
->> > index 0000000000..111bbfb434
->> > --- /dev/null
->> > +++ b/package/dmenu-wayland/Config.in
->> > @@ -0,0 +1,26 @@
->> > +config BR2_PACKAGE_DMENU_WAYLAND
->> > +     bool "dmenu-wayland"
->> > +     depends on BR2_USE_MMU # pango -> lib2
->>
->> lib2 ?
->>
->> > +     depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
->> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> glib2, wayland
->> > +     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuz
->> > +     depends on !BR2_STATIC_LIBS # wayland -> dlfcn.h
->> > +     depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype support
->> > +     depends on BR2_USE_WCHAR # pango -> glib2
->>
->> I think listing the first order dependency is enough.
->>
->> > +DMENU_WAYLAND_VERSION =3D a380201dff5bfac2dace553d7eaedb6cea6855f9
->> > +DMENU_WAYLAND_SITE =3D https://github.com/nyyManni/dmenu-wayland.git
->> > +DMENU_WAYLAND_SITE_METHOD =3D git
->>
->> Use the github macro?
->>
->> > +DMENU_WAYLAND_LICENSE =3D MIT
->> > +DMENU_WAYLAND_LICENSE_FILES =3D LICENSE
->> > +
->> > +DMENU_WAYLAND_DEPENDENCIES =3D \
->> > +     cairo \
->> > +     libglib2 \
->> > +     libxkbcommon \
->> > +     pango \
->> > +     wayland \
->> > +     wayland-protocols
->> > +
->> > +# By default, sway calls dmenu not dmenu-wl
->> > +define DMENU_WAYLAND_SYMLINK_DMENU_WL
->> > +     cd $(TARGET_DIR)/usr/bin && \
->> > +     ln -sf dmenu-wl dmenu
->>
->> I think:
->>
->>         ln -sf dmenu-wl $(TARGET_DIR)/usr/bin/dmenu
->>
->> achieves the same.
->>
->> Thomas
->> --
->> Thomas Petazzoni, co-owner and CEO, Bootlin
->> Embedded Linux and Kernel engineering and training
->> https://bootlin.com
->>
->
-
---000000000000636f6d060ad6a25b
+--0000000000007002b0060ad6a7f9
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Forgot to mention, does it really matter if I use<div>ln -=
-sf dmenu-wl $(TARGET_DIR)/usr/bin/dmenu vs what is there now? Does it not a=
-chieve the same goal?</div><div><br></div><div>Thanks!</div><div><br></div>=
-<div><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmai=
-l_signature"><div dir=3D"ltr"><span><p dir=3D"ltr" style=3D"line-height:1.7=
-999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:=
-10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);background-color:transp=
-arent;vertical-align:baseline;white-space:pre-wrap">Adam Duskett</span></p>=
-<p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margi=
-n-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&q=
-uot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-align=
-:baseline;white-space:pre-wrap">Senior Embedded Systems Developer</span></p=
-><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;marg=
-in-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&=
-quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-alig=
-n:baseline;white-space:pre-wrap">M. +1208-515-8102</span></p><p dir=3D"ltr"=
- style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt">=
-<span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace=
-;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;whit=
-e-space:pre-wrap"><a href=3D"mailto:adam.duskett@amarulasolutions.com" targ=
-et=3D"_blank">adam.duskett@amarulasolutions.com</a></span></p><p dir=3D"ltr=
-" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"=
-><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospac=
-e;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;whi=
-te-space:pre-wrap">__________________________________</span></p><p dir=3D"l=
-tr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0p=
-t"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monosp=
-ace;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;w=
-hite-space:pre-wrap"><br></span><span style=3D"font-size:10pt;font-family:U=
-buntu,sans-serif;color:rgb(0,0,0);background-color:transparent;vertical-ali=
-gn:baseline;white-space:pre-wrap">Amarula Solutions BV</span></p><p dir=3D"=
-ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0=
-pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monos=
-pace;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;=
-white-space:pre-wrap">Joop Geesinkweg 125, 1114 AB, Amsterdam, NL</span></p=
-><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;marg=
-in-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&=
-quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-alig=
-n:baseline;white-space:pre-wrap">T. +31 (0)85 111 9170</span><span style=3D=
-"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0=
-,0);background-color:transparent;vertical-align:baseline;white-space:pre-wr=
-ap"><br></span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&=
-quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-alig=
-n:baseline;white-space:pre-wrap"><a href=3D"mailto:info@amarulasolutions.co=
-m" target=3D"_blank">info@amarulasolutions.com</a></span></p><p dir=3D"ltr"=
- style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt">=
-<a href=3D"http://www.amarulasolutions.com/" target=3D"_blank"><span style=
-=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
-0,0,0);background-color:transparent;vertical-align:baseline;white-space:pre=
--wrap">www.amarulasolutions.com</span></a></p><div><br></div></span></div><=
-/div></div><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
-class=3D"gmail_attr">On Thu, Nov 23, 2023 at 12:12=E2=80=AFPM Adam Duskett =
-&lt;<a href=3D"mailto:adam.duskett@amarulasolutions.com">adam.duskett@amaru=
-lasolutions.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" s=
-tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
-ding-left:1ex"><div dir=3D"ltr">Hey Thomas;<div><br></div><div>lib2 -&gt; g=
-lib2</div><div><br></div><div>&quot;I think listing the first order depende=
-ncy is enough.&quot; Not sure what you mean.<span style=3D"color:rgb(80,0,8=
-0)"><br></span></div><div><br></div><div>Using the github macro wouldn&#39;=
-t work as the release is quite old and lacks an absurd amount</div><div>of =
-features and fixes.</div><div><br></div><div><br clear=3D"all"><div><div di=
-r=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><span><p dir=3D"ltr" s=
-tyle=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=3D"fo=
-nt-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);background-colo=
-r:transparent;vertical-align:baseline;white-space:pre-wrap">Adam Duskett</s=
-pan></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;margin-botto=
-m:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,mo=
-nospace;color:rgb(0,0,0);background-color:transparent;vertical-align:baseli=
-ne;white-space:pre-wrap">Senior Embedded Systems Developer</span></p><p dir=
-=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><a href=
-=3D"mailto:adam.duskett@amarulasolutions.com" style=3D"background-color:tra=
-nsparent;font-family:&quot;Ubuntu Mono&quot;,monospace;font-size:10pt" targ=
-et=3D"_blank">adam.duskett@amarulasolutions.com</a><br></p><p dir=3D"ltr" s=
-tyle=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=3D"fo=
-nt-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0)=
-;background-color:transparent;vertical-align:baseline;white-space:pre-wrap"=
->__________________________________</span></p><p dir=3D"ltr" style=3D"line-=
-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;=
-font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-c=
-olor:transparent;vertical-align:baseline;white-space:pre-wrap"><br></span><=
-span style=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0)=
-;background-color:transparent;vertical-align:baseline;white-space:pre-wrap"=
->Amarula Solutions BV</span></p><p dir=3D"ltr" style=3D"line-height:1.8;mar=
-gin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&q=
-uot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transpare=
-nt;vertical-align:baseline;white-space:pre-wrap">Joop Geesinkweg 125, 1114 =
-AB, Amsterdam, NL</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-=
-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;=
-Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;v=
-ertical-align:baseline;white-space:pre-wrap">T. +31 (0)85 111 9170</span><s=
-pan style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;c=
-olor:rgb(0,0,0);background-color:transparent;vertical-align:baseline;white-=
-space:pre-wrap"><br></span><span style=3D"font-size:10pt;font-family:&quot;=
-Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;v=
-ertical-align:baseline;white-space:pre-wrap"><a href=3D"mailto:info@amarula=
-solutions.com" target=3D"_blank">info@amarulasolutions.com</a></span></p><p=
- dir=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><a =
-href=3D"http://www.amarulasolutions.com/" target=3D"_blank"><span style=3D"=
-font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,=
-0);background-color:transparent;vertical-align:baseline;white-space:pre-wra=
-p">www.amarulasolutions.com</span></a></p><div><br></div></span></div></div=
-></div><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" clas=
-s=3D"gmail_attr">On Thu, Nov 23, 2023 at 6:44=E2=80=AFAM Thomas Petazzoni &=
-lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com" target=3D"_blank">thomas=
-.petazzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
-04);padding-left:1ex">Hello Adam,<br>
-<br>
-On Wed, 22 Nov 2023 17:08:08 -0700<br>
-Adam Duskett &lt;<a href=3D"mailto:adam.duskett@amarulasolutions.com" targe=
-t=3D"_blank">adam.duskett@amarulasolutions.com</a>&gt; wrote:<br>
-<br>
-&gt; diff --git a/package/dmenu-wayland/Config.in b/package/dmenu-wayland/C=
-onfig.in<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..111bbfb434<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/dmenu-wayland/Config.in<br>
-&gt; @@ -0,0 +1,26 @@<br>
-&gt; +config BR2_PACKAGE_DMENU_WAYLAND<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;dmenu-wayland&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_USE_MMU # pango -&gt; lib2<br>
-<br>
-lib2 ?<br>
-<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -&gt;=
- harfbuzz<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_THREADS # pango -&gt=
-; glib2, wayland<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango=
- -&gt; harfbuz<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_STATIC_LIBS # wayland -&gt; dlfcn=
-.h<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_INSTALL_LIBSTDCPP # pango -&gt; fr=
-eetype support<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_USE_WCHAR # pango -&gt; glib2<br>
-<br>
-I think listing the first order dependency is enough.<br>
-<br>
-&gt; +DMENU_WAYLAND_VERSION =3D a380201dff5bfac2dace553d7eaedb6cea6855f9<br=
->
-&gt; +DMENU_WAYLAND_SITE =3D <a href=3D"https://github.com/nyyManni/dmenu-w=
-ayland.git" rel=3D"noreferrer" target=3D"_blank">https://github.com/nyyMann=
-i/dmenu-wayland.git</a><br>
-&gt; +DMENU_WAYLAND_SITE_METHOD =3D git<br>
-<br>
-Use the github macro?<br>
-<br>
-&gt; +DMENU_WAYLAND_LICENSE =3D MIT<br>
-&gt; +DMENU_WAYLAND_LICENSE_FILES =3D LICENSE<br>
-&gt; +<br>
-&gt; +DMENU_WAYLAND_DEPENDENCIES =3D \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0cairo \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0libglib2 \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0libxkbcommon \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0pango \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0wayland \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0wayland-protocols<br>
-&gt; +<br>
-&gt; +# By default, sway calls dmenu not dmenu-wl<br>
-&gt; +define DMENU_WAYLAND_SYMLINK_DMENU_WL<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0cd $(TARGET_DIR)/usr/bin &amp;&amp; \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0ln -sf dmenu-wl dmenu<br>
-<br>
-I think:<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ln -sf dmenu-wl $(TARGET_DIR)/usr/bin/dmenu<br>
-<br>
-achieves the same.<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
-</blockquote></div>
+<div dir=3D"ltr">Hello,<div><br></div><div>A couple of years ago, Bootln bu=
+ilt us a kernel using Buildroot.=C2=A0 I took all the build scripts and sou=
+rce code required to build that kernel and moved them to our own local git =
+repository.=C2=A0 At the time everything built=C2=A0fine, and the last time=
+ I tried--about a year ago--it was working but I recently tried to build it=
+ and I&#39;m getting the error below.=C2=A0 I don&#39;t have the deep knowl=
+edge of Buildroot and how it obtains all its sources and=C2=A0packages but =
+I thought I had moved everything we needed to our local repository.=C2=A0 C=
+an anyone tell me if I&#39;ve missed something?</div><div><br></div><div>Th=
+anks,</div><div>Dave.</div><div><br></div><div>arget/etc/lighttpd/conf.d/mi=
+me.conf<br>&gt;&gt;&gt; linux-tools =C2=A0Extracting<br>&gt;&gt;&gt; linux =
+f593d9e1e347488358872bc8618180db7aca685c Downloading<br>Initialized empty G=
+it repository in /home/fgdev/projects/buildroot/dl/linux/git/.git/<br>Fetch=
+ing all references<br>remote: TF401019: The Git repository with name or ide=
+ntifier linux does not exist or you do not have permissions for the operati=
+on you are attempting.<br>fatal: Could not read from remote repository.<br>=
+<br>Please make sure you have the correct access rights<br>and the reposito=
+ry exists.<br>Detected a corrupted git cache.<br>Removing it and starting a=
+fresh.<br>Initialized empty Git repository in /home/fgdev/projects/buildroo=
+t/dl/linux/git/.git/<br>Fetching all references<br>remote: TF401019: The Gi=
+t repository with name or identifier linux does not exist or you do not hav=
+e permissions for the operation you are attempting.<br>fatal: Could not rea=
+d from remote repository.<br><br>Please make sure you have the correct acce=
+ss rights<br>and the repository exists.<br>Detected a corrupted git cache.<=
+br>This is the second time in a row; bailing out<br>--2023-11-23 11:49:35--=
+ =C2=A0<a href=3D"http://sources.buildroot.net/linux/linux-f593d9e1e3474883=
+58872bc8618180db7aca685c.tar.gz">http://sources.buildroot.net/linux/linux-f=
+593d9e1e347488358872bc8618180db7aca685c.tar.gz</a><br>Resolving <a href=3D"=
+http://sources.buildroot.net">sources.buildroot.net</a> (<a href=3D"http://=
+sources.buildroot.net">sources.buildroot.net</a>)... 2606:4700:20::ac43:483=
+8, 2606:4700:20::681a:125, 2606:4700:20::681a:25, ...<br>Connecting to <a h=
+ref=3D"http://sources.buildroot.net">sources.buildroot.net</a> (<a href=3D"=
+http://sources.buildroot.net">sources.buildroot.net</a>)|2606:4700:20::ac43=
+:4838|:80... connected.<br>HTTP request sent, awaiting response... 404 Not =
+Found<br>2023-11-23 11:49:35 ERROR 404: Not Found.<br><br>--2023-11-23 11:4=
+9:35-- =C2=A0<a href=3D"http://sources.buildroot.net/linux-f593d9e1e3474883=
+58872bc8618180db7aca685c.tar.gz">http://sources.buildroot.net/linux-f593d9e=
+1e347488358872bc8618180db7aca685c.tar.gz</a><br>Resolving <a href=3D"http:/=
+/sources.buildroot.net">sources.buildroot.net</a> (<a href=3D"http://source=
+s.buildroot.net">sources.buildroot.net</a>)... 2606:4700:20::ac43:4838, 260=
+6:4700:20::681a:125, 2606:4700:20::681a:25, ...<br>Connecting to <a href=3D=
+"http://sources.buildroot.net">sources.buildroot.net</a> (<a href=3D"http:/=
+/sources.buildroot.net">sources.buildroot.net</a>)|2606:4700:20::ac43:4838|=
+:80... connected.<br>HTTP request sent, awaiting response... 404 Not Found<=
+br>2023-11-23 11:49:35 ERROR 404: Not Found.<br><br>make[1]: *** [package/<=
+a href=3D"http://pkg-generic.mk:146">pkg-generic.mk:146</a>: /home/fgdev/pr=
+ojects/buildroot/output/build/linux-f593d9e1e347488358872bc8618180db7aca685=
+c/.stamp_downloaded] Error 1<br>make: *** [Makefile:84: _all] Error 2<br></=
+div></div>
 
---000000000000636f6d060ad6a25b--
+--0000000000007002b0060ad6a7f9--
 
---===============0293402739256589230==
+--===============7965908618948104423==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -431,4 +227,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0293402739256589230==--
+--===============7965908618948104423==--
