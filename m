@@ -4,85 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFC07C5AD4C
-	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 15:25:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37026C5AD4C
+	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 15:31:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6122360B3D;
-	Thu, 23 Nov 2023 15:25:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6122360B3D
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE7596133C;
+	Thu, 23 Nov 2023 15:31:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE7596133C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qoBmiUWO4PjD; Thu, 23 Nov 2023 15:25:42 +0000 (UTC)
+	with ESMTP id 2H5uwoQ_Sood; Thu, 23 Nov 2023 15:31:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8432860C30;
-	Thu, 23 Nov 2023 15:25:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8432860C30
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 466E21BF410
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:25:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1819760C15;
+	Thu, 23 Nov 2023 15:31:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1819760C15
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 455CD1BF410
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:31:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CC2B60C30
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CC2B60C30
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2862E41E11
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:31:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2862E41E11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UrncgDbz5TyD for <buildroot@lists.busybox.net>;
- Thu, 23 Nov 2023 15:25:39 +0000 (UTC)
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CC97E60B3D
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 15:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC97E60B3D
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-332c46d5988so630106f8f.1
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 07:25:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700753137; x=1701357937;
- h=in-reply-to:references:cc:to:from:subject:message-id:date
- :content-transfer-encoding:mime-version:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=6zwWz0nIcjmhIbwrlSPAUEF6U8W2a49D9rxRZEPMWJM=;
- b=GJXCDjn68OYv9Iz0Jii9q5oUeZEL9/9cZfdUBYMOkRTZG+8BZV8j4kNfzGvNpfqmlm
- YKbG5NAjQf68eFMgJZ+h/azLo5zmFtH+Ad1VpLICHhdfSIBzxm2iZX+W78A3a0y3TTf9
- jfR3979d5qIcCOTOE4Rel5yUnlT/2kJdNvsUKEIhDi2DhWevLh6jbHC2wcD+P1aPej0B
- g0wtJsqTABjkmFr/jjKFp7zpu5T4krEiouJmQoAqINktqaW6MKOzNLJhy5LDDESOjxnH
- ujH7CTQFZ0b/fqLiQhJMS0aE+w05Fgk4YUvO7ZsV+O1gYdVbGKF0uzNfRbvBIZXcwdrM
- yQkA==
-X-Gm-Message-State: AOJu0YyrNR6Dny2QnZLoaId+qvOL0mvwMcK8QCPXZ8BEP2JT7bAM/d96
- ruU8r7mEMLRAc0W6X5TDF1TqEpHAA70WfZ0pmc8=
-X-Google-Smtp-Source: AGHT+IGdDOxuu/kK51BFDO8LyiiEYgOaommkht1XkAShLaj7F+6khw/94TNESvQnYkD61aZJVtEDoQ==
-X-Received: by 2002:a5d:5f8d:0:b0:332:dc26:f227 with SMTP id
- dr13-20020a5d5f8d000000b00332dc26f227mr1823181wrb.18.1700753136670; 
- Thu, 23 Nov 2023 07:25:36 -0800 (PST)
-Received: from localhost ([2a01:e0a:ce:f2f0:3a7c:76ff:fe01:6f05])
- by smtp.gmail.com with ESMTPSA id
- s11-20020adfeccb000000b00332c6c5ce82sm1935530wro.94.2023.11.23.07.25.36
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 23 Nov 2023 07:25:36 -0800 (PST)
-Mime-Version: 1.0
-Date: Thu, 23 Nov 2023 16:25:35 +0100
-Message-Id: <CX6AO4BXYX52.FL7MGXII8KB8@rtone.fr>
-From: =?utf-8?q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>
-To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20231121193448.1151936-1-gael.portay@rtone.fr>
- <20231123111233.24b5dbf2@windsurf>
-In-Reply-To: <20231123111233.24b5dbf2@windsurf>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WV42NybG_eVq for <buildroot@lists.busybox.net>;
+ Thu, 23 Nov 2023 15:31:45 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com
+ (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6967D4190A
+ for <buildroot@buildroot.org>; Thu, 23 Nov 2023 15:31:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6967D4190A
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-394-7qZRwYyBMjG6i6pdZpi0dg-1; Thu, 23 Nov 2023 10:31:42 -0500
+X-MC-Unique: 7qZRwYyBMjG6i6pdZpi0dg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com
+ [10.11.54.10])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFA56101A54C
+ for <buildroot@buildroot.org>; Thu, 23 Nov 2023 15:31:42 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.208.21])
+ by smtp.corp.redhat.com (Postfix) with ESMTP id 13680492BFD;
+ Thu, 23 Nov 2023 15:31:41 +0000 (UTC)
+From: Anthony Harivel <aharivel@redhat.com>
+To: buildroot@buildroot.org
+Date: Thu, 23 Nov 2023 16:31:31 +0100
+Message-ID: <20231123153131.1253841-1-aharivel@redhat.com>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rtone.fr; s=google; t=1700753137; x=1701357937; darn=buildroot.org;
- h=in-reply-to:references:cc:to:from:subject:message-id:date
- :content-transfer-encoding:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=6zwWz0nIcjmhIbwrlSPAUEF6U8W2a49D9rxRZEPMWJM=;
- b=DZmqS/I0u/ufvw/xaJyirUwfbgzE0Yb22gRPPYkgh/pmeEzjqIFEbY076dHvV+h8iP
- sZZxtPK6M3fIeMjHxjz1pMCeqDKXXp0MRqtxDco89k6mSV5yFmV3x3byr8e8XmG/9Hwn
- dcs+Yiwn1yzanpBaMJUqTHBb9UOiD+b3vC2Sg=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=rtone.fr header.i=@rtone.fr
- header.a=rsa-sha256 header.s=google header.b=DZmqS/I0
-Subject: Re: [Buildroot] [v1 0/4] [PATCH 0/3] Add support for Pi5
+ d=redhat.com; 
+ s=mimecast20190719; t=1700753504;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=2EMKz0pqUW0qlqtxKLVZ/aDS8NCfBz7G77TX/LbE78c=;
+ b=c+33IFER/eYSdvyGZOEn+x2cQOqdsJXL27weGUootgLuhZKYDogv87PHjkSm2wmj9ub/Mv
+ lKm6zDq70LJDAuU1DiXf40+uz3Q4nC4NBWjDSB9MdbwQZ1TWtgw6/yfWQ73iNd4lCMxDwg
+ 9pIZiMgv1KmWY/bIIScTxUhZGRvPqKM=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com
+ header.a=rsa-sha256 header.s=mimecast20190719 header.b=c+33IFER
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: add an option to enable
+ lscpu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,114 +84,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Martin Bark <martin@barkynet.com>, Julien
- Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Anthony Harivel <aharivel@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1IE5vdiAyMywgMjAyMyBhdCAxMToxMiBBTSBDRVQsIFRob21hcyBQZXRhenpvbmkgd3Jv
-dGU6Cj4gT24gVHVlLCAyMSBOb3YgMjAyMyAyMDozNDo0NCArMDEwMAo+IEdhw6tsIFBPUlRBWSA8
-Z2FlbC5wb3J0YXlAcnRvbmUuZnI+IHdyb3RlOgo+Cj4gPiBUaGUgb3V0cHV0IGJvb3RzIGZpbmUg
-YW5kIGl0IHJ1bnMgZ2V0dHkgb24gdWFydCBhbmQgdmlydHVhbCB0dHkgaWYgaXQgaXMKPiA+IGJ1
-aWx0IHVzaW5nIHRoZSB0b29sY2hhaW4gYnVpbHQgYnkgYnVpbGRyb290Lgo+ID4gCj4gPiBUaGUg
-b3V0cHV0IGJvb3RzIHRoZSBrZXJuZWwgYnV0IHRoZSBrZXJuZWwgY2Fubm90IHJ1biB0aGUgaW5p
-dCBwcm9jZXNzCj4gPiBpZiBpdCBpcyBidWlsdCB1c2luZyB0aGUgYm9vdGxpbiBwcmVidWlsdCB0
-b29sY2hhaW4uIFNvbWV0aGluZyBpcyBicm9rZW4KPiA+IGR1ZSB0byB0aGUgMTZrIE1NVSBwYWdl
-LXNpemUgOigKPgo+IEkgKnRoaW5rKiB0aGlzIGlzIGV4cGVjdGVkLiBUaGUgQm9vdGxpbiB0b29s
-Y2hhaW5zIGFyZSBidWlsdCBmb3IgdGhlCj4gZGVmYXVsdCBwYWdlIHNpemUgb2YgNEtCLCBzbyB0
-aGUgbGliYyBpbiB0aG9zZSB0b29sY2hhaW5zIGV4cGVjdHMgNEtCCj4gcGFnZXMsIGFuZCB0aGlz
-IGJyZWFrcyBpZiB5b3UgbWl4IGl0IHdpdGggY29kZSB0aGF0IHdhcyBidWlsdCBmb3IgMTYgS0IK
-PiBwYWdlIHNpemUuCj4KCk9rYXkuIFNvIGl0IG5lZWRzIHRvIHNoaXAgbXVsdGlwbGUgdG9vbGNo
-YWlucywgb25lIHBlciBwYWdlLXNpemU/IE9yCm1heWJlIHRoZXJlIGlzIGEgY29tcGlsZXIgZmxh
-ZyBvciB3aGF0c29ldmVyOyBJIHNhdyBhIGxpbmtlciBmbGFnLiBJCmtub3cgbm90aGluZyBhYm91
-dCB0aGF0IGZvciBub3cuIEkgbmVlZCB0byBkaWcgaW4uCgpCVFcsIEkgd29uZGVyIGhvdyB0aGUg
-UmFzcGJlcnJ5IE9TIGRlYWxzIHdpdGggYW4gaW1hZ2Ugd29ya2luZyBmb3IgYm90aAo0ayBhbmQg
-MTZrIGluIGEgc2luZ2xlIHVzZXJsYW5kOyBtYXliZSBpdCBpcyBqdXN0IGEgbWF0dGVyIG9mIHRv
-b2xjaGFpbi4KCj4gPiBRdWVzdGlvbjogdGhlIGRldmljZS10cmVlIG92ZXJsYXlzIGFyZSB0YWtl
-biBmcm9tIHRoZSBycGktZmlybXdhcmU7IGlzCj4gPiB0aGVyZSBhIHBsYW4gdG8gY29tcGlsZSB0
-aGUgb25lIGZyb20gdGhlIGRvd25zdHJlYW0ga2VybmVsIHNvdXJjZXMKPiA+IGluc3RlYWQ/IGJ5
-IHR3ZWFraW5nIHRoZSBsaW51eC5tayBtYXliZT8KPgo+IFRoZSBwcm9ibGVtIGhlcmUgaXMgdGhh
-dCBpdCB3b3VsZCBiZSBhIHR3ZWFrIGluIGxpbnV4Lm1rIHRoYXQgaXMKPiBzcGVjaWZpYyB0byBo
-b3cgdGhlIGRvd25zdHJlYW0gUlBpIGtlcm5lbCBkb2VzIGl0LiBCdXQgdGhlIG1haW5saW5lCj4g
-a2VybmVsIGhhcyBncm93biBzdXBwb3J0IGZvciBidWlsZGluZyBEVCBvdmVybGF5cyB0b28uIElz
-IGl0IHNpbWlsYXIgdG8KPiBob3cgdGhlIGRvd25zdHJlYW0gUlBpIGtlcm5lbCBkb2VzIGl0Pwo+
-CgpBbGwgSSBrbm93IGZvciBrbm93IGlzIHRoYXQgdXBzdHJlYW0gc2V0cyB0aGUgZmxhZyAtQCB0
-byBlbWJlZCB0aGUgbm9kZXMKX19zeW1ib2xzX18gYW5kIF9fbG9jYWxfZml4dXBzX18gaW4gdGhl
-IGR0YiBzdWJqZWN0IHRvIGdldCBvdmVybGFpZCBhdApydW50aW1lLgoKVGhlIGR0Ym8gY2FuIHJl
-c29sdmUgaXRzIG1pc3Npbmcgc3ltYm9scyBmcm9tIGl0cyBub2RlIF9fZml4dXBzX18gdGhlbgpJ
-SVJDLgoKRGlkIEkgbWlzc2VkIHNvbWV0aGluZyBuZXcgaW4gdGhlIHVwc3RyZWFtIGtlcm5lbD8K
-Cj4gV2hpY2ggdHdlYWsgd291bGQgYmUgbmVlZGVkIGluIGxpbnV4Lm1rIHRvIGJ1aWxkIG92ZXJs
-YXlzIGluIHRoZQo+IGRvd25zdHJlYW0gUlBpIGtlcm5lbD8KPgoKSW4gZmFjdCwgdGhlIG92ZXJs
-YXlzIGFyZSBidWlsdCBhbHJlYWR5IGJ5IGxpbnV4Lm1rIHNpbmNlIGl0IGJ1aWxkcyB0aGUKZGV2
-aWNlLXRyZWVzIGFuZCB0aHVzIHRoZSBvdmVybGF5cyBhdCB0aGUgc2FtZSB0aW1lLgoKQWN0dWFs
-bHksIHRoZXJlIGlzIG5vIG1lY2FuaXNtIHRvIGluc3RhbGwgdGhlbSBiYWNrIHRoZSBvdXRwdXQg
-ZGlyZWN0b3J5CnNpbmNlIHRoZSBsaW51eC5tayBkb2VzIG5vdCB1c2UgdGhlIHRhcmdldCBkdGJz
-X2luc3RhbGwgdG8gaW5zdGFsbCB0aGUKZGV2aWNlLXRyZWUgYmxvYnMuCgpJdCB1c2VzIEJSMl9M
-SU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FIHRvIGxpc3QgdGhlIGluLXRyZWUgZGV2aWNlLXRy
-ZWUKdG8gaW5zdGFsbCBtYW51YWxseSB0aGFua3MgdG8gYW4gaW5zdGFsbCAtRC4KClRoZXJlZm9y
-ZSwgdGhlIG92ZXJsYXlzIG5lZWQgdGhlIHNhbWUgbWVjYW5pc20gZm9yIHRoZSBvdmVybGF5cy4K
-Ck5vdGU6IFRoZSBtZWNhbmlzbSBjYW5ub3QgYmUgcmV1c2VkIGZvciB0aGUgb3ZlcmxheXMgc2lu
-Y2UgdGhlIG5hbWUKZ2l2ZW4gaXMgdGhlIHBhdGg6CiAtIGZyb20gdGhlIGR0cyBkaXJlY3Rvcnkg
-KG92ZXJsYXlzIGFyZSBpbiBvdmVybGF5cy8pCiAtIHdpdGhvdXQgdGhlIC5kdHMgc3VmZml4IChv
-dmVybGF5cyBoYXZlIC1vdmVybGF5LmR0cykKIC0gLmR0YiBpcyBhdXRvbWF0aWNhbGx5IHN1ZmZp
-eGVkICgvIVwgb3ZlcmxheXMgaGF2ZSAtb3ZlcmxheS5kdGJvKQoKSSBoYXZlIGFscmVhZHkgbWFk
-ZSB0aGF0IHR3ZWFrIGJ1dCBJIGhhdmUgbm90IHN1Ym1pdHRlZCBpdCBmb3IgYW4gUkZDIGFzCnRo
-ZSBvdmVybGF5cyBpcyBhIGRvd25zdHJlYW0gc3BlY2lmaWMgZmVhdHVyZSAoYXQgbGVhc3QgZm9y
-IG5vdyksIGFuZCBJCmRvIG5vdCBrbm93IGlmIGFub3RoZXIgZG93bnN0cmVhbSBrZXJuZWwgdHJl
-ZSBidWlsdHMgb3ZlcmxheXMuCgpUaGVyZWZvcmUsIEkgdGhpbmsgaXQgc2hvdWxkIG5vdCBiZSBh
-IHBhcnQgb2YgbGludXgubWsgKGF0IGxlYXN0CmRpcmVjdGx5KSwgZXZlbiBpZiBpdCBpcyBzdGFu
-ZGFyZCB3aXRoIG90aGVyIGRvd25zdHJlYW0gdHJlZXMuCgpCZWxvdyBpcyBhIHBhcnQgb2YgdGhl
-IHR3ZWFrIEkgYW0gdGhpbmtpbmcgYWJvdXQgKGl0IGlzIGEgY29weS9wYXN0ZSBvZgp3aGF0IGl0
-IGlzIGRvbmUgZm9yIGR0cy9kdGIpOgoKZGlmZiAtLWdpdCBhL2xpbnV4L2xpbnV4Lm1rIGIvbGlu
-dXgvbGludXgubWsKaW5kZXggNTNlMmFkNmQ0OC4uNWYyYjM3MWFmZSAxMDA2NDQKLS0tIGEvbGlu
-dXgvbGludXgubWsKKysrIGIvbGludXgvbGludXgubWsKQEAgLTE5OSw2ICsxOTksMTQgQEAgTElO
-VVhfRFRTX05BTUUgKz0gJChiYXNlbmFtZSAkKGZpbHRlciAlLmR0cywkKG5vdGRpciAkKGNhbGwg
-cXN0cmlwLCQoQlIyX0xJTlVYX0sKCiBMSU5VWF9EVEJTID0gJChhZGRzdWZmaXggLmR0YiwkKExJ
-TlVYX0RUU19OQU1FKSkKCitpZmVxICgkKEJSMl9MSU5VWF9LRVJORUxfRFRCX09WRVJMQVlfU1VQ
-UE9SVCkseSkKK0xJTlVYX0RUU19PVkVSTEFZX05BTUVTICs9ICQoY2FsbCBxc3RyaXAsJChCUjJf
-TElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfT1ZFUkxBWV9OQU1FUykpCisKK0xJTlVYX0RUU19PVkVS
-TEFZX05BTUVTICs9ICQoYmFzZW5hbWUgJChmaWx0ZXIgJS1vdmVybGF5LmR0cywkKG5vdGRpciAk
-KGNhbGwgcXN0cmlwLCQoQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fRFRTX09WRVJMQVlfUEFUSCkp
-KSkpCisKK0xJTlVYX0RUQk9TID0gJChhZGRzdWZmaXggLmR0Ym8sJChMSU5VWF9EVFNfT1ZFUkxB
-WV9OQU1FUykpCitlbmRpZgorCiBpZmVxICgkKEJSMl9MSU5VWF9LRVJORUxfSU1BR0VfVEFSR0VU
-X0NVU1RPTSkseSkKIExJTlVYX0lNQUdFX05BTUUgPSAkKGNhbGwgcXN0cmlwLCQoQlIyX0xJTlVY
-X0tFUk5FTF9JTUFHRV9OQU1FKSkKIExJTlVYX1RBUkdFVF9OQU1FID0gJChjYWxsIHFzdHJpcCwk
-KEJSMl9MSU5VWF9LRVJORUxfSU1BR0VfVEFSR0VUX05BTUUpKQpAQCAtNDU4LDEwICs0NjYsMjMg
-QEAgZGVmaW5lIExJTlVYX0lOU1RBTExfRFRCCiAgICAgICAgICAgICAgICAgICAgICAgICQoMSkv
-JChpZiAkKEJSMl9MSU5VWF9LRVJORUxfRFRCX0tFRVBfRElSTkFNRSksJChkdGIpLCQobm90ZGly
-ICQoZHRiKSkpCiAgICAgICAgKQogZW5kZWYKK2RlZmluZSBMSU5VWF9JTlNUQUxMX0RUQk8KKyAg
-ICAgICAkKGZvcmVhY2ggZHRibywkKExJTlVYX0RUQk9TKSwgXAorICAgICAgICAgICAgICAgaW5z
-dGFsbCAtRCBcCisgICAgICAgICAgICAgICAgICAgICAgICQod2lsZGNhcmQgJChMSU5VWF9BUkNI
-X1BBVEgpL2Jvb3QvZHRzLyQoZHRibykpIFwKKyAgICAgICAgICAgICAgICAgICAgICAgJCgxKS8k
-KGlmICQoQlIyX0xJTlVYX0tFUk5FTF9EVEJPX0tFRVBfRElSTkFNRSksJChkdGJvKSwkKG5vdGRp
-ciAkKGR0Ym8pKSkKKyAgICAgICApCitlbmRlZgogZW5kaWYgIyBCUjJfTElOVVhfS0VSTkVMX0FQ
-UEVOREVEX0RUQgogZW5kaWYgIyBCUjJfTElOVVhfS0VSTkVMX0RUQl9JU19TRUxGX0JVSUxUCiBl
-bmRpZiAjIEJSMl9MSU5VWF9LRVJORUxfRFRTX1NVUFBPUlQKCitpZmVxICgkKEJSMl9MSU5VWF9L
-RVJORUxfRFRTX09WRVJMQVlfU1VQUE9SVCkseSkKK2RlZmluZSBMSU5VWF9CVUlMRF9EVEJPCisg
-ICAgICAgJChMSU5VWF9NQUtFX0VOVikgJChCUjJfTUFLRSkgJChMSU5VWF9NQUtFX0ZMQUdTKSAt
-QyAkKEBEKSAkKExJTlVYX0RUQk9TKQorZW5kZWYKK2VuZGlmICMgQlIyX0xJTlVYX0tFUk5FTF9E
-VFNfT1ZFUkxBWV9TVVBQT1JUCisKIGlmZXEgKCQoQlIyX0xJTlVYX0tFUk5FTF9BUFBFTkRFRF9E
-VEIpLHkpCiAjIGR0YnMgbW92ZWQgZnJvbSBhcmNoLyRBUkNIL2Jvb3QgdG8gYXJjaC8kQVJDSC9i
-b290L2R0cyBzaW5jZSAzLjgtcmMxCiBkZWZpbmUgTElOVVhfQVBQRU5EX0RUQgpAQCAtNTA4LDYg
-KzUyOSw3IEBAIGRlZmluZSBMSU5VWF9CVUlMRF9DTURTCiAgICAgICAgJChMSU5VWF9NQUtFX0VO
-VikgJChCUjJfTUFLRSkgJChMSU5VWF9NQUtFX0ZMQUdTKSAtQyAkKEBEKSAkKExJTlVYX1RBUkdF
-VF9OQU1FKQogICAgICAgICQoTElOVVhfQlVJTERfRFRCKQogICAgICAgICQoTElOVVhfQVBQRU5E
-X0RUQikKKyAgICAgICAkKExJTlVYX0JVSUxEX0RUQk8pCiBlbmRlZgoKIGlmZXEgKCQoQlIyX0xJ
-TlVYX0tFUk5FTF9BUFBFTkRFRF9EVEIpLHkpCkBAIC01MjksNiArNTUxLDcgQEAgaWZlcSAoJChC
-UjJfTElOVVhfS0VSTkVMX0lOU1RBTExfVEFSR0VUKSx5KQogZGVmaW5lIExJTlVYX0lOU1RBTExf
-S0VSTkVMX0lNQUdFX1RPX1RBUkdFVAogICAgICAgICQoY2FsbCBMSU5VWF9JTlNUQUxMX0lNQUdF
-LCQoVEFSR0VUX0RJUikvYm9vdCkKICAgICAgICAkKGNhbGwgTElOVVhfSU5TVEFMTF9EVEIsJChU
-QVJHRVRfRElSKS9ib290KQorICAgICAgICQoY2FsbCBMSU5VWF9JTlNUQUxMX0RUQk8sJChUQVJH
-RVRfRElSKS9ib290L292ZXJsYXlzKQogZW5kZWYKIGVuZGlmCgpAQCAtNTQzLDYgKzU2Niw3IEBA
-IGVuZGVmCiBkZWZpbmUgTElOVVhfSU5TVEFMTF9JTUFHRVNfQ01EUwogICAgICAgICQoY2FsbCBM
-SU5VWF9JTlNUQUxMX0lNQUdFLCQoQklOQVJJRVNfRElSKSkKICAgICAgICAkKGNhbGwgTElOVVhf
-SU5TVEFMTF9EVEIsJChCSU5BUklFU19ESVIpKQorICAgICAgICQoY2FsbCBMSU5VWF9JTlNUQUxM
-X0RUQk8sJChCSU5BUklFU19ESVIpKQogZW5kZWYKCkxldCBtZSBrbm93IGlmIHRoaXMgbG9va3Mg
-dG8gYmUgaW50ZXJyZXN0aW5nIGFuZCBpZiBpdCBzaG91bGQgZ2V0IHBvc3QKaW4gYSBkZWRpY2F0
-ZWQgdGhyZWFkLgoKVGhhbmtzLgoKPiBUaG9tYXMKPgoKR2HDq2wKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+lscpu displays information about CPU architecture and needs to be
+explicitly enable for compilation.
+
+Signed-off-by: Anthony Harivel <aharivel@redhat.com>
+---
+ package/util-linux/Config.in     | 9 ++++++++-
+ package/util-linux/util-linux.mk | 1 +
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index be87494b35cf..3eb1b2e1c9a3 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -58,7 +58,7 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	  blkdiscard, blkid, blockdev, chcpu, choom, col, colcrt, colrm,
+ 	  column, ctrlaltdel, dmesg, fdisk, fincore, findfs, findmnt,
+ 	  flock, fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize,
+-	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
++	  ldattach, look, lsblk, lsipc, lslocks, lsns, mcookie,
+ 	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev,
+ 	  rtcwake, script, scriptlive, scriptreplay, setarch, setsid,
+ 	  sfdisk, swaplabel, swapoff, swapon, uuidgen, uuidparse,
+@@ -211,6 +211,13 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+ 	help
+ 	  Set up and control loop devices
+ 
++config BR2_PACKAGE_UTIL_LINUX_LSCPU
++	bool "lscpu"
++	depends on BR2_USE_MMU # libsmartcols
++	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
++	help
++	  Display information about the CPU architecture
++
+ config BR2_PACKAGE_UTIL_LINUX_LSFD
+ 	bool "lsfd"
+ 	depends on BR2_USE_MMU # libsmartcols
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 72126adb005f..3546c07337e0 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -161,6 +161,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN),--enable-login,--disable-login) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LSCPU),--enable-lscpu,--disable-lscpu) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSFD),--enable-lsfd,--disable-lsfd) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSMEM),--enable-lsmem,--disable-lsmem) \
+-- 
+2.42.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
