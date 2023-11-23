@@ -4,75 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37026C5AD4C
-	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 15:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCDDFC5AD4C
+	for <buildroot@archiver.kernel.org>; Thu, 23 Nov 2023 15:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE7596133C;
-	Thu, 23 Nov 2023 15:31:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE7596133C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8156361342;
+	Thu, 23 Nov 2023 15:38:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8156361342
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2H5uwoQ_Sood; Thu, 23 Nov 2023 15:31:49 +0000 (UTC)
+	with ESMTP id WMvB8eza3Nrd; Thu, 23 Nov 2023 15:38:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1819760C15;
-	Thu, 23 Nov 2023 15:31:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1819760C15
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 455CD1BF410
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:31:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C90C660C15;
+	Thu, 23 Nov 2023 15:38:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C90C660C15
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A80721BF410
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:38:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2862E41E11
- for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:31:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2862E41E11
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78C3F403FB
+ for <buildroot@lists.busybox.net>; Thu, 23 Nov 2023 15:38:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78C3F403FB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WV42NybG_eVq for <buildroot@lists.busybox.net>;
- Thu, 23 Nov 2023 15:31:45 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com
- (us-smtp-delivery-124.mimecast.com [170.10.133.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6967D4190A
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 15:31:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6967D4190A
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-394-7qZRwYyBMjG6i6pdZpi0dg-1; Thu, 23 Nov 2023 10:31:42 -0500
-X-MC-Unique: 7qZRwYyBMjG6i6pdZpi0dg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com
- [10.11.54.10])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFA56101A54C
- for <buildroot@buildroot.org>; Thu, 23 Nov 2023 15:31:42 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.208.21])
- by smtp.corp.redhat.com (Postfix) with ESMTP id 13680492BFD;
- Thu, 23 Nov 2023 15:31:41 +0000 (UTC)
-From: Anthony Harivel <aharivel@redhat.com>
-To: buildroot@buildroot.org
-Date: Thu, 23 Nov 2023 16:31:31 +0100
-Message-ID: <20231123153131.1253841-1-aharivel@redhat.com>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3-i7kjPhslb7 for <buildroot@lists.busybox.net>;
+ Thu, 23 Nov 2023 15:38:47 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 732DB403AF
+ for <buildroot@buildroot.org>; Thu, 23 Nov 2023 15:38:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 732DB403AF
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-40b27b498c3so6966055e9.0
+ for <buildroot@buildroot.org>; Thu, 23 Nov 2023 07:38:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1700753925; x=1701358725;
+ h=in-reply-to:references:from:subject:cc:to:message-id:date
+ :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=cW4qOqRZ2nN9QXIquFl4alLA1a3lH03FJ6Hd+1tBJpI=;
+ b=SxADZnu5XJME9V0V15u4U3Pw8Tdmd/k3C0uAI154ah3mUOIJ2MLiWr27zwRILDeyR5
+ 3+3thzheA3WIURG5GZWIaoTFbotRQaGS5H/NgnGtrNC6gMJVmlB+I4xHbAr8rrIDkScD
+ Ko/q8CFtne4TTC0EH3manjUrhjcrivF81F/K1o2SwUd9/tLEQ0PnE1cN5t9F9swSuIAb
+ uSmVweFRkLPc4Bg+ulrMMzeJE+wRM277WQSqKS0U304G3tfFhMaR3+xikZ+AybWG8eMO
+ W0KGIPL+s0uT0J26Etr11F5ju1CEXhLxKr3ZitAqOlSoLldXellwDEGyAjfZT/NW4oSa
+ vRww==
+X-Gm-Message-State: AOJu0Ywgg+6LgO1q1FW3yx3iPfCrPLwLBU4j52MzE7CI+p5xZcMk/U5u
+ lChtKSflZdbqaK/tI15oDBBXzQ==
+X-Google-Smtp-Source: AGHT+IH3/Pxhwl/fM3ic/08c1kXv8yiNgORWx6YOTvoOaURflzfroVdfXDRWTJ2/pKkSGCQ2Y/rE/A==
+X-Received: by 2002:a05:600c:1d27:b0:40b:3440:c802 with SMTP id
+ l39-20020a05600c1d2700b0040b3440c802mr2574498wms.35.1700753925485; 
+ Thu, 23 Nov 2023 07:38:45 -0800 (PST)
+Received: from localhost ([2a01:e0a:ce:f2f0:3a7c:76ff:fe01:6f05])
+ by smtp.gmail.com with ESMTPSA id
+ fs27-20020a05600c3f9b00b0040b36787913sm2349683wmb.13.2023.11.23.07.38.45
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 23 Nov 2023 07:38:45 -0800 (PST)
+Mime-Version: 1.0
+Date: Thu, 23 Nov 2023 16:38:44 +0100
+Message-Id: <CX6AY6UA72ZB.3SRZZAYMXMZPP@rtone.fr>
+To: =?utf-8?q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>
+From: =?utf-8?q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>
+X-Mailer: aerc 0.15.2
+References: <20231121193448.1151936-1-gael.portay@rtone.fr>
+ <20231123111233.24b5dbf2@windsurf> <CX6AO4BXYX52.FL7MGXII8KB8@rtone.fr>
+In-Reply-To: <CX6AO4BXYX52.FL7MGXII8KB8@rtone.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=redhat.com; 
- s=mimecast20190719; t=1700753504;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=2EMKz0pqUW0qlqtxKLVZ/aDS8NCfBz7G77TX/LbE78c=;
- b=c+33IFER/eYSdvyGZOEn+x2cQOqdsJXL27weGUootgLuhZKYDogv87PHjkSm2wmj9ub/Mv
- lKm6zDq70LJDAuU1DiXf40+uz3Q4nC4NBWjDSB9MdbwQZ1TWtgw6/yfWQ73iNd4lCMxDwg
- 9pIZiMgv1KmWY/bIIScTxUhZGRvPqKM=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com
- header.a=rsa-sha256 header.s=mimecast20190719 header.b=c+33IFER
-Subject: [Buildroot] [PATCH 1/1] package/util-linux: add an option to enable
- lscpu
+ d=rtone.fr; s=google; t=1700753925; x=1701358725; darn=buildroot.org;
+ h=in-reply-to:references:from:subject:cc:to:message-id:date
+ :content-transfer-encoding:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=cW4qOqRZ2nN9QXIquFl4alLA1a3lH03FJ6Hd+1tBJpI=;
+ b=Muel4X/jB+T2lVbNj6D1koKnQDN9QMqpVRbCPcT3FSiCwBiwPLUik7/qIub4CJwzA0
+ Ak8o7LTP/p5OCTDC8bwNMW+pYJJaUgjC2gvxNgmebpDIypLgKCFV22PWBdpOHEl3/a0h
+ ALcFEQQGuVHNwnj2xtleSMNphadmKR+dHNwsg=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=rtone.fr header.i=@rtone.fr
+ header.a=rsa-sha256 header.s=google header.b=Muel4X/j
+Subject: Re: [Buildroot] [v1 0/4] [PATCH 0/3] Add support for Pi5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,64 +95,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anthony Harivel <aharivel@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Martin Bark <martin@barkynet.com>, Julien
+ Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-lscpu displays information about CPU architecture and needs to be
-explicitly enable for compilation.
-
-Signed-off-by: Anthony Harivel <aharivel@redhat.com>
----
- package/util-linux/Config.in     | 9 ++++++++-
- package/util-linux/util-linux.mk | 1 +
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index be87494b35cf..3eb1b2e1c9a3 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -58,7 +58,7 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	  blkdiscard, blkid, blockdev, chcpu, choom, col, colcrt, colrm,
- 	  column, ctrlaltdel, dmesg, fdisk, fincore, findfs, findmnt,
- 	  flock, fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize,
--	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
-+	  ldattach, look, lsblk, lsipc, lslocks, lsns, mcookie,
- 	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev,
- 	  rtcwake, script, scriptlive, scriptreplay, setarch, setsid,
- 	  sfdisk, swaplabel, swapoff, swapon, uuidgen, uuidparse,
-@@ -211,6 +211,13 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
- 	help
- 	  Set up and control loop devices
- 
-+config BR2_PACKAGE_UTIL_LINUX_LSCPU
-+	bool "lscpu"
-+	depends on BR2_USE_MMU # libsmartcols
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	help
-+	  Display information about the CPU architecture
-+
- config BR2_PACKAGE_UTIL_LINUX_LSFD
- 	bool "lsfd"
- 	depends on BR2_USE_MMU # libsmartcols
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 72126adb005f..3546c07337e0 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -161,6 +161,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN),--enable-login,--disable-login) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LSCPU),--enable-lscpu,--disable-lscpu) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSFD),--enable-lsfd,--disable-lsfd) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSMEM),--enable-lsmem,--disable-lsmem) \
--- 
-2.42.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVGh1IE5vdiAyMywgMjAyMyBhdCA0OjI1IFBNIENFVCwgR2HDq2wgUE9SVEFZIHdyb3RlOgo+
+IE9uIFRodSBOb3YgMjMsIDIwMjMgYXQgMTE6MTIgQU0gQ0VULCBUaG9tYXMgUGV0YXp6b25pIHdy
+b3RlOgo+ID4gT24gVHVlLCAyMSBOb3YgMjAyMyAyMDozNDo0NCArMDEwMAo+ID4gR2HDq2wgUE9S
+VEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4gd3JvdGU6Cj4gPgo+ID4gPiBUaGUgb3V0cHV0IGJv
+b3RzIGZpbmUgYW5kIGl0IHJ1bnMgZ2V0dHkgb24gdWFydCBhbmQgdmlydHVhbCB0dHkgaWYgaXQg
+aXMKPiA+ID4gYnVpbHQgdXNpbmcgdGhlIHRvb2xjaGFpbiBidWlsdCBieSBidWlsZHJvb3QuCj4g
+PiA+IAo+ID4gPiBUaGUgb3V0cHV0IGJvb3RzIHRoZSBrZXJuZWwgYnV0IHRoZSBrZXJuZWwgY2Fu
+bm90IHJ1biB0aGUgaW5pdCBwcm9jZXNzCj4gPiA+IGlmIGl0IGlzIGJ1aWx0IHVzaW5nIHRoZSBi
+b290bGluIHByZWJ1aWx0IHRvb2xjaGFpbi4gU29tZXRoaW5nIGlzIGJyb2tlbgo+ID4gPiBkdWUg
+dG8gdGhlIDE2ayBNTVUgcGFnZS1zaXplIDooCj4gPgo+ID4gSSAqdGhpbmsqIHRoaXMgaXMgZXhw
+ZWN0ZWQuIFRoZSBCb290bGluIHRvb2xjaGFpbnMgYXJlIGJ1aWx0IGZvciB0aGUKPiA+IGRlZmF1
+bHQgcGFnZSBzaXplIG9mIDRLQiwgc28gdGhlIGxpYmMgaW4gdGhvc2UgdG9vbGNoYWlucyBleHBl
+Y3RzIDRLQgo+ID4gcGFnZXMsIGFuZCB0aGlzIGJyZWFrcyBpZiB5b3UgbWl4IGl0IHdpdGggY29k
+ZSB0aGF0IHdhcyBidWlsdCBmb3IgMTYgS0IKPiA+IHBhZ2Ugc2l6ZS4KPiA+Cj4KPiBPa2F5LiBT
+byBpdCBuZWVkcyB0byBzaGlwIG11bHRpcGxlIHRvb2xjaGFpbnMsIG9uZSBwZXIgcGFnZS1zaXpl
+PyBPcgo+IG1heWJlIHRoZXJlIGlzIGEgY29tcGlsZXIgZmxhZyBvciB3aGF0c29ldmVyOyBJIHNh
+dyBhIGxpbmtlciBmbGFnLiBJCj4ga25vdyBub3RoaW5nIGFib3V0IHRoYXQgZm9yIG5vdy4gSSBu
+ZWVkIHRvIGRpZyBpbi4KPgo+IEJUVywgSSB3b25kZXIgaG93IHRoZSBSYXNwYmVycnkgT1MgZGVh
+bHMgd2l0aCBhbiBpbWFnZSB3b3JraW5nIGZvciBib3RoCj4gNGsgYW5kIDE2ayBpbiBhIHNpbmds
+ZSB1c2VybGFuZDsgbWF5YmUgaXQgaXMganVzdCBhIG1hdHRlciBvZiB0b29sY2hhaW4uCj4KPiA+
+ID4gUXVlc3Rpb246IHRoZSBkZXZpY2UtdHJlZSBvdmVybGF5cyBhcmUgdGFrZW4gZnJvbSB0aGUg
+cnBpLWZpcm13YXJlOyBpcwo+ID4gPiB0aGVyZSBhIHBsYW4gdG8gY29tcGlsZSB0aGUgb25lIGZy
+b20gdGhlIGRvd25zdHJlYW0ga2VybmVsIHNvdXJjZXMKPiA+ID4gaW5zdGVhZD8gYnkgdHdlYWtp
+bmcgdGhlIGxpbnV4Lm1rIG1heWJlPwoKSSBoYXZlIGp1c3QgdGVzdGVkIHdpdGggdGhlIHRvb2xj
+aGFpbiAiQXJtIEFBcmNoNjQgMTIuMi5yZWwxIiBhbmQgaXQKd29ya3MhIEl0IGlzIGp1c3QgYSBt
+YXR0ZXIgb2YgdG9vbGNoYWluLgoKR2HDq2wKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
