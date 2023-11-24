@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2EC9C61DF4
-	for <buildroot@archiver.kernel.org>; Fri, 24 Nov 2023 16:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EEEEC61DF4
+	for <buildroot@archiver.kernel.org>; Fri, 24 Nov 2023 16:17:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B528421D1;
-	Fri, 24 Nov 2023 16:17:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B528421D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48B07421E5;
+	Fri, 24 Nov 2023 16:17:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48B07421E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1HIzENcUtjq1; Fri, 24 Nov 2023 16:17:12 +0000 (UTC)
+	with ESMTP id PoGIqmt0z3-o; Fri, 24 Nov 2023 16:17:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A44C421D6;
-	Fri, 24 Nov 2023 16:17:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A44C421D6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 07A411BF29A
- for <buildroot@lists.busybox.net>; Fri, 24 Nov 2023 16:16:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A770421FE;
+	Fri, 24 Nov 2023 16:17:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A770421FE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 44C541BF29A
+ for <buildroot@lists.busybox.net>; Fri, 24 Nov 2023 16:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0B1541A79
- for <buildroot@lists.busybox.net>; Fri, 24 Nov 2023 16:16:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0B1541A79
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B47161595
+ for <buildroot@lists.busybox.net>; Fri, 24 Nov 2023 16:16:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B47161595
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3oQvb9QrgFYA for <buildroot@lists.busybox.net>;
- Fri, 24 Nov 2023 16:16:13 +0000 (UTC)
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4B52241A7E
- for <buildroot@buildroot.org>; Fri, 24 Nov 2023 16:16:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B52241A7E
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-409299277bbso14185545e9.2
- for <buildroot@buildroot.org>; Fri, 24 Nov 2023 08:16:13 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n0plcjL62bEz for <buildroot@lists.busybox.net>;
+ Fri, 24 Nov 2023 16:16:15 +0000 (UTC)
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
+ [IPv6:2a00:1450:4864:20::236])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9134B60ACA
+ for <buildroot@buildroot.org>; Fri, 24 Nov 2023 16:16:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9134B60ACA
+Received: by mail-lj1-x236.google.com with SMTP id
+ 38308e7fff4ca-2c87adce180so25861341fa.0
+ for <buildroot@buildroot.org>; Fri, 24 Nov 2023 08:16:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700842570; x=1701447370;
+ d=1e100.net; s=20230601; t=1700842572; x=1701447372;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=2qqoxISX0QB0pq3Te89y/Uxmt8QXIaXIJLpzM8HNfbU=;
- b=AkYBRli2NUAikr6vcTyz1MTPjNE2ww90X43yLXiANpjRV69uc+ochPjbxuv2fg1vT0
- 7bht6kqQA6te0AwhF7HEt6853MEpYF7k65myL+oDRxK9JZbqgTJjYnS7tUG97Y7t0IzT
- GO6O8hd1BATQSa784yx8uoX0SrzRgg3/TKR0JqRTaH5huuksbz0hUmTFpX1RXOXPxslK
- WRijs1UhBtP3hT1G35n44nqzuGAlngBXFveAOe9UjBXkhBflpVB/6risdOfX+QwkMkGB
- aJHjZHKcAKQZV1NojfXpJzLXRkVxCc5x156LVMlN8Iv1VXM+TAUBqyiU6vWc2292CoGs
- r7MQ==
-X-Gm-Message-State: AOJu0YxYS8xmZPK8BfQUOOh3Iwf4WCvxj+2j9lKhtBEE/hov3CEf2uCN
- x6CceMATk6cPTY0ssqo1bcbMOOHlcbtDZqw0H6o56w==
-X-Google-Smtp-Source: AGHT+IHKzCoKN1QGwfAwiWxliazh0ACOeqceQFP+7ZVg+iQqiHMfAy7OpjYvG23tZz5+jj3nDHQowQ==
-X-Received: by 2002:a05:600c:3b83:b0:40b:2a53:7913 with SMTP id
- n3-20020a05600c3b8300b0040b2a537913mr2961266wms.13.1700842570605; 
- Fri, 24 Nov 2023 08:16:10 -0800 (PST)
+ bh=PHlcqHGeso2fHER9ENZrc++IBQSiapK6pMGgPv+/eQQ=;
+ b=PZjuUz5TusixpY6s3DyGyNfUqgbvA9x42EsNoFVcmy/BGH+JLXuxEi242Y6B/4HKWv
+ Ym9dfHB8kkixL+/VdX9R3pvrrv6NRZP63C6rwTtC6/mdy0X933r2TwaEpwJY65E2t062
+ rZJYRKmFyRyTx5XMiFhySmAS/YIkftV+U87h7tLoAOre84gxty8JSmbICduFPlKleNSG
+ WEwZr5USX2HOaD9TG43pX1+IQV1UMK5ntsPLbWRYtjDK8PL23od9SUyjw9mBGCzHQrE1
+ tVFHgP0Qm5/zRzdVanZmcONwKM7Zyt8Zel7eqI92ug2v4MN6oAWIdvE0ElXOqlArAhJ3
+ tIFw==
+X-Gm-Message-State: AOJu0YwJvXVwfXV2OoA3e3+/a73HX8aqfK2h4NWEidWmF4UyN4Ad+tom
+ 7sdQgSiBwWQgHyEPSwclftlccGCXJRcByI0GalnloA==
+X-Google-Smtp-Source: AGHT+IHgsxt2ZRP053u7iW9ik0RIomE2vkBfpY40D3/6BlCMyeq9zgWakYN6GfH+iDBsZqBf3ifA1Q==
+X-Received: by 2002:a2e:9796:0:b0:2c8:84ff:4a25 with SMTP id
+ y22-20020a2e9796000000b002c884ff4a25mr2506018lji.5.1700842572194; 
+ Fri, 24 Nov 2023 08:16:12 -0800 (PST)
 Received: from P-NAN-KHNOUM.nantes.intranet
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- fm20-20020a05600c0c1400b0040b297fce5fsm6147325wmb.10.2023.11.24.08.16.10
+ fm20-20020a05600c0c1400b0040b297fce5fsm6147325wmb.10.2023.11.24.08.16.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Nov 2023 08:16:10 -0800 (PST)
+ Fri, 24 Nov 2023 08:16:11 -0800 (PST)
 From: Antoine Coutant <antoine.coutant@smile.fr>
 To: buildroot@buildroot.org
-Date: Fri, 24 Nov 2023 17:15:20 +0100
-Message-Id: <20231124161523.215078-5-antoine.coutant@smile.fr>
+Date: Fri, 24 Nov 2023 17:15:21 +0100
+Message-Id: <20231124161523.215078-6-antoine.coutant@smile.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231124161523.215078-1-antoine.coutant@smile.fr>
 References: <20231124161523.215078-1-antoine.coutant@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1700842570; x=1701447370;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1700842572; x=1701447372;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=2qqoxISX0QB0pq3Te89y/Uxmt8QXIaXIJLpzM8HNfbU=;
- b=Uv6DzZkAsDsYAtyBNKF+gnZ8xxVc+QJ7UAO/HL0WCN1mtbQdzQGyuEKgC6pvGHBbGU
- 3wYYNRsGo8FUhEf10MEUxLIwyEupfzMB5ivXdVqIw4bQE+wlHBp0ViSIIkhniIXwWeXp
- s8ifuvGDnWm1n3BbrXVmoCEGafiv8+6usAFrF7vwlvzA1/ge9/K78ewPDcTZmN0zNR1t
- M7DiOJMBdZ9PVCF3gx2sOzx2vAYJs38eXzKkUxJkyq7fgtmFCL94ee+1SrkZQrcO0/y1
- e9lzweOBSCIm31NZkAHGEhjYC5547ew7y7uAVpm14YwI9OrAHA9H3z9T58eGg+uBXjjf
- Blrg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=PHlcqHGeso2fHER9ENZrc++IBQSiapK6pMGgPv+/eQQ=;
+ b=JJZ7Qx22bPHc5HJOhQFvdw3yZHIVG3TfaepFdjiSUV49bVrlWdTXY2UtvroR/YxMpU
+ zH9cP1ENdqeNwen/Rn04Mte4ZWhxsHGALncrqY+Y1R+dmir5snDYmvsijeHxzLlC5wpW
+ SFk5Hp/lwBkD7J8YpyjNGARqQH7nS8JWvqFZeo431s4Wzwo9NOE+rxwgXe4NbrTjuOxL
+ fB6saqeP1nHtcSjWojlDPt/bjRK8LhFufW4sdA5Qo4scFZ0fiP3kXSQznDOWaFzPnsnp
+ cETMYnSJg3msnS1p7K4N4ilKIvCCGEAEVBwbbGGI36hky+WS7j6WqcWu9EaAmEHsSsvS
+ Ec9g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=Uv6DzZkA
-Subject: [Buildroot] [[DO NOT MERGE] v3 4/7] package/opencl-headers: new
+ header.s=20230601 header.b=JJZ7Qx22
+Subject: [Buildroot] [[DO NOT MERGE] v3 5/7] package/opencl-icd-loader: new
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -110,125 +110,113 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Sebastian Weyer <sebastian.weyer@smile.fr>
 
-These headers provide the C language API bindings. It is a complement to
-the C++ bindings already available in opencl-clhpp. This package is
-required to build opencl-icd-loader:
+With this package it is possible to have multiple implementations of
+OpenCL at the same time. This package provides a libOpenCL.so file that
+captures the OpenCL API calls and forwards it to the correct
+implementation of OpenCL. OpenCL implementations can be manually
+registered by creating a file containing its full file path in
+/etc/OpenCL/vendors/<implementation>.icd[1]
 
-https://github.com/KhronosGroup/OpenCL-ICD-Loader#dependencies
+This package is required by certain OpenCL implementations, for example
+Mesa3D's implementation if it is not built in standalone mode.
+
+[1] https://github.com/KhronosGroup/OpenCL-ICD-Loader#registering-icds
 
 Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
 ---
 Changes v2 -> v3:
-	-resolution of the conflict created by adding opencl-headers
+	-resolution of the conflict created by adding opencl-icd-loader
 	under Sebastian Weyer in DEVELOPERS
-	- resolution of the conflict created by adding opencl-headers
+	- resolution of the conflict created by adding opencl-icd-loader
 	to package/Config.in
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/opencl-headers/Config.in           |  7 ++++
- package/opencl-headers/opencl-headers.hash |  3 ++
- package/opencl-headers/opencl-headers.mk   | 42 ++++++++++++++++++++++
- 5 files changed, 54 insertions(+)
- create mode 100644 package/opencl-headers/Config.in
- create mode 100644 package/opencl-headers/opencl-headers.hash
- create mode 100644 package/opencl-headers/opencl-headers.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/opencl-icd-loader/Config.in           | 12 ++++++++++++
+ .../opencl-icd-loader/opencl-icd-loader.hash  |  3 +++
+ .../opencl-icd-loader/opencl-icd-loader.mk    | 19 +++++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/opencl-icd-loader/Config.in
+ create mode 100644 package/opencl-icd-loader/opencl-icd-loader.hash
+ create mode 100644 package/opencl-icd-loader/opencl-icd-loader.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 1f26e9bc81..b7052238d9 100644
+index b7052238d9..4a90bad7ee 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2671,6 +2671,7 @@ F:	package/ripgrep/
- N:	Sebastian Weyer <sebastian.weyer@smile.fr>
+@@ -2672,6 +2672,7 @@ N:	Sebastian Weyer <sebastian.weyer@smile.fr>
  F:      package/amlogic-boot-fip/
  F:	package/nushell/
-+F:	package/opencl-headers
+ F:	package/opencl-headers
++F:	package/opencl-icd-loader
  F:	package/rust-bindgen/
  F:	package/spirv-headers/
  F:	support/testing/tests/package/sample_nu.nu
 diff --git a/package/Config.in b/package/Config.in
-index 2097a21408..8fd86123c3 100644
+index 8fd86123c3..70c9970723 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1667,6 +1667,7 @@ menu "Graphics"
- 	source "package/onevpl/Config.in"
+@@ -1668,6 +1668,7 @@ menu "Graphics"
  	source "package/onevpl-intel-gpu/Config.in"
  	source "package/opencl-clhpp/Config.in"
-+	source "package/opencl-headers/Config.in"
+ 	source "package/opencl-headers/Config.in"
++	source "package/opencl-icd-loader/Config.in"
  	source "package/opencv3/Config.in"
  	source "package/opencv4/Config.in"
  	source "package/opencv4-contrib/Config.in"
-diff --git a/package/opencl-headers/Config.in b/package/opencl-headers/Config.in
+diff --git a/package/opencl-icd-loader/Config.in b/package/opencl-icd-loader/Config.in
 new file mode 100644
-index 0000000000..092d8a2a4d
+index 0000000000..405dc5401a
 --- /dev/null
-+++ b/package/opencl-headers/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_OPENCL_HEADERS
-+	bool "opencl-headers"
++++ b/package/opencl-icd-loader/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_OPENCL_ICD_LOADER
++	bool "OpenCL-ICD-Loader"
++	depends on BR2_INSTALL_LIBSTDCPP
 +	depends on BR2_PACKAGE_HAS_LIBOPENCL
++	select BR2_PACKAGE_OPENCL_HEADERS
 +	help
-+	  C language headers for the OpenCL API
++	  OpenCL defines an Installable Client Driver (ICD) mechanism to
++	  allow developers to build applications against an Installable
++	  Client Driver loader (ICD loader) rather than linking their
++	  applications against a specific OpenCL implementation.
 +
-+	  https://github.com/KhronosGroup/OpenCL-Headers
-diff --git a/package/opencl-headers/opencl-headers.hash b/package/opencl-headers/opencl-headers.hash
++	  https://github.com/KhronosGroup/OpenCL-ICD-Loader
+diff --git a/package/opencl-icd-loader/opencl-icd-loader.hash b/package/opencl-icd-loader/opencl-icd-loader.hash
 new file mode 100644
-index 0000000000..f3d7ef8411
+index 0000000000..d028e3d856
 --- /dev/null
-+++ b/package/opencl-headers/opencl-headers.hash
++++ b/package/opencl-icd-loader/opencl-icd-loader.hash
 @@ -0,0 +1,3 @@
-+#Locally generated
-+sha256  0ce992f4167f958f68a37918dec6325be18f848dee29a4521c633aae3304915d  OpenCL-Headers-2023.04.17.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencl-headers/opencl-headers.mk b/package/opencl-headers/opencl-headers.mk
++# locally generated
++sha256  173bdc4f321d550b6578ad2aafc2832f25fbb36041f095e6221025f74134b876  OpenCL-ICD-Loader-2023.04.17.tar.gz
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/opencl-icd-loader/opencl-icd-loader.mk b/package/opencl-icd-loader/opencl-icd-loader.mk
 new file mode 100644
-index 0000000000..1cad98a3d0
+index 0000000000..d3d94b9cb5
 --- /dev/null
-+++ b/package/opencl-headers/opencl-headers.mk
-@@ -0,0 +1,42 @@
++++ b/package/opencl-icd-loader/opencl-icd-loader.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# opencl-headers
++# opencl-icd-loader
 +#
 +################################################################################
 +
-+OPENCL_HEADERS_VERSION = 2023.04.17
-+OPENCL_HEADERS_SOURCE = OpenCL-Headers-$(OPENCL_HEADERS_VERSION).tar.gz
-+OPENCL_HEADERS_SITE = $(call github,KhronosGroup,OpenCL-Headers,v$(OPENCL_HEADERS_VERSION))
-+OPENCL_HEADERS_LICENSE = Apache-2.0
-+OPENCL_HEADERS_LICENSE_FILES = LICENSE
-+OPENCL_HEADERS_INSTALL_STAGING = YES
++OPENCL_ICD_LOADER_VERSION = 2023.04.17
++OPENCL_ICD_LOADER_SOURCE = OpenCL-ICD-Loader-$(OPENCL_ICD_LOADER_VERSION).tar.gz
++OPENCL_ICD_LOADER_SITE = $(call github,KhronosGroup,OpenCL-ICD-Loader,v$(OPENCL_ICD_LOADER_VERSION))
++OPENCL_ICD_LOADER_LICENSE = Apache-2.0
++OPENCL_ICD_LOADER_LICENSE_FILES = LICENSE
++OPENCL_ICD_LOADER_INSTALL_STAGING = YES
 +
-+OPENCL_HEADERS_INSTALL_TARGET = NO
++OPENCL_ICD_LOADER_DEPENDENCIES = opencl-headers
 +
-+OPENCL_HEADERS_FILES = cl_d3d10.h \
-+					   cl_d3d11.h \
-+					   cl_dx9_media_sharing.h \
-+					   cl_dx9_media_sharing_intel.h \
-+					   cl_egl.h \
-+					   cl_ext.h \
-+					   cl_ext_intel.h \
-+					   cl_gl_ext.h \
-+					   cl_gl.h \
-+					   cl.h \
-+					   cl_half.h \
-+					   cl_icd.h \
-+					   cl_layer.h \
-+					   cl_platform.h \
-+					   cl_va_api_media_sharing_intel.h \
-+					   cl_version.h \
-+					   opencl.h
++OPENCL_ICD_LOADER_CONF_OPTS += -DOPENCL_ICD_LOADER_HEADERS_DIR=$(STAGING_DIR)/usr/include
 +
-+
-+define OPENCL_HEADERS_INSTALL_STAGING_CMDS
-+	$(foreach header,$(OPENCL_HEADERS_FILES), \
-+		$(INSTALL) -D -m 0644 $(@D)/CL/$(header) \
-+			$(STAGING_DIR)/usr/include/CL/$(header)
-+	)
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.25.1
 
