@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C748AC61DF4
-	for <buildroot@archiver.kernel.org>; Fri, 24 Nov 2023 23:25:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39280C61DF4
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 00:00:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C3B8615C7;
-	Fri, 24 Nov 2023 23:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C3B8615C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 94D2E4004A;
+	Sat, 25 Nov 2023 00:00:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94D2E4004A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dDYa3UrTPxE5; Fri, 24 Nov 2023 23:59:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 70025400D1;
+	Fri, 24 Nov 2023 23:59:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70025400D1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BF6DC1BF20B
+ for <buildroot@lists.busybox.net>; Fri, 24 Nov 2023 23:59:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9883A60B0B
+ for <buildroot@lists.busybox.net>; Fri, 24 Nov 2023 23:59:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9883A60B0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y38SCDRHcYmf; Fri, 24 Nov 2023 23:25:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA05E615A3;
-	Fri, 24 Nov 2023 23:25:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA05E615A3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7EBB21BF319
- for <buildroot@lists.busybox.net>; Fri, 24 Nov 2023 23:25:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 580E080E84
- for <buildroot@lists.busybox.net>; Fri, 24 Nov 2023 23:25:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 580E080E84
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UMAJfObiwqNz for <buildroot@lists.busybox.net>;
- Fri, 24 Nov 2023 23:25:25 +0000 (UTC)
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20DF780E55
- for <buildroot@buildroot.org>; Fri, 24 Nov 2023 23:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20DF780E55
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-7ad501cb1f9so77698839f.0
- for <buildroot@buildroot.org>; Fri, 24 Nov 2023 15:25:25 -0800 (PST)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ONh_8Md9hXqu for <buildroot@lists.busybox.net>;
+ Fri, 24 Nov 2023 23:59:56 +0000 (UTC)
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9E7EF60AEF
+ for <buildroot@buildroot.org>; Fri, 24 Nov 2023 23:59:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E7EF60AEF
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-35aa6107e9fso8128035ab.0
+ for <buildroot@buildroot.org>; Fri, 24 Nov 2023 15:59:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700868324; x=1701473124;
+ d=1e100.net; s=20230601; t=1700870395; x=1701475195;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=bZVNwezRTL4vHl9BDRyYi++XFsh6b/IqrU/s8o6wito=;
- b=Wr+uLcgteWCoDdFHFCwgvFBsLwiloFl2khtJC2+4KXaIPHob96N6Z6azob0WoVhfLu
- 3YWDxy8SnA+APka3D/GmgmmgTaxkh6ixLjzb3pQdhxiwNKpbav3xtDBbJ6YS+nshT4AR
- U34rcCiVn0fOMv+4n8h3q3j2WH19m/2W2l+9LNABGTDvjA8+91FUYj68y9atNPMFVz4+
- kDbi/uGUHBZCgy+87DhOa2EhZSXFBf6QdaG4uokerbFnZOsah9Y5NdpO3ZCRuMWD487c
- WkUCHPJYqK30CVrQBCXjwrhZ/+dOtFAJE30ld9zJjkDceFAS0X6pPV/PxZ+qI742/wcM
- gstA==
-X-Gm-Message-State: AOJu0YyCu15/H+r4b/zBHRY7aNw02xSoej4ESj2AXcPHgWlP8xMVhb6C
- ddWVOVyTzl91hfmzh8Bg3Es2HLkMwVM=
-X-Google-Smtp-Source: AGHT+IE+2BjqD/6O64QfDhEbMgTzfxK0Mqn85vaiFar/f/COVDpOoqVw8l/iM5y8z4+58ee50py4nQ==
-X-Received: by 2002:a5e:de0b:0:b0:7b3:59e4:8b4e with SMTP id
- e11-20020a5ede0b000000b007b359e48b4emr5086708iok.21.1700868323739; 
- Fri, 24 Nov 2023 15:25:23 -0800 (PST)
+ bh=tNuHaL4H3S6bucnMs3XooL1lYsnSrUFWyPiwmMi9JW0=;
+ b=PB5qMIzrtLbjJTWmuw8HBjS/ulpA2sOm2Di9NcL0y+kWmUqwUuYJIvryIzEHp1p9Pf
+ KqQCeApLgM5X1e2f2HSsSL1FlSzUI7WaYmwaPzzfJtEYFiajdU6zq/gd42ST0Csw5b8m
+ HCbusXspvIwjqdfALyexAcTL/zcT62y+SCl16vEILiwdw9MQx9LVwKW5XD5grbcFgje3
+ KtyGVraDhGpEau/GWnu3QG8M0bzIDUa8nYWQyIWoCwxtrXG2whWB0+YTBG1Hf04BUgDj
+ wBaRLDm3saXICWOJhZZLYceX0+kCxBUVsxSpRI5QQzZhkhNN9+V8vux/z7Oaf4YrNUo3
+ yBLA==
+X-Gm-Message-State: AOJu0Ywz4s52DQZhBG7wMqqsw/4bqL/0Irj3p1rfFEemaD1dGEaEuJrq
+ lVTHcT7abhhM4sATSuwPq9sfHXP55TM=
+X-Google-Smtp-Source: AGHT+IGiIw1OJMg9ABZiseuNaRfOgwairHvpqJsMy4KQ0qo27cE9+oQVklyjljihqkp2pK1IGxcBrg==
+X-Received: by 2002:a05:6e02:1a45:b0:35b:2765:4e80 with SMTP id
+ u5-20020a056e021a4500b0035b27654e80mr6014381ilv.31.1700870395330; 
+ Fri, 24 Nov 2023 15:59:55 -0800 (PST)
 Received: from james-x399.localdomain (97-118-243-253.hlrn.qwest.net.
  [97.118.243.253]) by smtp.gmail.com with ESMTPSA id
- d9-20020a5d9bc9000000b007b383e7be86sm300946ion.3.2023.11.24.15.25.23
+ ed20-20020a056638291400b004667dcd2c04sm1073836jab.43.2023.11.24.15.59.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Nov 2023 15:25:23 -0800 (PST)
+ Fri, 24 Nov 2023 15:59:54 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Nov 2023 16:25:19 -0700
-Message-Id: <20231124232519.184099-1-james.hilliard1@gmail.com>
+Date: Fri, 24 Nov 2023 16:59:52 -0700
+Message-Id: <20231124235952.12924-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700868324; x=1701473124; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1700870395; x=1701475195; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=bZVNwezRTL4vHl9BDRyYi++XFsh6b/IqrU/s8o6wito=;
- b=EAFSiyaZg7NuofSq6GCh9fjVUzf1bpnrJ/OgAteSEiPAkKT49ZXXEe4UwnlhO7jTjA
- FH5aB6YgkC5hM+UTLneeNSJdj6U66BKOVznRh4QlE+GLtMZ367+ld2yseiseJj+u/GOI
- M5sFEMHCg5VEZGjoP3bbQYv1HCM9VnjcZ4WiXoItspp/vS7NnaIp3Sc1wujTZriOML+A
- Frb70IQHu/Fz0euRwpiqgkbvjAA6p/FWqJn9T8iH4vHAz3YPFhnsbTNf1yQQjLH+M5Uo
- OXqLzf5gHzn6AdqW8XuR1/rrWfkb/uHk9EUQGY2LRX0UxyL8a/o3ZgkYsQnhv4Ju5zmL
- 7jNg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=tNuHaL4H3S6bucnMs3XooL1lYsnSrUFWyPiwmMi9JW0=;
+ b=GeOZouZh2Cw0LRJ33B2cY8oWHwHgjKdAeeu0gm6Tau0XH8/S+2ixDawAyZ3P4DaAgy
+ QGMRPRrCMZXoSIYSML01OuXFVR+YTb7+8QiMaY7gDD5rQ908Q3ooGnPfzq1ycDajclSD
+ w9XnKZVgMu6QyjeOnYa0Gj1hExovHEe0Vh6bK2zgIB4OzSSrxF12K6ZL6QX7z/ZPJxDz
+ 5HYoxFUMl8cKCy2zb2ip/YpvhLqwj9rgcrJT8+QMm0wC3UCXNaYYwolshvkYcqlO7iYV
+ ujJZhkgJfZF4moXBoE7kG/EKnUnsseFaX9FahLmtod86R/0qO4EdzZ+1zXwKoO1Av272
+ B4Jw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=EAFSiyaZ
-Subject: [Buildroot] [PATCH 1/1] package/python-orjson: bump to version
- 3.9.10
+ header.a=rsa-sha256 header.s=20230601 header.b=GeOZouZh
+Subject: [Buildroot] [PATCH 1/1] package/python-mako: bump to version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,46 +93,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Graeme Smecher <gsmecher@threespeedlogic.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to year update:
+https://github.com/sqlalchemy/mako/commit/272f5d8cc97aee829e3b285486f33c9c8e604c74
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-orjson/python-orjson.hash | 2 +-
- package/python-orjson/python-orjson.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-mako/python-mako.hash | 6 +++---
+ package/python-mako/python-mako.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index 773fb14568..0e9b93f311 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index a010e8d8f6..03651cf956 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  048938fd9153f37eaf7a08b748de94ff87b2488dd3bd9f96c3ae784527a961b3  orjson-3.9.2.tar.gz
-+sha256  245a1ad9a8f926273787e91f7d7e14b4b357e263a215d8c96dd2039b3cddc238  orjson-3.9.10.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/mako/json
+-md5  651f365616611fcd4f2702a9002e2195  Mako-1.2.4.tar.gz
+-sha256  d60a3903dc3bb01a18ad6a89cdbe2e4eadc69c0bc8ef1e3773ba53d44c3f7a34  Mako-1.2.4.tar.gz
++md5  90da23903468efe9aa88dc88081579ff  Mako-1.3.0.tar.gz
++sha256  e3a9d388fd00e87043edbe8792f45880ac0114e9c4adc69f6e9bfb2c55e3b11b  Mako-1.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-index cf05b26262..a2e8a50468 100644
---- a/package/python-orjson/python-orjson.mk
-+++ b/package/python-orjson/python-orjson.mk
+-sha256  760f22b3e9ea4a50eb99201bd8dd118869f28108cfb64ccce6d1b305cf9ae9fa  LICENSE
++sha256  0a326e448dd22f220dd30796677ddbdf3ddaa6427a9744fea9deaa51d9d74fd9  LICENSE
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 313fbfcab2..1f7a0b0657 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ORJSON_VERSION = 3.9.2
-+PYTHON_ORJSON_VERSION = 3.9.10
- PYTHON_ORJSON_SOURCE = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
--PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/30/a4/96bcb52da0de9ccfcd99a60719b995c9b9c3aaa3a70701f0790ce856c10d
-+PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/72/75/642688bf5d99131fe8cf603f4ef9f26e4b1c6ed8f7f5c7e6fb31def54fb7
- PYTHON_ORJSON_SETUP_TYPE = maturin
- PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
- PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-PYTHON_MAKO_VERSION = 1.2.4
++PYTHON_MAKO_VERSION = 1.3.0
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/05/5f/2ba6e026d33a0e6ddc1dddf9958677f76f5f80c236bd65309d280b166d3e
++PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/a9/6e/6b41e654bbdcef90c6b9e7f280bf7cbd756dc2560ce76214f5cdbc4ddab5
+ PYTHON_MAKO_SETUP_TYPE = setuptools
+ PYTHON_MAKO_LICENSE = MIT
+ PYTHON_MAKO_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
