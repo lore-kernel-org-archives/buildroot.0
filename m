@@ -4,88 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A8A4C636BD
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 01:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A778C61DF4
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 01:38:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12A14402EB;
-	Sat, 25 Nov 2023 01:38:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12A14402EB
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB69640160;
+	Sat, 25 Nov 2023 01:38:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB69640160
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XxWm-OLZT61c; Sat, 25 Nov 2023 01:38:29 +0000 (UTC)
+	with ESMTP id lhU1pFT_ZCXs; Sat, 25 Nov 2023 01:38:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EAE2C40160;
-	Sat, 25 Nov 2023 01:38:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAE2C40160
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E6DD21BF3B5
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 01:38:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 754E540190;
+	Sat, 25 Nov 2023 01:38:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 754E540190
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EC4CA1BF3B5
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 01:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD855822DD
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 01:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD855822DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id B85E040103
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 01:38:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B85E040103
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jZWko7iW92uA for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 01:38:13 +0000 (UTC)
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E412B822DC
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 01:38:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E412B822DC
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-7b35b9645e1so82913339f.2
- for <buildroot@buildroot.org>; Fri, 24 Nov 2023 17:38:12 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tp4exzYP-9Rq for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 01:38:14 +0000 (UTC)
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6F40D401AD
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 01:38:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F40D401AD
+Received: by mail-il1-x129.google.com with SMTP id
+ e9e14a558f8ab-35c30eb9ad0so7558525ab.2
+ for <buildroot@buildroot.org>; Fri, 24 Nov 2023 17:38:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700876291; x=1701481091;
+ d=1e100.net; s=20230601; t=1700876293; x=1701481093;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Q/KvQ57MaXjpP1JX9o0NHJSy35CeysvwvfXiLb6+A60=;
- b=d42xhP0wUK/sj4ECZU4A2kTJSznIv47KVJ7IoT8b8pOsmzBjZoFJhcaid2BbCfo6+9
- 9eW9F1ZaYAm/WE9zFiIbK80wZRVATqs93nSFhdM4qkJ49chDf+RxzH1xKGP/nAcviRn3
- yDE939CrJbzF3esUD7AdcnazyxCUGYNsn2JW0VpXOX4yvQMEFqUMViFU0EvFwqOcgAH7
- VHfFqqzrUh5Nv1qK4ddsiCNnIhWy2G8P9v+LeXC5SsLQ211D/KZ/LzTB/jvPFM+FYvG6
- SXT6TIiyJL0T2PcfXGpQraXBCTGK3IbIMNoNVD5AfQXKlrINgo8eeSbbtjSt/tb7GB/c
- /Gzw==
-X-Gm-Message-State: AOJu0YwYL3eF/Xexl5LciIRgT5RuaNPkxlirqUzaOOPg345sTE0Outhc
- qHA1odDtpgU1PR18OnROqEEU8g633NQ=
-X-Google-Smtp-Source: AGHT+IG7cnNmbPLtljIMh7o6oHzqodNeUlop0QLbnXULRgUfD73EHy6ov2KvRu0WgiTwfe+SBmdAMw==
-X-Received: by 2002:a05:6602:168a:b0:798:d82b:7b02 with SMTP id
- s10-20020a056602168a00b00798d82b7b02mr6886318iow.4.1700876291511; 
- Fri, 24 Nov 2023 17:38:11 -0800 (PST)
+ bh=WuhnVccTSyueiYmK01zsvLXz2EnAupJJX2wcMymA2i0=;
+ b=cf7MI/phUdzuetETwkDY9FBr8QWmcX6pyO9QIX1f36Srvfpjk0I/u60lprhG5jlUsL
+ WauKLKgjCq4AfK3PLFCUELRl3ylcRna3NMPImXGoNdhoiMFwvKD85kCC3u7B4R6hll2J
+ PRFCOP/B8NhVV2197OoBd7VDjp7/yBp2GXsX3SWA4bDS8CHQUKUhohLpViOmyVFJgX7x
+ ddSElJ20+RwRFs5/WVWK8pF2RNLE9/PoBc3HDo16cWyZOdzjw+GtkFXGVDrpxB5y2vnE
+ 2D5Wz++iHZQbtnLb4GgegkC1hB27NT8dht9vHhFAt2cVbMY/sSI8v5xzUTCKILmvEIKh
+ X1VQ==
+X-Gm-Message-State: AOJu0Yx2vmyDzq5oYGaJUhkU83kqGAsx8kOdobvBWHakHMz9dpwU3vhh
+ pveuamqSAOfgxHFYnfnfEN6oigluIgM=
+X-Google-Smtp-Source: AGHT+IFfEyDCX9VWlxuzbSS49a8ExlTOzXeW0QSOwXDSBuEWhp8dkawPwOR1vS0+P4qR6FyOwd7Cog==
+X-Received: by 2002:a05:6602:254c:b0:7b3:70c5:a60 with SMTP id
+ cg12-20020a056602254c00b007b370c50a60mr128545iob.14.1700876293094; 
+ Fri, 24 Nov 2023 17:38:13 -0800 (PST)
 Received: from james-x399.localdomain (97-118-243-253.hlrn.qwest.net.
  [97.118.243.253]) by smtp.gmail.com with ESMTPSA id
- g1-20020a028501000000b004645642818esm1139552jai.35.2023.11.24.17.38.10
+ g1-20020a028501000000b004645642818esm1139552jai.35.2023.11.24.17.38.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Nov 2023 17:38:10 -0800 (PST)
+ Fri, 24 Nov 2023 17:38:11 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Nov 2023 18:38:05 -0700
-Message-Id: <20231125013807.213822-2-james.hilliard1@gmail.com>
+Date: Fri, 24 Nov 2023 18:38:06 -0700
+Message-Id: <20231125013807.213822-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231125013807.213822-1-james.hilliard1@gmail.com>
 References: <20231125013807.213822-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700876291; x=1701481091; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1700876293; x=1701481093; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Q/KvQ57MaXjpP1JX9o0NHJSy35CeysvwvfXiLb6+A60=;
- b=G/DGCpOfff5kH6xSQfHF6Fnn8jCqbJj5GxykpYCAkru2jZQcOdczFUywV/CZ/F5SIJ
- RZDsp82uuS57ONoidSphJ1nICj6GbXAjNt4bdKXcldCzfmfH1jj5Sqxb4kzqBY95A0ix
- jLKoYarInnBsh/TjcSNPwU88DvvTUO9B0UGP7o7jPgKVmnM9fRGB+f17UoFqTzNQLP1f
- /6/CaGK9ppISxQZWBkX55CiCt9L55YOzXgIK433B4jWKj/svHCuT3hR2lgtxzvLzm+Gg
- Mz8QnOfTdvLisJEJMsq9P5D0rGFusZY4mCMoNc8DSHLXBkNPGHKjuOImSd2lgcaYwkK4
- /LAQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=WuhnVccTSyueiYmK01zsvLXz2EnAupJJX2wcMymA2i0=;
+ b=PB9hF2V3o1V4RLYc3lKdXbte9vtNOAJBUc5ugu+12w4UPUMpJuOfuourTfQzIyAxaN
+ i1Ai9sQUcksJI5fHnOIGh77dGyQXjHSa3ooOkuiopCSJ7iNcmAJW6VY7d44VI/wcvCoW
+ Nu9Zo0KD5rJqVcYgqW+3VUUZnxfajdqRBlNhyWzAId3Wu0zirV7C0sVtTP22jHq0cNwH
+ F7JjvTXeTxLMNM2hD/sSY6nhjf8hYbtpObie3foRMnSeOnntrPzk7j2gBIxSN7wnL3td
+ 16oNGbzfbB8px6WC3klH4dh9bMaDsTcjL1vM6tQ96VOJrQ4O7DbIm6jlhpyKihAkeD+q
+ YvRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=G/DGCpOf
-Subject: [Buildroot] [PATCH 2/4] package/python-meson-python: new host
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=PB9hF2V3
+Subject: [Buildroot] [PATCH 3/4] package/python-contourpy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,47 +107,72 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../python-meson-python.hash                   |  5 +++++
- .../python-meson-python/python-meson-python.mk | 18 ++++++++++++++++++
- 2 files changed, 23 insertions(+)
- create mode 100644 package/python-meson-python/python-meson-python.hash
- create mode 100644 package/python-meson-python/python-meson-python.mk
+ package/Config.in                              |  1 +
+ package/python-contourpy/Config.in             |  8 ++++++++
+ package/python-contourpy/python-contourpy.hash |  5 +++++
+ package/python-contourpy/python-contourpy.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-contourpy/Config.in
+ create mode 100644 package/python-contourpy/python-contourpy.hash
+ create mode 100644 package/python-contourpy/python-contourpy.mk
 
-diff --git a/package/python-meson-python/python-meson-python.hash b/package/python-meson-python/python-meson-python.hash
+diff --git a/package/Config.in b/package/Config.in
+index 5a3410d758..5d0d6492c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1029,6 +1029,7 @@ menu "External python modules"
+ 	source "package/python-configshell-fb/Config.in"
+ 	source "package/python-constantly/Config.in"
+ 	source "package/python-construct/Config.in"
++	source "package/python-contourpy/Config.in"
+ 	source "package/python-couchdb/Config.in"
+ 	source "package/python-crayons/Config.in"
+ 	source "package/python-crc16/Config.in"
+diff --git a/package/python-contourpy/Config.in b/package/python-contourpy/Config.in
 new file mode 100644
-index 0000000000..537353bad2
+index 0000000000..4843884a97
 --- /dev/null
-+++ b/package/python-meson-python/python-meson-python.hash
++++ b/package/python-contourpy/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_CONTOURPY
++	bool "python-contourpy"
++	select BR2_PACKAGE_PYTHON_PYBIND
++	help
++	  Python library for calculating contours of 2D quadrilateral
++	  grids.
++
++	  https://github.com/contourpy/contourpy
+diff --git a/package/python-contourpy/python-contourpy.hash b/package/python-contourpy/python-contourpy.hash
+new file mode 100644
+index 0000000000..8f23d107ae
+--- /dev/null
++++ b/package/python-contourpy/python-contourpy.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/meson-python/json
-+md5  e91eb9946d7bb8be06e434c5a2dadd05  meson_python-0.15.0.tar.gz
-+sha256  fddb73eecd49e89c1c41c87937cd89c2d0b65a1c63ba28238681d4bd9484d26f  meson_python-0.15.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/contourpy/json
++md5  cae5b781ade023c01bc1a8a53312f2ac  contourpy-1.1.0.tar.gz
++sha256  e53046c3863828d21d531cc3b53786e6580eb1ba02477e8681009b6aa0870b21  contourpy-1.1.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  8f82ea9ef9a55b47f4170536d02e48b5bc33fc5135e5b4a1b5f8d6404833ec9b  LICENSE
-diff --git a/package/python-meson-python/python-meson-python.mk b/package/python-meson-python/python-meson-python.mk
++sha256  c2522156ba7d4dfbbec266dfea98bf76a69bc41edb18cad323177fad6b19b35f  LICENSE
+diff --git a/package/python-contourpy/python-contourpy.mk b/package/python-contourpy/python-contourpy.mk
 new file mode 100644
-index 0000000000..64d5de4ba9
+index 0000000000..f305793cb2
 --- /dev/null
-+++ b/package/python-meson-python/python-meson-python.mk
-@@ -0,0 +1,18 @@
++++ b/package/python-contourpy/python-contourpy.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-meson-python
++# python-contourpy
 +#
 +################################################################################
 +
-+PYTHON_MESON_PYTHON_VERSION = 0.15.0
-+PYTHON_MESON_PYTHON_SOURCE = meson_python-$(PYTHON_MESON_PYTHON_VERSION).tar.gz
-+PYTHON_MESON_PYTHON_SITE = https://files.pythonhosted.org/packages/a2/3b/276b596824a0820987fdcc7721618453b4f9a8305fe20b611a00ac3f948e
-+PYTHON_MESON_PYTHON_SETUP_TYPE = pep517
-+PYTHON_MESON_PYTHON_LICENSE = MIT
-+PYTHON_MESON_PYTHON_LICENSE_FILES = LICENSE
-+HOST_PYTHON_MESON_PYTHON_DEPENDENCIES = \
-+	host-meson \
-+	host-patchelf \
-+	host-python-pyproject-metadata
++PYTHON_CONTOURPY_VERSION = 1.1.0
++PYTHON_CONTOURPY_SOURCE = contourpy-$(PYTHON_CONTOURPY_VERSION).tar.gz
++PYTHON_CONTOURPY_SITE = https://files.pythonhosted.org/packages/a7/3b/632c003e1dfbc82d32c0466762f2d2cf139d26032626dc65944e38d0e5b9
++PYTHON_CONTOURPY_LICENSE = BSD-3-Clause
++PYTHON_CONTOURPY_LICENSE_FILES = LICENSE
++PYTHON_CONTOURPY_DEPENDENCIES = python-pybind host-python-meson-python
 +
-+$(eval $(host-python-package))
++$(eval $(meson-package))
 -- 
 2.34.1
 
