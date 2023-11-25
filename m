@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 341F0C61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:33:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34EB2C61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:33:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB65040350;
-	Sat, 25 Nov 2023 11:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB65040350
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5F2C40459;
+	Sat, 25 Nov 2023 11:33:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5F2C40459
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qiDeWAejVMdi; Sat, 25 Nov 2023 11:33:34 +0000 (UTC)
+	with ESMTP id fOnPcwne3a8R; Sat, 25 Nov 2023 11:33:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC0414031F;
-	Sat, 25 Nov 2023 11:33:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC0414031F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0FBE71BF27C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A8B140426;
+	Sat, 25 Nov 2023 11:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A8B140426
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AE081BF27C
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9416B40236
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B1C28216D
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9416B40236
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B1C28216D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wi80rlGlSkSV for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3aK_a5xrHviX for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7086540320
+ by smtp1.osuosl.org (Postfix) with ESMTP id 930998214A
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7086540320
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 930998214A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6AED786C3D; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
+ id 80AD786C58; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:25:13 +0100
+Date: Sat, 25 Nov 2023 12:25:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 47d43fe906c4f0ce5eed14ee1affd846fbae4be2
-X-Git-Newrev: 35744a2c0265d88f1264629f041e1676a0e99f32
+X-Git-Oldrev: 96980b4738c5adada09e39abac4c3087954cf1ce
+X-Git-Newrev: 58a920e5fb364543dad9a4b328aa4ddaa3bdfa0b
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113128.6AED786C3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-periphery: bump
- to version 2.4.1
+Message-Id: <20231125113128.80AD786C58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pip: bump to
+ version 23.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35744a2c0265d88f1264629f041e1676a0e99f32
+commit: https://git.buildroot.net/buildroot/commit/?id=58a920e5fb364543dad9a4b328aa4ddaa3bdfa0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-License hash changed due to year update:
-https://github.com/vsergeev/python-periphery/commit/c0e6741ee294fb9362ddc4b60088f18bb1c27f8d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-periphery/python-periphery.hash | 8 +++++---
- package/python-periphery/python-periphery.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-pip/python-pip.hash | 4 ++--
+ package/python-pip/python-pip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
-index 24e104d3ad..a758fa7a4d 100644
---- a/package/python-periphery/python-periphery.hash
-+++ b/package/python-periphery/python-periphery.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
--sha256  385716bdbd11fcf2c5728548c3d42f12ebc0974faa64fa1a98b89b4a44dc004c  python-periphery-2.3.0.tar.gz
--sha256  76fe342043adfe8d9453c4979aa165476875137e15b0ddea1f4c3f3fa9808361  LICENSE
-+# md5, sha256 from https://pypi.org/pypi/python-periphery/json
-+md5  2b2a1037fb4ac15e7b0514ce3659d26c  python-periphery-2.4.1.tar.gz
-+sha256  61d461d736982a6f766e878720ab10a68151e2e8c1086600d9389ac47e40e88a  python-periphery-2.4.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  321124461e9f86f4f7bb9f571500bf58ec1b76206b642e505ce17db7f7c88e05  LICENSE
-diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
-index 2c533fa2c2..7a49f305a5 100644
---- a/package/python-periphery/python-periphery.mk
-+++ b/package/python-periphery/python-periphery.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index b41ce47d4c..9518c9d8b8 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5  996f58a94fe0b8b82b6795c42bd171ba  pip-22.3.1.tar.gz
+-sha256  65fd48317359f3af8e593943e6ae1506b66325085ea64b706a998c6e83eeaf38  pip-22.3.1.tar.gz
++md5  f0c9fba61e9d9badcc9921062e993d84  pip-23.3.1.tar.gz
++sha256  1fcaa041308d01f14575f6d0d2ea4b75a3e2871fe4f9c694976f908768e14174  pip-23.3.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index 040767930e..83a1631a2f 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PERIPHERY_VERSION = 2.3.0
--PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
-+PYTHON_PERIPHERY_VERSION = 2.4.1
-+PYTHON_PERIPHERY_SITE = https://files.pythonhosted.org/packages/df/f1/1a986ad2bb696033168db2121151e5ff90df033af780ffca47c8bb559f29
- PYTHON_PERIPHERY_LICENSE = MIT
- PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
- PYTHON_PERIPHERY_SETUP_TYPE = setuptools
+-PYTHON_PIP_VERSION = 22.3.1
++PYTHON_PIP_VERSION = 23.3.1
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/a3/50/c4d2727b99052780aad92c7297465af5fe6eec2dbae490aa9763273ffdc1
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/1f/7f/4da15e07ccd11c84c1ccc8f6e24288d5e76c99441bf80e315b33542db951
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
