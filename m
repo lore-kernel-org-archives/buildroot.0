@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEBFCC61DF4
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:36:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 357FDC61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C34340527;
-	Sat, 25 Nov 2023 11:36:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C34340527
+	by smtp2.osuosl.org (Postfix) with ESMTP id D2A9A4050C;
+	Sat, 25 Nov 2023 11:36:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2A9A4050C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SF7v1nQY7eRd; Sat, 25 Nov 2023 11:36:06 +0000 (UTC)
+	with ESMTP id 56LI7e_8XnhL; Sat, 25 Nov 2023 11:36:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5BD9E40350;
-	Sat, 25 Nov 2023 11:36:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BD9E40350
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 81A9F1BF27C
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E62B04051C;
+	Sat, 25 Nov 2023 11:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E62B04051C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5ACEE1BF27C
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 137B48215E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 988A840342
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 137B48215E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 988A840342
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wJwD3mLlNFJO for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id om9r0b17WKYB for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B25A82169
+ by smtp2.osuosl.org (Postfix) with ESMTP id 03B0E40370
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B25A82169
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03B0E40370
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0813A86C58; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
+ id 011CD86BCA; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:26:45 +0100
+Date: Sat, 25 Nov 2023 12:26:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 618ad13422197e3ad18893bc034a11d4b4d0f6c6
-X-Git-Newrev: 20af13d17f404c9d56d7274046358c2242524248
+X-Git-Oldrev: 66f94d372fce75240cceadeb1bdc738297cfb8fc
+X-Git-Newrev: 618ad13422197e3ad18893bc034a11d4b4d0f6c6
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113129.0813A86C58@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pydyf: bump to
- version 0.8.0
+Message-Id: <20231125113129.011CD86BCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pydal: bump to
+ version 20231114.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20af13d17f404c9d56d7274046358c2242524248
+commit: https://git.buildroot.net/buildroot/commit/?id=618ad13422197e3ad18893bc034a11d4b4d0f6c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pydyf/python-pydyf.hash | 4 ++--
- package/python-pydyf/python-pydyf.mk   | 4 ++--
+ package/python-pydal/python-pydal.hash | 4 ++--
+ package/python-pydal/python-pydal.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pydyf/python-pydyf.hash b/package/python-pydyf/python-pydyf.hash
-index 4e52429dfe..b2dac04516 100644
---- a/package/python-pydyf/python-pydyf.hash
-+++ b/package/python-pydyf/python-pydyf.hash
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index 8ed25084d1..9f2ab55508 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydyf/json
--md5  52a772655c1398e7b60d22e930e13094  pydyf-0.7.0.tar.gz
--sha256  a5a88cb06e5beb64a1ef2147ee879b0e5139f5fdb827fda2fcf14a018c7b11e6  pydyf-0.7.0.tar.gz
-+md5  a3650927d9a84da1dc0aa1d268f21376  pydyf-0.8.0.tar.gz
-+sha256  b22b1ef016141b54941ad66ed4e036a7bdff39c0b360993b283875c3f854dd9a  pydyf-0.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pydal/json
+-md5  47f0425745bcd1bb413aa9208cd06b3c  pydal-20230521.1.tar.gz
+-sha256  10478a61e627c5b8cb7691f7f7ebf7210845485316493d37d740c297fb6d1845  pydal-20230521.1.tar.gz
++md5  b2072b7b000223890b56830ca1ab3616  pydal-20231114.3.tar.gz
++sha256  c42d16fca9e3bb6d399aefb2434c0e70862ee13c75437852f421920432ee5fb1  pydal-20231114.3.tar.gz
  # Locally computed sha256 checksums
- sha256  75461e438973e1ba0f93a7de9e3fe5b2f49e1ab49251d392878a9cdae8ce7e47  LICENSE
-diff --git a/package/python-pydyf/python-pydyf.mk b/package/python-pydyf/python-pydyf.mk
-index d941a00a9f..e9b7d229c7 100644
---- a/package/python-pydyf/python-pydyf.mk
-+++ b/package/python-pydyf/python-pydyf.mk
+ sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index 1cc7e90b11..245383f244 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDYF_VERSION = 0.7.0
-+PYTHON_PYDYF_VERSION = 0.8.0
- PYTHON_PYDYF_SOURCE = pydyf-$(PYTHON_PYDYF_VERSION).tar.gz
--PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/28/ec/b6b327f2a249a83022501b2f57844ca05b2b26e0cadf28648ea5c0f72aa6
-+PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/18/dc/b607bbc7c15327c5d5ec25681a3707c847906134925d21a26ec6e7416a4a
- PYTHON_PYDYF_SETUP_TYPE = flit
- PYTHON_PYDYF_LICENSE = BSD-3-Clause
- PYTHON_PYDYF_LICENSE_FILES = LICENSE
+-PYTHON_PYDAL_VERSION = 20230521.1
++PYTHON_PYDAL_VERSION = 20231114.3
+ PYTHON_PYDAL_SOURCE = pydal-$(PYTHON_PYDAL_VERSION).tar.gz
+-PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/68/b4/15dc227f965cc0525ca7f432368706cc4087ad6d587a5a05b251d133023e
++PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/0b/3b/86302e165af07bc3d9225aea6ed8f52386270220e4aac1aad0101a48aac1
+ PYTHON_PYDAL_LICENSE = BSD-3-Clause
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYDAL_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
