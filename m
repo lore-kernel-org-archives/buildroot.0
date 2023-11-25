@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC28C61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85C9DC61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A81E4048D;
-	Sat, 25 Nov 2023 11:34:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A81E4048D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 320784048D;
+	Sat, 25 Nov 2023 11:34:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 320784048D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WN0UstJClwSF; Sat, 25 Nov 2023 11:34:44 +0000 (UTC)
+	with ESMTP id C63Oa46Ut7jv; Sat, 25 Nov 2023 11:34:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58A304032A;
-	Sat, 25 Nov 2023 11:34:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58A304032A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5E5C31BF27C
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E547C40459;
+	Sat, 25 Nov 2023 11:34:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E547C40459
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BBAD1BF27C
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5F998214A
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5F998214A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FD6840220
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FD6840220
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nlq2NZAAnAWA for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l6wkMGcw4gZo for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B09F08214D
+ by smtp2.osuosl.org (Postfix) with ESMTP id A802C40350
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B09F08214D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A802C40350
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A1D4086C44; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
+ id 971E486C3D; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:25:48 +0100
+Date: Sat, 25 Nov 2023 12:25:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7748d228e66c70d570acea07e4ff749ec3146279
-X-Git-Newrev: 778fddf9e2020bce64df78c7f86edcd4b62e80cb
+X-Git-Oldrev: 90eeb059105d51b7f57e57a9180e7f6156520712
+X-Git-Newrev: 7748d228e66c70d570acea07e4ff749ec3146279
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113128.A1D4086C44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-psutil: bump to
- version 5.9.6
+Message-Id: <20231125113128.971E486C3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-prompt-toolkit:
+ bump to version 3.0.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=778fddf9e2020bce64df78c7f86edcd4b62e80cb
+commit: https://git.buildroot.net/buildroot/commit/?id=7748d228e66c70d570acea07e4ff749ec3146279
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-License hash changed due to quote removal:
-https://github.com/giampaolo/psutil/commit/bea3cf2d16899251b4b5f6b2609db9881645ea2d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-psutil/python-psutil.hash | 6 +++---
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-prompt-toolkit/python-prompt-toolkit.hash | 4 ++--
+ package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 15927562b1..f388118663 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+index 62ba0c3cfe..54130f3ae0 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psutil/json
--md5  f72751d05b781757b7cd9bc375d2e351  psutil-5.9.4.tar.gz
--sha256  3d7f9739eb435d4b1338944abe23f49584bde5395f27487d2ee25ad9a8774a62  psutil-5.9.4.tar.gz
-+md5  eec35090e7474e471a12f0dd16c981f9  psutil-5.9.6.tar.gz
-+sha256  e4b92ddcd7dd4cdd3f900180ea1e104932c7bce234fb88976e2a3b296441225a  psutil-5.9.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/prompt-toolkit/json
+-md5  5a2bb559c0bcbc617f507a320c64ba03  prompt_toolkit-3.0.36.tar.gz
+-sha256  3e163f254bef5a03b146397d7c1963bd3e2812f0964bb9a24e6ec761fd28db63  prompt_toolkit-3.0.36.tar.gz
++md5  252a5d200e41d46b65a3076d2bc0a4bd  prompt_toolkit-3.0.41.tar.gz
++sha256  941367d97fc815548822aa26c2a269fdc4eb21e9ec05fc5d447cf09bad5d75f0  prompt_toolkit-3.0.41.tar.gz
  # Locally computed sha256 checksums
--sha256  24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
-+sha256  b89c063b3786e28e0c0a38f1931db61fed35e69dd2a2966fbecffee0f46c8d10  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index e764d1accc..ece1039a51 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
+ sha256  303574d9bdd85c757d6025017942bf17baeedf2778f62bd7f425d07d880f4c4a  LICENSE
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
+index 426fa41e0b..db40f6c7eb 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PSUTIL_VERSION = 5.9.4
-+PYTHON_PSUTIL_VERSION = 5.9.6
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/3d/7d/d05864a69e452f003c0d77e728e155a89a2a26b09e64860ddd70ad64fb26
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/2d/01/beb7331fc6c8d1c49dd051e3611379bfe379e915c808e1301506027fce9d
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+-PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.36
++PYTHON_PROMPT_TOOLKIT_VERSION = 3.0.41
+ PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
+-PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/fb/93/180be2342f89f16543ec4eb3f25083b5b84eba5378f68efff05409fb39a9
++PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/d9/7b/7d88d94427e1e179e0a62818e68335cf969af5ca38033c0ca02237ab6ee7
+ PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
+ PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3-Clause
+ PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
