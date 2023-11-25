@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08140C61D97
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 00:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20C49C61D97
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 01:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 83A634004A;
-	Sat, 25 Nov 2023 00:24:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83A634004A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8038A420A6;
+	Sat, 25 Nov 2023 01:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8038A420A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ACR6Jsy2Ysgg; Sat, 25 Nov 2023 00:24:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KQiZmX7vlMUB; Sat, 25 Nov 2023 01:01:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 854E6400D1;
-	Sat, 25 Nov 2023 00:24:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 854E6400D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD8EF42073;
+	Sat, 25 Nov 2023 01:01:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD8EF42073
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1CB161BF29F
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 00:24:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E80B61BF29F
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 01:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9F8661521
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 00:24:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9F8661521
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE48960B90
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 01:01:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE48960B90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tUfysmWNHSc2 for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 00:24:49 +0000 (UTC)
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 03E7861520
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 00:24:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03E7861520
-Received: from [192.168.50.221] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id 6gTVrI6wxsbav6gTVrUtIN; Sat, 25 Nov 2023 01:24:46 +0100
-Message-ID: <1c744e50-01e2-4e78-94b1-62b6ebfd992d@benettiengineering.com>
-Date: Sat, 25 Nov 2023 01:24:45 +0100
+ with ESMTP id HceORIMqc65K for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 01:01:20 +0000 (UTC)
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
+ [IPv6:2607:f8b0:4864:20::62f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D9D460AC6
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 01:01:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D9D460AC6
+Received: by mail-pl1-x62f.google.com with SMTP id
+ d9443c01a7336-1cf8b35a6dbso17524315ad.0
+ for <buildroot@buildroot.org>; Fri, 24 Nov 2023 17:01:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1700874079; x=1701478879;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ACX/CdjmZNCaDgVxIcSlnskNuBBKskIysheDr3sLn7U=;
+ b=KUQE1jdnFaPLJ+OufLKdjwri05+JJmi2RS+m7XtWsl3WFxbsKypmeuRqSg35iIqwiH
+ 7mp9hsbDH6H1W40kqRjtAJ44T3oQQFSrz8m4dxJXKSNzjQP97UqGWqaJv3bmb372xiBp
+ 4xcU7qJpsOOYptL7vgf4T7xyALkuy7a9B+rjjKDrnpTRmfQOLP+MmCoCawgqKPNFv0PI
+ n0fpdUzM8euIq0dxxFL3GGFhwfqKX74lT7Nlvek6p2ZEviPoABaVT2a8zUWEevxYE5ie
+ ouPGa9zZ4ZBmz2oJAo7kCACgxoC7GC/qfvIKDVnNloN1k3bvELeBM91hHJpizdmidUz/
+ mTDw==
+X-Gm-Message-State: AOJu0Yyha6Fxyo7O2vrGDblVSAy1Ip7LPA+khVIMpmPdUAsFt0/3fstU
+ Zl+qTfqIO2/LEOjdkvKyWRYmWNBQta65svZ77mk=
+X-Google-Smtp-Source: AGHT+IEgq3G7oTaX9tWjW2p8SbnmePCTDym7fRjYlHMfriSS1uqgqVJfwOuAYn75zF7gRKKNqYazqQ==
+X-Received: by 2002:a17:902:d303:b0:1cc:2f70:4865 with SMTP id
+ b3-20020a170902d30300b001cc2f704865mr4796980plc.26.1700874078529; 
+ Fri, 24 Nov 2023 17:01:18 -0800 (PST)
+Received: from DESKTOP-OI0KN2B.lan ([172.56.200.138])
+ by smtp.gmail.com with ESMTPSA id
+ jk2-20020a170903330200b001b8b1f6619asm3807749plb.75.2023.11.24.17.01.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 24 Nov 2023 17:01:17 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Fri, 24 Nov 2023 18:01:09 -0700
+Message-ID: <20231125010113.1758786-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20231123173957.2385041-1-giulio.benetti@benettiengineering.com>
- <20231124225923.59d08949@windsurf>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20231124225923.59d08949@windsurf>
-X-CMAE-Envelope: MS4xfBS+kDhgXKMwzzBWnUfdyzQcnlqgn/aOr1dJsT3nl0EbYK+c4OVCqTiWPYjktYfh/65qogYo6vXR7ZiXPIGX/WoNz2JGLhAl3HbekhcfnMtwFGir767x
- WssQBppCg7hZ3XfXLwbEol/BTEmEfZHDreub/Ygu3B7resk8TmqnU8jlxWI03ydUIgGi/SWVKv/YYh8q4oU7jSDf8NTb0ZNtYgsMYICe3m4P3ib8/q35SaXw
- Go5nDuVBV9VlAh1YkbXcBhUF0z0AYM3dV83/vU79md11+7D30CmveypHQf/hGXt7SRHmtHxlS6Suhj6+li97KYzHbeePILWm5DN2C7GSooN/Z9OoshOZnUwY
- ytgM0mSqilgk7Yceh+N0+Irk+WsEzOuAsx5XW1WXSaNdwQVoeCHfcMNFMMtBCW8X//AvRXtA
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1700871886; bh=absuGI79ukkIjZ3CndwGIZPkAbYwRcv6jxEa9M87OY4=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=X9sK/FNSnTWCnpJTNn0hUqK8fdomNIae5VrvQplGeClI7x4KSLqxApCfJrmlBVovI
- I8WTzhevWpueuH16AeS2pnu7G/RQepxRzDvNnsuZslkhsGZGo5nTOcGenBNZaK+Ckg
- 8MRTe/kPw9kvVdNWiKHd1eFRUv3pnCYMc9rcceiQqepQDUxPAUcaXweWmZ+qH/3c0x
- d7E/I1CjqoQWxTdo3YrVs/t51EJv2yC57o0plPYDB5qOEiVsY38CLhGdV5+88nUu59
- JH8M//FenFlnbRNJmpOgZ1XbD1ZoI7bNg5EczxqbupFHIwNF7DCUGRSH9iTjS5llbz
- kJidKxr2S22vA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1700874079; x=1701478879;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ACX/CdjmZNCaDgVxIcSlnskNuBBKskIysheDr3sLn7U=;
+ b=lTmrd5sB6Vb1IRDemPY+dtItcF0wIBOp5Xqwzx29D2l0XmubgJVoil/PfkemZBRTo2
+ T5iSrbtsKUB0sSgKnQHAHmNliS/ENS256Zxx/o//j3Re3WgGICDurfPhdDptSd+MeqGd
+ t9QNNdScFtqP9japSEV09uMojgcC3JtwUedik=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=X9sK/FNS
-Subject: Re: [Buildroot] [PATCH] package/swupdate: workaround runtime update
- failure
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=lTmrd5sB
+Subject: [Buildroot] [PATCH/next v2 1/5] package/Config.in: move
+ flutter-gallery
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,53 +93,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>,
- James Autry <jautry@tekvox.com>, Jim Reinhart <jimr@tekvox.com>,
- Matthew Maron <matthewm@tekvox.com>, buildroot@buildroot.org
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+This is a graphic application not a graphic library
 
-On 24/11/23 22:59, Thomas Petazzoni wrote:
-> On Thu, 23 Nov 2023 18:39:57 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> +SWUPDATE_CFLAGS = $(TARGET_CFLAGS)
->> +
->> +# Workaround update failure showing up with -Os
->> +# Reported here:
->> +# https://groups.google.com/g/swupdate/c/oHMihNw8ZHA
->> +ifeq ($(BR2_OPTIMIZE_S),y)
->> +SWUPDATE_CFLAGS += -O3
->> +endif
-> 
-> This looks really horrible to me.
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You're right,
-
-> Is there a compiler bug? Or a bug in
-> the swupdate code base, such as some undefined behavior that causes an
-> incorrect behavior when built -Os, but not -O3 ?
-
-An undefined behavior showing up when built with -Os, but I'm currently
-trying to work it out and also to give a test case to SWUpdate
-Maintainer using qemu-arm.
-
-So I think it's better I get to the root cause, I fix it and later
-provide a local patch to fix the problem.
-
-I've already set the patch as Rejected on Patchwork, sorry for the
-noise.
-
-Best regards
+diff --git a/package/Config.in b/package/Config.in
+index 5a3410d758..c971127759 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -313,6 +313,7 @@ menu "Graphic libraries and applications (graphic/text)"
+ comment "Graphic applications"
+ 	source "package/cage/Config.in"
+ 	source "package/cog/Config.in"
++	source "package/flutter-gallery/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/ghostscript/Config.in"
+ 	source "package/glmark2/Config.in"
+@@ -345,7 +346,6 @@ comment "Graphic libraries"
+ 	source "package/fbset/Config.in"
+ 	source "package/fbterm/Config.in"
+ 	source "package/fbv/Config.in"
+-	source "package/flutter-gallery/Config.in"
+ 	source "package/flutter-pi/Config.in"
+ 	source "package/freerdp/Config.in"
+ 	source "package/graphicsmagick/Config.in"
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-
-> Thomas
+2.42.0
 
 _______________________________________________
 buildroot mailing list
