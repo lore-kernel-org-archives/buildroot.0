@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A369C4167B
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 21:06:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DCDBC4167B
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 21:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B09BB8130E;
-	Sat, 25 Nov 2023 21:06:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B09BB8130E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 147BF81237;
+	Sat, 25 Nov 2023 21:07:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 147BF81237
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qpK0pNZbDBwq; Sat, 25 Nov 2023 21:06:48 +0000 (UTC)
+	with ESMTP id l8Xd-VmtohYL; Sat, 25 Nov 2023 21:07:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE42281441;
-	Sat, 25 Nov 2023 21:06:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE42281441
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D70211BF473
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:05:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 685C4813DD;
+	Sat, 25 Nov 2023 21:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 685C4813DD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A51C1BF863
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:05:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4027408B5
+ by smtp1.osuosl.org (Postfix) with ESMTP id C4C9A80F54
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:05:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4027408B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4C9A80F54
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OcLE5LlBO0e7 for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sUb7bX9OZr7W for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 21:05:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB3DC4086F
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8D3781237
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB3DC4086F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8D3781237
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97FD2873A8; Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
+ id D7934873A8; Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 22:02:17 +0100
+Date: Sat, 25 Nov 2023 22:03:15 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b28b95d1e4087e7569522565a8327f45f39e11de
-X-Git-Newrev: 906a9fb98972683c8db3820c073ddaa0a0218212
+X-Git-Oldrev: 6b915358babe37a721b4f6e032ec884174bd6e0b
+X-Git-Newrev: bfafe9b3e9c5a5ae7767c534dccca2d14e50b41c
 X-Patchwork-Hint: ignore
-Message-Id: <20231125210555.97FD2873A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-flit-core:
- instantiate _INSTALL_CMDS
+Message-Id: <20231125210555.D7934873A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/manual: remove references
+ to PKG_PYTHON_*_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,61 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=906a9fb98972683c8db3820c073ddaa0a0218212
+commit: https://git.buildroot.net/buildroot/commit/?id=bfafe9b3e9c5a5ae7767c534dccca2d14e50b41c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-host-python-flit-core is the only package that overrides
-_BASE_INSTALL_CMD. Since we're going to remove that variable in a
-follow-up patch, we no longer will be able to do that.
-
-Since host-python-flit-core is really a special case, it makes sense to
-define HOST_PYTHON_FLIT_CORE_INSTALL_CMDS in its entirety.
-
-While we're at it, also instantiate
-HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS directly there. This
-variable is not used anywhere else, and it's a bit confusing to have it
-in pkg-python.mk - it looks like a mistake.
+These variables were removed. In addition, the text describing them
+wasn't terribly useful. Just remove the sentences describing them.
 
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-python.mk                        | 3 ---
- package/python-flit-core/python-flit-core.mk | 9 +++++++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ docs/manual/adding-packages-python.adoc | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 5f8ef14262..be9756acc4 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -177,9 +177,6 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
- 	--scripts=$(HOST_DIR)/bin \
- 	--data=$(HOST_DIR)
+diff --git a/docs/manual/adding-packages-python.adoc b/docs/manual/adding-packages-python.adoc
+index 500967f235..33dbfc30a5 100644
+--- a/docs/manual/adding-packages-python.adoc
++++ b/docs/manual/adding-packages-python.adoc
+@@ -135,25 +135,13 @@ therefore only use a few of them, or none.
+   makes sense to use for distutils/setuptools based packages as
+   flit/pep517 based packages do not pass these options to a +setup.py+
+   script but instead pass them to +support/scripts/pyinstaller.py+.
+-  For target distutils packages, the +PKG_PYTHON_DISTUTILS_BUILD_OPTS+
+-  options are already passed automatically by the infrastructure.
  
--HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
--	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
--
- # Target flit packages
- PKG_PYTHON_FLIT_ENV = \
- 	$(PKG_PYTHON_PEP517_ENV)
-diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
-index ea887a0258..34e58d03ca 100644
---- a/package/python-flit-core/python-flit-core.mk
-+++ b/package/python-flit-core/python-flit-core.mk
-@@ -13,7 +13,12 @@ PYTHON_FLIT_CORE_SETUP_TYPE = flit-bootstrap
+ * +PYTHON_FOO_INSTALL_TARGET_OPTS+, +PYTHON_FOO_INSTALL_STAGING_OPTS+,
+   +HOST_PYTHON_FOO_INSTALL_OPTS+ to specify additional options to pass
+   to the Python +setup.py+ script (for distutils/setuptools packages)
+   or +support/scripts/pyinstaller.py+ (for flit/pep517 packages) during
+   the target installation step, the staging installation step or the
+-  host installation, respectively. Note that the infrastructure is
+-  automatically passing some options, defined in
+-  +PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS+ or
+-  +PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS+ (for target distutils
+-  packages), +HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS+ (for host
+-  distutils packages), +PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS+ or
+-  +PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS+ (for target setuptools
+-  packages), +HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS+ (for host
+-  setuptools packages) and +PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS+ or
+-  +PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS+ (for target flit/pep517
+-  packages).
++  host installation, respectively.
  
- # Use flit built in bootstrap_install for installing host-python-flit-core.
- # This is due to host-python-installer depending on host-python-flit-core.
--#
--HOST_PYTHON_FLIT_CORE_BASE_INSTALL_CMD = -m bootstrap_install dist/* $(HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS)
-+define HOST_PYTHON_FLIT_CORE_INSTALL_CMDS
-+	cd $($(PKG)_BUILDDIR)/; \
-+		$(HOST_PKG_PYTHON_FLIT_BOOTSTRAP_ENV) \
-+		$(HOST_DIR)/bin/python3 \
-+		-m bootstrap_install dist/* \
-+		--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+endef
- 
- $(eval $(host-python-package))
+ With the Python infrastructure, all the steps required to build and
+ install the packages are already defined, and they generally work well
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
