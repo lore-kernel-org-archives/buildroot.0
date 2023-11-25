@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 322CBC61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73B75C61DF4
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D472B40350;
-	Sat, 25 Nov 2023 11:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D472B40350
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0915A40012;
+	Sat, 25 Nov 2023 11:50:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0915A40012
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hQZ66QTXXmYH; Sat, 25 Nov 2023 11:36:33 +0000 (UTC)
+	with ESMTP id tvdAMueoyjL2; Sat, 25 Nov 2023 11:50:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A76924053E;
-	Sat, 25 Nov 2023 11:36:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A76924053E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4EAEB1BF27C
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C35EE40160;
+	Sat, 25 Nov 2023 11:50:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C35EE40160
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BE6881BF27C
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:50:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A910940350
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A910940350
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97CD941E27
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:50:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97CD941E27
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HIsFni-HrLlg for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IWc6ivv6yTIb for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 11:50:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0288A40352
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0288A40352
+ by smtp4.osuosl.org (Postfix) with ESMTP id A76FD41929
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:50:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A76FD41929
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E7A3486C3D; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
+ id 93BC186CF1; Sat, 25 Nov 2023 11:50:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:26:31 +0100
+Date: Sat, 25 Nov 2023 12:47:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ecc9da527794cf6a1b09e132412350376349d2d5
-X-Git-Newrev: 66f94d372fce75240cceadeb1bdc738297cfb8fc
+X-Git-Oldrev: efb5d3fbd888549cdd2370240bfb2969afed2bb4
+X-Git-Newrev: e241419490c80cb0b758dc017ffe8f7b95533890
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113128.E7A3486C3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pycryptodomex:
- bump to version 3.19.0
+Message-Id: <20231125115016.93BC186CF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/scanpypi: add flit
+ package support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66f94d372fce75240cceadeb1bdc738297cfb8fc
+commit: https://git.buildroot.net/buildroot/commit/?id=e241419490c80cb0b758dc017ffe8f7b95533890
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+These packages don't have a setup.py so we instead need to parse their
+pyproject.toml file.
+
+It is possible that such a package does not define a project_urls config
+item, so ensure we do not choke on it (None.get() would raise).
+
+Note that this currently doesn't handle flit package dependency
+resolution.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+[yann.morin.1998@free.fr:
+  - add sentence about the project_urls rewrite
+  - fix flake8 errors
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pycryptodomex/python-pycryptodomex.hash | 4 ++--
- package/python-pycryptodomex/python-pycryptodomex.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ utils/scanpypi | 94 +++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 90 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pycryptodomex/python-pycryptodomex.hash b/package/python-pycryptodomex/python-pycryptodomex.hash
-index 954f4a8938..2b74e03e76 100644
---- a/package/python-pycryptodomex/python-pycryptodomex.hash
-+++ b/package/python-pycryptodomex/python-pycryptodomex.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pycryptodomex/json
--md5  3b8d868cef13ea41cb3bfeab66a7707c  pycryptodomex-3.18.0.tar.gz
--sha256  3e3ecb5fe979e7c1bb0027e518340acf7ee60415d79295e5251d13c68dde576e  pycryptodomex-3.18.0.tar.gz
-+md5  0dc96e1ffb42c955d89c2ce3f3875c9c  pycryptodomex-3.19.0.tar.gz
-+sha256  af83a554b3f077564229865c45af0791be008ac6469ef0098152139e6bd4b5b6  pycryptodomex-3.19.0.tar.gz
- # Locally computed sha256 checksums
- sha256  4e04660d77c1c64e89d79537919fb8240fa21484a7e3db29f358b2c7f84ea073  LICENSE.rst
- sha256  8e563c767164faa0831a333b57d23d4311cf566eb1b15d93250f4606be4eb549  Doc/LEGAL/COPYRIGHT.pycrypto
-diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
-index d6eb2a9513..0d9855c602 100644
---- a/package/python-pycryptodomex/python-pycryptodomex.mk
-+++ b/package/python-pycryptodomex/python-pycryptodomex.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 3c98bb4bcc..021c99a172 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -43,6 +43,56 @@ except ImportError:
+     liclookup = None
  
--PYTHON_PYCRYPTODOMEX_VERSION = 3.18.0
-+PYTHON_PYCRYPTODOMEX_VERSION = 3.19.0
- PYTHON_PYCRYPTODOMEX_SOURCE = pycryptodomex-$(PYTHON_PYCRYPTODOMEX_VERSION).tar.gz
--PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/40/92/efd675dba957315d705f792b28d900bddc36f39252f6713961b4221ee9af
-+PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/14/c9/09d5df04c9f29ae1b49d0e34c9934646b53bb2131a55e8ed2a0d447c7c53
- PYTHON_PYCRYPTODOMEX_SETUP_TYPE = setuptools
- PYTHON_PYCRYPTODOMEX_LICENSE = \
- 	BSD-2-Clause, \
+ 
++def toml_load(f):
++    with open(f, 'rb') as fh:
++        ex = None
++
++        # Try standard library tomllib first
++        try:
++            from tomllib import load
++            return load(fh)
++        except ImportError:
++            pass
++
++        # Try regular tomli next
++        try:
++            from tomli import load
++            return load(fh)
++        except ImportError as e:
++            ex = e
++
++        # Try pip's vendored tomli
++        try:
++            from pip._vendor.tomli import load
++            try:
++                return load(fh)
++            except TypeError:
++                # Fallback to handle older version
++                try:
++                    fh.seek(0)
++                    w = io.TextIOWrapper(fh, encoding="utf8", newline="")
++                    return load(w)
++                finally:
++                    w.detach()
++        except ImportError:
++            pass
++
++        # Try regular toml last
++        try:
++            from toml import load
++            fh.seek(0)
++            w = io.TextIOWrapper(fh, encoding="utf8", newline="")
++            try:
++                return load(w)
++            finally:
++                w.detach()
++        except ImportError:
++            pass
++
++        print('This package needs tomli')
++        raise ex
++
++
+ def setup_decorator(func, method):
+     """
+     Decorator for distutils.core.setup and setuptools.setup.
+@@ -316,6 +366,35 @@ class BuildrootPackage():
+             os.chdir(current_dir)
+             sys.path.remove(self.tmp_extract)
+ 
++    def load_pyproject(self):
++        """
++        Loads the corresponding pyproject.toml and store its metadata
++        """
++        current_dir = os.getcwd()
++        os.chdir(self.tmp_extract)
++        sys.path.insert(0, self.tmp_extract)
++        try:
++            pyproject_data = toml_load('pyproject.toml')
++            try:
++                self.setup_metadata = pyproject_data.get('project', {})
++                self.metadata_name = self.setup_metadata.get('name', self.real_name)
++                build_system = pyproject_data.get('build-system', {})
++                build_backend = build_system.get('build-backend', None)
++                if build_backend and build_backend == 'flit_core.buildapi':
++                    self.setup_metadata['method'] = 'flit'
++                elif build_system.get('backend-path', None):
++                    self.setup_metadata['method'] = 'pep517'
++                else:
++                    self.setup_metadata['method'] = 'unknown'
++            except KeyError:
++                print('ERROR: Could not determine package metadata for {pkg}.\n'
++                      .format(pkg=self.real_name))
++                raise
++        except FileNotFoundError:
++            raise
++        os.chdir(current_dir)
++        sys.path.remove(self.tmp_extract)
++
+     def get_requirements(self, pkg_folder):
+         """
+         Retrieve dependencies from the metadata found in the setup.py script of
+@@ -620,8 +699,12 @@ class BuildrootPackage():
+         if help_lines[-1][-1] != '.':
+             help_lines[-1] += '.'
+ 
+-        home_page = md_info.get('home_page', None) or \
+-                    md_info.get('project_urls', {}).get('Homepage', None)  # noqa: E127
++        home_page = md_info.get('home_page', None)
++
++        if not home_page:
++            project_urls = md_info.get('project_urls', None)
++            if project_urls:
++                home_page = project_urls.get('Homepage', None)
+ 
+         if home_page:
+             # \t + two spaces is 3 char long
+@@ -699,9 +782,12 @@ def main():
+             except ImportError as err:
+                 if 'buildutils' in str(err):
+                     print('This package needs buildutils')
++                    continue
+                 else:
+-                    raise
+-                continue
++                    try:
++                        package.load_pyproject()
++                    except Exception:
++                        raise
+             except (AttributeError, KeyError) as error:
+                 print('Error: Could not install package {pkg}: {error}'.format(
+                     pkg=package.real_name, error=error))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
