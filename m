@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC84FC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58DECC10DC3
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9B3441B5A;
-	Mon,  4 Dec 2023 20:23:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9B3441B5A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D30941B58;
+	Mon,  4 Dec 2023 20:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D30941B58
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6sApqi0wQp5k; Mon,  4 Dec 2023 20:23:08 +0000 (UTC)
+	with ESMTP id HnMIworTvUHw; Mon,  4 Dec 2023 20:23:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1D6F41751;
-	Mon,  4 Dec 2023 20:23:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1D6F41751
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 240861BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D35D41B86;
+	Mon,  4 Dec 2023 20:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D35D41B86
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 326311BF977
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 843B94176E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C16560B09
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 843B94176E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C16560B09
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uXeqU-dT06ld for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C1VagaSOGPep for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F68D41739
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4845A60FFE
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F68D41739
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4845A60FFE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 003D2879B6; Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
+ id 3515D879B7; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 16:40:30 +0100
+Date: Sat, 25 Nov 2023 22:02:24 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0ff5d3df052d9a1594db05360e301c7614ca68f2
-X-Git-Newrev: ba27abf3566a86ecf2f89c7a4bb1d2c6a50eda89
+X-Git-Oldrev: 906a9fb98972683c8db3820c073ddaa0a0218212
+X-Git-Newrev: fde20964c71202589568d84de0c3bb4c3d6e9b17
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201329.003D2879B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-python.mk: remove
- _BASE_BUILD_OPTS variable
+Message-Id: <20231204201329.3515D879B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jailhouse: move conditional
+ build/install to macro
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba27abf3566a86ecf2f89c7a4bb1d2c6a50eda89
+commit: https://git.buildroot.net/buildroot/commit/?id=fde20964c71202589568d84de0c3bb4c3d6e9b17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This variable can just as well be merged into _BASE_BUILD_CMD. This is
-how it's done for the install opts. And anyway it's only used by
-distutils and nowhere else.
+The usual way of having conditional build and installation of parts
+of a generic-package, is to conditionally define macros that do that
+build and installation, and unconditionally expand the macros in the
+_BUILD_CMDS and _INSTALL_CMDS.
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Do that in jailhouse, which used to use an ad-hoc conditional block
+directly in _BUILD_CMDS and _INSTALL_CMDS.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-python.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/jailhouse/jailhouse.mk | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 1fc096efb3..eacf75c165 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -198,8 +198,7 @@ endif
- ifeq ($$($(2)_SETUP_TYPE),distutils)
- ifeq ($(4),target)
- $(2)_BASE_ENV = $$(PKG_PYTHON_DISTUTILS_ENV)
--$(2)_BASE_BUILD_CMD = setup.py build
--$(2)_BASE_BUILD_OPTS = $$(PKG_PYTHON_DISTUTILS_BUILD_OPTS)
-+$(2)_BASE_BUILD_CMD = setup.py build $$(PKG_PYTHON_DISTUTILS_BUILD_OPTS)
- $(2)_BASE_INSTALL_TARGET_CMD  = setup.py install --no-compile $$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS)
- $(2)_BASE_INSTALL_STAGING_CMD = setup.py install $$(PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS)
- else
-@@ -335,7 +334,7 @@ define $(2)_BUILD_CMDS
- 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
- 		$$(HOST_DIR)/bin/python3 \
- 		$$($$(PKG)_BASE_BUILD_CMD) \
--		$$($$(PKG)_BASE_BUILD_OPTS) $$($$(PKG)_BUILD_OPTS))
-+		$$($$(PKG)_BUILD_OPTS))
- endef
+diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
+index 6356c5a7aa..913be765bd 100644
+--- a/package/jailhouse/jailhouse.mk
++++ b/package/jailhouse/jailhouse.mk
+@@ -30,11 +30,26 @@ JAILHOUSE_MAKE_OPTS += \
+ 	PYTHON_PIP_USABLE="no"
  endif
  
++ifeq ($(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS),y)
++define JAILHOUSE_BUILD_HELPER_SCRIPTS
++	cd $(@D) && \
++	$(PKG_PYTHON_SETUPTOOLS_ENV) \
++	$(HOST_DIR)/bin/python setup.py \
++		build
++endef
++define JAILHOUSE_INSTALL_HELPER_SCRIPTS
++	cd $(@D) && \
++	$(PKG_PYTHON_SETUPTOOLS_ENV) \
++	$(HOST_DIR)/bin/python setup.py \
++		install --no-compile \
++		$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
++endef
++endif
++
+ define JAILHOUSE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)
+ 
+-	$(if $(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS), \
+-		cd $(@D) && $(PKG_PYTHON_SETUPTOOLS_ENV) $(HOST_DIR)/bin/python setup.py build)
++	$(JAILHOUSE_BUILD_HELPER_SCRIPTS)
+ endef
+ 
+ define JAILHOUSE_INSTALL_TARGET_CMDS
+@@ -47,8 +62,7 @@ define JAILHOUSE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/local/libexec/jailhouse/demos
+ 	$(INSTALL) -D -m 0755 $(@D)/inmates/demos/*/*.bin $(TARGET_DIR)/usr/local/libexec/jailhouse/demos
+ 
+-	$(if $(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS), \
+-		cd $(@D) && $(PKG_PYTHON_SETUPTOOLS_ENV) $(HOST_DIR)/bin/python setup.py install --no-compile $(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS))
++	$(JAILHOUSE_INSTALL_HELPER_SCRIPTS)
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
