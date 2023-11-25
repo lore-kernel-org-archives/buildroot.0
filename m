@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A7CBC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91A50C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:19:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9323418AC;
-	Mon,  4 Dec 2023 20:19:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9323418AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B6BE4189F;
+	Mon,  4 Dec 2023 20:19:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B6BE4189F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e29UM8ssOz7X; Mon,  4 Dec 2023 20:19:09 +0000 (UTC)
+	with ESMTP id 35nGE1kTAEXg; Mon,  4 Dec 2023 20:19:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2D27418A8;
-	Mon,  4 Dec 2023 20:19:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2D27418A8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F069418A3;
+	Mon,  4 Dec 2023 20:19:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F069418A3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 35FA61BF97A
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10A0F1BF31D
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50F8460B25
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6718460FF7
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50F8460B25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6718460FF7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CfL9i592SgF4 for <buildroot@lists.busybox.net>;
+ with ESMTP id PLy7IYoyuep4 for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1B3560FF1
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBCD260FF4
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1B3560FF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBCD260FF4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2CE4879B7; Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
+ id E9C74879B7; Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:26:38 +0100
+Date: Sat, 25 Nov 2023 16:38:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66f94d372fce75240cceadeb1bdc738297cfb8fc
-X-Git-Newrev: 618ad13422197e3ad18893bc034a11d4b4d0f6c6
+X-Git-Oldrev: e241419490c80cb0b758dc017ffe8f7b95533890
+X-Git-Newrev: 0ff5d3df052d9a1594db05360e301c7614ca68f2
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201328.C2CE4879B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydal: bump to version
- 20231114.3
+Message-Id: <20231204201328.E9C74879B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-python.mk: remove
+ $(2)_PYTHON_INTERPRETER variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=618ad13422197e3ad18893bc034a11d4b4d0f6c6
+commit: https://git.buildroot.net/buildroot/commit/?id=0ff5d3df052d9a1594db05360e301c7614ca68f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This is a leftover from python 2/3. Since the interpreter is now always
+python3, we can simply call it like that - like is done in all the other
+places where python is called.
+
+While we're at it, call python3 explicitly rather than relying on the
+symlink.
+
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pydal/python-pydal.hash | 4 ++--
- package/python-pydal/python-pydal.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/pkg-python.mk | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-index 8ed25084d1..9f2ab55508 100644
---- a/package/python-pydal/python-pydal.hash
-+++ b/package/python-pydal/python-pydal.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydal/json
--md5  47f0425745bcd1bb413aa9208cd06b3c  pydal-20230521.1.tar.gz
--sha256  10478a61e627c5b8cb7691f7f7ebf7210845485316493d37d740c297fb6d1845  pydal-20230521.1.tar.gz
-+md5  b2072b7b000223890b56830ca1ab3616  pydal-20231114.3.tar.gz
-+sha256  c42d16fca9e3bb6d399aefb2434c0e70862ee13c75437852f421920432ee5fb1  pydal-20231114.3.tar.gz
- # Locally computed sha256 checksums
- sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-index 1cc7e90b11..245383f244 100644
---- a/package/python-pydal/python-pydal.mk
-+++ b/package/python-pydal/python-pydal.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 28ee4cb85f..1fc096efb3 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -325,10 +325,6 @@ $(2)_DOWNLOAD_POST_PROCESS = cargo
+ $(2)_DOWNLOAD_DEPENDENCIES = host-rustc
+ endif # SETUP_TYPE
  
--PYTHON_PYDAL_VERSION = 20230521.1
-+PYTHON_PYDAL_VERSION = 20231114.3
- PYTHON_PYDAL_SOURCE = pydal-$(PYTHON_PYDAL_VERSION).tar.gz
--PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/68/b4/15dc227f965cc0525ca7f432368706cc4087ad6d587a5a05b251d133023e
-+PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/0b/3b/86302e165af07bc3d9225aea6ed8f52386270220e4aac1aad0101a48aac1
- PYTHON_PYDAL_LICENSE = BSD-3-Clause
- PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
- PYTHON_PYDAL_SETUP_TYPE = setuptools
+-# Python interpreter to use for building the package.
+-#
+-$(2)_PYTHON_INTERPRETER = $$(HOST_DIR)/bin/python
+-
+ #
+ # Build step. Only define it if not already defined by the package .mk
+ # file.
+@@ -337,7 +333,7 @@ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) \
++		$$(HOST_DIR)/bin/python3 \
+ 		$$($$(PKG)_BASE_BUILD_CMD) \
+ 		$$($$(PKG)_BASE_BUILD_OPTS) $$($$(PKG)_BUILD_OPTS))
+ endef
+@@ -351,7 +347,7 @@ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) \
++		$$(HOST_DIR)/bin/python3 \
+ 		$$($$(PKG)_BASE_INSTALL_CMD) \
+ 		$$($$(PKG)_INSTALL_OPTS))
+ endef
+@@ -365,7 +361,7 @@ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) \
++		$$(HOST_DIR)/bin/python3 \
+ 		$$($$(PKG)_BASE_INSTALL_TARGET_CMD) \
+ 		$$($$(PKG)_INSTALL_TARGET_OPTS))
+ endef
+@@ -379,7 +375,7 @@ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) \
++		$$(HOST_DIR)/bin/python3 \
+ 		$$($$(PKG)_BASE_INSTALL_STAGING_CMD) \
+ 		$$($$(PKG)_INSTALL_STAGING_OPTS))
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
