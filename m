@@ -1,69 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 326D6C61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 12:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DC2DC4167B
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 15:36:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C1ED940012;
-	Sat, 25 Nov 2023 12:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1ED940012
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1760E414C5;
+	Sat, 25 Nov 2023 15:36:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1760E414C5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iz0DvuJ_ocIM; Sat, 25 Nov 2023 15:36:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CAFA41834;
+	Sat, 25 Nov 2023 15:36:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CAFA41834
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CE241BF423
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 15:36:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D786F403BE
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 15:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D786F403BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o6_MhebnuY3a; Sat, 25 Nov 2023 12:20:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A1BD400CF;
-	Sat, 25 Nov 2023 12:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A1BD400CF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AD291BF487
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 12:20:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0407E82243
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 12:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0407E82243
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3NCmy_uHEk3Z for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 12:19:59 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qKPMDnlbTJcF for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 15:36:17 +0000 (UTC)
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D6C9882230
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 12:19:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6C9882230
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 013E1400C6
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 15:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 013E1400C6
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:a9ce:514c:eb15:225c])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id ED17C13F8A2;
- Sat, 25 Nov 2023 13:19:53 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9E57013F81D;
+ Sat, 25 Nov 2023 16:36:09 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 25 Nov 2023 13:19:53 +0100
-Date: Sat, 25 Nov 2023 13:19:53 +0100
+ Sat, 25 Nov 2023 16:36:09 +0100
+Date: Sat, 25 Nov 2023 16:36:09 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Michael Nosthoff <buildroot@heine.tech>
-Message-ID: <20231125121953.GI3177259@scaer>
-References: <20231124090758.3299176-1-buildroot@heine.tech>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20231125153609.GJ3177259@scaer>
+References: <20231125081052.881728-1-james.hilliard1@gmail.com>
+ <20231125081052.881728-2-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231124090758.3299176-1-buildroot@heine.tech>
+In-Reply-To: <20231125081052.881728-2-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1700914796;
- bh=ubCdWpWDuffARtyIEeFSan1BXUPtUXIbx5i1iAyLhbE=;
+ d=free.fr; s=smtp-20201208; t=1700926574;
+ bh=OVVD5TSSc+9MKyaZEGzSUqvDH5pghgGBKlaGJiGySso=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=LJsiJIpyPgK6JxnYMBM9roXKhxPM56xkqk9Gjb/niMKy8gBPYP736Gd2QMp2owvJ4
- Q4HMBf+LUQxFCpqda1it5bunTvoPMXBe1KX4gTJFVspPwKHKQswYwL0oIlSG6yNvqg
- wVu+sGQWpQlVb9pHbKSvnnagV8WYy8n0ayO/+gfYcRbsG8PkTq+BcIkruNQYZmquA9
- O/OSCWnrdrbSjjn8w4xQ3MIq3k97eDnSopGr2WwtjNOYwI5sjDca01cO4qcVnd6SO7
- 0aVd5ORjC8vtKgCIuQgqtJvn9EBPDvTE3sEVEGykcl8KdkTU+ZIrP1T9G4iqmdPziZ
- a+ROrx/b3lfyg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=ng7iFW7jzLa1zeWnneZU8W5LA/Za5mR5/qPkMq9dFZxetuUIwyPynFxWSYBur+Rsd
+ qVLAhaOx9/5+JMU1Af7K7SX6zgSC8UrDreLUzsfLexOT+7CKOhnkkJycZXydfCV+D8
+ 3AbCCweBiLwhmquuMTgv3HH5bUKemv2rbNWi8pw40hNyylFo721T7+NavVbSGNTOJ8
+ nOzvh82ECK9rZQMUuXW4fZ+cEOVILyeihGqa8EF5IBNIFrxeJvPo8ps5S2wbgJ3jty
+ 2/FgpcRMiDA/ZP1a4LoKHpDu4oYgmzTl+/EjLnp848K9XMQ0K0X9KlkSuXL03Z9JKp
+ wPy945O1Sugww==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LJsiJIpy
-Subject: Re: [Buildroot] [PATCH] package/re2: bump to version 2023.11.01
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ng7iFW7j
+Subject: Re: [Buildroot] [PATCH 2/3] package/python-pydantic-core: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,125 +77,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2023-11-24 10:07 +0100, Michael Nosthoff via buildroot spake thusly:
-> - libabseil-cpp is now a dependency
-> - raise c++ standard to c++14 (due to abseil) --> requires gcc8
-> - drop fix for gcc <= 5 introduced in 25fd3b0a523805db14682f7c559cc1c9c366ed55
->   (c++ >= 14 is the default for gcc >= 8)
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+James, All,
+
+On 2023-11-25 01:10 -0700, James Hilliard spake thusly:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/re2/Config.in |  7 ++++---
->  package/re2/re2.hash  |  2 +-
->  package/re2/re2.mk    | 13 +++++--------
->  3 files changed, 10 insertions(+), 12 deletions(-)
+>  package/Config.in                                 |  1 +
+>  package/python-pydantic-core/Config.in            |  8 ++++++++
+>  .../python-pydantic-core.hash                     |  4 ++++
+>  .../python-pydantic-core/python-pydantic-core.mk  | 15 +++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-pydantic-core/Config.in
+>  create mode 100644 package/python-pydantic-core/python-pydantic-core.hash
+>  create mode 100644 package/python-pydantic-core/python-pydantic-core.mk
 > 
-> diff --git a/package/re2/Config.in b/package/re2/Config.in
-> index 64217e8aa2..d3bcad8d1a 100644
-> --- a/package/re2/Config.in
-> +++ b/package/re2/Config.in
-> @@ -1,8 +1,9 @@
->  config BR2_PACKAGE_RE2
->  	bool "re2"
->  	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # needs C++11
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # needs C++14, libabseil-cpp
+> diff --git a/package/Config.in b/package/Config.in
+> index 68e6e29a4d..fcc09b07c4 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1228,6 +1228,7 @@ menu "External python modules"
+>  	source "package/python-pycups/Config.in"
+>  	source "package/python-pydal/Config.in"
+>  	source "package/python-pydantic/Config.in"
+> +	source "package/python-pydantic-core/Config.in"
+>  	source "package/python-pydevmem/Config.in"
+>  	source "package/python-pydyf/Config.in"
+>  	source "package/python-pyelftools/Config.in"
+> diff --git a/package/python-pydantic-core/Config.in b/package/python-pydantic-core/Config.in
+> new file mode 100644
+> index 0000000000..3eeb1844a2
+> --- /dev/null
+> +++ b/package/python-pydantic-core/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_PYDANTIC_CORE
+> +	bool "python-pydantic-core"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+> +	help
 
-You said in the commit log that the C++14 requirement is due to
-libaseil-cpp, but the comment you wrote here is ambiguoug, as it seems
-to imply that re2 itself needs C++14.
+So what happens if I apply this patch, which adds pydantic-core, but I
+do not apply the next one, which bumps pydantic, so we end up in a
+situation with an old pydantic, with the new core also installed?
 
-If the C++14 is only due to libaseil-cpp, then the comment should be:
+Do the two conflict, or is it an OK situation (obviously the
+pydantic-core would be of little use)?
 
-    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
+If there is a conflict, then we will want to introduce the new package
+at the same time we do the bump, and that should be explained int he
+commit log.
 
-If however re2 needs C++ for itself, then the comment should be:
+If there is no conflict, then just say, we can ammend the commit log
+accordignly.
 
-    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++14
+> +	  Core validation logic for pydantic written in rust.
 
-Can you clarify this?
+As it is written in rust, I was wondering... [0]
 
-Also, re2 is selected by two packages:
+[--SNIP--]
+> diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
+> new file mode 100644
+> index 0000000000..8b61323ab3
+> --- /dev/null
+> +++ b/package/python-pydantic-core/python-pydantic-core.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-pydantic-core
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYDANTIC_CORE_VERSION = 2.14.5
+> +PYTHON_PYDANTIC_CORE_SOURCE = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
+> +PYTHON_PYDANTIC_CORE_SITE = https://files.pythonhosted.org/packages/64/26/cffb93fe9c6b5a91c497f37fae14a4b073ecbc47fc36a9979c7aa888b245
+> +PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
+> +PYTHON_PYDANTIC_CORE_LICENSE = MIT
+> +PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
+> +PYTHON_PYDANTIC_CORE_DEPENDENCIES = host-python-typing-extensions
 
-  - gprc, and it already depends on gcc >= 8 becasue of libabseil-cpp
+[0] ... why there was dependency on the rust toolchain.
 
-  - qt5webengne, but that one only depends on gcc >= 4.9, so the new
-    dependency mustbe propagated there too.
+So I looked at the manual [1] to check the maturin setup type, but... It
+is *not* documented (although I seem to remember I already asked that it
+be, I can't find that mail, so let's say this is the first time I bring
+up the subject...)
 
-Can you check and respin, please?
+So I had to look at the code, and see that the rust toolchain is
+automatically added when the setup type is maturin.
+
+As I had no idea that maturin was explicitly about python-packages-
+written-in-rust, the dependency on rust was not obvious to me... :-/
+
+Could you please extend the manual to descrbe the additional setup types
+that are currently supported by Buildroot, please?
+
+[1] https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_python_packages
 
 Regards,
 Yann E. MORIN.
 
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_LIBABSEIL_CPP
->  	help
->  	  RE2 is a fast, safe, thread-friendly alternative
->  	  to backtracking regular expression engines like
-> @@ -11,7 +12,7 @@ config BR2_PACKAGE_RE2
->  
->  	  https://github.com/google/re2
->  
-> -comment "re2 needs a toolchain w/ C++, threads, gcc >= 4.8"
-> +comment "re2 needs a toolchain w/ C++, threads, gcc >= 8"
->  	depends on !BR2_INSTALL_LIBSTDCPP || \
->  		!BR2_TOOLCHAIN_HAS_THREADS || \
-> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
-> diff --git a/package/re2/re2.hash b/package/re2/re2.hash
-> index a39dece7a9..5f590aba6e 100644
-> --- a/package/re2/re2.hash
-> +++ b/package/re2/re2.hash
-> @@ -1,3 +1,3 @@
->  # locally calculated
-> -sha256  cbce8b7803e856827201a132862e41af386e7afd9cc6d9a9bc7a4fa4d8ddbdde  re2-2023-02-01.tar.gz
-> +sha256  4e6593ac3c71de1c0f322735bc8b0492a72f66ffccfad76e259fa21c41d27d8a  re2-2023-11-01.tar.gz
->  sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
-> diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-> index 5587366b1f..b81a64f2e9 100644
-> --- a/package/re2/re2.mk
-> +++ b/package/re2/re2.mk
-> @@ -4,29 +4,26 @@
->  #
->  ################################################################################
->  
-> -RE2_VERSION = 2023-02-01
-> +RE2_VERSION = 2023-11-01
->  RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
->  RE2_LICENSE = BSD-3-Clause
->  RE2_LICENSE_FILES = LICENSE
->  RE2_INSTALL_STAGING = YES
-> -
-> -RE2_MAKE_OPTS = \
-> -	$(TARGET_CONFIGURE_OPTS) \
-> -	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-> +RE2_DEPENDENCIES = libabseil-cpp
->  
->  define RE2_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
->  		-C $(@D) $(if $(BR2_STATIC_LIBS),static)
->  endef
->  
->  define RE2_INSTALL_STAGING_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
->  		DESTDIR="$(STAGING_DIR)" prefix=/usr -C $(@D) \
->  		$(if $(BR2_STATIC_LIBS),static-install,install)
->  endef
->  
->  define RE2_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
->  		DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) \
->  		$(if $(BR2_STATIC_LIBS),static-install,install)
->  endef
+> +
+> +$(eval $(python-package))
 > -- 
 > 2.34.1
 > 
