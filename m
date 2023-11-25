@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEE86C61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 05:34:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E6B8C61DF7
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 05:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94C2161506;
-	Sat, 25 Nov 2023 05:34:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94C2161506
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20AB761506;
+	Sat, 25 Nov 2023 05:40:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20AB761506
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EP0AudoIxkFK; Sat, 25 Nov 2023 05:34:56 +0000 (UTC)
+	with ESMTP id rOZ2KsOMxjJv; Sat, 25 Nov 2023 05:40:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEDE5614F3;
-	Sat, 25 Nov 2023 05:34:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEDE5614F3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A743D1BF4E5
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 05:34:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6835C614F3;
+	Sat, 25 Nov 2023 05:40:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6835C614F3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ED4831BF4E5
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 05:40:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89BD9614F3
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 05:34:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89BD9614F3
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1F484016C
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 05:40:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1F484016C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7yYxEgMJrTsQ for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 05:34:51 +0000 (UTC)
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 953A560D51
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 05:34:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 953A560D51
-Received: by mail-il1-x12e.google.com with SMTP id
- e9e14a558f8ab-35c7d62a389so2513965ab.3
- for <buildroot@buildroot.org>; Fri, 24 Nov 2023 21:34:51 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gMHU2WYEgmk9 for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 05:40:20 +0000 (UTC)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D9A5F40160
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 05:40:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9A5F40160
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-7b35b9645e1so89753339f.2
+ for <buildroot@buildroot.org>; Fri, 24 Nov 2023 21:40:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700890490; x=1701495290;
+ d=1e100.net; s=20230601; t=1700890818; x=1701495618;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=jFYSydiSTilnWs9At7aGYg2atv/k4qH3AkO8zC/o1GA=;
- b=cp6+u/JKNWrRiB3nlmo+e3hxdi+tqd05NEHeK+m2sKLF+ccnLH2KW6WsXKstcPbSVX
- vHOE3twXnIZaNqmZQQ9t3vrn12OE3k9IwTogu+Z7ZTh+X90MCOZ5H/bTTBJPf5gw04uT
- fNfyHsadsP6DcFKPB06T50g1LyXTL4A9Xb4xE2BhnByJ1lsXUfov48FcoSt48q6Muu8v
- oNdfKQY1pEfGKhnOuej8kQpDKzY2JdkBxrFNwfkuoptuGoPHAT8xM5Ev6BafvLO3djyv
- 8LNX6gSF0Iw4KrHLGx1umXIt9fxXYXYgszdLo8xjuFG52xyO4kvwfwCX8HNORsstlvz2
- SPjQ==
-X-Gm-Message-State: AOJu0YwEdCY1ITKP3XNdbbUsEQuxtLaev8eLCxdXlCQvIeXVbPB6nVO4
- I0cU2LqnMCiXo09jaPTh4OnZgWmd4lg=
-X-Google-Smtp-Source: AGHT+IHykkDxhXdZg9RM7hIvG1JfDgZfK3vDzjcAWP2pDcV1OKA+tL/Jlu/PakY1GJxFjhUpoEqnaw==
-X-Received: by 2002:a05:6e02:1aa8:b0:35a:b337:6f58 with SMTP id
- l8-20020a056e021aa800b0035ab3376f58mr568215ilv.16.1700890490338; 
- Fri, 24 Nov 2023 21:34:50 -0800 (PST)
+ bh=i37edfeWsGmj3QqcijTut5wamXSaNS2MuTqu9waNmKs=;
+ b=tWwOxonIdFIVQ/ojgpvvj9shbDXdLHpgTRFz1gpRC1nnrKkz5lS+Qqz/chPZO/rXZZ
+ EF56xieqsYeGhij5f2Di5xXN6WbU3t1VioUW4k4EtogtyHk8xLvLSfMCrdGGPL8FiH0v
+ A2QUTchF2TzPP01q6Bi1Di/NCGVH17t/E2+A9qWBO0u/3yN+LG10gBxSZHPcQOHkqlKu
+ 3gTxs0tTlyumZIjBtPom0P6hiwjIr5GsLI2ZDbmo4EZM3CKjN356pZGhcSMRM0nSa+3j
+ dJ9ksaPqT3rBEfRuzXVlELXnXAp8ITG0aQcknF7GzM4T+4zYdvV4+U683V+aCfr+/Z2B
+ wM+g==
+X-Gm-Message-State: AOJu0YwhGN/WnE6LOm99bvuTmhLt/7W7ZafmOVPV+y9kgkKwbbFsvi3F
+ U2fiDT+C9Qs59IIkKGE6wilnakKmKeE=
+X-Google-Smtp-Source: AGHT+IHVQG+rgQy5X1XauovS8mMAAnMZ+2cMrpgwmple0ucfAvtDFmomLnin0yTHBGDt3Z6DHRozlg==
+X-Received: by 2002:a92:cec7:0:b0:35c:6e90:ebfa with SMTP id
+ z7-20020a92cec7000000b0035c6e90ebfamr3464350ilq.6.1700890818443; 
+ Fri, 24 Nov 2023 21:40:18 -0800 (PST)
 Received: from james-x399.localdomain (97-118-243-253.hlrn.qwest.net.
  [97.118.243.253]) by smtp.gmail.com with ESMTPSA id
- bf8-20020a056e02308800b00359b09f0710sm279223ilb.6.2023.11.24.21.34.49
+ ci10-20020a0566383d8a00b004665e8a0608sm1166543jab.137.2023.11.24.21.40.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Nov 2023 21:34:49 -0800 (PST)
+ Fri, 24 Nov 2023 21:40:17 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 Nov 2023 22:34:48 -0700
-Message-Id: <20231125053448.305980-1-james.hilliard1@gmail.com>
+Date: Fri, 24 Nov 2023 22:40:16 -0700
+Message-Id: <20231125054016.311072-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700890490; x=1701495290; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1700890818; x=1701495618; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jFYSydiSTilnWs9At7aGYg2atv/k4qH3AkO8zC/o1GA=;
- b=nKFSwyzC4yx/bYXCo/jLXhAMxX+tMrR+bF3Ede/BbeCX7fpRDNRCfCWQJiH6ClJs/j
- mIHntAEvL6isnSRzY6/JZOUT+VJXA6SLt0BfOnzRA6wX3RoyqF5160lX7ZINmrQvIBXQ
- X0BZRjgQZr4tV1bpLZs/i0r4LncBWEdOf1PO/5g5AJk96ix8F9w9R6Hwh8vp1zTgxMOm
- o1B0Ui3eNj+33B0SHVwhYxSykB4Ef+cTlfrZxDUSoX0hQr0fI+BhpiqQpHGSUW2KumTe
- BdzfAgdoX5Vo3/K7CYvA7Bhk26bKDdqh487AbQlBs62b3IQnBC04jX/6cKGT7uFa+FrM
- +xaQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=i37edfeWsGmj3QqcijTut5wamXSaNS2MuTqu9waNmKs=;
+ b=hY8i05lz/ODuofHnpzJejRBpX+L3j67MfIVk6v/RQ8A6XVS2wUGNcuvFloC7bnYBkl
+ OpgLgSgAZLRNEQAJ1T/3epQARtrpyfupHLyVTedLmEQtN+EuM+/jlIXCUHKWE34caco2
+ pqux2DWIYzf+5302hXvi5eTd0YVbc+eZ59iQTmLbc03jDGGT2xCisNv89QnhwljRAvl5
+ 6kL4omd+pziWN+5RntMd9F6HEIV9Trs4UDkEuhr3JOoh+fOMszqZKnoQkymjy1o6cBk+
+ VmYfkN4zjRq3leKg+73xqxsWkNg+7V4kguatOu7W6eX7+zlE4mTs7rzZgdjOdnnMTTrf
+ 7F6Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=nKFSwyzC
-Subject: [Buildroot] [PATCH 1/1] package/python-pip: bump to version 23.3.1
+ header.a=rsa-sha256 header.s=20230601 header.b=hY8i05lz
+Subject: [Buildroot] [PATCH 1/1] package/python-portend: bump to version
+ 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,40 +100,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to notice removal:
+https://github.com/jaraco/portend/commit/5957d58266e479f124b31f30e4322e798fdf386b
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pip/python-pip.hash | 4 ++--
- package/python-pip/python-pip.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-portend/python-portend.hash | 6 +++---
+ package/python-portend/python-portend.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
-index b41ce47d4c..9518c9d8b8 100644
---- a/package/python-pip/python-pip.hash
-+++ b/package/python-pip/python-pip.hash
+diff --git a/package/python-portend/python-portend.hash b/package/python-portend/python-portend.hash
+index 6af3b77792..98e196bec8 100644
+--- a/package/python-portend/python-portend.hash
++++ b/package/python-portend/python-portend.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pip/json
--md5  996f58a94fe0b8b82b6795c42bd171ba  pip-22.3.1.tar.gz
--sha256  65fd48317359f3af8e593943e6ae1506b66325085ea64b706a998c6e83eeaf38  pip-22.3.1.tar.gz
-+md5  f0c9fba61e9d9badcc9921062e993d84  pip-23.3.1.tar.gz
-+sha256  1fcaa041308d01f14575f6d0d2ea4b75a3e2871fe4f9c694976f908768e14174  pip-23.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/portend/json
+-md5  c37d676837505a6fc8dd33185c6d62a7  portend-3.1.0.tar.gz
+-sha256  239e3116045ea823f6df87d6168107ad75ccc0590e37242af0cc1e98c5d224e4  portend-3.1.0.tar.gz
++md5  0c3a2e8073c384b826f87795766f1e0e  portend-3.2.0.tar.gz
++sha256  5250a352c19c959d767cac878b829d93e5dc7625a5143399a2a00dc6628ffb72  portend-3.2.0.tar.gz
  # Locally computed sha256 checksums
- sha256  634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index 040767930e..83a1631a2f 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
+-sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
++sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-portend/python-portend.mk b/package/python-portend/python-portend.mk
+index 4322121e9b..5415198ffb 100644
+--- a/package/python-portend/python-portend.mk
++++ b/package/python-portend/python-portend.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PIP_VERSION = 22.3.1
-+PYTHON_PIP_VERSION = 23.3.1
- PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
--PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/a3/50/c4d2727b99052780aad92c7297465af5fe6eec2dbae490aa9763273ffdc1
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/1f/7f/4da15e07ccd11c84c1ccc8f6e24288d5e76c99441bf80e315b33542db951
- PYTHON_PIP_SETUP_TYPE = setuptools
- PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
+-PYTHON_PORTEND_VERSION = 3.1.0
++PYTHON_PORTEND_VERSION = 3.2.0
+ PYTHON_PORTEND_SOURCE = portend-$(PYTHON_PORTEND_VERSION).tar.gz
+-PYTHON_PORTEND_SITE = https://files.pythonhosted.org/packages/6e/0a/42bcc9c97744958ce72d33f526e972379b9e90adede8a151f338818c41d4
++PYTHON_PORTEND_SITE = https://files.pythonhosted.org/packages/8f/fc/bcfc768996b438d6e4bde7a6c8cfd62089847b0f5381a0e0ec2d8ee6b202
+ PYTHON_PORTEND_LICENSE = MIT
+ PYTHON_PORTEND_LICENSE_FILES = LICENSE
+ PYTHON_PORTEND_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
