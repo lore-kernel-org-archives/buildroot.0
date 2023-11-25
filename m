@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1DC0C61DF4
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:32:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8FEEC61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:32:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93C1B402F2;
-	Sat, 25 Nov 2023 11:32:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93C1B402F2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 87A2640220;
+	Sat, 25 Nov 2023 11:32:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87A2640220
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tD7XOXzr10mf; Sat, 25 Nov 2023 11:32:39 +0000 (UTC)
+	with ESMTP id m9mHlKarB3Hr; Sat, 25 Nov 2023 11:32:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C428402F4;
-	Sat, 25 Nov 2023 11:32:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C428402F4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 24F7A1BF863
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3683140160;
+	Sat, 25 Nov 2023 11:32:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3683140160
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AD3A71BF27C
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54AE540220
+ by smtp4.osuosl.org (Postfix) with ESMTP id A547F415BA
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54AE540220
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A547F415BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ja9kOec9tof0 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RwUZhsl0W-OP for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 362D440160
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8E074209C
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 362D440160
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8E074209C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2170486C58; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
+ id B755686C5E; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:24:27 +0100
+Date: Sat, 25 Nov 2023 12:26:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0cdce6d53f744252d6799ae63894b93f7f03e2ea
-X-Git-Newrev: 134e65f023d6a9e28ceea595fe5e7c66f58837ca
+X-Git-Oldrev: 3223987c937c5e7ef2caf0166bb45f4089d89b2f
+X-Git-Newrev: 0bfd7351e1970d03ba692a3ab0207aee4a527dbd
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113128.2170486C58@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-outcome: bump
- to version 1.3.0.post0
+Message-Id: <20231125113128.B755686C5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pyasn1-modules:
+ bump to version 0.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=134e65f023d6a9e28ceea595fe5e7c66f58837ca
+commit: https://git.buildroot.net/buildroot/commit/?id=0bfd7351e1970d03ba692a3ab0207aee4a527dbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Update github url to new repository.
+
+License hash changed due to year update:
+https://github.com/pyasn1/pyasn1-modules/commit/848e7d6a6e8c16d68fb7bedd0715f724ef538b5d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-outcome/python-outcome.hash | 4 ++--
- package/python-outcome/python-outcome.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pyasn1-modules/Config.in                  | 2 +-
+ package/python-pyasn1-modules/python-pyasn1-modules.hash | 6 +++---
+ package/python-pyasn1-modules/python-pyasn1-modules.mk   | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-outcome/python-outcome.hash b/package/python-outcome/python-outcome.hash
-index 43796e89ac..476da60766 100644
---- a/package/python-outcome/python-outcome.hash
-+++ b/package/python-outcome/python-outcome.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/outcome/json
--md5  58612ee4407901985f85ad3869dd83b8  outcome-1.2.0.tar.gz
--sha256  6f82bd3de45da303cf1f771ecafa1633750a358436a8bb60e06a1ceb745d2672  outcome-1.2.0.tar.gz
-+md5  3a626832ac864c95f6054958d0da3011  outcome-1.3.0.post0.tar.gz
-+sha256  9dcf02e65f2971b80047b377468e72a268e15c0af3cf1238e6ff14f7f91143b8  outcome-1.3.0.post0.tar.gz
+diff --git a/package/python-pyasn1-modules/Config.in b/package/python-pyasn1-modules/Config.in
+index 6aff4d935b..cb486d33ae 100644
+--- a/package/python-pyasn1-modules/Config.in
++++ b/package/python-pyasn1-modules/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_PYTHON_PYASN1_MODULES
+ 	help
+ 	  A collection of ASN.1-based protocols modules.
+ 
+-	  https://github.com/etingof/pyasn1-modules
++	  https://github.com/pyasn1/pyasn1-modules
+diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
+index 2305596585..6f4bb6faf0 100644
+--- a/package/python-pyasn1-modules/python-pyasn1-modules.hash
++++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
+-md5  107e1ece7d0a41d782f69f8a95a4d9bc  pyasn1-modules-0.2.8.tar.gz
+-sha256  905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e  pyasn1-modules-0.2.8.tar.gz
++md5  94ee572b06ae09f1903b11333575b091  pyasn1_modules-0.3.0.tar.gz
++sha256  5bd01446b736eb9d31512a30d46c1ac3395d676c6f3cafa4c03eb54b9925631c  pyasn1_modules-0.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  652c878488d1456361e08c3f8607fd7ba59892a14103d15cce4ff93c85b5cc8b  LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
-diff --git a/package/python-outcome/python-outcome.mk b/package/python-outcome/python-outcome.mk
-index 27d7fdede3..aa8a6cbf38 100644
---- a/package/python-outcome/python-outcome.mk
-+++ b/package/python-outcome/python-outcome.mk
+-sha256  22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
++sha256  2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd  LICENSE.txt
+diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
+index 9933a63aa7..41987028fc 100644
+--- a/package/python-pyasn1-modules/python-pyasn1-modules.mk
++++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_OUTCOME_VERSION = 1.2.0
-+PYTHON_OUTCOME_VERSION = 1.3.0.post0
- PYTHON_OUTCOME_SOURCE = outcome-$(PYTHON_OUTCOME_VERSION).tar.gz
--PYTHON_OUTCOME_SITE = https://files.pythonhosted.org/packages/dd/91/741e1626e89fdc3664169e16300c59eefa4b23540cc6d6c70450f885098f
-+PYTHON_OUTCOME_SITE = https://files.pythonhosted.org/packages/98/df/77698abfac98571e65ffeb0c1fba8ffd692ab8458d617a0eed7d9a8d38f2
- PYTHON_OUTCOME_SETUP_TYPE = setuptools
- PYTHON_OUTCOME_LICENSE = Apache-2.0 or MIT
- PYTHON_OUTCOME_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
+-PYTHON_PYASN1_MODULES_VERSION = 0.2.8
+-PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
+-PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/88/87/72eb9ccf8a58021c542de2588a867dbefc7556e14b2866d1e40e9e2b587e
++PYTHON_PYASN1_MODULES_VERSION = 0.3.0
++PYTHON_PYASN1_MODULES_SOURCE = pyasn1_modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
++PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/3b/e4/7dec823b1b5603c5b3c51e942d5d9e65efd6ff946e713a325ed4146d070f
+ PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
+ PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
+ PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
