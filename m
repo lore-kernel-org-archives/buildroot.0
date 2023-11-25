@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DE9C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 553ACC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:21:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 912E541899;
-	Mon,  4 Dec 2023 20:21:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 912E541899
+	by smtp4.osuosl.org (Postfix) with ESMTP id E28E541899;
+	Mon,  4 Dec 2023 20:21:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E28E541899
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SiYDyW_PqB41; Mon,  4 Dec 2023 20:21:39 +0000 (UTC)
+	with ESMTP id psx5PNj9UzKS; Mon,  4 Dec 2023 20:21:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1FED41953;
-	Mon,  4 Dec 2023 20:21:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1FED41953
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1161D1BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4206D41913;
+	Mon,  4 Dec 2023 20:21:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4206D41913
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E1E11BF977
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A7F541768
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A7F541768
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FAC560FF1
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FAC560FF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PnYO1D7Y63C7 for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YTaBP5R4SrLS for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DD904011A
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DD904011A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6829E60B4E
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6829E60B4E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B6F6879BA; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+ id 59564879B7; Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 22:03:15 +0100
+Date: Sat, 25 Nov 2023 12:25:34 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6b915358babe37a721b4f6e032ec884174bd6e0b
-X-Git-Newrev: bfafe9b3e9c5a5ae7767c534dccca2d14e50b41c
+X-Git-Oldrev: 58a920e5fb364543dad9a4b328aa4ddaa3bdfa0b
+X-Git-Newrev: 90eeb059105d51b7f57e57a9180e7f6156520712
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201329.5B6F6879BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: remove references to
- PKG_PYTHON_*_OPTS
+Message-Id: <20231204201328.59564879B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-portend: bump to version
+ 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfafe9b3e9c5a5ae7767c534dccca2d14e50b41c
+commit: https://git.buildroot.net/buildroot/commit/?id=90eeb059105d51b7f57e57a9180e7f6156520712
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These variables were removed. In addition, the text describing them
-wasn't terribly useful. Just remove the sentences describing them.
+License hash changed due to notice removal:
+https://github.com/jaraco/portend/commit/5957d58266e479f124b31f30e4322e798fdf386b
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-python.adoc | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ package/python-portend/python-portend.hash | 6 +++---
+ package/python-portend/python-portend.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/docs/manual/adding-packages-python.adoc b/docs/manual/adding-packages-python.adoc
-index 500967f235..33dbfc30a5 100644
---- a/docs/manual/adding-packages-python.adoc
-+++ b/docs/manual/adding-packages-python.adoc
-@@ -135,25 +135,13 @@ therefore only use a few of them, or none.
-   makes sense to use for distutils/setuptools based packages as
-   flit/pep517 based packages do not pass these options to a +setup.py+
-   script but instead pass them to +support/scripts/pyinstaller.py+.
--  For target distutils packages, the +PKG_PYTHON_DISTUTILS_BUILD_OPTS+
--  options are already passed automatically by the infrastructure.
+diff --git a/package/python-portend/python-portend.hash b/package/python-portend/python-portend.hash
+index 6af3b77792..98e196bec8 100644
+--- a/package/python-portend/python-portend.hash
++++ b/package/python-portend/python-portend.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/portend/json
+-md5  c37d676837505a6fc8dd33185c6d62a7  portend-3.1.0.tar.gz
+-sha256  239e3116045ea823f6df87d6168107ad75ccc0590e37242af0cc1e98c5d224e4  portend-3.1.0.tar.gz
++md5  0c3a2e8073c384b826f87795766f1e0e  portend-3.2.0.tar.gz
++sha256  5250a352c19c959d767cac878b829d93e5dc7625a5143399a2a00dc6628ffb72  portend-3.2.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
++sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-portend/python-portend.mk b/package/python-portend/python-portend.mk
+index 4322121e9b..5415198ffb 100644
+--- a/package/python-portend/python-portend.mk
++++ b/package/python-portend/python-portend.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- * +PYTHON_FOO_INSTALL_TARGET_OPTS+, +PYTHON_FOO_INSTALL_STAGING_OPTS+,
-   +HOST_PYTHON_FOO_INSTALL_OPTS+ to specify additional options to pass
-   to the Python +setup.py+ script (for distutils/setuptools packages)
-   or +support/scripts/pyinstaller.py+ (for flit/pep517 packages) during
-   the target installation step, the staging installation step or the
--  host installation, respectively. Note that the infrastructure is
--  automatically passing some options, defined in
--  +PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS+ or
--  +PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS+ (for target distutils
--  packages), +HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS+ (for host
--  distutils packages), +PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS+ or
--  +PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS+ (for target setuptools
--  packages), +HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS+ (for host
--  setuptools packages) and +PKG_PYTHON_PEP517_INSTALL_TARGET_OPTS+ or
--  +PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS+ (for target flit/pep517
--  packages).
-+  host installation, respectively.
- 
- With the Python infrastructure, all the steps required to build and
- install the packages are already defined, and they generally work well
+-PYTHON_PORTEND_VERSION = 3.1.0
++PYTHON_PORTEND_VERSION = 3.2.0
+ PYTHON_PORTEND_SOURCE = portend-$(PYTHON_PORTEND_VERSION).tar.gz
+-PYTHON_PORTEND_SITE = https://files.pythonhosted.org/packages/6e/0a/42bcc9c97744958ce72d33f526e972379b9e90adede8a151f338818c41d4
++PYTHON_PORTEND_SITE = https://files.pythonhosted.org/packages/8f/fc/bcfc768996b438d6e4bde7a6c8cfd62089847b0f5381a0e0ec2d8ee6b202
+ PYTHON_PORTEND_LICENSE = MIT
+ PYTHON_PORTEND_LICENSE_FILES = LICENSE
+ PYTHON_PORTEND_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
