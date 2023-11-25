@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A30E8C4167B
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 21:06:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1036AC4167B
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 21:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E64BE80A5A;
-	Sat, 25 Nov 2023 21:05:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E64BE80A5A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8929280F54;
+	Sat, 25 Nov 2023 21:06:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8929280F54
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EvEZciw45C7w; Sat, 25 Nov 2023 21:05:59 +0000 (UTC)
+	with ESMTP id qUA09XY0v_Ki; Sat, 25 Nov 2023 21:06:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5544180F54;
-	Sat, 25 Nov 2023 21:05:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5544180F54
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AB4C91BF473
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC5AC81237;
+	Sat, 25 Nov 2023 21:06:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC5AC81237
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B74D71BF863
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:05:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9175181238
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9DB44607FE
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:05:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9175181238
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DB44607FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I8nsDN1PO01z for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id InCjknJ9yP7V for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C44A880F54
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7A50606CB
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C44A880F54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7A50606CB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC7C6873AF; Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
+ id B73D0873A2; Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 22:02:34 +0100
+Date: Sat, 25 Nov 2023 22:02:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fde20964c71202589568d84de0c3bb4c3d6e9b17
-X-Git-Newrev: 0c54deff255d433db46e6c5ecd14c8e97f1715dd
+X-Git-Oldrev: 0c54deff255d433db46e6c5ecd14c8e97f1715dd
+X-Git-Newrev: ee9b7ee9ce60476609a66c35f4fa94ba7f61175b
 X-Patchwork-Hint: ignore
-Message-Id: <20231125210555.AC7C6873AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/jailhouse: expand
+Message-Id: <20231125210555.B73D0873A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/i2c-tools: expand
  PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,36 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c54deff255d433db46e6c5ecd14c8e97f1715dd
+commit: https://git.buildroot.net/buildroot/commit/?id=ee9b7ee9ce60476609a66c35f4fa94ba7f61175b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 In a follow-up patch, we want to remove this variable. Replace it with
 its expansion, which is anyway just
 $(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) --root=$(TARGET_DIR)
 
+Also remove PKG_PYTHON_SETUPTOOLS_BUILD_OPTS, which is not defined (i.e.
+empty).
+
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-[yann.morin.1998@free.fr:
-  - fixup after introduction of JAILHOUSE_INSTALL_HELPER_SCRIPTS
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/jailhouse/jailhouse.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/i2c-tools/i2c-tools.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
-index 913be765bd..c239e75e76 100644
---- a/package/jailhouse/jailhouse.mk
-+++ b/package/jailhouse/jailhouse.mk
-@@ -42,7 +42,8 @@ define JAILHOUSE_INSTALL_HELPER_SCRIPTS
- 	$(PKG_PYTHON_SETUPTOOLS_ENV) \
- 	$(HOST_DIR)/bin/python setup.py \
- 		install --no-compile \
--		$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index adccd9475d..f8d1bcb4b0 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -36,15 +36,15 @@ I2C_TOOLS_PYTHON_BASE_ENV = \
+ define I2C_TOOLS_BUILD_PYSMBUS
+ 	(cd $(@D)/py-smbus; \
+ 	$(I2C_TOOLS_PYTHON_BASE_ENV) \
+-		$(HOST_DIR)/bin/python setup.py build \
+-		$(PKG_PYTHON_SETUPTOOLS_BUILD_OPTS))
++		$(HOST_DIR)/bin/python setup.py build)
+ endef
+ 
+ define I2C_TOOLS_INSTALL_PYSMBUS
+ 	(cd $(@D)/py-smbus; \
+ 	$(I2C_TOOLS_PYTHON_BASE_ENV) \
+ 		$(HOST_DIR)/bin/python setup.py install \
+-		$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS))
 +		$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
 +		--root=$(TARGET_DIR))
  endef
- endif
  
+ endif # BR2_PACKAGE_PYTHON3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
