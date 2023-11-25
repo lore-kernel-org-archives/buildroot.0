@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0223EC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 812ADC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3D4741880;
-	Mon,  4 Dec 2023 20:22:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3D4741880
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37DFE41B75;
+	Mon,  4 Dec 2023 20:22:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37DFE41B75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OTQd56k2s7TV; Mon,  4 Dec 2023 20:22:19 +0000 (UTC)
+	with ESMTP id sPAXF7ABKDLh; Mon,  4 Dec 2023 20:22:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03FED41B60;
-	Mon,  4 Dec 2023 20:22:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03FED41B60
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 150181BF977
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7864241B72;
+	Mon,  4 Dec 2023 20:22:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7864241B72
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 214381BF31D
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 641B3417C2
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 641B3417C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8709C416F8
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8709C416F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SXegN7ckeIVT for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ie81dauz0qJ9 for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A24EB40B0E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E0C84173A
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A24EB40B0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0C84173A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E376879B9; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+ id 2B76F879B6; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 26 Nov 2023 22:37:41 +0100
+Date: Sat, 25 Nov 2023 22:02:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 05a259ed416d2bef1587a29d35fc117fa81183b2
-X-Git-Newrev: 32c90b6ad7e54e0a750feee33472777a4daef822
+X-Git-Oldrev: b28b95d1e4087e7569522565a8327f45f39e11de
+X-Git-Newrev: 906a9fb98972683c8db3820c073ddaa0a0218212
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201329.8E376879B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8821cu: bump to version
- 2023-09-26
+Message-Id: <20231204201329.2B76F879B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-flit-core: instantiate
+ _INSTALL_CMDS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32c90b6ad7e54e0a750feee33472777a4daef822
+commit: https://git.buildroot.net/buildroot/commit/?id=906a9fb98972683c8db3820c073ddaa0a0218212
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this version we can build with Linux 6.7.
+host-python-flit-core is the only package that overrides
+_BASE_INSTALL_CMD. Since we're going to remove that variable in a
+follow-up patch, we no longer will be able to do that.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Since host-python-flit-core is really a special case, it makes sense to
+define HOST_PYTHON_FLIT_CORE_INSTALL_CMDS in its entirety.
+
+While we're at it, also instantiate
+HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS directly there. This
+variable is not used anywhere else, and it's a bit confusing to have it
+in pkg-python.mk - it looks like a mistake.
+
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rtl8821cu/rtl8821cu.hash | 2 +-
- package/rtl8821cu/rtl8821cu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-python.mk                        | 3 ---
+ package/python-flit-core/python-flit-core.mk | 9 +++++++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
-index c98fd6234f..3d7a1be9d1 100644
---- a/package/rtl8821cu/rtl8821cu.hash
-+++ b/package/rtl8821cu/rtl8821cu.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8e155db366b5a97bc629534131e4fe1e29b455aa0ec9e1f42af23a9b6f610107  rtl8821cu-de36dfeff890086a9f30cd0052715fbaa9554087.tar.gz
-+sha256  5226fefd72d2dd2b8048a8d836f731139ddcb9a34eab68e9b07acee6ee5d8553  rtl8821cu-eb52ece92607394ecc22e96b41671ec3e5b1fa30.tar.gz
- sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
-diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-index 09fca49eb3..8f344d518f 100644
---- a/package/rtl8821cu/rtl8821cu.mk
-+++ b/package/rtl8821cu/rtl8821cu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 5f8ef14262..be9756acc4 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -177,9 +177,6 @@ HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
+ 	--scripts=$(HOST_DIR)/bin \
+ 	--data=$(HOST_DIR)
  
--RTL8821CU_VERSION = de36dfeff890086a9f30cd0052715fbaa9554087
-+RTL8821CU_VERSION = eb52ece92607394ecc22e96b41671ec3e5b1fa30
- RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
- RTL8821CU_LICENSE = GPL-2.0
- RTL8821CU_LICENSE_FILES = LICENSE
+-HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
+-	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+-
+ # Target flit packages
+ PKG_PYTHON_FLIT_ENV = \
+ 	$(PKG_PYTHON_PEP517_ENV)
+diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
+index ea887a0258..34e58d03ca 100644
+--- a/package/python-flit-core/python-flit-core.mk
++++ b/package/python-flit-core/python-flit-core.mk
+@@ -13,7 +13,12 @@ PYTHON_FLIT_CORE_SETUP_TYPE = flit-bootstrap
+ 
+ # Use flit built in bootstrap_install for installing host-python-flit-core.
+ # This is due to host-python-installer depending on host-python-flit-core.
+-#
+-HOST_PYTHON_FLIT_CORE_BASE_INSTALL_CMD = -m bootstrap_install dist/* $(HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS)
++define HOST_PYTHON_FLIT_CORE_INSTALL_CMDS
++	cd $($(PKG)_BUILDDIR)/; \
++		$(HOST_PKG_PYTHON_FLIT_BOOTSTRAP_ENV) \
++		$(HOST_DIR)/bin/python3 \
++		-m bootstrap_install dist/* \
++		--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
++endef
+ 
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
