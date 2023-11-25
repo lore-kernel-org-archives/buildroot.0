@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B39C61DF4
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 341F0C61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC90E4031F;
-	Sat, 25 Nov 2023 11:33:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC90E4031F
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB65040350;
+	Sat, 25 Nov 2023 11:33:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB65040350
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V3nyD_KTniZi; Sat, 25 Nov 2023 11:33:20 +0000 (UTC)
+	with ESMTP id qiDeWAejVMdi; Sat, 25 Nov 2023 11:33:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 891B040426;
-	Sat, 25 Nov 2023 11:33:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 891B040426
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC0414031F;
+	Sat, 25 Nov 2023 11:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC0414031F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 593871BF865
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FBE71BF27C
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C5CF4037C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9416B40236
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C5CF4037C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9416B40236
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pGzzqZAjuUWQ for <buildroot@lists.busybox.net>;
+ with ESMTP id Wi80rlGlSkSV for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5808540236
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7086540320
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5808540236
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7086540320
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 46D6286C44; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
+ id 6AED786C3D; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:24:50 +0100
+Date: Sat, 25 Nov 2023 12:25:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6c70212a09253eb5fb79c715e7fff7fb786a74ba
-X-Git-Newrev: 31d7d323808083e2b8e25a7fdbee08f5486ee291
+X-Git-Oldrev: 47d43fe906c4f0ce5eed14ee1affd846fbae4be2
+X-Git-Newrev: 35744a2c0265d88f1264629f041e1676a0e99f32
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113128.46D6286C44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pathspec: bump
- to version 0.11.2
+Message-Id: <20231125113128.6AED786C3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-periphery: bump
+ to version 2.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31d7d323808083e2b8e25a7fdbee08f5486ee291
+commit: https://git.buildroot.net/buildroot/commit/?id=35744a2c0265d88f1264629f041e1676a0e99f32
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+License hash changed due to year update:
+https://github.com/vsergeev/python-periphery/commit/c0e6741ee294fb9362ddc4b60088f18bb1c27f8d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pathspec/python-pathspec.hash | 4 ++--
- package/python-pathspec/python-pathspec.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-periphery/python-periphery.hash | 8 +++++---
+ package/python-periphery/python-periphery.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pathspec/python-pathspec.hash b/package/python-pathspec/python-pathspec.hash
-index 5eb76cb5f9..01177b7428 100644
---- a/package/python-pathspec/python-pathspec.hash
-+++ b/package/python-pathspec/python-pathspec.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathspec/json
--md5  d89408b52aff020ac768a14c0ef1c7de  pathspec-0.10.3.tar.gz
--sha256  56200de4077d9d0791465aa9095a01d421861e405b5096955051deefd697d6f6  pathspec-0.10.3.tar.gz
-+md5  92ebd6d735d261952ff99d64083eeff4  pathspec-0.11.2.tar.gz
-+sha256  e0d8d0ac2f12da61956eb2306b69f9469b42f4deb0f3cb6ed47b9cce9996ced3  pathspec-0.11.2.tar.gz
- # Locally computed sha256 checksums
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/python-pathspec/python-pathspec.mk b/package/python-pathspec/python-pathspec.mk
-index e88bce231f..d32b6a56e1 100644
---- a/package/python-pathspec/python-pathspec.mk
-+++ b/package/python-pathspec/python-pathspec.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
+index 24e104d3ad..a758fa7a4d 100644
+--- a/package/python-periphery/python-periphery.hash
++++ b/package/python-periphery/python-periphery.hash
+@@ -1,3 +1,5 @@
+-# Locally calculated
+-sha256  385716bdbd11fcf2c5728548c3d42f12ebc0974faa64fa1a98b89b4a44dc004c  python-periphery-2.3.0.tar.gz
+-sha256  76fe342043adfe8d9453c4979aa165476875137e15b0ddea1f4c3f3fa9808361  LICENSE
++# md5, sha256 from https://pypi.org/pypi/python-periphery/json
++md5  2b2a1037fb4ac15e7b0514ce3659d26c  python-periphery-2.4.1.tar.gz
++sha256  61d461d736982a6f766e878720ab10a68151e2e8c1086600d9389ac47e40e88a  python-periphery-2.4.1.tar.gz
++# Locally computed sha256 checksums
++sha256  321124461e9f86f4f7bb9f571500bf58ec1b76206b642e505ce17db7f7c88e05  LICENSE
+diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
+index 2c533fa2c2..7a49f305a5 100644
+--- a/package/python-periphery/python-periphery.mk
++++ b/package/python-periphery/python-periphery.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PATHSPEC_VERSION = 0.10.3
-+PYTHON_PATHSPEC_VERSION = 0.11.2
- PYTHON_PATHSPEC_SOURCE = pathspec-$(PYTHON_PATHSPEC_VERSION).tar.gz
--PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/32/1a/6baf904503c3e943cae9605c9c88a43b964dea5b59785cf956091b341b08
-+PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/a0/2a/bd167cdf116d4f3539caaa4c332752aac0b3a0cc0174cdb302ee68933e81
- PYTHON_PATHSPEC_LICENSE = MPL-2.0
- PYTHON_PATHSPEC_LICENSE_FILES = LICENSE
- PYTHON_PATHSPEC_SETUP_TYPE = setuptools
+-PYTHON_PERIPHERY_VERSION = 2.3.0
+-PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
++PYTHON_PERIPHERY_VERSION = 2.4.1
++PYTHON_PERIPHERY_SITE = https://files.pythonhosted.org/packages/df/f1/1a986ad2bb696033168db2121151e5ff90df033af780ffca47c8bb559f29
+ PYTHON_PERIPHERY_LICENSE = MIT
+ PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
+ PYTHON_PERIPHERY_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
