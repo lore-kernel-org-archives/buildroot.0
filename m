@@ -1,88 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 248C8C61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 08:22:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE895C61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 09:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD1E2615FE;
-	Sat, 25 Nov 2023 08:22:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD1E2615FE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 33957400C5;
+	Sat, 25 Nov 2023 09:06:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33957400C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JBDwU4_Yoj-t; Sat, 25 Nov 2023 08:22:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GY3vl7DSj2hC; Sat, 25 Nov 2023 09:06:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2730260E59;
-	Sat, 25 Nov 2023 08:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2730260E59
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 498EA1BF3D2
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 08:22:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1F1C54016B;
+	Sat, 25 Nov 2023 09:06:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F1C54016B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8095D1BF2CE
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 09:06:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E998615FE
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 08:22:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E998615FE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58EBA82164
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 09:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58EBA82164
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sUaU6OPjJEAk for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 08:22:12 +0000 (UTC)
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 333E86161E
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 08:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 333E86161E
-Received: by mail-il1-x136.google.com with SMTP id
- e9e14a558f8ab-35c8adc38f2so535425ab.1
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 00:22:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1700900530; x=1701505330;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=2Tj0V20xax2Ur1q1stuHC1gEt63MaJ9kec1E4T2Un74=;
- b=M4QtUDgQFNjsJlbBNpeoS7lK9zwmIjODEJxQX8MgRpKOAtpqF2NZv/0Ooz5gNV0mar
- q6hrTboadC1CjqOBcJHH0Shs6EF0Sjjc1AdQh9JZaHGFYD+pUIiPreGzcXZc5uU3lztS
- OCrUE54bNVdBAOju2IeUtV+4Dg5GDeMQPFvAYah5dU4cIb+gsi2sfYNHbb0GT+QAf+oE
- /sbR09vgfvqiLTSi6j2Z0ZvLyA7Bj1uE/4WEg3sT2QhaZczdyLYpyAIuPm+XNO2d2Wcf
- vVXDvf7g6pQD/TNnk6JblE4JCluMg6xkzTg1FClyqU6UVf5CbuQszAfkTefkFNc9DD1A
- IyCA==
-X-Gm-Message-State: AOJu0YwCbkHlMeuoRCtrLqmJCMEjj3qaT/UpMykHWLL9m2Fb1mIGHUWQ
- j6sxXdKsnVGO8gXcgnFE+nepjYvcSg4=
-X-Google-Smtp-Source: AGHT+IHqXFWPEQ2fMKPE/XS0HM9JNckT5otHxLItcD2rXLmjAGOZ7IAsvu5UH0DbK+RB8185hZhz6w==
-X-Received: by 2002:a92:c5c9:0:b0:357:592a:8c4a with SMTP id
- s9-20020a92c5c9000000b00357592a8c4amr5960130ilt.12.1700900529856; 
- Sat, 25 Nov 2023 00:22:09 -0800 (PST)
-Received: from james-x399.localdomain (97-118-243-253.hlrn.qwest.net.
- [97.118.243.253]) by smtp.gmail.com with ESMTPSA id
- y10-20020a05663824ca00b004640798fc0dsm1228016jat.153.2023.11.25.00.22.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Nov 2023 00:22:09 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KAmAB9VDXrXu for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 09:06:32 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F031F8215E
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 09:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F031F8215E
+Received: from fli4l.lan.fli4l (p4fd6c4a5.dip0.t-ipconnect.de [79.214.196.165])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C28CFA4C0921
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 10:06:27 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52490)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
+ (envelope-from <bernd@kuhls.net>) id 1r6ocM-0001pw-2e
+ for buildroot@buildroot.org; Sat, 25 Nov 2023 10:06:26 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 01:22:08 -0700
-Message-Id: <20231125082208.888608-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 25 Nov 2023 10:06:26 +0100
+Message-Id: <20231125090626.20610-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1700900530; x=1701505330; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2Tj0V20xax2Ur1q1stuHC1gEt63MaJ9kec1E4T2Un74=;
- b=RR7GksXK87NKNXIqwou4DSo/LciMFNmBC2saJXQ3/Sl/KzKXvcqvjNDIK35oF7znKl
- cyfVfNNl0mI3DebJKDmIgNG66t+D73RwIz1z26GZ2XMAxwBKfa/rjzuejHK/OkIf+slK
- oTBeUTP39+3/N0XlI8CEgqm3J1Hgcb8K4GO4/Z2iQCrVzZwWy4mLUe00aC4VzOo9AqWU
- cBljnij/qYmwjKanIUevFMiynYlt/6a2WDumXckWc8gKXsh8iECrFEoZw1A2hckRRWM6
- qmJS+BR5T1xQce2jcBwm+BUDNWUl/YGH+bwskCh/b/MvWYWJGfP5PMd1hQnJ3MN7Xyyv
- 0cVA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=RR7GksXK
-Subject: [Buildroot] [PATCH 1/1] package/python-pyelftools: bump to version
- 0.30
+ d=kuhls.net; 
+ s=kas202306131828; t=1700903187;
+ bh=PY7KTnG4GW6nsvFjoMnw0ViemuJPT5d4QAZX4gFBP6Y=;
+ h=From:To:Subject:Date:From;
+ b=T2TvoG+r5wNLCyxyN8ZvkHJhT6ua75NwpTuRhrj05PbtSq1dwg7ujGjIR/gHqq/Qp
+ Mb8TXFgRXhrfeoijLAxQLB140hHoei2Qhx00vHPlfXxBiZHxoWNp4OePb4m82Y5YAE
+ sivbDTjlK95e8MkD8gv1EnQi+EkggsOClAQ8RDzl+SidfMKYhL1YXo4NPLq+51Xv09
+ kUK5nLp7VCVTa7i97TGnarKRBANISQAFzs7xS9Zg+1hc6irhrPF/J7xX5HhJWxE091
+ Z0dKSaGtBqXgJFQabuIvWo7vljVb/J1gptZWrX6UVNwxf5yZQ6Ogo5gAShasAWr4ig
+ esIiyJ1ZArg9Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=T2TvoG+r
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 5, 6}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,49 +75,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Olivier Matz <olivier.matz@6wind.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pyelftools/python-pyelftools.hash | 4 ++--
- package/python-pyelftools/python-pyelftools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 16 ++++++++--------
+ package/linux-headers/Config.in.host | 16 ++++++++--------
+ 3 files changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/package/python-pyelftools/python-pyelftools.hash b/package/python-pyelftools/python-pyelftools.hash
-index 7cffe2d646..70af8104b9 100644
---- a/package/python-pyelftools/python-pyelftools.hash
-+++ b/package/python-pyelftools/python-pyelftools.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyelftools/json
--md5  2afc97cd239c0dea0cca97d00d3dcb42  pyelftools-0.29.tar.gz
--sha256  ec761596aafa16e282a31de188737e5485552469ac63b60cfcccf22263fd24ff  pyelftools-0.29.tar.gz
-+md5  2b4f82fd30436834b9357a5e74b8ceb7  pyelftools-0.30.tar.gz
-+sha256  2fc92b0d534f8b081f58c7c370967379123d8e00984deb53c209364efd575b40  pyelftools-0.30.tar.gz
- # Locally computed sha256 checksums
- sha256  ae18bf4cb82f92af7547259177bc28bc48e4fc732518bcedfe690226288d3445  LICENSE
-diff --git a/package/python-pyelftools/python-pyelftools.mk b/package/python-pyelftools/python-pyelftools.mk
-index 7566f24895..0e52c0b885 100644
---- a/package/python-pyelftools/python-pyelftools.mk
-+++ b/package/python-pyelftools/python-pyelftools.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index d6e563212b..a2628b95c2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--PYTHON_PYELFTOOLS_VERSION = 0.29
-+PYTHON_PYELFTOOLS_VERSION = 0.30
- PYTHON_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON_PYELFTOOLS_VERSION).tar.gz
--PYTHON_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/0e/35/e76da824595452a5ad07f289ea1737ca0971fc6cc7b6ee9464279be06b5e
-+PYTHON_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/84/05/fd41cd647de044d1ffec90ce5aaae935126ac217f8ecb302186655284fc8
- PYTHON_PYELFTOOLS_LICENSE = Public domain
- PYTHON_PYELFTOOLS_LICENSE_FILES = LICENSE
- PYTHON_PYELFTOOLS_SETUP_TYPE = setuptools
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.6.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.6.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index aa94a4ca91..c221b25b34 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,14 +1,14 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  da1ed7d47c97ed72c9354091628740aa3c40a3c9cd7382871f3cedbd60588234  linux-6.6.1.tar.xz
+-sha256  2ee24af9282b80923b2da56b70aad7df2e8ee4e3f076452e05ba66be2059b519  linux-6.5.11.tar.xz
+-sha256  b9fd616facd6becfceef88b9be718d0f16625cab3fe81d11384802a7091e85ec  linux-6.1.62.tar.xz
++sha256  73d4f6ad8dd6ac2a41ed52c2928898b7c3f2519ed5dbdb11920209a36999b77e  linux-6.6.2.tar.xz
++sha256  4a69c1d32c974e125ad723145d31683a3b078667ad56d17f7852dcaffb9f359f  linux-6.5.12.tar.xz
++sha256  c29d043b01dd4fcc61a24fd027c5c7912b15b1f10d8e3c83a0cb935885f0758d  linux-6.1.63.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  af84e54164e1c01f59764ba528448ed36b377d22aafbd81b4b0cf47792ef4aaa  linux-5.15.138.tar.xz
+-sha256  9d2d961fbf87486e48b0087326ee35cb0af4dec03c770737b098652457205104  linux-5.10.200.tar.xz
+-sha256  9830820714c8f5985c50071cc9e1b40533ee81a4f6c704916c7148d16e54ebfe  linux-5.4.260.tar.xz
++sha256  9c68c10dfe18e59b892e940436dea6a18d167160d55e62563cf7282244d8044e  linux-5.15.139.tar.xz
++sha256  6afc06598fa8e3bc907cff75f995f372df51d40a284e260de78a3421b1f18218  linux-5.10.201.tar.xz
++sha256  31bac78086f0aa0b3b30d521a21a6ecb2374bdf036f69c3fa42e7eb6c5b64fc3  linux-5.4.261.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  9da816bce896024c96b6c846be8f3e6315dd6ae82925698f534153d6a0c10f56  linux-4.19.298.tar.xz
+-sha256  de36689d713ed17f8bc1286fe4b9afcdb9a3de3b6f1d6aff52569f055c276bb7  linux-4.14.329.tar.xz
++sha256  c6fb7521e1b4124d5c7637768f1b13d9a57f887d6e50aa80d34e62296e18e48a  linux-4.19.299.tar.xz
++sha256  670ecc452c4a55d52b0dc1f3e11460e88f0ac5e7b3df0672fc46db5c9dff8f67  linux-4.14.330.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 81bd9f9380..057a829140 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -412,14 +412,14 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.329"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.298"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.260"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.200"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.138"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.62"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.5.11"	if BR2_KERNEL_HEADERS_6_5
+-	default "6.6.1"		if BR2_KERNEL_HEADERS_6_6
++	default "4.14.330"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.299"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.261"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.201"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.139"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.63"	if BR2_KERNEL_HEADERS_6_1
++	default "6.5.12"	if BR2_KERNEL_HEADERS_6_5
++	default "6.6.2"		if BR2_KERNEL_HEADERS_6_6
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
