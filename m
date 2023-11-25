@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8FEEC61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:32:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D87BC61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:33:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 87A2640220;
-	Sat, 25 Nov 2023 11:32:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87A2640220
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45E8B4037C;
+	Sat, 25 Nov 2023 11:33:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45E8B4037C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m9mHlKarB3Hr; Sat, 25 Nov 2023 11:32:53 +0000 (UTC)
+	with ESMTP id IXN7pflg0GL9; Sat, 25 Nov 2023 11:33:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3683140160;
-	Sat, 25 Nov 2023 11:32:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3683140160
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AD3A71BF27C
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA0C040391;
+	Sat, 25 Nov 2023 11:33:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA0C040391
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AB401BF27C
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A547F415BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5BD4D817FF
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A547F415BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BD4D817FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RwUZhsl0W-OP for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ah5VdKbuTTJh for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8E074209C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8811282135
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8E074209C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8811282135
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B755686C5E; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
+ id 75E0B86C44; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:26:02 +0100
+Date: Sat, 25 Nov 2023 12:25:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3223987c937c5e7ef2caf0166bb45f4089d89b2f
-X-Git-Newrev: 0bfd7351e1970d03ba692a3ab0207aee4a527dbd
+X-Git-Oldrev: 35744a2c0265d88f1264629f041e1676a0e99f32
+X-Git-Newrev: 96980b4738c5adada09e39abac4c3087954cf1ce
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113128.B755686C5E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pyasn1-modules:
- bump to version 0.3.0
+Message-Id: <20231125113128.75E0B86C44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pillow: bump to
+ version 10.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bfd7351e1970d03ba692a3ab0207aee4a527dbd
+commit: https://git.buildroot.net/buildroot/commit/?id=96980b4738c5adada09e39abac4c3087954cf1ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Update github url to new repository.
-
-License hash changed due to year update:
-https://github.com/pyasn1/pyasn1-modules/commit/848e7d6a6e8c16d68fb7bedd0715f724ef538b5d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pyasn1-modules/Config.in                  | 2 +-
- package/python-pyasn1-modules/python-pyasn1-modules.hash | 6 +++---
- package/python-pyasn1-modules/python-pyasn1-modules.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-pillow/python-pillow.hash | 4 ++--
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyasn1-modules/Config.in b/package/python-pyasn1-modules/Config.in
-index 6aff4d935b..cb486d33ae 100644
---- a/package/python-pyasn1-modules/Config.in
-+++ b/package/python-pyasn1-modules/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_PYTHON_PYASN1_MODULES
- 	help
- 	  A collection of ASN.1-based protocols modules.
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index c2c5125678..92258a6712 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pillow/json
+-md5  93a0585ab0ee9717a7576129bdabdf93  Pillow-10.0.1.tar.gz
+-sha256  d72967b06be9300fed5cfbc8b5bafceec48bf7cdc7dab66b1d2549035287191d  Pillow-10.0.1.tar.gz
++md5  a55618c5d2fd64048dd3ea41bc39f7cd  Pillow-10.1.0.tar.gz
++sha256  e6bf8de6c36ed96c86ea3b6e1d5273c53f46ef518a062464cd7ef5dd2cf92e38  Pillow-10.1.0.tar.gz
  
--	  https://github.com/etingof/pyasn1-modules
-+	  https://github.com/pyasn1/pyasn1-modules
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-index 2305596585..6f4bb6faf0 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.hash
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
--md5  107e1ece7d0a41d782f69f8a95a4d9bc  pyasn1-modules-0.2.8.tar.gz
--sha256  905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e  pyasn1-modules-0.2.8.tar.gz
-+md5  94ee572b06ae09f1903b11333575b091  pyasn1_modules-0.3.0.tar.gz
-+sha256  5bd01446b736eb9d31512a30d46c1ac3395d676c6f3cafa4c03eb54b9925631c  pyasn1_modules-0.3.0.tar.gz
  # Locally computed sha256 checksums
--sha256  22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
-+sha256  2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd  LICENSE.txt
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-index 9933a63aa7..41987028fc 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.mk
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-@@ -4,9 +4,9 @@
+ sha256  0fdb68ffb39062553be40be4e6eaea9700b4f5e870a720ae86b8925d67613ddd  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index d9f6fba861..bc94062da8 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PYASN1_MODULES_VERSION = 0.2.8
--PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
--PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/88/87/72eb9ccf8a58021c542de2588a867dbefc7556e14b2866d1e40e9e2b587e
-+PYTHON_PYASN1_MODULES_VERSION = 0.3.0
-+PYTHON_PYASN1_MODULES_SOURCE = pyasn1_modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
-+PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/3b/e4/7dec823b1b5603c5b3c51e942d5d9e65efd6ff946e713a325ed4146d070f
- PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
- PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
+-PYTHON_PILLOW_VERSION = 10.0.1
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/64/9e/7e638579cce7dc346632f020914141a164a872be813481f058883ee8d421
++PYTHON_PILLOW_VERSION = 10.1.0
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/80/d7/c4b258c9098b469c4a4e77b0a99b5f4fd21e359c2e486c977d231f52fc71
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
