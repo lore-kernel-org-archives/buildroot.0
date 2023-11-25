@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A365EC4167B
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 15:42:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A30E8C4167B
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 21:06:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CB2C418A4;
-	Sat, 25 Nov 2023 15:42:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CB2C418A4
+	by smtp1.osuosl.org (Postfix) with ESMTP id E64BE80A5A;
+	Sat, 25 Nov 2023 21:05:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E64BE80A5A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id svrtlb8ipKNk; Sat, 25 Nov 2023 15:42:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EvEZciw45C7w; Sat, 25 Nov 2023 21:05:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72D68418BB;
-	Sat, 25 Nov 2023 15:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72D68418BB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 916141BF423
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 15:42:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5544180F54;
+	Sat, 25 Nov 2023 21:05:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5544180F54
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AB4C91BF473
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:05:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6ACDC60B69
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 15:42:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6ACDC60B69
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9175181238
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:05:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9175181238
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BUGfwIiAJvEG for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 15:42:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I8nsDN1PO01z for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A2CC560B68
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 15:42:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2CC560B68
+ by smtp1.osuosl.org (Postfix) with ESMTP id C44A880F54
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C44A880F54
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9237A87082; Sat, 25 Nov 2023 15:42:20 +0000 (UTC)
+ id AC7C6873AF; Sat, 25 Nov 2023 21:05:55 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 16:41:41 +0100
+Date: Sat, 25 Nov 2023 22:02:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ba27abf3566a86ecf2f89c7a4bb1d2c6a50eda89
-X-Git-Newrev: aae25fb55e13198cfabbcbd7e561767d337c0407
+X-Git-Oldrev: fde20964c71202589568d84de0c3bb4c3d6e9b17
+X-Git-Newrev: 0c54deff255d433db46e6c5ecd14c8e97f1715dd
 X-Patchwork-Hint: ignore
-Message-Id: <20231125154220.9237A87082@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pkg-python.mk: split
- the commands in a target and host section
+Message-Id: <20231125210555.AC7C6873AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/jailhouse: expand
+ PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,91 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aae25fb55e13198cfabbcbd7e561767d337c0407
+commit: https://git.buildroot.net/buildroot/commit/?id=0c54deff255d433db46e6c5ecd14c8e97f1715dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Only define the _CMDS variables that are relevant for the target resp.
-host variant. Duplicate the _BUILD_CMDS. This will allow us to
-differentiate part of the _BUILD_CMDS definition in a follow-up patch.
+In a follow-up patch, we want to remove this variable. Replace it with
+its expansion, which is anyway just
+$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) --root=$(TARGET_DIR)
 
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+[yann.morin.1998@free.fr:
+  - fixup after introduction of JAILHOUSE_INSTALL_HELPER_SCRIPTS
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-python.mk | 47 +++++++++++++++++++++++++++++++++--------------
- 1 file changed, 33 insertions(+), 14 deletions(-)
+ package/jailhouse/jailhouse.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index eacf75c165..c1640d71bb 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -324,6 +324,7 @@ $(2)_DOWNLOAD_POST_PROCESS = cargo
- $(2)_DOWNLOAD_DEPENDENCIES = host-rustc
- endif # SETUP_TYPE
- 
-+ifeq ($(4),target)
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
-@@ -338,20 +339,6 @@ define $(2)_BUILD_CMDS
+diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
+index 913be765bd..c239e75e76 100644
+--- a/package/jailhouse/jailhouse.mk
++++ b/package/jailhouse/jailhouse.mk
+@@ -42,7 +42,8 @@ define JAILHOUSE_INSTALL_HELPER_SCRIPTS
+ 	$(PKG_PYTHON_SETUPTOOLS_ENV) \
+ 	$(HOST_DIR)/bin/python setup.py \
+ 		install --no-compile \
+-		$(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS)
++		$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
++		--root=$(TARGET_DIR))
  endef
  endif
  
--#
--# Host installation step. Only define it if not already defined by the
--# package .mk file.
--#
--ifndef $(2)_INSTALL_CMDS
--define $(2)_INSTALL_CMDS
--	(cd $$($$(PKG)_BUILDDIR)/; \
--		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
--		$$(HOST_DIR)/bin/python3 \
--		$$($$(PKG)_BASE_INSTALL_CMD) \
--		$$($$(PKG)_INSTALL_OPTS))
--endef
--endif
--
- #
- # Target installation step. Only define it if not already defined by
- # the package .mk file.
-@@ -380,6 +367,38 @@ define $(2)_INSTALL_STAGING_CMDS
- endef
- endif
- 
-+else # host
-+
-+#
-+# Host build step. Only define it if not already defined by the package .mk
-+# file.
-+#
-+ifndef $(2)_BUILD_CMDS
-+define $(2)_BUILD_CMDS
-+	(cd $$($$(PKG)_BUILDDIR)/; \
-+		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
-+		$$(HOST_DIR)/bin/python3 \
-+		$$($$(PKG)_BASE_BUILD_CMD) \
-+		$$($$(PKG)_BUILD_OPTS))
-+endef
-+endif
-+
-+#
-+# Host installation step. Only define it if not already defined by the
-+# package .mk file.
-+#
-+ifndef $(2)_INSTALL_CMDS
-+define $(2)_INSTALL_CMDS
-+	(cd $$($$(PKG)_BUILDDIR)/; \
-+		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
-+		$$(HOST_DIR)/bin/python3 \
-+		$$($$(PKG)_BASE_INSTALL_CMD) \
-+		$$($$(PKG)_INSTALL_OPTS))
-+endef
-+endif
-+
-+endif # host / target
-+
- # Call the generic package infrastructure to generate the necessary
- # make targets
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
