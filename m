@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 357FDC61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:36:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 322CBC61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2A9A4050C;
-	Sat, 25 Nov 2023 11:36:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2A9A4050C
+	by smtp2.osuosl.org (Postfix) with ESMTP id D472B40350;
+	Sat, 25 Nov 2023 11:36:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D472B40350
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 56LI7e_8XnhL; Sat, 25 Nov 2023 11:36:20 +0000 (UTC)
+	with ESMTP id hQZ66QTXXmYH; Sat, 25 Nov 2023 11:36:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E62B04051C;
-	Sat, 25 Nov 2023 11:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E62B04051C
+	by smtp2.osuosl.org (Postfix) with ESMTP id A76924053E;
+	Sat, 25 Nov 2023 11:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A76924053E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5ACEE1BF27C
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4EAEB1BF27C
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 988A840342
+ by smtp2.osuosl.org (Postfix) with ESMTP id A910940350
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 988A840342
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A910940350
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id om9r0b17WKYB for <buildroot@lists.busybox.net>;
+ with ESMTP id HIsFni-HrLlg for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03B0E40370
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0288A40352
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03B0E40370
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0288A40352
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 011CD86BCA; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
+ id E7A3486C3D; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:26:38 +0100
+Date: Sat, 25 Nov 2023 12:26:31 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 66f94d372fce75240cceadeb1bdc738297cfb8fc
-X-Git-Newrev: 618ad13422197e3ad18893bc034a11d4b4d0f6c6
+X-Git-Oldrev: ecc9da527794cf6a1b09e132412350376349d2d5
+X-Git-Newrev: 66f94d372fce75240cceadeb1bdc738297cfb8fc
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113129.011CD86BCA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pydal: bump to
- version 20231114.3
+Message-Id: <20231125113128.E7A3486C3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pycryptodomex:
+ bump to version 3.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=618ad13422197e3ad18893bc034a11d4b4d0f6c6
+commit: https://git.buildroot.net/buildroot/commit/?id=66f94d372fce75240cceadeb1bdc738297cfb8fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pydal/python-pydal.hash | 4 ++--
- package/python-pydal/python-pydal.mk   | 4 ++--
+ package/python-pycryptodomex/python-pycryptodomex.hash | 4 ++--
+ package/python-pycryptodomex/python-pycryptodomex.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-index 8ed25084d1..9f2ab55508 100644
---- a/package/python-pydal/python-pydal.hash
-+++ b/package/python-pydal/python-pydal.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydal/json
--md5  47f0425745bcd1bb413aa9208cd06b3c  pydal-20230521.1.tar.gz
--sha256  10478a61e627c5b8cb7691f7f7ebf7210845485316493d37d740c297fb6d1845  pydal-20230521.1.tar.gz
-+md5  b2072b7b000223890b56830ca1ab3616  pydal-20231114.3.tar.gz
-+sha256  c42d16fca9e3bb6d399aefb2434c0e70862ee13c75437852f421920432ee5fb1  pydal-20231114.3.tar.gz
+diff --git a/package/python-pycryptodomex/python-pycryptodomex.hash b/package/python-pycryptodomex/python-pycryptodomex.hash
+index 954f4a8938..2b74e03e76 100644
+--- a/package/python-pycryptodomex/python-pycryptodomex.hash
++++ b/package/python-pycryptodomex/python-pycryptodomex.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pycryptodomex/json
+-md5  3b8d868cef13ea41cb3bfeab66a7707c  pycryptodomex-3.18.0.tar.gz
+-sha256  3e3ecb5fe979e7c1bb0027e518340acf7ee60415d79295e5251d13c68dde576e  pycryptodomex-3.18.0.tar.gz
++md5  0dc96e1ffb42c955d89c2ce3f3875c9c  pycryptodomex-3.19.0.tar.gz
++sha256  af83a554b3f077564229865c45af0791be008ac6469ef0098152139e6bd4b5b6  pycryptodomex-3.19.0.tar.gz
  # Locally computed sha256 checksums
- sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-index 1cc7e90b11..245383f244 100644
---- a/package/python-pydal/python-pydal.mk
-+++ b/package/python-pydal/python-pydal.mk
+ sha256  4e04660d77c1c64e89d79537919fb8240fa21484a7e3db29f358b2c7f84ea073  LICENSE.rst
+ sha256  8e563c767164faa0831a333b57d23d4311cf566eb1b15d93250f4606be4eb549  Doc/LEGAL/COPYRIGHT.pycrypto
+diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
+index d6eb2a9513..0d9855c602 100644
+--- a/package/python-pycryptodomex/python-pycryptodomex.mk
++++ b/package/python-pycryptodomex/python-pycryptodomex.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDAL_VERSION = 20230521.1
-+PYTHON_PYDAL_VERSION = 20231114.3
- PYTHON_PYDAL_SOURCE = pydal-$(PYTHON_PYDAL_VERSION).tar.gz
--PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/68/b4/15dc227f965cc0525ca7f432368706cc4087ad6d587a5a05b251d133023e
-+PYTHON_PYDAL_SITE = https://files.pythonhosted.org/packages/0b/3b/86302e165af07bc3d9225aea6ed8f52386270220e4aac1aad0101a48aac1
- PYTHON_PYDAL_LICENSE = BSD-3-Clause
- PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
- PYTHON_PYDAL_SETUP_TYPE = setuptools
+-PYTHON_PYCRYPTODOMEX_VERSION = 3.18.0
++PYTHON_PYCRYPTODOMEX_VERSION = 3.19.0
+ PYTHON_PYCRYPTODOMEX_SOURCE = pycryptodomex-$(PYTHON_PYCRYPTODOMEX_VERSION).tar.gz
+-PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/40/92/efd675dba957315d705f792b28d900bddc36f39252f6713961b4221ee9af
++PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/14/c9/09d5df04c9f29ae1b49d0e34c9934646b53bb2131a55e8ed2a0d447c7c53
+ PYTHON_PYCRYPTODOMEX_SETUP_TYPE = setuptools
+ PYTHON_PYCRYPTODOMEX_LICENSE = \
+ 	BSD-2-Clause, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
