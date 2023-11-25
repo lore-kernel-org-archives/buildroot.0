@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A65EFC61D9D
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:31:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE794C61D9D
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 11:31:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48FEC40391;
-	Sat, 25 Nov 2023 11:31:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48FEC40391
+	by smtp2.osuosl.org (Postfix) with ESMTP id 610FF402F2;
+	Sat, 25 Nov 2023 11:31:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 610FF402F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KWS9LaJCRYU2; Sat, 25 Nov 2023 11:31:44 +0000 (UTC)
+	with ESMTP id yxpy7g3wPrrh; Sat, 25 Nov 2023 11:31:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7D02A40342;
-	Sat, 25 Nov 2023 11:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D02A40342
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1D30F1BF863
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D4BC402E0;
+	Sat, 25 Nov 2023 11:31:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D4BC402E0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3910D1BF865
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04E2B415BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0E1A08216D
  for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 11:31:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E2B415BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E1A08216D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id at3Vt8-aacVh for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U3hCOFY2ueAo for <buildroot@lists.busybox.net>;
  Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4177C42096
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2AFAE80A51
  for <buildroot@buildroot.org>; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4177C42096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AFAE80A51
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E46686C5D; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
+ id 147B586BCA; Sat, 25 Nov 2023 11:31:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:24:34 +0100
+Date: Sat, 25 Nov 2023 12:24:20 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 134e65f023d6a9e28ceea595fe5e7c66f58837ca
-X-Git-Newrev: c4749c6f82a2009ab9b7ae084a60344344b98f11
+X-Git-Oldrev: a7d2810bc9082d168799c051a4f2e5937a9254a1
+X-Git-Newrev: 0cdce6d53f744252d6799ae63894b93f7f03e2ea
 X-Patchwork-Hint: ignore
-Message-Id: <20231125113128.2E46686C5D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-packaging: bump
- to version 23.2
+Message-Id: <20231125113128.147B586BCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-mako: bump to
+ version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4749c6f82a2009ab9b7ae084a60344344b98f11
+commit: https://git.buildroot.net/buildroot/commit/?id=0cdce6d53f744252d6799ae63894b93f7f03e2ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+License hash changed due to year update:
+https://github.com/sqlalchemy/mako/commit/272f5d8cc97aee829e3b285486f33c9c8e604c74
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-packaging/python-packaging.hash | 4 ++--
- package/python-packaging/python-packaging.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-mako/python-mako.hash | 6 +++---
+ package/python-mako/python-mako.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-packaging/python-packaging.hash b/package/python-packaging/python-packaging.hash
-index 0e339ea573..df75c3505c 100644
---- a/package/python-packaging/python-packaging.hash
-+++ b/package/python-packaging/python-packaging.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/packaging/json
--md5  f7d5c39c6f92cc2dfa1293ba8f6c097c  packaging-23.1.tar.gz
--sha256  a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f  packaging-23.1.tar.gz
-+md5  d54eeff8c7ca86980528f4132f258d54  packaging-23.2.tar.gz
-+sha256  048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5  packaging-23.2.tar.gz
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index a010e8d8f6..03651cf956 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mako/json
+-md5  651f365616611fcd4f2702a9002e2195  Mako-1.2.4.tar.gz
+-sha256  d60a3903dc3bb01a18ad6a89cdbe2e4eadc69c0bc8ef1e3773ba53d44c3f7a34  Mako-1.2.4.tar.gz
++md5  90da23903468efe9aa88dc88081579ff  Mako-1.3.0.tar.gz
++sha256  e3a9d388fd00e87043edbe8792f45880ac0114e9c4adc69f6e9bfb2c55e3b11b  Mako-1.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48  LICENSE
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.APACHE
-diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
-index aac4d76ee2..3e0f85c00a 100644
---- a/package/python-packaging/python-packaging.mk
-+++ b/package/python-packaging/python-packaging.mk
+-sha256  760f22b3e9ea4a50eb99201bd8dd118869f28108cfb64ccce6d1b305cf9ae9fa  LICENSE
++sha256  0a326e448dd22f220dd30796677ddbdf3ddaa6427a9744fea9deaa51d9d74fd9  LICENSE
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 313fbfcab2..1f7a0b0657 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PACKAGING_VERSION = 23.1
-+PYTHON_PACKAGING_VERSION = 23.2
- PYTHON_PACKAGING_SOURCE = packaging-$(PYTHON_PACKAGING_VERSION).tar.gz
--PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/b9/6c/7c6658d258d7971c5eb0d9b69fa9265879ec9a9158031206d47800ae2213
-+PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/fb/2b/9b9c33ffed44ee921d0967086d653047286054117d584f1b1a7c22ceaf7b
- PYTHON_PACKAGING_SETUP_TYPE = flit
- PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
- PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_MAKO_VERSION = 1.2.4
++PYTHON_MAKO_VERSION = 1.3.0
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/05/5f/2ba6e026d33a0e6ddc1dddf9958677f76f5f80c236bd65309d280b166d3e
++PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/a9/6e/6b41e654bbdcef90c6b9e7f280bf7cbd756dc2560ce76214f5cdbc4ddab5
+ PYTHON_MAKO_SETUP_TYPE = setuptools
+ PYTHON_MAKO_LICENSE = MIT
+ PYTHON_MAKO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
