@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CFF0C4167B
-	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 21:41:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF815C4167B
+	for <buildroot@archiver.kernel.org>; Sat, 25 Nov 2023 22:04:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2ABC460A74;
-	Sat, 25 Nov 2023 21:41:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ABC460A74
+	by smtp3.osuosl.org (Postfix) with ESMTP id 735CD608B7;
+	Sat, 25 Nov 2023 22:04:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 735CD608B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bs5avPSiYUVv; Sat, 25 Nov 2023 21:41:20 +0000 (UTC)
+	with ESMTP id ufnpM9fS6Kqu; Sat, 25 Nov 2023 22:04:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5AFBA60A4F;
-	Sat, 25 Nov 2023 21:41:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AFBA60A4F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84B8160A4F;
+	Sat, 25 Nov 2023 22:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84B8160A4F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A43991BF473
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:41:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A577F1BF47F
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 22:04:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7ACF9400DD
- for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 21:41:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7ACF9400DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 898A2400DD
+ for <buildroot@lists.busybox.net>; Sat, 25 Nov 2023 22:04:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 898A2400DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kRmCs7uZDQvM for <buildroot@lists.busybox.net>;
- Sat, 25 Nov 2023 21:41:16 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0AA0D400B8
- for <buildroot@buildroot.org>; Sat, 25 Nov 2023 21:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AA0D400B8
+ with ESMTP id EWwEtarKIXCz for <buildroot@lists.busybox.net>;
+ Sat, 25 Nov 2023 22:04:46 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D85F2400B8
+ for <buildroot@buildroot.org>; Sat, 25 Nov 2023 22:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D85F2400B8
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:a9ce:514c:eb15:225c])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3B51713F86E;
- Sat, 25 Nov 2023 22:41:11 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id DF89D13F89C;
+ Sat, 25 Nov 2023 23:04:39 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 25 Nov 2023 22:41:11 +0100
-Date: Sat, 25 Nov 2023 22:41:11 +0100
+ Sat, 25 Nov 2023 23:04:39 +0100
+Date: Sat, 25 Nov 2023 23:04:39 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231125214111.GP3177259@scaer>
-References: <20231123215250.486862-1-fontaine.fabrice@gmail.com>
+To: Ralf Dragon <hypnotoad@lindra.de>
+Message-ID: <20231125220439.GQ3177259@scaer>
+References: <20231123174105.2435757-1-hypnotoad@lindra.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231123215250.486862-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20231123174105.2435757-1-hypnotoad@lindra.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1700948474;
- bh=Vpxw1Z4Ai+7IKSqYlfomG4qt4PGse91XAVcH2ErStck=;
+ d=free.fr; s=smtp-20201208; t=1700949884;
+ bh=qOcA2QP16eTyYkwP/06EXV3vZbLFAdPMXMdx83dopVQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dwHrVHPqu4hPhRsCfHPCI8scVjJ9vocuE3OqOaCMV2LZYRNosQVSsI5MWnYT3iV0u
- XZj52XlYvcEFrADfTx3iMBXmtbSDj1moAOF1W3Nvcg2GjFiaT31uExLlv2jM1c3qS5
- JuFZGNoUet1y1GL3vYhkn3Mp8kopu/rjJalNrKTb23MYaXENqTbcY01sKH8xK4pQw/
- ZsJCdjVCHU4b0mRWsTQvPceXYBnHaHC374otR1szHIpDU1FAdRYRgrzIFlET968PvW
- DjeO7puDYG13W05uSyCgvZVtSxlOPKAwYhaGjfn21VvrpIokPDQrr7qGN5kpgFAHSw
- +AIaOn6BGlOPA==
+ b=Q8FpisC5xLEi2cmD7/40sRoFfVOuEpQMMhNlMhFAlsDGryoDDTP4vOO99mslEdH3T
+ 5k6TKAmEKnYEEXah4w4AIrVexhWebELui0/wPntk/rmzNAuV3Zds67Wduds5fYM3N5
+ 3vF6qZDklhLDW101WF7cMDvzDhGVTVJfohNsrnXuyO/PwVhpvbkug4+0LkKJ4zG9/x
+ Sx3fSNhsJ+vrWWbcyqsK1kRtDjG8IeCL3eC5GSRuQavfAKQFb9b9oqgjFoF3xuDhOP
+ TamKwpY9Qqo6sC/xSgpXJub96EUPvqn+PV2PGv9FOQ9Gv15gbt8RZb1rct1HPqsP37
+ BQtiCxy5koutA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dwHrVHPq
-Subject: Re: [Buildroot] [PATCH 1/1] package/oatpp: fix uclibc build
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Q8FpisC5
+Subject: Re: [Buildroot] [PATCH 1/1] python-sip: fix compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,116 +75,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alessandro Partesotti <a.partesotti@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
-
-On 2023-11-23 22:52 +0100, Fabrice Fontaine spake thusly:
-> Fix the following uclibc build failure raised since the addition of the
-> package in commit d5bba26801b352f591451cf73e0b7509de0e6850:
-> 
-> In file included from /home/autobuild/autobuild/instance-4/output-1/build/oatpp-1.3.0/src/oatpp/algorithm/CRC.hpp:28,
->                  from /home/autobuild/autobuild/instance-4/output-1/build/oatpp-1.3.0/src/oatpp/algorithm/CRC.cpp:25:
-> /home/autobuild/autobuild/instance-4/output-1/build/oatpp-1.3.0/src/oatpp/core/base/Environment.hpp:359:93: error: 'va_list' has not been declared
->   359 |   static void vlogFormatted(v_uint32 priority, const std::string& tag, const char* message, va_list args);
->       |                                                                                             ^~~~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/bcdf7548ff752f936defd111d13c63245ea70cbe
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...base-Environment.hpp-include-cstdarg.patch | 37 +++++++++++++++++++
->  package/oatpp/oatpp.mk                        |  6 +++
->  2 files changed, 43 insertions(+)
->  create mode 100644 package/oatpp/0001-src-oatpp-core-base-Environment.hpp-include-cstdarg.patch
-> 
-> diff --git a/package/oatpp/0001-src-oatpp-core-base-Environment.hpp-include-cstdarg.patch b/package/oatpp/0001-src-oatpp-core-base-Environment.hpp-include-cstdarg.patch
-> new file mode 100644
-> index 0000000000..f02215d8a9
-> --- /dev/null
-> +++ b/package/oatpp/0001-src-oatpp-core-base-Environment.hpp-include-cstdarg.patch
-> @@ -0,0 +1,37 @@
-> +From b3e8930ccbaeeb77a4cd8b0fffbe52a208aa9a29 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Thu, 23 Nov 2023 22:45:56 +0100
-> +Subject: [PATCH] src/oatpp/core/base/Environment.hpp: include cstdarg
-> +
-> +Include cstdarg to fix the following build failure with uclibc-ng:
-> +
-> +In file included from /home/autobuild/autobuild/instance-4/output-1/build/oatpp-1.3.0/src/oatpp/algorithm/CRC.hpp:28,
-> +                 from /home/autobuild/autobuild/instance-4/output-1/build/oatpp-1.3.0/src/oatpp/algorithm/CRC.cpp:25:
-> +/home/autobuild/autobuild/instance-4/output-1/build/oatpp-1.3.0/src/oatpp/core/base/Environment.hpp:359:93: error: 'va_list' has not been declared
-> +  359 |   static void vlogFormatted(v_uint32 priority, const std::string& tag, const char* message, va_list args);
-> +      |                                                                                             ^~~~~~~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/bcdf7548ff752f936defd111d13c63245ea70cbe
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Upstream: https://github.com/oatpp/oatpp/pull/895
-
-It's been merged now, so I changed that to point to the actual commit.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> +---
-> + src/oatpp/core/base/Environment.hpp | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/oatpp/core/base/Environment.hpp b/src/oatpp/core/base/Environment.hpp
-> +index fd77a5c6..05d5c949 100644
-> +--- a/src/oatpp/core/base/Environment.hpp
-> ++++ b/src/oatpp/core/base/Environment.hpp
-> +@@ -29,6 +29,7 @@
-> + #include "./Compiler.hpp"
-> + #include "./Config.hpp"
-> + 
-> ++#include <cstdarg>
-> + #include <cstdio>
-> + #include <atomic>
-> + #include <mutex>
-> +-- 
-> +2.42.0
-> +
-> diff --git a/package/oatpp/oatpp.mk b/package/oatpp/oatpp.mk
-> index 621a549023..c8b0c9694a 100644
-> --- a/package/oatpp/oatpp.mk
-> +++ b/package/oatpp/oatpp.mk
-> @@ -13,4 +13,10 @@ OATPP_INSTALL_STAGING = YES
->  # Only builds a static lib and headers
->  OATPP_INSTALL_TARGET = NO
->  
-> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
-> +OATPP_CONF_OPTS += -DOATPP_COMPAT_BUILD_NO_SET_AFFINITY=OFF
-> +else
-> +OATPP_CONF_OPTS += -DOATPP_COMPAT_BUILD_NO_SET_AFFINITY=ON
-> +endif
-> +
->  $(eval $(cmake-package))
-> -- 
-> 2.42.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UmFsZiwgQWxsLAoKT24gMjAyMy0xMS0yMyAxODo0MSArMDEwMCwgUmFsZiBEcmFnb24gc3Bha2Ug
+dGh1c2x5Ogo+IFdpdGhvdXQgdGhlIHBhdGNoLCBweXRob24tc2lwIGZhaWxzIHdpdGg6Cj4gCj4g
+c2lwbGliLmM6IEluIGZ1bmN0aW9uIOKAmHNpcF9hcGlfZ2V0X2ZyYW1l4oCZOgo+IHNpcGxpYi5j
+OjEzNzUwOjIyOiBlcnJvcjogaW52YWxpZCB1c2Ugb2YgdW5kZWZpbmVkIHR5cGUg4oCYc3RydWN0
+IF9mcmFtZeKAmQo+IDEzNzUwIHwgICAgICAgICBmcmFtZSA9IGZyYW1lLT5mX2JhY2s7Cj4gCj4g
+U2lnbmVkLW9mZi1ieTogUmFsZiBEcmFnb24gPGh5cG5vdG9hZEBsaW5kcmEuZGU+CgpUaGFua3Mg
+Zm9yIHRoaXMgcGF0Y2g7IHBsZWFzZSBmaW5kIGJlbG93IGEgZmV3IGNvbW1lbnRzLgoKPiAtLS0K
+PiAgcGFja2FnZS9weXRob24tc2lwLzAwMDItZml4ZnJhbWUucGF0Y2ggfCA0NiArKysrKysrKysr
+KysrKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgNDYgaW5zZXJ0aW9ucygrKQo+ICBj
+cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9weXRob24tc2lwLzAwMDItZml4ZnJhbWUucGF0Y2gK
+PiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tc2lwLzAwMDItZml4ZnJhbWUucGF0Y2gg
+Yi9wYWNrYWdlL3B5dGhvbi1zaXAvMDAwMi1maXhmcmFtZS5wYXRjaAo+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uODZlYjg3OGIxMQo+IC0tLSAvZGV2L251bGwKPiAr
+KysgYi9wYWNrYWdlL3B5dGhvbi1zaXAvMDAwMi1maXhmcmFtZS5wYXRjaAo+IEBAIC0wLDAgKzEs
+NDYgQEAKPiArU2lnbmVkLW9mZi1ieTogUmFsZiBEcmFnb24gPGh5cG5vdG9hZEBsaW5kcmEuZGU+
+CgogICAgJCAuL3V0aWxzL2RvY2tlci1ydW4gbWFrZSBjaGVjay1wYWNrYWdlCiAgICBwYWNrYWdl
+L3B5dGhvbi1zaXAvMDAwMi1maXhmcmFtZS5wYXRjaDowOiBtaXNzaW5nIFVwc3RyZWFtIGluIHRo
+ZSBoZWFkZXIgKGh0dHA6Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcvI19hZGRpdGlvbmFsX3BhdGNo
+X2RvY3VtZW50YXRpb24pCgpBIGJ1bmRsZWQgcGF0Y2ggc2hvdWxkIGJlIGZvcm1hdHRlZCBsaWtl
+IGEgcHJvcGVyIHBhdGNoLCB3aXRoIGEgY29tbWl0CmxvZyBhbmQgZXhwbGFuYXRpb25zIGZvciB0
+aGUgcGF0Y2gsIHJlYWR5IHRvIGJlIHN1Ym1pdHRlZCB1cHN0cmVhbToKICAgIGh0dHBzOi8vYnVp
+bGRyb290Lm9yZy9kb3dubG9hZHMvbWFudWFsL21hbnVhbC5odG1sI3BhdGNoLXBvbGljeQoKSGVy
+ZSwgeW91J2Qgd2FudCB0byBleHBsYWluIHdoeSBpdCBub3cgZmFpbHMsIHNvIHRoYXQgd2UgY2Fu
+IGFzc2Vzcwp3aGV0aGVyIHdlIG5lZWQgdG8gYmFja3BvcnQgdGhlIGZpeCB0byBtYWludGFpbmFu
+Y2UgYnJhbmNoZXMuCgpTbywgc29tZXRoaW5nIGFsb25nIHRoZSBsaW5lcyBvZjoKCiAgICBzaXBs
+aWI6IGZpeCBidWlsZCB3aXRoIHB5dGhvbiA+PSAzLjExCgogICAgV2l0aCBweXRob24gMy4xMSwg
+dGhlIFB5RnJhbWVPYmplY3Qgc3RydWN0dXJlIG1lbWJlcnMgaGF2ZSBiZWVuCiAgICByZW1vdmVk
+IGZyb20gdGhlIHB1YmxpYyBDIEFQSToKCiAgICAgICAgaHR0cHM6Ly9kb2NzLnB5dGhvbi5vcmcv
+My4xMS93aGF0c25ldy8zLjExLmh0bWwjd2hhdHNuZXczMTEtYy1hcGktcG9ydGluZwogICAgICAg
+IGh0dHBzOi8vZG9jcy5weXRob24ub3JnLzMuMTEvd2hhdHNuZXcvMy4xMS5odG1sI3B5ZnJhbWVv
+YmplY3QtMy0xMS1oaWRpbmcKCiAgICBTbywgdXNlIHRoZSBwcm9wZXIgb2JqZWN0IHR5cGUgdGhh
+dCBjYW4gc3RvcmUgYW4gYWN0dWFsCiAgICBQeUZyYW1lT2JqZWN0LgoKICAgIFNpZ25lZC1vZmYt
+Ynk6IFlvdXIgTmFtZSA8eW91ckBtYWlsPgogICAgVXBzdHJlYW06IFt1cHN0cmVhbSBzdGF0dXNd
+CgoocGxlYXNlIGFkYXB0IHRoZSBhYm92ZSwgaXQncyBtb3N0bHkgZm9yIGlsbHVzdHJhdGlvbikK
+CldlIGFsc28gdHJ5IGhhcmQgdG8gcHVzaCBwYXRjaGVzIHVwc3RyZWFtIHNvIHRoYXQgd2UgZG8g
+bm90IGhhdmUgdG8KY2FycnkgdGhlbSBpbmRlZmluaXRlbHkuIFBsZWFzZSB0cnkgYW5kIHN1Ym1p
+dCB0aGF0IHBhdGNoIHRvIHRoZSBTSVAKcHJvamVjdDoKICAgIGh0dHBzOi8vcml2ZXJiYW5rY29t
+cHV0aW5nLmNvbS9zdXBwb3J0L2xpc3RzCgo+ICtJbmRleDogaG9zdC1weXRob24tc2lwLTQuMTku
+MjUvc2lwbGliL3NpcC5oCj4gKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KCldoYXQgZGlmZiBmb3JuYXQgaXMgdGhhdD8g
+V2UgdXN1YWxseSBoYXZlIHBsYWluIGRpZmYsIG9yIGdpdC1mb3JtYXR0ZWQKcGF0Y2hlcy4KCkNh
+biB5b3UgbG9vayBpbnRvIHJld29ya2luZyB0aGlzIHBhdGNoIG9mIHlvdXJzLCBwbGVhc2U/CgpS
+ZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiArLS0tIGhvc3QtcHl0aG9uLXNpcC00LjE5LjI1Lm9y
+aWcvc2lwbGliL3NpcC5oCj4gKysrKyBob3N0LXB5dGhvbi1zaXAtNC4xOS4yNS9zaXBsaWIvc2lw
+LmgKPiArQEAgLTE3OTksNyArMTc5OSw3IEBAIHR5cGVkZWYgc3RydWN0IF9zaXBBUElEZWYgewo+
+ICsgICAgIGludCAoKmFwaV9nZXRfdGltZSkoUHlPYmplY3QgKiwgc2lwVGltZURlZiAqKTsKPiAr
+ICAgICBQeU9iamVjdCAqKCphcGlfZnJvbV90aW1lKShjb25zdCBzaXBUaW1lRGVmICopOwo+ICsg
+ICAgIGludCAoKmFwaV9pc191c2VyX3R5cGUpKGNvbnN0IHNpcFdyYXBwZXJUeXBlICopOwo+ICst
+ICAgIHN0cnVjdCBfZnJhbWUgKigqYXBpX2dldF9mcmFtZSkoaW50KTsKPiArKyAgICBQeUZyYW1l
+T2JqZWN0ICooKmFwaV9nZXRfZnJhbWUpKGludCk7Cj4gKyAgICAgaW50ICgqYXBpX2NoZWNrX3Bs
+dWdpbl9mb3JfdHlwZSkoY29uc3Qgc2lwVHlwZURlZiAqLCBjb25zdCBjaGFyICopOwo+ICsgICAg
+IFB5T2JqZWN0ICooKmFwaV91bmljb2RlX25ldykoU0lQX1NTSVpFX1QsIHVuc2lnbmVkLCBpbnQg
+Kiwgdm9pZCAqKik7Cj4gKyAgICAgdm9pZCAoKmFwaV91bmljb2RlX3dyaXRlKShpbnQsIHZvaWQg
+KiwgaW50LCB1bnNpZ25lZCk7Cj4gK0luZGV4OiBob3N0LXB5dGhvbi1zaXAtNC4xOS4yNS9zaXBs
+aWIvc2lwbGliLmMKPiArPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PQo+ICstLS0gaG9zdC1weXRob24tc2lwLTQuMTkuMjUu
+b3JpZy9zaXBsaWIvc2lwbGliLmMKPiArKysrIGhvc3QtcHl0aG9uLXNpcC00LjE5LjI1L3NpcGxp
+Yi9zaXBsaWIuYwo+ICtAQCAtNDQ4LDcgKzQ0OCw3IEBAIHN0YXRpYyBQeU9iamVjdCAqc2lwX2Fw
+aV9mcm9tX2RhdGV0aW1lKGMKPiArIHN0YXRpYyBpbnQgc2lwX2FwaV9nZXRfdGltZShQeU9iamVj
+dCAqb2JqLCBzaXBUaW1lRGVmICp0aW1lKTsKPiArIHN0YXRpYyBQeU9iamVjdCAqc2lwX2FwaV9m
+cm9tX3RpbWUoY29uc3Qgc2lwVGltZURlZiAqdGltZSk7Cj4gKyBzdGF0aWMgaW50IHNpcF9hcGlf
+aXNfdXNlcl90eXBlKGNvbnN0IHNpcFdyYXBwZXJUeXBlICp3dCk7Cj4gKy1zdGF0aWMgc3RydWN0
+IF9mcmFtZSAqc2lwX2FwaV9nZXRfZnJhbWUoaW50KTsKPiArK3N0YXRpYyBQeUZyYW1lT2JqZWN0
+ICpzaXBfYXBpX2dldF9mcmFtZShpbnQpOwo+ICsgc3RhdGljIGludCBzaXBfYXBpX2NoZWNrX3Bs
+dWdpbl9mb3JfdHlwZShjb25zdCBzaXBUeXBlRGVmICp0ZCwKPiArICAgICAgICAgY29uc3QgY2hh
+ciAqbmFtZSk7Cj4gKyBzdGF0aWMgUHlPYmplY3QgKnNpcF9hcGlfdW5pY29kZV9uZXcoU0lQX1NT
+SVpFX1QgbGVuLCB1bnNpZ25lZCBtYXhjaGFyLAo+ICtAQCAtMTM3NDEsMTMgKzEzNzQxLDEzIEBA
+IHN0YXRpYyBpbnQgc2lwX2FwaV9pc191c2VyX3R5cGUoY29uc3Qgc2kKPiArIC8qCj4gKyAgKiBS
+ZXR1cm4gYSBmcmFtZSBmcm9tIHRoZSBleGVjdXRpb24gc3RhY2suCj4gKyAgKi8KPiArLXN0YXRp
+YyBzdHJ1Y3QgX2ZyYW1lICpzaXBfYXBpX2dldF9mcmFtZShpbnQgZGVwdGgpCj4gKytzdGF0aWMg
+UHlGcmFtZU9iamVjdCAqc2lwX2FwaV9nZXRfZnJhbWUoaW50IGRlcHRoKQo+ICsgewo+ICstICAg
+IHN0cnVjdCBfZnJhbWUgKmZyYW1lID0gUHlFdmFsX0dldEZyYW1lKCk7Cj4gKysgICAgUHlGcmFt
+ZU9iamVjdCAqZnJhbWUgPSBQeUV2YWxfR2V0RnJhbWUoKTsKPiArIAo+ICsgICAgIHdoaWxlIChm
+cmFtZSAhPSBOVUxMICYmIGRlcHRoID4gMCkKPiArICAgICB7Cj4gKy0gICAgICAgIGZyYW1lID0g
+ZnJhbWUtPmZfYmFjazsKPiArKyAgICAgICAgZnJhbWUgPSBQeUZyYW1lX0dldEJhY2soZnJhbWUp
+Owo+ICsgICAgICAgICAtLWRlcHRoOwo+ICsgICAgIH0KPiArIAo+ICsKPiAtLSAKPiAyLjM5LjIK
+PiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8v
+bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0t
+LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0t
+LS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVk
+IHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYg
+MDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAg
+ICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFH
+QUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdl
+ZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8
+CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
+LS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
