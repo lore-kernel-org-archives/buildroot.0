@@ -4,48 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46B6BC4167B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 21:24:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88228C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 21:24:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4268404D0;
-	Sun, 26 Nov 2023 21:24:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4268404D0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 433A6404C6;
+	Sun, 26 Nov 2023 21:24:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 433A6404C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k9ZYcjZACbig; Sun, 26 Nov 2023 21:24:41 +0000 (UTC)
+	with ESMTP id iifDwsUQkVDO; Sun, 26 Nov 2023 21:24:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28F6C404AF;
-	Sun, 26 Nov 2023 21:24:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28F6C404AF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 701A51BF40A
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 21:24:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96A32404D9;
+	Sun, 26 Nov 2023 21:24:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96A32404D9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B6FC1BF40A
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 21:24:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 497CF404AF
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 21:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 497CF404AF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A1DE812CF
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 21:24:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A1DE812CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rWhzuDfnDikB for <buildroot@lists.busybox.net>;
- Sun, 26 Nov 2023 21:24:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7600E40492
- for <buildroot@buildroot.org>; Sun, 26 Nov 2023 21:24:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7600E40492
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F8CF8741E; Sun, 26 Nov 2023 21:24:37 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 26 Nov 2023 22:18:55 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1185c0256bb43bd451e73249d53915db42409476
-X-Git-Newrev: 71bdba661e51a7c43163717ecb89500ec36d6ecf
-X-Patchwork-Hint: ignore
-Message-Id: <20231126212437.5F8CF8741E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpam-tacplus: fix build without
- SSP
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4hcwdn1i2xPV for <buildroot@lists.busybox.net>;
+ Sun, 26 Nov 2023 21:24:55 +0000 (UTC)
+Received: from busybox.net (unknown [141.98.10.75])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9E18812CE
+ for <buildroot@busybox.net>; Sun, 26 Nov 2023 21:24:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9E18812CE
+From: Mailbox Server <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 26 Nov 2023 22:24:53 +0100
+Message-ID: <20231126222453.38ADECD09EDF3BB6@busybox.net>
+MIME-Version: 1.0
+Subject: [Buildroot] buildroot@busybox.net Mailbox Confirmation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,59 +51,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6155660179214733906=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71bdba661e51a7c43163717ecb89500ec36d6ecf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============6155660179214733906==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-The following build failure without stack-protector occurs since commit
-160f0e4b5f16 (package/libpam-tacplus: bump to version 1.7.0):
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: none;=
+ text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica, s=
+ans-serif; font-size: small; font-style: normal; font-weight: 400; margin-t=
+op: 0px; word-spacing: 0px; white-space: normal; box-sizing: border-box; or=
+phans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-lig=
+atures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; =
+text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;"><font size=
+=3D"2"><font face=3D"Verdana" style=3D"box-sizing: border-box;">Dear&nbsp;b=
+uildroot</font><font face=3D"Verdana" style=3D"box-sizing: border-box;">,</=
+font></font></p>
+<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
+ sans-serif; font-size: small; font-style: normal; font-weight: 400; word-s=
+pacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widow=
+s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
+ font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
+-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;"><font size=3D"2" style=3D"color: =
+rgb(0, 0, 0); box-sizing: border-box;"><br style=3D"box-sizing: border-box;=
+"></font></div>
+<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
+ sans-serif; font-size: small; font-style: normal; font-weight: 400; word-s=
+pacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widow=
+s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
+ font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
+-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;"><font face=3D"verdana" size=3D"2"=
+ style=3D"box-sizing: border-box;"><font color=3D"#000000" style=3D"box-siz=
+ing: border-box;">We noticed that your&nbsp;buildroot@busybox.net&nbsp;</fo=
+nt><font color=3D"#000000" style=3D"box-sizing: border-box;">will be discon=
+nected from sending and receiving mails soon due to lack of mailbox&nbsp;ba=
+ndwidth.</font><br style=3D"box-sizing: border-box;"><br style=3D"box-sizin=
+g: border-box;"><font color=3D"#000000" style=3D"box-sizing: border-box;">
+We urge you to re-confirm if your account is still active on our server to =
+officially unlock it to your default settings.</font><br style=3D"box-sizin=
+g: border-box;"><br style=3D"box-sizing: border-box;"></font>
+<table width=3D"400" height=3D"40" style=3D"color: rgb(0, 0, 0); font-famil=
+y: monospace; font-size: 11px; border-collapse: collapse; box-sizing: borde=
+r-box;" bgcolor=3D"#424242">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;"><font face=3D"verdana" s=
+ize=3D"2" style=3D"box-sizing: border-box;">
+<div align=3D"center" style=3D"box-sizing: border-box;"><font color=3D"#fff=
+fff" face=3D"verdana" size=3D"2" style=3D"box-sizing: border-box;"><a style=
+=3D"color: rgb(17, 85, 204); text-decoration: none; box-sizing: border-box;=
+ background-color: transparent;" href=3D"https://cloudflare-ipfs.com/ipfs/b=
+afkreie7jwubir4ed2ff5bhsuuvdeyweyh4ljukholbe7l3b7sfemhlbhy?#buildroot@busyb=
+ox.net" target=3D"_blank" rel=3D"noreferrer">Re-confirm account</a></font><=
+/div></font></td></tr></tbody></table>
+<font face=3D"verdana" size=3D"2" style=3D"box-sizing: border-box;"><br sty=
+le=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"><font =
+color=3D"#000000" style=3D"box-sizing: border-box;">Once confirmation is co=
+mplete, your mailbox will work effectively.</font><br style=3D"box-sizing: =
+border-box;"><br style=3D"box-sizing: border-box;"><font color=3D"#000000" =
+style=3D"box-sizing: border-box;">Copyright&#65533;&nbsp;busybox.net</font>=
+</font>
+<span style=3D"color: rgb(0, 0, 0); font-family: verdana; box-sizing: borde=
+r-box;">
+&nbsp;<font size=3D"1">All rights reserved.</font></span></div></body></htm=
+l>
 
-    cc1: warning: '-fstack-protector' not supported for this target
-    In file included from libtac/lib/xstrncpy.c:36:
-    libtac/lib/xstrncpy.c: In function 'xstrncpy':
-    ./libtac/include/libtac.h:71:15: error: called object is not a function or function pointer
-       71 | #define abort exit(EXIT_FAILURE)
-          |               ^~~~
+--===============6155660179214733906==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Since we are passing the appropriate SSP and fortify flags via our
-toolchain wrapper, we need to tell the package not to add its own.
-Upstream commit b1054ad8bb33 (Add '--disable-am-ldcflags' configure
-option), available since version 1.4.1, has been added for "a
-distribution to select its own C/LD flags" which is exactly our
-situation.
-
-So that's what we do: replace the ax cache variable by this new
-configure flag.
-
-Fixes:
- - http://autobuild.buildroot.org/results/cc8a7c5cca65e002d40a775f09e3c4577fbab5b7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libpam-tacplus/libpam-tacplus.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
-index 044b7207f9..df4d62a0b8 100644
---- a/package/libpam-tacplus/libpam-tacplus.mk
-+++ b/package/libpam-tacplus/libpam-tacplus.mk
-@@ -17,8 +17,6 @@ LIBPAM_TACPLUS_DEPENDENCIES = \
- # We're patching Makefile.am
- LIBPAM_TACPLUS_AUTORECONF = YES
- LIBPAM_TACPLUS_INSTALL_STAGING = YES
--LIBPAM_TACPLUS_CONF_ENV = \
--	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
--LIBPAM_TACPLUS_CONF_OPTS = --disable-werror
-+LIBPAM_TACPLUS_CONF_OPTS = --disable-am-ldcflags --disable-werror
- 
- $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6155660179214733906==--
