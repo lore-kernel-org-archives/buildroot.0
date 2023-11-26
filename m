@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D145DC4167B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 17:12:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77C1BC4167B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 17:23:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FA6F60BBB;
-	Sun, 26 Nov 2023 17:12:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FA6F60BBB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D91860BB7;
+	Sun, 26 Nov 2023 17:23:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D91860BB7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PerC1XQ1pEus; Sun, 26 Nov 2023 17:12:55 +0000 (UTC)
+	with ESMTP id A-WK7_ZElajf; Sun, 26 Nov 2023 17:23:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C45D960BCD;
-	Sun, 26 Nov 2023 17:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C45D960BCD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47A1260B6A;
+	Sun, 26 Nov 2023 17:23:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47A1260B6A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C54731BF28A
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:12:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 309761BF28A
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:23:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB60181302
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:12:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB60181302
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02BAB812BB
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02BAB812BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nzmu0-jnoLN9 for <buildroot@lists.busybox.net>;
- Sun, 26 Nov 2023 17:12:52 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A3E7A812FE
- for <buildroot@buildroot.org>; Sun, 26 Nov 2023 17:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3E7A812FE
+ with ESMTP id Hgr4YhqvRSgN for <buildroot@lists.busybox.net>;
+ Sun, 26 Nov 2023 17:23:05 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 03AFF81227
+ for <buildroot@buildroot.org>; Sun, 26 Nov 2023 17:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03AFF81227
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:4fcd:aaeb:59ee:6854])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 8889078034E;
- Sun, 26 Nov 2023 18:12:46 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 016B0780331;
+ Sun, 26 Nov 2023 18:22:58 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 26 Nov 2023 18:12:46 +0100
-Date: Sun, 26 Nov 2023 18:12:46 +0100
+ Sun, 26 Nov 2023 18:22:58 +0100
+Date: Sun, 26 Nov 2023 18:22:58 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20231126171246.GA3177259@scaer>
-References: <20231125081052.881728-1-james.hilliard1@gmail.com>
- <20231125081052.881728-3-james.hilliard1@gmail.com>
+To: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@rtone.fr>
+Message-ID: <20231126172258.GB3177259@scaer>
+References: <20231122010408.2410999-1-gael.portay@rtone.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231125081052.881728-3-james.hilliard1@gmail.com>
+In-Reply-To: <20231122010408.2410999-1-gael.portay@rtone.fr>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1701018770;
- bh=dae1BLf82fAzDX0SU8mu4g3TaSlXWZA/FvSLes02Umo=;
+ d=free.fr; s=smtp-20201208; t=1701019383;
+ bh=SfJcq2RZ0V4wYRFzv9rIzusEc+YUOg+mItHCLOhUEl4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=b/hFFL3JzJW/LXmoFOyuLU2MJrNk8qdb3xlV2oGudXIsJwkRWj6H2mgPGm2fjdWq1
- nVk6FIh91CTpnF8OezQS/yp+D+D6czXAIEwIefvVY57ONMCoiYMiaprFSpck62AH4O
- 6ah0LCcVzAM+uGaN8yQDfXb5NdnGKypIym42WZ2crep2IBj7EygdAPtu8Cayz9yv+f
- ohQzbiRB3N2xFKvyyaTPR0PiVTA5WKTtYx1pj4WEJ4xfnSCE/YV07kkWdYSG7ze+xH
- dCW9qBxJe3q/S9bE8xc93uALLePImoNLB1VitYKtip/MYklAN2j8jSH6jiwJHo4xsc
- 1vzzhyH+0oeMg==
+ b=Dp9gPqzW0vXow19+dlmAW/TT9c24Gk7QZV1VMoiZLwEw9dbL7YTK6qrwI2kRLIV2t
+ nR1ppJhTQFxhJm5viJnuflwvKM6C9AuBHWceH/3dnLqTZ82R2C8EIqims3xX7tBdFO
+ PhdWlpxLo0lsz3mjCDQKZomvik/aSIVppTvLTOJ0BPtrJFA9C0NOstxYIZlb8XFo4d
+ OEbxD3hLVVf7BPxWh7TMP2E1LuZYxN/sAlwOEI2xxfCcYFb2k8EaVzIglbGOny84lM
+ 4VbGo3l9A1vbbEK5JgZjSo1Jdk5KsSP5k/BHX37pE8Fqk6HkSt3EK/bXZtKKQt/Jhp
+ mf/8mpXLB5mmw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=b/hFFL3J
-Subject: Re: [Buildroot] [PATCH 3/3] package/python-pydantic: bump to
- version 2.5.2
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Dp9gPqzW
+Subject: Re: [Buildroot] [PATCH 1/1] board/raspberrypi/readme.txt: fix typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,106 +75,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Martin Bark <martin@barkynet.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
-
-On 2023-11-25 01:10 -0700, James Hilliard spake thusly:
-> Add new python-annotated-types runtime dependency.
-> 
-> Add new python-pydantic-core runtime dependency.
-> 
-> Migrate build backend from setuptools to hatchling.
-> 
-> License hash changed due to adding contributors:
-> https://github.com/pydantic/pydantic/commit/7bc9c6525a81680c0dd9df3558ed5f33345a77c2
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/python-pydantic/Config.in            | 5 ++++-
->  package/python-pydantic/python-pydantic.hash | 6 +++---
->  package/python-pydantic/python-pydantic.mk   | 9 ++++++---
->  3 files changed, 13 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/python-pydantic/Config.in b/package/python-pydantic/Config.in
-> index 41ec43adf4..e9cd2e6780 100644
-> --- a/package/python-pydantic/Config.in
-> +++ b/package/python-pydantic/Config.in
-> @@ -1,8 +1,11 @@
->  config BR2_PACKAGE_PYTHON_PYDANTIC
->  	bool "python-pydantic"
-> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic-core
-> +	select BR2_PACKAGE_PYTHON_ANNOTATED_TYPES # runtime
-> +	select BR2_PACKAGE_PYTHON_PYDANTIC_CORE # runtime
->  	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
->  	help
->  	  Data validation and settings management using python 3.6
->  	  type hinting.
->  
-> -	  https://github.com/samuelcolvin/pydantic
-> +	  https://github.com/pydantic/pydantic
-> diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
-> index 88b17f4575..0848debc1c 100644
-> --- a/package/python-pydantic/python-pydantic.hash
-> +++ b/package/python-pydantic/python-pydantic.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/pydantic/json
-> -md5  f0e286c32f40ec45aba9603742739cd6  pydantic-1.10.8.tar.gz
-> -sha256  1410275520dfa70effadf4c21811d755e7ef9bb1f1d077a21958153a92c8d9ca  pydantic-1.10.8.tar.gz
-> +md5  348281a5a27eb5253c7a83927aae64e1  pydantic-2.5.2.tar.gz
-> +sha256  ff177ba64c6faf73d7afa2e8cad38fd456c0dbe01c9954e71038001cd15a6edd  pydantic-2.5.2.tar.gz
->  # Locally computed sha256 checksums
-> -sha256  9e3946690ac88b6b73e8f001a0586af13568be8852fd514e4393f39761764387  LICENSE
-> +sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
-> diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-> index b800426d22..b5bb7ff853 100644
-> --- a/package/python-pydantic/python-pydantic.mk
-> +++ b/package/python-pydantic/python-pydantic.mk
-> @@ -4,11 +4,14 @@
->  #
->  ################################################################################
->  
-> -PYTHON_PYDANTIC_VERSION = 1.10.8
-> +PYTHON_PYDANTIC_VERSION = 2.5.2
->  PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
-> -PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/23/65/2aa13873e9e0084ecaec00fbe6c6096b65e1ab99ba66bdbf7e4e7c4cc915
-> -PYTHON_PYDANTIC_SETUP_TYPE = setuptools
-> +PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/b7/41/3c8108f79fb7da2d2b17f35744232af4ffcd9e764ebe1e3fd4b26669b325
-> +PYTHON_PYDANTIC_SETUP_TYPE = pep517
->  PYTHON_PYDANTIC_LICENSE = MIT
->  PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
-> +PYTHON_PYDANTIC_DEPENDENCIES = \
-> +	host-python-hatchling \
-> +	host-python-hatch-fancy-pypi-readme
->  
->  $(eval $(python-package))
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+R2HDq2wsIEFsbCwKCk9uIDIwMjMtMTEtMjIgMDI6MDQgKzAxMDAsIEdhw6tsIFBPUlRBWSBzcGFr
+ZSB0aHVzbHk6Cj4gU2lnbmVkLW9mZi1ieTogR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheUBydG9u
+ZS5mcj4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklO
+LgoKPiAtLS0KPiAgYm9hcmQvcmFzcGJlcnJ5cGkvcmVhZG1lLnR4dCB8IDYgKysrLS0tCj4gIDEg
+ZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAt
+LWdpdCBhL2JvYXJkL3Jhc3BiZXJyeXBpL3JlYWRtZS50eHQgYi9ib2FyZC9yYXNwYmVycnlwaS9y
+ZWFkbWUudHh0Cj4gaW5kZXggYzgxZmQ4MDFhZS4uMjFhMTM2ZWI4MyAxMDA2NDQKPiAtLS0gYS9i
+b2FyZC9yYXNwYmVycnlwaS9yZWFkbWUudHh0Cj4gKysrIGIvYm9hcmQvcmFzcGJlcnJ5cGkvcmVh
+ZG1lLnR4dAo+IEBAIC0xNyw4ICsxNyw4IEBAIEhvdyB0byBidWlsZCBpdAo+ICBDb25maWd1cmUg
+QnVpbGRyb290Cj4gIC0tLS0tLS0tLS0tLS0tLS0tLS0KPiAKPiAtVGhlcmUgYXJlIHR3byBSYXNw
+YmVycnlQaSBkZWZjb25maWcgZmlsZXMgaW4gQnVpbGRyb290LCBvbmUgZm9yIGVhY2gKPiAtbWFq
+b3IgdmFyaWFudCwgd2hpY2ggeW91IHNob3VsZCBiYXNlIHlvdXIgd29yayBvbjoKPiArVGhlcmUg
+YXJlIHNldmVyYWwgUmFzcGJlcnJ5IFBpIGRlZmNvbmZpZyBmaWxlcyBpbiBCdWlsZHJvb3QsIG9u
+ZSBmb3IKPiArZWFjaCBtYWpvciB2YXJpYW50LCB3aGljaCB5b3Ugc2hvdWxkIGJhc2UgeW91ciB3
+b3JrIG9uOgo+IAo+ICBGb3IgbW9kZWxzIEEsIEIsIEErIG9yIEIrOgo+IAo+IEBAIC0xMzMsNyAr
+MTMzLDcgQEAgSG93IHRvIHdyaXRlIHRvIENNNCBlTU1DIG1lbW9yeQo+ICA9PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09Cj4gCj4gIEZvciBDTTQgbW9kdWxlcyB3aXRob3V0IGVNTUMgbWVt
+b3J5IHNlZSBhYm92ZSBmb3IgYm9vdGluZyBmcm9tIFNEIGNhcmQsCj4gLWZvciBDTTQgbW9kdWVs
+cyB3aXRoIGVNTUMgbWVtb3J5IHByb2NlZWQgYXMgZm9sbG93aW5nOgo+ICtmb3IgQ000IG1vZHVs
+ZXMgd2l0aCBlTU1DIG1lbW9yeSBwcm9jZWVkIGFzIGZvbGxvd2luZzoKPiAKPiAgLSBmaXQganVt
+cGVyIG9uIElPIEJvYXJkIGhlYWRlciBKMiB0byBkaXNhYmxlIGVNTUMgYm9vdAo+ICAtIGNvbm5l
+Y3QgSU8gQm9hcmQgbWljcm8gVVNCIHBvcnQgKEoxMSBVU0Igc2xhdmUpIHRvIHlvdXIgaG9zdCBs
+aW51eCBzeXN0ZW0KPiAtLQo+IDIuNDIuMQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
+LS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBN
+T1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNv
+bnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8g
+Q0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0t
+LS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8g
+IHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlM
+ICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
