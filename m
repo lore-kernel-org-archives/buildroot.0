@@ -4,101 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9F12C4167B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 22:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C354C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 22:49:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 679A560A9D;
-	Sun, 26 Nov 2023 22:18:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 679A560A9D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E07060C0E;
+	Sun, 26 Nov 2023 22:49:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E07060C0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0WVziIbHbuTR; Sun, 26 Nov 2023 22:17:59 +0000 (UTC)
+	with ESMTP id RHRcFsnTroND; Sun, 26 Nov 2023 22:49:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C48B60BED;
-	Sun, 26 Nov 2023 22:17:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C48B60BED
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C74760C09;
+	Sun, 26 Nov 2023 22:49:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C74760C09
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2044D1BF215
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 22:17:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D7671BF215
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 22:48:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBED860BED
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 22:17:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBED860BED
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C99360C09
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 22:48:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C99360C09
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u9eTLpxnuhJM for <buildroot@lists.busybox.net>;
- Sun, 26 Nov 2023 22:17:55 +0000 (UTC)
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de
- [81.169.146.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 063B360A9D
- for <buildroot@buildroot.org>; Sun, 26 Nov 2023 22:17:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 063B360A9D
-ARC-Seal: i=1; a=rsa-sha256; t=1701037072; cv=none;
- d=strato.com; s=strato-dkim-0002;
- b=ZG38oG8hG1Q2mdAWL+z9z1ymAcqe0exE5jDF4MT2ophd45FMubTMXaXXCr+8QwmjXQ
- BOIev3aQFU+9uVJXRkRCRhBZnqkdOLEUpDFpoP/NitO91QQw5Ic7S5kmvWjJc3m5QH83
- sMVTlDWF3WWPHORh/mVwLFXhk7ZgVajbUcoEfJFVRXv4t7+OglV38QFR0HV+hQuw2PNy
- md4j39000ILMsSPITDKjgCG1Z8ph/K0A+T5LsjU7x4TDDkaM0H6mGGPUnHkTtTvC+d6Y
- YuCgjQWMmKiH7ZtwOhucXY/qBcERtpJT9job+OcbObxqvN50KSkCvOGycvDQAE5gAkau
- dKWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1701037072;
- s=strato-dkim-0002; d=strato.com;
- h=Message-ID:References:In-Reply-To:Reply-to:Subject:To:From:Date:Cc:
- Date:From:Subject:Sender;
- bh=UmlHD5M67uL/gijwO/tPdF4hLiNd56tGleuy0UdwYrE=;
- b=hNXMseJUr9VcZcIi0aJRrqC9i58BG1nGAhepEKYlDxX8n/2n84bZaMEzJ5GDiAE8Qf
- 0LwuSMTBw2byo2fqh73jiu/xu0PVtK2fL4GXsG9kLPzzfcg30I86iZzaMqioRMrpQ/9r
- pnQvVd+Icf5QrHvY0Py5n+aIwpdGFPsGMpM254bHAU4n5FZCvs6O00Nwlo3380/SbqGq
- 4RMhm/c9TNsuwEiU9QGu+ApqDQQxxjTJIkUThbWzuDyh9zcAaCAdnPEzh+zufRUhVn7s
- lc0dpDFx/F+kper+3g/bAE9CWZJXP6WpTWCmYEzFVPAQE0MCMGHzcID6S4SIhUfOdwLT
- EZdg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-X-RZG-AUTH: ":IGkLe0G6f98kjqfw4wUQFrlMTRmdcFArqMJ/8fSjEoKsocSmf3F8nXFB3POYuFu6"
-Received: from [127.0.0.1] by smtp.strato.de (RZmta 49.9.1 DYNA|AUTH)
- with ESMTPSA id k8f8b7zAQMHqdiN
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
- (Client did not present a certificate) for <buildroot@buildroot.org>;
- Sun, 26 Nov 2023 23:17:52 +0100 (CET)
-Date: Sun, 26 Nov 2023 23:17:51 +0100
-From: Leo <info.leo@widler.de>
+ with ESMTP id m4-gxLs3UX4J for <buildroot@lists.busybox.net>;
+ Sun, 26 Nov 2023 22:48:57 +0000 (UTC)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6BE8760C06
+ for <buildroot@buildroot.org>; Sun, 26 Nov 2023 22:48:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BE8760C06
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-40b30308c67so26680325e9.0
+ for <buildroot@buildroot.org>; Sun, 26 Nov 2023 14:48:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1701038934; x=1701643734;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Nuos80PQfNzzeuEUejcqaI2aVbLDRgUsepRYtwZ9f2M=;
+ b=Df6FEBRSuI48JzMNebDHaI7FwpD2BKZZWRFer8Bpr1Kv3y8Eh9RHPF0zdEbnD8HMHf
+ +Pj+qipvBmM4JRpVwvNZlwLJNRjcrXxihRdWOrGBKH+ZIfA7XarU+S/h8Bx61ILtQreP
+ 71Bd+35zy8rymWVjQ7gVOYzbShgTwrab3JB/m/1KDqpy8Lo7xrE7g7liNF9nVESAOXiQ
+ T1XUgLDG+h7hQQ6dp7QTA68cn66NH1B3751pGyT8ytIvdqYE1F7KIeMygYrePwjF240S
+ 6SWDE+9sgJMUXZtuyKDj1+kgt9MTLY1BPWqImuUuFgit66Vzpn+NgyPT2CjJCwsw4a0F
+ 6T8Q==
+X-Gm-Message-State: AOJu0YzTr57zDL0bicTdwwuSgGx2Hua4nUjtzulZwElf7YuVof1hJliW
+ XXc/m7Sby0nyFok+A63Hyg4XW/SkX8o=
+X-Google-Smtp-Source: AGHT+IEGVlQp0sxGOye5/qhC5+SAzUzdk4EJiOse3Nuz/fy+lYb9W4aPY2voxEdw8ppX4Avk5sp3mQ==
+X-Received: by 2002:a05:600c:5118:b0:3f6:9634:c8d6 with SMTP id
+ o24-20020a05600c511800b003f69634c8d6mr7205293wms.18.1701038934465; 
+ Sun, 26 Nov 2023 14:48:54 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ iv8-20020a05600c548800b004063ea92492sm11701409wmb.22.2023.11.26.14.48.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 26 Nov 2023 14:48:53 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-In-Reply-To: <20231126215644.GO3177259@scaer>
-References: <20231126214357.3376407-1-info.leo@widler.de>
- <20231126215644.GO3177259@scaer>
-Message-ID: <9CB2714C-64FC-4E32-BD7D-12F72EC7EC34@widler.de>
+Date: Sun, 26 Nov 2023 23:48:49 +0100
+Message-ID: <20231126224849.321916-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- t=1701037072; 
- s=strato-dkim-0002; d=widler.de;
- h=Message-ID:References:In-Reply-To:Reply-to:Subject:To:From:Date:Cc:
- Date:From:Subject:Sender;
- bh=UmlHD5M67uL/gijwO/tPdF4hLiNd56tGleuy0UdwYrE=;
- b=JwKRO+gUZxagq1JpwFKtUpzl4Qawx5KvY0tm/L+0I4lLyuqWBaI5I4X0WRNpycSJ89
- UTD6FZ4xG0Ic8BVAZ8sO5yhpL1s51VV4so6UrVv+hu5xonP3PtNiclEQVLWPv2TzNRK0
- vZOxoCNDeJyPSKtrR0XEu76MCbeiRk/z4fIxhgAmLPJW6ym9ALfMOfFCOPu8pagKKpfI
- 2NWDL7aj9/maGWtwKvWv/IE4Pw/c78W18aKtV4lqOzn5BsC7WBbfDZRL2leeZqcdGXQf
- mbuBiYMrs4NvfOj8B4zUx5ROUnJ4karVPjE3eUBrPGv4L9aSDty2vJZJGo16NtyBvwq7
- KNKw==
-X-Mailman-Original-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- t=1701037072; 
- s=strato-dkim-0003; d=widler.de;
- h=Message-ID:References:In-Reply-To:Reply-to:Subject:To:From:Date:Cc:
- Date:From:Subject:Sender;
- bh=UmlHD5M67uL/gijwO/tPdF4hLiNd56tGleuy0UdwYrE=;
- b=QdJ1trmmq/Z1CG4WFP2nUb3EaxhqZ0KaiHTacehj3s8smACzSJ7q9nvA9ANvFY9Gze
- Dmfr/kV78D7wX87VF0DQ==
+ d=gmail.com; s=20230601; t=1701038934; x=1701643734; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Nuos80PQfNzzeuEUejcqaI2aVbLDRgUsepRYtwZ9f2M=;
+ b=K2XZTsf5gvFWIZMaYg3VppDkAGoeH0PJTa1towQ+NRabwtibtbdWameH5uHnLA10bO
+ z3mt2+c8dGBjMpfT0p1PSW566W2ZiIZFRpSKMoK+ZsdjKtKCLYJhp0saboud02FD/n08
+ K7FIUcqupOh/I210BVhyBThVT78u9KIOqIguw+9LS8MbU5EFd1Aj+AC9Y/JncZ7qFWud
+ E8GPj6JUIgVS3lMyBzAVJlUzW7HlL2ROYCyK8fPkaUE1re4Bi4YkFSBQOUjdW6IdKNsZ
+ mGGKt3eQuRpnZkSFWDTcTcewPaq3PCPAPJQ2HnNERUKEyJUJzOF9+RTzoE9dEYF2Nz9s
+ QKVA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=widler.de header.i=@widler.de
- header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=JwKRO+gU; 
- dkim=pass header.d=widler.de header.i=@widler.de header.a=ed25519-sha256
- header.s=strato-dkim-0003 header.b=QdJ1trmm
-Subject: Re: [Buildroot] [PATCH 1/1] package/attr: add --enable-multilib to
- fix build error for BL808 based boards
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=K2XZTsf5
+Subject: [Buildroot] [PATCH 1/1] package/libldns: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,184 +93,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: info.leo@widler.de
-Content-Type: multipart/mixed; boundary="===============3089557188883187025=="
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3089557188883187025==
-Content-Type: multipart/alternative;
- boundary=----I2W4RN31GD9QKOYJGE1LOXOQE4S6FA
-Content-Transfer-Encoding: 7bit
+Fix the following build failure raised since bump of libressl to version
+3.8.2 in commit 21eca49ed5110872407b76ab9337d2877c4cda24:
 
-------I2W4RN31GD9QKOYJGE1LOXOQE4S6FA
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+./keys.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
+  167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+      |                                   ^~~~~~~~~~~~~~~~~
 
-Hi,
+Fixes:
+ - http://autobuild.buildroot.org/results/37cc05b78a7004caa1b45d896121f059a4f8ca00
 
-I'll change my name, thanks for letting me know
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...keys.c-fix-build-with-libressl-3.8.1.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/libldns/0001-keys.c-fix-build-with-libressl-3.8.1.patch
 
-The failure is on none of the auto builders=2E I have uploaded the config=
-=2Elog here: https://pastebin=2Ecom/ZzP6pNvx
-
-And to fix this issue I added the --enable-multilib option which resolves =
-the problem=2E
-
-Regards,
-Leonard Widler
-
-Am 26=2E November 2023 22:56:44 MEZ schrieb "Yann E=2E MORIN" <yann=2Emori=
-n=2E1998@free=2Efr>:
->leow149, All,
->
->Thank you for your contribution! Here is a quick review=2E
->
->First, we'll need you to use your real name as the author of the patch;
->we do not accept annonymous (od pseduonymou) contributions=2E
->
->On 2023-11-26 22:43 +0100, leow149 spake thusly:
->> This commit fixes a build error which specifically happens for Bouffall=
-o Labs BL808 based boards, but might also happen on other RiscV64 Boards=2E
->
->Please wrap your commit log to ~72 chars=2E
->
->Waht is the error that you see? Could you see if there is a similar
->build failure on out autobulders:
->    http://autobuild=2Ebuildroot=2Eorg/?static=3D1&reason=3Dattr-%
->
->The last build error for attr was more than a year ago now, so it is
->relatively surprising to see that attr does not build=2E So we'll need a
->bit more context=2E
->
->> Signed-off-by: leow149 <info=2Eleo@widler=2Ede>
->> ---
->>  package/attr/attr=2Emk | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/package/attr/attr=2Emk b/package/attr/attr=2Emk
->> index 0327497e1e=2E=2E89f7d21f0c 100644
->> --- a/package/attr/attr=2Emk
->> +++ b/package/attr/attr=2Emk
->> @@ -13,7 +13,8 @@ ATTR_CPE_ID_VENDOR =3D attr_project
->> =20
->>  ATTR_INSTALL_STAGING =3D YES
->> =20
->> -ATTR_CONF_OPTS =3D --disable-nls
->> -
->> +ATTR_CONF_OPTS =3D \
->> +	--disable-nls \
->> +	--enable-multilib
->
->Buildroot does not generate multilib toolchains, and when using an
->external toolchain that is multilib, the proper multilib diretory is
->copies over to the sysroot=2E
->
->So, --eanble-multilib looksa like the wrong approach, at least without
->more explanations=2E
->
->Can you elaborate on the issue you encounter, and what makes you think
->--enable-multilib is the correct solution?
->
->Thanks!
->
->Regards,
->Yann E=2E MORIN=2E
->
->>  $(eval $(autotools-package))
->>  $(eval $(host-autotools-package))
->> --=20
->> 2=2E30=2E2
->>=20
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot=2Eorg
->> https://lists=2Ebuildroot=2Eorg/mailman/listinfo/buildroot
->
->--=20
->=2E-----------------=2E--------------------=2E------------------=2E------=
---------------=2E
->|  Yann E=2E MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' cons=
-piracy: |
->| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___         =
-      |
->| +33 561 099 427 `------------=2E-------:  X  AGAINST      |  \e/  There=
- is no  |
->| http://ymorin=2Eis-a-geek=2Eorg/ | _/*\_ | / \ HTML MAIL    |   v   con=
-spiracy=2E  |
->'------------------------------^-------^------------------^--------------=
-------'
->_______________________________________________
->buildroot mailing list
->buildroot@buildroot=2Eorg
->https://lists=2Ebuildroot=2Eorg/mailman/listinfo/buildroot
-
-------I2W4RN31GD9QKOYJGE1LOXOQE4S6FA
-Content-Type: text/html;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head></head><body><div dir=3D"auto">Hi,<br><br>I'll change my name, =
-thanks for letting me know<br><br>The failure is on none of the auto builde=
-rs=2E I have uploaded the config=2Elog here: <a href=3D"https://pastebin=2E=
-com/ZzP6pNvx">https://pastebin=2Ecom/ZzP6pNvx</a><br><br>And to fix this is=
-sue I added the --enable-multilib option which resolves the problem=2E<br><=
-br>Regards,<br>Leonard Widler</div><br><br><div class=3D"gmail_quote"><div =
-dir=3D"auto">Am 26=2E November 2023 22:56:44 MEZ schrieb "Yann E=2E MORIN" =
-&lt;yann=2Emorin=2E1998@free=2Efr&gt;:</div><blockquote class=3D"gmail_quot=
-e" style=3D"margin: 0pt 0pt 0pt 0=2E8ex; border-left: 1px solid rgb(204, 20=
-4, 204); padding-left: 1ex;">
-<pre class=3D"k9mail"><div dir=3D"auto">leow149, All,<br><br>Thank you for=
- your contribution! Here is a quick review=2E<br><br>First, we'll need you =
-to use your real name as the author of the patch;<br>we do not accept annon=
-ymous (od pseduonymou) contributions=2E<br><br>On 2023-11-26 22:43 +0100, l=
-eow149 spake thusly:<br></div><blockquote class=3D"gmail_quote" style=3D"ma=
-rgin: 0pt 0pt 1ex 0=2E8ex; border-left: 1px solid #729fcf; padding-left: 1e=
-x;"><div dir=3D"auto">This commit fixes a build error which specifically ha=
-ppens for Bouffallo Labs BL808 based boards, but might also happen on other=
- RiscV64 Boards=2E<br></div></blockquote><div dir=3D"auto"><br>Please wrap =
-your commit log to ~72 chars=2E<br><br>Waht is the error that you see? Coul=
-d you see if there is a similar<br>build failure on out autobulders:<br>   =
- <a href=3D"http://autobuild=2Ebuildroot=2Eorg/?static=3D1&amp;reason=3Datt=
-r-%">http://autobuild=2Ebuildroot=2Eorg/?static=3D1&amp;reason=3Dattr-%</a>=
-<br><br>The last build error for attr was more than a year ago now, so it i=
-s<br>relatively surprising to see that attr does not build=2E So we'll need=
- a<br>bit more context=2E<br><br></div><blockquote class=3D"gmail_quote" st=
-yle=3D"margin: 0pt 0pt 1ex 0=2E8ex; border-left: 1px solid #729fcf; padding=
--left: 1ex;"><div dir=3D"auto">Signed-off-by: leow149 &lt;info=2Eleo@widler=
-=2Ede&gt;<hr> package/attr/attr=2Emk | 5 +++--<br> 1 file changed, 3 insert=
-ions(+), 2 deletions(-)<br><br>diff --git a/package/attr/attr=2Emk b/packag=
-e/attr/attr=2Emk<br>index 0327497e1e=2E=2E89f7d21f0c 100644<br>--- a/packag=
-e/attr/attr=2Emk<br>+++ b/package/attr/attr=2Emk<br>@@ -13,7 +13,8 @@ ATTR_=
-CPE_ID_VENDOR =3D attr_project<br> <br> ATTR_INSTALL_STAGING =3D YES<br> <b=
-r>-ATTR_CONF_OPTS =3D --disable-nls<br>-<br>+ATTR_CONF_OPTS =3D \<br>+	--di=
-sable-nls \<br>+	--enable-multilib<br></div></blockquote><div dir=3D"auto">=
-<br>Buildroot does not generate multilib toolchains, and when using an<br>e=
-xternal toolchain that is multilib, the proper multilib diretory is<br>copi=
-es over to the sysroot=2E<br><br>So, --eanble-multilib looksa like the wron=
-g approach, at least without<br>more explanations=2E<br><br>Can you elabora=
-te on the issue you encounter, and what makes you think<br>--enable-multili=
-b is the correct solution?<br><br>Thanks!<br><br>Regards,<br>Yann E=2E MORI=
-N=2E<br><br></div><blockquote class=3D"gmail_quote" style=3D"margin: 0pt 0p=
-t 1ex 0=2E8ex; border-left: 1px solid #729fcf; padding-left: 1ex;"><div dir=
-=3D"auto"> $(eval $(autotools-package))<br> $(eval $(host-autotools-package=
-))<br><div class=3D"k9mail-signature">-- <br>2=2E30=2E2<hr>buildroot mailin=
-g list<br>buildroot@buildroot=2Eorg<br><a href=3D"https://lists=2Ebuildroot=
-=2Eorg/mailman/listinfo/buildroot">https://lists=2Ebuildroot=2Eorg/mailman/=
-listinfo/buildroot</a><br></div></div></blockquote><div dir=3D"auto"><br></=
-div></pre></blockquote></div></body></html>
-------I2W4RN31GD9QKOYJGE1LOXOQE4S6FA--
-
---===============3089557188883187025==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libldns/0001-keys.c-fix-build-with-libressl-3.8.1.patch b/package/libldns/0001-keys.c-fix-build-with-libressl-3.8.1.patch
+new file mode 100644
+index 0000000000..c385cc44b9
+--- /dev/null
++++ b/package/libldns/0001-keys.c-fix-build-with-libressl-3.8.1.patch
+@@ -0,0 +1,40 @@
++From 681cb309620e44d3d4d96494554e19bcab0b6f9d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 26 Nov 2023 23:38:14 +0100
++Subject: [PATCH] keys.c: fix build with libressl >= 3.8.1
++
++libressl >= 3.8.1 removed ENGINE support:
++"ENGINE support was removed and OPENSSL_NO_ENGINE is set. In spite
++of this, some stub functions are provided to avoid patching some
++applications that do not honor OPENSSL_NO_ENGINE."
++resulting in the following build failure with gost:
++
++./keys.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
++  167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
++      |                                   ^~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/37cc05b78a7004caa1b45d896121f059a4f8ca00
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/NLnetLabs/ldns/pull/227
++---
++ keys.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/keys.c b/keys.c
++index 78bea972..59de186e 100644
++--- a/keys.c
+++++ b/keys.c
++@@ -132,7 +132,7 @@ ldns_key_new_frm_engine(ldns_key **key, ENGINE *e, char *key_id, ldns_algorithm
++ }
++ #endif
++ 
++-#ifdef USE_GOST
+++#if defined(USE_GOST) && !defined(OPENSSL_NO_ENGINE)
++ /** store GOST engine reference loaded into OpenSSL library */
++ ENGINE* ldns_gost_engine = NULL;
++ 
++-- 
++2.42.0
++
+-- 
+2.42.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3089557188883187025==--
