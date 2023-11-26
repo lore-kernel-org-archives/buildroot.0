@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F28ADC4167B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 21:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B251EC07CA9
+	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 21:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B177460D71;
-	Sun, 26 Nov 2023 21:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B177460D71
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6616860BE7;
+	Sun, 26 Nov 2023 21:56:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6616860BE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q1HIIAKQgieE; Sun, 26 Nov 2023 21:47:45 +0000 (UTC)
+	with ESMTP id BJt35Nz0uQR0; Sun, 26 Nov 2023 21:56:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB87860C09;
-	Sun, 26 Nov 2023 21:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB87860C09
+	by smtp3.osuosl.org (Postfix) with ESMTP id A582C60B43;
+	Sun, 26 Nov 2023 21:56:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A582C60B43
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C7E931BF40A
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 21:47:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 951531BF40A
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 21:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ADC24404D0
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 21:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADC24404D0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76467404C6
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 21:56:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76467404C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N9MTa9263u4h for <buildroot@lists.busybox.net>;
- Sun, 26 Nov 2023 21:47:24 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9DAE3404C6
- for <buildroot@buildroot.org>; Sun, 26 Nov 2023 21:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DAE3404C6
+ with ESMTP id piAECWYkCdPA for <buildroot@lists.busybox.net>;
+ Sun, 26 Nov 2023 21:56:48 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 80672403AC
+ for <buildroot@buildroot.org>; Sun, 26 Nov 2023 21:56:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80672403AC
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:4fcd:aaeb:59ee:6854])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id F1191780316;
- Sun, 26 Nov 2023 22:47:20 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id CB0B9780368;
+ Sun, 26 Nov 2023 22:56:44 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 26 Nov 2023 22:47:20 +0100
-Date: Sun, 26 Nov 2023 22:47:20 +0100
+ Sun, 26 Nov 2023 22:56:44 +0100
+Date: Sun, 26 Nov 2023 22:56:44 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Maxim Kochetkov <fido_max@inbox.ru>
-Message-ID: <20231126214720.GN3177259@scaer>
-References: <20231123060558.807373-1-fido_max@inbox.ru>
+To: leow149 <info.leo@widler.de>
+Message-ID: <20231126215644.GO3177259@scaer>
+References: <20231126214357.3376407-1-info.leo@widler.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231123060558.807373-1-fido_max@inbox.ru>
+In-Reply-To: <20231126214357.3376407-1-info.leo@widler.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1701035243;
- bh=gMuKs7ai0x1pboHiyc7e1mlcoeVx4k0Fb1jA4L1aScs=;
+ d=free.fr; s=smtp-20201208; t=1701035806;
+ bh=jZfZ8o1KCvSC2vMzpN1jXhKfbMxZVpwK5cPVG3wRnBo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=alSHHGZ6jymOHcQm+GlPEW6HNwIQzZZdyHcxcUssyJB0CWrbRu0LJ+RKJh2HWOXf5
- H1138oBCw+C4jtTRdYUk2N1lfF/bq29uJz8rWxVzxeMqnVKD9xC4zHlgUYoh+TxdcX
- 50XpMtrUvsxhdJk4VYFMqsMPAft4LLKqYKA2We7O8zjPZr7Ef5qlUAUBIimljrMg5W
- YT0ypx6SXUuDy24YsvvhtoAkzOA4CiOJFRn3zQGUTJuHyr9/U3/txtEYr2YL9UEgbG
- iztO9uNEs483c1TfPlShvjSaYSG6I9W43gOPqSErGSuSYgv0Cdtw1e2q4Jopu4imXD
- O7m175XN6sHFQ==
+ b=p6facEKAkK4WGcSYqwWKNZwHuu61jD60PWkd7qSMTqi1OqyVctqYgGe+8tetV58KG
+ ebi+smwYH0n6r9yv2fQQy7Z7Cxd1cXeYQzqWO3/nFYjIG3ppTo5kcF7TtlWy0ZHWpr
+ grSsN+Cx+0g07ORSLyDd0b7e91uZrIDDMhqzr2jKRt9O8h+Y1QtlH801HYl5MTFYJF
+ jj09Bd0xENydqcEuIOM7MOYM0W/bPNLyi6Vms8n63DCb3p+DsNG1ZJ0dClR7ODGgLg
+ suQdV6749UDJxaGIwOB8HTiXXA58vXO1PUOi3laIbQmQaOGwAYlPsPuq0p64xV6Bj0
+ e0pXO7Aq7mzpg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=alSHHGZ6
-Subject: Re: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to
- 2.12.2
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=p6facEKA
+Subject: Re: [Buildroot] [PATCH 1/1] package/attr: add --enable-multilib to
+ fix build error for BL808 based boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,53 +82,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Maxim, All,
+leow149, All,
 
-On 2023-11-23 09:05 +0300, Maxim Kochetkov spake thusly:
-> Release notes: https://github.com/timescale/timescaledb/blob/2.12.2/CHANGELOG.md
+Thank you for your contribution! Here is a quick review.
+
+First, we'll need you to use your real name as the author of the patch;
+we do not accept annonymous (od pseduonymou) contributions.
+
+On 2023-11-26 22:43 +0100, leow149 spake thusly:
+> This commit fixes a build error which specifically happens for Bouffallo Labs BL808 based boards, but might also happen on other RiscV64 Boards.
+
+Please wrap your commit log to ~72 chars.
+
+Waht is the error that you see? Could you see if there is a similar
+build failure on out autobulders:
+    http://autobuild.buildroot.org/?static=1&reason=attr-%
+
+The last build error for attr was more than a year ago now, so it is
+relatively surprising to see that attr does not build. So we'll need a
+bit more context.
+
+> Signed-off-by: leow149 <info.leo@widler.de>
+> ---
+>  package/attr/attr.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+> index 0327497e1e..89f7d21f0c 100644
+> --- a/package/attr/attr.mk
+> +++ b/package/attr/attr.mk
+> @@ -13,7 +13,8 @@ ATTR_CPE_ID_VENDOR = attr_project
+>  
+>  ATTR_INSTALL_STAGING = YES
+>  
+> -ATTR_CONF_OPTS = --disable-nls
+> -
+> +ATTR_CONF_OPTS = \
+> +	--disable-nls \
+> +	--enable-multilib
 
-Applied to next, thanks.
+Buildroot does not generate multilib toolchains, and when using an
+external toolchain that is multilib, the proper multilib diretory is
+copies over to the sysroot.
+
+So, --eanble-multilib looksa like the wrong approach, at least without
+more explanations.
+
+Can you elaborate on the issue you encounter, and what makes you think
+--enable-multilib is the correct solution?
+
+Thanks!
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/timescaledb/timescaledb.hash | 2 +-
->  package/timescaledb/timescaledb.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-> index 0f2269986e..ae1d3db1e1 100644
-> --- a/package/timescaledb/timescaledb.hash
-> +++ b/package/timescaledb/timescaledb.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  acca5f6ec5684722374eece92f73d7763bd171075074fd2e6bd0244bda9fbc25  timescaledb-2.11.2.tar.gz
-> +sha256  d24cd29aad411d3e41d543d1a30827c48f8e01a48563650db5fac145ad7a01eb  timescaledb-2.12.2.tar.gz
->  sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-> diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-> index fe7bcbc36e..adae1c2bae 100644
-> --- a/package/timescaledb/timescaledb.mk
-> +++ b/package/timescaledb/timescaledb.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TIMESCALEDB_VERSION = 2.11.2
-> +TIMESCALEDB_VERSION = 2.12.2
->  TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
->  TIMESCALEDB_LICENSE = Apache-2.0
->  TIMESCALEDB_LICENSE_FILES = LICENSE
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
 > -- 
-> 2.40.1
+> 2.30.2
 > 
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
