@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 304A5C4167B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 17:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76BEEC4167B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 17:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8C3B60BB9;
-	Sun, 26 Nov 2023 17:12:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8C3B60BB9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 310DD60BBB;
+	Sun, 26 Nov 2023 17:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 310DD60BBB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oto-iuzqMOw0; Sun, 26 Nov 2023 17:12:04 +0000 (UTC)
+	with ESMTP id ajQ4qZHTcs8p; Sun, 26 Nov 2023 17:12:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24ADC606F5;
-	Sun, 26 Nov 2023 17:12:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24ADC606F5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 713B31BF28A
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:12:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7269460BB5;
+	Sun, 26 Nov 2023 17:12:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7269460BB5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E5C21BF28A
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A4AA812D3
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:12:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A4AA812D3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5792160BB5
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5792160BB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nlEWuIh-AmgB for <buildroot@lists.busybox.net>;
- Sun, 26 Nov 2023 17:12:00 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 478AA812CF
- for <buildroot@buildroot.org>; Sun, 26 Nov 2023 17:12:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 478AA812CF
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vf9A4jFzWSxr for <buildroot@lists.busybox.net>;
+ Sun, 26 Nov 2023 17:12:34 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3FEE6606F5
+ for <buildroot@buildroot.org>; Sun, 26 Nov 2023 17:12:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FEE6606F5
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:4fcd:aaeb:59ee:6854])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 510AB780316;
- Sun, 26 Nov 2023 18:11:53 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 6BAC078034E;
+ Sun, 26 Nov 2023 18:12:28 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 26 Nov 2023 18:11:53 +0100
-Date: Sun, 26 Nov 2023 18:11:53 +0100
+ Sun, 26 Nov 2023 18:12:28 +0100
+Date: Sun, 26 Nov 2023 18:12:28 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20231126171153.GY3177259@scaer>
+Message-ID: <20231126171228.GZ3177259@scaer>
 References: <20231125081052.881728-1-james.hilliard1@gmail.com>
+ <20231125081052.881728-2-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231125081052.881728-1-james.hilliard1@gmail.com>
+In-Reply-To: <20231125081052.881728-2-james.hilliard1@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1701018717;
- bh=uV/ZDCLgA0NUi1nNCFlU7w0iQ80piKY5g6sJO2xu1CE=;
+ d=free.fr; s=smtp-20201208; t=1701018752;
+ bh=jeYPjKtUiqVjSxBIptvGMFf/0eiPUwa5iRuf8Y0952w=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=B/EDzeBc+IWOSWaw9SAFOLgjw/Wg4RBrCA1xciyU3bwhaw4BRxtWHcWUflwjki1iY
- vStupPka2O9iFAdqnVo9HvsAR0GJOsT+dPIkDwv3NVG/pYbSTOkOAfYwrEZW5gvTs6
- T2tB9lG9aiEHlPHoc3H2uKXcLoSh7KgpuulzxDGPNyum81gaoEKVbCyTdZHVmCaiJC
- HOplnoXpEkTKbeK9wad4LB4QkHJ4YAJRD5igIp0jeJE+0hRiGC5hjslC5SrigHsVyy
- Po+GBVZlSlJ1o47nXFjMXFKye3rT0eukQcWNPeq7VGFVV4XmCbYfLgHgfTPd4i6ZQc
- THB2BHr8V8+mA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=DKYxa8mge45nHo5Xe+ghztqIhnou5dA0tkplrCyE2zD+Vc2dKbjqbyf1/rzVWWSWT
+ PhR52LAZmDcDhABSK+yeYi8URDTUWhJCRmgqFdy/YRI6nuO8gD3zrPi0pmY0ntotMa
+ jWAY7GWKb8H8ZZmSI2A82r1FUPyxEGJzlv5sCGfLhcs+MKzMqcHn4hg2n2v0y+fqaf
+ SRxg2i0SnnZjqSJEmSc1o5/zh9WdohFiDldVS0UIMSVlux6kvkdwJDUYY9F6mTCf1B
+ 9+MWwIX2SpPPDXJeK+CIQznGkU7gbslSrWgT0776WuSzIh2uFbojhTTBQYUhPtjI2S
+ De0vgI51tbQwA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=B/EDzeBc
-Subject: Re: [Buildroot] [PATCH 1/3] package/python-annotated-types: new
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DKYxa8mg
+Subject: Re: [Buildroot] [PATCH 2/3] package/python-pydantic-core: new
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -88,75 +89,77 @@ James, All,
 On 2023-11-25 01:10 -0700, James Hilliard spake thusly:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Applied to next, thanks.
+Applied to next, after exapnding the commit log with a summary of your
+explanations, thanks!
 
 Regards,
 Yann E. MORIN.
 
 > ---
 >  package/Config.in                                 |  1 +
->  package/python-annotated-types/Config.in          |  6 ++++++
->  .../python-annotated-types.hash                   |  5 +++++
->  .../python-annotated-types.mk                     | 15 +++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-annotated-types/Config.in
->  create mode 100644 package/python-annotated-types/python-annotated-types.hash
->  create mode 100644 package/python-annotated-types/python-annotated-types.mk
+>  package/python-pydantic-core/Config.in            |  8 ++++++++
+>  .../python-pydantic-core.hash                     |  4 ++++
+>  .../python-pydantic-core/python-pydantic-core.mk  | 15 +++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-pydantic-core/Config.in
+>  create mode 100644 package/python-pydantic-core/python-pydantic-core.hash
+>  create mode 100644 package/python-pydantic-core/python-pydantic-core.mk
 > 
 > diff --git a/package/Config.in b/package/Config.in
-> index 5a3410d758..68e6e29a4d 100644
+> index 68e6e29a4d..fcc09b07c4 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -974,6 +974,7 @@ menu "External python modules"
->  	source "package/python-aiozipkin/Config.in"
->  	source "package/python-alembic/Config.in"
->  	source "package/python-alsaaudio/Config.in"
-> +	source "package/python-annotated-types/Config.in"
->  	source "package/python-ansicolors/Config.in"
->  	source "package/python-apispec/Config.in"
->  	source "package/python-appdirs/Config.in"
-> diff --git a/package/python-annotated-types/Config.in b/package/python-annotated-types/Config.in
+> @@ -1228,6 +1228,7 @@ menu "External python modules"
+>  	source "package/python-pycups/Config.in"
+>  	source "package/python-pydal/Config.in"
+>  	source "package/python-pydantic/Config.in"
+> +	source "package/python-pydantic-core/Config.in"
+>  	source "package/python-pydevmem/Config.in"
+>  	source "package/python-pydyf/Config.in"
+>  	source "package/python-pyelftools/Config.in"
+> diff --git a/package/python-pydantic-core/Config.in b/package/python-pydantic-core/Config.in
 > new file mode 100644
-> index 0000000000..36525a526b
+> index 0000000000..3eeb1844a2
 > --- /dev/null
-> +++ b/package/python-annotated-types/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_ANNOTATED_TYPES
-> +	bool "python-annotated-types"
+> +++ b/package/python-pydantic-core/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_PYDANTIC_CORE
+> +	bool "python-pydantic-core"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
 > +	help
-> +	  Reusable constraint types to use with typing.Annotated.
+> +	  Core validation logic for pydantic written in rust.
 > +
-> +	  https://github.com/annotated-types/annotated-types
-> diff --git a/package/python-annotated-types/python-annotated-types.hash b/package/python-annotated-types/python-annotated-types.hash
+> +	  https://github.com/pydantic/pydantic-core
+> diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
 > new file mode 100644
-> index 0000000000..1663bcb51f
+> index 0000000000..4927d816be
 > --- /dev/null
-> +++ b/package/python-annotated-types/python-annotated-types.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/annotated-types/json
-> +md5  5fe2125b08851f0d05a8efad6456861c  annotated_types-0.6.0.tar.gz
-> +sha256  563339e807e53ffd9c267e99fc6d9ea23eb8443c08f112651963e24e22f84a5d  annotated_types-0.6.0.tar.gz
+> +++ b/package/python-pydantic-core/python-pydantic-core.hash
+> @@ -0,0 +1,4 @@
+> +# Locally calculated after vendoring
+> +sha256  b54296f8317e7ffd72726836636aa3a6c8c977d8f73b68253c443c0fe3731064  pydantic_core-2.14.5.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256  fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d  LICENSE
-> diff --git a/package/python-annotated-types/python-annotated-types.mk b/package/python-annotated-types/python-annotated-types.mk
+> +sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
+> diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
 > new file mode 100644
-> index 0000000000..8bc617069d
+> index 0000000000..8b61323ab3
 > --- /dev/null
-> +++ b/package/python-annotated-types/python-annotated-types.mk
+> +++ b/package/python-pydantic-core/python-pydantic-core.mk
 > @@ -0,0 +1,15 @@
 > +################################################################################
 > +#
-> +# python-annotated-types
+> +# python-pydantic-core
 > +#
 > +################################################################################
 > +
-> +PYTHON_ANNOTATED_TYPES_VERSION = 0.6.0
-> +PYTHON_ANNOTATED_TYPES_SOURCE = annotated_types-$(PYTHON_ANNOTATED_TYPES_VERSION).tar.gz
-> +PYTHON_ANNOTATED_TYPES_SITE = https://files.pythonhosted.org/packages/67/fe/8c7b275824c6d2cd17c93ee85d0ee81c090285b6d52f4876ccc47cf9c3c4
-> +PYTHON_ANNOTATED_TYPES_SETUP_TYPE = pep517
-> +PYTHON_ANNOTATED_TYPES_LICENSE = MIT
-> +PYTHON_ANNOTATED_TYPES_LICENSE_FILES = LICENSE
-> +PYTHON_ANNOTATED_TYPES_DEPENDENCIES = host-python-hatchling
+> +PYTHON_PYDANTIC_CORE_VERSION = 2.14.5
+> +PYTHON_PYDANTIC_CORE_SOURCE = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
+> +PYTHON_PYDANTIC_CORE_SITE = https://files.pythonhosted.org/packages/64/26/cffb93fe9c6b5a91c497f37fae14a4b073ecbc47fc36a9979c7aa888b245
+> +PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
+> +PYTHON_PYDANTIC_CORE_LICENSE = MIT
+> +PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
+> +PYTHON_PYDANTIC_CORE_DEPENDENCIES = host-python-typing-extensions
 > +
 > +$(eval $(python-package))
 > -- 
