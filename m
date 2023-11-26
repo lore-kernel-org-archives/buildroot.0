@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADBD2C10DC1
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D8D6C10DC1
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:26:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67861418F9;
-	Mon,  4 Dec 2023 20:25:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67861418F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB27B4185C;
+	Mon,  4 Dec 2023 20:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB27B4185C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bH-_dT6Zd8by; Mon,  4 Dec 2023 20:25:51 +0000 (UTC)
+	with ESMTP id 4QnD954OwO-z; Mon,  4 Dec 2023 20:26:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB71B418F4;
-	Mon,  4 Dec 2023 20:25:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB71B418F4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 90AA41BF31D
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F2D141B9E;
+	Mon,  4 Dec 2023 20:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F2D141B9E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 059521BF31D
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5174A61002
+ by smtp4.osuosl.org (Postfix) with ESMTP id D90A941776
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5174A61002
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D90A941776
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OmVhul6qVIYC for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x2EZ56yUJkTB for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4AB0360FC9
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AB0360FC9
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDE6741690
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDE6741690
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48B99879B8; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id B82E1879B6; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 17:40:27 +0100
+Date: Sun, 26 Nov 2023 22:40:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e6e16a6d1803956b0c10e0d92608980888d0ebd3
-X-Git-Newrev: 7ceebff5b94f6a179e8ef77d467b1af0cc1bc477
+X-Git-Oldrev: e056aeeca9cf8c00c6da62c39979ce6c55c92791
+X-Git-Newrev: beafbb83ad58e2f6d446ac03565207cb0128c82d
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201330.48B99879B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elfutils: drop -lfts
+Message-Id: <20231204201329.B82E1879B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.12.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,33 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ceebff5b94f6a179e8ef77d467b1af0cc1bc477
+commit: https://git.buildroot.net/buildroot/commit/?id=beafbb83ad58e2f6d446ac03565207cb0128c82d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As spotted by Yann E. Morin in
-https://patchwork.ozlabs.org/project/buildroot/patch/20231022154133.1619344-1-bernd@kuhls.net,
--lfts is not needed since bump to version 0.183 in commit
-ef92e86e845134868011cb0b801509a0755f855e and
-https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=da855fc9cd415c288bfcb9de1f3d5eb329de0557
+Release notes: https://github.com/timescale/timescaledb/blob/2.12.2/CHANGELOG.md
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/elfutils/elfutils.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 45df971071..24eb168894 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -51,7 +51,6 @@ endif
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index 0f2269986e..ae1d3db1e1 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  acca5f6ec5684722374eece92f73d7763bd171075074fd2e6bd0244bda9fbc25  timescaledb-2.11.2.tar.gz
++sha256  d24cd29aad411d3e41d543d1a30827c48f8e01a48563650db5fac145ad7a01eb  timescaledb-2.12.2.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index fe7bcbc36e..adae1c2bae 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
- ELFUTILS_DEPENDENCIES += musl-fts argp-standalone
--ELFUTILS_LDFLAGS += -lfts
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-TIMESCALEDB_VERSION = 2.11.2
++TIMESCALEDB_VERSION = 2.12.2
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
