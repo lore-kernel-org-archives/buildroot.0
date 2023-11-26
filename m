@@ -4,86 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 067CAC4167B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 16:19:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 600ADC4167B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 16:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9158660888;
-	Sun, 26 Nov 2023 16:19:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9158660888
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14383607F0;
+	Sun, 26 Nov 2023 16:20:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14383607F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yO4Ey6M2ayiA; Sun, 26 Nov 2023 16:19:43 +0000 (UTC)
+	with ESMTP id Zy5s7pomA8pO; Sun, 26 Nov 2023 16:20:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D798B607C7;
-	Sun, 26 Nov 2023 16:19:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D798B607C7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 559401BF3FF
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 16:19:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35D5960A98;
+	Sun, 26 Nov 2023 16:20:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35D5960A98
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B5571BF3FF
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 16:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 154D9403BF
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 16:19:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 154D9403BF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24EBE81006
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 16:20:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24EBE81006
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W5VoaEBEWNOY for <buildroot@lists.busybox.net>;
- Sun, 26 Nov 2023 16:19:38 +0000 (UTC)
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com
- [IPv6:2607:f8b0:4864:20::834])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A64BC4042D
- for <buildroot@buildroot.org>; Sun, 26 Nov 2023 16:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A64BC4042D
-Received: by mail-qt1-x834.google.com with SMTP id
- d75a77b69052e-41c157bbd30so18736471cf.0
- for <buildroot@buildroot.org>; Sun, 26 Nov 2023 08:19:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701015577; x=1701620377;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=89v9qRAj7GH4x72zcXUuNFwXv7+WfsPZKGt3EZkUXEE=;
- b=Kcz2W1V1aKDvp2u3g/N4QgPf6BgcF9GMetGJvl9bao7n5pJAbh9qou3BfdaS2TQ1Q2
- 6tCImQ9FTCj6Vmv0moE5pYjLc8u9VraMi4Su5s5qe8RW3g1JZCgSGH9PR4mrg54yQ6sO
- OvfLa5GTLPX8E9pFgb1BURb/doJeVjBPHspH2Tidp9BGwvzgO+lznPcD0Om00d4vnIhd
- i2xSq0+C4Gtnf/B6VL4ZSbP28s7RW/NNsByUrbtKQW283AV0Cv0GRD+N3frhfKZBFMV2
- U3SGBGqw9orWPlSFCHMGUMY6ae4IgmEOQb7fw3gtAnqXORYq0fnFEavgeHseFOq4oppt
- KN3A==
-X-Gm-Message-State: AOJu0YwEhHjeVe/7akkotAzfnF6IIlsnzkasbsJHSR4HfHiDHVPPGhRr
- AUN92FEFM2lk31sd/peHW6/YORHi+PdWUYMPjug=
-X-Google-Smtp-Source: AGHT+IHVJd/Juzr8Nbc7LwrBfol+YI6TAaCmr5XqJ8vKuYBtv6lKhArUW9HFAkTt6PZ/HCDqFQLhjxgUKV05ZYUqbn0=
-X-Received: by 2002:a05:622a:118f:b0:418:1252:9e73 with SMTP id
- m15-20020a05622a118f00b0041812529e73mr11506897qtk.30.1701015577415; Sun, 26
- Nov 2023 08:19:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20231125081052.881728-1-james.hilliard1@gmail.com>
- <20231125081052.881728-2-james.hilliard1@gmail.com>
- <20231125153609.GJ3177259@scaer>
- <CADvTj4oC_mtb0EymNkFQ969rPRoaw8L8QVvAV2n--knCYB9=iQ@mail.gmail.com>
- <20231126112725.GS3177259@scaer>
-In-Reply-To: <20231126112725.GS3177259@scaer>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 26 Nov 2023 09:19:25 -0700
-Message-ID: <CADvTj4qHe+Puev4JLopaBbH-Kq0+NAR_GH0G43JkcGy125tqXQ@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701015577; x=1701620377; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=89v9qRAj7GH4x72zcXUuNFwXv7+WfsPZKGt3EZkUXEE=;
- b=i+AgjZzaAhbQr05lVkN9E3dPEfqal0tJS2Nnf5gH+js/QHJlBcNpWyAxlWZRqGWFCn
- PvdnoB+d9OejfaokMMbM0wVbEVoGqFajE0XY1hP2fOlpLGOnC5WWuq3aFd2SiLDbtOM7
- GQh6T1MZu1tsHk6a9tEGv/HM+cCSyV9YJeGYqiziWY8Moo8v9WzOwX/NoyaNUUDiajtd
- S7swMP+M8QmDB6gBTV3K7kL97i+tsNkVsyMD/6o47jSzxH8FX78hI5ulA7AxB7IiPYM6
- ccoVjMDbyP6y9iNY0nLu+fkvQZkyUMMyriMYxBlUkEeMkKuDdX5aGRCFs6OSuwIj1tBJ
- 57cQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=i+AgjZza
-Subject: Re: [Buildroot] [PATCH 2/3] package/python-pydantic-core: new
- package
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QLsdk_V5I75t for <buildroot@lists.busybox.net>;
+ Sun, 26 Nov 2023 16:20:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22F6580FDD
+ for <buildroot@buildroot.org>; Sun, 26 Nov 2023 16:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22F6580FDD
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 07F85873CE; Sun, 26 Nov 2023 16:20:00 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 26 Nov 2023 17:19:36 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f7b9d3ad2b4acccad5252737003e8a0db4f43340
+X-Git-Newrev: 2c3946fcb45b07db5cc88cdc944745aa1ef8fa04
+X-Patchwork-Hint: ignore
+Message-Id: <20231126162001.07F85873CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: don't download patch
+ generated from github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,71 +57,204 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3704344266074191532=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCBOb3YgMjYsIDIwMjMgYXQgNDoyN+KAr0FNIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9y
-aW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPgo+IEphbWVzLCBBbGwsCj4KPiBPbiAyMDIzLTExLTI1
-IDE3OjExIC0wNzAwLCBKYW1lcyBIaWxsaWFyZCBzcGFrZSB0aHVzbHk6Cj4gPiBPbiBTYXQsIE5v
-diAyNSwgMjAyMyBhdCA4OjM24oCvQU0gWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZy
-ZWUuZnI+IHdyb3RlOgo+IFstLVNOSVAtLV0KPiA+ID4gU28gd2hhdCBoYXBwZW5zIGlmIEkgYXBw
-bHkgdGhpcyBwYXRjaCwgd2hpY2ggYWRkcyBweWRhbnRpYy1jb3JlLCBidXQgSQo+ID4gPiBkbyBu
-b3QgYXBwbHkgdGhlIG5leHQgb25lLCB3aGljaCBidW1wcyBweWRhbnRpYywgc28gd2UgZW5kIHVw
-IGluIGEKPiA+ID4gc2l0dWF0aW9uIHdpdGggYW4gb2xkIHB5ZGFudGljLCB3aXRoIHRoZSBuZXcg
-Y29yZSBhbHNvIGluc3RhbGxlZD8KPiA+ID4KPiA+ID4gRG8gdGhlIHR3byBjb25mbGljdCwgb3Ig
-aXMgaXQgYW4gT0sgc2l0dWF0aW9uIChvYnZpb3VzbHkgdGhlCj4gPiA+IHB5ZGFudGljLWNvcmUg
-d291bGQgYmUgb2YgbGl0dGxlIHVzZSk/Cj4gPiA+Cj4gPiA+IElmIHRoZXJlIGlzIGEgY29uZmxp
-Y3QsIHRoZW4gd2Ugd2lsbCB3YW50IHRvIGludHJvZHVjZSB0aGUgbmV3IHBhY2thZ2UKPiA+ID4g
-YXQgdGhlIHNhbWUgdGltZSB3ZSBkbyB0aGUgYnVtcCwgYW5kIHRoYXQgc2hvdWxkIGJlIGV4cGxh
-aW5lZCBpbnQgaGUKPiA+ID4gY29tbWl0IGxvZy4KPiA+ID4KPiA+ID4gSWYgdGhlcmUgaXMgbm8g
-Y29uZmxpY3QsIHRoZW4ganVzdCBzYXksIHdlIGNhbiBhbW1lbmQgdGhlIGNvbW1pdCBsb2cKPiA+
-ID4gYWNjb3JkaWdubHkuCj4gPgo+ID4gVGhlcmUncyBubyBjb25mbGljdCBzaW5jZSBweWRhbnRp
-Yy1jb3JlIGlzIGEgbmV3IHBhY2thZ2Ugd2l0aCBubyByZXZlcnNlCj4gPiBkZXBlbmRlbmNpZXMu
-Cj4KPiBJdCBpcyBub3QganVzdCBhYm91dCByZXZlcnNlIGRlcGVuZGVuY2llcy4gQXNzdW1pbmcg
-d2UganVzdCBhcHBseSB0aGUKPiBweWRhbnRpYy1jb3JlIG5ldyBwYWNrYWdlLCBhbmQga2VlcCB0
-aGUgb2xkIHB5ZGFudGljIChlLmcgd2UgaGF2ZSB0bwo+IHJldmVydCB0aGUgYnVtcCBsYXRlciBm
-b3IgdmFyaW91cyByZWFzb25zKSwgd2hhdCBoYXBwZW5zIGF0IGJ1aWxkIHRpbWUKPiBvciBhdCBy
-dW50aW1lLCBpZiB0aGUgdXNlciBlbmFibGVzIHB5ZGFudGljLWNvcmUgYW5kIHB5ZGFudGljICh0
-aGUgb2xkKT8KClNvIHB5ZGFudGljLWNvcmUgaXMganVzdCBhIG5ldyBkZXBlbmRlbmN5IGZvciBw
-eWRhbnRpYyB0byBoYW5kbGUgY29yZQp2YWxpZGF0aW9uIGxvZ2ljLiBJZiBweWRhbnRpYy1jb3Jl
-IGlzIHVzZWQgd2l0aCBvbGQgcHlkYW50aWMgdGhlcmUgc2hvdWxkbid0CmJlIGFueSBidWlsZC9y
-dW50aW1lIGlzc3VlcyBhcyB0aGV5IHdvdWxkIG5vdCBjb25mbGljdCBpbiBhbnkgd2F5LgoKPgo+
-IElmIHRoYXQgbWFrZXMgcHlkYW50aWMtb2xkIGZhaWwgdG8gYnVpbGQgb3IgcnVuLCB0aGF0IGlz
-IHdoYXQgd2UgY2FyZQo+IGFib3V0LgoKV2h5IHdvdWxkIGl0IG1ha2UgcHlkYW50aWMtb2xkIGZh
-aWw/IFRoZSBweWRhbnRpYy1jb3JlIHBhY2thZ2UgdXNlcyBhCmRpZmZlcmVudCBtb2R1bGUgbmFt
-ZXNwYWNlIHdoaWNoIGlzIHR5cGljYWxseSBob3cgcHl0aG9uIHBhY2thZ2VzCnByZXZlbnQgaW1w
-b3J0IGNvbmZsaWN0cyBpbiBnZW5lcmFsLgoKVG8gaW1wb3J0IGZyb20gcHlkYW50aWMtY29yZSB5
-b3UgaW1wb3J0IGxpa2U6CmZyb20gcHlkYW50aWNfY29yZSBpbXBvcnQgU2NoZW1hVmFsaWRhdG9y
-LCBWYWxpZGF0aW9uRXJyb3IKClRvIGltcG9ydCBmcm9tIHB5ZGFudGljIHlvdSBpbXBvcnQgbGlr
-ZToKZnJvbSBweWRhbnRpYyBpbXBvcnQgQmFzZU1vZGVsCgpOZXcgcHlkYW50aWMgc2ltcGx5IGlu
-dGVybmFsbHkgaW1wb3J0cyBmcm9tIHB5ZGFudGljX2NvcmUgYnV0IG9sZApweWRhbnRpYyBkb2Vz
-IG5vdCBhbmQgd2lsbCBmdW5jdGlvbiB0aGUgc2FtZSB3aGV0aGVyIG9yIG5vdCB3ZSBoYXZlCnB5
-ZGFudGljX2NvcmUgaW5zdGFsbGVkLgoKCgo+Cj4gWy0tU05JUC0tXQo+ID4gPiBDb3VsZCB5b3Ug
-cGxlYXNlIGV4dGVuZCB0aGUgbWFudWFsIHRvIGRlc2NyYmUgdGhlIGFkZGl0aW9uYWwgc2V0dXAg
-dHlwZXMKPiA+ID4gdGhhdCBhcmUgY3VycmVudGx5IHN1cHBvcnRlZCBieSBCdWlsZHJvb3QsIHBs
-ZWFzZT8KPiA+IFllYWgsIHNvIHdlJ3JlIHByZXR0eSBjbG9zZSByaWdodCBub3cgdG8gaGF2aW5n
-IGFsbCBvdXIgcHl0aG9uIGluZnJhc3RydWN0dXJlCj4gPiBtaWdyYXRlZCB0byBwZXA1MTcgc28g
-SSB3YXMgdGhpbmtpbmcgb25jZSB3ZSBoYXZlIHRoYXQgdGhlbiBhIGxvdCBvZiB0aGluZ3MKPiA+
-IGluY2x1ZGluZyB0aGUgZG9jdW1lbnRhdGlvbiBjYW4gYmUgc2lnbmlmaWNhbnRseSBzaW1wbGlm
-aWVkIGFzIG1hdHVyaW4gYW5kCj4gPiBzZXR1cHRvb2xzLXJ1c3QgaW5mcmFzdHJ1Y3R1cmUgd2ls
-bCBiZSBwZXA1MTcgYmFzZWQgYW5kIHdlIGNhbiBkcm9wIGFsbCB0aGUKPiA+IGxlZ2FjeSBkb2Nz
-IGxpa2UgZGlzdHV0aWxzIGFuZCB0aGUgZG9jcyByZWxhdGVkIHRvIGxlZ2FjeSBub24tcGVwNTE3
-IHNldHVwdG9vbHMuCj4KPiBCdXQgbm9uZSBvZiB0aGF0IGlzIG9uIG1hc3RlciwgZm9yIHRoZSBy
-ZWxlYXNlIHRvIGNvbWUsIHNvIHdlIHdvdWxkIHN0aWwKPiBuZWVkIHRoZSBtYW51YWwgdG8gYmUg
-dXAtdG8tZGF0ZSBmb3IgbWFzdGVyLgo+Cj4gUmVnYXJkcywKPiBZYW5uIEUuIE1PUklOLgo+Cj4g
-LS0KPiAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
-LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+IHwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1U
-aW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cj4g
-fCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAg
-IHwgIF9fXyAgICAgICAgICAgICAgIHwKPiB8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0t
-Li0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAo+IHwgaHR0
-cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAg
-diAgIGNvbnNwaXJhY3kuICB8Cj4gJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0t
-LS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============3704344266074191532==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=2c3946fcb45b07db5cc88cdc944745aa1ef8fa04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Git-generated patches embed the short-hash of the objects in the
+repository. The length of those short hashes are subject to change
+in at least three cases:
+
+  - the number of objects in the repository increases, so git increases
+    the length of short hashes to get a good change there is no
+    collision;
+
+  - the git configuration changes, see core.abbrev in git-config;
+
+  - the heuristic to compute the length changes in a newer git version.
+
+Since the bump to zfs 2.1.4 in commit 68dfd09708c6, the patch generated
+by github has changed, causing download failures:
+
+    wget --passive-ftp -nd -t 3 -O '/home/ymorin/dev/buildroot/O/master/build/.bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch.uoFq9e/output' 'https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch'
+    --2023-11-26 16:53:25--
+    https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
+    Resolving github.com (github.com)... 140.82.121.3
+    Connecting to github.com (github.com)|140.82.121.3|:443...  connected.
+    HTTP request sent, awaiting response... 200 OK
+    Length: 2976 (2.9K) [text/plain]
+    Saving to: ‘/home/ymorin/dev/buildroot/O/master/build/.bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch.uoFq9e/output’
+
+    /home/ymorin/dev/buildroot/O/ 100%[================================================>]   2.91K --.-KB/s in 0s
+
+    2023-11-26 16:53:25 (15.0 MB/s) - ‘/home/ymorin/dev/buildroot/O/master/build/.bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch.uoFq9e/output’ saved [2976/2976]
+
+    ERROR: while checking hashes from package/zfs//zfs.hash
+    ERROR: bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch has wrong sha256 hash:
+    ERROR: expected: 96a27353fe717ff2c8b95deb8b009c4eb750303c6400e2d8a2582ab1ec12b25a
+    ERROR: got     : 246c80f66abca5a7e0c41cc7c56eec0b4cb7f16b142262480401142bbc2f999f
+    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+And indeed, the length of short hashes has increased by one since then.
+
+Fix that by bundling the patch, with the short hashes that were known
+then, so that it matches the sha256 we had for it.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/zfs/0001-config-user-check-for-aio.h.patch | 94 ++++++++++++++++++++++
+ package/zfs/zfs.hash                               |  1 -
+ package/zfs/zfs.mk                                 |  3 +-
+ 3 files changed, 95 insertions(+), 3 deletions(-)
+
+diff --git a/package/zfs/0001-config-user-check-for-aio.h.patch b/package/zfs/0001-config-user-check-for-aio.h.patch
+new file mode 100644
+index 0000000000..55321ee2fc
+--- /dev/null
++++ b/package/zfs/0001-config-user-check-for-aio.h.patch
+@@ -0,0 +1,94 @@
++From bc3f12bfac152a0c28951cec92340ba14f9ccee9 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=D0=BD=D0=B0=D0=B1?= <nabijaczleweli@nabijaczleweli.xyz>
++Date: Mon, 28 Mar 2022 19:24:22 +0200
++Subject: [PATCH] config: user: check for <aio.h>
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++And always zpool_read_label_slow() on non-conformant libcs
++
++Reviewed-by: Brian Behlendorf <behlendorf1@llnl.gov>
++Co-authored-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
++Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
++Closes #13207
++Closes #13254
++Upstream: https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9
++[yann.morin.1998@free.fr: backport from upstream]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ config/user-aio.h.m4        | 7 +++++++
++ config/user-libaio.m4       | 2 +-
++ config/user.m4              | 1 +
++ lib/libzutil/zutil_import.c | 6 ++++++
++ 4 files changed, 15 insertions(+), 1 deletion(-)
++ create mode 100644 config/user-aio.h.m4
++
++diff --git a/config/user-aio.h.m4 b/config/user-aio.h.m4
++new file mode 100644
++index 00000000000..152c0946722
++--- /dev/null
+++++ b/config/user-aio.h.m4
++@@ -0,0 +1,7 @@
+++dnl #
+++dnl # POSIX specifies <aio.h> as part of realtime extensions,
+++dnl # and is missing from at least uClibc – force fallbacks there
+++dnl #
+++AC_DEFUN([ZFS_AC_CONFIG_USER_AIO_H], [
+++	ZFS_AC_FIND_SYSTEM_LIBRARY(AIO_H, [], [aio.h], [], [rt], [lio_listio])
+++])
++diff --git a/config/user-libaio.m4 b/config/user-libaio.m4
++index 95c144d76b4..8009bd11b3e 100644
++--- a/config/user-libaio.m4
+++++ b/config/user-libaio.m4
++@@ -1,5 +1,5 @@
++ dnl #
++-dnl # Check for libaio - only used for libaiot test cases.
+++dnl # Check for libaio - only used for mmap_libaio test cases.
++ dnl #
++ AC_DEFUN([ZFS_AC_CONFIG_USER_LIBAIO], [
++ 	ZFS_AC_FIND_SYSTEM_LIBRARY(LIBAIO, [], [libaio.h], [], [aio], [], [user_libaio=yes], [user_libaio=no])
++diff --git a/config/user.m4 b/config/user.m4
++index 670820b3771..f450af47e04 100644
++--- a/config/user.m4
+++++ b/config/user.m4
++@@ -23,6 +23,7 @@ AC_DEFUN([ZFS_AC_CONFIG_USER], [
++ 	ZFS_AC_CONFIG_USER_LIBAIO
++ 	ZFS_AC_CONFIG_USER_LIBATOMIC
++ 	ZFS_AC_CONFIG_USER_LIBFETCH
+++	ZFS_AC_CONFIG_USER_AIO_H
++ 	ZFS_AC_CONFIG_USER_CLOCK_GETTIME
++ 	ZFS_AC_CONFIG_USER_PAM
++ 	ZFS_AC_CONFIG_USER_RUNSTATEDIR
++diff --git a/lib/libzutil/zutil_import.c b/lib/libzutil/zutil_import.c
++index d7547c4249e..3744a1c3474 100644
++--- a/lib/libzutil/zutil_import.c
+++++ b/lib/libzutil/zutil_import.c
++@@ -47,7 +47,9 @@
++  * using our derived config, and record the results.
++  */
++
+++#ifdef HAVE_AIO_H
++ #include <aio.h>
+++#endif
++ #include <ctype.h>
++ #include <dirent.h>
++ #include <errno.h>
++@@ -982,6 +984,9 @@ zpool_read_label_slow(int fd, nvlist_t **config, int *num_labels)
++ int
++ zpool_read_label(int fd, nvlist_t **config, int *num_labels)
++ {
+++#ifndef HAVE_AIO_H
+++	return (zpool_read_label_slow(fd, config, num_labels));
+++#else
++ 	struct stat64 statbuf;
++ 	struct aiocb aiocbs[VDEV_LABELS];
++ 	struct aiocb *aiocbps[VDEV_LABELS];
++@@ -1104,6 +1109,7 @@ zpool_read_label(int fd, nvlist_t **config, int *num_labels)
++ 	*config = expected_config;
++
++ 	return (0);
+++#endif
++ }
++
++ /*
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index 3a73e5e94f..f0327ce8cc 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,6 +1,5 @@
+ # From https://github.com/openzfs/zfs/releases/download/zfs-2.1.12/zfs-2.1.12.sha256.asc
+ sha256  64daa26aed3e12c931f6f4413d7527c4ebdb8da35416b356152b5f9fdd4c6e6d  zfs-2.1.12.tar.gz
+-sha256  96a27353fe717ff2c8b95deb8b009c4eb750303c6400e2d8a2582ab1ec12b25a  bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
+ 
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index f0461ea9ec..6ea3d22ba5 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -6,14 +6,13 @@
+ 
+ ZFS_VERSION = 2.1.12
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+-ZFS_PATCH = https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
+ ZFS_SELINUX_MODULES = zfs
+ ZFS_LICENSE = CDDL
+ ZFS_LICENSE_FILES = LICENSE COPYRIGHT
+ ZFS_CPE_ID_VENDOR = openzfs
+ ZFS_CPE_ID_PRODUCT = openzfs
+ 
+-# 0001-removal-of-LegacyVersion-broke-ax_python_dev.m4.patch
++# 0001-config-user-check-for-aio.h.patch
+ ZFS_AUTORECONF = YES
+ 
+ ZFS_DEPENDENCIES = libaio openssl udev util-linux zlib libcurl linux
+
+--===============3704344266074191532==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3704344266074191532==--
