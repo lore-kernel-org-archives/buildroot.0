@@ -4,67 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F764C4167B
-	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 17:34:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED329C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 26 Nov 2023 17:46:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9C0E60681;
-	Sun, 26 Nov 2023 17:34:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9C0E60681
+	by smtp3.osuosl.org (Postfix) with ESMTP id 895BA60B6A;
+	Sun, 26 Nov 2023 17:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 895BA60B6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s1C_GKni6jDc; Sun, 26 Nov 2023 17:34:30 +0000 (UTC)
+	with ESMTP id oYInL6T09PXo; Sun, 26 Nov 2023 17:46:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF8B0607BC;
-	Sun, 26 Nov 2023 17:34:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF8B0607BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id D711960ABA;
+	Sun, 26 Nov 2023 17:46:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D711960ABA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 055FD1BF28A
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:34:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7942C1BF28A
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:46:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D27328130A
- for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:34:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D27328130A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5ED5B81206
+ for <buildroot@lists.busybox.net>; Sun, 26 Nov 2023 17:46:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ED5B81206
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YJbjnwe0Zwn2 for <buildroot@lists.busybox.net>;
- Sun, 26 Nov 2023 17:34:26 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 62399812EE
- for <buildroot@buildroot.org>; Sun, 26 Nov 2023 17:34:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62399812EE
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4fcd:aaeb:59ee:6854])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9F07E78034D;
- Sun, 26 Nov 2023 18:34:21 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 26 Nov 2023 18:34:21 +0100
-Date: Sun, 26 Nov 2023 18:34:21 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20231126173421.GC3177259@scaer>
-References: <20231116135136.2337261-1-thomas.petazzoni@bootlin.com>
+ with ESMTP id qXjfgW3ZxxLa for <buildroot@lists.busybox.net>;
+ Sun, 26 Nov 2023 17:46:05 +0000 (UTC)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1D88881257
+ for <buildroot@buildroot.org>; Sun, 26 Nov 2023 17:46:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D88881257
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-40b402c36c4so7352185e9.1
+ for <buildroot@buildroot.org>; Sun, 26 Nov 2023 09:46:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1701020762; x=1701625562;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=sjKJoak/nsvkDJujNBoUnukimeS2l6NEi8UNzlC+JoA=;
+ b=NWAaqBnFyKeD6DpZjgdV5SB/TqWuel9DMcWs37OPpdm40AQ1ydyyJgpo7FoVEdZGey
+ 32ehwQ110SoJnTxTdbCuHOyYYF4DajJhNDeRvw/okwuj1a47ijKWtzUS3MkmGTqP0P95
+ nLrdpMHPFhOMNpVnA8ZsT7vVvmK0FPeix9pK2aPfRNomdsCnDsRop0aufd/sBNJWiXsz
+ /Aa5DeseViPU1rpOfet65EKVCHKwrF0DwoJbcjC7SPJh4fyyAjCy+2pODngCfqiGeBD1
+ yPzZdpzR4qxCzxKnmeczJ0uxx7+d4YhSBru8NOvXbWhDXFAK3/udeTp18/TymPmgAhfw
+ x7PQ==
+X-Gm-Message-State: AOJu0YzusIbJOMdiN+V/oWSz26TJGuO+1IMYkusOKGtnv5Hnaj+NZ+Bj
+ AHx1LbCn7z3cPvj3//zl+Ud3+TGSy3s=
+X-Google-Smtp-Source: AGHT+IFvBhrfAvd0hXH3yh3IJ9Or41C4N5+9AqDNMfpT7EBpJvab6Nx/qDwcy/rQ0xI9uP3MrvZ0vQ==
+X-Received: by 2002:a05:600c:3b16:b0:40b:4007:11f1 with SMTP id
+ m22-20020a05600c3b1600b0040b400711f1mr2848588wms.11.1701020762033; 
+ Sun, 26 Nov 2023 09:46:02 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ e15-20020a056000120f00b0032da35baf7bsm9736829wrx.113.2023.11.26.09.46.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 26 Nov 2023 09:46:01 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 26 Nov 2023 18:45:58 +0100
+Message-ID: <20231126174558.24896-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231116135136.2337261-1-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1701020064;
- bh=/vpItOenn52/1asWuAtY4LhJSe6cBHmDQ/QuMuGl2yY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=elzR2c0JiCEfGDErVaKM4nUyYhAWe+RSLwZwLrx8U6tTVJRo6dQz59p5nCw0NsEzE
- 8xznchS48N32pKN1moczU589kUxAtM0/zekrzKIf0Cp2NeO9VVNT0r4neEY9r4uA6i
- NVa9/TOelkisFe2zLT4LcKGXLIf1R7r0K0BbQ1k3kvXr4KhWnD136OSPjJX/nWhlG7
- wsyUCRPTFWCZZyEYXU5JBfzjXKHLhRFGbNrYP9Uxy8cJADgoFdBLQNrfBnNWBjkOOF
- PZHGFAxke0bZtYyTkYMgU1xcAzPXBa4EqR2AG+kvBeQ+OJK0fn6B+TfEGHsm0znh3K
- aEwN1NC2a7c3w==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1701020762; x=1701625562; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=sjKJoak/nsvkDJujNBoUnukimeS2l6NEi8UNzlC+JoA=;
+ b=U4Wt9TXuDtOKscePKy3jiT2SGj4oS5os0ejIgF47NTF1A6Sjdvq9a6z+VyU/XUpXUb
+ tbQkrYi9JsQPIo3RzgfBkAQ93Oa9khSrdKAS+b8E1hCpXsteMiRlGH9S64P6gpRp2Kll
+ ib1iqCyRcIUeVpqUX44QkFiveLyuG6X5/6UGFgb4kcfXPflyaRZKStPhJL2ysgDiBivs
+ hYAdSzxIk+GLJahEartitq/m4fEj13vs2RH2/UzV/P05yFmzHTgFv5uPt5zr1+FsMp+P
+ 7dcF1mMsHGs4UqjPdSQlqA9G13aPajUw+eBkcxFsSlBYUoo8/5X0YZwroB0WXWI71nkf
+ nroQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=elzR2c0J
-Subject: Re: [Buildroot] [PATCH] package/netsnmp: revert back to 5.9.3,
- backport security fix
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=U4Wt9TXu
+Subject: [Buildroot] [PATCH 1/1] package/opensc: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,243 +93,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>,
- Buildroot List <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Fix the following build failure with libressl >= 3.8 raised since bump
+of libressl to version 3.8.2 in commit
+21eca49ed5110872407b76ab9337d2877c4cda24:
 
-On 2023-11-16 14:51 +0100, Thomas Petazzoni via buildroot spake thusly:
-> In commit 13fc9dcb34926e9b6310b23662920c55c96d83a1, netsnmp was bumped
-> from 5.9.3 to 5.9.4 to fix two CVEs.
-> 
-> However, even though it's a minor version bump, there are actually 163
-> commits upstream between those two minor releases, and some of them
-> are breaking existing use-cases. In particular upstream
-> a2cb167514ac0c7e1b04e8f151e0b015501362e0 now requires that config_()
-> macros in MIB files are terminated with a semicolon, causing a build
-> breakage with existing MIB files that were totally valid with 5.9.3.
-> 
-> This commit therefore proposes to revert back to 5.9.3, by reverting
-> those two commits:
-> 
-> 56caafceab3ec12669ccb7aa6fc8b653778064e1 package/netsnmp: fix musl build
-> 13fc9dcb34926e9b6310b23662920c55c96d83a1 package/netsnmp: security bump to version 5.9.4
-> 
-> and instead revert the one upstream commit that fixes both CVEs.
+In file included from card-westcos.c:37:
+/home/autobuild/autobuild/instance-11/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/openssl/evp.h:627:32: error: macro "EVP_sha3_224" passed 1 arguments, but takes just 0
+  627 | const EVP_MD *EVP_sha3_224(void);
+      |                                ^
 
-s/revert/backport/ as noticed by Baruch.
+Fixes:
+ - http://autobuild.buildroot.org/results/cecee659371f370bf4bd2b27a4752bf20ceff326
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...L-does-provide-EVP_sha3_-after-3-7-3.patch | 32 +++++++++++++++++++
+ ...ixed-detection-of-SHA3-compatibility.patch | 27 ++++++++++++++++
+ 2 files changed, 59 insertions(+)
+ create mode 100644 package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
+ create mode 100644 package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
 
-Applied to master, thanks.
-
-> ---
-> Note: for master, we probably want to keep the bump to 5.9.4, as it's
-> upstream decision. This commit is really intended for
-> 2023.02.x (perhaps other maintenance branches), where we don't want to
-> break things for users.
-
-I saw that comment a bit too late, and pushed to master.
-
-However, after reasing the CHANGES file, I noticed that:
-
-    IMPORTANT: SNMP over TLS and/or DTLS are not functioning properly
-    in this release with various versions of OpenSSL and will be fixed
-    in a future release.
-
-So, it was anyway a good idea to revert (pfeew...)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...onfiguration-of-NETSNMP_FD_MASK_TYPE.patch | 38 ----------
->  ...agent-disallow-SET-with-NULL-varbind.patch | 72 +++++++++++++++++++
->  package/netsnmp/netsnmp.hash                  |  6 +-
->  package/netsnmp/netsnmp.mk                    |  6 +-
->  4 files changed, 80 insertions(+), 42 deletions(-)
->  delete mode 100644 package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch
->  create mode 100644 package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-> 
-> diff --git a/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch b/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch
-> deleted file mode 100644
-> index 91a00aec27..0000000000
-> --- a/package/netsnmp/0001-Fix-configuration-of-NETSNMP_FD_MASK_TYPE.patch
-> +++ /dev/null
-> @@ -1,38 +0,0 @@
-> -From a62169f1fa358be8f330ea8519ade0610fac525b Mon Sep 17 00:00:00 2001
-> -From: Adam Gajda <adgajda@users.noreply.github.com>
-> -Date: Mon, 2 Oct 2023 16:40:31 +0200
-> -Subject: [PATCH] Fix configuration of NETSNMP_FD_MASK_TYPE
-> -
-> -Upstream: https://github.com/net-snmp/net-snmp/commit/a62169f1fa358be8f330ea8519ade0610fac525b
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - configure                        | 2 +-
-> - configure.d/config_project_types | 2 +-
-> - 2 files changed, 2 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/configure b/configure
-> -index 9f0a173d8a..945a27c663 100755
-> ---- a/configure
-> -+++ b/configure
-> -@@ -30871,7 +30871,7 @@ CFLAGS="$CFLAGS -Werror"
-> - 
-> - { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for the type of fd_set::fds_bits" >&5
-> - printf %s "checking for the type of fd_set::fds_bits... " >&6; }
-> --for type in __fd_mask __int32_t unknown; do
-> -+for type in __fd_mask __int32_t long\ int unknown; do
-> -   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-> - /* end confdefs.h.  */
-> - 
-> -diff --git a/configure.d/config_project_types b/configure.d/config_project_types
-> -index 1b4c66b95e..a78e8ebb06 100644
-> ---- a/configure.d/config_project_types
-> -+++ b/configure.d/config_project_types
-> -@@ -66,7 +66,7 @@ netsnmp_save_CFLAGS=$CFLAGS
-> - CFLAGS="$CFLAGS -Werror"
-> - 
-> - AC_MSG_CHECKING([for the type of fd_set::fds_bits])
-> --for type in __fd_mask __int32_t unknown; do
-> -+for type in __fd_mask __int32_t long\ int unknown; do
-> -   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-> - #include <sys/select.h>
-> - #include <stddef.h>
-> diff --git a/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch b/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-> new file mode 100644
-> index 0000000000..3a6321d7a7
-> --- /dev/null
-> +++ b/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-> @@ -0,0 +1,72 @@
-> +From b07627fa67c686b07d1eab123cf3e4887a2a93aa Mon Sep 17 00:00:00 2001
-> +From: Bill Fenner <fenner@gmail.com>
-> +Date: Fri, 25 Nov 2022 08:41:24 -0800
-> +Subject: [PATCH] snmp_agent: disallow SET with NULL varbind
-> +
-> +Upstream: https://github.com/net-snmp/net-snmp/commit/4589352dac3ae111c7621298cf231742209efd9b
-> +
-> +[Thomas: this commit was merged as part of
-> +https://github.com/net-snmp/net-snmp/pull/490/commits, which fixes
-> +https://github.com/net-snmp/net-snmp/issues/474 (CVE-2022-44792) and
-> +https://github.com/net-snmp/net-snmp/issues/475 (CVE-2022-44793). The
-> +other two commits merged as part of this pull request are related to
-> +adding a non-regression test for this, which is not relevant for the
-> +security fix itself.]
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + agent/snmp_agent.c | 32 ++++++++++++++++++++++++++++++++
-> + 1 file changed, 32 insertions(+)
-> +
-> +diff --git a/agent/snmp_agent.c b/agent/snmp_agent.c
-> +index 867d0c166f..3f678fe2df 100644
-> +--- a/agent/snmp_agent.c
-> ++++ b/agent/snmp_agent.c
-> +@@ -3719,12 +3719,44 @@ netsnmp_handle_request(netsnmp_agent_session *asp, int status)
-> +     return 1;
-> + }
-> + 
-> ++static int
-> ++check_set_pdu_for_null_varbind(netsnmp_agent_session *asp)
-> ++{
-> ++    int i;
-> ++    netsnmp_variable_list *v = NULL;
-> ++
-> ++    for (i = 1, v = asp->pdu->variables; v != NULL; i++, v = v->next_variable) {
-> ++	if (v->type == ASN_NULL) {
-> ++	    /*
-> ++	     * Protect SET implementations that do not protect themselves
-> ++	     * against wrong type.
-> ++	     */
-> ++	    DEBUGMSGTL(("snmp_agent", "disallowing SET with NULL var for varbind %d\n", i));
-> ++	    asp->index = i;
-> ++	    return SNMP_ERR_WRONGTYPE;
-> ++	}
-> ++    }
-> ++    return SNMP_ERR_NOERROR;
-> ++}
-> ++
-> + int
-> + handle_pdu(netsnmp_agent_session *asp)
-> + {
-> +     int             status, inclusives = 0;
-> +     netsnmp_variable_list *v = NULL;
-> + 
-> ++#ifndef NETSNMP_NO_WRITE_SUPPORT
-> ++    /*
-> ++     * Check for ASN_NULL in SET request
-> ++     */
-> ++    if (asp->pdu->command == SNMP_MSG_SET) {
-> ++	status = check_set_pdu_for_null_varbind(asp);
-> ++	if (status != SNMP_ERR_NOERROR) {
-> ++	    return status;
-> ++	}
-> ++    }
-> ++#endif /* NETSNMP_NO_WRITE_SUPPORT */
-> ++
-> +     /*
-> +      * for illegal requests, mark all nodes as ASN_NULL 
-> +      */
-> +-- 
-> +2.41.0
-> +
-> diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-> index 7898941271..e1e9d10898 100644
-> --- a/package/netsnmp/netsnmp.hash
-> +++ b/package/netsnmp/netsnmp.hash
-> @@ -1,7 +1,7 @@
->  # Locally calculated after checking pgp signature at
-> -# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.4/net-snmp-5.9.4.tar.gz.asc
-> -# using key 6E6718AEF1EB5C65C32D1B2A356BC0B552D53CAB
-> -sha256  8b4de01391e74e3c7014beb43961a2d6d6fa03acc34280b9585f4930745b0544  net-snmp-5.9.4.tar.gz
-> +# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.3/net-snmp-5.9.3.tar.gz.asc
-> +# using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
-> +sha256  2097f29b7e1bf3f1300b4bae52fa2308d0bb8d5d3998dbe02f9462a413a2ef0a  net-snmp-5.9.3.tar.gz
->  
->  # Hash for license file
->  sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
-> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-> index b5cda30a7b..fafd604879 100644
-> --- a/package/netsnmp/netsnmp.mk
-> +++ b/package/netsnmp/netsnmp.mk
-> @@ -4,13 +4,17 @@
->  #
->  ################################################################################
->  
-> -NETSNMP_VERSION = 5.9.4
-> +NETSNMP_VERSION = 5.9.3
->  NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
->  NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
->  NETSNMP_LICENSE = Various BSD-like
->  NETSNMP_LICENSE_FILES = COPYING
->  NETSNMP_CPE_ID_VENDOR = net-snmp
->  NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
-> +# 0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-> +NETSNMP_IGNORE_CVES = \
-> +	CVE-2022-44792 \
-> +	CVE-2022-44793
->  NETSNMP_SELINUX_MODULES = snmp
->  NETSNMP_INSTALL_STAGING = YES
->  NETSNMP_CONF_ENV = \
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch b/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
+new file mode 100644
+index 0000000000..80c19a3f5f
+--- /dev/null
++++ b/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
+@@ -0,0 +1,32 @@
++From e015242590ad9131e124232cc5a2fd02d525ef2c Mon Sep 17 00:00:00 2001
++From: Klemens Nanni <kn@openbsd.org>
++Date: Thu, 29 Jun 2023 02:41:43 +0300
++Subject: [PATCH] LibreSSL does provide EVP_sha3_*() after 3.7.3
++
++Support was added in 16.04.2023.
++
++Compile- and run-tested on OpenBSD/amd64 7.3-current.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/OpenSC/OpenSC/commit/e015242590ad9131e124232cc5a2fd02d525ef2c
++---
++ src/libopensc/sc-ossl-compat.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
++index df0cebbce2..8012cd4c0f 100644
++--- a/src/libopensc/sc-ossl-compat.h
+++++ b/src/libopensc/sc-ossl-compat.h
++@@ -50,10 +50,12 @@ extern "C" {
++ #if LIBRESSL_VERSION_NUMBER < 0x30500000L
++ #define FIPS_mode()                             (0)
++ #endif
+++#ifndef EVP_sha3_224
++ #define EVP_sha3_224()                          (NULL)
++ #define EVP_sha3_256()                          (NULL)
++ #define EVP_sha3_384()                          (NULL)
++ #define EVP_sha3_512()                          (NULL)
+++#endif
++ #if LIBRESSL_VERSION_NUMBER < 0x3070000fL
++ #define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
++ #define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
+diff --git a/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch b/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
+new file mode 100644
+index 0000000000..3d8aa7e4ef
+--- /dev/null
++++ b/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
+@@ -0,0 +1,27 @@
++From 33351d91aa22fa8077847ba3f19abb5a00b04600 Mon Sep 17 00:00:00 2001
++From: Frank Morgner <frankmorgner@gmail.com>
++Date: Tue, 15 Aug 2023 17:58:21 +0200
++Subject: [PATCH] fixed detection of SHA3 compatibility
++
++fixes https://github.com/OpenSC/OpenSC/issues/2836
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/OpenSC/OpenSC/commit/33351d91aa22fa8077847ba3f19abb5a00b04600
++---
++ src/libopensc/sc-ossl-compat.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
++index 8012cd4c0f..96ec4bd736 100644
++--- a/src/libopensc/sc-ossl-compat.h
+++++ b/src/libopensc/sc-ossl-compat.h
++@@ -50,7 +50,8 @@ extern "C" {
++ #if LIBRESSL_VERSION_NUMBER < 0x30500000L
++ #define FIPS_mode()                             (0)
++ #endif
++-#ifndef EVP_sha3_224
+++/* OpenSSL 1.1.1 has EVP_sha3_* */
+++#if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30800000L
++ #define EVP_sha3_224()                          (NULL)
++ #define EVP_sha3_256()                          (NULL)
++ #define EVP_sha3_384()                          (NULL)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
