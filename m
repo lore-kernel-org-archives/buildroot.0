@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D8D6C10DC1
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1029AC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB27B4185C;
-	Mon,  4 Dec 2023 20:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB27B4185C
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEE6E418E2;
+	Mon,  4 Dec 2023 20:26:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEE6E418E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4QnD954OwO-z; Mon,  4 Dec 2023 20:26:04 +0000 (UTC)
+	with ESMTP id 9WTi291_Da1T; Mon,  4 Dec 2023 20:26:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F2D141B9E;
-	Mon,  4 Dec 2023 20:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F2D141B9E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 059521BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3C0741827;
+	Mon,  4 Dec 2023 20:26:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3C0741827
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 27FBB1BF977
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D90A941776
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC39F41953
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D90A941776
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC39F41953
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x2EZ56yUJkTB for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1sSJJu4uxP69 for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BDE6741690
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FFC540140
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDE6741690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FFC540140
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B82E1879B6; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+ id 80735879B8; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 26 Nov 2023 22:40:53 +0100
+Date: Sun, 26 Nov 2023 18:09:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e056aeeca9cf8c00c6da62c39979ce6c55c92791
-X-Git-Newrev: beafbb83ad58e2f6d446ac03565207cb0128c82d
+X-Git-Oldrev: 92fcdbd3e23aa03326d203271d02595409452690
+X-Git-Newrev: 05a259ed416d2bef1587a29d35fc117fa81183b2
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201329.B82E1879B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.12.2
+Message-Id: <20231204201329.80735879B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydantic: bump to version
+ 2.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +63,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beafbb83ad58e2f6d446ac03565207cb0128c82d
+commit: https://git.buildroot.net/buildroot/commit/?id=05a259ed416d2bef1587a29d35fc117fa81183b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/timescale/timescaledb/blob/2.12.2/CHANGELOG.md
+Add new python-annotated-types runtime dependency.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Add new python-pydantic-core runtime dependency.
+
+Migrate build backend from setuptools to hatchling.
+
+License hash changed due to adding contributors:
+https://github.com/pydantic/pydantic/commit/7bc9c6525a81680c0dd9df3558ed5f33345a77c2
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pydantic/Config.in            | 5 ++++-
+ package/python-pydantic/python-pydantic.hash | 6 +++---
+ package/python-pydantic/python-pydantic.mk   | 9 ++++++---
+ 3 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index 0f2269986e..ae1d3db1e1 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  acca5f6ec5684722374eece92f73d7763bd171075074fd2e6bd0244bda9fbc25  timescaledb-2.11.2.tar.gz
-+sha256  d24cd29aad411d3e41d543d1a30827c48f8e01a48563650db5fac145ad7a01eb  timescaledb-2.12.2.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index fe7bcbc36e..adae1c2bae 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pydantic/Config.in b/package/python-pydantic/Config.in
+index 41ec43adf4..e9cd2e6780 100644
+--- a/package/python-pydantic/Config.in
++++ b/package/python-pydantic/Config.in
+@@ -1,8 +1,11 @@
+ config BR2_PACKAGE_PYTHON_PYDANTIC
+ 	bool "python-pydantic"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic-core
++	select BR2_PACKAGE_PYTHON_ANNOTATED_TYPES # runtime
++	select BR2_PACKAGE_PYTHON_PYDANTIC_CORE # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+ 	help
+ 	  Data validation and settings management using python 3.6
+ 	  type hinting.
+ 
+-	  https://github.com/samuelcolvin/pydantic
++	  https://github.com/pydantic/pydantic
+diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
+index 88b17f4575..0848debc1c 100644
+--- a/package/python-pydantic/python-pydantic.hash
++++ b/package/python-pydantic/python-pydantic.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pydantic/json
+-md5  f0e286c32f40ec45aba9603742739cd6  pydantic-1.10.8.tar.gz
+-sha256  1410275520dfa70effadf4c21811d755e7ef9bb1f1d077a21958153a92c8d9ca  pydantic-1.10.8.tar.gz
++md5  348281a5a27eb5253c7a83927aae64e1  pydantic-2.5.2.tar.gz
++sha256  ff177ba64c6faf73d7afa2e8cad38fd456c0dbe01c9954e71038001cd15a6edd  pydantic-2.5.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256  9e3946690ac88b6b73e8f001a0586af13568be8852fd514e4393f39761764387  LICENSE
++sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
+diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
+index b800426d22..b5bb7ff853 100644
+--- a/package/python-pydantic/python-pydantic.mk
++++ b/package/python-pydantic/python-pydantic.mk
+@@ -4,11 +4,14 @@
  #
  ################################################################################
  
--TIMESCALEDB_VERSION = 2.11.2
-+TIMESCALEDB_VERSION = 2.12.2
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+-PYTHON_PYDANTIC_VERSION = 1.10.8
++PYTHON_PYDANTIC_VERSION = 2.5.2
+ PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
+-PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/23/65/2aa13873e9e0084ecaec00fbe6c6096b65e1ab99ba66bdbf7e4e7c4cc915
+-PYTHON_PYDANTIC_SETUP_TYPE = setuptools
++PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/b7/41/3c8108f79fb7da2d2b17f35744232af4ffcd9e764ebe1e3fd4b26669b325
++PYTHON_PYDANTIC_SETUP_TYPE = pep517
+ PYTHON_PYDANTIC_LICENSE = MIT
+ PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
++PYTHON_PYDANTIC_DEPENDENCIES = \
++	host-python-hatchling \
++	host-python-hatch-fancy-pypi-readme
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
