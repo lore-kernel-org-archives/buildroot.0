@@ -4,84 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 289E7C4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 22:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6763FC4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 22:41:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A193F4014E;
-	Mon, 27 Nov 2023 22:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A193F4014E
+	by smtp2.osuosl.org (Postfix) with ESMTP id B39FF400AF;
+	Mon, 27 Nov 2023 22:41:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B39FF400AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8QloclRPKByt; Mon, 27 Nov 2023 22:11:31 +0000 (UTC)
+	with ESMTP id 7gbLI37Zui55; Mon, 27 Nov 2023 22:41:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73160404E0;
-	Mon, 27 Nov 2023 22:11:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73160404E0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AFA931BF407
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 22:11:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73289405FD;
+	Mon, 27 Nov 2023 22:41:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73289405FD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 77F231BF407
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 22:41:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93E98404E0
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 22:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93E98404E0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D9B6818A2
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 22:41:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D9B6818A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oPrrR41ohAcZ for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 22:11:27 +0000 (UTC)
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 20AA24014E
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 22:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20AA24014E
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-40b402c36c4so17792485e9.1
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 14:11:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701123085; x=1701727885;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=lWNGyAqlmr3cbQP3OzFYHKHdR9YuJcu166QdSpXr3AA=;
- b=MK3YGLQJx2DczTmHMQbwmQy1pUvHjGM8cL5q3qj5BuwFiv3X6Adof4OwwmcMQmtZyv
- UP0j6C6liIGuWJoF5+24QArLKpBWt42Rtkxtmdoqky8osm72EHy+DmWC34PPzKclbCz8
- L7zBEnZs6i7aI+/1kfrmq/56GdUatHrMqucZdDmQEIhIL0NyamQQmOlF1Q7/Se5Anekr
- UsyjwkUjwFf9NcIxFmasMTdfc1uRrA602dgWfilRiT0mwCGOmAMiQAMlTlln3qs4EUed
- vaLosB6H2Avpw/bq/tnn0z+QQnDOu0bBoG5qnl0oXl1Z4F/+Seh3vHzXsFfx7rmJeOwg
- NM9g==
-X-Gm-Message-State: AOJu0Yz4anzsddetMfZzzcmQTh5U9MgFeecn4ba6giKkNouF2sTN3Aom
- mxYRravdCl3vQmfnr5ogb7IsFkW+M3Y=
-X-Google-Smtp-Source: AGHT+IFFCmT1DIVhYQps5DnwsE83DcCw0VlyTSes0qAUQ8wasUV8klOQeBVmLch6BiyY2qeEDgJL+A==
-X-Received: by 2002:a05:600c:3b99:b0:40b:402c:34eb with SMTP id
- n25-20020a05600c3b9900b0040b402c34ebmr6125274wms.16.1701123084535; 
- Mon, 27 Nov 2023 14:11:24 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m19-20020a05600c4f5300b0040b2b38a1fasm15480909wmq.4.2023.11.27.14.11.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Nov 2023 14:11:23 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j3XHiN6iQWZQ for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 22:41:53 +0000 (UTC)
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D4B848188B
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 22:41:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4B848188B
+Received: from pps.filterd (m0346905.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 3ARLIiV4019271; Mon, 27 Nov 2023 22:41:50 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3uk69u38re-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 27 Nov 2023 22:41:50 +0000
+Received: from xusxph004rp020.corp.ray.com ([128.13.120.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 3ARMfnrD015691
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 27 Nov 2023 22:41:49 GMT
+Received: from dtulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph004rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 3ARMfm42024945
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Mon, 27 Nov 2023 22:41:49 GMT
+X-Received: from bspbox.kirk (kirk.rockwellcollins.lab [10.148.204.208])
+ by dtulimr02.rockwellcollins.com (Postfix) with ESMTP id A525E20043;
+ Mon, 27 Nov 2023 16:41:48 -0600 (CST)
 To: buildroot@buildroot.org
-Date: Mon, 27 Nov 2023 23:11:19 +0100
-Message-ID: <20231127221119.1361708-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+Date: Mon, 27 Nov 2023 22:41:39 +0000
+Message-ID: <20231127224139.35969-1-brandon.maier@collins.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-27_19,2023-11-27_01,2023-05-22_02
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-27_19,2023-11-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ adultscore=0
+ mlxlogscore=999 malwarescore=0 spamscore=0 phishscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311270158
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ phishscore=0 bulkscore=0
+ spamscore=0 mlxlogscore=996 adultscore=0 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
+ definitions=main-2311270158
+X-Proofpoint-ORIG-GUID: Cn9kRkdVx0B9en8jd6AIZkdoEP7ObYZz
+X-Proofpoint-GUID: Cn9kRkdVx0B9en8jd6AIZkdoEP7ObYZz
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ mlxlogscore=999 malwarescore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
+ clxscore=1011 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311270158
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701123085; x=1701727885; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lWNGyAqlmr3cbQP3OzFYHKHdR9YuJcu166QdSpXr3AA=;
- b=dTfmB/n4dvdlgRHq7fIhrILh3zr9NZECPEaHNwNj5eUBfLjkQ12U0uCDNZNKnKNdtO
- VFphWF1pTG/RmYtMAG80OKW2fduxZbDSaN8OBRwmqBUMJavMxq4ec2XC1rIHbdgDERzu
- amvUePsteclMbpdEWvxy8tf7JRBbBB7Vq7uIiBxyBstiZQvt1UzI/2eyM/AN4sx/q6cO
- HJZeWRsgx0KWvcHHXUlueYma9h9rvBJUkEDmqpr4oW6BnJm7BXMjokHq3KtBAN9ulGjR
- AT2w+vnIVH1Cc2h7z2yARglueAM1LbKHpLD8ZwhhmLYBBrPDxKc3LJAAK42gA3WW+wpn
- GiMg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=dTfmB/n4
-Subject: [Buildroot] [PATCH 1/1] package/gsl: fix musl build on m68k
+ d=collins.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=POD051818;
+ bh=PH+013zmdXz4XMPQrDvyZw8rjK+JpI6B8N5GcTCSitE=;
+ b=LY+08INdewdWuclF1HYBTk+G61iHZBklMMK09bKrUFP4OdFhKoXEPg/wHjTweribJap5
+ y4YTKGQSA13nb0Z624LTqJMBzVieMszkTxl/gkBD/TGEuYBU8q8DuuoAtwbOUEvj8Q8S
+ tmOyIMqUeuGoANPjHZHPcdVx4bvqS6hjg3y2bBpAm+gTaKv5BVbSK2QGyTT7Z6yLouS5
+ gKnnGGNutUHuezEUeikh5pbcB4ruXFALzu1HG6o3qY08YscAkP8LTuYzNGCVHtg5yCmp
+ uqOYGrnRVUR8Hv/m22IoEy9DtddI2ZeUURJ5wwh/86AqBZWvX+ZK+zYDS1N/4ApFPlKY ZA== 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
+ header.a=rsa-sha256 header.s=POD051818 header.b=LY+08INd
+Subject: [Buildroot] [PATCH 1/1] ppd-merge: speed up per-package-rsync
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,83 +109,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Herve Codina <herve.codina@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Brandon Maier <brandon.maier@collins.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update patch to fix the following musl build failure with m68k which is
-only raised (for an unknown reason) since bump to version 2.7.1 in commit
-3e48f8358e519f9c24262a6549d8f6c78ee01add:
-
-In file included from fp.c:6:
-fp-gnum68k.c:21:10: fatal error: fpu_control.h: No such file or directory
-   21 | #include <fpu_control.h>
-      |          ^~~~~~~~~~~~~~~
-
-Add also upstream link to first patch iteration which was sent in
-November 2022 but didn't get it any reply (like most of the other emails
-sent to bug-gsl@gnu.org ...)
-
-Fixes:
- - http://autobuild.buildroot.org/results/e59636f6ac148807c1c67f09eef0e0a9f5d52303
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .checkpackageignore                                      | 1 -
- package/gsl/0001-configure.ac-fix-build-on-powerpc.patch | 7 ++++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 52f983e049..5dcd2b088b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -529,7 +529,6 @@ package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch Up
- package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch Upstream
- package/grpc/0003-host-grpc-only-cpp-plugin.patch Upstream
- package/grpc/0004-disable-unconditionally-downloading-api-repos.patch Upstream
--package/gsl/0001-configure.ac-fix-build-on-powerpc.patch Upstream
- package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch Upstream
- package/guile/0001-calculate-csqrt_manually.patch Upstream
- package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch Upstream
-diff --git a/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch b/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
-index 13f6da4588..96ab780467 100644
---- a/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
-+++ b/package/gsl/0001-configure.ac-fix-build-on-powerpc.patch
-@@ -1,9 +1,9 @@
- From 84e62d57b90b41a0c96bb9fb6ec61ecaac76a1ab Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Sat, 5 Nov 2022 21:31:36 +0100
--Subject: [PATCH] configure.ac: fix build on powerpc
-+Subject: [PATCH] configure.ac: fix build on powerpc and m68k
- 
--Fix the following powerpc build failures on:
-+Fix the following powerpc and m68k build failures on:
-  - musl raised because fpu_control.h is not available:
- 
- In file included from fp.c:8:
-@@ -25,6 +25,7 @@ Fixes:
-  - http://autobuild.buildroot.org/results/48403946bb4cda9013e51db59c1b2ffdcf4e2854
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://lists.gnu.org/archive/html/bug-gsl/2022-11/msg00000.html
- ---
-  configure.ac | 8 ++++++++
-  1 file changed, 8 insertions(+)
-@@ -37,7 +38,7 @@ index bfd9ca30..1ee6dca0 100644
-     fi
-  fi
-  
--+if test "$ac_cv_c_ieee_interface" = "gnuppc" ; then
-++if test "$ac_cv_c_ieee_interface" = "gnuppc" -o "$ac_cv_c_ieee_interface" = "gnum68k" ; then
- +    AC_CACHE_CHECK([for _FPU_RC_NEAREST], ac_cv_c__fpu_rc_nearest,
- +    [ac_cv_c__fpu_rc_nearest=no
- +    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <fpu_control.h>
--- 
-2.42.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIHBlci1wYWNrYWdlLXJzeW5jIHN0YWdlIGNhbiBhZGQgYSBzaWduaWZpY2FudCBhbW91bnQg
+b2YgdGltZSB0bwpidWlsZHMuIFRoZXkgY2FuIGFsc28gYmUgYW5ub3lpbmcgYXMgdGhlIHNsb3dl
+c3QgcnN5bmNzLCB0aGUgZmluYWwKdGFyZ2V0LWZpbmFsaXplIGFuZCBob3N0LWZpbmFsaXplIHN0
+YWdlcywgcnVuIG9uIGBtYWtlIGFsbGAgd2hpY2ggd2UgdXNlCmZyZXF1ZW50bHkgZHVyaW5nIGRl
+dmVsb3BtZW50LgoKVGhlIHBlci1wYWNrYWdlLXJzeW5jIGlzIHNsb3cgYmVjYXVzZSBpdCBsYXVu
+Y2hlcyBhIG5ldyByc3luYyBmb3IgZWFjaApzb3VyY2UgdHJlZSwgYW5kIGVhY2ggcnN5bmMgbXVz
+dCByZXNjYW4gdGhlIGRlc3RpbmF0aW9uIGRpcmVjdG9yeSBhbmQKcG90ZW50aWFsbHkgb3Zlcndy
+aXRlIGZpbGVzIG11bHRpcGxlIHRpbWVzLiBTbyBpbnN0ZWFkIHdlIG1hbnVhbGx5IHdhbGsKdGhl
+IHNvdXJjZSB0cmVlcyB0byBmaW5kIG9ubHkgdGhlIGZpbGVzIHRoYXQgc2hvdWxkIGJlIHdyaXR0
+ZW4gdG8gdGhlCmRlc3RpbmF0aW9uLCB0aGVuIGZlZWQgdGhhdCB0byBhIHNpbmdsZSBpbnN0YW5j
+ZSBvZiByc3luYy4KCkJlbG93IGlzIGEgYmVuY2htYXJrIHJ1bm5pbmcganVzdCB0aGUgaG9zdC1m
+aW5hbGl6ZSBtZXJnZSBmb3IgYSBzeXN0ZW0Kd2l0aCAyMDAgaG9zdCBwYWNrYWdlcywgcnVubmlu
+ZyBpbiBib3RoIGhhcmRsaW5rIGFuZCBmdWxsIGNvcHkgbW9kZS4KCkJlbmNobWFyayAxOiBwcGQt
+bWVyZ2UtY29weQogIFRpbWUgKG1lYW4gwrEgz4MpOiAgICAgIDUuMzMyIHMgwrEgIDAuMDk4IHMg
+ICAgW1VzZXI6IDUuMzAwIHMsIFN5c3RlbTogMy45MjYgc10KICBSYW5nZSAobWluIOKApiBtYXgp
+OiAgICA1LjA5OSBzIOKApiAgNS40NjggcyAgICAxMCBydW5zCgpCZW5jaG1hcmsgMjogcHBkLW1l
+cmdlLWhhcmRsaW5rCiAgVGltZSAobWVhbiDCsSDPgyk6ICAgICAgMi4wNjcgcyDCsSAgMC4wMjcg
+cyAgICBbVXNlcjogMS4yMTggcywgU3lzdGVtOiAxLjYxNCBzXQogIFJhbmdlIChtaW4g4oCmIG1h
+eCk6ICAgIDIuMDM3IHMg4oCmICAyLjExNCBzICAgIDEwIHJ1bnMKCkJlbmNobWFyayAzOiByc3lu
+Yy1jb3B5CiAgVGltZSAobWVhbiDCsSDPgyk6ICAgICAyNS41MzkgcyDCsSAgMC4yMzMgcyAgICBb
+VXNlcjogMTEuNzA1IHMsIFN5c3RlbTogMTAuODYyIHNdCiAgUmFuZ2UgKG1pbiDigKYgbWF4KTog
+ICAyNS4yMTUgcyDigKYgMjUuOTY2IHMgICAgMTAgcnVucwoKQmVuY2htYXJrIDQ6IHJzeW5jLWhh
+cmRsaW5rCiAgVGltZSAobWVhbiDCsSDPgyk6ICAgICAyNC4wNzQgcyDCsSAgMC4yNzEgcyAgICBb
+VXNlcjogMy40NTEgcywgU3lzdGVtOiAxMC44MDIgc10KICBSYW5nZSAobWluIOKApiBtYXgpOiAg
+IDIzLjY3MiBzIOKApiAyNC41MjIgcyAgICAxMCBydW5zCgpTdW1tYXJ5CiAgJ3BwZC1tZXJnZS1o
+YXJkbGluaycgcmFuCiAgICAyLjU4IMKxIDAuMDYgdGltZXMgZmFzdGVyIHRoYW4gJ3BwZC1tZXJn
+ZS1jb3B5JwogICAxMS42NSDCsSAwLjIwIHRpbWVzIGZhc3RlciB0aGFuICdyc3luYy1oYXJkbGlu
+aycKICAgMTIuMzYgwrEgMC4yMCB0aW1lcyBmYXN0ZXIgdGhhbiAncnN5bmMtY29weScKClNpZ25l
+ZC1vZmYtYnk6IEJyYW5kb24gTWFpZXIgPGJyYW5kb24ubWFpZXJAY29sbGlucy5jb20+Ci0tLQog
+cGFja2FnZS9wa2ctdXRpbHMubWsgICAgICAgICB8ICAxNiArLS0tCiBzdXBwb3J0L3NjcmlwdHMv
+cHBkLW1lcmdlLnNoIHwgMTU0ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCiAy
+IGZpbGVzIGNoYW5nZWQsIDE1NyBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKIGNyZWF0
+ZSBtb2RlIDEwMDc1NSBzdXBwb3J0L3NjcmlwdHMvcHBkLW1lcmdlLnNoCgpkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9wa2ctdXRpbHMubWsgYi9wYWNrYWdlL3BrZy11dGlscy5tawppbmRleCAwNTllODZh
+ZTBhLi4zOTY4Y2FiZWJkIDEwMDY0NAotLS0gYS9wYWNrYWdlL3BrZy11dGlscy5taworKysgYi9w
+YWNrYWdlL3BrZy11dGlscy5tawpAQCAtMjE2LDE5ICsyMTYsOSBAQCBpZmVxICgkKEJSMl9QRVJf
+UEFDS0FHRV9ESVJFQ1RPUklFUykseSkKICMgJDM6IGRlc3RpbmF0aW9uIGRpcmVjdG9yeQogIyAk
+NDogbGl0ZXJhbCAiY29weSIgb3IgImhhcmRsaW5rIiB0byBjb3B5IG9yIGhhcmRsaW5rIGZpbGVz
+IGZyb20gc3JjIHRvIGRlc3QKIGRlZmluZSBwZXItcGFja2FnZS1yc3luYwotCW1rZGlyIC1wICQo
+MykKLQkkKGZvcmVhY2ggcGtnLCQoMSksXAotCQlyc3luYyAtYSBcCi0JCQktLWhhcmQtbGlua3Mg
+XAotCQkJJChpZiAkKGZpbHRlciBoYXJkbGluaywkKDQpKSwgXAotCQkJCS0tbGluay1kZXN0PSQo
+UEVSX1BBQ0tBR0VfRElSKS8kKHBrZykvJCgyKS8sIFwKLQkJCQkkKGlmICQoZmlsdGVyIGNvcHks
+JCg0KSksIFwKLQkJCQkJJChlbXB0eSksIFwKLQkJCQkJJChlcnJvciBwZXItcGFja2FnZS1yc3lu
+YyBjYW4gb25seSAiY29weSIgb3IgImhhcmRsaW5rIiwgbm90ICIkKDQpIikgXAotCQkJCSkgXAot
+CQkJKSBcCi0JCQkkKFBFUl9QQUNLQUdFX0RJUikvJChwa2cpLyQoMikvIFwKLQkJCSQoMykkKHNl
+cCkpCisJUEVSX1BBQ0tBR0VfRElSPSQoUEVSX1BBQ0tBR0VfRElSKSBcCisJCSQoVE9QRElSKS9z
+dXBwb3J0L3NjcmlwdHMvcHBkLW1lcmdlLnNoIFwKKwkJJCgyKSAkKDMpICQoNCkgJCgxKQogZW5k
+ZWYKIAogIyBwcmVwYXJlcyB0aGUgcGVyLXBhY2thZ2UgSE9TVF9ESVIgYW5kIFRBUkdFVF9ESVIg
+b2YgdGhlIGN1cnJlbnQKZGlmZiAtLWdpdCBhL3N1cHBvcnQvc2NyaXB0cy9wcGQtbWVyZ2Uuc2gg
+Yi9zdXBwb3J0L3NjcmlwdHMvcHBkLW1lcmdlLnNoCm5ldyBmaWxlIG1vZGUgMTAwNzU1CmluZGV4
+IDAwMDAwMDAwMDAuLmViMWNhZjllNTIKLS0tIC9kZXYvbnVsbAorKysgYi9zdXBwb3J0L3Njcmlw
+dHMvcHBkLW1lcmdlLnNoCkBAIC0wLDAgKzEsMTU0IEBACisjIS9iaW4vYmFzaAorIyBNZXJnZSBh
+IHNldCBvZiBCdWlsZHJvb3QgcGVyLXBhY2thZ2UtZGlyZWN0b3JpZXMgKFBQRCkgaW50byBhIHNp
+bmdsZQorIyBkZXN0aW5hdGlvbiBkaXJlY3RvcnkuCisjCisjIHBwZC1tZXJnZSBzY2FucyB0aHJv
+dWdoIGFsbCB0aGUgUFBEIGFuZCBidWlsZHMgYSB0YWJsZSBvZiB3aGljaCBmaWxlcyBmcm9tCisj
+IGVhY2ggc291cmNlIGRpcmVjdG9yeSB3aWxsIGJlIHdyaXR0ZW4gdG8gdGhlIGRlc3RpbmF0aW9u
+IGRpcmVjdG9yeS4gSXQgZmVlZHMKKyMgdGhhdCB0YWJsZSBpbnRvIHJzeW5jIHRvIHRlbGwgaXQg
+ZXhhY3RseSB3aGljaCBmaWxlcyB0byBjb3B5LgorIworIyBFeGFtcGxlOgorIyAgIHBwZC1tZXJn
+ZSByZXBsYWNlcyB0aGUgb3JpZ2luYWwgbWV0aG9kIG9mIG1lcmdpbmcgUFBEIHRoYXQgcmFuIG1h
+bnkgcnN5bmMKKyMgICBjb21tYW5kcyBsaWtlIGJlbG93LgorIworIyAgID4gcnN5bmMgLWEgLS1s
+aW5rLWRlc3Q9JFBFUl9QQUNLQUdFX0RJUi9wa2ctMS9ob3N0LyBcCisjICAgPiAgICAgJFBFUl9Q
+QUNLQUdFX0RJUi9wa2ctMS9ob3N0LyBkZXN0LworIyAgID4gcnN5bmMgLWEgLS1saW5rLWRlc3Q9
+JFBFUl9QQUNLQUdFX0RJUi9wa2ctMi9ob3N0LyBcCisjICAgPiAgICAgJFBFUl9QQUNLQUdFX0RJ
+Ui9wa2ctMi9ob3N0LyBkZXN0LworIyAgIC4uLgorIyAgID4gcnN5bmMgLWEgLS1saW5rLWRlc3Q9
+JFBFUl9QQUNLQUdFX0RJUi9wa2ctbi9ob3N0LyBcCisjICAgPiAgICAgJFBFUl9QQUNLQUdFX0RJ
+Ui9wa2ctbi9ob3N0LyBkZXN0LworIworIyAgIFRoZSBlcXVpdmFsZW50IGNvbW1hbmQgd2l0aCBw
+cGQtbWVyZ2UgaXMKKyMKKyMgICA+IFBFUl9QQUNLQUdFX0RJUj0kUEVSX1BBQ0tBR0VfRElSIFwK
+KyMgICA+ICAgICBwcGQtbWVyZ2Uuc2ggaG9zdCBkZXN0LyBoYXJkbGluayBcCisjICAgPiAgICAg
+cGtnLTEgcGtnLTIgLi4uIHBrZy1uCisKK3NldCAtZXVvIHBpcGVmYWlsCisKK3VzYWdlKCkgewor
+ICAgIGNhdCA8PEVPRiA+JjIKK1VzYWdlOgorICBwcGQtbWVyZ2Uuc2ggPGhvc3R8dGFyZ2V0PiA8
+ZGVzdGluYXRpb24+IDxoYXJkbGlua3xjb3B5PiA8cGtnLW5hbWU+Li4uCisKKyAgUEVSX1BBQ0tB
+R0VfRElSIG11c3QgYmUgZGVmaW5lZCBpbiB0aGUgZW52aXJvbm1lbnQuCisKKyAgTWVyZ2VzIGVh
+Y2ggZGlyZWN0b3J5IGZvciA8cGtnLW5hbWU+IGF0CisgICJcJFBFUl9QQUNLQUdFX0RJUi88cGtn
+LW5hbWU+Lzxob3N0fHRhcmdldD4vIiBpbnRvIDxkZXN0aW5hdGlvbj4uCitFT0YKKyAgICBlY2hv
+ICJFcnJvcjogJCoiID4mMgorICAgIGV4aXQgMQorfQorCitzZWFyY2hfc3VidHJlZXMoKSB7Cisg
+ICAgIyBVc2UgYGZpbmRgIHRvIHdhbGsgYWxsIHN1YnRyZWVzIGFuZCBwcmludCB0aGVpciBjb250
+ZW50cyBpbiBgcnN5bmNgCisgICAgIyAnLS1yZWxhdGl2ZScgcGF0aCBzeW50YXguIEZpbHRlciBw
+YXRocyB0aHJvdWdoIGF3ayBzbyB3ZSBkaXNjYXJkIGFueQorICAgICMgZHVwbGljYXRlIGZpbGVz
+IGZvdW5kIHdoaWxlIHdhbGtpbmcgc3VidHJlZXMuCisgICAgKGNkICIkUEVSX1BBQ0tBR0VfRElS
+IiAmJiBmaW5kICIke3N1YnRyZWVzW0BdfSIgLW1pbmRlcHRoIDEgLXByaW50ZiAiJUgvLi8lUFww
+IikgXAorICAgICAgICB8IGF3ayAnCisgICAgICAgIEJFR0lOIHsKKyAgICAgICAgICAgIFJTPSJc
+MCI7CisgICAgICAgICAgICBPUlM9IlwwIjsKKyAgICAgICAgICAgIEZTPSIvXFwuLyI7CisgICAg
+ICAgIH0KKyAgICAgICAgeworICAgICAgICAgICAgaWYgKCEoJDIgaW4gZm91bmQpKSB7CisgICAg
+ICAgICAgICAgICAgZm91bmRbJDJdPTE7CisgICAgICAgICAgICAgICAgcHJpbnQ7CisgICAgICAg
+ICAgICB9CisgICAgICAgIH0nCit9CisKK3JzeW5jX2hhcmRsaW5rKCkgeworICAgICMgcnN5bmMg
+aGFyZGxpbmtpbmcgd2l0aCAtLWxpbmstZGVzdCBoYXJkIGNhcHMgYXQgMjAgc3VidHJlZXMuIEJh
+dGNoIHVwIHRoZQorICAgICMgaW5wdXQgZmlsZXMgaW4gJHRtcGRpciB1bnRpbCB3ZSBoYXZlIDIw
+IHN1YnRyZWVzLCB0aGVuIGZsdXNoIHRoZW0gd2l0aCBhbgorICAgICMgcnN5bmMgY2FsbC4KKyAg
+ICB0bXBkaXI9JChta3RlbXAgLWQpCisgICAgYXdrIC12IHRtcGRpcj0iJHRtcGRpciIgJworICAg
+ICAgICBmdW5jdGlvbiBta2ZpbGVzKCkgeworICAgICAgICAgICAgb3V0X2ZpbGU9dG1wZGlyICIv
+IiBpICIuZmlsZXMiOworICAgICAgICAgICAgc3VidHJlZXNfZmlsZT10bXBkaXIgIi8iIGkgIi5z
+dWJ0cmVlcyI7CisgICAgICAgIH0KKyAgICAgICAgZnVuY3Rpb24gYmF0Y2hfb3V0KCkgeworICAg
+ICAgICAgICAgY2xvc2Uob3V0X2ZpbGUpOworICAgICAgICAgICAgY2xvc2Uoc3VidHJlZXNfZmls
+ZSk7CisgICAgICAgICAgICBkZWxldGUgc3VidHJlZXM7CisgICAgICAgICAgICBwcmludCBpOwor
+ICAgICAgICAgICAgaSs9MTsKKyAgICAgICAgICAgIG1rZmlsZXMoKTsKKyAgICAgICAgfQorICAg
+ICAgICBCRUdJTiB7CisgICAgICAgICAgICBSUz0iXDAiOworICAgICAgICAgICAgT1JTPSJcMCI7
+CisgICAgICAgICAgICBGUz0iL1xcLi8iOworICAgICAgICAgICAgaT0wOworICAgICAgICAgICAg
+bWtmaWxlcygpOworICAgICAgICB9CisgICAgICAgICEoJDEgaW4gc3VidHJlZXMpICYmIChsZW5n
+dGgoc3VidHJlZXMpID49IDIwKSB7CisgICAgICAgICAgICBiYXRjaF9vdXQoKTsKKyAgICAgICAg
+fQorICAgICAgICB7CisgICAgICAgICAgICBwcmludCA+IG91dF9maWxlOworICAgICAgICAgICAg
+aWYgKCEoJDEgaW4gc3VidHJlZXMpKSB7CisgICAgICAgICAgICAgICAgc3VidHJlZXNbJDFdPTE7
+CisgICAgICAgICAgICAgICAgcHJpbnQgJDEgPiBzdWJ0cmVlc19maWxlOworICAgICAgICAgICAg
+fQorICAgICAgICB9CisgICAgICAgIEVORCB7CisgICAgICAgICAgICBpZiAobGVuZ3RoKHN1YnRy
+ZWVzKSA+IDApIHsKKyAgICAgICAgICAgICAgICBiYXRjaF9vdXQoKTsKKyAgICAgICAgICAgIH0K
+KyAgICAgICAgfScgfCB3aGlsZSBJRlM9IHJlYWQgLXIgLWQgJCdcMCcgaTsgZG8KKyAgICAgICAg
+ICAgIHJzeW5jX2NtZF9iYXRjaD0oICIke3JzeW5jX2NtZFtAXX0iICkKKyAgICAgICAgICAgIHdo
+aWxlIElGUz0gcmVhZCAtciAtZCAkJ1wwJyBzdWJ0cmVlOyBkbworICAgICAgICAgICAgICAgIHJz
+eW5jX2NtZF9iYXRjaCs9KCAtLWxpbmstZGVzdD0iJFBFUl9QQUNLQUdFX0RJUi8kc3VidHJlZS8i
+ICkKKyAgICAgICAgICAgIGRvbmUgPCIkdG1wZGlyLyRpLnN1YnRyZWVzIgorICAgICAgICAgICAg
+IiR7cnN5bmNfY21kX2JhdGNoW0BdfSIgIiRQRVJfUEFDS0FHRV9ESVIvIiAiJGRlc3QvIiA8IiR0
+bXBkaXIvJGkuZmlsZXMiCisgICAgICAgIGRvbmUKKyAgICBybSAtcmYgIiR0bXBkaXIiCit9CisK
+K2lmIFsgIiQjIiAtbHQgMyBdOyB0aGVuCisgICAgdXNhZ2UgIkludmFsaWQgbnVtYmVyIG9mIGFy
+Z3VtZW50cyIKK2ZpCit0eXBlPSQxCitkZXN0PSQyCitsaW5rPSQzCitzaGlmdCAzCisKK2Nhc2Ug
+IiR0eXBlIiBpbgoraG9zdHx0YXJnZXQpCisgICAgOzsKKyopCisgICAgdXNhZ2UgIlVua25vd24g
+dHlwZSAnJHR5cGUnIgorICAgIDs7Citlc2FjCisKK3N1YnRyZWVzPSgpCitmb3IgKChpID0gJCM7
+IGkgPiAwOyBpLS0pKTsgZG8KKyAgICBzdWJ0cmVlcys9KCAiJHshaX0vJHR5cGUiICkKK2RvbmUK
+KworaWYgWyAteiAiJHtQRVJfUEFDS0FHRV9ESVI6LX0iIF07IHRoZW4KKyAgICB1c2FnZSAiUEVS
+X1BBQ0tBR0VfRElSIG11c3QgYmUgZGVmaW5lZCIKK2ZpCisKK3JzeW5jX2NtZD0oIHJzeW5jIC1h
+IC0taGFyZC1saW5rcyAtLWZpbGVzLWZyb209LSAtLWZyb20wICkKKworbWtkaXIgLXAgIiRkZXN0
+IgorCitpZiBbICIkeyNzdWJ0cmVlc1tAXX0iIC1lcSAwIF07IHRoZW4KKyAgICBleGl0IDAKK2Zp
+CisKK2Nhc2UgIiRsaW5rIiBpbgoraGFyZGxpbmspCisgICAgc2VhcmNoX3N1YnRyZWVzIHwgcnN5
+bmNfaGFyZGxpbmsKKyAgICA7OworY29weSkKKyAgICBzZWFyY2hfc3VidHJlZXMgfCAiJHtyc3lu
+Y19jbWRbQF19IiAiJFBFUl9QQUNLQUdFX0RJUi8iICIkZGVzdC8iCisgICAgOzsKKyopCisgICAg
+dXNhZ2UgIlVua25vd24gbGluayBjb21tYW5kICckbGluayciCisgICAgOzsKK2VzYWMKLS0gCjIu
+NDMuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
