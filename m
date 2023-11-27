@@ -4,67 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ACD4C4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 12:06:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A92ACC4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 12:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1867740321;
-	Mon, 27 Nov 2023 12:06:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1867740321
+	by smtp4.osuosl.org (Postfix) with ESMTP id 655BA40570;
+	Mon, 27 Nov 2023 12:06:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 655BA40570
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vtzWe2NeUtn4; Mon, 27 Nov 2023 12:05:59 +0000 (UTC)
+	with ESMTP id 8VI2QgpfZvPX; Mon, 27 Nov 2023 12:06:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 733134033D;
-	Mon, 27 Nov 2023 12:05:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 733134033D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A68F1BF3A8
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 12:05:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C360940542;
+	Mon, 27 Nov 2023 12:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C360940542
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FC8D1BF3A8
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 12:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D795380E8D
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 12:05:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D795380E8D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27ECF404FE
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 12:06:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27ECF404FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y1ee2XAZhw8d for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 12:05:56 +0000 (UTC)
-X-Greylist: delayed 371 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 27 Nov 2023 12:05:55 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4E6980E5C
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B4E6980E5C
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 12:05:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S7kSzdszT00C for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 12:06:17 +0000 (UTC)
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D789E404F7
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 12:06:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D789E404F7
 Received: from submission (posteo.de [185.67.36.169]) 
- by mout01.posteo.de (Postfix) with ESMTPS id 9EA88240028
+ by mout02.posteo.de (Postfix) with ESMTPS id 5410D240105
  for <buildroot@buildroot.org>; Mon, 27 Nov 2023 12:59:41 +0100 (CET)
 Received: from customer (localhost [127.0.0.1])
- by submission (posteo.de) with ESMTPSA id 4Sf3zd1pyXz6twq;
- Mon, 27 Nov 2023 12:59:41 +0100 (CET)
+ by submission (posteo.de) with ESMTPSA id 4Sf3zc6n2sz6twF;
+ Mon, 27 Nov 2023 12:59:40 +0100 (CET)
 From: Alexander Egorenkov <egorenar-dev@posteo.net>
 To: buildroot@buildroot.org
-Date: Mon, 27 Nov 2023 11:59:59 +0000
-Message-ID: <20231127115959.25625-2-egorenar-dev@posteo.net>
-In-Reply-To: <20231127115959.25625-1-egorenar-dev@posteo.net>
-References: <20231127115959.25625-1-egorenar-dev@posteo.net>
+Date: Mon, 27 Nov 2023 11:59:58 +0000
+Message-ID: <20231127115959.25625-1-egorenar-dev@posteo.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=posteo.net; s=2017; 
- t=1701086381; bh=ZrmTYvlF+xIt4wvJ5UEYYDKOZKmY1I0zNZ9T1KTYZac=;
+ t=1701086381; bh=DSQd59tpRb4NbTaW3IiCtYck/CX6pEeTMZDrcNxJQOg=;
  h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
  Content-Transfer-Encoding:From;
- b=NYmNvMFOHnTfFhoyH4482y09Ikz0KhtoNTEmBds20hCHU2fo2NFb/1lRI8Fh6EOnh
- r+4YYiqqrYoYZEj0utmNgVKQwsglwWc0gg8YmoyA1nm3h0etWycPBfMCTQlIPBpBZb
- SP2gVY2nVxWMQ3zLeWm5QAEW1QpERkrhhFZmLQFGZo/62u3GY95wuULF9k1TrXe5UF
- xKWiSulT9kf+e0Xjrk2LVyXDmQyxCfA5pXVBhjnmfnGvn+hTZyec+d2hieb8SZFQz8
- peoSqw1Lf/1EIfYN/JcPTlTbE9WG/gW09y6yp1rnx2MzSFiBAxi5tb0swA9Rv1Aot/
- nEU5SKRNNSCQA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=KAyhmNY4nEuwNsxh7ZMHJVu5blyu3if0dZCRhoFdj/IhOgZvHC96hqiOJGAbnaf2v
+ V1gP3jo+ZQiot8gXD+dumMORNPHHQR1ahO9jDja9dKLzY8W9DsuaJjKmi47CZ+mmlm
+ biz+LcLwO/9pjQ4D05zBBGE+WKbw0tUG+VdnYx13tnNLoCibCQ9dgbabE2PT9lhtMP
+ pA9m+gIoyuKkWK94jWaB6D42JaUievi6hZNInq4DcQ5yUDx7o2mCC3JWn4hbd+PX74
+ 5aomy9IxZheJMDhBYEslsJ9hBEiZdFfUccych9sBBqGR/iju/IfGO/HtBiKymIThTc
+ 2pJJGSjiPlaWQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net
- header.a=rsa-sha256 header.s=2017 header.b=NYmNvMFO
-Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: bump to version
- 0.9.7
+ header.a=rsa-sha256 header.s=2017 header.b=KAyhmNY4
+Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: bump to version 1.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,39 +77,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Change log:
-- https://github.com/opensvc/multipath-tools/pull/77
+Release notes:
+- https://github.com/makedumpfile/makedumpfile/releases/tag/1.7.4
 
 Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 ---
- package/multipath-tools/multipath-tools.hash | 2 +-
- package/multipath-tools/multipath-tools.mk   | 2 +-
+ package/makedumpfile/makedumpfile.hash | 2 +-
+ package/makedumpfile/makedumpfile.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index 06aa5ccc809a..0f51c3884645 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
+index 665023d87be5..fdb30de88d8d 100644
+--- a/package/makedumpfile/makedumpfile.hash
++++ b/package/makedumpfile/makedumpfile.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256  401c6f6e8dc5d3feaaee76280716aee718579ac024ce4f2fae77c798dc7a0f9f  multipath-tools-0.9.6.tar.gz
-+sha256  8f0a7ddc01137d0f90ac3ef5700131dfbd6cf3bbbccdcfa317e8379efa328d59  multipath-tools-0.9.7.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index 7071e1fd1b33..e62e85e14daa 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
+-sha256  f059dbebf5156a9ab97cd3c1f41ad5df3436c7ab4dd6dbffa234fc4e93cfa2ce  makedumpfile-1.7.3.tar.gz
++sha256  0554f5de516c51f5756e437dbfc353722b16b20e875241275554b474e89298db  makedumpfile-1.7.4.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+index 6102c92bd8bb..410752682da4 100644
+--- a/package/makedumpfile/makedumpfile.mk
++++ b/package/makedumpfile/makedumpfile.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MULTIPATH_TOOLS_VERSION = 0.9.6
-+MULTIPATH_TOOLS_VERSION = 0.9.7
- MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
- 
- MULTIPATH_TOOLS_LICENSE = \
+-MAKEDUMPFILE_VERSION = 1.7.3
++MAKEDUMPFILE_VERSION = 1.7.4
+ MAKEDUMPFILE_SITE = https://github.com/makedumpfile/makedumpfile/releases/download/$(MAKEDUMPFILE_VERSION)
+ MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
+ MAKEDUMPFILE_LICENSE = GPL-2.0
 -- 
 2.42.0
 
