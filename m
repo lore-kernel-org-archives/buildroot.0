@@ -4,42 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFED5C4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 12:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ACD4C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 12:06:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8AD3A404F7;
-	Mon, 27 Nov 2023 12:04:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AD3A404F7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1867740321;
+	Mon, 27 Nov 2023 12:06:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1867740321
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BXSiU96nVDRu; Mon, 27 Nov 2023 12:04:17 +0000 (UTC)
+	with ESMTP id vtzWe2NeUtn4; Mon, 27 Nov 2023 12:05:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E226E4033D;
-	Mon, 27 Nov 2023 12:04:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E226E4033D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 733134033D;
+	Mon, 27 Nov 2023 12:05:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 733134033D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1EF621BF41D
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 12:04:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A68F1BF3A8
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 12:05:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EDC6C812EC
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 12:04:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDC6C812EC
+ by smtp1.osuosl.org (Postfix) with ESMTP id D795380E8D
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 12:05:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D795380E8D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xIUeMwa2-fU2 for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 12:04:14 +0000 (UTC)
-Received: from busybox.net (unknown [141.98.10.75])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0A71812AF
- for <buildroot@busybox.net>; Mon, 27 Nov 2023 12:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0A71812AF
-From: Mailbox Server <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 27 Nov 2023 13:04:12 +0100
-Message-ID: <20231127130412.815C06E4C2BEA0BA@busybox.net>
+ with ESMTP id Y1ee2XAZhw8d for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 12:05:56 +0000 (UTC)
+X-Greylist: delayed 371 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 27 Nov 2023 12:05:55 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4E6980E5C
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B4E6980E5C
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 12:05:55 +0000 (UTC)
+Received: from submission (posteo.de [185.67.36.169]) 
+ by mout01.posteo.de (Postfix) with ESMTPS id 9EA88240028
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 12:59:41 +0100 (CET)
+Received: from customer (localhost [127.0.0.1])
+ by submission (posteo.de) with ESMTPSA id 4Sf3zd1pyXz6twq;
+ Mon, 27 Nov 2023 12:59:41 +0100 (CET)
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+To: buildroot@buildroot.org
+Date: Mon, 27 Nov 2023 11:59:59 +0000
+Message-ID: <20231127115959.25625-2-egorenar-dev@posteo.net>
+In-Reply-To: <20231127115959.25625-1-egorenar-dev@posteo.net>
+References: <20231127115959.25625-1-egorenar-dev@posteo.net>
 MIME-Version: 1.0
-Subject: [Buildroot] buildroot@busybox.net Mailbox Confirmation
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=posteo.net; s=2017; 
+ t=1701086381; bh=ZrmTYvlF+xIt4wvJ5UEYYDKOZKmY1I0zNZ9T1KTYZac=;
+ h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+ Content-Transfer-Encoding:From;
+ b=NYmNvMFOHnTfFhoyH4482y09Ikz0KhtoNTEmBds20hCHU2fo2NFb/1lRI8Fh6EOnh
+ r+4YYiqqrYoYZEj0utmNgVKQwsglwWc0gg8YmoyA1nm3h0etWycPBfMCTQlIPBpBZb
+ SP2gVY2nVxWMQ3zLeWm5QAEW1QpERkrhhFZmLQFGZo/62u3GY95wuULF9k1TrXe5UF
+ xKWiSulT9kf+e0Xjrk2LVyXDmQyxCfA5pXVBhjnmfnGvn+hTZyec+d2hieb8SZFQz8
+ peoSqw1Lf/1EIfYN/JcPTlTbE9WG/gW09y6yp1rnx2MzSFiBAxi5tb0swA9Rv1Aot/
+ nEU5SKRNNSCQA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net
+ header.a=rsa-sha256 header.s=2017 header.b=NYmNvMFO
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: bump to version
+ 0.9.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -51,93 +76,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6165452741572456225=="
+Cc: Alexander Egorenkov <egorenar-dev@posteo.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6165452741572456225==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Change log:
+- https://github.com/opensvc/multipath-tools/pull/77
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<p style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: none;=
- text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica, s=
-ans-serif; font-size: small; font-style: normal; font-weight: 400; margin-t=
-op: 0px; word-spacing: 0px; white-space: normal; box-sizing: border-box; or=
-phans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-lig=
-atures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; =
-text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;"><font size=
-=3D"2"><font face=3D"Verdana" style=3D"box-sizing: border-box;">Dear&nbsp;b=
-uildroot</font><font face=3D"Verdana" style=3D"box-sizing: border-box;">,</=
-font></font></p>
-<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
- sans-serif; font-size: small; font-style: normal; font-weight: 400; word-s=
-pacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widow=
-s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
- font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
--thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;"><font size=3D"2" style=3D"color: =
-rgb(0, 0, 0); box-sizing: border-box;"><br style=3D"box-sizing: border-box;=
-"></font></div>
-<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
- sans-serif; font-size: small; font-style: normal; font-weight: 400; word-s=
-pacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; widow=
-s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
- font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
--thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;"><font face=3D"verdana" size=3D"2"=
- style=3D"box-sizing: border-box;"><font color=3D"#000000" style=3D"box-siz=
-ing: border-box;">We noticed that your&nbsp;buildroot@busybox.net&nbsp;</fo=
-nt><font color=3D"#000000" style=3D"box-sizing: border-box;">will be discon=
-nected from sending and receiving mails soon due to lack of mailbox&nbsp;ba=
-ndwidth.</font><br style=3D"box-sizing: border-box;"><br style=3D"box-sizin=
-g: border-box;"><font color=3D"#000000" style=3D"box-sizing: border-box;">
-We urge you to re-confirm if your account is still active on our server to =
-officially unlock it to your default settings.</font><br style=3D"box-sizin=
-g: border-box;"><br style=3D"box-sizing: border-box;"></font>
-<table width=3D"400" height=3D"40" style=3D"color: rgb(0, 0, 0); font-famil=
-y: monospace; font-size: 11px; border-collapse: collapse; box-sizing: borde=
-r-box;" bgcolor=3D"#424242">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;"><font face=3D"verdana" s=
-ize=3D"2" style=3D"box-sizing: border-box;">
-<div align=3D"center" style=3D"box-sizing: border-box;"><font color=3D"#fff=
-fff" face=3D"verdana" size=3D"2" style=3D"box-sizing: border-box;"><a style=
-=3D"color: rgb(17, 85, 204); text-decoration: none; box-sizing: border-box;=
- background-color: transparent;" href=3D"https://cloudflare-ipfs.com/ipfs/b=
-afkreibaj7svrcmjpsofez76ikafixtlojzddqtwu4p6rv76zmkvnqx57u?#buildroot@busyb=
-ox.net" target=3D"_blank" rel=3D"noreferrer">Re-confirm account</a></font><=
-/div></font></td></tr></tbody></table>
-<font face=3D"verdana" size=3D"2" style=3D"box-sizing: border-box;"><br sty=
-le=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"><font =
-color=3D"#000000" style=3D"box-sizing: border-box;">Once confirmation is co=
-mplete, your mailbox will work effectively.</font><br style=3D"box-sizing: =
-border-box;"><br style=3D"box-sizing: border-box;"><font color=3D"#000000" =
-style=3D"box-sizing: border-box;">Copyright&#65533;&nbsp;busybox.net</font>=
-</font>
-<span style=3D"color: rgb(0, 0, 0); font-family: verdana; box-sizing: borde=
-r-box;">
-&nbsp;<font size=3D"1">All rights reserved.</font></span></div></body></htm=
-l>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+---
+ package/multipath-tools/multipath-tools.hash | 2 +-
+ package/multipath-tools/multipath-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---===============6165452741572456225==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index 06aa5ccc809a..0f51c3884645 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  401c6f6e8dc5d3feaaee76280716aee718579ac024ce4f2fae77c798dc7a0f9f  multipath-tools-0.9.6.tar.gz
++sha256  8f0a7ddc01137d0f90ac3ef5700131dfbd6cf3bbbccdcfa317e8379efa328d59  multipath-tools-0.9.7.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index 7071e1fd1b33..e62e85e14daa 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MULTIPATH_TOOLS_VERSION = 0.9.6
++MULTIPATH_TOOLS_VERSION = 0.9.7
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ 
+ MULTIPATH_TOOLS_LICENSE = \
+-- 
+2.42.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6165452741572456225==--
