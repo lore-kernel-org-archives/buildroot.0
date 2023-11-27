@@ -1,90 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0417BC4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 19:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75C93C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 21:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90EA260F46;
-	Mon, 27 Nov 2023 19:44:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90EA260F46
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FC608174D;
+	Mon, 27 Nov 2023 21:22:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FC608174D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mzWxyuEZmSVP; Mon, 27 Nov 2023 19:44:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fjzbO-vqDCAa; Mon, 27 Nov 2023 21:22:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5F5560F41;
-	Mon, 27 Nov 2023 19:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5F5560F41
+	by smtp1.osuosl.org (Postfix) with ESMTP id 337D78188A;
+	Mon, 27 Nov 2023 21:22:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 337D78188A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 384B31BF479
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 19:44:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0E7731BF37B
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 21:22:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 10FD060F3C
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 19:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10FD060F3C
+ by smtp3.osuosl.org (Postfix) with ESMTP id D29D560EFE
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 21:22:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D29D560EFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IuaQi0lR_xvx for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 19:44:17 +0000 (UTC)
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5557860F44
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 19:44:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5557860F44
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-40b3e2f8ec5so19919215e9.1
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 11:44:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701114255; x=1701719055;
- h=in-reply-to:references:cc:to:from:subject:message-id:date
- :content-transfer-encoding:mime-version:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=dxAZbD2g0x90uf5F7dpBxSu/wzCeBIeNMOBdHvqtxm8=;
- b=PiNv5ti9KBCEAYQjCtnA2Qi3uF9ThvbhGWBQ8GA078KDYbGzzos5zrOWFQijSZwiam
- Ne7erWLMPvP6BnkZuwY3ydMwb6WWGPFVsAwZoqhcU7IocZzi5ZL4no/NgMx98fRoicdW
- CP4vVzzigan52m1TAm5QG/R900Ugb8DcePPZ0szg719k3BN5bjkMSY0n2k9kMgTA0ujD
- o/D5OwnEXnNGd1Xcfs/m7aKQRWrRiIM4a81C095JGf+62pkn3YzhEyRFFJnBRm9Xa6hk
- XyeD0KaD33zAx8SxXjj761qhfdOc6us5TqciLv/+7ehZp0EhuLsMDdev6MN9dyRynfCG
- ulZw==
-X-Gm-Message-State: AOJu0YxBM+BoA1sx6kyW4aqiQ2puXlT3ENcPcEAZcQ6/bOWT8Pe7eiyn
- oCwyF2BmbBTFyH28uJboQSjUDg==
-X-Google-Smtp-Source: AGHT+IGrxi1GnppjrrK2xQnuqQXpVn0S9BV7JlZER7VqRu7okaoLjxxpb1e93Cw4xY+0R0sulzeNQg==
-X-Received: by 2002:a05:600c:3505:b0:40b:3863:3ae7 with SMTP id
- h5-20020a05600c350500b0040b38633ae7mr8778846wmq.29.1701114255444; 
- Mon, 27 Nov 2023 11:44:15 -0800 (PST)
-Received: from localhost ([2a01:e0a:ce:f2f0:2a6b:35ff:feb8:77d9])
- by smtp.gmail.com with ESMTPSA id
- k32-20020a05600c1ca000b0040839fcb217sm15143348wms.8.2023.11.27.11.44.14
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 27 Nov 2023 11:44:15 -0800 (PST)
-Mime-Version: 1.0
-Date: Mon, 27 Nov 2023 20:44:14 +0100
-Message-Id: <CX9UOC39HILJ.10TZKPLI4I0AB@rtone.fr>
-From: =?utf-8?q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, "Peter Seiderer"
- <ps.report@gmx.net>
-X-Mailer: aerc 0.15.2
-References: <20231120214150.671145-1-gael.portay@rtone.fr>
- <20231120231125.2ba705f9@gmx.net> <20231127184501.GC3177259@scaer>
-In-Reply-To: <20231127184501.GC3177259@scaer>
+ with ESMTP id P-8yKmjuSrtd for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 21:22:17 +0000 (UTC)
+X-Greylist: delayed 459 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 27 Nov 2023 21:22:16 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCE9860DA5
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CCE9860DA5
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 21:22:16 +0000 (UTC)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org
+ [IPv6:2001:67c:2050:b231:465::202])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4SfJHp3kjgz9tM4
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 22:14:30 +0100 (CET)
+Message-ID: <f0b3caa4-43ce-4f0e-a855-9726f1944644@lindra.de>
+Date: Mon, 27 Nov 2023 22:14:29 +0100
+MIME-Version: 1.0
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20231123174105.2435757-1-hypnotoad@lindra.de>
+ <20231125220439.GQ3177259@scaer>
+From: Ralf Dragon <hypnotoad@lindra.de>
+In-Reply-To: <20231125220439.GQ3177259@scaer>
+X-Rspamd-Queue-Id: 4SfJHp3kjgz9tM4
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rtone.fr; s=google; t=1701114255; x=1701719055; darn=buildroot.org;
- h=in-reply-to:references:cc:to:from:subject:message-id:date
- :content-transfer-encoding:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=dxAZbD2g0x90uf5F7dpBxSu/wzCeBIeNMOBdHvqtxm8=;
- b=EJRaCCg2SuhbjMLuRCZGCFYsRR2NBhRSwwQ4Fc6V5kIYuRsrYBwbuPd2HLdQ6iOwd8
- ApvWv12srxGpBI9lqMm6Xbe6uylmGKKFHoUxEeyrZjkKnpQugx8wp5e7sW3Dn57IVlJs
- BK097qwnSZ08adQ47b5IifGodtVWL8WTBQZ+k=
+ d=lindra.de; s=MBO0001; t=1701119670;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ in-reply-to:in-reply-to:references:references;
+ bh=gwT6/QzKFMxcT+87K+zTRtmKe17y1nFsXx3ZwMPobP0=;
+ b=S2+vksCv5M06vnQabcBsoThxApCWD77NFJMPKm939a5HZQIx7PFbPbL7D2ORyjuCnCxRwV
+ PvxDZiLWgeQxTL2MlUzoIOO/vfqVuQ7ZIk8cYka72esUZs+Vzld8bes7KDczCXyOuZnRfJ
+ Q9G34vAD+boC29Q47AJAiEYDte17yyzhcU4lTObtKscGb74nOYJu3zEllvgCZZaxwnlrXj
+ 08S9riwf5Tit0Sx/+2pk7BQsvTNfNa3hAN/MErm/2W0bXj89Y8+5mRLcA4uIWe0dT44o6K
+ vhsW10+aggCDMioId8wotQ6HG4Zb62+t1im0C/1fgULLV8ScIElbjBWln/gOuw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=rtone.fr header.i=@rtone.fr
- header.a=rsa-sha256 header.s=google header.b=EJRaCCg2
-Subject: Re: [Buildroot] [PATCH 1/1] board/raspberrypi: fix autoprobing of
- bluetooth driver
+ dkim=pass (2048-bit key) header.d=lindra.de header.i=@lindra.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=S2+vksCv
+Subject: Re: [Buildroot] [PATCH 1/1] python-sip: fix compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,36 +79,173 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1227034579404197630=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gWWFubiwgQWxsLAoKT24gTW9uIE5vdiAyNywgMjAyMyBhdCA3OjQ1IFBNIENFVCwgWWFu
-biBFLiBNT1JJTiB3cm90ZToKPiBQZXRlciwgQWxsLAo+Cj4gT24gMjAyMy0xMS0yMCAyMzoxMSAr
-MDEwMCwgUGV0ZXIgU2VpZGVyZXIgc3Bha2UgdGh1c2x5Ogo+ID4gT24gTW9uLCAyMCBOb3YgMjAy
-MyAyMjo0MTo1MCArMDEwMCwgR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4gd3Jv
-dGU6Cj4gPiA+IFRoZSBjb21taXQgNjg5YjlhYzQzOSAocGFja2FnZS9ycGktZmlybXdhcmU6IHJl
-d29yayBib290L2NvbmZpZyBmaWxlCj4gPiA+IGhhbmRsaW5nKSBoYXMgc3BsaXQgaW4gdHdvIHRo
-ZSBwcm9wZXJ0eToKPiA+ID4gCWR0b3ZlcmxheT1taW5pdWFydC1idCxrcm5idD1vbgo+ID4gPiBJ
-bnRvOgo+ID4gPiAJZHRvdmVybGF5PW1pbml1YXJ0LWJ0Cj4gPiA+IAlkdG92ZXJsYXk9a3JuYnQ9
-b24KPiBbLS1TTklQLS1dCj4gPiAuLi5hbHRlcm5hdGl2ZSBwYXRjaCAocmVtb3ZpbmcgdGhlIGZh
-aWxpbmcgbGluZSkgYWxyZWFkeSBzdWdnZXN0ZWQsIHNlZSBbNl0gZm9yCj4gPiBkZXRhaWxzIGFu
-ZCByZWFzb25pbmcuLi4KPiA+IFs2XSBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2pl
-Y3QvYnVpbGRyb290L3BhdGNoLzIwMjMwODA4MTgwOTU5LjI4MDkxLTItcHMucmVwb3J0QGdteC5u
-ZXQvCj4KPiBUaGFua3MgZm9yIHRoZSBoZWFkcy11cCBvbiB0aGF0IHBhdGNoLCBJJ2xsIGxvb2sg
-aW50byBpdCBub3c6IEl0IHN0YXRlcwo+ICJhcyBubyBvbmUgY29tcGxhaW5lZCBzaW5jZSAyMDIx
-IGp1c3QgZHJvcCBpdCIgYnV0IEdhw6tsIG5vdGljZWQgbm93LCBzbwo+IGl0IG1ha2VzIHNlbnNl
-IHRvIGFwcGx5IGhpcyBwYXRjaCBub3cuCj4KPiBSZWdhcmRzLAo+IFlhbm4gRS4gTU9SSU4uCgpZ
-YW5uLCBzb3JyeSBmb3IgdGhhdCBsYXRlIHBvc3QsIGJ1dCB5b3UgbWF5IGFsc28gY29uc2lkZXIg
-dGhhdCBvbmVbMV0KZm9yIHRoZSBjb25zaXN0ZW5jeS4KCkFuZCByaWdodCwgdGhlc2UgbGluZXMg
-c2hvdWxkIGdldCByZW1vdmVkIGFmdGVyIHRoZSBidW1wIG9mIHRoZSBwaQprZXJuZWxbMl0gc2lu
-Y2UgdGhlIGtybmJ0PW9uIGlzIG5vdyB0aGUgZGVmYXVsdCBiZWhhdmlvdXIuCgpSZWdhcmRzLApH
-YcOrbAoKWzFdOiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290
-L3BhdGNoLzIwMjMxMTI3MTkyNDU1LjI4MjIzNzQtMS1nYWVsLnBvcnRheUBydG9uZS5mci8KWzJd
-OiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L2xpc3QvP3Nl
-cmllcz0zODA2NzEKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This is a multi-part message in MIME format.
+--===============1227034579404197630==
+Content-Type: multipart/alternative;
+ boundary="------------ChvzrN1PlCtcmlqHRhhgdx20"
+Content-Language: en-US
+
+This is a multi-part message in MIME format.
+--------------ChvzrN1PlCtcmlqHRhhgdx20
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Dear Yann,
+
+thank you for your feedback. As you might have noticed, this is my first 
+submission to buildroot and I had no contact so far to such a 
+contribution process. So feedback is appreciated.
+
+> Here, you'd want to explain why it now fails, so that we can assess
+> whether we need to backport the fix to maintainance branches.
+>
+> So, something along the lines of:
+>
+>      siplib: fix build with python >= 3.11
+>
+>      With python 3.11, the PyFrameObject structure members have been
+>      removed from the public C API:
+>
+> https://docs.python.org/3.11/whatsnew/3.11.html#whatsnew311-c-api-porting
+> https://docs.python.org/3.11/whatsnew/3.11.html#pyframeobject-3-11-hiding
+>
+>      So, use the proper object type that can store an actual
+>      PyFrameObject.
+>
+Your description it is already quite good 🙂. I will check again. I have 
+to say, the patch checker command passed for me, but I was probably in 
+the long-term branch at that time.
+
+
+> We also try hard to push patches upstream so that we do not have to
+> carry them indefinitely. Please try and submit that patch to the SIP
+> project:
+> https://riverbankcomputing.com/support/lists
+
+They write that siplib is no longer supported and that 4.19.25 is the 
+last version: https://riverbankcomputing.com/software/sip/download . 
+That's why I did not consider asking there.
+
+>> +Index: host-python-sip-4.19.25/siplib/sip.h
+>> +===================================================================
+> What diff fornat is that? We usually have plain diff, or git-formatted
+> patches.
+
+I think it is the output from "git diff" piped into the file.
+
+> Can you look into reworking this patch of yours, please?
+
+Will do.
+
+Best,
+
+Ralf
+
+--------------ChvzrN1PlCtcmlqHRhhgdx20
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <div class="moz-text-html" lang="x-unicode">
+      <div class="moz-text-flowed"
+        style="font-family: -moz-fixed; font-size: 12px;"
+        lang="x-unicode">Dear Yann, <br>
+        <br>
+        thank you for your feedback. As you might have noticed, this is
+        my first submission to buildroot and I had no contact so far to
+        such a contribution process. So feedback is appreciated. <br>
+        <br>
+        <blockquote type="cite" style="color: #007cff;">Here, you'd want
+          to explain why it now fails, so that we can assess <br>
+          whether we need to backport the fix to maintainance branches.
+          <br>
+          <br>
+          So, something along the lines of: <br>
+          <br>
+               siplib: fix build with python &gt;= 3.11 <br>
+          <br>
+               With python 3.11, the PyFrameObject structure members
+          have been <br>
+               removed from the public C API: <br>
+          <br>
+                   <a class="moz-txt-link-freetext"
+href="https://docs.python.org/3.11/whatsnew/3.11.html#whatsnew311-c-api-porting">https://docs.python.org/3.11/whatsnew/3.11.html#whatsnew311-c-api-porting</a>
+          <br>
+                   <a class="moz-txt-link-freetext"
+href="https://docs.python.org/3.11/whatsnew/3.11.html#pyframeobject-3-11-hiding">https://docs.python.org/3.11/whatsnew/3.11.html#pyframeobject-3-11-hiding</a>
+          <br>
+          <br>
+               So, use the proper object type that can store an actual <br>
+               PyFrameObject. <br>
+          <br>
+        </blockquote>
+        Your description it is already quite good 🙂. I will check
+        again. I have to say, the patch checker command passed for me,
+        but I was probably in the long-term branch at that time. <br>
+        <br>
+        <br>
+        <blockquote type="cite" style="color: #007cff;">We also try hard
+          to push patches upstream so that we do not have to <br>
+          carry them indefinitely. Please try and submit that patch to
+          the SIP <br>
+          project: <br>
+               <a class="moz-txt-link-freetext"
+            href="https://riverbankcomputing.com/support/lists">https://riverbankcomputing.com/support/lists</a>
+          <br>
+        </blockquote>
+        <br>
+        They write that siplib is no longer supported and that 4.19.25
+        is the last version: <a class="moz-txt-link-freetext"
+          href="https://riverbankcomputing.com/software/sip/download">https://riverbankcomputing.com/software/sip/download</a>
+        . That's why I did not consider asking there. <br>
+        <br>
+        <blockquote type="cite" style="color: #007cff;">
+          <blockquote type="cite" style="color: #007cff;">+Index:
+            host-python-sip-4.19.25/siplib/sip.h <br>
++=================================================================== <br>
+          </blockquote>
+          What diff fornat is that? We usually have plain diff, or
+          git-formatted <br>
+          patches. <br>
+        </blockquote>
+        <br>
+        I think it is the output from "git diff" piped into the file. <br>
+        <br>
+        <blockquote type="cite" style="color: #007cff;">Can you look
+          into reworking this patch of yours, please? <br>
+        </blockquote>
+        <br>
+        Will do. <br>
+        <br>
+        Best, <br>
+        <br>
+        Ralf <br>
+        <br>
+      </div>
+    </div>
+  </body>
+</html>
+
+--------------ChvzrN1PlCtcmlqHRhhgdx20--
+
+--===============1227034579404197630==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1227034579404197630==--
