@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78322C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F0F7C10DC1
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 362CB41BBF;
-	Mon,  4 Dec 2023 20:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 362CB41BBF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 461D342506;
+	Mon,  4 Dec 2023 20:30:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 461D342506
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZHGUCJs8Y5Na; Mon,  4 Dec 2023 20:30:40 +0000 (UTC)
+	with ESMTP id fZLGCe8IBbX9; Mon,  4 Dec 2023 20:30:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E998842503;
-	Mon,  4 Dec 2023 20:30:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E998842503
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5AC4B1BF31D
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D31AD42514;
+	Mon,  4 Dec 2023 20:30:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D31AD42514
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4003F1BF31D
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2DFED4174D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81A3E41732
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DFED4174D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81A3E41732
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0vJ5W0ewZw-i for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VNMLsiYA0vKc for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C99C41754
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CDF1416C3
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C99C41754
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CDF1416C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE27B879BD; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+ id 077F5879B6; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 27 Nov 2023 19:31:42 +0100
+Date: Mon, 27 Nov 2023 19:55:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 83b799457f9d48cf5949ba2b6e0f66c20724ba30
-X-Git-Newrev: fc7606010e4edde7a34c545fac0fe7f82d4a5e18
+X-Git-Oldrev: fc7606010e4edde7a34c545fac0fe7f82d4a5e18
+X-Git-Newrev: 13ba668a2da3a0dcb386578ce15b00a444101dbe
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201329.EE27B879BD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/re2: bump to version 2023.11.01
+Message-Id: <20231204201330.077F5879B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/raspberrypi: bump Linux version to
+ 6.1.61
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,139 +63,421 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc7606010e4edde7a34c545fac0fe7f82d4a5e18
+commit: https://git.buildroot.net/buildroot/commit/?id=13ba668a2da3a0dcb386578ce15b00a444101dbe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- libabseil-cpp is now a dependency
-- required c++ standard is now c++14 [0] --> requires gcc8
-- drop fix for gcc <= 5 introduced in 25fd3b0a523805db14682f7c559cc1c9c366ed55
-  (c++ >= 14 is the default for gcc >= 8)
-- update gcc required for depending packages qt5webengine & grpc
+Linux 6.1 has been marked LTS for a long time now. Time to bump
+Linux for RaspberryPi's to the latest 6.1.61 Since April 2022
+the RaspberryPi defconfigs have compressed kernel module enabled
+by default. (see [1] and [2]).
 
-[0] https://github.com/google/re2/wiki/Install/7c2552dd54444695ce5a9e6a01dd8f312b347914
+To load compressed kernel modules kmod and xz packages are needed
+because busybox doesn't support it.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+For testing I used RaspberryPi 2, 3(32+64bit) and 4(32+64bit), all with mdev enabled.
+
+[1] https://github.com/raspberrypi/linux/commit/c45b4223a4e4a8cfe39edbb4949329ea478fa4e2
+[2] https://github.com/raspberrypi/linux/issues/4966
+
+Signed-off-by: Bram Oosterhuis <dev@bybram.com>
+Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Tested-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/grpc/Config.in             |  2 +-
- package/qt5/qt5webengine/Config.in |  6 +++---
- package/re2/Config.in              |  7 ++++---
- package/re2/re2.hash               |  2 +-
- package/re2/re2.mk                 | 13 +++++--------
- 5 files changed, 14 insertions(+), 16 deletions(-)
+ configs/raspberrypi0_defconfig        | 13 ++++++++++---
+ configs/raspberrypi0w_defconfig       | 13 ++++++++++---
+ configs/raspberrypi2_defconfig        | 13 ++++++++++---
+ configs/raspberrypi3_64_defconfig     | 13 ++++++++++---
+ configs/raspberrypi3_defconfig        | 13 ++++++++++---
+ configs/raspberrypi3_qt5we_defconfig  | 13 ++++++++++---
+ configs/raspberrypi4_64_defconfig     | 13 ++++++++++---
+ configs/raspberrypi4_defconfig        | 13 ++++++++++---
+ configs/raspberrypi_defconfig         | 13 ++++++++++---
+ configs/raspberrypicm4io_64_defconfig | 13 ++++++++++---
+ configs/raspberrypicm4io_defconfig    | 13 ++++++++++---
+ configs/raspberrypizero2w_defconfig   | 13 ++++++++++---
+ 12 files changed, 120 insertions(+), 36 deletions(-)
 
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index afe0ea8450..ef3e1c86cb 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp, re2
- 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 542f212dfc..cfa5893f41 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -10,10 +10,10 @@ config BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT # qt5base-icu
- 	depends on BR2_USE_MMU # libglib2, qt5base-dbus
+diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+index 4506e94bce..6bff1ebf81 100644
+--- a/configs/raspberrypi0_defconfig
++++ b/configs/raspberrypi0_defconfig
+@@ -2,14 +2,14 @@ BR2_arm=y
+ BR2_arm1176jzf_s=y
+ BR2_ARM_EABIHF=y
  
--comment "qt5webengine needs udev /dev management and a glibc toolchain w/ gcc >= 4.9, host gcc >= 4.9, threads, wchar"
-+comment "qt5webengine needs udev /dev management and a glibc toolchain w/ gcc >= 8, host gcc >= 4.9, threads, wchar"
- 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
- 		!BR2_HOST_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
  
-@@ -26,7 +26,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5base-icu
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # qt5base-icu
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # re2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
-diff --git a/package/re2/Config.in b/package/re2/Config.in
-index 64217e8aa2..0ac0041f6d 100644
---- a/package/re2/Config.in
-+++ b/package/re2/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_RE2
- 	bool "re2"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # needs C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++14
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBABSEIL_CPP
- 	help
- 	  RE2 is a fast, safe, thread-friendly alternative
- 	  to backtracking regular expression engines like
-@@ -11,7 +12,7 @@ config BR2_PACKAGE_RE2
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
- 	  https://github.com/google/re2
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
  
--comment "re2 needs a toolchain w/ C++, threads, gcc >= 4.8"
-+comment "re2 needs a toolchain w/ C++, threads, gcc >= 8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
-diff --git a/package/re2/re2.hash b/package/re2/re2.hash
-index a39dece7a9..5f590aba6e 100644
---- a/package/re2/re2.hash
-+++ b/package/re2/re2.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  cbce8b7803e856827201a132862e41af386e7afd9cc6d9a9bc7a4fa4d8ddbdde  re2-2023-02-01.tar.gz
-+sha256  4e6593ac3c71de1c0f322735bc8b0492a72f66ffccfad76e259fa21c41d27d8a  re2-2023-11-01.tar.gz
- sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
-diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-index 5587366b1f..b81a64f2e9 100644
---- a/package/re2/re2.mk
-+++ b/package/re2/re2.mk
-@@ -4,29 +4,26 @@
- #
- ################################################################################
+ # Build the DTBs for A/B from the kernel sources: the zero is the same
+@@ -37,3 +37,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+index 7a35794c2d..ac72d49f92 100644
+--- a/configs/raspberrypi0w_defconfig
++++ b/configs/raspberrypi0w_defconfig
+@@ -2,14 +2,14 @@ BR2_arm=y
+ BR2_arm1176jzf_s=y
+ BR2_ARM_EABIHF=y
  
--RE2_VERSION = 2023-02-01
-+RE2_VERSION = 2023-11-01
- RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
- RE2_LICENSE = BSD-3-Clause
- RE2_LICENSE_FILES = LICENSE
- RE2_INSTALL_STAGING = YES
--
--RE2_MAKE_OPTS = \
--	$(TARGET_CONFIGURE_OPTS) \
--	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+RE2_DEPENDENCIES = libabseil-cpp
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
  
- define RE2_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		-C $(@D) $(if $(BR2_STATIC_LIBS),static)
- endef
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
- define RE2_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		DESTDIR="$(STAGING_DIR)" prefix=/usr -C $(@D) \
- 		$(if $(BR2_STATIC_LIBS),static-install,install)
- endef
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+@@ -32,3 +32,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0w/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0w/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 9b484c5588..dee9a0b23f 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -7,12 +7,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
- define RE2_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) \
- 		$(if $(BR2_STATIC_LIBS),static-install,install)
- endef
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+@@ -39,3 +39,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 4d838ae0e8..6871dc0fe0 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ 
+ # Build the DTB from the kernel sources
+@@ -37,3 +37,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 0a59ab42a9..f0e7b82191 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+@@ -37,3 +37,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index 40d0c0f888..532b3ed686 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -7,12 +7,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+@@ -51,3 +51,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="400M"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+index 5942f7c4e1..453bbe9440 100644
+--- a/configs/raspberrypi4_64_defconfig
++++ b/configs/raspberrypi4_64_defconfig
+@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+@@ -36,3 +36,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4-64/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+index 4e5580c140..1ed5d34b56 100644
+--- a/configs/raspberrypi4_defconfig
++++ b/configs/raspberrypi4_defconfig
+@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+@@ -36,3 +36,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index cca53f9b37..01b4353b84 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -4,14 +4,14 @@ BR2_ARM_EABIHF=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+@@ -38,3 +38,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
+index 29cb0472d7..d53711c3a7 100644
+--- a/configs/raspberrypicm4io_64_defconfig
++++ b/configs/raspberrypicm4io_64_defconfig
+@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+@@ -39,3 +39,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io-64/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypicm4io_defconfig b/configs/raspberrypicm4io_defconfig
+index 017aecc0dd..4b50dc9ef9 100644
+--- a/configs/raspberrypicm4io_defconfig
++++ b/configs/raspberrypicm4io_defconfig
+@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+@@ -39,3 +39,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/configs/raspberrypizero2w_defconfig b/configs/raspberrypizero2w_defconfig
+index 2ea503ca24..1bf335c076 100644
+--- a/configs/raspberrypizero2w_defconfig
++++ b/configs/raspberrypizero2w_defconfig
+@@ -2,14 +2,14 @@ BR2_arm=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6.1=y
+ 
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,0b54dbda3cca2beb51e236a25738784e90853b64)/linux-0b54dbda3cca2beb51e236a25738784e90853b64.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+@@ -34,3 +34,10 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypizero2w/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypizero2w/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
