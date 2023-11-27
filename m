@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4304BC4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 10:12:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F40CC4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 10:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB96540331;
-	Mon, 27 Nov 2023 10:12:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB96540331
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97C1F4033B;
+	Mon, 27 Nov 2023 10:14:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97C1F4033B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k17JOrJEbBK8; Mon, 27 Nov 2023 10:12:23 +0000 (UTC)
+	with ESMTP id knR-N7qscxmL; Mon, 27 Nov 2023 10:14:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F40424032C;
-	Mon, 27 Nov 2023 10:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F40424032C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 03FDF1BF35A
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 10:12:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6F404033C;
+	Mon, 27 Nov 2023 10:14:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6F404033C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F04A1BF35A
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 10:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D125E4032C
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 10:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D125E4032C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 855EB60A5C
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 10:14:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 855EB60A5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q8HIjQzY98DN for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 10:12:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rSxhmbJhE7pz for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 10:14:15 +0000 (UTC)
 Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 220334032B
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 10:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 220334032B
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 541AF60808
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 10:14:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 541AF60808
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DE3141814B9; Mon, 27 Nov 2023 11:12:09 +0100 (CET)
+ with ESMTPSA id 27D181814B9; Mon, 27 Nov 2023 11:14:12 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Mon, 27 Nov 2023 11:11:35 +0100
-Message-Id: <20231127101136.3306319-1-buildroot@heine.tech>
+Date: Mon, 27 Nov 2023 11:14:04 +0100
+Message-Id: <20231127101405.3306410-1-buildroot@heine.tech>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=heine.tech; s=dkim; 
- t=1701079933; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=sohGLcVqIQPuwzEAnJyjqo7BWVfU4NznIyc7QLv6z7g=;
- b=qTcDqnmlmsBkHCqRbRmi8bNtn4hOitkAV7DhPVm6IdpcPaLVrud+9pSH7XI9mPjfFav+O+
- Wng80XhXEyp58+aUhq1xERtNPDLGcAXZSEgLlqvz4vZBQ9W7WBQauqRSSVxVdQi5R9DL+C
- /qmHDIPbGLH0dC6zq0P6wEcyiSZl+aI=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1701080052; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=ZL7rAgRt6wCpXTHF0367oAGsjdiXqzAfjM1TCodmaFg=;
+ b=mlYpB3euuMxiC9Muy8wP+tssoi0QJRkljC0Duw5tRPc1gUpC3VXBaN9+XnQObjqZZueCxS
+ kVFWyCZ8eZDTza/hxr6R23qbH+QwbBr9KZfFGp+4CRoPG8DoxRxQlT1G5bZthgtIYX96E8
+ 0aA5VyN/AJsfUZIETvSaYXSgxqqaBDQ=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=qTcDqnml
-Subject: [Buildroot] [PATCH v2] package/re2: bump to version 2023.11.01
+ header.a=rsa-sha256 header.s=dkim header.b=mlYpB3eu
+Subject: [Buildroot] [PATCH v3] package/re2: bump to version 2023.11.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,6 +86,9 @@ Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 v2:
  - clarify that re2 itself now requires c++14
  - raise gcc required version for qt5webengine and add comment for grpc
+
+v3:
+ - update C++14 comment in Config.in
 ---
  package/grpc/Config.in             |  2 +-
  package/qt5/qt5webengine/Config.in |  6 +++---
@@ -134,7 +137,7 @@ index 542f212dfc..cfa5893f41 100644
  	depends on BR2_USE_WCHAR # libglib2
  	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
 diff --git a/package/re2/Config.in b/package/re2/Config.in
-index 64217e8aa2..d3bcad8d1a 100644
+index 64217e8aa2..0ac0041f6d 100644
 --- a/package/re2/Config.in
 +++ b/package/re2/Config.in
 @@ -1,8 +1,9 @@
@@ -142,7 +145,7 @@ index 64217e8aa2..d3bcad8d1a 100644
  	bool "re2"
  	depends on BR2_INSTALL_LIBSTDCPP
 -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # needs C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # needs C++14, libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++14
  	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	select BR2_PACKAGE_LIBABSEIL_CPP
  	help
