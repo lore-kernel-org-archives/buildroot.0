@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C54E4C10DC1
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D94C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:28:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7885D4182B;
-	Mon,  4 Dec 2023 20:28:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7885D4182B
+	by smtp4.osuosl.org (Postfix) with ESMTP id C81BA4182B;
+	Mon,  4 Dec 2023 20:28:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C81BA4182B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gn7mqVZ8B_Rz; Mon,  4 Dec 2023 20:28:21 +0000 (UTC)
+	with ESMTP id MC6etr6Hn2Uh; Mon,  4 Dec 2023 20:28:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E741420E4;
-	Mon,  4 Dec 2023 20:28:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E741420E4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C5FD61BF31D
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2020141AFC;
+	Mon,  4 Dec 2023 20:28:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2020141AFC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 429BB1BF31D
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C31FA61000
+ by smtp2.osuosl.org (Postfix) with ESMTP id 001E841986
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C31FA61000
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 001E841986
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xYr_k_1hX0Ou for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1jaa8LVl3cw0 for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 043A160FFE
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 043A160FFE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D7FEF4175C
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7FEF4175C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00102879B8; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id CDF88879B8; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 19:15:01 +0100
+Date: Mon, 27 Nov 2023 19:10:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c8a5a97e6740e31ef62e1be9f7c640dde79db6d4
-X-Git-Newrev: 029099025f81baaa6b8296bada22878751fa5025
+X-Git-Oldrev: cc363e9a93484e734313b17962b931b3df6eedaa
+X-Git-Newrev: 0868e3430bd4f6f8b05087c45a29e0df2cb46969
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201331.00102879B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libblockdev: drop unrecognized
- options
+Message-Id: <20231204201329.CDF88879B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/makedumpfile: bump to version 1.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=029099025f81baaa6b8296bada22878751fa5025
+commit: https://git.buildroot.net/buildroot/commit/?id=0868e3430bd4f6f8b05087c45a29e0df2cb46969
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The following options were wrongly kept when bumping to version 3.0.3 in
-commit 18420d9b6b424492741cba495cc2e7a28a409e8b:
- - dmraid (dropped since
-   https://github.com/storaged-project/libblockdev/commit/d174944a85169efae3bac0b6e76498e3d0c6c240)
- - bcache and kbd (dropped since
-   https://github.com/storaged-project/libblockdev/commit/c1ff1c87e31fb2820a5694637eb221f590eb9451)
- - python2 (dropped since
-   https://github.com/storaged-project/libblockdev/commit/8fc33b834529d3d18a73112e4c77ea0a5d26d62c)
- - vdo (dropped since
-   https://github.com/storaged-project/libblockdev/commit/e51faac2a952da33925e3ccab0f4f0fdf3986cd3)
+Release notes:
+- https://github.com/makedumpfile/makedumpfile/releases/tag/1.7.4
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libblockdev/libblockdev.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ package/makedumpfile/makedumpfile.hash | 2 +-
+ package/makedumpfile/makedumpfile.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 3bbc221cc5..e0fca2b95c 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -16,20 +16,15 @@ LIBBLOCKDEV_AUTORECONF = YES
- LIBBLOCKDEV_CONF_OPTS = \
- 	--disable-introspection \
- 	--with-loop \
--	--without-bcache \
- 	--without-btrfs \
- 	--without-dm \
--	--without-dmraid \
- 	--without-escrow \
--	--without-kbd \
- 	--without-lvm_dbus \
- 	--without-mpath \
- 	--without-nvdimm \
--	--without-python2 \
- 	--without-python3 \
- 	--without-s390 \
--	--without-tools \
--	--without-vdo
-+	--without-tools
+diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
+index 665023d87b..fdb30de88d 100644
+--- a/package/makedumpfile/makedumpfile.hash
++++ b/package/makedumpfile/makedumpfile.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f059dbebf5156a9ab97cd3c1f41ad5df3436c7ab4dd6dbffa234fc4e93cfa2ce  makedumpfile-1.7.3.tar.gz
++sha256  0554f5de516c51f5756e437dbfc353722b16b20e875241275554b474e89298db  makedumpfile-1.7.4.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+index 6102c92bd8..410752682d 100644
+--- a/package/makedumpfile/makedumpfile.mk
++++ b/package/makedumpfile/makedumpfile.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
- LIBBLOCKDEV_DEPENDENCIES += cryptsetup keyutils
+-MAKEDUMPFILE_VERSION = 1.7.3
++MAKEDUMPFILE_VERSION = 1.7.4
+ MAKEDUMPFILE_SITE = https://github.com/makedumpfile/makedumpfile/releases/download/$(MAKEDUMPFILE_VERSION)
+ MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
+ MAKEDUMPFILE_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
