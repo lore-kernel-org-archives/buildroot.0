@@ -4,93 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 860EEC4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 13:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 055EBC4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 16:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20D17405AA;
-	Mon, 27 Nov 2023 13:38:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20D17405AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 302544056D;
+	Mon, 27 Nov 2023 16:10:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 302544056D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xWdrgtk9WubT; Mon, 27 Nov 2023 13:38:27 +0000 (UTC)
+	with ESMTP id bWVOkpYVZaeP; Mon, 27 Nov 2023 16:10:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48A5740571;
-	Mon, 27 Nov 2023 13:38:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48A5740571
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2640C1BF2BC
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 13:38:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D36540743;
+	Mon, 27 Nov 2023 16:10:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D36540743
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 015441BF405
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 16:10:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE33C40374
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 13:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE33C40374
+ by smtp1.osuosl.org (Postfix) with ESMTP id CEF5B80F6B
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 16:10:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEF5B80F6B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zf7QMsObqZLz for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 13:38:22 +0000 (UTC)
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D58A140138
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 13:38:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D58A140138
-Received: by mail-pl1-x632.google.com with SMTP id
- d9443c01a7336-1cfc9c4acb6so7013215ad.0
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 05:38:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701092302; x=1701697102;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=tMDfo5YEqgzIyIzjeppIHAnwGsqc2wOrSdUbFvH09Hg=;
- b=J3aeqhNxn5bu25lXhwKg1j7QOioUxZgxLUflHRdHfEW8KjUIGURpkBMnQUXaJrTzXg
- IF1pRL0WtDmQSfr/h9nv3TkxVyv/cyXFvTokALOzPTDR84pGYQdKZMFIOJc4bZQ8JDyf
- OTxmlPJPUdbtKMSgqFin2f1frOKBq1qCkAex1SSkoC6l11AOI4Txpdry0D7KI5JHJsDd
- 7q8NlOfhPdqkOVD4ju208cl18QBS95E50WGilrydp6BSpUHiL31I3TOD2tkbfqBqBT/U
- dsJHBCsBm7ltGJj+zL6nLtXsp6UyanXnmi0O0JBeMzir5m6eoskqkzj0Bu2eRLMBcBwv
- lXdg==
-X-Gm-Message-State: AOJu0YzmNED0IRn6H8gfgK3eM5w0PSU9dOGOQCAYuo2OVcEtzrL0DPuD
- CBIAQKKqfjv4uX3EJJzmkx0VBEX+x9LTkQ==
-X-Google-Smtp-Source: AGHT+IG8v/wExqh4nwOjFdikhB0J/2/VkdwxRFWsT2MDvaOG34KxWMGhbr9sUGw3V2i/0rLTYtZ1fA==
-X-Received: by 2002:a17:903:22c5:b0:1cc:2a23:cbb4 with SMTP id
- y5-20020a17090322c500b001cc2a23cbb4mr11502696plg.35.1701092301962; 
- Mon, 27 Nov 2023 05:38:21 -0800 (PST)
-Received: from archie.me ([103.131.18.64]) by smtp.gmail.com with ESMTPSA id
- u10-20020a17090282ca00b001cf65d03cedsm7426446plz.32.2023.11.27.05.38.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Nov 2023 05:38:21 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
- id 187E8101A2BEC; Mon, 27 Nov 2023 20:38:18 +0700 (WIB)
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Buildroot Development <buildroot@buildroot.org>
-Date: Mon, 27 Nov 2023 20:38:08 +0700
-Message-ID: <20231127133806.848789-3-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PqpmM8oLu1VA for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 16:10:38 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 21CE180F66
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 16:10:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21CE180F66
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:7618:50d5:c153:9a40])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id E16C2B00583;
+ Mon, 27 Nov 2023 17:10:32 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 27 Nov 2023 17:10:32 +0100
+Date: Mon, 27 Nov 2023 17:10:32 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Leo <info.leo@widler.de>
+Message-ID: <20231127161032.GQ3177259@scaer>
+References: <20231126214357.3376407-1-info.leo@widler.de>
+ <20231126215644.GO3177259@scaer>
+ <9CB2714C-64FC-4E32-BD7D-12F72EC7EC34@widler.de>
+ <20231127064813.GP3177259@scaer>
+ <0A422087-89C4-4C88-8263-E05CC5BA1FB8@widler.de>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1675; i=bagasdotme@gmail.com;
- h=from:subject; bh=h/DdA4b2W8TtgNfMNKccv1kq8Humt2h+8NhMtrhn3sE=;
- b=owGbwMvMwCUmqirOYPHY4znjabUkhtSU2fsuzljFsOf4ZsWWVJbFlofq7jP2dBrd7D3GfND3S
- EZWdq5gRykLgxgXg6yYIkv0Wtldxrx7L5nFJBTBzGFlAhnCwMUpABPp/cvIMLHIPXXzKsX5b8wi
- DguyXzzIcVBAK9a6Qlr/s8zypK3MXYwMc9efKd+ZKfv37W8GhsnK0xUEXl27EnbeXcp9e9miXae
- yGQE=
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp;
- fpr=5BAD1DBA330DBDD2365C60721525170038E348E7
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701092302; x=1701697102; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tMDfo5YEqgzIyIzjeppIHAnwGsqc2wOrSdUbFvH09Hg=;
- b=JuWOu0NvH/qVP+GVXY+QqNxi+E75FWbkEmJqcPSx87HIMY9GKkudq5FekrF12kSOpA
- 7brGqCs6V0+na/bYuaJVeV4ODkhSHyPNR0OmlqbGMWFFK8gHo9O+aud6FThDkbZDW+3e
- L0K5bKwoWMgKEeB1beB5Djc0bHVoGL8HNNGsuypTyh6W4Z6owkZQlP/k4MlEVOZ9tMXc
- 9nAuR5elsesQDHRQ0tO01W3CdvkBfaIhA2qdYHTx74NPiYWkWJ2YlK4tqRJlJjZzGL95
- jVF0RB7W2DMs4t+JivkbZ3L+yUX2nw28jdaPa95R7xzahy0XC1gWVimlT20lnZ+QNauG
- EqMg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JuWOu0Nv
-Subject: [Buildroot] [PATCH v2] package/git: bump to version 2.43.0
+Content-Disposition: inline
+In-Reply-To: <0A422087-89C4-4C88-8263-E05CC5BA1FB8@widler.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1701101435;
+ bh=dT9zVxG+XJGqhQodHL77kDS4Do8OL4CDLpC+ECUtP30=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Ty42ssfUSmgCF7COUqx8NG94fwDNVeaoHPByWL7Ja6w8aP/qdqmxfWeF9kl2/1Yt4
+ FaHwX272m1zrvedDj+irrmGpis15NyRAcnXYUeF0qCXMMrRGmwMVKVh5xP6O+Vaqg8
+ ZCzerR2ZS6I0ZDoH3+4k+jHBxTzV6hX5VKbm9JM8qfeHjR913DGFsEVIb06mPwehj4
+ GbFeAdiXy1FacqCQUQ5ekV4MrEje9xt0TTHtXyASnqUInqWbT7uQOueABX9WeSNH43
+ jUFC0DB1QH6yJQToEZ/iYp8c4/L4QaY6WpT8jGjlGuQWEuxbizvATch8TgZVdrFs3a
+ STHOEzVhXTyGg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ty42ssfU
+Subject: Re: [Buildroot] [PATCH 1/1] package/attr: add --enable-multilib to
+ fix build error for BL808 based boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,57 +80,204 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump the package version to 2.43.0. For the full changelog, see the
-release announcement at [1].
+Leo, All,
 
-Link: https://lore.kernel.org/git/xmqqzfz8l5or.fsf@gitster.g/ [1]
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
-Changes since v1 [1]:
+On 2023-11-27 08:07 +0100, Leo spake thusly:
+> defconfig can be found here: [1]https://github.com/openbouffalo/buildroot_bouffalo/blob/main/configs/pine64_ox64_full_defconfig
+> The link to the tool chain is also in there.
+> Sure it would be better to get to the root of the problem. My solution was just a quick and dirty fix.
 
-  * Fix up patch subject prefix (add missing colon separator)
+Thanks for the links.
 
- [1]: https://lore.kernel.org/buildroot/20231127133043.847846-2-bagasdotme@gmail.com/
+I tried to reproduce locally, after following the instructions in the
+buildroot_bouffalo readme file, but attr does build properly here with
+the aforementioned defconfig.
 
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I also tried to reproduce in a container using the reference image by
+Buildroot (./utils/docker-run) and it also succeeds.
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index f3f5915c8d..9cf044cc07 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  8e46fa96bf35a65625d85fde50391e39bc0620d1bb39afb70b96c4a237a1a4f7  git-2.42.1.tar.xz
-+sha256  5446603e73d911781d259e565750dcd277a42836c8e392cac91cf137aa9b76ec  git-2.43.0.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index cb49986c43..1502968186 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.42.1
-+GIT_VERSION = 2.43.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+I also tried to run with the ubuntu:22.04 that is used in the github
+worflows for buildroot_bouffalo, and (after installing the necessary
+dependencies as visible in .github/workflows/buildroot.yml), it also
+succeeds.
 
-base-commit: 4d549c071dcc7ede701ee91cb39bc4a9a2be7baf
+I also tried without using ccache, and it also succeeded.
+
+Thus, it comforts my opinion that using --enable-multilib when
+configuring attr, is not the proper solution.
+
+However, I do see that your have workflows failing with that issue,
+indeed, but of all the tests I did, none could reproduce it.
+
+I see that you are using a cached ccache for your workflows; I wonder if
+somehow that cache did get corrupted. Can you try and run a workflow
+without ccache?
+
+Regards,
+Yann E. MORIN.
+
+> Regards,
+> Leonard Widler
+> 
+> Am 27. November 2023 07:48:13 MEZ schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
+> 
+>  Leo, All,
+> 
+>  On 2023-11-26 23:17 +0100, Leo spake thusly:
+> 
+>  I'll change my name, thanks for letting me know
+> 
+>  The failure is on none of the auto builders. I have uploaded the config.log here: [1]https://pastebin.com/ZzP6pNvx
+> 
+> 
+>  Can you also provide the Buildroot defconfig, please?
+> 
+>  (Also, I see you are running as root; this is not required to run
+>  Buildroot, and is even dangerous and not really supported; please run as
+>  a non-root user.)
+> 
+> 
+>  And to fix this issue I added the --enable-multilib option which resolves the problem.
+> 
+> 
+>  The issue looks like a misconfiguration somewhere:
+> 
+>      .../crti.o: can't link double-float modules with soft-float modules
+>      ...//ld: failed to merge target specific data of file .../crti.o
+> 
+>  So, we want to understand the problem rather than paper-over it.
+> 
+>  Where did you get your toolchain (Xuantie-900 linux-5.10.4 glibc gcc
+>  Toolchain V2.6.1 B-20220906)? Is it public, so we can try and reproduce
+>  the issue?
+> 
+>  Regards,
+>  Yann E. MORIN.
+> 
+> 
+>  Regards,
+>  Leonard Widler
+> 
+>  Am 26. November 2023 22:56:44 MEZ schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
+> 
+>   leow149, All,
+> 
+>   Thank you for your contribution! Here is a quick review.
+> 
+>   First, we'll need you to use your real name as the author of the patch;
+>   we do not accept annonymous (od pseduonymou) contributions.
+> 
+>   On 2023-11-26 22:43 +0100, leow149 spake thusly:
+> 
+>   This commit fixes a build error which specifically happens for Bouffallo Labs BL808 based boards, but might also happen on other RiscV64 Boards.
+> 
+> 
+>   Please wrap your commit log to ~72 chars.
+> 
+>   Waht is the error that you see? Could you see if there is a similar
+>   build failure on out autobulders:
+> 
+>   [2]http://autobuild.buildroot.org/?static=1&reason=attr-%
+> 
+> 
+>   The last build error for attr was more than a year ago now, so it is
+>   relatively surprising to see that attr does not build. So we'll need a
+>   bit more context.
+> 
+> 
+>   Signed-off-by: leow149 <info.leo@widler.de>
+> 
+>   --------------------------------------------------------------------------------------------------------------------------------
+> 
+>    package/attr/attr.mk | 5 +++--
+>    1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+>   diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+>   index 0327497e1e..89f7d21f0c 100644
+>   --- a/package/attr/attr.mk
+>   +++ b/package/attr/attr.mk
+>   @@ -13,7 +13,8 @@ ATTR_CPE_ID_VENDOR = attr_project
+> 
+>    ATTR_INSTALL_STAGING = YES
+> 
+>   -ATTR_CONF_OPTS = --disable-nls
+>   -
+>   +ATTR_CONF_OPTS = \
+>   +       --disable-nls \
+>   +       --enable-multilib
+> 
+> 
+>   Buildroot does not generate multilib toolchains, and when using an
+>   external toolchain that is multilib, the proper multilib diretory is
+>   copies over to the sysroot.
+> 
+>   So, --eanble-multilib looksa like the wrong approach, at least without
+>   more explanations.
+> 
+>   Can you elaborate on the issue you encounter, and what makes you think
+>   --enable-multilib is the correct solution?
+> 
+>   Thanks!
+> 
+>   Regards,
+>   Yann E. MORIN.
+> 
+> 
+>    $(eval $(autotools-package))
+>    $(eval $(host-autotools-package))
+>   --
+>   2.30.2
+> 
+>   --------------------------------------------------------------------------------------------------------------------------------
+> 
+>   buildroot mailing list
+>   buildroot@buildroot.org
+>   [3]https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+>  Links:
+>  1.
+>  [2]https://pastebin.com/ZzP6pNvx
+>  2.
+>  [3]http://autobuild.buildroot.org/?static=1&reason=attr-%
+> 
+>  3.
+>  [4]https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+> 
+> 
+> 
+>   --------------------------------------------------------------------------------------------------------------------------------
+> 
+>  buildroot mailing list
+>  buildroot@buildroot.org
+>  [5]https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+> Links:
+> 1. https://github.com/openbouffalo/buildroot_bouffalo/blob/main/configs/pine64_ox64_full_defconfig
+> 2. https://pastebin.com/ZzP6pNvx
+> 3. http://autobuild.buildroot.org/?static=1&reason=attr-%
+> 4. https://lists.buildroot.org/mailman/listinfo/buildroot
+> 5. https://lists.buildroot.org/mailman/listinfo/buildroot
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
 -- 
-An old man doll... just what I always wanted! - Clara
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
