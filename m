@@ -1,80 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EE98C4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 09:40:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4304BC4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 10:12:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A41960812;
-	Mon, 27 Nov 2023 09:40:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A41960812
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB96540331;
+	Mon, 27 Nov 2023 10:12:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB96540331
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1hcRnacnt-U6; Mon, 27 Nov 2023 09:40:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k17JOrJEbBK8; Mon, 27 Nov 2023 10:12:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0FE860A5C;
-	Mon, 27 Nov 2023 09:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0FE860A5C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D4C6D1BF418
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 09:40:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F40424032C;
+	Mon, 27 Nov 2023 10:12:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F40424032C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 03FDF1BF35A
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 10:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6E1B60A5C
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 09:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6E1B60A5C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D125E4032C
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 10:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D125E4032C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y8Bv8w-OZMJS for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 09:40:53 +0000 (UTC)
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2376460812
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 09:40:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2376460812
-Received: from unknown (HELO opfedv1rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 27 Nov 2023 10:40:46 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0f.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Nov 2023 10:40:46 +0100
-Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 27 Nov 2023 10:40:45 +0100
-Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Mon, 27 Nov 2023 10:40:44 +0100
-X-IronPort-AV: E=Sophos;i="6.04,230,1695679200"; d="scan'208";a="71274975"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Mon, 27 Nov 2023 10:40:44 +0100
-Message-ID: <5e5da455b1f21f427b740a6cc9206c3b58316a9c.1701078039.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q8HIjQzY98DN for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 10:12:18 +0000 (UTC)
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 220334032B
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 10:12:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 220334032B
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id DE3141814B9; Mon, 27 Nov 2023 11:12:09 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Mon, 27 Nov 2023 11:11:35 +0100
+Message-Id: <20231127101136.3306319-1-buildroot@heine.tech>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX302.corporate.adroot.infra.ftgroup
- (10.115.26.11) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1701078053; x=1732614053;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=EpUsRFlXO2CUTnlBYznM2p/PxDHGJTDhDgy8zxIjlVU=;
- b=KNU7TyJz5+j24oKFTFmBUakm9g/iCdjJKQ+hsFf4uyP8lNNq6OxZCkjq
- snWsovfUGpt19qrhJasDJtYQ+7GJo+o0EYzvf03icndB2sGKLLSIekDcY
- /xoOcgaJysnJZL+8dwS5UDoyZCRLJOGo/RvJVvpOpW5OL8wWPjiwmMnSG
- BB4ljufDiMCRBnRRjIy7PWgECCV+C3VrMwccmvecT7oFqi7Ae5daP7Kwq
- RIHRJHpPw0U+BWmuUQuXHv2x/OJGpNk9V6ZkO1BRHOshELRzUZ+Hfxyfk
- cm2ti5B2bKBePN0JJrb8nR5t440XBxq1XSQLJ1XgETamgG/oi2Jm/w1nI
- A==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=KNU7TyJz
-Subject: [Buildroot] [PATCH v2] package/erlang: disable for uclibc,
- fix glibc-build
+ d=heine.tech; s=dkim; 
+ t=1701079933; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=sohGLcVqIQPuwzEAnJyjqo7BWVfU4NznIyc7QLv6z7g=;
+ b=qTcDqnmlmsBkHCqRbRmi8bNtn4hOitkAV7DhPVm6IdpcPaLVrud+9pSH7XI9mPjfFav+O+
+ Wng80XhXEyp58+aUhq1xERtNPDLGcAXZSEgLlqvz4vZBQ9W7WBQauqRSSVxVdQi5R9DL+C
+ /qmHDIPbGLH0dC6zq0P6wEcyiSZl+aI=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=qTcDqnml
+Subject: [Buildroot] [PATCH v2] package/re2: bump to version 2023.11.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,127 +63,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, Bernd Kuhls <bernd@kuhls.net>,
- yann.morin@orange.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Julien Corjon <corjon.j@ecagroup.com>, Robert Rose <robertroyrose@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmluQG9yYW5nZS5jb20+CgpDb21taXQgMmNm
-YTg2YTU0ODgyKHBhY2thZ2UvZXJsYW5nOiBidW1wIHZlcnNpb24gdG8gMjYuMC4yKSBhZGRlZCBh
-CnBhdGNoIHRvIHJlc3RvcmUgYnVpbGRpbmcgb24gdUNsaWJjLgoKSG93ZXZlciwgdGhhdCBwYXRj
-aCBpcyBub3QgdXBzdHJlYW0sIGFuZCBoYXMgYmVlbiByZWplY3RlZDoKCiAgICBodHRwczovL2dp
-dGh1Yi5jb20vZXJsYW5nL290cC9wdWxsLzc1MDAKCiAgICBQbGVhc2Ugb3BlbiBhIFBSIHRvIGh0
-dHBzOi8vZ2l0aHViLmNvbS9hc21qaXQvYXNtaml0IGluc3RlYWQgYW5kIHdlCiAgICB3aWxsIGdl
-dCB0aGUgZml4IG5leHQgdGltZSB3ZSBzeW5jIHdpdGggdXBzdHJlYW0uIFdlIGRvIG5vdCB3YW50
-CiAgICB0aGVpcnMgYW5kIG91ciBpbXBsZW1lbnRhdGlvbiB0byBkaXZlcmdlLgoKRnVydGhlcm1v
-cmUsIGl0IGhhcHBlbnMgdG8gd29yayBvbiB1Q2xpYmMsIGJlY2F1c2UgdUNsaWJjIGRvZXMgbm90
-CmV4cG9zZSBzeXMvYXV4di5oLCBidXQgaXQgZmFpbHMgdG8gd29yayBvbiBnbGliYywgYmVjYXVz
-ZSB0aGUgZGVmaW5lIGlzCm5vdCBwcm9wYWdhdGVkIHRvICJzdWItdHJlZXMiLCBhbmQgdGh1cyBp
-cyBuZXZlciBkZWZpbmVkIHdoZXJlIGl0IGlzCmNoZWNrZWQgZm9yLCBldmVuIHdoZW4gc3lzL2F1
-eHYuaCBpcyBhdmFpbGFibGUuIFRoaXMgY2F1c2VzIGJ1aWxkCmZhaWx1cmVzIHN1Y2ggYXM6Cgog
-ICAgYXNtaml0L2NvcmUvY3B1aW5mby5jcHA6IEluIGZ1bmN0aW9uIOKAmHZvaWQgYXNtaml0Ojpf
-YWJpXzFfMTA6OmRldGVjdEhXQ2FwcyhDcHVJbmZvJiwgbG9uZyB1bnNpZ25lZCBpbnQsIGNvbnN0
-IExpbnV4SFdDYXBNYXBwaW5nKiwgc2l6ZV90KeKAmToKICAgIGFzbWppdC9jb3JlL2NwdWluZm8u
-Y3BwOjg0MDoyNDogZXJyb3I6IOKAmGdldGF1eHZhbOKAmSB3YXMgbm90IGRlY2xhcmVkIGluIHRo
-aXMgc2NvcGUKICAgICAgODQwIHwgICB1bnNpZ25lZCBsb25nIG1hc2sgPSBnZXRhdXh2YWwodHlw
-ZSk7CiAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+CiAgICBhc21q
-aXQvY29yZS9jcHVpbmZvLmNwcDogSW4gZnVuY3Rpb24g4oCYdm9pZCBhc21qaXQ6Ol9hYmlfMV8x
-MDo6ZGV0ZWN0QVJNQ3B1KENwdUluZm8mKeKAmToKICAgIGFzbWppdC9jb3JlL2NwdWluZm8uY3Bw
-Ojk3MjoyMTogZXJyb3I6IOKAmEFUX0hXQ0FQ4oCZIHdhcyBub3QgZGVjbGFyZWQgaW4gdGhpcyBz
-Y29wZQogICAgICA5NzIgfCAgIGRldGVjdEhXQ2FwcyhjcHUsIEFUX0hXQ0FQLCBod0NhcE1hcHBp
-bmcsIEFTTUpJVF9BUlJBWV9TSVpFKGh3Q2FwTWFwcGluZykpOwogICAgICAgICAgfCAgICAgICAg
-ICAgICAgICAgICAgIF5+fn5+fn5+CiAgICBhc21qaXQvY29yZS9jcHVpbmZvLmNwcDo5NzM6MjE6
-IGVycm9yOiDigJhBVF9IV0NBUDLigJkgd2FzIG5vdCBkZWNsYXJlZCBpbiB0aGlzIHNjb3BlCiAg
-ICAgIDk3MyB8ICAgZGV0ZWN0SFdDYXBzKGNwdSwgQVRfSFdDQVAyLCBod0NhcE1hcHBpbmcyLCBB
-U01KSVRfQVJSQVlfU0laRShod0NhcE1hcHBpbmcyKSk7CiAgICAgICAgICB8ICAgICAgICAgICAg
-ICAgICAgICAgXn5+fn5+fn5+CgpZZXQsIHN5cy9hdXh2Lmggd2FzIGRldGVjdGVkIGF0IGNvbmZp
-Z3VyZSB0aW1lOgoKICAgIGNoZWNraW5nIGZvciBzeXMvYXV4di5oLi4uIHllcwoKVGhpcyBkZWZj
-b25maWcgaXMgZW5vdWdoIHRvIHJlcHJvZHVjZSB0aGUgZXJyb3I6CgogICAgQlIyX2FhcmNoNjQ9
-eQogICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15CiAgICBCUjJfVE9PTENIQUlOX0VYVEVSTkFM
-X0JPT1RMSU49eQogICAgQlIyX1BBQ0tBR0VfRVJMQU5HPXkKClNpbmNlIHVwc3RyZWFtIHJlZnVz
-ZWQgdGhlIHBhdGNoLCBhbmQgdGhlcmUgaXMgbm8gZml4IHRoYXQgd2FzIHN1Ym1pdHRlZAp0byB0
-aGUgYWN0dWFsIHVwc3RyZWFtIChhc21qaXQpLCBkcm9wIHRoZSByZWplY3RyZWQgcGF0Y2gsIGFu
-ZCBkaXNhYmxlCmZvciB1Q2xpYmM6IHRoZSBwYXRjaCBpcyBpbmNvcnJlY3QsIGFuZCB3ZSBjYW4n
-dCBmaXggYSBidWlsZCBpc3N1ZSBvbgp1Q2xpYmMgYnkgaW50cm9kdWNpbmcgYW5vdGhlciBvbiBn
-bGliYy4KCkZpeGVzOgogICAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMv
-ZmMxL2ZjMTliYWQyMjYzYmRmYWNlYTU5NDIxN2Q1ZGRmZGUwZTI3ODk1YjEvCiAgICBodHRwOi8v
-YXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8xMTQvMTE0MTZkODFkNWIyN2ZjMDYyN2Iz
-MzVhOTcxMTU0YzA4OGQ1NzU0YS8KClNpZ25lZC1vZmYtYnk6IFlhbm4gRS4gTU9SSU4gPHlhbm4u
-bW9yaW5Ab3JhbmdlLmNvbT4KQ2M6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+CkNjOiBN
-YXhpbSBLb2NoZXRrb3YgPGZpZG9fbWF4QGluYm94LnJ1PgoKQ2hhbmdlcyB2MSAtPiB2MjoKICAt
-IHVwZGF0ZSBjb21tZW50IHdoZW4gdW5hdmFpbGFibGUKLS0tCiAuLi4vMDAwMS1lcnRzLWNoZWNr
-LWZvci1zeXMtYXV4di5oLnBhdGNoICAgICAgfCA0NCAtLS0tLS0tLS0tLS0tLS0tLS0tCiBwYWNr
-YWdlL2VybGFuZy9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgfCAgNSArKy0KIDIgZmls
-ZXMgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCA0NiBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2Rl
-IDEwMDY0NCBwYWNrYWdlL2VybGFuZy8wMDAxLWVydHMtY2hlY2stZm9yLXN5cy1hdXh2LmgucGF0
-Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2VybGFuZy8wMDAxLWVydHMtY2hlY2stZm9yLXN5cy1h
-dXh2LmgucGF0Y2ggYi9wYWNrYWdlL2VybGFuZy8wMDAxLWVydHMtY2hlY2stZm9yLXN5cy1hdXh2
-LmgucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGFmNGI2NmQwNWQuLjAwMDAw
-MDAwMDAKLS0tIGEvcGFja2FnZS9lcmxhbmcvMDAwMS1lcnRzLWNoZWNrLWZvci1zeXMtYXV4di5o
-LnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsNDQgKzAsMCBAQAotRnJvbSBlZGUxZTE3Nzk0YzJj
-YWYwOTFlODEwYmRmYTQ5MDQwYzc1ZjUxM2ViIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJv
-bTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLURhdGU6IFNhdCwgMTUgSnVsIDIwMjMg
-MTg6MzY6NDggKzAyMDAKLVN1YmplY3Q6IFtQQVRDSF0gZXJ0czogY2hlY2sgZm9yIHN5cy9hdXh2
-LmgKLQotVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9lcmxhbmcvb3RwL3B1bGwvNzUwMAot
-Ci1TaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0PgotLS0tCi0gZXJ0
-cy9jb25maWd1cmUuYWMgICAgICAgICAgICAgICAgICAgICB8IDIgKy0KLSBlcnRzL2VtdWxhdG9y
-L2FzbWppdC9jb3JlL2NwdWluZm8uY3BwIHwgMiArKwotIDIgZmlsZXMgY2hhbmdlZCwgMyBpbnNl
-cnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCi0KLWRpZmYgLS1naXQgYS9lcnRzL2NvbmZpZ3VyZS5h
-YyBiL2VydHMvY29uZmlndXJlLmFjCi1pbmRleCBhNjNkMzkxZmIzLi45ZDNlMzM4NjMzIDEwMDY0
-NAotLS0tIGEvZXJ0cy9jb25maWd1cmUuYWMKLSsrKyBiL2VydHMvY29uZmlndXJlLmFjCi1AQCAt
-MTY1NSw3ICsxNjU1LDcgQEAgQUNfQ0hFQ0tfSEVBREVSUyhmY250bC5oIGxpbWl0cy5oIHVuaXN0
-ZC5oIHN5c2xvZy5oIGRsZmNuLmggaWVlZWZwLmggXAotICAgICAgICAgICAgICAgICAgc3lzL3Nv
-Y2tldC5oIHN5cy9zb2NraW8uaCBzeXMvc29ja2V0aW8uaCBcCi0gICAgICAgICAgICAgICAgICBu
-ZXQvZXJybm8uaCBtYWxsb2MuaCBhcnBhL25hbWVzZXIuaCBsaWJkbHBpLmggXAotIAkJIHB0eS5o
-IHV0aWwuaCBsaWJ1dGlsLmggdXRtcC5oIGxhbmdpbmZvLmggcG9sbC5oIHNka2Rka3Zlci5oIFwK
-LS0gICAgICAgICAgICAgICAgIGVsZi5oKQotKyAgICAgICAgICAgICAgICAgZWxmLmggc3lzL2F1
-eHYuaCkKLSAKLSBBQ19DSEVDS19NRU1CRVJTKFtzdHJ1Y3QgaWZyZXEuaWZyX2h3YWRkcl0sIFtd
-LCBbXSwKLSAJWyNpZmRlZiBfX1dJTjMyX18KLWRpZmYgLS1naXQgYS9lcnRzL2VtdWxhdG9yL2Fz
-bWppdC9jb3JlL2NwdWluZm8uY3BwIGIvZXJ0cy9lbXVsYXRvci9hc21qaXQvY29yZS9jcHVpbmZv
-LmNwcAotaW5kZXggZmIyYWNmYzA5Yi4uZDhiNzI2OTdhYiAxMDA2NDQKLS0tLSBhL2VydHMvZW11
-bGF0b3IvYXNtaml0L2NvcmUvY3B1aW5mby5jcHAKLSsrKyBiL2VydHMvZW11bGF0b3IvYXNtaml0
-L2NvcmUvY3B1aW5mby5jcHAKLUBAIC0xNSw4ICsxNSwxMCBAQAotIAotIC8vIFJlcXVpcmVkIGJ5
-IGBnZXRhdXh2YWwoKWAgb24gTGludXguCi0gI2lmIGRlZmluZWQoX19saW51eF9fKQotKyNpZiBk
-ZWZpbmVkKEhBVkVfU1lTX0FVWFZfSCkKLSAgICNpbmNsdWRlIDxzeXMvYXV4di5oPgotICNlbmRp
-ZgotKyNlbmRpZgotIAotIC8vISBSZXF1aXJlZCB0byBkZXRlY3QgQ1BVIGFuZCBmZWF0dXJlcyBv
-biBBcHBsZSBwbGF0Zm9ybXMuCi0gI2lmIGRlZmluZWQoX19BUFBMRV9fKQotLS0gCi0yLjM5LjIK
-LQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9lcmxhbmcvQ29uZmlnLmluIGIvcGFja2FnZS9lcmxhbmcv
-Q29uZmlnLmluCmluZGV4IGQzZmUwZGJlYzEuLjcyNGY5MTEyM2IgMTAwNjQ0Ci0tLSBhL3BhY2th
-Z2UvZXJsYW5nL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL2VybGFuZy9Db25maWcuaW4KQEAgLTE1
-LDExICsxNSwxMSBAQCBjb25maWcgQlIyX1BBQ0tBR0VfRVJMQU5HX0FSQ0hfU1VQUE9SVFMKIAkj
-IGVybGFuZyBuZWVkcyBob3N0LWVybGFuZwogCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9TVF9F
-UkxBTkdfQVJDSF9TVVBQT1JUUwogCi1jb21tZW50ICJlcmxhbmcgbmVlZHMgYSB0b29sY2hhaW4g
-dy8gZHluYW1pYyBsaWJyYXJ5LCB0aHJlYWRzLCB3Y2hhciIKK2NvbW1lbnQgImVybGFuZyBuZWVk
-cyBhIGdsaWJjIG9yIG11c2wgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSwgdGhyZWFkcywg
-d2NoYXIiCiAJZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGZvcmsoKQogCWRlcGVuZHMgb24gQlIy
-X1BBQ0tBR0VfRVJMQU5HX0FSQ0hfU1VQUE9SVFMKIAlkZXBlbmRzIG9uIEJSMl9TVEFUSUNfTElC
-UyB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyBcCi0JCXx8ICFCUjJfVVNFX1dDSEFSCisJ
-CXx8ICFCUjJfVVNFX1dDSEFSIHx8IEJSMl9UT09MQ0hBSU5fVVNFU19VQ0xJQkMKIAogY29uZmln
-IEJSMl9QQUNLQUdFX0VSTEFORwogCWJvb2wgImVybGFuZyIKQEAgLTI3LDYgKzI3LDcgQEAgY29u
-ZmlnIEJSMl9QQUNLQUdFX0VSTEFORwogCWRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUgogCWRlcGVu
-ZHMgb24gIUJSMl9TVEFUSUNfTElCUwogCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhS
-RUFEUworCWRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fVVNFU19VQ0xJQkMKIAlkZXBlbmRzIG9u
-IEJSMl9QQUNLQUdFX0VSTEFOR19BUkNIX1NVUFBPUlRTCiAJc2VsZWN0IEJSMl9QQUNLQUdFX1pM
-SUIKIAloZWxwCi0tIAoyLjM0LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXw0KQ2UgbWVzc2FnZSBldCBzZXMgcGllY2VzIGpvaW50ZXMgcGV1dmVu
-dCBjb250ZW5pciBkZXMgaW5mb3JtYXRpb25zIGNvbmZpZGVudGllbGxlcyBvdSBwcml2aWxlZ2ll
-ZXMgZXQgbmUgZG9pdmVudCBkb25jDQpwYXMgZXRyZSBkaWZmdXNlcywgZXhwbG9pdGVzIG91IGNv
-cGllcyBzYW5zIGF1dG9yaXNhdGlvbi4gU2kgdm91cyBhdmV6IHJlY3UgY2UgbWVzc2FnZSBwYXIg
-ZXJyZXVyLCB2ZXVpbGxleiBsZSBzaWduYWxlcg0KYSBsJ2V4cGVkaXRldXIgZXQgbGUgZGV0cnVp
-cmUgYWluc2kgcXVlIGxlcyBwaWVjZXMgam9pbnRlcy4gTGVzIG1lc3NhZ2VzIGVsZWN0cm9uaXF1
-ZXMgZXRhbnQgc3VzY2VwdGlibGVzIGQnYWx0ZXJhdGlvbiwNCk9yYW5nZSBkZWNsaW5lIHRvdXRl
-IHJlc3BvbnNhYmlsaXRlIHNpIGNlIG1lc3NhZ2UgYSBldGUgYWx0ZXJlLCBkZWZvcm1lIG91IGZh
-bHNpZmllLiBNZXJjaS4NCg0KVGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMgbWF5IGNv
-bnRhaW4gY29uZmlkZW50aWFsIG9yIHByaXZpbGVnZWQgaW5mb3JtYXRpb24gdGhhdCBtYXkgYmUg
-cHJvdGVjdGVkIGJ5IGxhdzsNCnRoZXkgc2hvdWxkIG5vdCBiZSBkaXN0cmlidXRlZCwgdXNlZCBv
-ciBjb3BpZWQgd2l0aG91dCBhdXRob3Jpc2F0aW9uLg0KSWYgeW91IGhhdmUgcmVjZWl2ZWQgdGhp
-cyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGFuZCBkZWxldGUgdGhp
-cyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMuDQpBcyBlbWFpbHMgbWF5IGJlIGFsdGVyZWQs
-IE9yYW5nZSBpcyBub3QgbGlhYmxlIGZvciBtZXNzYWdlcyB0aGF0IGhhdmUgYmVlbiBtb2RpZmll
-ZCwgY2hhbmdlZCBvciBmYWxzaWZpZWQuDQpUaGFuayB5b3UuCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+- libabseil-cpp is now a dependency
+- required c++ standard is now c++14 [0] --> requires gcc8
+- drop fix for gcc <= 5 introduced in 25fd3b0a523805db14682f7c559cc1c9c366ed55
+  (c++ >= 14 is the default for gcc >= 8)
+- update gcc required for depending packages qt5webengine & grpc
+
+[0] https://github.com/google/re2/wiki/Install/7c2552dd54444695ce5a9e6a01dd8f312b347914
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+
+v2:
+ - clarify that re2 itself now requires c++14
+ - raise gcc required version for qt5webengine and add comment for grpc
+---
+ package/grpc/Config.in             |  2 +-
+ package/qt5/qt5webengine/Config.in |  6 +++---
+ package/re2/Config.in              |  7 ++++---
+ package/re2/re2.hash               |  2 +-
+ package/re2/re2.mk                 | 13 +++++--------
+ 5 files changed, 14 insertions(+), 16 deletions(-)
+
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index afe0ea8450..ef3e1c86cb 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp, re2
+ 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index 542f212dfc..cfa5893f41 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -10,10 +10,10 @@ config BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT # qt5base-icu
+ 	depends on BR2_USE_MMU # libglib2, qt5base-dbus
+ 
+-comment "qt5webengine needs udev /dev management and a glibc toolchain w/ gcc >= 4.9, host gcc >= 4.9, threads, wchar"
++comment "qt5webengine needs udev /dev management and a glibc toolchain w/ gcc >= 8, host gcc >= 4.9, threads, wchar"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
+ 		!BR2_HOST_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 
+@@ -26,7 +26,7 @@ config BR2_PACKAGE_QT5WEBENGINE
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5base-icu
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # qt5base-icu
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # re2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
+diff --git a/package/re2/Config.in b/package/re2/Config.in
+index 64217e8aa2..d3bcad8d1a 100644
+--- a/package/re2/Config.in
++++ b/package/re2/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_RE2
+ 	bool "re2"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # needs C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # needs C++14, libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBABSEIL_CPP
+ 	help
+ 	  RE2 is a fast, safe, thread-friendly alternative
+ 	  to backtracking regular expression engines like
+@@ -11,7 +12,7 @@ config BR2_PACKAGE_RE2
+ 
+ 	  https://github.com/google/re2
+ 
+-comment "re2 needs a toolchain w/ C++, threads, gcc >= 4.8"
++comment "re2 needs a toolchain w/ C++, threads, gcc >= 8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+index a39dece7a9..5f590aba6e 100644
+--- a/package/re2/re2.hash
++++ b/package/re2/re2.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  cbce8b7803e856827201a132862e41af386e7afd9cc6d9a9bc7a4fa4d8ddbdde  re2-2023-02-01.tar.gz
++sha256  4e6593ac3c71de1c0f322735bc8b0492a72f66ffccfad76e259fa21c41d27d8a  re2-2023-11-01.tar.gz
+ sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index 5587366b1f..b81a64f2e9 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
+@@ -4,29 +4,26 @@
+ #
+ ################################################################################
+ 
+-RE2_VERSION = 2023-02-01
++RE2_VERSION = 2023-11-01
+ RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+ RE2_LICENSE = BSD-3-Clause
+ RE2_LICENSE_FILES = LICENSE
+ RE2_INSTALL_STAGING = YES
+-
+-RE2_MAKE_OPTS = \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++RE2_DEPENDENCIES = libabseil-cpp
+ 
+ define RE2_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		-C $(@D) $(if $(BR2_STATIC_LIBS),static)
+ endef
+ 
+ define RE2_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		DESTDIR="$(STAGING_DIR)" prefix=/usr -C $(@D) \
+ 		$(if $(BR2_STATIC_LIBS),static-install,install)
+ endef
+ 
+ define RE2_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(RE2_MAKE_OPTS) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		DESTDIR="$(TARGET_DIR)" prefix=/usr -C $(@D) \
+ 		$(if $(BR2_STATIC_LIBS),static-install,install)
+ endef
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
