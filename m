@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5900C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C0AC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:24:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 918E641803;
-	Mon,  4 Dec 2023 20:24:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 918E641803
+	by smtp4.osuosl.org (Postfix) with ESMTP id E414B41BD4;
+	Mon,  4 Dec 2023 20:24:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E414B41BD4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XJr3yEULXWKI; Mon,  4 Dec 2023 20:24:36 +0000 (UTC)
+	with ESMTP id LyKeDAuMIgRv; Mon,  4 Dec 2023 20:24:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDA4C41BBB;
-	Mon,  4 Dec 2023 20:24:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDA4C41BBB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E4501BF31D
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2774A418D6;
+	Mon,  4 Dec 2023 20:24:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2774A418D6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1310F1BF31D
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB04060FF4
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB04060FF4
+ by smtp2.osuosl.org (Postfix) with ESMTP id B838340B0E
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B838340B0E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mjdoiU6j6Out for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8_Bh8H-ZMgjA for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 82EBA60592
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAE1D4175D
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82EBA60592
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAE1D4175D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76186879B7; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
+ id D78E3879B9; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 26 Nov 2023 18:05:21 +0100
+Date: Mon, 27 Nov 2023 19:10:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f26d434278ac641815e0fd856cc771d65f91617
-X-Git-Newrev: 92fcdbd3e23aa03326d203271d02595409452690
+X-Git-Oldrev: 0868e3430bd4f6f8b05087c45a29e0df2cb46969
+X-Git-Newrev: 9b6c2acf590b2f3402bbe22431bd2e04f9499973
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201329.76186879B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic-core: new package
+Message-Id: <20231204201329.D78E3879B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/git: bump to version 2.43.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,86 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92fcdbd3e23aa03326d203271d02595409452690
+commit: https://git.buildroot.net/buildroot/commit/?id=9b6c2acf590b2f3402bbe22431bd2e04f9499973
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Although pydantic-core likely implements a subset of the functionality
-in pydantic 1.10.8 as we currently package, there will not be any
-conflict as the modules namespace differ:
+Bump the package version to 2.43.0. For the full changelog, see the
+release announcement at [1].
 
-    import pydantic  # 1.10.8
-    import pydantic_core
-
-So, we can add pydantic-core, then bump pydantic; we don't need to do
-both in the same commit.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998@free.fr: add explanations from James about no-conflict]
+Link: https://lore.kernel.org/git/xmqqzfz8l5or.fsf@gitster.g/ [1]
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in                                      |  1 +
- package/python-pydantic-core/Config.in                 |  8 ++++++++
- package/python-pydantic-core/python-pydantic-core.hash |  4 ++++
- package/python-pydantic-core/python-pydantic-core.mk   | 15 +++++++++++++++
- 4 files changed, 28 insertions(+)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 68e6e29a4d..fcc09b07c4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1228,6 +1228,7 @@ menu "External python modules"
- 	source "package/python-pycups/Config.in"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pydantic/Config.in"
-+	source "package/python-pydantic-core/Config.in"
- 	source "package/python-pydevmem/Config.in"
- 	source "package/python-pydyf/Config.in"
- 	source "package/python-pyelftools/Config.in"
-diff --git a/package/python-pydantic-core/Config.in b/package/python-pydantic-core/Config.in
-new file mode 100644
-index 0000000000..3eeb1844a2
---- /dev/null
-+++ b/package/python-pydantic-core/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PYDANTIC_CORE
-+	bool "python-pydantic-core"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
-+	help
-+	  Core validation logic for pydantic written in rust.
-+
-+	  https://github.com/pydantic/pydantic-core
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-new file mode 100644
-index 0000000000..4927d816be
---- /dev/null
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated after vendoring
-+sha256  b54296f8317e7ffd72726836636aa3a6c8c977d8f73b68253c443c0fe3731064  pydantic_core-2.14.5.tar.gz
-+# Locally computed sha256 checksums
-+sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
-new file mode 100644
-index 0000000000..8b61323ab3
---- /dev/null
-+++ b/package/python-pydantic-core/python-pydantic-core.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pydantic-core
-+#
-+################################################################################
-+
-+PYTHON_PYDANTIC_CORE_VERSION = 2.14.5
-+PYTHON_PYDANTIC_CORE_SOURCE = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
-+PYTHON_PYDANTIC_CORE_SITE = https://files.pythonhosted.org/packages/64/26/cffb93fe9c6b5a91c497f37fae14a4b073ecbc47fc36a9979c7aa888b245
-+PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
-+PYTHON_PYDANTIC_CORE_LICENSE = MIT
-+PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
-+PYTHON_PYDANTIC_CORE_DEPENDENCIES = host-python-typing-extensions
-+
-+$(eval $(python-package))
+diff --git a/package/git/git.hash b/package/git/git.hash
+index f3f5915c8d..9cf044cc07 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  8e46fa96bf35a65625d85fde50391e39bc0620d1bb39afb70b96c4a237a1a4f7  git-2.42.1.tar.xz
++sha256  5446603e73d911781d259e565750dcd277a42836c8e392cac91cf137aa9b76ec  git-2.43.0.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index cb49986c43..1502968186 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.42.1
++GIT_VERSION = 2.43.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
