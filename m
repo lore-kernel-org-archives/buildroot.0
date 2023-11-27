@@ -4,62 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A2BC4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 16:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63EA6C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 17:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E6814030A;
-	Mon, 27 Nov 2023 16:50:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E6814030A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1ACBD402C8;
+	Mon, 27 Nov 2023 17:09:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ACBD402C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U_devsYtC-8X; Mon, 27 Nov 2023 16:50:25 +0000 (UTC)
+	with ESMTP id SeCco1qkkfHs; Mon, 27 Nov 2023 17:09:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A6024030B;
-	Mon, 27 Nov 2023 16:50:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A6024030B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4BD7D1BF405
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 16:50:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA363402FD;
+	Mon, 27 Nov 2023 17:09:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA363402FD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 69AF71BF860
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 17:09:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24D8280BA4
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 16:50:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24D8280BA4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42327405E1
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 17:09:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42327405E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bZnBawLi1aDd for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 16:50:20 +0000 (UTC)
-X-Greylist: delayed 381 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 27 Nov 2023 16:50:20 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3087980B82
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3087980B82
- for <buildroot@busybox.net>; Mon, 27 Nov 2023 16:50:20 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.3])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 9A0934403F6;
- Mon, 27 Nov 2023 18:42:37 +0200 (IST)
-To: buildroot@busybox.net
-Date: Mon, 27 Nov 2023 18:43:50 +0200
-Message-ID: <c7671eb7fe22f65212c2d1aa88d4c5d415eab668.1701103430.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.42.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ov1kQ6phwpAV for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 17:09:26 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5508D405D6
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 17:09:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5508D405D6
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:7618:50d5:c153:9a40])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id E0624B00596;
+ Mon, 27 Nov 2023 18:09:18 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 27 Nov 2023 18:09:18 +0100
+Date: Mon, 27 Nov 2023 18:09:18 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Petr Vorel <pevik@seznam.cz>
+Message-ID: <20231127170918.GS3177259@scaer>
+References: <20231116201629.2623827-1-pevik@seznam.cz>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20231116201629.2623827-1-pevik@seznam.cz>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1701103357;
- bh=gnBCW1KQrLezePMiVa3/spN2kYy8cG+oHkzqllq+p/o=;
- h=From:To:Cc:Subject:Date:From;
- b=hLqxeYht1CKX1DRf6oL020SXtFhduCvhHxO8oRxV3cjgcL+R2H4f58yR/3y3Lm8oJ
- 49WfvGfP1bIxe/zmXOvhgod3ZgKp/SU0gvQq8b8WENfP1fJEdNqjuVp4a140xffLov
- dM8wluXqFdJBqhniFxA/4cpS+3OwFVUh7o4CQNAYIntialetbWDFIEZOaKRHH7pRsO
- HDv1tjCtcDJ9ipTqYRYZnUiaqNj2wWhBFbtKNtdOtvt5y4ZSSWgP4ZLU1BEtrjzXfU
- crQy8DlwiKCa4XHs7EQTu1NRgbYzmw/4pN6VB7ZEREL+Pv5PLQrtO8Z2KAQeYcAQ3d
- yZCCcfZvhL1Sw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=hLqxeYht
-Subject: [Buildroot] [PATCH] package/socat: bump to version 1.8.0.0
+ d=free.fr; s=smtp-20201208; t=1701104963;
+ bh=ZBaVlYNgT8SG2UjelTwbodX8vJSHrPD1KRgI5KYKkwQ=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=uCuxBEFcAC/uCjjDBt4Mt+LpPd97PAbe396hvgGIS3PJn2eu8tPUIsODXr0R+5QIt
+ LHErfOiisn5IUusUfzDYXHH+68vFCUMYtgDl0UCBniSTs0CGHYv9AW0VJnVZ8DnRis
+ 5zQHuDsOxddbXwItVZWpUjYz5JDDe2RGtoBRlMGwtW+zOlBI0HT+Ie3Yun8+/sy4b+
+ J3DaRlu2pEzPcu7l5LRuLEY3cpKJJ1mjaEUN5ANE6xFeqITwfYOcbUICIDL8MpGPEQ
+ yPVMcuNqcexJ71LZ/vc5MWnr70dMSpS8y7p7vKffJbopzkyt8JbUqzVcFO24b5jzRH
+ lQnp2Ny/395tA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uCuxBEFc
+Subject: Re: [Buildroot] [PATCH 1/1] package/nfs-utils: fix build failure
+ due to glibc <= 2.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,171 +76,285 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Petr Vorel <petr.vorel@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update README hash for changed not related to license.
+Petr, All,
 
-Change patch 0001 to git format. socat is now hosted on git. Also,
-update to apply to current version.
+On 2023-11-16 21:16 +0100, Petr Vorel spake thusly:
+> From: Petr Vorel <petr.vorel@gmail.com>
+> 
+> Backport upstream patches that check if <sys/random.h> exists or not. If
+> it doesn't exist it uses uses the corresponding syscall.
+> 
+> NOTE: This would not be enough on Linux kernel < 3.17, but that's old
+> enough.
 
-Add upstream status to both patches.
+I guess that's about kernel headers, i.e. that would cause a build
+filure, not a runtime one?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .checkpackageignore                           |  2 --
- package/socat/0001-no-documentation.patch     | 34 ++++++++++++++-----
- .../0002-compat-set-NETDB_INTERNAL.patch      |  7 ++--
- package/socat/socat.hash                      |  6 ++--
- package/socat/socat.mk                        |  2 +-
- 5 files changed, 33 insertions(+), 18 deletions(-)
+If so, that would need a dependency on kern el headers;
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0663149d01cb..e9fdf9f01cac 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1292,8 +1292,6 @@ package/snort/0005-fix-sparc.patch Upstream
- package/snort/0006-Fix-compile-error-when-building-against-uclibc-or-mu.patch Upstream
- package/snort/0007-Fix-error-when-building-on-a-Fedora-host-machine.patch Upstream
- package/snort/0008-Fix-NO-OPTIMIZE.patch Upstream
--package/socat/0001-no-documentation.patch Upstream
--package/socat/0002-compat-set-NETDB_INTERNAL.patch Upstream
- package/socketcand/0001-Fix-GCC10-build-failure.patch Upstream
- package/softether/0001-Create-autotools-plumbing-for-SoftEther.patch Upstream
- package/softether/0002-Create-libsoftether.so-and-dynamically-link.patch Upstream
-diff --git a/package/socat/0001-no-documentation.patch b/package/socat/0001-no-documentation.patch
-index ce088dfafc83..b4c3e1ffde41 100644
---- a/package/socat/0001-no-documentation.patch
-+++ b/package/socat/0001-no-documentation.patch
-@@ -1,37 +1,53 @@
--socat: disable documentation build/installation
-+From 01463f5dbe19501948dec26160e0cc3b4e9167b4 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 27 Nov 2023 18:09:57 +0200
-+Subject: [PATCH] socat: disable documentation build/installation
- 
- The documentation generation process requires a special yold2man
- program, for which we don't have a package in Buildroot. Since we
- generally don't care much about documentation of packages, just adjust
- the package Makefile.in to not build/install its documentation.
- 
-+Upstream: N/A
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[baruch: update for 1.8.0.0; git patch format]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ Makefile.in | 7 ++-----
-+ 1 file changed, 2 insertions(+), 5 deletions(-)
- 
--Index: b/Makefile.in
--===================================================================
-+diff --git a/Makefile.in b/Makefile.in
-+index c01b1a4a2306..fd89acb06f3c 100644
- --- a/Makefile.in
- +++ b/Makefile.in
--@@ -93,7 +93,7 @@
-- 	Config/Makefile.Cygwin-1-5-25 Config/config.Cygwin-1-5-25.h \
-- 	Config/Makefile.MacOSX-10-5 Config/config.MacOSX-10-5.h
-+@@ -82,7 +82,7 @@ SHFILES = socat-chain.sh socat-mux.sh socat-broker.sh \
-+ TESTFILES = test.sh socks4echo.sh proxyecho.sh readline-test.sh \
-+ 	proxy.sh socks4a-echo.sh
-  
- -all: progs doc
- +all: progs
-  
-  scmclean: gitclean
-  
--@@ -136,13 +136,11 @@
-+@@ -128,7 +128,7 @@ libxio.a: $(XIOOBJS) $(UTLOBJS)
-  strip: progs
-  	strip $(PROGS)
-  
- -install: progs $(srcdir)/doc/socat.1
- +install: progs
-  	mkdir -p $(DESTDIR)$(BINDEST)
-- 	$(INSTALL) -m 755 socat $(DESTDIR)$(BINDEST)
-+ 	$(INSTALL) -m 755 socat $(DESTDIR)$(BINDEST)/socat1
-+ 	ln -sf socat1 $(DESTDIR)$(BINDEST)/socat
-+@@ -137,9 +137,6 @@ install: progs $(srcdir)/doc/socat.1
-+ 	$(INSTALL) -m 755 socat-broker.sh $(DESTDIR)$(BINDEST)
-  	$(INSTALL) -m 755 procan $(DESTDIR)$(BINDEST)
-  	$(INSTALL) -m 755 filan $(DESTDIR)$(BINDEST)
- -	mkdir -p $(DESTDIR)$(MANDEST)/man1
---	$(INSTALL) -m 644 $(srcdir)/doc/socat.1 $(DESTDIR)$(MANDEST)/man1/
-+-	$(INSTALL) -m 644 $(srcdir)/doc/socat.1 $(DESTDIR)$(MANDEST)/man1/socat1.1
-+-	ln -sf socat1.1 $(DESTDIR)$(MANDEST)/man1/socat.1
-  
-  uninstall:
-  	rm -f $(DESTDIR)$(BINDEST)/socat
-+-- 
-+2.42.0
-+
-diff --git a/package/socat/0002-compat-set-NETDB_INTERNAL.patch b/package/socat/0002-compat-set-NETDB_INTERNAL.patch
-index da31073ba558..f526664210dd 100644
---- a/package/socat/0002-compat-set-NETDB_INTERNAL.patch
-+++ b/package/socat/0002-compat-set-NETDB_INTERNAL.patch
-@@ -1,4 +1,4 @@
--From e7804d1750652e39c7a5803d360b29b2637a695f Mon Sep 17 00:00:00 2001
-+From 4b86f141c7c4725093fb2e12c769fec393727519 Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Sun, 28 Aug 2016 21:04:01 +0200
- Subject: [PATCH] compat: set NETDB_INTERNAL
-@@ -12,16 +12,17 @@ Based on [2].
- [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=resolv/netdb.h;h=3aba530932c7a62a4f23e3193e9186da677f552b;hb=fdfc9260b61d3d72541f18104d24c7bcb0ce5ca2#l74
- [2] http://git.alpinelinux.org/cgit/aports/tree/main/socat/netdb-internal.patch?id=5a45173b50892cb634197c30b3506ebff98d3b7d
- 
-+Upstream: sent to socat@dest-unreach.org
- Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
-  compat.h | 2 ++
-  1 file changed, 2 insertions(+)
- 
- diff --git a/compat.h b/compat.h
--index 19a929f..4f5ee6d 100644
-+index bb7e2d8f1782..72e73c701f64 100644
- --- a/compat.h
- +++ b/compat.h
--@@ -666,6 +666,8 @@ typedef int sig_atomic_t;
-+@@ -851,6 +851,8 @@ typedef unsigned long T_sigset;
-  
-  #if !defined(NETDB_INTERNAL) && defined(h_NETDB_INTERNAL)
-  #  define NETDB_INTERNAL h_NETDB_INTERNAL
-diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-index 2113e1b3a485..2a14d7530301 100644
---- a/package/socat/socat.hash
-+++ b/package/socat/socat.hash
-@@ -1,8 +1,8 @@
- # From http://www.dest-unreach.org/socat/download.md5sum
--md5  a605d3779465f42c07fc507cfbfb08f9  socat-1.7.4.4.tar.bz2
-+md5  51f9ecdf5d942d0a3c150ea400eb89ef  socat-1.8.0.0.tar.bz2
- # From http://www.dest-unreach.org/socat/download.sha256sum
--sha256  fbd42bd2f0e54a3af6d01bdf15385384ab82dbc0e4f1a5e153b3e0be1b6380ac  socat-1.7.4.4.tar.bz2
-+sha256  e1de683dd22ee0e3a6c6bbff269abe18ab0c9d7eb650204f125155b9005faca7  socat-1.8.0.0.tar.bz2
- # Locally calculated
--sha256  3555c6bc2779ff0f9a7145d1e3cd1d8fde59548bcd3364a23b907de21eec5aa8  README
-+sha256  de9d702354b2e748ea87eb20d18c3d90ebede5dc6d2fc3c2e0645d139a5181bc  README
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  fd9e48ca316a5032069b9521f4f4b4d9b1c60365012bae1e62286bcd5bd2e761  COPYING.OpenSSL
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index f958f26522fa..1e2880c028d8 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SOCAT_VERSION = 1.7.4.4
-+SOCAT_VERSION = 1.8.0.0
- SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
+    depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+
+> Fixes: http://autobuild.buildroot.net/results/c5fde6099a8b228a8bdc3154d1e47dfa192e94ed/
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Hi,
+> 
+> I'm sorry for the noise (I sent unsubscribed).
+> 
+> NOTE: I was not able to test the build, therefore it *should* fix it.
+
+Giulio reported build failures with this patch applied, and also:
+
+[--SNIP--]
+> diff --git a/package/nfs-utils/0003-reexport-fsidd.c-Remove-unused-headers.patch b/package/nfs-utils/0003-reexport-fsidd.c-Remove-unused-headers.patch
+> new file mode 100644
+> index 0000000000..0331a8c9f8
+> --- /dev/null
+> +++ b/package/nfs-utils/0003-reexport-fsidd.c-Remove-unused-headers.patch
+> @@ -0,0 +1,42 @@
+> +From 1a4edb2aa6b9b88fcdcb8d82b262467d06527623 Mon Sep 17 00:00:00 2001
+> +From: Petr Vorel <pvorel@suse.cz>
+> +Date: Fri, 10 Nov 2023 10:35:33 -0500
+> +Subject: [PATCH 1/3] reexport/fsidd.c: Remove unused headers
+
+    $ make check-package
+    package/nfs-utils/0003-reexport-fsidd.c-Remove-unused-headers.patch:4: generate your patches with 'git format-patch -N'
+    package/nfs-utils/0004-support-reexport.c-Remove-unused-headers.patch:4: generate your patches with 'git format-patch -N'
+    package/nfs-utils/0005-support-backend_sqlite.c-Add-getrandom-fallback.patch:4: generate your patches with 'git format-patch -N'
+
+Regards,
+Yann E. MORIN.
+
+> +
+> +Some of them are needed but included elsewhere, e.g. <string.h>
+> +included in xcommon.h, but at least <sys/random.h> is removed due
+> +further code simplification.
+> +
+> +Fixes: 6fd2732d ("export: Add fsidd")
+> +Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> +Signed-off-by: Steve Dickson <steved@redhat.com>
+> +Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> +Upstream: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=1a4edb2aa6b9b88fcdcb8d82b262467d06527623
+> +---
+> + support/reexport/fsidd.c | 10 ----------
+> + 1 file changed, 10 deletions(-)
+> +
+> +diff --git a/support/reexport/fsidd.c b/support/reexport/fsidd.c
+> +index d4b245e8..3e62b3fc 100644
+> +--- a/support/reexport/fsidd.c
+> ++++ b/support/reexport/fsidd.c
+> +@@ -7,16 +7,6 @@
+> + #include <dlfcn.h>
+> + #endif
+> + #include <event2/event.h>
+> +-#include <limits.h>
+> +-#include <stdint.h>
+> +-#include <stdio.h>
+> +-#include <sys/random.h>
+> +-#include <sys/socket.h>
+> +-#include <sys/stat.h>
+> +-#include <sys/types.h>
+> +-#include <sys/un.h>
+> +-#include <sys/vfs.h>
+> +-#include <unistd.h>
+> + 
+> + #include "conffile.h"
+> + #include "reexport_backend.h"
+> +-- 
+> +2.42.0
+> +
+> diff --git a/package/nfs-utils/0004-support-reexport.c-Remove-unused-headers.patch b/package/nfs-utils/0004-support-reexport.c-Remove-unused-headers.patch
+> new file mode 100644
+> index 0000000000..23d3e80ada
+> --- /dev/null
+> +++ b/package/nfs-utils/0004-support-reexport.c-Remove-unused-headers.patch
+> @@ -0,0 +1,43 @@
+> +From bdc79f02c17fc9ec7461d48007105caac789cef4 Mon Sep 17 00:00:00 2001
+> +From: Petr Vorel <pvorel@suse.cz>
+> +Date: Fri, 10 Nov 2023 10:39:05 -0500
+> +Subject: [PATCH 2/3] support/reexport.c: Remove unused headers
+> +
+> +Some of them are needed but included elsewhere, e.g. <sys/socket.h>
+> +included in nfslib.h or <string.h> included in xcommon.h, but at least
+> +<sys/random.h> is removed due further code simplification.
+> +
+> +Fixes: 878674b3 ("Add reexport helper library")
+> +Reviewed-by: Richard Weinberger <richard@nod.at>
+> +Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> +Signed-off-by: Steve Dickson <steved@redhat.com>
+> +Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> +Upstream: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=bdc79f02c17fc9ec7461d48007105caac789cef4
+> +---
+> + support/reexport/reexport.c | 7 -------
+> + 1 file changed, 7 deletions(-)
+> +
+> +diff --git a/support/reexport/reexport.c b/support/reexport/reexport.c
+> +index d9a700af..78516586 100644
+> +--- a/support/reexport/reexport.c
+> ++++ b/support/reexport/reexport.c
+> +@@ -5,16 +5,9 @@
+> + #ifdef HAVE_DLFCN_H
+> + #include <dlfcn.h>
+> + #endif
+> +-#include <stdint.h>
+> +-#include <stdio.h>
+> +-#include <sys/random.h>
+> +-#include <sys/stat.h>
+> + #include <sys/types.h>
+> + #include <sys/vfs.h>
+> +-#include <unistd.h>
+> + #include <errno.h>
+> +-#include <sys/socket.h>
+> +-#include <sys/un.h>
+> + 
+> + #include "nfsd_path.h"
+> + #include "conffile.h"
+> +-- 
+> +2.42.0
+> +
+> diff --git a/package/nfs-utils/0005-support-backend_sqlite.c-Add-getrandom-fallback.patch b/package/nfs-utils/0005-support-backend_sqlite.c-Add-getrandom-fallback.patch
+> new file mode 100644
+> index 0000000000..71c42f74b1
+> --- /dev/null
+> +++ b/package/nfs-utils/0005-support-backend_sqlite.c-Add-getrandom-fallback.patch
+> @@ -0,0 +1,113 @@
+> +From f92fd6ca815025c435dabf45da28472ac0aa04a4 Mon Sep 17 00:00:00 2001
+> +From: Petr Vorel <pvorel@suse.cz>
+> +Date: Fri, 10 Nov 2023 10:59:29 -0500
+> +Subject: [PATCH 3/3] support/backend_sqlite.c: Add getrandom() fallback
+> +
+> +Allow to compile reexport on systems with older libc. (getrandom()
+> +wrapper is supported on glibc 2.25+ and  musl 1.1.20+, uclibc-ng does
+> +not yet support it).
+> +
+> +getrandom() syscall is supported Linux 3.17+ (old enough to bother with
+> +a check).
+> +
+> +Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> +Signed-off-by: Steve Dickson <steved@redhat.com>
+> +Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> +Upstream: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=f92fd6ca815025c435dabf45da28472ac0aa04a4
+> +---
+> + Makefile.am                       |  1 +
+> + aclocal/getrandom.m4              | 16 ++++++++++++++++
+> + configure.ac                      |  3 +++
+> + support/reexport/backend_sqlite.c | 18 +++++++++++++++++-
+> + 4 files changed, 37 insertions(+), 1 deletion(-)
+> + create mode 100644 aclocal/getrandom.m4
+> +
+> +diff --git a/Makefile.am b/Makefile.am
+> +index 00220842..72ad4ba7 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -10,6 +10,7 @@ EXTRA_DIST = \
+> + 	autogen.sh \
+> + 	\
+> + 	aclocal/bsdsignals.m4 \
+> ++	aclocal/getrandom.m4 \
+> + 	aclocal/nfs-utils.m4 \
+> + 	aclocal/kerberos5.m4 \
+> + 	aclocal/tcp-wrappers.m4 \
+> +diff --git a/aclocal/getrandom.m4 b/aclocal/getrandom.m4
+> +new file mode 100644
+> +index 00000000..bc0fe16a
+> +--- /dev/null
+> ++++ b/aclocal/getrandom.m4
+> +@@ -0,0 +1,16 @@
+> ++dnl Checks for getrandom support (glibc 2.25+, musl 1.1.20+)
+> ++dnl
+> ++AC_DEFUN([AC_GETRANDOM], [
+> ++    AC_MSG_CHECKING(for getrandom())
+> ++    AC_LINK_IFELSE(
+> ++		[AC_LANG_PROGRAM([[
+> ++		   #include <stdlib.h>  /* for NULL */
+> ++		   #include <sys/random.h>
+> ++		]],
+> ++		[[ return getrandom(NULL, 0U, 0U); ]] )],
+> ++		[AC_DEFINE([HAVE_GETRANDOM], [1], [Define to 1 if you have the `getrandom' function.])
+> ++		AC_MSG_RESULT([yes])],
+> ++		[AC_MSG_RESULT([no])])
+> ++
+> ++	AC_SUBST(HAVE_GETRANDOM)
+> ++])
+> +diff --git a/configure.ac b/configure.ac
+> +index 6fbcb974..4bff679d 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -277,6 +277,9 @@ AC_TCP_WRAPPERS
+> + # Arrange for large-file support
+> + AC_SYS_LARGEFILE
+> + 
+> ++dnl Check for getrandom() libc support
+> ++AC_GETRANDOM
+> ++
+> + AC_CONFIG_SRCDIR([support/include/config.h.in])
+> + AC_CONFIG_HEADERS([support/include/config.h])
+> + 
+> +diff --git a/support/reexport/backend_sqlite.c b/support/reexport/backend_sqlite.c
+> +index 132f30c4..0eb5ea37 100644
+> +--- a/support/reexport/backend_sqlite.c
+> ++++ b/support/reexport/backend_sqlite.c
+> +@@ -7,9 +7,16 @@
+> + #include <stdio.h>
+> + #include <stdlib.h>
+> + #include <string.h>
+> +-#include <sys/random.h>
+> + #include <unistd.h>
+> + 
+> ++#ifdef HAVE_GETRANDOM
+> ++# include <sys/random.h>
+> ++# if !defined(SYS_getrandom) && defined(__NR_getrandom)
+> ++   /* usable kernel-headers, but old glibc-headers */
+> ++#  define SYS_getrandom __NR_getrandom
+> ++# endif
+> ++#endif
+> ++
+> + #include "conffile.h"
+> + #include "reexport_backend.h"
+> + #include "xlog.h"
+> +@@ -20,6 +27,15 @@
+> + static sqlite3 *db;
+> + static int init_done;
+> + 
+> ++#if !defined(HAVE_GETRANDOM) && defined(SYS_getrandom)
+> ++/* libc without function, but we have syscall */
+> ++static int getrandom(void *buf, size_t buflen, unsigned int flags)
+> ++{
+> ++	return (syscall(SYS_getrandom, buf, buflen, flags));
+> ++}
+> ++# define HAVE_GETRANDOM
+> ++#endif
+> ++
+> + static int prng_init(void)
+> + {
+> + 	int seed;
+> +-- 
+> +2.42.0
+> +
+> -- 
+> 2.42.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.42.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
