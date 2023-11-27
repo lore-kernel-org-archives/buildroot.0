@@ -4,71 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 055EBC4167B
-	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 16:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0347C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 27 Nov 2023 16:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 302544056D;
-	Mon, 27 Nov 2023 16:10:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 302544056D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37E8B405C7;
+	Mon, 27 Nov 2023 16:40:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37E8B405C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bWVOkpYVZaeP; Mon, 27 Nov 2023 16:10:42 +0000 (UTC)
+	with ESMTP id xZkw-0POOGCh; Mon, 27 Nov 2023 16:40:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D36540743;
-	Mon, 27 Nov 2023 16:10:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D36540743
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 015441BF405
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 16:10:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6657D405D8;
+	Mon, 27 Nov 2023 16:40:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6657D405D8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E7CCD1BF405
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 16:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEF5B80F6B
- for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 16:10:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEF5B80F6B
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9815405D8
+ for <buildroot@lists.busybox.net>; Mon, 27 Nov 2023 16:40:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9815405D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PqpmM8oLu1VA for <buildroot@lists.busybox.net>;
- Mon, 27 Nov 2023 16:10:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ht8KFZbJgGvw for <buildroot@lists.busybox.net>;
+ Mon, 27 Nov 2023 16:40:20 +0000 (UTC)
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 21CE180F66
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 16:10:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21CE180F66
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BEE46405C7
+ for <buildroot@buildroot.org>; Mon, 27 Nov 2023 16:40:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEE46405C7
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:7618:50d5:c153:9a40])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E16C2B00583;
- Mon, 27 Nov 2023 17:10:32 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 53F8EB0056A;
+ Mon, 27 Nov 2023 17:40:14 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 27 Nov 2023 17:10:32 +0100
-Date: Mon, 27 Nov 2023 17:10:32 +0100
+ Mon, 27 Nov 2023 17:40:14 +0100
+Date: Mon, 27 Nov 2023 17:40:14 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Leo <info.leo@widler.de>
-Message-ID: <20231127161032.GQ3177259@scaer>
-References: <20231126214357.3376407-1-info.leo@widler.de>
- <20231126215644.GO3177259@scaer>
- <9CB2714C-64FC-4E32-BD7D-12F72EC7EC34@widler.de>
- <20231127064813.GP3177259@scaer>
- <0A422087-89C4-4C88-8263-E05CC5BA1FB8@widler.de>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20231127164014.GR3177259@scaer>
+References: <20231126224849.321916-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <0A422087-89C4-4C88-8263-E05CC5BA1FB8@widler.de>
+In-Reply-To: <20231126224849.321916-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1701101435;
- bh=dT9zVxG+XJGqhQodHL77kDS4Do8OL4CDLpC+ECUtP30=;
+ d=free.fr; s=smtp-20201208; t=1701103217;
+ bh=srtGOvFqbD7eKNye9Wnt4+ry+OAOqBKLMNSN8T9YLWE=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Ty42ssfUSmgCF7COUqx8NG94fwDNVeaoHPByWL7Ja6w8aP/qdqmxfWeF9kl2/1Yt4
- FaHwX272m1zrvedDj+irrmGpis15NyRAcnXYUeF0qCXMMrRGmwMVKVh5xP6O+Vaqg8
- ZCzerR2ZS6I0ZDoH3+4k+jHBxTzV6hX5VKbm9JM8qfeHjR913DGFsEVIb06mPwehj4
- GbFeAdiXy1FacqCQUQ5ekV4MrEje9xt0TTHtXyASnqUInqWbT7uQOueABX9WeSNH43
- jUFC0DB1QH6yJQToEZ/iYp8c4/L4QaY6WpT8jGjlGuQWEuxbizvATch8TgZVdrFs3a
- STHOEzVhXTyGg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=ns9Zn6BlEGMLsu90GY5MekxiE2h7zVP5E84bl+rjqwFUFVSasfxEOHkazhxi9LeIA
+ 6K7cptQTdhGNjUGO9MD2ErY/PNUMV9ey2ONIIzHSPnRcUiAyBU8cdtU0LP1QDbiGBo
+ mYSvu8F6KVctm+bPWUJbQ/ke9imr0Hfoe6uBj6e/VrTakFykj1fNaHLlS4+D/KBXtm
+ gbDRXTUhAoBZtehYBJrN+8mSWWLXR59uX0zbTOIHf7SFg23e3l7wFNu2flip0xew60
+ r93+BXj6zLO4WEFjZM+hGsg7rmWTgW4CKzx4rI/HgJXkkVDRaYRvb/jE03wuV15G6c
+ +xrH5h9J7h3Xg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ty42ssfU
-Subject: Re: [Buildroot] [PATCH 1/1] package/attr: add --enable-multilib to
- fix build error for BL808 based boards
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ns9Zn6Bl
+Subject: Re: [Buildroot] [PATCH 1/1] package/libldns: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,196 +75,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Leo, All,
+Fabrice, All,
 
-On 2023-11-27 08:07 +0100, Leo spake thusly:
-> defconfig can be found here: [1]https://github.com/openbouffalo/buildroot_bouffalo/blob/main/configs/pine64_ox64_full_defconfig
-> The link to the tool chain is also in there.
-> Sure it would be better to get to the root of the problem. My solution was just a quick and dirty fix.
+On 2023-11-26 23:48 +0100, Fabrice Fontaine spake thusly:
+> Fix the following build failure raised since bump of libressl to version
+> 3.8.2 in commit 21eca49ed5110872407b76ab9337d2877c4cda24:
+> 
+> ./keys.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
+>   167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+>       |                                   ^~~~~~~~~~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/37cc05b78a7004caa1b45d896121f059a4f8ca00
 
-Thanks for the links.
+Rather than patch, can we just disable it for libressl:
 
-I tried to reproduce locally, after following the instructions in the
-buildroot_bouffalo readme file, but attr does build properly here with
-the aforementioned defconfig.
+    diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+    index 06564e3d9f..d6af6a2b97 100644
+    --- a/package/libldns/libldns.mk
+    +++ b/package/libldns/libldns.mk
+    @@ -17,7 +17,6 @@ LIBLDNS_CONF_OPTS = \
+     	--with-ssl=$(STAGING_DIR)/usr \
+     	--enable-dane \
+     	--enable-ecdsa \
+    -	--enable-gost \
+     	--enable-sha2 \
+     	--without-examples \
+     	--without-p5-dns-ldns \
+    @@ -30,6 +29,12 @@ else
+     LIBLDNS_CONF_OPTS += --disable-dane-verify
+     endif
+     
+    +ifeq ($(BR2_PACKAGE_LIBOPENSSL_ENGINES),y)
+    +LIBLDNS_CONF_OPTS += --enable-gost
+    +else
+    +LIBLDNS_CONF_OPTS += --disable-gost
+    +endif
+    +
+     ifeq ($(BR2_STATIC_LIBS),y)
+     LIBLDNS_DEPENDENCIES += host-pkgconf
+     # missing -lz breaks configure, add it using pkgconf
 
-I also tried to reproduce in a container using the reference image by
-Buildroot (./utils/docker-run) and it also succeeds.
-
-I also tried to run with the ubuntu:22.04 that is used in the github
-worflows for buildroot_bouffalo, and (after installing the necessary
-dependencies as visible in .github/workflows/buildroot.yml), it also
-succeeds.
-
-I also tried without using ccache, and it also succeeded.
-
-Thus, it comforts my opinion that using --enable-multilib when
-configuring attr, is not the proper solution.
-
-However, I do see that your have workflows failing with that issue,
-indeed, but of all the tests I did, none could reproduce it.
-
-I see that you are using a cached ccache for your workflows; I wonder if
-somehow that cache did get corrupted. Can you try and run a workflow
-without ccache?
+Note: the condition on libopenssl-engines if outside the condition on
+libopenssl, so that we have a --disable-gost even when libopenssl is not
+enabled.
 
 Regards,
 Yann E. MORIN.
 
-> Regards,
-> Leonard Widler
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...keys.c-fix-build-with-libressl-3.8.1.patch | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 package/libldns/0001-keys.c-fix-build-with-libressl-3.8.1.patch
 > 
-> Am 27. November 2023 07:48:13 MEZ schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
+> diff --git a/package/libldns/0001-keys.c-fix-build-with-libressl-3.8.1.patch b/package/libldns/0001-keys.c-fix-build-with-libressl-3.8.1.patch
+> new file mode 100644
+> index 0000000000..c385cc44b9
+> --- /dev/null
+> +++ b/package/libldns/0001-keys.c-fix-build-with-libressl-3.8.1.patch
+> @@ -0,0 +1,40 @@
+> +From 681cb309620e44d3d4d96494554e19bcab0b6f9d Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 26 Nov 2023 23:38:14 +0100
+> +Subject: [PATCH] keys.c: fix build with libressl >= 3.8.1
+> +
+> +libressl >= 3.8.1 removed ENGINE support:
+> +"ENGINE support was removed and OPENSSL_NO_ENGINE is set. In spite
+> +of this, some stub functions are provided to avoid patching some
+> +applications that do not honor OPENSSL_NO_ENGINE."
+> +resulting in the following build failure with gost:
+> +
+> +./keys.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
+> +  167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+> +      |                                   ^~~~~~~~~~~~~~~~~
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/37cc05b78a7004caa1b45d896121f059a4f8ca00
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Upstream: https://github.com/NLnetLabs/ldns/pull/227
+> +---
+> + keys.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/keys.c b/keys.c
+> +index 78bea972..59de186e 100644
+> +--- a/keys.c
+> ++++ b/keys.c
+> +@@ -132,7 +132,7 @@ ldns_key_new_frm_engine(ldns_key **key, ENGINE *e, char *key_id, ldns_algorithm
+> + }
+> + #endif
+> + 
+> +-#ifdef USE_GOST
+> ++#if defined(USE_GOST) && !defined(OPENSSL_NO_ENGINE)
+> + /** store GOST engine reference loaded into OpenSSL library */
+> + ENGINE* ldns_gost_engine = NULL;
+> + 
+> +-- 
+> +2.42.0
+> +
+> -- 
+> 2.42.0
 > 
->  Leo, All,
-> 
->  On 2023-11-26 23:17 +0100, Leo spake thusly:
-> 
->  I'll change my name, thanks for letting me know
-> 
->  The failure is on none of the auto builders. I have uploaded the config.log here: [1]https://pastebin.com/ZzP6pNvx
-> 
-> 
->  Can you also provide the Buildroot defconfig, please?
-> 
->  (Also, I see you are running as root; this is not required to run
->  Buildroot, and is even dangerous and not really supported; please run as
->  a non-root user.)
-> 
-> 
->  And to fix this issue I added the --enable-multilib option which resolves the problem.
-> 
-> 
->  The issue looks like a misconfiguration somewhere:
-> 
->      .../crti.o: can't link double-float modules with soft-float modules
->      ...//ld: failed to merge target specific data of file .../crti.o
-> 
->  So, we want to understand the problem rather than paper-over it.
-> 
->  Where did you get your toolchain (Xuantie-900 linux-5.10.4 glibc gcc
->  Toolchain V2.6.1 B-20220906)? Is it public, so we can try and reproduce
->  the issue?
-> 
->  Regards,
->  Yann E. MORIN.
-> 
-> 
->  Regards,
->  Leonard Widler
-> 
->  Am 26. November 2023 22:56:44 MEZ schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
-> 
->   leow149, All,
-> 
->   Thank you for your contribution! Here is a quick review.
-> 
->   First, we'll need you to use your real name as the author of the patch;
->   we do not accept annonymous (od pseduonymou) contributions.
-> 
->   On 2023-11-26 22:43 +0100, leow149 spake thusly:
-> 
->   This commit fixes a build error which specifically happens for Bouffallo Labs BL808 based boards, but might also happen on other RiscV64 Boards.
-> 
-> 
->   Please wrap your commit log to ~72 chars.
-> 
->   Waht is the error that you see? Could you see if there is a similar
->   build failure on out autobulders:
-> 
->   [2]http://autobuild.buildroot.org/?static=1&reason=attr-%
-> 
-> 
->   The last build error for attr was more than a year ago now, so it is
->   relatively surprising to see that attr does not build. So we'll need a
->   bit more context.
-> 
-> 
->   Signed-off-by: leow149 <info.leo@widler.de>
-> 
->   --------------------------------------------------------------------------------------------------------------------------------
-> 
->    package/attr/attr.mk | 5 +++--
->    1 file changed, 3 insertions(+), 2 deletions(-)
-> 
->   diff --git a/package/attr/attr.mk b/package/attr/attr.mk
->   index 0327497e1e..89f7d21f0c 100644
->   --- a/package/attr/attr.mk
->   +++ b/package/attr/attr.mk
->   @@ -13,7 +13,8 @@ ATTR_CPE_ID_VENDOR = attr_project
-> 
->    ATTR_INSTALL_STAGING = YES
-> 
->   -ATTR_CONF_OPTS = --disable-nls
->   -
->   +ATTR_CONF_OPTS = \
->   +       --disable-nls \
->   +       --enable-multilib
-> 
-> 
->   Buildroot does not generate multilib toolchains, and when using an
->   external toolchain that is multilib, the proper multilib diretory is
->   copies over to the sysroot.
-> 
->   So, --eanble-multilib looksa like the wrong approach, at least without
->   more explanations.
-> 
->   Can you elaborate on the issue you encounter, and what makes you think
->   --enable-multilib is the correct solution?
-> 
->   Thanks!
-> 
->   Regards,
->   Yann E. MORIN.
-> 
-> 
->    $(eval $(autotools-package))
->    $(eval $(host-autotools-package))
->   --
->   2.30.2
-> 
->   --------------------------------------------------------------------------------------------------------------------------------
-> 
->   buildroot mailing list
->   buildroot@buildroot.org
->   [3]https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
->  Links:
->  1.
->  [2]https://pastebin.com/ZzP6pNvx
->  2.
->  [3]http://autobuild.buildroot.org/?static=1&reason=attr-%
-> 
->  3.
->  [4]https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> 
-> 
-> 
->   --------------------------------------------------------------------------------------------------------------------------------
-> 
->  buildroot mailing list
->  buildroot@buildroot.org
->  [5]https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> Links:
-> 1. https://github.com/openbouffalo/buildroot_bouffalo/blob/main/configs/pine64_ox64_full_defconfig
-> 2. https://pastebin.com/ZzP6pNvx
-> 3. http://autobuild.buildroot.org/?static=1&reason=attr-%
-> 4. https://lists.buildroot.org/mailman/listinfo/buildroot
-> 5. https://lists.buildroot.org/mailman/listinfo/buildroot
-
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
