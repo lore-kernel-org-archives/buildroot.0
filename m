@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B724C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 16:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3889AC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 16:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7BF04174E;
-	Tue, 28 Nov 2023 16:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7BF04174E
+	by smtp4.osuosl.org (Postfix) with ESMTP id E132A401E1;
+	Tue, 28 Nov 2023 16:13:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E132A401E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zoj1gVXdxnSj; Tue, 28 Nov 2023 16:12:51 +0000 (UTC)
+	with ESMTP id gxa1zoQ98rzp; Tue, 28 Nov 2023 16:13:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8DE741753;
-	Tue, 28 Nov 2023 16:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8DE741753
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1FB071BF3F9
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 16:12:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C94DF40214;
+	Tue, 28 Nov 2023 16:13:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C94DF40214
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 46C7E1BF3F9
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 16:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED79841745
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 16:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED79841745
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2098C81E95
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 16:12:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2098C81E95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9Q_pawvGSEoJ for <buildroot@lists.busybox.net>;
- Tue, 28 Nov 2023 16:12:21 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 683984173A
- for <buildroot@buildroot.org>; Tue, 28 Nov 2023 16:12:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 683984173A
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AjFegj06mcBz for <buildroot@lists.busybox.net>;
+ Tue, 28 Nov 2023 16:12:39 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1F0E481E98
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 16:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F0E481E98
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:c5a3:8084:a241:9d13])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 61E4A13F86A;
- Tue, 28 Nov 2023 17:12:17 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0FA2513F92C;
+ Tue, 28 Nov 2023 17:12:35 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 28 Nov 2023 17:12:17 +0100
-Date: Tue, 28 Nov 2023 17:12:17 +0100
+ Tue, 28 Nov 2023 17:12:34 +0100
+Date: Tue, 28 Nov 2023 17:12:34 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231128161217.GF3177259@scaer>
-References: <20231127212712.1059242-1-fontaine.fabrice@gmail.com>
+Message-ID: <20231128161234.GG3177259@scaer>
+References: <20231127212822.1060094-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231127212712.1059242-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20231127212822.1060094-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1701187939;
- bh=SIUd1xP+jSrmTqs19zL9SZENwO+9f5rKPaRFnpr+3is=;
+ d=free.fr; s=smtp-20201208; t=1701187957;
+ bh=CF0wxfdk1B0QosJL5/sMSXzb0RNF34u4poS7uqEdvec=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=kKZIwUqpIeDmq7/6nTkJZkUDJC7w1m7wbiTh+7Bc/BpdEMr2IFH6TBnR4Vc/an3p3
- MH+C1b+YxTrOCScrla48bd7H0ZpJMHsGERFusPFSFVHhVQDcklvNcrcgQP551Wjzno
- znOt+nTQY8cv7ye9N0t37EoXv1YN6rco0rRb/sk04d1jhNIdeO3SU5oR3RhwU5VVa2
- r7+0hHj+IidjqbwnAFfUimL2yF6BSRhSaI1OCKIeZAI/Od0QgwDrYp/QmqVuI+IRSc
- jMglSYMFBeAQokUEq4jE3foVS8XD+jlzvsEgm7Ve7tqGdnvCdzeuIACfMIYVO0Lp+1
- p737CaS4WAH8w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Rc0Nyh1sWFBy+fZTWdsbQF+Lh7oPC/pNkLr1AiAT6X+Eg89MD6OlvBS534+V68n+R
+ ZM4h74CjTQFuJRxWyfgE1z89H+sPb8Gb25uMFCgohCUVxy5aOpKXLgDv3L/QJaYKWA
+ gmmhVmZOrJBoqsu46iMGjVmAeu7qAhHULq/fPcYixBYy7RDpbpBnnu7suMKbq/txMA
+ LJB1QOhO4RaWDMnkN0oR9jHemQElRAb56wuFDh6asHaXwYVaIHbHxKoV98oKHrC2RD
+ i2U0gBhHfxjtY7u2DqKt1Jk3M00x7n5bh42sCgkUordeANRjhTIoNUyc7jhw8UdiUV
+ JCwi8yRm5SEXw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kKZIwUqp
-Subject: Re: [Buildroot] [PATCH 1/1] package/motion: fix webp build
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Rc0Nyh1s
+Subject: Re: [Buildroot] [PATCH 1/1] package/janet: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,17 +81,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Fabrice, All
 
-On 2023-11-27 22:27 +0100, Fabrice Fontaine spake thusly:
-> Fix the following build failure raised since bump of webp to version
-> 1.3.2 in commit c88c1d3319dd24fa833455a2e7d96bc4585bab7f:
+On 2023-11-27 22:28 +0100, Fabrice Fontaine spake thusly:
+> janet unconditionally uses fork since version 1.32.0 and
+> https://github.com/janet-lang/janet/commit/4b8c1ac2d2d5c13d7c8592fd6d94b34a6a8b3549
+> resulting in the following build failure since bump to version 1.32.1 in
+> commit c87abf01a9153a2b2fe6c046fa83c86db92d79a7:
 > 
-> /home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/aarch64_be-buildroot-linux-uclibc/13.2.0/../../../../aarch64_be-buildroot-linux-uclibc/bin/ld: picture.o: undefined reference to symbol 'WebPMemoryWriterClear'
-> /home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/aarch64_be-buildroot-linux-uclibc/13.2.0/../../../../aarch64_be-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-9/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/usr/lib64/libwebp.so.7: error adding symbols: DSO missing from command line
+> janet.c:(.text+0x19bbc): undefined reference to `fork'
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/9b859a701debeaddf1f9909e16adc6811a620576
+>  - http://autobuild.buildroot.org/results/f0771fc6c9905d3a6d60ce245df585b3c6096f7f
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -101,42 +102,26 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...Include-libwebp-when-WEBP-is-enabled.patch | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/motion/0002-Include-libwebp-when-WEBP-is-enabled.patch
+>  package/janet/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/motion/0002-Include-libwebp-when-WEBP-is-enabled.patch b/package/motion/0002-Include-libwebp-when-WEBP-is-enabled.patch
-> new file mode 100644
-> index 0000000000..a1536a7d2f
-> --- /dev/null
-> +++ b/package/motion/0002-Include-libwebp-when-WEBP-is-enabled.patch
-> @@ -0,0 +1,26 @@
-> +From 40ecd71ff361442f1579089481619dd7cae90ffd Mon Sep 17 00:00:00 2001
-> +From: Piotr Mionskowski <piotr.mionskowski@gmail.com>
-> +Date: Sun, 9 Jul 2023 01:44:49 +0200
-> +Subject: [PATCH] Include libwebp when WEBP is enabled
-> +
-> +Upstream: https://github.com/Motion-Project/motion/commit/40ecd71ff361442f1579089481619dd7cae90ffd
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + configure.ac | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index ce588f65..ee45ac37 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -191,8 +191,8 @@ AS_IF([test "${WEBP}" = "yes" ], [
-> +     AS_IF([pkg-config libwebpmux ], [
-> +         AC_MSG_RESULT(yes)
-> +         AC_DEFINE([HAVE_WEBP], [1], [Define to 1 if WEBP is around])
-> +-        TEMP_CFLAGS="$TEMP_CFLAGS "`pkg-config --cflags libwebpmux`
-> +-        TEMP_LIBS="$TEMP_LIBS "`pkg-config --libs libwebpmux`
-> ++        TEMP_CFLAGS="$TEMP_CFLAGS "`pkg-config --cflags libwebpmux libwebp`
-> ++        TEMP_LIBS="$TEMP_LIBS "`pkg-config --libs libwebpmux libwebp`
-> +       ],[
-> +         AC_MSG_RESULT(no)
-> +       ]
+> diff --git a/package/janet/Config.in b/package/janet/Config.in
+> index 7b78c14bf4..bb4bf462aa 100644
+> --- a/package/janet/Config.in
+> +++ b/package/janet/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_JANET
+>  	bool "janet"
+> +	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+>  	help
+>  	  Janet is a functional and imperative programming language.
+> @@ -11,4 +12,5 @@ config BR2_PACKAGE_JANET
+>  	  https://janet-lang.org/
+>  
+>  comment "janet needs a toolchain w/ gcc >= 4.9"
+> +	depends on BR2_USE_MMU
+>  	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 > -- 
 > 2.42.0
 > 
