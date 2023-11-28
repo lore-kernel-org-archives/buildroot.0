@@ -4,54 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 082DEC4167B
-	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 11:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F366C07CA9
+	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 13:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 837F3410EA;
-	Tue, 28 Nov 2023 11:36:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 837F3410EA
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFDD640910;
+	Tue, 28 Nov 2023 13:17:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFDD640910
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id APnFS36rA5Pm; Tue, 28 Nov 2023 11:36:53 +0000 (UTC)
+	with ESMTP id CcRlEy7vQugi; Tue, 28 Nov 2023 13:17:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFEAA41488;
-	Tue, 28 Nov 2023 11:36:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFEAA41488
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1241E405A2;
+	Tue, 28 Nov 2023 13:16:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1241E405A2
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 226171BF281
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 11:36:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D1E01BF3C4
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 13:16:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDA1D4015A
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 11:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDA1D4015A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 422D2403A5
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 13:16:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 422D2403A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id seti2Bd36i3O for <buildroot@lists.busybox.net>;
- Tue, 28 Nov 2023 11:36:49 +0000 (UTC)
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C44FB4011A
- for <buildroot@buildroot.org>; Tue, 28 Nov 2023 11:36:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C44FB4011A
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 052791814B9; Tue, 28 Nov 2023 12:36:43 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Tue, 28 Nov 2023 12:36:34 +0100
-Message-Id: <20231128113635.3712892-1-buildroot@heine.tech>
+ with ESMTP id T8rdvJ8iLJkU for <buildroot@lists.busybox.net>;
+ Tue, 28 Nov 2023 13:16:55 +0000 (UTC)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AEEC740192
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 13:16:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEEC740192
+Received: by mail-ed1-x530.google.com with SMTP id
+ 4fb4d7f45d1cf-5441305cbd1so7092642a12.2
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 05:16:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1701177414; x=1701782214;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=sZ6w6NYK7MLJExaBCacghn7jvxqCecqeGhA0DwYoWTE=;
+ b=bczinxA/6mkrFDsAu1RgitvA02gWPlG9TaLykMSsq2MQ/lXIAj7MMGazX62nDf3mPY
+ o43lXtQgD2AnSvawMelHPsJ97jzkUuPy6yVJhKRT7YoiF8RADrG6HFHRVzLqI+PDH+N9
+ dakcoGMSqkI0M4y4jrQgEncvJn0a5d2m9qCcDnOGP9jD3vhGwLN/KWqd25O4SyIaqS4Y
+ nUgvhdRe1ekD05WLslhsDxdJavMqkqqKnO7XafvHXdQCYv/L6bzQ3h6C48SJYYqn503X
+ ZyrX/Vuu7dVEUumyeZThp7ZTVCgYqtQ3VtyDxB4Ooz1hFkFVuv6c4+yjjmEmiLv+Hi76
+ 6lYw==
+X-Gm-Message-State: AOJu0YxsMX/HjWjuqbOtHgqclCSc2be8uBhlLAXncXAy7u5qAp7rppOi
+ AYA9hir6ESq82N1eCcvMu6KD3IyX5ySNBQ==
+X-Google-Smtp-Source: AGHT+IFGGwoEJQwhzddqff06BeKok7z45imfa8mQ35wdKAhyB5ynyig3kFbEQo5U9zJRgFjgFopBsw==
+X-Received: by 2002:a50:8ac7:0:b0:53e:4762:9373 with SMTP id
+ k7-20020a508ac7000000b0053e47629373mr10529259edk.18.1701177413589; 
+ Tue, 28 Nov 2023 05:16:53 -0800 (PST)
+Received: from wslxew193.ultratronik.de (mail.ultratronik.de. [82.100.224.114])
+ by smtp.gmail.com with ESMTPSA id
+ k11-20020a056402048b00b00537963f692esm6243150edv.0.2023.11.28.05.16.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 28 Nov 2023 05:16:50 -0800 (PST)
+From: Boerge Struempfel <boerge.struempfel@gmail.com>
+X-Google-Original-From: Boerge Struempfel <bstruempfel@ultratronik.de>
+To: 
+Date: Tue, 28 Nov 2023 14:15:49 +0100
+Message-ID: <20231128131557.44045-1-bstruempfel@ultratronik.de>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1701171405; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=Ka6UBKdKXr5bbTE66ET4GAA8uNgMW5a9tJvhFUkjkMY=;
- b=pjpYRyfT8cOTueOLuCR4Z6Wr6S1BYgZorKhqIAR41OYtM9XaXbAbFUc5AqfBcD7x66wk9T
- BVcPmfK4TcGlYlbqfH/QF1tWN00/otHBIemHRETImYfoE/SemHGctaDDJULbxd2AsIHoU7
- Y9vMUxZ3A8S7m37AigmSBgaf5NMSg+c=
+ d=gmail.com; s=20230601; t=1701177414; x=1701782214; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=sZ6w6NYK7MLJExaBCacghn7jvxqCecqeGhA0DwYoWTE=;
+ b=HvRAXoFl/hHglbKcnN4p1Y+9atDlXFiLDPlvSgMeqr7Y1w2tiulQKz7hRmapU3+167
+ +6hAbp7R/qAQk+n9IEasr9jyeFKo5RR35/zHLcqGrfXhDCDIUFyxUlQtRNLEvdLF68w8
+ SOAo0iFhbFqyHfxTeWuB4WLOyTI+ue5rStkwfKJdYRqK0eQZjl+1DR4XavV6ZQiUoQ3N
+ r17uMJI6fN5bA6uTDrEzlTj5iijxFRrRQVwVd+Pzxv55T26V5FZGAoga5LWtq0Aot4ds
+ QFgAsxCU5Mzf35Du5jx9tCp06sEor+ZDgx+WtiJ8si24aP1Pp/C9M3uzYWzU9Kc+XnBs
+ We/Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=pjpYRyfT
-Subject: [Buildroot] [PATCH] package/protobuf-c: bump to version 1.5.0
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=HvRAXoFl
+Subject: [Buildroot] [PATCH v3 0/2] Adding support for gpiod v2.0 and higher
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,146 +94,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: vfazio@xes-inc.com, bonet@grenoble.cnrs.fr, bstruempfel@ultratronik.de,
+ buildroot@buildroot.org, boerge.struempfel@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- drops support for proto2
-- fixes compatibility with protobuf >= 22.0
-- to be compatible with new protobuf versions c++17 is now required
-  when building with protoc (which we do for host) [0]
-- require host gcc >= 7 for c++17 support, propagate to depending packets
+Since libgpiod v2.0 breaks its api, and leads to
+compilation issues with multiple other packages,
+we introduce libgpiod v2.0 as a new package libgpiod2.
+Furthermore swupdate is updated to support both the
+old libpgiod and the new libgpiod2 package.
 
-[0] https://github.com/protobuf-c/protobuf-c/pull/673
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/collectd/Config.in         | 2 ++
- package/criu/Config.in             | 1 +
- package/kismet/Config.in           | 1 +
- package/protobuf-c/Config.in       | 5 +++--
- package/protobuf-c/protobuf-c.hash | 4 ++--
- package/protobuf-c/protobuf-c.mk   | 6 +++---
- package/riemann-c-client/Config.in | 1 +
- 7 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index d3b686771d..145b9a2a3a 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -738,6 +738,7 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
- 	# riemann-c-client -> protobuf-c
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_RIEMANN_C_CLIENT
- 	select BR2_PACKAGE_LIBTOOL
- 	help
-@@ -772,6 +773,7 @@ config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
- 	bool "write_prometheus"
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
-diff --git a/package/criu/Config.in b/package/criu/Config.in
-index ff3bf30229..c36569f0b1 100644
---- a/package/criu/Config.in
-+++ b/package/criu/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_CRIU_ARCH_SUPPORTS
- 	# BE/LE endian issues.
- 	depends on BR2_USE_MMU # libcap
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 
-diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-index 7bde6c92af..0ba6637ef7 100644
---- a/package/kismet/Config.in
-+++ b/package/kismet/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_KISMET
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_PROTOBUF_C
-diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-index d96cd7b382..aa2f640658 100644
---- a/package/protobuf-c/Config.in
-+++ b/package/protobuf-c/Config.in
-@@ -4,12 +4,13 @@ config BR2_PACKAGE_PROTOBUF_C
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# host-protobuf only builds on certain architectures
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # c++17
- 	help
- 	  Code generator and runtime libraries to use Protocol Buffers
- 	  from pure C (not C++).
- 
- 	  https://github.com/protobuf-c/protobuf-c
- 
--comment "protobuf-c needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "protobuf-c needs a toolchain w/ C++, threads and host gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_HOST_GCC_AT_LEAST_7
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
-index ec00442277..aafd98416a 100644
---- a/package/protobuf-c/protobuf-c.hash
-+++ b/package/protobuf-c/protobuf-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4cc4facd508172f3e0a4d3a8736225d472418aee35b4ad053384b137b220339f  protobuf-c-1.4.1.tar.gz
--sha256  b8999cb392cc5bbe8cd679de59584ad8d2f26033123e76f1d662fa14b9d4f287  LICENSE
-+sha256  7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98  protobuf-c-1.5.0.tar.gz
-+sha256  ad28bbf89340b86d15aad1ff62c4f4590025d836415307dc66cf0338235cc2f4  LICENSE
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index 0742a33db2..7f05f61405 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROTOBUF_C_VERSION = 1.4.1
-+PROTOBUF_C_VERSION = 1.5.0
- PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
-@@ -15,8 +15,8 @@ PROTOBUF_C_LICENSE = BSD-2-Clause
- PROTOBUF_C_LICENSE_FILES = LICENSE
- PROTOBUF_C_CPE_ID_VENDOR = protobuf-c_project
- 
--# host-protobuf needs c++11 (since 3.6.0)
--HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
-+# when building with protoc c++17 is now required
-+HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++17"
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
-index 6c3c35caf8..5508fd7a6d 100644
---- a/package/riemann-c-client/Config.in
-+++ b/package/riemann-c-client/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
- 	  Riemann-c-client is a C client library for the Riemann
+v2: https://lists.buildroot.org/pipermail/buildroot/2023-November/679812.html
+v1: https://lists.buildroot.org/pipermail/buildroot/2023-November/679675.html
+
+Changes from v2:
+  - Removed unnecessary Autoreconf, since the corresponding patch has been applied to the source.
+
+Changes from v1:
+  - Added myself to DEVELOPERS for the new libgpiod2 package
+  - Removed the dependency on the linux headers
+  - Updated from version 2.0.2 to 2.1
+  - Added comment in the commit message to swap the dependency in the future
+  - Added a note in the commit message, that the libgpiod2 does not correspond to the libgpiod2 debian package
+  - Updated the help text to explain the difference between libgpiod and libgpiod2
+
+
+Boerge Struempfel (2):
+  package/libgpiod2: new package
+  package/swupdate: Add compatibility to libgpiod2
+
+ DEVELOPERS                                    |   3 +
+ package/Config.in                             |   1 +
+ package/libgpiod2/Config.in                   |  27 +++
+ package/libgpiod2/libgpiod2.hash              |   4 +
+ package/libgpiod2/libgpiod2.mk                |  41 ++++
+ ...cfw-Refactored-switch_mode-signature.patch |  74 +++++++
+ ...pio-chip-and-lines-in-gpio-structure.patch | 129 +++++++++++
+ .../0004-ucfw-Refactored-gpio-handling.patch  | 132 +++++++++++
+ ...d-compatibility-with-libgpiod-v2-api.patch | 209 ++++++++++++++++++
+ package/swupdate/Config.in                    |   4 +-
+ package/swupdate/swupdate.mk                  |   5 +-
+ 11 files changed, 626 insertions(+), 3 deletions(-)
+ create mode 100644 package/libgpiod2/Config.in
+ create mode 100644 package/libgpiod2/libgpiod2.hash
+ create mode 100644 package/libgpiod2/libgpiod2.mk
+ create mode 100644 package/swupdate/0002-ucfw-Refactored-switch_mode-signature.patch
+ create mode 100644 package/swupdate/0003-ucfw-Save-the-gpio-chip-and-lines-in-gpio-structure.patch
+ create mode 100644 package/swupdate/0004-ucfw-Refactored-gpio-handling.patch
+ create mode 100644 package/swupdate/0005-ucfw-Add-compatibility-with-libgpiod-v2-api.patch
+
 -- 
-2.34.1
+2.42.0
 
 _______________________________________________
 buildroot mailing list
