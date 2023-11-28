@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 924F0C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 20:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3084C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 20:57:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 386BA81EE3;
-	Tue, 28 Nov 2023 20:57:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 386BA81EE3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EF0C81EFB;
+	Tue, 28 Nov 2023 20:57:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EF0C81EFB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id im7QAyRaHFUW; Tue, 28 Nov 2023 20:56:59 +0000 (UTC)
+	with ESMTP id 79tZ_NX4cqyg; Tue, 28 Nov 2023 20:57:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80EF88196E;
-	Tue, 28 Nov 2023 20:56:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80EF88196E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 711A11BF969
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7538817B1;
+	Tue, 28 Nov 2023 20:57:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7538817B1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 86EAF1BF97F
  for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 20:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5799860C23
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6015641797
  for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 20:56:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5799860C23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6015641797
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tkWUFDTm188i for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xyee_fwvu6Pf for <buildroot@lists.busybox.net>;
  Tue, 28 Nov 2023 20:56:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 896BC60C13
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8237E41795
  for <buildroot@buildroot.org>; Tue, 28 Nov 2023 20:56:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 896BC60C13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8237E41795
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77A1187532; Tue, 28 Nov 2023 20:56:43 +0000 (UTC)
+ id 6BB9887531; Tue, 28 Nov 2023 20:56:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Nov 2023 21:51:38 +0100
+Date: Tue, 28 Nov 2023 21:49:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d675873f4fe9b601719b08cdd8a901d73ec7f731
-X-Git-Newrev: bc96e9da0d8010482dcc50c055567d4625498088
+X-Git-Oldrev: 8ad1a2eaa5fa6c5eaa6614b007b968223e49448e
+X-Git-Newrev: d675873f4fe9b601719b08cdd8a901d73ec7f731
 X-Patchwork-Hint: ignore
-Message-Id: <20231128205643.77A1187532@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/memcached: security bump to
- version 1.6.22
+Message-Id: <20231128205643.6BB9887531@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vlc: security bump to version
+ 3.0.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc96e9da0d8010482dcc50c055567d4625498088
+commit: https://git.buildroot.net/buildroot/commit/?id=d675873f4fe9b601719b08cdd8a901d73ec7f731
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2023-46852: In Memcached before 1.6.22, a buffer overflow exists
-when processing multiget requests in proxy mode, if there are many
-spaces after the "get" substring.
+Fix CVE-2023-47359: Videolan VLC prior to version 3.0.20 contains an
+incorrect offset read that leads to a Heap-Based Buffer Overflow in
+function GetPacket() and results in a memory corruption.
 
-Fix CVE-2023-46853: In Memcached before 1.6.22, an off-by-one error
-exists when processing proxy requests in proxy mode, if \n is used
-instead of \r\n.
+Fix CVE-2023-47360: Videolan VLC prior to version 3.0.20 contains an
+Integer underflow that leads to an incorrect packet length.
 
-https://github.com/memcached/memcached/wiki/ReleaseNotes1622
+https://code.videolan.org/videolan/vlc/-/blob/3.0.20/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/vlc/vlc.hash | 8 ++++----
+ package/vlc/vlc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index c223a14bac..bd2072df0b 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.6.21.tar.gz.sha1
--sha1  6d899680b4ba4b76b6c92120143cf87630ee984a  memcached-1.6.21.tar.gz
-+# From http://www.memcached.org/files/memcached-1.6.22.tar.gz.sha1
-+sha1  7a691f390d59616dbebfc9e2e4942d499c39a338  memcached-1.6.22.tar.gz
- 
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index ef381e5934..40529bd664 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,7 +1,7 @@
+-# From https://get.videolan.org/vlc/3.0.19/vlc-3.0.19.tar.xz.sha256
+-sha256  643e3294bafe922324663ca499515b7564f2794575fd7d2b7992d20896381745  vlc-3.0.19.tar.xz
+-# From https://get.videolan.org/vlc/3.0.19/vlc-3.0.19.tar.xz.sha1
+-sha1  6d162248a26fdd76a9d4e7e3d52f40d4326f72c1  vlc-3.0.19.tar.xz
++# From https://get.videolan.org/vlc/3.0.20/vlc-3.0.20.tar.xz.sha256
++sha256  adc7285b4d2721cddf40eb5270cada2aaa10a334cb546fd55a06353447ba29b5  vlc-3.0.20.tar.xz
++# From https://get.videolan.org/vlc/3.0.20/vlc-3.0.20.tar.xz.sha1
++sha1  b834516ab701bf6311980ed5d67b77c834fdebe7  vlc-3.0.20.tar.xz
  # Locally computed
--sha256  c788980efc417dd5d93c442b1c8b8769fb2018896c29de3887d22a2f143da2ee  memcached-1.6.21.tar.gz
-+sha256  34783a90a4ccf74c4107085fd92b688749d23b276cfdad9f04e4f725a05d1ca7  memcached-1.6.22.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index a1a5eac049..05ae69eb32 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 729e928b4d..d0fc1744c0 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MEMCACHED_VERSION = 1.6.21
-+MEMCACHED_VERSION = 1.6.22
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-VLC_VERSION = 3.0.19
++VLC_VERSION = 3.0.20
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
