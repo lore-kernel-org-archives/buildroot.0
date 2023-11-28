@@ -1,68 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F36EFC4167B
-	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 15:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD674C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 16:12:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90D2E6058B;
-	Tue, 28 Nov 2023 15:49:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90D2E6058B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5566441724;
+	Tue, 28 Nov 2023 16:12:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5566441724
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zW0kTc2uVrQo; Tue, 28 Nov 2023 15:49:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5moLclXHeReV; Tue, 28 Nov 2023 16:12:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CCA261074;
-	Tue, 28 Nov 2023 15:49:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CCA261074
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A34921BF470
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 15:49:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8FFC41736;
+	Tue, 28 Nov 2023 16:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8FFC41736
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A849A1BF3F9
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 16:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6420040447
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 15:49:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6420040447
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F65E41734
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 16:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F65E41734
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sCn8mfaZ2cji for <buildroot@lists.busybox.net>;
- Tue, 28 Nov 2023 15:49:27 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BA290400D8
- for <buildroot@buildroot.org>; Tue, 28 Nov 2023 15:49:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA290400D8
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BAAC460005;
- Tue, 28 Nov 2023 15:49:21 +0000 (UTC)
-Date: Tue, 28 Nov 2023 16:49:20 +0100
-To: Brandon Maier <brandon.maier@collins.com>
-Message-ID: <20231128164920.75ac695e@bootlin.com>
-In-Reply-To: <20231127224139.35969-1-brandon.maier@collins.com>
-References: <20231127224139.35969-1-brandon.maier@collins.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: herve.codina@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1701186562;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=AwR6oVdxYGxHhbG6b/n1Reu2VspMHFKyiGguQIpP1LM=;
- b=mWIoidD4rKQWPZaTQEd007LZAbAFTWg8Wg1pKrqnqTrxBZXR/z6TJPxgXBrCfgoMqP1ebZ
- tp0qnYAa0APVWOg+KwwQ5b0apYYeW9b5N+S79I1RVe8xDpcPJfaHyQ2NoAkD7RM83cAKAW
- 4hFTyq5O6P3BC7G3AhLfeKt4f8hlHoFkzY6uoSM+siMjhDaFDze+p0fr4Ga/ev31uDZNb2
- 3rBTStn2jCj1uH/CJ45bTQ6eroZcFDKPB6IACAHXmcgSQIuLDw69369T5HvKobq6qiCJhe
- UlzH3rUOSYvBrTrtVy0erBcuyitIw3cU/+OPQhXhOoYM21pA47npI8bHaivHSw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mWIoidD4
-Subject: Re: [Buildroot] [PATCH 1/1] ppd-merge: speed up per-package-rsync
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s2v9uQj3zySD for <buildroot@lists.busybox.net>;
+ Tue, 28 Nov 2023 16:11:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A355F4172A
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 16:11:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A355F4172A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8FFE18750D; Tue, 28 Nov 2023 16:11:56 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 28 Nov 2023 17:03:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1267a234fff8c5270d8ead5541167053771636b1
+X-Git-Newrev: aa0f115bf7d1d6c63670115582b77af54a4a9653
+X-Patchwork-Hint: ignore
+Message-Id: <20231128161156.8FFE18750D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/janet: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,39 +56,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Herve Codina via buildroot <buildroot@buildroot.org>
-Reply-To: Herve Codina <herve.codina@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQnJhbmRvbiwKCk9uIE1vbiwgMjcgTm92IDIwMjMgMjI6NDE6MzkgKzAwMDAKQnJhbmRvbiBN
-YWllciA8YnJhbmRvbi5tYWllckBjb2xsaW5zLmNvbT4gd3JvdGU6CgpbLi4uXQoKPiBkaWZmIC0t
-Z2l0IGEvcGFja2FnZS9wa2ctdXRpbHMubWsgYi9wYWNrYWdlL3BrZy11dGlscy5tawo+IGluZGV4
-IDA1OWU4NmFlMGEuLjM5NjhjYWJlYmQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9wa2ctdXRpbHMu
-bWsKPiArKysgYi9wYWNrYWdlL3BrZy11dGlscy5tawo+IEBAIC0yMTYsMTkgKzIxNiw5IEBAIGlm
-ZXEgKCQoQlIyX1BFUl9QQUNLQUdFX0RJUkVDVE9SSUVTKSx5KQo+ICAjICQzOiBkZXN0aW5hdGlv
-biBkaXJlY3RvcnkKPiAgIyAkNDogbGl0ZXJhbCAiY29weSIgb3IgImhhcmRsaW5rIiB0byBjb3B5
-IG9yIGhhcmRsaW5rIGZpbGVzIGZyb20gc3JjIHRvIGRlc3QKPiAgZGVmaW5lIHBlci1wYWNrYWdl
-LXJzeW5jCj4gLQlta2RpciAtcCAkKDMpCgpTaG91bGRuJ3QgdGhlIG1rZGlyIGJlIGtlcHQgaGVy
-ZSA/Cgo+IC0JJChmb3JlYWNoIHBrZywkKDEpLFwKPiAtCQlyc3luYyAtYSBcCj4gLQkJCS0taGFy
-ZC1saW5rcyBcCj4gLQkJCSQoaWYgJChmaWx0ZXIgaGFyZGxpbmssJCg0KSksIFwKPiAtCQkJCS0t
-bGluay1kZXN0PSQoUEVSX1BBQ0tBR0VfRElSKS8kKHBrZykvJCgyKS8sIFwKPiAtCQkJCSQoaWYg
-JChmaWx0ZXIgY29weSwkKDQpKSwgXAo+IC0JCQkJCSQoZW1wdHkpLCBcCj4gLQkJCQkJJChlcnJv
-ciBwZXItcGFja2FnZS1yc3luYyBjYW4gb25seSAiY29weSIgb3IgImhhcmRsaW5rIiwgbm90ICIk
-KDQpIikgXAo+IC0JCQkJKSBcCj4gLQkJCSkgXAo+IC0JCQkkKFBFUl9QQUNLQUdFX0RJUikvJChw
-a2cpLyQoMikvIFwKPiAtCQkJJCgzKSQoc2VwKSkKPiArCVBFUl9QQUNLQUdFX0RJUj0kKFBFUl9Q
-QUNLQUdFX0RJUikgXAo+ICsJCSQoVE9QRElSKS9zdXBwb3J0L3NjcmlwdHMvcHBkLW1lcmdlLnNo
-IFwKPiArCQkkKDIpICQoMykgJCg0KSAkKDEpCgpXaGF0IGRvIHlvdSB0aGluayBhYm91dCBwYXNz
-aW5nIHRoZSBQRVJfUEFDS0FHRV9ESVIgYnkgcGFyYW1ldGVyIGluc3RlYWQgb2YKbWl4aW5nIGVu
-dmlyb25tZW50IHZhbHVlcyBhbmQgcGFyYW1ldGVycyA/Cgo+ICBlbmRlZgo+ICAKPiAgIyBwcmVw
-YXJlcyB0aGUgcGVyLXBhY2thZ2UgSE9TVF9ESVIgYW5kIFRBUkdFVF9ESVIgb2YgdGhlIGN1cnJl
-bnQKPiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC9zY3JpcHRzL3BwZC1tZXJnZS5zaCBiL3N1cHBvcnQv
-c2NyaXB0cy9wcGQtbWVyZ2Uuc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+IGluZGV4IDAwMDAw
-MDAwMDAuLmViMWNhZjllNTIKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvc3VwcG9ydC9zY3JpcHRz
-L3BwZC1tZXJnZS5zaApbLi4uXQoKCkJlc3QgcmVnYXJkcywKSGVydsOpCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=aa0f115bf7d1d6c63670115582b77af54a4a9653
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+janet unconditionally uses fork since version 1.32.0 and
+https://github.com/janet-lang/janet/commit/4b8c1ac2d2d5c13d7c8592fd6d94b34a6a8b3549
+resulting in the following build failure since bump to version 1.32.1 in
+commit c87abf01a9153a2b2fe6c046fa83c86db92d79a7:
+
+janet.c:(.text+0x19bbc): undefined reference to `fork'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f0771fc6c9905d3a6d60ce245df585b3c6096f7f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/janet/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/janet/Config.in b/package/janet/Config.in
+index 7b78c14bf4..bb4bf462aa 100644
+--- a/package/janet/Config.in
++++ b/package/janet/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_JANET
+ 	bool "janet"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	help
+ 	  Janet is a functional and imperative programming language.
+@@ -11,4 +12,5 @@ config BR2_PACKAGE_JANET
+ 	  https://janet-lang.org/
+ 
+ comment "janet needs a toolchain w/ gcc >= 4.9"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
