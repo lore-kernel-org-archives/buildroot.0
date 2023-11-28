@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24B99C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 20:52:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9189BC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 20:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0E2181EE7;
-	Tue, 28 Nov 2023 20:52:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0E2181EE7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C26A81E9E;
+	Tue, 28 Nov 2023 20:54:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C26A81E9E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LSq0agrNydEx; Tue, 28 Nov 2023 20:52:07 +0000 (UTC)
+	with ESMTP id zLWBXCfMthZA; Tue, 28 Nov 2023 20:54:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 359C381EE3;
-	Tue, 28 Nov 2023 20:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 359C381EE3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 465091BF38E
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 20:52:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8456812DA;
+	Tue, 28 Nov 2023 20:54:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8456812DA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EFE881BF38E
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 20:54:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F99081E9E
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 20:52:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F99081E9E
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5DA44176A
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 20:54:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5DA44176A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ir0wpE-7yY4J for <buildroot@lists.busybox.net>;
- Tue, 28 Nov 2023 20:52:03 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2A566812DA
- for <buildroot@buildroot.org>; Tue, 28 Nov 2023 20:52:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A566812DA
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DE45340003;
- Tue, 28 Nov 2023 20:51:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cn0PXyNk53WF for <buildroot@lists.busybox.net>;
+ Tue, 28 Nov 2023 20:54:20 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC96641768
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 20:54:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC96641768
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E324D240002;
+ Tue, 28 Nov 2023 20:54:16 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r853m-00GUdR-39;
- Tue, 28 Nov 2023 21:51:58 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r8560-00GUmX-0l;
+ Tue, 28 Nov 2023 21:54:16 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231128201433.407879-1-fontaine.fabrice@gmail.com>
-Date: Tue, 28 Nov 2023 21:51:58 +0100
-In-Reply-To: <20231128201433.407879-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 28 Nov 2023 21:14:33 +0100")
-Message-ID: <87zfyxbnyp.fsf@48ers.dk>
+References: <20231128202113.479207-1-fontaine.fabrice@gmail.com>
+Date: Tue, 28 Nov 2023 21:54:16 +0100
+In-Reply-To: <20231128202113.479207-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 28 Nov 2023 21:21:13 +0100")
+Message-ID: <87v89lbnuv.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/memcached: security bump to
- version 1.6.22
+Subject: Re: [Buildroot] [PATCH 1/1] package/squid: security bump to version
+ 6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,15 +71,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix CVE-2023-46852: In Memcached before 1.6.22, a buffer overflow exists
- > when processing multiget requests in proxy mode, if there are many
- > spaces after the "get" substring.
+ > Fix CVE-2023-5824, CVE-2023-46724, CVE-2023-46846, CVE-2023-46847 and
+ > CVE-2023-46848
 
- > Fix CVE-2023-46853: In Memcached before 1.6.22, an off-by-one error
- > exists when processing proxy requests in proxy mode, if \n is used
- > instead of \r\n.
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-543m-w2m2-g255
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-j83v-w3p4-5cqh
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-73m6-jm96-c6r3
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-phqj-m8gv-cq4g
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-2g3c-pg7q-g59w
 
- > https://github.com/memcached/memcached/wiki/ReleaseNotes1622
+ > https://github.com/squid-cache/squid/blob/SQUID_6_5/ChangeLog
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
