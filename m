@@ -1,45 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D90C7C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 18:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3881FC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 19:47:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A43581E4D;
-	Tue, 28 Nov 2023 18:27:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A43581E4D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C44A5417A0;
+	Tue, 28 Nov 2023 19:47:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C44A5417A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M1brSdiYEjsg; Tue, 28 Nov 2023 18:27:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pek6pek51u8L; Tue, 28 Nov 2023 19:47:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC3B2818BE;
-	Tue, 28 Nov 2023 18:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC3B2818BE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C71771BF28F
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 18:27:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18A224179D;
+	Tue, 28 Nov 2023 19:46:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18A224179D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 82E1B1BF311
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 19:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9EFAC819F5
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 18:27:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EFAC819F5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B8D660C24
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 19:46:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B8D660C24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BfDVifAZk8As for <buildroot@lists.busybox.net>;
- Tue, 28 Nov 2023 18:27:25 +0000 (UTC)
-Received: from busybox.net (unknown [141.98.10.75])
- by smtp1.osuosl.org (Postfix) with ESMTP id A809B818BE
- for <buildroot@busybox.net>; Tue, 28 Nov 2023 18:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A809B818BE
-From: Postmaster <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 28 Nov 2023 19:27:21 +0100
-Message-ID: <20231128192721.DDD6A93E6C294F00@busybox.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sWlRpCEhcsDL for <buildroot@lists.busybox.net>;
+ Tue, 28 Nov 2023 19:46:56 +0000 (UTC)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 06AF960C02
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 19:46:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06AF960C02
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-332e3664665so3544700f8f.0
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 11:46:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1701200813; x=1701805613;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Lg5u6YVcJTJ9rZbjsqvzgBQFLM3pNDp9l6oUuLzPjVY=;
+ b=P8win/lkxnrRuqMRTriOQbTcMSFzr7NM2kC/9XPk7Y/u/k8CjOf74NmHokNtZnQvt/
+ +HnE3DQNJLKFnQp0jT38USZc4JunBUrCE2zc0AzYFjcWLJX9tVuj7gC1pMAkl7zBN9OP
+ X4TUpX4RrQy36WGEa4sOuRVXA3/3fNPprq1qp0pG/ueh4d0lAEUmuRFnvtslvMKpXr0Y
+ k2hcCZAg+4TuZr8ucmHs4C0GsTm2TgpHgXTHoREWP0uRh0ZcNa+7vFiW6OgCQkS/CbAR
+ gg+dVX/LGgESlHoN6Pwuwk9U7rvMeohpZeT2k1bY/8+A88T0Efqnq0C7POz0LpTzCrrx
+ NpCQ==
+X-Gm-Message-State: AOJu0Yzd9KZqajp6GYZnNmeg2hXaI2BqtcILDk7hDDqWc1QRpTz7P6Ve
+ l8FOeiQAVbm6ddx3k8rll77C16jPOO8=
+X-Google-Smtp-Source: AGHT+IEcgYXhxbaCOF7htbRfv7ZqyQ0ajBYsoaHIK+ahg7clLyFyhUIGwHcQOzitrtB7Y/S/oZtmEw==
+X-Received: by 2002:adf:f9c6:0:b0:333:69:41fc with SMTP id
+ w6-20020adff9c6000000b00333006941fcmr6311389wrr.30.1701200813009; 
+ Tue, 28 Nov 2023 11:46:53 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ n8-20020a05600c3b8800b0040b398f0585sm16075941wms.9.2023.11.28.11.46.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 28 Nov 2023 11:46:52 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 28 Nov 2023 20:46:47 +0100
+Message-ID: <20231128194647.12817-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Subject: [Buildroot] Your mailbox is full
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1701200813; x=1701805613; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Lg5u6YVcJTJ9rZbjsqvzgBQFLM3pNDp9l6oUuLzPjVY=;
+ b=NFW14kAjtUOnS1Rt92JxI4UTppiAKs7/MzyhKvlGatDlDojnAVItgm+W4n9s9XVB2f
+ gM4C1b5JnpXpK+McfPQ7VlBUJbqgxcG02Cbt+dpMA/RMSnpiDsKsdYDqkwQfCFoqCE64
+ xE+H877d/PbwAgaNjnJ7ZRpiPzgp93n2YanHEzysIOsW0ruZ9pv3LUZQc/zLuJAFLGdg
+ aaI7qqGJwEIbCFxgXl5VI19/PkQNBfR28/odArgRraTdyhrqY/gzVxPIcTBMyUeP8vTE
+ b/SVi6Wl5l55TrrLs7Q9j/ZMna3ZQee0NcR904G7NnReDCAVcrI89uR5WKnPSaVPS7QQ
+ wHHw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=NFW14kAj
+Subject: [Buildroot] [PATCH 1/1] system/Config.in: disable openrc with uclibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -51,107 +93,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1652701908165381190=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1652701908165381190==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+openrc raises the following uclibc build failures since bump to version
+0.51 in commit 730c90faa3ec13ee1ead47113c9c5c7d3a8dac55:
 
-<!DOCTYPE HTML>
+../src/rc-abort/rc-abort.c: In function 'main':
+../src/rc-abort/rc-abort.c:27:21: error: implicit declaration of function 'kill'; did you mean 'killpg'? [-Werror=implicit-function-declaration]
+   27 |                 if (kill(pid, SIGUSR1) != 0)
+      |                     ^~~~
+      |                     killpg
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
-<body style=3D"margin: 0.4em;">
-<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
-; text-indent: 0px; letter-spacing: normal; font-family: "Lucida Grande", V=
-erdana, Arial, Helvetica, sans-serif; font-size: 1.2em; font-style: normal;=
- font-weight: 600; margin-top: 0px; margin-bottom: 1.5em; word-spacing: 0px=
-; white-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 25=
-5, 255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit=
--text-stroke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;'><=
-font style=3D"vertical-align: inherit;">Your mailbox is almost full. </font=
-></p>
-<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
-(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
-l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
-t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
-e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
-nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
-caps: normal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
-<tbody><tr style=3D"height: 0.5em;"><td style=3D"background: 0% 50% rgb(218=
-, 60, 47); margin: 0px; width: 321px; font-family: Roboto, RobotoDraft, Hel=
-vetica, Arial, sans-serif;">&nbsp;</td><td style=3D"background: 0% 50% rgb(=
-224, 224, 224); margin: 0px; font-family: Roboto, RobotoDraft, Helvetica, A=
-rial, sans-serif;">&nbsp;</td></tr></tbody></table>
-<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
-(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
-l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
-t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
-e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
-nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
-caps: normal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
-<tbody><tr><td align=3D"left" style=3D"margin: 0px; font-family: Roboto, Ro=
-botoDraft, Helvetica, Arial, sans-serif;"><span style=3D"color: rgb(218, 60=
-, 47); font-weight: bold;"><font style=3D"vertical-align: inherit;">4.86 GB=
- </font></span></td><td align=3D"right" style=3D"margin: 0px; font-family: =
-Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">
-<span style=3D"font-weight: bold;"><font style=3D"vertical-align: inherit;"=
->4.18 GB </font></span></td></tr>
-</tbody></table>
-<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
-ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
- "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
-ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
-; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
--ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
-px; text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;'><font styl=
-e=3D"vertical-align: inherit;">You&nbsp;might experience delays or can&nbsp=
-;no longer send and receive messages.<br></font><br><a style=3D"text-decora=
-tion: none;" href=3D"cloudflare-ipfs.com/ipfs/bafkreifzgx3oswi24mqzm5s2ckho=
-4iimassvdrgbnxeg5xr2v4taka3254?#buildroot@busybox.net">
-<span style=3D"background: linear-gradient(rgb(192, 192, 192) 0%, rgb(148, =
-148, 148) 100%); padding: 5px 10px; border-radius: 8px; border: 1px solid r=
-gb(8, 44, 64); border-image: none; text-align: center; color: rgb(227, 66, =
-52); letter-spacing: 2px; font-size: 24px; font-variant: small-caps; font-w=
-eight: bold; position: relative; cursor: pointer; box-shadow: 1px 3px 5px 2=
-px #c0c0c0; text-shadow: 1px 1px 1px rgba(5,29,41,1); -ms-user-select: none=
-; -webkit-box-shadow: 1px 3px 5px 2px #c0c0c0;=20
--moz-box-shadow: 1px 3px 5px 2px #c0c0c0; -webkit-touch-callout: none; -web=
-kit-user-select: none; -khtml-user-select: none; -moz-user-select: none; us=
-er-select: none;">Clear Storage</span></a><br>
-<br></p>
-<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
-ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
- "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
-ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
-; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
--ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
-px; text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;'><b style=
-=3D"font-weight: bolder;"><font style=3D"vertical-align: inherit;">Mailbox =
-address: </font><br></b><font style=3D"vertical-align: inherit;"><a href=3D=
-"mailto:m@hieterrace.com">buildroot@busybox.net</a></font></p></body></html=
->
+../src/libeinfo/libeinfo.c: In function 'colour_terminal':
+../src/libeinfo/libeinfo.c:319:26: error: implicit declaration of function 'fileno' [-Werror=implicit-function-declaration]
+  319 |         if (f && !isatty(fileno(f)))
+      |                          ^~~~~~
 
---===============1652701908165381190==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+../src/librc/librc-misc.c: In function 'rc_getfile':
+../src/librc/librc-misc.c:79:14: error: implicit declaration of function 'fileno'; did you mean 'd_fileno'? [-Werror=implicit-function-declaration]
+   79 |         fd = fileno(fp);
+      |              ^~~~~~
+      |              d_fileno
+
+../src/librc/librc-daemon.c: In function 'rc_service_daemons_crashed':
+../src/librc/librc-daemon.c:633:37: error: implicit declaration of function 'kill'; did you mean 'killpg'? [-Werror=implicit-function-declaration]
+  633 |                                 if (kill(pid, 0) == -1 && errno == ESRCH)
+      |                                     ^~~~
+      |                                     killpg
+
+These build failures could be fixed by patching openrc but upstream
+is not happy with this patch: https://github.com/OpenRC/openrc/pull/674.
+
+So, as advised by Yann E. Morin, openrc is hided away for uClibc, until
+upstream has a proper fix.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/494ef392a971ddb3c5c7b01e0149c6439018dbe7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ system/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/system/Config.in b/system/Config.in
+index 0b4dc9543e..b90e40e415 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -105,12 +105,13 @@ config BR2_INIT_OPENRC
+ 	bool "OpenRC"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	select BR2_PACKAGE_OPENRC
+ 	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_ROOTFS_SKELETON_DEFAULT
+ 
+-comment "openrc needs a toolchain w/ dynamic library"
++comment "openrc needs a glibc or musl toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS && BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 
+ # In Buildroot, we decided not to support a split-usr when systemd is
+ # used as an init system. This is a design decision, not a systemd
+-- 
+2.42.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1652701908165381190==--
