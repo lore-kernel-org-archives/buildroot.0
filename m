@@ -4,86 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 365DBC4167B
-	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 03:46:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68006C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 06:40:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1B3681B14;
-	Tue, 28 Nov 2023 03:46:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1B3681B14
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF99881C81;
+	Tue, 28 Nov 2023 06:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF99881C81
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OgEumH2jYRn5; Tue, 28 Nov 2023 03:46:54 +0000 (UTC)
+	with ESMTP id bojDoWhRR3dd; Tue, 28 Nov 2023 06:40:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 944A481B17;
-	Tue, 28 Nov 2023 03:46:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 944A481B17
+	by smtp1.osuosl.org (Postfix) with ESMTP id C081981CA0;
+	Tue, 28 Nov 2023 06:40:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C081981CA0
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 94D331BF5AD
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 03:46:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 729A61BF338
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 06:40:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A8EA414A1
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 03:46:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A8EA414A1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0AF8241365
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 06:40:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AF8241365
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UUE3mAZTXeLP for <buildroot@lists.busybox.net>;
- Tue, 28 Nov 2023 03:46:50 +0000 (UTC)
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
- [IPv6:2607:f8b0:4864:20::22c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 32A07410E6
- for <buildroot@buildroot.org>; Tue, 28 Nov 2023 03:46:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32A07410E6
-Received: by mail-oi1-x22c.google.com with SMTP id
- 5614622812f47-3b86f3cdca0so1136070b6e.3
- for <buildroot@buildroot.org>; Mon, 27 Nov 2023 19:46:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701143209; x=1701748009;
- h=subject:from:content-language:to:user-agent:mime-version:date
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=pGk42a+If1PjeyxZT55/oKL12VS0T6IVPlHH+QtTB20=;
- b=Q37+w3z7I8mJAcglit1BHm5WK4ue2ylscRghS7dEa0ETeMeSW7zEI8n7Cd1MmV0+0/
- dV98rsh0Afb2nANS/XojqHhZ1axw0hJtv+pJ1aglHfVEkSlIuGeTWTzsE/hMJL+mVyqY
- lyMddSTPOFDgRAxzGfmvTsg2CkYtQl/GS+k6B2ldF1LArZujTBAkQsiTKwrKLYNaMQa7
- 1x/XNw2BlAOtAXCNOw5YE0JUh8EAKyuV8BYhOE01JPFAp2IePJJEwHqxB/798e2SVB/Q
- DbxV+0h0We3Wy3L8kIGwhmayI1XOMex2RrL++DYlpd550XET9XeijXPA+ocS0mGfo090
- qiPQ==
-X-Gm-Message-State: AOJu0YyDEsd0KljkZA5h/bsZbD2TfEXO3dxj4tlRwtOMR9cTgV4HLSmI
- G69RAPk15zZ52EtsJeS2iAb9Ml09geQ=
-X-Google-Smtp-Source: AGHT+IGR3LVcvtln51wqPkYpqsD8eDcjQ4rkA2eOfGCYmIuf1MxMOJNx64YfcQNzs4PR08jYJ3LraA==
-X-Received: by 2002:a05:6808:f94:b0:3ae:144f:f99b with SMTP id
- o20-20020a0568080f9400b003ae144ff99bmr17577503oiw.4.1701143208726; 
- Mon, 27 Nov 2023 19:46:48 -0800 (PST)
-Received: from [192.168.2.238] ([71.198.210.168])
- by smtp.gmail.com with ESMTPSA id
- x23-20020aa793b7000000b006cb638ba1aasm7813953pff.49.2023.11.27.19.46.48
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 27 Nov 2023 19:46:48 -0800 (PST)
-Message-ID: <e9d5821b-46f9-4a8c-bcc6-2d8410b6c071@gmail.com>
-Date: Mon, 27 Nov 2023 19:46:47 -0800
+ with ESMTP id HaubqChRPtaM for <buildroot@lists.busybox.net>;
+ Tue, 28 Nov 2023 06:40:47 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D0CC5410E5
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 06:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0CC5410E5
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C944CE000A
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 06:40:43 +0000 (UTC)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
 To: buildroot@buildroot.org
-Content-Language: en-US
-From: hg <gpfw.hgiang@gmail.com>
+Date: Tue, 28 Nov 2023 06:40:43 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20231128064049.0AF8241365@smtp4.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701143209; x=1701748009; darn=buildroot.org;
- h=subject:from:content-language:to:user-agent:mime-version:date
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=pGk42a+If1PjeyxZT55/oKL12VS0T6IVPlHH+QtTB20=;
- b=B0CaIIwWX4xSzjm92cU6Kd1D8xbeh38ehYzzox872kTqOHnNgt2UYNse+93DHtW72+
- gTpOtvYjq9nf56f3UAEYoPwHWZOPfOla6Clh9uw2W5J7SJdyoBhjzWMV2Gbv2Y/4oSmn
- hUv/BDx+J0lxoobHM/1qZ02pFJf5+C1lUjrYkTCHFAphsL+MM3nN5L9i9a/w59wX6Iax
- v3vXEPexh41d7kXXR1kVOqnEJ8W2PRwvXe3imsvI9kj0kdado6SdqSot5BUJdheH9aOR
- 0xkVF6Qc7+DbUcr+8JzWn8cZ5aIPBL5We9JS7m6Dk5jbL7aSLaqkHEyjZCDu1QraWz3M
- QmDA==
+ d=bootlin.com; s=gm1; 
+ t=1701153643; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=1r4Zr0lFJEVmvH30AYud6wTDx5KI/DFbhsigoxoics0=;
+ b=n9pSdCAhs1wP7HRPer1BgusyAot3TQ45C0GnNNCIIbJTKbvB7kz2AEXmfS6TZTnd0ZiKQ4
+ 0Pr2D5kyZpkW+ByNwM127doXeo6+qvMgt5Bn4K8Jm63bt+0oadLFprWtGx3Irekgn9HTg1
+ orGBC9b/iUJd2KByRqa+qrJ7Bhl7AWbwqLu84tcXN4o7X/3XlPaMWDJJn3ftJywbgWNJqr
+ MZCWsjE6EXec9DoiRTf7m0CcMKpgWurbGHr8mp6NZP9qAP8E/gDb7ct5pEInHjPIQlveCF
+ 52bn2MmyZiiLeruDID+LUjoLv0HZw0+Kod1BQHohESsnYF6lxwIyCPfvqksa0A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=B0CaIIwW
-Subject: [Buildroot] buildroot 2023.08 on STM32F429 Disco
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=n9pSdCAh
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-11-27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,265 +69,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3994426091832441301=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============3994426091832441301==
-Content-Type: multipart/alternative;
- boundary="------------Gx0HBidjSBZEhV8W5eADiTVx"
-Content-Language: en-US
+Hello,
 
-This is a multi-part message in MIME format.
---------------Gx0HBidjSBZEhV8W5eADiTVx
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autobuild statistics for 2023-11-27
+===================================
 
-Hi,
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  3  |  2  |  0  |  5  |
+  2023.08.x  |  5  |  2  |  0  |  7  |
+    master   | 50  | 43  |  2  | 95  |
 
-I've tried buildroot 2023.08 on STM32F429 Disco board recently and faced 
-following issues:
+Classification of failures by reason for master
+-----------------------------------------------
 
-- Can't enter anything into console to login
-
-- LCD doesn't display (this could be the that the kernel crashes 
-already, so I wouldn't worry too much about this atm)
-
-Further debugging suggest Stack corrupted (I enabled Stack Protection):
-
-    x080de188 in __loop_delay () (gdb) bt #0  0x080de188 in __loop_delay
-    () #1  0x080f042c in panic () #2  0x080f244a in __stack_chk_fail ()
-    #3  0x0813f1ca in __inflate_kernel_data () #4  0x0813cbf0 in
-    __mmap_switched ()
-
-Anyone can suggest a fix for this issue? This is XIP image and the chip 
-has very limited memory.
-
-This is the console log before it hangs (I only upgraded kernel to 
-6.1.63, the rest was default from Buildroot 2023.08)
-
-    [    0.000000] Booting Linux on physical CPU 0x0 [    0.000000]
-    Linux version 6.1.63
-    (arm-buildroot-uclinux-uclibcgnueabi-gcc.br_real (Buildroot
-    2023.08-1-g5292a466fb) 12.3.0, GNU ld (GNU Binutils) 2.40) #2
-    PREEMPT Mon Nov 27 00:23:16 PST 2023 [    0.000000] CPU: ARMv7-M
-    [410fc241] revision 1 (ARMv7M), cr=00000000 [    0.000000] CPU:
-    unknown data cache, unknown instruction cache [    0.000000] OF:
-    fdt: Machine model: STMicroelectronics STM32F429i-DISCO board [   
-    0.000000] Zone ranges: [    0.000000]   Normal   [mem
-    0x0000000090000000-0x00000000907fffff] [    0.000000] Movable zone
-    start for each node [    0.000000] Early memory node ranges [   
-    0.000000]   node   0: [mem 0x0000000090000000-0x00000000907fffff]
-    [    0.000000] Initmem setup node 0 [mem
-    0x0000000090000000-0x00000000907fffff] [    0.000000] pcpu-alloc: s0
-    r0 d32768 u32768 alloc=1*32768 [    0.000000] pcpu-alloc: [0] 0 [   
-    0.000000] Built 1 zonelists, mobility grouping off.  Total pages:
-    2032 [    0.000000] Kernel command line: root=/dev/ram [   
-    0.000000] Dentry cache hash table entries: 1024 (order: 0, 4096
-    bytes, linear) [    0.000000] Inode-cache hash table entries: 1024
-    (order: 0, 4096 bytes, linear) [    0.000000] mem auto-init:
-    stack:all(zero), heap alloc:off, heap free:off [    0.000000]
-    Memory: 7876K/8192K available (1002K kernel code, 69K rwdata, 216K
-    rodata, 74K init, 45K bss, 316K reserved, 0K cma-reserved) [   
-    0.000000] rcu: Preemptible hierarchical RCU implementation. [   
-    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is
-    100 jiffies. [    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated
-    irqs: 16 [    0.000000] /soc/interrupt-controller@40013c00: bank0
-    [    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on
-    contention. [    0.000000] clocksource: arm_system_timer: mask:
-    0xffffff max_cycles: 0xffffff, max_idle_ns: 355517175 ns [   
-    0.000000] ARM System timer initialized as clocksource [    0.000011]
-    sched_clock: 32 bits at 84MHz, resolution 11ns, wraps every
-    25565281274ns [    0.000155] timers@40000c00: STM32 sched_clock
-    registered [    0.000263] Switching to timer-based delay loop,
-    resolution 11ns [    0.000341] timers@40000c00: STM32 delay timer
-    registered [    0.000446] clocksource: timers@40000c00: mask:
-    0xffffffff max_cycles: 0xffffffff, max_idle_ns: 22753100554 ns [   
-    0.000649] /soc/timers@40000c00: STM32 clockevent driver initialized
-    (32 bits) [    0.003076] Calibrating delay loop (skipped), value
-    calculated using timer frequency.. 168.00 BogoMIPS (lpj=84000) [   
-    0.003248] pid_max: default: 4096 minimum: 301 [    0.003688]
-    Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-    [    0.003980] Mountpoint-cache hash table entries: 1024 (order: 0,
-    4096 bytes, linear) [    0.019413] rcu: Hierarchical SRCU
-    implementation. [    0.019468] rcu:     Max phase no-delay instances
-    is 400. [    0.024442] devtmpfs: initialized [    0.257147]
-    clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff,
-    max_idle_ns: 1911260446275000 ns [    0.257625] pinctrl core:
-    initialized pinctrl subsystem [    0.441498] stm32f429-pinctrl
-    soc:pinctrl@40020000: GPIOA bank added [    0.444993]
-    stm32f429-pinctrl soc:pinctrl@40020000: GPIOB bank added [   
-    0.453497] stm32f429-pinctrl soc:pinctrl@40020000: GPIOC bank added
-    [    0.461149] stm32f429-pinctrl soc:pinctrl@40020000: GPIOD bank
-    added [    0.464614] stm32f429-pinctrl soc:pinctrl@40020000: GPIOE
-    bank added [    0.473104] stm32f429-pinctrl soc:pinctrl@40020000:
-    GPIOF bank added [    0.476777] stm32f429-pinctrl
-    soc:pinctrl@40020000: GPIOG bank added [    0.484763]
-    stm32f429-pinctrl soc:pinctrl@40020000: GPIOH bank added [   
-    0.490909] stm32f429-pinctrl soc:pinctrl@40020000: GPIOI bank added
-    [    0.494343] stm32f429-pinctrl soc:pinctrl@40020000: GPIOJ bank
-    added [    0.503230] stm32f429-pinctrl soc:pinctrl@40020000: GPIOK
-    bank added [    0.503503] stm32f429-pinctrl soc:pinctrl@40020000:
-    Pinctrl STM32 initialized [    0.678526] stm32-dma
-    40026000.dma-controller: STM32 DMA driver registered [    0.711907]
-    stm32-dma 40026400.dma-controller: STM32 DMA driver registered [   
-    0.728203] clocksource: Switched to clocksource timers@40000c00 [   
-    0.780779] workingset: timestamp_bits=30 max_order=11 bucket_order=0
-    [    1.157699] STM32 USART driver initialized [    1.174322]
-    40011000.serial: ttySTM0 at MMIO 0x40011000 (irq = 47, base_baud =
-    5250000) is a stm32-usart [    1.694863] printk: console [ttySTM0]
-    enabled [    1.730462] stm32_rtc 40002800.rtc: registered as rtc0
-    [    1.736328] stm32_rtc 40002800.rtc: setting system clock to
-    2000-01-01T03:02:48 UTC (946695768) [    1.747677] stm32_rtc
-    40002800.rtc: Date/Time must be initialized [    2.075660] Freeing
-    unused kernel image (initmem) memory: 24K [    2.081881] This
-    architecture does not have kernel memory protection. [    2.088952]
-    Run /init as init process [    2.092970]   with arguments: [   
-    2.096321]     /init [    2.098791]   with environment: [   
-    2.102341]     HOME=/ [    2.105028]     TERM=linux seedrng: can't
-    determine pool size, assuming 256 bits: No such file or directory
-    Saving 256 bits of non-creditable seed for next boot Welcome to
-    Buildroot (none) login:
+                libressl-3.8.2 | 8 
+              host-rust-1.71.1 | 3 
+                       unknown | 3 
+glibc-2.38-27-g750a45a78390... | 2 
+  gobject-introspection-1.76.1 | 2 
+            host-erlang-26.0.2 | 2 
+                   linux-6.6.1 | 2 
+                   openrc-0.51 | 2 
+                  acpid-2.0.34 | 1 
+  binutils-arc-2020.09-release | 1 
+check-11970a7e112dfe243a2e6... | 1 
+                 coreutils-9.3 | 1 
+          cryptodev-linux-1.13 | 1 
+                   duma-2.5.15 | 1 
+                     file-5.45 | 1 
+         gobject-introspection | 1 
+                     gsl-2.7.1 | 1 
+         host-gcc-final-12.3.0 | 1 
+                host-go-1.21.4 | 1 
+          imagemagick-7.1.0-51 | 1 
+           libfreeimage-3.18.0 | 1 
+                libselinux-3.5 | 1 
+          linux-5.10.162-cip24 | 1 
+            linux-fusion-9.0.3 | 1 
+              liquid-dsp-1.5.0 | 1 
+                  motion-4.5.1 | 1 
+                    mpv-0.35.1 | 1 
+                  nginx-1.24.0 | 1 
+         openfpgaloader-0.10.0 | 1 
 
 
---------------Gx0HBidjSBZEhV8W5eADiTVx
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Detail of failures for master
+-----------------------------
 
-<!DOCTYPE html>
-<html>
-  <head>
-
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <p>Hi,</p>
-    <p>I've tried buildroot 2023.08 on STM32F429 Disco board recently 
-      and faced following issues:</p>
-    <p>- Can't enter anything into console to login</p>
-    <p>- LCD doesn't display (this could be the that the kernel crashes
-      already, so I wouldn't worry too much about this atm)</p>
-    <p>Further debugging suggest Stack corrupted (I enabled Stack
-      Protection):</p>
-    <blockquote>
-      <pre><font size="4" face="monospace">x080de188 in __loop_delay ()
-(gdb) bt
-#0  0x080de188 in __loop_delay ()
-#1  0x080f042c in panic ()
-#2  0x080f244a in __stack_chk_fail ()
-#3  0x0813f1ca in __inflate_kernel_data ()
-#4  0x0813cbf0 in __mmap_switched ()</font>
-</pre>
-    </blockquote>
-    <p>Anyone can suggest a fix for this issue? This is XIP image and
-      the chip has very limited memory.<br>
-    </p>
-    <p>This is the console log before it hangs (I only upgraded kernel
-      to 6.1.63, the rest was default from Buildroot 2023.08)<br>
-    </p>
-    <blockquote>
-      <pre><font size="4">[    0.000000] Booting Linux on physical CPU 0x0
-[    0.000000] Linux version 6.1.63 (arm-buildroot-uclinux-uclibcgnueabi-gcc.br_real (Buildroot 2023.08-1-g5292a466fb) 12.3.0, GNU ld (GNU Binutils) 2.40) #2 PREEMPT Mon Nov 27 00:23:16 PST 2023
-[    0.000000] CPU: ARMv7-M [410fc241] revision 1 (ARMv7M), cr=00000000
-[    0.000000] CPU: unknown data cache, unknown instruction cache
-[    0.000000] OF: fdt: Machine model: STMicroelectronics STM32F429i-DISCO board
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000090000000-0x00000000907fffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000090000000-0x00000000907fffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000090000000-0x00000000907fffff]
-[    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
-[    0.000000] pcpu-alloc: [0] 0 
-[    0.000000] Built 1 zonelists, mobility grouping off.  Total pages: 2032
-[    0.000000] Kernel command line: root=/dev/ram
-[    0.000000] Dentry cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-[    0.000000] Inode-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-[    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
-[    0.000000] Memory: 7876K/8192K available (1002K kernel code, 69K rwdata, 216K rodata, 74K init, 45K bss, 316K reserved, 0K cma-reserved)
-[    0.000000] rcu: Preemptible hierarchical RCU implementation.
-[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
-[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
-[    0.000000] /soc/interrupt-controller@40013c00: bank0
-[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
-[    0.000000] clocksource: arm_system_timer: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 355517175 ns
-[    0.000000] ARM System timer initialized as clocksource
-[    0.000011] sched_clock: 32 bits at 84MHz, resolution 11ns, wraps every 25565281274ns
-[    0.000155] timers@40000c00: STM32 sched_clock registered
-[    0.000263] Switching to timer-based delay loop, resolution 11ns
-[    0.000341] timers@40000c00: STM32 delay timer registered
-[    0.000446] clocksource: timers@40000c00: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 22753100554 ns
-[    0.000649] /soc/timers@40000c00: STM32 clockevent driver initialized (32 bits)
-[    0.003076] Calibrating delay loop (skipped), value calculated using timer frequency.. 168.00 BogoMIPS (lpj=84000)
-[    0.003248] pid_max: default: 4096 minimum: 301
-[    0.003688] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-[    0.003980] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-[    0.019413] rcu: Hierarchical SRCU implementation.
-[    0.019468] rcu:     Max phase no-delay instances is 400.
-[    0.024442] devtmpfs: initialized
-[    0.257147] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
-[    0.257625] pinctrl core: initialized pinctrl subsystem
-[    0.441498] stm32f429-pinctrl soc:pinctrl@40020000: GPIOA bank added
-[    0.444993] stm32f429-pinctrl soc:pinctrl@40020000: GPIOB bank added
-[    0.453497] stm32f429-pinctrl soc:pinctrl@40020000: GPIOC bank added
-[    0.461149] stm32f429-pinctrl soc:pinctrl@40020000: GPIOD bank added
-[    0.464614] stm32f429-pinctrl soc:pinctrl@40020000: GPIOE bank added
-[    0.473104] stm32f429-pinctrl soc:pinctrl@40020000: GPIOF bank added
-[    0.476777] stm32f429-pinctrl soc:pinctrl@40020000: GPIOG bank added
-[    0.484763] stm32f429-pinctrl soc:pinctrl@40020000: GPIOH bank added
-[    0.490909] stm32f429-pinctrl soc:pinctrl@40020000: GPIOI bank added
-[    0.494343] stm32f429-pinctrl soc:pinctrl@40020000: GPIOJ bank added
-[    0.503230] stm32f429-pinctrl soc:pinctrl@40020000: GPIOK bank added
-[    0.503503] stm32f429-pinctrl soc:pinctrl@40020000: Pinctrl STM32 initialized
-[    0.678526] stm32-dma 40026000.dma-controller: STM32 DMA driver registered
-[    0.711907] stm32-dma 40026400.dma-controller: STM32 DMA driver registered
-[    0.728203] clocksource: Switched to clocksource timers@40000c00
-[    0.780779] workingset: timestamp_bits=30 max_order=11 bucket_order=0
-[    1.157699] STM32 USART driver initialized
-[    1.174322] 40011000.serial: ttySTM0 at MMIO 0x40011000 (irq = 47, base_baud = 5250000) is a stm32-usart
-[    1.694863] printk: console [ttySTM0] enabled
-[    1.730462] stm32_rtc 40002800.rtc: registered as rtc0
-[    1.736328] stm32_rtc 40002800.rtc: setting system clock to 2000-01-01T03:02:48 UTC (946695768)
-[    1.747677] stm32_rtc 40002800.rtc: Date/Time must be initialized
-[    2.075660] Freeing unused kernel image (initmem) memory: 24K
-[    2.081881] This architecture does not have kernel memory protection.
-[    2.088952] Run /init as init process
-[    2.092970]   with arguments:
-[    2.096321]     /init
-[    2.098791]   with environment:
-[    2.102341]     HOME=/
-[    2.105028]     TERM=linux
-seedrng: can't determine pool size, assuming 256 bits: No such file or directory
-Saving 256 bits of non-creditable seed for next boot
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mips64    |          acpid-2.0.34          | NOK | http://autobuild.buildroot.net/results/7f7c36269e0fdb05630a77b3c3b95ec2874aef55 | ORPH
+    arc      |  binutils-arc-2020.09-release  | NOK | http://autobuild.buildroot.net/results/677cdca6886bc48690b13dca1997653c8980c4cf |     
+   arceb     | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/d9606604b6dbb73461f71958814cda8ffe17f957 | ORPH
+    arc      |         coreutils-9.3          | NOK | http://autobuild.buildroot.net/results/a247436c4840aa7cdf8668451e7d69330f3df597 | ORPH
+    or1k     |      cryptodev-linux-1.13      | NOK | http://autobuild.buildroot.net/results/8c67e0cc0f5aa653b31c5dc38b2b228f7010260e | ORPH
+    mips     |          duma-2.5.15           | NOK | http://autobuild.buildroot.net/results/c20e8a60ae115219da0d290867d9d76a6a209519 | ORPH
+    i686     |           file-5.45            | NOK | http://autobuild.buildroot.net/results/5314459347b79cbda8c7c9b2ee7a987be82297da | ORPH
+  powerpc    | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/e791f9c2c180b3350852754b0f3c811206e7cf23 |     
+ powerpc64   | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/7d54277971d174e7012428017029f8c6fa87c9c0 |     
+ microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/2d506ee9141812b47c76b3e80df30731fe99657d |     
+  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/90efdf9a3d98af3c8638baf96541ff6f3d263536 | ORPH
+    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/2bf612c2f1ae792e0395343106718db536230476 | ORPH
+    m68k     |           gsl-2.7.1            | NOK | http://autobuild.buildroot.net/results/e59636f6ac148807c1c67f09eef0e0a9f5d52303 | ORPH
+   x86_64    |       host-erlang-26.0.2       | NOK | http://autobuild.buildroot.net/results/30e0b1101e6bd8686e4e54f6d95361103ef0c88d |     
+  sparc64    |       host-erlang-26.0.2       | NOK | http://autobuild.buildroot.net/results/261e6955f9ae9b500ea76e6e6b3a87db5f6d5dd2 |     
+  powerpc    |     host-gcc-final-12.3.0      | NOK | http://autobuild.buildroot.net/results/7c4d23f89c0e2318ec35392eaf8c17f1cecf65e2 |     
+   mips64    |         host-go-1.21.4         | NOK | http://autobuild.buildroot.net/results/4ede22ef7c1631a37a645947d82c315b12aed6f5 |     
+  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/47c942daf55a05ee8bbb702d18cccd44eeb8d921 |     
+   mipsel    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/8b1fb108d80c50f8132253a3a829bbfab4b2f4bf |     
+  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/594a00e788721c8cfa1cec07b67e6de1bd59861e |     
+   sh4aeb    |      imagemagick-7.1.0-51      | NOK | http://autobuild.buildroot.net/results/659f90e745da4cc6e6cba06af72a3d3bb5f915a3 | ORPH
+  mips64el   |      libfreeimage-3.18.0       | NOK | http://autobuild.buildroot.net/results/9260a71a6e25ff44f124f4d6598f1b6b16cae7fe |     
+ microblaze  |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/e64e20a25c5a39980a704906fd7bfd3c136b8fbc | ORPH
+ microblaze  |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/057eeb77f97818dec8ecbf4f226ae9fda7b723e8 | ORPH
+    arc      |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/789f029dab27d56216901546db60aca1c6749b04 | ORPH
+    mips     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/99a250a503c98f96dde9de7387a0a7596d9bd8e0 | ORPH
+ powerpc64   |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/707d2118ec7261df57b85b56cdb2cf84a7a82ad7 | ORPH
+   mips64    |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/55ce97fa3b84e5106599eebcc1a4d2e57f07d709 | ORPH
+    mips     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/ef9fc5502fd539b3bdb4f26d5c408c5319a405a4 | ORPH
+microblazeel |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/0b76a3a0ad93402cd2a59e4002ea645167269f21 | ORPH
+   sh4aeb    |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/840f3c6d8de8a75625bf185f13bfa58ee5661dd7 |     
+ powerpc64   |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/c405ce77d6a7afd0d39d2a1f165070d6838cac32 | ORPH
+    i586     |          linux-6.6.1           | NOK | http://autobuild.buildroot.net/results/b6677010f44685c266e94c06c90341233428887b | ORPH
+   armeb     |          linux-6.6.1           | NOK | http://autobuild.buildroot.net/results/4c26ed482aac38cf9c40484efbd632b9e78198f6 | ORPH
+ powerpc64   |       linux-fusion-9.0.3       | NOK | http://autobuild.buildroot.net/results/7140f045bbabb95edcb2b110061e890d3ab0edbd | ORPH
+    i686     |        liquid-dsp-1.5.0        | NOK | http://autobuild.buildroot.net/results/edebc9f379c7908c8fdc0518388b40673c8189e7 |     
+ aarch64_be  |          motion-4.5.1          | NOK | http://autobuild.buildroot.net/results/9b859a701debeaddf1f9909e16adc6811a620576 |     
+    sh4a     |           mpv-0.35.1           | NOK | http://autobuild.buildroot.net/results/e69f4c5423dc88743be9a872d146e5646a5e34a4 |     
+   arceb     |          nginx-1.24.0          | NOK | http://autobuild.buildroot.net/results/d3b7448cbcddc93d2fc2317278f74e84a2f9433f |     
+powerpc64le  |     openfpgaloader-0.10.0      | NOK | http://autobuild.buildroot.net/results/ee89dcc7430079195e2e9ff300e1320de848d3e3 |     
+  powerpc    |          openrc-0.51           | NOK | http://autobuild.buildroot.net/results/733afd88b1bd7950257152810960f15dfd05edf3 |     
+   xtensa    |          openrc-0.51           | NOK | http://autobuild.buildroot.net/results/494ef392a971ddb3c5c7b01e0149c6439018dbe7 |     
+ powerpc64   |            unknown             | NOK | http://autobuild.buildroot.net/results/828f12f864cfee622c32afa2041b64cbebeb6532 |     
+microblazeel |            unknown             | TIM | http://autobuild.buildroot.net/results/7f2b0cb9cd44aa11aa4c905fdbbe69ba1e659070 |     
+    arc      |            unknown             | NOK | http://autobuild.buildroot.net/results/4d7f0d2f458879da82535c62bda4fe08e6a1dff6 |     
 
 
-Welcome to Buildroot
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
 
-(none) login: 
+                 fdk-aac-2.0.2 | 1 
+                  reaver-1.6.6 | 1 
 
 
-</font></pre>
-    </blockquote>
-    <br>
-    <blockquote>
-      <pre>
-</pre>
-    </blockquote>
-  </body>
-</html>
+Detail of failures for 2023.02.x
+--------------------------------
 
---------------Gx0HBidjSBZEhV8W5eADiTVx--
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |         fdk-aac-2.0.2          | NOK | http://autobuild.buildroot.net/results/79d511d49d51c1e92d9df90cd87f542b70a01a7f |     
+   arceb     |          reaver-1.6.6          | NOK | http://autobuild.buildroot.net/results/dd7f7b35f9b296412559f866226ee30b5b320aff |     
 
---===============3994426091832441301==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
+Classification of failures by reason for 2023.08.x
+--------------------------------------------------
+
+                  linux-6.4.16 | 1 
+        ltp-testsuite-20230127 | 1 
+
+
+Detail of failures for 2023.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |          linux-6.4.16          | NOK | http://autobuild.buildroot.net/results/f3c80d57739c5d8cebf7b45809ac084d55feb2fc | ORPH
+ aarch64_be  |     ltp-testsuite-20230127     | NOK | http://autobuild.buildroot.net/results/28ec42c8d44b99ba57dbf8c9ba14cf0982f3f938 |     
+
+
+Gitlab CI results for 2023-11-27
+================================
+
+Detail of runtime-test failures for master
+------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+      TestCpioDracutGlibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788688  | ORPH 
+...ioDracutGlibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788690  | ORPH 
+       TestCpioDracutMusl | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788691  | ORPH 
+...pioDracutMuslMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788693  | ORPH 
+     TestCpioDracutUclibc | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788694  | ORPH 
+...oDracutUclibcMergedUsr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788697  | ORPH 
+              TestFlutter | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788832  | ORPH 
+           TestIPythonPy3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788861  | ORPH 
+          TestLuaLsqlite3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788884  | ORPH 
+           TestLuaLuacURL | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788909  | ORPH 
+       TestLuajitLsqlite3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788888  | ORPH 
+        TestLuajitLuacURL | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620788913  | ORPH 
+                  TestOla | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789011  | ORPH 
+          TestPolkitInitd | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789061  | ORPH 
+        TestPolkitSystemd | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789062  | ORPH 
+       TestPythonPahoMQTT | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789170  | ORPH 
+   TestPythonPy3Bitstring | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789080  | ORPH 
+   TestPythonPy3Construct | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789094  | ORPH 
+    TestPythonPy3Crossbar | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789096  | ORPH 
+  TestPythonPy3Dicttoxml2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789107  | ORPH 
+    TestPythonPy3Dtschema | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789118  | ORPH 
+...honPy3FlaskExpectsJson | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789135  | ORPH 
+        TestPythonPy3Hkdf | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789146  | ORPH 
+        TestPythonPy3Mako | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789164  | ORPH 
+     TestPythonPy3MakoExt | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789165  | ORPH 
+     TestPythonPy3Passlib | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789172  | ORPH 
+      TestPythonPy3Pynacl | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789178  | ORPH 
+       TestPythonPy3Pysmb | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789181  | ORPH 
+      TestPythonPy3Pyyaml | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789188  | ORPH 
+         TestPythonPy3RSA | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789195  | ORPH 
+       TestPythonPy3SciPy | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789200  | ORPH 
+      TestPythonPy3Spake2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789213  | ORPH 
+             TestStressNG | https://gitlab.com/buildroot.org/buildroot/-/jobs/5620789242  | ORPH 
+
+
+
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3994426091832441301==--
