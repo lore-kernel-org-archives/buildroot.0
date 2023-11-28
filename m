@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A768C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 22:56:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62133C4167B
+	for <buildroot@archiver.kernel.org>; Tue, 28 Nov 2023 22:57:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0454061AAF;
-	Tue, 28 Nov 2023 22:56:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0454061AAF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 191DB612BE;
+	Tue, 28 Nov 2023 22:57:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 191DB612BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cx2bcr3L8XF5; Tue, 28 Nov 2023 22:56:49 +0000 (UTC)
+	with ESMTP id tP96iJECPEXI; Tue, 28 Nov 2023 22:57:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A7CE612BE;
-	Tue, 28 Nov 2023 22:56:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A7CE612BE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AB65C1BF379
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 22:56:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F8D060D6B;
+	Tue, 28 Nov 2023 22:57:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F8D060D6B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 72F871BF379
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 22:57:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84215612BE
- for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 22:56:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84215612BE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C7FE81EB3
+ for <buildroot@lists.busybox.net>; Tue, 28 Nov 2023 22:57:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C7FE81EB3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aOvGu7uQ8hwJ for <buildroot@lists.busybox.net>;
- Tue, 28 Nov 2023 22:56:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CC2360C0F
- for <buildroot@buildroot.org>; Tue, 28 Nov 2023 22:56:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CC2360C0F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5970E87536; Tue, 28 Nov 2023 22:56:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n-VRau1BsEA6 for <buildroot@lists.busybox.net>;
+ Tue, 28 Nov 2023 22:57:33 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1238C81EB2
+ for <buildroot@buildroot.org>; Tue, 28 Nov 2023 22:57:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1238C81EB2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 514C0C0002;
+ Tue, 28 Nov 2023 22:57:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r871F-000fFs-2C;
+ Tue, 28 Nov 2023 23:57:29 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 28 Nov 2023 23:55:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e5af07dce9eb2333a863b09ac1c06eb35f3adb70
-X-Git-Newrev: ca169d1d0a5df92e6a1f0850e6969cc525849e6f
-X-Patchwork-Hint: ignore
-Message-Id: <20231128225645.5970E87536@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] system/Config.in: disable openrc with
- uclibc
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20231128175125.581858-1-bernd@kuhls.net>
+Date: Tue, 28 Nov 2023 23:57:29 +0100
+In-Reply-To: <20231128175125.581858-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Tue, 28 Nov 2023 18:51:25 +0100")
+Message-ID: <87edg9bi5i.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 5, 6}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,76 +63,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca169d1d0a5df92e6a1f0850e6969cc525849e6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-openrc raises the following uclibc build failures since bump to version
-0.51 in commit 730c90faa3ec13ee1ead47113c9c5c7d3a8dac55:
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-../src/rc-abort/rc-abort.c: In function 'main':
-../src/rc-abort/rc-abort.c:27:21: error: implicit declaration of function 'kill'; did you mean 'killpg'? [-Werror=implicit-function-declaration]
-   27 |                 if (kill(pid, SIGUSR1) != 0)
-      |                     ^~~~
-      |                     killpg
+Committed, thanks.
 
-../src/libeinfo/libeinfo.c: In function 'colour_terminal':
-../src/libeinfo/libeinfo.c:319:26: error: implicit declaration of function 'fileno' [-Werror=implicit-function-declaration]
-  319 |         if (f && !isatty(fileno(f)))
-      |                          ^~~~~~
-
-../src/librc/librc-misc.c: In function 'rc_getfile':
-../src/librc/librc-misc.c:79:14: error: implicit declaration of function 'fileno'; did you mean 'd_fileno'? [-Werror=implicit-function-declaration]
-   79 |         fd = fileno(fp);
-      |              ^~~~~~
-      |              d_fileno
-
-../src/librc/librc-daemon.c: In function 'rc_service_daemons_crashed':
-../src/librc/librc-daemon.c:633:37: error: implicit declaration of function 'kill'; did you mean 'killpg'? [-Werror=implicit-function-declaration]
-  633 |                                 if (kill(pid, 0) == -1 && errno == ESRCH)
-      |                                     ^~~~
-      |                                     killpg
-
-These build failures could be fixed by patching openrc but upstream
-is not happy with this patch: https://github.com/OpenRC/openrc/pull/674.
-
-So, as advised by Yann E. Morin, openrc is hidden away for uClibc, until
-upstream has a proper fix.
-
-Fixes:
- - http://autobuild.buildroot.org/results/494ef392a971ddb3c5c7b01e0149c6439018dbe7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- system/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/system/Config.in b/system/Config.in
-index 0b4dc9543e..b90e40e415 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -105,12 +105,13 @@ config BR2_INIT_OPENRC
- 	bool "OpenRC"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	select BR2_PACKAGE_OPENRC
- 	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_ROOTFS_SKELETON_DEFAULT
- 
--comment "openrc needs a toolchain w/ dynamic library"
-+comment "openrc needs a glibc or musl toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS && BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 
- # In Buildroot, we decided not to support a split-usr when systemd is
- # used as an init system. This is a design decision, not a systemd
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
