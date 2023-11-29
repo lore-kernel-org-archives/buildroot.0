@@ -1,93 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CBC9C4167B
-	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 11:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C638C4167B
+	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 15:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A560401F3;
-	Wed, 29 Nov 2023 11:03:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A560401F3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F9196150D;
+	Wed, 29 Nov 2023 15:02:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F9196150D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id duEuflfiqjP0; Wed, 29 Nov 2023 11:03:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K-fuEHxRKGRI; Wed, 29 Nov 2023 15:02:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3ED73400DC;
-	Wed, 29 Nov 2023 11:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ED73400DC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F6A21BF369
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 11:03:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAED5614FF;
+	Wed, 29 Nov 2023 15:02:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAED5614FF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D060F1BF2B5
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 15:02:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0670B41A04
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 11:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0670B41A04
+ by smtp3.osuosl.org (Postfix) with ESMTP id A92B26150D
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 15:02:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A92B26150D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6MqE5_yq8l5u for <buildroot@lists.busybox.net>;
- Wed, 29 Nov 2023 11:03:11 +0000 (UTC)
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com
- [IPv6:2607:f8b0:4864:20::52a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 27B92401DD
- for <buildroot@buildroot.org>; Wed, 29 Nov 2023 11:03:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27B92401DD
-Received: by mail-pg1-x52a.google.com with SMTP id
- 41be03b00d2f7-53fa455cd94so4379921a12.2
- for <buildroot@buildroot.org>; Wed, 29 Nov 2023 03:03:11 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0JcwUPmDeviR for <buildroot@lists.busybox.net>;
+ Wed, 29 Nov 2023 15:02:23 +0000 (UTC)
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9664460B3D
+ for <buildroot@buildroot.org>; Wed, 29 Nov 2023 15:02:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9664460B3D
+Received: by mail-lj1-x22d.google.com with SMTP id
+ 38308e7fff4ca-2c9c39b7923so4121141fa.0
+ for <buildroot@buildroot.org>; Wed, 29 Nov 2023 07:02:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701255790; x=1701860590;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ohZOO1qR6zAjQvK2iLvS8s92cB6afDhy3agh9tRmE+c=;
- b=PPHI2b8StWpi/EJfKRISteTkZGPxoYOZQImIgaXoXxCF8sRu35RwpRu0YjAVYbs1KC
- 6svK6ERO2LXWRHDhG7OOGwkuYqK2ZI7mnTyWcTkwZXfsYfmwgA3c6MEbGS/l7sISbB2F
- 83z7oY1k2KQFDESqFi8rPPxKsDyoAV6YHqs+Ok5MtxBApF3LPL2EpSy6iSLfEjfwFl8a
- mkx5hbLm9QIQKmh/HjN0KH77ZcB565552jgO5cmoePhHYQFTWpwfi0b3Rc/oHPgEFDto
- fJoROHZJ/W0ezeM+Pnu66tL6YiY9+kqikn/mFb95i5hLGLyqjy3mUOZ+4zTIlzWaudYe
- ggAg==
-X-Gm-Message-State: AOJu0YzammG6fT2JYPIJz7ks8zFgjYUWCCekVwTqUGA1pA3oy00e4bOn
- zHoRXyowEZ2zIY2w0OwBADW61jfxk4oxVA+Q36GCbw==
-X-Google-Smtp-Source: AGHT+IEE4blvBc0cZqdpbCPboe8tirAMSkBP09sDyFdJuu2v3Yv9E2hG2VJCjSb2GFdWge7WGRs0sQ==
-X-Received: by 2002:a05:6a20:729e:b0:18a:f5df:5f88 with SMTP id
- o30-20020a056a20729e00b0018af5df5f88mr19701219pzk.62.1701255790260; 
- Wed, 29 Nov 2023 03:03:10 -0800 (PST)
-Received: from alesmao.newtesc.com ([187.120.6.114])
+ d=1e100.net; s=20230601; t=1701270140; x=1701874940;
+ h=in-reply-to:from:references:to:content-language:subject:user-agent
+ :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=xdRWE+SgwyfLOndYHaOl4dtdZU37url8ML/q3e7x2l8=;
+ b=tmeK6FeoSInfuGP/GzbfyJnBKaJN1k8y1EdzszmvPNXrzqCtmJ67YhK8XMc/uU5xB6
+ JSuWR7SQDluv1FN/PhbSip1bntv1+B0seApq0d/1qHZbqE/ndk+SVHki3TJjDGWOF/TE
+ C9qYhFUlxqCDb3qureLROStIXxobkHKZZ5/3G9oE4E2bWeDaHBqBRMoU04xeRr0Jz769
+ s3OFXl2Rhijux2V6SiYFWMaeWTFY0s473+Hzv483G6+D84F1dRczLwyk9ItegI+vbxow
+ CrqkDeoHBNiNitU9nahlrNzD6nfpSbi0elbr54CJeOOUDPU2CpSRqXl5VMtGLPHhTQEO
+ 6Ygg==
+X-Gm-Message-State: AOJu0Yy6llW76ZNlastbFqQsyM22x8lExPrXp59UU4oIwOIAB6r2oge/
+ 2nkz+UNs8R4/SvDIw3hF6sOyRFSrci6RZIFAoGg=
+X-Google-Smtp-Source: AGHT+IE4qkuz7BLt9O45wDcoatPXnPYIjY9AdUpRy2YUawrP1+TiZMmcDo/K+nsfc3XC4pWgVDoQwA==
+X-Received: by 2002:a2e:240b:0:b0:2c9:c580:82d5 with SMTP id
+ k11-20020a2e240b000000b002c9c58082d5mr217619ljk.35.1701270139662; 
+ Wed, 29 Nov 2023 07:02:19 -0800 (PST)
+Received: from [10.5.3.225]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- d3-20020a056a0010c300b006cdd5dfc11asm810213pfu.166.2023.11.29.03.03.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Nov 2023 03:03:09 -0800 (PST)
-From: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
-To: buildroot@buildroot.org
-Date: Wed, 29 Nov 2023 08:02:58 -0300
-Message-ID: <20231129110258.3708-2-flavio.tapajos@newtesc.com.br>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231129110258.3708-1-flavio.tapajos@newtesc.com.br>
-References: <20231129110258.3708-1-flavio.tapajos@newtesc.com.br>
+ ay5-20020a05600c1e0500b0040b54d7ebb9sm1832071wmb.41.2023.11.29.07.02.18
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 29 Nov 2023 07:02:19 -0800 (PST)
+Message-ID: <56ef6583-cbf8-440d-9513-63b7294f3502@smile.fr>
+Date: Wed, 29 Nov 2023 16:02:18 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20231124161523.215078-1-antoine.coutant@smile.fr>
+ <20231124161523.215078-2-antoine.coutant__4480.32651781745$1700842615$gmane$org@smile.fr>
+ <pan$5ec9d$5fde4d51$dffa430d$e2645b4e@ID-313208.user.individual.net>
+From: Antoine Coutant <antoine.coutant@smile.fr>
+In-Reply-To: <pan$5ec9d$5fde4d51$dffa430d$e2645b4e@ID-313208.user.individual.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=newtesc-com-br.20230601.gappssmtp.com; s=20230601; t=1701255790; x=1701860590;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1701270140; x=1701874940;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ohZOO1qR6zAjQvK2iLvS8s92cB6afDhy3agh9tRmE+c=;
- b=b+ce/nGQnlgwwKNDHdbDMst7VAXzrQ+5sXaPDlEUaneGoBJq2yhzAkMbJ+B0bbd6yb
- YRvoDoJrq1KGbiiJlkE4jky8ZR0cdpS9SmP5zZlby7y8zoWZKEhELSX4njifJorH7DCv
- 5bCHEXeDfOCUMzrRxw03fTZaFihrfmo3BgQexm8PpXG2u82Fpsulbcwq+uAWtphYPoXK
- 1pGSf38+rJ9lfk4c92HRWMxpcc44UdA8zKNmrs6etl3I6LFL50L0VwygaW0kpAEJTjgd
- nSYKqgqkxhzMQg10d0qm+pizr9ZIWU1FQRrRHfSIKP8uzpgjuAVVwywYmrdLdPOU5euw
- vEsQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=newtesc-com-br.20230601.gappssmtp.com
- header.i=@newtesc-com-br.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=b+ce/nGQ
-Subject: [Buildroot] [PATCH 2/2] package/rsyslog: add libdbi-drivers
- optional dependency
+ h=in-reply-to:from:references:to:content-language:subject:user-agent
+ :mime-version:date:message-id:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=xdRWE+SgwyfLOndYHaOl4dtdZU37url8ML/q3e7x2l8=;
+ b=ZZFw6H45Y3SkVWWF8ResIl3U8iL9Qu1ggjmGLnLk1AjH6CN7Ije1zmXtCQ2TPXh02q
+ zz+OR070w2IWG/8xxANiNfRINZTEfRPyX96G5OoncbFWhTNk3Lm3NewVeRJz49aTFklq
+ W38lJTIDeUlsspuufoRJ5hTU+xRF3ZQ0ZOWIwq0k5z6k4CgzNYMFaA3vmFVjL7jz7mD9
+ Ihn8Q1qH+EvxkqOZh75euL5RBsCZUxPHl7zvGOM7iFRjXMUy7a/twUtKqiLLxriT/ZY5
+ 7ORIkgGphh3blglLKIP6pNHP8cw5frZjmqI9HxQweM9SNWK+kOJ3o8DB6U+G7nzLzPFa
+ IDfw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=ZZFw6H45
+Subject: Re: [Buildroot] [[DO NOT MERGE] v3 1/7] package/meson: bump version
+ to 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,33 +104,172 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3418215464871010351=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TmVlZGVkIGluIG9yZGVyIHRvIHVzZSBvbWxpYmRiaSBtb2R1bGUKClNpZ25lZC1vZmYtYnk6IEZs
-w6F2aW8gVGFwYWrDs3MgPGZsYXZpby50YXBham9zQG5ld3Rlc2MuY29tLmJyPgotLS0KIERFVkVM
-T1BFUlMgICAgICAgICAgICAgICAgIHwgMSArCiBwYWNrYWdlL3JzeXNsb2cvcnN5c2xvZy5tayB8
-IDcgKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQg
-YS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwppbmRleCAxZjI2ZTliYzgxLi4yZjNlZWRmOGEwIDEw
-MDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBiL0RFVkVMT1BFUlMKQEAgLTEwNzgsNiArMTA3OCw3
-IEBAIEY6CXBhY2thZ2UvcHl0aG9uLXB5bW9kYnVzLwogTjoJRmzDoXZpbyBUYXBhasOzcyA8Zmxh
-dmlvLnRhcGFqb3NAbmV3dGVzYy5jb20uYnI+CiBGOgljb25maWdzL2FzdXNfdGlua2VyLXNfcmsz
-Mjg4X2RlZmNvbmZpZwogRjoJYm9hcmQvYXN1cy90aW5rZXItcy8KK0Y6CXBhY2thZ2UvcnN5c2xv
-Zy8KIAogTjoJRmxvcmlhbiBGYWluZWxsaSA8Zi5mYWluZWxsaUBnbWFpbC5jb20+CiBGOglwYWNr
-YWdlL2NwdWxpbWl0LwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9yc3lzbG9nL3JzeXNsb2cubWsgYi9w
-YWNrYWdlL3JzeXNsb2cvcnN5c2xvZy5tawppbmRleCBjZjlmMmMwZTc5Li44ZWE5MmVhNzg1IDEw
-MDY0NAotLS0gYS9wYWNrYWdlL3JzeXNsb2cvcnN5c2xvZy5taworKysgYi9wYWNrYWdlL3JzeXNs
-b2cvcnN5c2xvZy5tawpAQCAtMTUxLDYgKzE1MSwxMyBAQCBSU1lTTE9HX0NPTkZfT1BUUyArPSBc
-CiAJLS1kaXNhYmxlLW9tam91cm5hbAogZW5kaWYKIAoraWZlcSAoJChCUjJfUEFDS0FHRV9MSUJE
-QklfRFJJVkVSUykseSkKK1JTWVNMT0dfQ09ORl9PUFRTICs9IC0tZW5hYmxlLWxpYmRiaQorUlNZ
-U0xPR19ERVBFTkRFTkNJRVMgKz0gbGliZGJpLWRyaXZlcnMKK2Vsc2UKK1JTWVNMT0dfQ09ORl9P
-UFRTICs9IC0tZGlzYWJsZS1saWJkYmkKK2VuZGlmCisKIGRlZmluZSBSU1lTTE9HX0lOU1RBTExf
-SU5JVF9TWVNURU1ECiAJJChJTlNUQUxMKSAtbSAwNjQ0IC1EIHBhY2thZ2UvcnN5c2xvZy9yc3lz
-bG9nLnNlcnZpY2UgXAogCQkkKFRBUkdFVF9ESVIpL3Vzci9saWIvc3lzdGVtZC9zeXN0ZW0vcnN5
-c2xvZy5zZXJ2aWNlCi0tIAoyLjQzLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+This is a multi-part message in MIME format.
+--===============3418215464871010351==
+Content-Type: multipart/alternative;
+ boundary="------------xMHXSAhR0QxN4eSPYIZFz5yC"
+Content-Language: en-US
+
+This is a multi-part message in MIME format.
+--------------xMHXSAhR0QxN4eSPYIZFz5yC
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi Bernd,
+
+On 25/11/2023 12:24, Bernd Kuhls wrote:
+> Hi Antoine,
+>
+> Am Fri, 24 Nov 2023 17:15:17 +0100 schrieb Antoine Coutant:
+>
+>> It would be safer not to merge this patch without being sure that the
+>> problem was from qemu and not meson.
+> apparently there is a problem with meson for which an untested patch
+> exists:
+> https://github.com/mesonbuild/meson/issues/11914#issuecomment-1764880338
+> https://github.com/dcbaker/meson/commit/
+> 5440c57a63f81d5d6cdf0cf7a5c5613f766589f0
+
+I tested this patch and it appears that it does not fix the issue.
+
+Indeed, this patch removes paths that are not compiler specific
+
+but the path of the library linked to host-clang is not removed
+
+(/usr/lib/x86_64-linux-gnu/libgio-2.0.so).
+
+I added a new comment on the issue :
+
+https://github.com/mesonbuild/meson/issues/11914#issuecomment-1832011210 
+<https://github.com/mesonbuild/meson/issues/11914#issuecomment-1832011210>.
+
+> Also with this version bump you need to update support/misc/cross-
+> compilation.conf.in
+>
+> -pkgconfig = '@PKGCONF_HOST_BINARY@'
+> +pkg-config = '@PKGCONF_HOST_BINARY@'
+>
+> because ofhttps://mesonbuild.com/Release-notes-for-1-3-0.html#machine-
+> files-pkgconfig-field-deprecated-and-replaced-by-pkgconfig
+
+Thanks, I will make this change.
+
+Regards, Antoine
+
+>
+> Regards, Bernd
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+--------------xMHXSAhR0QxN4eSPYIZFz5yC
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p>Hi Bernd,</p>
+    <div class="moz-cite-prefix">On 25/11/2023 12:24, Bernd Kuhls wrote:<br>
+    </div>
+    <blockquote type="cite"
+cite="mid:pan$5ec9d$5fde4d51$dffa430d$e2645b4e@ID-313208.user.individual.net">
+      <pre class="moz-quote-pre" wrap="">Hi Antoine,
+
+Am Fri, 24 Nov 2023 17:15:17 +0100 schrieb Antoine Coutant:
+
+</pre>
+      <blockquote type="cite">
+        <pre class="moz-quote-pre" wrap="">It would be safer not to merge this patch without being sure that the
+problem was from qemu and not meson.
+</pre>
+      </blockquote>
+      <pre class="moz-quote-pre" wrap="">
+apparently there is a problem with meson for which an untested patch 
+exists:
+<a class="moz-txt-link-freetext" href="https://github.com/mesonbuild/meson/issues/11914#issuecomment-1764880338">https://github.com/mesonbuild/meson/issues/11914#issuecomment-1764880338</a>
+<a class="moz-txt-link-freetext" href="https://github.com/dcbaker/meson/commit/">https://github.com/dcbaker/meson/commit/</a>
+5440c57a63f81d5d6cdf0cf7a5c5613f766589f0</pre>
+    </blockquote>
+    <pre class="moz-quote-pre" wrap=""></pre>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"
+      id="docs-internal-guid-799749fc-7fff-a703-bc69-407ac7e2fdd4"><span
+style="font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap; font-family: Arial, sans-serif;">I tested this patch and it appears that it does not fix the issue.</span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap; font-family: Arial, sans-serif;">Indeed, this patch removes paths that are not compiler specific</span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap; font-family: Arial, sans-serif;">but the path of the library linked to host-clang is not removed</span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap; font-family: Arial, sans-serif;">(/usr/lib/x86_64-linux-gnu/libgio-2.0.so).</span></p>
+    <p><span
+style="font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap; font-family: Arial, sans-serif;">I added a new comment on the issue :</span></p>
+    <p><a
+href="https://github.com/mesonbuild/meson/issues/11914#issuecomment-1832011210"
+        style="text-decoration:none;"><span
+style="font-size: 11pt; color: rgb(17, 85, 204); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: underline; text-decoration-skip-ink: none; vertical-align: baseline; white-space: pre-wrap; font-family: Arial, sans-serif;">https://github.com/mesonbuild/meson/issues/11914#issuecomment-1832011210</span></a><span
+style="font-size: 11pt; color: rgb(0, 0, 0); background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap; font-family: Arial, sans-serif;">.</span></p>
+    <blockquote type="cite"
+cite="mid:pan$5ec9d$5fde4d51$dffa430d$e2645b4e@ID-313208.user.individual.net">
+      <pre class="moz-quote-pre" wrap="">Also with this version bump you need to update support/misc/cross-
+compilation.conf.in
+
+-pkgconfig = '@PKGCONF_HOST_BINARY@'
++pkg-config = '@PKGCONF_HOST_BINARY@'
+
+because of <a class="moz-txt-link-freetext" href="https://mesonbuild.com/Release-notes-for-1-3-0.html#machine">https://mesonbuild.com/Release-notes-for-1-3-0.html#machine</a>-
+files-pkgconfig-field-deprecated-and-replaced-by-pkgconfig</pre>
+    </blockquote>
+    <pre class="moz-quote-pre" wrap=""></pre>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Thanks, </span><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">I will make this change.</span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">
+</span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:11pt;font-family:Arial,sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Regards, Antoine
+</span></p>
+    <blockquote type="cite"
+cite="mid:pan$5ec9d$5fde4d51$dffa430d$e2645b4e@ID-313208.user.individual.net">
+      <pre class="moz-quote-pre" wrap="">
+
+Regards, Bernd
+
+_______________________________________________
+buildroot mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:buildroot@buildroot.org">buildroot@buildroot.org</a>
+<a class="moz-txt-link-freetext" href="https://lists.buildroot.org/mailman/listinfo/buildroot">https://lists.buildroot.org/mailman/listinfo/buildroot</a>
+</pre>
+    </blockquote>
+  </body>
+</html>
+
+--------------xMHXSAhR0QxN4eSPYIZFz5yC--
+
+--===============3418215464871010351==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3418215464871010351==--
