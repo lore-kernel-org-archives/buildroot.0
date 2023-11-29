@@ -4,47 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B8A8C4167B
-	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 21:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5386BC4167B
+	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 22:08:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05DAC615F5;
-	Wed, 29 Nov 2023 21:58:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05DAC615F5
+	by smtp3.osuosl.org (Postfix) with ESMTP id E31FF615F8;
+	Wed, 29 Nov 2023 22:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E31FF615F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nGB0_TpShc-Q; Wed, 29 Nov 2023 21:57:59 +0000 (UTC)
+	with ESMTP id lYbKT9ayszTP; Wed, 29 Nov 2023 22:08:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D3A9615F3;
-	Wed, 29 Nov 2023 21:57:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D3A9615F3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 924A61BF283
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 21:57:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 568C0614F9;
+	Wed, 29 Nov 2023 22:08:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 568C0614F9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D5F4C1BF356
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 22:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 783D840130
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 21:57:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 783D840130
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE98784400
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 22:08:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE98784400
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JZeHGEeK398C for <buildroot@lists.busybox.net>;
- Wed, 29 Nov 2023 21:57:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78B9A4010E
- for <buildroot@buildroot.org>; Wed, 29 Nov 2023 21:57:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78B9A4010E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5FB7787593; Wed, 29 Nov 2023 21:57:55 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lEYA5o36EM-0 for <buildroot@lists.busybox.net>;
+ Wed, 29 Nov 2023 22:08:48 +0000 (UTC)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A412A843FE
+ for <buildroot@buildroot.org>; Wed, 29 Nov 2023 22:08:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A412A843FE
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-332ff20ec45so901692f8f.1
+ for <buildroot@buildroot.org>; Wed, 29 Nov 2023 14:08:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1701295726; x=1701900526;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=aSLSGDxpX4ceqy4RA8mTdiJ1iimoUnvG4OLvx07XzLQ=;
+ b=qSSBoqCT+O9P3dMdLSvkslwChLnumhW6vxRJp1q94AGbOf/bVjchXBpp1Gl3BnoJuZ
+ 1TDakhIYnPNe/b8HioqlnsoZtt9P6y40QajtHJrL3PG0fHfsJDFNPli7V63+gIfGeTJr
+ 8TDOuLUVb1aP+0ADEzngQO1bkXmcHBltfO+NtPDxo3sM/nbBjh3gcQIhmP36SvQFsOZD
+ 9v+tqkTs/Zt9UtQRfVKsyPYaFBIPqICvnmLliH5BtoCrqpEj8Z+D5CBCoEJvx1kY+Ssy
+ 0QxzM9axA/9qVD6d2Lb5T1nn0vJBJQEirnYNsjnBBjN+MbyzHl/YmHy6ZVDoJsWmqu8S
+ 6GVw==
+X-Gm-Message-State: AOJu0YxG4KACqYnzk8qI+L+Hs/sPfq5jSRsu/Ms2VhM82MBeL6RZwEjS
+ UlxaFmd8mJVVRti6Z57G7OwQqQcf7/c=
+X-Google-Smtp-Source: AGHT+IFaMo6ind8w0DeuB3LYCr+/GcG1zRI9A8aCPzddZcYLEuXLAygtC/AhnpYQAepAyeEAH31O6A==
+X-Received: by 2002:adf:f944:0:b0:333:1a90:83c5 with SMTP id
+ q4-20020adff944000000b003331a9083c5mr2211022wrr.19.1701295725644; 
+ Wed, 29 Nov 2023 14:08:45 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ fa16-20020a05600c519000b0040b36ad5413sm3477117wmb.46.2023.11.29.14.08.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 29 Nov 2023 14:08:44 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 29 Nov 2023 22:57:14 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d3eff1cd761c35c686dcd9d839bc5e0c85c6dfc0
-X-Git-Newrev: 0ed48b952bf2b854315009234e8b8b5c55af3757
-X-Patchwork-Hint: ignore
-Message-Id: <20231129215755.5FB7787593@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2023.11-rc2
+Date: Wed, 29 Nov 2023 23:08:43 +0100
+Message-ID: <20231129220843.1712894-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1701295726; x=1701900526; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=aSLSGDxpX4ceqy4RA8mTdiJ1iimoUnvG4OLvx07XzLQ=;
+ b=aZTHWVF0J0VBlz728jTNWW5+2JPoegXL2TDYAySzhx42QrpR2qXr87a1EdLM2aLoTW
+ Ei6bVsQWPDICiKS1FgRsicIU3vj/5rg3qVWkjdrYRJpD3Z3eIbt95X4hen0Htl8ko98B
+ 21Wrs12FGAEDPRUUhjy/OZ6Ks4jB5zPCslTm60JA/2FNVLhJn7vNipnAKkqYXewWvtNa
+ 7pTCIvq2LvQ8XRcgowj9LUH2O8pnJCoMv3raDSOLihvt6PCvozXLOD/oG+Q4kCZbVXal
+ 1JUxG+Zn43zvUPngiXKhzMRsPIXvbFp4hQsatHAkfMGyFHm8txrXs5kC6nrbLTJnpLAe
+ GZOw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=aZTHWVF0
+Subject: [Buildroot] [PATCH 1/1] package/openfpgaloader: bump to version
+ 0.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,149 +94,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Jean Burgat <jeanburgat33@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ed48b952bf2b854315009234e8b8b5c55af3757
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This bump will fix the following build failure thanks to
+https://github.com/trabucayre/openFPGALoader/commit/933ed793e85dea7e16ddd6540791097fd3a299f5:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+In file included from /home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/jtag.hpp:13,
+                 from /home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/device.hpp:13,
+                 from /home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/efinix.hpp:11,
+                 from /home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/efinix.cpp:6:
+/home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/board.hpp:49:9: error: 'uint8_t' does not name a type
+   49 |         uint8_t tms_pin; /*! TMS pin value */
+      |         ^~~~~~~
+/home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/board.hpp:12:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+   11 | #include "cable.hpp"
+  +++ |+#include <cstdint>
+   12 |
+
+https://github.com/trabucayre/openFPGALoader/releases/tag/v0.11.0
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ee89dcc7430079195e2e9ff300e1320de848d3e3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- CHANGES                    | 19 +++++++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 21 +++++++++++++++++++++
- 4 files changed, 51 insertions(+), 11 deletions(-)
+ package/openfpgaloader/openfpgaloader.hash | 2 +-
+ package/openfpgaloader/openfpgaloader.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index a045779c31..c1b5651b74 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,22 @@
-+2023.11-rc2, released November 29th, 2023
-+
-+	Fixes all over the tree.
-+
-+	Defconfigs: Raspberry pi: Fix bluetooth autoprobing,
-+	rockpro64: Fix U-Boot build, bump rootfs size, vim3: Use
-+	device tree from Linux rather than from U-Boot.
-+
-+	Updated/fixed packages: erlang, exfatprogs, flutter-engine,
-+	flutter-sdk-bin, gcc, gsl, intel-microcode, janet,
-+	kodi-pvr-hts, libgdiplus, libpam-tacplus, libxml2,
-+	libzenoh-pico, memcached, motion, netsnmp, nodejs, oatpp,
-+	openrc, opensc, perl, postgresql, python-msgpack, qemu,
-+	refpolicy, samba4, squid, vim, vlc, xwayland, zfs
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#15856: Using BR2_CONFIG= on a different file-system...
-+
- 2023.11-rc1, released November 14th, 2023
+diff --git a/package/openfpgaloader/openfpgaloader.hash b/package/openfpgaloader/openfpgaloader.hash
+index a8b537782c..6fa81a98a2 100644
+--- a/package/openfpgaloader/openfpgaloader.hash
++++ b/package/openfpgaloader/openfpgaloader.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  966b4629df86b1d520ddd8a4e0a3fc00060b26b5ab4e172b596bd9d4659a196e  openfpgaloader-0.10.0.tar.gz
++sha256  a463690358d2510919472c2f460039a304d016a08a45970821e667eea1c48cc8  openfpgaloader-0.11.0.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
+index 6d7fbd9850..0fd172b532 100644
+--- a/package/openfpgaloader/openfpgaloader.mk
++++ b/package/openfpgaloader/openfpgaloader.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	Fixes all over the tree and new features.
-diff --git a/Makefile b/Makefile
-index 8e3e745b38..04d24b9a35 100644
---- a/Makefile
-+++ b/Makefile
-@@ -90,9 +90,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2023.11-rc1
-+export BR2_VERSION := 2023.11-rc2
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1699946000
-+BR2_VERSION_EPOCH = 1701295000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 23474159a3..7cc2ff7ccd 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -76,37 +76,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest release candidate: <b>2023.11-rc1</b></h3>
-+      <h3 style="text-align: center;">Latest release candidate: <b>2023.11-rc2</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.11-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.11-rc1.tar.gz">buildroot-2023.11-rc1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.11-rc1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.11-rc2.tar.gz">buildroot-2023.11-rc2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.11-rc2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.11-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.11-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.11-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.11-rc1.tar.xz">buildroot-2023.11-rc1.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.11-rc1.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.11-rc2.tar.xz">buildroot-2023.11-rc2.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.11-rc2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index e8b10e3a6e..b3dda4c629 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2023.11-rc2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>29 November 2023</small></p>
-+      </div>
-+      <div class="timeline-body">
-+        <p>2023.11-rc2 has been released with more cleanups and build fixes. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2023.11-rc2">CHANGES</a>
-+	  file for details.</p>
-+
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2023.11-rc2.tar.xz">2023.11-rc2
-+	  release candidate</a>, and report any problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-OPENFPGALOADER_VERSION = 0.10.0
++OPENFPGALOADER_VERSION = 0.11.0
+ OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,v$(OPENFPGALOADER_VERSION))
+ OPENFPGALOADER_LICENSE = Apache-2.0
+ OPENFPGALOADER_LICENSE_FILES = LICENSE
+-- 
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
