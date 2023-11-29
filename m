@@ -4,54 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFACC4167B
-	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 07:42:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07275C4167B
+	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 07:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF8B0417A9;
-	Wed, 29 Nov 2023 07:42:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF8B0417A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9CFC41816;
+	Wed, 29 Nov 2023 07:43:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9CFC41816
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bV-p2W6qifgf; Wed, 29 Nov 2023 07:42:03 +0000 (UTC)
+	with ESMTP id DUBx_IW3uvDL; Wed, 29 Nov 2023 07:43:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D56E41803;
-	Wed, 29 Nov 2023 07:42:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D56E41803
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2435C1BF32D
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 07:42:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00DD141809;
+	Wed, 29 Nov 2023 07:43:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00DD141809
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C3491BF32D
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 07:43:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F187B81E0A
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 07:42:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F187B81E0A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 449EB60B4E
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 07:43:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 449EB60B4E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a0EhRDQ_rlh4 for <buildroot@lists.busybox.net>;
- Wed, 29 Nov 2023 07:42:00 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AC86281DF8
- for <buildroot@buildroot.org>; Wed, 29 Nov 2023 07:41:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC86281DF8
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 72A93FF805;
- Wed, 29 Nov 2023 07:41:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r8FCl-0011AR-1X;
- Wed, 29 Nov 2023 08:41:55 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iNC1bz90P2Pn for <buildroot@lists.busybox.net>;
+ Wed, 29 Nov 2023 07:43:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3650060AD8
+ for <buildroot@buildroot.org>; Wed, 29 Nov 2023 07:43:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3650060AD8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1928A8755E; Wed, 29 Nov 2023 07:43:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: <yann.morin@orange.com>
-References: <5e5da455b1f21f427b740a6cc9206c3b58316a9c.1701078039.git.yann.morin@orange.com>
-Date: Wed, 29 Nov 2023 08:41:55 +0100
-In-Reply-To: <5e5da455b1f21f427b740a6cc9206c3b58316a9c.1701078039.git.yann.morin@orange.com>
- (yann morin's message of "Mon, 27 Nov 2023 10:40:44 +0100")
-Message-ID: <875y1latvg.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] package/erlang: disable for uclibc,
- fix glibc-build
+To: buildroot@buildroot.org
+Date: Wed, 29 Nov 2023 08:37:29 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c9222fe0fc73aadf42ea8ed2c3514b19e15e9a62
+X-Git-Newrev: 127986f3eda6cc8396f8f83269d525fe13dbde1a
+X-Patchwork-Hint: ignore
+Message-Id: <20231129074333.1928A8755E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl: security bump to 5.36.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +56,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, Bernd Kuhls <bernd@kuhls.net>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gICA8eWFubi5tb3JpbkBvcmFuZ2UuY29tPiB3cml0ZXM6CgogPiBGcm9tOiAiWWFubiBF
-LiBNT1JJTiIgPHlhbm4ubW9yaW5Ab3JhbmdlLmNvbT4KID4gQ29tbWl0IDJjZmE4NmE1NDg4Mihw
-YWNrYWdlL2VybGFuZzogYnVtcCB2ZXJzaW9uIHRvIDI2LjAuMikgYWRkZWQgYQogPiBwYXRjaCB0
-byByZXN0b3JlIGJ1aWxkaW5nIG9uIHVDbGliYy4KCiA+IEhvd2V2ZXIsIHRoYXQgcGF0Y2ggaXMg
-bm90IHVwc3RyZWFtLCBhbmQgaGFzIGJlZW4gcmVqZWN0ZWQ6CgogPiAgICAgaHR0cHM6Ly9naXRo
-dWIuY29tL2VybGFuZy9vdHAvcHVsbC83NTAwCgogPiAgICAgUGxlYXNlIG9wZW4gYSBQUiB0byBo
-dHRwczovL2dpdGh1Yi5jb20vYXNtaml0L2FzbWppdCBpbnN0ZWFkIGFuZCB3ZQogPiAgICAgd2ls
-bCBnZXQgdGhlIGZpeCBuZXh0IHRpbWUgd2Ugc3luYyB3aXRoIHVwc3RyZWFtLiBXZSBkbyBub3Qg
-d2FudAogPiAgICAgdGhlaXJzIGFuZCBvdXIgaW1wbGVtZW50YXRpb24gdG8gZGl2ZXJnZS4KCiA+
-IEZ1cnRoZXJtb3JlLCBpdCBoYXBwZW5zIHRvIHdvcmsgb24gdUNsaWJjLCBiZWNhdXNlIHVDbGli
-YyBkb2VzIG5vdAogPiBleHBvc2Ugc3lzL2F1eHYuaCwgYnV0IGl0IGZhaWxzIHRvIHdvcmsgb24g
-Z2xpYmMsIGJlY2F1c2UgdGhlIGRlZmluZSBpcwogPiBub3QgcHJvcGFnYXRlZCB0byAic3ViLXRy
-ZWVzIiwgYW5kIHRodXMgaXMgbmV2ZXIgZGVmaW5lZCB3aGVyZSBpdCBpcwogPiBjaGVja2VkIGZv
-ciwgZXZlbiB3aGVuIHN5cy9hdXh2LmggaXMgYXZhaWxhYmxlLiBUaGlzIGNhdXNlcyBidWlsZAog
-PiBmYWlsdXJlcyBzdWNoIGFzOgoKID4gICAgIGFzbWppdC9jb3JlL2NwdWluZm8uY3BwOiBJbiBm
-dW5jdGlvbiDigJh2b2lkIGFzbWppdDo6X2FiaV8xXzEwOjpkZXRlY3RIV0NhcHMoQ3B1SW5mbyYs
-IGxvbmcgdW5zaWduZWQgaW50LCBjb25zdCBMaW51eEhXQ2FwTWFwcGluZyosIHNpemVfdCnigJk6
-CiA+ICAgICBhc21qaXQvY29yZS9jcHVpbmZvLmNwcDo4NDA6MjQ6IGVycm9yOiDigJhnZXRhdXh2
-YWzigJkgd2FzIG5vdCBkZWNsYXJlZCBpbiB0aGlzIHNjb3BlCiA+ICAgICAgIDg0MCB8ICAgdW5z
-aWduZWQgbG9uZyBtYXNrID0gZ2V0YXV4dmFsKHR5cGUpOwogPiAgICAgICAgICAgfCAgICAgICAg
-ICAgICAgICAgICAgICAgIF5+fn5+fn5+fgogPiAgICAgYXNtaml0L2NvcmUvY3B1aW5mby5jcHA6
-IEluIGZ1bmN0aW9uIOKAmHZvaWQgYXNtaml0OjpfYWJpXzFfMTA6OmRldGVjdEFSTUNwdShDcHVJ
-bmZvJinigJk6CiA+ICAgICBhc21qaXQvY29yZS9jcHVpbmZvLmNwcDo5NzI6MjE6IGVycm9yOiDi
-gJhBVF9IV0NBUOKAmSB3YXMgbm90IGRlY2xhcmVkIGluIHRoaXMgc2NvcGUKID4gICAgICAgOTcy
-IHwgICBkZXRlY3RIV0NhcHMoY3B1LCBBVF9IV0NBUCwgaHdDYXBNYXBwaW5nLCBBU01KSVRfQVJS
-QVlfU0laRShod0NhcE1hcHBpbmcpKTsKID4gICAgICAgICAgIHwgICAgICAgICAgICAgICAgICAg
-ICBefn5+fn5+fgogPiAgICAgYXNtaml0L2NvcmUvY3B1aW5mby5jcHA6OTczOjIxOiBlcnJvcjog
-4oCYQVRfSFdDQVAy4oCZIHdhcyBub3QgZGVjbGFyZWQgaW4gdGhpcyBzY29wZQogPiAgICAgICA5
-NzMgfCAgIGRldGVjdEhXQ2FwcyhjcHUsIEFUX0hXQ0FQMiwgaHdDYXBNYXBwaW5nMiwgQVNNSklU
-X0FSUkFZX1NJWkUoaHdDYXBNYXBwaW5nMikpOwogPiAgICAgICAgICAgfCAgICAgICAgICAgICAg
-ICAgICAgIF5+fn5+fn5+fgoKID4gWWV0LCBzeXMvYXV4di5oIHdhcyBkZXRlY3RlZCBhdCBjb25m
-aWd1cmUgdGltZToKCiA+ICAgICBjaGVja2luZyBmb3Igc3lzL2F1eHYuaC4uLiB5ZXMKCiA+IFRo
-aXMgZGVmY29uZmlnIGlzIGVub3VnaCB0byByZXByb2R1Y2UgdGhlIGVycm9yOgoKID4gICAgIEJS
-Ml9hYXJjaDY0PXkKID4gICAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQogPiAgICAgQlIyX1RP
-T0xDSEFJTl9FWFRFUk5BTF9CT09UTElOPXkKID4gICAgIEJSMl9QQUNLQUdFX0VSTEFORz15Cgog
-PiBTaW5jZSB1cHN0cmVhbSByZWZ1c2VkIHRoZSBwYXRjaCwgYW5kIHRoZXJlIGlzIG5vIGZpeCB0
-aGF0IHdhcyBzdWJtaXR0ZWQKID4gdG8gdGhlIGFjdHVhbCB1cHN0cmVhbSAoYXNtaml0KSwgZHJv
-cCB0aGUgcmVqZWN0cmVkIHBhdGNoLCBhbmQgZGlzYWJsZQogPiBmb3IgdUNsaWJjOiB0aGUgcGF0
-Y2ggaXMgaW5jb3JyZWN0LCBhbmQgd2UgY2FuJ3QgZml4IGEgYnVpbGQgaXNzdWUgb24KID4gdUNs
-aWJjIGJ5IGludHJvZHVjaW5nIGFub3RoZXIgb24gZ2xpYmMuCgogPiBGaXhlczoKID4gICAgIGh0
-dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2ZjMS9mYzE5YmFkMjI2M2JkZmFj
-ZWE1OTQyMTdkNWRkZmRlMGUyNzg5NWIxLwogPiAgICAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJv
-b3Qub3JnL3Jlc3VsdHMvMTE0LzExNDE2ZDgxZDViMjdmYzA2MjdiMzM1YTk3MTE1NGMwODhkNTc1
-NGEvCgogPiBTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluQG9yYW5nZS5j
-b20+CiA+IENjOiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0PgogPiBDYzogTWF4aW0gS29j
-aGV0a292IDxmaWRvX21heEBpbmJveC5ydT4KCiA+IENoYW5nZXMgdjEgLT4gdjI6CiA+ICAgLSB1
-cGRhdGUgY29tbWVudCB3aGVuIHVuYXZhaWxhYmxlCgpDb21taXR0ZWQsIHRoYW5rcy4KCi0tIApC
-eWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=127986f3eda6cc8396f8f83269d525fe13dbde1a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+fix CVE-2023-47038 - Write past buffer end via illegal user-defined Unicode property
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 2165c8c601..667b09221d 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,10 +1,10 @@
+-# Hashes from: https://www.cpan.org/src/5.0/perl-5.36.1.tar.xz.{md5,sha1,sha256}.txt
+-md5  825f6b1d7e03b22522e0bdb992fbb728  perl-5.36.1.tar.xz
+-sha1  7b766266af08a6cef0487308e80b40d5d8069df7  perl-5.36.1.tar.xz
+-sha256  bd91217ea8a8c8b81f21ebbb6cefdf0d13ae532013f944cdece2cd51aef4b6a7  perl-5.36.1.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.36.2.tar.xz.{md5,sha1,sha256}.txt
++md5  698ae4946b28e38a729916f04cc389a3  perl-5.36.2.tar.xz
++sha1  9bd6e3f7c333e2e5f14c8650333fc29da3df2d90  perl-5.36.2.tar.xz
++sha256  19445f09ea9f6ada33297010d5b76ac46be565568d1a4377a6bc736cd795a128  perl-5.36.2.tar.xz
+ 
+-# Hash from: https://github.com/arsv/perl-cross/releases/download/1.4.1/perl-cross-1.4.1.hash
+-sha256  3e14bb4f28c83586c668c5f9f6b4e57b138b4ec2fae0271086e29d4e352670ca  perl-cross-1.4.1.tar.gz
++# Hash from: https://github.com/arsv/perl-cross/releases/download/1.5.1/perl-cross-1.5.1.hash
++sha256  35d859b49bab274021d8a61511fd39a70a58cb727223de5b54342898155cf5e0  perl-cross-1.5.1.tar.gz
+ 
+ # Locally calculated
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 734e8efec6..735adea01a 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 36
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
+ PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.4.1
++PERL_CROSS_VERSION = 1.5.1
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
