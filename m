@@ -4,85 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5386BC4167B
-	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 22:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EAA7C4167B
+	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 22:11:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E31FF615F8;
-	Wed, 29 Nov 2023 22:08:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E31FF615F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 168A5615FA;
+	Wed, 29 Nov 2023 22:11:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 168A5615FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lYbKT9ayszTP; Wed, 29 Nov 2023 22:08:52 +0000 (UTC)
+	with ESMTP id AiV4SG0r9_xs; Wed, 29 Nov 2023 22:11:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 568C0614F9;
-	Wed, 29 Nov 2023 22:08:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 568C0614F9
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA5C661609;
+	Wed, 29 Nov 2023 22:11:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA5C661609
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D5F4C1BF356
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 22:08:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B6DCC1BF356
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 22:11:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE98784400
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 22:08:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE98784400
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FBC78177C
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 22:11:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FBC78177C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lEYA5o36EM-0 for <buildroot@lists.busybox.net>;
- Wed, 29 Nov 2023 22:08:48 +0000 (UTC)
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A412A843FE
- for <buildroot@buildroot.org>; Wed, 29 Nov 2023 22:08:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A412A843FE
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-332ff20ec45so901692f8f.1
- for <buildroot@buildroot.org>; Wed, 29 Nov 2023 14:08:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701295726; x=1701900526;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=aSLSGDxpX4ceqy4RA8mTdiJ1iimoUnvG4OLvx07XzLQ=;
- b=qSSBoqCT+O9P3dMdLSvkslwChLnumhW6vxRJp1q94AGbOf/bVjchXBpp1Gl3BnoJuZ
- 1TDakhIYnPNe/b8HioqlnsoZtt9P6y40QajtHJrL3PG0fHfsJDFNPli7V63+gIfGeTJr
- 8TDOuLUVb1aP+0ADEzngQO1bkXmcHBltfO+NtPDxo3sM/nbBjh3gcQIhmP36SvQFsOZD
- 9v+tqkTs/Zt9UtQRfVKsyPYaFBIPqICvnmLliH5BtoCrqpEj8Z+D5CBCoEJvx1kY+Ssy
- 0QxzM9axA/9qVD6d2Lb5T1nn0vJBJQEirnYNsjnBBjN+MbyzHl/YmHy6ZVDoJsWmqu8S
- 6GVw==
-X-Gm-Message-State: AOJu0YxG4KACqYnzk8qI+L+Hs/sPfq5jSRsu/Ms2VhM82MBeL6RZwEjS
- UlxaFmd8mJVVRti6Z57G7OwQqQcf7/c=
-X-Google-Smtp-Source: AGHT+IFaMo6ind8w0DeuB3LYCr+/GcG1zRI9A8aCPzddZcYLEuXLAygtC/AhnpYQAepAyeEAH31O6A==
-X-Received: by 2002:adf:f944:0:b0:333:1a90:83c5 with SMTP id
- q4-20020adff944000000b003331a9083c5mr2211022wrr.19.1701295725644; 
- Wed, 29 Nov 2023 14:08:45 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- fa16-20020a05600c519000b0040b36ad5413sm3477117wmb.46.2023.11.29.14.08.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Nov 2023 14:08:44 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 29 Nov 2023 23:08:43 +0100
-Message-ID: <20231129220843.1712894-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+ with ESMTP id oLlOoXd6CRBl for <buildroot@lists.busybox.net>;
+ Wed, 29 Nov 2023 22:11:01 +0000 (UTC)
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 06B9A81755
+ for <buildroot@buildroot.org>; Wed, 29 Nov 2023 22:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06B9A81755
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4SgYS02P5Dz9stb;
+ Wed, 29 Nov 2023 23:10:56 +0100 (CET)
+Message-ID: <36de4fd0-85f8-46a4-9146-05029704f458@lindra.de>
+Date: Wed, 29 Nov 2023 23:10:53 +0100
 MIME-Version: 1.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20231123174105.2435757-1-hypnotoad@lindra.de>
+ <20231125220439.GQ3177259@scaer>
+ <f0b3caa4-43ce-4f0e-a855-9726f1944644@lindra.de>
+ <20231129064229.GI3177259@scaer>
+From: Ralf Dragon <hypnotoad@lindra.de>
+In-Reply-To: <20231129064229.GI3177259@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701295726; x=1701900526; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=aSLSGDxpX4ceqy4RA8mTdiJ1iimoUnvG4OLvx07XzLQ=;
- b=aZTHWVF0J0VBlz728jTNWW5+2JPoegXL2TDYAySzhx42QrpR2qXr87a1EdLM2aLoTW
- Ei6bVsQWPDICiKS1FgRsicIU3vj/5rg3qVWkjdrYRJpD3Z3eIbt95X4hen0Htl8ko98B
- 21Wrs12FGAEDPRUUhjy/OZ6Ks4jB5zPCslTm60JA/2FNVLhJn7vNipnAKkqYXewWvtNa
- 7pTCIvq2LvQ8XRcgowj9LUH2O8pnJCoMv3raDSOLihvt6PCvozXLOD/oG+Q4kCZbVXal
- 1JUxG+Zn43zvUPngiXKhzMRsPIXvbFp4hQsatHAkfMGyFHm8txrXs5kC6nrbLTJnpLAe
- GZOw==
+ d=lindra.de; s=MBO0001; t=1701295856;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ in-reply-to:in-reply-to:references:references;
+ bh=cXLoRiS0qmLFqxf/BullZIIXUA9LDEXp8Q5xUdJMYCU=;
+ b=m5izaD9D+ZDxx03UHbEPYHPzyJlfy4FQBdHqGkSzMYFNfHYCCm00pgb1U3o/I4C7uShpQv
+ 4EWYnzCYU8Ui1GOXMugiTQ4/X+/9ESw+xL6NSRQuBGkmEEX7T7YvRzAMOs8q+XndO3/L9c
+ kXMZBSoaPUunRSoSXBvFfLdWffZLD/4eZuONv7o8YgPCUYyfND7HFfmAoDs7zqJtz9Wizx
+ Iaj9yijiD5KWeMeUM9GjeQRcJlP5+B9g4OPswkmBBMCnwa/btieoBks+JbLgM7mDj6M4Xg
+ N+UlVHZT2S8tm6OT2UV2/b9nMRKdg4NcoxmVovmWG0uc4qOk7itLHyomBC0+Hw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=aZTHWVF0
-Subject: [Buildroot] [PATCH 1/1] package/openfpgaloader: bump to version
- 0.11.0
+ dkim=pass (2048-bit key) header.d=lindra.de header.i=@lindra.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=m5izaD9D
+Subject: Re: [Buildroot] [PATCH 1/1] python-sip: fix compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,65 +77,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jean Burgat <jeanburgat33@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1645841177403968776=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This bump will fix the following build failure thanks to
-https://github.com/trabucayre/openFPGALoader/commit/933ed793e85dea7e16ddd6540791097fd3a299f5:
+This is a multi-part message in MIME format.
+--===============1645841177403968776==
+Content-Type: multipart/alternative;
+ boundary="------------XQz0IfFAYBtD1bPtMOYzAgQF"
+Content-Language: en-US
 
-In file included from /home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/jtag.hpp:13,
-                 from /home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/device.hpp:13,
-                 from /home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/efinix.hpp:11,
-                 from /home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/efinix.cpp:6:
-/home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/board.hpp:49:9: error: 'uint8_t' does not name a type
-   49 |         uint8_t tms_pin; /*! TMS pin value */
-      |         ^~~~~~~
-/home/buildroot/autobuild/instance-3/output-1/build/openfpgaloader-0.10.0/src/board.hpp:12:1: note: 'uint8_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
-   11 | #include "cable.hpp"
-  +++ |+#include <cstdint>
-   12 |
+This is a multi-part message in MIME format.
+--------------XQz0IfFAYBtD1bPtMOYzAgQF
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://github.com/trabucayre/openFPGALoader/releases/tag/v0.11.0
+Dear Yann,
 
-Fixes:
- - http://autobuild.buildroot.org/results/ee89dcc7430079195e2e9ff300e1320de848d3e3
+We also try hard to push patches upstream so that we do not have to
+>>    carry them indefinitely. Please try and submit that patch to the SIP
+>>    project:
+>>         [3]https://riverbankcomputing.com/support/lists
+>>
+>> They write that siplib is no longer supported and that 4.19.25 is the last version:
+>> [4]https://riverbankcomputing.com/software/sip/download  . That's why I did not consider asking there.
+> What I read is that version 4 is no longer maintained:
+>
+>      SIP v4 is no longer supported. This is the last release.
+>
+> The repository is still getting a lot of attention, and they tagged
+> 6.7.12 last october, which is prestty recent. Also, it looks like it is
+> now a proper python package, so we should be able to migrate python-sip
+> to the python-package infra now, and drop our custom _CONFIGURE_CMDS,
+> _BUILD_CMDS, and _INSTLAL_CMDS altogether.
+>
+> Of course, pyqt5, the sole user of python-sip, may still require sip v4,
+> which would preclude updating... :-(
+>
+> Could you look into that?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/openfpgaloader/openfpgaloader.hash | 2 +-
- package/openfpgaloader/openfpgaloader.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Debian did a pretty similar fix like mine 1 year ago: 
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=%231023913 . Freebsd 
+uses pyqt5 with sip6 
+https://gitlab.com/FreeBSD/freebsd-ports/-/commit/08cac15470d53f0475de0de67a94c7e2cd7e021e 
+. I will do one attempt to update to their versions 5.15.10 with 6.7.12 
+from SIP6.
 
-diff --git a/package/openfpgaloader/openfpgaloader.hash b/package/openfpgaloader/openfpgaloader.hash
-index a8b537782c..6fa81a98a2 100644
---- a/package/openfpgaloader/openfpgaloader.hash
-+++ b/package/openfpgaloader/openfpgaloader.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  966b4629df86b1d520ddd8a4e0a3fc00060b26b5ab4e172b596bd9d4659a196e  openfpgaloader-0.10.0.tar.gz
-+sha256  a463690358d2510919472c2f460039a304d016a08a45970821e667eea1c48cc8  openfpgaloader-0.11.0.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
-index 6d7fbd9850..0fd172b532 100644
---- a/package/openfpgaloader/openfpgaloader.mk
-+++ b/package/openfpgaloader/openfpgaloader.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENFPGALOADER_VERSION = 0.10.0
-+OPENFPGALOADER_VERSION = 0.11.0
- OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,v$(OPENFPGALOADER_VERSION))
- OPENFPGALOADER_LICENSE = Apache-2.0
- OPENFPGALOADER_LICENSE_FILES = LICENSE
--- 
-2.42.0
+Best,
+
+Ralf
+
+
+--------------XQz0IfFAYBtD1bPtMOYzAgQF
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p>Dear Yann,</p>
+    <span style="white-space: pre-wrap">  We also try hard to push patches upstream so that we do not have to</span>
+    <blockquote type="cite" cite="mid:20231129064229.GI3177259@scaer">
+      <blockquote type="cite">
+        <pre class="moz-quote-pre" wrap="">  carry them indefinitely. Please try and submit that patch to the SIP
+  project:
+       [3]<a class="moz-txt-link-freetext" href="https://riverbankcomputing.com/support/lists">https://riverbankcomputing.com/support/lists</a>
+
+They write that siplib is no longer supported and that 4.19.25 is the last version:
+[4]<a class="moz-txt-link-freetext" href="https://riverbankcomputing.com/software/sip/download">https://riverbankcomputing.com/software/sip/download</a> . That's why I did not consider asking there.
+</pre>
+      </blockquote>
+      <pre class="moz-quote-pre" wrap="">
+What I read is that version 4 is no longer maintained:
+
+    SIP v4 is no longer supported. This is the last release.
+
+The repository is still getting a lot of attention, and they tagged
+6.7.12 last october, which is prestty recent. Also, it looks like it is
+now a proper python package, so we should be able to migrate python-sip
+to the python-package infra now, and drop our custom _CONFIGURE_CMDS,
+_BUILD_CMDS, and _INSTLAL_CMDS altogether.
+
+Of course, pyqt5, the sole user of python-sip, may still require sip v4,
+which would preclude updating... :-(
+
+Could you look into that?</pre>
+    </blockquote>
+    <p>Debian did a pretty similar fix like mine 1 year ago:
+      <a class="moz-txt-link-freetext" href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=%231023913">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=%231023913</a> .
+      Freebsd uses pyqt5 with sip6
+<a class="moz-txt-link-freetext" href="https://gitlab.com/FreeBSD/freebsd-ports/-/commit/08cac15470d53f0475de0de67a94c7e2cd7e021e">https://gitlab.com/FreeBSD/freebsd-ports/-/commit/08cac15470d53f0475de0de67a94c7e2cd7e021e</a>
+      . I will do one attempt to update to their versions 5.15.10 with
+      6.7.12 from SIP6. <br>
+    </p>
+    <p>Best,</p>
+    <p>Ralf<br>
+    </p>
+    <p><br>
+    </p>
+    <span style="white-space: pre-wrap">
+</span>
+  </body>
+</html>
+
+--------------XQz0IfFAYBtD1bPtMOYzAgQF--
+
+--===============1645841177403968776==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1645841177403968776==--
