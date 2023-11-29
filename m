@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A106C4167B
-	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 21:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1CA6C07CB1
+	for <buildroot@archiver.kernel.org>; Wed, 29 Nov 2023 21:38:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 158D4615D1;
-	Wed, 29 Nov 2023 21:30:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 158D4615D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BFDD615C8;
+	Wed, 29 Nov 2023 21:38:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BFDD615C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XGW6fhWh7ROT; Wed, 29 Nov 2023 21:30:24 +0000 (UTC)
+	with ESMTP id anDvoYTGa_8J; Wed, 29 Nov 2023 21:38:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39FCF615CC;
-	Wed, 29 Nov 2023 21:30:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39FCF615CC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6C4921BF969
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 21:30:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFDCD615C5;
+	Wed, 29 Nov 2023 21:38:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFDCD615C5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D0301BF377
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 21:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52AD582099
- for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 21:30:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52AD582099
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7C654095B
+ for <buildroot@lists.busybox.net>; Wed, 29 Nov 2023 21:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7C654095B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LVDPt-a3BXow for <buildroot@lists.busybox.net>;
- Wed, 29 Nov 2023 21:30:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 67BEC82068
- for <buildroot@buildroot.org>; Wed, 29 Nov 2023 21:30:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67BEC82068
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4848287589; Wed, 29 Nov 2023 21:30:08 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 29 Nov 2023 22:26:32 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 02e80e06c54af2863b622f1ecaa076656f1c16cf
-X-Git-Newrev: cb924944051be8f121feff2f510d04d135e0f4aa
-X-Patchwork-Hint: ignore
-Message-Id: <20231129213008.4848287589@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgdiplus: needs C++
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KRShPZyYr8CY for <buildroot@lists.busybox.net>;
+ Wed, 29 Nov 2023 21:38:11 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7BF2A4055E
+ for <buildroot@buildroot.org>; Wed, 29 Nov 2023 21:38:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BF2A4055E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 866B020002;
+ Wed, 29 Nov 2023 21:38:09 +0000 (UTC)
+Date: Wed, 29 Nov 2023 22:38:08 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20231129223808.19195702@windsurf>
+In-Reply-To: <1c744e50-01e2-4e78-94b1-62b6ebfd992d@benettiengineering.com>
+References: <20231123173957.2385041-1-giulio.benetti@benettiengineering.com>
+ <20231124225923.59d08949@windsurf>
+ <1c744e50-01e2-4e78-94b1-62b6ebfd992d@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1701293889;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=DDaIznhde8WnjDrm/KrD4zOWc+cMeyNN0d15kuFeOxg=;
+ b=HxcCi0e/+W9aUJdJbfAc8+HuxM3AY1Zip4H6vlnAet6e12oFYu+qtR/UjX7Dwef0deO5El
+ 8hz4C1IVMlrV63zvHUmtXSSsJlWkLFOZMUsVUIuKg3xK4tseR41Ut90XNaW6go679nNSEl
+ X6kYvSNlkS4+VfYJoQ/tAXIOMbUIluo80LMw0AD8HA4RsMHF1kdsr0Cr9J3+b+8+BQQQGp
+ 36O68cK+WTHm2ia0UeWu4fKLlX45Rce8OPet0unascpp1mokJmQcJG6OX/Wz/RhiRSFmfz
+ nuIYvz3FHNjxJ5u1LWCsMfnYRnzwhoAyirSTijjZafIyNkAYdieI4IN8CmwAcQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HxcCi0e/
+Subject: Re: [Buildroot] [PATCH] package/swupdate: workaround runtime update
+ failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,57 +77,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>,
+ James Autry <jautry@tekvox.com>, Jim Reinhart <jimr@tekvox.com>,
+ Matthew Maron <matthewm@tekvox.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb924944051be8f121feff2f510d04d135e0f4aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Giulio,
 
-Unfortunately, libgdiplus unconditionally calls AC_PROG_CXX since
-version 6.1 for google-based tests resulting in the following build
-failure without C++ since commit
-5b6dd17b864cfb9133d3e2d78b9a15fed877b15b and
-https://github.com/mono/libgdiplus/commit/4f9802230653ffe810ed2e535a572e42821fdf2d:
+On Sat, 25 Nov 2023 01:24:45 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-checking whether the C++ compiler works... no
-configure: error: in `/home/thomas/autobuild/instance-3/output-1/build/libgdiplus-6.1':
-configure: error: C++ compiler cannot create executables
+> > Is there a compiler bug? Or a bug in
+> > the swupdate code base, such as some undefined behavior that causes an
+> > incorrect behavior when built -Os, but not -O3 ?  
+> 
+> An undefined behavior showing up when built with -Os, but I'm currently
+> trying to work it out and also to give a test case to SWUpdate
+> Maintainer using qemu-arm.
+> 
+> So I think it's better I get to the root cause, I fix it and later
+> provide a local patch to fix the problem.
 
-Fixes:
- - http://autobuild.buildroot.org/results/3757921a2160ca209089a0b47414a445cc42e35e
+Sounds good, thanks for the effort.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgdiplus/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> I've already set the patch as Rejected on Patchwork, sorry for the
+> noise.
 
-diff --git a/package/libgdiplus/Config.in b/package/libgdiplus/Config.in
-index 6ddf44fd0c..d26a997d46 100644
---- a/package/libgdiplus/Config.in
-+++ b/package/libgdiplus/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBGDIPLUS
- 	depends on BR2_USE_WCHAR # libglib2 -> gettext
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_XLIB_LIBXFT
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_CAIRO
-@@ -13,7 +14,8 @@ config BR2_PACKAGE_LIBGDIPLUS
- 
- 	  https://github.com/mono/libgdiplus
- 
--comment "libgdiplus needs a toolchain w/ wchar, threads"
-+comment "libgdiplus needs a toolchain w/ wchar, threads, C++"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP
+No worries at all!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
