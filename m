@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 747C4C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D7D6C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E5644365B;
-	Thu, 30 Nov 2023 23:05:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E5644365B
+	by smtp2.osuosl.org (Postfix) with ESMTP id B377543653;
+	Thu, 30 Nov 2023 23:05:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B377543653
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y9KqI1VPdgd4; Thu, 30 Nov 2023 23:05:21 +0000 (UTC)
+	with ESMTP id obDCrVgMgkNT; Thu, 30 Nov 2023 23:05:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 153A143686;
-	Thu, 30 Nov 2023 23:05:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 153A143686
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1843E1BF983
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACBAA43688;
+	Thu, 30 Nov 2023 23:05:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACBAA43688
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CDB61BF990
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E79B6FA44
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4CAC4365B
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E79B6FA44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4CAC4365B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7gdHaCc3lv5N for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G1NZPbIwOcoC for <buildroot@lists.busybox.net>;
  Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DABEB60B5D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DB344365C
  for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DABEB60B5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DB344365C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8B9B8766E; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+ id 7B3118766B; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 23:53:12 +0100
+Date: Thu, 30 Nov 2023 23:45:47 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: a29a42e11e32b54e8f46c1ad50557b132093bef1
-X-Git-Newrev: 515f4a1c1d1a46a64eb648ee18b447bc0a22fc31
+X-Git-Oldrev: 566bad2b39f3ee0b91794c946882a3b62e6591d1
+X-Git-Newrev: cfaac7f0a08fddd9a7b83eabdd3e679c9c0b1c1e
 X-Patchwork-Hint: ignore
-Message-Id: <20231130230401.D8B9B8766E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libxml2: security
- bump to version 2.11.6
+Message-Id: <20231130230401.7B3118766B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/memcached:
+ security bump to version 1.6.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=515f4a1c1d1a46a64eb648ee18b447bc0a22fc31
+commit: https://git.buildroot.net/buildroot/commit/?id=cfaac7f0a08fddd9a7b83eabdd3e679c9c0b1c1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fix CVE-2023-45322: libxml2 through 2.11.5 has a use-after-free that can
-only occur after a certain memory allocation fails. This occurs in
-xmlUnlinkNode in tree.c. NOTE: the vendor's position is "I don't think
-these issues are critical enough to warrant a CVE ID ... because an
-attacker typically can't control when memory allocations fail."
+Fix CVE-2023-46852: In Memcached before 1.6.22, a buffer overflow exists
+when processing multiget requests in proxy mode, if there are many
+spaces after the "get" substring.
 
-https://gitlab.gnome.org/GNOME/libxml2/-/blob/v2.11.6/NEWS
+Fix CVE-2023-46853: In Memcached before 1.6.22, an off-by-one error
+exists when processing proxy requests in proxy mode, if \n is used
+instead of \r\n.
+
+https://github.com/memcached/memcached/wiki/ReleaseNotes1622
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e5af07dce9eb2333a863b09ac1c06eb35f3adb70)
+(cherry picked from commit bc96e9da0d8010482dcc50c055567d4625498088)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index cad19f930f..78c1ddc6a2 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.5.sha256sum
--sha256  3727b078c360ec69fa869de14bd6f75d7ee8d36987b071e6928d4720a28df3a6  libxml2-2.11.5.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.6.sha256sum
-+sha256  c90eee7506764abbe07bb616b82da452529609815aefef423d66ef080eb0c300  libxml2-2.11.6.tar.xz
- # License files, locally calculated
- sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index d2f96a7e96..b7a2c796fc 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index c223a14bac..bd2072df0b 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,6 +1,6 @@
+-# From http://www.memcached.org/files/memcached-1.6.21.tar.gz.sha1
+-sha1  6d899680b4ba4b76b6c92120143cf87630ee984a  memcached-1.6.21.tar.gz
++# From http://www.memcached.org/files/memcached-1.6.22.tar.gz.sha1
++sha1  7a691f390d59616dbebfc9e2e4942d499c39a338  memcached-1.6.22.tar.gz
+ 
+ # Locally computed
+-sha256  c788980efc417dd5d93c442b1c8b8769fb2018896c29de3887d22a2f143da2ee  memcached-1.6.21.tar.gz
++sha256  34783a90a4ccf74c4107085fd92b688749d23b276cfdad9f04e4f725a05d1ca7  memcached-1.6.22.tar.gz
+ sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index a1a5eac049..05ae69eb32 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBXML2_VERSION_MAJOR = 2.11
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).5
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).6
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+-MEMCACHED_VERSION = 1.6.21
++MEMCACHED_VERSION = 1.6.22
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
