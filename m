@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25E53C10F04
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86EFAC4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1B014368B;
-	Thu, 30 Nov 2023 23:07:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1B014368B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A0C54368B;
+	Thu, 30 Nov 2023 23:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A0C54368B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 04hEu2Pn78vB; Thu, 30 Nov 2023 23:07:11 +0000 (UTC)
+	with ESMTP id 6dtjHBXb6H-D; Thu, 30 Nov 2023 23:07:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B06B4369A;
-	Thu, 30 Nov 2023 23:07:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B06B4369A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C5DD4368D;
+	Thu, 30 Nov 2023 23:07:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C5DD4368D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7D0B41BF983
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FD4B1BF844
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC75341ED7
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD81941E5F
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC75341ED7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD81941E5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Rfwokr7Ipkl for <buildroot@lists.busybox.net>;
- Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+ with ESMTP id 9fRYEKeb8hS4 for <buildroot@lists.busybox.net>;
+ Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22B8E41E5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC19241F5D
  for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22B8E41E5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC19241F5D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 103EA8766E; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+ id BE5A08766B; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 23:40:30 +0100
+Date: Thu, 30 Nov 2023 23:52:18 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 9119cd3d621bc625b403e8f41cfb2af72e5c4705
-X-Git-Newrev: 178f44b18fe1ead04d32c4a5e3915e5a5ac4b8eb
+X-Git-Oldrev: 72ec404bde1a734bf753c955869c7d2144b73a2d
+X-Git-Newrev: ced7a59bb0b2fe6831afae949b3bec16dd275d5b
 X-Patchwork-Hint: ignore
-Message-Id: <20231130230401.103EA8766E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/motion: fix webp
- build
+Message-Id: <20231130230401.BE5A08766B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libxml2: bump
+ version to 2.11.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=178f44b18fe1ead04d32c4a5e3915e5a5ac4b8eb
+commit: https://git.buildroot.net/buildroot/commit/?id=ced7a59bb0b2fe6831afae949b3bec16dd275d5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fix the following build failure raised since bump of webp to version
-1.3.2 in commit c88c1d3319dd24fa833455a2e7d96bc4585bab7f:
+Release notes:
+https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.0.news
+https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.1.news
+https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.2.news
+https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.3.news
+https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.4.news
 
-/home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/aarch64_be-buildroot-linux-uclibc/13.2.0/../../../../aarch64_be-buildroot-linux-uclibc/bin/ld: picture.o: undefined reference to symbol 'WebPMemoryWriterClear'
-/home/autobuild/autobuild/instance-9/output-1/host/lib/gcc/aarch64_be-buildroot-linux-uclibc/13.2.0/../../../../aarch64_be-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-9/output-1/host/aarch64_be-buildroot-linux-uclibc/sysroot/usr/lib64/libwebp.so.7: error adding symbols: DSO missing from command line
-
-Fixes:
- - http://autobuild.buildroot.org/results/9b859a701debeaddf1f9909e16adc6811a620576
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1267a234fff8c5270d8ead5541167053771636b1)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit dfe1ca7872a45bcdc825ff0900d7fd929097a635)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0002-Include-libwebp-when-WEBP-is-enabled.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/motion/0002-Include-libwebp-when-WEBP-is-enabled.patch b/package/motion/0002-Include-libwebp-when-WEBP-is-enabled.patch
-new file mode 100644
-index 0000000000..a1536a7d2f
---- /dev/null
-+++ b/package/motion/0002-Include-libwebp-when-WEBP-is-enabled.patch
-@@ -0,0 +1,26 @@
-+From 40ecd71ff361442f1579089481619dd7cae90ffd Mon Sep 17 00:00:00 2001
-+From: Piotr Mionskowski <piotr.mionskowski@gmail.com>
-+Date: Sun, 9 Jul 2023 01:44:49 +0200
-+Subject: [PATCH] Include libwebp when WEBP is enabled
-+
-+Upstream: https://github.com/Motion-Project/motion/commit/40ecd71ff361442f1579089481619dd7cae90ffd
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ce588f65..ee45ac37 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -191,8 +191,8 @@ AS_IF([test "${WEBP}" = "yes" ], [
-+     AS_IF([pkg-config libwebpmux ], [
-+         AC_MSG_RESULT(yes)
-+         AC_DEFINE([HAVE_WEBP], [1], [Define to 1 if WEBP is around])
-+-        TEMP_CFLAGS="$TEMP_CFLAGS "`pkg-config --cflags libwebpmux`
-+-        TEMP_LIBS="$TEMP_LIBS "`pkg-config --libs libwebpmux`
-++        TEMP_CFLAGS="$TEMP_CFLAGS "`pkg-config --cflags libwebpmux libwebp`
-++        TEMP_LIBS="$TEMP_LIBS "`pkg-config --libs libwebpmux libwebp`
-+       ],[
-+         AC_MSG_RESULT(no)
-+       ]
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 37030bdfaa..f3650c5ec5 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.4.sha256sum
+-sha256  ed0c91c5845008f1936739e4eee2035531c1c94742c6541f44ee66d885948d45  libxml2-2.10.4.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.4.sha256sum
++sha256  737e1d7f8ab3f139729ca13a2494fd17bf30ddb4b7a427cf336252cab57f57f7  libxml2-2.11.4.tar.xz
+ # License files, locally calculated
+ sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index cf26a36cc4..9f7774f719 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXML2_VERSION_MAJOR = 2.10
++LIBXML2_VERSION_MAJOR = 2.11
+ LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
