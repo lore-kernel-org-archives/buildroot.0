@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89494C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B75BC4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:06:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3FE8E4368E;
-	Thu, 30 Nov 2023 23:06:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FE8E4368E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 145264368D;
+	Thu, 30 Nov 2023 23:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 145264368D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Drduv85_vLac; Thu, 30 Nov 2023 23:06:16 +0000 (UTC)
+	with ESMTP id Xcn_koAS6tTd; Thu, 30 Nov 2023 23:06:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 071214365B;
-	Thu, 30 Nov 2023 23:06:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 071214365B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 52A131BF983
+	by smtp2.osuosl.org (Postfix) with ESMTP id E5BAA4366F;
+	Thu, 30 Nov 2023 23:06:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5BAA4366F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CCDF1BF990
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 030294365C
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 030294365C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FA8941E7B
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FA8941E7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r6XYIHD7OD_T for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QKq52gzisUbQ for <buildroot@lists.busybox.net>;
  Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99CDA4366F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DC0241ED7
  for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99CDA4366F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DC0241ED7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95F328766B; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+ id 693AE8766A; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 23:50:17 +0100
+Date: Thu, 30 Nov 2023 23:45:40 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 48428b07ad77d693e6546d42c2f04688821a9297
-X-Git-Newrev: dbf8a45bb340a0494ac7f3f274644c5e0a1bc594
+X-Git-Oldrev: 37f6c072dd75962e2635c228ac7aeae66ed4bba4
+X-Git-Newrev: 566bad2b39f3ee0b91794c946882a3b62e6591d1
 X-Patchwork-Hint: ignore
-Message-Id: <20231130230401.95F328766B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/squid: bump
- version to 6.3
+Message-Id: <20231130230401.693AE8766A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/memcached: fix
+ uclibc-ng build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbf8a45bb340a0494ac7f3f274644c5e0a1bc594
+commit: https://git.buildroot.net/buildroot/commit/?id=566bad2b39f3ee0b91794c946882a3b62e6591d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0e15854fbcb12c22bda59affb658aecc002177ed)
+Fix the following uclibc-ng build failure raised since bump to version
+1.6.21 in commit 6ce55ab0ed3b7125cd11ecfe8c18aaf156b5f060 and
+https://github.com/memcached/memcached/commit/875371a75cbf1f92350de2d1fa0fae4a35ed572b:
+
+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: memcached-thread.o: in function `thread_setname':
+thread.c:(.text+0xea2): undefined reference to `pthread_setname_np'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e856d381f5ec7d2727f21c8bd46dacb456984416
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bfa3cd74d017ba47b91729f131daf5d5993c5265)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../memcached/0002-fix-build-on-uclibc-ng.patch    | 64 ++++++++++++++++++++++
+ package/memcached/memcached.mk                     |  2 +
+ 2 files changed, 66 insertions(+)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index ec60a0e9d1..a6d4c5d056 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v6/squid-6.2.tar.xz.asc
--md5  ad01b7d82b6a00ffd8cd39b97113d05a  squid-6.2.tar.xz
--sha1  29ddb4c522a36f1270e7cfa66f0dec8805fd2b57  squid-6.2.tar.xz
-+# From http://www.squid-cache.org/Versions/v6/squid-6.3.tar.xz.asc
-+md5  2512b5d27856e6f91a97719784506893  squid-6.3.tar.xz
-+sha1  7bd74034015c6a4d345a4d277a431908bed2ec4a  squid-6.3.tar.xz
- # Locally calculated
--sha256  dd759e151e997d31786d91743d327b1b4b532f1caea66bf81100ec8ba04ec4c1  squid-6.2.tar.xz
-+sha256  74a0f5586a7a5d89573d502708d5e1d66ddf0430cf4802cc7261b765653248fa  squid-6.3.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 167e9f67d8..019a202952 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/memcached/0002-fix-build-on-uclibc-ng.patch b/package/memcached/0002-fix-build-on-uclibc-ng.patch
+new file mode 100644
+index 0000000000..a5af7a2adb
+--- /dev/null
++++ b/package/memcached/0002-fix-build-on-uclibc-ng.patch
+@@ -0,0 +1,64 @@
++From c84e5e55e0e9e793849f721d30979242ed6a6ee3 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 1 Oct 2023 14:12:38 +0200
++Subject: [PATCH] fix build on uclibc-ng
++
++Fix the following build failure with uclibc-ng raised since version
++1.6.18 and
++https://github.com/memcached/memcached/commit/875371a75cbf1f92350de2d1fa0fae4a35ed572b:
++
++/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: memcached-thread.o: in function `thread_setname':
++thread.c:(.text+0xea2): undefined reference to `pthread_setname_np'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e856d381f5ec7d2727f21c8bd46dacb456984416
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: unsent yet (waiting feedback on first patch)
++---
++ configure.ac | 1 +
++ extstore.c   | 2 +-
++ thread.c     | 2 +-
++ 3 files changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index d94f6fb..5ec5088 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -686,6 +686,7 @@ AC_CHECK_FUNCS(clock_gettime)
++ AC_CHECK_FUNCS(preadv)
++ AC_CHECK_FUNCS(pread)
++ AC_CHECK_FUNCS(eventfd)
+++AC_CHECK_FUNCS([pthread_setname_np],[AC_DEFINE(HAVE_PTHREAD_SETNAME_NP, 1, [Define to 1 if support pthread_setname_np])])
++ AC_CHECK_FUNCS([accept4], [AC_DEFINE(HAVE_ACCEPT4, 1, [Define to 1 if support accept4])])
++ AC_CHECK_FUNCS([getopt_long], [AC_DEFINE(HAVE_GETOPT_LONG, 1, [Define to 1 if support getopt_long])])
++ 
++diff --git a/extstore.c b/extstore.c
++index b079465..f6a6180 100644
++--- a/extstore.c
+++++ b/extstore.c
++@@ -119,7 +119,7 @@ struct store_engine {
++ #define THR_NAME_MAXLEN 16
++ static void thread_setname(pthread_t thread, const char *name) {
++ assert(strlen(name) < THR_NAME_MAXLEN);
++-#if defined(__linux__)
+++#if defined(__linux__) && defined(HAVE_PTHREAD_SETNAME_NP)
++ pthread_setname_np(thread, name);
++ #endif
++ }
++diff --git a/thread.c b/thread.c
++index ee120fa..76651c2 100644
++--- a/thread.c
+++++ b/thread.c
++@@ -635,7 +635,7 @@ static void thread_libevent_process(evutil_socket_t fd, short which, void *arg)
++ #define THR_NAME_MAXLEN 16
++ void thread_setname(pthread_t thread, const char *name) {
++ assert(strlen(name) < THR_NAME_MAXLEN);
++-#if defined(__linux__)
+++#if defined(__linux__) && defined(HAVE_PTHREAD_SETNAME_NP)
++ pthread_setname_np(thread, name);
++ #endif
++ }
++-- 
++2.40.1
++
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 2ebc672d1c..a1a5eac049 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -13,6 +13,8 @@ MEMCACHED_LICENSE = BSD-3-Clause
+ MEMCACHED_LICENSE_FILES = COPYING
+ MEMCACHED_CPE_ID_VENDOR = memcached
+ MEMCACHED_SELINUX_MODULES = memcached
++# We're patching configure.ac
++MEMCACHED_AUTORECONF = YES
  
--SQUID_VERSION = 6.2
-+SQUID_VERSION = 6.3
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v6
- SQUID_LICENSE = GPL-2.0+
+ ifeq ($(BR2_ENDIAN),"BIG")
+ MEMCACHED_CONF_ENV += ac_cv_c_endian=big
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
