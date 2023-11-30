@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57AF0C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 19:32:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E5C9C07CA9
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 20:18:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E79F941F3E;
-	Thu, 30 Nov 2023 19:32:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E79F941F3E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12F2641E6F;
+	Thu, 30 Nov 2023 20:18:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12F2641E6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0fNT0YD4rw7o; Thu, 30 Nov 2023 19:32:47 +0000 (UTC)
+	with ESMTP id R9nWhy5OsPhc; Thu, 30 Nov 2023 20:18:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0702D41F5A;
-	Thu, 30 Nov 2023 19:32:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0702D41F5A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5AD961BF40F
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 19:32:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53A4541925;
+	Thu, 30 Nov 2023 20:18:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53A4541925
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A3B01BF2B3
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 20:18:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40E138463A
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 19:32:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40E138463A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 413C960A64
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 20:18:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 413C960A64
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dMQGdBOm6jIn for <buildroot@lists.busybox.net>;
- Thu, 30 Nov 2023 19:32:44 +0000 (UTC)
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3C56084635
- for <buildroot@buildroot.org>; Thu, 30 Nov 2023 19:32:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C56084635
-Received: by mail-io1-xd31.google.com with SMTP id
- ca18e2360f4ac-7b34ee2a243so37860239f.0
- for <buildroot@buildroot.org>; Thu, 30 Nov 2023 11:32:44 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C4uaVakLf7vC for <buildroot@lists.busybox.net>;
+ Thu, 30 Nov 2023 20:18:48 +0000 (UTC)
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
+ [IPv6:2607:f8b0:4864:20::22f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D690607FF
+ for <buildroot@buildroot.org>; Thu, 30 Nov 2023 20:18:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D690607FF
+Received: by mail-oi1-x22f.google.com with SMTP id
+ 5614622812f47-3b898c9b4cbso791353b6e.2
+ for <buildroot@buildroot.org>; Thu, 30 Nov 2023 12:18:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701372763; x=1701977563;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=oe/Q+PReuqGQOGEqqMdWslp67vteE42ESmgVSFfu/7c=;
- b=OqiwPWcjl3jK+Wl/TvnJrMIZraQcAvYdcRm5d+jkCOXXmKnNc4sisGrS8xSa8ws0cY
- S/RRaHC67lmt0+waSH322FvvzE9WOBoplbDjzgFBZRQ/1blQDAkZhTt/ilseN2C/81gi
- uRUIimjAM6gcwRYV0FoouLgsYCXchcSExFBaOfB58qeXV7JXLQJAInfDwHpehn34ydNP
- zm1ORJERfw0kiA3wlWMmbAbkQO05XyyazIae255H5eZZ8EQPIKuuFGbd/sW3IvNpdDeJ
- /MzxpORVNktmD8Exev6J7XvIR0quMUs7XRy72SN3abTQcUN4O9bZX4duOJfQUuaQ/h5W
- 2VlQ==
-X-Gm-Message-State: AOJu0YxJmlkO+AZ1nBatSEKgOU4+Qo8wmG5qD7ziRSYjfKPLIYqs4/+9
- nMBUpY967tJo7cYSMAwIciL1FnA9eis=
-X-Google-Smtp-Source: AGHT+IH7qwNeiRX25/otNJldGs0Jyoz2TdHLmCALNh0eJbbfgUHcoov61X0VA9PWo9UTYewO0w5TOA==
-X-Received: by 2002:a05:6602:2bfc:b0:7b3:fcb9:3532 with SMTP id
- d28-20020a0566022bfc00b007b3fcb93532mr5161011ioy.12.1701372762670; 
- Thu, 30 Nov 2023 11:32:42 -0800 (PST)
-Received: from james-x399.localdomain (97-118-243-253.hlrn.qwest.net.
- [97.118.243.253]) by smtp.gmail.com with ESMTPSA id
- t23-20020a05663801f700b0044d10eda3a8sm445277jaq.158.2023.11.30.11.32.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Nov 2023 11:32:42 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 12:32:34 -0700
-Message-Id: <20231130193234.2275235-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ d=1e100.net; s=20230601; t=1701375527; x=1701980327;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=QUh3v034zQMyXw+gO/cnovRy3c/YjjhsjeCpmfnThI4=;
+ b=COF6HNSVty0PYPQqw6K3fKfrJvttTIGxQ8IZqvqvhhYNU4U1l/3RF2BrS/7C+3ptMd
+ NANhDjHE7/Pj6AVesL71ZQ3l5MUVpVsK1l6EV5F60bzVR1EjiZu82Qk+QfIBNeEjKdrW
+ CRojPAcSOvnJExHIzKyzIiiIKY77vpYm9MtV45uzrwrBth8JfTZT2wBS+IrH3YWiVeQv
+ dtSsu/RObyR7U7c6inK1lEY5ZYyo4IjfUodh9VvAS6rWSSDcX0+F3OpjuyetZeQx/YOp
+ i9VsmK0Z2NwVaOD2Q7vAIEaow7PxjqGnOI6uxX5t/tJk51cqjnZxTxjKnEqenP4vCgcF
+ YBdA==
+X-Gm-Message-State: AOJu0YzltI4G6FSH52BBu9/I8naVv5maT/fB3mAtgjvvOnDtVymjjMdE
+ EkLnTVJGZ3HV789bZyzyu2euNMFBvdiJErnDNcugN/MG1Jc=
+X-Google-Smtp-Source: AGHT+IHBJAi4QsIijdkUcynsfJn/NtSZf1+iR3Qp6cuHdLtmhafRnJG3vPDXm5comdBk84sntsUnDrUWdup8qtLhums=
+X-Received: by 2002:a05:6808:17a2:b0:3b5:69c2:59cd with SMTP id
+ bg34-20020a05680817a200b003b569c259cdmr939758oib.25.1701375527209; Thu, 30
+ Nov 2023 12:18:47 -0800 (PST)
 MIME-Version: 1.0
+References: <20231121174722.4164-1-trippgallagher98@gmail.com>
+ <20231123111528.3f88828e@windsurf>
+ <CAAmzYqn7P5mqWuorwSy2McooKGSfn_VWoOx+dXXv1fpF1J=y0g@mail.gmail.com>
+ <20231124095345.3652c590@windsurf>
+In-Reply-To: <20231124095345.3652c590@windsurf>
+From: Byron Gallagher <trippgallagher98@gmail.com>
+Date: Thu, 30 Nov 2023 15:18:38 -0500
+Message-ID: <CAAmzYqnQE1HAzaap0uwbCP-ng3qxQk3mRH4p32fQE-70a9xT3w@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701372763; x=1701977563; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=oe/Q+PReuqGQOGEqqMdWslp67vteE42ESmgVSFfu/7c=;
- b=MLUo+ui36K1zeHswDKvtGswJ0/rL9Zc5atBhR7mVLow6df60P+oAitHK8VLKRFqEv3
- poNdqH83Hy7o3HEX8skzRGQJqDHAjSsteyn+95httE+BiCCmwecaRKFZ1pBp8A/f2oRs
- LzI2SD5aZshwD1/R3/Wkx5TEQmmts+4sZMD8P7DdS74KMlc5LegSqiNwwFqZP5cWWctK
- eQD3eDkp8LJBH/QqyT2COUCpp+OpqeHCw06c/s42w2lMWDrpgIB4Nv4XYEGePXWLN+5a
- j729ESoRKKdZvSkHoFTDWi7ub/F739qGQdXbX3xw0BG77gDJRu65AKTGxxCMV7fMgjue
- IhJA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1701375527; x=1701980327; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=QUh3v034zQMyXw+gO/cnovRy3c/YjjhsjeCpmfnThI4=;
+ b=QdWZHRxdJsZMjcxMYzfHwBE+XO5y30zAzHh50cCVaTyhXmyS+Zh+BQvf3wFzynWoMT
+ BKHvMPlhIyDylSK2QhvIIUvwukVMdZk24iW8ru9q/kZxOoxdsX6S5Vga4J2cEsDKDVqF
+ XTItuGlxu/o4KLzDpwIBp4Ftvy3geDekdmrHI5ZObm2q8v71n1oCj4fllVEAsZE0PcpL
+ QyQFH4k7YBWH9yAaSjWD+Xoi7/xZw66DuKaaLhyd6CItTQAaYiTP4cTu90O0nvkLOEjF
+ VFLgOrZdq3HqTro7NDQoK0Rn6qAVwwVFrshrxLPbEzX3Tj03rtll8pPyxE4UmSJsbwb+
+ pZkg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=MLUo+ui3
-Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: refactor setuptools
- handling to not use imp
+ header.a=rsa-sha256 header.s=20230601 header.b=QdWZHRxd
+Subject: Re: [Buildroot] [PATCH] package/socat: fix static openssl
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,190 +94,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The imp module is deprecated as of python verison 3.12.
-
-Refactor setuptools handling to remove monkeypatching hack and
-instead do pep517 metadata generation and dependency resolution.
-
-Invert setuptools/pyproject fallback ordering so that we try
-parsing pyproject.toml files first.
-
-Use a set comprehension instead of a list comprehension for
-generating pkg_req so that we don't get duplicates.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- utils/scanpypi | 92 +++++++++++++++++---------------------------------
- 1 file changed, 31 insertions(+), 61 deletions(-)
-
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 021c99a172..a1c2c2bd52 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -18,8 +18,8 @@ import hashlib
- import re
- import textwrap
- import tempfile
--import imp
--from functools import wraps
-+import importlib
-+from setuptools.build_meta import prepare_metadata_for_build_wheel
- import six.moves.urllib.request
- import six.moves.urllib.error
- import six.moves.urllib.parse
-@@ -93,32 +93,6 @@ def toml_load(f):
-         raise ex
- 
- 
--def setup_decorator(func, method):
--    """
--    Decorator for distutils.core.setup and setuptools.setup.
--    Puts the arguments with which setup is called as a dict
--    Add key 'method' which should be either 'setuptools' or 'distutils'.
--
--    Keyword arguments:
--    func -- either setuptools.setup or distutils.core.setup
--    method -- either 'setuptools' or 'distutils'
--    """
--
--    @wraps(func)
--    def closure(*args, **kwargs):
--        # Any python packages calls its setup function to be installed.
--        # Argument 'name' of this setup function is the package's name
--        BuildrootPackage.setup_args[kwargs['name']] = kwargs
--        BuildrootPackage.setup_args[kwargs['name']]['method'] = method
--    return closure
--
--# monkey patch
--import setuptools  # noqa E402
--setuptools.setup = setup_decorator(setuptools.setup, 'setuptools')
--import distutils   # noqa E402
--distutils.core.setup = setup_decorator(setuptools.setup, 'distutils')
--
--
- def find_file_upper_case(filenames, path='./'):
-     """
-     List generator:
-@@ -345,26 +319,18 @@ class BuildrootPackage():
-         """
-         current_dir = os.getcwd()
-         os.chdir(self.tmp_extract)
--        sys.path.insert(0, self.tmp_extract)
-         try:
--            s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
--            imp.load_module('__main__', s_file, s_path, s_desc)
--            if self.metadata_name in self.setup_args:
--                pass
--            elif self.metadata_name.replace('_', '-') in self.setup_args:
--                self.metadata_name = self.metadata_name.replace('_', '-')
--            elif self.metadata_name.replace('-', '_') in self.setup_args:
--                self.metadata_name = self.metadata_name.replace('-', '_')
-+            metadata = prepare_metadata_for_build_wheel(self.tmp_extract)
-             try:
--                self.setup_metadata = self.setup_args[self.metadata_name]
--            except KeyError:
--                # This means setup was not called
--                print('ERROR: Could not determine package metadata for {pkg}.\n'
--                      .format(pkg=self.real_name))
--                raise
-+                dist = importlib.metadata.Distribution.at(metadata)
-+                self.metadata_name = dist.name
-+                self.setup_metadata = {'method': 'setuptools'}
-+                if dist.requires:
-+                    self.setup_metadata['install_requires'] = dist.requires
-+            finally:
-+                shutil.rmtree(metadata)
-         finally:
-             os.chdir(current_dir)
--            sys.path.remove(self.tmp_extract)
- 
-     def load_pyproject(self):
-         """
-@@ -372,7 +338,6 @@ class BuildrootPackage():
-         """
-         current_dir = os.getcwd()
-         os.chdir(self.tmp_extract)
--        sys.path.insert(0, self.tmp_extract)
-         try:
-             pyproject_data = toml_load('pyproject.toml')
-             try:
-@@ -380,20 +345,25 @@ class BuildrootPackage():
-                 self.metadata_name = self.setup_metadata.get('name', self.real_name)
-                 build_system = pyproject_data.get('build-system', {})
-                 build_backend = build_system.get('build-backend', None)
--                if build_backend and build_backend == 'flit_core.buildapi':
--                    self.setup_metadata['method'] = 'flit'
-+                if build_backend:
-+                    if build_backend == 'flit_core.buildapi':
-+                        self.setup_metadata['method'] = 'flit'
-+                    elif build_backend == 'setuptools.build_meta':
-+                        raise Exception("handle setuptools")
-+                    else:
-+                        self.setup_metadata['method'] = 'unknown'
-                 elif build_system.get('backend-path', None):
-                     self.setup_metadata['method'] = 'pep517'
-                 else:
--                    self.setup_metadata['method'] = 'unknown'
-+                    raise Exception("handle setuptools")
-             except KeyError:
-                 print('ERROR: Could not determine package metadata for {pkg}.\n'
-                       .format(pkg=self.real_name))
-                 raise
-         except FileNotFoundError:
-             raise
--        os.chdir(current_dir)
--        sys.path.remove(self.tmp_extract)
-+        finally:
-+            os.chdir(current_dir)
- 
-     def get_requirements(self, pkg_folder):
-         """
-@@ -411,8 +381,8 @@ class BuildrootPackage():
-                         for req in self.pkg_req]
- 
-         # get rid of commented lines and also strip the package strings
--        self.pkg_req = [item.strip() for item in self.pkg_req
--                        if len(item) > 0 and item[0] != '#']
-+        self.pkg_req = {item.strip() for item in self.pkg_req
-+                        if len(item) > 0 and item[0] != '#'}
- 
-         req_not_found = self.pkg_req
-         self.pkg_req = list(map(pkg_buildroot_name, self.pkg_req))
-@@ -778,15 +748,15 @@ def main():
- 
-             # Loading the package install info from the package
-             try:
--                package.load_setup()
--            except ImportError as err:
--                if 'buildutils' in str(err):
--                    print('This package needs buildutils')
--                    continue
--                else:
--                    try:
--                        package.load_pyproject()
--                    except Exception:
-+                package.load_pyproject()
-+            except Exception:
-+                try:
-+                    package.load_setup()
-+                except ImportError as err:
-+                    if 'buildutils' in str(err):
-+                        print('This package needs buildutils')
-+                        continue
-+                    else:
-                         raise
-             except (AttributeError, KeyError) as error:
-                 print('Error: Could not install package {pkg}: {error}'.format(
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVGhvbWFzLAoKSSBiZWxpZXZlIEkndmUgaW1wbGVtZW50ZWQgdGhlIGNoYW5nZXMgaW4gbXkg
+bG9jYWwgdmVyc2lvbiBidXQgd291bGQKbGlrZSB5b3VyIHRob3VnaHRzLgoxLiBTb2NhdCBwYWNr
+YWdlIG5vdyBoYXMgdG8gYmUgYXV0b3JlY29uZiByYXRoZXIgdGhhbiBzaW1wbGUgYXV0b3Rvb2xz
+CndpdGggYSBwcmUtY29uZmlnIGhvb2sgdGhhdCBydW5zIGF1dG9jb25mIGluZGVwZW5kZW50bHku
+CjIuIFRoZSB1cHN0cmVhbSBzb2NhdCBjb25maWd1cmUuYWMgdXNlcyB0aGUgb2xkIEFDX0RFRklO
+RShGT08pIGZvcm1hdAp3aGljaCBjYXVzZXMgYXV0b2hlYWRlciB0byBmYWlsLiBJJ3ZlIGNoYW5n
+ZWQgZXZlcnkgaW52b2NhdGlvbiB0byB0aGUKY29ycmVjdCBBQ19ERUZJTkUoRk9PLCBbVkFMXSwg
+W0Rlc2NyaXB0aW9uXSkKMy4gVGhlIGNoYW5nZXMgdG8gdGhlIHJlbGV2YW50IGJsb2NrIGZvciBm
+aW5kaW5nIGxpYnNzbCBhcmUgYXMgZm9sbG93czoKCjU4MCw1OTNjNTgwLDYwMwo8ICAgICAgIGlm
+IHRlc3QgLW4gIiRPUEVOU1NMX0JBU0UiOyB0aGVuCjwgICAgICAgTD0iJE9QRU5TU0xfQkFTRS9s
+aWIiOyBMSUJTPSIkTElCUyAtTCRMIC1sc3NsIC1sY3J5cHRvIgo8ICAgICAgIGVsc2UKPCAgICAg
+ICBMSUJTPSIkTElCUyAtbHNzbCAtbGNyeXB0byIKPCAgICAgICBmaQo8ICAgICAgIEFDX1RSWV9M
+SU5LKFsjaW5jbHVkZSA8b3BlbnNzbC9zc2wuaD5dLAo8ICAgICAgICBbU1NMX2xpYnJhcnlfaW5p
+dCgpO0VSUl9lcnJvcl9zdHJpbmcoKV0sCjwgICAgICAgIFtzY19jdl9oYXZlX2xpYnNzbD0neWVz
+J10sCjwgICAgICAgIFsgTElCUz0iJExJQlMgLWxjcnlwdG8iCjwgICAgICAgIEFDX1RSWV9MSU5L
+KFsjaW5jbHVkZSA8b3BlbnNzbC9zc2wuaD5dLAo8ICAgICAgICBbU1NMX2xpYnJhcnlfaW5pdCgp
+XSwKPCAgICAgICAgIFtzY19jdl9oYXZlX2xpYnNzbD0neWVzJ10sCjwgICAgICAgICBbc2NfY3Zf
+aGF2ZV9saWJzc2w9J25vJ10pCjwgICAgICAgICBdKQotLS0KPiAgICAgUEtHX0NIRUNLX01PRFVM
+RVMoTElCU1NMLCBsaWJzc2wsCj4gICAgIFsKPiAgICAgICBMSUJTPSIkTElCUyAkTElCU1NMX0xJ
+QlMiCj4gICAgICAgQ0ZMQUdTPSIkQ0ZMQUdTICRMSUJTU0xfQ0ZMQUdTIgo+ICAgICAgIHNjX2N2
+X2hhdmVfbGlic3NsPSd5ZXMnCj4gICAgIF0sCj4gICAgIFsKPiAgICAgICAgIGlmIHRlc3QgLW4g
+IiRPUEVOU1NMX0JBU0UiOyB0aGVuCj4gICAgIEw9IiRPUEVOU1NMX0JBU0UvbGliIjsgTElCUz0i
+JExJQlMgLUwkTCAtbHNzbCAtbGNyeXB0byIKPiAgICAgICAgIGVsc2UKPiAgICAgTElCUz0iJExJ
+QlMgLWxzc2wgLWxjcnlwdG8iCj4gICAgICAgICBmaQo+ICAgICAgICAgQUNfVFJZX0xJTksoWyNp
+bmNsdWRlIDxvcGVuc3NsL3NzbC5oPl0sCj4gICAgICAgICBbU1NMX2xpYnJhcnlfaW5pdCgpO0VS
+Ul9lcnJvcl9zdHJpbmcoKV0sCj4gICAgICAgICBbc2NfY3ZfaGF2ZV9saWJzc2w9J3llcyddLAo+
+ICAgICAgICAgWyBMSUJTPSIkTElCUyAtbGNyeXB0byIKPiAgICAgICAgIEFDX1RSWV9MSU5LKFsj
+aW5jbHVkZSA8b3BlbnNzbC9zc2wuaD5dLAo+ICAgICAgICAgW1NTTF9saWJyYXJ5X2luaXQoKV0s
+Cj4gICAgICAgW3NjX2N2X2hhdmVfbGlic3NsPSd5ZXMnXSwKPiAgICAgICBbc2NfY3ZfaGF2ZV9s
+aWJzc2w9J25vJ10pCj4gICAgICAgICAgIF0pCj4gICAgICAgICBBQ19NU0dfUkVTVUxUKCRzY19j
+dl9oYXZlX2xpYnNzbCkKPiAgICAgXSkKCgpPbiBGcmksIE5vdiAyNCwgMjAyMyBhdCAzOjUz4oCv
+QU0gVGhvbWFzIFBldGF6em9uaQo8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4gd3JvdGU6
+Cj4KPiBIZWxsbyBCeXJvbiwKPgo+IE9uIFRodSwgMjMgTm92IDIwMjMgMTI6NTU6MzMgLTA1MDAK
+PiBCeXJvbiBHYWxsYWdoZXIgPHRyaXBwZ2FsbGFnaGVyOThAZ21haWwuY29tPiB3cm90ZToKPgo+
+ID4gVGhhdCBtYWtlcyBzZW5zZS4gSW4gdGhpcyBjYXNlIHdvdWxkIGl0IGJlIHN1ZmZpY2llbnQg
+dG8gYWRkIGFub3RoZXIgbGF5ZXIKPiA+IG9mIEFDX1RSWV9MSU5LIHRvIGNoZWNrIHRoZSBzdGF0
+aWMgY2FzZT8gaS5lLiB3ZSB0cnkgd2l0aCAtbHNzbCAtbGNyeXB0bwo+ID4gZmlyc3QgYW5kIGlm
+IGZhaWwsIHRyeSBhZ2FpbiB3aXRoIC1sc3NsIC1sY3J5cHRvIC1sej8KPgo+IFRoYXQncyBhbiBv
+cHRpb24gaW5kZWVkLiBCdXQgdGhlIGJlc3Qgc29sdXRpb24gaXMgcmVhbGx5IHRvIHVzZQo+IHBr
+Zy1jb25maWcsIHRocm91Z2ggUEtHX0NIRUNLX01PRFVMRVMoKSwgYW5kIG9ubHkgaWYgbm90IGZv
+dW5kIHZpYQo+IHBrZy1jb25maWcgZmFsbCBiYWNrIG9uIHRoZSBleGlzdGluZyBjcmFwIHRoYXQg
+dXNlcyBBQ19UUllfTElOSygpLgo+Cj4gQmVzdCByZWdhcmRzLAo+Cj4gVGhvbWFzCj4gLS0KPiBU
+aG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCj4gRW1iZWRkZWQgTGlu
+dXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKPiBodHRwczovL2Jvb3RsaW4u
+Y29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
+dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
