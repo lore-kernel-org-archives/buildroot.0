@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD08AC4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 08:31:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8440C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 08:31:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8525461B3A;
-	Thu, 30 Nov 2023 08:31:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8525461B3A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28C956F4D2;
+	Thu, 30 Nov 2023 08:31:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28C956F4D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fy5hFPL0FhFA; Thu, 30 Nov 2023 08:31:36 +0000 (UTC)
+	with ESMTP id uq_zLYM5yhGp; Thu, 30 Nov 2023 08:31:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9FFF60B90;
-	Thu, 30 Nov 2023 08:31:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9FFF60B90
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CC0BB1BF23B
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 08:31:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BD286F4B1;
+	Thu, 30 Nov 2023 08:31:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BD286F4B1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E63F1BF23B
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 08:31:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4E408444C
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 08:31:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4E408444C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25A77416B6
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 08:31:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25A77416B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9CitvWL44V6E for <buildroot@lists.busybox.net>;
- Thu, 30 Nov 2023 08:31:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qtxhN4OGAxD0 for <buildroot@lists.busybox.net>;
+ Thu, 30 Nov 2023 08:31:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD75384449
- for <buildroot@buildroot.org>; Thu, 30 Nov 2023 08:31:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD75384449
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10CDF40490
+ for <buildroot@buildroot.org>; Thu, 30 Nov 2023 08:31:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10CDF40490
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC46987601; Thu, 30 Nov 2023 08:31:33 +0000 (UTC)
+ id F260487604; Thu, 30 Nov 2023 08:31:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 09:04:26 +0100
+Date: Thu, 30 Nov 2023 09:17:48 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 2f93db49d433c337fccad539c2d8a4169bff5045
-X-Git-Newrev: b8e0734ebf3ecf870333af3709903c369b29304c
+X-Git-Oldrev: 819a4ba019020780142d71c6ebebdb091d3ed173
+X-Git-Newrev: 30f8dd83e6ce798e0e636d762e4f5c3ff9caa387
 X-Patchwork-Hint: ignore
-Message-Id: <20231130083133.BC46987601@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gcc: fix
- disabling the documentation
+Message-Id: <20231130083133.F260487604@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ board/raspberrypi/readme.txt: fix typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,72 +58,58 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5653804130105544755=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8e0734ebf3ecf870333af3709903c369b29304c
+--===============5653804130105544755==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=30f8dd83e6ce798e0e636d762e4f5c3ff9caa387
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-gcc.mk attempts to disable building the documentation by setting
-MAKEINFO=missing, but it is not working.  If makeinfo is installed
-and recent enough, gcc still uses it.  This can be checked easily:
-
-grep BUILD_INFO='info' host-gcc-initial-*/build/gcc/config.log
-
-It happens because the root ./configure script will check
-$MAKEINFO --version (aka 'missing --version') and will overwrite it with
-MAKEINFO='missing makeinfo' because the version does not match.
-
-Having MAKEINFO='missing makeinfo' is a problem because
-'missing makeinfo' will actually attempt to run 'makeinfo' before
-failing with an error message.  If makeinfo is installed on the host,
-then 'missing makeinfo' will successfully run makeinfo anyway.
-
-Many gcc subprojects will check $MAKEINFO --version and enable building
-the documentation if it is recent enough.  This patch overrides these
-checks by forcing gcc_cv_prog_makeinfo_modern=no.
-
-Building the GCC documentation can fail with the wrong makeinfo version.
-It happened at least when building GCC 11.3.0 with makeinfo 7.1.
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f7b9d3ad2b4acccad5252737003e8a0db4f43340)
+(cherry picked from commit acd833c8c712268ecfec1080721c6f39192bbdb2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ board/raspberrypi/readme.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 5d023d725f..834da24925 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -88,9 +88,12 @@ HOST_GCC_COMMON_CONF_OPTS += --with-debug-prefix-map=$(BASE_DIR)=buildroot
- endif
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index c81fd801ae..21a136eb83 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -17,8 +17,8 @@ How to build it
+ Configure Buildroot
+ -------------------
  
- # Don't build documentation. It takes up extra space / build time,
--# and sometimes needs specific makeinfo versions to work
-+# and sometimes needs specific makeinfo versions to work. Override the check
-+# for a modern makeinfo otherwise the configure scripts will still enable it.
- HOST_GCC_COMMON_CONF_ENV = \
- 	MAKEINFO=missing
-+HOST_GCC_COMMON_MAKE_OPTS = \
-+	gcc_cv_prog_makeinfo_modern=no
+-There are two RaspberryPi defconfig files in Buildroot, one for each
+-major variant, which you should base your work on:
++There are several Raspberry Pi defconfig files in Buildroot, one for
++each major variant, which you should base your work on:
  
- GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
- GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
-@@ -295,7 +298,7 @@ HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
- # For gcc-final, the gcc logic to detect whether SSP support is
- # available or not in the C library is not working properly for
- # uClibc, so let's be explicit as well.
--HOST_GCC_COMMON_MAKE_OPTS = \
-+HOST_GCC_COMMON_MAKE_OPTS += \
- 	gcc_cv_libc_provides_ssp=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+ For models A, B, A+ or B+:
  
- ifeq ($(BR2_CCACHE),y)
+@@ -133,7 +133,7 @@ How to write to CM4 eMMC memory
+ ===============================
+ 
+ For CM4 modules without eMMC memory see above for booting from SD card,
+-for CM4 moduels with eMMC memory proceed as following:
++for CM4 modules with eMMC memory proceed as following:
+ 
+ - fit jumper on IO Board header J2 to disable eMMC boot
+ - connect IO Board micro USB port (J11 USB slave) to your host linux system
+
+--===============5653804130105544755==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5653804130105544755==--
