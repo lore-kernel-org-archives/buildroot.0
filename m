@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29467C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 08:32:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69302C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 08:32:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAD356F4B1;
-	Thu, 30 Nov 2023 08:32:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAD356F4B1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 235266F4B5;
+	Thu, 30 Nov 2023 08:32:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 235266F4B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id joZPy1maLWkM; Thu, 30 Nov 2023 08:32:27 +0000 (UTC)
+	with ESMTP id LgIvEvxHNgQm; Thu, 30 Nov 2023 08:32:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5B956F51D;
-	Thu, 30 Nov 2023 08:32:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5B956F51D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 853951BF23B
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 08:31:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69A1D6F4F8;
+	Thu, 30 Nov 2023 08:32:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69A1D6F4F8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A35B81BF23B
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 08:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A11E40490
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 08:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A11E40490
+ by smtp1.osuosl.org (Postfix) with ESMTP id 854E484449
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 08:31:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 854E484449
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DP8LrapMa9jf for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wGvwGae62zwP for <buildroot@lists.busybox.net>;
  Thu, 30 Nov 2023 08:31:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06051400D6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18A3C8449A
  for <buildroot@buildroot.org>; Thu, 30 Nov 2023 08:31:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06051400D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18A3C8449A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E9C3C87601; Thu, 30 Nov 2023 08:31:33 +0000 (UTC)
+ id 13EF787602; Thu, 30 Nov 2023 08:31:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 09:17:04 +0100
+Date: Thu, 30 Nov 2023 09:25:52 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 6af0375dd60e1e051bce7c7a95cb21035296343f
-X-Git-Newrev: 819a4ba019020780142d71c6ebebdb091d3ed173
+X-Git-Oldrev: 3f5b8cf4d70a8b4f28ca36200d4aa253ae470741
+X-Git-Newrev: 85c2b406c393a3492a930c7b7e831ce5e3d73742
 X-Patchwork-Hint: ignore
-Message-Id: <20231130083133.E9C3C87601@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/zfs: fix zfs
- autotools cross-compilation
+Message-Id: <20231130083134.13EF787602@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/postgresql:
+ security bump version to 15.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,84 +58,53 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2366646503840769973=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2366646503840769973==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=819a4ba019020780142d71c6ebebdb091d3ed173
+commit: https://git.buildroot.net/buildroot/commit/?id=85c2b406c393a3492a930c7b7e831ce5e3d73742
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-This commit addresses a long-standing bug encountered during ZFS
-compilation in cross-platform environments. The issue arises because ZFS
-autoconf triggers a `make modules` to detect if the kernel can compile
-modules [1]. The problem occurs when autoconf uses the host environment
-instead of the cross-platform environment.
+Release notes:
+https://www.postgresql.org/about/news/postgresql-161-155-1410-1313-1217-and-1122-released-2749/
 
-To fix this, we export necessary environment variables to ensure that ZFS
-autoconf utilizes the cross-platform environment correctly.
+Fixes CVE-2023-5868, CVE-2023-5869, CVE-2023-5870.
 
-This patch resolves ZFS cross-platform compilations:
-- http://autobuild.buildroot.net/results/ebeab256101bcba38c35fd55075c414e62f92caa/
-- http://autobuild.buildroot.net/results/03b9f12a106bf100eec695a92b83bf09b22c68b0/
-- http://autobuild.buildroot.net/results/c2da90337463607c2fadfeac7ad72e5c3899a61f/
-- http://autobuild.buildroot.net/results/465a249f92d2f5db7ac4b61b4111e6cbaaa15688/
-- http://autobuild.buildroot.net/results/7e2d3277e26fa5b0c8073a0e8b9e82f47ade9697/
-- http://autobuild.buildroot.net/results/a8fb87336b09fef8787a7889dfcccf14fe1215b9/
-- https://gitlab.com/kubu93/buildroot/-/jobs/1522848483
-
-And fix a few emails:
-- alpine.DEB.2.22.394.2108181630280.2028262@ridzo [build zfs into buildroot for raspberry pi 4]
-- https://lists.buildroot.org/pipermail/buildroot/2021-August/621696.html
-- https://lists.buildroot.org/pipermail/buildroot/2021-August/621345.html
-- https://lists.buildroot.org/pipermail/buildroot/2022-July/646379.html
-- https://lists.buildroot.org/pipermail/buildroot/2023-June/668467.html
-
-[1] This is the full callback, you can just check the last link:
-- https://github.com/openzfs/zfs/blob/zfs-2.1.12/config/kernel-declare-event-class.m4#L7C11-L7C11
-- https://github.com/openzfs/zfs/blob/zfs-2.1.12/config/kernel.m4#L883
-- https://github.com/openzfs/zfs/blob/zfs-2.1.12/config/kernel.m4#L868
-- https://github.com/openzfs/zfs/blob/zfs-2.1.12/config/kernel.m4#L668
-
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7fe685c510578435b8b7c0448478e71a3db4d9e4)
+(cherry picked from commit 4d549c071dcc7ede701ee91cb39bc4a9a2be7baf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zfs/zfs.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-index 43a10a0de9..aa2e72b2e0 100644
---- a/package/zfs/zfs.mk
-+++ b/package/zfs/zfs.mk
-@@ -57,6 +57,14 @@ else
- ZFS_CONF_OPTS += --disable-pam
- endif
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 0640f883a7..4fc3bfcff0 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v15.4/postgresql-15.4.tar.bz2.sha256
+-sha256  baec5a4bdc4437336653b6cb5d9ed89be5bd5c0c58b94e0becee0a999e63c8f9  postgresql-15.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v15.4/postgresql-15.5.tar.bz2.sha256
++sha256  8f53aa95d78eb8e82536ea46b68187793b42bba3b4f65aa342f540b23c9b10a6  postgresql-15.5.tar.bz2
+ # License file, Locally calculated
+ sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index b951b14aa0..3108fe65e1 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Sets the environment for the `make` that will be run ZFS autotools checks.
-+ZFS_CONF_ENV += \
-+	ARCH=$(KERNEL_ARCH) \
-+	CROSS_COMPILE="$(TARGET_CROSS)"
-+ZFS_MAKE_ENV += \
-+	ARCH=$(KERNEL_ARCH) \
-+	CROSS_COMPILE="$(TARGET_CROSS)"
-+
- # ZFS userland tools are unfunctional without the Linux kernel modules.
- ZFS_MODULE_SUBDIRS = \
- 	module/avl \
-
---===============2366646503840769973==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-POSTGRESQL_VERSION = 15.4
++POSTGRESQL_VERSION = 15.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2366646503840769973==--
