@@ -1,50 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43289C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 22:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8841C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 22:37:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC63E846DD;
-	Thu, 30 Nov 2023 22:17:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC63E846DD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YsOZBsBxbxiQ; Thu, 30 Nov 2023 22:17:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45960846CD;
-	Thu, 30 Nov 2023 22:17:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45960846CD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 455501BF983
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 22:17:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29337401E1
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 22:17:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29337401E1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31EE44016C;
+	Thu, 30 Nov 2023 22:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31EE44016C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5eu-HJ8MJSB6 for <buildroot@lists.busybox.net>;
- Thu, 30 Nov 2023 22:17:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA35B40167
- for <buildroot@buildroot.org>; Thu, 30 Nov 2023 22:17:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA35B40167
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C051C87621; Thu, 30 Nov 2023 22:17:39 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9fqP57RCQVb1; Thu, 30 Nov 2023 22:37:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 616FB404DA;
+	Thu, 30 Nov 2023 22:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 616FB404DA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AB4551BF844
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 22:37:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 801EB8459C
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 22:37:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 801EB8459C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HUZXK7d4i7Z0 for <buildroot@lists.busybox.net>;
+ Thu, 30 Nov 2023 22:37:16 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6FA858459A
+ for <buildroot@buildroot.org>; Thu, 30 Nov 2023 22:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FA858459A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B0BCFF80A;
+ Thu, 30 Nov 2023 22:37:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r8pei-003RcC-1U;
+ Thu, 30 Nov 2023 23:37:12 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 23:14:07 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5fcd48aff97866df5488eb47589f6f45064f0228
-X-Git-Newrev: d590c2c9398bce36efe042233054a2c6b75fcad0
-X-Patchwork-Hint: ignore
-Message-Id: <20231130221739.C051C87621@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libusb-compat: fix hash
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230808180959.28091-1-ps.report@gmx.net>
+ <20231127185138.GD3177259@scaer>
+Date: Thu, 30 Nov 2023 23:37:12 +0100
+In-Reply-To: <20231127185138.GD3177259@scaer> (Yann E. MORIN's message of
+ "Mon, 27 Nov 2023 19:51:38 +0100")
+Message-ID: <87zfyu7trb.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v1] board/raspberrypi/config_4_64bit.txt:
+ remove testing dtoverlay entries (vc4-kms-v3d-pi4, imx219)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,79 +64,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8442686374792769986=="
+Cc: Peter Seiderer <ps.report@gmx.net>, Martin Bark <martin@barkynet.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8442686374792769986==
-Content-Type: text/plain
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d590c2c9398bce36efe042233054a2c6b75fcad0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Peter, All,
+ > On 2023-08-08 20:09 +0200, Peter Seiderer spake thusly:
+ >> Remove private/testing dtoverlay entries (vc4-kms-v3d-pi4, imx219 and
+ >> commented out ov5647) wrongly introduced by commit 689b9ac439
+ >> ("package/rpi-firmware: rework boot/config file handling") [1].
+ >> 
+ >> [1] https://git.buildroot.net/buildroot/commit/?id=689b9ac439ab7b507c8982b6102bddf59d03efbf
+ >> 
+ >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Upstream re-released the v0.1.8 tarballs with autotools related stuff. [1]
-That makes the hash test to fail:
+ > Applied to master, thanks.
 
-ERROR: while checking hashes from package/libusb-compat//libusb-compat.hash
-ERROR: libusb-compat-0.1.8.tar.bz2 has wrong sha256 hash:
-ERROR: expected: 698c76484f3dec1e0175067cbd1556c3021e94e7f2313ae3ea6a66d900e00827
-ERROR: got     : b692dcf674c070c8c0bee3c8230ce4ee5903f926d77dc8b968a4dd1b70f9b05c
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+Committed to 2023.02.x and 2023.08.x, thanks.
 
-Update the hash and drop LIBUSB_COMPAT_AUTORECONF.
-
-[1] https://github.com/libusb/libusb-compat-0.1/issues/28#issuecomment-1759400548
-
-[Peter: use .tar.gz to not conflict with s.b.o]
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libusb-compat/libusb-compat.hash | 2 +-
- package/libusb-compat/libusb-compat.mk   | 4 ----
- 2 files changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/package/libusb-compat/libusb-compat.hash b/package/libusb-compat/libusb-compat.hash
-index a198e76058..b22fa5434d 100644
---- a/package/libusb-compat/libusb-compat.hash
-+++ b/package/libusb-compat/libusb-compat.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  698c76484f3dec1e0175067cbd1556c3021e94e7f2313ae3ea6a66d900e00827  libusb-compat-0.1.8.tar.bz2
-+sha256  d199c173fd3cd9d27c7f4bb6608befc7eb761984e6664da7d9d4386ff66fe6fc  libusb-compat-0.1.8.tar.gz
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
-index d49b753670..b54dbded27 100644
---- a/package/libusb-compat/libusb-compat.mk
-+++ b/package/libusb-compat/libusb-compat.mk
-@@ -6,7 +6,6 @@
- 
- LIBUSB_COMPAT_VERSION_MAJOR = 0.1
- LIBUSB_COMPAT_VERSION = $(LIBUSB_COMPAT_VERSION_MAJOR).8
--LIBUSB_COMPAT_SOURCE = libusb-compat-$(LIBUSB_COMPAT_VERSION).tar.bz2
- LIBUSB_COMPAT_SITE = https://github.com/libusb/libusb-compat-0.1/releases/download/v$(LIBUSB_COMPAT_VERSION)
- LIBUSB_COMPAT_DEPENDENCIES = host-pkgconf libusb
- HOST_LIBUSB_COMPAT_DEPENDENCIES = host-pkgconf host-libusb
-@@ -14,9 +13,6 @@ LIBUSB_COMPAT_INSTALL_STAGING = YES
- LIBUSB_COMPAT_CONFIG_SCRIPTS = libusb-config
- LIBUSB_COMPAT_LICENSE = LGPL-2.1+
- LIBUSB_COMPAT_LICENSE_FILES = COPYING
--# 0.1.8 tarball was released without configure script by upstream
--# discussed here: https://github.com/libusb/libusb-compat-0.1/issues/28
--LIBUSB_COMPAT_AUTORECONF = YES
- 
- ifeq ($(BR2_STATIC_LIBS),)
- LIBUSB_COMPAT_CONF_ENV += \
-
---===============8442686374792769986==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8442686374792769986==--
