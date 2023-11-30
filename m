@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01DAEC10DC2
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 19:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57AF0C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 19:32:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82014401C0;
-	Thu, 30 Nov 2023 19:13:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82014401C0
+	by smtp4.osuosl.org (Postfix) with ESMTP id E79F941F3E;
+	Thu, 30 Nov 2023 19:32:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E79F941F3E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XF7t9koZ7USK; Thu, 30 Nov 2023 19:13:21 +0000 (UTC)
+	with ESMTP id 0fNT0YD4rw7o; Thu, 30 Nov 2023 19:32:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB18F4192A;
-	Thu, 30 Nov 2023 19:13:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB18F4192A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3744F1BF31B
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 19:13:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0702D41F5A;
+	Thu, 30 Nov 2023 19:32:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0702D41F5A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5AD961BF40F
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 19:32:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F1266F75E
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 19:13:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F1266F75E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40E138463A
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 19:32:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40E138463A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ji8c866pnI9Z for <buildroot@lists.busybox.net>;
- Thu, 30 Nov 2023 19:13:18 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D013D6F563
- for <buildroot@buildroot.org>; Thu, 30 Nov 2023 19:13:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D013D6F563
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-40b595bf5d2so8842885e9.2
- for <buildroot@buildroot.org>; Thu, 30 Nov 2023 11:13:17 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dMQGdBOm6jIn for <buildroot@lists.busybox.net>;
+ Thu, 30 Nov 2023 19:32:44 +0000 (UTC)
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
+ [IPv6:2607:f8b0:4864:20::d31])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3C56084635
+ for <buildroot@buildroot.org>; Thu, 30 Nov 2023 19:32:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C56084635
+Received: by mail-io1-xd31.google.com with SMTP id
+ ca18e2360f4ac-7b34ee2a243so37860239f.0
+ for <buildroot@buildroot.org>; Thu, 30 Nov 2023 11:32:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701371595; x=1701976395;
+ d=1e100.net; s=20230601; t=1701372763; x=1701977563;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ivdw5vVf04lXT4iZLCERQxJGFWkOyYMmSV8Ur1F/ZVE=;
- b=l0kyQMZdll7nFOjGA2NGiEqDMr0siJ/kp8ec+skv+5KNdqRuHmpLMRu9JBkqs2zbAt
- 80OpnZDOeoUWXvxZheWJXoqCWPCo3yzpPxo5m3Vu8EN0LcCZEMJBCEew3VIUSfhf0JnR
- 4OZZO4jZxaNofFPpl8PzsjnBGsNSD4Ema9pmXwspgcP4S6DeTYjpCx6iwLWC9wvVC7XM
- 7kaz/hrcOtU9QXQErKn1Hc81DjfHA5XyKMfXuCzmwBmkk73PZfjUuDIDwDDPOLwQ7zcs
- FAxQZhaRJ4dYKzpMmmoOWI56DUfeh89nSH8JyHrRoGX4Re3V06Z08BEBp/qZ9jEJTwR2
- 3zSA==
-X-Gm-Message-State: AOJu0YyDVOYQ5AkSYE7mWyXf5gRon8fhZ7wxlwZWHX6QGsSuQWXjmC9k
- IvhfGMqJB5zoTwGz0OTrbAZTanCT8n0=
-X-Google-Smtp-Source: AGHT+IEZFh08d8+F387tasiSV6A2VuxuC5gKlJBVoIcOVf+a+WxGfRQjXTIiQKo+wpU77s3cLp9Otg==
-X-Received: by 2002:a05:600c:1989:b0:40b:5e59:99ee with SMTP id
- t9-20020a05600c198900b0040b5e5999eemr5934wmq.270.1701371594879; 
- Thu, 30 Nov 2023 11:13:14 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- z15-20020a5d4d0f000000b003332037854csm2248028wrt.80.2023.11.30.11.13.14
+ bh=oe/Q+PReuqGQOGEqqMdWslp67vteE42ESmgVSFfu/7c=;
+ b=OqiwPWcjl3jK+Wl/TvnJrMIZraQcAvYdcRm5d+jkCOXXmKnNc4sisGrS8xSa8ws0cY
+ S/RRaHC67lmt0+waSH322FvvzE9WOBoplbDjzgFBZRQ/1blQDAkZhTt/ilseN2C/81gi
+ uRUIimjAM6gcwRYV0FoouLgsYCXchcSExFBaOfB58qeXV7JXLQJAInfDwHpehn34ydNP
+ zm1ORJERfw0kiA3wlWMmbAbkQO05XyyazIae255H5eZZ8EQPIKuuFGbd/sW3IvNpdDeJ
+ /MzxpORVNktmD8Exev6J7XvIR0quMUs7XRy72SN3abTQcUN4O9bZX4duOJfQUuaQ/h5W
+ 2VlQ==
+X-Gm-Message-State: AOJu0YxJmlkO+AZ1nBatSEKgOU4+Qo8wmG5qD7ziRSYjfKPLIYqs4/+9
+ nMBUpY967tJo7cYSMAwIciL1FnA9eis=
+X-Google-Smtp-Source: AGHT+IH7qwNeiRX25/otNJldGs0Jyoz2TdHLmCALNh0eJbbfgUHcoov61X0VA9PWo9UTYewO0w5TOA==
+X-Received: by 2002:a05:6602:2bfc:b0:7b3:fcb9:3532 with SMTP id
+ d28-20020a0566022bfc00b007b3fcb93532mr5161011ioy.12.1701372762670; 
+ Thu, 30 Nov 2023 11:32:42 -0800 (PST)
+Received: from james-x399.localdomain (97-118-243-253.hlrn.qwest.net.
+ [97.118.243.253]) by smtp.gmail.com with ESMTPSA id
+ t23-20020a05663801f700b0044d10eda3a8sm445277jaq.158.2023.11.30.11.32.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Nov 2023 11:13:14 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Thu, 30 Nov 2023 11:32:42 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 20:13:05 +0100
-Message-ID: <20231130191305.5345-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+Date: Thu, 30 Nov 2023 12:32:34 -0700
+Message-Id: <20231130193234.2275235-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701371595; x=1701976395; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1701372763; x=1701977563; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ivdw5vVf04lXT4iZLCERQxJGFWkOyYMmSV8Ur1F/ZVE=;
- b=J16tlx7UTcRe6hIBhjeNobfXap3IT54wWSVALi4KxjU+SJWchziZu0obBsEw4jAfhb
- oh44KyMsDBQpDUl+5XWnZDeoU7cwUj+frSRHI8iuBe6l5QN9Mj9svAclJ0T3Hpcn8sTY
- EEtCv4v97zyAB4TO9M/TP8G9EprVbWa4aMiZhLJFnIfHcJmvkzftCXr9LDckzn7MoVh3
- O4G6lnopl8AlEGeQC3nqWQ/L4/auM5rL4mZYvTFtZgznzlIho71E2QzupThtOhQgXD6+
- RXMbfyCU+ZmJm76h9ml/MxTBIPG+opCxVOMeSodg6+Z5hPnnVCdqYyjmtspKAY0UysA+
- I5bw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=oe/Q+PReuqGQOGEqqMdWslp67vteE42ESmgVSFfu/7c=;
+ b=MLUo+ui36K1zeHswDKvtGswJ0/rL9Zc5atBhR7mVLow6df60P+oAitHK8VLKRFqEv3
+ poNdqH83Hy7o3HEX8skzRGQJqDHAjSsteyn+95httE+BiCCmwecaRKFZ1pBp8A/f2oRs
+ LzI2SD5aZshwD1/R3/Wkx5TEQmmts+4sZMD8P7DdS74KMlc5LegSqiNwwFqZP5cWWctK
+ eQD3eDkp8LJBH/QqyT2COUCpp+OpqeHCw06c/s42w2lMWDrpgIB4Nv4XYEGePXWLN+5a
+ j729ESoRKKdZvSkHoFTDWi7ub/F739qGQdXbX3xw0BG77gDJRu65AKTGxxCMV7fMgjue
+ IhJA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=J16tlx7U
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with
- BR2_TIME_BITS_64
+ header.a=rsa-sha256 header.s=20230601 header.b=MLUo+ui3
+Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: refactor setuptools
+ handling to not use imp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,62 +94,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Antoine Tenart <atenart@kernel.org>,
- Marcus Folkesson <marcus.folkesson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Do not remove _FILE_OFFSET_BITS=64 from CFLAGS and CPPFLAGS to avoid the
-following build failure with BR2_TIME_BITS_64 raised since commit
-3c427c64726560ea1743282a3fdb78f5b28692eb:
+The imp module is deprecated as of python verison 3.12.
 
-In file included from /home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/features.h:394,
-                 from /home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/bits/libc-header-start.h:33,
-                 from /home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/stdint.h:26,
-                 from /home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/lib/gcc/mipsel-buildroot-linux-gnu/12.3.0/include/stdint.h:9,
-                 from ../include/selinux/avc.h:9,
-                 from avc.c:10:
-/home/autobuild/autobuild/instance-9/output-1/per-package/libselinux/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-      |     ^~~~~
+Refactor setuptools handling to remove monkeypatching hack and
+instead do pep517 metadata generation and dependency resolution.
 
-This LFS workaround for glibc < 2.23 was added in 2016 by commit
-ebcca24c953d8df4b16bc52c5ba31feae4ed8ad0 and is probably not needed
-anymore as glibc 2.23 was released in February 2016:
-https://sourceware.org/glibc/wiki/Release/2.23
+Invert setuptools/pyproject fallback ordering so that we try
+parsing pyproject.toml files first.
 
-Fixes:
- - http://autobuild.buildroot.org/results/d85c81f87adf3a5945fa369bcec233e6def2ed12
+Use a set comprehension instead of a list comprehension for
+generating pkg_req so that we don't get duplicates.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/libselinux/libselinux.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ utils/scanpypi | 92 +++++++++++++++++---------------------------------
+ 1 file changed, 31 insertions(+), 61 deletions(-)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index b8de21edaa..529745f82e 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -52,14 +52,6 @@ define LIBSELINUX_BUILD_PYTHON_BINDINGS
- endef
- endif # python3
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 021c99a172..a1c2c2bd52 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -18,8 +18,8 @@ import hashlib
+ import re
+ import textwrap
+ import tempfile
+-import imp
+-from functools import wraps
++import importlib
++from setuptools.build_meta import prepare_metadata_for_build_wheel
+ import six.moves.urllib.request
+ import six.moves.urllib.error
+ import six.moves.urllib.parse
+@@ -93,32 +93,6 @@ def toml_load(f):
+         raise ex
  
--# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
--# set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
--# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
--# when the python binding is enabled.
--LIBSELINUX_MAKE_OPTS += \
--	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
--	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
+ 
+-def setup_decorator(func, method):
+-    """
+-    Decorator for distutils.core.setup and setuptools.setup.
+-    Puts the arguments with which setup is called as a dict
+-    Add key 'method' which should be either 'setuptools' or 'distutils'.
 -
- define LIBSELINUX_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(LIBSELINUX_MAKE_OPTS) all
+-    Keyword arguments:
+-    func -- either setuptools.setup or distutils.core.setup
+-    method -- either 'setuptools' or 'distutils'
+-    """
+-
+-    @wraps(func)
+-    def closure(*args, **kwargs):
+-        # Any python packages calls its setup function to be installed.
+-        # Argument 'name' of this setup function is the package's name
+-        BuildrootPackage.setup_args[kwargs['name']] = kwargs
+-        BuildrootPackage.setup_args[kwargs['name']]['method'] = method
+-    return closure
+-
+-# monkey patch
+-import setuptools  # noqa E402
+-setuptools.setup = setup_decorator(setuptools.setup, 'setuptools')
+-import distutils   # noqa E402
+-distutils.core.setup = setup_decorator(setuptools.setup, 'distutils')
+-
+-
+ def find_file_upper_case(filenames, path='./'):
+     """
+     List generator:
+@@ -345,26 +319,18 @@ class BuildrootPackage():
+         """
+         current_dir = os.getcwd()
+         os.chdir(self.tmp_extract)
+-        sys.path.insert(0, self.tmp_extract)
+         try:
+-            s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
+-            imp.load_module('__main__', s_file, s_path, s_desc)
+-            if self.metadata_name in self.setup_args:
+-                pass
+-            elif self.metadata_name.replace('_', '-') in self.setup_args:
+-                self.metadata_name = self.metadata_name.replace('_', '-')
+-            elif self.metadata_name.replace('-', '_') in self.setup_args:
+-                self.metadata_name = self.metadata_name.replace('-', '_')
++            metadata = prepare_metadata_for_build_wheel(self.tmp_extract)
+             try:
+-                self.setup_metadata = self.setup_args[self.metadata_name]
+-            except KeyError:
+-                # This means setup was not called
+-                print('ERROR: Could not determine package metadata for {pkg}.\n'
+-                      .format(pkg=self.real_name))
+-                raise
++                dist = importlib.metadata.Distribution.at(metadata)
++                self.metadata_name = dist.name
++                self.setup_metadata = {'method': 'setuptools'}
++                if dist.requires:
++                    self.setup_metadata['install_requires'] = dist.requires
++            finally:
++                shutil.rmtree(metadata)
+         finally:
+             os.chdir(current_dir)
+-            sys.path.remove(self.tmp_extract)
+ 
+     def load_pyproject(self):
+         """
+@@ -372,7 +338,6 @@ class BuildrootPackage():
+         """
+         current_dir = os.getcwd()
+         os.chdir(self.tmp_extract)
+-        sys.path.insert(0, self.tmp_extract)
+         try:
+             pyproject_data = toml_load('pyproject.toml')
+             try:
+@@ -380,20 +345,25 @@ class BuildrootPackage():
+                 self.metadata_name = self.setup_metadata.get('name', self.real_name)
+                 build_system = pyproject_data.get('build-system', {})
+                 build_backend = build_system.get('build-backend', None)
+-                if build_backend and build_backend == 'flit_core.buildapi':
+-                    self.setup_metadata['method'] = 'flit'
++                if build_backend:
++                    if build_backend == 'flit_core.buildapi':
++                        self.setup_metadata['method'] = 'flit'
++                    elif build_backend == 'setuptools.build_meta':
++                        raise Exception("handle setuptools")
++                    else:
++                        self.setup_metadata['method'] = 'unknown'
+                 elif build_system.get('backend-path', None):
+                     self.setup_metadata['method'] = 'pep517'
+                 else:
+-                    self.setup_metadata['method'] = 'unknown'
++                    raise Exception("handle setuptools")
+             except KeyError:
+                 print('ERROR: Could not determine package metadata for {pkg}.\n'
+                       .format(pkg=self.real_name))
+                 raise
+         except FileNotFoundError:
+             raise
+-        os.chdir(current_dir)
+-        sys.path.remove(self.tmp_extract)
++        finally:
++            os.chdir(current_dir)
+ 
+     def get_requirements(self, pkg_folder):
+         """
+@@ -411,8 +381,8 @@ class BuildrootPackage():
+                         for req in self.pkg_req]
+ 
+         # get rid of commented lines and also strip the package strings
+-        self.pkg_req = [item.strip() for item in self.pkg_req
+-                        if len(item) > 0 and item[0] != '#']
++        self.pkg_req = {item.strip() for item in self.pkg_req
++                        if len(item) > 0 and item[0] != '#'}
+ 
+         req_not_found = self.pkg_req
+         self.pkg_req = list(map(pkg_buildroot_name, self.pkg_req))
+@@ -778,15 +748,15 @@ def main():
+ 
+             # Loading the package install info from the package
+             try:
+-                package.load_setup()
+-            except ImportError as err:
+-                if 'buildutils' in str(err):
+-                    print('This package needs buildutils')
+-                    continue
+-                else:
+-                    try:
+-                        package.load_pyproject()
+-                    except Exception:
++                package.load_pyproject()
++            except Exception:
++                try:
++                    package.load_setup()
++                except ImportError as err:
++                    if 'buildutils' in str(err):
++                        print('This package needs buildutils')
++                        continue
++                    else:
+                         raise
+             except (AttributeError, KeyError) as error:
+                 print('Error: Could not install package {pkg}: {error}'.format(
 -- 
-2.42.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
