@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86EFAC4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AB48C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:07:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A0C54368B;
-	Thu, 30 Nov 2023 23:07:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A0C54368B
+	by smtp2.osuosl.org (Postfix) with ESMTP id D98AB4366F;
+	Thu, 30 Nov 2023 23:07:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D98AB4366F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6dtjHBXb6H-D; Thu, 30 Nov 2023 23:07:25 +0000 (UTC)
+	with ESMTP id lAqsPTWZnOmG; Thu, 30 Nov 2023 23:07:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C5DD4368D;
-	Thu, 30 Nov 2023 23:07:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C5DD4368D
+	by smtp2.osuosl.org (Postfix) with ESMTP id BEF6C4365B;
+	Thu, 30 Nov 2023 23:07:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEF6C4365B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0FD4B1BF844
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 04F071BF844
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD81941E5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA53641F96
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD81941E5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA53641F96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9fRYEKeb8hS4 for <buildroot@lists.busybox.net>;
- Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
+ with ESMTP id uY0rrh193HeA for <buildroot@lists.busybox.net>;
+ Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC19241F5D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AAEE41EE7
  for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC19241F5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AAEE41EE7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE5A08766B; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+ id 87A048766A; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 23:52:18 +0100
+Date: Thu, 30 Nov 2023 23:50:10 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 72ec404bde1a734bf753c955869c7d2144b73a2d
-X-Git-Newrev: ced7a59bb0b2fe6831afae949b3bec16dd275d5b
+X-Git-Oldrev: cfaac7f0a08fddd9a7b83eabdd3e679c9c0b1c1e
+X-Git-Newrev: 48428b07ad77d693e6546d42c2f04688821a9297
 X-Patchwork-Hint: ignore
-Message-Id: <20231130230401.BE5A08766B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libxml2: bump
- version to 2.11.4
+Message-Id: <20231130230401.87A048766A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/squid: update to
+ 6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ced7a59bb0b2fe6831afae949b3bec16dd275d5b
+commit: https://git.buildroot.net/buildroot/commit/?id=48428b07ad77d693e6546d42c2f04688821a9297
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Release notes:
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.0.news
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.1.news
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.2.news
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.3.news
-https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.4.news
+See the release notes for Squid 6 for any news:
+http://www.squid-cache.org/Versions/v6/RELEASENOTES.html
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dfe1ca7872a45bcdc825ff0900d7fd929097a635)
+Tested with qemu_aarch64_virt_defconfig.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2a7c6816f02f45946e896577d78e3470331b2d63)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 37030bdfaa..f3650c5ec5 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.4.sha256sum
--sha256  ed0c91c5845008f1936739e4eee2035531c1c94742c6541f44ee66d885948d45  libxml2-2.10.4.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.4.sha256sum
-+sha256  737e1d7f8ab3f139729ca13a2494fd17bf30ddb4b7a427cf336252cab57f57f7  libxml2-2.11.4.tar.xz
- # License files, locally calculated
- sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index cf26a36cc4..9f7774f719 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index b00d14011e..ec60a0e9d1 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v5/squid-5.7.tar.xz.asc
+-md5  7a3764a3c5833631a779d7827901cda7  squid-5.7.tar.xz
+-sha1  141e8007d6b1cfee34654127a9ca025125b37b58  squid-5.7.tar.xz
++# From http://www.squid-cache.org/Versions/v6/squid-6.2.tar.xz.asc
++md5  ad01b7d82b6a00ffd8cd39b97113d05a  squid-6.2.tar.xz
++sha1  29ddb4c522a36f1270e7cfa66f0dec8805fd2b57  squid-6.2.tar.xz
+ # Locally calculated
+-sha256  6b0753aaba4c9c4efd333e67124caecf7ad6cc2d38581f19d2f0321f5b7ecd81  squid-5.7.tar.xz
++sha256  dd759e151e997d31786d91743d327b1b4b532f1caea66bf81100ec8ba04ec4c1  squid-6.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 355af0b902..167e9f67d8 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBXML2_VERSION_MAJOR = 2.10
-+LIBXML2_VERSION_MAJOR = 2.11
- LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
+-SQUID_VERSION = 5.7
++SQUID_VERSION = 6.2
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+-SQUID_SITE = http://www.squid-cache.org/Versions/v5
++SQUID_SITE = http://www.squid-cache.org/Versions/v6
+ SQUID_LICENSE = GPL-2.0+
+ SQUID_LICENSE_FILES = COPYING
+ SQUID_CPE_ID_VENDOR = squid-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
