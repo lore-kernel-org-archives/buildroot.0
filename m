@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B75BC4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58EB8C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 145264368D;
-	Thu, 30 Nov 2023 23:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 145264368D
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0E7543698;
+	Thu, 30 Nov 2023 23:06:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0E7543698
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xcn_koAS6tTd; Thu, 30 Nov 2023 23:06:30 +0000 (UTC)
+	with ESMTP id qgBMub3ScNJG; Thu, 30 Nov 2023 23:06:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5BAA4366F;
-	Thu, 30 Nov 2023 23:06:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5BAA4366F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6CCDF1BF990
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3E4D4366F;
+	Thu, 30 Nov 2023 23:06:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3E4D4366F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 108001BF844
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FA8941E7B
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FA8941E7B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E35C4365B
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E35C4365B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QKq52gzisUbQ for <buildroot@lists.busybox.net>;
- Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CllMf-jh_Gse for <buildroot@lists.busybox.net>;
+ Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6DC0241ED7
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3CF143670
  for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DC0241ED7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3CF143670
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 693AE8766A; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+ id CAFE5875FF; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 23:45:40 +0100
+Date: Thu, 30 Nov 2023 23:53:05 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 37f6c072dd75962e2635c228ac7aeae66ed4bba4
-X-Git-Newrev: 566bad2b39f3ee0b91794c946882a3b62e6591d1
+X-Git-Oldrev: ced7a59bb0b2fe6831afae949b3bec16dd275d5b
+X-Git-Newrev: a29a42e11e32b54e8f46c1ad50557b132093bef1
 X-Patchwork-Hint: ignore
-Message-Id: <20231130230401.693AE8766A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/memcached: fix
- uclibc-ng build
+Message-Id: <20231130230401.CAFE5875FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libxml2: bump
+ version to 2.11.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,111 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=566bad2b39f3ee0b91794c946882a3b62e6591d1
+commit: https://git.buildroot.net/buildroot/commit/?id=a29a42e11e32b54e8f46c1ad50557b132093bef1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fix the following uclibc-ng build failure raised since bump to version
-1.6.21 in commit 6ce55ab0ed3b7125cd11ecfe8c18aaf156b5f060 and
-https://github.com/memcached/memcached/commit/875371a75cbf1f92350de2d1fa0fae4a35ed572b:
+Release notes:
+https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.5.news
 
-/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: memcached-thread.o: in function `thread_setname':
-thread.c:(.text+0xea2): undefined reference to `pthread_setname_np'
-
-Fixes:
- - http://autobuild.buildroot.org/results/e856d381f5ec7d2727f21c8bd46dacb456984416
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bfa3cd74d017ba47b91729f131daf5d5993c5265)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 622698d78472aad0b4afa2775fd35dd5bff7a865)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../memcached/0002-fix-build-on-uclibc-ng.patch    | 64 ++++++++++++++++++++++
- package/memcached/memcached.mk                     |  2 +
- 2 files changed, 66 insertions(+)
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/memcached/0002-fix-build-on-uclibc-ng.patch b/package/memcached/0002-fix-build-on-uclibc-ng.patch
-new file mode 100644
-index 0000000000..a5af7a2adb
---- /dev/null
-+++ b/package/memcached/0002-fix-build-on-uclibc-ng.patch
-@@ -0,0 +1,64 @@
-+From c84e5e55e0e9e793849f721d30979242ed6a6ee3 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 1 Oct 2023 14:12:38 +0200
-+Subject: [PATCH] fix build on uclibc-ng
-+
-+Fix the following build failure with uclibc-ng raised since version
-+1.6.18 and
-+https://github.com/memcached/memcached/commit/875371a75cbf1f92350de2d1fa0fae4a35ed572b:
-+
-+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: memcached-thread.o: in function `thread_setname':
-+thread.c:(.text+0xea2): undefined reference to `pthread_setname_np'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e856d381f5ec7d2727f21c8bd46dacb456984416
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: unsent yet (waiting feedback on first patch)
-+---
-+ configure.ac | 1 +
-+ extstore.c   | 2 +-
-+ thread.c     | 2 +-
-+ 3 files changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index d94f6fb..5ec5088 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -686,6 +686,7 @@ AC_CHECK_FUNCS(clock_gettime)
-+ AC_CHECK_FUNCS(preadv)
-+ AC_CHECK_FUNCS(pread)
-+ AC_CHECK_FUNCS(eventfd)
-++AC_CHECK_FUNCS([pthread_setname_np],[AC_DEFINE(HAVE_PTHREAD_SETNAME_NP, 1, [Define to 1 if support pthread_setname_np])])
-+ AC_CHECK_FUNCS([accept4], [AC_DEFINE(HAVE_ACCEPT4, 1, [Define to 1 if support accept4])])
-+ AC_CHECK_FUNCS([getopt_long], [AC_DEFINE(HAVE_GETOPT_LONG, 1, [Define to 1 if support getopt_long])])
-+ 
-+diff --git a/extstore.c b/extstore.c
-+index b079465..f6a6180 100644
-+--- a/extstore.c
-++++ b/extstore.c
-+@@ -119,7 +119,7 @@ struct store_engine {
-+ #define THR_NAME_MAXLEN 16
-+ static void thread_setname(pthread_t thread, const char *name) {
-+ assert(strlen(name) < THR_NAME_MAXLEN);
-+-#if defined(__linux__)
-++#if defined(__linux__) && defined(HAVE_PTHREAD_SETNAME_NP)
-+ pthread_setname_np(thread, name);
-+ #endif
-+ }
-+diff --git a/thread.c b/thread.c
-+index ee120fa..76651c2 100644
-+--- a/thread.c
-++++ b/thread.c
-+@@ -635,7 +635,7 @@ static void thread_libevent_process(evutil_socket_t fd, short which, void *arg)
-+ #define THR_NAME_MAXLEN 16
-+ void thread_setname(pthread_t thread, const char *name) {
-+ assert(strlen(name) < THR_NAME_MAXLEN);
-+-#if defined(__linux__)
-++#if defined(__linux__) && defined(HAVE_PTHREAD_SETNAME_NP)
-+ pthread_setname_np(thread, name);
-+ #endif
-+ }
-+-- 
-+2.40.1
-+
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 2ebc672d1c..a1a5eac049 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -13,6 +13,8 @@ MEMCACHED_LICENSE = BSD-3-Clause
- MEMCACHED_LICENSE_FILES = COPYING
- MEMCACHED_CPE_ID_VENDOR = memcached
- MEMCACHED_SELINUX_MODULES = memcached
-+# We're patching configure.ac
-+MEMCACHED_AUTORECONF = YES
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index f3650c5ec5..cad19f930f 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.4.sha256sum
+-sha256  737e1d7f8ab3f139729ca13a2494fd17bf30ddb4b7a427cf336252cab57f57f7  libxml2-2.11.4.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.5.sha256sum
++sha256  3727b078c360ec69fa869de14bd6f75d7ee8d36987b071e6928d4720a28df3a6  libxml2-2.11.5.tar.xz
+ # License files, locally calculated
+ sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 9f7774f719..d2f96a7e96 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- ifeq ($(BR2_ENDIAN),"BIG")
- MEMCACHED_CONF_ENV += ac_cv_c_endian=big
+ LIBXML2_VERSION_MAJOR = 2.11
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).4
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).5
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
