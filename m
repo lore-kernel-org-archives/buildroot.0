@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62769C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:06:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89494C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12E1443672;
-	Thu, 30 Nov 2023 23:06:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12E1443672
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FE8E4368E;
+	Thu, 30 Nov 2023 23:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FE8E4368E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rpzCH7WCRrB8; Thu, 30 Nov 2023 23:06:02 +0000 (UTC)
+	with ESMTP id Drduv85_vLac; Thu, 30 Nov 2023 23:06:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F280043681;
-	Thu, 30 Nov 2023 23:06:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F280043681
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4DBEB1BF844
+	by smtp2.osuosl.org (Postfix) with ESMTP id 071214365B;
+	Thu, 30 Nov 2023 23:06:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 071214365B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 52A131BF983
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F385660B48
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F385660B48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 030294365C
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 030294365C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 96bvcI8QCgqV for <buildroot@lists.busybox.net>;
- Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r6XYIHD7OD_T for <buildroot@lists.busybox.net>;
+ Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 03BD26FA3B
- for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03BD26FA3B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99CDA4366F
+ for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99CDA4366F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1E4B8766E; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+ id 95F328766B; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Dec 2023 00:03:10 +0100
+Date: Thu, 30 Nov 2023 23:50:17 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 12a55aba9567bb7dfc68aca416cd9d5828919270
-X-Git-Newrev: 249f90cf253c7c20c4df19cb2f4277ca73626f68
+X-Git-Oldrev: 48428b07ad77d693e6546d42c2f04688821a9297
+X-Git-Newrev: dbf8a45bb340a0494ac7f3f274644c5e0a1bc594
 X-Patchwork-Hint: ignore
-Message-Id: <20231130230401.F1E4B8766E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/perl: bump to
- version 5.36.1
+Message-Id: <20231130230401.95F328766B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/squid: bump
+ version to 6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,72 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=249f90cf253c7c20c4df19cb2f4277ca73626f68
+commit: https://git.buildroot.net/buildroot/commit/?id=dbf8a45bb340a0494ac7f3f274644c5e0a1bc594
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-diff README:
--Perl is Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
--2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012,
--2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022
--by Larry Wall and others.
-+Perl is Copyright (C) 1993 - 2023 by Larry Wall and others.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[yann.morin.1998@free.fr: fix spaces in hash file]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8a289667f5dba6fffb3a21faa14517e9b49726a4)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0e15854fbcb12c22bda59affb658aecc002177ed)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl/perl.hash | 14 +++++++-------
- package/perl/perl.mk   |  4 ++--
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index b21023f730..2165c8c601 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,12 +1,12 @@
--# Hashes from: https://www.cpan.org/src/5.0/perl-5.36.0.tar.xz.{md5,sha1,sha256}.txt
--md5  826e42da130011699172fd655e49cfa2  perl-5.36.0.tar.xz
--sha1  938c56a77ae094eb7f5019318a5e4efb2d9c74fa  perl-5.36.0.tar.xz
--sha256  0f386dccbee8e26286404b2cca144e1005be65477979beb9b1ba272d4819bcf0  perl-5.36.0.tar.xz
-+# Hashes from: https://www.cpan.org/src/5.0/perl-5.36.1.tar.xz.{md5,sha1,sha256}.txt
-+md5  825f6b1d7e03b22522e0bdb992fbb728  perl-5.36.1.tar.xz
-+sha1  7b766266af08a6cef0487308e80b40d5d8069df7  perl-5.36.1.tar.xz
-+sha256  bd91217ea8a8c8b81f21ebbb6cefdf0d13ae532013f944cdece2cd51aef4b6a7  perl-5.36.1.tar.xz
- 
--# Hash from: https://github.com/arsv/perl-cross/releases/download/1.4/perl-cross-1.4.hash
--sha256  be9d9f9f7148edff7a2f9695ba3cb7e3975eff6b25a9a81dd311725fd757aa91  perl-cross-1.4.tar.gz
-+# Hash from: https://github.com/arsv/perl-cross/releases/download/1.4.1/perl-cross-1.4.1.hash
-+sha256  3e14bb4f28c83586c668c5f9f6b4e57b138b4ec2fae0271086e29d4e352670ca  perl-cross-1.4.1.tar.gz
- 
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index ec60a0e9d1..a6d4c5d056 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v6/squid-6.2.tar.xz.asc
+-md5  ad01b7d82b6a00ffd8cd39b97113d05a  squid-6.2.tar.xz
+-sha1  29ddb4c522a36f1270e7cfa66f0dec8805fd2b57  squid-6.2.tar.xz
++# From http://www.squid-cache.org/Versions/v6/squid-6.3.tar.xz.asc
++md5  2512b5d27856e6f91a97719784506893  squid-6.3.tar.xz
++sha1  7bd74034015c6a4d345a4d277a431908bed2ec4a  squid-6.3.tar.xz
  # Locally calculated
- sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
- sha256  d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912  Copying
--sha256  06bab256e2e039c59d2ca3c5853425317b4a0f251fe4e5d5201a987b11fc4f78  README
-+sha256  810c97bea10842d2e47bc79e51acdfa1628cfee34fa0d89330f4eb3a44e3def9  README
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 9be00e1b2c..734e8efec6 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,7 +6,7 @@
+-sha256  dd759e151e997d31786d91743d327b1b4b532f1caea66bf81100ec8ba04ec4c1  squid-6.2.tar.xz
++sha256  74a0f5586a7a5d89573d502708d5e1d66ddf0430cf4802cc7261b765653248fa  squid-6.3.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 167e9f67d8..019a202952 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 36
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
- PERL_SITE = https://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
-@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
- PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.4
-+PERL_CROSS_VERSION = 1.4.1
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+-SQUID_VERSION = 6.2
++SQUID_VERSION = 6.3
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v6
+ SQUID_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
