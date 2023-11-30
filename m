@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3A66C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:11:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 442DEC4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:12:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 825FE43670;
-	Thu, 30 Nov 2023 23:11:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 825FE43670
+	by smtp2.osuosl.org (Postfix) with ESMTP id E673943674;
+	Thu, 30 Nov 2023 23:12:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E673943674
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k-T_Lhl0nBZH; Thu, 30 Nov 2023 23:11:49 +0000 (UTC)
+	with ESMTP id qi42d76KakCk; Thu, 30 Nov 2023 23:12:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 420AF436CB;
-	Thu, 30 Nov 2023 23:11:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 420AF436CB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C7551BF2A1
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA472436BA;
+	Thu, 30 Nov 2023 23:12:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA472436BA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B2DC1BF983
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:09:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A99B84698
- for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:09:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A99B84698
+ by smtp3.osuosl.org (Postfix) with ESMTP id 633C060B5D
+ for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:09:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 633C060B5D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tdtz9Ab1hM1S for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YZo_7GbHj8i8 for <buildroot@lists.busybox.net>;
  Thu, 30 Nov 2023 23:09:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 29478846E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1935C60B29
  for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:09:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29478846E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1935C60B29
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 134A6876B0; Thu, 30 Nov 2023 23:09:02 +0000 (UTC)
+ id 07DA5876AF; Thu, 30 Nov 2023 23:09:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 23:49:48 +0100
+Date: Thu, 30 Nov 2023 23:49:29 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: bc63929d5b224f3e3050f2d460e506b8fba9e887
-X-Git-Newrev: 722335175e58a93b8853ae43808a1b00ebb5e14c
+X-Git-Oldrev: c06c12775b79fe44b870ab2d54934711fc09551e
+X-Git-Newrev: bc63929d5b224f3e3050f2d460e506b8fba9e887
 X-Patchwork-Hint: ignore
-Message-Id: <20231130230902.134A6876B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/squid: bump
- version to 6.3
+Message-Id: <20231130230902.07DA5876AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/squid: update to
+ 6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=722335175e58a93b8853ae43808a1b00ebb5e14c
+commit: https://git.buildroot.net/buildroot/commit/?id=bc63929d5b224f3e3050f2d460e506b8fba9e887
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
+See the release notes for Squid 6 for any news:
+http://www.squid-cache.org/Versions/v6/RELEASENOTES.html
+
+Tested with qemu_aarch64_virt_defconfig.
+
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0e15854fbcb12c22bda59affb658aecc002177ed)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2a7c6816f02f45946e896577d78e3470331b2d63)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/squid/squid.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index ec60a0e9d1..a6d4c5d056 100644
+index b00d14011e..ec60a0e9d1 100644
 --- a/package/squid/squid.hash
 +++ b/package/squid/squid.hash
 @@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v6/squid-6.2.tar.xz.asc
--md5  ad01b7d82b6a00ffd8cd39b97113d05a  squid-6.2.tar.xz
--sha1  29ddb4c522a36f1270e7cfa66f0dec8805fd2b57  squid-6.2.tar.xz
-+# From http://www.squid-cache.org/Versions/v6/squid-6.3.tar.xz.asc
-+md5  2512b5d27856e6f91a97719784506893  squid-6.3.tar.xz
-+sha1  7bd74034015c6a4d345a4d277a431908bed2ec4a  squid-6.3.tar.xz
+-# From http://www.squid-cache.org/Versions/v5/squid-5.7.tar.xz.asc
+-md5  7a3764a3c5833631a779d7827901cda7  squid-5.7.tar.xz
+-sha1  141e8007d6b1cfee34654127a9ca025125b37b58  squid-5.7.tar.xz
++# From http://www.squid-cache.org/Versions/v6/squid-6.2.tar.xz.asc
++md5  ad01b7d82b6a00ffd8cd39b97113d05a  squid-6.2.tar.xz
++sha1  29ddb4c522a36f1270e7cfa66f0dec8805fd2b57  squid-6.2.tar.xz
  # Locally calculated
--sha256  dd759e151e997d31786d91743d327b1b4b532f1caea66bf81100ec8ba04ec4c1  squid-6.2.tar.xz
-+sha256  74a0f5586a7a5d89573d502708d5e1d66ddf0430cf4802cc7261b765653248fa  squid-6.3.tar.xz
+-sha256  6b0753aaba4c9c4efd333e67124caecf7ad6cc2d38581f19d2f0321f5b7ecd81  squid-5.7.tar.xz
++sha256  dd759e151e997d31786d91743d327b1b4b532f1caea66bf81100ec8ba04ec4c1  squid-6.2.tar.xz
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
 diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 167e9f67d8..019a202952 100644
+index 355af0b902..167e9f67d8 100644
 --- a/package/squid/squid.mk
 +++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SQUID_VERSION = 6.2
-+SQUID_VERSION = 6.3
+-SQUID_VERSION = 5.7
++SQUID_VERSION = 6.2
  SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v6
+-SQUID_SITE = http://www.squid-cache.org/Versions/v5
++SQUID_SITE = http://www.squid-cache.org/Versions/v6
  SQUID_LICENSE = GPL-2.0+
+ SQUID_LICENSE_FILES = COPYING
+ SQUID_CPE_ID_VENDOR = squid-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
