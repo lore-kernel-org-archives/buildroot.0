@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25514C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D44EEC4167B
+	for <buildroot@archiver.kernel.org>; Thu, 30 Nov 2023 23:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B57EB43670;
-	Thu, 30 Nov 2023 23:04:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B57EB43670
+	by smtp2.osuosl.org (Postfix) with ESMTP id 82C0F4365C;
+	Thu, 30 Nov 2023 23:04:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82C0F4365C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dXYqEdZiKWIB; Thu, 30 Nov 2023 23:04:39 +0000 (UTC)
+	with ESMTP id 55ilq-k0KqE1; Thu, 30 Nov 2023 23:04:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8281F43672;
-	Thu, 30 Nov 2023 23:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8281F43672
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B30951BF983
+	by smtp2.osuosl.org (Postfix) with ESMTP id 41AC343668;
+	Thu, 30 Nov 2023 23:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41AC343668
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B02C21BF844
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8ABA56FA42
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9463843671
  for <buildroot@lists.busybox.net>; Thu, 30 Nov 2023 23:04:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ABA56FA42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9463843671
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hIFm6FEPrBpM for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eZwhhEd07SGo for <buildroot@lists.busybox.net>;
  Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFFEA60B48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5998B4365B
  for <buildroot@buildroot.org>; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFFEA60B48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5998B4365B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B07FC8766E; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
+ id 467ED8766B; Thu, 30 Nov 2023 23:04:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 Nov 2023 23:50:38 +0100
+Date: Thu, 30 Nov 2023 23:43:22 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d8feeaa04779bbf3fc0e3ba0c44c826781803ac2
-X-Git-Newrev: 72ec404bde1a734bf753c955869c7d2144b73a2d
+X-Git-Oldrev: e169bc91a4e9170495b4f33e055091b3983cb087
+X-Git-Newrev: f108d50df178e60eaa6f069ac7f85d1c9dc3dc65
 X-Patchwork-Hint: ignore
-Message-Id: <20231130230401.B07FC8766E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/vim: security
- bump to version 9.0.2136
+Message-Id: <20231130230401.467ED8766B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/vlc: security
+ bump to version 3.0.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72ec404bde1a734bf753c955869c7d2144b73a2d
+commit: https://git.buildroot.net/buildroot/commit/?id=f108d50df178e60eaa6f069ac7f85d1c9dc3dc65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fix CVE-2023-46246, CVE-2023-48231, CVE-2023-48232, CVE-2023-48233,
-CVE-2023-48234, CVE-2023-48235, CVE-2023-48236 and CVE-2023-48237
+Fix CVE-2023-47359: Videolan VLC prior to version 3.0.20 contains an
+incorrect offset read that leads to a Heap-Based Buffer Overflow in
+function GetPacket() and results in a memory corruption.
+
+Fix CVE-2023-47360: Videolan VLC prior to version 3.0.20 contains an
+Integer underflow that leads to an incorrect packet length.
+
+https://code.videolan.org/videolan/vlc/-/blob/3.0.20/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6bd302c631f88698763a3cf3fd6d0a9b3f0a17c8)
+(cherry picked from commit d675873f4fe9b601719b08cdd8a901d73ec7f731)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/vlc.hash | 8 ++++----
+ package/vlc/vlc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 8fdb6998c9..4ff64bada2 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index ef381e5934..40529bd664 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,7 +1,7 @@
+-# From https://get.videolan.org/vlc/3.0.19/vlc-3.0.19.tar.xz.sha256
+-sha256  643e3294bafe922324663ca499515b7564f2794575fd7d2b7992d20896381745  vlc-3.0.19.tar.xz
+-# From https://get.videolan.org/vlc/3.0.19/vlc-3.0.19.tar.xz.sha1
+-sha1  6d162248a26fdd76a9d4e7e3d52f40d4326f72c1  vlc-3.0.19.tar.xz
++# From https://get.videolan.org/vlc/3.0.20/vlc-3.0.20.tar.xz.sha256
++sha256  adc7285b4d2721cddf40eb5270cada2aaa10a334cb546fd55a06353447ba29b5  vlc-3.0.20.tar.xz
++# From https://get.videolan.org/vlc/3.0.20/vlc-3.0.20.tar.xz.sha1
++sha1  b834516ab701bf6311980ed5d67b77c834fdebe7  vlc-3.0.20.tar.xz
  # Locally computed
--sha256  29d0e5212daedbff1b781edba1b66f549b1a226020271f20aa9884abfdf39fc7  vim-9.0.2053.tar.gz
-+sha256  d826682fb839c0b99f80b9189af549d46dc087ef2cfc617ce161609ba5da4dc7  vim-9.0.2136.tar.gz
- sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
- sha256  b475d5d3f8c855dc1a84813bbe45c44054d7f7aee20c800950bf89d5958873de  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 37684e0aa3..b0b4ffe344 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 729e928b4d..d0fc1744c0 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VIM_VERSION = 9.0.2053
-+VIM_VERSION = 9.0.2136
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+-VLC_VERSION = 3.0.19
++VLC_VERSION = 3.0.20
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
