@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CD1DC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05941C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 17ACA40492;
-	Fri,  1 Dec 2023 20:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17ACA40492
+	by smtp2.osuosl.org (Postfix) with ESMTP id A819640370;
+	Fri,  1 Dec 2023 20:13:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A819640370
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Eod8VBM0q1Tj; Fri,  1 Dec 2023 20:12:54 +0000 (UTC)
+	with ESMTP id Gz8k3O4WTM_y; Fri,  1 Dec 2023 20:13:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E619E43753;
-	Fri,  1 Dec 2023 20:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E619E43753
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6384E1BF995
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BAFA8404A0;
+	Fri,  1 Dec 2023 20:13:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAFA8404A0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 375251BF2BF
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C4B784915
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C4B784915
+ by smtp2.osuosl.org (Postfix) with ESMTP id 112A643784
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 112A643784
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pcZHOnjb_DBs for <buildroot@lists.busybox.net>;
- Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5UWAd_YF3tFf for <buildroot@lists.busybox.net>;
+ Fri,  1 Dec 2023 20:12:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AE3484914
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39CC240492
  for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AE3484914
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39CC240492
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47BC28772E; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
+ id 16D1A8772A; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Dec 2023 21:10:00 +0100
+Date: Fri, 1 Dec 2023 21:05:14 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 9e2e2cb6a9306df35c92ba62940d291de53213a3
-X-Git-Newrev: 407357437dc00f8f81deff39e6f4dcf024b5be0c
+X-Git-Oldrev: fb3f6d1d1eb3fe089ab751a3bf9fe27355f6e652
+X-Git-Newrev: 0ffbc8e28837ab094c744ecf3ea15b8922f34229
 X-Patchwork-Hint: ignore
-Message-Id: <20231201201235.47BC28772E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/zfs: bump version
- to 2.2.2
+Message-Id: <20231201201235.16D1A8772A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/imagemagick:
+ security bump to version 7.1.1-21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,66 +58,51 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3398501771831705839=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3398501771831705839==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=407357437dc00f8f81deff39e6f4dcf024b5be0c
+commit: https://git.buildroot.net/buildroot/commit/?id=0ffbc8e28837ab094c744ecf3ea15b8922f34229
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-This release contains an important fix for a data corruption
-bug. Full details are in the issue [1] and bug fix [2].
+Fix CVE-2023-1289, CVE-2023-2157, CVE-2023-34151, CVE-2023-34152,
+CVE-2023-34153, CVE-2023-3428, CVE-2023-34474 and CVE-2023-34475
 
-1. https://github.com/openzfs/zfs/issues/15526
-2. https://github.com/openzfs/zfs/pull/15571
+https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
 
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c068fc4fa08051653229455dde0034427113a577)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 758d79faec0d95c57489296658517b1fd9fb5040)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zfs/zfs.hash | 4 ++--
- package/zfs/zfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
-index b02c49234a..01c86f2bd6 100644
---- a/package/zfs/zfs.hash
-+++ b/package/zfs/zfs.hash
-@@ -1,5 +1,5 @@
--# Locally computed
--sha256  42035fd059faa25a09cd511b24a57b8ad1285cb69127f2a0043b98562c5ec690  zfs-2.2.0.tar.gz
-+# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.2/zfs-2.2.2.sha256.asc
-+sha256  76bc0547d9ba31d4b0142e417aaaf9f969072c3cb3c1a5b10c8738f39ed12fc9  zfs-2.2.2.tar.gz
- 
- # Hash for license files:
- sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-index c044a10f41..4aa165fd4c 100644
---- a/package/zfs/zfs.mk
-+++ b/package/zfs/zfs.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 8988dad5da..fd80316ec5 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4333ef2fe63f2510988af82b726f5b1919ebd54037ea6674566c69fcceb67e11  imagemagick-7.1.0-51.tar.gz
++sha256  09402e5f17c6575ef9f010bb2e21ae1710f1f3426f115ad4317ee9129c32608e  imagemagick-7.1.1-21.tar.gz
+ sha256  8cceeb67d4e783cb63075c7311fdb990fa0369ee80fbd0f481064cd02386ca2d  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 91dd208b0d..719c6768af 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZFS_VERSION = 2.2.0
-+ZFS_VERSION = 2.2.2
- ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
- ZFS_LICENSE = CDDL
- ZFS_LICENSE_FILES = LICENSE COPYRIGHT
-
---===============3398501771831705839==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-IMAGEMAGICK_VERSION = 7.1.0-51
++IMAGEMAGICK_VERSION = 7.1.1-21
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3398501771831705839==--
