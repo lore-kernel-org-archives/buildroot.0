@@ -4,55 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12A54C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:16:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19A68C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:20:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6BC440492;
-	Fri,  1 Dec 2023 20:16:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6BC440492
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC01440492;
+	Fri,  1 Dec 2023 20:20:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC01440492
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mq4qLqdMjBS6; Fri,  1 Dec 2023 20:15:59 +0000 (UTC)
+	with ESMTP id 0xvTgT5Ff3BY; Fri,  1 Dec 2023 20:20:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BACA741A01;
-	Fri,  1 Dec 2023 20:15:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BACA741A01
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 78E621BF2BF
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:15:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D356F404A0;
+	Fri,  1 Dec 2023 20:20:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D356F404A0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CB4491BF2BF
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:20:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F00942172
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:15:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F00942172
+ by smtp2.osuosl.org (Postfix) with ESMTP id AFDC3404A0
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:20:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFDC3404A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id icRPNnfeqcr3 for <buildroot@lists.busybox.net>;
- Fri,  1 Dec 2023 20:15:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gmdg365v5voN for <buildroot@lists.busybox.net>;
+ Fri,  1 Dec 2023 20:20:03 +0000 (UTC)
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4F05C4215E
- for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:15:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F05C4215E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 04790C0003;
- Fri,  1 Dec 2023 20:15:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r99vU-004TK7-04;
- Fri, 01 Dec 2023 21:15:52 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20231104220152.3252635-1-dev@bybram.com>
- <20231201100405.GL3177259@scaer>
-Date: Fri, 01 Dec 2023 21:15:51 +0100
-In-Reply-To: <20231201100405.GL3177259@scaer> (Yann E. MORIN's message of
- "Fri, 1 Dec 2023 11:04:05 +0100")
-Message-ID: <87sf4l4r2g.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 719AC40492
+ for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:20:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 719AC40492
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A3CAAC0006
+ for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:20:01 +0000 (UTC)
+Message-ID: <08138fda-74d4-46ee-833f-52aac135d125@korsgaard.com>
+Date: Fri, 1 Dec 2023 21:19:58 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20231126221637.5688-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+In-Reply-To: <20231126221637.5688-1-fontaine.fabrice@gmail.com>
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] configs/raspberrypi: bump Linux version
- to 6.1.61
+Subject: Re: [Buildroot] [PATCH 1/1] package/libzenoh-pico: add threads
+ comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +60,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>, buildroot@buildroot.org,
- Bram Oosterhuis <dev@bybram.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 26/11/2023 23.16, Fabrice Fontaine wrote:
+> Commit 3e76df02b324b0442eec7bfd2451ee2fbb3709e9 forgot to add a comment
+> about threads dependency
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Bram, All,
- > On 2023-11-04 23:01 +0100, Bram Oosterhuis spake thusly:
- >> Linux 6.1 has been marked LTS for a long time now. Time to bump
- >> Linux for RaspberryPi's to the latest 6.1.61 Since April 2022
- >> the RaspberryPi defconfigs have compressed kernel module enabled
- >> by default. (see [1] and [2]).
- >> 
- >> To load compressed kernel modules kmod and xz packages are needed
- >> because busybox doesn't support it.
- >> 
- >> For testing I used RaspberryPi 2, 3(32+64bit) and 4(32+64bit), all with mdev enabled.
- >> 
- >> [1] https://github.com/raspberrypi/linux/commit/c45b4223a4e4a8cfe39edbb4949329ea478fa4e2
- >> [2] https://github.com/raspberrypi/linux/issues/4966
- >> 
- >> Signed-off-by: Bram Oosterhuis <dev@bybram.com>
+Committed, thanks.
 
- > Applied to next, thanks.
-
-Sorry for the slow response, the xz compressed modules seems a bit of a
-random choice by the rpi people. I wonder if it wouldn't make more sense
-to use a kernel config fragment to just disable that rather than
-enforcing kmod?
-
-Or do they enable so many modules that they really take up a huge space
-(and not fitting in our default rootfs size)?
+> ---
+>   package/libzenoh-pico/Config.in | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/libzenoh-pico/Config.in b/package/libzenoh-pico/Config.in
+> index cb61b0de55..5f7e91c9f6 100644
+> --- a/package/libzenoh-pico/Config.in
+> +++ b/package/libzenoh-pico/Config.in
+> @@ -9,3 +9,6 @@ config BR2_PACKAGE_LIBZENOH_PICO
+>   	  functionalities.
+>   
+>   	  https://github.com/eclipse-zenoh/zenoh-pico
+> +
+> +comment "libzenoh-pico needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
 -- 
 Bye, Peter Korsgaard
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
