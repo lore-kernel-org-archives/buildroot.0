@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD16C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F09EC4167B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:13:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2D2E404A0;
-	Fri,  1 Dec 2023 20:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2D2E404A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE8F4404A0;
+	Fri,  1 Dec 2023 20:13:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE8F4404A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZUu_77zVeBEm; Fri,  1 Dec 2023 20:13:34 +0000 (UTC)
+	with ESMTP id Q1r6vvz8Ipdn; Fri,  1 Dec 2023 20:13:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B09CA4379E;
-	Fri,  1 Dec 2023 20:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B09CA4379E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 44D7043761;
+	Fri,  1 Dec 2023 20:13:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44D7043761
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 159BE1BF2BF
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 199D31BF2BF
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BABE40492
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66D9843784
  for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BABE40492
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66D9843784
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RPHPz-_NjdT7 for <buildroot@lists.busybox.net>;
+ with ESMTP id IhsGOfO7_NVR for <buildroot@lists.busybox.net>;
  Fri,  1 Dec 2023 20:12:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 836DC43753
+ by smtp2.osuosl.org (Postfix) with ESMTP id 617A541A01
  for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 836DC43753
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 617A541A01
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 531D68772B; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
+ id 3C55C8772D; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Dec 2023 21:11:39 +0100
+Date: Fri, 1 Dec 2023 21:09:51 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 407357437dc00f8f81deff39e6f4dcf024b5be0c
-X-Git-Newrev: 75abb665b1f8b8eb1657c76ca73bbc70cc9c180b
+X-Git-Oldrev: 236a009f6e5d8042925790bcdaa57db6a4b393e4
+X-Git-Newrev: 9e2e2cb6a9306df35c92ba62940d291de53213a3
 X-Patchwork-Hint: ignore
-Message-Id: <20231201201235.531D68772B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/rtty: fix wolfssl
- build
+Message-Id: <20231201201235.3C55C8772D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/zfs: bump version
+ to 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +58,192 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8592217554293889096=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75abb665b1f8b8eb1657c76ca73bbc70cc9c180b
+--===============8592217554293889096==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9e2e2cb6a9306df35c92ba62940d291de53213a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix the following wolfssl build failure raised at least since bump to
-version 7.4.0 in commit 6b5907bf65d27ed98532e9783f92f5575f38b3d2:
+Removed backported patch:
+- https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
 
-/home/autobuild/autobuild/instance-4/output-1/build/rtty-8.1.0/src/ssl/openssl.c: In function 'ssl_last_error_string':
-/home/autobuild/autobuild/instance-4/output-1/build/rtty-8.1.0/src/ssl/openssl.c:143:24: error: implicit declaration of function 'ERR_peek_error_line_data'; did you mean 'wolfSSL_ERR_get_error_line_data'? [-Werror=implicit-function-declaration]
-  143 |         ssl_err_code = ERR_peek_error_line_data(&file, &line, &data, &flags);
-      |                        ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                        wolfSSL_ERR_get_error_line_data
+Updated ZFS test to pass this new version; drop the explicit /pool
+mountpoint option to rely on the default location (which happens to be
+/pool already).
 
-Fixes:
- - http://autobuild.buildroot.org/results/9db9f1dcc6760de4b78771bb79f109c4efd06c36
- - http://autobuild.buildroot.org/results/16422af9469de114e552124542508c3b18ea8f19
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: don't force wolfssl-all]
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 67cb7d8d093f57339e622e1f1f5a40d5013194f1)
+[yann.morin.1998@free.fr:
+  - needed on master to further bump to a data-corruption fix
+]
+(cherry picked from commit d153e58d13f262f96c6c7c9a2bc0d31b76c8973d)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a44d1a1252572bcb7638e5b832c24841303f4800)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtty/rtty.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/zfs/0001-config-user-check-for-aio.h.patch | 94 ----------------------
+ package/zfs/zfs.hash                               |  4 +-
+ package/zfs/zfs.mk                                 |  2 +-
+ support/testing/tests/package/test_zfs.py          |  4 +-
+ 4 files changed, 5 insertions(+), 99 deletions(-)
 
-diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-index 964ec04ec4..8a40f584de 100644
---- a/package/rtty/rtty.mk
-+++ b/package/rtty/rtty.mk
-@@ -24,7 +24,7 @@ RTTY_CONF_OPTS += \
- 	-DUSE_MBEDTLS=OFF \
- 	-DUSE_OPENSSL=ON \
- 	-DUSE_WOLFSSL=OFF
--else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
-+else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
- RTTY_DEPENDENCIES += wolfssl
- RTTY_CONF_OPTS += \
- 	-DSSL_SUPPORT=ON \
+diff --git a/package/zfs/0001-config-user-check-for-aio.h.patch b/package/zfs/0001-config-user-check-for-aio.h.patch
+deleted file mode 100644
+index 55321ee2fc..0000000000
+--- a/package/zfs/0001-config-user-check-for-aio.h.patch
++++ /dev/null
+@@ -1,94 +0,0 @@
+-From bc3f12bfac152a0c28951cec92340ba14f9ccee9 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?=D0=BD=D0=B0=D0=B1?= <nabijaczleweli@nabijaczleweli.xyz>
+-Date: Mon, 28 Mar 2022 19:24:22 +0200
+-Subject: [PATCH] config: user: check for <aio.h>
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-And always zpool_read_label_slow() on non-conformant libcs
+-
+-Reviewed-by: Brian Behlendorf <behlendorf1@llnl.gov>
+-Co-authored-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+-Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
+-Closes #13207
+-Closes #13254
+-Upstream: https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9
+-[yann.morin.1998@free.fr: backport from upstream]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- config/user-aio.h.m4        | 7 +++++++
+- config/user-libaio.m4       | 2 +-
+- config/user.m4              | 1 +
+- lib/libzutil/zutil_import.c | 6 ++++++
+- 4 files changed, 15 insertions(+), 1 deletion(-)
+- create mode 100644 config/user-aio.h.m4
+-
+-diff --git a/config/user-aio.h.m4 b/config/user-aio.h.m4
+-new file mode 100644
+-index 00000000000..152c0946722
+---- /dev/null
+-+++ b/config/user-aio.h.m4
+-@@ -0,0 +1,7 @@
+-+dnl #
+-+dnl # POSIX specifies <aio.h> as part of realtime extensions,
+-+dnl # and is missing from at least uClibc – force fallbacks there
+-+dnl #
+-+AC_DEFUN([ZFS_AC_CONFIG_USER_AIO_H], [
+-+	ZFS_AC_FIND_SYSTEM_LIBRARY(AIO_H, [], [aio.h], [], [rt], [lio_listio])
+-+])
+-diff --git a/config/user-libaio.m4 b/config/user-libaio.m4
+-index 95c144d76b4..8009bd11b3e 100644
+---- a/config/user-libaio.m4
+-+++ b/config/user-libaio.m4
+-@@ -1,5 +1,5 @@
+- dnl #
+--dnl # Check for libaio - only used for libaiot test cases.
+-+dnl # Check for libaio - only used for mmap_libaio test cases.
+- dnl #
+- AC_DEFUN([ZFS_AC_CONFIG_USER_LIBAIO], [
+- 	ZFS_AC_FIND_SYSTEM_LIBRARY(LIBAIO, [], [libaio.h], [], [aio], [], [user_libaio=yes], [user_libaio=no])
+-diff --git a/config/user.m4 b/config/user.m4
+-index 670820b3771..f450af47e04 100644
+---- a/config/user.m4
+-+++ b/config/user.m4
+-@@ -23,6 +23,7 @@ AC_DEFUN([ZFS_AC_CONFIG_USER], [
+- 	ZFS_AC_CONFIG_USER_LIBAIO
+- 	ZFS_AC_CONFIG_USER_LIBATOMIC
+- 	ZFS_AC_CONFIG_USER_LIBFETCH
+-+	ZFS_AC_CONFIG_USER_AIO_H
+- 	ZFS_AC_CONFIG_USER_CLOCK_GETTIME
+- 	ZFS_AC_CONFIG_USER_PAM
+- 	ZFS_AC_CONFIG_USER_RUNSTATEDIR
+-diff --git a/lib/libzutil/zutil_import.c b/lib/libzutil/zutil_import.c
+-index d7547c4249e..3744a1c3474 100644
+---- a/lib/libzutil/zutil_import.c
+-+++ b/lib/libzutil/zutil_import.c
+-@@ -47,7 +47,9 @@
+-  * using our derived config, and record the results.
+-  */
+-
+-+#ifdef HAVE_AIO_H
+- #include <aio.h>
+-+#endif
+- #include <ctype.h>
+- #include <dirent.h>
+- #include <errno.h>
+-@@ -982,6 +984,9 @@ zpool_read_label_slow(int fd, nvlist_t **config, int *num_labels)
+- int
+- zpool_read_label(int fd, nvlist_t **config, int *num_labels)
+- {
+-+#ifndef HAVE_AIO_H
+-+	return (zpool_read_label_slow(fd, config, num_labels));
+-+#else
+- 	struct stat64 statbuf;
+- 	struct aiocb aiocbs[VDEV_LABELS];
+- 	struct aiocb *aiocbps[VDEV_LABELS];
+-@@ -1104,6 +1109,7 @@ zpool_read_label(int fd, nvlist_t **config, int *num_labels)
+- 	*config = expected_config;
+-
+- 	return (0);
+-+#endif
+- }
+-
+- /*
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index f0327ce8cc..b02c49234a 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.1.12/zfs-2.1.12.sha256.asc
+-sha256  64daa26aed3e12c931f6f4413d7527c4ebdb8da35416b356152b5f9fdd4c6e6d  zfs-2.1.12.tar.gz
++# Locally computed
++sha256  42035fd059faa25a09cd511b24a57b8ad1285cb69127f2a0043b98562c5ec690  zfs-2.2.0.tar.gz
+ 
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index aa2e72b2e0..c044a10f41 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZFS_VERSION = 2.1.12
++ZFS_VERSION = 2.2.0
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_LICENSE = CDDL
+ ZFS_LICENSE_FILES = LICENSE COPYRIGHT
+diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
+index 1f01ddd768..27dbc2869b 100644
+--- a/support/testing/tests/package/test_zfs.py
++++ b/support/testing/tests/package/test_zfs.py
+@@ -40,11 +40,11 @@ class TestZfsBase(infra.basetest.BRTest):
+ 
+         cmds = [
+             # Init
+-            "modprobe zfs",
++            "modprobe zfs && sleep 2",
+             "mount -o remount,size=132M /tmp",
+             "fallocate -l 64M /tmp/container1.raw",
+             "fallocate -l 64M /tmp/container2.raw",
+-            "zpool create -m /pool pool raidz /tmp/container1.raw /tmp/container2.raw",
++            "zpool create pool raidz /tmp/container1.raw /tmp/container2.raw",
+             "dd if=/dev/urandom bs=1M count=8 of=/pool/urandom",
+             "sha256sum /pool/urandom > /tmp/urandom.sha256",
+             # Check ZFS
+
+--===============8592217554293889096==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8592217554293889096==--
