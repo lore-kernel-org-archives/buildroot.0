@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A103CC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CD1DC4167B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A11340370;
-	Fri,  1 Dec 2023 20:12:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A11340370
+	by smtp2.osuosl.org (Postfix) with ESMTP id 17ACA40492;
+	Fri,  1 Dec 2023 20:12:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17ACA40492
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qpdLSM5SnOJJ; Fri,  1 Dec 2023 20:12:40 +0000 (UTC)
+	with ESMTP id Eod8VBM0q1Tj; Fri,  1 Dec 2023 20:12:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 483D8404A0;
-	Fri,  1 Dec 2023 20:12:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 483D8404A0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3FF2F1BF2BF
+	by smtp2.osuosl.org (Postfix) with ESMTP id E619E43753;
+	Fri,  1 Dec 2023 20:12:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E619E43753
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6384E1BF995
  for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1957A60709
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C4B784915
  for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1957A60709
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C4B784915
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yVBL5OuzqbBw for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pcZHOnjb_DBs for <buildroot@lists.busybox.net>;
  Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D403605B0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AE3484914
  for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D403605B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AE3484914
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23D728772B; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
+ id 47BC28772E; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Dec 2023 21:06:51 +0100
+Date: Fri, 1 Dec 2023 21:10:00 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 0ffbc8e28837ab094c744ecf3ea15b8922f34229
-X-Git-Newrev: 49e32695beaa86fc5abe56d30e0c03ac088521dc
+X-Git-Oldrev: 9e2e2cb6a9306df35c92ba62940d291de53213a3
+X-Git-Newrev: 407357437dc00f8f81deff39e6f4dcf024b5be0c
 X-Patchwork-Hint: ignore
-Message-Id: <20231201201235.23D728772B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/xtables-addons:
- drop unrecognized option
+Message-Id: <20231201201235.47BC28772E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/zfs: bump version
+ to 2.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,41 +58,66 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3398501771831705839=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49e32695beaa86fc5abe56d30e0c03ac088521dc
+--===============3398501771831705839==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=407357437dc00f8f81deff39e6f4dcf024b5be0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
---with-xtables is an unrecognized option since the addition of the
-package in commit 490917387a0ff6969f8130be38993eed5f06f73e:
-https://github.com/nawawi/xtables-addons/blob/a576f4d43e80f9f91705c9e6a86f2d58c283df14/configure.ac
+This release contains an important fix for a data corruption
+bug. Full details are in the issue [1] and bug fix [2].
 
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls, --with-xtables
+1. https://github.com/openzfs/zfs/issues/15526
+2. https://github.com/openzfs/zfs/pull/15571
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e81dc9df53c406d0f65f5cb5e0fd6c5b0de32fd3)
+(cherry picked from commit c068fc4fa08051653229455dde0034427113a577)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xtables-addons/xtables-addons.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/zfs/zfs.hash | 4 ++--
+ package/zfs/zfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index e794538956..adfedbc874 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -13,7 +13,6 @@ XTABLES_ADDONS_LICENSE_FILES = LICENSE
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index b02c49234a..01c86f2bd6 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# Locally computed
+-sha256  42035fd059faa25a09cd511b24a57b8ad1285cb69127f2a0043b98562c5ec690  zfs-2.2.0.tar.gz
++# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.2/zfs-2.2.2.sha256.asc
++sha256  76bc0547d9ba31d4b0142e417aaaf9f969072c3cb3c1a5b10c8738f39ed12fc9  zfs-2.2.2.tar.gz
  
- XTABLES_ADDONS_CONF_OPTS = \
- 	--with-kbuild="$(LINUX_DIR)" \
--	--with-xtables="$(STAGING_DIR)/usr" \
- 	--with-xtlibdir="/usr/lib/xtables"
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index c044a10f41..4aa165fd4c 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define XTABLES_ADDONS_BUILD_CMDS
+-ZFS_VERSION = 2.2.0
++ZFS_VERSION = 2.2.2
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_LICENSE = CDDL
+ ZFS_LICENSE_FILES = LICENSE COPYRIGHT
+
+--===============3398501771831705839==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3398501771831705839==--
