@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B228C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF24CC4167B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:03:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0733A43753;
-	Fri,  1 Dec 2023 20:00:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0733A43753
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4653140492;
+	Fri,  1 Dec 2023 20:03:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4653140492
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id so-c52ZmJUrh; Fri,  1 Dec 2023 20:00:42 +0000 (UTC)
+	with ESMTP id oTD84suDX4G8; Fri,  1 Dec 2023 20:03:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E94494014B;
-	Fri,  1 Dec 2023 20:00:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E94494014B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 779B01BF2C0
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:00:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6BE664014B;
+	Fri,  1 Dec 2023 20:03:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BE664014B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DCF5D1BF2C0
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5094842145
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5094842145
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2BF984936
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:03:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2BF984936
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u7C-P3Ee3tKd for <buildroot@lists.busybox.net>;
- Fri,  1 Dec 2023 20:00:38 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE24A4212C
- for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:00:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE24A4212C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E0E95C0002;
- Fri,  1 Dec 2023 20:00:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8ev51kw8XzwI for <buildroot@lists.busybox.net>;
+ Fri,  1 Dec 2023 20:03:06 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A109A84925
+ for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:03:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A109A84925
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5AA37FF805;
+ Fri,  1 Dec 2023 20:03:02 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r99gf-004Rzk-0M;
- Fri, 01 Dec 2023 21:00:33 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r99j3-004SDO-1S;
+ Fri, 01 Dec 2023 21:03:01 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: <yann.morin@orange.com>
-References: <5e5da455b1f21f427b740a6cc9206c3b58316a9c.1701078039.git.yann.morin@orange.com>
-Date: Fri, 01 Dec 2023 21:00:33 +0100
-In-Reply-To: <5e5da455b1f21f427b740a6cc9206c3b58316a9c.1701078039.git.yann.morin@orange.com>
- (yann morin's message of "Mon, 27 Nov 2023 10:40:44 +0100")
-Message-ID: <87msut66ce.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20231127221119.1361708-1-fontaine.fabrice@gmail.com>
+Date: Fri, 01 Dec 2023 21:03:01 +0100
+In-Reply-To: <20231127221119.1361708-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 27 Nov 2023 23:11:19 +0100")
+Message-ID: <87il5h668a.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] package/erlang: disable for uclibc,
- fix glibc-build
+Subject: Re: [Buildroot] [PATCH 1/1] package/gsl: fix musl build on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,61 +62,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, Bernd Kuhls <bernd@kuhls.net>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gICA8eWFubi5tb3JpbkBvcmFuZ2UuY29tPiB3cml0ZXM6CgogPiBGcm9tOiAiWWFubiBF
-LiBNT1JJTiIgPHlhbm4ubW9yaW5Ab3JhbmdlLmNvbT4KID4gQ29tbWl0IDJjZmE4NmE1NDg4Mihw
-YWNrYWdlL2VybGFuZzogYnVtcCB2ZXJzaW9uIHRvIDI2LjAuMikgYWRkZWQgYQogPiBwYXRjaCB0
-byByZXN0b3JlIGJ1aWxkaW5nIG9uIHVDbGliYy4KCiA+IEhvd2V2ZXIsIHRoYXQgcGF0Y2ggaXMg
-bm90IHVwc3RyZWFtLCBhbmQgaGFzIGJlZW4gcmVqZWN0ZWQ6CgogPiAgICAgaHR0cHM6Ly9naXRo
-dWIuY29tL2VybGFuZy9vdHAvcHVsbC83NTAwCgogPiAgICAgUGxlYXNlIG9wZW4gYSBQUiB0byBo
-dHRwczovL2dpdGh1Yi5jb20vYXNtaml0L2FzbWppdCBpbnN0ZWFkIGFuZCB3ZQogPiAgICAgd2ls
-bCBnZXQgdGhlIGZpeCBuZXh0IHRpbWUgd2Ugc3luYyB3aXRoIHVwc3RyZWFtLiBXZSBkbyBub3Qg
-d2FudAogPiAgICAgdGhlaXJzIGFuZCBvdXIgaW1wbGVtZW50YXRpb24gdG8gZGl2ZXJnZS4KCiA+
-IEZ1cnRoZXJtb3JlLCBpdCBoYXBwZW5zIHRvIHdvcmsgb24gdUNsaWJjLCBiZWNhdXNlIHVDbGli
-YyBkb2VzIG5vdAogPiBleHBvc2Ugc3lzL2F1eHYuaCwgYnV0IGl0IGZhaWxzIHRvIHdvcmsgb24g
-Z2xpYmMsIGJlY2F1c2UgdGhlIGRlZmluZSBpcwogPiBub3QgcHJvcGFnYXRlZCB0byAic3ViLXRy
-ZWVzIiwgYW5kIHRodXMgaXMgbmV2ZXIgZGVmaW5lZCB3aGVyZSBpdCBpcwogPiBjaGVja2VkIGZv
-ciwgZXZlbiB3aGVuIHN5cy9hdXh2LmggaXMgYXZhaWxhYmxlLiBUaGlzIGNhdXNlcyBidWlsZAog
-PiBmYWlsdXJlcyBzdWNoIGFzOgoKID4gICAgIGFzbWppdC9jb3JlL2NwdWluZm8uY3BwOiBJbiBm
-dW5jdGlvbiDigJh2b2lkIGFzbWppdDo6X2FiaV8xXzEwOjpkZXRlY3RIV0NhcHMoQ3B1SW5mbyYs
-IGxvbmcgdW5zaWduZWQgaW50LCBjb25zdCBMaW51eEhXQ2FwTWFwcGluZyosIHNpemVfdCnigJk6
-CiA+ICAgICBhc21qaXQvY29yZS9jcHVpbmZvLmNwcDo4NDA6MjQ6IGVycm9yOiDigJhnZXRhdXh2
-YWzigJkgd2FzIG5vdCBkZWNsYXJlZCBpbiB0aGlzIHNjb3BlCiA+ICAgICAgIDg0MCB8ICAgdW5z
-aWduZWQgbG9uZyBtYXNrID0gZ2V0YXV4dmFsKHR5cGUpOwogPiAgICAgICAgICAgfCAgICAgICAg
-ICAgICAgICAgICAgICAgIF5+fn5+fn5+fgogPiAgICAgYXNtaml0L2NvcmUvY3B1aW5mby5jcHA6
-IEluIGZ1bmN0aW9uIOKAmHZvaWQgYXNtaml0OjpfYWJpXzFfMTA6OmRldGVjdEFSTUNwdShDcHVJ
-bmZvJinigJk6CiA+ICAgICBhc21qaXQvY29yZS9jcHVpbmZvLmNwcDo5NzI6MjE6IGVycm9yOiDi
-gJhBVF9IV0NBUOKAmSB3YXMgbm90IGRlY2xhcmVkIGluIHRoaXMgc2NvcGUKID4gICAgICAgOTcy
-IHwgICBkZXRlY3RIV0NhcHMoY3B1LCBBVF9IV0NBUCwgaHdDYXBNYXBwaW5nLCBBU01KSVRfQVJS
-QVlfU0laRShod0NhcE1hcHBpbmcpKTsKID4gICAgICAgICAgIHwgICAgICAgICAgICAgICAgICAg
-ICBefn5+fn5+fgogPiAgICAgYXNtaml0L2NvcmUvY3B1aW5mby5jcHA6OTczOjIxOiBlcnJvcjog
-4oCYQVRfSFdDQVAy4oCZIHdhcyBub3QgZGVjbGFyZWQgaW4gdGhpcyBzY29wZQogPiAgICAgICA5
-NzMgfCAgIGRldGVjdEhXQ2FwcyhjcHUsIEFUX0hXQ0FQMiwgaHdDYXBNYXBwaW5nMiwgQVNNSklU
-X0FSUkFZX1NJWkUoaHdDYXBNYXBwaW5nMikpOwogPiAgICAgICAgICAgfCAgICAgICAgICAgICAg
-ICAgICAgIF5+fn5+fn5+fgoKID4gWWV0LCBzeXMvYXV4di5oIHdhcyBkZXRlY3RlZCBhdCBjb25m
-aWd1cmUgdGltZToKCiA+ICAgICBjaGVja2luZyBmb3Igc3lzL2F1eHYuaC4uLiB5ZXMKCiA+IFRo
-aXMgZGVmY29uZmlnIGlzIGVub3VnaCB0byByZXByb2R1Y2UgdGhlIGVycm9yOgoKID4gICAgIEJS
-Ml9hYXJjaDY0PXkKID4gICAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQogPiAgICAgQlIyX1RP
-T0xDSEFJTl9FWFRFUk5BTF9CT09UTElOPXkKID4gICAgIEJSMl9QQUNLQUdFX0VSTEFORz15Cgog
-PiBTaW5jZSB1cHN0cmVhbSByZWZ1c2VkIHRoZSBwYXRjaCwgYW5kIHRoZXJlIGlzIG5vIGZpeCB0
-aGF0IHdhcyBzdWJtaXR0ZWQKID4gdG8gdGhlIGFjdHVhbCB1cHN0cmVhbSAoYXNtaml0KSwgZHJv
-cCB0aGUgcmVqZWN0cmVkIHBhdGNoLCBhbmQgZGlzYWJsZQogPiBmb3IgdUNsaWJjOiB0aGUgcGF0
-Y2ggaXMgaW5jb3JyZWN0LCBhbmQgd2UgY2FuJ3QgZml4IGEgYnVpbGQgaXNzdWUgb24KID4gdUNs
-aWJjIGJ5IGludHJvZHVjaW5nIGFub3RoZXIgb24gZ2xpYmMuCgogPiBGaXhlczoKID4gICAgIGh0
-dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2ZjMS9mYzE5YmFkMjI2M2JkZmFj
-ZWE1OTQyMTdkNWRkZmRlMGUyNzg5NWIxLwogPiAgICAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJv
-b3Qub3JnL3Jlc3VsdHMvMTE0LzExNDE2ZDgxZDViMjdmYzA2MjdiMzM1YTk3MTE1NGMwODhkNTc1
-NGEvCgogPiBTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluQG9yYW5nZS5j
-b20+CiA+IENjOiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0PgogPiBDYzogTWF4aW0gS29j
-aGV0a292IDxmaWRvX21heEBpbmJveC5ydT4KCiA+IENoYW5nZXMgdjEgLT4gdjI6CiA+ICAgLSB1
-cGRhdGUgY29tbWVudCB3aGVuIHVuYXZhaWxhYmxlCgpDb21taXR0ZWQgdG8gMjAyMy4wOC54LCB0
-aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+
+ > Update patch to fix the following musl build failure with m68k which is
+ > only raised (for an unknown reason) since bump to version 2.7.1 in commit
+ > 3e48f8358e519f9c24262a6549d8f6c78ee01add:
+
+ > In file included from fp.c:6:
+ > fp-gnum68k.c:21:10: fatal error: fpu_control.h: No such file or directory
+ >    21 | #include <fpu_control.h>
+ >       |          ^~~~~~~~~~~~~~~
+
+ > Add also upstream link to first patch iteration which was sent in
+ > November 2022 but didn't get it any reply (like most of the other emails
+ > sent to bug-gsl@gnu.org ...)
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/e59636f6ac148807c1c67f09eef0e0a9f5d52303
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
