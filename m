@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB400C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95C1DC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:30:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A25AE4186B;
-	Mon,  4 Dec 2023 20:30:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A25AE4186B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5261E41BBF;
+	Mon,  4 Dec 2023 20:30:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5261E41BBF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HS1M16PwPE-g; Mon,  4 Dec 2023 20:30:01 +0000 (UTC)
+	with ESMTP id zIi2UhFW8jIe; Mon,  4 Dec 2023 20:30:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 009C64226F;
-	Mon,  4 Dec 2023 20:30:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 009C64226F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 574921BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E6024186B;
+	Mon,  4 Dec 2023 20:30:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E6024186B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EC9301BF31D
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A20841748
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7302460FFA
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A20841748
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7302460FFA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hSpdCMVKYgAf for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xSzrDSTOqLku for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F41EB41767
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E43360AFE
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F41EB41767
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E43360AFE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DFF90879BA; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 1CF14879B8; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 19:02:54 +0100
+Date: Fri, 1 Dec 2023 11:02:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a9d03feed642a860c11122a0b0ab32365201fc40
-X-Git-Newrev: 302199957705ae9b63741ce8a571b706bcc577e2
+X-Git-Oldrev: 9d27996289f50f1e3e16748920f5945e1efcffa7
+X-Git-Newrev: 5d4bc471494f256b1d53e6895d780452c895e3d9
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201330.DFF90879BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-firmware: add
- RTL8851/RTL8852 firmware
+Message-Id: <20231204201330.1CF14879B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xtables-addons: bump to version
+ 3.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,52 +58,61 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2509959222194724827=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2509959222194724827==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=302199957705ae9b63741ce8a571b706bcc577e2
+commit: https://git.buildroot.net/buildroot/commit/?id=5d4bc471494f256b1d53e6895d780452c895e3d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add firmware files for RTL8851 and RTL8852 cards used by the rtlbt driver.
+This bump will fix the following build failure with kernel >= 6.2 thanks
+to
+https://codeberg.org/jengelh/xtables-addons/commit/51761c3fe2454e0b4bc25274dd55d4ab72c54bf0:
 
-Signed-off-by: Jan Čermák <sairon@sairon.cz>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+/home/buildroot/autobuild/instance-1/output-1/build/xtables-addons-3.22/extensions/xt_TARPIT.c:
+In function 'xttarpit_honeypot':
+/home/buildroot/autobuild/instance-1/output-1/build/xtables-addons-3.22/extensions/xt_TARPIT.c:110:26:
+error: implicit declaration of function 'prandom_u32_max'; did you mean
+'prandom_u32_state'? [-Werror=implicit-function-declaration]
+  110 |                         (prandom_u32_max(0x20) - 0xf);
+      |                          ^~~~~~~~~~~~~~~
+      |                          prandom_u32_state
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e8f2a0cb5b38ff98da97268c4b642554a0a732e1
+ - http://autobuild.buildroot.org/results/0191ee0590c08b73f17b35a5c8521796693772b5
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/linux-firmware/linux-firmware.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/xtables-addons/xtables-addons.hash | 2 +-
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index c2cf0fec19..96905dd909 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -90,7 +90,12 @@ LINUX_FIRMWARE_FILES += \
- 	rtl_bt/rtl8821c_config.bin rtl_bt/rtl8821c_fw.bin \
- 	rtl_bt/rtl8822b_config.bin rtl_bt/rtl8822b_fw.bin \
- 	rtl_bt/rtl8822cs_config.bin rtl_bt/rtl8822cs_fw.bin \
--	rtl_bt/rtl8822cu_config.bin rtl_bt/rtl8822cu_fw.bin
-+	rtl_bt/rtl8822cu_config.bin rtl_bt/rtl8822cu_fw.bin \
-+	rtl_bt/rtl8851bu_fw.bin rtl_bt/rtl8851bu_config.bin \
-+	rtl_bt/rtl8852au_fw.bin rtl_bt/rtl8852au_config.bin \
-+	rtl_bt/rtl8852bu_fw.bin rtl_bt/rtl8852bu_config.bin \
-+	rtl_bt/rtl8852cu_fw.bin rtl_bt/rtl8852cu_config.bin \
-+	rtl_bt/rtl8852cu_fw_v2.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
- endif
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index 840a31f947..7bdbbb8578 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  faa16a27166275afbfe8df605f55c3a81ac693bf19da674d45ceded4137ae217  xtables-addons-3.22.tar.xz
++sha256  3e823f71720519ced31c4c7d2bfaf7120d9c01c59a0843dfcbe93c95c64d81c1  xtables-addons-3.24.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index e794538956..3111602816 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-
---===============2509959222194724827==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-XTABLES_ADDONS_VERSION = 3.22
++XTABLES_ADDONS_VERSION = 3.24
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2509959222194724827==--
