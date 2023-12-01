@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B8C2C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 21:22:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FFEDC4167B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 21:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF8C784902;
-	Fri,  1 Dec 2023 21:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF8C784902
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CCD0849B6;
+	Fri,  1 Dec 2023 21:23:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CCD0849B6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nDx3Qs6PO1qf; Fri,  1 Dec 2023 21:22:14 +0000 (UTC)
+	with ESMTP id Z9Omt_TiA3fW; Fri,  1 Dec 2023 21:23:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 324C0848FE;
-	Fri,  1 Dec 2023 21:22:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 324C0848FE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9826C84902;
+	Fri,  1 Dec 2023 21:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9826C84902
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 614C11BF35F
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 21:22:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5BD141BF35F
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 21:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36590420AE
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 21:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36590420AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 354FF41FAB
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 21:23:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 354FF41FAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1ckv1_HXlrZD for <buildroot@lists.busybox.net>;
- Fri,  1 Dec 2023 21:22:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 53E8842096
- for <buildroot@buildroot.org>; Fri,  1 Dec 2023 21:22:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53E8842096
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41CAB87776; Fri,  1 Dec 2023 21:22:10 +0000 (UTC)
+ with ESMTP id 8Mw3Lhe-dwYT for <buildroot@lists.busybox.net>;
+ Fri,  1 Dec 2023 21:23:20 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E289641F9B
+ for <buildroot@buildroot.org>; Fri,  1 Dec 2023 21:23:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E289641F9B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C01BC1C0002;
+ Fri,  1 Dec 2023 21:23:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r9Ayg-004Zyy-0Z;
+ Fri, 01 Dec 2023 22:23:14 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 1 Dec 2023 22:18:15 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 75abb665b1f8b8eb1657c76ca73bbc70cc9c180b
-X-Git-Newrev: 758b7799cad728c2ab4707e0f29f73f93f93b8d1
-X-Patchwork-Hint: ignore
-Message-Id: <20231201212210.41CAB87776@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/samba4: security
- bump version to 4.18.9
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20231201203822.615354-1-fontaine.fabrice@gmail.com>
+Date: Fri, 01 Dec 2023 22:23:14 +0100
+In-Reply-To: <20231201203822.615354-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 1 Dec 2023 21:38:22 +0100")
+Message-ID: <877clx4ny5.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/putty: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +62,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Alexander Dahl <post@lespocky.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=758b7799cad728c2ab4707e0f29f73f93f93b8d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes CVE-2018-14628:
-https://www.samba.org/samba/security/CVE-2018-14628.html
+ > Fix the following static build failure raised since bump to version 0.78
+ > in commit 5673ea3ce4d4dd721bb17fc8d5b1283f5c1080b4:
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.18.9.html
+ > In file included from /home/buildroot/autobuild/instance-0/output-1/build/putty-0.78/putty.h:8,
+ >                  from /home/buildroot/autobuild/instance-0/output-1/build/putty-0.78/callback.c:8:
+ > /home/buildroot/autobuild/instance-0/output-1/build/putty-0.78/unix/platform.h:11:10: fatal error: dlfcn.h: No such file or directory
+ >    11 | #include <dlfcn.h>                     /* Dynamic library loading */
+ >       |          ^~~~~~~~~
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/06f0b14bd0414f97b06070198e290fb3253348c5
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 9843d419f0..3a69e90675 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.18.8.tar.asc
--sha256  4fb87bceaeb01d832a59046c197a044b7e8e8000581548b5d577a6cda03344d1  samba-4.18.8.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.18.9.tar.asc
-+sha256  f455c1d6351ed3a36fc2cb6e8ab1bfd0effe54a56686ffd495d64ab52d50f245  samba-4.18.9.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9cf7a59d9b..9b23197916 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.18.8
-+SAMBA4_VERSION = 4.18.9
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
