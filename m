@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0E51C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD16C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:13:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6417C437A6;
-	Fri,  1 Dec 2023 20:13:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6417C437A6
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2D2E404A0;
+	Fri,  1 Dec 2023 20:13:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2D2E404A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wu6Gj7gJBZDH; Fri,  1 Dec 2023 20:13:21 +0000 (UTC)
+	with ESMTP id ZUu_77zVeBEm; Fri,  1 Dec 2023 20:13:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4420243797;
-	Fri,  1 Dec 2023 20:13:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4420243797
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B49EE1BF2BF
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B09CA4379E;
+	Fri,  1 Dec 2023 20:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B09CA4379E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 159BE1BF2BF
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DA6A42112
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4BABE40492
  for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:12:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DA6A42112
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BABE40492
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IaX4kdqtKyXB for <buildroot@lists.busybox.net>;
- Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RPHPz-_NjdT7 for <buildroot@lists.busybox.net>;
+ Fri,  1 Dec 2023 20:12:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4363A420F5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 836DC43753
  for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4363A420F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 836DC43753
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FFBA8772C; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
+ id 531D68772B; Fri,  1 Dec 2023 20:12:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 1 Dec 2023 21:08:14 +0100
+Date: Fri, 1 Dec 2023 21:11:39 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 49e32695beaa86fc5abe56d30e0c03ac088521dc
-X-Git-Newrev: 236a009f6e5d8042925790bcdaa57db6a4b393e4
+X-Git-Oldrev: 407357437dc00f8f81deff39e6f4dcf024b5be0c
+X-Git-Newrev: 75abb665b1f8b8eb1657c76ca73bbc70cc9c180b
 X-Patchwork-Hint: ignore
-Message-Id: <20231201201235.2FFBA8772C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/xtables-addons:
- bump to version 3.24
+Message-Id: <20231201201235.531D68772B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/rtty: fix wolfssl
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=236a009f6e5d8042925790bcdaa57db6a4b393e4
+commit: https://git.buildroot.net/buildroot/commit/?id=75abb665b1f8b8eb1657c76ca73bbc70cc9c180b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-This bump will fix the following build failure with kernel >= 6.2 thanks
-to
-https://codeberg.org/jengelh/xtables-addons/commit/51761c3fe2454e0b4bc25274dd55d4ab72c54bf0:
+Fix the following wolfssl build failure raised at least since bump to
+version 7.4.0 in commit 6b5907bf65d27ed98532e9783f92f5575f38b3d2:
 
-/home/buildroot/autobuild/instance-1/output-1/build/xtables-addons-3.22/extensions/xt_TARPIT.c:
-In function 'xttarpit_honeypot':
-/home/buildroot/autobuild/instance-1/output-1/build/xtables-addons-3.22/extensions/xt_TARPIT.c:110:26:
-error: implicit declaration of function 'prandom_u32_max'; did you mean
-'prandom_u32_state'? [-Werror=implicit-function-declaration]
-  110 |                         (prandom_u32_max(0x20) - 0xf);
-      |                          ^~~~~~~~~~~~~~~
-      |                          prandom_u32_state
+/home/autobuild/autobuild/instance-4/output-1/build/rtty-8.1.0/src/ssl/openssl.c: In function 'ssl_last_error_string':
+/home/autobuild/autobuild/instance-4/output-1/build/rtty-8.1.0/src/ssl/openssl.c:143:24: error: implicit declaration of function 'ERR_peek_error_line_data'; did you mean 'wolfSSL_ERR_get_error_line_data'? [-Werror=implicit-function-declaration]
+  143 |         ssl_err_code = ERR_peek_error_line_data(&file, &line, &data, &flags);
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                        wolfSSL_ERR_get_error_line_data
 
 Fixes:
- - http://autobuild.buildroot.org/results/e8f2a0cb5b38ff98da97268c4b642554a0a732e1
- - http://autobuild.buildroot.org/results/0191ee0590c08b73f17b35a5c8521796693772b5
+ - http://autobuild.buildroot.org/results/9db9f1dcc6760de4b78771bb79f109c4efd06c36
+ - http://autobuild.buildroot.org/results/16422af9469de114e552124542508c3b18ea8f19
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: don't force wolfssl-all]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 84b721c2bf88c3ae8f519680a64b1829427176c2)
+(cherry picked from commit 67cb7d8d093f57339e622e1f1f5a40d5013194f1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xtables-addons/xtables-addons.hash | 2 +-
- package/xtables-addons/xtables-addons.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rtty/rtty.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 840a31f947..7bdbbb8578 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  faa16a27166275afbfe8df605f55c3a81ac693bf19da674d45ceded4137ae217  xtables-addons-3.22.tar.xz
-+sha256  3e823f71720519ced31c4c7d2bfaf7120d9c01c59a0843dfcbe93c95c64d81c1  xtables-addons-3.24.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index adfedbc874..efd8bd98ce 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XTABLES_ADDONS_VERSION = 3.22
-+XTABLES_ADDONS_VERSION = 3.24
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
- XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
+index 964ec04ec4..8a40f584de 100644
+--- a/package/rtty/rtty.mk
++++ b/package/rtty/rtty.mk
+@@ -24,7 +24,7 @@ RTTY_CONF_OPTS += \
+ 	-DUSE_MBEDTLS=OFF \
+ 	-DUSE_OPENSSL=ON \
+ 	-DUSE_WOLFSSL=OFF
+-else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
++else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+ RTTY_DEPENDENCIES += wolfssl
+ RTTY_CONF_OPTS += \
+ 	-DSSL_SUPPORT=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
