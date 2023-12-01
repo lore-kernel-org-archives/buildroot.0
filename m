@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C13BC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:14:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12A54C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  1 Dec 2023 20:16:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA33B43775;
-	Fri,  1 Dec 2023 20:14:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA33B43775
+	by smtp2.osuosl.org (Postfix) with ESMTP id B6BC440492;
+	Fri,  1 Dec 2023 20:16:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6BC440492
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R95D-xSU5Sq6; Fri,  1 Dec 2023 20:14:57 +0000 (UTC)
+	with ESMTP id mq4qLqdMjBS6; Fri,  1 Dec 2023 20:15:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 57DE0437C7;
-	Fri,  1 Dec 2023 20:14:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57DE0437C7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2D4F71BF2BF
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:14:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BACA741A01;
+	Fri,  1 Dec 2023 20:15:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BACA741A01
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 78E621BF2BF
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 032BD437AA
- for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:14:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 032BD437AA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F00942172
+ for <buildroot@lists.busybox.net>; Fri,  1 Dec 2023 20:15:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F00942172
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JwMA_FbBfyGF for <buildroot@lists.busybox.net>;
- Fri,  1 Dec 2023 20:13:59 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90F8B437AD
- for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:13:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90F8B437AD
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B9B487747; Fri,  1 Dec 2023 20:13:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id icRPNnfeqcr3 for <buildroot@lists.busybox.net>;
+ Fri,  1 Dec 2023 20:15:55 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4F05C4215E
+ for <buildroot@buildroot.org>; Fri,  1 Dec 2023 20:15:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F05C4215E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 04790C0003;
+ Fri,  1 Dec 2023 20:15:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r99vU-004TK7-04;
+ Fri, 01 Dec 2023 21:15:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 1 Dec 2023 21:11:35 +0100
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: a6067ffa3492c13ca3d72522422c9b12d2f8eb2c
-X-Git-Newrev: fa11b1cc5b8f58d8ba79ac0c61c5473fcb6996df
-X-Patchwork-Hint: ignore
-Message-Id: <20231201201359.7B9B487747@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/rtty: fix wolfssl
- build
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20231104220152.3252635-1-dev@bybram.com>
+ <20231201100405.GL3177259@scaer>
+Date: Fri, 01 Dec 2023 21:15:51 +0100
+In-Reply-To: <20231201100405.GL3177259@scaer> (Yann E. MORIN's message of
+ "Fri, 1 Dec 2023 11:04:05 +0100")
+Message-ID: <87sf4l4r2g.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2] configs/raspberrypi: bump Linux version
+ to 6.1.61
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +64,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Martin Bark <martin@barkynet.com>, buildroot@buildroot.org,
+ Bram Oosterhuis <dev@bybram.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa11b1cc5b8f58d8ba79ac0c61c5473fcb6996df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fix the following wolfssl build failure raised at least since bump to
-version 7.4.0 in commit 6b5907bf65d27ed98532e9783f92f5575f38b3d2:
+ > Bram, All,
+ > On 2023-11-04 23:01 +0100, Bram Oosterhuis spake thusly:
+ >> Linux 6.1 has been marked LTS for a long time now. Time to bump
+ >> Linux for RaspberryPi's to the latest 6.1.61 Since April 2022
+ >> the RaspberryPi defconfigs have compressed kernel module enabled
+ >> by default. (see [1] and [2]).
+ >> 
+ >> To load compressed kernel modules kmod and xz packages are needed
+ >> because busybox doesn't support it.
+ >> 
+ >> For testing I used RaspberryPi 2, 3(32+64bit) and 4(32+64bit), all with mdev enabled.
+ >> 
+ >> [1] https://github.com/raspberrypi/linux/commit/c45b4223a4e4a8cfe39edbb4949329ea478fa4e2
+ >> [2] https://github.com/raspberrypi/linux/issues/4966
+ >> 
+ >> Signed-off-by: Bram Oosterhuis <dev@bybram.com>
 
-/home/autobuild/autobuild/instance-4/output-1/build/rtty-8.1.0/src/ssl/openssl.c: In function 'ssl_last_error_string':
-/home/autobuild/autobuild/instance-4/output-1/build/rtty-8.1.0/src/ssl/openssl.c:143:24: error: implicit declaration of function 'ERR_peek_error_line_data'; did you mean 'wolfSSL_ERR_get_error_line_data'? [-Werror=implicit-function-declaration]
-  143 |         ssl_err_code = ERR_peek_error_line_data(&file, &line, &data, &flags);
-      |                        ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                        wolfSSL_ERR_get_error_line_data
+ > Applied to next, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/9db9f1dcc6760de4b78771bb79f109c4efd06c36
- - http://autobuild.buildroot.org/results/16422af9469de114e552124542508c3b18ea8f19
+Sorry for the slow response, the xz compressed modules seems a bit of a
+random choice by the rpi people. I wonder if it wouldn't make more sense
+to use a kernel config fragment to just disable that rather than
+enforcing kmod?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: don't force wolfssl-all]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 67cb7d8d093f57339e622e1f1f5a40d5013194f1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rtty/rtty.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Or do they enable so many modules that they really take up a huge space
+(and not fitting in our default rootfs size)?
 
-diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-index 964ec04ec4..8a40f584de 100644
---- a/package/rtty/rtty.mk
-+++ b/package/rtty/rtty.mk
-@@ -24,7 +24,7 @@ RTTY_CONF_OPTS += \
- 	-DUSE_MBEDTLS=OFF \
- 	-DUSE_OPENSSL=ON \
- 	-DUSE_WOLFSSL=OFF
--else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
-+else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
- RTTY_DEPENDENCIES += wolfssl
- RTTY_CONF_OPTS += \
- 	-DSSL_SUPPORT=ON \
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
