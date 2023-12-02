@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84685C4167B
-	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 08:39:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CFB7C4167B
+	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 08:40:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E94D400AB;
-	Sat,  2 Dec 2023 08:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E94D400AB
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA2F44048A;
+	Sat,  2 Dec 2023 08:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA2F44048A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ferFNDqJq3w7; Sat,  2 Dec 2023 08:39:52 +0000 (UTC)
+	with ESMTP id 14_a8Gof-VU1; Sat,  2 Dec 2023 08:40:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 44F8B416C7;
-	Sat,  2 Dec 2023 08:39:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44F8B416C7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A8D6D1BF3BF
+	by smtp2.osuosl.org (Postfix) with ESMTP id BDFB1435CB;
+	Sat,  2 Dec 2023 08:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDFB1435CB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CDA011BF861
  for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 08:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8028884953
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5F1E400AB
  for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 08:39:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8028884953
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5F1E400AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WgD34T9InG-f for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9kPHzqi3EQUK for <buildroot@lists.busybox.net>;
  Sat,  2 Dec 2023 08:39:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6EFD84917
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0D0943642
  for <buildroot@buildroot.org>; Sat,  2 Dec 2023 08:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6EFD84917
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0D0943642
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DB3287535; Sat,  2 Dec 2023 08:39:48 +0000 (UTC)
+ id 9B68387540; Sat,  2 Dec 2023 08:39:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 2 Dec 2023 09:37:23 +0100
+Date: Sat, 2 Dec 2023 09:37:38 +0100
+Subject: [git commit branch/next] DEVELOPERS: add Flávio Tapajós for rsyslog
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 03e66a35eabaed9f258b8670eba2e8fc13dd3eb5
-X-Git-Newrev: 6358bb3a9bcf8d4c66893e8df513d18bf0022c35
+X-Git-Oldrev: 6358bb3a9bcf8d4c66893e8df513d18bf0022c35
+X-Git-Newrev: e6e16a6d1803956b0c10e0d92608980888d0ebd3
 X-Patchwork-Hint: ignore
-Message-Id: <20231202083948.8DB3287535@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rsyslog: add
- libdbi-drivers optional dependency
+Message-Id: <20231202083948.9B68387540@busybox.osuosl.org>
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +57,35 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1669128830402117806=="
+Content-Type: multipart/mixed; boundary="===============5786213049765880104=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1669128830402117806==
+--===============5786213049765880104==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6358bb3a9bcf8d4c66893e8df513d18bf0022c35
+commit: https://git.buildroot.net/buildroot/commit/?id=e6e16a6d1803956b0c10e0d92608980888d0ebd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Needed in order to use omlibdbi module
-
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsyslog/rsyslog.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index cf9f2c0e79..8ea92ea785 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -151,6 +151,13 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-omjournal
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1f26e9bc81..2f3eedf8a0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1078,6 +1078,7 @@ F:	package/python-pymodbus/
+ N:	Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+ F:	configs/asus_tinker-s_rk3288_defconfig
+ F:	board/asus/tinker-s/
++F:	package/rsyslog/
  
-+ifeq ($(BR2_PACKAGE_LIBDBI_DRIVERS),y)
-+RSYSLOG_CONF_OPTS += --enable-libdbi
-+RSYSLOG_DEPENDENCIES += libdbi-drivers
-+else
-+RSYSLOG_CONF_OPTS += --disable-libdbi
-+endif
-+
- define RSYSLOG_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -m 0644 -D package/rsyslog/rsyslog.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/rsyslog.service
+ N:	Florian Fainelli <f.fainelli@gmail.com>
+ F:	package/cpulimit/
 
---===============1669128830402117806==
+--===============5786213049765880104==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -106,4 +96,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1669128830402117806==--
+--===============5786213049765880104==--
