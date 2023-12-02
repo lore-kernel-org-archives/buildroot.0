@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2446C4167B
-	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 22:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E73C4C4167B
+	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 22:38:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C87C40103;
-	Sat,  2 Dec 2023 22:27:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C87C40103
+	by smtp2.osuosl.org (Postfix) with ESMTP id 731D640103;
+	Sat,  2 Dec 2023 22:38:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 731D640103
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C_y_vTb4845b; Sat,  2 Dec 2023 22:27:13 +0000 (UTC)
+	with ESMTP id OGND5TsGel_8; Sat,  2 Dec 2023 22:38:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D2344020B;
-	Sat,  2 Dec 2023 22:27:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D2344020B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C65AA1BF375
- for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 22:27:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68FB2401CC;
+	Sat,  2 Dec 2023 22:38:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68FB2401CC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E11301BF299
+ for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 22:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC54060EC7
- for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 22:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC54060EC7
+ by smtp4.osuosl.org (Postfix) with ESMTP id B642241936
+ for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 22:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B642241936
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MmKPjkQlDb-F for <buildroot@lists.busybox.net>;
- Sat,  2 Dec 2023 22:27:09 +0000 (UTC)
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9DAEA60EC5
- for <buildroot@buildroot.org>; Sat,  2 Dec 2023 22:27:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DAEA60EC5
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-332c0c32d19so2810583f8f.3
- for <buildroot@buildroot.org>; Sat, 02 Dec 2023 14:27:09 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 15MtSPXADqrk for <buildroot@lists.busybox.net>;
+ Sat,  2 Dec 2023 22:38:11 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 933E740996
+ for <buildroot@buildroot.org>; Sat,  2 Dec 2023 22:38:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 933E740996
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3332efd75c9so1919342f8f.2
+ for <buildroot@buildroot.org>; Sat, 02 Dec 2023 14:38:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701556027; x=1702160827;
+ d=1e100.net; s=20230601; t=1701556689; x=1702161489;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ZuoYVCTdqgk+faqrXEYK3dOfaRrU800vIuwuKi/IMDM=;
- b=BTYRVmJ+16kCPDckZewNb/vAO86Mu0AwlFzAHKJygSotnnCrj6xF35fl0/obg13i6L
- iSvrOo1knRa+XD8ejqZM6JSe9+QLicVzRShY3Q2FQ0o1KGueFiubtw8UrcwUVDoJA/7W
- WsD95OKeIHBBwswiq7epJRk3H+ZKJfziwDMYeLLdaD//zwH2Aqp2rYWlRfEKHrOLnQH6
- BcmN+WTflutzApYzpYxkewC4QxXyE6Yv4t5L/LR4RdmUh3pa6kVec5bA/lRVl1uV1w3L
- Yx+77hiwbwTKljxUd/76Af4VhcNsHqk7R51sJ7M7rY7fUoC4xe5PSUQEVxayP03MBEOx
- EtYA==
-X-Gm-Message-State: AOJu0Yy2vfjS0zCFqzozo34KIUmKJg+6zt9eXgfRFtam3rhAHybimc4C
- Oy+p3sdp4uk6WvmhXb2Th02BlT3KDdM=
-X-Google-Smtp-Source: AGHT+IEU+GazG/o70G6sJIYux1chuefWqTV+Nryx8r6PT8uHYhtV4chd99cB4Zv12lkyK26NtyHouQ==
-X-Received: by 2002:adf:f44f:0:b0:333:2fd2:2f07 with SMTP id
- f15-20020adff44f000000b003332fd22f07mr2227844wrp.128.1701556026647; 
- Sat, 02 Dec 2023 14:27:06 -0800 (PST)
+ bh=Yz1pclGfJcd+h9QVX9XISyAQ+hHgxq8kpm74Eykt3dA=;
+ b=jjQQxPV7Sm0KVO8w5BlIb0g7i9h/7z7xqUfRwf2HqlC0HDJMZW3I1lY8C2xTYjonlf
+ nKkQODhk5TkJNVZ+L4Zfeu1xVWoQK/PJB4WTyb2NB1mUjaB6nJVrCY4bVjBHZcV1e9QK
+ kZNNVeumETTiAH1xQEu2Ecf9I9+c2sPpnhBCpmfNWL5V7zRCtDcIJTDTn46twE3a5LP7
+ cC+sb9TdJviXi32YmtxU8QUY9d/fTPy69BSzIecVUZ0fhRZAhBpT2DMpULNGDRgiXBzp
+ 4gE2UnCnghOjKXDBtpAlHNAJPkbto/eXjnlyKob1uLgp8t5KPiTPJvOvddfdPYwd4zy1
+ ZC8A==
+X-Gm-Message-State: AOJu0YzYIAaa9oyx8nnBG1i2bnlf1w+wb4moouN7HgF918UB4/GeksfC
+ HFtf7mxdnMAMJN88FrtSvFdLPrk3B8c=
+X-Google-Smtp-Source: AGHT+IE9t4qBxiogvmBQvLC7AA/BwYjf2LSZSAQn1oiyNh10UzJEuf+zRtrWr1IBAN0Q8++GzbS0Yg==
+X-Received: by 2002:a5d:6d85:0:b0:333:3cf5:4317 with SMTP id
+ l5-20020a5d6d85000000b003333cf54317mr354294wrs.153.1701556688732; 
+ Sat, 02 Dec 2023 14:38:08 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- k26-20020adfb35a000000b003332faefd86sm5797062wrd.0.2023.12.02.14.27.05
+ x13-20020a5d490d000000b0033333ebd106sm4421382wrq.75.2023.12.02.14.38.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Dec 2023 14:27:06 -0800 (PST)
+ Sat, 02 Dec 2023 14:38:08 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  2 Dec 2023 23:26:44 +0100
-Message-ID: <20231202222644.315091-1-fontaine.fabrice@gmail.com>
+Date: Sat,  2 Dec 2023 23:36:33 +0100
+Message-ID: <20231202223633.351154-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701556027; x=1702160827; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1701556689; x=1702161489; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ZuoYVCTdqgk+faqrXEYK3dOfaRrU800vIuwuKi/IMDM=;
- b=I6qCO22XzUNWGX2vRvCQowrFaDk8bKIq2qw2FcBNIFy/l/j0cMqn92io4piaNt/pPB
- d+n9rdyNlE8i3u2orj/uZmbSJb0+nrqGcUZjzbljP3DehDRot9ZiFP5fgpcNbonQzveN
- zmjim7N4huoZaOkdPJzq6eAW91rQbHXUlRZfaPKx1aBhMvFF2illabNPrRW2mvEstMHS
- RCFveU5Ghvlvg6ygN2wJWNoWT1oMBob4fEowGppPYlPEZVri1eXwWD5A1AwzbJ2hvsil
- biJdL6wlBwh8tpa6Wh8/wp/nOYEmEFqSncxHfgt8RdjpAJ6C806t1I70rjYiQts5dLe2
- cLeA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Yz1pclGfJcd+h9QVX9XISyAQ+hHgxq8kpm74Eykt3dA=;
+ b=BN/zZn+zWmlNmxrvp6aJItM4cqJzURSgTyvLDyLLzelskDtibqNpJ2Lcih6wXgdUwp
+ qQcDEfyyWgWKbhrzZMD8i+pBdDAeI4Wm4iwEITEQmXCsOCLTw0dncIE/MwKRAwklAkMo
+ MvLA3Yeutd3B+zsaThhnHLoeQudbVvour0eOAeV83/g3VIh+pTsEM+JomzSYkSPaV3Vo
+ uwajWrIY3yfRUHfYUUqDRZUncpMb0DaGVUvbx5POCdCZADE4POtJFuP+kFHTl5Wd/rfu
+ z1tYIuHCWmSKtVE4rdzYMxvl6GZisH82Z/henGS1i54TZIbH7KlloEE8d8102B/HpWjk
+ nlRQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=I6qCO22X
-Subject: [Buildroot] [PATCH 1/1] package/linux-tools: fix selftests with
- kernel >= 6.5
+ header.a=rsa-sha256 header.s=20230601 header.b=BN/zZn+z
+Subject: [Buildroot] [PATCH/next 1/1] package/leptonica: bump to version
+ 1.83.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,48 +94,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+Cc: Gilles Talis <gilles.talis@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following selftests build failure raised since kernel >= 6.5 and
-https://github.com/torvalds/linux/commit/9fc96c7c19dfab67bf81b25fbc4f49b7752d5060:
-
-make[1]: Entering directory '/home/autobuild/autobuild/instance-4/output-1/build/linux-6.6.3/tools/testing/selftests'
-
-[1;31merror[0m: missing kernel header files.
-Please run this and try again:
-
-    cd ../../..
-    make headers
-
-make[1]: *** [Makefile:186: kernel_header_files] Error 1
-
-Fixes:
- - http://autobuild.buildroot.org/results/7674abb454b46ca768e44b6838a0d8724c772dd6
+https://github.com/DanBloomberg/leptonica/compare/1.82.0...1.83.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-tools/linux-tool-selftests.mk.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/leptonica/leptonica.hash | 2 +-
+ package/leptonica/leptonica.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-selftests.mk.in b/package/linux-tools/linux-tool-selftests.mk.in
-index e29c7f59de..0bcc47af0a 100644
---- a/package/linux-tools/linux-tool-selftests.mk.in
-+++ b/package/linux-tools/linux-tool-selftests.mk.in
-@@ -23,7 +23,8 @@ SELFTESTS_DEPENDENCIES = \
+diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
+index 1220fbbd6e..6511d6b410 100644
+--- a/package/leptonica/leptonica.hash
++++ b/package/leptonica/leptonica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  155302ee914668c27b6fe3ca9ff2da63b245f6d62f3061c8f27563774b8ae2d6  leptonica-1.82.0.tar.gz
++sha256  8f18615e0743af7df7f50985c730dfcf0c93548073d1f56621e4156a8b54d3dd  leptonica-1.83.1.tar.gz
+ sha256  87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806  leptonica-license.txt
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 8791b0c4c2..8eedf2fda9 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- SELFTESTS_MAKE_FLAGS = \
- 	$(LINUX_MAKE_FLAGS) \
--	ARCH=$(SELFTESTS_ARCH)
-+	ARCH=$(SELFTESTS_ARCH) \
-+	KHDR_DIR=$(LINUX_DIR)/usr/include
- 
- # O must be redefined here to overwrite the one used by Buildroot for
- # out of tree build. We build the selftests in $(LINUX_DIR)/tools/selftests and
+-LEPTONICA_VERSION = 1.82.0
+-LEPTONICA_SITE = http://www.leptonica.org/source
++LEPTONICA_VERSION = 1.83.1
++LEPTONICA_SITE = https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTONICA_VERSION)
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
+ LEPTONICA_CPE_ID_VENDOR = leptonica
 -- 
 2.42.0
 
