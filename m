@@ -4,84 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC7BBC4167B
-	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 12:34:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDA53C4167B
+	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 12:34:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F320F60AC0;
-	Sat,  2 Dec 2023 12:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F320F60AC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84B1D60D51;
+	Sat,  2 Dec 2023 12:34:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84B1D60D51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bIC8rN_8cVd1; Sat,  2 Dec 2023 12:34:12 +0000 (UTC)
+	with ESMTP id Dgs31ke4bas8; Sat,  2 Dec 2023 12:34:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B0BB60A7B;
-	Sat,  2 Dec 2023 12:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B0BB60A7B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DB2A31BF299
- for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 12:34:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C44B560C0E;
+	Sat,  2 Dec 2023 12:34:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C44B560C0E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EA3F51BF299
+ for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 12:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BBB4384836
- for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 12:34:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBB4384836
+ by smtp2.osuosl.org (Postfix) with ESMTP id C174040158
+ for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 12:34:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C174040158
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vv2YFlioosXy for <buildroot@lists.busybox.net>;
- Sat,  2 Dec 2023 12:34:08 +0000 (UTC)
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
- [IPv6:2a00:1450:4864:20::133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3C3DC84829
- for <buildroot@buildroot.org>; Sat,  2 Dec 2023 12:34:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C3DC84829
-Received: by mail-lf1-x133.google.com with SMTP id
- 2adb3069b0e04-50bc59115c2so4286439e87.2
- for <buildroot@buildroot.org>; Sat, 02 Dec 2023 04:34:08 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7NEGblX7l1f9 for <buildroot@lists.busybox.net>;
+ Sat,  2 Dec 2023 12:34:10 +0000 (UTC)
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
+ [IPv6:2a00:1450:4864:20::132])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 223D4400D7
+ for <buildroot@buildroot.org>; Sat,  2 Dec 2023 12:34:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 223D4400D7
+Received: by mail-lf1-x132.google.com with SMTP id
+ 2adb3069b0e04-50bee606265so124115e87.2
+ for <buildroot@buildroot.org>; Sat, 02 Dec 2023 04:34:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701520445; x=1702125245;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=efDhclO8ddUJ4OUeBOnd2FzCeHXVDZAi/iUqdVb10LA=;
- b=mupt2V7Y/bZxy/rPIfx5b1XytomVnEshBPzjtTYtFYucHLgSmaQs1E9xGj4vMreeNd
- mrMH6nQA0Y4ZhOnWCDDTWz0pNb/CF1GN0hVa/RRTFWgnjHfiJKrT0fMuOqok6te/HbLP
- pQTL9TEYCW3479TxYOXPZGWd3umf+rfpXf4ALnnxdWq02eLdoGhiuisPTuinv0A3X4nE
- sOsp5QiZjR8w4W1NY6o8wvyapvrq6xFSnGKSa/5bUIqHWvUT1YrugPQTGCmJEHfTutMG
- KFlgDMocd2QSKtd4Mmdkk9qqMGlPHQbtpsq0VhReStOA8KhOtCmcd79a2R63nCASFDvC
- 5wQw==
-X-Gm-Message-State: AOJu0Yyv03hnKqyVNOoK4kWPALcy9K+DnHaOKu1hH46eRcyt7dKmzD/L
- VgwDYBb/wgVcSWmhqbIIImmvqugYEv8=
-X-Google-Smtp-Source: AGHT+IEgrzJdc11CXINusTLVNHrizQ2+ZZdlQ97rEx1hjd2+ZUr71JZTVhcv2Ek7bk+JDROaqHyZLw==
-X-Received: by 2002:a05:6512:2c95:b0:50b:d764:967c with SMTP id
- dw21-20020a0565122c9500b0050bd764967cmr1907785lfb.96.1701520444693; 
- Sat, 02 Dec 2023 04:34:04 -0800 (PST)
+ d=1e100.net; s=20230601; t=1701520447; x=1702125247;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=XqsWQ85MxuvnyQSm5iG6WbhFpv0ptkhg26aXDgEnQDE=;
+ b=eoRNvdH74zUvTSmGmkItWqIA+sVIDTJgEOaLyXcHsFu4J0wgyqZ8BLdzAgZ7NZylRl
+ x0vugtMTFZ6w+BKr1L2HL0Jd5is8osFG2QQ1CAC35CO62uTEHG916Mwg8I61HDsSj9kp
+ oRhXlTpotQ5YN4/WAdZtrwzRd1q0c1yeaCK8Jdfj6xlQ7I4T0/dTGLuRBrHBLxg9u3Ih
+ mn+EM7xYWgpdQ57VZaRsp2t+y9si3ou0hAAvy8cBWG0EoA7fETkTTpsmtM5GFeMFFEkQ
+ W6xcvibSW7RlWyOgd1+dzCRzJa7s/LSrvd2oT3F0i9W8otYSwReNr3QYxeSj7CGSp6XD
+ LK4Q==
+X-Gm-Message-State: AOJu0YwL4V3Z92LIBRE81Rmr5DCgicXuNvq+9XmDx9bhtL/kCnAfYbcW
+ htl78S9uRQLXuvwnUnwXiIEnBWpIW4g=
+X-Google-Smtp-Source: AGHT+IGvp8aFMSJtuK57HP1OHi6iVBVb/2pp5veeo128gsW3mQYSmRWXV3ph3zwe5bcKkhJCU4UvwA==
+X-Received: by 2002:a05:6512:6c8:b0:50b:ae1f:ecd8 with SMTP id
+ u8-20020a05651206c800b0050bae1fecd8mr2079017lff.41.1701520446881; 
+ Sat, 02 Dec 2023 04:34:06 -0800 (PST)
 Received: from localhost.localdomain ([5.188.167.245])
  by smtp.googlemail.com with ESMTPSA id
- e14-20020ac2546e000000b0050bbcd68e8bsm705672lfn.47.2023.12.02.04.34.03
+ e14-20020ac2546e000000b0050bbcd68e8bsm705672lfn.47.2023.12.02.04.34.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Dec 2023 04:34:03 -0800 (PST)
+ Sat, 02 Dec 2023 04:34:06 -0800 (PST)
 From: Sergey Matyukevich <geomatsi@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  2 Dec 2023 15:31:36 +0300
-Message-ID: <20231202123400.2327151-1-geomatsi@gmail.com>
+Date: Sat,  2 Dec 2023 15:31:37 +0300
+Message-ID: <20231202123400.2327151-2-geomatsi@gmail.com>
 X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20231202123400.2327151-1-geomatsi@gmail.com>
+References: <20231202123400.2327151-1-geomatsi@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701520445; x=1702125245; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=efDhclO8ddUJ4OUeBOnd2FzCeHXVDZAi/iUqdVb10LA=;
- b=D5LUNd7qDBQOD79hp1fA292iWBKjFJ7eRBcm1Xa/D12w7vPETtElqCcswCp7hUCNpu
- r+PnXLD8ruCYaPG9t71LlOVP3ZqQnBDFCFFF1VXiPOeCg3HEcZkYkxe363v/xQTEUMdx
- n2qPCmRKyn6lSUynAGI9VN0+J9V4zPhE1zeD77C+O+MQ0p8EZnoo7yMDNmYp1lVWzwj+
- ojx590hBFbzil5feYNUQnCnhESYZvilFh1rFLg+xuZHP8oN/tU3D/tUZa8ekUodjInPt
- KbWZOYzsjZTM+E+JPLPZwUpkcIUbe2iUGuntmn3D91YWjqZwaPJd6btz3eQlho637mAg
- bu5w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1701520447; x=1702125247; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=XqsWQ85MxuvnyQSm5iG6WbhFpv0ptkhg26aXDgEnQDE=;
+ b=MgmJWaiFwuQLzEf00xVWYr4gO8WF27WQ7Gcf/oWPuAYfIEGRhVi78gyAmTNVxXVCBB
+ nb4SMygQoW2Mf7OdUZ8G1fyYL8wgDUUjw7f54yCWXDrb9TLvn57rITDUC97WOwIfeMNZ
+ 7tLdqGrMEYhLXKSRHn5Wk4DS4AwU+nju3KX/gTht3OoIftLmtKoI5yuOFmXMC8JgwryG
+ Bx1xCidqD7ADodBjR49vS27S2XuQNyx/WVYwYwdZ5/CiQyYO1QundP0ru0axnyEqi9eJ
+ zQzvoUfkxZ/l58orthsVWzsNRCV6XjjCNehxjfm0UrrqzLN9u+k+GVyIRcTI7rkO55kB
+ WzTA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=D5LUNd7q
-Subject: [Buildroot] [PATCH 0/5] allwinner: arm: bsp updates
+ header.a=rsa-sha256 header.s=20230601 header.b=MgmJWaiF
+Subject: [Buildroot] [PATCH 1/5] configs/linksprite_pcduino_defconfig: bump
+ BSP versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,35 +103,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Switch to the new Linux LTS release 6.6.3. Swtich to the
+latest U-Boot 2023.10.
 
-Here are the patches with BSP updates for several Allwinner boards. Bump
-Linux kernel to the latest LTS v6.6.x. Bump U-Boot and ATF to the latest
-available versions. This time no WiFi issues are observed with the new
-kernel, even for out-of-tree xr819-xradio driver. Wireless connectivity
-works fine on orange-pi-zero, orange-pi-zero-plus2, and linksprite boards.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ configs/linksprite_pcduino_defconfig | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Regards,
-Sergey
-
-Sergey Matyukevich (5):
-  configs/linksprite_pcduino_defconfig: bump BSP versions
-  configs/orangepi_pc_plus: bump BSP versions
-  configs/orangepi_one_defconfig: bump BSP versions
-  configs/orangepi_zero: bump BSP versions
-  configs/orangepi_zero_plus2: update BSP versions
-
- ...dts-orange-pi-zero-interrupt-triggering-xr819.patch |  8 ++++----
- .../0002-ARM-dts-orange-pi-zero-enable-spi-nor.patch   |  8 ++++----
- .../0003-ARM-dts-orange-pi-zero-enable-spidev.patch    |  8 ++++----
- .../0004-ARM-dts-orange-pi-zero-enable-uart.patch      |  8 ++++----
- configs/linksprite_pcduino_defconfig                   | 10 +++++-----
- configs/orangepi_one_defconfig                         |  8 ++++----
- configs/orangepi_pc_plus_defconfig                     |  8 ++++----
- configs/orangepi_zero_defconfig                        |  8 ++++----
- configs/orangepi_zero_plus2_defconfig                  | 10 +++++-----
- 9 files changed, 38 insertions(+), 38 deletions(-)
-
+diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
+index cf58e021ba..2b215201cb 100644
+--- a/configs/linksprite_pcduino_defconfig
++++ b/configs/linksprite_pcduino_defconfig
+@@ -18,16 +18,16 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ # For kernel modules autoloading
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ 
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-pcduino"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/linksprite/pcduino/linux-extras.config"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+@@ -40,7 +40,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 -- 
 2.42.1
 
