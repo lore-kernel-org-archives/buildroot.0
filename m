@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 335A7C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E1EAC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:26:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3B2B418F9;
-	Mon,  4 Dec 2023 20:26:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B2B418F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 241D941E48;
+	Mon,  4 Dec 2023 20:26:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 241D941E48
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N3r1DOVZxRTm; Mon,  4 Dec 2023 20:26:42 +0000 (UTC)
+	with ESMTP id OXGtxhXwJyNn; Mon,  4 Dec 2023 20:26:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08D4F41DA3;
-	Mon,  4 Dec 2023 20:26:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08D4F41DA3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 135121BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72E0941E38;
+	Mon,  4 Dec 2023 20:26:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72E0941E38
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BB271BF977
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0EDB4177A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2EB441743
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0EDB4177A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2EB441743
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PprolNFG4kPk for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rXl8i_vq3hNy for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C85E0416A9
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C85E0416A9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41C9E4175F
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41C9E4175F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC012879BC; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 3F500879B9; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Nov 2023 22:40:46 +0100
+Date: Sat, 2 Dec 2023 09:37:38 +0100
+Subject: [git commit] DEVELOPERS: add Flávio Tapajós for rsyslog
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6556bfba4f6e40186cdb7135b6ebde8a9fa9fa9f
-X-Git-Newrev: e056aeeca9cf8c00c6da62c39979ce6c55c92791
+X-Git-Oldrev: 6358bb3a9bcf8d4c66893e8df513d18bf0022c35
+X-Git-Newrev: e6e16a6d1803956b0c10e0d92608980888d0ebd3
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201329.AC012879BC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/osm2pgsql: bump version to 1.10.0
+Message-Id: <20231204201330.3F500879B9@busybox.osuosl.org>
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +57,43 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8100811109418975833=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e056aeeca9cf8c00c6da62c39979ce6c55c92791
+--===============8100811109418975833==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e6e16a6d1803956b0c10e0d92608980888d0ebd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release-notes: https://github.com/openstreetmap/osm2pgsql/releases/tag/1.10.0
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/osm2pgsql/osm2pgsql.hash | 2 +-
- package/osm2pgsql/osm2pgsql.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
-index 0b4eb17c99..a93ceb6a7f 100644
---- a/package/osm2pgsql/osm2pgsql.hash
-+++ b/package/osm2pgsql/osm2pgsql.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  dc30a3ad9a27f944e4169be9a8e07ee09711901536ddc8fcf4a292bd3aec51d9  osm2pgsql-1.9.2.tar.gz
-+sha256  33849d8edacbca5ab5492fed32ac954de14f92ab6b3028c03ef88bb7ab596d20  osm2pgsql-1.10.0.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
-index 44c980ac95..1565c2142c 100644
---- a/package/osm2pgsql/osm2pgsql.mk
-+++ b/package/osm2pgsql/osm2pgsql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1f26e9bc81..2f3eedf8a0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1078,6 +1078,7 @@ F:	package/python-pymodbus/
+ N:	Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+ F:	configs/asus_tinker-s_rk3288_defconfig
+ F:	board/asus/tinker-s/
++F:	package/rsyslog/
  
--OSM2PGSQL_VERSION = 1.9.2
-+OSM2PGSQL_VERSION = 1.10.0
- OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
- OSM2PGSQL_LICENSE = GPL-2.0+
- OSM2PGSQL_LICENSE_FILES = COPYING
+ N:	Florian Fainelli <f.fainelli@gmail.com>
+ F:	package/cpulimit/
+
+--===============8100811109418975833==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8100811109418975833==--
