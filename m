@@ -4,64 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DF52C4167B
-	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 01:50:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C905EC4167B
+	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 01:51:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0813423F9;
-	Sat,  2 Dec 2023 01:50:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0813423F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77F6C42279;
+	Sat,  2 Dec 2023 01:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77F6C42279
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kqQzFq4l5MtH; Sat,  2 Dec 2023 01:50:06 +0000 (UTC)
+	with ESMTP id yFNNtzr6tlj3; Sat,  2 Dec 2023 01:51:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB596423F4;
-	Sat,  2 Dec 2023 01:50:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB596423F4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B8A081BF3CB
- for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 01:50:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75B92423F4;
+	Sat,  2 Dec 2023 01:51:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75B92423F4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A92241BF3CB
+ for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 01:51:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8AC4260BEF
- for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 01:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AC4260BEF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8127C8489B
+ for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 01:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8127C8489B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JnrbGzKSkRhD for <buildroot@lists.busybox.net>;
- Sat,  2 Dec 2023 01:50:03 +0000 (UTC)
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 97C3460ADE
- for <buildroot@buildroot.org>; Sat,  2 Dec 2023 01:50:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97C3460ADE
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9353WWBWE9Hy for <buildroot@lists.busybox.net>;
+ Sat,  2 Dec 2023 01:51:26 +0000 (UTC)
+Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7B15484895
+ for <buildroot@buildroot.org>; Sat,  2 Dec 2023 01:51:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B15484895
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 9F8prKWYnwUld9F8qrOaTm; Sat, 02 Dec 2023 02:50:00 +0100
+ id 9FABrsn3FnPdI9FACrGyZr; Sat, 02 Dec 2023 02:51:24 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sat,  2 Dec 2023 02:49:59 +0100
-Message-Id: <20231202014959.2609255-1-giulio.benetti@benettiengineering.com>
+Date: Sat,  2 Dec 2023 02:51:23 +0100
+Message-Id: <20231202015123.2609353-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfFqLg4/75wI7YAnFKkEx7Ta0YZrmSAg7JYvAEdrzr5whZJxjhBzAyCuNi+w/cF7QzbEiE5eqbQYyBAn8zMAR0fdWyEjqqiOlvyKl7b1mhxQ0vMs77/ma
- NqPKXNobeFzRdkzvpUJZYXGaY3rG3Pbv6zkxB8mU0AJ5sZvWohNcI/JzGJiouG1C9Zkeb/BwuRQVXS9sY777oAOB/SBMmN70hatc0lAihyXZtsZ/IavMSShs
- JhiT33xA/LtaC6gbmwL/Dg7HXLrAaddAmdqjSL4bGQb2TsrrEhy1pZi+6xQuCJ6ex86Yaq2m7XjIoVkDzJq/Iw/EPLbpbHV+2N/CWLPAfJRg6O6BAnTQxiux
- j4hoW8y9
+X-CMAE-Envelope: MS4xfBcUAvJrVQPPyqz2Qu6S/xdEkIoVttZjRtZsPwnQDmNYJh7W+hE0q3tQnZzZmEB5Mh7SlmRnvh3qUr5pozvDfV66BFpXQ3+nDsS8GCf4ObPAWJCiCToF
+ 7wAxRKW5FAKv3SRLpykbEv2750h85G3cBHXcXdtNU0vC9Uoo2uxA9Aib3qbNy7UNRpqon4LAjX35qWFmZVGYy4qwXTGogjq3fheMx6riHCGtagi2DI4rjr7E
+ 5AA0goctEzG1oNCNog7AyFex9MDLzpXD+SJGtFiss+H9FNGCgYoR/7XNzJoF4AeTP5JrCHEvu3XoCb6IdhyJcDfDz7cbjpCy0sJ27edq0Qg=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1701481800; bh=/kRG5VAdlZ5bCw2Ag7uKBpc8+TFsC7OEvndAF74HM/M=;
+ t=1701481884; bh=Q36WUSOXB8qQJjb73dvj6/oQZ7ShwurNwzCsDC61WL0=;
  h=From:To:Subject:Date:MIME-Version;
- b=DwLONzDZT18CGQ+k3fkpDFhlZutX7mlNiBKBwd1oxPY9y/qyh+Ozhqzo5OwMAqQyo
- A8ceQWFQPeqtt+eGrtTunh6ROnb31olH16azqXICTLzvfDhnoRLzhnh6FiOW1G5RAc
- SoYxf21wUjzyNXrxbFXiL5XsJDxCEmdZ6+ANMkd+g9gzdKgtY4zFLXBGUFY1S9Y2fY
- 7SYL3zDHUEapqdPtQL+XBnBVrpkamdKBqLe+Vc0xIDnedskhp11noMUYjoe+qGm/n5
- CYXbuJSbuZurahsFZ/VbZ/zXsekwuR09f4DVhtByg8UwZni7KP0wdR/Pms2yWtnHLJ
- JuJmdC5yInmRQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=OdWPQLZRSmJzGt84R4H0wxpBCpHfhNHeMPyeuTKoHTDlRfFY1BHk2mqPg9H/7nN41
+ /h6FJz7Mvct5tdJ/8wDoYpIF/1tccii9Tvc+glbHszbe6s5wfLIhFv/Z3G8W1zxPTd
+ yZ3gh6rzKBVevk02stbtGI9ghlYhzS927aVgYMRLjWw1Xe1hLV4gyT060mHbdm3/EL
+ bTNVHW8WRFpK7CKXnyU+jNhsAnkQWy+Hk3p4t+jjNbewJCvrVuQlnHp5PeqIvCDIIp
+ U56GH3+bXObMdkb88pBf2Fd7Zi2xppnSNRaUtOEAhC05FeSVWL4zkj4aCIrR3guHRZ
+ ewtxNESXfayxA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=DwLONzDZ
-Subject: [Buildroot] [PATCH] package/freescale-imx: append /imx6ulz to
- BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+ header.a=rsa-sha256 header.s=a1 header.b=OdWPQLZR
+Subject: [Buildroot] [PATCH] package/swugenerator: add missing dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,35 +71,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Refik Tuzakli <tuzakli.refik@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Gary Bisson <bisson.gary@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-imx6ulz supports freescale-imx too so let's add it to the bool name for
-completeness.
+From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
 
+At the moment swugenerator package lacks host-openssl, host-gzip and
+host-zstd. All their final executables like openssl, gzip and zstd
+can be used by swugenerator if the correct flag is passed so let's
+add these missing dependencies.
+
+Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/freescale-imx/Config.in | 2 +-
+ package/swugenerator/swugenerator.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index fe3f265941..1c26b3cc6f 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -35,7 +35,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
- 	bool "imx6sl/imx6sx"
+diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
+index f4ead1d229..141a6a96c5 100644
+--- a/package/swugenerator/swugenerator.mk
++++ b/package/swugenerator/swugenerator.mk
+@@ -9,6 +9,6 @@ SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
+ SWUGENERATOR_LICENSE = GPL-3.0
+ SWUGENERATOR_LICENSE_FILES = LICENSE
+ HOST_SWUGENERATOR_SETUP_TYPE = setuptools
+-HOST_SWUGENERATOR_DEPENDENCIES = host-python-libconf
++HOST_SWUGENERATOR_DEPENDENCIES = host-gzip host-openssl host-python-libconf
  
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
--	bool "imx6ul/imx6ull"
-+	bool "imx6ul/imx6ull/imx6ulz"
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
- 	bool "imx7d/imx7ulp"
+ $(eval $(host-python-package))
 -- 
 2.34.1
 
