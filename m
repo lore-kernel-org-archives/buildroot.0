@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00B79C4167B
-	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 08:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72FDBC4167B
+	for <buildroot@archiver.kernel.org>; Sat,  2 Dec 2023 08:40:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96320416C7;
-	Sat,  2 Dec 2023 08:40:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96320416C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23435435CB;
+	Sat,  2 Dec 2023 08:40:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23435435CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JYlLWvajTZZb; Sat,  2 Dec 2023 08:40:19 +0000 (UTC)
+	with ESMTP id KIxrIZuIMV1k; Sat,  2 Dec 2023 08:40:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 588DF403AE;
-	Sat,  2 Dec 2023 08:40:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 588DF403AE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BFC571BF3BF
- for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 08:39:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2636E403AE;
+	Sat,  2 Dec 2023 08:40:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2636E403AE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4D0B51BF3BF
+ for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 08:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6BDD84917
- for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 08:39:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6BDD84917
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25EAA60B45
+ for <buildroot@lists.busybox.net>; Sat,  2 Dec 2023 08:40:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25EAA60B45
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yWE8dScpO1Jv for <buildroot@lists.busybox.net>;
- Sat,  2 Dec 2023 08:39:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A73B84915
- for <buildroot@buildroot.org>; Sat,  2 Dec 2023 08:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A73B84915
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8100F8753D; Sat,  2 Dec 2023 08:39:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Og-VNX1H-IfU for <buildroot@lists.busybox.net>;
+ Sat,  2 Dec 2023 08:40:50 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1565960B43
+ for <buildroot@buildroot.org>; Sat,  2 Dec 2023 08:40:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1565960B43
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DCA1F1BF205;
+ Sat,  2 Dec 2023 08:40:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r9LYM-0053ia-0f;
+ Sat, 02 Dec 2023 09:40:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 2 Dec 2023 09:36:10 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5d4bc471494f256b1d53e6895d780452c895e3d9
-X-Git-Newrev: 03e66a35eabaed9f258b8670eba2e8fc13dd3eb5
-X-Patchwork-Hint: ignore
-Message-Id: <20231202083948.8100F8753D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rsyslog: bump version
- to 8.2310.0
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20231201212318.1091953-1-fontaine.fabrice@gmail.com>
+Date: Sat, 02 Dec 2023 09:40:46 +0100
+In-Reply-To: <20231201212318.1091953-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 1 Dec 2023 22:23:18 +0100")
+Message-ID: <87ttp12e0h.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/libpjsip: security bump to
+ version 2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,58 +63,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7679005775594544885=="
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7679005775594544885==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=03e66a35eabaed9f258b8670eba2e8fc13dd3eb5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rsyslog/rsyslog.hash | 2 +-
- package/rsyslog/rsyslog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
-index 4049590bb8..90df3e054f 100644
---- a/package/rsyslog/rsyslog.hash
-+++ b/package/rsyslog/rsyslog.hash
-@@ -1,5 +1,5 @@
- # From http://www.rsyslog.com/downloads/download-v8-stable/
--sha256  a6d731e46ad3d64f6ad4b19bbf1bf56ca4760a44a24bb96823189dc2e71f7028  rsyslog-8.2204.1.tar.gz
-+sha256  20d9ce792bf0a7ed0703dbf0941490f8be655f48b55b4bebdc0827bbb0ddbf11  rsyslog-8.2310.0.tar.gz
- 
- # Locally calculated
- sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 84fd2d2e5e..cf9f2c0e79 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RSYSLOG_VERSION = 8.2204.1
-+RSYSLOG_VERSION = 8.2310.0
- RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
-
---===============7679005775594544885==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7679005775594544885==--
+Pj4+Pj4gIkZhYnJpY2UiID09IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPiB3cml0ZXM6CgogPiBGaXggQ1ZFLTIwMjMtMzg3MDM6IFBKU0lQIGlzIGEgZnJlZSBh
+bmQgb3BlbiBzb3VyY2UgbXVsdGltZWRpYQogPiBjb21tdW5pY2F0aW9uIGxpYnJhcnkgd3JpdHRl
+biBpbiBDIHdpdGggaGlnaCBsZXZlbCBBUEkgaW4gQywgQysrLCBKYXZhLAogPiBDIywgYW5kIFB5
+dGhvbiBsYW5ndWFnZXMuIFNSVFAgaXMgYSBoaWdoZXIgbGV2ZWwgbWVkaWEgdHJhbnNwb3J0IHdo
+aWNoCiA+IGlzIHN0YWNrZWQgdXBvbiBhIGxvd2VyIGxldmVsIG1lZGlhIHRyYW5zcG9ydCBzdWNo
+IGFzIFVEUCBhbmQgSUNFLgogPiBDdXJyZW50bHkgYSBoaWdoZXIgbGV2ZWwgdHJhbnNwb3J0IGlz
+IG5vdCBzeW5jaHJvbml6ZWQgd2l0aCBpdHMgbG93ZXIKID4gbGV2ZWwgdHJhbnNwb3J0IHRoYXQg
+bWF5IGludHJvZHVjZSB1c2UtYWZ0ZXItZnJlZSBpc3N1ZS4gVGhpcwogPiB2dWxuZXJhYmlsaXR5
+IGFmZmVjdHMgYXBwbGljYXRpb25zIHRoYXQgaGF2ZSBTUlRQIGNhcGFiaWxpdHkKID4gKGBQSk1F
+RElBX0hBU19TUlRQYCBpcyBzZXQpIGFuZCB1c2UgdW5kZXJseWluZyBtZWRpYSB0cmFuc3BvcnQg
+b3RoZXIKID4gdGhhbiBVRFAuIFRoaXMgdnVsbmVyYWJpbGl0eeKAmXMgaW1wYWN0IG1heSByYW5n
+ZSBmcm9tIHVuZXhwZWN0ZWQKID4gYXBwbGljYXRpb24gdGVybWluYXRpb24gdG8gY29udHJvbCBm
+bG93IGhpamFjay9tZW1vcnkgY29ycnVwdGlvbi4gVGhlCiA+IHBhdGNoIGlzIGF2YWlsYWJsZSBh
+cyBhIGNvbW1pdCBpbiB0aGUgbWFzdGVyIGJyYW5jaC4KCiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9w
+anNpcC9wanByb2plY3Qvc2VjdXJpdHkvYWR2aXNvcmllcy9HSFNBLWY3NnctZmg3Yy1wYzY2CiA+
+IGh0dHBzOi8vZ2l0aHViLmNvbS9wanNpcC9wanByb2plY3QvcmVsZWFzZXMvdGFnLzIuMTQKCiA+
+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwu
+Y29tPgoKQ29tbWl0dGVkLCB0aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
