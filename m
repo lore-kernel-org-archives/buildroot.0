@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70B2BC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 21:24:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C64FFC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 21:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 194A5409E7;
-	Sun,  3 Dec 2023 21:24:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 194A5409E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81A4E400EC;
+	Sun,  3 Dec 2023 21:25:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81A4E400EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hi8NPB5NwPZG; Sun,  3 Dec 2023 21:24:46 +0000 (UTC)
+	with ESMTP id A2l4aCBswTHa; Sun,  3 Dec 2023 21:25:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 183E4405B1;
-	Sun,  3 Dec 2023 21:24:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 183E4405B1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 25F031BF3EE
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:24:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E709400F9;
+	Sun,  3 Dec 2023 21:25:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E709400F9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0582A1BF3EE
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F1650818BE
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1650818BE
+ by smtp4.osuosl.org (Postfix) with ESMTP id E04344150E
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:25:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E04344150E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a0-rKMLuw1hH for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id STFLOcCcBDqK for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 21:25:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1A546818A2
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A546818A2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09BF140530
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 21:25:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09BF140530
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 04246878CD; Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
+ id ED66A878D3; Sun,  3 Dec 2023 21:25:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 22:05:23 +0100
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 275d74bd64593ba1d10af458c410a0015cbfcb24
-X-Git-Newrev: 0b3f8449e79a6ad32a5b7c20228cceef60cea0a9
+Date: Sun, 3 Dec 2023 22:05:29 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: bf03703aaa3a9f0febeb6567d1a5196babbcab42
+X-Git-Newrev: 5cdd40da3bfbac48eabb461343eb4e738b7d7d4b
 X-Patchwork-Hint: ignore
-Message-Id: <20231203212402.04246878CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/libpjsip:
+Message-Id: <20231203212520.ED66A878D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libpjsip:
  security bump to version 2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,15 +58,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8517133786439072413=="
+Content-Type: multipart/mixed; boundary="===============1339969541529088605=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8517133786439072413==
+--===============1339969541529088605==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b3f8449e79a6ad32a5b7c20228cceef60cea0a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5cdd40da3bfbac48eabb461343eb4e738b7d7d4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Fix CVE-2023-38703: PJSIP is a free and open source multimedia
 communication library written in C with high level API in C, C++, Java,
@@ -115,7 +115,7 @@ index f97d547fd7..8169e0dcee 100644
  LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
  
 
---===============8517133786439072413==
+--===============1339969541529088605==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -126,4 +126,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8517133786439072413==--
+--===============1339969541529088605==--
