@@ -4,85 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A72BC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31D50C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:24:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E80BF415A7;
-	Sun,  3 Dec 2023 18:20:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E80BF415A7
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDDD3415C8;
+	Sun,  3 Dec 2023 18:24:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDDD3415C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f3o2IbdtsIuD; Sun,  3 Dec 2023 18:20:08 +0000 (UTC)
+	with ESMTP id ksVPm7dv9lvW; Sun,  3 Dec 2023 18:24:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A2FA41575;
-	Sun,  3 Dec 2023 18:20:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A2FA41575
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 325351BF408
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:20:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F7B9415A7;
+	Sun,  3 Dec 2023 18:24:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F7B9415A7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 85DB01BF408
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:24:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11ED081374
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:20:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11ED081374
+ by smtp4.osuosl.org (Postfix) with ESMTP id 579AC4156C
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:24:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 579AC4156C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XuLM2Rv0vC4d for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 18:20:05 +0000 (UTC)
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F318B81372
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:20:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F318B81372
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-33330a5617fso1925268f8f.2
- for <buildroot@buildroot.org>; Sun, 03 Dec 2023 10:20:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701627602; x=1702232402;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=UgQ+9yy4Q/4IdM7iK7uMZXHq+70skDGdNWCAebVIHYw=;
- b=urD1Kkwykq2VfoMh/9kBZwNJ32T+PvFu4v0XAO/TrLJnivzoY8VX331IXTbnpGAhvL
- W1HWV7NXJSqBbildCmzzL2u4QANHeNDirUgtIVjVv6RfaFw125cIx8XPRKH5Q+j3VdSx
- mv2vU1sF3I9/1k6OQLBMnf3LNn+w68AMkDuLmsbJH9c/1BzUv5M0X3LrCi4yrjJSF+I6
- 1fp0MB41Ozz+ozA5fgXdz+5Qf09xv+P2JsO0W1+v8X8EBF6IrDIfrHAZHAbBXyAX82HS
- IVFIjDifPNjIziS2BCWeT+Ba8EpKAg9Qvc+karD5VXRf0XnlrLm8P5WEwNTDzbfys/zs
- npyA==
-X-Gm-Message-State: AOJu0Yws7ombzLIMdvNQnzndswZQVKPjBxixldpREQloiVo2x+eBMPhT
- nOGvuoDohYTqJnwbUtwdYFiQ64IQ67k=
-X-Google-Smtp-Source: AGHT+IGInlNPgdyTmirqcU4hIyFRCyuS5YQ0JXa/Uurv4/Fi5EHMYPFhkHnorOU5KwZKtqmX4ZSCPQ==
-X-Received: by 2002:adf:fa0c:0:b0:333:2fd2:5d1a with SMTP id
- m12-20020adffa0c000000b003332fd25d1amr2694620wrr.76.1701627601672; 
- Sun, 03 Dec 2023 10:20:01 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- d22-20020adfa356000000b0033332df65absm6717979wrb.50.2023.12.03.10.20.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Dec 2023 10:20:01 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  3 Dec 2023 19:19:58 +0100
-Message-ID: <20231203181958.285115-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bB0kJ3Y-_QQS for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 18:24:52 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 085AE4155F
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:24:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 085AE4155F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E8543240002;
+ Sun,  3 Dec 2023 18:24:47 +0000 (UTC)
+Message-ID: <a239b638-8c8b-47c1-8ff5-7d760e5ecb43@korsgaard.com>
+Date: Sun, 3 Dec 2023 19:24:47 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701627602; x=1702232402; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UgQ+9yy4Q/4IdM7iK7uMZXHq+70skDGdNWCAebVIHYw=;
- b=ePo5V83ZkD4MAY2pTLHn77YdYkoIAh7b1PYy5WdrV+vlFD1cEavcmwts8qlx7ljXrc
- GPKRg2MNm9Jtgx+Yfi0Rr2OIbkyb6sQ080L9VTS0U3P1ktBex83UZM2sM8Lvih3ulHHZ
- O7dCusfSf4pe8/WnF84XRb05lYauH1RR7xZU8lKTYaZjrbWU8g/T58vFUFF5DhYI+QuS
- 590UXJSoI0q1kW8eTr4D9BOHZ7MPOokpUxLDfHgn1OT7R/gHS4q+US70bRE01YtTV3/+
- NQYMJiVXXix3Ohe7UQyd64CNaRyixV8QbPnMlrp1T2YuyTc2zhMEqofIv8hPGPim6/i5
- Z+iw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ePo5V83Z
-Subject: [Buildroot] [PATCH 1/1] package/openssl: add
- BR2_PACKAGE_LIBRESSL_ARCH_SUPPORTS
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
+References: <20231026115034.2924408-1-neal.frager@amd.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+In-Reply-To: <20231026115034.2924408-1-neal.frager@amd.com>
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v4 1/1] configs/zynqmp_kria_kr260_defconfig:
+ new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,57 +60,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Bradley.Gamble@entrust.com, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, thomas.petazzoni@bootlin.com, david.evans@ebv.com,
+ dylan.bespalko@amd.com, michal.simek@amd.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libressl doesn't support all architectures since bump to version 3.8.2
-in commit 21eca49ed5110872407b76ab9337d2877c4cda24 and
-https://github.com/libressl/portable/commit/b98c56fd5e86fa76eb55a98a2266a923f64f705c
-https://github.com/libressl/portable/commit/71ce0b8c3e07079a40011d2f3515969e3bdf302e:
+On 26/10/2023 13.50, Neal Frager wrote:
+> This patch adds support for Xilinx Kria KR260 starter kit.
+> 
+> KR260 features can be found here:
+> https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
+> 
+> While the Kria SOM is based on a ZynqMP SoC, there are some key
+> boot config differences from the other ZynqMP evaluation boards.
+> 
+> 1. There are no boot switches on Kria SOMs. The boot mode is thus
+> hard configured for QSPI flash. A pre-programmed boot.bin comes
+> with every Starter Kit. U-Boot can then find the Linux kernel and
+> file system on the SD card.
+> 
+> Optional instructions for updating the boot.bin in the QSPI flash
+> can be found in the readme.txt file and the link below.
+> 
+> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM
+> 
+> 2. Kria SOMs use UART1 for the console instead of UART0. For this
+> reason, Kria Starter Kits will use a separate extlinux.conf file
+> from other ZynqMP evaluation boards.
+> 
+> 3. The KR260 has a USB to SD card bridge, so the Linux kernel
+> and file system are found on /dev/sda1 and /dev/sda2.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> V1->V2:
+>   - Submitted tri-state patches upstream
+> V2->V3:
+>   - Formatted upstream patches to remove all of the mail server messages
+> V3->V4:
+>   - Bumped to xilinx_v2023.2, so that board specific patches no longer needed
 
-In file included from /home/autobuild/autobuild/instance-4/output-1/build/libressl-3.8.2/crypto/rc4/rc4_enc.c:61:
-/home/autobuild/autobuild/instance-4/output-1/build/libressl-3.8.2/crypto/../include/openssl/rc4.h:75:9: error: unknown type name 'RC4_INT'
-   75 |         RC4_INT x, y;
-      |         ^~~~~~~
+Committed to next after fixing the kr260.sh shellcheck warnings, similar 
+to how I did for kv260.sh, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/1f6ac121b3771ccc4b0e846c061b7002ccb63963
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/openssl/Config.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index c7641ecefa..9b9b656760 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -30,8 +30,20 @@ config BR2_PACKAGE_LIBOPENSSL
- 
- source "package/libopenssl/Config.in"
- 
-+config BR2_PACKAGE_LIBRESSL_ARCH_SUPPORTS
-+	bool
-+	# see include/CMakeLists.txt
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_arm || BR2_armeb
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_RISCV_64
-+	default y if BR2_sparc64
-+
- config BR2_PACKAGE_LIBRESSL
- 	bool "libressl"
-+	depends on BR2_PACKAGE_LIBRESSL_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# uClibc doesn't provide __register_atfork() without NPTL
 -- 
-2.42.0
+Bye, Peter Korsgaard
 
 _______________________________________________
 buildroot mailing list
