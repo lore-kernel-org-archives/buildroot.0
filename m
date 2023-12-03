@@ -4,47 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84FB0C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:12:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAD31C07E97
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:15:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38CD74167F;
-	Sun,  3 Dec 2023 18:12:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38CD74167F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D5D5415CA;
+	Sun,  3 Dec 2023 18:15:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D5D5415CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jkr8n4IzYFlb; Sun,  3 Dec 2023 18:12:06 +0000 (UTC)
+	with ESMTP id kjyirCXlOPTR; Sun,  3 Dec 2023 18:15:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 673144168F;
-	Sun,  3 Dec 2023 18:12:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 673144168F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 36ED01BF408
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:12:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B3C84156C;
+	Sun,  3 Dec 2023 18:15:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B3C84156C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C29C21BF408
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10C5D81765
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:12:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10C5D81765
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BD5D4156C
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:15:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BD5D4156C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KvsPhOaSV301 for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 18:12:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1726F8149B
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:12:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1726F8149B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 05DE287826; Sun,  3 Dec 2023 18:12:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0Ymqe_QbtgEa for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 18:15:32 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A04D7414D1
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:15:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A04D7414D1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2355920002;
+ Sun,  3 Dec 2023 18:15:28 +0000 (UTC)
+Message-ID: <158689a1-fd02-471d-bcd0-e1fa974ebca8@korsgaard.com>
+Date: Sun, 3 Dec 2023 19:15:28 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20231121220706.506553-1-fontaine.fabrice@gmail.com>
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 19:11:29 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7898055d34950a872b7cb0fe2fff2895b1a9289
-X-Git-Newrev: b47b2065b249b3f50f3164d8a8114b108f596559
-X-Patchwork-Hint: ignore
-Message-Id: <20231203181203.05DE287826@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmemcached: fix static build
+In-Reply-To: <20231121220706.506553-1-fontaine.fabrice@gmail.com>
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/libblockdev: drop unrecognized
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,55 +60,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b47b2065b249b3f50f3164d8a8114b108f596559
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/11/2023 23.07, Fabrice Fontaine wrote:
+> The following options were wrongly kept when bumping to version 3.0.3 in
+> commit 18420d9b6b424492741cba495cc2e7a28a409e8b:
+>   - dmraid (dropped since
+>     https://github.com/storaged-project/libblockdev/commit/d174944a85169efae3bac0b6e76498e3d0c6c240)
+>   - bcache and kbd (dropped since
+>     https://github.com/storaged-project/libblockdev/commit/c1ff1c87e31fb2820a5694637eb221f590eb9451)
+>   - python2 (dropped since
+>     https://github.com/storaged-project/libblockdev/commit/8fc33b834529d3d18a73112e4c77ea0a5d26d62c)
+>   - vdo (dropped since
+>     https://github.com/storaged-project/libblockdev/commit/e51faac2a952da33925e3ccab0f4f0fdf3986cd3)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fix the following static build failure raised since bump to version
-1.1.4 in commit 7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
+Committed to next, thanks.
 
-CMake Error at /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/src/bin/cmake_install.cmake:60 (file):
-  file RPATH_CHANGE could not write new RPATH:
+> ---
+>   package/libblockdev/libblockdev.mk | 7 +------
+>   1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+> index 3bbc221cc5..e0fca2b95c 100644
+> --- a/package/libblockdev/libblockdev.mk
+> +++ b/package/libblockdev/libblockdev.mk
+> @@ -16,20 +16,15 @@ LIBBLOCKDEV_AUTORECONF = YES
+>   LIBBLOCKDEV_CONF_OPTS = \
+>   	--disable-introspection \
+>   	--with-loop \
+> -	--without-bcache \
+>   	--without-btrfs \
+>   	--without-dm \
+> -	--without-dmraid \
+>   	--without-escrow \
+> -	--without-kbd \
+>   	--without-lvm_dbus \
+>   	--without-mpath \
+>   	--without-nvdimm \
+> -	--without-python2 \
+>   	--without-python3 \
+>   	--without-s390 \
+> -	--without-tools \
+> -	--without-vdo
+> +	--without-tools
+>   
+>   ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
+>   LIBBLOCKDEV_DEPENDENCIES += cryptsetup keyutils
 
-    $ORIGIN/../lib
+-- 
+Bye, Peter Korsgaard
 
-  to the file:
-
-    /home/autobuild/autobuild/instance-13/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/bin/memcapable
-
-  No valid ELF RPATH or RUNPATH entry exists in the file;
-Call Stack (most recent call first):
-  /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/src/cmake_install.cmake:52 (include)
-  /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/cmake_install.cmake:52 (include)
-
-Fixes:
- - http://autobuild.buildroot.org/results/778ff517d465896f54a3cd5316a66c54f66fd4cb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libmemcached/libmemcached.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-index 63df8f5c20..b72f127a1d 100644
---- a/package/libmemcached/libmemcached.mk
-+++ b/package/libmemcached/libmemcached.mk
-@@ -18,7 +18,8 @@ LIBMEMCACHED_CPE_ID_VENDOR = awesome
- # unexpected build failures with packages that use libmemcached (e.g. c-icap)
- LIBMEMCACHED_CONF_OPTS += \
- 	-DCMAKE_BUILD_TYPE=Release \
--	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99"
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
-+	-DCMAKE_SKIP_RPATH=ON
- 
- ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBMEMCACHED_DEPENDENCIES += libevent
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
