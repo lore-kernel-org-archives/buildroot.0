@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DBDCC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DC08C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF9FC418BD;
-	Mon,  4 Dec 2023 20:29:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF9FC418BD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 383BE418BD;
+	Mon,  4 Dec 2023 20:29:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 383BE418BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vnY9mwXd-lGO; Mon,  4 Dec 2023 20:29:37 +0000 (UTC)
+	with ESMTP id 7x7XAcrfnLg1; Mon,  4 Dec 2023 20:29:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 054A542270;
-	Mon,  4 Dec 2023 20:29:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 054A542270
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D98781BF31D
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E13C42202;
+	Mon,  4 Dec 2023 20:29:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E13C42202
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A2381BF977
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 24F7360692
+ by smtp4.osuosl.org (Postfix) with ESMTP id 340CF416C5
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24F7360692
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 340CF416C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8QBf9wKPshwD for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HuTzSPA6cBVr for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4442E60FFA
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4442E60FFA
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA72741732
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA72741732
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41AA0879BC; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+ id A921E879B6; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 20:18:56 +0100
+Date: Sun, 3 Dec 2023 18:08:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 790d554474c5a999d2996dc532bc042631ef16f2
-X-Git-Newrev: 8e871ac18bcedb268d11059a8e5be40da442295f
+X-Git-Oldrev: 026c8f80ff2294f08d70aa17d38b4be8c0c9d0de
+X-Git-Newrev: ad21d833e0d0876f43e409548481c6030db2d16e
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201331.41AA0879BC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rdma-core: bump to version v49.0
+Message-Id: <20231204201330.A921E879B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/socat: drop patch 2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +62,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e871ac18bcedb268d11059a8e5be40da442295f
+commit: https://git.buildroot.net/buildroot/commit/?id=ad21d833e0d0876f43e409548481c6030db2d16e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log, see:
-https://github.com/linux-rdma/rdma-core/releases/tag/v49.0
+As upstream developer mentioned in private communication, the code using
+NETDB_INTERNAL is now disabled. Remove the patch.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rdma-core/rdma-core.hash | 2 +-
- package/rdma-core/rdma-core.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/socat/0002-compat-set-NETDB_INTERNAL.patch | 36 ----------------------
+ 1 file changed, 36 deletions(-)
 
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-index f0f2448a8f..fc1d319123 100644
---- a/package/rdma-core/rdma-core.hash
-+++ b/package/rdma-core/rdma-core.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  e78abaa3ed16771bc6c40b538fe27082429363b86b6ce47636bb57a59238b2be  rdma-core-48.0.tar.gz
-+sha256  1ea2c2678d48be0b179871e9ae8c58ceab11a0c5b69315a332ff51dd607180b7  rdma-core-49.0.tar.gz
- sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
- sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-index 41f10d44f6..5f8989b3bd 100644
---- a/package/rdma-core/rdma-core.mk
-+++ b/package/rdma-core/rdma-core.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RDMA_CORE_VERSION = 48.0
-+RDMA_CORE_VERSION = 49.0
- RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
- RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
- RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
+diff --git a/package/socat/0002-compat-set-NETDB_INTERNAL.patch b/package/socat/0002-compat-set-NETDB_INTERNAL.patch
+deleted file mode 100644
+index f526664210..0000000000
+--- a/package/socat/0002-compat-set-NETDB_INTERNAL.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 4b86f141c7c4725093fb2e12c769fec393727519 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sun, 28 Aug 2016 21:04:01 +0200
+-Subject: [PATCH] compat: set NETDB_INTERNAL
+-
+-Musl doesn't provide NETDB_INTERNAL which is defined in resolv/netdb.h
+-in Glibc [1].
+-
+-Set NETDB_INTERNAL to -1 locally if not already defined.
+-Based on [2].
+-
+-[1] https://sourceware.org/git/?p=glibc.git;a=blob;f=resolv/netdb.h;h=3aba530932c7a62a4f23e3193e9186da677f552b;hb=fdfc9260b61d3d72541f18104d24c7bcb0ce5ca2#l74
+-[2] http://git.alpinelinux.org/cgit/aports/tree/main/socat/netdb-internal.patch?id=5a45173b50892cb634197c30b3506ebff98d3b7d
+-
+-Upstream: sent to socat@dest-unreach.org
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- compat.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/compat.h b/compat.h
+-index bb7e2d8f1782..72e73c701f64 100644
+---- a/compat.h
+-+++ b/compat.h
+-@@ -851,6 +851,8 @@ typedef unsigned long T_sigset;
+- 
+- #if !defined(NETDB_INTERNAL) && defined(h_NETDB_INTERNAL)
+- #  define NETDB_INTERNAL h_NETDB_INTERNAL
+-+#elif !defined(NETDB_INTERNAL)
+-+#  define NETDB_INTERNAL (-1)
+- #endif
+- 
+- #ifndef INET_ADDRSTRLEN
+--- 
+-2.5.5
+-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
