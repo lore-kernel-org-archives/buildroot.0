@@ -4,47 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB8F9C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 17:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4798C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 17:14:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77B9D415F8;
-	Sun,  3 Dec 2023 17:09:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B9D415F8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 989CF415D5;
+	Sun,  3 Dec 2023 17:14:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 989CF415D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gGJO3GhtIxvT; Sun,  3 Dec 2023 17:09:41 +0000 (UTC)
+	with ESMTP id cOnIX_iey4wx; Sun,  3 Dec 2023 17:13:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BA66415FA;
-	Sun,  3 Dec 2023 17:09:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BA66415FA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 423E71BF8C7
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:09:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05209414FA;
+	Sun,  3 Dec 2023 17:13:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05209414FA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 16F401BF328
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:13:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11804400B2
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:09:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11804400B2
+ by smtp3.osuosl.org (Postfix) with ESMTP id E11A860F3B
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:13:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11A860F3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WpiMqZcsC4qM for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 17:09:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 276CC4035D
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 17:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 276CC4035D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E53A87802; Sun,  3 Dec 2023 17:09:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4xQCviujyM0W for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 17:13:56 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 112DC60773
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 17:13:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 112DC60773
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 12C8E60003;
+ Sun,  3 Dec 2023 17:13:53 +0000 (UTC)
+Message-ID: <c1ea53d5-f4b6-4fda-bdb2-b7674e8d45d7@korsgaard.com>
+Date: Sun, 3 Dec 2023 18:13:53 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
+ buildroot@buildroot.org
+References: <20231122014108.2430309-1-gael.portay@rtone.fr>
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 18:08:58 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 026c8f80ff2294f08d70aa17d38b4be8c0c9d0de
-X-Git-Newrev: ad21d833e0d0876f43e409548481c6030db2d16e
-X-Patchwork-Hint: ignore
-Message-Id: <20231203170928.0E53A87802@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/socat: drop patch 2
+In-Reply-To: <20231122014108.2430309-1-gael.portay@rtone.fr>
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2] Revert "board/raspberrypi: handle dtb
+ overlays for all variants"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,67 +61,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Martin Bark <martin@barkynet.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad21d833e0d0876f43e409548481c6030db2d16e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-As upstream developer mentioned in private communication, the code using
-NETDB_INTERNAL is now disabled. Remove the patch.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/socat/0002-compat-set-NETDB_INTERNAL.patch | 36 ----------------------
- 1 file changed, 36 deletions(-)
-
-diff --git a/package/socat/0002-compat-set-NETDB_INTERNAL.patch b/package/socat/0002-compat-set-NETDB_INTERNAL.patch
-deleted file mode 100644
-index f526664210..0000000000
---- a/package/socat/0002-compat-set-NETDB_INTERNAL.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 4b86f141c7c4725093fb2e12c769fec393727519 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sun, 28 Aug 2016 21:04:01 +0200
--Subject: [PATCH] compat: set NETDB_INTERNAL
--
--Musl doesn't provide NETDB_INTERNAL which is defined in resolv/netdb.h
--in Glibc [1].
--
--Set NETDB_INTERNAL to -1 locally if not already defined.
--Based on [2].
--
--[1] https://sourceware.org/git/?p=glibc.git;a=blob;f=resolv/netdb.h;h=3aba530932c7a62a4f23e3193e9186da677f552b;hb=fdfc9260b61d3d72541f18104d24c7bcb0ce5ca2#l74
--[2] http://git.alpinelinux.org/cgit/aports/tree/main/socat/netdb-internal.patch?id=5a45173b50892cb634197c30b3506ebff98d3b7d
--
--Upstream: sent to socat@dest-unreach.org
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- compat.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/compat.h b/compat.h
--index bb7e2d8f1782..72e73c701f64 100644
----- a/compat.h
--+++ b/compat.h
--@@ -851,6 +851,8 @@ typedef unsigned long T_sigset;
-- 
-- #if !defined(NETDB_INTERNAL) && defined(h_NETDB_INTERNAL)
-- #  define NETDB_INTERNAL h_NETDB_INTERNAL
--+#elif !defined(NETDB_INTERNAL)
--+#  define NETDB_INTERNAL (-1)
-- #endif
-- 
-- #ifndef INET_ADDRSTRLEN
---- 
--2.5.5
--
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMjIvMTEvMjAyMyAwMi40MSwgR2HDq2wgUE9SVEFZIHdyb3RlOgo+IFRoaXMgcmV2ZXJ0cyBj
+b21taXQgNjAyMWYzNjc4YjQ0ZDQzZGE3MDU3ZTMxMzVkYTg0MmNkZTFmZmEwNS4KPiAKPiBUaGF0
+IGNoYW5nZSBpcyBubyBtb3JlIHJlbGV2YW50IHNpbmNlIHRoZSBnZW5pbWFnZS5jZmcgZmlsZXMg
+YXJlCj4gZ2VuZXJhdGVkIGJ5IHRoZSBjb21taXQgZTM3ZWU1YWNkYyAoYm9hcmQvcmFzcGJlcnJ5
+cGkvcG9zdC1pbWFnZS5zaDoKPiBnZW5lcmF0ZSBnZW5pbWFnZSBjb25maWcgZnJvbSB0ZW1wbGF0
+ZSBpZiBub3QgcHJlc2VudCksIGFuZCBzaW5jZSB0aGUKPiB2YXJpYW50LXNwZWNpZmljIGZpbGVz
+IHdlcmUgZHJvcHBlZCBvZmYgYnkgdGhlIGNvbW1pdCBmYzVjZGVlZDcyCj4gKGJvYXJkL3Jhc3Bi
+ZXJyeXBpOiBkcm9wIHZhcmlhbnQtc3BlY2lmaWMgZ2VuaW1hZ2UgZmlsZXMpLgo+IAo+IFRoaXMg
+cmVtb3ZlcyB0aGUgdmVyeSBsYXN0IGFsaXZlIHBpZWNlIG9mIGNoYW5nZSBvZiB0aGUgY29tbWl0
+Cj4gNjAyMWYzNjc4YiAoYm9hcmQvcmFzcGJlcnJ5cGk6IGhhbmRsZSBkdGIgb3ZlcmxheXMgZm9y
+IGFsbCB2YXJpYW50cyk7Cj4gdGhlIGNvbW1pdCBpcyBmdWxseSByZXZlcnRlZCBub3cuCj4gCj4g
+U2lnbmVkLW9mZi1ieTogR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4KPiAtLS0K
+PiBNYWludGFpbmVycywKPiAKPiBVbmxlc3MgSSBhbSBtaXN0YWtlbiwgdGhpcyBjb3VsZCBnb25l
+LCByaWdodD8KCkkgYmVsaWV2ZSBzbywgeWVzLgoKQ29tbWl0dGVkIHRvIG5leHQsIHRoYW5rcy4K
+Ci0tIApCeWUsIFBldGVyIEtvcnNnYWFyZAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
