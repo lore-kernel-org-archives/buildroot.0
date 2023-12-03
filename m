@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0DFCC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D9FC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B2D5426AE;
-	Mon,  4 Dec 2023 20:32:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B2D5426AE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64A1A426BE;
+	Mon,  4 Dec 2023 20:32:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64A1A426BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lPAJjcC7lKO1; Mon,  4 Dec 2023 20:32:38 +0000 (UTC)
+	with ESMTP id pjgQex5k-wuA; Mon,  4 Dec 2023 20:32:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C734841DED;
-	Mon,  4 Dec 2023 20:32:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C734841DED
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABE034268A;
+	Mon,  4 Dec 2023 20:32:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABE034268A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 19ADC1BF31D
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10F7F1BF31D
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EA8341745
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F6814173C
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EA8341745
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F6814173C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WyoEP8O136KE for <buildroot@lists.busybox.net>;
+ with ESMTP id yjlJEO-r_0Tn for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0181041772
+ by smtp4.osuosl.org (Postfix) with ESMTP id CDC144173A
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0181041772
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDC144173A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EA61B879B6; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+ id C2CD7879B7; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 19:07:31 +0100
+Date: Sun, 3 Dec 2023 18:12:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 302199957705ae9b63741ce8a571b706bcc577e2
-X-Git-Newrev: c8a5a97e6740e31ef62e1be9f7c640dde79db6d4
+X-Git-Oldrev: ad21d833e0d0876f43e409548481c6030db2d16e
+X-Git-Newrev: 56fd7854342911b737478667a183958119166a18
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201330.EA61B879B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tbb: bump to version 2021.11.0.
+Message-Id: <20231204201330.C2CD7879B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "board/raspberrypi: handle dtb
+ overlays for all variants"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,44 +58,55 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0291033182851886862=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8a5a97e6740e31ef62e1be9f7c640dde79db6d4
+--===============0291033182851886862==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=56fd7854342911b737478667a183958119166a18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+This reverts commit 6021f3678b44d43da7057e3135da842cde1ffa05.
+
+That change is no more relevant since the genimage.cfg files are
+generated by the commit e37ee5acdc (board/raspberrypi/post-image.sh:
+generate genimage config from template if not present), and since the
+variant-specific files were dropped off by the commit fc5cdeed72
+(board/raspberrypi: drop variant-specific genimage files).
+
+This removes the very last alive piece of change of the commit
+6021f3678b (board/raspberrypi: handle dtb overlays for all variants);
+the commit is fully reverted now.
+
+Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tbb/tbb.hash | 2 +-
- package/tbb/tbb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/raspberrypi/post-build.sh | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
-index 085d54109a..4d2cb10da8 100644
---- a/package/tbb/tbb.hash
-+++ b/package/tbb/tbb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  487023a955e5a3cc6d3a0d5f89179f9b6c0ae7222613a7185b0227ba0c83700b  tbb-2021.10.0.tar.gz
-+sha256  782ce0cab62df9ea125cdea253a50534862b563f1d85d4cda7ad4e77550ac363  tbb-2021.11.0.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
-diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
-index 75cca5e99d..1b0afbb889 100644
---- a/package/tbb/tbb.mk
-+++ b/package/tbb/tbb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TBB_VERSION = 2021.10.0
-+TBB_VERSION = 2021.11.0
- TBB_SITE = $(call github,01org,tbb,v$(TBB_VERSION))
- TBB_INSTALL_STAGING = YES
- TBB_LICENSE = Apache-2.0
+diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+index 0bd7bc3d17..73026e5922 100755
+--- a/board/raspberrypi/post-build.sh
++++ b/board/raspberrypi/post-build.sh
+@@ -14,6 +14,3 @@ elif [ -d ${TARGET_DIR}/etc/systemd ]; then
+     ln -sf /lib/systemd/system/getty@.service \
+        "${TARGET_DIR}/etc/systemd/system/getty.target.wants/getty@tty1.service"
+ fi
+-
+-# ensure overlays exists for genimage
+-mkdir -p "${BINARIES_DIR}/rpi-firmware/overlays"
+
+--===============0291033182851886862==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0291033182851886862==--
