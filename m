@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01D76C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 04:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DACE8C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 04:20:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFBA981E94;
-	Sun,  3 Dec 2023 04:19:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFBA981E94
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EC2B81EB5;
+	Sun,  3 Dec 2023 04:20:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EC2B81EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X5GPu-6IzNUv; Sun,  3 Dec 2023 04:19:55 +0000 (UTC)
+	with ESMTP id mgcWtcaP91OH; Sun,  3 Dec 2023 04:20:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96B9481EC9;
-	Sun,  3 Dec 2023 04:19:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96B9481EC9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3831F1BF2B9
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 04:19:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CD9B8200C;
+	Sun,  3 Dec 2023 04:20:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CD9B8200C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A3A31BF2B9
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 04:19:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1EF7360F00
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 04:19:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EF7360F00
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23A354139E
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 04:19:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23A354139E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 28-P1eK46jEL for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 04:19:16 +0000 (UTC)
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
- [IPv6:2607:f8b0:4864:20::635])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0491360EF9
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 04:19:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0491360EF9
-Received: by mail-pl1-x635.google.com with SMTP id
- d9443c01a7336-1d0538d9bbcso17494305ad.3
- for <buildroot@buildroot.org>; Sat, 02 Dec 2023 20:19:15 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qmBPPSvs9B_v for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 04:19:19 +0000 (UTC)
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com
+ [IPv6:2607:f8b0:4864:20::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E0391410A4
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 04:19:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0391410A4
+Received: by mail-oi1-x231.google.com with SMTP id
+ 5614622812f47-3b843b61d8aso1448365b6e.0
+ for <buildroot@buildroot.org>; Sat, 02 Dec 2023 20:19:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701577154; x=1702181954;
+ d=1e100.net; s=20230601; t=1701577157; x=1702181957;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=B3tz5tPc5A0nkIZdd3nwzZ/JQen1DgIMIT7ex1+NHwA=;
- b=euvVjgQ4MdGAQiJT0Hj2RNnmcr6KN+kti87uGYVcHoJgilmdk0gg3g4ey1OFJzU2Jg
- adTzgx3MlDqHuIdKSAiN1UtHjtZMRfs7WSsJvaF2xUK+tyIxa0PvKlfys2egu5xBeQvj
- ZHprK+pbbgU6AzORXsGPCKdEDCy3jat7IEYVV0sfsLhZUc/hwx/ynGJGOkxhhWPuu0nX
- xJ2r81k8nHRM+v96QltIBfbQRKn3JLcuTvhGmayPPiRkBqdNfgm0trWYFN85qbzohTGE
- MdkzQNUGENMAMXioraxNYpFrR1U5BtgOratQ+dpGoe7TSsRmN8KqIb7B6Ye5S/wQ8ohr
- UwGQ==
-X-Gm-Message-State: AOJu0YymtiOSV2gu0mRI5ehcZuXmpz6N9zrpbdEl2TBk7hys79qXQtEK
- LeLsmOJHLPOYzPMVoEHl4U3T8/bzFXC9xATg1+A=
-X-Google-Smtp-Source: AGHT+IGEJQq5C1c74dC99KI9a9yngiJEJucV39JGXL7eGFk+sQMOzmHwvsBw/lbCPYCPdlw/Aj+vtw==
-X-Received: by 2002:a17:902:be15:b0:1d0:6ffd:e2f0 with SMTP id
- r21-20020a170902be1500b001d06ffde2f0mr1994998pls.138.1701577154300; 
- Sat, 02 Dec 2023 20:19:14 -0800 (PST)
+ bh=gEUxPZ+sk3oKB2LwBAUg98vyRwr0s+I9WiKps10iY+U=;
+ b=TI0xgSi/3U+5q6lRhhAN3wqHTj14N4k9WShJvWuA4UqXHLTpTs3hIzHv/UDQqwyHgN
+ vBxWPKweMgp8BtloFbo8tk1sCclpEBL4r0s22DelJBimlwDDqOlxmZre4Jr/WGqwkuGN
+ FplNbt2VSHIWGGz2jXocgTf3+dEeJwcqv8PlIY3GVeSYH69K++UC6hJWeNFEtZsD5fEM
+ E0cT76uaVU5gAaLPTliU0sXN+ygvOKtWr3ACwv2qpkrLO+gFVrNQa+QZKGBDU2NV5LkF
+ JxGJIUFvwjJECvWJ0XLylWpp1Ako6xvHQrBThDQSa0eFDEslVEJdVj+ltygoUZSMa0ND
+ pjwQ==
+X-Gm-Message-State: AOJu0Yw0VRoAi3hRUXDZAaWYvgGztn70TDPFjhgTB8B6H/wdLlgxwKdv
+ Yzr2GQ33JG6U20L2yx1/1SvB9OAaI8yxcmIKgcc=
+X-Google-Smtp-Source: AGHT+IH+EMKTSsSWjEn+nzS6BS0mdJKix9EMhcYV/zvbDR3INbHYhQLE/huWtg6SqK6srp4+Oi7VaQ==
+X-Received: by 2002:a05:6808:f87:b0:3b8:b063:5d66 with SMTP id
+ o7-20020a0568080f8700b003b8b0635d66mr2924551oiw.77.1701577157399; 
+ Sat, 02 Dec 2023 20:19:17 -0800 (PST)
 Received: from localhost.localdomain (75-174-247-100.bsmr.qwest.net.
  [75.174.247.100]) by smtp.gmail.com with ESMTPSA id
- j15-20020a170902da8f00b001cfc6388b5dsm5874084plx.260.2023.12.02.20.19.10
+ j15-20020a170902da8f00b001cfc6388b5dsm5874084plx.260.2023.12.02.20.19.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Dec 2023 20:19:13 -0800 (PST)
+ Sat, 02 Dec 2023 20:19:17 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat,  2 Dec 2023 21:18:38 -0700
-Message-ID: <20231203041841.492885-5-adam.duskett@amarulasolutions.com>
+Date: Sat,  2 Dec 2023 21:18:39 -0700
+Message-ID: <20231203041841.492885-6-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231203041841.492885-1-adam.duskett@amarulasolutions.com>
 References: <20231203041841.492885-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1701577154; x=1702181954;
+ d=amarulasolutions.com; s=google; t=1701577157; x=1702181957;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=B3tz5tPc5A0nkIZdd3nwzZ/JQen1DgIMIT7ex1+NHwA=;
- b=VuYRn359lmb6A8z/N4NBURlLncxWGDMc5CdaEqLTWitBBamw8paSWNMbLfHWI32klc
- IEoCKvrGy6caThlCAuoytNrYTX0w0ShLjkCbE3TuY3kXbBs0bHEt5156ct08KrwYgVpk
- EZ2TxDqeUmC88cAJAmFeGej5ZQtd+1RBtd5Oo=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=gEUxPZ+sk3oKB2LwBAUg98vyRwr0s+I9WiKps10iY+U=;
+ b=efkqo9UdnfEoAYn0Fikpsa1J3BnmmXNK9P56aqYt6VY7qIlVzdtCAm2tCYZlq8m7Uy
+ 9FqXxPwc+MFLVagaPEHfw/MzJvkLI5Jl+WUm7H4kH5ljcMVPMVkXIsKT8yu3wiFGUF4c
+ xtT44LvpZ1TaPNJhtjnzWfamsUTndL/4OezQM=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=VuYRn359
-Subject: [Buildroot] [PATCH 5/6] package/google-breakpad: add
- 0002-dont-include-stab.h.patch
+ header.b=efkqo9Ud
+Subject: [Buildroot] [PATCH 6/6] package/google-breakpad: bump version to
+ f49c2f1a2023da0cb055874fba050563dfea57db
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,208 +99,109 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
  Pascal Huerst <pascal.huerst@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch is from openembedded. Unfortuantly, as it patches configure.ac,
-we must add GOOGLE_BREAKPAD_AUTORECONF = YES to google-breakpad.mk.
-
-We also add TestGoogleBreakPaduClibc.
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- Config.in                                     |   2 +-
- .../0002-dont-include-stab.h.patch            | 103 ++++++++++++++++++
- package/google-breakpad/Config.in             |   6 +-
- package/google-breakpad/google-breakpad.mk    |   2 +
- .../tests/package/test_google_breakpad.py     |   7 ++
- 5 files changed, 116 insertions(+), 4 deletions(-)
- create mode 100644 package/google-breakpad/0002-dont-include-stab.h.patch
-
-diff --git a/Config.in b/Config.in
-index 554b4062eb..27f5deb16a 100644
---- a/Config.in
-+++ b/Config.in
-@@ -589,7 +589,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	select BR2_PACKAGE_GOOGLE_BREAKPAD
-diff --git a/package/google-breakpad/0002-dont-include-stab.h.patch b/package/google-breakpad/0002-dont-include-stab.h.patch
-new file mode 100644
-index 0000000000..0817f1928f
---- /dev/null
-+++ b/package/google-breakpad/0002-dont-include-stab.h.patch
-@@ -0,0 +1,103 @@
-+From 569af712da94637091080943f6a0d69ccb35864e Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Thu, 14 Sep 2017 23:24:08 -0700
-+Subject: [PATCH] don't include stab.h
-+
-+From openembeddeds patch found at the following path:
-+meta-oe/recipes-devtools/breakpad/breakpad/0003-Dont-include-stab.h.patch
-+
-+  - Backported to c85eb4a59b618f3beaad5445ceb1f865ffa8efdf
-+  - Added || defined(__UCLIBC__) in stabs_reader.h, as uClibc provides the
-+    a.out.h file but does not include the N_* macros.
-+
-+Upstream: Pending
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[Backported to c85eb4a59b618f3beaad5445ceb1f865ffa8efdf]
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ configure.ac                        |  2 +-
-+ src/common/stabs_reader.cc          |  2 ++
-+ src/common/stabs_reader.h           | 24 ++++++++++++++++++++++++
-+ src/common/stabs_reader_unittest.cc |  2 ++
-+ 4 files changed, 29 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 20fb075..74aaf93 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -72,7 +72,7 @@ AC_ARG_ENABLE(m32,
-+ AC_HEADER_STDC
-+ AC_SYS_LARGEFILE
-+ AX_PTHREAD
-+-AC_CHECK_HEADERS([a.out.h sys/mman.h sys/random.h])
-++AC_CHECK_HEADERS([a.out.h stab.h sys/mman.h sys/random.h])
-+ AC_CHECK_FUNCS([arc4random getcontext getrandom memfd_create])
-+ AM_CONDITIONAL([HAVE_GETCONTEXT], [test "x$ac_cv_func_getcontext" = xyes])
-+ AM_CONDITIONAL([HAVE_MEMFD_CREATE], [test "x$ac_cv_func_memfd_create" = xyes])
-+diff --git a/src/common/stabs_reader.cc b/src/common/stabs_reader.cc
-+index 43c4040..d03c660 100644
-+
-+--- a/src/common/stabs_reader.cc
-++++ b/src/common/stabs_reader.cc
-+@@ -34,7 +34,9 @@
-+ #include "common/stabs_reader.h"
-+ 
-+ #include <assert.h>
-++#ifdef HAVE_STAB_H
-+ #include <stab.h>
-++#endif
-+ #include <string.h>
-+ 
-+ #include <string>
-+diff --git a/src/common/stabs_reader.h b/src/common/stabs_reader.h
-+index 1e773f4..9154872 100644
-+--- a/src/common/stabs_reader.h
-++++ b/src/common/stabs_reader.h
-+@@ -58,6 +58,30 @@
-+ #elif defined(HAVE_A_OUT_H)
-+ #include <a.out.h>
-+ #endif
-++// Definitions from <stab.h> and <a.out.h> for systems which
-++// do not have them
-++#if !defined(HAVE_A_OUT_H) || defined(__UCLIBC__)
-++#undef N_UNDF
-++#define N_UNDF 0x0
-++#ifndef N_FUN
-++#define N_FUN 0x24
-++#endif
-++#ifndef N_SLINE
-++#define N_SLINE 0x44
-++#endif
-++#ifndef N_SO
-++#define N_SO 0x64
-++#endif
-++#ifndef N_LSYM
-++#define N_LSYM 0x80
-++#endif
-++#ifndef N_BINCL
-++#define N_BINCL 0x82
-++#endif
-++#ifndef N_SOL
-++#define N_SOL 0x84
-++#endif
-++#endif
-+ 
-+ #include <string>
-+ #include <vector>
-+diff --git a/src/common/stabs_reader_unittest.cc b/src/common/stabs_reader_unittest.cc
-+index 24f3e1a..1a148bd 100644
-+--- a/src/common/stabs_reader_unittest.cc
-++++ b/src/common/stabs_reader_unittest.cc
-+@@ -33,7 +33,9 @@
-+ 
-+ #include <assert.h>
-+ #include <errno.h>
-++#ifdef HAVE_STAB_H
-+ #include <stab.h>
-++#endif
-+ #include <stdarg.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-- 
-+2.43.0
-diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-index 49d0bc06de..4320ad64aa 100644
---- a/package/google-breakpad/Config.in
-+++ b/package/google-breakpad/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LINUX_SYSCALL_SUPPORT
-@@ -34,12 +34,12 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
- 
- 	  https://chromium.googlesource.com/breakpad/breakpad
- 
--comment "google-breakpad requires a glibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
-+comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_USES_GLIBC || \
-+		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- if BR2_PACKAGE_GOOGLE_BREAKPAD
-diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
-index 132323363b..154a5ed20e 100644
---- a/package/google-breakpad/google-breakpad.mk
-+++ b/package/google-breakpad/google-breakpad.mk
-@@ -12,6 +12,8 @@ GOOGLE_BREAKPAD_LICENSE = BSD-3-Clause, MIT
- GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
- GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad linux-syscall-support
- 
-+# Patching configure.ac
-+GOOGLE_BREAKPAD_AUTORECONF = YES
- HOST_GOOGLE_BREAKPAD_DEPENDENCIES = host-linux-syscall-support
- 
- ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD_TOOLS),)
-diff --git a/support/testing/tests/package/test_google_breakpad.py b/support/testing/tests/package/test_google_breakpad.py
-index 646bdf6ee3..4d791bb79b 100644
---- a/support/testing/tests/package/test_google_breakpad.py
-+++ b/support/testing/tests/package/test_google_breakpad.py
-@@ -48,3 +48,10 @@ class TestGoogleBreakPadGlibC(GoogelBreakPadBase):
- 
-     def test_run(self):
-         self.check_google_breakpad()
-+
-+
-+class TestGoogleBreakPaduClibc(GoogelBreakPadBase):
-+    config = GoogelBreakPadBase.config + "BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_UCLIBC_STABLE=y"
-+
-+    def test_run(self):
-+        self.check_google_breakpad()
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICAtIERyb3Agbm8gbG9uZ2VyIG5lZWRlZCAwMDAxLWFkZC1jc3RkaW50LXRvLW1pbmlkdW1wX2Rl
+c2NyaXB0b3IuaC5wYXRjaAoKICAtIFJlbmFtZSAwMDAyLWRvbnQtaW5jbHVkZS1zdGFiLmgucGF0
+Y2ggdG8gMDAwMS1kb250LWluY2x1ZGUtc3RhYi5oLnBhdGNoCiAgICBhbmQgcmVmYWN0b3Igc28g
+aXQgYXBwbGllcyBjbGVhbmx5LgoKICAtIFVwZGF0ZWQgbGljZW5zZSBoYXNoIGR1ZSB0byBudW1l
+cm91cyBhZGRpdGlvbnMgb2YgbGljZW5zZXMsIGFuZCB1cGRhdGVkCiAgICBjb3B5cmlnaHQgeWVh
+cnMuCgoKU2lnbmVkLW9mZi1ieTogQWRhbSBEdXNrZXR0IDxhZGFtLmR1c2tldHRAYW1hcnVsYXNv
+bHV0aW9ucy5jb20+Ci0tLQogLi4uYWRkLWNzdGRpbnQtdG8tbWluaWR1bXBfZGVzY3JpcHRvci5o
+LnBhdGNoIHwgMzIgLS0tLS0tLS0tLS0tLS0tLS0tLQogLi4uaC5wYXRjaCA9PiAwMDAxLWRvbnQt
+aW5jbHVkZS1zdGFiLmgucGF0Y2h9IHwgMTIgKysrLS0tLQogcGFja2FnZS9nb29nbGUtYnJlYWtw
+YWQvZ29vZ2xlLWJyZWFrcGFkLmhhc2ggIHwgIDQgKy0tCiBwYWNrYWdlL2dvb2dsZS1icmVha3Bh
+ZC9nb29nbGUtYnJlYWtwYWQubWsgICAgfCAgNCArLS0KIDQgZmlsZXMgY2hhbmdlZCwgMTAgaW5z
+ZXJ0aW9ucygrKSwgNDIgZGVsZXRpb25zKC0pCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9n
+b29nbGUtYnJlYWtwYWQvMDAwMS1hZGQtY3N0ZGludC10by1taW5pZHVtcF9kZXNjcmlwdG9yLmgu
+cGF0Y2gKIHJlbmFtZSBwYWNrYWdlL2dvb2dsZS1icmVha3BhZC97MDAwMi1kb250LWluY2x1ZGUt
+c3RhYi5oLnBhdGNoID0+IDAwMDEtZG9udC1pbmNsdWRlLXN0YWIuaC5wYXRjaH0gKDk1JSkKCmRp
+ZmYgLS1naXQgYS9wYWNrYWdlL2dvb2dsZS1icmVha3BhZC8wMDAxLWFkZC1jc3RkaW50LXRvLW1p
+bmlkdW1wX2Rlc2NyaXB0b3IuaC5wYXRjaCBiL3BhY2thZ2UvZ29vZ2xlLWJyZWFrcGFkLzAwMDEt
+YWRkLWNzdGRpbnQtdG8tbWluaWR1bXBfZGVzY3JpcHRvci5oLnBhdGNoCmRlbGV0ZWQgZmlsZSBt
+b2RlIDEwMDY0NAppbmRleCBmMTNiZGRjM2JiLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvZ29v
+Z2xlLWJyZWFrcGFkLzAwMDEtYWRkLWNzdGRpbnQtdG8tbWluaWR1bXBfZGVzY3JpcHRvci5oLnBh
+dGNoCisrKyAvZGV2L251bGwKQEAgLTEsMzIgKzAsMCBAQAotRnJvbSBkZDdhNmIyOGU3NWU3NjVk
+NDVjZTdlY2FiMjEwNjBlODQ1ZGQ0MDg4IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTog
+QWRhbSBEdXNrZXR0IDxhZGFtLmR1c2tldHRAYW1hcnVsYXNvbHV0aW9ucy5jb20+Ci1EYXRlOiBG
+cmksIDEgRGVjIDIwMjMgMTA6MzQ6MjEgLTA3MDAKLVN1YmplY3Q6IFtQQVRDSF0gYWRkIGNzdGRp
+bnQgdG8gbWluaWR1bXBfZGVzY3JpcHRvci5oCi0KLUZpeGVzIGJ1aWxkcyBvbiBuZXdlciBzeXN0
+ZW1zIGFuZCByZXNvbHZlcyB0aGUgZm9sbG93aW5nIGVycm9yOgotCi3igJh1aW50cHRyX3TigJkg
+aXMgZGVmaW5lZCBpbiBoZWFkZXIg4oCYPGNzdGRpbnQ+4oCZOyBkaWQgeW91IGZvcmdldCB0bwot
+4oCYI2luY2x1ZGUgPGNzdGRpbnQ+4oCZPwotCi1VcHN0cmVhbTogTm90IHN1Ym1pdHRlZC4gRml4
+ZWQgaW4gbGF0ZXIgdmVyc2lvbnMuCi0KLVNpZ25lZC1vZmYtYnk6IEFkYW0gRHVza2V0dCA8YWRh
+bS5kdXNrZXR0QGFtYXJ1bGFzb2x1dGlvbnMuY29tPgotLS0tCi0gc3JjL2NsaWVudC9saW51eC9o
+YW5kbGVyL21pbmlkdW1wX2Rlc2NyaXB0b3IuaCB8IDEgKwotIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
+c2VydGlvbigrKQotCi1kaWZmIC0tZ2l0IGEvc3JjL2NsaWVudC9saW51eC9oYW5kbGVyL21pbmlk
+dW1wX2Rlc2NyaXB0b3IuaCBiL3NyYy9jbGllbnQvbGludXgvaGFuZGxlci9taW5pZHVtcF9kZXNj
+cmlwdG9yLmgKLWluZGV4IGM3ZTRmMmIuLjg1ZThjNGIgMTAwNjQ0Ci0tLS0gYS9zcmMvY2xpZW50
+L2xpbnV4L2hhbmRsZXIvbWluaWR1bXBfZGVzY3JpcHRvci5oCi0rKysgYi9zcmMvY2xpZW50L2xp
+bnV4L2hhbmRsZXIvbWluaWR1bXBfZGVzY3JpcHRvci5oCi1AQCAtMzAsNiArMzAsNyBAQAotICNp
+Zm5kZWYgQ0xJRU5UX0xJTlVYX0hBTkRMRVJfTUlOSURVTVBfREVTQ1JJUFRPUl9IXwotICNkZWZp
+bmUgQ0xJRU5UX0xJTlVYX0hBTkRMRVJfTUlOSURVTVBfREVTQ1JJUFRPUl9IXwotIAotKyNpbmNs
+dWRlIDxjc3RkaW50PgotICNpbmNsdWRlIDxhc3NlcnQuaD4KLSAjaW5jbHVkZSA8c3lzL3R5cGVz
+Lmg+Ci0gCi0tLSAKLTIuNDMuMAotCmRpZmYgLS1naXQgYS9wYWNrYWdlL2dvb2dsZS1icmVha3Bh
+ZC8wMDAyLWRvbnQtaW5jbHVkZS1zdGFiLmgucGF0Y2ggYi9wYWNrYWdlL2dvb2dsZS1icmVha3Bh
+ZC8wMDAxLWRvbnQtaW5jbHVkZS1zdGFiLmgucGF0Y2gKc2ltaWxhcml0eSBpbmRleCA5NSUKcmVu
+YW1lIGZyb20gcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvMDAwMi1kb250LWluY2x1ZGUtc3RhYi5o
+LnBhdGNoCnJlbmFtZSB0byBwYWNrYWdlL2dvb2dsZS1icmVha3BhZC8wMDAxLWRvbnQtaW5jbHVk
+ZS1zdGFiLmgucGF0Y2gKaW5kZXggMDgxN2YxOTI4Zi4uOGVmY2IyNTBjMiAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9nb29nbGUtYnJlYWtwYWQvMDAwMi1kb250LWluY2x1ZGUtc3RhYi5oLnBhdGNoCisr
+KyBiL3BhY2thZ2UvZ29vZ2xlLWJyZWFrcGFkLzAwMDEtZG9udC1pbmNsdWRlLXN0YWIuaC5wYXRj
+aApAQCAtMjMsMTEgKzIzLDExIEBAIFNpZ25lZC1vZmYtYnk6IEFkYW0gRHVza2V0dCA8YWRhbS5k
+dXNrZXR0QGFtYXJ1bGFzb2x1dGlvbnMuY29tPgogIDQgZmlsZXMgY2hhbmdlZCwgMjkgaW5zZXJ0
+aW9ucygrKSwgMSBkZWxldGlvbigtKQogCiBkaWZmIC0tZ2l0IGEvY29uZmlndXJlLmFjIGIvY29u
+ZmlndXJlLmFjCi1pbmRleCAyMGZiMDc1Li43NGFhZjkzIDEwMDY0NAoraW5kZXggYmZlZTM3Mi4u
+MmYwMGE4NyAxMDA2NDQKIC0tLSBhL2NvbmZpZ3VyZS5hYwogKysrIGIvY29uZmlndXJlLmFjCi1A
+QCAtNzIsNyArNzIsNyBAQCBBQ19BUkdfRU5BQkxFKG0zMiwKLSBBQ19IRUFERVJfU1REQworQEAg
+LTYxLDcgKzYxLDcgQEAgZmkKKyAKICBBQ19TWVNfTEFSR0VGSUxFCiAgQVhfUFRIUkVBRAogLUFD
+X0NIRUNLX0hFQURFUlMoW2Eub3V0Lmggc3lzL21tYW4uaCBzeXMvcmFuZG9tLmhdKQpAQCAtNDAs
+NyArNDAsNyBAQCBpbmRleCA0M2M0MDQwLi5kMDNjNjYwIDEwMDY0NAogCiAtLS0gYS9zcmMvY29t
+bW9uL3N0YWJzX3JlYWRlci5jYwogKysrIGIvc3JjL2NvbW1vbi9zdGFic19yZWFkZXIuY2MKLUBA
+IC0zNCw3ICszNCw5IEBACitAQCAtMzgsNyArMzgsOSBAQAogICNpbmNsdWRlICJjb21tb24vc3Rh
+YnNfcmVhZGVyLmgiCiAgCiAgI2luY2x1ZGUgPGFzc2VydC5oPgpAQCAtNTQsNyArNTQsNyBAQCBk
+aWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9zdGFic19yZWFkZXIuaCBiL3NyYy9jb21tb24vc3RhYnNf
+cmVhZGVyLmgKIGluZGV4IDFlNzczZjQuLjkxNTQ4NzIgMTAwNjQ0CiAtLS0gYS9zcmMvY29tbW9u
+L3N0YWJzX3JlYWRlci5oCiArKysgYi9zcmMvY29tbW9uL3N0YWJzX3JlYWRlci5oCi1AQCAtNTgs
+NiArNTgsMzAgQEAKK0BAIC01NCw2ICs1NCwzMCBAQAogICNlbGlmIGRlZmluZWQoSEFWRV9BX09V
+VF9IKQogICNpbmNsdWRlIDxhLm91dC5oPgogICNlbmRpZgpAQCAtODksNyArODksNyBAQCBkaWZm
+IC0tZ2l0IGEvc3JjL2NvbW1vbi9zdGFic19yZWFkZXJfdW5pdHRlc3QuY2MgYi9zcmMvY29tbW9u
+L3N0YWJzX3JlYWRlcl91bml0dAogaW5kZXggMjRmM2UxYS4uMWExNDhiZCAxMDA2NDQKIC0tLSBh
+L3NyYy9jb21tb24vc3RhYnNfcmVhZGVyX3VuaXR0ZXN0LmNjCiArKysgYi9zcmMvY29tbW9uL3N0
+YWJzX3JlYWRlcl91bml0dGVzdC5jYwotQEAgLTMzLDcgKzMzLDkgQEAKK0BAIC0zNiw3ICszNiw5
+IEBACiAgCiAgI2luY2x1ZGUgPGFzc2VydC5oPgogICNpbmNsdWRlIDxlcnJuby5oPgpkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvZ29vZ2xlLWJyZWFrcGFkLmhhc2ggYi9wYWNr
+YWdlL2dvb2dsZS1icmVha3BhZC9nb29nbGUtYnJlYWtwYWQuaGFzaAppbmRleCAwMzcxOTgxNmI1
+Li43ODg5NzhmMDhhIDEwMDY0NAotLS0gYS9wYWNrYWdlL2dvb2dsZS1icmVha3BhZC9nb29nbGUt
+YnJlYWtwYWQuaGFzaAorKysgYi9wYWNrYWdlL2dvb2dsZS1icmVha3BhZC9nb29nbGUtYnJlYWtw
+YWQuaGFzaApAQCAtMSwzICsxLDMgQEAKICMgTG9jYWxseSBjYWxjdWxhdGVkCi1zaGEyNTYgIDUy
+NzE2ZDE0MGJhNTI4ZDM2YjQwNTkxYWUyYzc0ODViMTgwMjNmNjYxMDQxNGJiYTAwNTdmMGNjMTNj
+YWYyNTYgIGdvb2dsZS1icmVha3BhZC1jODVlYjRhNTliNjE4ZjNiZWFhZDU0NDVjZWIxZjg2NWZm
+YThlZmRmLWJyMS50YXIuZ3oKLXNoYTI1NiAgOGQ1ZDEzMTEzNDJlZDU1YjQ4NmQ3NzhhNjc2M2Y1
+NGEyNjAwMjY5OGFjMGNiYWI2NDAyNmI5ODAzMzMwMGRmZCAgTElDRU5TRQorc2hhMjU2ICAyOWUx
+NDcwMTFiZjY1NzdkZjk1ZWUzYTUwYmY1ZmZkMTk0MTY0NWRkNDE0ZDU2OWJkNDA5YTkwMzViY2Ji
+N2Y3ICBnb29nbGUtYnJlYWtwYWQtZjQ5YzJmMWEyMDIzZGEwY2IwNTU4NzRmYmEwNTA1NjNkZmVh
+NTdkYi1icjEudGFyLmd6CitzaGEyNTYgIDY5YjNkODBjMTlhNDYwZTA5NzE2OTEwZDU0ZDFhZGE1
+ZDgwMDcxNmUyYjczNzUxYmViYWM0NDM1MjU5MGY2NDYgIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvZ29vZ2xlLWJyZWFrcGFkL2dvb2dsZS1icmVha3BhZC5tayBiL3BhY2thZ2UvZ29vZ2xl
+LWJyZWFrcGFkL2dvb2dsZS1icmVha3BhZC5tawppbmRleCAxNTRhNWVkMjBlLi45NWI1MzIzNDdl
+IDEwMDY0NAotLS0gYS9wYWNrYWdlL2dvb2dsZS1icmVha3BhZC9nb29nbGUtYnJlYWtwYWQubWsK
+KysrIGIvcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvZ29vZ2xlLWJyZWFrcGFkLm1rCkBAIC00LDEx
+ICs0LDExIEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1HT09HTEVfQlJFQUtQQURf
+VkVSU0lPTiA9IGM4NWViNGE1OWI2MThmM2JlYWFkNTQ0NWNlYjFmODY1ZmZhOGVmZGYKK0dPT0dM
+RV9CUkVBS1BBRF9WRVJTSU9OID0gZjQ5YzJmMWEyMDIzZGEwY2IwNTU4NzRmYmEwNTA1NjNkZmVh
+NTdkYgogR09PR0xFX0JSRUFLUEFEX1NJVEUgPSBodHRwczovL2Nocm9taXVtLmdvb2dsZXNvdXJj
+ZS5jb20vYnJlYWtwYWQvYnJlYWtwYWQKIEdPT0dMRV9CUkVBS1BBRF9TSVRFX01FVEhPRCA9IGdp
+dAogR09PR0xFX0JSRUFLUEFEX0lOU1RBTExfU1RBR0lORyA9IFlFUwotR09PR0xFX0JSRUFLUEFE
+X0xJQ0VOU0UgPSBCU0QtMy1DbGF1c2UsIE1JVAorR09PR0xFX0JSRUFLUEFEX0xJQ0VOU0UgPSBB
+cGFjaGUtMi4wLCBDbGFyaWZpZWQgQXJ0aXN0aWMgTGljZW5zZSwgZ2VkY3VybCwgQlNELTMtQ2xh
+dXNlLCBHUEwtMi4wLCBNSVQKIEdPT0dMRV9CUkVBS1BBRF9MSUNFTlNFX0ZJTEVTID0gTElDRU5T
+RQogR09PR0xFX0JSRUFLUEFEX0RFUEVOREVOQ0lFUyA9IGhvc3QtZ29vZ2xlLWJyZWFrcGFkIGxp
+bnV4LXN5c2NhbGwtc3VwcG9ydAogCi0tIAoyLjQzLjAKCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
+Zm8vYnVpbGRyb290Cg==
