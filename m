@@ -4,53 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7ACBC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 14:47:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22452C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 14:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E4CE60F20;
-	Sun,  3 Dec 2023 14:47:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E4CE60F20
+	by smtp3.osuosl.org (Postfix) with ESMTP id C47DB60F2E;
+	Sun,  3 Dec 2023 14:47:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C47DB60F2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ot970Fgw6_9D; Sun,  3 Dec 2023 14:47:16 +0000 (UTC)
+	with ESMTP id h56dwa2hgaoE; Sun,  3 Dec 2023 14:47:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D256A60B91;
-	Sun,  3 Dec 2023 14:47:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D256A60B91
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2492D60F22;
+	Sun,  3 Dec 2023 14:47:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2492D60F22
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F5811BF47D
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 14:47:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 358971BF47D
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 14:47:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 18C7D819F3
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 14:47:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18C7D819F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0E90281A27
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 14:47:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E90281A27
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EQXRxgNVmmpg for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 14:47:13 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C03E581973
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 14:47:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C03E581973
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9F99660003;
- Sun,  3 Dec 2023 14:47:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9nkS-006Lwy-2r;
- Sun, 03 Dec 2023 15:47:08 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231202214529.8858-1-fontaine.fabrice@gmail.com>
-Date: Sun, 03 Dec 2023 15:47:08 +0100
-In-Reply-To: <20231202214529.8858-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 2 Dec 2023 22:45:29 +0100")
-Message-ID: <87h6kz2vir.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+ with ESMTP id GGQurEUOizqO for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 14:47:28 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD660819F6
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 14:47:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD660819F6
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-33338c47134so1170998f8f.1
+ for <buildroot@buildroot.org>; Sun, 03 Dec 2023 06:47:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1701614845; x=1702219645;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=j9zJAzQ84O33ZUcvtt12dbZ5GjTBjNb/I6szzROmH14=;
+ b=C9OjL47aVxUodK70uUcVwdAfYGZVpjkuQ+8vg4/yx1jHmKUugKo5tQ3boPw1Zy77ft
+ 6WGAI1WZnW72QKR3RmyeGTp5Tjm0UbLv1cMOzb7j+u4aLXlGYM+MmC4iJjhosH8T3Nyp
+ eJAwFrQZ77lkDUSEOfFErNlcGM0FH1+xLimTV1lxyXW4bJYx4Nq2MmxFNutNHMyHazTZ
+ H5c8BFAXbWx2PL6f4p0zDqkApN+eZN6Qz5hZRVgfU9IGT5t9JpwUvj+hShGwiJTL4RPv
+ wB8s38eRgn7/bBFn3tWgt/i09B2+IG6PbA8xpPzgMr0H83FvIX24djE4EtWiKDQ0vjYn
+ /+sQ==
+X-Gm-Message-State: AOJu0Yy3ZhmPp53KXQaZD/LLf0zWtzmshTzLl+bnzyVQctbLSiq8T/eZ
+ syd4BiN/9rWrcYFdMDTP3sIrWbCZY00=
+X-Google-Smtp-Source: AGHT+IHLns3lC32I6benBLbpJ6Hlsz32XZ6UGw/rGY55yDgM3FVE69qeVFxMLBOT20XypLsgalpZZQ==
+X-Received: by 2002:a1c:7c08:0:b0:40b:5e21:ec48 with SMTP id
+ x8-20020a1c7c08000000b0040b5e21ec48mr580589wmc.122.1701614844840; 
+ Sun, 03 Dec 2023 06:47:24 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ ay31-20020a05600c1e1f00b004080f0376a0sm11842172wmb.42.2023.12.03.06.47.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 03 Dec 2023 06:47:24 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  3 Dec 2023 15:47:22 +0100
+Message-ID: <20231203144722.1942484-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/putty: disable gssapi
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1701614845; x=1702219645; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=j9zJAzQ84O33ZUcvtt12dbZ5GjTBjNb/I6szzROmH14=;
+ b=FaKWLNJnTZST7ymn4SuYXwyWvBSz9BHofRUhxgxKpqqKLTNCp1ef6k9iln4TKXcPiR
+ 7B3Ti9hrO8ZRAalqYSwldtPSv+S7wRxDaJGAm96f4pOix6lTW6Zr1R8Y9kJLHSx/oDa9
+ d1jhVy47046qE8rqveXslJSaPUdRiVhTELWJC3hxBuHLRK1nVrX+c/IEKpRlCCb6dYKU
+ 3yEK82gSGhh7TopPM9i8tBpKQnEpH+WZ24W7Tx22UFNgHYi42I64fdFicxOVlHsIuLuV
+ gd5c/iIdb7536M2h2APjq6rlCNtiXIDg+0fw9lWM6WgUcyuuWvZvW7VOhi9dW6LJESX/
+ Watw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=FaKWLNJn
+Subject: [Buildroot] [PATCH 1/1] package/xenomai: fix build with gcc >= 12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,31 +93,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Dahl <post@lespocky.de>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Fix the following build failure with gcc >= 12:
 
- > PUTTY_GSSAPI is enabled by default resulting in the following build
- > failure since bump to version 0.78 in commit
- > 5673ea3ce4d4dd721bb17fc8d5b1283f5c1080b4:
+task.c: In function 't_start':
+task.c:398:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
+  398 |         return ret;
+      |                ^~~
+task.c:364:13: note: 'ret' was declared here
+  364 |         int ret;
+      |             ^~~
+task.c: In function 't_resume':
+task.c:444:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
+  444 |         return ret;
+      |                ^~~
+task.c:428:13: note: 'ret' was declared here
+  428 |         int ret;
+      |             ^~~
 
- >  /home/fabrice/buildroot/output/build/putty-0.79/unix/gss.c:133:10: fatal error: gssapi/gssapi.h: No such file or directory
- >   133 | #include <gssapi/gssapi.h>
- >       |          ^~~~~~~~~~~~~~~~~
+Fixes:
+ - http://autobuild.buildroot.org/results/bc1b40de22e563b704ad7f20b6bf4d1f73a6ed8a
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/d6d06b5aa0df070c3880399e044fb3cd3a830aec
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ib-psos-task.c-fix-build-with-gcc-12.patch | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/xenomai/3.0.10/0004-lib-psos-task.c-fix-build-with-gcc-12.patch
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
+diff --git a/package/xenomai/3.0.10/0004-lib-psos-task.c-fix-build-with-gcc-12.patch b/package/xenomai/3.0.10/0004-lib-psos-task.c-fix-build-with-gcc-12.patch
+new file mode 100644
+index 0000000000..52200dcbcb
+--- /dev/null
++++ b/package/xenomai/3.0.10/0004-lib-psos-task.c-fix-build-with-gcc-12.patch
+@@ -0,0 +1,55 @@
++From 6c6da9e6d75ccfaa83c1efe14211f080c14181c6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 3 Dec 2023 15:28:50 +0100
++Subject: [PATCH] lib/psos/task.c: fix build with gcc >= 12
++
++Fix the following build failure with gcc >= 12:
++
++task.c: In function 't_start':
++task.c:398:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
++  398 |         return ret;
++      |                ^~~
++task.c:364:13: note: 'ret' was declared here
++  364 |         int ret;
++      |             ^~~
++task.c: In function 't_resume':
++task.c:444:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
++  444 |         return ret;
++      |                ^~~
++task.c:428:13: note: 'ret' was declared here
++  428 |         int ret;
++      |             ^~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/bc1b40de22e563b704ad7f20b6bf4d1f73a6ed8a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/psos/task.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lib/psos/task.c b/lib/psos/task.c
++index f678be61d..27bcc28a9 100644
++--- a/lib/psos/task.c
+++++ b/lib/psos/task.c
++@@ -362,7 +362,7 @@ u_long t_start(u_long tid,
++ {
++ 	struct psos_task *task;
++ 	struct service svc;
++-	int ret;
+++	int ret = SUCCESS;
++ 
++ 	CANCEL_DEFER(svc);
++ 
++@@ -426,7 +426,7 @@ u_long t_resume(u_long tid)
++ {
++ 	struct psos_task *task;
++ 	struct service svc;
++-	int ret;
+++	int ret = SUCCESS;
++ 
++ 	CANCEL_DEFER(svc);
++ 
++-- 
++2.42.0
++
 -- 
-Bye, Peter Korsgaard
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
