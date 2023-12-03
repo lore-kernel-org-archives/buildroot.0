@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC408C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 19:21:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C86C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 19:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9547B40438;
-	Sun,  3 Dec 2023 19:21:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9547B40438
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16E4440533;
+	Sun,  3 Dec 2023 19:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16E4440533
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5odHnhGVV_MT; Sun,  3 Dec 2023 19:21:28 +0000 (UTC)
+	with ESMTP id 5HfpZC_IMmg8; Sun,  3 Dec 2023 19:21:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE8F0404B9;
-	Sun,  3 Dec 2023 19:21:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE8F0404B9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B6EF1BF32C
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:21:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B71640972;
+	Sun,  3 Dec 2023 19:21:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B71640972
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 01CB81BF32C
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3502781467
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:21:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3502781467
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC331405B1
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:21:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC331405B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ffaSp2WSbiqf for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 19:21:21 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 53CA981461
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 19:21:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53CA981461
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AA64C1C0003;
- Sun,  3 Dec 2023 19:21:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9s1m-009YZY-39;
- Sun, 03 Dec 2023 20:21:18 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HxdQ0oHjlRW5 for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 19:21:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF120404B9
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 19:21:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF120404B9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9E296878A4; Sun,  3 Dec 2023 19:21:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@smile.fr>
-References: <20231111113731.859747-1-romain.naour@smile.fr>
-Date: Sun, 03 Dec 2023 20:21:18 +0100
-In-Reply-To: <20231111113731.859747-1-romain.naour@smile.fr> (Romain Naour's
- message of "Sat, 11 Nov 2023 12:37:31 +0100")
-Message-ID: <87plznw0r5.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: print error
- log if the runtime test fail
+To: buildroot@buildroot.org
+Date: Sun, 3 Dec 2023 20:20:53 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 8e871ac18bcedb268d11059a8e5be40da442295f
+X-Git-Newrev: 3503d48897bd841f26e2a20bf750dc8174d0fa85
+X-Patchwork-Hint: ignore
+Message-Id: <20231203192131.9E296878A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/misc/gitlab-ci.yml.in:
+ print error log if the runtime test fail
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +57,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3503d48897bd841f26e2a20bf750dc8174d0fa85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > When an error occurs, the gitlab-ci job log doesn't contain any useful
- > information than the name of the failing test:
+When an error occurs, the gitlab-ci job log doesn't contain any useful
+information than the name of the failing test:
 
- >   FAIL: test_run (tests.package.test_python_paho_mqtt.TestPythonPahoMQTT)
+  FAIL: test_run (tests.package.test_python_paho_mqtt.TestPythonPahoMQTT)
 
- > In order to encourage contributors to investigate issues reported by
- > gitlab-ci, we want to print the last lines of the log file (build or
- > runtime).
+In order to encourage contributors to investigate issues reported by
+gitlab-ci, we want to print the last lines of the log file (build or
+runtime).
 
- > Unfortunately, gitlab-ci job log completely strips lines ending with
- > CRCRLF [1][2]. We have to take a look at the gitlab-ci raw log to see
- > the complete log [3].
+Unfortunately, gitlab-ci job log completely strips lines ending with
+CRCRLF [1][2]. We have to take a look at the gitlab-ci raw log to see
+the complete log [3].
 
- > To workaround this issue, remove crlf from qemu serial stdio log
- > while printing in the gitlab-ci job log (we don't want to change
- > the log file generated by support/testing/run-tests and saved as
- > artefacts).
+To workaround this issue, remove crlf from qemu serial stdio log
+while printing in the gitlab-ci job log (we don't want to change
+the log file generated by support/testing/run-tests and saved as
+artefacts).
 
- > [1] https://gitlab.com/gitlab-org/gitlab/-/issues/218771
- > [2] https://gitlab.com/kubu93/buildroot/-/jobs/5492937691
- > [3] https://gitlab.com/kubu93/buildroot/-/jobs/5492937691/raw
+[1] https://gitlab.com/gitlab-org/gitlab/-/issues/218771
+[2] https://gitlab.com/kubu93/buildroot/-/jobs/5492937691
+[3] https://gitlab.com/kubu93/buildroot/-/jobs/5492937691/raw
 
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/misc/gitlab-ci.yml.in | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index 4d9acbc3d3..db206432aa 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -103,7 +103,16 @@ before_script:
+     script:
+         - TEST_CASE_NAME=${CI_JOB_NAME}
+         - echo "Starting runtime test ${TEST_CASE_NAME}"
+-        - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
++        - |
++            ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME} || {
++                echo 'Failed runtime test last output'
++                if [ -f test-output/*-run.log ]; then
++                    tail -200 test-output/*-run.log | sed 's/\r\r$//'
++                else
++                    tail -200 test-output/*-build.log
++                fi
++                exit 1
++            }
+     retry:
+         max: 2
+         when:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
