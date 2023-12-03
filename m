@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DA84C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 22:22:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2031EC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 22:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A70C400EC;
-	Sun,  3 Dec 2023 22:22:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A70C400EC
+	by smtp2.osuosl.org (Postfix) with ESMTP id B375F400EC;
+	Sun,  3 Dec 2023 22:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B375F400EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VC5vgX5SMHP6; Sun,  3 Dec 2023 22:22:52 +0000 (UTC)
+	with ESMTP id PUzFfYj5b6ba; Sun,  3 Dec 2023 22:23:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 308E7400F9;
-	Sun,  3 Dec 2023 22:22:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 308E7400F9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 58F491BF3DA
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:22:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9B4C400F9;
+	Sun,  3 Dec 2023 22:23:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9B4C400F9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 36BD81BF3DA
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:23:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30F16400F9
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:22:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30F16400F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10141404B6
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10141404B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iEHFyKiBu4GY for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 22:22:49 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A9C28400EC
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 22:22:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9C28400EC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CFF1D40002;
- Sun,  3 Dec 2023 22:22:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9urO-00AEJZ-0o;
- Sun, 03 Dec 2023 23:22:46 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6TDpeYugcvJH for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 22:23:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E9A540499
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 22:23:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E9A540499
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 29D68878FC; Sun,  3 Dec 2023 22:23:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231203184400.499648-1-fontaine.fabrice@gmail.com>
-Date: Sun, 03 Dec 2023 23:22:46 +0100
-In-Reply-To: <20231203184400.499648-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Dec 2023 19:44:00 +0100")
-Message-ID: <87edg3uds9.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
- version 10.11.6
+To: buildroot@buildroot.org
+Date: Sun, 3 Dec 2023 22:44:27 +0100
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: b0734aa57e58bba8c73612b5fbf158b89d22eaaa
+X-Git-Newrev: c72ad6fefae854d8ac7fbcd010bc4262a1c36b1d
+X-Patchwork-Hint: ignore
+Message-Id: <20231203222319.29D68878FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/speechd: fix NLS
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c72ad6fefae854d8ac7fbcd010bc4262a1c36b1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > This bump will fix the following build failure raised since bump of fmt
- > to version 10.1.0 in commit 619b5585d92c8f701cd92e0e26c0883a753125ad
- > thanks to
- > https://github.com/MariaDB/server/commit/f4cec369a392c8a6056207012992ad4a5639965a:
+Fix the following NLS build failure raised since the addition of the
+package in commit 9f4f8c5f8993c6d7c2ef730ac211ef84ac9ae26d:
 
- > -- Performing Test HAVE_SYSTEM_LIBFMT
- > -- Performing Test HAVE_SYSTEM_LIBFMT - Failed
+/home/buildroot/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/12.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../../src/common/.libs/libcommon.a(libcommon_la-i18n.o): undefined reference to symbol 'libintl_bindtextdomain'
 
- > [...]
+Fixes:
+ - http://autobuild.buildroot.org/results/8ab13cf474d732c95a1da65592d950b24b3d474b
 
- > -- Downloading...
- >    dst='/home/buildroot/autobuild/instance-3/output-1/build/mariadb-10.11.4/extra/libfmt/src/8.0.1.zip'
- >    timeout='none'
- >    inactivity timeout='none'
- > -- Using src='https://github.com/fmtlib/fmt/archive/refs/tags/8.0.1.zip'
- > CMake Error at libfmt-stamp/download-libfmt.cmake:170 (message):
- >   Each download failed!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f6a7050d7191b9a534d1d2789ceb72d69f25da83)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/speechd/speechd.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
- >     error: downloading 'https://github.com/fmtlib/fmt/archive/refs/tags/8.0.1.zip' failed
- >           status_code: 1
- >           status_string: "Unsupported protocol"
- >           log:
- >           --- LOG BEGIN ---
- >           Protocol "https" not supported or disabled in libcurl
-
- > This bump will also fix CVE-2023-22084
-
- > https://mariadb.com/kb/en/mariadb-10-11-5-release-notes/
- > https://mariadb.com/kb/en/mariadb-10-11-6-release-notes/
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/9cb577195aa939289102116df5a2eac03f0d5017
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2023.02.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
+index 5944ea3a28..872b18ad15 100644
+--- a/package/speechd/speechd.mk
++++ b/package/speechd/speechd.mk
+@@ -12,8 +12,11 @@ SPEECHD_INSTALL_STAGING = YES
+ # speechd source code is released without configure script
+ SPEECHD_AUTORECONF = YES
+ SPEECHD_GETTEXTIZE = YES
+-SPEECHD_DEPENDENCIES = host-pkgconf dotconf libglib2 libsndfile
+-SPEECHD_CONF_ENV = ac_cv_prog_HELP2MAN=""
++SPEECHD_DEPENDENCIES = \
++	host-pkgconf dotconf libglib2 libsndfile $(TARGET_NLS_DEPENDENCIES)
++SPEECHD_CONF_ENV = \
++	ac_cv_prog_HELP2MAN="" \
++	LIBS=$(TARGET_NLS_LIBS)
+ SPEECHD_CONF_OPTS = \
+ 	--disable-python \
+ 	--without-espeak \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
