@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BDDCC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 21:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91A6C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 21:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4BA8E400F9;
-	Sun,  3 Dec 2023 21:35:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BA8E400F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 914E4400F9;
+	Sun,  3 Dec 2023 21:36:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 914E4400F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cpJuMBPTtEr0; Sun,  3 Dec 2023 21:35:28 +0000 (UTC)
+	with ESMTP id TvUeVCKsDaB9; Sun,  3 Dec 2023 21:36:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CFC14047D;
-	Sun,  3 Dec 2023 21:35:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CFC14047D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1749E1BF3EE
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:35:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3B334047D;
+	Sun,  3 Dec 2023 21:36:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3B334047D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7618E1BF3EE
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC8BA607BC
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:35:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC8BA607BC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E8AF40932
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:36:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E8AF40932
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LDMd-ce1sL1K for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 21:35:25 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F379F60783
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 21:35:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F379F60783
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E4DE940002;
- Sun,  3 Dec 2023 21:35:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tFTZQ09FX5aO for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 21:36:24 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62B384092D
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 21:36:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62B384092D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 98753240005;
+ Sun,  3 Dec 2023 21:36:21 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9u7V-009hg7-0k;
- Sun, 03 Dec 2023 22:35:21 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r9u8S-009hjQ-3B;
+ Sun, 03 Dec 2023 22:36:21 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231203142011.1407103-1-fontaine.fabrice@gmail.com>
-Date: Sun, 03 Dec 2023 22:35:21 +0100
-In-Reply-To: <20231203142011.1407103-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Dec 2023 15:20:11 +0100")
-Message-ID: <87zfyrufza.fsf@48ers.dk>
+References: <20231203084445.471234-1-fontaine.fabrice@gmail.com>
+Date: Sun, 03 Dec 2023 22:36:20 +0100
+In-Reply-To: <20231203084445.471234-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 3 Dec 2023 09:44:45 +0100")
+Message-ID: <87v89fufxn.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libde265: security bump to
- version 1.0.14
+Subject: Re: [Buildroot] [PATCH 1/1] package/libmemcached: fix build with
+ gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -71,16 +71,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix CVE-2023-43887: Libde265 v1.0.12 was discovered to contain multiple
- > buffer overflows via the num_tile_columns and num_tile_row parameters in
- > the function pic_parameter_set::dump.
+ > Fix the following build failure with gcc 4.8 raised since bump to
+ > version 1.1.4 in commit 7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
 
- > Fix CVE-2023-47471: Buffer Overflow vulnerability in strukturag libde265
- > v1.10.12 allows a local attacker to cause a denial of service via the
- > slice_segment_header function in the slice.cc component.
+ > /home/buildroot/autobuild/run/instance-0/output-1/build/libmemcached-1.1.4/src/libmemcachedprotocol/ascii_handler.c: In function 'ascii_get_response_handler':
+ > /home/buildroot/autobuild/run/instance-0/output-1/build/libmemcached-1.1.4/src/libmemcachedprotocol/ascii_handler.c:249:3: error: 'for' loop initial declarations are only allowed in C99 mode
+ >    for (int x = 0; x < keylen; ++x) {
+ >    ^
 
- > https://github.com/strukturag/libde265/releases/tag/v1.0.14
- > https://github.com/strukturag/libde265/releases/tag/v1.0.13
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/202aeec4dda822ac341d8882f84f968a303697c3
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
