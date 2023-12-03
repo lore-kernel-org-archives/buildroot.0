@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D278C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:20:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4EA6C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27A0D4095D;
-	Sun,  3 Dec 2023 16:20:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27A0D4095D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4FCB140930;
+	Sun,  3 Dec 2023 16:21:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FCB140930
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H91O98Ppijhv; Sun,  3 Dec 2023 16:20:47 +0000 (UTC)
+	with ESMTP id Z4vfAmFeClWK; Sun,  3 Dec 2023 16:21:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DFBB40904;
-	Sun,  3 Dec 2023 16:20:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DFBB40904
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C9E940904;
+	Sun,  3 Dec 2023 16:21:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C9E940904
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D8ADF1BF471
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:20:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 236501BF471
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:21:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE14940904
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:20:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE14940904
+ by smtp2.osuosl.org (Postfix) with ESMTP id F06C440904
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F06C440904
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6hZFPSeBZtDD for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 16:20:43 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 98FC84095D
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:20:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98FC84095D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D3ABC60005;
- Sun,  3 Dec 2023 16:20:40 +0000 (UTC)
+ with ESMTP id 4L9ODl7nG4bI for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 16:21:15 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EDD7640900
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDD7640900
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E231920004;
+ Sun,  3 Dec 2023 16:21:11 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9pCy-008hgL-0j;
- Sun, 03 Dec 2023 17:20:40 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r9pDT-008lkY-0W;
+ Sun, 03 Dec 2023 17:21:11 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231203080214.394961-1-fontaine.fabrice@gmail.com>
-Date: Sun, 03 Dec 2023 17:20:40 +0100
-In-Reply-To: <20231203080214.394961-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Dec 2023 09:02:14 +0100")
-Message-ID: <874jgz2r6v.fsf@48ers.dk>
+To: Sergey Matyukevich <geomatsi@gmail.com>
+References: <20231202123611.2327790-1-geomatsi@gmail.com>
+Date: Sun, 03 Dec 2023 17:21:11 +0100
+In-Reply-To: <20231202123611.2327790-1-geomatsi@gmail.com> (Sergey
+ Matyukevich's message of "Sat, 2 Dec 2023 15:36:06 +0300")
+Message-ID: <87zfyr1clk.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmemcached: link with
- -latomic when needed
+Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: remove Synopsys email
+ address for S.Matyukevich
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,19 +69,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
- > Fix the following build failure raised since bump to version 1.1.4 in
- > commit 7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
-
- > /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/11.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
- > CMakeFiles/aslap.dir/ms_conn.c.o: undefined reference to symbol
- > '__atomic_fetch_add_4@@LIBATOMIC_1.0'
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/c8e4e1f9609d1339fe070afe440c63660892600e
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > I am no longer work at Synopsys, so remove this email address.
+ > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
 Committed, thanks.
 
