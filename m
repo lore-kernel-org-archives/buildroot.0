@@ -4,54 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C29EC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:27:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 055B0C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C99DE41527;
-	Sun,  3 Dec 2023 16:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C99DE41527
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94AC44067F;
+	Sun,  3 Dec 2023 16:38:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94AC44067F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bc_NIPghIcRi; Sun,  3 Dec 2023 16:27:53 +0000 (UTC)
+	with ESMTP id EhBs6Hkyu9sY; Sun,  3 Dec 2023 16:38:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30F6A415D0;
-	Sun,  3 Dec 2023 16:27:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30F6A415D0
+	by smtp4.osuosl.org (Postfix) with ESMTP id D446240629;
+	Sun,  3 Dec 2023 16:38:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D446240629
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8F93B1BF471
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:27:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 859C61BF471
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7554340900
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7554340900
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C39340900
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:38:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C39340900
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cK0q8Bprxi8d for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 16:27:26 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2F1314013D
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:27:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F1314013D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3219220004;
- Sun,  3 Dec 2023 16:27:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9pJT-00954U-1I;
- Sun, 03 Dec 2023 17:27:23 +0100
+ with ESMTP id xS2Km704BL9r for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 16:38:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4006740467
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:38:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4006740467
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 28EF18777D; Sun,  3 Dec 2023 16:38:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231203145419.1946230-1-fontaine.fabrice@gmail.com>
-Date: Sun, 03 Dec 2023 17:27:23 +0100
-In-Reply-To: <20231203145419.1946230-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Dec 2023 15:54:18 +0100")
-Message-ID: <87il5f1cb8.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/xenomai: fix build with gcc >= 12
+To: buildroot@buildroot.org
+Date: Sun, 3 Dec 2023 17:26:37 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5eb79ff3b951fb756e17d8a06b5608b179ddbd60
+X-Git-Newrev: f6a7050d7191b9a534d1d2789ceb72d69f25da83
+X-Patchwork-Hint: ignore
+Message-Id: <20231203163805.28EF18777D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/speechd: fix NLS build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f6a7050d7191b9a534d1d2789ceb72d69f25da83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix the following build failure with gcc >= 12:
- > task.c: In function 't_start':
- > task.c:398:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
- >   398 |         return ret;
- >       |                ^~~
- > task.c:364:13: note: 'ret' was declared here
- >   364 |         int ret;
- >       |             ^~~
- > task.c: In function 't_resume':
- > task.c:444:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
- >   444 |         return ret;
- >       |                ^~~
- > task.c:428:13: note: 'ret' was declared here
- >   428 |         int ret;
- >       |             ^~~
+Fix the following NLS build failure raised since the addition of the
+package in commit 9f4f8c5f8993c6d7c2ef730ac211ef84ac9ae26d:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/bc1b40de22e563b704ad7f20b6bf4d1f73a6ed8a
+/home/buildroot/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/12.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../../src/common/.libs/libcommon.a(libcommon_la-i18n.o): undefined reference to symbol 'libintl_bindtextdomain'
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Add missing Upstream tag to patch
+Fixes:
+ - http://autobuild.buildroot.org/results/8ab13cf474d732c95a1da65592d950b24b3d474b
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/speechd/speechd.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
+index c68d466116..7d50f88c1d 100644
+--- a/package/speechd/speechd.mk
++++ b/package/speechd/speechd.mk
+@@ -12,8 +12,11 @@ SPEECHD_INSTALL_STAGING = YES
+ # speechd source code is released without configure script
+ SPEECHD_AUTORECONF = YES
+ SPEECHD_AUTOPOINT = YES
+-SPEECHD_DEPENDENCIES = host-pkgconf dotconf libglib2 libsndfile
+-SPEECHD_CONF_ENV = ac_cv_prog_HELP2MAN=""
++SPEECHD_DEPENDENCIES = \
++	host-pkgconf dotconf libglib2 libsndfile $(TARGET_NLS_DEPENDENCIES)
++SPEECHD_CONF_ENV = \
++	ac_cv_prog_HELP2MAN="" \
++	LIBS=$(TARGET_NLS_LIBS)
+ SPEECHD_CONF_OPTS = \
+ 	--disable-python \
+ 	--without-espeak \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
