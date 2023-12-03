@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3851AC10F04
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B206EC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE7354149F;
-	Sun,  3 Dec 2023 18:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE7354149F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 498FD415EA;
+	Sun,  3 Dec 2023 18:11:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 498FD415EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7VmwsEpg_qPx; Sun,  3 Dec 2023 18:11:09 +0000 (UTC)
+	with ESMTP id VMN5QAWyQzWf; Sun,  3 Dec 2023 18:11:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23BF541506;
-	Sun,  3 Dec 2023 18:11:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23BF541506
+	by smtp4.osuosl.org (Postfix) with ESMTP id 996994155F;
+	Sun,  3 Dec 2023 18:11:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 996994155F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 68CC01BF8C7
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:10:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6C7AE1BF408
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 409CA40438
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:10:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 409CA40438
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43E0240438
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:11:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43E0240438
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L5ATxLqv0xo9 for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 18:10:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F558400D8
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:10:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F558400D8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 18F288781E; Sun,  3 Dec 2023 18:10:53 +0000 (UTC)
+ with ESMTP id nS52vEsvyIHD for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 18:11:49 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B4BB2400D8
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:11:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4BB2400D8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ED55C1BF206;
+ Sun,  3 Dec 2023 18:11:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r9qwU-009BLq-15;
+ Sun, 03 Dec 2023 19:11:46 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 19:02:54 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a9d03feed642a860c11122a0b0ab32365201fc40
-X-Git-Newrev: 302199957705ae9b63741ce8a571b706bcc577e2
-X-Patchwork-Hint: ignore
-Message-Id: <20231203181053.18F288781E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/linux-firmware: add
- RTL8851/RTL8852 firmware
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20231203174204.6577-1-fontaine.fabrice@gmail.com>
+Date: Sun, 03 Dec 2023 19:11:46 +0100
+In-Reply-To: <20231203174204.6577-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 3 Dec 2023 18:42:04 +0100")
+Message-ID: <87o7f7xijh.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/libmemcached: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +62,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9190060361621830599=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9190060361621830599==
-Content-Type: text/plain
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=302199957705ae9b63741ce8a571b706bcc577e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+ > Fix the following static build failure raised since bump to version
+ > 1.1.4 in commit 7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
 
-Add firmware files for RTL8851 and RTL8852 cards used by the rtlbt driver.
+ > CMake Error at /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/src/bin/cmake_install.cmake:60 (file):
+ >   file RPATH_CHANGE could not write new RPATH:
 
-Signed-off-by: Jan Čermák <sairon@sairon.cz>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-firmware/linux-firmware.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ >     $ORIGIN/../lib
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index c2cf0fec19..96905dd909 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -90,7 +90,12 @@ LINUX_FIRMWARE_FILES += \
- 	rtl_bt/rtl8821c_config.bin rtl_bt/rtl8821c_fw.bin \
- 	rtl_bt/rtl8822b_config.bin rtl_bt/rtl8822b_fw.bin \
- 	rtl_bt/rtl8822cs_config.bin rtl_bt/rtl8822cs_fw.bin \
--	rtl_bt/rtl8822cu_config.bin rtl_bt/rtl8822cu_fw.bin
-+	rtl_bt/rtl8822cu_config.bin rtl_bt/rtl8822cu_fw.bin \
-+	rtl_bt/rtl8851bu_fw.bin rtl_bt/rtl8851bu_config.bin \
-+	rtl_bt/rtl8852au_fw.bin rtl_bt/rtl8852au_config.bin \
-+	rtl_bt/rtl8852bu_fw.bin rtl_bt/rtl8852bu_config.bin \
-+	rtl_bt/rtl8852cu_fw.bin rtl_bt/rtl8852cu_config.bin \
-+	rtl_bt/rtl8852cu_fw_v2.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
- endif
- 
+ >   to the file:
 
---===============9190060361621830599==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ >     /home/autobuild/autobuild/instance-13/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/bin/memcapable
 
+ >   No valid ELF RPATH or RUNPATH entry exists in the file;
+ > Call Stack (most recent call first):
+ >   /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/src/cmake_install.cmake:52 (include)
+ >   /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/cmake_install.cmake:52 (include)
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/778ff517d465896f54a3cd5316a66c54f66fd4cb
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9190060361621830599==--
