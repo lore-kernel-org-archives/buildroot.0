@@ -4,84 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5F7EC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 17:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF85CC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F3C94154E;
-	Sun,  3 Dec 2023 17:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F3C94154E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 287674148F;
+	Sun,  3 Dec 2023 18:07:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 287674148F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3wD38OrHbixt; Sun,  3 Dec 2023 17:42:13 +0000 (UTC)
+	with ESMTP id d0GGQHZqr9lK; Sun,  3 Dec 2023 18:07:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D0E2410DF;
-	Sun,  3 Dec 2023 17:42:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D0E2410DF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C5C440994;
+	Sun,  3 Dec 2023 18:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C5C440994
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C4411BF580
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:42:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D2BD1BF408
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:06:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D5854047D
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:42:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D5854047D
+ by smtp2.osuosl.org (Postfix) with ESMTP id E925840467
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:06:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E925840467
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yu7-NAQIIBVG for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 17:42:10 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ABDA440467
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 17:42:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABDA440467
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40c09dfd82aso5905655e9.0
- for <buildroot@buildroot.org>; Sun, 03 Dec 2023 09:42:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701625327; x=1702230127;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=clSc0X9LjV4KeQ6r4CdL1kHx0nJ1k67L3sk/p/qGSdE=;
- b=KnB159mzroASaC5ZmBxrk1Trv+CUJ8vW+7XquAljZ1y1VPo8oz5jsCMc3TEq5kB6xh
- TVsYxeqYz4dwfZ36SpjIpz16cgGtUPpu+YlRJeBzn9K01Jzzno6eQ+VPv6bV+/9mpUjd
- TOXj9FCYS4bDthPeFdyvXwigtJE/MAZgc7ecnjd6EVm+LhK498S2ZSzIPAk381VNv5ae
- UuQ4nC1DxRdoNWr6GDwz3xkIB0oRXcyj6N8D3RgLY56F1VI8TzgZ37zxTxarPcE6SOBS
- 98xKvFcK6PqihsIlWAqtyIGv0sE0FwuhtAX+/EexvKiLK89+Q/T5gbTWDf4J5NFKl/UW
- q1xA==
-X-Gm-Message-State: AOJu0YxYXWAEyHs7zPyc8cKO2tIQyMDk9QfWgp1RcR5rJGPh2uSY9SDX
- NtFE4YVLpLgg9niM6P9b13dq0hzMgXI=
-X-Google-Smtp-Source: AGHT+IFRRQ7A8pIleoIDvLZvRsVbOnQXkwDsVrjlHzQmZBDBdn/ERpWk7WoqTw8PJRJcQyYLmzFSOA==
-X-Received: by 2002:a05:600c:8607:b0:40b:5e59:ccd3 with SMTP id
- ha7-20020a05600c860700b0040b5e59ccd3mr1763147wmb.180.1701625326474; 
- Sun, 03 Dec 2023 09:42:06 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- fm24-20020a05600c0c1800b0040b3e26872dsm16303098wmb.8.2023.12.03.09.42.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Dec 2023 09:42:06 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  3 Dec 2023 18:42:04 +0100
-Message-ID: <20231203174204.6577-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.42.0
+ with ESMTP id ykioLrq7VEOS for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 18:06:56 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 55CC440438
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:06:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55CC440438
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 286841BF203;
+ Sun,  3 Dec 2023 18:06:53 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r9qrk-009Aqv-0i;
+ Sun, 03 Dec 2023 19:06:52 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Jan =?utf-8?B?xIxlcm3DoWs=?= <sairon@sairon.cz>
+References: <20231107131627.424088-1-sairon@sairon.cz>
+Date: Sun, 03 Dec 2023 19:06:52 +0100
+In-Reply-To: <20231107131627.424088-1-sairon@sairon.cz> ("Jan
+ =?utf-8?B?xIxlcm3DoWsiJ3M=?=
+ message of "Tue, 7 Nov 2023 14:16:26 +0100")
+Message-ID: <87sf4jxirn.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701625327; x=1702230127; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=clSc0X9LjV4KeQ6r4CdL1kHx0nJ1k67L3sk/p/qGSdE=;
- b=e7NrWcRbfAoPuwSiy2Il7sl4WN31127ZknkQYdVYZ8p1Af6RUO0Bo02lJdwz+CxdQR
- /1Gmrbb9K5iHKqjwa9mkX3W2paGyCP2xdxCGAibo0sFPNQ8Ukcjzk0IN+Veh6fFTqFZ8
- 5uGtCXb40eXdAbwdqCkv3n6M8CE83A6HEbUQL8fePL0v6RD7HrfIHypPF86XMJ31lNRO
- i2FYCZ8LLd9wuYAbrO+kIlgYHvLR7xPF7ORDOxN4zch1aS3U5JDsi+CSSF9D5GpUUBYB
- fLhPtQPv9xSFmsI5G3B4S1JxbxgxiWAA/RskGRuzPb9Uve01i2Lvt1ig6pHN42NceMl/
- /E/Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=e7NrWcRb
-Subject: [Buildroot] [PATCH 1/1] package/libmemcached: fix static build
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2] package/linux-firmware: add
+ RTL8851/RTL8852 firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,55 +64,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E.
+ MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following static build failure raised since bump to version
-1.1.4 in commit 7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
-
-CMake Error at /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/src/bin/cmake_install.cmake:60 (file):
-  file RPATH_CHANGE could not write new RPATH:
-
-    $ORIGIN/../lib
-
-  to the file:
-
-    /home/autobuild/autobuild/instance-13/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/bin/memcapable
-
-  No valid ELF RPATH or RUNPATH entry exists in the file;
-Call Stack (most recent call first):
-  /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/src/cmake_install.cmake:52 (include)
-  /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/cmake_install.cmake:52 (include)
-
-Fixes:
- - http://autobuild.buildroot.org/results/778ff517d465896f54a3cd5316a66c54f66fd4cb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmemcached/libmemcached.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-index 63df8f5c20..b72f127a1d 100644
---- a/package/libmemcached/libmemcached.mk
-+++ b/package/libmemcached/libmemcached.mk
-@@ -18,7 +18,8 @@ LIBMEMCACHED_CPE_ID_VENDOR = awesome
- # unexpected build failures with packages that use libmemcached (e.g. c-icap)
- LIBMEMCACHED_CONF_OPTS += \
- 	-DCMAKE_BUILD_TYPE=Release \
--	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99"
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
-+	-DCMAKE_SKIP_RPATH=ON
- 
- ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBMEMCACHED_DEPENDENCIES += libevent
--- 
-2.42.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkphbiIgPT0gSmFuIMSMZXJtw6FrIDxzYWlyb25Ac2Fpcm9uLmN6PiB3cml0ZXM6Cgog
+PiBBZGQgZmlybXdhcmUgZmlsZXMgZm9yIFJUTDg4NTEgYW5kIFJUTDg4NTIgY2FyZHMgdXNlZCBi
+eSB0aGUgcnRsYnQgZHJpdmVyLgogPiBTaWduZWQtb2ZmLWJ5OiBKYW4gxIxlcm3DoWsgPHNhaXJv
+bkBzYWlyb24uY3o+CgpDb21taXR0ZWQgdG8gbmV4dCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIg
+S29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
