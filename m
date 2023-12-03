@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2D9FC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31AB8C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:33:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64A1A426BE;
-	Mon,  4 Dec 2023 20:32:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64A1A426BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id E03CE40118;
+	Mon,  4 Dec 2023 20:33:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E03CE40118
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pjgQex5k-wuA; Mon,  4 Dec 2023 20:32:51 +0000 (UTC)
+	with ESMTP id Li78mWsSXvG0; Mon,  4 Dec 2023 20:33:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABE034268A;
-	Mon,  4 Dec 2023 20:32:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABE034268A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AD3240245;
+	Mon,  4 Dec 2023 20:33:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AD3240245
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 10F7F1BF31D
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 035EE1BF977
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:14:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F6814173C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DCB34175D
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F6814173C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DCB34175D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yjlJEO-r_0Tn for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+ with ESMTP id lu2HQ30Lix89 for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CDC144173A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6496C41762
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDC144173A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6496C41762
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2CD7879B7; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+ id 6262A879B7; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 18:12:25 +0100
+Date: Sun, 3 Dec 2023 17:45:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ad21d833e0d0876f43e409548481c6030db2d16e
-X-Git-Newrev: 56fd7854342911b737478667a183958119166a18
+X-Git-Oldrev: af2cd694e3903131d6e2f00646adfa83a89a23e2
+X-Git-Newrev: a4e713558dfd9a6fd6c0677b4b094adc216b720e
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201330.C2CD7879B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "board/raspberrypi: handle dtb
- overlays for all variants"
+Message-Id: <20231204201330.6262A879B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/leptonica: bump to version 1.83.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +57,48 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0291033182851886862=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0291033182851886862==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=56fd7854342911b737478667a183958119166a18
+commit: https://git.buildroot.net/buildroot/commit/?id=a4e713558dfd9a6fd6c0677b4b094adc216b720e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 6021f3678b44d43da7057e3135da842cde1ffa05.
+https://github.com/DanBloomberg/leptonica/compare/1.82.0...1.83.1
 
-That change is no more relevant since the genimage.cfg files are
-generated by the commit e37ee5acdc (board/raspberrypi/post-image.sh:
-generate genimage config from template if not present), and since the
-variant-specific files were dropped off by the commit fc5cdeed72
-(board/raspberrypi: drop variant-specific genimage files).
-
-This removes the very last alive piece of change of the commit
-6021f3678b (board/raspberrypi: handle dtb overlays for all variants);
-the commit is fully reverted now.
-
-Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/post-build.sh | 3 ---
- 1 file changed, 3 deletions(-)
+ package/leptonica/leptonica.hash | 2 +-
+ package/leptonica/leptonica.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
-index 0bd7bc3d17..73026e5922 100755
---- a/board/raspberrypi/post-build.sh
-+++ b/board/raspberrypi/post-build.sh
-@@ -14,6 +14,3 @@ elif [ -d ${TARGET_DIR}/etc/systemd ]; then
-     ln -sf /lib/systemd/system/getty@.service \
-        "${TARGET_DIR}/etc/systemd/system/getty.target.wants/getty@tty1.service"
- fi
--
--# ensure overlays exists for genimage
--mkdir -p "${BINARIES_DIR}/rpi-firmware/overlays"
-
---===============0291033182851886862==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
+index 1220fbbd6e..6511d6b410 100644
+--- a/package/leptonica/leptonica.hash
++++ b/package/leptonica/leptonica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  155302ee914668c27b6fe3ca9ff2da63b245f6d62f3061c8f27563774b8ae2d6  leptonica-1.82.0.tar.gz
++sha256  8f18615e0743af7df7f50985c730dfcf0c93548073d1f56621e4156a8b54d3dd  leptonica-1.83.1.tar.gz
+ sha256  87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806  leptonica-license.txt
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 8791b0c4c2..8eedf2fda9 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LEPTONICA_VERSION = 1.82.0
+-LEPTONICA_SITE = http://www.leptonica.org/source
++LEPTONICA_VERSION = 1.83.1
++LEPTONICA_SITE = https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTONICA_VERSION)
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
+ LEPTONICA_CPE_ID_VENDOR = leptonica
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0291033182851886862==--
