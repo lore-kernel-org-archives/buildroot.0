@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B10FC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 17:00:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B175AC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 17:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 080DE4149D;
-	Sun,  3 Dec 2023 17:00:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 080DE4149D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CF7641575;
+	Sun,  3 Dec 2023 17:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CF7641575
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q0WUGIr_VXDr; Sun,  3 Dec 2023 17:00:08 +0000 (UTC)
+	with ESMTP id wHc_-bzfIAeb; Sun,  3 Dec 2023 17:00:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D7EF41608;
-	Sun,  3 Dec 2023 17:00:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D7EF41608
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 046AA1BF471
+	by smtp4.osuosl.org (Postfix) with ESMTP id B12D1415E0;
+	Sun,  3 Dec 2023 17:00:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B12D1415E0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FC0D1BF8C7
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF9A060F3B
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDFB9415D9
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:59:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF9A060F3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDFB9415D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RlbI8syv_dm9 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q6iigr0PHFny for <buildroot@lists.busybox.net>;
  Sun,  3 Dec 2023 16:59:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 235186074C
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:59:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 235186074C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D3644149D
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:59:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D3644149D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11275877FE; Sun,  3 Dec 2023 16:59:28 +0000 (UTC)
+ id EFC39877EE; Sun,  3 Dec 2023 16:59:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 17:55:42 +0100
+Date: Sun, 3 Dec 2023 17:54:35 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9fb563b491ed6eb515b2d9b2cb4654e6c3d8ffb9
-X-Git-Newrev: 593c259cde9ac646b70281a71336b6465dd39b37
+X-Git-Oldrev: c9e5c1e80eff025768e347efbe5eb4d1dfd81ea9
+X-Git-Newrev: 748a217c2521c1dd4248fd1b5507388f664e1984
 X-Patchwork-Hint: ignore
-Message-Id: <20231203165928.11275877FE@busybox.osuosl.org>
+Message-Id: <20231203165927.EFC39877EE@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- configs/orangepi_one_defconfig: bump BSP versions
+ configs/linksprite_pcduino_defconfig: bump BSP versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=593c259cde9ac646b70281a71336b6465dd39b37
+commit: https://git.buildroot.net/buildroot/commit/?id=748a217c2521c1dd4248fd1b5507388f664e1984
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Switch to the new Linux LTS release 6.6.3. Switch to the
@@ -72,42 +72,43 @@ latest U-Boot 2023.10.
 Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/orangepi_one_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ configs/linksprite_pcduino_defconfig | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
-index ea988e87ea..1431619620 100644
---- a/configs/orangepi_one_defconfig
-+++ b/configs/orangepi_one_defconfig
-@@ -1,16 +1,16 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
+diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
+index cf58e021ba..2b215201cb 100644
+--- a/configs/linksprite_pcduino_defconfig
++++ b/configs/linksprite_pcduino_defconfig
+@@ -18,16 +18,16 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ # For kernel modules autoloading
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ 
+-# Linux headers same as kernel, a 5.10 series
 -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++# Linux headers same as kernel, a 6.6 series
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_One"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi One"
- BR2_SYSTEM_DHCP="eth0"
+ 
+ # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.14"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.3"
  BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-one"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-orangepi-one"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-pcduino"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/linksprite/pcduino/linux-extras.config"
  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+@@ -40,7 +40,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
