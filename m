@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE9C8C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:23:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BC06C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:26:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A57240900;
-	Sun,  3 Dec 2023 16:23:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A57240900
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0439A409F0;
+	Sun,  3 Dec 2023 16:26:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0439A409F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kB0PEVLv00Rd; Sun,  3 Dec 2023 16:23:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QwMJxKXIrQ-C; Sun,  3 Dec 2023 16:26:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8905B40913;
-	Sun,  3 Dec 2023 16:23:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8905B40913
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36FD4409A2;
+	Sun,  3 Dec 2023 16:26:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36FD4409A2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C1F751BF471
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:23:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 642B11BF8C7
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:26:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B14A40491
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B14A40491
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BA2F409A2
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA2F409A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QJjH4rNyCx9d for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 16:23:21 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9F44A403F5
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:23:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F44A403F5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A765E1BF208;
- Sun,  3 Dec 2023 16:23:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9pFX-0093Pu-04;
- Sun, 03 Dec 2023 17:23:19 +0100
+ with ESMTP id YN8aObLsXcp2 for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 16:26:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C97540873
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C97540873
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D42E98770B; Sun,  3 Dec 2023 16:26:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231203084445.471234-1-fontaine.fabrice@gmail.com>
-Date: Sun, 03 Dec 2023 17:23:18 +0100
-In-Reply-To: <20231203084445.471234-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 3 Dec 2023 09:44:45 +0100")
-Message-ID: <87r0k31ci1.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmemcached: fix build with
- gcc 4.8
+To: buildroot@buildroot.org
+Date: Sun, 3 Dec 2023 15:38:29 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 38c4aa2826ce31bd77140a55b5dca78eb28e53a5
+X-Git-Newrev: bc7b0e1002ed393c6ffb784aa245cbaa40569106
+X-Patchwork-Hint: ignore
+Message-Id: <20231203162609.D42E98770B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl: security bump to version
+ 5.36.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +57,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bc7b0e1002ed393c6ffb784aa245cbaa40569106
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix the following build failure with gcc 4.8 raised since bump to
- > version 1.1.4 in commit 7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
+fix CVE-2023-47038 - Write past buffer end via illegal user-defined Unicode property
 
- > /home/buildroot/autobuild/run/instance-0/output-1/build/libmemcached-1.1.4/src/libmemcachedprotocol/ascii_handler.c: In function 'ascii_get_response_handler':
- > /home/buildroot/autobuild/run/instance-0/output-1/build/libmemcached-1.1.4/src/libmemcachedprotocol/ascii_handler.c:249:3: error: 'for' loop initial declarations are only allowed in C99 mode
- >    for (int x = 0; x < keylen; ++x) {
- >    ^
+note: 5.36.2 was a broken release
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/202aeec4dda822ac341d8882f84f968a303697c3
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 667b09221d..983b921e27 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,10 +1,10 @@
+-# Hashes from: https://www.cpan.org/src/5.0/perl-5.36.2.tar.xz.{md5,sha1,sha256}.txt
+-md5  698ae4946b28e38a729916f04cc389a3  perl-5.36.2.tar.xz
+-sha1  9bd6e3f7c333e2e5f14c8650333fc29da3df2d90  perl-5.36.2.tar.xz
+-sha256  19445f09ea9f6ada33297010d5b76ac46be565568d1a4377a6bc736cd795a128  perl-5.36.2.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.36.3.tar.xz.{md5,sha1,sha256}.txt
++md5  17946060e6279cf32d08edc92c40efc3  perl-5.36.3.tar.xz
++sha1  9949e79c92171b39f4fb2b19ffd4ea293b8dd589  perl-5.36.3.tar.xz
++sha256  45a228daef66d02fdccc820e71f87e40d8e3df1fc4431f8d4580ec08033866bd  perl-5.36.3.tar.xz
+ 
+-# Hash from: https://github.com/arsv/perl-cross/releases/download/1.5.1/perl-cross-1.5.1.hash
+-sha256  35d859b49bab274021d8a61511fd39a70a58cb727223de5b54342898155cf5e0  perl-cross-1.5.1.tar.gz
++# Hash from: https://github.com/arsv/perl-cross/releases/download/1.5.2/perl-cross-1.5.2.hash
++sha256  584dc54c48dca25e032b676a15bef377c1fed9de318b4fc140292a5dbf326e90  perl-cross-1.5.2.tar.gz
+ 
+ # Locally calculated
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 735adea01a..71aef9997b 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 36
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
+ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
+ PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.5.1
++PERL_CROSS_VERSION = 1.5.2
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
