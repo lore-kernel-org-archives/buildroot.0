@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E47F3C10F04
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:59:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B10FC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 17:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9443141600;
-	Sun,  3 Dec 2023 16:59:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9443141600
+	by smtp4.osuosl.org (Postfix) with ESMTP id 080DE4149D;
+	Sun,  3 Dec 2023 17:00:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 080DE4149D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nyqbnvrt09kl; Sun,  3 Dec 2023 16:59:55 +0000 (UTC)
+	with ESMTP id q0WUGIr_VXDr; Sun,  3 Dec 2023 17:00:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5F0C415E0;
-	Sun,  3 Dec 2023 16:59:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5F0C415E0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 014501BF2EF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D7EF41608;
+	Sun,  3 Dec 2023 17:00:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D7EF41608
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 046AA1BF471
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF66581B70
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF9A060F3B
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:59:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF66581B70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF9A060F3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 76uxW_2uc4jY for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RlbI8syv_dm9 for <buildroot@lists.busybox.net>;
  Sun,  3 Dec 2023 16:59:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 076BF818E6
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:59:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 076BF818E6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 235186074C
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:59:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 235186074C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E6D79877ED; Sun,  3 Dec 2023 16:59:27 +0000 (UTC)
+ id 11275877FE; Sun,  3 Dec 2023 16:59:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 17:48:15 +0100
+Date: Sun, 3 Dec 2023 17:55:42 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a4e713558dfd9a6fd6c0677b4b094adc216b720e
-X-Git-Newrev: c9e5c1e80eff025768e347efbe5eb4d1dfd81ea9
+X-Git-Oldrev: 9fb563b491ed6eb515b2d9b2cb4654e6c3d8ffb9
+X-Git-Newrev: 593c259cde9ac646b70281a71336b6465dd39b37
 X-Patchwork-Hint: ignore
-Message-Id: <20231203165927.E6D79877ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnss: bump version
- to 3.95
+Message-Id: <20231203165928.11275877FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/orangepi_one_defconfig: bump BSP versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9e5c1e80eff025768e347efbe5eb4d1dfd81ea9
+commit: https://git.buildroot.net/buildroot/commit/?id=593c259cde9ac646b70281a71336b6465dd39b37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Switch to the new Linux LTS release 6.6.3. Switch to the
+latest U-Boot 2023.10.
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/orangepi_one_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 50889f8d13..046f0efcca 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_94_RTM/src/SHA256SUMS
--sha256  463ae180ee9e5ee9e3ad4f629326657e236780cc865572a930a16520abad9dd8  nss-3.94.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_95_RTM/src/SHA256SUMS
-+sha256  469888e41e8a780051ce00edcd914e8a6bd38da88a82cfb84898dd388635822a  nss-3.95.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index e6f4d2f42a..878375e1b6 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.94
-+LIBNSS_VERSION = 3.95
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
+index ea988e87ea..1431619620 100644
+--- a/configs/orangepi_one_defconfig
++++ b/configs/orangepi_one_defconfig
+@@ -1,16 +1,16 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_One"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi One"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-one"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-orangepi-one"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
