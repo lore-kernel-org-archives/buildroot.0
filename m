@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4798C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 17:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F993C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 17:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 989CF415D5;
-	Sun,  3 Dec 2023 17:14:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 989CF415D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE59B415EA;
+	Sun,  3 Dec 2023 17:14:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE59B415EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cOnIX_iey4wx; Sun,  3 Dec 2023 17:13:59 +0000 (UTC)
+	with ESMTP id bHPlq-wzzZrw; Sun,  3 Dec 2023 17:14:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05209414FA;
-	Sun,  3 Dec 2023 17:13:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05209414FA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 16F401BF328
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:13:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3999B414FA;
+	Sun,  3 Dec 2023 17:14:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3999B414FA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 704BD1BF328
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E11A860F3B
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:13:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11A860F3B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 558D44047D
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 17:14:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 558D44047D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4xQCviujyM0W for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 17:13:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ShJ5TK2NMjB1 for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 17:14:25 +0000 (UTC)
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 112DC60773
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 17:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 112DC60773
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 12C8E60003;
- Sun,  3 Dec 2023 17:13:53 +0000 (UTC)
-Message-ID: <c1ea53d5-f4b6-4fda-bdb2-b7674e8d45d7@korsgaard.com>
-Date: Sun, 3 Dec 2023 18:13:53 +0100
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 59F87400D8
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 17:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59F87400D8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 523F760009;
+ Sun,  3 Dec 2023 17:14:23 +0000 (UTC)
+Message-ID: <ae2caa93-0d0a-44d7-8621-c617ba0690d3@korsgaard.com>
+Date: Sun, 3 Dec 2023 18:14:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US
 To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
  buildroot@buildroot.org
 References: <20231122014108.2430309-1-gael.portay@rtone.fr>
+ <20231122014108.2430309-2-gael.portay@rtone.fr>
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20231122014108.2430309-1-gael.portay@rtone.fr>
+In-Reply-To: <20231122014108.2430309-2-gael.portay@rtone.fr>
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] Revert "board/raspberrypi: handle dtb
- overlays for all variants"
+Subject: Re: [Buildroot] [PATCH 2/2] Revert "Fix rasberry Pi 64bit firmware
+ overlay inclusion"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,7 +71,7 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 T24gMjIvMTEvMjAyMyAwMi40MSwgR2HDq2wgUE9SVEFZIHdyb3RlOgo+IFRoaXMgcmV2ZXJ0cyBj
-b21taXQgNjAyMWYzNjc4YjQ0ZDQzZGE3MDU3ZTMxMzVkYTg0MmNkZTFmZmEwNS4KPiAKPiBUaGF0
+b21taXQgNTFkNmQ2YzU4MDQzMjQzNWYyYjJmOTVlZDM1ZTIyYTVlY2JlOWRjYi4KPiAKPiBUaGF0
 IGNoYW5nZSBpcyBubyBtb3JlIHJlbGV2YW50IHNpbmNlIHRoZSBnZW5pbWFnZS5jZmcgZmlsZXMg
 YXJlCj4gZ2VuZXJhdGVkIGJ5IHRoZSBjb21taXQgZTM3ZWU1YWNkYyAoYm9hcmQvcmFzcGJlcnJ5
 cGkvcG9zdC1pbWFnZS5zaDoKPiBnZW5lcmF0ZSBnZW5pbWFnZSBjb25maWcgZnJvbSB0ZW1wbGF0
@@ -78,12 +79,11 @@ ZSBpZiBub3QgcHJlc2VudCksIGFuZCBzaW5jZSB0aGUKPiB2YXJpYW50LXNwZWNpZmljIGZpbGVz
 IHdlcmUgZHJvcHBlZCBvZmYgYnkgdGhlIGNvbW1pdCBmYzVjZGVlZDcyCj4gKGJvYXJkL3Jhc3Bi
 ZXJyeXBpOiBkcm9wIHZhcmlhbnQtc3BlY2lmaWMgZ2VuaW1hZ2UgZmlsZXMpLgo+IAo+IFRoaXMg
 cmVtb3ZlcyB0aGUgdmVyeSBsYXN0IGFsaXZlIHBpZWNlIG9mIGNoYW5nZSBvZiB0aGUgY29tbWl0
-Cj4gNjAyMWYzNjc4YiAoYm9hcmQvcmFzcGJlcnJ5cGk6IGhhbmRsZSBkdGIgb3ZlcmxheXMgZm9y
-IGFsbCB2YXJpYW50cyk7Cj4gdGhlIGNvbW1pdCBpcyBmdWxseSByZXZlcnRlZCBub3cuCj4gCj4g
-U2lnbmVkLW9mZi1ieTogR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4KPiAtLS0K
-PiBNYWludGFpbmVycywKPiAKPiBVbmxlc3MgSSBhbSBtaXN0YWtlbiwgdGhpcyBjb3VsZCBnb25l
-LCByaWdodD8KCkkgYmVsaWV2ZSBzbywgeWVzLgoKQ29tbWl0dGVkIHRvIG5leHQsIHRoYW5rcy4K
-Ci0tIApCeWUsIFBldGVyIEtvcnNnYWFyZAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Cj4gNTFkNmQ2YzU4MCAoRml4IHJhc2JlcnJ5IFBpIDY0Yml0IGZpcm13YXJlIG92ZXJsYXkgaW5j
+bHVzaW9uKTsgdGhlCj4gY29tbWl0IGlzIGZ1bGx5IHJldmVydGVkIG5vdy4KPiAKPiBTaWduZWQt
+b2ZmLWJ5OiBHYcOrbCBQT1JUQVkgPGdhZWwucG9ydGF5QHJ0b25lLmZyPgo+IC0tLQo+IE1haW50
+YWluZXJzLAo+IAo+IFVubGVzcyBJIGFtIG1pc3Rha2VuLCB0aGlzIGNvdWxkIGdvbmUsIHJpZ2h0
+PwoKSSBiZWxpZXZlIHNvLCB5ZXMuIENvbW1pdHRlZCB0byBuZXh0LCB0aGFua3MuCgotLSAKQnll
+LCBQZXRlciBLb3JzZ2FhcmQKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
