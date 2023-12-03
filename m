@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D46DC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:28:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A19C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37EC3421E4;
-	Mon,  4 Dec 2023 20:28:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37EC3421E4
+	by smtp4.osuosl.org (Postfix) with ESMTP id B55CD42202;
+	Mon,  4 Dec 2023 20:28:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B55CD42202
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3eoBI9WeP3my; Mon,  4 Dec 2023 20:28:46 +0000 (UTC)
+	with ESMTP id 33sB_0YAvfaM; Mon,  4 Dec 2023 20:28:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 726BC4180B;
-	Mon,  4 Dec 2023 20:28:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 726BC4180B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6BF521BF977
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD47742203;
+	Mon,  4 Dec 2023 20:28:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD47742203
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C8DEE1BF31D
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 014C341690
+ by smtp3.osuosl.org (Postfix) with ESMTP id 077F060FC8
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 014C341690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 077F060FC8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9Mm1YvNau0ea for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Dbzep-x23GIL for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8347141609
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8347141609
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2C67760692
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C67760692
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69D63879B6; Mon,  4 Dec 2023 20:13:29 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 1D65B879B8; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 26 Nov 2023 18:05:02 +0100
+Date: Sun, 3 Dec 2023 19:25:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bfafe9b3e9c5a5ae7767c534dccca2d14e50b41c
-X-Git-Newrev: 0f26d434278ac641815e0fd856cc771d65f91617
+X-Git-Oldrev: 075a65a4e1dd0ede3002fa47a2b6cafcea75edb9
+X-Git-Newrev: 2d194122d1e3ede39f37a7000e73def0b7d89e9c
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201329.69D63879B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-annotated-types: new package
+Message-Id: <20231204201331.1D65B879B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynqmp_zcu106_defconfig: bump to
+ xilinx-v2023.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,74 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f26d434278ac641815e0fd856cc771d65f91617
+commit: https://git.buildroot.net/buildroot/commit/?id=2d194122d1e3ede39f37a7000e73def0b7d89e9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/Config.in                                         |  1 +
- package/python-annotated-types/Config.in                  |  6 ++++++
- .../python-annotated-types/python-annotated-types.hash    |  5 +++++
- package/python-annotated-types/python-annotated-types.mk  | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
+This patch bumps the zynqmp_zcu106_defconfig to xilinx-v2023.2 which includes
+the following updates:
 
-diff --git a/package/Config.in b/package/Config.in
-index 5a3410d758..68e6e29a4d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -974,6 +974,7 @@ menu "External python modules"
- 	source "package/python-aiozipkin/Config.in"
- 	source "package/python-alembic/Config.in"
- 	source "package/python-alsaaudio/Config.in"
-+	source "package/python-annotated-types/Config.in"
- 	source "package/python-ansicolors/Config.in"
- 	source "package/python-apispec/Config.in"
- 	source "package/python-appdirs/Config.in"
-diff --git a/package/python-annotated-types/Config.in b/package/python-annotated-types/Config.in
-new file mode 100644
-index 0000000000..36525a526b
---- /dev/null
-+++ b/package/python-annotated-types/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_ANNOTATED_TYPES
-+	bool "python-annotated-types"
-+	help
-+	  Reusable constraint types to use with typing.Annotated.
-+
-+	  https://github.com/annotated-types/annotated-types
-diff --git a/package/python-annotated-types/python-annotated-types.hash b/package/python-annotated-types/python-annotated-types.hash
-new file mode 100644
-index 0000000000..1663bcb51f
---- /dev/null
-+++ b/package/python-annotated-types/python-annotated-types.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/annotated-types/json
-+md5  5fe2125b08851f0d05a8efad6456861c  annotated_types-0.6.0.tar.gz
-+sha256  563339e807e53ffd9c267e99fc6d9ea23eb8443c08f112651963e24e22f84a5d  annotated_types-0.6.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d  LICENSE
-diff --git a/package/python-annotated-types/python-annotated-types.mk b/package/python-annotated-types/python-annotated-types.mk
-new file mode 100644
-index 0000000000..8bc617069d
---- /dev/null
-+++ b/package/python-annotated-types/python-annotated-types.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-annotated-types
-+#
-+################################################################################
-+
-+PYTHON_ANNOTATED_TYPES_VERSION = 0.6.0
-+PYTHON_ANNOTATED_TYPES_SOURCE = annotated_types-$(PYTHON_ANNOTATED_TYPES_VERSION).tar.gz
-+PYTHON_ANNOTATED_TYPES_SITE = https://files.pythonhosted.org/packages/67/fe/8c7b275824c6d2cd17c93ee85d0ee81c090285b6d52f4876ccc47cf9c3c4
-+PYTHON_ANNOTATED_TYPES_SETUP_TYPE = pep517
-+PYTHON_ANNOTATED_TYPES_LICENSE = MIT
-+PYTHON_ANNOTATED_TYPES_LICENSE_FILES = LICENSE
-+PYTHON_ANNOTATED_TYPES_DEPENDENCIES = host-python-hatchling
-+
-+$(eval $(python-package))
+- Linux v6.1.30 with additional bug fixes
+- U-Boot v2023.01 with additional bug fixes
+- ATF v2.8 with additional bug fixes
+- PMUFW xilinx_v2023.2
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/zynqmp_zcu106_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 21f41a2d8f..011c7f0fae 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
+@@ -15,13 +15,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.1)/xlnx_rebase_v2.8_2023.1.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.2)/xlnx_rebase_v2.8_2023.2.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu106-revA"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+@@ -30,7 +30,7 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.1/zcu106-zynqmp/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/zcu106-zynqmp/pmufw.elf"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
