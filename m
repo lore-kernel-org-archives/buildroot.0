@@ -4,47 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CB16C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A179FC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:38:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0115340629;
-	Sun,  3 Dec 2023 16:38:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0115340629
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BAA94088A;
+	Sun,  3 Dec 2023 16:38:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BAA94088A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l-yNxTivVKA8; Sun,  3 Dec 2023 16:38:21 +0000 (UTC)
+	with ESMTP id FeoFj1ZT1CSo; Sun,  3 Dec 2023 16:38:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38AA84067F;
-	Sun,  3 Dec 2023 16:38:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38AA84067F
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0FF540875;
+	Sun,  3 Dec 2023 16:38:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0FF540875
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2CC1BF471
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:38:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6AD2A1BF471
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C54E40467
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:38:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C54E40467
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EB5E40904
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EB5E40904
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y6eRHZwfDZYc for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 16:38:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5CCCE408DA
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:38:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CCCE408DA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F7F78777E; Sun,  3 Dec 2023 16:38:05 +0000 (UTC)
+ with ESMTP id aaZ8bC0-NqDr for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 16:38:43 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EB235408DA
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB235408DA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F3AFCFF809;
+ Sun,  3 Dec 2023 16:38:39 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r9pUN-0095ma-0j;
+ Sun, 03 Dec 2023 17:38:39 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 17:27:11 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6a7050d7191b9a534d1d2789ceb72d69f25da83
-X-Git-Newrev: a3db1dd1b7b4fca95eefb1f42a25881f89d881f7
-X-Patchwork-Hint: ignore
-Message-Id: <20231203163805.3F7F78777E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xenomai: fix build with gcc >= 12
+References: <20231201211402.1087936-1-peter@korsgaard.com>
+Date: Sun, 03 Dec 2023 17:38:39 +0100
+In-Reply-To: <20231201211402.1087936-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 1 Dec 2023 22:14:01 +0100")
+Message-ID: <87edg31bsg.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] toradx_apalis_imx6_defconfig: add download
+ hashes for linux/uboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,103 +63,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3db1dd1b7b4fca95eefb1f42a25881f89d881f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fix the following build failure with gcc >= 12:
+ > The defconfig fetches Linux and U-Boot from a git repo using the
+ > unauthenticated git:// protocol, so add download hashes for them to ensure
+ > we get the right sources by adding a global patch dir and running
+ > utils/add-custom-hashes.
 
-task.c: In function 't_start':
-task.c:398:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
-  398 |         return ret;
-      |                ^~~
-task.c:364:13: note: 'ret' was declared here
-  364 |         int ret;
-      |             ^~~
-task.c: In function 't_resume':
-task.c:444:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
-  444 |         return ret;
-      |                ^~~
-task.c:428:13: note: 'ret' was declared here
-  428 |         int ret;
-      |             ^~~
+ > The defconfig uses the Linux sources for the kernel headers, so make
+ > linux-headers/linux-headers.hash a symlink to linux/linux.hash so the same
+ > hash file is used.
 
-Fixes:
- - http://autobuild.buildroot.org/results/bc1b40de22e563b704ad7f20b6bf4d1f73a6ed8a
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...004-lib-psos-task.c-fix-build-with-gcc-12.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+Committed, thanks.
 
-diff --git a/package/xenomai/3.0.10/0004-lib-psos-task.c-fix-build-with-gcc-12.patch b/package/xenomai/3.0.10/0004-lib-psos-task.c-fix-build-with-gcc-12.patch
-new file mode 100644
-index 0000000000..fcc1f1e673
---- /dev/null
-+++ b/package/xenomai/3.0.10/0004-lib-psos-task.c-fix-build-with-gcc-12.patch
-@@ -0,0 +1,56 @@
-+From 6c6da9e6d75ccfaa83c1efe14211f080c14181c6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 3 Dec 2023 15:28:50 +0100
-+Subject: [PATCH] lib/psos/task.c: fix build with gcc >= 12
-+
-+Fix the following build failure with gcc >= 12:
-+
-+task.c: In function 't_start':
-+task.c:398:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
-+  398 |         return ret;
-+      |                ^~~
-+task.c:364:13: note: 'ret' was declared here
-+  364 |         int ret;
-+      |             ^~~
-+task.c: In function 't_resume':
-+task.c:444:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
-+  444 |         return ret;
-+      |                ^~~
-+task.c:428:13: note: 'ret' was declared here
-+  428 |         int ret;
-+      |             ^~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bc1b40de22e563b704ad7f20b6bf4d1f73a6ed8a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://lore.kernel.org/xenomai/20231203144307.1940139-1-fontaine.fabrice@gmail.com/T/#u
-+---
-+ lib/psos/task.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/psos/task.c b/lib/psos/task.c
-+index f678be61d..27bcc28a9 100644
-+--- a/lib/psos/task.c
-++++ b/lib/psos/task.c
-+@@ -362,7 +362,7 @@ u_long t_start(u_long tid,
-+ {
-+ 	struct psos_task *task;
-+ 	struct service svc;
-+-	int ret;
-++	int ret = SUCCESS;
-+ 
-+ 	CANCEL_DEFER(svc);
-+ 
-+@@ -426,7 +426,7 @@ u_long t_resume(u_long tid)
-+ {
-+ 	struct psos_task *task;
-+ 	struct service svc;
-+-	int ret;
-++	int ret = SUCCESS;
-+ 
-+ 	CANCEL_DEFER(svc);
-+ 
-+-- 
-+2.42.0
-+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
