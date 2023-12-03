@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9AF9C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 22:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51AC2C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 22:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92B8140A47;
-	Sun,  3 Dec 2023 22:26:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92B8140A47
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED33A40972;
+	Sun,  3 Dec 2023 22:26:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED33A40972
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RyFVe96_CtlZ; Sun,  3 Dec 2023 22:26:18 +0000 (UTC)
+	with ESMTP id MJrVdeKEOyd9; Sun,  3 Dec 2023 22:26:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E47E40A08;
-	Sun,  3 Dec 2023 22:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E47E40A08
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 13ED31BF3DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3A35409BD;
+	Sun,  3 Dec 2023 22:26:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3A35409BD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 465EC1BF8C7
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70C72409E1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 36D5140951
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:24:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70C72409E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36D5140951
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mgaJwh9FPx8K for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LSCWbxgr_0Wy for <buildroot@lists.busybox.net>;
  Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E8CB40A1E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59359410D5
  for <buildroot@buildroot.org>; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E8CB40A1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59359410D5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DD4B87936; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
+ id 4938D87936; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 22:35:54 +0100
+Date: Sun, 3 Dec 2023 23:08:53 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 50abc2e77a249402bdbeef55ed7e64dd3a8641f1
-X-Git-Newrev: 37dfdda3211e3fdf35aa6b996604e32755f32d6d
+X-Git-Oldrev: 100ba3215908f4f214085b3b82f5695e9cfe4c4a
+X-Git-Newrev: dedfab8614082e493b084b8c2085d1bd597be946
 X-Patchwork-Hint: ignore
-Message-Id: <20231203222432.1DD4B87936@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/libmemcached: fix
- build with gcc 4.8
+Message-Id: <20231203222432.4938D87936@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x]
+ toradex_apalis_imx6_defconfig: add download hashes for linux/uboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37dfdda3211e3fdf35aa6b996604e32755f32d6d
+commit: https://git.buildroot.net/buildroot/commit/?id=dedfab8614082e493b084b8c2085d1bd597be946
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix the following build failure with gcc 4.8 raised since bump to
-version 1.1.4 in commit 7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
+The defconfig fetches Linux and U-Boot from a git repo using the
+unauthenticated git:// protocol, so add download hashes for them to ensure
+we get the right sources by adding a global patch dir and running
+utils/add-custom-hashes.
 
-/home/buildroot/autobuild/run/instance-0/output-1/build/libmemcached-1.1.4/src/libmemcachedprotocol/ascii_handler.c: In function 'ascii_get_response_handler':
-/home/buildroot/autobuild/run/instance-0/output-1/build/libmemcached-1.1.4/src/libmemcachedprotocol/ascii_handler.c:249:3: error: 'for' loop initial declarations are only allowed in C99 mode
-   for (int x = 0; x < keylen; ++x) {
-   ^
+The defconfig uses the Linux sources for the kernel headers, so make
+linux-headers/linux-headers.hash a symlink to linux/linux.hash so the same
+hash file is used.
 
-Fixes:
- - http://autobuild.buildroot.org/results/202aeec4dda822ac341d8882f84f968a303697c3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5eb79ff3b951fb756e17d8a06b5608b179ddbd60)
+(cherry picked from commit cdc9b8a3a75c4c39f23feb4e3b0e296786e0132c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmemcached/libmemcached.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ board/toradex/apalis-imx6/patches/linux-headers/linux-headers.hash | 1 +
+ board/toradex/apalis-imx6/patches/linux/linux.hash                 | 2 ++
+ board/toradex/apalis-imx6/patches/uboot/uboot.hash                 | 2 ++
+ configs/toradex_apalis_imx6_defconfig                              | 1 +
+ 4 files changed, 6 insertions(+)
 
-diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-index f86cdd3bbf..63df8f5c20 100644
---- a/package/libmemcached/libmemcached.mk
-+++ b/package/libmemcached/libmemcached.mk
-@@ -16,7 +16,9 @@ LIBMEMCACHED_CPE_ID_VENDOR = awesome
- 
- # Force Release otherwise libraries will be suffixed by -dbg which will raise
- # unexpected build failures with packages that use libmemcached (e.g. c-icap)
--LIBMEMCACHED_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-+LIBMEMCACHED_CONF_OPTS += \
-+	-DCMAKE_BUILD_TYPE=Release \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99"
- 
- ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBMEMCACHED_DEPENDENCIES += libevent
+diff --git a/board/toradex/apalis-imx6/patches/linux-headers/linux-headers.hash b/board/toradex/apalis-imx6/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/toradex/apalis-imx6/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/toradex/apalis-imx6/patches/linux/linux.hash b/board/toradex/apalis-imx6/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..1138ec3b93
+--- /dev/null
++++ b/board/toradex/apalis-imx6/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  9c69a1c283db6ee8042cc6f013a159473f257e71751887312c7dd2902f01bec8  linux-d899927728beca8357a5b4120b690cb3c1d80844-br1.tar.gz
+diff --git a/board/toradex/apalis-imx6/patches/uboot/uboot.hash b/board/toradex/apalis-imx6/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..a81a7d8d4a
+--- /dev/null
++++ b/board/toradex/apalis-imx6/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  9a540b08ccb7e8a0252f86d0bad5d676d0964725a7f2a06d798225c2a3024878  uboot-30a1208727729dae22cb42f9ba9ba17efe5e6f77-br1.tar.gz
+diff --git a/configs/toradex_apalis_imx6_defconfig b/configs/toradex_apalis_imx6_defconfig
+index 40a2d2d520..e447190e0c 100644
+--- a/configs/toradex_apalis_imx6_defconfig
++++ b/configs/toradex_apalis_imx6_defconfig
+@@ -1,6 +1,7 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++BR2_GLOBAL_PATCH_DIR="board/toradex/apalis-imx6/patches"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/apalis-imx6/post-image.sh"
+ BR2_LINUX_KERNEL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
