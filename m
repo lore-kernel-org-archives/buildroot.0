@@ -4,84 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C3F0C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 04:19:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCD47C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 04:19:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F22F81E94;
-	Sun,  3 Dec 2023 04:19:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F22F81E94
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09EED81E99;
+	Sun,  3 Dec 2023 04:19:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09EED81E99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qUiIay94tyU4; Sun,  3 Dec 2023 04:19:06 +0000 (UTC)
+	with ESMTP id 4bxL_poGr3sH; Sun,  3 Dec 2023 04:19:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 104A181EA0;
-	Sun,  3 Dec 2023 04:19:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 104A181EA0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67E0F81EA8;
+	Sun,  3 Dec 2023 04:19:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67E0F81EA8
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D9601BF2B9
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 04:19:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE57B1BF2B9
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 04:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 103C381E99
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 04:19:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 103C381E99
+ by smtp1.osuosl.org (Postfix) with ESMTP id C34E181EA0
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 04:19:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C34E181EA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vrxex-TWLZRE for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 04:19:00 +0000 (UTC)
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
- [IPv6:2607:f8b0:4864:20::102a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9275981E94
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 04:19:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9275981E94
-Received: by mail-pj1-x102a.google.com with SMTP id
- 98e67ed59e1d1-2839b922c18so2776482a91.1
- for <buildroot@buildroot.org>; Sat, 02 Dec 2023 20:19:00 -0800 (PST)
+ with ESMTP id lXn50_aZFuOc for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 04:19:05 +0000 (UTC)
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F395681E99
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 04:19:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F395681E99
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-1cfb30ce241so17946335ad.0
+ for <buildroot@buildroot.org>; Sat, 02 Dec 2023 20:19:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701577139; x=1702181939;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=TgMjaBih8t+B2Fp2Lyi4vDJZJcuYvNyLjPaOq/uVn3I=;
- b=ngltuiQgeVOJXsfTLI6IYcbtRUMmraDKM/rOxEZ2BrpISYdiuqnACoLL+io2cIgaNq
- QUnuQGFxVYayTeWjazvP9T6L+i4DcHwxOqzbivj6tlgJV9tQIZTcwz3Iqfx9zJAQZdK0
- OQxvIcSQebw6LzAcT4/CyOtwYl32OOvY0J+s7KV7KgNzYeWzTUvNCctYa2RoP7Cl03t/
- Z+YhBphZMe1dcWZh6j6MgwKETs2Ej9+ThrYGgAvYzySEPaEXBEswBPio05yXlJKCzTQL
- crxfJ/1wezDHOI+g9E2ekFRyIxIpWGA/6lMwZdZLebJSu27e9Vg1uo3q3dIzhZduIztT
- 1cmg==
-X-Gm-Message-State: AOJu0YwdQzM+Dua30fps3PQFzwMIWQEujW0JwS8DkBozAYnBmsnNOdPC
- aj0kcbmfa3DsUoKRgHV2js/kO2mFXyZrgJmHD+M=
-X-Google-Smtp-Source: AGHT+IGSWxJ/Uln1C3+Wc0aVIJQ7dytoCLkpHCfkc6SZC9xL+NPnOfUo0jgY7gWv7Nw+deZsrc7qkg==
-X-Received: by 2002:a17:902:a706:b0:1d0:609e:f6dc with SMTP id
- w6-20020a170902a70600b001d0609ef6dcmr704918plq.1.1701577139093; 
- Sat, 02 Dec 2023 20:18:59 -0800 (PST)
+ d=1e100.net; s=20230601; t=1701577143; x=1702181943;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=gRdcSox6qBzp9xh3XUb1tSdwxHD/qBhd4yrNrFV3u7c=;
+ b=ugjC/5V0OEig1MwGnVxdyMCXYgFoxYbEtFjR9ZiIxS+QJmJX5BR2F0j/8V3+SqhwaF
+ HnDjP+3BGs7BhGxfvlLQSihRNrqTPSehNYv7KxsDuiusaxyU2fIHzC25G/nEDM8IEyM/
+ nDRG/5/uQ3EQIdAxuEq6g+EbgFeXNGLbbdNYnpCuAz9CIrufjsweilgwt1GDOY/488M1
+ 0Z33vdREyHkOive5/X2pRn11rCCczUmoH3gfIV8XTK3UpIdupqpqi/Szi2pZ7mtce1bU
+ +whi7AoIi2z0xfNoAgXu7gD5rb3P+r1hgTk61XHRdAhIlOzrGdgdqU4KjlshUJFslOzJ
+ C+Lg==
+X-Gm-Message-State: AOJu0Ywc+RTpowpUkvl2qQtk5oSSh4zPM714qwtIg2z0Qok9EUibzkb9
+ IrQGHNgiMbs0/YUWLtVxq/naThkuOKZ7vORjJk4=
+X-Google-Smtp-Source: AGHT+IGJWX5Ck3gt311jZAhOx6EYY+wFhVzhsjWSOhxm2BZGJQt48CHk6J/AtIYIwhTR2ceKHDsLqg==
+X-Received: by 2002:a17:902:ed85:b0:1d0:6ffe:a14 with SMTP id
+ e5-20020a170902ed8500b001d06ffe0a14mr1776735plj.114.1701577143047; 
+ Sat, 02 Dec 2023 20:19:03 -0800 (PST)
 Received: from localhost.localdomain (75-174-247-100.bsmr.qwest.net.
  [75.174.247.100]) by smtp.gmail.com with ESMTPSA id
- j15-20020a170902da8f00b001cfc6388b5dsm5874084plx.260.2023.12.02.20.18.56
+ j15-20020a170902da8f00b001cfc6388b5dsm5874084plx.260.2023.12.02.20.19.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Dec 2023 20:18:58 -0800 (PST)
+ Sat, 02 Dec 2023 20:19:02 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat,  2 Dec 2023 21:18:34 -0700
-Message-ID: <20231203041841.492885-1-adam.duskett@amarulasolutions.com>
+Date: Sat,  2 Dec 2023 21:18:35 -0700
+Message-ID: <20231203041841.492885-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231203041841.492885-1-adam.duskett@amarulasolutions.com>
+References: <20231203041841.492885-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1701577139; x=1702181939;
+ d=amarulasolutions.com; s=google; t=1701577143; x=1702181943;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TgMjaBih8t+B2Fp2Lyi4vDJZJcuYvNyLjPaOq/uVn3I=;
- b=NrF0ANqaG4tEIho3KipSCxwJHKsMZNBUE5Iw8qTFPw1Vmx/SRwjyZH8mLYg5xypB4o
- lcCbldj9fG5xGXkac1K/SdViIt3+/ymr2mOmPkLV+l6g/UjvmxJ/oNqTLMk7/QZIDKr6
- AbLQ6P3aMlx2O6yORHDoHzqodQ3CJu4o/sUS8=
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gRdcSox6qBzp9xh3XUb1tSdwxHD/qBhd4yrNrFV3u7c=;
+ b=R8+Fr/jGUkWHhdPsJMhxAbocZo7yudHIc+RmZf29BataiIUNXBpPQPe6Io7hSXnxFZ
+ S5NkT82JT7jHM7y4w3XVcspb03rVWp/p0D28yZAQKRHskBpIXpnYD8cVPvk57GIz1kTU
+ 4T/PkqxhsqzXw2Uakuurc+hocolbB1SD2ZHaI=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=NrF0ANqa
-Subject: [Buildroot] [PATCH 1/6] package/google-breakpad/gen-syms.sh: fix
- shellcheck warnings
+ header.b=R8+Fr/jG
+Subject: [Buildroot] [PATCH 2/6] package/google-breakpad: disable uclibc
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,26 +104,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes warning SC2068
+The google-breakpad package uses stab.h which is not included in uClibc.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/google-breakpad/gen-syms.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Config.in                         | 2 +-
+ package/google-breakpad/Config.in | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/google-breakpad/gen-syms.sh b/package/google-breakpad/gen-syms.sh
-index 2bc0afafb6..4bc020ec19 100755
---- a/package/google-breakpad/gen-syms.sh
-+++ b/package/google-breakpad/gen-syms.sh
-@@ -14,7 +14,7 @@ error() {
-     exit 1
- }
+diff --git a/Config.in b/Config.in
+index 27f5deb16a..554b4062eb 100644
+--- a/Config.in
++++ b/Config.in
+@@ -589,7 +589,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_GOOGLE_BREAKPAD
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+index 4320ad64aa..49d0bc06de 100644
+--- a/package/google-breakpad/Config.in
++++ b/package/google-breakpad/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LINUX_SYSCALL_SUPPORT
+@@ -34,12 +34,12 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
  
--for FILE in ${@}; do
-+for FILE in "${@}"; do
-     f="${TARGET_DIR}${FILE}"
-     if [ ! -e "${f}" ]; then
-         error "%s: No such file or directory\n" "${FILE}"
+ 	  https://chromium.googlesource.com/breakpad/breakpad
+ 
+-comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
++comment "google-breakpad requires a glibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
++		!BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ if BR2_PACKAGE_GOOGLE_BREAKPAD
 -- 
 2.43.0
 
