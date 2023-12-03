@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E1EAC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC516C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:27:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 241D941E48;
-	Mon,  4 Dec 2023 20:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 241D941E48
+	by smtp4.osuosl.org (Postfix) with ESMTP id 710D641F82;
+	Mon,  4 Dec 2023 20:27:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 710D641F82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OXGtxhXwJyNn; Mon,  4 Dec 2023 20:26:54 +0000 (UTC)
+	with ESMTP id 1ZKARPSsTLtZ; Mon,  4 Dec 2023 20:27:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72E0941E38;
-	Mon,  4 Dec 2023 20:26:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72E0941E38
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BB271BF977
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA30441F6F;
+	Mon,  4 Dec 2023 20:27:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA30441F6F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B12F71BF31D
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2EB441743
+ by smtp3.osuosl.org (Postfix) with ESMTP id 909E060FC9
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2EB441743
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 909E060FC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rXl8i_vq3hNy for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s32i4gygVJUT for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41C9E4175F
+ by smtp3.osuosl.org (Postfix) with ESMTP id CEAE760FF6
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41C9E4175F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEAE760FF6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F500879B9; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+ id CCBFD879B8; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 2 Dec 2023 09:37:38 +0100
-Subject: [git commit] DEVELOPERS: add Flávio Tapajós for rsyslog
+Date: Sun, 3 Dec 2023 18:12:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6358bb3a9bcf8d4c66893e8df513d18bf0022c35
-X-Git-Newrev: e6e16a6d1803956b0c10e0d92608980888d0ebd3
+X-Git-Oldrev: 56fd7854342911b737478667a183958119166a18
+X-Git-Newrev: f1de35e2a0ea2496a920d0b28b5986ffb50f0640
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201330.3F500879B9@busybox.osuosl.org>
+Message-Id: <20231204201330.CCBFD879B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "Fix rasberry Pi 64bit firmware
+ overlay inclusion"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,35 +58,53 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8100811109418975833=="
+Content-Type: multipart/mixed; boundary="===============4261048389395172399=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8100811109418975833==
+--===============4261048389395172399==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6e16a6d1803956b0c10e0d92608980888d0ebd3
+commit: https://git.buildroot.net/buildroot/commit/?id=f1de35e2a0ea2496a920d0b28b5986ffb50f0640
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This reverts commit 51d6d6c580432435f2b2f95ed35e22a5ecbe9dcb.
+
+That change is no more relevant since the genimage.cfg files are
+generated by the commit e37ee5acdc (board/raspberrypi/post-image.sh:
+generate genimage config from template if not present), and since the
+variant-specific files were dropped off by the commit fc5cdeed72
+(board/raspberrypi: drop variant-specific genimage files).
+
+This removes the very last alive piece of change of the commit
+51d6d6c580 (Fix rasberry Pi 64bit firmware overlay inclusion); the
+commit is fully reverted now.
+
+Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/rpi-firmware/rpi-firmware.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1f26e9bc81..2f3eedf8a0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1078,6 +1078,7 @@ F:	package/python-pymodbus/
- N:	Flávio Tapajós <flavio.tapajos@newtesc.com.br>
- F:	configs/asus_tinker-s_rk3288_defconfig
- F:	board/asus/tinker-s/
-+F:	package/rsyslog/
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 37e010d1de..11177aee02 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -59,12 +59,6 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/overlays/overlay_map.dtb $(BINARIES_DIR)/rpi-firmware/overlays/
+ 	touch $(BINARIES_DIR)/rpi-firmware/overlays/README
+ endef
+-else
+-# Still create the directory, so a genimage.cfg can include it independently of
+-# whether _INSTALL_DTB_OVERLAYS is selected or not.
+-define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+-	$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays
+-endef
+ endif
  
- N:	Florian Fainelli <f.fainelli@gmail.com>
- F:	package/cpulimit/
+ # Install prebuilt libraries if RPI_USERLAND not enabled
 
---===============8100811109418975833==
+--===============4261048389395172399==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -96,4 +115,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8100811109418975833==--
+--===============4261048389395172399==--
