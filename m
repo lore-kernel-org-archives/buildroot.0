@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB957C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 21:24:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70B2BC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 21:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8162540993;
-	Sun,  3 Dec 2023 21:24:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8162540993
+	by smtp2.osuosl.org (Postfix) with ESMTP id 194A5409E7;
+	Sun,  3 Dec 2023 21:24:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 194A5409E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RDQ5DDmYM3VJ; Sun,  3 Dec 2023 21:24:32 +0000 (UTC)
+	with ESMTP id hi8NPB5NwPZG; Sun,  3 Dec 2023 21:24:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A75F409AD;
-	Sun,  3 Dec 2023 21:24:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A75F409AD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 69F7B1BF3EE
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:24:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 183E4405B1;
+	Sun,  3 Dec 2023 21:24:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 183E4405B1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 25F031BF3EE
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:24:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4255E40297
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4255E40297
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1650818BE
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1650818BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hFfPvJ1r7V9Q for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a0-rKMLuw1hH for <buildroot@lists.busybox.net>;
  Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E64A400F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A546818A2
  for <buildroot@buildroot.org>; Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E64A400F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A546818A2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B280878CF; Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
+ id 04246878CD; Sun,  3 Dec 2023 21:24:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 22:23:09 +0100
+Date: Sun, 3 Dec 2023 22:05:23 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 49da7a4ae362e7fe1ef77c743388d6d5d2f87e3e
-X-Git-Newrev: 55678b84a153456ac4c55bab38ae8eba88d70f9b
+X-Git-Oldrev: 275d74bd64593ba1d10af458c410a0015cbfcb24
+X-Git-Newrev: 0b3f8449e79a6ad32a5b7c20228cceef60cea0a9
 X-Patchwork-Hint: ignore
-Message-Id: <20231203212402.1B280878CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/putty: disable
- gssapi
+Message-Id: <20231203212402.04246878CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libpjsip:
+ security bump to version 2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +58,72 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8517133786439072413=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55678b84a153456ac4c55bab38ae8eba88d70f9b
+--===============8517133786439072413==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0b3f8449e79a6ad32a5b7c20228cceef60cea0a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-PUTTY_GSSAPI is enabled by default resulting in the following build
-failure since bump to version 0.78 in commit
-5673ea3ce4d4dd721bb17fc8d5b1283f5c1080b4:
+Fix CVE-2023-38703: PJSIP is a free and open source multimedia
+communication library written in C with high level API in C, C++, Java,
+C#, and Python languages. SRTP is a higher level media transport which
+is stacked upon a lower level media transport such as UDP and ICE.
+Currently a higher level transport is not synchronized with its lower
+level transport that may introduce use-after-free issue. This
+vulnerability affects applications that have SRTP capability
+(`PJMEDIA_HAS_SRTP` is set) and use underlying media transport other
+than UDP. This vulnerability’s impact may range from unexpected
+application termination to control flow hijack/memory corruption. The
+patch is available as a commit in the master branch.
 
- /home/fabrice/buildroot/output/build/putty-0.79/unix/gss.c:133:10: fatal error: gssapi/gssapi.h: No such file or directory
-  133 | #include <gssapi/gssapi.h>
-      |          ^~~~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/d6d06b5aa0df070c3880399e044fb3cd3a830aec
+https://github.com/pjsip/pjproject/security/advisories/GHSA-f76w-fh7c-pc66
+https://github.com/pjsip/pjproject/releases/tag/2.14
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 499b4d6d22a704adf65d1db0808952ad386ee1a0)
+(cherry picked from commit 38c4aa2826ce31bd77140a55b5dca78eb28e53a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/putty/putty.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libpjsip/libpjsip.hash | 2 +-
+ package/libpjsip/libpjsip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index c79917dac0..93e978a36a 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -10,6 +10,7 @@ PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
- PUTTY_CPE_ID_VENDOR = putty
- PUTTY_DEPENDENCIES = host-pkgconf
-+PUTTY_CONF_OPTS = -DPUTTY_GSSAPI=OFF
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index 2edd97bed4..d72e1090e3 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  32a5ab5bfbb9752cb6a46627e4c410e61939c8dbbd833ac858473cfbd9fb9d7d  pjproject-2.13.1.tar.gz
++sha256  5805c1171acab4af9684d7ad096dcb92f71fc42809852144e97e1413468c9981  pjproject-2.14.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index f97d547fd7..8169e0dcee 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
- PUTTY_DEPENDENCIES += libgtk3
+-LIBPJSIP_VERSION = 2.13.1
++LIBPJSIP_VERSION = 2.14
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
+ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+ 
+
+--===============8517133786439072413==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8517133786439072413==--
