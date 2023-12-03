@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 334BCC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C54E4C10DC1
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:28:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E55EC41B6A;
-	Mon,  4 Dec 2023 20:28:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E55EC41B6A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7885D4182B;
+	Mon,  4 Dec 2023 20:28:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7885D4182B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1aClxA5e7O8r; Mon,  4 Dec 2023 20:28:09 +0000 (UTC)
+	with ESMTP id gn7mqVZ8B_Rz; Mon,  4 Dec 2023 20:28:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2543142032;
-	Mon,  4 Dec 2023 20:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2543142032
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8B29B1BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E741420E4;
+	Mon,  4 Dec 2023 20:28:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E741420E4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C5FD61BF31D
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EEAB14175D
+ by smtp3.osuosl.org (Postfix) with ESMTP id C31FA61000
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEAB14175D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C31FA61000
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bbFSnShGPwo0 for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xYr_k_1hX0Ou for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F9FB41748
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F9FB41748
+ by smtp3.osuosl.org (Postfix) with ESMTP id 043A160FFE
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 043A160FFE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E811879B8; Mon,  4 Dec 2023 20:13:28 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 00102879B8; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 25 Nov 2023 12:24:50 +0100
+Date: Sun, 3 Dec 2023 19:15:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6c70212a09253eb5fb79c715e7fff7fb786a74ba
-X-Git-Newrev: 31d7d323808083e2b8e25a7fdbee08f5486ee291
+X-Git-Oldrev: c8a5a97e6740e31ef62e1be9f7c640dde79db6d4
+X-Git-Newrev: 029099025f81baaa6b8296bada22878751fa5025
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201328.1E811879B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pathspec: bump to version
- 0.11.2
+Message-Id: <20231204201331.00102879B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libblockdev: drop unrecognized
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31d7d323808083e2b8e25a7fdbee08f5486ee291
+commit: https://git.buildroot.net/buildroot/commit/?id=029099025f81baaa6b8296bada22878751fa5025
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-pathspec/python-pathspec.hash | 4 ++--
- package/python-pathspec/python-pathspec.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+The following options were wrongly kept when bumping to version 3.0.3 in
+commit 18420d9b6b424492741cba495cc2e7a28a409e8b:
+ - dmraid (dropped since
+   https://github.com/storaged-project/libblockdev/commit/d174944a85169efae3bac0b6e76498e3d0c6c240)
+ - bcache and kbd (dropped since
+   https://github.com/storaged-project/libblockdev/commit/c1ff1c87e31fb2820a5694637eb221f590eb9451)
+ - python2 (dropped since
+   https://github.com/storaged-project/libblockdev/commit/8fc33b834529d3d18a73112e4c77ea0a5d26d62c)
+ - vdo (dropped since
+   https://github.com/storaged-project/libblockdev/commit/e51faac2a952da33925e3ccab0f4f0fdf3986cd3)
 
-diff --git a/package/python-pathspec/python-pathspec.hash b/package/python-pathspec/python-pathspec.hash
-index 5eb76cb5f9..01177b7428 100644
---- a/package/python-pathspec/python-pathspec.hash
-+++ b/package/python-pathspec/python-pathspec.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathspec/json
--md5  d89408b52aff020ac768a14c0ef1c7de  pathspec-0.10.3.tar.gz
--sha256  56200de4077d9d0791465aa9095a01d421861e405b5096955051deefd697d6f6  pathspec-0.10.3.tar.gz
-+md5  92ebd6d735d261952ff99d64083eeff4  pathspec-0.11.2.tar.gz
-+sha256  e0d8d0ac2f12da61956eb2306b69f9469b42f4deb0f3cb6ed47b9cce9996ced3  pathspec-0.11.2.tar.gz
- # Locally computed sha256 checksums
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/python-pathspec/python-pathspec.mk b/package/python-pathspec/python-pathspec.mk
-index e88bce231f..d32b6a56e1 100644
---- a/package/python-pathspec/python-pathspec.mk
-+++ b/package/python-pathspec/python-pathspec.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libblockdev/libblockdev.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index 3bbc221cc5..e0fca2b95c 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -16,20 +16,15 @@ LIBBLOCKDEV_AUTORECONF = YES
+ LIBBLOCKDEV_CONF_OPTS = \
+ 	--disable-introspection \
+ 	--with-loop \
+-	--without-bcache \
+ 	--without-btrfs \
+ 	--without-dm \
+-	--without-dmraid \
+ 	--without-escrow \
+-	--without-kbd \
+ 	--without-lvm_dbus \
+ 	--without-mpath \
+ 	--without-nvdimm \
+-	--without-python2 \
+ 	--without-python3 \
+ 	--without-s390 \
+-	--without-tools \
+-	--without-vdo
++	--without-tools
  
--PYTHON_PATHSPEC_VERSION = 0.10.3
-+PYTHON_PATHSPEC_VERSION = 0.11.2
- PYTHON_PATHSPEC_SOURCE = pathspec-$(PYTHON_PATHSPEC_VERSION).tar.gz
--PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/32/1a/6baf904503c3e943cae9605c9c88a43b964dea5b59785cf956091b341b08
-+PYTHON_PATHSPEC_SITE = https://files.pythonhosted.org/packages/a0/2a/bd167cdf116d4f3539caaa4c332752aac0b3a0cc0174cdb302ee68933e81
- PYTHON_PATHSPEC_LICENSE = MPL-2.0
- PYTHON_PATHSPEC_LICENSE_FILES = LICENSE
- PYTHON_PATHSPEC_SETUP_TYPE = setuptools
+ ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
+ LIBBLOCKDEV_DEPENDENCIES += cryptsetup keyutils
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
