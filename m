@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1837DC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 22:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30C0CC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 22:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF26140A08;
-	Sun,  3 Dec 2023 22:26:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF26140A08
+	by smtp2.osuosl.org (Postfix) with ESMTP id CCF3140A08;
+	Sun,  3 Dec 2023 22:27:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCF3140A08
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t8Smy_b2dnYe; Sun,  3 Dec 2023 22:26:45 +0000 (UTC)
+	with ESMTP id u3RQrFbBkqrx; Sun,  3 Dec 2023 22:26:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A0DF40A16;
-	Sun,  3 Dec 2023 22:26:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A0DF40A16
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 17CE91BF3DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2560F40A5F;
+	Sun,  3 Dec 2023 22:26:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2560F40A5F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A9911BF8C7
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19E96409D7
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:24:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19E96409D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61323410D5
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:24:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61323410D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4j6SiVD9nddd for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0cKkKFOeSamk for <buildroot@lists.busybox.net>;
  Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40A0240A2E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C80741529
  for <buildroot@buildroot.org>; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40A0240A2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C80741529
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2CE8A87934; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
+ id 6AD2A87935; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 22:37:14 +0100
+Date: Sun, 3 Dec 2023 23:17:55 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 37dfdda3211e3fdf35aa6b996604e32755f32d6d
-X-Git-Newrev: ce9b0d50c45ec26b3ab7b9351e5c411f04ba9cf4
+X-Git-Oldrev: b1509f719d8d4ce7da1757fd29b0c0dd6bc38f25
+X-Git-Newrev: 6b68acec970b841acebfde492b59b1026d248d74
 X-Patchwork-Hint: ignore
-Message-Id: <20231203222432.2CE8A87934@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/speechd: fix NLS
- build
+Message-Id: <20231203222432.6AD2A87935@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/mariadb: security
+ bump to version 10.11.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce9b0d50c45ec26b3ab7b9351e5c411f04ba9cf4
+commit: https://git.buildroot.net/buildroot/commit/?id=6b68acec970b841acebfde492b59b1026d248d74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix the following NLS build failure raised since the addition of the
-package in commit 9f4f8c5f8993c6d7c2ef730ac211ef84ac9ae26d:
+This bump will fix the following build failure raised since bump of fmt
+to version 10.1.0 in commit 619b5585d92c8f701cd92e0e26c0883a753125ad
+thanks to
+https://github.com/MariaDB/server/commit/f4cec369a392c8a6056207012992ad4a5639965a:
 
-/home/buildroot/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/12.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../../src/common/.libs/libcommon.a(libcommon_la-i18n.o): undefined reference to symbol 'libintl_bindtextdomain'
+-- Performing Test HAVE_SYSTEM_LIBFMT
+-- Performing Test HAVE_SYSTEM_LIBFMT - Failed
+
+[...]
+
+-- Downloading...
+   dst='/home/buildroot/autobuild/instance-3/output-1/build/mariadb-10.11.4/extra/libfmt/src/8.0.1.zip'
+   timeout='none'
+   inactivity timeout='none'
+-- Using src='https://github.com/fmtlib/fmt/archive/refs/tags/8.0.1.zip'
+CMake Error at libfmt-stamp/download-libfmt.cmake:170 (message):
+  Each download failed!
+
+    error: downloading 'https://github.com/fmtlib/fmt/archive/refs/tags/8.0.1.zip' failed
+          status_code: 1
+          status_string: "Unsupported protocol"
+          log:
+          --- LOG BEGIN ---
+          Protocol "https" not supported or disabled in libcurl
+
+This bump will also fix CVE-2023-22084
+
+https://mariadb.com/kb/en/mariadb-10-11-5-release-notes/
+https://mariadb.com/kb/en/mariadb-10-11-6-release-notes/
 
 Fixes:
- - http://autobuild.buildroot.org/results/8ab13cf474d732c95a1da65592d950b24b3d474b
+ - http://autobuild.buildroot.org/results/9cb577195aa939289102116df5a2eac03f0d5017
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f6a7050d7191b9a534d1d2789ceb72d69f25da83)
+(cherry picked from commit d20329ed76082553368241aa4b38f4dabf45bc76)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/speechd/speechd.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
-index ae777c6d30..c7c938a454 100644
---- a/package/speechd/speechd.mk
-+++ b/package/speechd/speechd.mk
-@@ -12,8 +12,11 @@ SPEECHD_INSTALL_STAGING = YES
- # speechd source code is released without configure script
- SPEECHD_AUTORECONF = YES
- SPEECHD_AUTOPOINT = YES
--SPEECHD_DEPENDENCIES = host-pkgconf dotconf libglib2 libsndfile
--SPEECHD_CONF_ENV = ac_cv_prog_HELP2MAN=""
-+SPEECHD_DEPENDENCIES = \
-+	host-pkgconf dotconf libglib2 libsndfile $(TARGET_NLS_DEPENDENCIES)
-+SPEECHD_CONF_ENV = \
-+	ac_cv_prog_HELP2MAN="" \
-+	LIBS=$(TARGET_NLS_LIBS)
- SPEECHD_CONF_OPTS = \
- 	--disable-python \
- 	--without-espeak \
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 03ce5a968a..fd73cca4f3 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.11.4
+-sha512  62fc05395857dd036ebeed53b1ff0ecd9abd95ce8e5316194286521caae0f9452cf96a93613adec809e39e1d8ef20c330b24fee82b3bb90ee27a84f2bbd0d8d2  mariadb-10.11.4.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.11.6
++sha512  3d77f7be4a26d5a36af56150a5f8ed5e21adeed9bc8ea1bd694e47a25a571bd73468eada7c96e0dfe5a6c81bef625abf71a56d228cf43a738e555e3c0d824a6a  mariadb-10.11.6.tar.gz
+ 
+ # Hash for license files
+ sha256  2b278a3a2f20696113a7c57c4f3e6a5cdb9a25f2a827e72e0c089a2f805ff91a  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 78e4703eee..7f3755892a 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.11.4
++MARIADB_VERSION = 10.11.6
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
