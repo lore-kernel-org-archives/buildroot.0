@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B11E1C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:25:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41284C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7118541C20;
-	Mon,  4 Dec 2023 20:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7118541C20
+	by smtp4.osuosl.org (Postfix) with ESMTP id F358741C20;
+	Mon,  4 Dec 2023 20:25:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F358741C20
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aGTGrKkCPTCC; Mon,  4 Dec 2023 20:25:26 +0000 (UTC)
+	with ESMTP id KArjlmn8Ukcd; Mon,  4 Dec 2023 20:25:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DF3C41C0A;
-	Mon,  4 Dec 2023 20:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DF3C41C0A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 05FE11BF31D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DD3841919;
+	Mon,  4 Dec 2023 20:25:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DD3841919
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 171931BF977
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3F7D41751
+ by smtp2.osuosl.org (Postfix) with ESMTP id C828E41753
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3F7D41751
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C828E41753
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uz7uXtz7y4pL for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s_R-VRYUylV5 for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 368834173B
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA4D54175A
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 368834173B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA4D54175A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 345C4879B7; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
+ id D5067879B9; Mon,  4 Dec 2023 20:13:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 2 Dec 2023 09:37:23 +0100
+Date: Sun, 3 Dec 2023 18:15:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 03e66a35eabaed9f258b8670eba2e8fc13dd3eb5
-X-Git-Newrev: 6358bb3a9bcf8d4c66893e8df513d18bf0022c35
+X-Git-Oldrev: f1de35e2a0ea2496a920d0b28b5986ffb50f0640
+X-Git-Newrev: a9d03feed642a860c11122a0b0ab32365201fc40
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201330.345C4879B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsyslog: add libdbi-drivers
- optional dependency
+Message-Id: <20231204201330.D5067879B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/raspberrypi/readme.txt: add pi0w hint
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +57,39 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1150587186672518712=="
+Content-Type: multipart/mixed; boundary="===============6837521027871161749=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1150587186672518712==
+--===============6837521027871161749==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6358bb3a9bcf8d4c66893e8df513d18bf0022c35
+commit: https://git.buildroot.net/buildroot/commit/?id=a9d03feed642a860c11122a0b0ab32365201fc40
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Needed in order to use omlibdbi module
-
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsyslog/rsyslog.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ board/raspberrypi/readme.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index cf9f2c0e79..8ea92ea785 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -151,6 +151,13 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-omjournal
- endif
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index c81fd801ae..ebcf8da588 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -28,6 +28,10 @@ For model Zero (model A+ in smaller form factor):
  
-+ifeq ($(BR2_PACKAGE_LIBDBI_DRIVERS),y)
-+RSYSLOG_CONF_OPTS += --enable-libdbi
-+RSYSLOG_DEPENDENCIES += libdbi-drivers
-+else
-+RSYSLOG_CONF_OPTS += --disable-libdbi
-+endif
+   $ make raspberrypi0_defconfig
+ 
++or for model Zero W (model Zero with wireless LAN and Bluetooth):
 +
- define RSYSLOG_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -m 0644 -D package/rsyslog/rsyslog.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/rsyslog.service
++  $ make raspberrypi0w_defconfig
++
+ For model Zero 2 W (model B3 in smaller form factor):
+ 
+   $ make raspberrypizero2w_defconfig
 
---===============1150587186672518712==
+--===============6837521027871161749==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -106,4 +100,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1150587186672518712==--
+--===============6837521027871161749==--
