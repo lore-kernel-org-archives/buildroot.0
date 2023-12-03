@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B638DC07E97
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 22:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84411C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 22:26:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 622574047D;
-	Sun,  3 Dec 2023 22:25:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 622574047D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37F9740A01;
+	Sun,  3 Dec 2023 22:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37F9740A01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id omb6QSmugq4P; Sun,  3 Dec 2023 22:25:51 +0000 (UTC)
+	with ESMTP id UonSd9WIZixc; Sun,  3 Dec 2023 22:26:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 86B9040A4D;
-	Sun,  3 Dec 2023 22:25:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86B9040A4D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D6481BF8C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A73640A1F;
+	Sun,  3 Dec 2023 22:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A73640A1F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B1F51BF3DA
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 061AB8175F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53649409D7
  for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 22:24:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 061AB8175F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53649409D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DZ1sujj9JZOq for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vV-p1oueSroc for <buildroot@lists.busybox.net>;
  Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 208C68175C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D22D40A2F
  for <buildroot@buildroot.org>; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 208C68175C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D22D40A2F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1115087935; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
+ id 5AEC787934; Sun,  3 Dec 2023 22:24:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 22:33:44 +0100
+Date: Sun, 3 Dec 2023 23:17:31 +0100
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 2369c3b34ad9b31509907b01c44ff2013b6dee55
-X-Git-Newrev: 50abc2e77a249402bdbeef55ed7e64dd3a8641f1
+X-Git-Oldrev: dedfab8614082e493b084b8c2085d1bd597be946
+X-Git-Newrev: b1509f719d8d4ce7da1757fd29b0c0dd6bc38f25
 X-Patchwork-Hint: ignore
-Message-Id: <20231203222432.1115087935@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/libde265:
- security bump to version 1.0.14
+Message-Id: <20231203222432.5AEC787934@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libmemcached: fix
+ static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50abc2e77a249402bdbeef55ed7e64dd3a8641f1
+commit: https://git.buildroot.net/buildroot/commit/?id=b1509f719d8d4ce7da1757fd29b0c0dd6bc38f25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix CVE-2023-43887: Libde265 v1.0.12 was discovered to contain multiple
-buffer overflows via the num_tile_columns and num_tile_row parameters in
-the function pic_parameter_set::dump.
+Fix the following static build failure raised since bump to version
+1.1.4 in commit 7205df8a4f3c729b11a5f0c34885e6cf592f24b9:
 
-Fix CVE-2023-47471: Buffer Overflow vulnerability in strukturag libde265
-v1.10.12 allows a local attacker to cause a denial of service via the
-slice_segment_header function in the slice.cc component.
+CMake Error at /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/src/bin/cmake_install.cmake:60 (file):
+  file RPATH_CHANGE could not write new RPATH:
 
-https://github.com/strukturag/libde265/releases/tag/v1.0.14
-https://github.com/strukturag/libde265/releases/tag/v1.0.13
+    $ORIGIN/../lib
+
+  to the file:
+
+    /home/autobuild/autobuild/instance-13/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/bin/memcapable
+
+  No valid ELF RPATH or RUNPATH entry exists in the file;
+Call Stack (most recent call first):
+  /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/src/cmake_install.cmake:52 (include)
+  /home/autobuild/autobuild/instance-13/output-1/build/libmemcached-1.1.4/cmake_install.cmake:52 (include)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/778ff517d465896f54a3cd5316a66c54f66fd4cb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4cf5d91d8bf1dc48af612e785bde869e47048ec3)
+(cherry picked from commit b47b2065b249b3f50f3164d8a8114b108f596559)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libde265/libde265.hash | 2 +-
- package/libde265/libde265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libmemcached/libmemcached.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libde265/libde265.hash b/package/libde265/libde265.hash
-index 168b5db395..9bb3f20a71 100644
---- a/package/libde265/libde265.hash
-+++ b/package/libde265/libde265.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  62185ea2182e68cf68bba20cc6eb4c287407b509cf0a827d7ddb75614db77b5c  libde265-1.0.12.tar.gz
-+sha256  99f46ef77a438be639aa3c5d9632c0670541c5ed5d386524d4199da2d30df28f  libde265-1.0.14.tar.gz
- sha256  02cc1585a20677992e0ba578fa692635dc193735f2691dc81de924b51c4e8020  COPYING
-diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
-index 208fa24e27..8624d2f949 100644
---- a/package/libde265/libde265.mk
-+++ b/package/libde265/libde265.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
+index 63df8f5c20..b72f127a1d 100644
+--- a/package/libmemcached/libmemcached.mk
++++ b/package/libmemcached/libmemcached.mk
+@@ -18,7 +18,8 @@ LIBMEMCACHED_CPE_ID_VENDOR = awesome
+ # unexpected build failures with packages that use libmemcached (e.g. c-icap)
+ LIBMEMCACHED_CONF_OPTS += \
+ 	-DCMAKE_BUILD_TYPE=Release \
+-	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99"
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
++	-DCMAKE_SKIP_RPATH=ON
  
--LIBDE265_VERSION = 1.0.12
-+LIBDE265_VERSION = 1.0.14
- LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
- LIBDE265_LICENSE = LGPL-3.0+
- LIBDE265_LICENSE_FILES = COPYING
+ ifeq ($(BR2_PACKAGE_LIBEVENT),y)
+ LIBMEMCACHED_DEPENDENCIES += libevent
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
