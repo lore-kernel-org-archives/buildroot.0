@@ -4,51 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 288CAC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 19:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63907C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 19:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9906A40488;
-	Sun,  3 Dec 2023 19:20:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9906A40488
+	by smtp2.osuosl.org (Postfix) with ESMTP id 177B440603;
+	Sun,  3 Dec 2023 19:20:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 177B440603
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ij35NzYEq92T; Sun,  3 Dec 2023 19:20:03 +0000 (UTC)
+	with ESMTP id isUbV3poqAF9; Sun,  3 Dec 2023 19:20:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B00BB40438;
-	Sun,  3 Dec 2023 19:20:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B00BB40438
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7726D1BF32C
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:20:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 29BC440438;
+	Sun,  3 Dec 2023 19:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29BC440438
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 05F881BF32C
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C6D081463
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C6D081463
+ by smtp4.osuosl.org (Postfix) with ESMTP id D309640993
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:20:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D309640993
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rJpIFOMCBdg6 for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 19:20:00 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA76F81461
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 19:19:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA76F81461
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 18DD460002;
- Sun,  3 Dec 2023 19:19:57 +0000 (UTC)
-Message-ID: <8da56124-7e33-461a-94d3-a2df72968503@korsgaard.com>
-Date: Sun, 3 Dec 2023 20:19:57 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20231121180339.3015360-1-ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vfUJPckKNctU for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 19:20:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D59B40932
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 19:20:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D59B40932
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 185BB8789F; Sun,  3 Dec 2023 19:20:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20231121180339.3015360-1-ju.o@free.fr>
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH next 1/1] package/rdma-core: bump to version
- v49.0
+To: buildroot@buildroot.org
+Date: Sun, 3 Dec 2023 20:18:56 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 790d554474c5a999d2996dc532bc042631ef16f2
+X-Git-Newrev: 8e871ac18bcedb268d11059a8e5be40da442295f
+X-Patchwork-Hint: ignore
+Message-Id: <20231203192014.185BB8789F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rdma-core: bump to
+ version v49.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,22 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/11/2023 19.03, Julien Olivain wrote:
-> For change log, see:
-> https://github.com/linux-rdma/rdma-core/releases/tag/v49.0
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=8e871ac18bcedb268d11059a8e5be40da442295f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Committed to next, thanks.
+For change log, see:
+https://github.com/linux-rdma/rdma-core/releases/tag/v49.0
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rdma-core/rdma-core.hash | 2 +-
+ package/rdma-core/rdma-core.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
+index f0f2448a8f..fc1d319123 100644
+--- a/package/rdma-core/rdma-core.hash
++++ b/package/rdma-core/rdma-core.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  e78abaa3ed16771bc6c40b538fe27082429363b86b6ce47636bb57a59238b2be  rdma-core-48.0.tar.gz
++sha256  1ea2c2678d48be0b179871e9ae8c58ceab11a0c5b69315a332ff51dd607180b7  rdma-core-49.0.tar.gz
+ sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
+ sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
+diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
+index 41f10d44f6..5f8989b3bd 100644
+--- a/package/rdma-core/rdma-core.mk
++++ b/package/rdma-core/rdma-core.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RDMA_CORE_VERSION = 48.0
++RDMA_CORE_VERSION = 49.0
+ RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
+ RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
+ RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
