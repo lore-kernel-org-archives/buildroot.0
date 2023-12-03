@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4892CC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 21:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C0A9C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 21:22:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF00E40519;
-	Sun,  3 Dec 2023 21:04:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF00E40519
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9739400EC;
+	Sun,  3 Dec 2023 21:22:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9739400EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9bXaZy7uOt8K; Sun,  3 Dec 2023 21:04:57 +0000 (UTC)
+	with ESMTP id 5uuPb23NdAEf; Sun,  3 Dec 2023 21:22:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC0204012F;
-	Sun,  3 Dec 2023 21:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC0204012F
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3C92400F9;
+	Sun,  3 Dec 2023 21:22:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3C92400F9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D9CA1BF3EE
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:04:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 433CF1BF3EE
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43567607C1
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:04:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43567607C1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 186CB607BC
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 21:22:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 186CB607BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9is7dmq46i1B for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 21:04:53 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E7CCF606F2
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 21:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7CCF606F2
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F346C1C0004;
- Sun,  3 Dec 2023 21:04:49 +0000 (UTC)
+ with ESMTP id 0GGscjWddZ9v for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 21:22:26 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E7A2760767
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 21:22:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7A2760767
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 779DC20005;
+ Sun,  3 Dec 2023 21:22:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9tdx-009e30-10;
- Sun, 03 Dec 2023 22:04:49 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r9tuv-009gsq-2e;
+ Sun, 03 Dec 2023 22:22:21 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231201203822.615354-1-fontaine.fabrice@gmail.com>
-Date: Sun, 03 Dec 2023 22:04:49 +0100
-In-Reply-To: <20231201203822.615354-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 1 Dec 2023 21:38:22 +0100")
-Message-ID: <87leabvvym.fsf@48ers.dk>
+References: <20231201212318.1091953-1-fontaine.fabrice@gmail.com>
+Date: Sun, 03 Dec 2023 22:22:21 +0100
+In-Reply-To: <20231201212318.1091953-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 1 Dec 2023 22:23:18 +0100")
+Message-ID: <87h6kzvv5e.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/putty: fix static build
+Subject: Re: [Buildroot] [PATCH 1/1] package/libpjsip: security bump to
+ version 2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,33 +63,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Dahl <post@lespocky.de>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
-
- > Fix the following static build failure raised since bump to version 0.78
- > in commit 5673ea3ce4d4dd721bb17fc8d5b1283f5c1080b4:
-
- > In file included from /home/buildroot/autobuild/instance-0/output-1/build/putty-0.78/putty.h:8,
- >                  from /home/buildroot/autobuild/instance-0/output-1/build/putty-0.78/callback.c:8:
- > /home/buildroot/autobuild/instance-0/output-1/build/putty-0.78/unix/platform.h:11:10: fatal error: dlfcn.h: No such file or directory
- >    11 | #include <dlfcn.h>                     /* Dynamic library loading */
- >       |          ^~~~~~~~~
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/06f0b14bd0414f97b06070198e290fb3253348c5
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkZhYnJpY2UiID09IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21h
+aWwuY29tPiB3cml0ZXM6CgogPiBGaXggQ1ZFLTIwMjMtMzg3MDM6IFBKU0lQIGlzIGEgZnJlZSBh
+bmQgb3BlbiBzb3VyY2UgbXVsdGltZWRpYQogPiBjb21tdW5pY2F0aW9uIGxpYnJhcnkgd3JpdHRl
+biBpbiBDIHdpdGggaGlnaCBsZXZlbCBBUEkgaW4gQywgQysrLCBKYXZhLAogPiBDIywgYW5kIFB5
+dGhvbiBsYW5ndWFnZXMuIFNSVFAgaXMgYSBoaWdoZXIgbGV2ZWwgbWVkaWEgdHJhbnNwb3J0IHdo
+aWNoCiA+IGlzIHN0YWNrZWQgdXBvbiBhIGxvd2VyIGxldmVsIG1lZGlhIHRyYW5zcG9ydCBzdWNo
+IGFzIFVEUCBhbmQgSUNFLgogPiBDdXJyZW50bHkgYSBoaWdoZXIgbGV2ZWwgdHJhbnNwb3J0IGlz
+IG5vdCBzeW5jaHJvbml6ZWQgd2l0aCBpdHMgbG93ZXIKID4gbGV2ZWwgdHJhbnNwb3J0IHRoYXQg
+bWF5IGludHJvZHVjZSB1c2UtYWZ0ZXItZnJlZSBpc3N1ZS4gVGhpcwogPiB2dWxuZXJhYmlsaXR5
+IGFmZmVjdHMgYXBwbGljYXRpb25zIHRoYXQgaGF2ZSBTUlRQIGNhcGFiaWxpdHkKID4gKGBQSk1F
+RElBX0hBU19TUlRQYCBpcyBzZXQpIGFuZCB1c2UgdW5kZXJseWluZyBtZWRpYSB0cmFuc3BvcnQg
+b3RoZXIKID4gdGhhbiBVRFAuIFRoaXMgdnVsbmVyYWJpbGl0eeKAmXMgaW1wYWN0IG1heSByYW5n
+ZSBmcm9tIHVuZXhwZWN0ZWQKID4gYXBwbGljYXRpb24gdGVybWluYXRpb24gdG8gY29udHJvbCBm
+bG93IGhpamFjay9tZW1vcnkgY29ycnVwdGlvbi4gVGhlCiA+IHBhdGNoIGlzIGF2YWlsYWJsZSBh
+cyBhIGNvbW1pdCBpbiB0aGUgbWFzdGVyIGJyYW5jaC4KCiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9w
+anNpcC9wanByb2plY3Qvc2VjdXJpdHkvYWR2aXNvcmllcy9HSFNBLWY3NnctZmg3Yy1wYzY2CiA+
+IGh0dHBzOi8vZ2l0aHViLmNvbS9wanNpcC9wanByb2plY3QvcmVsZWFzZXMvdGFnLzIuMTQKCiA+
+IFNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwu
+Y29tPgoKQ29tbWl0dGVkIHRvIDIwMjMuMDIueCBhbmQgMjAyMy4wOC54LCB0aGFua3MuCgotLSAK
+QnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
