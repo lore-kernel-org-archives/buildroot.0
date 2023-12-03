@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FBE0C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:47:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8C1AC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A2F3415C7;
-	Sun,  3 Dec 2023 16:47:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A2F3415C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93B06415C7;
+	Sun,  3 Dec 2023 16:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93B06415C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5fvX3ngGo-CQ; Sun,  3 Dec 2023 16:47:02 +0000 (UTC)
+	with ESMTP id CiiHB6xxeWeK; Sun,  3 Dec 2023 16:48:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9209741584;
-	Sun,  3 Dec 2023 16:47:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9209741584
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DBA911BF471
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:46:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB0AB415A9;
+	Sun,  3 Dec 2023 16:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB0AB415A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DFB81BF471
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C281360A65
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:46:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C281360A65
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75AB240467
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75AB240467
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s833jhxUZCLv for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 16:46:59 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F11EB605BE
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:46:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F11EB605BE
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E0E31877B6; Sun,  3 Dec 2023 16:46:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5ypzrOhl6V6K for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 16:48:24 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BDCA4013D
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BDCA4013D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6389E60002;
+ Sun,  3 Dec 2023 16:48:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r9pdl-0096YJ-26;
+ Sun, 03 Dec 2023 17:48:21 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 17:45:42 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: af2cd694e3903131d6e2f00646adfa83a89a23e2
-X-Git-Newrev: a4e713558dfd9a6fd6c0677b4b094adc216b720e
-X-Patchwork-Hint: ignore
-Message-Id: <20231203164658.E0E31877B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/leptonica: bump to
- version 1.83.1
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20231127185106.2390761-1-giulio.benetti@benettiengineering.com>
+Date: Sun, 03 Dec 2023 17:48:20 +0100
+In-Reply-To: <20231127185106.2390761-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Mon, 27 Nov 2023 19:51:06 +0100")
+Message-ID: <87o7f7z0yz.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/libnss: bump version to 3.95
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,48 +62,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4e713558dfd9a6fd6c0677b4b094adc216b720e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-https://github.com/DanBloomberg/leptonica/compare/1.82.0...1.83.1
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/leptonica/leptonica.hash | 2 +-
- package/leptonica/leptonica.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to next, thanks.
 
-diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
-index 1220fbbd6e..6511d6b410 100644
---- a/package/leptonica/leptonica.hash
-+++ b/package/leptonica/leptonica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  155302ee914668c27b6fe3ca9ff2da63b245f6d62f3061c8f27563774b8ae2d6  leptonica-1.82.0.tar.gz
-+sha256  8f18615e0743af7df7f50985c730dfcf0c93548073d1f56621e4156a8b54d3dd  leptonica-1.83.1.tar.gz
- sha256  87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806  leptonica-license.txt
-diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
-index 8791b0c4c2..8eedf2fda9 100644
---- a/package/leptonica/leptonica.mk
-+++ b/package/leptonica/leptonica.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LEPTONICA_VERSION = 1.82.0
--LEPTONICA_SITE = http://www.leptonica.org/source
-+LEPTONICA_VERSION = 1.83.1
-+LEPTONICA_SITE = https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTONICA_VERSION)
- LEPTONICA_LICENSE = BSD-2-Clause
- LEPTONICA_LICENSE_FILES = leptonica-license.txt
- LEPTONICA_CPE_ID_VENDOR = leptonica
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
