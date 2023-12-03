@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CA4CC4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43C6FC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 16:58:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A41974150E;
-	Sun,  3 Dec 2023 16:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A41974150E
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF9FA41514;
+	Sun,  3 Dec 2023 16:58:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF9FA41514
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8OyhDpmA-aWf; Sun,  3 Dec 2023 16:55:21 +0000 (UTC)
+	with ESMTP id ltvj3roOi4tS; Sun,  3 Dec 2023 16:58:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B06141497;
-	Sun,  3 Dec 2023 16:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B06141497
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 404A21BF471
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:55:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D712414CD;
+	Sun,  3 Dec 2023 16:58:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D712414CD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C11721BF471
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:58:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A1C641497
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:55:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A1C641497
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1F0240467
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 16:58:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1F0240467
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7fXpPKCpbKQI for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 16:55:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GMYhkoSzYxXM for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 16:58:50 +0000 (UTC)
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3F62F41496
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F62F41496
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F9DE1C0002;
- Sun,  3 Dec 2023 16:55:15 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1CC22400D8
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 16:58:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CC22400D8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 292921C0004;
+ Sun,  3 Dec 2023 16:58:48 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1r9pkQ-0096xD-2e;
- Sun, 03 Dec 2023 17:55:14 +0100
+ (envelope-from <peter@korsgaard.com>) id 1r9pnr-0097HG-1k;
+ Sun, 03 Dec 2023 17:58:47 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Sergey Matyukevich <geomatsi@gmail.com>
 References: <20231202123400.2327151-1-geomatsi@gmail.com>
- <20231202123400.2327151-2-geomatsi@gmail.com>
-Date: Sun, 03 Dec 2023 17:55:14 +0100
-In-Reply-To: <20231202123400.2327151-2-geomatsi@gmail.com> (Sergey
- Matyukevich's message of "Sat, 2 Dec 2023 15:31:37 +0300")
-Message-ID: <87jzpvz0nh.fsf@48ers.dk>
+ <20231202123400.2327151-3-geomatsi@gmail.com>
+Date: Sun, 03 Dec 2023 17:58:47 +0100
+In-Reply-To: <20231202123400.2327151-3-geomatsi@gmail.com> (Sergey
+ Matyukevich's message of "Sat, 2 Dec 2023 15:31:38 +0300")
+Message-ID: <87fs0jz0hk.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/5] configs/linksprite_pcduino_defconfig:
- bump BSP versions
+Subject: Re: [Buildroot] [PATCH 2/5] configs/orangepi_pc_plus: bump BSP
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,7 +75,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  > Switch to the new Linux LTS release 6.6.3. Swtich to the
  > latest U-Boot 2023.10.
 
-s/Swtich/Switch/. Fixed that and committed to next, thanks.
+ > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
