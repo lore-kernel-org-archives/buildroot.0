@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63907C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 19:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC408C4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 19:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 177B440603;
-	Sun,  3 Dec 2023 19:20:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 177B440603
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9547B40438;
+	Sun,  3 Dec 2023 19:21:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9547B40438
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id isUbV3poqAF9; Sun,  3 Dec 2023 19:20:18 +0000 (UTC)
+	with ESMTP id 5odHnhGVV_MT; Sun,  3 Dec 2023 19:21:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 29BC440438;
-	Sun,  3 Dec 2023 19:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29BC440438
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 05F881BF32C
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:20:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE8F0404B9;
+	Sun,  3 Dec 2023 19:21:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE8F0404B9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B6EF1BF32C
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D309640993
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:20:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D309640993
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3502781467
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 19:21:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3502781467
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vfUJPckKNctU for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 19:20:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D59B40932
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 19:20:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D59B40932
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 185BB8789F; Sun,  3 Dec 2023 19:20:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ffaSp2WSbiqf for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 19:21:21 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 53CA981461
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 19:21:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53CA981461
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AA64C1C0003;
+ Sun,  3 Dec 2023 19:21:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r9s1m-009YZY-39;
+ Sun, 03 Dec 2023 20:21:18 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 20:18:56 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 790d554474c5a999d2996dc532bc042631ef16f2
-X-Git-Newrev: 8e871ac18bcedb268d11059a8e5be40da442295f
-X-Patchwork-Hint: ignore
-Message-Id: <20231203192014.185BB8789F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rdma-core: bump to
- version v49.0
+To: Romain Naour <romain.naour@smile.fr>
+References: <20231111113731.859747-1-romain.naour@smile.fr>
+Date: Sun, 03 Dec 2023 20:21:18 +0100
+In-Reply-To: <20231111113731.859747-1-romain.naour@smile.fr> (Romain Naour's
+ message of "Sat, 11 Nov 2023 12:37:31 +0100")
+Message-ID: <87plznw0r5.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: print error
+ log if the runtime test fail
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +63,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e871ac18bcedb268d11059a8e5be40da442295f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
-For change log, see:
-https://github.com/linux-rdma/rdma-core/releases/tag/v49.0
+ > When an error occurs, the gitlab-ci job log doesn't contain any useful
+ > information than the name of the failing test:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rdma-core/rdma-core.hash | 2 +-
- package/rdma-core/rdma-core.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >   FAIL: test_run (tests.package.test_python_paho_mqtt.TestPythonPahoMQTT)
 
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-index f0f2448a8f..fc1d319123 100644
---- a/package/rdma-core/rdma-core.hash
-+++ b/package/rdma-core/rdma-core.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  e78abaa3ed16771bc6c40b538fe27082429363b86b6ce47636bb57a59238b2be  rdma-core-48.0.tar.gz
-+sha256  1ea2c2678d48be0b179871e9ae8c58ceab11a0c5b69315a332ff51dd607180b7  rdma-core-49.0.tar.gz
- sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
- sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-index 41f10d44f6..5f8989b3bd 100644
---- a/package/rdma-core/rdma-core.mk
-+++ b/package/rdma-core/rdma-core.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RDMA_CORE_VERSION = 48.0
-+RDMA_CORE_VERSION = 49.0
- RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
- RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
- RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
+ > In order to encourage contributors to investigate issues reported by
+ > gitlab-ci, we want to print the last lines of the log file (build or
+ > runtime).
+
+ > Unfortunately, gitlab-ci job log completely strips lines ending with
+ > CRCRLF [1][2]. We have to take a look at the gitlab-ci raw log to see
+ > the complete log [3].
+
+ > To workaround this issue, remove crlf from qemu serial stdio log
+ > while printing in the gitlab-ci job log (we don't want to change
+ > the log file generated by support/testing/run-tests and saved as
+ > artefacts).
+
+ > [1] https://gitlab.com/gitlab-org/gitlab/-/issues/218771
+ > [2] https://gitlab.com/kubu93/buildroot/-/jobs/5492937691
+ > [3] https://gitlab.com/kubu93/buildroot/-/jobs/5492937691/raw
+
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
