@@ -4,51 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31D50C4167B
-	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BEEC4167B
+	for <buildroot@archiver.kernel.org>; Sun,  3 Dec 2023 18:26:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDDD3415C8;
-	Sun,  3 Dec 2023 18:24:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDDD3415C8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B6FA415CA;
+	Sun,  3 Dec 2023 18:26:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B6FA415CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ksVPm7dv9lvW; Sun,  3 Dec 2023 18:24:57 +0000 (UTC)
+	with ESMTP id cCz2btmzK-p5; Sun,  3 Dec 2023 18:26:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F7B9415A7;
-	Sun,  3 Dec 2023 18:24:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F7B9415A7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 85DB01BF408
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:24:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF15D415C7;
+	Sun,  3 Dec 2023 18:26:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF15D415C7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B8A231BF408
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:26:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 579AC4156C
- for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 579AC4156C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8EF3540438
+ for <buildroot@lists.busybox.net>; Sun,  3 Dec 2023 18:26:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EF3540438
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bB0kJ3Y-_QQS for <buildroot@lists.busybox.net>;
- Sun,  3 Dec 2023 18:24:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NzRaIeLx4uVM for <buildroot@lists.busybox.net>;
+ Sun,  3 Dec 2023 18:26:37 +0000 (UTC)
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 085AE4155F
- for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:24:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 085AE4155F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E8543240002;
- Sun,  3 Dec 2023 18:24:47 +0000 (UTC)
-Message-ID: <a239b638-8c8b-47c1-8ff5-7d760e5ecb43@korsgaard.com>
-Date: Sun, 3 Dec 2023 19:24:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
-References: <20231026115034.2924408-1-neal.frager@amd.com>
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 97125400D8
+ for <buildroot@buildroot.org>; Sun,  3 Dec 2023 18:26:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97125400D8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 93472240002;
+ Sun,  3 Dec 2023 18:26:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1r9rAo-009CGe-2q;
+ Sun, 03 Dec 2023 19:26:34 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20231026115034.2924408-1-neal.frager@amd.com>
+To: Neal Frager <neal.frager@amd.com>
+References: <20231116122324.3457681-1-neal.frager@amd.com>
+Date: Sun, 03 Dec 2023 19:26:34 +0100
+In-Reply-To: <20231116122324.3457681-1-neal.frager@amd.com> (Neal Frager's
+ message of "Thu, 16 Nov 2023 12:23:22 +0000")
+Message-ID: <87jzpvxhut.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v4 1/1] configs/zynqmp_kria_kr260_defconfig:
- new defconfig
+Subject: Re: [Buildroot] [PATCH v1 1/3] configs/zynqmp_zcu102_defconfig:
+ bump to xilinx-v2023.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,55 +63,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bradley.Gamble@entrust.com, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, thomas.petazzoni@bootlin.com, david.evans@ebv.com,
- dylan.bespalko@amd.com, michal.simek@amd.com
+Cc: michal.simek@amd.com, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 26/10/2023 13.50, Neal Frager wrote:
-> This patch adds support for Xilinx Kria KR260 starter kit.
-> 
-> KR260 features can be found here:
-> https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
-> 
-> While the Kria SOM is based on a ZynqMP SoC, there are some key
-> boot config differences from the other ZynqMP evaluation boards.
-> 
-> 1. There are no boot switches on Kria SOMs. The boot mode is thus
-> hard configured for QSPI flash. A pre-programmed boot.bin comes
-> with every Starter Kit. U-Boot can then find the Linux kernel and
-> file system on the SD card.
-> 
-> Optional instructions for updating the boot.bin in the QSPI flash
-> can be found in the readme.txt file and the link below.
-> 
-> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM
-> 
-> 2. Kria SOMs use UART1 for the console instead of UART0. For this
-> reason, Kria Starter Kits will use a separate extlinux.conf file
-> from other ZynqMP evaluation boards.
-> 
-> 3. The KR260 has a USB to SD card bridge, so the Linux kernel
-> and file system are found on /dev/sda1 and /dev/sda2.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-> V1->V2:
->   - Submitted tri-state patches upstream
-> V2->V3:
->   - Formatted upstream patches to remove all of the mail server messages
-> V3->V4:
->   - Bumped to xilinx_v2023.2, so that board specific patches no longer needed
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
-Committed to next after fixing the kr260.sh shellcheck warnings, similar 
-to how I did for kv260.sh, thanks.
+ > This patch bumps the zynqmp_zcu102_defconfig to xilinx-v2023.2 which includes
+ > the following updates:
+
+ > - Linux v6.1.30 with additional bug fixes
+ > - U-Boot v2023.01 with additional bug fixes
+ > - ATF v2.8 with additional bug fixes
+ > - PMUFW xilinx_v2023.2
+
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
