@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3FA7C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 21:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86040C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 21:13:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 876D44011A;
-	Mon,  4 Dec 2023 21:12:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 876D44011A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2159641750;
+	Mon,  4 Dec 2023 21:13:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2159641750
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GT0GsZFkc671; Mon,  4 Dec 2023 21:12:38 +0000 (UTC)
+	with ESMTP id yhogL6eSLBwk; Mon,  4 Dec 2023 21:13:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 999E241762;
-	Mon,  4 Dec 2023 21:12:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 999E241762
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 077FB1BF977
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 21:12:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F40C41466;
+	Mon,  4 Dec 2023 21:13:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F40C41466
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C70F1BF30E
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 21:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E288460FBD
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 21:12:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E288460FBD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 319324174F
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 21:13:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 319324174F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0EQ3VzfMgBWz for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 21:12:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p-wQ43qNaFhW for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 21:13:05 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 07BD360B25
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 21:12:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07BD360B25
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE9ED4011A
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 21:13:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE9ED4011A
 Received: from fli4l.lan.fli4l (p4fd6c4a5.dip0.t-ipconnect.de [79.214.196.165])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E3659A4C042A
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 22:12:32 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50478)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D7EEAA4C042A
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 22:13:00 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35722)
  by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
- (envelope-from <bernd@kuhls.net>) id 1rAGEy-0006Rv-27
- for buildroot@buildroot.org; Mon, 04 Dec 2023 22:12:32 +0100
+ (envelope-from <bernd@kuhls.net>) id 1rAGFQ-0006Wv-25
+ for buildroot@buildroot.org; Mon, 04 Dec 2023 22:13:00 +0100
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon,  4 Dec 2023 22:12:32 +0100
-Message-Id: <20231204211232.12539-1-bernd@kuhls.net>
+Date: Mon,  4 Dec 2023 22:13:00 +0100
+Message-Id: <20231204211300.12560-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1701724352;
- bh=QbEgo4VmS5RlptgQZO2IyuOVFPGVgfYa7RjH/bRxq50=;
+ s=kas202306131828; t=1701724380;
+ bh=rgTg10xs9y7FrH+9aEWVWn/1utF3g1qkYpnEmten0q8=;
  h=From:To:Subject:Date:From;
- b=kuPid1fDz2ABO1tuuPOIrOcUTWQn/jdSBilHLY/Z3D3jfGBZXpETJereFvkzwnfZh
- S2wiGn8Pr4D1VnlxWAKaqu1z9MAmbFNcX5HBLJI9286VPjCKwNVpmSNLus2iCC7nBv
- rAffjel8g6NyGoyzYOtamq/icymvnfFijYWAVedbnv/dzZ7VvO8ul/BtR4WBCVZgbK
- Mdp9GH+0Qi7I9Byd3F7rtFa5c+C0M7HL88uKlCozZSfh2XlIWmEpVZED7sU02n9EUg
- dmlVsUlHDuDMT7mzl5h7fqDQq3hMO1+Nj8DnaQuq35bzmvYbRPxc4xJQaq1cDF1z7T
- jIQQTB6tec0KQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=xvUC/7y2IzcyES1C1DRPC5AuSUiivbXIS2moP7b4jU+8uTDeKPQxRWruejHE3R3ON
+ 6wd+/Q3/yQj8aL7l/2emjydB/o62FCnotCQji1MWo/I3M1FZaAJf0K4WmGzJZyyVzZ
+ EIS9nIcBNskiT5VwGPZ/S3avbuBrBKAjkaXaebW1W5rchZeaJz6Xl/G2m/UNIjToQw
+ 5NLA4JABE9iEcfBEQUL9H3clJXL5W9DzwH0wlojyra9q0dj9i8kcHPo9IYb86bmTzA
+ JySin4vAUZipSkLSys4aTQpfhBhgXcu9ldUgdnkGcXIlvQYMZd6N9d5qGuyIEzd8qA
+ M/j7JCpwREkeg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=kuPid1fD
-Subject: [Buildroot] [PATCH 1/1] package/ethtool: bump version to 6.6
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=xvUC/7y2
+Subject: [Buildroot] [PATCH 1/1] package/libheif: bump version to 1.17.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,47 +79,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch back to upstream-provided tarball after upstream fixed the
-inclusion of header files needed for older kernels:
-https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/commit/?id=988279e051e7a51d0b9e54a7366602ba2879d114
+Release notes:
+https://github.com/strukturag/libheif/releases
+
+Added configure support for new codec plugins introduced in version
+1.17.0: https://github.com/strukturag/libheif/releases/tag/v1.17.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ethtool/ethtool.hash | 3 ++-
- package/ethtool/ethtool.mk   | 9 +++------
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ package/libheif/libheif.hash |  2 +-
+ package/libheif/libheif.mk   | 30 +++++++++++++++++++++++++++++-
+ 2 files changed, 30 insertions(+), 2 deletions(-)
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 812e4dd8d1..a37c800015 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,4 +1,5 @@
-+# From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
-+sha256  833a8493cb9cd5809ab59743092d9a38742c282290800e9626407511bbcebf9e  ethtool-6.6.tar.xz
- # Locally calculated
--sha256  b1f5fa66f71c3bab9daeacbd77e010b52c47df0a711b216847f78405f3299189  ethtool-6.5.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index ee710e0021..c9c2856612 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,12 +4,9 @@
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index 50152abde5..6ea3ba6eec 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  7f97e4205c0bd9f9b8560536c8bd2e841d1c9a6d610401eb3eb87ed9cdfe78ea  libheif-1.16.2.tar.gz
++sha256  38ab01938ef419dbebb98346dc0b1c8bb503a0449ea61a0e409a988786c2af5b  libheif-1.17.5.tar.gz
+ sha256  b2eb4f6588b005bebac44cfb2dfd23f6a16c5ca9b8a619a315158b0215a917a3  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index 65e64a02f7..419a864ef3 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 6.5
--ETHTOOL_SITE = https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/snapshot
--# needed only for autoreconf
--ETHTOOL_DEPENDENCIES = host-pkgconf
--# GIT version, shipped without configure
--ETHTOOL_AUTORECONF = YES
-+ETHTOOL_VERSION = 6.6
-+ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
-+ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
- ETHTOOL_LICENSE_FILES = LICENSE COPYING
- ETHTOOL_CPE_ID_VENDOR = kernel
+-LIBHEIF_VERSION = 1.16.2
++LIBHEIF_VERSION = 1.17.5
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
+@@ -30,6 +30,20 @@ else
+ LIBHEIF_CONF_OPTS += -DWITH_DAV1D=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FFMPEG),y)
++LIBHEIF_CONF_OPTS += -DWITH_FFMPEG_DECODER=ON
++LIBHEIF_DEPENDENCIES += ffmpeg
++else
++LIBHEIF_CONF_OPTS += -DWITH_FFMPEG_DECODER=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_KVAZAAR),y)
++LIBHEIF_CONF_OPTS += -DWITH_KVAZAAR=ON
++LIBHEIF_DEPENDENCIES += kvazaar
++else
++LIBHEIF_CONF_OPTS += -DWITH_KVAZAAR=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBDE265),y)
+ LIBHEIF_CONF_OPTS += -DWITH_LIBDE265=ON
+ LIBHEIF_DEPENDENCIES += libde265
+@@ -37,6 +51,20 @@ else
+ LIBHEIF_CONF_OPTS += -DWITH_LIBDE265=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBJPEG),y)
++LIBHEIF_CONF_OPTS += -DWITH_JPEG_DECODER=ON -DWITH_JPEG_ENCODER=ON
++LIBHEIF_DEPENDENCIES += libjpeg
++else
++LIBHEIF_CONF_OPTS += -DWITH_JPEG_DECODER=OFF -DWITH_JPEG_ENCODER=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENJPEG),y)
++LIBHEIF_CONF_OPTS += -DWITH_OpenJPEG_DECODER=ON -DWITH_OpenJPEG_ENCODER=ON
++LIBHEIF_DEPENDENCIES += openjpeg
++else
++LIBHEIF_CONF_OPTS += -DWITH_OpenJPEG_DECODER=OFF -DWITH_OpenJPEG_ENCODER=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_X265),y)
+ LIBHEIF_CONF_OPTS += -DWITH_X265=ON
+ LIBHEIF_DEPENDENCIES += x265
 -- 
 2.39.2
 
