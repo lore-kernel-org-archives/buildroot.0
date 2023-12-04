@@ -4,65 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0020C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 21:16:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D00C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 21:16:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F05D41769;
-	Mon,  4 Dec 2023 21:16:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F05D41769
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0018417C2;
+	Mon,  4 Dec 2023 21:16:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0018417C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ju7Vz8FiPaKA; Mon,  4 Dec 2023 21:16:31 +0000 (UTC)
+	with ESMTP id eKgrT29Sy5Ml; Mon,  4 Dec 2023 21:16:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6BDCF419C3;
-	Mon,  4 Dec 2023 21:16:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BDCF419C3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DDFFC1BF30E
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 21:16:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C73EE419B6;
+	Mon,  4 Dec 2023 21:16:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C73EE419B6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9423F1BF30E
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 21:16:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C483760B25
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 21:16:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C483760B25
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7AFBD82197
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 21:16:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AFBD82197
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z-_b6EbhjurY for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 21:16:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P1vqhmKzlaqP for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 21:16:37 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DF5E860FBD
- for <buildroot@buildroot.org>; Mon,  4 Dec 2023 21:16:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF5E860FBD
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8ABC4818EC
+ for <buildroot@buildroot.org>; Mon,  4 Dec 2023 21:16:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ABC4818EC
 Received: from fli4l.lan.fli4l (p4fd6c4a5.dip0.t-ipconnect.de [79.214.196.165])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2777AA4C042A;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3FB91A4C0EB0;
  Mon,  4 Dec 2023 22:16:23 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:58136)
  by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
- (envelope-from <bernd@kuhls.net>) id 1rAGIg-00077J-2v;
- Mon, 04 Dec 2023 22:16:22 +0100
+ (envelope-from <bernd@kuhls.net>) id 1rAGIg-00077J-37;
+ Mon, 04 Dec 2023 22:16:23 +0100
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon,  4 Dec 2023 22:16:20 +0100
-Message-Id: <20231204211622.12687-1-bernd@kuhls.net>
+Date: Mon,  4 Dec 2023 22:16:21 +0100
+Message-Id: <20231204211622.12687-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231204211622.12687-1-bernd@kuhls.net>
+References: <20231204211622.12687-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1701724583;
- bh=UxEQuAIbI8Lv62RGPGu84+eYz/T4WArvgZRYJdsvg7U=;
- h=From:To:Cc:Subject:Date:From;
- b=Bto9xM26TGY8skHnAc1j3oiBFwPQ8FQykzowv74gewz2rAeLELKplwO68/iV6vZl6
- MCkbzJuXfRoXKz3QO4FvLau3PEolfzqMQcTG+oCd/Csc+ojPLfynbtz4V+NkUGW0iB
- cfauqzJf5tXcU5NAP0FClUfptWjhZjLhywVypxL+Tc3KJ6Z4aNobNn07CTuxhMocsM
- BXfJm3AfZ5atYbq2JVShOn4rVdeNV2Xe8lzPvfd40Tr4/S4lFNi3NK3IzRwJFtN110
- N05etELUWplb957cUAERFn9zMIw6RVGyxY/RuCTlFOEvPepTE6UsxdzVrrA2YMKEIZ
- 7q32JjiP2hHYg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=V+Det2W0TyQ/GnVUOcR3CAIRsEi045p6h0VWEYpJ4m4=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=IVUel2F9ZAnI32tfsoaJpNINlX1m3haeCFvwpzPZPePpe9nqiDNcbC/wO2Dx1mMGS
+ 0MJG5nEs0ehV1VYL22BJDP+dlmZpbQ0aPpnS2pA41tTPjLNfKBflMmF39rDJsEE4ca
+ OUcwZ1yy3Geuoss2ABp8CIK+6/L2g0/trMVpF3hv9hvSjgrN+52M3iGzIprObq5AzD
+ 3sY7eBnYIoGhNz42kga6aYxaohdzjjz7JciosZNdEagDvpNIJmlvtRpx0ag3cPnNuv
+ m7SNBdxMVVTDjPxgBlvjnPbzFPR6H27sz0oYh45CGGq0q7W54mHhHgkBBoQpHHpFCf
+ AUglvlxYpGQDQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=Bto9xM26
-Subject: [Buildroot] [PATCH 1/3] package/squid: fix build with libxml2-2.12
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=IVUel2F9
+Subject: [Buildroot] [PATCH 2/3] package/xmlstarlet: Fix build with
+ libxml2-2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,49 +85,46 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...0001-ESI-Fix-build-with-libxml2-2.12.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/squid/0001-ESI-Fix-build-with-libxml2-2.12.patch
+ .../0001-Fix-build-with-libxml2-2.12.patch    | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/xmlstarlet/0001-Fix-build-with-libxml2-2.12.patch
 
-diff --git a/package/squid/0001-ESI-Fix-build-with-libxml2-2.12.patch b/package/squid/0001-ESI-Fix-build-with-libxml2-2.12.patch
+diff --git a/package/xmlstarlet/0001-Fix-build-with-libxml2-2.12.patch b/package/xmlstarlet/0001-Fix-build-with-libxml2-2.12.patch
 new file mode 100644
-index 0000000000..c369651aba
+index 0000000000..9f32020d7d
 --- /dev/null
-+++ b/package/squid/0001-ESI-Fix-build-with-libxml2-2.12.patch
-@@ -0,0 +1,36 @@
-+From c50e5fd11744eb2cdfb90fb7e8180880160927c3 Mon Sep 17 00:00:00 2001
++++ b/package/xmlstarlet/0001-Fix-build-with-libxml2-2.12.patch
+@@ -0,0 +1,33 @@
++From 59395730bc66d97c154f727543e501d6f3c061af Mon Sep 17 00:00:00 2001
 +From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 25 Nov 2023 13:44:49 +0100
-+Subject: [PATCH] ESI: Fix build with libxml2-2.12
++Date: Sat, 25 Nov 2023 14:03:45 +0100
++Subject: [PATCH] Fix build with libxml2-2.12
 +
-+libxml2 recently made it a const return.
++Upstream reorganized header includes:
++https://github.com/GNOME/libxml2/blob/master/NEWS
 +
-+Fixes build error
++"Several cyclic dependencies in public header files were fixed. As a
++ result, certain headers won't include other headers as before."
 +
-+Libxml2Parser.cc:147:40: error: invalid conversion from 'const xmlError*'
-+ {aka 'const _xmlError*'} to 'xmlErrorPtr' {aka '_xmlError*'}
-+ [-fpermissive]
-+
-+Upstream: https://github.com/squid-cache/squid/pull/1600
++Upstream: https://sourceforge.net/p/xmlstar/patches/22/
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/esi/Libxml2Parser.cc | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/xmlstar.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/esi/Libxml2Parser.cc b/src/esi/Libxml2Parser.cc
-+index f03752885..73def2dbf 100644
-+--- a/src/esi/Libxml2Parser.cc
-++++ b/src/esi/Libxml2Parser.cc
-+@@ -144,7 +144,7 @@ ESILibxml2Parser::lineNumber() const
-+ char const *
-+ ESILibxml2Parser::errorString() const
-+ {
-+-    xmlErrorPtr error = xmlGetLastError();
-++    const xmlError *error = xmlGetLastError();
++diff --git a/src/xmlstar.h b/src/xmlstar.h
++index 3e1eed3..1a12da1 100644
++--- a/src/xmlstar.h
+++++ b/src/xmlstar.h
++@@ -15,6 +15,7 @@
++ #include <libxml/xpath.h>
++ #include <libxml/xpathInternals.h>
++ #include <libxml/xmlreader.h>
+++#include <libxml/xmlsave.h>
 + 
-+     if (error == nullptr)
-+         return nullptr;
++ typedef enum { /* EXIT_SUCCESS = 0, EXIT_FAILURE = 1, */
++     EXIT_BAD_ARGS = EXIT_FAILURE+1, EXIT_BAD_FILE,
 +-- 
 +2.39.2
 +
