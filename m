@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79B3BC4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4465C4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 20:31:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3735B424B3;
-	Mon,  4 Dec 2023 20:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3735B424B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 828204257F;
+	Mon,  4 Dec 2023 20:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 828204257F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xpdPicKCcUZQ; Mon,  4 Dec 2023 20:31:06 +0000 (UTC)
+	with ESMTP id bujO89rpt4ws; Mon,  4 Dec 2023 20:31:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FFD542547;
-	Mon,  4 Dec 2023 20:31:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FFD542547
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7723F1BF977
- for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D485942567;
+	Mon,  4 Dec 2023 20:31:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D485942567
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 113881BF31D
+ for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A7824174F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99E4A41724
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A7824174F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99E4A41724
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ASoW7QBFJFtx for <buildroot@lists.busybox.net>;
- Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tzFwsYcMklbK for <buildroot@lists.busybox.net>;
+ Mon,  4 Dec 2023 20:13:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 230C141749
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6628C41773
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 230C141749
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6628C41773
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 145D5879B9; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
+ id 609A9879B6; Mon,  4 Dec 2023 20:13:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Dec 2023 19:25:40 +0100
+Date: Mon, 4 Dec 2023 21:11:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b7ff789e0e5e5e40bbf4bd0145100a842df16ccc
-X-Git-Newrev: 075a65a4e1dd0ede3002fa47a2b6cafcea75edb9
+X-Git-Oldrev: 3503d48897bd841f26e2a20bf750dc8174d0fa85
+X-Git-Newrev: 0c6f3d7f2e286d6f2eb66b1d8cd437942e87f1d5
 X-Patchwork-Hint: ignore
-Message-Id: <20231204201331.145D5879B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp_zcu102_defconfig: bump to
- xilinx-v2023.2
+Message-Id: <20231204201331.609A9879B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Merge branch 'next'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,61 +62,9 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=075a65a4e1dd0ede3002fa47a2b6cafcea75edb9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This patch bumps the zynqmp_zcu102_defconfig to xilinx-v2023.2 which includes
-the following updates:
-
-- Linux v6.1.30 with additional bug fixes
-- U-Boot v2023.01 with additional bug fixes
-- ATF v2.8 with additional bug fixes
-- PMUFW xilinx_v2023.2
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/zynqmp_zcu102_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index 18230cf89b..c920093d8d 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
-@@ -15,13 +15,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.1)/xlnx_rebase_v2.8_2023.1.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.2)/xlnx_rebase_v2.8_2023.2.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-@@ -30,7 +30,7 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.1/zcu102-zynqmp/pmufw.elf"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/zcu102-zynqmp/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+commit: https://git.buildroot.net/buildroot/commit/?id=0c6f3d7f2e286d6f2eb66b1d8cd437942e87f1d5
+Patch is too large, so refusing to show it
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
