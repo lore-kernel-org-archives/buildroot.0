@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ED00C4167B
-	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 13:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7517CC4167B
+	for <buildroot@archiver.kernel.org>; Mon,  4 Dec 2023 13:42:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7E2481F16;
-	Mon,  4 Dec 2023 13:42:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7E2481F16
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D67F81F2B;
+	Mon,  4 Dec 2023 13:42:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D67F81F2B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id thXCuVX6c29N; Mon,  4 Dec 2023 13:42:18 +0000 (UTC)
+	with ESMTP id R-wBFfuJAYxm; Mon,  4 Dec 2023 13:42:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3128081E14;
-	Mon,  4 Dec 2023 13:42:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3128081E14
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B159B1BF969
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5294C81F30;
+	Mon,  4 Dec 2023 13:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5294C81F30
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D56721BF977
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 13:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89E02416D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE4514015F
  for <buildroot@lists.busybox.net>; Mon,  4 Dec 2023 13:42:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89E02416D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE4514015F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N7LiNX_n5XSb for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sa41tLtULUKJ for <buildroot@lists.busybox.net>;
  Mon,  4 Dec 2023 13:42:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9FE241695
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF30F40142
  for <buildroot@buildroot.org>; Mon,  4 Dec 2023 13:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9FE241695
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF30F40142
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7BB28798D; Mon,  4 Dec 2023 13:42:14 +0000 (UTC)
+ id 977B28798C; Mon,  4 Dec 2023 13:42:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Dec 2023 14:41:23 +0100
+Date: Mon, 4 Dec 2023 14:38:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 955fd5a15529fda2af6f8844d9fc541c4b8a79be
-X-Git-Newrev: 46e2e2549bb27f83fc3eefa949969f137e4b3230
+X-Git-Oldrev: 1ed291ae978006600b4e41130207d09b0271ed14
+X-Git-Newrev: 955fd5a15529fda2af6f8844d9fc541c4b8a79be
 X-Patchwork-Hint: ignore
-Message-Id: <20231204134214.A7BB28798D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2023.08.4
+Message-Id: <20231204134214.977B28798C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2023.08.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +62,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46e2e2549bb27f83fc3eefa949969f137e4b3230
+commit: https://git.buildroot.net/buildroot/commit/?id=955fd5a15529fda2af6f8844d9fc541c4b8a79be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5abe7bd726493acd0b9ea4600b7a33ccfaefce2f)
+[Peter: drop Makefile/Vagrantfile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ CHANGES | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 78ae18ffc4..4eff3f4ddf 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index f927b7df65..bcd4102297 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -118,6 +118,24 @@
+ 	#15826: nodejs modules with native extensions fail to install
+ 	#15835: Incompatibility between network-manager and libcurl 8.4
  
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2023.08.4 released, 2023.08.x series EOL</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 December 2023</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2023.08.4 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2023.08.3 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2023.08.4">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87o7f6t7fs.fsf@48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2023.08.4.tar.xz">2023.08.4 release</a>.</p>
++2023.08.4, released December 4th, 2023
 +
-+	  <p>Notice that the 2023.08.x series is now end of life. Please migrate to
-+	  the 2023.11 series instead.</p>
-+      </div>
-+    </div>
-+  </li>
++	Important / security related fixes.
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Defconfigs: Raspberrypi: Fix DT overlay for autoproving of
++	bluetooth driver, Toradex apalis i.mx6: Add download hashes
++	for Linux and U-Boot.
++
++	Updated/fixed packages: gcc, erlang, exfatprogs, gsl,
++	imagemagick, intel-microcode, libde265, libmemcached,
++	libpjsip, libxml2, mariadb, memcached, motion, netsnmp, perl,
++	postgresql, putty, rtty, samba4, speechd, squid, vim, vlc,
++	xenomai, xtables-addons, zfs
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#15856: Using BR2_CONFIG= on a different file-system...
++
+ 2023.08.3, released November 14th, 2023
+ 
+ 	Important / security related fixes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
