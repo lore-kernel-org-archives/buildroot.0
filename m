@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B91B9C10DCE
-	for <buildroot@archiver.kernel.org>; Tue,  5 Dec 2023 09:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C521C10DCE
+	for <buildroot@archiver.kernel.org>; Tue,  5 Dec 2023 09:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A69D822F4;
-	Tue,  5 Dec 2023 09:44:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A69D822F4
+	by smtp1.osuosl.org (Postfix) with ESMTP id B96F982305;
+	Tue,  5 Dec 2023 09:44:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B96F982305
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id meI9zHQACevD; Tue,  5 Dec 2023 09:44:04 +0000 (UTC)
+	with ESMTP id QlW07hmJHPjs; Tue,  5 Dec 2023 09:44:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF99A822EF;
-	Tue,  5 Dec 2023 09:44:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF99A822EF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8CDCE1BF2AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10439822E9;
+	Tue,  5 Dec 2023 09:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10439822E9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AA5841BF97D
  for <buildroot@lists.busybox.net>; Tue,  5 Dec 2023 09:44:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72EF04054A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8256E4012F
  for <buildroot@lists.busybox.net>; Tue,  5 Dec 2023 09:44:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72EF04054A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8256E4012F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JKpQdSV84hVh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AChyR_9BQ2VY for <buildroot@lists.busybox.net>;
  Tue,  5 Dec 2023 09:44:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4262140457
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C9A5400D6
  for <buildroot@buildroot.org>; Tue,  5 Dec 2023 09:44:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4262140457
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C9A5400D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30DBC879DD; Tue,  5 Dec 2023 09:44:01 +0000 (UTC)
+ id 268B1879DC; Tue,  5 Dec 2023 09:44:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 5 Dec 2023 10:43:41 +0100
+Date: Tue, 5 Dec 2023 10:42:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0a54c46054b618f191e5474c8e4961462b97056e
-X-Git-Newrev: 41f49d2067db9c0b895efb0b0c9ae0c481920640
+X-Git-Oldrev: 0c6f3d7f2e286d6f2eb66b1d8cd437942e87f1d5
+X-Git-Newrev: 0a54c46054b618f191e5474c8e4961462b97056e
 X-Patchwork-Hint: ignore
-Message-Id: <20231205094401.30DBC879DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sofia-sip: bump version to 1.13.17
+Message-Id: <20231205094401.268B1879DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: security bump version to
+ 8.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,39 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41f49d2067db9c0b895efb0b0c9ae0c481920640
+commit: https://git.buildroot.net/buildroot/commit/?id=0a54c46054b618f191e5474c8e4961462b97056e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+"This is a security release" according to the upstream release notes:
+https://news-web.php.net/php.announce/369
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sofia-sip/sofia-sip.hash | 2 +-
- package/sofia-sip/sofia-sip.mk   | 2 +-
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index 6799a941be..f4ce8d832d 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  125a9653bea1fc1cb275e4aec3445aa2deadf1fe3f1adffae9559d2349bfab36  sofia-sip-1.13.16.tar.gz
-+sha256  daca3d961b6aa2974ad5d3be69ed011726c3e4d511b2a0d4cb6d878821a2de7a  sofia-sip-1.13.17.tar.gz
- sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
- sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index c829625cb0..a64716483f 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0f77f0082f..8ad3823960 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  e1526e400bce9f9f9f774603cfac6b72b5e8f89fa66971ebc3cc4e5964083132  php-8.2.12.tar.xz
++sha256  2629bba10117bf78912068a230c68a8fd09b7740267bd8ebd3cfce91515d454b  php-8.2.13.tar.xz
+ 
+ # License file
+ sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index add46584c6..aaad741de7 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SOFIA_SIP_VERSION = 1.13.16
-+SOFIA_SIP_VERSION = 1.13.17
- SOFIA_SIP_SITE = $(call github,freeswitch,sofia-sip,v$(SOFIA_SIP_VERSION))
- SOFIA_SIP_INSTALL_STAGING = YES
- # Fetched from github, no pre-generated configure script provided
+-PHP_VERSION = 8.2.12
++PHP_VERSION = 8.2.13
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
