@@ -1,47 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69E36C4167B
-	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 02:05:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A0DAC4167B
+	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 06:43:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D07E243538;
-	Wed,  6 Dec 2023 02:05:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D07E243538
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5962403C5;
+	Wed,  6 Dec 2023 06:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5962403C5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mZV0wfnkYKZv; Wed,  6 Dec 2023 06:43:14 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E76B9404A3;
+	Wed,  6 Dec 2023 06:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E76B9404A3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 785961BF853
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 06:43:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2519E4031D
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 06:43:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2519E4031D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bwbz0L-auEUi; Wed,  6 Dec 2023 02:05:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D19D9435E4;
-	Wed,  6 Dec 2023 02:05:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D19D9435E4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BD3E01BF277
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 02:05:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 90C2481426
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 02:05:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90C2481426
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T-m_cAHbA4TE for <buildroot@lists.busybox.net>;
- Wed,  6 Dec 2023 02:05:39 +0000 (UTC)
-X-Greylist: delayed 118172 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 06 Dec 2023 02:05:39 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52B8D8140C
-Received: from busybox.net (unknown [38.170.237.199])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52B8D8140C
- for <buildroot@busybox.net>; Wed,  6 Dec 2023 02:05:39 +0000 (UTC)
-From: Webmail Voicemail+ <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 5 Dec 2023 16:05:38 -0800
-Message-ID: <20231205160538.A82AAC9EFDF0F877@busybox.net>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c1wFeSsCk_Xw for <buildroot@lists.busybox.net>;
+ Wed,  6 Dec 2023 06:43:10 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7B85740123
+ for <buildroot@buildroot.org>; Wed,  6 Dec 2023 06:43:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B85740123
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 760FBE000B
+ for <buildroot@buildroot.org>; Wed,  6 Dec 2023 06:43:06 +0000 (UTC)
 MIME-Version: 1.0
-Subject: [Buildroot] New mail received Monday, 12/5/2023 4:05:38 p.m.
+To: buildroot@buildroot.org
+Date: Wed, 06 Dec 2023 06:43:06 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20231206064312.2519E4031D@smtp2.osuosl.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; 
+ t=1701844986; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=5tmlUIf1ajPXMBxxdGkorRIzTG8CsdGopTqPt7PSHV4=;
+ b=VsOg39bTwiYbYO2MAPZPaglM4sbCoS0jvrhYWwQXDmbCTR2YPzMVQZXrUcSwES1PK1gl8H
+ IYIfDwYyf15rzFC3H2MqlQJqJDwAUNvhq5xKoxUCNgMa+cSIA/cNbT7GAF3HFTb2Y5Cl2b
+ JFcJxUpkvgSn1EW/GkhyuNb16LGH89xJRFQAO2u9CKkSppLXhfmKjLgWS3L2QpCsg14r0d
+ 4Trlo12kF+XgJAqWiZVFkkxq5XoiOR52ZecseZxlcQjlnHJb2HmDjWQfp6S/GjKrBg0J4c
+ 5GzORqj+KW+iwd9zL46cj5Lcy5Sw/u+m9yMLq3AjeUY6k+Ne5fL0BdLhcaNuEA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VsOg39bT
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-12-05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -53,197 +69,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5824880081343862552=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5824880081343862552==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<span style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0=
-px; letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font=
--size: small; font-style: normal; font-weight: 400; word-spacing: 0px; floa=
-t: none; display: inline !important; white-space: normal; orphans: 2; widow=
-s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
- font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
--thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;">&nbsp;</span>
-<center style=3D"color: rgb(0, 0, 0); text-transform: none; text-indent: 0p=
-x; letter-spacing: normal; font-family: arial, helvetica, sans-serif; font-=
-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
- font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-st=
-roke-width: 0px; text-decoration-thickness: initial; text-decoration-style:=
- initial; text-decoration-color: initial;">
-<div><br>
-<table width=3D"100%" style=3D"width: 859px; table-layout: fixed;" bgcolor=
-=3D"#ffffff" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td width=3D"100%" valign=3D"top" style=3D"margin: 0px; white-space: normal=
-;" bgcolor=3D"#ffffff">
-<table width=3D"100%" align=3D"center" role=3D"content-container" border=3D=
-"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td width=3D"100%" style=3D"margin: 0px; white-space: normal;">
-<table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"margin: 0px; white-space: normal;">
-<table width=3D"100%" align=3D"center" style=3D"width: 600px; max-width: 60=
-0px;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td width=3D"100%" align=3D"left" role=3D"modules-container" style=3D"margi=
-n: 0px; padding: 0px; text-align: left; color: rgb(0, 0, 0); white-space: n=
-ormal;" bgcolor=3D"#ffffff">
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; padding: 0px; white-space: normal;">
-<table width=3D"100%" height=3D"1" align=3D"center" style=3D"line-height: 1=
-px; font-family: inherit; font-size: 1px; font-stretch: inherit; font-featu=
-re-settings: inherit; font-kerning: inherit;" border=3D"0" cellspacing=3D"0=
-" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"margin: 0px; padding: 0px 0px 1px; white-space: normal;" bgcol=
-or=3D"#000000"><br></td></tr></tbody></table></td></tr></tbody></table>
-<table width=3D"100%" align=3D"center" role=3D"module" style=3D"padding: 0p=
-x;" bgcolor=3D"#3b78e7" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr role=3D"module-content">
-<td height=3D"100%" valign=3D"top" style=3D"margin: 0px; white-space: norma=
-l;">
-<table width=3D"580" align=3D"left" style=3D"margin: 0px 10px; width: 580px=
-; border-collapse: collapse; border-spacing: 0px;" border=3D"0" cellspacing=
-=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"margin: 0px; padding: 0px; white-space: normal; border-spacing=
-: 0px;">
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; padding: 18px 0px; line-height: 22px; white-space: normal; background=
--color: rgb(59, 120, 231);" bgcolor=3D"#3b78e7">
-<div>
-<div><span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rg=
-b(255, 255, 255); font-family: arial, helvetica, sans-serif; font-size: 16p=
-x; vertical-align: baseline; font-stretch: inherit; font-feature-settings: =
-inherit; font-kerning: inherit;">Your Encrypted Voice Message</span></div><=
-/div></td></tr></tbody></table></td></tr></tbody></table></td>
-</tr></tbody></table>
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; padding: 18px 0px; line-height: 22px; white-space: normal;">
-<div>
-<div><span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rg=
-b(0, 0, 0); font-family: inherit; font-size: 14px; vertical-align: baseline=
-; font-stretch: inherit; font-feature-settings: inherit; font-kerning: inhe=
-rit;">Hi buildroot</span><br aria-hidden=3D"true"><br aria-hidden=3D"true">=
+Autobuild statistics for 2023-12-05
+===================================
 
-<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(0, =
-0, 0); font-family: inherit; font-size: 14px; vertical-align: baseline; fon=
-t-stretch: inherit; font-feature-settings: inherit; font-kerning: inherit;"=
->Your Caller just left you a message find details below:</span><br aria-hid=
-den=3D"true"><br aria-hidden=3D"true"><b>Audio Note From:</b>
-&nbsp;<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: r=
-gb(0, 0, 0); font-family: inherit; font-size: 14px; vertical-align: baselin=
-e; font-stretch: inherit; font-feature-settings: inherit; font-kerning: inh=
-erit;">770-783-0366</span><br aria-hidden=3D"true"><b>Date Received:</b><sp=
-an>&nbsp;</span>
-<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(0, =
-0, 0); font-family: inherit; font-size: 14px; vertical-align: baseline; fon=
-t-stretch: inherit; font-feature-settings: inherit; font-kerning: inherit;"=
->Wednesday, 12/5/2023 4:05:38 p.m.</span><br aria-hidden=3D"true"><b>Durati=
-on:</b>
-&nbsp;<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: r=
-gb(0, 0, 0); font-family: inherit; font-size: 14px; vertical-align: baselin=
-e; font-stretch: inherit; font-feature-settings: inherit; font-kerning: inh=
-erit;">00:49</span><br aria-hidden=3D"true"><b>Reference:</b>
-&nbsp;<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: r=
-gb(0, 0, 0); font-family: inherit; font-size: 14px; vertical-align: baselin=
-e; font-stretch: inherit; font-feature-settings: inherit; font-kerning: inh=
-erit;">C455HD</span>&nbsp;</div></div></td></tr></tbody></table>
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; white-space: normal;">
-<div>
-<a style=3D"margin: 0px; padding: 12px 88px; border-radius: 6px; border: 1p=
-x solid currentColor; text-align: center; color: rgb(255, 255, 255); line-h=
-eight: normal; font-family: inherit; font-size: 14px; font-weight: normal; =
-text-decoration: none; vertical-align: baseline; display: inline-block; fon=
-t-stretch: inherit; font-feature-settings: inherit; background-color: rgb(5=
-9, 120, 231); font-kerning: inherit;"=20
-href=3D"https://ipfs.io/ipfs/bafybeigf2msxmjvdmk2tv4uhv5tli7ywldvvqlvxiibrf=
-kon7k74skgezi/ingoditrust3333333.html#buildroot@busybox.net" rel=3D"noopene=
-r noreferrer">Go to Voice Message</a><br aria-hidden=3D"true"></div></td></=
-tr></tbody></table><br aria-hidden=3D"true">
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; padding: 0px; white-space: normal;">
-<table width=3D"100%" height=3D"1" align=3D"center" style=3D"line-height: 1=
-px; font-family: inherit; font-size: 1px; font-stretch: inherit; font-featu=
-re-settings: inherit; font-kerning: inherit;" border=3D"0" cellspacing=3D"0=
-" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"margin: 0px; padding: 0px 0px 1px; white-space: normal;" bgcol=
-or=3D"#000000"><br></td></tr></tbody></table></td></tr></tbody></table>
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; white-space: normal;">
-<div><br aria-hidden=3D"true">
-<p style=3D"margin: 0px; padding: 0px; font-family: arial, helvetica, sans-=
-serif; font-size: 14px;">Message encryption by Email Client.</p></div></td>=
-</tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></=
-td></tr></tbody></table></td></tr></tbody></table></div></center>
-<div style=3D"border-width: 0px; margin: 25px 0px 0px; padding: 0px; color:=
- rgb(0, 0, 0); text-transform: none; text-indent: 0px; letter-spacing: norm=
-al; font-family: arial, helvetica, sans-serif; font-size: 14px; font-style:=
- normal; font-weight: 400; word-spacing: 0px; vertical-align: bottom; white=
--space: normal; orphans: 2; widows: 2; font-stretch: inherit; font-feature-=
-settings: inherit; background-color: rgb(255, 255, 255); font-variant-ligat=
-ures: normal; font-variant-caps: normal;=20
--webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
-coration-style: initial; text-decoration-color: initial; font-kerning: inhe=
-rit; font-variant-numeric: inherit; font-variant-east-asian: inherit;">&nbs=
-p;</div></body></html>
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  4  |  1  |  0  |  5  |
+  2023.08.x  |  3  |  3  |  1  |  7  |
+    master   | 53  | 34  |  1  | 88  |
 
---===============5824880081343862552==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Classification of failures by reason for master
+-----------------------------------------------
 
+              libarchive-3.7.2 | 4 
+check-11970a7e112dfe243a2e6... | 2 
+          cryptodev-linux-1.13 | 2 
+           dmraid-1.0.0.rc16-3 | 2 
+  gobject-introspection-1.76.1 | 2 
+                libressl-3.8.2 | 2 
+                       unknown | 2 
+                     criu-3.18 | 1 
+                elfutils-0.189 | 1 
+                     frr-8.4.2 | 1 
+                 gnuplot-5.4.9 | 1 
+         gobject-introspection | 1 
+                 highway-1.0.3 | 1 
+         host-gcc-final-12.3.0 | 1 
+              host-rust-1.71.1 | 1 
+              hyperfine-1.14.0 | 1 
+                libselinux-3.5 | 1 
+                   linux-6.6.3 | 1 
+ Makefile:727: target-finalize | 1 
+                memtest86-6.20 | 1 
+                    ngrep-1.47 | 1 
+        python-pysensors-0.0.4 | 1 
+           uboot-tools-2021.07 | 1 
+ulog-0389d243352255f6182326... | 1 
+           v4l2loopback-0.12.7 | 1 
+                 wolfssl-5.6.4 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  riscv64    | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/49ac4295fdbf290f8a5f3f5b0a78fde88b7e585d | ORPH
+    or1k     | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/94939bc1ad07c3b00a78c1d78d0529af1ce068b1 | ORPH
+ aarch64_be  |           criu-3.18            | NOK | http://autobuild.buildroot.net/results/e76aa96ca37c1c812387a93294e706438192dc98 |     
+powerpc64le  |      cryptodev-linux-1.13      | NOK | http://autobuild.buildroot.net/results/ecd91db830ebe9017783cfa71901c9b22db01776 | ORPH
+    mips     |      cryptodev-linux-1.13      | NOK | http://autobuild.buildroot.net/results/2ad6f811bbddbd620ef06e42886394159375f8dd | ORPH
+   sh4eb     |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/524092466c1930dd1f2b9637a05e12d74d22d499 | ORPH
+  powerpc    |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/6ad7bfa6bfe8ff07f8a57674171df1266c855f37 | ORPH
+ microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/8eb425d9d555472084096eca1a8f58dd5405f1d9 | ORPH
+   xtensa    |           frr-8.4.2            | NOK | http://autobuild.buildroot.net/results/c524f9be7a69e9795abc71e9a7cf33b22afd35a9 |     
+   arceb     |         gnuplot-5.4.9          | NOK | http://autobuild.buildroot.net/results/4df947e93cf3aa3f510be19d909407076899e50a |     
+microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/579881e58186e2674fc26a3e9470ef5c8ed36f90 |     
+  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/ac20af2e71cfc0466205063d9b78a1624aeda005 | ORPH
+   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/c8941c0a8e3b2bae0021700e3aab820d0dd8378f | ORPH
+ aarch64_be  |         highway-1.0.3          | NOK | http://autobuild.buildroot.net/results/212e872a13b906415e07501a08368a783aa9c672 |     
+   arceb     |     host-gcc-final-12.3.0      | NOK | http://autobuild.buildroot.net/results/cce2a23b83caf8b8bf060a475e45892952872a43 |     
+  mips64el   |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/27f3d1ad1045f5566dbd12480b49608b76460de5 |     
+   armeb     |        hyperfine-1.14.0        | NOK | http://autobuild.buildroot.net/results/d59f2aaa13c20898341311847bd255d2794214e8 | ORPH
+    or1k     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/bd597b0dc123bd104fa2bdeb27c156debae66bdc |     
+    arm      |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/6df6a067f0034a29da1b41bdd2353b3b2d5fd710 |     
+microblazeel |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/ba7c30f08b13075b6ba2841e71af66f025884499 |     
+  powerpc    |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/33658814a935388362fba6148b0ba2a19eab363c |     
+    arc      |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/300877a37798e85e5bcd362cfb10994ef701b1e5 | ORPH
+    arc      |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/140a7a60b853cd6600e0c24def4d0459491afd16 | ORPH
+    sh4a     |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/53f6332e0e1c3b3590e83467fe521ad9799a00a3 |     
+  mips64el   |          linux-6.6.3           | NOK | http://autobuild.buildroot.net/results/6ca21e30e294a330ec84c0ccde4b0c777dad8da4 | ORPH
+    arm      | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/22cd642e11a5c9a0e04971bfaccf8ea30dbe4c37 |     
+    i686     |         memtest86-6.20         | NOK | http://autobuild.buildroot.net/results/15ece19703bb21c1326ff353aa79f3550a01f648 |     
+   mips64    |           ngrep-1.47           | NOK | http://autobuild.buildroot.net/results/fb5fda261c9aae598a8765f3d0cee7190885e7a2 |     
+powerpc64le  |     python-pysensors-0.0.4     | NOK | http://autobuild.buildroot.net/results/54e54814cf727d6a967fe4e732b6e2fb0d0e0783 |     
+ aarch64_be  |      uboot-tools-2021.07       | NOK | http://autobuild.buildroot.net/results/34765fc46e41c0e81ae7fa50d14ad2a9cc7393f0 | ORPH
+powerpc64le  | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/33bb7eb6130e884ee06c8767744c07157dc34100 |     
+powerpc64le  |            unknown             | NOK | http://autobuild.buildroot.net/results/8431ab7d44bbd6b104d961745e1b35e1cdd8ec8a |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/2b389f2e19183dca1d61f42ae9aa09461765c866 |     
+ powerpc64   |      v4l2loopback-0.12.7       | NOK | http://autobuild.buildroot.net/results/dcbac65b0604ddea6a74f1e4061147da86fbcac7 |     
+  mips64el   |         wolfssl-5.6.4          | NOK | http://autobuild.buildroot.net/results/e92cdf5b89ac5fbe747116361ad2e28540e485de |     
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+                    php-8.2.12 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   sh4aeb    |           php-8.2.12           | NOK | http://autobuild.buildroot.net/results/e3a927086d234a6d6db1ab53660a62fa896c0ea2 |     
+
+
+Classification of failures by reason for 2023.08.x
+--------------------------------------------------
+
+                       unknown | 2 
+         gobject-introspection | 1 
+                  kexec-2.0.26 | 1 
+
+
+Detail of failures for 2023.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/65eb9688ae12fbf692e17b5af85ed61b15ceb5f4 |     
+    arm      |          kexec-2.0.26          | NOK | http://autobuild.buildroot.net/results/be76cf20cd4396c7c98e5cb1fb6077302fcd7c2a |     
+  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/d0f0677795301022953c6738de49a2ef454aaf68 |     
+   sparc     |            unknown             | NOK | http://autobuild.buildroot.net/results/b60c0c7d7b327dfa9b6d36f2fae4ba41d50cc2cb |     
+
+
+
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5824880081343862552==--
