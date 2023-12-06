@@ -4,88 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 929A6C4167B
-	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 09:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D576C10F04
+	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 09:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 358C841A49;
-	Wed,  6 Dec 2023 09:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 358C841A49
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF4CE41A6C;
+	Wed,  6 Dec 2023 09:40:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF4CE41A6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Tutr0Ehnm7q; Wed,  6 Dec 2023 09:40:39 +0000 (UTC)
+	with ESMTP id MwRXqGTqxQrM; Wed,  6 Dec 2023 09:40:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09EE041A6C;
-	Wed,  6 Dec 2023 09:40:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09EE041A6C
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3AA043637;
+	Wed,  6 Dec 2023 09:40:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3AA043637
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8ED3B1BF83E
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 09:39:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9FAA61BF83E
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 09:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B76781EDE
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 09:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B76781EDE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7557F81EB3
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 09:39:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7557F81EB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YqpvYnX0LHKH for <buildroot@lists.busybox.net>;
- Wed,  6 Dec 2023 09:39:54 +0000 (UTC)
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 86D6881EB3
- for <buildroot@busybox.net>; Wed,  6 Dec 2023 09:39:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86D6881EB3
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-a186e5d1056so73133066b.0
- for <buildroot@busybox.net>; Wed, 06 Dec 2023 01:39:54 -0800 (PST)
+ with ESMTP id UGdKFeyBKtVn for <buildroot@lists.busybox.net>;
+ Wed,  6 Dec 2023 09:39:55 +0000 (UTC)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6D5C781CAD
+ for <buildroot@busybox.net>; Wed,  6 Dec 2023 09:39:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D5C781CAD
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-548f0b7ab11so8598949a12.1
+ for <buildroot@busybox.net>; Wed, 06 Dec 2023 01:39:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701855592; x=1702460392;
+ d=1e100.net; s=20230601; t=1701855593; x=1702460393;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=RmhBsRK40dYOGKR8nfWSqGShQvkTnyJFDbu0rDYZptY=;
- b=H8HtEdzQLCzorB47i8Tg24rTsjGlTyt/1BQvVFlOn/J9NICtL5lSEn/ZIwH1ZO7hsJ
- nNH3h4Gobvh2H2lsK4tXvQBHdYJmc6cWENPACZuidHmUZYpIxtfq0PmlMpHhYLmwl3py
- uev3DBx4D1v5I0OkhiCN5r53ymjQCub3NRK45wHk/F/5EpaTb8MTBs3LznMb1bbHMxp+
- vWX1YIjCASOWT8jpKA3jLlvBGyMisKhz6+TeXHmJvqNq/040CUqmTAB8Y1riwFOwZ7l7
- Yo00J2PsiZ2xVHRB7eJolhOyv+06UNXuiRNvz1R6lGuCtmlaR+l7Iy2FZicyCwcUlMpA
- aqpA==
-X-Gm-Message-State: AOJu0YwcMiRFOAc71KPGCxfd0kAtJl21aZMead5pk3OOQAe5vNINVj9U
- yn/Nhl9VSg8LOms7BgSqnRPV+Cexxzo=
-X-Google-Smtp-Source: AGHT+IEGmD4OG5tWkrEs/A45gPcmyA8cdKi81ZKVy4kyDBRMWePEu2XplYTgb01jaby+cUXxSElumQ==
-X-Received: by 2002:a17:906:dc:b0:a17:d9c8:d9d3 with SMTP id
- 28-20020a17090600dc00b00a17d9c8d9d3mr439854eji.12.1701855592411; 
- Wed, 06 Dec 2023 01:39:52 -0800 (PST)
+ bh=Uu99n3bfSVyHv2tj+re1hfpGg7AAKbiFCXOC4BPW7N0=;
+ b=GdTY8AfB08vtY567rb9mmTMuyTPBE0hQSanUWUDgDsDrp9GyKxgMKdYT0TgpM8PWYy
+ W0osAs1/vwjAwUJwB+6eg/8VlsRvjWZXHAcmTPJX6A16ujzEbJWWOBx7p9V0qy8te6fK
+ VEiQWecWY1z5Adu6mVH+jXTlVhAm6myIRCJIknvHj/YUSv60syc1gTrz1T3X58oPXcAy
+ HtgJYyvdGnjjflzHTcLzmbZeysyE70ujqt4Nd4ps2ZMI1vqrirYZYBJ7U/VIRzqSlfdH
+ 4I3lzzLbDDZeLg8JKg8qYZ88uPgTCR8XR9FvNkC1E7U9ARFTbe8V6otBHMlDZulgxS4H
+ LUTw==
+X-Gm-Message-State: AOJu0YwxpGhitT1WQwSI4ckCMGNGQFAO/3rcuBPfTbR2AH7Hp7ySWPuF
+ TP3nZ/6c4TxejfPR7BHwyori8PXggBk=
+X-Google-Smtp-Source: AGHT+IGI7buNBXkl1GLY0TaXSedR2A0bRhnC7R0M+wLJcQIapLUL4xFSfnVDTOeL5FLZIoXO0Yi/sQ==
+X-Received: by 2002:a17:907:c909:b0:a19:a1ba:da3f with SMTP id
+ ui9-20020a170907c90900b00a19a1bada3fmr394486ejc.102.1701855593092; 
+ Wed, 06 Dec 2023 01:39:53 -0800 (PST)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- di16-20020a170906731000b00a1b6d503e7esm4265553ejc.157.2023.12.06.01.39.51
+ di16-20020a170906731000b00a1b6d503e7esm4265553ejc.157.2023.12.06.01.39.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Wed, 06 Dec 2023 01:39:52 -0800 (PST)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Wed,  6 Dec 2023 10:39:41 +0100
-Message-Id: <20231206093942.1548412-2-francois.perrad@gadz.org>
+Date: Wed,  6 Dec 2023 10:39:42 +0100
+Message-Id: <20231206093942.1548412-3-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231206093942.1548412-1-francois.perrad@gadz.org>
 References: <20231206093942.1548412-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701855592; x=1702460392; darn=busybox.net;
+ d=gmail.com; s=20230601; t=1701855593; x=1702460393; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=RmhBsRK40dYOGKR8nfWSqGShQvkTnyJFDbu0rDYZptY=;
- b=QRuzZBKABSTPdB5Ly34G0FhJF2bpFUAW+lSZ69UUdU1phzkWrXD+htXelETYttFKXI
- bpyJHYschQ0ubkBY3hgbYE6LPqZ2iC00s9ZqBfEAY1YDFM8bwW8zkGh/xsGhGZwtwZwG
- IpJGbxvHSzGx7GAuZcXdJy+4raJub0oy9kw3r4QWsjP6ImywsfqPtGJ+1w8Xp5H/Y/cV
- +unJS5FjgtTp425fUFWR4S0QMaUnRLyr6KZMu9LK17DmWwAAFL2oTqVMCZMD5jq5YtHN
- glEewi4iI4+W3dy4uzS7N7fthUYFY2khL3Wn9ha5dinDXycqP8ATvH2O/DmdWkwN6kPn
- 1WnA==
+ bh=Uu99n3bfSVyHv2tj+re1hfpGg7AAKbiFCXOC4BPW7N0=;
+ b=QtBq1Jnk0oDcZW0MF3foV1dngGaco29GqutBa7UBdJ+Mi7A+Kv4cEV0SlZ0+f1AdLV
+ lhNXcboEyyjWsexeaiMkoH+S9YeZZgXkWH3Fk7m/FnK4WHJemZitxhnD7DKJHbOMmVR8
+ ttIkaJ/pPCcMF6c1ySJXMXsXcS5PzHW4xESRai63zgCT23O5uK6yk3yhrai5kTn0lSAE
+ 4lxe4UrsLwK6wSszDEUFDLER2GU3sqD6zogBDLiQFzmuhQoXh3/TrW88Fes6CprM/OQ5
+ b4V0g7tmwKU9IUm6C3BsM78Ded6HZf7uWJ3e//SZo+Nsp0hTOcqR/9goJ6+o8F1qr+QE
+ FQqQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=QRuzZBKA
-Subject: [Buildroot] [PATCH 2/3] package/lua-conciseserialization: new
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=QtBq1Jnk
+Subject: [Buildroot] [PATCH 3/3] package/lua-ubjson: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,71 +103,64 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                              |  1 +
- package/lua-conciseserialization/Config.in     |  6 ++++++
- .../lua-conciseserialization.hash              |  4 ++++
- .../lua-conciseserialization.mk                | 18 ++++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/lua-conciseserialization/Config.in
- create mode 100644 package/lua-conciseserialization/lua-conciseserialization.hash
- create mode 100644 package/lua-conciseserialization/lua-conciseserialization.mk
+ package/Config.in                  |  1 +
+ package/lua-ubjson/Config.in       |  7 +++++++
+ package/lua-ubjson/lua-ubjson.hash |  3 +++
+ package/lua-ubjson/lua-ubjson.mk   | 11 +++++++++++
+ 4 files changed, 22 insertions(+)
+ create mode 100644 package/lua-ubjson/Config.in
+ create mode 100644 package/lua-ubjson/lua-ubjson.hash
+ create mode 100644 package/lua-ubjson/lua-ubjson.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e8c210e22b..2400cf0796 100644
+index 2400cf0796..c18a17af91 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -726,6 +726,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-coatpersistent/Config.in"
- 	source "package/lua-codegen/Config.in"
- 	source "package/lua-compat53/Config.in"
-+	source "package/lua-conciseserialization/Config.in"
- 	source "package/lua-cqueues/Config.in"
- 	source "package/lua-csnappy/Config.in"
- 	source "package/lua-curl/Config.in"
-diff --git a/package/lua-conciseserialization/Config.in b/package/lua-conciseserialization/Config.in
+@@ -761,6 +761,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-std-normalize/Config.in"
+ 	source "package/lua-stdlib/Config.in"
+ 	source "package/lua-testmore/Config.in"
++	source "package/lua-ubjson/Config.in"
+ 	source "package/lua-utf8/Config.in"
+ 	source "package/lua-valua/Config.in"
+ 	source "package/lua-zlib/Config.in"
+diff --git a/package/lua-ubjson/Config.in b/package/lua-ubjson/Config.in
 new file mode 100644
-index 0000000000..b660147008
+index 0000000000..88ed2c7c79
 --- /dev/null
-+++ b/package/lua-conciseserialization/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LUA_CONCISESERIALIZATION
-+	bool "lua-conciseserialization"
++++ b/package/lua-ubjson/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUA_UBJSON
++	bool "lua-ubjson"
++	select BR2_PACKAGE_LUA_COMPAT53 if BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1 # runtime
 +	help
-+	  a pure Lua implementation of CBOR / RFC8949.
++	  a pure Lua implementation of UBJSON.
 +
-+	  https://fperrad.frama.io/lua-ConciseSerialization/
-diff --git a/package/lua-conciseserialization/lua-conciseserialization.hash b/package/lua-conciseserialization/lua-conciseserialization.hash
++	  https://fperrad.frama.io/lua-ubjson/
+diff --git a/package/lua-ubjson/lua-ubjson.hash b/package/lua-ubjson/lua-ubjson.hash
 new file mode 100644
-index 0000000000..30ae4536f6
+index 0000000000..6db046ec2f
 --- /dev/null
-+++ b/package/lua-conciseserialization/lua-conciseserialization.hash
-@@ -0,0 +1,4 @@
++++ b/package/lua-ubjson/lua-ubjson.hash
+@@ -0,0 +1,3 @@
 +# computed by luarocks/buildroot
-+sha256  1dd7a5bd17349ad78e93b36f05739e4323a8fda8cd66dee423bdd5a21a0c4453  lua-conciseserialization-0.2.4-1.src.rock
-+sha256  7988a3ab9ea3d8c536387c4e7931b1703fa02f7011771569ed56641fa1a0c78c  lua-conciseserialization-lua53-0.2.4-1.src.rock
-+sha256  23ddf0d4a4dbc0667eeb919ceb7cc0a5b527af6cb51b286b78fa42f350de2130  lua-ConciseSerialization-0.2.4/COPYRIGHT
-diff --git a/package/lua-conciseserialization/lua-conciseserialization.mk b/package/lua-conciseserialization/lua-conciseserialization.mk
++sha256  6605a6a0ca5f6cb8ec1aac14840adcdc6b359f5d8666fb3d224510e8d73c43b9  lua-ubjson-0.1.0-1.src.rock
++sha256  c85f6b3d47bcde28fd15bc7e361cdc5ec6b580819f4a891e29cf89513abbadd2  lua-ubjson-0.1.0/COPYRIGHT
+diff --git a/package/lua-ubjson/lua-ubjson.mk b/package/lua-ubjson/lua-ubjson.mk
 new file mode 100644
-index 0000000000..a777a4baea
+index 0000000000..93e6631962
 --- /dev/null
-+++ b/package/lua-conciseserialization/lua-conciseserialization.mk
-@@ -0,0 +1,18 @@
++++ b/package/lua-ubjson/lua-ubjson.mk
+@@ -0,0 +1,11 @@
 +################################################################################
 +#
-+# lua-conciseserialization
++# lua-ubjson
 +#
 +################################################################################
 +
-+LUA_CONCISESERIALIZATION_VERSION_UPSTREAM = 0.2.4
-+LUA_CONCISESERIALIZATION_VERSION = $(LUA_CONCISESERIALIZATION_VERSION_UPSTREAM)-1
-+ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
-+LUA_CONCISESERIALIZATION_NAME_UPSTREAM = lua-ConciseSerialization-lua53
-+else
-+LUA_CONCISESERIALIZATION_NAME_UPSTREAM = lua-ConciseSerialization
-+endif
-+LUA_CONCISESERIALIZATION_SUBDIR = lua-ConciseSerialization-$(LUA_CONCISESERIALIZATION_VERSION_UPSTREAM)
-+LUA_CONCISESERIALIZATION_LICENSE = MIT
-+LUA_CONCISESERIALIZATION_LICENSE_FILES = $(LUA_CONCISESERIALIZATION_SUBDIR)/COPYRIGHT
++LUA_UBJSON_VERSION = 0.1.0-1
++LUA_UBJSON_LICENSE = MIT
++LUA_UBJSON_LICENSE_FILES = $(LUA_UBJSON_SUBDIR)/COPYRIGHT
 +
 +$(eval $(luarocks-package))
 -- 
