@@ -4,77 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41146C10DCE
-	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 19:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DC4DC4167B
+	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 20:07:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACBDF60A84;
-	Wed,  6 Dec 2023 19:25:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACBDF60A84
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21C4460D65;
+	Wed,  6 Dec 2023 20:07:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21C4460D65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jvynOw6myj86; Wed,  6 Dec 2023 19:25:41 +0000 (UTC)
+	with ESMTP id NeGo87C2B0Dh; Wed,  6 Dec 2023 20:07:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1276E60A9E;
-	Wed,  6 Dec 2023 19:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1276E60A9E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 247E71BF343
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 19:25:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74AF560AE4;
+	Wed,  6 Dec 2023 20:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74AF560AE4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F093D1BF82C
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 20:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA75941E61
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 19:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA75941E61
+ by smtp3.osuosl.org (Postfix) with ESMTP id D657160AE4
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 20:07:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D657160AE4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4foKYligMRT3 for <buildroot@lists.busybox.net>;
- Wed,  6 Dec 2023 19:25:36 +0000 (UTC)
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B0EA941E5B
- for <buildroot@buildroot.org>; Wed,  6 Dec 2023 19:25:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0EA941E5B
-Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
- by shout01.mail.de (Postfix) with ESMTP id 92E62240B6D
- for <buildroot@buildroot.org>; Wed,  6 Dec 2023 20:25:34 +0100 (CET)
-Received: from smtp01.mail.de (smtp04.bt.mail.de [10.0.121.214])
- by postfix02.mail.de (Postfix) with ESMTP id 77119A00E2;
- Wed,  6 Dec 2023 20:25:34 +0100 (CET)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 3120A240A8B;
- Wed,  6 Dec 2023 20:25:34 +0100 (CET)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kwbs5nuQgguF for <buildroot@lists.busybox.net>;
+ Wed,  6 Dec 2023 20:07:35 +0000 (UTC)
+Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 08F2860AE2
+ for <buildroot@buildroot.org>; Wed,  6 Dec 2023 20:07:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08F2860AE2
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id AyB9rIchy0L7VAyB9r36Hd; Wed, 06 Dec 2023 21:07:32 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed,  6 Dec 2023 20:25:27 +0100
-Message-Id: <20231206192527.90222-1-kilian.zinnecker@mail.de>
+Date: Wed,  6 Dec 2023 21:07:30 +0100
+Message-Id: <20231206200730.1948165-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 1692
-X-purgate-ID: 154282::1701890734-967E9338-2234C58F/0/0
+X-CMAE-Envelope: MS4xfIzQkfO+DJ2LrVFJpsQBurGsQTI9u918+EXLMCEOQsTsTPbhTJeMvCxcUq6Dm6u5HHY8iEIY2/QulAxW0QhkQxlbjzve1IWskdKui20R90F0V2r+5jd5
+ SrRwAeYGbhq77aX02u6JXR90KPiMSovrHevXgEi0/4G9wgxjZWQ0VqsWIpCLaNX4SNG0yQz7wWLmSLlYuXWve84X8Q7YpLUouIK1X8EZb8Gs+GGkrSeeHoN1
+ qIi3sJc0rNlf73MOc0GY9tVv25u+BatFI4tbDUTZSBXoBKJq2TN+2Ogx2Tx7QnqETDosNG5Du4NzPAxvqioOKQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1701890734;
- bh=4PrbPWCMncCD3NaKMA/jofkVYMEtRuvmmqzMSX4D0SA=;
- h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
- b=WZEtJax0Q6KJD92MvhRWK71j8y2VJfhoY8jdR1badw9k7VSG39plMYEM60ZnJhuxf
- QJuP85LvlSiqWzhyoNOh3+w8DYollk4jHG8R842DkSpk5W2mTm9Vsd38TC77qRUwkX
- 3RuVoD+xTBt6Denh3s5RZf7puAJ4mrn0plBzrbln+BxW9oOy3DQHBPn5bWEY0Njc3d
- wkT0Nh4aKC/0c9aZ20tm88if730HapY0oHp3eJsZTdkT/PZbw5vmKI5mg6ts0IqA7Z
- vWIdYjYihgoS1W431QFEUJaxURr2Z6lG1+YyJypYAYFZVnpndhbrzDcIoS9LX/V4An
- fP5l+i8SqtPFw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=WZEtJax0
-Subject: [Buildroot] [PATCH 1/1] configs/rock5b: add hash for custom kernel,
- uboot
+ d=aruba.it; s=a1; 
+ t=1701893252; bh=WHD5+EOu33W2FtCsXb9+pE4jkLgBmZ9JORDd7pwy3Ps=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=ZsQkN+AOpviJaLmhkHlrTYAIqVYu8r6b+yfLfKP69TijFr1jYwlv2kQNInHVvq2QP
+ NYHjXZTmcXkBdyEGHewh6DX80O4HFr+UIPHRjArHFrbUkA97cfqtMgby9ALQPy5ovx
+ khQaP7AlZIQMeo4FuJFNzvxEr3n+ivo0ETzmbK9EwLQ/UOn3p7SPmqcwWCewrsgKdg
+ WpB2oeStRCMZBltqknAgMJolIFtv/CElfMbBEXiWEeIVSwVA51yTTwGCLLnmx2SNhc
+ TXThoS+kdPifkHbTVG88mWaPGIDf6s8mh4d+uUF/sXrLHw3A4DsxOWd9QvSDHt4pyx
+ VFJ68/rTYqtJg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=ZsQkN+AO
+Subject: [Buildroot] [PATCH] package/rtl8188eu: bump to 2023-12-04 version
+ on v5.2.2.4 branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,55 +72,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "kilian.zinnecker--- via buildroot" <buildroot@buildroot.org>
-Reply-To: kilian.zinnecker@mail.de
-Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Kilian Zinnecker <kilian.zinnecker@mail.de>
+This version allows to build with Linux 6.7
 
-Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- board/radxa/rock5b/patches/linux/linux.hash | 2 ++
- board/radxa/rock5b/patches/uboot/uboot.hash | 2 ++
- configs/rock5b_defconfig                    | 1 +
- 3 files changed, 5 insertions(+)
- create mode 100644 board/radxa/rock5b/patches/linux/linux.hash
- create mode 100644 board/radxa/rock5b/patches/uboot/uboot.hash
+ package/rtl8188eu/rtl8188eu.hash | 2 +-
+ package/rtl8188eu/rtl8188eu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/radxa/rock5b/patches/linux/linux.hash b/board/radxa/rock5b/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..95ad749554
---- /dev/null
-+++ b/board/radxa/rock5b/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  a5eca7b8f929a1918125e2e4fbd7ab4ea5b3910b5ae4547e81c794b47373ffb5  linux-52f51a2b5ba178f331af62260d2da86d7472c14b-br1.tar.gz
-diff --git a/board/radxa/rock5b/patches/uboot/uboot.hash b/board/radxa/rock5b/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..efd629bd2f
---- /dev/null
-+++ b/board/radxa/rock5b/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  12e921b466ae731cdbc355e6832b7f22bc90b01aeceef9886f98aaba7b394300  u-boot-2023.07.tar.bz2
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index eed656ef5f..2e72b386b1 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -6,6 +6,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS=""
- BR2_TARGET_GENERIC_HOSTNAME="rock5b"
- BR2_TARGET_GENERIC_ISSUE="Welcome to the rock5b board"
- BR2_GLOBAL_PATCH_DIR="board/radxa/rock5b/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
+diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
+index b3ead087d4..eb28e6cf0a 100644
+--- a/package/rtl8188eu/rtl8188eu.hash
++++ b/package/rtl8188eu/rtl8188eu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6bf8c026c7d875248f18f14de6fd116cac178db9bdb5bdbc1e267c8ac6b6237f  rtl8188eu-3ff6f7d84cb5346ed8d5dc21056769f2e03746d9.tar.gz
++sha256  8cb10a047d39f13c776b0097ef1290f6b3c63590fd57bc0827e8638c878819f0  rtl8188eu-306f3e62cf7cddf8cee74f70f88a7a7b3af46f56.tar.gz
+ sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index f475bf3cab..36a84d34de 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8188EU_VERSION = 3ff6f7d84cb5346ed8d5dc21056769f2e03746d9
++RTL8188EU_VERSION = 306f3e62cf7cddf8cee74f70f88a7a7b3af46f56
+ RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
+ RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+ RTL8188EU_LICENSE_FILES = COPYING
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
