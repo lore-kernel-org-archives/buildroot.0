@@ -1,54 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E59F4C10F04
-	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 08:15:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62698C4167B
+	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 09:12:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C62E81769;
-	Wed,  6 Dec 2023 08:15:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C62E81769
+	by smtp2.osuosl.org (Postfix) with ESMTP id D955F40472;
+	Wed,  6 Dec 2023 09:12:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D955F40472
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I5aDb0uFfzCT; Wed,  6 Dec 2023 08:15:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LqcFY3zSG8Z1; Wed,  6 Dec 2023 09:12:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82DDE8176A;
-	Wed,  6 Dec 2023 08:15:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82DDE8176A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 77A1C1BF32A
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 08:15:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB66A40120;
+	Wed,  6 Dec 2023 09:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB66A40120
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 001821BF83E
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 09:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D77760B49
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 08:15:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D77760B49
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBA5A40120
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 09:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBA5A40120
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lz4JX7fmYGDx for <buildroot@lists.busybox.net>;
- Wed,  6 Dec 2023 08:15:49 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ED2A660B13
- for <buildroot@buildroot.org>; Wed,  6 Dec 2023 08:15:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED2A660B13
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 341604000B
- for <buildroot@buildroot.org>; Wed,  6 Dec 2023 08:15:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rAn4L-00DEOa-1R
- for buildroot@buildroot.org; Wed, 06 Dec 2023 09:15:45 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 06 Dec 2023 09:15:45 +0100
-Message-ID: <87y1e7sq4u.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BLaA_BkaBJJk for <buildroot@lists.busybox.net>;
+ Wed,  6 Dec 2023 09:12:38 +0000 (UTC)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com
+ [51.77.79.158])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 08396400EA
+ for <buildroot@buildroot.org>; Wed,  6 Dec 2023 09:12:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08396400EA
+Date: Wed, 06 Dec 2023 09:11:46 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Message-ID: <BeznnlTq0vvbpFka026Yd1oSJiN00BCfdSJrIJ5StZU1JXCG4xA25tNDQp7PhX_G1YfZ10xV9k1i4ohYUe6W64UxlEcmcdninKgmLEVMp6A=@protonmail.com>
+Feedback-ID: 6956783:user:proton
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] Talos security vulnerabilities TALOS-2023-1844 /
- TALOS-2023-1845
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=protonmail.com; 
+ s=protonmail3; t=1701853949; x=1702113149;
+ bh=gchdbuCPsYQwLJgZXkbzPnS/cvC/OdCl6TXp7l+S1CY=;
+ h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+ Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+ b=qFH6BuSYBdg5gMh8IBG9cov4V5XF23A6ncojsjR2zmxtLjmPAr/Crnr8yhUgMtz/S
+ 1hZa/KL56M2Ga45eB7e8XeZzh7eLNdFs+eKE3ynx5E9bzFuC3++COISC7IifNeUEMq
+ Cuv+/fmhBI4aqXkd43hVazy7rTbjVLQuLxbVwMZR6uOm/rQSmZCFlUnaTc2ecxKtXM
+ u4BF1ejV12vVF8rgt8s6uDOPRDbP4iXNX+gO0veyuoZlSXfMs4zc7nOOuWK5EuHfn7
+ hVSW6iFtcKZ7d9NcKK2DJ/DM2AOAukEGFD4c/JNZZFY7GwJbIIcJBB0C0647OfBhLP
+ 4+0Y+NULCI+pw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com
+ header.a=rsa-sha256 header.s=protonmail3 header.b=qFH6BuSY
+Subject: [Buildroot] [PATCH] package/gloox: bump version to 1.0.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,84 +67,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Yair Ben-Avraham via buildroot <buildroot@buildroot.org>
+Reply-To: Yair Ben-Avraham <yairba@protonmail.com>
+Content-Type: multipart/mixed; boundary="===============4152753378289374309=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-FYI,
+This is a multi-part message in MIME format.
 
-Talos recently reported a number of security vulnerabilities in the
-package download hash checking in Buildroot, and these are now public
-at:
+--===============4152753378289374309==
+Content-Type: multipart/alternative;
+ boundary="b1_fAZOgDU0y6AgSYi5ad7bIx9k8i2K8gKvUmd2f72Td4"
 
-https://talosintelligence.com/vulnerability_reports/TALOS-2023-1844
-https://talosintelligence.com/vulnerability_reports/TALOS-2023-1845
+This is a multi-part message in MIME format.
 
-A small number of packages did not have a .hash file, meaning that the
-downloaded sources were not verified - And for aufs + aufs-util they
-were downloaded from a http:// site, so conceptually vulnerable to a man
-in the middle attack.
+--b1_fAZOgDU0y6AgSYi5ad7bIx9k8i2K8gKvUmd2f72Td4
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
 
-aufs/aufs-utils were changed to fetch from https by:
+U2lnbmVkLW9mZi1ieTogWWFpciBCZW4tQXZyYWhhbSA8eWFpcmJhQHByb3Rvbm1haWwuY29tPgot
+LS0KcGFja2FnZS9nbG9veC9nbG9veC5oYXNoIHwgMiArLQpwYWNrYWdlL2dsb294L2dsb294Lm1r
+IHwgMiArLQoyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkK
+CmRpZmYgLS1naXQgYS9wYWNrYWdlL2dsb294L2dsb294Lmhhc2ggYi9wYWNrYWdlL2dsb294L2ds
+b294Lmhhc2gKaW5kZXggNjZhM2MyZDFiZS4uOTYzYjc5ODI5OSAxMDA2NDQKLS0tIGEvcGFja2Fn
+ZS9nbG9veC9nbG9veC5oYXNoCisrKyBiL3BhY2thZ2UvZ2xvb3gvZ2xvb3guaGFzaApAQCAtMSwz
+ICsxLDMgQEAKIyBMb2NhbGx5IGNhbGN1bGF0ZWQKLXNoYTI1NiAwYjhiNzM3MTQzOWJjNThkOWU1
+MTM4NGI2MTZjOTY0YjE4YjdiNDFiODdhZjFiNzg1NTEwNDM4MGVkYTg2ZmZiIGdsb294LTEuMC4y
+Ny50YXIuYnoyCitzaGEyNTYgNTkxYmQxMmMyNDllZGUwYjUwYTFlZjZiOTlhYzBkZThlZjljMWJh
+NGZkMmUxODZmOTdhNzQwMjE1Y2M1OTY2YyBnbG9veC0xLjAuMjgudGFyLmJ6MgpzaGEyNTYgNDBh
+MjBjNDFjOGRhYmI4YmE2MWJlYTk4M2ZhOGYyZjY5ODllNjdmYWM1NmJiNjJjMjI0OTA1MzgwN2Zk
+MjZhZiBMSUNFTlNFCmRpZmYgLS1naXQgYS9wYWNrYWdlL2dsb294L2dsb294Lm1rIGIvcGFja2Fn
+ZS9nbG9veC9nbG9veC5tawppbmRleCAzNDk1ZGI5NmYwLi4wZDI0ZjgwMDhiIDEwMDY0NAotLS0g
+YS9wYWNrYWdlL2dsb294L2dsb294Lm1rCisrKyBiL3BhY2thZ2UvZ2xvb3gvZ2xvb3gubWsKQEAg
+LTQsNyArNCw3IEBACiMKIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKCi1HTE9PWF9WRVJTSU9OID0g
+MS4wLjI3CitHTE9PWF9WRVJTSU9OID0gMS4wLjI4CkdMT09YX1NPVVJDRSA9IGdsb294LSQoR0xP
+T1hfVkVSU0lPTikudGFyLmJ6MgpHTE9PWF9TSVRFID0gaHR0cHM6Ly9jYW1heWEubmV0L2Rvd25s
+b2FkCkdMT09YX0xJQ0VOU0UgPSBHUEwtMy4wIHdpdGggT3BlblNTTCBleGNlcHRpb24KLS0gMi4z
+OS4y
 
-https://gitlab.com/buildroot.org/buildroot/-/commit/f2a590750f5bedcee48ce7beb8f35356b42eda11
-https://gitlab.com/buildroot.org/buildroot/-/commit/99d525028f969220719a4e6bcd694f7d9cfd5b67
+--b1_fAZOgDU0y6AgSYi5ad7bIx9k8i2K8gKvUmd2f72Td4
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: base64
 
-The fallback download location on source.buildroot.net was changed to
-use https:// by:
-
-https://gitlab.com/buildroot.org/buildroot/-/commit/05296ced369bab8877efa624f3d9b4d201ba5b38
-
-Hash files for riscv64-elf-toolchain and mxsldr were added by:
-
-https://gitlab.com/buildroot.org/buildroot/-/commit/58d7c712d7d1ef5b439ead455a4ed2ca659b60fb
-https://gitlab.com/buildroot.org/buildroot/-/commit/fefcfddc5e6a265c66adbdff615558f99133f148
-
-Which are all included in 2023.02.7 / 2023.08.3 / 2023.11.
-
-
-Some packages allow a custom version or even a custom upstream location
-(E.G. Linux, U-Boot, versal-firmware, ..). For those custom versions
-Buildroot naturally cannot provide the expected hash, so instead we have
-added support for providing hashes for those files in the
-BR2_GLOBAL_PATCH_DIR location and added a
-BR2_DOWNLOAD_FORCE_CHECK_HASHES option to enforce hash checking (and
-fail if missing/invalid) for all downloads. This was added by:
-
-https://gitlab.com/buildroot.org/buildroot/-/commit/5d36710e36fc4698c8fae71675bcff7395246006
-https://gitlab.com/buildroot.org/buildroot/-/commit/e091e31831122b60b084bd755e94df4dfe7188d2
-
-To make it easier to manage these custom hash files a
-utils/add-custom-hashes helper script has been added by:
-
-https://gitlab.com/buildroot.org/buildroot/-/commit/4984d0f230d0962270beb195966603f1d5a56300
-
-Which are all included in 2023.02.7 / 2023.08.3 / 2023.11.
-
-See the documentation for further details about this feature:
-
-https://buildroot.org/downloads/manual/manual.html#_adding_project_specific_patches_and_hashes
-
-Notice that it is up to the user of Buildroot to use this feature to
-protect their custom downloads!
-
-
-Finally the toradex_apalis_imx6_defconfig fetched Linux and U-Boot from
-a git:// URL, so custom hashes were added in the BR2_GLOBAL_PATCH_DIR
-for those by:
-
-https://gitlab.com/buildroot.org/buildroot/-/commit/cdc9b8a3a75c4c39f23feb4e3b0e296786e0132c
-
-Which is included in 2023.02.8 / 2023.08.4 / 2023.11.
+PGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6IEFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDE0
+cHg7Ij48L2Rpdj48c3Bhbj48L3NwYW4+PHNwYW4+U2lnbmVkLW9mZi1ieTogPHNwYW4+WWFpciBC
+ZW4tQXZyYWhhbSAmbHQ7PGEgdGFyZ2V0PSJfYmxhbmsiIHJlbD0ibm9yZWZlcnJlciBub2ZvbGxv
+dyBub29wZW5lciIgaHJlZj0ibWFpbHRvOnlhaXJiYUBwcm90b25tYWlsLmNvbSI+eWFpcmJhQHBy
+b3Rvbm1haWwuY29tPC9hPiZndDs8L3NwYW4+PC9zcGFuPjxkaXY+PHNwYW4+LS0tPC9zcGFuPjwv
+ZGl2PjxkaXY+PHNwYW4+Jm5ic3A7cGFja2FnZS9nbG9veC9nbG9veC5oYXNoIHwgMiArLTwvc3Bh
+bj48L2Rpdj48ZGl2PjxzcGFuPiZuYnNwO3BhY2thZ2UvZ2xvb3gvZ2xvb3gubWsgJm5ic3A7IHwg
+MiArLTwvc3Bhbj48L2Rpdj48ZGl2PjxzcGFuPiZuYnNwOzIgZmlsZXMgY2hhbmdlZCwgMiBpbnNl
+cnRpb25zKCspLCAyIGRlbGV0aW9ucygtKTwvc3Bhbj48L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2
+PjxzcGFuPmRpZmYgLS1naXQgYS9wYWNrYWdlL2dsb294L2dsb294Lmhhc2ggYi9wYWNrYWdlL2ds
+b294L2dsb294Lmhhc2g8L3NwYW4+PC9kaXY+PGRpdj48c3Bhbj5pbmRleCA2NmEzYzJkMWJlLi45
+NjNiNzk4Mjk5IDEwMDY0NDwvc3Bhbj48L2Rpdj48ZGl2PjxzcGFuPi0tLSBhL3BhY2thZ2UvZ2xv
+b3gvZ2xvb3guaGFzaDwvc3Bhbj48L2Rpdj48ZGl2PjxzcGFuPisrKyBiL3BhY2thZ2UvZ2xvb3gv
+Z2xvb3guaGFzaDwvc3Bhbj48L2Rpdj48ZGl2PjxzcGFuPkBAIC0xLDMgKzEsMyBAQDwvc3Bhbj48
+L2Rpdj48ZGl2PjxzcGFuPiZuYnNwOyMgTG9jYWxseSBjYWxjdWxhdGVkPC9zcGFuPjwvZGl2Pjxk
+aXY+PHNwYW4+LXNoYTI1NiAmbmJzcDswYjhiNzM3MTQzOWJjNThkOWU1MTM4NGI2MTZjOTY0YjE4
+YjdiNDFiODdhZjFiNzg1NTEwNDM4MGVkYTg2ZmZiICZuYnNwO2dsb294LTEuMC4yNy50YXIuYnoy
+PC9zcGFuPjwvZGl2PjxkaXY+PHNwYW4+K3NoYTI1NiAmbmJzcDs1OTFiZDEyYzI0OWVkZTBiNTBh
+MWVmNmI5OWFjMGRlOGVmOWMxYmE0ZmQyZTE4NmY5N2E3NDAyMTVjYzU5NjZjICZuYnNwO2dsb294
+LTEuMC4yOC50YXIuYnoyPC9zcGFuPjwvZGl2PjxkaXY+PHNwYW4+Jm5ic3A7c2hhMjU2ICZuYnNw
+OzQwYTIwYzQxYzhkYWJiOGJhNjFiZWE5ODNmYThmMmY2OTg5ZTY3ZmFjNTZiYjYyYzIyNDkwNTM4
+MDdmZDI2YWYgJm5ic3A7TElDRU5TRTwvc3Bhbj48L2Rpdj48ZGl2PjxzcGFuPmRpZmYgLS1naXQg
+YS9wYWNrYWdlL2dsb294L2dsb294Lm1rIGIvcGFja2FnZS9nbG9veC9nbG9veC5tazwvc3Bhbj48
+L2Rpdj48ZGl2PjxzcGFuPmluZGV4IDM0OTVkYjk2ZjAuLjBkMjRmODAwOGIgMTAwNjQ0PC9zcGFu
+PjwvZGl2PjxkaXY+PHNwYW4+LS0tIGEvcGFja2FnZS9nbG9veC9nbG9veC5tazwvc3Bhbj48L2Rp
+dj48ZGl2PjxzcGFuPisrKyBiL3BhY2thZ2UvZ2xvb3gvZ2xvb3gubWs8L3NwYW4+PC9kaXY+PGRp
+dj48c3Bhbj5AQCAtNCw3ICs0LDcgQEA8L3NwYW4+PC9kaXY+PGRpdj48c3Bhbj4mbmJzcDsjPC9z
+cGFuPjwvZGl2PjxkaXY+PHNwYW4+Jm5ic3A7IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyM8L3NwYW4+
+PC9kaXY+PGRpdj48c3Bhbj4mbmJzcDs8L3NwYW4+PC9kaXY+PGRpdj48c3Bhbj4tR0xPT1hfVkVS
+U0lPTiA9IDEuMC4yNzwvc3Bhbj48L2Rpdj48ZGl2PjxzcGFuPitHTE9PWF9WRVJTSU9OID0gMS4w
+LjI4PC9zcGFuPjwvZGl2PjxkaXY+PHNwYW4+Jm5ic3A7R0xPT1hfU09VUkNFID0gZ2xvb3gtJChH
+TE9PWF9WRVJTSU9OKS50YXIuYnoyPC9zcGFuPjwvZGl2PjxkaXY+PHNwYW4+Jm5ic3A7R0xPT1hf
+U0lURSA9IDxhIHRhcmdldD0iX2JsYW5rIiByZWw9Im5vcmVmZXJyZXIgbm9mb2xsb3cgbm9vcGVu
+ZXIiIGhyZWY9Imh0dHBzOi8vY2FtYXlhLm5ldC9kb3dubG9hZCI+aHR0cHM6Ly9jYW1heWEubmV0
+L2Rvd25sb2FkPC9hPjwvc3Bhbj48L2Rpdj48ZGl2PjxzcGFuPiZuYnNwO0dMT09YX0xJQ0VOU0Ug
+PSBHUEwtMy4wIHdpdGggT3BlblNTTCBleGNlcHRpb248L3NwYW4+PC9kaXY+PGRpdj48c3Bhbj4t
+LSA8L3NwYW4+PC9kaXY+PHNwYW4+Mi4zOS4yPC9zcGFuPjxzcGFuPjwvc3Bhbj48ZGl2IGNsYXNz
+PSJwcm90b25tYWlsX3NpZ25hdHVyZV9ibG9jayIgc3R5bGU9ImZvbnQtZmFtaWx5OiBBcmlhbCwg
+c2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNHB4OyI+PGRpdiBjbGFzcz0icHJvdG9ubWFpbF9zaWdu
+YXR1cmVfYmxvY2stdXNlciI+PGRpdj48L2Rpdj4NCiAgICA8L2Rpdj4NCiAgICANCiAgICAgICAg
+ICAgIDxkaXYgY2xhc3M9InByb3Rvbm1haWxfc2lnbmF0dXJlX2Jsb2NrLXByb3RvbiBwcm90b25t
+YWlsX3NpZ25hdHVyZV9ibG9jay1lbXB0eSI+DQogICAgICAgIA0KICAgICAgICAgICAgPC9kaXY+
+DQo8L2Rpdj4NCg==
 
 
-Thanks to Talos for discovering and reporting these issues to us and to
-Yann E. MORIN for implementing the custom hash logic.
+--b1_fAZOgDU0y6AgSYi5ad7bIx9k8i2K8gKvUmd2f72Td4--
 
--- 
-Bye, Peter Korsgaard
+
+--===============4152753378289374309==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4152753378289374309==--
+
