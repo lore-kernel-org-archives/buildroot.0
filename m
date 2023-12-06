@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE309C4167B
-	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 13:00:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 401D0C4167B
+	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 13:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 967E182FBE;
-	Wed,  6 Dec 2023 13:00:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 967E182FBE
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8D2B812B8;
+	Wed,  6 Dec 2023 13:00:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8D2B812B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fIQWVX-LU31o; Wed,  6 Dec 2023 13:00:15 +0000 (UTC)
+	with ESMTP id up2xhrdC5ut2; Wed,  6 Dec 2023 13:00:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBFA38316A;
-	Wed,  6 Dec 2023 13:00:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBFA38316A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E2C141BF34C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 323F4812B9;
+	Wed,  6 Dec 2023 13:00:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 323F4812B9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EAF5F1BF97D
  for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 13:00:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC2488316A
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4A0E41D67
  for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 13:00:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC2488316A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4A0E41D67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U-YiX5tWDont for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id awE3gapdqzho for <buildroot@lists.busybox.net>;
  Wed,  6 Dec 2023 13:00:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26B34831B0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 194E441D89
  for <buildroot@buildroot.org>; Wed,  6 Dec 2023 13:00:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26B34831B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 194E441D89
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1052087A1F; Wed,  6 Dec 2023 13:00:09 +0000 (UTC)
+ id 0753487A1D; Wed,  6 Dec 2023 13:00:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 6 Dec 2023 13:45:32 +0100
+Date: Wed, 6 Dec 2023 13:45:23 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 402c9fcb5ef1d6c2f9209bbe5853c6f6c48b503b
-X-Git-Newrev: 0ee24b86d83001ac90f99bb2f1bcccb487c7e6aa
+X-Git-Oldrev: 363b28ca4f4a4f840474e05c340d0f8ebd3ac190
+X-Git-Newrev: 402c9fcb5ef1d6c2f9209bbe5853c6f6c48b503b
 X-Patchwork-Hint: ignore
-Message-Id: <20231206130009.1052087A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.118
+Message-Id: <20231206130009.0753487A1D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.44.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,46 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ee24b86d83001ac90f99bb2f1bcccb487c7e6aa
+commit: https://git.buildroot.net/buildroot/commit/?id=402c9fcb5ef1d6c2f9209bbe5853c6f6c48b503b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2023-November/003433.html
+Changelog:
+https://sqlite.org/releaselog/3_44_2.html
+https://sqlite.org/changes.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 73f3d29f5a..bcbcdccf30 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-October/003429.html
--sha256  a2888d69e3eb1c8a77adc08a75a60fbae01f0d208d26f034d1a12e362361242b  libdrm-2.4.117.tar.xz
--sha512  326cf565548fb9d50a321562c13acb2a2f5ad5915ffdc2b08ef812fbac887f5b3d271cb2ce8c483633edddf2c55064d55810ff6697f713c179e2d0c8048eb544  libdrm-2.4.117.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-November/003433.html
-+sha256  a777bd85f2b5fc9c57f886c82058300578317cafdbc77d0a769d7e9a9567ab88  libdrm-2.4.118.tar.xz
-+sha512  2740ec10dfe96b520345c3f6f0d99a30aac95b1f96656bd9cd11269c2a83a9dac423da29d74a3deb55360e3ae2ca4a1de283e1e443667bedd22673f6629c9920  libdrm-2.4.118.tar.xz
- 
- # Hash for license file
- sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index b9201e4bd3..0db0c51284 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index ffeb1ff89c..38cff902d7 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  39116c94e76630f22d54cd82c3cea308565f1715f716d1b2527f1c9c969ba4d9  sqlite-autoconf-3430100.tar.gz
++sha256  1c6719a148bc41cf0f2bbbe3926d7ce3f5ca09d878f1246fcc20767b175bb407  sqlite-autoconf-3440200.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index f69097f3b7..99b1c4aa71 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.117
-+LIBDRM_VERSION = 2.4.118
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-SQLITE_VERSION = 3.43.1
+-SQLITE_TAR_VERSION = 3430100
++SQLITE_VERSION = 3.44.2
++SQLITE_TAR_VERSION = 3440200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2023
+ SQLITE_LICENSE = Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
