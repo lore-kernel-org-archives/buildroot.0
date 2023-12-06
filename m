@@ -4,89 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E19DEC4167B
-	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 22:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6839FC4167B
+	for <buildroot@archiver.kernel.org>; Wed,  6 Dec 2023 23:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75EDF4206B;
-	Wed,  6 Dec 2023 22:44:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75EDF4206B
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA21C4211F;
+	Wed,  6 Dec 2023 23:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA21C4211F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MnRR0XIKbwwO; Wed,  6 Dec 2023 22:44:56 +0000 (UTC)
+	with ESMTP id y13k0dMpA50H; Wed,  6 Dec 2023 23:22:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92B9F42090;
-	Wed,  6 Dec 2023 22:44:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92B9F42090
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9A3431BF980
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 22:44:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EFD9641E3A;
+	Wed,  6 Dec 2023 23:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFD9641E3A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 06E5A1BF275
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 23:22:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6EE7983133
- for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 22:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EE7983133
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D11D43623
+ for <buildroot@lists.busybox.net>; Wed,  6 Dec 2023 23:22:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D11D43623
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id arSMwrYFoEWl for <buildroot@lists.busybox.net>;
- Wed,  6 Dec 2023 22:44:27 +0000 (UTC)
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E7F9683112
- for <buildroot@buildroot.org>; Wed,  6 Dec 2023 22:44:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7F9683112
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-3334a701cbbso329230f8f.0
- for <buildroot@buildroot.org>; Wed, 06 Dec 2023 14:44:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701902665; x=1702507465;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=kiH+hLsQvW0ylElL0VYG2T3bv36jRey18d06vH1s5Tw=;
- b=FEyr7y6E5iA9zSH/W406410rPqkaiR76TFgZOmRh/7KsXT3hWDRrt6TlxN0SdVfjp+
- BO1SM27M6x1jlLDQN0MqfiRSfUm+cVAJ+JqYCN5pgu63VBapnm5Ar1xZg7Jdr8ni9jsW
- I8RCnR9So215Hh+g3Y5PjKZ5Eujm3rwWYEJrpPEYHaAOT0CYQCztSfs//KgQaABluRUV
- jlrSYKC62Rg1qaeqPRm5eO1ucLU0l9dDqaCS24FTYvLmbVXRyZx5lMBIujSMKjglSSeK
- rMVUONqJpI8kuP75DmrUM9wH1Z+59+1Qd5nGs9dUL9sNR1qf4kcB/kCxDj6SZKqVf7qh
- AfvA==
-X-Gm-Message-State: AOJu0YxczTZC0WGXqK8ftv6XmHZNoq2SFMd1CswQBcxxAvikHgeIzOXq
- PIz0FhRRwm5imv8rcVkfvMu6NTrAm05zkzxjeZo=
-X-Google-Smtp-Source: AGHT+IFb8fceRGZ2KPyNyZ3jj9SkTBJRuiGQ69jEsKGiuM9m/iN7tvzPOAJfxIjnp88X/6abgyhmvg==
-X-Received: by 2002:adf:f18e:0:b0:333:86d:c28b with SMTP id
- h14-20020adff18e000000b00333086dc28bmr693354wro.32.1701902664980; 
- Wed, 06 Dec 2023 14:44:24 -0800 (PST)
-Received: from P-NTS-Evian.home
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- w6-20020a05600018c600b00334b1564f0esm668567wrq.89.2023.12.06.14.44.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Dec 2023 14:44:24 -0800 (PST)
-From: Romain Naour <romain.naour@smile.fr>
-To: buildroot@buildroot.org
-Date: Wed,  6 Dec 2023 23:44:20 +0100
-Message-ID: <20231206224422.16063-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t99d0EelUL84 for <buildroot@lists.busybox.net>;
+ Wed,  6 Dec 2023 23:22:40 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AA81B400CE
+ for <buildroot@buildroot.org>; Wed,  6 Dec 2023 23:22:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA81B400CE
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C9CA8E0002;
+ Wed,  6 Dec 2023 23:22:36 +0000 (UTC)
+Date: Thu, 7 Dec 2023 00:22:35 +0100
+To: Michel Alex <Alex.Michel@wiedemann-group.com>
+Message-ID: <20231207002235.406546b7@windsurf>
+In-Reply-To: <AS1P250MB0608BD8803DA627E78F61E26A982A@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+References: <192a91$58bkb@mail.sensor-technik.de>
+ <AS1P250MB0608FF5000E2423DEE2A893DA982A@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+ <20231130085541.519eb02b@windsurf>
+ <AS1P250MB0608BD8803DA627E78F61E26A982A@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1701902665; x=1702507465;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kiH+hLsQvW0ylElL0VYG2T3bv36jRey18d06vH1s5Tw=;
- b=xF3nDsgo7r/0W7uWiPE2CH/kvyv5wMdZQNDlJeMzpTfFvoLuRJ9D/zCrGgg2vTXcac
- 11FdKeoaXhpoYXht0m7bkv9rsSEZta+Kvz1dfop6PtrBpOatxa7sxGe9t75lmq2k4MDG
- wLKHaROBCU88ktdh3uGZInb6mgnrNupM/YZ5w8NtlVzwJzdQq43p1RrTUwZqv0Djl/91
- 9D9tGY9ukbryMT2zXu5NsN7ZcKyyE1IDb73L4Me3ONGoeGsNViRfsUkph0bkXsTm72DZ
- Jvidp41JMk0PyArUAlSkRFgrzQmMrAMtOT7qtb4Zrw9YIBNJUSbmZ5wGrpYYJOSphrdM
- eQkA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=xF3nDsgo
-Subject: [Buildroot] [PATCH 1/3] support/testing: bump prebuilt kernel to
- 5.10.202
+ d=bootlin.com; s=gm1; t=1701904957;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9PUkpaALGM9JB49hEskJn2p8fb1DK7Iwe8Yk1bKIFXI=;
+ b=VPvkBZxHJg9uIHi5hUBtfOdriOpKI5WTnEjpCtmobPmuoAYKVwtYKo+Fp1Vp6CVlW/mVMR
+ 0KqkWSjM2t48TL89iqIvaER4yBm73Xrmlm6FSMrUN0yurNrcfp/NPaxClwXWfL+M4yFpfL
+ e5nhVHr0Vd+2KvSrjhTDQjqGyOv1fv/ilowuWJTykWwKSsYHXZhRBtwP6lCTUItUZMMZg8
+ QkED0DaGP0B+Pgo1FbZnrJWblV6NVx7vSo1okoKoDzxkBSgtfAvu1N7abeVHod7tD7eHtX
+ I4GlWdNwzvciaSw9wRemRs2bRw9nBoEmCVnPXiqrxYsh8P/ov8PQFC6ZeA7Nsw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VPvkBZxH
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2023-11-29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,103 +78,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As reported on the mailing list [1], TestPolkitSystemd and
-TestPolkitInitd are failing since we bumped the Bootlin toolchain
-2023.08 [2].
-
-The issue is caused by expat (XML library) package detecting
-arc4random_buf() introduced by glibc 2.36 [3].
-
-With arc4random_buf() support enabled, expat hang Polkit while reading
-its policy files (XML files) due to a lack of entropy on the system.
-
-Upgrading the kernel allows to avoid such issue thanks to
-random_get_entropy_fallback() introduced in 5.10.119 (backpored) [4].
-
-Build the vexpress-v2p-ca9 (armv7) 5.10.202 using the kernel
-configuration file found in /proc/config.gz but with additional kernel
-options provided by SYSTEMD_LINUX_CONFIG_FIXUPS. Indeed some kernel
-options requested by systemd were missing in 5.10.7 kernel.
-
-Build the versatile-pb (armv5) kernel using the same kernel
-configuration as qemu_arm_versatile_defconfig but with additional
-kernel options like for vexpress-v2p-ca9. While at it, enable
-IKCONFIG_PROC option to provide the kernel configuration at runtime
-in /proc/config.gz.
-
-Runtime tested:
-https://gitlab.com/kubu93/buildroot/-/pipelines/1097887826 (tests.package.test_polkit.TestPolkit*)
-https://gitlab.com/kubu93/buildroot/-/pipelines/1097705399 (tests.init.*)
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/5689309948 (TestPolkitSystemd)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/5689309947 (TestPolkitInitd)
-
-[1] http://lists.busybox.net/pipermail/buildroot/2023-December/680445.html
-[2] 452365a385ef35e808eb2eb669d1e3227c7399dd
-[3] https://sourceware.org/git/?p=glibc.git;a=commit;h=6f4e0fcfa2d2b0915816a3a3a1d48b4763a7dee2
-[4] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=fdca775081527364621857957655207d83035376
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- support/testing/infra/emulator.py | 8 ++++----
- support/testing/run-tests         | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 09f81eca89..624740fcb1 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -54,16 +54,16 @@ class Emulator(object):
- 
-                 if arch == "armv7":
-                     kernel = infra.download(self.downloaddir,
--                                            "kernel-vexpress-5.10.7")
-+                                            "kernel-vexpress-5.10.202")
-                     dtb = infra.download(self.downloaddir,
--                                         "vexpress-v2p-ca9-5.10.7.dtb")
-+                                         "vexpress-v2p-ca9-5.10.202.dtb")
-                     qemu_cmd += ["-dtb", dtb]
-                     qemu_cmd += ["-M", "vexpress-a9"]
-                 elif arch == "armv5":
-                     kernel = infra.download(self.downloaddir,
--                                            "kernel-versatile-5.10.7")
-+                                            "kernel-versatile-5.10.202")
-                     dtb = infra.download(self.downloaddir,
--                                         "versatile-pb-5.10.7.dtb")
-+                                         "versatile-pb-5.10.202.dtb")
-                     qemu_cmd += ["-dtb", dtb]
-                     qemu_cmd += ["-M", "versatilepb"]
-                     qemu_cmd += ["-device", "virtio-rng-pci"]
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index e8c540f370..485811b746 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -65,10 +65,10 @@ def main():
-     BRConfigTest.downloaddir = os.path.abspath(args.download)
- 
-     if args.prepare_only:
--        emulator_builtin_binaries = ["kernel-vexpress-5.10.7",
--                                     "vexpress-v2p-ca9-5.10.7.dtb",
--                                     "kernel-versatile-5.10.7",
--                                     "versatile-pb-5.10.7.dtb"]
-+        emulator_builtin_binaries = ["kernel-vexpress-5.10.202",
-+                                     "vexpress-v2p-ca9-5.10.202.dtb",
-+                                     "kernel-versatile-5.10.202",
-+                                     "versatile-pb-5.10.202.dtb"]
-         print("Downloading emulator builtin binaries")
-         for binary in emulator_builtin_binaries:
-             infra.download(BRConfigTest.downloaddir, binary)
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQWxleCwKClRoZSBiZXN0IHN0cmF0ZWd5IGlzIHRvIHJlbW92ZSB0aGUgc3R1cGlkIGFz
+bSgibm9wIikgdGhhdCBhcmUgaW4gdGhpcwpsaWJyYXJ5IGNvZGUuCgpCZXN0IHJlZ2FyZHMsCgpU
+aG9tYXMgUGV0YXp6b25pCgpPbiBUaHUsIDMwIE5vdiAyMDIzIDE0OjQzOjMzICswMDAwCk1pY2hl
+bCBBbGV4IDxBbGV4Lk1pY2hlbEB3aWVkZW1hbm4tZ3JvdXAuY29tPiB3cm90ZToKCj4gSGVsbG8g
+VGhvbWFzLAo+IAo+IHRoYW5rcyBmb3IgeW91ciByZXBseS4KPiAKPiBXaGF0IGlzIHRoZSBiZXN0
+IHN0cmF0ZWd5IHRvIGZpeCB0aGlzIGJ1aWxkIGVycm9yPyBUbyBleGNsdWRlIGFyMWsgYXJjaGl0
+ZWN0dXJlIGZvciB0aGlzIGxpYnJhcnkgKGRpc2FibGUgaXQgaWYgYXIxayBpcyBzZWxlY3RlZCkg
+b3IgdG8gcHJvdmlkZSBhIHBhdGNoIHdoaWNoIGp1c3QgcmVtb3ZlcyB0aGUgY29ycmVzcG9uZGlu
+ZyBsaW5lPwo+IAo+IEJlc3QgcmVnYXJkcywKPiBBbGV4Cj4gCj4gLS0tLS1PcmlnaW5hbCBNZXNz
+YWdlLS0tLS0KPiBGcm9tOiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3Rs
+aW4uY29tPiAKPiBTZW50OiBUaHVyc2RheSwgTm92ZW1iZXIgMzAsIDIwMjMgODo1NiBBTQo+IFRv
+OiBNaWNoZWwgQWxleCA8QWxleC5NaWNoZWxAd2llZGVtYW5uLWdyb3VwLmNvbT4KPiBDYzogYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKPiBTdWJqZWN0OiBSZTogW2F1dG9idWlsZC5idWlsZHJvb3Qu
+bmV0XSBZb3VyIGRhaWx5IHJlc3VsdHMgZm9yIDIwMjMtMTEtMjkKPiAKPiBWb3JzaWNodDogRXMg
+aGFuZGVsdCBzaWNoIHVtIGVpbmUgZXh0ZXJuZSBFLU1haWwgdm9tIEFic2VuZGVyIFRob21hcyBQ
+ZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+LiBCaXR0ZSBrbGlja2VuIFNp
+ZSBuaWNodCBhdWYgTGlua3Mgb2RlciBBbmjDpG5nZSwgc29sYW5nZSBTaWUgbmljaHQgdm9uIGRl
+ciBFY2h0aGVpdCBkZXIgTmFjaHJpY2h0IMO8YmVyemV1Z3Qgc2luZC4KPiAKPiBIZWxsbyBBbGV4
+LAo+IAo+IFRoZSBjb2RlIGluIGxpYnplbm9oLXBpY28gaXMgc3R1cGlkOgo+IAo+IHNpemVfdCBf
+el9lbmRwb2ludF9jb25maWdfc3RybGVuKGNvbnN0IF96X3N0cl9pbnRtYXBfdCAqcywgY29uc3Qg
+Y2hhciAqcHJvdG8pIHsKPiAgICAgc2l6ZV90IGxlbiA9IDA7Cj4gCj4gICAgIC8vIENhbGwgdGhl
+IHJpZ2h0IGNvbmZpZ3VyYXRpb24gcGFyc2VyIGRlcGVuZGluZyBvbiB0aGUgcHJvdG9jb2wgI2lm
+IFpfTElOS19UQ1AgPT0gMQo+ICAgICBpZiAoX3pfc3RyX2VxKHByb3RvLCBUQ1BfU0NIRU1BKSA9
+PSB0cnVlKSB7Cj4gICAgICAgICBsZW4gPSBfel90Y3BfY29uZmlnX3N0cmxlbihzKTsKPiAgICAg
+fSBlbHNlCj4gI2VuZGlmCj4gI2lmIFpfTElOS19VRFBfVU5JQ0FTVCA9PSAxIHx8IFpfTElOS19V
+RFBfTVVMVElDQVNUID09IDEKPiAgICAgICAgIGlmIChfel9zdHJfZXEocHJvdG8sIFVEUF9TQ0hF
+TUEpID09IHRydWUpIHsKPiAgICAgICAgIGxlbiA9IF96X3VkcF9jb25maWdfc3RybGVuKHMpOwo+
+ICAgICB9IGVsc2UKPiAjZW5kaWYKPiAjaWYgWl9MSU5LX0JMVUVUT09USCA9PSAxCj4gICAgICAg
+ICBpZiAoX3pfc3RyX2VxKHByb3RvLCBCVF9TQ0hFTUEpID09IHRydWUpIHsKPiAgICAgICAgIGxl
+biA9IF96X2J0X2NvbmZpZ19zdHJsZW4ocyk7Cj4gICAgIH0gZWxzZQo+ICNlbmRpZgo+ICNpZiBa
+X0xJTktfU0VSSUFMID09IDEKPiAgICAgICAgIGlmIChfel9zdHJfZXEocHJvdG8sIFNFUklBTF9T
+Q0hFTUEpID09IHRydWUpIHsKPiAgICAgICAgIGxlbiA9IF96X3NlcmlhbF9jb25maWdfc3RybGVu
+KHMpOwo+ICAgICB9IGVsc2UKPiAjZW5kaWYKPiAjaWYgWl9MSU5LX1dTID09IDEKPiAgICAgICAg
+IGlmIChfel9zdHJfZXEocHJvdG8sIFdTX1NDSEVNQSkgPT0gdHJ1ZSkgewo+ICAgICAgICAgbGVu
+ID0gX3pfd3NfY29uZmlnX3N0cmxlbihzKTsKPiAgICAgfSBlbHNlCj4gI2VuZGlmCj4gICAgIHsK
+PiAgICAgICAgIF9fYXNtX18oIm5vcCIpOwo+ICAgICB9Cj4gCj4gICAgIHJldHVybiBsZW47Cj4g
+fQo+IAo+IFNlZSB0aGUgX19hc21fXygibm9wIikuIFRoaXMgaXMgY29tcGxldGVseSBzdHVwaWQu
+IEl0IGFzc3VtZXMgZXZlcnkgQ1BVIGFyY2hpdGVjdHVyZSBpbiB0aGUgd29ybGQgaGFzIGEgQ1BV
+IGluc3RydWN0aW9uIG5hbWVkICJub3AiLCB3aGljaCBvZiBjb3Vyc2UgaXMgbm90IHRydWUuIEkg
+ZG9uJ3QgcmVhbGx5IHNlZSB3aGF0IHRoZXkgaGF2ZSBhZGRlZCB0aGF0LCBpdCByZWFsbHkgZG9l
+c24ndCBtYWtlIHNlbnNlLiBJIGJlbGlldmUgdGhpcyBmaW5hbCAiZWxzZSIgYmxvY2sgc2hvdWxk
+IGJlIGRyb3BwZWQgKGFzIHdlbGwgYXMgaW4gdGhlIG5leHQgZnVuY3Rpb24sIHRoYXQgdXNlcyB0
+aGUgc2FtZSBwYXR0ZXJuKS4KPiAKPiBCZXN0IHJlZ2FyZHMsCj4gCj4gVGhvbWFzCj4gCj4gT24g
+VGh1LCAzMCBOb3YgMjAyMyAwNzozNDozNyArMDAwMAo+IE1pY2hlbCBBbGV4IDxBbGV4Lk1pY2hl
+bEB3aWVkZW1hbm4tZ3JvdXAuY29tPiB3cm90ZToKPiAKPiA+IFRob21hcywKPiA+IAo+ID4gZG8g
+eW91IGhhdmUgYW55IGlkZWEgaG93IHRvIGZpeCB0aGlzIGJ1aWxkIGVycm9yPwo+ID4gCj4gPiBF
+cnJvcjogdW5yZWNvZ25pemVkIGluc3RydWN0aW9uIGBub3AnCj4gPiAKPiA+IEFsZXgKPiA+IAo+
+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0KPiA+IEZyb206IFRob21hcyBQZXRhenpvbmkg
+PHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gPiBTZW50OiBUaHVyc2RheSwgTm92ZW1i
+ZXIgMzAsIDIwMjMgNzozOCBBTQo+ID4gVG86IE1pY2hlbCBBbGV4IDxBbGV4Lk1pY2hlbEB3aWVk
+ZW1hbm4tZ3JvdXAuY29tPgo+ID4gU3ViamVjdDogW2F1dG9idWlsZC5idWlsZHJvb3QubmV0XSBZ
+b3VyIGRhaWx5IHJlc3VsdHMgZm9yIDIwMjMtMTEtMjkKPiA+IAo+ID4gCj4gPiBIZWxsbywKPiA+
+IAo+ID4gQXV0b2J1aWxkZXIgZmFpbHVyZXMKPiA+ID09PT09PT09PT09PT09PT09PT09Cj4gPiAK
+PiA+IEJlbG93IGlzIGEgbGlzdCBvZiBidWlsZCBmYWlsdXJlcyByZXBvcnRlZCBieSB0aGUgQnVp
+bGRyb290IGF1dG9idWlsZGVycyBpbiByZWxhdGlvbiB0byBwYWNrYWdlcyBvciBDUFUgYXJjaGl0
+ZWN0dXJlcyB5b3UgYXJlIGluIGNoYXJnZSBvZi4KPiA+IFBsZWFzZSBoZWxwIHVzIGltcHJvdmlu
+ZyB0aGUgcXVhbGl0eSBvZiBCdWlsZHJvb3QgYnkgaW52ZXN0aWdhdGluZyB0aG9zZSBidWlsZCBm
+YWlsdXJlcyBhbmQgc2VuZGluZyBwYXRjaGVzIHRvIGZpeCB0aGVtLgo+ID4gCj4gPiBSZXN1bHRz
+IGZvciB0aGUgJ21hc3RlcicgYnJhbmNoCj4gPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tCj4gPiAKPiA+IEJ1aWxkIGZhaWx1cmVzIHJlbGF0ZWQgdG8geW91ciBwYWNrYWdlczoKPiA+
+IAo+ID4gICAgIGFyY2ggICAgIHwgICAgICAgICAgICAgcmVhc29uICAgICAgICAgICAgIHwgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB1cmwgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIAo+ID4gLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ID4gLS0tLS0tLS0tLS0tLSst
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLQo+ID4gLS0tLS0tLS0tLS0tLSstLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ID4g
+LS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLQo+ID4gLS0t
+LS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLQo+ID4gLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLSstLQo+ID4gLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LSstLS0tLS0KPiA+ICAgICBvcjFrICAgICB8ICAgIGxpYnplbm9oLXBpY28tMC4xMC4wLXJjICAg
+ICB8IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzY2M2I2MzE4MTBiN2Uz
+OTgyZjM1NTM5ZjVkMzg4Y2Y1ZTUwOTA2NTQKPiA+IAo+ID4gCj4gPiBUaGFua3MgZm9yIHlvdXIg
+Y29udHJpYnV0aW9uIHRvIEJ1aWxkcm9vdCEKPiA+IAo+ID4gLS0KPiA+IGh0dHA6Ly9hdXRvYnVp
+bGQuYnVpbGRyb290Lm5ldCAgCj4gCj4gCj4gCj4gLS0KPiBUaG9tYXMgUGV0YXp6b25pLCBjby1v
+d25lciBhbmQgQ0VPLCBCb290bGluIEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJp
+bmcgYW5kIHRyYWluaW5nIGh0dHBzOi8vYm9vdGxpbi5jb20KCgoKLS0gClRob21hcyBQZXRhenpv
+bmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBl
+bmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
