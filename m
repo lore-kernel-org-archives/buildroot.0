@@ -4,66 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3239C4167B
-	for <buildroot@archiver.kernel.org>; Thu,  7 Dec 2023 16:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E5EAC4167B
+	for <buildroot@archiver.kernel.org>; Thu,  7 Dec 2023 17:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AFAF83CE6;
-	Thu,  7 Dec 2023 16:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AFAF83CE6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 039E183C5A;
+	Thu,  7 Dec 2023 17:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 039E183C5A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3TdKKvqs8LWG; Thu,  7 Dec 2023 16:39:38 +0000 (UTC)
+	with ESMTP id XjxnEZEjq_jf; Thu,  7 Dec 2023 17:06:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61E578128D;
-	Thu,  7 Dec 2023 16:39:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61E578128D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A60E01BF5B3
- for <buildroot@lists.busybox.net>; Thu,  7 Dec 2023 16:39:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46F9B83883;
+	Thu,  7 Dec 2023 17:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46F9B83883
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E62E11BF380
+ for <buildroot@lists.busybox.net>; Thu,  7 Dec 2023 17:06:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 48FB08128D
- for <buildroot@lists.busybox.net>; Thu,  7 Dec 2023 16:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48FB08128D
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDE8B400D7
+ for <buildroot@lists.busybox.net>; Thu,  7 Dec 2023 17:06:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDE8B400D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 45qKpx-6Y4LJ for <buildroot@lists.busybox.net>;
- Thu,  7 Dec 2023 16:39:34 +0000 (UTC)
-X-Greylist: delayed 86288 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 07 Dec 2023 16:39:33 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1ACD80B74
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E1ACD80B74
- for <buildroot@buildroot.org>; Thu,  7 Dec 2023 16:39:33 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C5EB1C0006;
- Thu,  7 Dec 2023 16:39:30 +0000 (UTC)
-Date: Thu, 7 Dec 2023 17:39:29 +0100
-To: Baruch Siach <baruch@tkos.co.il>
-Message-ID: <ZXH1QcJkmcJdz3nB@louis-chauvet-laptop>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KE3i23p_mHOC for <buildroot@lists.busybox.net>;
+ Thu,  7 Dec 2023 17:06:03 +0000 (UTC)
+Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 97E43400C7
+ for <buildroot@buildroot.org>; Thu,  7 Dec 2023 17:06:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97E43400C7
+Received: from localhost (unknown [10.0.8.2])
+ by mail.tkos.co.il (Postfix) with ESMTP id D0A6A440319;
+ Thu,  7 Dec 2023 19:04:24 +0200 (IST)
 References: <20231206164437.22191-1-louis.chauvet@bootlin.com>
- <87h6kvckwc.fsf@tarshish>
+ <87h6kvckwc.fsf@tarshish> <ZXH1QcJkmcJdz3nB@louis-chauvet-laptop>
+User-agent: mu4e 1.10.8; emacs 29.1
+To: Louis Chauvet <louis.chauvet@bootlin.com>
+Date: Thu, 07 Dec 2023 19:05:02 +0200
+In-reply-to: <ZXH1QcJkmcJdz3nB@louis-chauvet-laptop>
+Message-ID: <874jguc58s.fsf@tarshish>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <87h6kvckwc.fsf@tarshish>
-X-GND-Sasl: louis.chauvet@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1701967171;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=PKi2VcqEFvyEEXKoqV9gyGnti33Rw3RbckTQUdMDi+M=;
- b=GuuAeCGb4nu0nzBIlNklw711DjXmMC3YL23Ae6rns+ITpg+C1ek9EV0NGqwkJTy/jWKbnU
- yTDBXWbknBLcAB6ydCC7NxqBOELW7XQu1NYWD9pyzAP52wBeGFL/zWNcvERLbeR1MnOD5Z
- 8pdu+6Tw4ZmKuqAXO0yyADTcTwsqqIsoNJxbWmDE98F5Wmp6ugGrYgHCBjoZrkViuvqTwz
- k1SCaNDMofUcDt7sc4x7/IGaiZJ/1NtGj0QAvWi35PYAnRmW1KqX7/JEF8ndfvMJjyNPm7
- 02HAh7mRuVEtk7XAdOy2+VF9JBXtutbytvwmBFsjOGsY45i+EbFcrLYSssqhPw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GuuAeCGb
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1701968664;
+ bh=YXxQRvmLxuoZNjqr6bMrdz0V+w5vDlk8Vn22Oom1CUc=;
+ h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+ b=lWf+MCCivV+cumt/di0iXB0rr/2BpYsQPHFJ9SybsZHV7Dqg3KqAYBbWU3wv5ju0k
+ a+js9Cc5RKD8jf6KEhjsXdpJ5Vzh1BcwizCq/DOwcVNcgE8XJzxfX7V1dXQNEES2hX
+ IlhyVoubIc03ZkZkv8xe67rDBdIVsX5tl287H666fx8TKURgF5G3X4IE6M1afTRyTh
+ YUsa4kLn1fvWAHQDH4XAClEpNDRjaiuduU9QpaQNLgHp7IqPHBy64t/PcQt2BGHa8z
+ dM33Bsb0812tBoh/zyI7XpPoWlaiEWNcuNMe/xwWTdoLmpVWHQbYoTD1pyHf5rugRf
+ 6Wp1zZDzwznlA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=lWf+MCCi
 Subject: Re: [Buildroot] [PATCH] boot/arm-trusted-firmware: fix the RPATH of
  fiptool
 X-BeenThere: buildroot@buildroot.org
@@ -77,75 +71,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Louis Chauvet via buildroot <buildroot@buildroot.org>
-Reply-To: Louis Chauvet <louis.chauvet@bootlin.com>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
 Cc: kory.maincent@bootlin.com, thomas.petazzoni@bootlin.com, geomatsi@gmail.com,
  buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Baruch,
-
-Le 06/12/23 - 19:05, Baruch Siach via buildroot a =E9crit :
-> Hi Louis,
-> =
-
-> On Wed, Dec 06 2023, Louis Chauvet via buildroot wrote:
-> > The arm-trusted-firmware package builds a host tool called "fiptool",
-> > which is used during the build process of arm-trusted-firmware
-> > itself. This tool links against the OpenSSL host library, and
-> > therefore needs to be built with the correct RPATH pointing to
-> > $HOST_DIR/lib.
-> >
-> > This is why commit a957d9a90ade4194dffe3eb2fc0136bc5d077c28
-> > ("boot/arm-trusted-firmware: build fiptool separately with dependency
-> > o n host-openssl") added the ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
-> > variable, which builds the fiptool tool first, with the right
-> > variables set, before invoking the full build of TF-A. This ensured
-> > that fiptool was built with the correct RPATH.
-> >
-> > However, more recent versions of TF-A have modified their Makefile
-> > machinery, and fiptool is being rebuilt even if it was built
-> > before. Unfortunately, this rebuild is no longer done with the right
-> > flags, so we end up with a fiptool binary that no longer has the right
-> > RPATH, and fiptool fails to find the OpenSSL libraries from
-> > $HOST_DIR/lib.
-> >
-> > In order to fix this, we take a different approach: we do not build
-> > fiptool separately first, but we inject the necessary flags through
-> > the HOSTCC variable. Indeed, there's no HOST_LDFLAGS or HOST_LDLIBS
-> > variable or similar that would allow us to pass the -Wl,-rpath flag
-> > that is needed. Shoe-horning this flag into HOSTCC gets the job done,
-> > and actually simplifies our arm-trusted-firmware.mk.
-> =
-
-> The code this patch removes tries to keep compatibility with TF-A
-> versions earlier than 1.3. This patch relies on HOSTCC that was only
-> introduced in TF-A version 1.4 with upstream commit 72610c4102990
-> ("build: Introduce HOSTCC flag"). I guess losing compatibility with
-> older TF-A is fine, since all Buildroot in-tree configs appear to use
-> newer versions. But I think this should at least be mentioned in the
-> commit log.
-> =
-
-
-Thanks for your feedback. Do you think this is sufficient ?
-
-This patch break the compatibility with version prior to 1.4 (upstream
-commit 72610c4102990 ("build: Introduce HOSTCC flag")). v1.4 is very old =
-
-(July 2017), not used anymore in-tree and probably not used anymore =
-
-outside the tree.
-
--- =
-
-Louis Chauvet, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTG91aXMsCgpPbiBUaHUsIERlYyAwNyAyMDIzLCBMb3VpcyBDaGF1dmV0IHdyb3RlOgo+IExl
+IDA2LzEyLzIzIC0gMTk6MDUsIEJhcnVjaCBTaWFjaCB2aWEgYnVpbGRyb290IGEgw6ljcml0IDoK
+Pj4gT24gV2VkLCBEZWMgMDYgMjAyMywgTG91aXMgQ2hhdXZldCB2aWEgYnVpbGRyb290IHdyb3Rl
+Ogo+PiA+IFRoZSBhcm0tdHJ1c3RlZC1maXJtd2FyZSBwYWNrYWdlIGJ1aWxkcyBhIGhvc3QgdG9v
+bCBjYWxsZWQgImZpcHRvb2wiLAo+PiA+IHdoaWNoIGlzIHVzZWQgZHVyaW5nIHRoZSBidWlsZCBw
+cm9jZXNzIG9mIGFybS10cnVzdGVkLWZpcm13YXJlCj4+ID4gaXRzZWxmLiBUaGlzIHRvb2wgbGlu
+a3MgYWdhaW5zdCB0aGUgT3BlblNTTCBob3N0IGxpYnJhcnksIGFuZAo+PiA+IHRoZXJlZm9yZSBu
+ZWVkcyB0byBiZSBidWlsdCB3aXRoIHRoZSBjb3JyZWN0IFJQQVRIIHBvaW50aW5nIHRvCj4+ID4g
+JEhPU1RfRElSL2xpYi4KPj4gPgo+PiA+IFRoaXMgaXMgd2h5IGNvbW1pdCBhOTU3ZDlhOTBhZGU0
+MTk0ZGZmZTNlYjJmYzAxMzZiYzVkMDc3YzI4Cj4+ID4gKCJib290L2FybS10cnVzdGVkLWZpcm13
+YXJlOiBidWlsZCBmaXB0b29sIHNlcGFyYXRlbHkgd2l0aCBkZXBlbmRlbmN5Cj4+ID4gbyBuIGhv
+c3Qtb3BlbnNzbCIpIGFkZGVkIHRoZSBBUk1fVFJVU1RFRF9GSVJNV0FSRV9CVUlMRF9GSVBUT09M
+Cj4+ID4gdmFyaWFibGUsIHdoaWNoIGJ1aWxkcyB0aGUgZmlwdG9vbCB0b29sIGZpcnN0LCB3aXRo
+IHRoZSByaWdodAo+PiA+IHZhcmlhYmxlcyBzZXQsIGJlZm9yZSBpbnZva2luZyB0aGUgZnVsbCBi
+dWlsZCBvZiBURi1BLiBUaGlzIGVuc3VyZWQKPj4gPiB0aGF0IGZpcHRvb2wgd2FzIGJ1aWx0IHdp
+dGggdGhlIGNvcnJlY3QgUlBBVEguCj4+ID4KPj4gPiBIb3dldmVyLCBtb3JlIHJlY2VudCB2ZXJz
+aW9ucyBvZiBURi1BIGhhdmUgbW9kaWZpZWQgdGhlaXIgTWFrZWZpbGUKPj4gPiBtYWNoaW5lcnks
+IGFuZCBmaXB0b29sIGlzIGJlaW5nIHJlYnVpbHQgZXZlbiBpZiBpdCB3YXMgYnVpbHQKPj4gPiBi
+ZWZvcmUuIFVuZm9ydHVuYXRlbHksIHRoaXMgcmVidWlsZCBpcyBubyBsb25nZXIgZG9uZSB3aXRo
+IHRoZSByaWdodAo+PiA+IGZsYWdzLCBzbyB3ZSBlbmQgdXAgd2l0aCBhIGZpcHRvb2wgYmluYXJ5
+IHRoYXQgbm8gbG9uZ2VyIGhhcyB0aGUgcmlnaHQKPj4gPiBSUEFUSCwgYW5kIGZpcHRvb2wgZmFp
+bHMgdG8gZmluZCB0aGUgT3BlblNTTCBsaWJyYXJpZXMgZnJvbQo+PiA+ICRIT1NUX0RJUi9saWIu
+Cj4+ID4KPj4gPiBJbiBvcmRlciB0byBmaXggdGhpcywgd2UgdGFrZSBhIGRpZmZlcmVudCBhcHBy
+b2FjaDogd2UgZG8gbm90IGJ1aWxkCj4+ID4gZmlwdG9vbCBzZXBhcmF0ZWx5IGZpcnN0LCBidXQg
+d2UgaW5qZWN0IHRoZSBuZWNlc3NhcnkgZmxhZ3MgdGhyb3VnaAo+PiA+IHRoZSBIT1NUQ0MgdmFy
+aWFibGUuIEluZGVlZCwgdGhlcmUncyBubyBIT1NUX0xERkxBR1Mgb3IgSE9TVF9MRExJQlMKPj4g
+PiB2YXJpYWJsZSBvciBzaW1pbGFyIHRoYXQgd291bGQgYWxsb3cgdXMgdG8gcGFzcyB0aGUgLVds
+LC1ycGF0aCBmbGFnCj4+ID4gdGhhdCBpcyBuZWVkZWQuIFNob2UtaG9ybmluZyB0aGlzIGZsYWcg
+aW50byBIT1NUQ0MgZ2V0cyB0aGUgam9iIGRvbmUsCj4+ID4gYW5kIGFjdHVhbGx5IHNpbXBsaWZp
+ZXMgb3VyIGFybS10cnVzdGVkLWZpcm13YXJlLm1rLgo+PiAKPj4gVGhlIGNvZGUgdGhpcyBwYXRj
+aCByZW1vdmVzIHRyaWVzIHRvIGtlZXAgY29tcGF0aWJpbGl0eSB3aXRoIFRGLUEKPj4gdmVyc2lv
+bnMgZWFybGllciB0aGFuIDEuMy4gVGhpcyBwYXRjaCByZWxpZXMgb24gSE9TVENDIHRoYXQgd2Fz
+IG9ubHkKPj4gaW50cm9kdWNlZCBpbiBURi1BIHZlcnNpb24gMS40IHdpdGggdXBzdHJlYW0gY29t
+bWl0IDcyNjEwYzQxMDI5OTAKPj4gKCJidWlsZDogSW50cm9kdWNlIEhPU1RDQyBmbGFnIikuIEkg
+Z3Vlc3MgbG9zaW5nIGNvbXBhdGliaWxpdHkgd2l0aAo+PiBvbGRlciBURi1BIGlzIGZpbmUsIHNp
+bmNlIGFsbCBCdWlsZHJvb3QgaW4tdHJlZSBjb25maWdzIGFwcGVhciB0byB1c2UKPj4gbmV3ZXIg
+dmVyc2lvbnMuIEJ1dCBJIHRoaW5rIHRoaXMgc2hvdWxkIGF0IGxlYXN0IGJlIG1lbnRpb25lZCBp
+biB0aGUKPj4gY29tbWl0IGxvZy4KPgo+IFRoYW5rcyBmb3IgeW91ciBmZWVkYmFjay4gRG8geW91
+IHRoaW5rIHRoaXMgaXMgc3VmZmljaWVudCA/Cj4KPiBUaGlzIHBhdGNoIGJyZWFrIHRoZSBjb21w
+YXRpYmlsaXR5IHdpdGggdmVyc2lvbiBwcmlvciB0byAxLjQgKHVwc3RyZWFtCj4gY29tbWl0IDcy
+NjEwYzQxMDI5OTAgKCJidWlsZDogSW50cm9kdWNlIEhPU1RDQyBmbGFnIikpLiB2MS40IGlzIHZl
+cnkgb2xkIAo+IChKdWx5IDIwMTcpLCBub3QgdXNlZCBhbnltb3JlIGluLXRyZWUgYW5kIHByb2Jh
+Ymx5IG5vdCB1c2VkIGFueW1vcmUgCj4gb3V0c2lkZSB0aGUgdHJlZS4KCkxvb2tzIGdvb2QgdG8g
+bWUuCgpiYXJ1Y2gKCi0tIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIH4uIC5+ICAgVGsgT3BlbiBTeXN0ZW1zCj19LS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tb29PLS1VLS1Pb28tLS0tLS0tLS0tLS17PQog
+ICAtIGJhcnVjaEB0a29zLmNvLmlsIC0gdGVsOiArOTcyLjUyLjM2OC40NjU2LCBodHRwOi8vd3d3
+LnRrb3MuY28uaWwgLQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
