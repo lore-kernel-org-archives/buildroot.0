@@ -4,66 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B240AC4167B
-	for <buildroot@archiver.kernel.org>; Thu,  7 Dec 2023 12:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08249C4167B
+	for <buildroot@archiver.kernel.org>; Thu,  7 Dec 2023 12:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6103482F57;
-	Thu,  7 Dec 2023 12:07:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6103482F57
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83C5583A76;
+	Thu,  7 Dec 2023 12:24:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83C5583A76
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ysCO1X1qIzAU; Thu,  7 Dec 2023 12:07:25 +0000 (UTC)
+	with ESMTP id DLpg73eKqts1; Thu,  7 Dec 2023 12:24:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96DC08350A;
-	Thu,  7 Dec 2023 12:07:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96DC08350A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4F6C91BF990
- for <buildroot@lists.busybox.net>; Thu,  7 Dec 2023 12:07:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5F98839B4;
+	Thu,  7 Dec 2023 12:24:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5F98839B4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C715E1BF3D4
+ for <buildroot@lists.busybox.net>; Thu,  7 Dec 2023 12:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2489183B10
- for <buildroot@lists.busybox.net>; Thu,  7 Dec 2023 12:07:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2489183B10
+ by smtp3.osuosl.org (Postfix) with ESMTP id A08C1615F0
+ for <buildroot@lists.busybox.net>; Thu,  7 Dec 2023 12:24:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A08C1615F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h8Uy22xdgdYY for <buildroot@lists.busybox.net>;
- Thu,  7 Dec 2023 12:07:09 +0000 (UTC)
-Received: from smtpcmd03117.aruba.it (smtpcmd03117.aruba.it [62.149.158.117])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D32D683B5E
- for <buildroot@buildroot.org>; Thu,  7 Dec 2023 12:07:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D32D683B5E
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id BD9lrT5vVoaCcBD9mrp35y; Thu, 07 Dec 2023 13:07:06 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu,  7 Dec 2023 13:07:04 +0100
-Message-Id: <20231207120704.47607-2-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231207120704.47607-1-giulio.benetti@benettiengineering.com>
-References: <20231207120704.47607-1-giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xxys-GROP-cn for <buildroot@lists.busybox.net>;
+ Thu,  7 Dec 2023 12:24:44 +0000 (UTC)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
+ [IPv6:2607:f8b0:4864:20::1032])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 21EB2615E6
+ for <buildroot@buildroot.org>; Thu,  7 Dec 2023 12:24:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21EB2615E6
+Received: by mail-pj1-x1032.google.com with SMTP id
+ 98e67ed59e1d1-2886d445d8dso213530a91.1
+ for <buildroot@buildroot.org>; Thu, 07 Dec 2023 04:24:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1701951883; x=1702556683;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=1TTbMDS2Z6gTgncnifIs92iHdQq33dGSWgMsN7KvLGA=;
+ b=CVv2OO+RYF5JSrEZfC9eiBPxi1OO75Z9T47pFPsS/g90NQ9K4/KdIcyKWLL4DU7rIG
+ cAp78Ps71diTN5DyBjxwT0iRgM4KBSoLxNzQS0uZUXDyb3ckjSdYtgW69tUuNKrPdqRl
+ 3iw2d64CUwGrfNYBKKwMYMVbKW0Aa64PGJCl0he0KXGleG6NI8N2WgIafJXvIb2aKNYY
+ hKVy+5JxL7b270vo0RlrFK213zmzxAjGptivDQP+LFraemX+2hliCgqafLZMUhv1oe6b
+ LPXo1RtXtcvbFs4AHKcfTMH7uFNalV/9uWQcvTJPx4cuNmJKmqcj9KZlULaBjO8/oHmA
+ z83Q==
+X-Gm-Message-State: AOJu0Yx7x6k5Sgs9pgZbHflAu950ZWqT81sAX57dQKDpvO6Ic9Yn1jXJ
+ EbsdvqbHdBgehaRv9MAI/jNuVOn90Tr2g7LjC1AxXDwn
+X-Google-Smtp-Source: AGHT+IGB34n+b44MdY4WLHEXSTTXXGKpoFamw4nC2jh3MpHWkD/LdRS5ds2mdxYpGDz35tk592/DMTnAXNK7p1zm2Us=
+X-Received: by 2002:a17:90b:3791:b0:286:5726:6ef6 with SMTP id
+ mz17-20020a17090b379100b0028657266ef6mr4745330pjb.1.1701951883313; Thu, 07
+ Dec 2023 04:24:43 -0800 (PST)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfMQwCJzQOrYZip9PzVpwDOffeaR9nWDSUmDYjx8XTdxSX7CFr9JfjxACjpB5pY8nlzezldwV5WIUBauSfN9Eq6umokppfk/dokc3lEnQ47rXL0ujiyNp
- pVMPKazJ9GRoeuWsaQQVDQORh8wnPs4dDP+SYYbQ3XM+AAbxN2vntJV24SKb+Ae/Ukh9z8O/QXQCIR82ImgsmGbUmGjI/REvxcAmvfVkwI3Z0todXHJyzXK7
- fzzZIRu9p4xLgH9edCoaiG1Cr0AjaGL9Q01CWXJyW3AGzN4r9ZbZRSvsRlxnqo8jLiqBT6F2ItFqqo/Js9fFOo+Ed/4Q4635nk4uC1YIb0Wue5CzN5FHW9lx
- 7adaNXah
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1701950826; bh=iFAgvtmks24tBloDOMG//LQBzzS48uzVbgMQFJ0p9BU=;
- h=From:To:Subject:Date:MIME-Version;
- b=C+hb1IYU+5BsE3pbbzuwcci3FGDfKWUOf/trcJTM/kW8Y1dyubxc8v8XU7AjjYFIH
- PG0RStGdJVtcteiejOQySksd7PDAfEBSi+8QgPYIur5yfYkqsPKI/o66H+6BB1xiIS
- ty9gs6XbGonhzy1vXJqbil/Oalg6bTw/zhNTCm0sCqPIE7IeJWGS8UzuYggJ3b6Dws
- Y9lPTt6S3rNWw81+dmrtFwvNdy9e3euc66NAkqtG+zO35b4nAmnsdxeDdjAlA8b7BX
- mn6r0mxII9tCrQkzexBzzmKJa+dG3Hoxsdvm3etKep61ygm/JGz0SW4HX/D1wm75Qw
- 9vrqgKJMrbJFw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=C+hb1IYU
-Subject: [Buildroot] [PATCH] configs/freescale_imx6ullevk_defconfig: bump
- Linux and U-Boot to lf-6.1.36-2.1.0
+References: <20231207120704.47607-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20231207120704.47607-1-giulio.benetti@benettiengineering.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 7 Dec 2023 09:24:30 -0300
+Message-ID: <CAOMZO5Aep2H+s03sVrH9drMNfYGXN-LAcOdD8HbrUrJnmurrBA@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1701951883; x=1702556683; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=1TTbMDS2Z6gTgncnifIs92iHdQq33dGSWgMsN7KvLGA=;
+ b=ay1ZTgA5HXBmI0pqlUYZffbh6ZLECWunyi5g0r5OgpfXE68nnJ3+sPo6VcoYVh2jlr
+ 6rNlm3WLMdMLtCpsibdppOI+hDabV+/5AdRdZOlC4UjTatxaO4Bz8kqYZvGEbe4Rzggm
+ QKVymhl1Lyv39bYAj2jorczTgwcJjcK9/Wdn5e/20u+wLxrVwnKjUESIqiVPro5myIN0
+ t15Oaz2JpvAM2R/pae6UgIFB4JFSeS+lXxpHdUd3+GL6hbdlCwwJhQbyI241HnDTuPjV
+ 67wO0FxgZRiXqvxMFXUAl4uxdsHEmFDEuMoW/a2msRIMnTzLOSquD21TUrDjNmppcCN0
+ C7XQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=ay1ZTgA5
+Subject: Re: [Buildroot] [PATCH] configs/imx6ullevk_defconfig: bump Linux to
+ 6.6.4 and U-Boot to 2023.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,70 +91,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabio Estevam <festevam@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabrice Goucem <fabrice.goucem@oss.nxp.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Fabrice Goucem <fabrice.goucem@oss.nxp.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Let's also enable NXP firmware package to let latest SDMA firmware to be
-loaded. To achieve this we also need to enable dynamic eudev to let it
-to load the firmware.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- board/freescale/imx6ullevk/linux_sdma.fragment |  1 +
- configs/freescale_imx6ullevk_defconfig         | 11 ++++++++---
- 2 files changed, 9 insertions(+), 3 deletions(-)
- create mode 100644 board/freescale/imx6ullevk/linux_sdma.fragment
-
-diff --git a/board/freescale/imx6ullevk/linux_sdma.fragment b/board/freescale/imx6ullevk/linux_sdma.fragment
-new file mode 100644
-index 0000000000..6f1c8b4313
---- /dev/null
-+++ b/board/freescale/imx6ullevk/linux_sdma.fragment
-@@ -0,0 +1 @@
-+CONFIG_IMX_SDMA=m
-diff --git a/configs/freescale_imx6ullevk_defconfig b/configs/freescale_imx6ullevk_defconfig
-index db4fa69f71..fd4254edbf 100644
---- a/configs/freescale_imx6ullevk_defconfig
-+++ b/configs/freescale_imx6ullevk_defconfig
-@@ -1,21 +1,26 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.15.71-2.2.0)/linux-imx-lf-5.15.71-2.2.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.1.36-2.1.0)/linux-imx-lf-6.1.36-2.1.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx6ullevk/linux_sdma.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ull-14x14-evk"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6ull_14x14_evk"
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.15.71-2.2.0)/uboot-imx-lf-5.15.71-2.2.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.1.36-2.1.0)/uboot-imx-lf-6.1.36-2.1.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgR2l1bGlvLAoKT24gVGh1LCBEZWMgNywgMjAyMyBhdCA5OjA34oCvQU0gR2l1bGlvIEJlbmV0
+dGkKPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+IHdyb3RlOgo+Cj4gTGV0
+J3MgYWxzbyBlbmFibGUgTlhQIGZpcm13YXJlIHBhY2thZ2UgdG8gbGV0IGxhdGVzdCBTRE1BIGZp
+cm13YXJlIHRvIGJlCj4gbG9hZGVkLiBUbyBhY2hpZXZlIHRoaXMgd2UgYWxzbyBuZWVkIHRvIGVu
+YWJsZSBkeW5hbWljIGV1ZGV2IHRvIGxldCBpdAo+IHRvIGxvYWQgdGhlIGZpcm13YXJlLgo+Cj4g
+U2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdp
+bmVlcmluZy5jb20+CgpUaGFua3MgZm9yIHRoZSBwYXRjaC4KClJldmlld2VkLWJ5OiBGYWJpbyBF
+c3RldmFtIDxmZXN0ZXZhbUBnbWFpbC5jb20+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
