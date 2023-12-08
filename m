@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7D8BC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  8 Dec 2023 00:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2400C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  8 Dec 2023 00:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E51E2404E9;
-	Fri,  8 Dec 2023 00:10:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E51E2404E9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C182404B5;
+	Fri,  8 Dec 2023 00:35:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C182404B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HGw1f7bdIY2C; Fri,  8 Dec 2023 00:10:20 +0000 (UTC)
+	with ESMTP id 4Bmhjd5qsNch; Fri,  8 Dec 2023 00:35:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C718D405DD;
-	Fri,  8 Dec 2023 00:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C718D405DD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2FD1F1BF57C
- for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 00:10:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0222140525;
+	Fri,  8 Dec 2023 00:35:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0222140525
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 398571BF57C
+ for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 00:35:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0295242108
- for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 00:10:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0295242108
+ by smtp3.osuosl.org (Postfix) with ESMTP id 200AD60E89
+ for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 00:35:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 200AD60E89
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UsdCSjJzDvbY for <buildroot@lists.busybox.net>;
- Fri,  8 Dec 2023 00:10:16 +0000 (UTC)
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com
- [IPv6:2607:f8b0:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C9C754210F
- for <buildroot@buildroot.org>; Fri,  8 Dec 2023 00:10:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9C754210F
-Received: by mail-pf1-x436.google.com with SMTP id
- d2e1a72fcca58-6cea1522303so1094573b3a.1
- for <buildroot@buildroot.org>; Thu, 07 Dec 2023 16:10:16 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q34T9vxP0Gb4 for <buildroot@lists.busybox.net>;
+ Fri,  8 Dec 2023 00:35:31 +0000 (UTC)
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
+ [IPv6:2607:f8b0:4864:20::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 02B6F60E7D
+ for <buildroot@buildroot.org>; Fri,  8 Dec 2023 00:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02B6F60E7D
+Received: by mail-oi1-x229.google.com with SMTP id
+ 5614622812f47-3b844357f7cso1169602b6e.1
+ for <buildroot@buildroot.org>; Thu, 07 Dec 2023 16:35:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701994216; x=1702599016;
+ d=1e100.net; s=20230601; t=1701995729; x=1702600529;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=r5c2JwUJB/5u5VPOH2zfwuU8JqlGzjn+fqrw0LKgh+M=;
- b=rauMQtfx85gWHuKr2fLuOU86DPdtdQeQbq3Pg4S9CkAz7ESIF+jPn4+wgSkG/VISwz
- oatGEPzYs6Ad6JAGztNMkL0gEu18BVmKel49Sug0+J92xfO+oqW2hYqiIXm1kurtGCz8
- 9YJvcRnrNbuGhMnxt7fPBRRe1pZhagD+9PcQjOUfdkJgq3OzGNBF+xoKHS8Z1aYdzpCv
- ElWNiKVJyOrsOI6CMqBcChb0KIE7n8DWVZrn0f87sgyR62qfv3rYqOx2l8WHH0LO8x3i
- kPpjuhyuF65sRWryTp6gcW+5aooUgT6qPwQFaXBiaGuCoEN2XSaYfCjkCeV4+e4j6C6K
- fREQ==
-X-Gm-Message-State: AOJu0YydPmeqoRk5LGQGhzYT1BfH7u3pylFuSRpnwzGu4awEU8xzl3VP
- Qdnj/9BxtbeO7r+zl6vBYKYN1xNijl8=
-X-Google-Smtp-Source: AGHT+IFtpogfNxo0M6HMr/z8/3DsZe5OwLE5vDMvAnbfz5+iU/mEvbnU+FIbhiZEmpu72Ivqo9NRyQ==
-X-Received: by 2002:aa7:888f:0:b0:6ce:3949:2d9b with SMTP id
- z15-20020aa7888f000000b006ce39492d9bmr3443889pfe.54.1701994215685; 
- Thu, 07 Dec 2023 16:10:15 -0800 (PST)
+ bh=3B9vjSaaiyzcdjSr1wjLHnpnr+k90gzZPjXhblgBMbQ=;
+ b=cOjUL9RiAe4GsIhSpRFw8BFIzh/Oo/r+SYD1/rYVU8iqhgLZopnIboGLVjI0CjWX7q
+ +gvHnijKtq7Oksl6lBKDk+QjOs1fo/dZcbLm58DxBFvFJKuNhEWw3BoWh8+/omHdi5yU
+ or4W5iRBDC7BA9ecFMYnayydxvWBVWCZC8aXbXrsDMDHllE3ckV0/FJeI3Qg2a6/Ka0e
+ PFfUQxzG88m8W/HjK2Cys56j69bBrhhYE249Ua+3Rie8cC9th+PGIsT8Jj0eSG+joPTI
+ gfxdnbmlZnKNlJfv11EUQZYaebhjGIJbCqjSkLUHxbSgL9s6Occc+Eno0ewTzNCMhgGe
+ /S4Q==
+X-Gm-Message-State: AOJu0YwFkP1VtQcvXlZLh/syLe7am9GigxVs/VLTDgNPn5NdctASacBr
+ wGWzTlCQHawCLYOZDY/XyDN7NbxYcgY=
+X-Google-Smtp-Source: AGHT+IEIe1NdcAZbWt4tiDKy/Qh97osoTlpW6jDv47E/Ny3OcTRLZYhEOiKSKZ+1RJLNJSwW7IbN1w==
+X-Received: by 2002:a05:6808:3028:b0:3ae:4cab:526a with SMTP id
+ ay40-20020a056808302800b003ae4cab526amr4438976oib.14.1701995729470; 
+ Thu, 07 Dec 2023 16:35:29 -0800 (PST)
 Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- fb32-20020a056a002da000b006ce7ed5ba41sm345844pfb.55.2023.12.07.16.10.14
+ ka36-20020a056a0093a400b006ce7f0502f0sm371443pfb.151.2023.12.07.16.35.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Dec 2023 16:10:15 -0800 (PST)
+ Thu, 07 Dec 2023 16:35:29 -0800 (PST)
 From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  8 Dec 2023 08:09:57 +0800
-Message-Id: <20231208001001.6549-1-fancp2007@gmail.com>
+Date: Fri,  8 Dec 2023 08:34:06 +0800
+Message-Id: <20231208003407.9336-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231206012403.722101-1-fancp2007@gmail.com>
-References: <20231206012403.722101-1-fancp2007@gmail.com>
+In-Reply-To: <20231104192335.2920640-1-fancp2007@gmail.com>
+References: <20231104192335.2920640-1-fancp2007@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701994216; x=1702599016; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1701995729; x=1702600529; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=r5c2JwUJB/5u5VPOH2zfwuU8JqlGzjn+fqrw0LKgh+M=;
- b=egOeHFlW+qEY0B1Y5mSAPA6I+FmlHUu1ru4hVEHvrxu8ACHS2swo/lVdO22UIboX3l
- HPPCXLQgnn5I3SdahKMTCw5+HEq3Q/3/7BdWCD7dmkhsv0V4hewmSisJWnWMKf8gP3YS
- EQMjw/+f1jozcFSTVOxEe2YBw97B6Osy/0Ao4M4jaKUlk5VM4HcOZ6u+cIqParoMXYiE
- +GEhw9XblKyMINyz2phz/+S7L+7xIJDJC2hPQh0ZZJ42NTfCj49Mc1gZZmnPxkp1JRwO
- Fjo7bykYn7iVncZm/Qj4USJuxUAUF/q5NzHBW0KFFbeXc1pefGTKakyZmCDXd2yIA1yX
- ejrQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=3B9vjSaaiyzcdjSr1wjLHnpnr+k90gzZPjXhblgBMbQ=;
+ b=YXmmPo5hNAPHNnTdgHFGSuhore1cDHVGV/84JsSDF0tcErKutBkmAIc3sclfsWdR2o
+ ue2Et7zSXWtOU3/OEZpyuxtaJvDzRXYNx4YQJWvl5BysZG7E0kqobzjzOaAZ9q3cDSup
+ cayVj+NfmFhhmclfFk+TMcwuJzQ0q/+R5jNFJSH2vfLCoZ940UseaIVIiiWQg7o/G9ro
+ ao8zgW8kr+8lfGs+kZja/QSHddZPvLer32wcB3GhEKJ8opeMYuzSBiVAR9/OS5yNti4E
+ 9nJeeilID+bolHmNsSwt5hWaTfsSeNyLsmzt0WRrQJpiG41zdiMtlHr8Ht3EBk3caOQ8
+ UUrg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=egOeHFlW
-Subject: [Buildroot] [PATCH] configs/beaglebone_defconfig: bump Linux to
- 6.1.46-ti-r13 and U-Boot to 2023.10
+ header.a=rsa-sha256 header.s=20230601 header.b=YXmmPo5h
+Subject: [Buildroot] [PATCH] configs/friendlyarm_nanopi_neo2_defconfig: new
+ board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,79 +96,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lothar Felten <lothar.felten@gmail.com>, Scott Fan <fancp2007@gmail.com>
+Cc: Scott Fan <fancp2007@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The linux defconfig 'bb.org_defconfig' is the best for beagleboard.
+Add support for the FriendlyARM NanoPi NEO2 with mainline components:
+  - U-Boot 2023.10
+  - Linux 6.1.65
 
-To load compressed kernel modules, kmod and xz packages are needed
-because busybox doesn't support it.
-
-Bump U-Boot to version 2023.10. The uboot-tools package is no need.
-
-Tested on beaglebone black.
-
-[1] https://github.com/beagleboard/linux/releases/tag/6.1.46-ti-r13
+Board's wiki page:
+  - https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO2
 
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- configs/beaglebone_defconfig | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 7e006e7a85..e2d67019b1 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -3,11 +3,8 @@ BR2_arm=y
- BR2_cortex_a8=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
--
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+---
+Changes v1 -> v2:
+  - Fix issues from 'utils/docker-run make check-package'
+  - Add atf custom version in the defconfig
+  - No need for sudo to run sync
+
+Changes v2 -> v3:
+  - Update patch file, add the upstream tag
+
+Changes v3 -> v4:
+  - Use a single integrated image file (u-boot-sunxi-with-spl.bin)
+  - Remove patch file for uboot, switch to binman
+  - Merge boot partition into rootfs partition
+  - Bump kernel version to 6.1.61
+
+Changes v4 -> v5:
+  - Bump kernel version to 6.1.65
+---
+ board/friendlyarm/nanopi-neo2/extlinux.conf |  4 ++
+ board/friendlyarm/nanopi-neo2/genimage.cfg  | 16 +++++++
+ board/friendlyarm/nanopi-neo2/post-build.sh |  5 +++
+ board/friendlyarm/nanopi-neo2/readme.txt    | 34 +++++++++++++++
+ configs/friendlyarm_nanopi_neo2_defconfig   | 48 +++++++++++++++++++++
+ 5 files changed, 107 insertions(+)
+ create mode 100644 board/friendlyarm/nanopi-neo2/extlinux.conf
+ create mode 100644 board/friendlyarm/nanopi-neo2/genimage.cfg
+ create mode 100755 board/friendlyarm/nanopi-neo2/post-build.sh
+ create mode 100644 board/friendlyarm/nanopi-neo2/readme.txt
+ create mode 100644 configs/friendlyarm_nanopi_neo2_defconfig
+
+diff --git a/board/friendlyarm/nanopi-neo2/extlinux.conf b/board/friendlyarm/nanopi-neo2/extlinux.conf
+new file mode 100644
+index 0000000000..482a069f74
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo2/extlinux.conf
+@@ -0,0 +1,4 @@
++label friendlyarm-nanopi-buildroot
++  kernel /boot/Image
++  devicetree /boot/sun50i-h5-nanopi-neo2.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait
+diff --git a/board/friendlyarm/nanopi-neo2/genimage.cfg b/board/friendlyarm/nanopi-neo2/genimage.cfg
+new file mode 100644
+index 0000000000..67e4e5efdb
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo2/genimage.cfg
+@@ -0,0 +1,16 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot-tpl-spl-dtb {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		offset = 1M
++	}
++}
+diff --git a/board/friendlyarm/nanopi-neo2/post-build.sh b/board/friendlyarm/nanopi-neo2/post-build.sh
+new file mode 100755
+index 0000000000..c7ec875068
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo2/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++install -m 0644 -D "${BOARD_DIR}/extlinux.conf" "${TARGET_DIR}/boot/extlinux/extlinux.conf"
+diff --git a/board/friendlyarm/nanopi-neo2/readme.txt b/board/friendlyarm/nanopi-neo2/readme.txt
+new file mode 100644
+index 0000000000..c896a57525
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo2/readme.txt
+@@ -0,0 +1,34 @@
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the NanoPi NEO2. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++Wiki link:
++https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO2
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++How to build
++============
++
++    $ make friendlyarm_nanopi_neo2_defconfig
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sync
++
++Insert the micro SDcard in your NanoPi NEO2 and power it up. The console
++is on the serial line, 115200 8N1.
+diff --git a/configs/friendlyarm_nanopi_neo2_defconfig b/configs/friendlyarm_nanopi_neo2_defconfig
+new file mode 100644
+index 0000000000..a955ec323a
+--- /dev/null
++++ b/configs/friendlyarm_nanopi_neo2_defconfig
+@@ -0,0 +1,48 @@
++BR2_aarch64=y
++BR2_cortex_a53=y
++BR2_ARM_FPU_VFPV4=y
++
 +# Linux headers same as kernel, a 6.1 series
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- 
- # System
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-@@ -20,8 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.162-ti-r59)/linux-5.10.162-ti-r59.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.1.46-ti-r13)/linux-6.1.46-ti-r13.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-@@ -34,7 +31,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
++
++# Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -48,6 +45,9 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- 
--# Supporting host tools to build FIT image
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+# Enable compressed kernel module support
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_KMOD_TOOLS=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_KMOD=y
-+BR2_PACKAGE_HOST_KMOD_XZ=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo2"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.65"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-nanopi-neo2"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_GENERIC_ISSUE="Welcome to FriendlyARM NanoPi NEO2"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo2/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo2/genimage.cfg"
 -- 
 2.25.1
 
