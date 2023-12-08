@@ -4,64 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DCF3C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  8 Dec 2023 22:54:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09E1EC4167B
+	for <buildroot@archiver.kernel.org>; Fri,  8 Dec 2023 23:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 947AC60F00;
-	Fri,  8 Dec 2023 22:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 947AC60F00
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B6C66FA21;
+	Fri,  8 Dec 2023 23:05:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B6C66FA21
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 177PrblHKxxz; Fri,  8 Dec 2023 22:54:07 +0000 (UTC)
+	with ESMTP id 2CM-lEcUIbCn; Fri,  8 Dec 2023 23:05:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5D0060BDF;
-	Fri,  8 Dec 2023 22:54:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5D0060BDF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 017E81BF593
- for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 22:54:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D48536F6A0;
+	Fri,  8 Dec 2023 23:05:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D48536F6A0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 06F2E1BF5D7
+ for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 23:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC07183E97
- for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 22:54:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC07183E97
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0BEC42666
+ for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 23:05:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0BEC42666
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8ORINIijAivM for <buildroot@lists.busybox.net>;
- Fri,  8 Dec 2023 22:54:05 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC97B83E96
- for <buildroot@buildroot.org>; Fri,  8 Dec 2023 22:54:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC97B83E96
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7D3A113F81D;
- Fri,  8 Dec 2023 23:53:59 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 08 Dec 2023 23:53:59 +0100
-Date: Fri, 8 Dec 2023 23:53:59 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZXOehwwVDyiGPpRf@landeda>
-References: <20231207220930.1356097-1-fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ciW98e_fvg66 for <buildroot@lists.busybox.net>;
+ Fri,  8 Dec 2023 23:04:59 +0000 (UTC)
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
+ [IPv6:2a00:1450:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7E8B442662
+ for <buildroot@buildroot.org>; Fri,  8 Dec 2023 23:04:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E8B442662
+Received: by mail-lf1-x12e.google.com with SMTP id
+ 2adb3069b0e04-50bfd7be487so2976838e87.0
+ for <buildroot@buildroot.org>; Fri, 08 Dec 2023 15:04:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1702076697; x=1702681497;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=skawpneefh3+VWZHgXyhXNMjiRhMVogQMEfpKdolfrU=;
+ b=bY+IGeyvgdR5hZwhotcDKhKM99egv5lJVYJitD+X+/P4RTpyDYtfNlZfAR3UkrveHt
+ pyWmUeijbE6DtHyyr3Mg7wlKvrRejSHz3pbcTQGSoCGV+SFvsMsjldr8H4GKXpwHtfRo
+ aDQr/uEim8Oyh6IIXYLCLWHq6XcNe6vd4PU7oP3WQj8dpVyqJtwTAudTj8jPozuQ1hmt
+ yV0TvKo+u7NrDuZyI4naFeAtqAdMOi4nB8r2mczoRxs921gv2fi4ozPwt/kHcMVbP+xQ
+ +TJAj1UHeT2lEkpfIMpALt58PGsRfQgduLnt7+eeS7YOFQYW5nYBoij4O9xSHcN4Co86
+ pHmw==
+X-Gm-Message-State: AOJu0Yz9VOA39nQoBAckXo9d3JcTlZeksQFHlY15JQVInqxm76SdxnG0
+ jgZU+DtfJn79QbxxRQ/Bwd+KsXH1XJ9qOcjwHNo=
+X-Google-Smtp-Source: AGHT+IEZdxJiScYjkT+Oj+c1zl+20Xn4aNIVNJ1lbJH0KMR+VRzvaMrp/zWpCCZE7UWFKBmhv4pcRqEpYF4lRcDRMg4=
+X-Received: by 2002:a19:914f:0:b0:50b:ed85:a26e with SMTP id
+ y15-20020a19914f000000b0050bed85a26emr233978lfj.48.1702076697037; Fri, 08 Dec
+ 2023 15:04:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231207220930.1356097-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1702076042;
- bh=HHc/hRuL7N4jcOcxFQzFk/FvQne4Hv8Nrkfi8MJ0m3w=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=G3CD3QifoTJe5EAv1p+Fwhcmaaif9bjoZE+aLRhKldAet6v8WT9r4sP2CHbBhDlWs
- rT3oRVDzXJg0F5qHjLueQ00fdH6cJheCm683P4MjiXmC6ied/iPUzsCHcG4acoV5Oe
- /efX2x9NgjyO34njk7zZyH1blcMQG2d4LVQ0VVqchbG6fRIlakoCE5fOdr+nRtjA0/
- 7MIP4vbr1EPjfEaORr5nwW4TEoErsLLA5nFd0tLtxF38NR/dLUOlN7/X3hILN8AMQV
- P3NgYttWE9Rp17ySVTQhBacO+fUokwLgC0JXs3mXYofXdgS2O+bb+CHsX0IKDPQ2nH
- 0s4hnecSNUIjw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=G3CD3Qif
+References: <20231207220930.1356097-1-fontaine.fabrice@gmail.com>
+ <ZXOehwwVDyiGPpRf@landeda>
+In-Reply-To: <ZXOehwwVDyiGPpRf@landeda>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 9 Dec 2023 00:04:44 +0100
+Message-ID: <CAPi7W838vzhK48R5GduRL660bWQnS1WGTPsDmnx+gsj3HfVX3w@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1702076697; x=1702681497; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=skawpneefh3+VWZHgXyhXNMjiRhMVogQMEfpKdolfrU=;
+ b=az5cR4yQ+KdXxdXnokkfmhns2r1891I0GWbDAkRI70k1oZxzCbK6QcLuVSZSUyqOJJ
+ tlbsX5Kvp59U6aHWUBpHOFlLMlIJib6c05oqHYj4zNT6S375P0LGhdcPv70aRyNyvd3t
+ HrsP+6htIG5x4C8gsNBzneZGWcH4x5IeYJ/Pjz/uC9qaPq9riHbWsFuKxucZCvTufgrq
+ J6gKynEwFWAkftuunqFdyH0Gq5KYN8nEvz/VrQWjP8OLGJTarei2a/AgAhpsOmm7jg9L
+ wRycLPN9yrenYLyDiaLRCfF5DebZdgCD+sf2IOaApKkwDJ6UyjOkiNiilBKGhvdxYk4X
+ mwPQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=az5cR4yQ
 Subject: Re: [Buildroot] [PATCH 1/1] package/memtest86: pass TARGET_CC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -75,64 +92,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Steve Kenton <skenton@ou.edu>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2023-12-07 23:09 +0100, Fabrice Fontaine spake thusly:
-> Pass CC=$(TARGET_CC) to make to avoid the following build failure raised
-> since bump to version 6.20 in commit
-> a743087593a5fd5b33e2650591cada09929c27a6:
-> 
-> gcc -m32 -x assembler-with-cpp -c -I../boot -o boot/startup.o ../boot/startup32.S
-> gcc: error: unrecognized command-line option '-m32'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/15ece19703bb21c1326ff353aa79f3550a01f648
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/memtest86/memtest86.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/memtest86/memtest86.mk b/package/memtest86/memtest86.mk
-> index c0f85755fe..51d5805e0a 100644
-> --- a/package/memtest86/memtest86.mk
-> +++ b/package/memtest86/memtest86.mk
-> @@ -20,7 +20,8 @@ endif
->  endif
->  
->  define MEMTEST86_BUILD_CMDS
-> -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(MEMTEST86_BUILD_DIR)
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC=$(TARGET_CC) \
-
-CC=$(TARGET_CC) is already present in TARGET_CONFIGURE_OPTS, so why is
-it not accounted for?
-
-Regards,
-Yann E. MORIN.
-
-> +		-C $(@D)/$(MEMTEST86_BUILD_DIR)
->  endef
->  
->  define MEMTEST86_INSTALL_IMAGES_CMDS
-> -- 
-> 2.42.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+TGUgdmVuLiA4IGTDqWMuIDIwMjMgw6AgMjM6NTQsIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4u
+MTk5OEBmcmVlLmZyPiBhIMOpY3JpdCA6Cj4KPiBPbiAyMDIzLTEyLTA3IDIzOjA5ICswMTAwLCBG
+YWJyaWNlIEZvbnRhaW5lIHNwYWtlIHRodXNseToKPiA+IFBhc3MgQ0M9JChUQVJHRVRfQ0MpIHRv
+IG1ha2UgdG8gYXZvaWQgdGhlIGZvbGxvd2luZyBidWlsZCBmYWlsdXJlIHJhaXNlZAo+ID4gc2lu
+Y2UgYnVtcCB0byB2ZXJzaW9uIDYuMjAgaW4gY29tbWl0Cj4gPiBhNzQzMDg3NTkzYTVmZDViMzNl
+MjY1MDU5MWNhZGEwOTkyOWMyN2E2Ogo+ID4KPiA+IGdjYyAtbTMyIC14IGFzc2VtYmxlci13aXRo
+LWNwcCAtYyAtSS4uL2Jvb3QgLW8gYm9vdC9zdGFydHVwLm8gLi4vYm9vdC9zdGFydHVwMzIuUwo+
+ID4gZ2NjOiBlcnJvcjogdW5yZWNvZ25pemVkIGNvbW1hbmQtbGluZSBvcHRpb24gJy1tMzInCj4g
+Pgo+ID4gRml4ZXM6Cj4gPiAgLSBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0
+cy8xNWVjZTE5NzAzYmIyMWMxMzI2ZmYzNTNhYTc5ZjM1NTBhMDFmNjQ4Cj4gPgo+ID4gU2lnbmVk
+LW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Cj4g
+PiAtLS0KPiA+ICBwYWNrYWdlL21lbXRlc3Q4Ni9tZW10ZXN0ODYubWsgfCAzICsrLQo+ID4gIDEg
+ZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiA+Cj4gPiBkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9tZW10ZXN0ODYvbWVtdGVzdDg2Lm1rIGIvcGFja2FnZS9tZW10ZXN0
+ODYvbWVtdGVzdDg2Lm1rCj4gPiBpbmRleCBjMGY4NTc1NWZlLi41MWQ1ODA1ZTBhIDEwMDY0NAo+
+ID4gLS0tIGEvcGFja2FnZS9tZW10ZXN0ODYvbWVtdGVzdDg2Lm1rCj4gPiArKysgYi9wYWNrYWdl
+L21lbXRlc3Q4Ni9tZW10ZXN0ODYubWsKPiA+IEBAIC0yMCw3ICsyMCw4IEBAIGVuZGlmCj4gPiAg
+ZW5kaWYKPiA+Cj4gPiAgZGVmaW5lIE1FTVRFU1Q4Nl9CVUlMRF9DTURTCj4gPiAtICAgICAkKFRB
+UkdFVF9DT05GSUdVUkVfT1BUUykgJChNQUtFKSAtQyAkKEBEKS8kKE1FTVRFU1Q4Nl9CVUlMRF9E
+SVIpCj4gPiArICAgICAkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykgJChNQUtFKSBDQz0kKFRBUkdF
+VF9DQykgXAo+Cj4gQ0M9JChUQVJHRVRfQ0MpIGlzIGFscmVhZHkgcHJlc2VudCBpbiBUQVJHRVRf
+Q09ORklHVVJFX09QVFMsIHNvIHdoeSBpcwo+IGl0IG5vdCBhY2NvdW50ZWQgZm9yPwoKQmVjYXVz
+ZSAiQ0M9JChUQVJHRVRfQ0MpIG1ha2UiIGlzIG5vdCB0aGUgc2FtZSBhcyAibWFrZQpDQz0kKFRB
+UkdFVF9DQykiIGFzIGJ1aWxkezMyLDY0fS9NYWtlZmlsZSBpcyBzZXR0aW5nIENDIHRvIGdjYy4K
+Cj4KPiBSZWdhcmRzLAo+IFlhbm4gRS4gTU9SSU4uCj4KPiA+ICsgICAgICAgICAgICAgLUMgJChA
+RCkvJChNRU1URVNUODZfQlVJTERfRElSKQo+ID4gIGVuZGVmCj4gPgo+ID4gIGRlZmluZSBNRU1U
+RVNUODZfSU5TVEFMTF9JTUFHRVNfQ01EUwo+ID4gLS0KPiA+IDIuNDIuMAo+ID4KPiA+IF9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0Cj4gPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4gaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4KPiAtLQo+IC4tLS0t
+LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0t
+LS0tLS0tLS0tLS0tLS0tLS0uCj4gfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRk
+ZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKPiB8ICszMyA2NjIg
+Mzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAg
+ICAgICAgICAgICAgfAo+IHwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTog
+IFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8Cj4gfCBodHRwOi8veW1vcmlu
+LmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3Bp
+cmFjeS4gIHwKPiAnLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0t
+LS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwoKQmVzdCBSZWdhcmRzLAoKRmFicmlj
+ZQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
