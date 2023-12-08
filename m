@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2400C4167B
-	for <buildroot@archiver.kernel.org>; Fri,  8 Dec 2023 00:35:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E3FC10DC3
+	for <buildroot@archiver.kernel.org>; Fri,  8 Dec 2023 00:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C182404B5;
-	Fri,  8 Dec 2023 00:35:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C182404B5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C9E4404B5;
+	Fri,  8 Dec 2023 00:38:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C9E4404B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Bmhjd5qsNch; Fri,  8 Dec 2023 00:35:35 +0000 (UTC)
+	with ESMTP id kgc_wC7KOf2D; Fri,  8 Dec 2023 00:38:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0222140525;
-	Fri,  8 Dec 2023 00:35:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0222140525
+	by smtp2.osuosl.org (Postfix) with ESMTP id 291C240525;
+	Fri,  8 Dec 2023 00:38:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 291C240525
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 398571BF57C
- for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 00:35:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 873891BF57C
+ for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 00:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 200AD60E89
- for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 00:35:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 200AD60E89
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6003A60E89
+ for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 00:38:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6003A60E89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q34T9vxP0Gb4 for <buildroot@lists.busybox.net>;
- Fri,  8 Dec 2023 00:35:31 +0000 (UTC)
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
- [IPv6:2607:f8b0:4864:20::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 02B6F60E7D
- for <buildroot@buildroot.org>; Fri,  8 Dec 2023 00:35:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02B6F60E7D
-Received: by mail-oi1-x229.google.com with SMTP id
- 5614622812f47-3b844357f7cso1169602b6e.1
- for <buildroot@buildroot.org>; Thu, 07 Dec 2023 16:35:30 -0800 (PST)
+ with ESMTP id CeVjqr-ZFUmP for <buildroot@lists.busybox.net>;
+ Fri,  8 Dec 2023 00:38:01 +0000 (UTC)
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com
+ [IPv6:2607:f8b0:4864:20::62c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5B62C60E7D
+ for <buildroot@buildroot.org>; Fri,  8 Dec 2023 00:38:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B62C60E7D
+Received: by mail-pl1-x62c.google.com with SMTP id
+ d9443c01a7336-1d0a7b72203so13967365ad.2
+ for <buildroot@buildroot.org>; Thu, 07 Dec 2023 16:38:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1701995729; x=1702600529;
+ d=1e100.net; s=20230601; t=1701995880; x=1702600680;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=3B9vjSaaiyzcdjSr1wjLHnpnr+k90gzZPjXhblgBMbQ=;
- b=cOjUL9RiAe4GsIhSpRFw8BFIzh/Oo/r+SYD1/rYVU8iqhgLZopnIboGLVjI0CjWX7q
- +gvHnijKtq7Oksl6lBKDk+QjOs1fo/dZcbLm58DxBFvFJKuNhEWw3BoWh8+/omHdi5yU
- or4W5iRBDC7BA9ecFMYnayydxvWBVWCZC8aXbXrsDMDHllE3ckV0/FJeI3Qg2a6/Ka0e
- PFfUQxzG88m8W/HjK2Cys56j69bBrhhYE249Ua+3Rie8cC9th+PGIsT8Jj0eSG+joPTI
- gfxdnbmlZnKNlJfv11EUQZYaebhjGIJbCqjSkLUHxbSgL9s6Occc+Eno0ewTzNCMhgGe
- /S4Q==
-X-Gm-Message-State: AOJu0YwFkP1VtQcvXlZLh/syLe7am9GigxVs/VLTDgNPn5NdctASacBr
- wGWzTlCQHawCLYOZDY/XyDN7NbxYcgY=
-X-Google-Smtp-Source: AGHT+IEIe1NdcAZbWt4tiDKy/Qh97osoTlpW6jDv47E/Ny3OcTRLZYhEOiKSKZ+1RJLNJSwW7IbN1w==
-X-Received: by 2002:a05:6808:3028:b0:3ae:4cab:526a with SMTP id
- ay40-20020a056808302800b003ae4cab526amr4438976oib.14.1701995729470; 
- Thu, 07 Dec 2023 16:35:29 -0800 (PST)
+ bh=DbnTeiLRGmOYRISHd8H1S0u2bmNnwV6i8Lrb8rceo5s=;
+ b=gTB4wdPvdjrfcFRaqdwsVDsWda50sq11WWYiwuhD0FyTWPMGQXJsHkMF8nPV5ODK+A
+ 9RByhwhnCHlvoszHheC/0LHkZQRxJx+fzkpCk7EwCI+lP06GPE4rUGnbrzfApfX1G5Jn
+ zHyp9vNUpnEUAYG3WFvCdglgex+nTStQxHEI1kRTLcqpzNIxFBXh4EbuJhoU32pMdM2F
+ MBTPKlhnbuDIpLfo7eJp4mxoSHG3p99thGxaORKuH3+ftNQjJtBUfqQ6P3/O5fR4At1b
+ LYGaF8ULb6jLzJiJyk+VRuMNlKk0zy8AsPSXzqy2CCfuMTeMNXuo6gjKhCaj9A+eBXoJ
+ GBkw==
+X-Gm-Message-State: AOJu0YxlDIb5aJnysLhTbsYDTZwwM1Gb8S27cU1LkmOpVNUxLF0J8Pro
+ Li8mOlMO70EcOAhSY0BnN6rqJz8dcEI=
+X-Google-Smtp-Source: AGHT+IFzqvO2NitPKsRQ6Ora3dao0DiLSwcUGZbpV9Kw+jHGw7d0PzjFQTi1DL8AotIsT48PLkUwWQ==
+X-Received: by 2002:a17:902:e88f:b0:1d0:6b95:9c0d with SMTP id
+ w15-20020a170902e88f00b001d06b959c0dmr4548937plg.65.1701995879773; 
+ Thu, 07 Dec 2023 16:37:59 -0800 (PST)
 Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- ka36-20020a056a0093a400b006ce7f0502f0sm371443pfb.151.2023.12.07.16.35.28
+ k9-20020a170902c40900b001b9e9edbf43sm414667plk.171.2023.12.07.16.37.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Dec 2023 16:35:29 -0800 (PST)
+ Thu, 07 Dec 2023 16:37:59 -0800 (PST)
 From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  8 Dec 2023 08:34:06 +0800
-Message-Id: <20231208003407.9336-1-fancp2007@gmail.com>
+Date: Fri,  8 Dec 2023 08:37:46 +0800
+Message-Id: <20231208003746.9505-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231104192335.2920640-1-fancp2007@gmail.com>
 References: <20231104192335.2920640-1-fancp2007@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1701995729; x=1702600529; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1701995880; x=1702600680; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=3B9vjSaaiyzcdjSr1wjLHnpnr+k90gzZPjXhblgBMbQ=;
- b=YXmmPo5hNAPHNnTdgHFGSuhore1cDHVGV/84JsSDF0tcErKutBkmAIc3sclfsWdR2o
- ue2Et7zSXWtOU3/OEZpyuxtaJvDzRXYNx4YQJWvl5BysZG7E0kqobzjzOaAZ9q3cDSup
- cayVj+NfmFhhmclfFk+TMcwuJzQ0q/+R5jNFJSH2vfLCoZ940UseaIVIiiWQg7o/G9ro
- ao8zgW8kr+8lfGs+kZja/QSHddZPvLer32wcB3GhEKJ8opeMYuzSBiVAR9/OS5yNti4E
- 9nJeeilID+bolHmNsSwt5hWaTfsSeNyLsmzt0WRrQJpiG41zdiMtlHr8Ht3EBk3caOQ8
- UUrg==
+ bh=DbnTeiLRGmOYRISHd8H1S0u2bmNnwV6i8Lrb8rceo5s=;
+ b=JyNKV+RRzqHiR1F2wAOwCzRG0co7XZO4QIcWIFZGsjOF7lF1oGE0nFW0TZI5OSsCZ7
+ gPkcUrsgeHI76xkQv+YQvfRsKFz1PaXQ1g1KoP8qgPp7CQkRMWxTL2+2jP+w1XjSUeiQ
+ PyvpfGSzZA7JNPjXthAtdnfdHTjVHBAID8OD27K5vqojEQw6kjCUbvhv9M3N4N6o2lbU
+ DP9+czb26ErPVDhgHJrEpTuKblQje5Pb8+PeivuR5oLDYh1cNyqJzeTGWLC8hS5GzbnT
+ WP26LEF/LAwljEKdcLZQIQ+NmQf8hRMNnUy4E/rFMOAxa71ldjOA9XPOIRFmCn8ancQf
+ DkVA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YXmmPo5h
-Subject: [Buildroot] [PATCH] configs/friendlyarm_nanopi_neo2_defconfig: new
- board
+ header.a=rsa-sha256 header.s=20230601 header.b=JyNKV+RR
+Subject: [Buildroot] [PATCH v5] configs/friendlyarm_nanopi_neo2_defconfig:
+ new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -128,6 +128,8 @@ Changes v3 -> v4:
 
 Changes v4 -> v5:
   - Bump kernel version to 6.1.65
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
  board/friendlyarm/nanopi-neo2/extlinux.conf |  4 ++
  board/friendlyarm/nanopi-neo2/genimage.cfg  | 16 +++++++
