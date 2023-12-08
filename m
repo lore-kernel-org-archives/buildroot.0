@@ -4,83 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7ABDC4167B
-	for <buildroot@archiver.kernel.org>; Fri,  8 Dec 2023 13:30:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E3E1C4167B
+	for <buildroot@archiver.kernel.org>; Fri,  8 Dec 2023 13:54:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E60E80ECD;
-	Fri,  8 Dec 2023 13:30:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E60E80ECD
+	by smtp1.osuosl.org (Postfix) with ESMTP id C33D383D70;
+	Fri,  8 Dec 2023 13:53:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C33D383D70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UJnDk3VjrGur; Fri,  8 Dec 2023 13:30:22 +0000 (UTC)
+	with ESMTP id x38c2f5rGWZ0; Fri,  8 Dec 2023 13:53:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77EA780C2D;
-	Fri,  8 Dec 2023 13:30:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77EA780C2D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 276231BF83C
- for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 13:30:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1044C83D22;
+	Fri,  8 Dec 2023 13:53:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1044C83D22
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 448381BF83C
+ for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 13:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F318F403AA
- for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 13:30:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F318F403AA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1D05E83D11
+ for <buildroot@lists.busybox.net>; Fri,  8 Dec 2023 13:53:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D05E83D11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VtOUSk2uiBZp for <buildroot@lists.busybox.net>;
- Fri,  8 Dec 2023 13:30:18 +0000 (UTC)
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com
- [IPv6:2607:f8b0:4864:20::b36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5DCFB400CB
- for <buildroot@buildroot.org>; Fri,  8 Dec 2023 13:30:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DCFB400CB
-Received: by mail-yb1-xb36.google.com with SMTP id
- 3f1490d57ef6-db35caa1749so2195453276.2
- for <buildroot@buildroot.org>; Fri, 08 Dec 2023 05:30:18 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bUjuKEe5mNkZ for <buildroot@lists.busybox.net>;
+ Fri,  8 Dec 2023 13:53:55 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0805F83D70
+ for <buildroot@buildroot.org>; Fri,  8 Dec 2023 13:53:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0805F83D70
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40c09d62b70so24613845e9.1
+ for <buildroot@buildroot.org>; Fri, 08 Dec 2023 05:53:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702042217; x=1702647017;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1702043632; x=1702648432;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=PjItjk7gAZ2f4xrT+1hLrsGJVvQnscWktdo2rf7WiZc=;
- b=X0dHMgtW53hTPLw//eIMGd14DcYOf4HM4pptOJAey0wo2XKRbc0l2KISdErOiK3R29
- pD+bVmDdk9Ngd0CphgugEJnkZDGGdJ/lbEY4wLqPBYD/c2gDPMPGX2C8r2M4q8XoJFob
- 2r+Uvbh0+zYUbLBFdK+BlFTSXFFsTs05HEks5UBUanEbwHkZ8ooJWS6bXd2eyD7EZHM7
- LwmTTxagdnIaMqbbp3YVZUjBDlV3hReTIW04cJmJd8dP84sHvEfyxb29khwkT5Q/5FC9
- 1KY92aukWrAHpfKW8Gp3ietwmYCtJoBoiClo/xLIugPNSg8CwcrdYcTtZTxWrDUiT4f4
- 3Q0Q==
-X-Gm-Message-State: AOJu0YxF9zPNEqgX/8w0jjCmzOsuxK+Jgr4z/NmtvcEHQvhBrLo22XjN
- F918dT1vVDk37hLC/Zq3CkQyF3UdIddY1TWijNM=
-X-Google-Smtp-Source: AGHT+IHe7MFPFE6OAxE/PU0dwIXE+/0omlzMTvA5E8AeuPtZ8KzQLH9TBpcNCbSSe0cjOHASH/8FjkDqzciKG6CV/rw=
-X-Received: by 2002:a5b:74d:0:b0:db7:dacf:3fa4 with SMTP id
- s13-20020a5b074d000000b00db7dacf3fa4mr3307116ybq.81.1702042217069; Fri, 08
- Dec 2023 05:30:17 -0800 (PST)
+ bh=Vb/5u+YLLKmT0pdUXu9xrytO7lFXNacZ2neO7LOqPsw=;
+ b=ZQOfMUwS2H6t3btkS6hoD8fcyzNs0koCbcuSOS0/n5CT9kMCqlaPrdsR5xivNn9jJn
+ g3U0Py9ozPYQnm62OQ2i17oiYiJZdh9hnH+7p1XaK/rNPXouT1FWvJ2lr6+OhNhZcf/s
+ 1Z5Rt6FBom2ufB9xALWTip8+Sh5Yd7PlFqJvofwDNYR1E3MZ8OGEVMN10VUmghEQ8ffm
+ 29xZGLZhem6EmZ5xQsN1Lf3AUNak/dCfG8g1r7hKK/zW79U/GpGh5CfB+99LWUT1OCqJ
+ t9HZGXTHdfBkMG5D52zuwaF+2UwqsJMmSrIhzEgjmOkQ9LM7lOrUou7iFCszwfDPLTyM
+ g2wQ==
+X-Gm-Message-State: AOJu0YwLLyRODafvGx238Nt6WLS79TaQsrzh1PkZkevcAf2H2e3JqMw5
+ Az1tyr9fHdQaUFaTZ+GeoLXTRPXRd4H7cOBWKTM=
+X-Google-Smtp-Source: AGHT+IEWCPwfPPb5p4+9ltrVOnPpMHC3WyLrhi0md2XZ20jCJksgiOvdJmATRvLpQJvK5y+t6geyXA==
+X-Received: by 2002:a05:600c:1d13:b0:40b:5e21:c5db with SMTP id
+ l19-20020a05600c1d1300b0040b5e21c5dbmr1744968wms.169.1702043632274; 
+ Fri, 08 Dec 2023 05:53:52 -0800 (PST)
+Received: from P-NAN-KHNOUM.nantes.intranet
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ r20-20020a05600c459400b0040b349c91acsm5227705wmo.16.2023.12.08.05.53.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 08 Dec 2023 05:53:52 -0800 (PST)
+From: Antoine Coutant <antoine.coutant@smile.fr>
+To: buildroot@buildroot.org
+Date: Fri,  8 Dec 2023 14:53:27 +0100
+Message-Id: <20231208135329.1352567-1-antoine.coutant@smile.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAPn86JAC9RLnYULz=M+y55KGgzvF_yWZa3ujNSbg58aCS6KPZQ@mail.gmail.com>
- <ZXMAJq84X14w97J+@tl-lnx-nyma7486-2>
-In-Reply-To: <ZXMAJq84X14w97J+@tl-lnx-nyma7486-2>
-From: Stefano Cottafavi <stefano.cottafavi@gmail.com>
-Date: Fri, 8 Dec 2023 14:30:05 +0100
-Message-ID: <CAPn86JBOi=QB6PJKtd6PB8cwY9pmwH9TiBtOmwm2QtxrAeQ+Eg@mail.gmail.com>
-To: yann.morin@orange.com, 
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- michael@amarulasolutions.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1702042217; x=1702647017; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=PjItjk7gAZ2f4xrT+1hLrsGJVvQnscWktdo2rf7WiZc=;
- b=cUo9sVfGlq3wYnyF/WggQSRumaykERNKuEwbll0kGCTbNJqfeTQAW+UgbfQkpGgllD
- 8Ya7TguBGFzkKm9wDw82tKfu/2FqVyRI6cjh73g5oaoniffdLe0Uw2Z4f+GA4fQxZ4pl
- B7MMstTrMu9FaOMyGmNIBQXphMEzUayMCiO5WDgyXu5BYFtmfaokAefp/h2k2xl9pD5x
- qII8QIf+1NQRj9DbwNlo8tBYGEM7Rnj2tWiDWeMljyaMEt5BV9ZdrtQfiCyYuoTUppRO
- GbBES8+32ucL37xxXz38kplqJSeoOs7OYDALyWc2pFb9D+ExpRFJX0T8GUyzYITanezL
- YlXw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cUo9sVfG
-Subject: Re: [Buildroot] help - custom user not working
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1702043632; x=1702648432;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Vb/5u+YLLKmT0pdUXu9xrytO7lFXNacZ2neO7LOqPsw=;
+ b=2No3qCCAkaw27uFdMo8ZdvJE7x44QVr/QiODGCyFrrh5yIqM9b/zSNnSAo19AiiV0F
+ uztheSvGC8pjc2qFKg7ieqh2ZQEq6ZOscsjsLq2KAIB39LojRlzkI4cK2+Prc7xhT/89
+ Rpzfh/h/0DXSunQ1JN656o4Gv6WeuA4kQyd8yyQ4TFArCCzL7iv0bwQavZefrITcZoih
+ A5NAXFe0VTI0X4GUzmQUlIB8AEHMIzNXP5tJiNYrnxFS1dD/ilsCVzMqh6s0DImXUHW/
+ BlUAxhtIzZP+XXHx9eFoBTC57sq1fLGAKzxYc4B3N5vSJGUPHUKU+lgLzxpnHKy2czSI
+ /Tjw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=2No3qCCA
+Subject: [Buildroot] [PATCH 1/3]
+ toolchain/toolchain-external/toolchain-external-arm-arm: bump to version
+ 13.2-rel1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,187 +98,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7805790075357316030=="
+Cc: Antoine Coutant <antoine.coutant@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7805790075357316030==
-Content-Type: multipart/alternative; boundary="000000000000bdc13f060bff958a"
+Updated to gcc 13.2, gdb 13, binutils 2.41, glibc 2.38.
 
---000000000000bdc13f060bff958a
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+The x86_64 host variant prebuilt toolchain is built on RHEL7
+(glibc 2.17) and is likely also be useable on OS versions like
+RHEL8, Ubuntu 18.04 or later.
 
-Hey guys,
-I appreciated the prompt response. Noob me, my user table was indeed just a
-one liner, with no line feed :-(
-And that fixed it.
+The AArch64 host variant prebuilt toolchain is built on Ubuntu 18.04
+(glibc 2.27) is likely also be useable on OS versions like RHEL8,
+Ubuntu 18.04 or later.
 
-Now I can happily move on with the development, thank you!
+Tested with qemu_arm_vexpress_defconfig.
 
-Cheers,
-Ste
+Release note:
+https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 
+Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
+---
+ .../toolchain-external-arm-arm/Config.in                  | 8 ++++----
+ .../toolchain-external-arm-arm.hash                       | 8 ++++----
+ .../toolchain-external-arm-arm.mk                         | 2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-On Fri, Dec 8, 2023 at 12:38=E2=80=AFPM <yann.morin@orange.com> wrote:
-
-> Stefano, All,
->
-> On 2023-12-08 11:45 +0100, Stefano Cottafavi spake thusly:
-> > I'm trying to add a custom user to the minimal "raspberrypi4_defconfig"
-> build.
-> > I'm using Buildroot 2023.11, following the manual I've created a
-> "users.txt" file (in the buildroot root folder) with just one line:
-> > pi -1 pi -1 =3Draspberry /home/pi /bin/sh -
-> > The config file contains:
-> > BR2_ROOTFS_USERS_TABLES=3D"users.txt"
-> > The build is successful and looking and the "full_users_table.txt"
-> (output of the build) I can see the user definition above.
-> > However, when I try to log on as "pi" I get "Login incorrect" error.
-> > If I login as root and check the /etc/psswd, I DO NOT see the user pi
-> > Can you help me understand what am I missing?
->
-> Be sure that your users.txt is a proper unix-style text file, i.e.
-> lines are \n terminated, even the last one (proper editors, like vi,
-> will include the proper line termintaion).
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->                                         ____________
-> .-----------------.--------------------:       _    :------------------.
-> |  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-> |                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-> | +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-> | yann.morin (at) orange.com           |_=3D"    ,--' | / \ HTML MAIL    =
-|
-> '--------------------------------------:______/_____:------------------'
->
->
-> _________________________________________________________________________=
-___________________________________
-> Ce message et ses pieces jointes peuvent contenir des informations
-> confidentielles ou privilegiees et ne doivent donc
-> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez
-> recu ce message par erreur, veuillez le signaler
-> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages
-> electroniques etant susceptibles d'alteration,
-> Orange decline toute responsabilite si ce message a ete altere, deforme o=
-u
-> falsifie. Merci.
->
-> This message and its attachments may contain confidential or privileged
-> information that may be protected by law;
-> they should not be distributed, used or copied without authorisation.
-> If you have received this email in error, please notify the sender and
-> delete this message and its attachments.
-> As emails may be altered, Orange is not liable for messages that have bee=
-n
-> modified, changed or falsified.
-> Thank you.
->
-
---000000000000bdc13f060bff958a
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-family:monospac=
-e,monospace;font-size:small">Hey guys,=C2=A0</div><div class=3D"gmail_defau=
-lt" style=3D"font-family:monospace,monospace;font-size:small">I appreciated=
- the prompt response. Noob me, my user table was indeed just a one liner, w=
-ith no line feed :-(</div><div class=3D"gmail_default" style=3D"font-family=
-:monospace,monospace;font-size:small">And that fixed it.</div><div class=3D=
-"gmail_default" style=3D"font-family:monospace,monospace;font-size:small"><=
-br></div><div class=3D"gmail_default" style=3D"font-family:monospace,monosp=
-ace;font-size:small">Now I can happily move on with the development, thank =
-you!</div><div class=3D"gmail_default" style=3D"font-family:monospace,monos=
-pace;font-size:small"><br></div><div class=3D"gmail_default" style=3D"font-=
-family:monospace,monospace;font-size:small">Cheers,</div><div class=3D"gmai=
-l_default" style=3D"font-family:monospace,monospace;font-size:small">Ste</d=
-iv><div class=3D"gmail_default" style=3D"font-family:monospace,monospace;fo=
-nt-size:small"><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"l=
-tr" class=3D"gmail_attr">On Fri, Dec 8, 2023 at 12:38=E2=80=AFPM &lt;<a hre=
-f=3D"mailto:yann.morin@orange.com">yann.morin@orange.com</a>&gt; wrote:<br>=
-</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
-order-left:1px solid rgb(204,204,204);padding-left:1ex">Stefano, All,<br>
-<br>
-On 2023-12-08 11:45 +0100, Stefano Cottafavi spake thusly:<br>
-&gt; I&#39;m trying to add a custom user to the minimal &quot;raspberrypi4_=
-defconfig&quot; build.<br>
-&gt; I&#39;m using Buildroot 2023.11, following the manual I&#39;ve created=
- a &quot;users.txt&quot; file (in the buildroot root folder) with just one =
-line:<br>
-&gt; pi -1 pi -1 =3Draspberry /home/pi /bin/sh -<br>
-&gt; The config file contains:<br>
-&gt; BR2_ROOTFS_USERS_TABLES=3D&quot;users.txt&quot;<br>
-&gt; The build is successful and looking and the &quot;full_users_table.txt=
-&quot; (output of the build) I can see the user definition above.<br>
-&gt; However, when I try to log on as &quot;pi&quot; I get &quot;Login inco=
-rrect&quot; error.<br>
-&gt; If I login as root and check the /etc/psswd, I DO NOT see the user pi<=
-br>
-&gt; Can you help me understand what am I missing?<br>
-<br>
-Be sure that your users.txt is a proper unix-style text file, i.e.<br>
-lines are \n terminated, even the last one (proper editors, like vi,<br>
-will include the proper line termintaion).<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
--- <br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ________=
-____<br>
-.-----------------.--------------------:=C2=A0 =C2=A0 =C2=A0 =C2=A0_=C2=A0 =
-=C2=A0 :------------------.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded |=C2=A0 =C2=A0 __/ )=C2=A0=
- =C2=A0| /&quot;\ ASCII RIBBON |<br>
-|=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| Software=
-=C2=A0 Designer |=C2=A0 _/ - /&#39;=C2=A0 =C2=A0| \ / CAMPAIGN=C2=A0 =C2=A0=
- =C2=A0|<br>
-| +33 638.411.245 &#39;--------------------: (_=C2=A0 =C2=A0 `--, |=C2=A0 X=
-=C2=A0 AGAINST=C2=A0 =C2=A0 =C2=A0 |<br>
-| yann.morin (at) <a href=3D"http://orange.com" rel=3D"noreferrer" target=
-=3D"_blank">orange.com</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|_=3D&qu=
-ot;=C2=A0 =C2=A0 ,--&#39; | / \ HTML MAIL=C2=A0 =C2=A0 |<br>
-&#39;--------------------------------------:______/_____:------------------=
-&#39;<br>
-<br>
-___________________________________________________________________________=
-_________________________________<br>
-Ce message et ses pieces jointes peuvent contenir des informations confiden=
-tielles ou privilegiees et ne doivent donc<br>
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu=
- ce message par erreur, veuillez le signaler<br>
-a l&#39;expediteur et le detruire ainsi que les pieces jointes. Les message=
-s electroniques etant susceptibles d&#39;alteration,<br>
-Orange decline toute responsabilite si ce message a ete altere, deforme ou =
-falsifie. Merci.<br>
-<br>
-This message and its attachments may contain confidential or privileged inf=
-ormation that may be protected by law;<br>
-they should not be distributed, used or copied without authorisation.<br>
-If you have received this email in error, please notify the sender and dele=
-te this message and its attachments.<br>
-As emails may be altered, Orange is not liable for messages that have been =
-modified, changed or falsified.<br>
-Thank you.<br>
-</blockquote></div>
-
---000000000000bdc13f060bff958a--
-
---===============7805790075357316030==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 9b314795cb..bee8d61164 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -3,7 +3,7 @@ comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
+ 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+-	bool "Arm ARM 12.2.rel1"
++	bool "Arm ARM 13.2.rel1"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_ARM_CPU_HAS_NEON
+@@ -14,12 +14,12 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+-	  Arm toolchain for the ARM architecture. It uses GCC 12.2,
+-	  GDB 12, glibc 2.36, Binutils 2.39. It generates code
++	  Arm toolchain for the ARM architecture. It uses GCC 13.2,
++	  GDB 13, glibc 2.38, Binutils 2.41. It generates code
+ 	  that runs on all Cortex-A profile devices. The code
+ 	  generated uses the hard floating point calling convention,
+ 	  and uses the NEON FPU instructions.
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+index 2c1af4cfcc..e979e5f508 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+@@ -1,4 +1,4 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz.sha256asc
+-sha256  d73f230bb946231b648a960b719f2cc1afc792ec2e36f9abc25552f00923a926  arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-aarch64-arm-none-linux-gnueabihf.tar.xz.sha256asc
+-sha256  860f49bc60d559f06408f07a24bc2a09e5b8f9118cfe1daed521ab321c03c78e  arm-gnu-toolchain-12.2.rel1-aarch64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz.sha256asc
++sha256  df0f4927a67d1fd366ff81e40bd8c385a9324fbdde60437a512d106215f257b3  arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-aarch64-arm-none-linux-gnueabihf.tar.xz.sha256asc
++sha256  8ad384bb328bccc44396d85c8f8113b7b8c5e11bcfef322e77cda3ebe7baadb5  arm-gnu-toolchain-13.2.rel1-aarch64-arm-none-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+index 164b60e6ca..5962121af6 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 12.2.rel1
++TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 13.2.rel1
+ TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
+ 
+ TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7805790075357316030==--
