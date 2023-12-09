@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBE35C4167B
-	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 15:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F886C4167B
+	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 15:09:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DFDC60F18;
-	Sat,  9 Dec 2023 15:08:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DFDC60F18
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE7C660ABD;
+	Sat,  9 Dec 2023 15:09:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE7C660ABD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i8gnoI5KITOz; Sat,  9 Dec 2023 15:08:22 +0000 (UTC)
+	with ESMTP id DraXoriOrmXW; Sat,  9 Dec 2023 15:09:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7D7960B42;
-	Sat,  9 Dec 2023 15:08:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7D7960B42
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 26EEF1BF5A0
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:08:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5350B60A8A;
+	Sat,  9 Dec 2023 15:09:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5350B60A8A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DE7DD1BF5A0
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:09:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D1B781DF1
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:08:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D1B781DF1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7C95411C6
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:09:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7C95411C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M1yBb8RstOnL for <buildroot@lists.busybox.net>;
- Sat,  9 Dec 2023 15:08:19 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20EA781DE7
- for <buildroot@buildroot.org>; Sat,  9 Dec 2023 15:08:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20EA781DE7
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 03721E0003;
- Sat,  9 Dec 2023 15:08:15 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rBywA-000BGn-2t;
- Sat, 09 Dec 2023 16:08:14 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fyhmGjsI9ZMO for <buildroot@lists.busybox.net>;
+ Sat,  9 Dec 2023 15:09:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC05E410B0
+ for <buildroot@buildroot.org>; Sat,  9 Dec 2023 15:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC05E410B0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 92FA7876AE; Sat,  9 Dec 2023 15:09:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Fl=C3=A1vio_Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
-References: <20231205163541.1839475-1-flavio.tapajos@newtesc.com.br>
-Date: Sat, 09 Dec 2023 16:08:14 +0100
-In-Reply-To: <20231205163541.1839475-1-flavio.tapajos@newtesc.com.br>
- (=?utf-8?Q?=22Fl=C3=A1vio=09Tapaj=C3=B3s=22's?= message of "Tue, 5 Dec 2023
- 13:35:41 -0300")
-Message-ID: <87cyvfpg69.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] configs/asus_tinker-s_rk3288: bump
- Linux to 6.1.65 and U-boot to 2023.10
+To: buildroot@buildroot.org
+Date: Sat, 9 Dec 2023 16:08:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: db93c5a18c1c24523c3718ee49a66bbeb3783b96
+X-Git-Newrev: b2a544ab4feef6795a5a9d98ca60c1615d4459f6
+X-Patchwork-Hint: ignore
+Message-Id: <20231209150941.92FA7876AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/asus_tinker-s_rk3288: bump Linux
+ to 6.1.65 and U-boot to 2023.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,15 +57,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4804858285393036740=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkZsw6F2aW8iID09IEZsw6F2aW8gVGFwYWrDs3MgPGZsYXZpby50YXBham9zQG5ld3Rl
-c2MuY29tLmJyPiB3cml0ZXM6CgogPiBTaWduZWQtb2ZmLWJ5OiBGbMOhdmlvIFRhcGFqw7NzIDxm
-bGF2aW8udGFwYWpvc0BuZXd0ZXNjLmNvbS5icj4KCkNvbW1pdHRlZCwgdGhhbmtzLgoKLS0gCkJ5
-ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============4804858285393036740==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b2a544ab4feef6795a5a9d98ca60c1615d4459f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/asus_tinker-s_rk3288_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configs/asus_tinker-s_rk3288_defconfig b/configs/asus_tinker-s_rk3288_defconfig
+index 96fc79ee85..7082869881 100644
+--- a/configs/asus_tinker-s_rk3288_defconfig
++++ b/configs/asus_tinker-s_rk3288_defconfig
+@@ -10,7 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-s-rk3288"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.38"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.65"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+
+--===============4804858285393036740==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4804858285393036740==--
