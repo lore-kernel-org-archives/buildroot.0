@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F886C4167B
-	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 15:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C956BC4167B
+	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 15:11:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE7C660ABD;
-	Sat,  9 Dec 2023 15:09:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE7C660ABD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7402660ABD;
+	Sat,  9 Dec 2023 15:11:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7402660ABD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DraXoriOrmXW; Sat,  9 Dec 2023 15:09:46 +0000 (UTC)
+	with ESMTP id nThfBMrFUOO4; Sat,  9 Dec 2023 15:11:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5350B60A8A;
-	Sat,  9 Dec 2023 15:09:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5350B60A8A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DE7DD1BF5A0
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:09:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBEDB60A81;
+	Sat,  9 Dec 2023 15:11:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBEDB60A81
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FC2D1BF5A0
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:11:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7C95411C6
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:09:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7C95411C6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2895981E61
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2895981E61
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fyhmGjsI9ZMO for <buildroot@lists.busybox.net>;
- Sat,  9 Dec 2023 15:09:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC05E410B0
- for <buildroot@buildroot.org>; Sat,  9 Dec 2023 15:09:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC05E410B0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92FA7876AE; Sat,  9 Dec 2023 15:09:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iHSqqsAaq3rs for <buildroot@lists.busybox.net>;
+ Sat,  9 Dec 2023 15:10:59 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4362E81E5C
+ for <buildroot@buildroot.org>; Sat,  9 Dec 2023 15:10:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4362E81E5C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 141E41C0002;
+ Sat,  9 Dec 2023 15:10:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rByyk-000BQs-2i;
+ Sat, 09 Dec 2023 16:10:54 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 9 Dec 2023 16:08:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db93c5a18c1c24523c3718ee49a66bbeb3783b96
-X-Git-Newrev: b2a544ab4feef6795a5a9d98ca60c1615d4459f6
-X-Patchwork-Hint: ignore
-Message-Id: <20231209150941.92FA7876AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/asus_tinker-s_rk3288: bump Linux
- to 6.1.65 and U-boot to 2023.10
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20231207120704.47607-1-giulio.benetti@benettiengineering.com>
+ <87lea3pgo7.fsf@48ers.dk>
+ <801a7ae9-e6cf-40bf-8250-6a9a36b1b67c@benettiengineering.com>
+Date: Sat, 09 Dec 2023 16:10:54 +0100
+In-Reply-To: <801a7ae9-e6cf-40bf-8250-6a9a36b1b67c@benettiengineering.com>
+ (Giulio Benetti's message of "Sat, 9 Dec 2023 16:06:44 +0100")
+Message-ID: <878r63pg1t.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] configs/imx6ullevk_defconfig: bump Linux to
+ 6.6.4 and U-Boot to 2023.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +65,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4804858285393036740=="
+Cc: Fabio Estevam <festevam@gmail.com>,
+ Fabrice Goucem <fabrice.goucem@oss.nxp.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4804858285393036740==
-Content-Type: text/plain
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2a544ab4feef6795a5a9d98ca60c1615d4459f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Hi Peter,
+ > On 09/12/23 15:57, Peter Korsgaard wrote:
+ >>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+ >> > Let's also enable NXP firmware package to let latest SDMA
+ >> firmware to be
+ >> > loaded. To achieve this we also need to enable dynamic eudev to let it
+ >> > to load the firmware.
+ >> Why is that? I thought request_firmware() nowadays didn't need any
+ >> help
+ >> from user space to fetch files from /lib/firmware?
+ >> Is it because this is requested very early before the rootfs is
+ >> mounted?
 
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/asus_tinker-s_rk3288_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Exactly, if the driver is built-in Linux it's too early to search rootfs
+ > because it's not mounted.
 
-diff --git a/configs/asus_tinker-s_rk3288_defconfig b/configs/asus_tinker-s_rk3288_defconfig
-index 96fc79ee85..7082869881 100644
---- a/configs/asus_tinker-s_rk3288_defconfig
-+++ b/configs/asus_tinker-s_rk3288_defconfig
-@@ -10,7 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-s-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.38"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.65"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+ > Of course during drivers' probe()s and all kernel calls using dma will
+ > use ROM SDMA Firmware until SDMA Firmware is loaded from rootfs so those
+ > calls will have worse performances.
+ > Of course NXP Firmware can't be embedded into Linux because it's
+ > proprietary and license doesn't allow us to do that.
 
---===============4804858285393036740==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+OK. Committed after extending the commit message to explain that, thanks.
 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4804858285393036740==--
