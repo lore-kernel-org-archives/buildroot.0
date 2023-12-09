@@ -4,55 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B5B0C4167B
-	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 15:03:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEAAAC4167B
+	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 15:04:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 335B860E77;
-	Sat,  9 Dec 2023 15:03:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 335B860E77
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD8E860F49;
+	Sat,  9 Dec 2023 15:04:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD8E860F49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ar7zv_OfH6EN; Sat,  9 Dec 2023 15:03:56 +0000 (UTC)
+	with ESMTP id 9NaP-6DJLkK4; Sat,  9 Dec 2023 15:04:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B8F560A81;
-	Sat,  9 Dec 2023 15:03:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B8F560A81
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC9C71BF2AB
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:03:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1241460F22;
+	Sat,  9 Dec 2023 15:04:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1241460F22
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2BDDD1BF2AB
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8395740930
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:03:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8395740930
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0513940580
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:04:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0513940580
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZYEmkwy8ptLz for <buildroot@lists.busybox.net>;
- Sat,  9 Dec 2023 15:03:52 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4A1F04036E
- for <buildroot@buildroot.org>; Sat,  9 Dec 2023 15:03:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A1F04036E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A183920002;
- Sat,  9 Dec 2023 15:03:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rByrs-000B0J-01;
- Sat, 09 Dec 2023 16:03:48 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1k7f3hp3rCxr for <buildroot@lists.busybox.net>;
+ Sat,  9 Dec 2023 15:04:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E0D340570
+ for <buildroot@buildroot.org>; Sat,  9 Dec 2023 15:04:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E0D340570
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EF07287572; Sat,  9 Dec 2023 15:04:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yair Ben-Avraham via buildroot <buildroot@buildroot.org>
-References: <BeznnlTq0vvbpFka026Yd1oSJiN00BCfdSJrIJ5StZU1JXCG4xA25tNDQp7PhX_G1YfZ10xV9k1i4ohYUe6W64UxlEcmcdninKgmLEVMp6A=@protonmail.com>
- <Db9O_yrfPJCilzgeet7a7WTUMEe5k1lE366mkze_f7XgY7RJkKN6rLbxXz_fBNYaTrFFF06yDy8O-49GOs9lLRT6pcCMugsHI-EES3z7Usg=@protonmail.com>
-Date: Sat, 09 Dec 2023 16:03:47 +0100
-In-Reply-To: <Db9O_yrfPJCilzgeet7a7WTUMEe5k1lE366mkze_f7XgY7RJkKN6rLbxXz_fBNYaTrFFF06yDy8O-49GOs9lLRT6pcCMugsHI-EES3z7Usg=@protonmail.com>
- (Yair Ben-Avraham via buildroot's message of "Wed, 06 Dec 2023
- 09:32:47 +0000")
-Message-ID: <87h6krpgdo.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/gloox: bump version to 1.0.28
+To: buildroot@buildroot.org
+Date: Sat, 9 Dec 2023 16:02:38 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a32e41b09a7b6547a7df8499c47f6ab63798814b
+X-Git-Newrev: db93c5a18c1c24523c3718ee49a66bbeb3783b96
+X-Patchwork-Hint: ignore
+Message-Id: <20231209150412.EF07287572@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gloox: bump version to 1.0.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,36 +56,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yair Ben-Avraham <yairba@protonmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yair" == Yair Ben-Avraham via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=db93c5a18c1c24523c3718ee49a66bbeb3783b96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
- > ---
- > package/gloox/gloox.hash | 2 +-
- > package/gloox/gloox.mk | 2 +-
- > 2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gloox/gloox.hash | 2 +-
+ package/gloox/gloox.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
- > index 66a3c2d1be..963b798299 100644
- > --- a/package/gloox/gloox.hash
- > +++ b/package/gloox/gloox.hash
- > @@ -1,3 +1,3 @@
- > # Locally calculated
- > -sha256 0b8b7371439bc58d9e51384b616c964b18b7b41b87af1b7855104380eda86ffb gloox-1.0.27.tar.bz2
- > +sha256 591bd12c249ede0b50a1ef6b99ac0de8ef9c1ba4fd2e186f97a740215cc5966c gloox-1.0.28.tar.bz2
- > sha256 40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af LICENSE
- > diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
-
-Something (your mailer?) ate a bunch of white space, so I had to fix
-that up manually. Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
+index 66a3c2d1be..963b798299 100644
+--- a/package/gloox/gloox.hash
++++ b/package/gloox/gloox.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0b8b7371439bc58d9e51384b616c964b18b7b41b87af1b7855104380eda86ffb  gloox-1.0.27.tar.bz2
++sha256  591bd12c249ede0b50a1ef6b99ac0de8ef9c1ba4fd2e186f97a740215cc5966c  gloox-1.0.28.tar.bz2
+ sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
+diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
+index 3495db96f0..0d24f8008b 100644
+--- a/package/gloox/gloox.mk
++++ b/package/gloox/gloox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GLOOX_VERSION = 1.0.27
++GLOOX_VERSION = 1.0.28
+ GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
+ GLOOX_SITE = https://camaya.net/download
+ GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
