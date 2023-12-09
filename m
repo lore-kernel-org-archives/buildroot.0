@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEAAAC4167B
-	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 15:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62DD3C4167B
+	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 15:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD8E860F49;
-	Sat,  9 Dec 2023 15:04:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD8E860F49
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1592F60E77;
+	Sat,  9 Dec 2023 15:06:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1592F60E77
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9NaP-6DJLkK4; Sat,  9 Dec 2023 15:04:17 +0000 (UTC)
+	with ESMTP id OO_qSk1PhlCf; Sat,  9 Dec 2023 15:06:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1241460F22;
-	Sat,  9 Dec 2023 15:04:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1241460F22
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2BDDD1BF2AB
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:04:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69C4C60B42;
+	Sat,  9 Dec 2023 15:06:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69C4C60B42
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 325911BF5A0
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:06:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0513940580
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:04:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0513940580
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09DE740930
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 15:06:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09DE740930
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1k7f3hp3rCxr for <buildroot@lists.busybox.net>;
- Sat,  9 Dec 2023 15:04:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E0D340570
- for <buildroot@buildroot.org>; Sat,  9 Dec 2023 15:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E0D340570
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF07287572; Sat,  9 Dec 2023 15:04:12 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 9 Dec 2023 16:02:38 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a32e41b09a7b6547a7df8499c47f6ab63798814b
-X-Git-Newrev: db93c5a18c1c24523c3718ee49a66bbeb3783b96
-X-Patchwork-Hint: ignore
-Message-Id: <20231209150412.EF07287572@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gloox: bump version to 1.0.28
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LloGjoUvpPWJ for <buildroot@lists.busybox.net>;
+ Sat,  9 Dec 2023 15:06:48 +0000 (UTC)
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 021ED40286
+ for <buildroot@buildroot.org>; Sat,  9 Dec 2023 15:06:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 021ED40286
+Received: from [192.168.50.163] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id Byujrt51YAPJ2ByujrtKSL; Sat, 09 Dec 2023 16:06:45 +0100
+Message-ID: <801a7ae9-e6cf-40bf-8250-6a9a36b1b67c@benettiengineering.com>
+Date: Sat, 9 Dec 2023 16:06:44 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>
+References: <20231207120704.47607-1-giulio.benetti@benettiengineering.com>
+ <87lea3pgo7.fsf@48ers.dk>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <87lea3pgo7.fsf@48ers.dk>
+X-CMAE-Envelope: MS4xfOZCLFOQ9QJ/WuW5uaN6Ibzo9mPAqV7vdRUaOxetc8y9qgG7Wro/b2zgRHTV6tzDsMqwBjS6H7e6UuWRePknyjHrfw9mxcRDX+ju46Jn278+UPWxJ5xD
+ N5L3Rt8NtTp80ZrBcy3OBo+H5J/Ha3mFkvpOjpu1gq8Qv4LospKeQ24WxwX/cKJk0x1l5kobfZOzZT763MkhJuzb3Tbb7+5PbgsUhfZbP5pP36Y/0UA1OrES
+ yy/ACjCeKq26b9EtvKhTXQ6JkEeuwjmAZIpj0IbP80bS+g/inE7Ray+m5V9M8NRl2pSoatl1q0XWfrqEkHYlUA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1702134405; bh=cA0Bsbtu3iyO9PSpBPvBeUX+cSBWENPym/9n8wn6kJY=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=WgGguJyOZ9Yq4IBps7j2/mmffO/Bj4TGO9dbvofWfMDNz1Fx9fDHgk3nJ7iiKYmGD
+ DbnSB0ea4YK/fwfIgt6DUCeinfmuZzlMkJHcKZkkGguN0H+0IoRlSYkvJU4pQNO7+V
+ dIX1hVXZBb2NXGiXPGI5CXyyDp50CSrSaMzdES9SescO36cfZH/BzBVysFfahThZ5i
+ 4yInTgKqPuzxr1c8mwl9HuZ6ErWMeqNOrOtFqCafg+yYMlRZRK56rigBVJ41NpjCYG
+ 3AsDWEabZJ9hAWGBLrlB3trPe/HCxZkQp60Ew09vqXrP6tEICfxpXGi16KXZE+P/Ro
+ kGxL8+3JWozog==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=WgGguJyO
+Subject: Re: [Buildroot] [PATCH] configs/imx6ullevk_defconfig: bump Linux to
+ 6.6.4 and U-Boot to 2023.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,44 +76,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Fabio Estevam <festevam@gmail.com>,
+ Fabrice Goucem <fabrice.goucem@oss.nxp.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db93c5a18c1c24523c3718ee49a66bbeb3783b96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gloox/gloox.hash | 2 +-
- package/gloox/gloox.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 09/12/23 15:57, Peter Korsgaard wrote:
+>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+> 
+>   > Let's also enable NXP firmware package to let latest SDMA firmware to be
+>   > loaded. To achieve this we also need to enable dynamic eudev to let it
+>   > to load the firmware.
+> 
+> Why is that? I thought request_firmware() nowadays didn't need any help
+> from user space to fetch files from /lib/firmware?
+> 
+> Is it because this is requested very early before the rootfs is mounted?
 
-diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
-index 66a3c2d1be..963b798299 100644
---- a/package/gloox/gloox.hash
-+++ b/package/gloox/gloox.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0b8b7371439bc58d9e51384b616c964b18b7b41b87af1b7855104380eda86ffb  gloox-1.0.27.tar.bz2
-+sha256  591bd12c249ede0b50a1ef6b99ac0de8ef9c1ba4fd2e186f97a740215cc5966c  gloox-1.0.28.tar.bz2
- sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
-diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
-index 3495db96f0..0d24f8008b 100644
---- a/package/gloox/gloox.mk
-+++ b/package/gloox/gloox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLOOX_VERSION = 1.0.27
-+GLOOX_VERSION = 1.0.28
- GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
- GLOOX_SITE = https://camaya.net/download
- GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
+Exactly, if the driver is built-in Linux it's too early to search rootfs
+because it's not mounted.
+
+Of course during drivers' probe()s and all kernel calls using dma will
+use ROM SDMA Firmware until SDMA Firmware is loaded from rootfs so those
+calls will have worse performances.
+Of course NXP Firmware can't be embedded into Linux because it's
+proprietary and license doesn't allow us to do that.
+
+Kind regards
+-- 
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
