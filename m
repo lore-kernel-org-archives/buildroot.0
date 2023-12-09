@@ -4,69 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D29BC10DC3
-	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 09:28:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C114C4167B
+	for <buildroot@archiver.kernel.org>; Sat,  9 Dec 2023 10:10:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86DDC81A46;
-	Sat,  9 Dec 2023 09:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86DDC81A46
+	by smtp1.osuosl.org (Postfix) with ESMTP id EAFCA81B0A;
+	Sat,  9 Dec 2023 10:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAFCA81B0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id le2cRffS-RCS; Sat,  9 Dec 2023 09:28:25 +0000 (UTC)
+	with ESMTP id 6oQ09knNGL-7; Sat,  9 Dec 2023 10:10:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5C3281A64;
-	Sat,  9 Dec 2023 09:28:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5C3281A64
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AEC0F1BF5A7
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 09:28:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 266C681ABB;
+	Sat,  9 Dec 2023 10:10:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 266C681ABB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 899F31BF239
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 10:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BE1A404D2
- for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 09:28:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BE1A404D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6705B401A1
+ for <buildroot@lists.busybox.net>; Sat,  9 Dec 2023 10:10:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6705B401A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aoXdKf5RxG5S for <buildroot@lists.busybox.net>;
- Sat,  9 Dec 2023 09:28:20 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 371E1404AF
- for <buildroot@buildroot.org>; Sat,  9 Dec 2023 09:28:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 371E1404AF
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id F316B13F8A7;
- Sat,  9 Dec 2023 10:28:13 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 09 Dec 2023 10:28:13 +0100
-Date: Sat, 9 Dec 2023 10:28:13 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZXQzLeF6j3U1TOjU@landeda>
-References: <20231207220930.1356097-1-fontaine.fabrice@gmail.com>
- <ZXOehwwVDyiGPpRf@landeda>
- <CAPi7W838vzhK48R5GduRL660bWQnS1WGTPsDmnx+gsj3HfVX3w@mail.gmail.com>
- <ZXOi7tN9L6o6nEmp@landeda>
- <CAPi7W81SxGKzj7feR4i6TtwJZNjBYsADqMw-2ZriWb2oLc+bTQ@mail.gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9v4iY7J-HLD6 for <buildroot@lists.busybox.net>;
+ Sat,  9 Dec 2023 10:10:50 +0000 (UTC)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 508E240198
+ for <buildroot@buildroot.org>; Sat,  9 Dec 2023 10:10:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 508E240198
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-332fd81fc8dso2734223f8f.3
+ for <buildroot@buildroot.org>; Sat, 09 Dec 2023 02:10:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1702116648; x=1702721448;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PjxdxUvjKeM8puLpx+91jtizZMQ1ILGQBk1DDb/pe3k=;
+ b=HVhuXqIMB+TsaqKXuXgyBc1tbh72YcABXNNbtjf9cAtDvMlpwJcIDWXw9VvM0xuU16
+ mq+vycHRS04v3ORzhrEM+SIsARrIfFxA+vusPLRrsEnFgGuq1aoAChq0OOMVAUW4Wqhm
+ dp+oXEPeR/VRH4BUBPa1tqvKK1eLtbChmHaXaRjx1UNDOFn1vtMZWYeYyRa3flXXx+p6
+ lJUju4qgzqOTbWPITmzJD8GbqYeSE4Vhkfi2NUOdqY9/qQuZ7dpSBX8/A2QqpUpd0xpB
+ vWRsxnH4TDS3aaH2KRn+piYP/MgQpG4Npw/iNy0HbXVR+9smqLMEdkx/AzI1tRDU3wCV
+ ZkzQ==
+X-Gm-Message-State: AOJu0YwtpeZSBnuOCzF5J5Sp5t2G6SDR9lNr7uP8ObnSK6cuWp//3vjU
+ rLkk51mdfE/IBOocQtnJ56M3oaP4XEK1P4mVTJyFsg==
+X-Google-Smtp-Source: AGHT+IG4XVIJsJVsOGNGRRk2NMTjF11DsEgXUFIMrbzipu5E3cO7hiIPGbDYyRQMODty5HGeVTIFsQ==
+X-Received: by 2002:a05:600c:3b06:b0:40c:32f1:8167 with SMTP id
+ m6-20020a05600c3b0600b0040c32f18167mr752225wms.69.1702116647772; 
+ Sat, 09 Dec 2023 02:10:47 -0800 (PST)
+Received: from panicking.amarulasolutions.com ([2.198.79.154])
+ by smtp.gmail.com with ESMTPSA id
+ d12-20020adfa40c000000b003333fa3d043sm3992515wra.12.2023.12.09.02.10.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 09 Dec 2023 02:10:46 -0800 (PST)
+From: Michael Trimarchi <michael@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Sat,  9 Dec 2023 11:10:43 +0100
+Message-Id: <20231209101043.1839458-1-michael@amarulasolutions.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAPi7W81SxGKzj7feR4i6TtwJZNjBYsADqMw-2ZriWb2oLc+bTQ@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1702114097;
- bh=jDkpoX9IDDiuYKGJ1KAh8dok0EukSZ6i6TmegZq8jzk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=T30vcl4BhFk+UbaF5zXMm6GNt4jsBMIdP93AQGncyXiarcwthYzPEbU+Fre5bhFD3
- ALHHjOHpIVU/Y14jBpnYoFBC5ayJbajBLie1NX+ZtLAXyBFZSDbjVwqDTQgtVDAGoO
- Qq5DbIStfsDKU98e+dQG4LvSY+kTR6ueD7FhyINwHnX/gm2r36WD1Lcxi4innEAcHp
- s944XZlzqRWdMZ36lXva6sfR8i9yysLEalJ1Fqv121+TxtXytvGA4o2iBYJ1Z319gY
- dy3cebrq2FWm2zcr+rURIA6ta4oSdheNqihUBUW2ZJ8vxnt0yyfpkTgaomhbZxbHRm
- yg9RLAV5UY+Pg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=T30vcl4B
-Subject: Re: [Buildroot] [PATCH 1/1] package/memtest86: pass TARGET_CC
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1702116648; x=1702721448;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PjxdxUvjKeM8puLpx+91jtizZMQ1ILGQBk1DDb/pe3k=;
+ b=flywC1kvrKwMcSI5ZgAjJ5Gveiu24Fpspu12dnMZm7v0X7WMsiiXXXGkQ27H2MKoOR
+ krKX1FDyKnJXDazez0xX8uz9EVwOujYtm2oSRLO8L3BGSPt22UvbPl1P+BzJ2/dqoVPs
+ sqJ7cxuknHaDaANDx9HEJMmg695Lvb8x7Ady8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=flywC1kv
+Subject: [Buildroot] [PATCH] linux: Add helping kernel gdb functions
+ compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,66 +93,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Steve Kenton <skenton@ou.edu>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com,
+ Michael Trimarchi <michael@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RmFicmljZSwgQWxsLAoKT24gMjAyMy0xMi0wOSAwMDoyMCArMDEwMCwgRmFicmljZSBGb250YWlu
-ZSBzcGFrZSB0aHVzbHk6Cj4gTGUgc2FtLiA5IGTDqWMuIDIwMjMgw6AgMDA6MTIsIFlhbm4gRS4g
-TU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiBhIMOpY3JpdCA6Cj4gPiBPbiAyMDIzLTEy
-LTA5IDAwOjA0ICswMTAwLCBGYWJyaWNlIEZvbnRhaW5lIHNwYWtlIHRodXNseToKPiA+ID4gTGUg
-dmVuLiA4IGTDqWMuIDIwMjMgw6AgMjM6NTQsIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5
-OEBmcmVlLmZyPiBhIMOpY3JpdCA6Cj4gPiA+ID4gT24gMjAyMy0xMi0wNyAyMzowOSArMDEwMCwg
-RmFicmljZSBGb250YWluZSBzcGFrZSB0aHVzbHk6Cj4gPiA+ID4gPiBQYXNzIENDPSQoVEFSR0VU
-X0NDKSB0byBtYWtlIHRvIGF2b2lkIHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSByYWlzZWQK
-PiA+ID4gPiA+IHNpbmNlIGJ1bXAgdG8gdmVyc2lvbiA2LjIwIGluIGNvbW1pdAo+ID4gPiA+ID4g
-YTc0MzA4NzU5M2E1ZmQ1YjMzZTI2NTA1OTFjYWRhMDk5MjljMjdhNjoKPiA+IFstLVNOSVAtLV0K
-PiA+ID4gPiA+ICBkZWZpbmUgTUVNVEVTVDg2X0JVSUxEX0NNRFMKPiA+ID4gPiA+IC0gICAgICQo
-VEFSR0VUX0NPTkZJR1VSRV9PUFRTKSAkKE1BS0UpIC1DICQoQEQpLyQoTUVNVEVTVDg2X0JVSUxE
-X0RJUikKPiA+ID4gPiA+ICsgICAgICQoVEFSR0VUX0NPTkZJR1VSRV9PUFRTKSAkKE1BS0UpIEND
-PSQoVEFSR0VUX0NDKSBcCj4gPiA+ID4gQ0M9JChUQVJHRVRfQ0MpIGlzIGFscmVhZHkgcHJlc2Vu
-dCBpbiBUQVJHRVRfQ09ORklHVVJFX09QVFMsIHNvIHdoeSBpcwo+ID4gPiA+IGl0IG5vdCBhY2Nv
-dW50ZWQgZm9yPwo+ID4gPiBCZWNhdXNlICJDQz0kKFRBUkdFVF9DQykgbWFrZSIgaXMgbm90IHRo
-ZSBzYW1lIGFzICJtYWtlCj4gPiA+IENDPSQoVEFSR0VUX0NDKSIKPiA+Cj4gPiBZZWFoLCBJIGtu
-b3cgdGhhdCBwcmV0dHkgd2VsbCAoZXZlbiBpZiBJIG5ldmVyIHJlbWVtYmVyIHRoZSBydWxlcyBv
-Zgo+ID4gcHJlY2VkZW5jZSBmb3IgdGhlIGVudmlyb25tZW50LCBhcmd1bWVudCwgYW5kIE1ha2Vm
-aWxlIHZhcmlhYmxlcykuLi4KPiA+Cj4gPiA+IGFzIGJ1aWxkezMyLDY0fS9NYWtlZmlsZSBpcyBz
-ZXR0aW5nIENDIHRvIGdjYy4KPiA+Cj4gPiBCdXQgdGhhdCB3YXMgbm90IHRoZSBjYXNlIHByZXZp
-b3VzbHksIEkgZ3Vlc3MsIGFzIHlvdSBzYWlkIGl0IGFwcGVhcmVkCj4gPiB3aXRoIHRoZSBidW1w
-IHRvIDYuMjAuIFNvIG1heWJlIHdlIHNob3VsZCBub3cgbW92ZSB0aGUgd2hvbGUgb2YKPiA+ICQo
-VEFSR0VUX0NPTkZJR1VSRV9PUFRTKSB0byBiZSBhcmd1bWVudHMgcmF0aGVyIHRoYW4gZW52aXJv
-bm1lbnQKPiA+IHZhcmlhYmxlcywgaW5zdGVhZCBvZiBqdXN0IG1vdmluZyBDQyB0aGVyZS4KPiAK
-PiBJIGFscmVhZHkgdHJpZWQgdGhhdCBidXQgaXQgcmFpc2VzIGEgYnVpbGQgZmFpbHVyZSBiZWNh
-dXNlIHRoZQo+IGZvbGxvd2luZyBDRkxBR1Mgd2lsbCBiZSBvdmVycmlkZGVuOgo+IAo+IENGTEFH
-UyA9IC1zdGQ9YzExIC1XYWxsIC1XZXh0cmEgLVdzaGFkb3cgLW0zMiAtbWFyY2g9aTU4NiAtZnBp
-YyAtZm5vLWJ1aWx0aW4gXAo+ICAgICAgICAgIC1mZnJlZXN0YW5kaW5nIC1mb21pdC1mcmFtZS1w
-b2ludGVyIC1mbm8tc3RhY2stcHJvdGVjdG9yCgpPSywgYnV0IHRoZW4gaXQgbWVhbnMgd2UgYWxz
-byBoYXZlIHRvIGZvcmNpYmx5IG92ZXJyaWRlIGEgZmV3IG90aGVyCnZhcmlhYmxlcywgYXMgdGhl
-IE1ha2VmaWxlIGRlZmluZXMgdGhlbToKCiAgICBBUyA9IGFzIC02NAogICAgQ0MgPSBnY2MKICAg
-IE9CSkNPUFkgPSBvYmpjb3B5CgpCb3RoIEFTIGFuZCBPQkpDT1BZIGFyZSBlcXVhbGx5IHdyb25n
-IGluIGNyb3NzLWNvbXBpbGF0aW9uIGFzIENDIGlzLgpCdXQgZm9yIExELCBpdCBkb2VzIGl1c2Ug
-dGhlIG9uZSBmcm9tIHRoZSBlbnZpcm9ubWVudC4KCkFsc28sIGFyZ3VhYmx5LCBsZXR0aW5nIHRo
-ZSBwYWNrYWcgZGVmaW5lIGl0cyBvd24gQ0ZMQUdTIGlzIG5vdCBuaWNlLApiZWNhdXNlIGl0IGlz
-IG1pc3NpbmcgYWxsIHRoZSBvbmVzIHdlIGFyZSBzZXR0aW5nLCBsaWtlIHRoZSBfRk9SVElGWSwK
-dGhlIG9wdGltaXNhdGlvbnMsIG9yIHRoZSBkZWJ1ZyBsZXZlbHMuLi4KCkJ1dCBpbiBmYWN0LCBt
-ZW10ZXN0ODYrIGlzIGEgZnJlZS1zdGFuZGluZyBwcm9qZWN0IChpdCBydW5zIGFzIGEga2VybmVs
-Cm9yIGEgYm9vdGxvYWRlciBpbiBmYWN0KSwgc28gdGhhdCdzIE9LIHRvIGxldCBpdCBvdmVycmlk
-ZSB0aG9zZSBDRkxBR1MuCgpBbHNvLCBJIGtub3cgd2h5IHRoYXQgZGlkIG5vdCBoYXBwZW4gaW4g
-cHJldmlvdXMgdmVyc2lvbnM6IHdlIHNpbXBseQp3ZXJlIG5vdCBidWlsZGluZyBtZW10ZXM4Nisg
-YW5kIHdlcmUganVzdCBjb3B5aW5nIHRoZSBwcmUtYnVpbHQgZmlsZXMuCgpDYW4geW91IHBsZWFz
-ZSByZXNwaW4gdG8gYWNjb3VudCBmb3IgQVMgYW5kIE9CSkRVTVAsIGFuZCBhZGQgYSBibHVyYgp0
-aGF0IENGTEFHUyBpcyBvdmVycmlkZW4gYnV0IHRoYXQncyBPSz8KClJlZ2FyZHMsCllhbm4gRS4g
-TU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
-LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBS
-ZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6
-IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04g
-ICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0t
-LS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRw
-Oi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2
-ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0t
-Xi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+In order to use all the features of KGDB it's nice to have
+the possibility to source the vmlinux-gdb.py file. The
+generation of this file it's a target of linux kernel. Add it
+in order to use gdb of vmlinux in output directory including
+tx-* linux script
+
+gdb-multiarch --tui output/build/<linux dir>/vmlinux
+add-auto-load-safe-path output/build/<linux dir>
+source output/build/<linux dir>/vmlinux-gdb.py
+
+Linux needs to be compiled with DEBUG_INFO (without restrict
+DEBUG_INFO) and kernel cmdline should be modified to wait
+of kgdb if needed. As example
+
+kgdboc_earlycon=ns16550a kgdboc=/dev/ttyS2 kgdbwait nokaslr
+
+The test was done on am62x board over serial line. In order
+to have it running properly we need to compile the agent-proxy
+
+./output/host/bin/agent-proxy 4440 4441 0 /dev/ttyUSB0 115200
+
+gdb can now having the debugging uart available using:
+
+target remote localhost:4441
+
+the 4440 is used by the console and 4441 is used to debug
+
+Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+---
+ linux/Config.in | 7 +++++++
+ linux/linux.mk  | 7 +++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index ae734c49a0..71ab27bbcb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -486,6 +486,13 @@ config BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE
+ 	  such as "BTF: .tmp_vmlinux.btf: pahole (pahole) is not
+ 	  available".
+ 
++config BR2_LINUX_KERNEL_ADD_HOST_GDB_SCRIPTS
++	bool "Need tools for debugging with kgdb"
++	help
++	  Add helping script to be used with gdb and kgdb in order to
++	  debug linux kernel. Those convinients scripts add some feature
++	  command to gdb with specific python script
++
+ # Linux extensions
+ source "linux/Config.ext.in"
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1db5c6046d..e8cdb26793 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -488,6 +488,12 @@ LINUX_APPEND_DTB += ; \
+ endif
+ endif
+ 
++ifeq ($(BR2_LINUX_KERNEL_ADD_HOST_GDB_SCRIPTS),y)
++define LINUX_BUILD_GDB_SCRIPTS
++	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) scripts_gdb
++endef
++endif
++
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed. We call the 'all' and
+ # '$(LINUX_TARGET_NAME)' targets separately because calling them in
+@@ -503,6 +509,7 @@ define LINUX_BUILD_CMDS
+ 	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
+ 	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_BUILD_DTB)
++	$(LINUX_BUILD_GDB_SCRIPTS)
+ 	$(LINUX_APPEND_DTB)
+ endef
+ 
+-- 
+2.40.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
