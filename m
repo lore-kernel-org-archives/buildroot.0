@@ -1,70 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAF94C4167B
-	for <buildroot@archiver.kernel.org>; Sun, 10 Dec 2023 17:02:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EACA2C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 10 Dec 2023 17:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BB1D6109D;
-	Sun, 10 Dec 2023 17:02:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BB1D6109D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A07C81AA7;
+	Sun, 10 Dec 2023 17:38:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A07C81AA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WJdT7LSX0E2j; Sun, 10 Dec 2023 17:02:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ryFvFTygrY6R; Sun, 10 Dec 2023 17:38:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8040B60B6C;
-	Sun, 10 Dec 2023 17:02:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8040B60B6C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 61CBA1BF584
- for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 17:02:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB02C81E5F;
+	Sun, 10 Dec 2023 17:38:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB02C81E5F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 308201BF21A
+ for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 17:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 366C660B6C
- for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 17:02:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 366C660B6C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0072E40423
+ for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 17:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0072E40423
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eJSoHXRQRzQC for <buildroot@lists.busybox.net>;
- Sun, 10 Dec 2023 17:02:52 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F03BB60ADC
- for <buildroot@buildroot.org>; Sun, 10 Dec 2023 17:02:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F03BB60ADC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B9D511BF205;
- Sun, 10 Dec 2023 17:02:48 +0000 (UTC)
-Date: Sun, 10 Dec 2023 18:02:47 +0100
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20231210180247.24316308@windsurf>
-In-Reply-To: <ZXXBnuTeg_LcSWgZ@landeda>
-References: <5969347.lOV4Wx5bFT@kilian-aisec>
- <7af21f66-d3c5-e42f-03e5-8a1f6b370520@mind.be>
- <20230902094244.0251e004@windsurf> <ZXXBnuTeg_LcSWgZ@landeda>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I4EArvIASzEi for <buildroot@lists.busybox.net>;
+ Sun, 10 Dec 2023 17:38:10 +0000 (UTC)
+Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com
+ [203.205.221.164])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E17704173A
+ for <buildroot@buildroot.org>; Sun, 10 Dec 2023 17:38:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E17704173A
+Received: from smtpclient.apple ([101.5.160.146])
+ by newxmesmtplogicsvrsza1-0.qq.com (NewEsmtp) with SMTP
+ id 96B0ACB8; Mon, 11 Dec 2023 01:37:43 +0800
+X-QQ-mid: xmsmtpt1702229863tj81ygkku
+Message-ID: <tencent_30C4D795E5D466EAFF63C90C072000A93106@qq.com>
+X-QQ-XMAILINFO: MmPNY57tR1XnTdiK5+0PIG+zwJPsbjcY/lodIwM4A38trKKH2a9JMr5dJRHzdd
+ vHG0YLZl7NxXFd5JLJ0HcDsVTsE4+ulKkAS/yYykalymQfC4EC+X4ciP4r8JPi23n1XbxwRs9wUO
+ zPU2C1iQmgedljlne1KVx5WEhCq0cpNKDhdsst6v3hwXIH0hG9+czTsWvRh0B6nUefOl1RhWtAgL
+ YI4JJBCtwZ4zexkBGVFqiQQr7BF4ggCEh1lRyzt3eesYF4f//uDZTLboOaFXtRoqTxTE2mU6lGVZ
+ WDZFzqM7mkN+sG3IA5lJNB8mQ503kQT5I8b0W5JwVWKdRlTHBtjfpfwuIeg8hB8iY90hch2VLjv9
+ hqggSygG8PT9YxvIwtloqOiy9m6hBKSMIfRYiQpdIij++LxwK+Yzn8r6+hVoJsbAuqwywcG6Cood
+ qrRVBrETCBeoJ4px4PxhElFwV0GF6di0MWmhKc6LX8h3Fk80z5dfshjp/vyBG0PHsAD7foynRDQY
+ 8ehBSuVgOD4cHR+lxaSgfIokzVHcANDr1gBIupYK0U3EoTooK27bndhQIxcrKa4kNl+xEqdCmwV3
+ JZh2uNKyDBXJKMVfYB+nXhJZ3vIldbwWEHwspQpwgC0d/qNMa3C3TYY3fMoLPLiOppW+xq1php83
+ 0aaEzPQ+ZBH2YxKPv96ILG7uPBkRT4xmdlLidWOxnpan+6i2OchgUPAu/AWVH/5jBxlLp1nfkWwv
+ yqeirTsNMccv/5KEPOfAmjkt7C6ILSkEgvUl4zbhu+lMLl9APW+9i0KHqhPTiwAwUYQ0C91RHsmR
+ 2DsHyAWyCpY6Ehfe+0wC7h0Kduk8Ha+3VwVjWnPYLXXDhmGtFAR/NfpzDGsdIXugM/6lAx3Hm2vQ
+ ox3MU6g2HsT+pAwfOcyS1jPA8Cf/1N6TYuewT+U93OGCcphKNr2bHvidoh076/wID3tGfwck8Z15
+ ihemt+J5PyDnUw7nilcnfuMtsGCqAjck46HIxsPi/3OTY1/MTrZQ==
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.100.2.1.4\))
+In-Reply-To: <9f83b7b8-a4d9-43c2-bd36-2ce1a1509ef6@mind.be>
+Date: Mon, 11 Dec 2023 01:37:33 +0800
+X-OQ-MSGID: <48731580-90BB-4549-9196-290A02BCC41C@qq.com>
+References: <tencent_3E8054E385AF0DCBE94DC17FAD12060E6707@qq.com>
+ <6f2a8850-7610-4e6b-bc50-43394f6c2eeb@mind.be>
+ <tencent_D458CE6C52FEF7947073D400B41A737C190A@qq.com>
+ <781f37c6-6bf0-4214-8e33-c3ef51929172@mind.be>
+ <tencent_DE40A3F1DD57B325D9A6C37F68893E470206@qq.com>
+ <9f83b7b8-a4d9-43c2-bd36-2ce1a1509ef6@mind.be>
+To: Arnout Vandecappelle <arnout@mind.be>
+X-Mailer: Apple Mail (2.3774.100.2.1.4)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1702227769;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=1W1LKcZVUrlZsQKXK9iQsTKaSZpWiCb6oRLPQWNqHcA=;
- b=KDC+F1xjiIofTO3/khiUsy8oPXflmgpQx6Q4NTnMSLdL52weyQBGZNpPK9MbpbTAUp11U/
- DI3AD6RwE03UDetnFcsZoBFfi1hp8bmMGiWjUs5Rl07b4SAN1b2UvsMYoUlKzC2GhvAbSo
- Hzea+L+4swBFwnOuVeURHgrijQ0AKGYWlu6PmSnhQkPirn0sTQ+tLzUq0HF2KYvioQ3PwA
- ot6kdskie3C/k99P1aseTm96Z2mlwcSqg2HdPSWAWcdAsB0DjHOnTUTyjqeRaEg57gk8i1
- aJZVosDHlUbwiPrEK6j02RhVWmO1elKMARRQYM3YD/K3Wl3wtM1DUlmSzwqEXA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KDC+F1xj
-Subject: Re: [Buildroot] Buildroot docker image
+ d=qq.com; s=s201512; 
+ t=1702229865; bh=I3Kk88QOO48ZSq8cIrbxz3dFXoeqHBHXnymrLwbwOl8=;
+ h=Subject:From:In-Reply-To:Date:Cc:References:To;
+ b=mWt2pv8Sktq538ZzCeuGvp4UiTxi9+HLTkg0yPIWLFg3FVPVNvF60hqrZRoWEsHa1
+ 4SCbN7T4i9MY4mM+03PMKIv9MN3OXXSJ3omAvs9dnC0QfPxcWTrBucHe7amuESjzyR
+ AbdAdsnRKCFakAyfDAvWuukDFRgm7wLLrSoyHxtw=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.a=rsa-sha256
+ header.s=s201512 header.b=mWt2pv8S
+Subject: Re: [Buildroot] [PATCH 1/2] configs/milkv_duo: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,59 +89,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>,
- Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+From: hanyuan via buildroot <buildroot@buildroot.org>
+Reply-To: hanyuan <hanyuan-z@qq.com>
+Cc: Emil S <emil.soltys@outlook.com>, GP Orcullo <kinsamanka@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 10 Dec 2023 14:48:14 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hello Arnout,
 
-> M: strictly mandatory
-> T: optional, but helps use pre-built toolchains
-> S: optional, speeds up the build
-> C: needed to run check-package et al.
-> R: needed to run the runtime test-suite
-> 
-> Bazaar, mercurial and subversion are optional, and only required when a
-> package is bzr-, hg-, or svn-hosted, but if we want this image to be
-> usable generally, it should have all three.
-> 
-> Since mercurial is a python package, we can't drop python3, and the
-> remaining modules are relatively small in comparison to the rest.
-> 
-> Getting a more minimal image would be just about dropping qemu. That
-> would make for an image that we could not use in the CI, and that would
-> not be usable to test the changes done to Buildroot. I don't think that
-> would mkae for a good image.
+Glad to receive your review! These days we modified our patches and resubmitted them. Now there are two patches marked as v2 available, which almost meet your requirements. Could you please take a look on that? I am grateful for your patience and kind assistance.
 
-It's mainly Python3 that is important to drop. Python3 is not part of
-our mandatory requirements, and it's a very frequent sources, as people
-don't have an easily accessible container to test Buildroot builds
-without Python3, so they forget BR2_TARGET_UBOOT_NEEDS_PYTHON3 or
-similar options.
-
-We have exactly two packages that use Mercurial.
-
-pygame has the comment "stable 1.9.1 release requires V4L which has
-been wiped out of recent Linux kernels, so use latest mercurial
-revision until next stable release is out.", but there's a recent
-pygame 2.5.2 release from September 2023. And pygame is now on Github:
-https://github.com/pygame/pygame.
-
-The other one is dvb-apps, which hasn't seen a single commit since
-March 2014: https://linuxtv.org/hg/dvb-apps. We could consider it
-obsolete/unmaintained maybe? :-)
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Best regards,
+Hanyuan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
