@@ -1,63 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBDE8C10DCE
-	for <buildroot@archiver.kernel.org>; Sun, 10 Dec 2023 06:44:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCE82C4167B
+	for <buildroot@archiver.kernel.org>; Sun, 10 Dec 2023 11:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AA9781E74;
-	Sun, 10 Dec 2023 06:44:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AA9781E74
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SrZj3uT2QvQL; Sun, 10 Dec 2023 06:44:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C849821D1;
-	Sun, 10 Dec 2023 06:44:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C849821D1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 05BB81BF86D
- for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 06:44:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFCBD60FF1
- for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 06:44:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFCBD60FF1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31DAA60E0B;
+	Sun, 10 Dec 2023 11:18:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31DAA60E0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JbhFFCNGzMER for <buildroot@lists.busybox.net>;
- Sun, 10 Dec 2023 06:44:25 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D9B3D60FC8
- for <buildroot@buildroot.org>; Sun, 10 Dec 2023 06:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9B3D60FC8
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 348942000A
- for <buildroot@buildroot.org>; Sun, 10 Dec 2023 06:44:22 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UrG_ns2Nc7vL; Sun, 10 Dec 2023 11:17:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 316D361023;
+	Sun, 10 Dec 2023 11:17:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 316D361023
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B2711BF5A9
+ for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 11:17:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 699BA409B5
+ for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 11:17:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 699BA409B5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q70fwTaY-IXF for <buildroot@lists.busybox.net>;
+ Sun, 10 Dec 2023 11:17:53 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 51DCF405F1
+ for <buildroot@buildroot.org>; Sun, 10 Dec 2023 11:17:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51DCF405F1
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 13CF013F861;
+ Sun, 10 Dec 2023 12:17:46 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 10 Dec 2023 12:17:46 +0100
+Date: Sun, 10 Dec 2023 12:17:46 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Zhangjin Wu <falcon@tinylab.org>
+Message-ID: <ZXWeWoawTYeyYbOx@landeda>
+References: <ZXSwdJFb46e_u2RX@landeda>
+ <20231210013653.28449-1-falcon@tinylab.org>
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Sun, 10 Dec 2023 06:44:22 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20231210064426.DFCBD60FF1@smtp3.osuosl.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1702190662; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=o1r5RQcEkDtKo7GFi3t6idwBFy2nGaMhFCGgabrkMwo=;
- b=mtqafJDfzZpoTUywRsDZyzNmnwu1ZeB3XB25Rv/yPTX1n20rnigef8clAUiEjMtZAVMNyk
- KOjftXMfUf+I20X809uX/7f2EhiKBc3l/+w/+NVN9/QhSSJHqx8qqE/slU/AXdtOC0PmY4
- 5bm6PtJXbOxtmjOgFzjS1fUgXUjqbyAtbPZHN8Q9a7eFD8b01cFWsecvgDt4C86W/DqLnH
- DTHY0ny7QYjlP3uArk2U/B2QhV0F0xnArAgG+JkIYHjuHDf8vs74IWdnzK/qMTMxKTxoa+
- WryPy35TBfKRd7WyJJgH0+FsbnLFjJdYwNZS44VsyO/V0eOgEkdJBhyfuNBFeg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mtqafJDf
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-12-09
+Content-Disposition: inline
+In-Reply-To: <20231210013653.28449-1-falcon@tinylab.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1702207070;
+ bh=QY+mTjGOJPK1AG7ogV+MoPOfTmSnxM6OPtuabcWKTig=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=vBZdsnJQv67LKWm1ru1wnXv7QqytXV7iKDhDug8qI/T/l73I4NqXbEQt+35Mjtjm8
+ xr7X64SvXmPaLeRXSpSAi5CdGs+/672b/2NkfmxWq7pS+I7TGi4nertUJLMQZo/JLk
+ aHd7sH3BagOZzyJaI/tLHEOiKQ6apXVqbeIwkf+iLrGYiLC8LLlX7Ye9MTPcahuINr
+ 2nUhSWToEJwMA38tjoyGNlQXvTDU7p1wKLvxUBZ/2RTyQN0qFjCdiYQFK8hJFBQntY
+ 3aupTVJmcHjj0T40PZqiKGiVqp9XWucYT+mw+gdyVKrGMFvRfLpsWMUM3LXDFtuXxC
+ rDcpnhZGTaqGg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=vBZdsnJQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpfr: Fix GNU Mirror Path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,139 +75,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Zhangjin Wu, All,
 
-Autobuild statistics for 2023-12-09
-===================================
+On 2023-12-10 09:36 +0800, Zhangjin Wu spake thusly:
+> > On 2023-12-10 00:21 +0800, Zhangjin Wu spake thusly:
+> > > Replacing http://www.mpfr.org with BR2_GNU_MIRROR variable
+[--SNIP--]
+> > What is the rationale for switching over to the GNU mirror rather than
+> > use the official upstream location?
+> I have found that the downloading of mpfr from its official site is very
+> slow in our region, sometimes, costs several hours and even fails at
+> last. But the downloading from one of its local GNU mirror sites is fast
+> and deterministic.
+> And I have checked that the latest version of mpfr has been stored in
+> the GNU mirror site too:
+> http://ftpmirror.gnu.org/mpfr-4.2.1.tar.xz
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  4  |  4  |  0  |  8  |
-  2023.08.x  |  0  |  3  |  0  |  3  |
-    master   | 47  | 33  |  2  | 82  |
+    $ wget http://ftpmirror.gnu.org/mpfr-4.2.1.tar.xz
+    HTTP request sent, awaiting response... 404 Not Found
+    2023-12-10 11:54:02 ERROR 404: Not Found.
 
-Classification of failures by reason for master
------------------------------------------------
+(it's missing the /mpfr/ directory component in the path ;-) ).
 
-  gobject-introspection-1.76.1 | 3 
-                libressl-3.8.2 | 3 
-                elfutils-0.189 | 2 
-        host-sentry-cli-2.20.3 | 2 
-                   linux-6.6.3 | 2 
-               alsa-lib-1.2.10 | 1 
-                     criu-3.18 | 1 
-          cryptodev-linux-1.13 | 1 
-                 dc3dd-7.2.641 | 1 
-                 dhcp-4.4.3-P1 | 1 
-fs/cloop/cloop.mk:33: /home... | 1 
-         gobject-introspection | 1 
-host-gcc-final-arc-2020.09-... | 1 
-              host-rust-1.71.1 | 1 
-              libarchive-3.7.2 | 1 
-               libglib2-2.76.1 | 1 
-                libselinux-3.5 | 1 
-     linux-5.10.162-cip24-rt10 | 1 
-                   linux-tools | 1 
-                         mimic | 1 
-                    ngrep-1.47 | 1 
-                    opkg-0.6.2 | 1 
-                   perl-5.36.3 | 1 
-                    php-8.2.13 | 1 
-    python-cryptography-39.0.2 | 1 
-                    qemu-8.1.1 | 1 
-                       unknown | 1 
-               xwayland-23.1.1 | 1 
+> So, it should be reasonable and safe for us to do such switch ;-)
 
+The thing is, we can't really switch away from the official site, just
+because it is slow for some people, as the alternative might be the
+other way around for others: for me, the GNU mirror is ~8 times slower
+than the official MPFR site: 8.80MBps vs 1.06MBps (mpfr is small, so
+that's not much consequential, but that's on principle).
 
-Detail of failures for master
------------------------------
+So, I think you would have a few (complementary) options:
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-powerpc64le  |        alsa-lib-1.2.10         | NOK | http://autobuild.buildroot.net/results/55ba991a7dbb8e5b84fdfea6cdde838fc1fdcfd9 |     
- aarch64_be  |           criu-3.18            | NOK | http://autobuild.buildroot.net/results/6377f52d34e1f0939af54b2665f98c1b6a4a76de |     
-   xtensa    |      cryptodev-linux-1.13      | NOK | http://autobuild.buildroot.net/results/4e21c590633d4a04d4275b4e060ade20081bb5cd | ORPH
-    or1k     |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/89233a7324c448d8e666e3ac9138ab3a1d036d9d | ORPH
-   sh4eb     |         dhcp-4.4.3-P1          | NOK | http://autobuild.buildroot.net/results/000009c2969b83f572c4fb34ed96e25ea657b66a | ORPH
-    or1k     |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/12af36e65c2f34452b56a1a021a8cc94f4a75a9f | ORPH
-   armeb     |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/20108f915ec48bbd77ec4e104248509232e61d97 | ORPH
- aarch64_be  | fs/cloop/cloop.mk:33: /home... | NOK | http://autobuild.buildroot.net/results/aebd6f03288e4f29752a3b927f1668f007276cc0 |     
-microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/9f8e2aececc0df0fd302504e8917634207dabadd |     
-    i686     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/d4cb365d15ad9a580c93fdb10c8469799c17f26e | ORPH
-   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/ec0ab227c7da0d0bb25999727533bef8f93b0ace | ORPH
-  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/029bc353294a14fb92c0910ed757fe58baeac44e | ORPH
-   arceb     | host-gcc-final-arc-2020.09-... | NOK | http://autobuild.buildroot.net/results/ea78aaff94852b2ff12ec73625753efdcf95cf55 |     
-  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/f93b067cdaec347cd029f670baa96a3a4b480ed3 |     
-    mips     |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/c7e0684bd04383b5cc157d59ebb6074299f8d960 |     
-  aarch64    |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/e5aca83973fa3ba6f7c65c4cdb54015a59dfd649 |     
-    arm      |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/ae3bbc88369dba305c143bb6994432789cdb2bf7 |     
-   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/721482d9ed1d19a68fc6566bff4329b7ab1e1c9f |     
- powerpc64   |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/89a229a5a9e9b62c1b26b75277e02b71ea147e3b | ORPH
-   sparc     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/e33b600f5c495c60129bf90920ade56c98bd2c58 | ORPH
-  mips64el   |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/0fd884c4e5ab9ae3eb1ce900feeb0110d9b00164 | ORPH
- microblaze  |         libselinux-3.5         | NOK | http://autobuild.buildroot.net/results/a40cae9ed7ce3d0d917b9cceb514352d8f32c7f4 |     
- aarch64_be  |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/4acc9b79b3fa1a55489751355d220cdd517dc906 | ORPH
- powerpc64   |          linux-6.6.3           | NOK | http://autobuild.buildroot.net/results/2f1b4ff4f68f0c860c8cb5855e32a712c3013e53 | ORPH
-    mips     |          linux-6.6.3           | NOK | http://autobuild.buildroot.net/results/1aafd930de3a8dce35ae22f316aba964dcbff602 | ORPH
-   x86_64    |          linux-tools           | NOK | http://autobuild.buildroot.net/results/92ef708a37d1feafa976cf116c69cf64c6c34593 | ORPH
-  riscv64    |             mimic              | TIM | http://autobuild.buildroot.net/results/184e59da5a14057be2cb38a8cbec27d6564b4b0e |     
-   s390x     |           ngrep-1.47           | NOK | http://autobuild.buildroot.net/results/5ea1bc1ff328e96a0d3e59cad11eb2938cebbbe6 |     
-    arc      |           opkg-0.6.2           | NOK | http://autobuild.buildroot.net/results/8416c5e6b5c7337ba5def043327e028db9c31a94 | ORPH
-   sh4eb     |          perl-5.36.3           | NOK | http://autobuild.buildroot.net/results/efc514561cd03b04e65cc40f2bd52bc8ee20fa86 |     
-    arm      |           php-8.2.13           | NOK | http://autobuild.buildroot.net/results/8952d647d799129862d879828c54295642a7e633 |     
-    mips     |   python-cryptography-39.0.2   | NOK | http://autobuild.buildroot.net/results/0ce2ab76648918e48536d82a0bcfe6eed9acfb33 |     
-powerpc64le  |           qemu-8.1.1           | NOK | http://autobuild.buildroot.net/results/59954bf509ef412de75fb7cb76b1aab0049a5d16 |     
- microblaze  |            unknown             | NOK | http://autobuild.buildroot.net/results/44c614f0905100bed5a6cb9bb35a7cb95f062cbf |     
- powerpc64   |        xwayland-23.1.1         | NOK | http://autobuild.buildroot.net/results/47665d417dbae76bf27e805a5bcb1d8d6ab1f445 |     
+  - keep a local cache of your download directory: if BR2_DL_DIR is set
+    in the environment, then Buildroot will use that directory to look
+    for, and store, downloaded archives. That directory is never removed
+    by Buildroot (unless it is the default value of $(TOPDIR)/dl);
 
+  - similar to the above, populate a directory on a machine in your
+    local network, serve that directory with an HTTP(S) server, and
+    point BR2_PRIMARY_SITE to that location;
 
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
+  - change BR2_WGET to include one of the wget timeout options (see the
+    wget manual for the details): --timeout=seconds --dns-timeout=seconds
+    --connect-timeout=seconds --read-timeout=seconds. In your case, maybe
+    --read-timeout with a small-ish number of seconds would be enough to
+    trigger a failed download, and Buildroot will fallback to
+    downloading from BR2_BACKUP_SITE.
 
-               gupnp-av-0.14.0 | 1 
-            host-binutils-2.38 | 1 
-               host-go-1.20.11 | 1 
-                  linux-6.1.64 | 1 
+I know that the above might not be entirely satisfactory, but we really
+prefer to get the sources from the official location, unless there is a
+very strong reason not to. In this case, I don't think it is
+appropriate, especially since Buildroot has mechanisms in place to cope
+with such situations already.
 
+Regards,
+Yann E. MORIN.
 
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  mips64el   |        gupnp-av-0.14.0         | NOK | http://autobuild.buildroot.net/results/8c159bc4c1a5cea92c6d7274dda51eef4bf81393 |     
-   mips64    |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/c080d7a83959c83ae3c7687e19fe03e42577894a |     
-   s390x     |        host-go-1.20.11         | NOK | http://autobuild.buildroot.net/results/8129ddf2f7066419624938d3e0eff8486ee31bce |     
-   mips64    |          linux-6.1.64          | NOK | http://autobuild.buildroot.net/results/e88b2d0626ce79eaa4c6e69a8fe27f1613cd7e7e | ORPH
-
-
-Classification of failures by reason for 2023.08.x
---------------------------------------------------
-
-                jailhouse-0.12 | 1 
-                    sdl-1.2.15 | 1 
-ulog-0389d243352255f6182326... | 1 
-
-
-Detail of failures for 2023.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   x86_64    |         jailhouse-0.12         | NOK | http://autobuild.buildroot.net/results/b4e133c4d575315d11187da34bddf26fccd418ce |     
-    sh4a     |           sdl-1.2.15           | NOK | http://autobuild.buildroot.net/results/eaf276e5a367677a9f1852ceb97d1160287f3179 | ORPH
-    mips     | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/5dda97a2f9b430cf1dd180cf42d1258c96a4de6d |     
-
-
+> Regards,
+> Zhangjin Wu
+> 
+> > Regards,
+> > Yann E. MORIN.
+> > 
+> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > ---
+> > >  package/mpfr/mpfr.mk | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+> > > index 8d12c7502b..a5e26404d1 100644
+> > > --- a/package/mpfr/mpfr.mk
+> > > +++ b/package/mpfr/mpfr.mk
+> > > @@ -5,7 +5,7 @@
+> > >  ################################################################################
+> > >  
+> > >  MPFR_VERSION = 4.1.1
+> > > -MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
+> > > +MPFR_SITE = $(BR2_GNU_MIRROR)/mpfr
+> > >  MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
+> > >  MPFR_LICENSE = LGPL-3.0+
+> > >  MPFR_LICENSE_FILES = COPYING.LESSER
+> > > -- 
+> > > 2.34.1
+> > > 
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot@buildroot.org
+> > > https://lists.buildroot.org/mailman/listinfo/buildroot
+> > 
+> > -- 
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
-http://autobuild.buildroot.net
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
