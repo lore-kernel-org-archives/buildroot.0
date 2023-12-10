@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69783C4167B
-	for <buildroot@archiver.kernel.org>; Sun, 10 Dec 2023 13:11:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B223AC4167B
+	for <buildroot@archiver.kernel.org>; Sun, 10 Dec 2023 13:11:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0EDD6105F;
-	Sun, 10 Dec 2023 13:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0EDD6105F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E5E360B90;
+	Sun, 10 Dec 2023 13:11:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E5E360B90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m0QB-yejBQA0; Sun, 10 Dec 2023 13:11:28 +0000 (UTC)
+	with ESMTP id F8CJmIaS45M0; Sun, 10 Dec 2023 13:11:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 452E760B90;
-	Sun, 10 Dec 2023 13:11:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 452E760B90
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6BC8D1BF5A8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 946DC61075;
+	Sun, 10 Dec 2023 13:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 946DC61075
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AFB391BF5A8
  for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 13:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5224260B90
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86D8F4013F
  for <buildroot@lists.busybox.net>; Sun, 10 Dec 2023 13:11:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5224260B90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86D8F4013F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EAgus2lv3rPn for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7rkQnNn9aMDB for <buildroot@lists.busybox.net>;
  Sun, 10 Dec 2023 13:11:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8207160A71
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A2DF400D6
  for <buildroot@buildroot.org>; Sun, 10 Dec 2023 13:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8207160A71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A2DF400D6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6EBBF87A86; Sun, 10 Dec 2023 13:11:24 +0000 (UTC)
+ id 64CC587A85; Sun, 10 Dec 2023 13:11:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Dec 2023 14:01:34 +0100
+Date: Sun, 10 Dec 2023 13:57:05 +0100
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: e727d9c69c21994c8b88bccd3f64b5a88fbc1fdc
-X-Git-Newrev: bcf9f27caf10e1e79bf4ef1065202fe212435b7c
+X-Git-Oldrev: e6252e5b6d7b3ed645c3001dec3b5845852727d7
+X-Git-Newrev: e727d9c69c21994c8b88bccd3f64b5a88fbc1fdc
 X-Patchwork-Hint: ignore
-Message-Id: <20231210131124.6EBBF87A86@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/go: security bump
- to version 1.20.12
+Message-Id: <20231210131124.64CC587A85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/php: security
+ bump version to 8.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcf9f27caf10e1e79bf4ef1065202fe212435b7c
+commit: https://git.buildroot.net/buildroot/commit/?id=e727d9c69c21994c8b88bccd3f64b5a88fbc1fdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes the following CVEs:
+"This is a security release" according to the upstream release notes:
+https://news-web.php.net/php.announce/369
 
-CVE-2023-39326: net/http: limit chunked data overhead
-CVE-2023-45285: cmd/go: go get may unexpectedly fallback to insecure git
-
-https://go.dev/doc/devel/release#go1.20.12
-
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0a54c46054b618f191e5474c8e4961462b97056e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 12a9dfd5da..f90be52172 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  d355c5ae3a8f7763c9ec9dc25153aae373958cbcb60dd09e91a8b56c7621b2fc  go1.20.11.src.tar.gz
-+sha256  c5bf934751d31c315c1d0bb5fb02296545fa6d08923566f7a5afec81f2ed27d6  go1.20.12.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index e6fd46d15c..4bb44f235f 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0f77f0082f..8ad3823960 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  e1526e400bce9f9f9f774603cfac6b72b5e8f89fa66971ebc3cc4e5964083132  php-8.2.12.tar.xz
++sha256  2629bba10117bf78912068a230c68a8fd09b7740267bd8ebd3cfce91515d454b  php-8.2.13.tar.xz
+ 
+ # License file
+ sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index e2cdccb275..481b0b7eb1 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.20.11
-+GO_VERSION = 1.20.12
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-PHP_VERSION = 8.2.12
++PHP_VERSION = 8.2.13
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
