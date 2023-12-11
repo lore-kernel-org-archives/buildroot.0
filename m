@@ -4,63 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37B37C4167B
-	for <buildroot@archiver.kernel.org>; Mon, 11 Dec 2023 08:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F649C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 11 Dec 2023 08:21:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D52D2414FA;
-	Mon, 11 Dec 2023 08:17:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D52D2414FA
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADD95415E5;
+	Mon, 11 Dec 2023 08:21:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADD95415E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H6j5EAYapMKF; Mon, 11 Dec 2023 08:17:45 +0000 (UTC)
+	with ESMTP id bmd27u6UhNcg; Mon, 11 Dec 2023 08:21:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25320414D6;
-	Mon, 11 Dec 2023 08:17:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25320414D6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6DF031BF3A4
- for <buildroot@lists.busybox.net>; Mon, 11 Dec 2023 08:17:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11829415DC;
+	Mon, 11 Dec 2023 08:21:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11829415DC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B92BF1BF3A4
+ for <buildroot@lists.busybox.net>; Mon, 11 Dec 2023 08:21:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 464738214B
- for <buildroot@lists.busybox.net>; Mon, 11 Dec 2023 08:17:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 464738214B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F23040114
+ for <buildroot@lists.busybox.net>; Mon, 11 Dec 2023 08:21:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F23040114
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sNRLdBuF-78i for <buildroot@lists.busybox.net>;
- Mon, 11 Dec 2023 08:17:40 +0000 (UTC)
-X-Greylist: delayed 344 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 11 Dec 2023 08:17:40 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26B3982149
-Received: from 4.mo552.mail-out.ovh.net (4.mo552.mail-out.ovh.net
- [178.33.43.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 26B3982149
- for <buildroot@buildroot.org>; Mon, 11 Dec 2023 08:17:40 +0000 (UTC)
-Received: from mxplan7.mail.ovh.net (unknown [10.109.138.188])
- by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 17DF52A61E
- for <buildroot@buildroot.org>; Mon, 11 Dec 2023 08:17:38 +0000 (UTC)
-Received: from logilin.fr (37.59.142.96) by DAG4EX2.mxp7.local (172.16.2.32)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hNFAM2sYBXY2 for <buildroot@lists.busybox.net>;
+ Mon, 11 Dec 2023 08:21:51 +0000 (UTC)
+Received: from 6.mo552.mail-out.ovh.net (6.mo552.mail-out.ovh.net
+ [188.165.49.222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D8C5400EF
+ for <buildroot@buildroot.org>; Mon, 11 Dec 2023 08:21:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D8C5400EF
+Received: from mxplan7.mail.ovh.net (unknown [10.108.1.141])
+ by mo552.mail-out.ovh.net (Postfix) with ESMTPS id EFE1E2B7F7
+ for <buildroot@buildroot.org>; Mon, 11 Dec 2023 08:14:58 +0000 (UTC)
+Received: from logilin.fr (37.59.142.102) by DAG4EX2.mxp7.local (172.16.2.32)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 11 Dec
- 2023 09:17:37 +0100
+ 2023 09:14:58 +0100
 X-OVh-ClientIp: 82.64.11.165
 From: Christophe Blaess <christophe.blaess@logilin.fr>
 To: <buildroot@buildroot.org>
-Date: Mon, 11 Dec 2023 09:17:28 +0100
-Message-ID: <20231211081730.1406640-1-christophe.blaess@logilin.fr>
+Date: Mon, 11 Dec 2023 09:14:54 +0100
+Message-ID: <20231211081456.1405448-1-christophe.blaess@logilin.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Originating-IP: [37.59.142.96]
-X-ClientProxiedBy: DAG6EX2.mxp7.local (172.16.2.52) To DAG4EX2.mxp7.local
+X-Originating-IP: [37.59.142.102]
+X-ClientProxiedBy: DAG1EX2.mxp7.local (172.16.2.2) To DAG4EX2.mxp7.local
  (172.16.2.32)
-X-Ovh-Tracer-GUID: 4051551e-fa2e-40e1-b622-faf451a9bce0
-X-Ovh-Tracer-Id: 14240663499299837207
+X-Ovh-Tracer-GUID: 0a51a536-dc7b-4967-8b8e-f63741da77d5
+X-Ovh-Tracer-Id: 14195908976465892631
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudeluddguddulecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvefufffkofgggfgtihesthekredtredttdenucfhrhhomhepvehhrhhishhtohhphhgvuceulhgrvghsshcuoegthhhrihhsthhophhhvgdrsghlrggvshhssehlohhgihhlihhnrdhfrheqnecuggftrfgrthhtvghrnhepudduffduudehheeuudfgteffgfdtvefhgedtfedulefhjeejteehgfduffeiuddtnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrdeliedpkedvrdeigedruddurdduieehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeotghhrhhishhtohhphhgvrdgslhgrvghssheslhhoghhilhhinhdrfhhrqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehhedvpdhmohguvgepshhmthhpohhuth
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudeluddguddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvefufffkofgggfgtihesthekredtredttdenucfhrhhomhepvehhrhhishhtohhphhgvuceulhgrvghsshcuoegthhhrihhsthhophhhvgdrsghlrggvshhssehlohhgihhlihhnrdhfrheqnecuggftrfgrthhtvghrnhepudduffduudehheeuudfgteffgfdtvefhgedtfedulefhjeejteehgfduffeiuddtnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrddutddvpdekvddrieegrdduuddrudeiheenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegthhhrihhsthhophhhvgdrsghlrggvshhssehlohhgihhlihhnrdhfrheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheehvddpmhhouggvpehsmhhtphhouhht
 X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-96R001aedb6e02-2637-4f74-b922-40ed59939ffe,
+ (GARM-102R00445db9bca-556d-4910-8014-f1f225c66b74,
  9AF3198B505034A765FD1E5F33C94A984CDD90C4)
  smtp.auth=christophe.blaess@logilin.fr
 Subject: [Buildroot] [PATCH 1/3] configs: add support for the Raspberry Pi 5
