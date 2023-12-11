@@ -4,51 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37757C4167B
-	for <buildroot@archiver.kernel.org>; Mon, 11 Dec 2023 15:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CAD7C4167B
+	for <buildroot@archiver.kernel.org>; Mon, 11 Dec 2023 15:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D68961086;
-	Mon, 11 Dec 2023 15:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D68961086
+	by smtp3.osuosl.org (Postfix) with ESMTP id 080BB60FBF;
+	Mon, 11 Dec 2023 15:26:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 080BB60FBF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n9riRGmF1X0l; Mon, 11 Dec 2023 15:26:03 +0000 (UTC)
+	with ESMTP id sTF4_8fAFXyF; Mon, 11 Dec 2023 15:26:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FEBA60FBF;
-	Mon, 11 Dec 2023 15:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FEBA60FBF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D134D1BF336
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B12B611A5;
+	Mon, 11 Dec 2023 15:26:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B12B611A5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D5CF21BF976
  for <buildroot@lists.busybox.net>; Mon, 11 Dec 2023 15:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A88AD60FBF
+ by smtp1.osuosl.org (Postfix) with ESMTP id AAF5981A12
  for <buildroot@lists.busybox.net>; Mon, 11 Dec 2023 15:26:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A88AD60FBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAF5981A12
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0iWAiTvBvcRx for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hx1swiglm_H3 for <buildroot@lists.busybox.net>;
  Mon, 11 Dec 2023 15:25:59 +0000 (UTC)
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C408160F49
- for <buildroot@buildroot.org>; Mon, 11 Dec 2023 15:25:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C408160F49
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B44740006;
- Mon, 11 Dec 2023 15:25:55 +0000 (UTC)
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 98B62819D2
+ for <buildroot@buildroot.org>; Mon, 11 Dec 2023 15:25:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98B62819D2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 537C44000A;
+ Mon, 11 Dec 2023 15:25:57 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rCiAN-007GBc-05;
- Mon, 11 Dec 2023 16:25:55 +0100
+ (envelope-from <peko@48ers.dk>) id 1rCiAP-007GBp-00;
+ Mon, 11 Dec 2023 16:25:57 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Dec 2023 16:25:49 +0100
-Message-Id: <20231211152551.1730492-1-peter@korsgaard.com>
+Date: Mon, 11 Dec 2023 16:25:50 +0100
+Message-Id: <20231211152551.1730492-2-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231211152551.1730492-1-peter@korsgaard.com>
+References: <20231211152551.1730492-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH 1/2] package/xserver_xorg-server: security bump
- to version 21.1.9
+Subject: [Buildroot] [PATCH 2/2] package/xwayland: security bump to version
+ 23.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,6 +62,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -70,45 +73,42 @@ Fixes the following security issues:
 - CVE-2023-5367 X.Org server: OOB write in
   XIChangeDeviceProperty/RRChangeOutputProperty
 
-- CVE-2023-5380: Use-after-free bug in DestroyWindow
-
-- CVE-2023-5574: Use-after-free bug in DamageDestroy
-
 For details, see the advisory:
 https://lists.x.org/archives/xorg-announce/2023-October/003430.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ package/x11r7/xwayland/xwayland.hash | 6 +++---
+ package/x11r7/xwayland/xwayland.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 092a640f04..ccd7cc74fa 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-March/003377.html
--sha256  38aadb735650c8024ee25211c190bf8aad844c5f59632761ab1ef4c4d5aeb152  xorg-server-21.1.8.tar.xz
--sha512  6104b3620ed2e1e27d9a8e963388bbe8785a764585b1bc03dbf5d719a92894773dda580d377ca18ceeab353e65a5d23cc947bab84a4012f9dd1eca31cac36937  xorg-server-21.1.8.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-October/003431.html
-+sha256  ff697be2011b4c4966b7806929e51b7a08e9d33800d505305d26d9ccde4b533a  xorg-server-21.1.9.tar.xz
-+sha512  9044e1b9222616fb63aea444b75f4ca6582edb7d899018f8ea30359e57edf04b1555e69397ebc4d288f7e36d6b82a54dde3895f11d414573d229e908ac17bfe8  xorg-server-21.1.9.tar.xz
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+index b62f404d40..12363a66bf 100644
+--- a/package/x11r7/xwayland/xwayland.hash
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-March/003376.html
+-sha256  fb9461f5cb9fea5e07e91882311b0c88b43e8843b017ebac05eb5af69aa34c15  xwayland-23.1.1.tar.xz
+-sha512  21c386847135c5cb4ac884926b0fbeb6ad21c9ee54752e0cdc8418e31a72872d81032159c1d91b8afb915aaaf65e80454342461d676996b2f3c535a37b0147f0  xwayland-23.1.1.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-October/003432.html
++sha256  9f7c0938d2a41e941ffa04f99c35e5db2bcd3eec034afe8d35d5c810a22eb0a8  xwayland-23.2.2.tar.xz
++sha512  f5b319fdace7d7c078544730ecd26afeb63b1a0c779fb097455147945df85af32d9e91501ebdb70209d48e8a3ead3b23be31e9d5118358ac17e699abb4b6ac07  xwayland-23.2.2.tar.xz
+ 
  # Locally calculated
  sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index ede03d024c..cf0e688c36 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index 8550b61389..8eac602042 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 21.1.8
-+XSERVER_XORG_SERVER_VERSION = 21.1.9
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+-XWAYLAND_VERSION = 23.1.1
++XWAYLAND_VERSION = 23.2.2
+ XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+ XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XWAYLAND_LICENSE = MIT
 -- 
 2.39.2
 
