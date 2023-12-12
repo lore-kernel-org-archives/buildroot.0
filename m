@@ -1,65 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E86DC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 19:01:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EED59C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 21:00:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D443E40370;
-	Tue, 12 Dec 2023 19:01:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D443E40370
+	by smtp1.osuosl.org (Postfix) with ESMTP id 818DA81E04;
+	Tue, 12 Dec 2023 21:00:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 818DA81E04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id afsTkcX5-9zN; Tue, 12 Dec 2023 19:01:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TZhbFr334Ecp; Tue, 12 Dec 2023 21:00:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D15944048A;
-	Tue, 12 Dec 2023 19:01:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D15944048A
+	by smtp1.osuosl.org (Postfix) with ESMTP id C123282AF8;
+	Tue, 12 Dec 2023 21:00:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C123282AF8
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 88B061BF29F
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 19:01:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2EE641BF271
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 21:00:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C7E441B42
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 19:01:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C7E441B42
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14DB541AEF
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 21:00:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14DB541AEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DYPXDNCnqQBb for <buildroot@lists.busybox.net>;
- Tue, 12 Dec 2023 19:01:46 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2B7FD41B40
- for <buildroot@buildroot.org>; Tue, 12 Dec 2023 19:01:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B7FD41B40
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id A302313F8C8;
- Tue, 12 Dec 2023 20:01:41 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+ with ESMTP id A4unShaqRtmw for <buildroot@lists.busybox.net>;
+ Tue, 12 Dec 2023 20:59:59 +0000 (UTC)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2832641AEC
+ for <buildroot@buildroot.org>; Tue, 12 Dec 2023 20:59:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2832641AEC
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-333630e9e43so6088913f8f.2
+ for <buildroot@buildroot.org>; Tue, 12 Dec 2023 12:59:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1702414796; x=1703019596;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=qYobueY/+GKn2vs7uKame9RrhKpNWQ8mozAO7NEU3A8=;
+ b=SuXP+Rh0CgkPEjjsJr30X0oEu6PuZaxw1gVCzRlIQ+1CyYDs48JCg5eb/thkILmfh5
+ 6v3rMAZGLl2qVIws0ZngZX8rPoqUqTl2TPMM1iI+aHZHQGPxldtJKDHm/td0TpYBe5zj
+ XsHACN/06LnvB1SKbAQFi3yGH3l4B+8RfL0qk5j4ZxDI2guFBVV8xVjBiarVnZiiP8XM
+ Do6RuEi0+mBzTcaZca/sdtHJaHcZkpUSYW/4D/iTREKlD+akmgvi6y8QNTyczENsOsMM
+ 94CGdoZDgIyoc1y9cHkhzbrZnHeIOSDt+agwh/j0rwNSlOKRFtZ6X9E7tnY7Ac+UYBq8
+ kjqA==
+X-Gm-Message-State: AOJu0YwxoXJabVBymlt4tu0kVxL/vYS7uKYBrA+eb7eCO0jTbKvq420O
+ y7Bp5uoHd2fXkhM14ghdzwFt8h4zK8s=
+X-Google-Smtp-Source: AGHT+IEIPuZirbX+vMnoN+IjuS0Cvty/fABcS6CK5q8ZHytH5U4h5buO8CzGPGb2BFLqfdpbxAK+jA==
+X-Received: by 2002:a5d:595b:0:b0:333:2fd2:3bf1 with SMTP id
+ e27-20020a5d595b000000b003332fd23bf1mr2386007wri.170.1702414796042; 
+ Tue, 12 Dec 2023 12:59:56 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ c4-20020adffb44000000b003362d0eefd3sm2183268wrs.20.2023.12.12.12.59.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 12 Dec 2023 12:59:55 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Dec 2023 20:01:23 +0100
-Message-ID: <20231212190123.7226-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.43.0
+Date: Tue, 12 Dec 2023 21:59:51 +0100
+Message-ID: <20231212205951.280961-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1702407703;
- bh=E2bw/v0Bmj/SVyiTyMV5cpRH7HV7ND4OsWMIaexwhTM=;
- h=From:To:Cc:Subject:Date:From;
- b=P4PwwtjbKsxXcXcZD23xunZdP/ZgC5FeIq80NDhW12NoCydXKCgUHuBnpSKN2wpOQ
- whqJE6AotjIO4sUX6CkIrBQrWKlBckcYRDTQSWe2Q5rNue82B2QEVUoyupA/THPz2v
- K8pCHaRjxvIbza4c//eD/oOLEedquVrBGtMxMwa2+b+5JjHTcEqgv44/lQRIEFFT2b
- s0yNldflMXteelvf4ePisJbyIsdlqEA33sKJt7Z1iHdSM2Rc/3NZ+1kMz+UPdHkrn7
- FGnd0IWJZcZIrfKRsCmJtz4ipnTmlw5SbloyNLl17gBMcKJgxz4/REOi8LzQnLiTMu
- OA1Cuqz86g2/w==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1702414796; x=1703019596; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=qYobueY/+GKn2vs7uKame9RrhKpNWQ8mozAO7NEU3A8=;
+ b=Py4vrusuPbYdteAs8C0vzgi58B9bwHTCUFkrzqWURjb1ICog9MiFWri6utz4GXLJxQ
+ JtrOJ+xnKtqF0dEQhMFyh+OF52FCJmXiouZozSypQVRZxJpnM8wJTE0g5ABO08kXcR51
+ MmLqROnparCsvmXNNuYzAiuATpbN4kpHrc273HgtJzyIFR4fzljcifzlB9eQmjBo8lJm
+ vra0iFnHKDr6TmAjIV6y3LT/0dgM0lcD7EN0EJ/ODck78O9KoiKPaFnw6QyAgpvPpjcl
+ 3+70cDAcQPsfeL6FDNn4Xr+n2aeEn3mHSx5kYWlQCfzegLZcYamNeONh1GagphQWOox+
+ zGtQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=P4Pwwtjb
-Subject: [Buildroot] [PATCH 1/1] package/perftest: bump to version
- 23.10.0-0.29
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Py4vrusu
+Subject: [Buildroot] [PATCH v2,1/1] package/libldns: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,61 +93,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://github.com/linux-rdma/perftest/releases/tag/23.10.0-0.29
+Fix the following build failure raised since bump of libressl to version
+3.8.2 in commit 21eca49ed5110872407b76ab9337d2877c4cda24:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+./keys.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
+  167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+      |                                   ^~~~~~~~~~~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/37cc05b78a7004caa1b45d896121f059a4f8ca00
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Patch tested on branch master at commit b79fb3c with commands:
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Disable gost without engines instead of patching code
 
-    make check-package
-    ...
-    0 warnings generated
+ package/libldns/libldns.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-    utils/test-pkg -a -p perftest
-    ...
-    45 builds, 28 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_perftest
-    ...
-    OK
----
- package/perftest/perftest.hash | 2 +-
- package/perftest/perftest.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/perftest/perftest.hash b/package/perftest/perftest.hash
-index e771d4f463..2fa8c63493 100644
---- a/package/perftest/perftest.hash
-+++ b/package/perftest/perftest.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c5b437734b7f9d31dac0b044cd8510b5580eb932080871b470aeae7309884d3b  perftest-23.07.0-0.27.tar.gz
-+sha256  79bcbb4a62a578408379e89d73f4ceea8f272a139e8a634611f92b1d9ac911a0  perftest-23.10.0-0.29.tar.gz
- sha256  763adb7d5094f2127b026adea8701f042d28d4b1f6fb8b6e828989227a9cf7f5  COPYING
-diff --git a/package/perftest/perftest.mk b/package/perftest/perftest.mk
-index d3259face5..9e0424e47e 100644
---- a/package/perftest/perftest.mk
-+++ b/package/perftest/perftest.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+index 06564e3d9f..d6af6a2b97 100644
+--- a/package/libldns/libldns.mk
++++ b/package/libldns/libldns.mk
+@@ -17,7 +17,6 @@ LIBLDNS_CONF_OPTS = \
+ 	--with-ssl=$(STAGING_DIR)/usr \
+ 	--enable-dane \
+ 	--enable-ecdsa \
+-	--enable-gost \
+ 	--enable-sha2 \
+ 	--without-examples \
+ 	--without-p5-dns-ldns \
+@@ -30,6 +29,12 @@ else
+ LIBLDNS_CONF_OPTS += --disable-dane-verify
+ endif
  
--PERFTEST_VERSION = 23.07.0-0.27
-+PERFTEST_VERSION = 23.10.0-0.29
- PERFTEST_SITE = $(call github,linux-rdma,perftest,$(PERFTEST_VERSION))
- PERFTEST_LICENSE = GPL-2.0 or BSD-2-Clause
- PERFTEST_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_LIBOPENSSL_ENGINES),y)
++LIBLDNS_CONF_OPTS += --enable-gost
++else
++LIBLDNS_CONF_OPTS += --disable-gost
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBLDNS_DEPENDENCIES += host-pkgconf
+ # missing -lz breaks configure, add it using pkgconf
 -- 
-2.43.0
+2.42.0
 
 _______________________________________________
 buildroot mailing list
