@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99F28C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 21:57:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44A2BC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 21:57:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54D2B41926;
-	Tue, 12 Dec 2023 21:57:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54D2B41926
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC99C41BA1;
+	Tue, 12 Dec 2023 21:57:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC99C41BA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C51p76NiQl9U; Tue, 12 Dec 2023 21:57:01 +0000 (UTC)
+	with ESMTP id HqwxYRNM_k0s; Tue, 12 Dec 2023 21:57:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95CA341B19;
-	Tue, 12 Dec 2023 21:57:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95CA341B19
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E7D01BF2FD
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 21:56:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2543C41BB1;
+	Tue, 12 Dec 2023 21:57:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2543C41BB1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F05311BF423
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 21:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E924C60BB0
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 21:56:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E924C60BB0
+ by smtp2.osuosl.org (Postfix) with ESMTP id CCF23405B2
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 21:57:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCF23405B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XA4Po9u67SDz for <buildroot@lists.busybox.net>;
- Tue, 12 Dec 2023 21:56:44 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A263F60B0E
- for <buildroot@buildroot.org>; Tue, 12 Dec 2023 21:56:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A263F60B0E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 74B3240006;
- Tue, 12 Dec 2023 21:56:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Yft6tQfaT82C for <buildroot@lists.busybox.net>;
+ Tue, 12 Dec 2023 21:57:03 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C60B140291
+ for <buildroot@buildroot.org>; Tue, 12 Dec 2023 21:57:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C60B140291
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EAC3DC0002;
+ Tue, 12 Dec 2023 21:57:00 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rDAk3-009hVc-2O;
- Tue, 12 Dec 2023 22:56:39 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rDAkO-009hWr-16;
+ Tue, 12 Dec 2023 22:57:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-References: <20231211164530.1914335-1-peter@korsgaard.com>
-Date: Tue, 12 Dec 2023 22:56:39 +0100
-In-Reply-To: <20231211164530.1914335-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 11 Dec 2023 17:45:29 +0100")
-Message-ID: <87tton3x0o.fsf@48ers.dk>
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+References: <20231211085350.1154620-1-buildroot@heine.tech>
+Date: Tue, 12 Dec 2023 22:57:00 +0100
+In-Reply-To: <20231211085350.1154620-1-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Mon, 11 Dec 2023 09:53:48 +0100")
+Message-ID: <87plzb3x03.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/xwayland: libdrm is required,
- not optional
+Subject: Re: [Buildroot] [PATCH] package/json-for-modern-cpp: bump to
+ version 3.11.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@buildroot.org> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/476/47665d417dbae76bf27e805a5bcb1d8d6ab1f445/
+ > This release fixes some bugs found in the 3.11.2 release.
+ > https://github.com/nlohmann/json/releases/tag/v3.11.3
 
- > xwayland unconditionally includes xf86drm.h, so libdrm is required and not
- > optional:
-
- > grep -rs xf86drm.h
- > glamor/glamor_egl.c:#include <xf86drm.h>
- > hw/xwayland/xwayland-glamor.h:#include <xf86drm.h>
- > hw/xwayland/xwayland-glamor-eglstream.c:#include <xf86drm.h>
- > hw/xwayland/xwayland-window.h:#include <xf86drm.h>
- > hw/xwayland/xwayland-drm-lease.c:#include <xf86drm.h>
- > hw/xwayland/xwayland-glamor-gbm.c:#include <xf86drm.h>
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
 Committed, thanks.
 
