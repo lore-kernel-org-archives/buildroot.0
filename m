@@ -4,84 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C7F4C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 12:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA7EEC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 12:47:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10F21409FB;
-	Tue, 12 Dec 2023 12:02:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10F21409FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B551415DD;
+	Tue, 12 Dec 2023 12:47:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B551415DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ly2QnCQCSbZB; Tue, 12 Dec 2023 12:02:06 +0000 (UTC)
+	with ESMTP id xrjk_pAfCVs1; Tue, 12 Dec 2023 12:47:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DC32408A2;
-	Tue, 12 Dec 2023 12:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DC32408A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64003414EA;
+	Tue, 12 Dec 2023 12:47:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64003414EA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C509A1BF4E5
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 12:02:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6BB951BF853
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 12:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D6E08254A
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 12:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D6E08254A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44E1081422
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 12:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44E1081422
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xxt8-O3QCeB5 for <buildroot@lists.busybox.net>;
- Tue, 12 Dec 2023 12:02:02 +0000 (UTC)
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7178B82531
- for <buildroot@busybox.net>; Tue, 12 Dec 2023 12:02:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7178B82531
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-a22deb95d21so118060366b.3
- for <buildroot@busybox.net>; Tue, 12 Dec 2023 04:02:02 -0800 (PST)
+ with ESMTP id D-fuUjXBUUvd for <buildroot@lists.busybox.net>;
+ Tue, 12 Dec 2023 12:47:48 +0000 (UTC)
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
+ [IPv6:2607:f8b0:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2777181418
+ for <buildroot@buildroot.org>; Tue, 12 Dec 2023 12:47:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2777181418
+Received: by mail-pf1-x42f.google.com with SMTP id
+ d2e1a72fcca58-6ce9e897aeaso4839564b3a.2
+ for <buildroot@buildroot.org>; Tue, 12 Dec 2023 04:47:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702382520; x=1702987320;
+ d=1e100.net; s=20230601; t=1702385267; x=1702990067;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=6XDxlxeZdZ9t1aIFkT8jTLVr/YJDLn3glx4tfDubwY8=;
- b=IG93Ilwl3qVlOa6ndQX7hW1vO/+VKvJuGBLznXo1lHwJ9+hev2vogT1emXlabN3Qm2
- uDK3p/LH/DgT8kB+T0UJcLLOhFmqOMUxXUJ3s1ZEO7R970l6CChBnQH5n4MYcytklFoF
- dYtk+VNyJf2uh/1L46THWmbVeewfn2bkyZgH1U9f1Oh6zcrIyPQ6dY/MqKTWlsaerhbT
- WXLBEVPdRmsFMpamHE30uSQ/CfmlytiI4NOIZe8xAFJXj/v7Z/fB6VK4DehXFYGS5y3g
- sLrzBxkYBYtY/MdMuGUUnfxweKrN5wMMtrfOUypgqJ/IJ1zGcHjWhy6+Lie8BsBYlqKR
- Nneg==
-X-Gm-Message-State: AOJu0Yz62bS8LS65iM75gxrZMnvKyEyeU/cXkkfS6AWcNKPPFtTaIQD3
- cjFOI28eb+Fm7T/+bkllE8oStw9uAio=
-X-Google-Smtp-Source: AGHT+IExgkH1DFshrX6RjNX+fA2az194oFweM6TOUhKI3CCuvG36ZOAdxpeXbKTTo/42+kWqe3T3Ug==
-X-Received: by 2002:a17:906:4447:b0:a19:a19b:c729 with SMTP id
- i7-20020a170906444700b00a19a19bc729mr2993729ejp.121.1702382520321; 
- Tue, 12 Dec 2023 04:02:00 -0800 (PST)
-Received: from xubuntu-23.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- tk3-20020a170907c28300b00a1cd54ec021sm6201018ejc.57.2023.12.12.04.01.59
+ bh=iS90LkBdhw5n7/rscvMmItRfs7B1v02XtNhfDpZ8+mg=;
+ b=fZ3Bnl62eeGRvPRVYFg3H4/KIcxNUjojqh23ul6Yhqq+aO23oJMX0krmn2+yy4EJmA
+ MkFizqwcReFrNp9QVCAEROFxkNy5vJKktED0IFgrGbfEi/OgGgmdahmQkQbqhBFXCfuP
+ hcifAh41Nw0zEeq/RmU18ojZ2n0qgaymUWRaJU/g6MKkSAwkLLTRXeee6DqyY7saBNs+
+ YUXfCai4TY83zzQ3bCOnd7J3sPan/Crwp2kBj1sOscCA93QFlRrn5d9m/zHfu63xHWnF
+ ZfsPz8Y7X2Vb5qPZIPwdFDi0XSqpEccndM1Jg6srb8wSwN1AMWTu+4srs0YKh69pUcXO
+ icEw==
+X-Gm-Message-State: AOJu0YzV7jhXCaDSz735yJejKvOWPUVzdmsWvX3TnkpCETXsVLDNfTWD
+ ZD+jJeiPUKQSeF3HM0v6+/rpKeb8tIL+6O9Ddj4=
+X-Google-Smtp-Source: AGHT+IEXumtpRdoLYaLYHxJn8jtu5kjaEDTYejgufBcQvvcFWO221biDG1GK3/pu/U8Kp78X/557uw==
+X-Received: by 2002:a05:6a20:1016:b0:18f:97c:8a49 with SMTP id
+ gs22-20020a056a20101600b0018f097c8a49mr6941572pzc.116.1702385267155; 
+ Tue, 12 Dec 2023 04:47:47 -0800 (PST)
+Received: from alesmao.newtesc.com ([187.120.6.114])
+ by smtp.gmail.com with ESMTPSA id
+ ka23-20020a056a00939700b006cb4379061esm7923604pfb.205.2023.12.12.04.47.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 Dec 2023 04:02:00 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Tue, 12 Dec 2023 13:01:50 +0100
-Message-Id: <20231212120150.7925-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.40.1
+ Tue, 12 Dec 2023 04:47:46 -0800 (PST)
+From: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
+To: buildroot@buildroot.org
+Date: Tue, 12 Dec 2023 09:47:35 -0300
+Message-ID: <20231212124735.730065-1-flavio.tapajos@newtesc.com.br>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1702382520; x=1702987320; darn=busybox.net;
+ d=newtesc-com-br.20230601.gappssmtp.com; s=20230601; t=1702385267; x=1702990067;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6XDxlxeZdZ9t1aIFkT8jTLVr/YJDLn3glx4tfDubwY8=;
- b=YXSoBYeHvtfNO/jXMmtaNpTeQrHJxHwWEMxa4QoR5QgnmHL3bpOduhan1iaooNR69k
- qmC4OUsXFrJTY9vvLe9SgrFu9vcuUf97VRCitO3MsLYk/RGbz1bVBJ7zuVxEFQh8qSjM
- ip4CL6iQ+N0r9MNM0l9PNXWUgasvWz1PoLpd2RBYsZL64SZDBX9KeGX4Io/TaZ3QR1sp
- MXY9UfL8Oh9Jv6wspbk4k2lTZdEr83cweyu3zNT0nuF9I4lq1SmzYq7tTCxVnOd2vx2s
- T6vdiSWerRHydDN+nAXtrg7NUMMiBd2Uc5c6Ft4anikzUyFeFLKk00WG76E+U7s4it4t
- PmYg==
+ bh=iS90LkBdhw5n7/rscvMmItRfs7B1v02XtNhfDpZ8+mg=;
+ b=TDS8ntkCDLgn55MQVthXnWgT1eyrMhtFa13g4cPKr2NUb8IXSZideUg53az8szW/Vm
+ CwHw2NbjhBEJXNR7z+tV3+drn9ldxdJEvk2fUAV4feGkXoPVOO0s7fOeyz0I5xiWZTnO
+ 9uqPLwO4maXyEoz/hk5B/iFsxX/LmzLzAkJxQEnIfoIKgtoCruL4fohQRd0Pdc/umbeb
+ y6f9n+IZdpZOi81FpF9PAArmRDeTpJkTDVj+W7DTq785NryeH3t5ivpjETbgQIjREL7h
+ CgskNaYj6eK92FzptfgSthEEwxbmvC1zjCjE+wKlJPXEfNX/KyGozA29FnR/aSBvhRAi
+ bz8A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YXSoBYeH
-Subject: [Buildroot] [PATCH] package/open62541: bump to version 1.3.9
+ dkim=pass (2048-bit key) header.d=newtesc-com-br.20230601.gappssmtp.com
+ header.i=@newtesc-com-br.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=TDS8ntkC
+Subject: [Buildroot] [PATCH 1/1] package/rsyslog: bump version to 8.2312.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,43 +95,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/open62541/open62541.hash | 2 +-
- package/open62541/open62541.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
-index 3508cbb14..2946b991a 100644
---- a/package/open62541/open62541.hash
-+++ b/package/open62541/open62541.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  41e82d81d2fc9449028dab31fd460df1da29130bcb7388222842e778cf34625c  open62541-v1.3.8-br1.tar.gz
-+sha256  8ca1f20dba4fc103893d74d29e41c336ab67a1725512b03eaaf6060658525b43  open62541-v1.3.9-br1.tar.gz
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 16ef51ed3..17abd4a37 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPEN62541_VERSION = v1.3.8
-+OPEN62541_VERSION = v1.3.9
- OPEN62541_SITE_METHOD = git
- OPEN62541_SITE = https://github.com/open62541/open62541.git
- OPEN62541_GIT_SUBMODULES = YES
--- 
-2.40.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogRmzDoXZpbyBUYXBhasOzcyA8ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5j
+b20uYnI+Ci0tLQogcGFja2FnZS9yc3lzbG9nL3JzeXNsb2cuaGFzaCB8IDIgKy0KIHBhY2thZ2Uv
+cnN5c2xvZy9yc3lzbG9nLm1rICAgfCAyICstCiAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9u
+cygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3JzeXNsb2cvcnN5c2xv
+Zy5oYXNoIGIvcGFja2FnZS9yc3lzbG9nL3JzeXNsb2cuaGFzaAppbmRleCA5MGRmM2UwNTRmLi45
+YzAwMzY1MzU1IDEwMDY0NAotLS0gYS9wYWNrYWdlL3JzeXNsb2cvcnN5c2xvZy5oYXNoCisrKyBi
+L3BhY2thZ2UvcnN5c2xvZy9yc3lzbG9nLmhhc2gKQEAgLTEsNSArMSw1IEBACiAjIEZyb20gaHR0
+cDovL3d3dy5yc3lzbG9nLmNvbS9kb3dubG9hZHMvZG93bmxvYWQtdjgtc3RhYmxlLwotc2hhMjU2
+ICAyMGQ5Y2U3OTJiZjBhN2VkMDcwM2RiZjA5NDE0OTBmOGJlNjU1ZjQ4YjU1YjRiZWJkYzA4Mjdi
+YmIwZGRiZjExICByc3lzbG9nLTguMjMxMC4wLnRhci5negorc2hhMjU2ICA3NzQwMzIwMDYxMjhh
+ODk2NDM3ZjU5MTNlMTMyYWEyN2RiZmI5MzdjZDg4NDdlNDQ5NTIyZDVhMTJkNjNkMDNlICByc3lz
+bG9nLTguMjMxMi4wLnRhci5negogCiAjIExvY2FsbHkgY2FsY3VsYXRlZAogc2hhMjU2ICAwNTRi
+M2EwNDdkOTIzMjM3NmE0NmI4NzM1NmIxOWIwYzBjMjkyNGNiNWU2OTExYWI5NmEwMWZjNGI1MTVm
+MDgzICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL3JzeXNsb2cvcnN5c2xvZy5tayBiL3Bh
+Y2thZ2UvcnN5c2xvZy9yc3lzbG9nLm1rCmluZGV4IDhlYTkyZWE3ODUuLjE5MTk4NjNmNGYgMTAw
+NjQ0Ci0tLSBhL3BhY2thZ2UvcnN5c2xvZy9yc3lzbG9nLm1rCisrKyBiL3BhY2thZ2UvcnN5c2xv
+Zy9yc3lzbG9nLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMK
+IAotUlNZU0xPR19WRVJTSU9OID0gOC4yMzEwLjAKK1JTWVNMT0dfVkVSU0lPTiA9IDguMjMxMi4w
+CiBSU1lTTE9HX1NJVEUgPSBodHRwOi8vcnN5c2xvZy5jb20vZmlsZXMvZG93bmxvYWQvcnN5c2xv
+ZwogUlNZU0xPR19MSUNFTlNFID0gR1BMLTMuMCwgTEdQTC0zLjAsIEFwYWNoZS0yLjAKIFJTWVNM
+T0dfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcgQ09QWUlORy5MRVNTRVIgQ09QWUlORy5BU0wyMAot
+LSAKMi40My4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
+bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
