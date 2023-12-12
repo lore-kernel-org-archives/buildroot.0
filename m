@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0F59C4167B
-	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 16:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C395AC4167B
+	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 16:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62C4F41B47;
-	Tue, 12 Dec 2023 16:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62C4F41B47
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68B7A41B58;
+	Tue, 12 Dec 2023 16:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68B7A41B58
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xk1SSWj9gv2q; Tue, 12 Dec 2023 16:02:18 +0000 (UTC)
+	with ESMTP id q8TuqY84bq6g; Tue, 12 Dec 2023 16:17:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DAF341B42;
-	Tue, 12 Dec 2023 16:02:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DAF341B42
+	by smtp4.osuosl.org (Postfix) with ESMTP id B208C41B52;
+	Tue, 12 Dec 2023 16:17:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B208C41B52
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 500251BF46A
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 16:02:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 676B01BF429
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 16:17:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 287CA8176D
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 16:02:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 287CA8176D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40A55829BB
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 16:17:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40A55829BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DqS1xPJUJo0N for <buildroot@lists.busybox.net>;
- Tue, 12 Dec 2023 16:02:15 +0000 (UTC)
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org
- [IPv6:2001:67c:2050:0:465::202])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 10AA081762
- for <buildroot@buildroot.org>; Tue, 12 Dec 2023 16:02:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10AA081762
-Received: from smtp1.mailbox.org (smtp1.mailbox.org
- [IPv6:2001:67c:2050:b231:465::1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4SqNfW01qXz9slb;
- Tue, 12 Dec 2023 17:02:11 +0100 (CET)
-From: Ralf Dragon <hypnotoad@lindra.de>
+ with ESMTP id MPe5ikyCTr2B for <buildroot@lists.busybox.net>;
+ Tue, 12 Dec 2023 16:17:39 +0000 (UTC)
+X-Greylist: delayed 8815 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 12 Dec 2023 16:17:39 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E6A3829B6
+Received: from 6.mo576.mail-out.ovh.net (6.mo576.mail-out.ovh.net
+ [46.105.50.107])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E6A3829B6
+ for <buildroot@buildroot.org>; Tue, 12 Dec 2023 16:17:39 +0000 (UTC)
+Received: from director2.ghost.mail-out.ovh.net (unknown [10.109.139.154])
+ by mo576.mail-out.ovh.net (Postfix) with ESMTP id 04B02278E7
+ for <buildroot@buildroot.org>; Tue, 12 Dec 2023 13:50:41 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-tx6zr (unknown [10.110.178.147])
+ by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 948E91FDF3;
+ Tue, 12 Dec 2023 13:50:41 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.110])
+ by ghost-submission-6684bf9d7b-tx6zr with ESMTPSA
+ id 06t9IDFleGU21AAA4en/0w
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Tue, 12 Dec 2023 13:50:41 +0000
+X-OVh-ClientIp: 92.148.253.243
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Dec 2023 17:01:12 +0100
-Message-Id: <20231212160112.94272-2-hypnotoad@lindra.de>
-In-Reply-To: <20231212160112.94272-1-hypnotoad@lindra.de>
-References: <20231212160112.94272-1-hypnotoad@lindra.de>
+Date: Tue, 12 Dec 2023 14:49:55 +0100
+Message-ID: <20231212134955.32728-1-sebastien.szymanski@armadeus.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 4SqNfW01qXz9slb
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lindra.de; s=MBO0001; t=1702396931;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MAtaKBjeN4bZaGiiaztOH2m6ORRL5kEofVtuEfBzis4=;
- b=ygpTw8Lsg0jkEelIUJTNRwh1EQG+9dZCPQSpsTXZrt8d/vp7hz/kpebEbeDdUa3S9aMT+b
- YIYJOzHllIFlzV0nbvClxp3YL3HHl/nWErs8NVfM27Bsb2+3U12VluiaJKcX8s8LO0GIap
- 7r9CTS8XVz9FwL8uO0KBk/exLD6oMS17a8cOyyvzNeQYF4uHzR0RpzkhjWp7vtMox9cLnH
- w56Rqz6LeMfwW+MWn7OVX2wQv43dD46kn+YTL+wG/YjnNMk5IZKmDVGDt0iFeUYsqUzQ9n
- 6HE09CtBJ4NGaniZ7BxNpFdWG/nyMnq7/KMFruMjxUZtGXYYxmNI+lw1Zswq+g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=lindra.de header.i=@lindra.de
- header.a=rsa-sha256 header.s=MBO0001 header.b=ygpTw8Ls
-Subject: [Buildroot] [PATCH 2/2] python-qt5: add PyQt5.sip module
+X-Ovh-Tracer-Id: 7291609275558325227
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudelgedgheegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeetgeejhefgieeggedtheejueeitdelteetvdfhveffjeffgfekfeekveehuddvteenucffohhmrghinhepohhlughmrghnphhrohhgrhgrmhhmvghrrdhnvghtpdhgihhtlhgrsgdrtghomhdpghhithhhuhgsrdgtohhmpdhinhgushhtrghtvgdrvgguuhenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrdduuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehjeeipdhmohguvgepshhmthhpohhuth
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-110S004b129688d-0c59-4a41-a599-6bd9de514da6,
+ 0B065E34F8656297E0C5CD2D328CDA07FBEFC2F4)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH 1/1] package/tree: update _SITE URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,103 +75,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ralf Dragon <hypnotoad@lindra.de>, gwenhael.goavec-merou@trabucayre.com,
- yann.morin.1998@free.fr, asafka7@gmail.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following runtime error when importing PyQt5 in python:
-
-from PyQt5.QtCore import *
-ModuleNotFoundError: No module named 'PyQt5.sip'
-
-Signed-off-by: Ralf Dragon <hypnotoad@lindra.de>
----
-Backport to: 2023.02.x
-
- package/Config.in                              |  1 +
- package/python-pyqt5-sip/Config.in             |  6 ++++++
- package/python-pyqt5-sip/python-pyqt5-sip.hash |  4 ++++
- package/python-pyqt5-sip/python-pyqt5-sip.mk   | 15 +++++++++++++++
- package/python-pyqt5/Config.in                 |  1 +
- 5 files changed, 27 insertions(+)
- create mode 100644 package/python-pyqt5-sip/Config.in
- create mode 100644 package/python-pyqt5-sip/python-pyqt5-sip.hash
- create mode 100644 package/python-pyqt5-sip/python-pyqt5-sip.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index fcc09b07c4..2d6a077d16 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1253,6 +1253,7 @@ menu "External python modules"
- 	source "package/python-pyphen/Config.in"
- 	source "package/python-pyqrcode/Config.in"
- 	source "package/python-pyqt5/Config.in"
-+	source "package/python-pyqt5-sip/Config.in"
- 	source "package/python-pyratemp/Config.in"
- 	source "package/python-pyroute2/Config.in"
- 	source "package/python-pyrsistent/Config.in"
-diff --git a/package/python-pyqt5-sip/Config.in b/package/python-pyqt5-sip/Config.in
-new file mode 100644
-index 0000000000..6f26271f70
---- /dev/null
-+++ b/package/python-pyqt5-sip/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYQT5_SIP
-+	bool "python-pyqt5-sip"
-+	depends on BR2_PACKAGE_PYTHON_PYQT5
-+	depends on BR2_PACKAGE_PYTHON_SIP
-+	help
-+	  This is the PyQt5.sip module which is needed to run PyQt5.
-diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.hash b/package/python-pyqt5-sip/python-pyqt5-sip.hash
-new file mode 100644
-index 0000000000..8039cdafd9
---- /dev/null
-+++ b/package/python-pyqt5-sip/python-pyqt5-sip.hash
-@@ -0,0 +1,4 @@
-+# from https://pypi.org/project/PyQt5-sip/12.12.1
-+
-+sha256  8fdc6e0148abd12d977a1d3828e7b79aae958e83c6cb5adae614916d888a6b10  PyQt5_sip-12.12.1.tar.gz
-+md5  c2117da3b4c0e081c1c5a9088b8a4d55  PyQt5_sip-12.12.1.tar.gz
-diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.mk b/package/python-pyqt5-sip/python-pyqt5-sip.mk
-new file mode 100644
-index 0000000000..3f689b9d47
---- /dev/null
-+++ b/package/python-pyqt5-sip/python-pyqt5-sip.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-SIP-QT5
-+#
-+################################################################################
-+
-+PYTHON_PYQT5_SIP_VERSION = 12.12.1
-+PYTHON_PYQT5_SIP_SITE = https://files.pythonhosted.org/packages/c1/61/4055e7a0f36339964956ff415e36f4abf82561904cc49c021da32949fc55
-+PYTHON_PYQT5_SIP_SOURCE = PyQt5_sip-$(PYTHON_PYQT5_SIP_VERSION).tar.gz
-+PYTHON_PYQT5_SIP_LICENSE = MIT
-+PYTHON_PYQT5_SIP_LICENSE_FILES = LICENSE
-+PYTHON_PYQT5_SIP_SETUP_TYPE = setuptools
-+PYTHON_PYQT5_SIP_DEPENDENCIES += python-sip
-+
-+$(eval $(python-package))
-diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
-index 9fa7676f98..c2a1976950 100644
---- a/package/python-pyqt5/Config.in
-+++ b/package/python-pyqt5/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_PYQT5
- 	bool "python-pyqt5"
- 	depends on BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_PYTHON_SIP
-+	select BR2_PACKAGE_PYTHON_PYQT5_SIP
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	help
- 	  Python bindings for Qt 5
--- 
-2.39.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIGN1cnJlbnQgVFJFRV9TSVRFIFVSTCBkb2Vzbid0IHdvcmsgYW55bW9yZS4KTW9yZW92ZXIg
+dGhlIFJFQURNRSBzdGF0ZXM6CiIKVGhlIG1haW4gZGlzdHJpYnV0aW9uIHNpdGUgZm9yIHRyZWUg
+aXMgaGVyZToKaHR0cDovL29sZG1hbnByb2dyYW1tZXIubmV0L3NvdXJjZS5waHA/ZGlyPXByb2pl
+Y3RzL3RyZWUKCkJhY2t1cCBHSVQgc2l0ZXMgYXJlOgpodHRwczovL2dpdGxhYi5jb20vT2xkTWFu
+UHJvZ3JhbW1lci91bml4LXRyZWUKaHR0cHM6Ly9naXRodWIuY29tL09sZC1NYW4tUHJvZ3JhbW1l
+ci90cmVlCgpPbGQgc2l0ZSBmb3IgYXMgbG9uZyBhcyBpdCBsYXN0czoKaHR0cDovL21hbWEuaW5k
+c3RhdGUuZWR1L3VzZXJzL2ljZS90cmVlLwpmdHA6Ly9tYW1hLmluZHN0YXRlLmVkdS9saW51eC90
+cmVlLwoiCgpVc2UgaHR0cDovL29sZG1hbnByb2dyYW1tZXIubmV0L3Rhci90cmVlLyBmb3IgVFJF
+RV9TSVRFCgpTaWduZWQtb2ZmLWJ5OiBTw6liYXN0aWVuIFN6eW1hbnNraSA8c2ViYXN0aWVuLnN6
+eW1hbnNraUBhcm1hZGV1cy5jb20+Ci0tLQogcGFja2FnZS90cmVlL0NvbmZpZy5pbiB8IDIgKy0K
+IHBhY2thZ2UvdHJlZS90cmVlLm1rICAgfCAyICstCiAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0
+aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3RyZWUvQ29uZmln
+LmluIGIvcGFja2FnZS90cmVlL0NvbmZpZy5pbgppbmRleCAyMzQ5OTVmMTA5ZjQuLjQ4MjFiNTg5
+NjA5NSAxMDA2NDQKLS0tIGEvcGFja2FnZS90cmVlL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL3Ry
+ZWUvQ29uZmlnLmluCkBAIC03LDcgKzcsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfVFJFRQogCSAg
+ZGlyY29sb3JzIGlmIHRoZSBMU19DT0xPUlMgZW52aXJvbm1lbnQgdmFyaWFibGUgaXMgc2V0IGFu
+ZAogCSAgb3V0cHV0IGlzIHRvIHR0eS4KIAotCSAgaHR0cDovL21hbWEuaW5kc3RhdGUuZWR1L3Vz
+ZXJzL2ljZS90cmVlLworCSAgaHR0cDovL29sZG1hbnByb2dyYW1tZXIubmV0L3NvdXJjZS5waHA/
+ZGlyPXByb2plY3RzL3RyZWUKIAogY29tbWVudCAidHJlZSBuZWVkcyBhIHRvb2xjaGFpbiB3LyB3
+Y2hhciIKIAlkZXBlbmRzIG9uICFCUjJfVVNFX1dDSEFSCmRpZmYgLS1naXQgYS9wYWNrYWdlL3Ry
+ZWUvdHJlZS5tayBiL3BhY2thZ2UvdHJlZS90cmVlLm1rCmluZGV4IDgzYTQyN2I3NGQzNy4uNDc5
+YTE3MmE3MmI4IDEwMDY0NAotLS0gYS9wYWNrYWdlL3RyZWUvdHJlZS5taworKysgYi9wYWNrYWdl
+L3RyZWUvdHJlZS5tawpAQCAtNiw3ICs2LDcgQEAKIAogVFJFRV9WRVJTSU9OID0gMi4xLjEKIFRS
+RUVfU09VUkNFID0gdHJlZS0kKFRSRUVfVkVSU0lPTikudGd6Ci1UUkVFX1NJVEUgPSBodHRwOi8v
+bWFtYS5pbmRzdGF0ZS5lZHUvdXNlcnMvaWNlL3RyZWUvc3JjCitUUkVFX1NJVEUgPSBodHRwOi8v
+b2xkbWFucHJvZ3JhbW1lci5uZXQvdGFyL3RyZWUKIFRSRUVfTElDRU5TRSA9IEdQTC0yLjArCiBU
+UkVFX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCiAKLS0gCjIuNDEuMAoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
