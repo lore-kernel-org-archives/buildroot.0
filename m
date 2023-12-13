@@ -4,55 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89C05C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 13 Dec 2023 21:16:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E063C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 13 Dec 2023 22:29:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF64A43624;
-	Wed, 13 Dec 2023 21:16:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF64A43624
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E1AE4365A;
+	Wed, 13 Dec 2023 22:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E1AE4365A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r9D9IIoJopIv; Wed, 13 Dec 2023 21:16:18 +0000 (UTC)
+	with ESMTP id ldxQdQ7edl-g; Wed, 13 Dec 2023 22:29:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE88943620;
-	Wed, 13 Dec 2023 21:16:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE88943620
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3097B1BF40E
- for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 21:16:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05FEA40488;
+	Wed, 13 Dec 2023 22:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05FEA40488
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CBF11BF3FF
+ for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 22:29:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 093E58228D
- for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 21:16:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 093E58228D
+ by smtp3.osuosl.org (Postfix) with ESMTP id D8ECC6146B
+ for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 22:29:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8ECC6146B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h51I9ssMfYQz for <buildroot@lists.busybox.net>;
- Wed, 13 Dec 2023 21:16:15 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA795813C7
- for <buildroot@buildroot.org>; Wed, 13 Dec 2023 21:16:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA795813C7
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DFD2A240004;
- Wed, 13 Dec 2023 21:16:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rDWaR-00BNXe-0Q;
- Wed, 13 Dec 2023 22:16:11 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20231211095614.182498-1-tanyuan@tinylab.org>
- <f63d5836-a4fe-467e-b928-184a4aafae26@mind.be>
-Date: Wed, 13 Dec 2023 22:16:11 +0100
-In-Reply-To: <f63d5836-a4fe-467e-b928-184a4aafae26@mind.be> (Arnout
- Vandecappelle's message of "Wed, 13 Dec 2023 22:03:39 +0100")
-Message-ID: <87cyv94xd0.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5dQSluYAbQn1 for <buildroot@lists.busybox.net>;
+ Wed, 13 Dec 2023 22:28:59 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E1EC60F2C
+ for <buildroot@buildroot.org>; Wed, 13 Dec 2023 22:28:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E1EC60F2C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 31C4760003;
+ Wed, 13 Dec 2023 22:28:55 +0000 (UTC)
+Date: Wed, 13 Dec 2023 23:28:54 +0100
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20231213232854.5242117f@windsurf>
+In-Reply-To: <20231204073443.1543587-1-neal.frager@amd.com>
+References: <20231204073443.1543587-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] Inquiry About Mirroring Methods for Buildroot
- Packages
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1702506535;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=0TUUelHEqrH4UH/dRkI1gT75ZhAKsLjA1P8xClbsWCk=;
+ b=dBKBW8RF6/I+4+fSrpoZ94i2+06ZKaFPs3A7IARnuNYs5R5foprqcb5apHmVcvI1gjJq7x
+ JtYxB4qpHicStZ4oMy1NN3Pz1D0Wl9f7zGz30aXHkhSRSu0gD22J9bLHzW5q9QvKtkPMsK
+ MDiiW+7ZkL/rDzSj2pux5IHyvNONnxJbU0PLYqkGnB2c1YA6m1SXFVgResLjvtGSY+MHpg
+ fxWiIu3FZ0v0Xnm5ogbQBVuFScLHH3KXHq2aLictypoeQVAcvc76mDWk/nkU3ZSvgMiNNw
+ qOE7nURvt10QP1e21N7bfWo2zTIghGLfz/mD99gX0U0rpcn5zsdm47p8uXKTIA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dBKBW8RF
+Subject: Re: [Buildroot] [PATCH v8 01/10] package/binutils-bare-metal: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +75,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin.1998@free.fr, Yuan Tan <tanyuan@tinylab.org>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: michal.simek@amd.com, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, Neal Frager via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkFybm91dCIgPT0gQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPiB3
-cml0ZXM6CgogPiBPbiAxMS8xMi8yMDIzIDEwOjU2LCBZdWFuIFRhbiB3cm90ZToKID4+IEhpLAog
-Pj4gSSBhbSByZWFjaGluZyBvdXQgdG8gaW5xdWlyZSBhYm91dCB0aGUgYmVzdCBwcmFjdGljZXMg
-Zm9yIG1pcnJvcmluZwogPj4gQnVpbGRyb290IHBhY2thZ2VzLiBXZSBhaW0gdG8gZXN0YWJsaXNo
-IGEgcmVsaWFibGUgbWlycm9yIGZvciB0aGVzZQogPj4gcGFja2FnZXMsIHBhcnRpY3VsYXJseSB0
-byBmYWNpbGl0YXRlIGFjY2VzcyBmb3IgdXNlcnMgaW4gcmVnaW9ucyBsaWtlCiA+PiBtYWlubGFu
-ZCBDaGluYSwgd2hlcmUgZG93bmxvYWRpbmcgcGFja2FnZXMgY2FuIHNvbWV0aW1lcyBiZSBjaGFs
-bGVuZ2luZy4KCiA+ICBXZSB1c2UgY2xvdWRmbGFyZSBDRE4uIEkganVzdCByZWFkIHVwIG9uIGl0
-IGFuZCBpdCBzZWVtcyB0aGVyZSdzIGEKID4gIHNlcGFyYXRlIENETiB0aGF0IG5lZWRzIHRvIGJl
-IGVuYWJsZWQgdG8gc2VydmUgQ2hpbmEuIFBlcmhhcHMgdGhhdAogPiBqdXN0IG5lZWRzIHRvIGJl
-IGVuYWJsZWQ/CiA+IFBldGVyPwoKSG1tLCBJIGd1ZXNzIHlvdSBhcmUgcmVmZXJyaW5nIHRvCmh0
-dHBzOi8vd3d3LmNsb3VkZmxhcmUuY29tL2FwcGxpY2F0aW9uLXNlcnZpY2VzL3Byb2R1Y3RzL2No
-aW5hLW5ldHdvcmsvPwoKSWYgc28sIHRoYXQgZG9lc24ndCBsb29rIGFzIGlmIHRoYXQgaXMganVz
-dCBzb21ldGhpbmcgeW91IGNhbiBlbmFibGUgZm9yCnRoZWlyIGZyZWUgb2ZmZXJpbmcsIEUuRy4g
-eW91IGFwcGFyZW50bHkgbmVlZCBhICJJQ1AgbGljZW5zZSI6CgpXaGF0IGlzIGFuIElDUCBsaWNl
-bnNlCgpJQ1AgaXMgdGhlIHNob3J0IG5hbWUgZm9yICJJbnRlcm5ldCBDb250ZW50IFByb3ZpZGVy
-Ii4gQWNjb3JkaW5nIHRvCkNoaW5lc2UgcmVndWxhdGlvbnMsIGFsbCB3ZWJzaXRlcyBob3N0ZWQg
-aW4gTWFpbmxhbmQgQ2hpbmEgb3IgY29udGVudApzZXJ2ZWQgZnJvbSBDaGluZXNlIGRhdGEgY2Vu
-dGVycyAod2hpY2ggaXMgdHJ1ZSBmb3Igb3VyIENoaW5hIE5ldHdvcmsKc2VydmljZSkgbmVlZHMg
-dG8gb2J0YWluIGFuIElDUCAiQmVpQW7lpIfmoYgiIG9yICJMaWNlbnNlIOivgSIgbnVtYmVyIGZv
-cgpldmVyeSBkb21haW4gdGhhdCBzZXJ2ZXMgY29udGVudCB0byB5b3VyIHBhZ2VzLiBUaGlzIG51
-bWJlciBuZWVkcyB0byBiZQpkaXNwbGF5ZWQgb24gdGhlIGZvb3RlciBvZiB5b3VyIHBhZ2VzLgoK
-ID4+IEkgaGF2ZSB0d28gc3VnZ2VzdGlvbnMgYW5kIHdvdWxkIGxpa2UgdG8ga25vdyBpZiBlaXRo
-ZXIgaXMgcG9zc2libGU6CiA+PiAxLiBDb3VsZCB5b3UgZW5hYmxlIHJzeW5jIGZvciBzb3VyY2Vz
-LmJ1aWxkcm9vdC5uZXQ/IFRoaXMgd291bGQgbWFrZQogPj4gaXQKID4+IGVhc2llciBmb3IgbWly
-cm9yIHNpdGVzIHRvIHN0YXkgdXBkYXRlZC4KID4+IDIuIElmIHJzeW5jIGlzbid0IGFuIG9wdGlv
-biwgd291bGQgaXQgYmUgb2theSB0byB1c2Ugd2dldCB0byBjbG9uZQogPj4gdGhlCiA+PiBlbnRp
-cmUgc291cmNlcy5idWlsZHJvb3QubmV0PwoKID4gIFdvdWxkbid0IGl0IGJlIGVhc2llciB0byBj
-b25zdHJ1Y3QgeW91ciBvd24gdmVyc2lvbiwgYnkgcnVubmluZyB0aGUKID4gIHNhbWUgc2NyaXB0
-IHRoYXQgUGV0ZXIgdXNlcyB0byB1cGRhdGUgYWN0dWFsIHNvdXJjZXMuYnVpbGRyb290Lm5ldD8K
-ID4gIFRob3VnaCBJSVVDIHRoYXQgc2NyaXB0IGlzIGEgYml0IG9mIGEgaGFjay4KCnllcywgaXQg
-aXMgYSBiaWcgaGFjay4gSXQgYmFzaWNhbGx5IHJ1bnMgbWFrZSBhbGx5ZXNwYWNrYWdlY29uZmln
-ICYmCm1ha2Ugc291cmNlLCBidXQgdGhlbiBkb2VzIGEgbnVtYmVyIG9mIG11dGF0aW9ucyBhcyB3
-ZWxsIHRvIHRyeSB0byBjYXRjaApwZXItYXJjaGl0ZWN0dXJlIHBhY2thZ2VzIG9yIHBhY2thZ2Vz
-IHdpdGggbXVsdGlwbGUgdmVyc2lvbnMuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello Neal,
+
+On Mon, 4 Dec 2023 07:34:33 +0000
+Neal Frager via buildroot <buildroot@buildroot.org> wrote:
+
+> This patch adds a new package for building binutils for a bare-metal toolchain.
+> The cpu architecture is defined by a toolchain-bare-metal virtual package.
+> While any cpu architecture could be used, the default configuration will be a
+> Xilinx microblaze little endian architecture, so that buildroot will be able
+> to build the microblaze firmware applications for zynqmp and versal.
+
+Thanks for sending this new iteration. I finally took some time to look
+into it, as I wanted to merge patches 1 to 4 today. I did some good
+progress in fixing a number of issues, and my current progress can be
+seen at:
+
+   https://github.com/tpetazzoni/buildroot/tree/bare-metal
+
+Do you think you could rebase your changes on top of this, and see if
+it all works fine? I of course encourage you to review the modified
+commits, to spot what I fixed/changed. If you agree with my changes,
+and they work for you, I think the changes in my branch are ready to be
+merged, so I will be happy to apply them.
+
+One thing that still bothers me is:
+
++define NEWLIB_BARE_METAL_FIXUP
++mv $(HOST_GCC_BARE_METAL_SYSROOT)/usr/$(NEWLIB_BARE_METAL_ARCH)/include \
++	$(HOST_GCC_BARE_METAL_SYSROOT)/usr/include
++mv $(HOST_GCC_BARE_METAL_SYSROOT)/usr/$(NEWLIB_BARE_METAL_ARCH)/lib \
++	$(HOST_GCC_BARE_METAL_SYSROOT)/usr/lib
++endef
++
++NEWLIB_BARE_METAL_POST_INSTALL_STAGING_HOOKS += NEWLIB_BARE_METAL_FIXUP
+
+But I was able to find that it's due to:
+
+tooldir='${exec_prefix}'/${target_noncanonical}
+
+in newlib's configure.ac script.
+
+And interestingly, this issue had already been spotted in an earlier
+(2015) attempt at bringing newlib support in Buildroot:
+
+https://lore.kernel.org/buildroot/1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com/#Z31newlib-0001-configure-tooldir-path.patch
+
+I'm not yet decided on what is the most appropriate: your hook that
+moves things around after installation, or patching the configure.ac
+script to get things at the right place from the start.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
