@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F80DC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 13 Dec 2023 16:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE840C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 13 Dec 2023 16:43:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4A5860F11;
-	Wed, 13 Dec 2023 16:43:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4A5860F11
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1DDC360F30;
+	Wed, 13 Dec 2023 16:43:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DDC360F30
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6OGSV3xprYys; Wed, 13 Dec 2023 16:43:23 +0000 (UTC)
+	with ESMTP id uT-VxPAPB9GG; Wed, 13 Dec 2023 16:43:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3374660ED1;
-	Wed, 13 Dec 2023 16:43:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3374660ED1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 013E31BF285
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2393A60F23;
+	Wed, 13 Dec 2023 16:43:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2393A60F23
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 257381BF97D
  for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 16:43:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB763408C5
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDA48400AB
  for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 16:43:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB763408C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDA48400AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pRvT7EEigrci for <buildroot@lists.busybox.net>;
- Wed, 13 Dec 2023 16:43:18 +0000 (UTC)
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1A4E3408BD
- for <buildroot@buildroot.org>; Wed, 13 Dec 2023 16:43:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A4E3408BD
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-a1915034144so939302266b.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q8thWIFYG9m6 for <buildroot@lists.busybox.net>;
+ Wed, 13 Dec 2023 16:43:17 +0000 (UTC)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7126440648
+ for <buildroot@buildroot.org>; Wed, 13 Dec 2023 16:43:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7126440648
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-a22fb5f71d9so162977066b.0
  for <buildroot@buildroot.org>; Wed, 13 Dec 2023 08:43:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702485796; x=1703090596;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=8z+ceXyPF1/MAwYsjmyC6gaYiGjfc2Cmajdh2SFPjek=;
- b=Sm09sOyk1lQQD8sm3+edu242YRrc5esVOzVsX3Sjq+O9DPLh2s9EbMuDEcfH69VF+N
- vfhnwMnY+HrTTs8gEXlUstdpZJcGvz5NH4LiT/7VW4W4KvwMLFZ/wPtcCDslPxlrgfU2
- JxNCFSoggA3KcBq9i9WDbKRdj9uwWnQDNGGVLV/T9SKcG+bnISGJOXZkb8e0vXoIzHvY
- g228BTG4i24vNnlbHV6YGdudbLUHsUIXafcdCd5x46XJfyWFiKBG0VL6XiEmu5+vLKel
- KmLBgiUgjMt7U0c7m2/by4GX7B/Ya4GLO5gH153mdPDrv7siy6obMYlfNjIu87k/xtTD
- wOYA==
-X-Gm-Message-State: AOJu0Yy5mRbCBLLEBtp8CWeu7dCzCZiYMQAcVJkEp+6U2lwIFn8HLxM8
- 85uKKm8XknYwiCsHvwK3tw6RKffp5BwHam6bG695hQ==
-X-Google-Smtp-Source: AGHT+IGGdeLS+B4zgHvS5KaAHmfxnFKikEN9OlONuGtGHssyY76+geue77bf0GrCdckqeoSDta86sQ==
-X-Received: by 2002:a17:907:9408:b0:a1d:4f7c:4428 with SMTP id
- dk8-20020a170907940800b00a1d4f7c4428mr5945690ejc.63.1702485795987; 
+ d=1e100.net; s=20230601; t=1702485795; x=1703090595;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=GEoS2Hpzeg2yutB4fvfblOlvap1mBGAsifOCojno0U8=;
+ b=HYH6GxmbtlDxw/Qe2CgKrS6Cre41KoqMvPBMsph33X1vRYtijdLPtDslgxhoSu25b3
+ ZJlPAK02hZlcfDBvT+vj4IK8uFeEqmg08wl/G2ePsttlm+/0oQD+MALD02edxDUil8Qb
+ ypxDRLUxUVJ2PjZtxyyDlBGkLaBzzwmF6wLhXisIbwToelGGtha7t1fFvmH97unXg8i7
+ onSh6nE67+7SSszWB4A8vVYycEqGgaxVyDg/u3o59zguc0k+LneiY8uE0euEH2tYfK3M
+ bPa8pwODghdst60RiEe7Hc8/vTcZpg1H93Q4bl2RjUM21v6RgRN+/SiKDngksQmf7mWL
+ 6GMw==
+X-Gm-Message-State: AOJu0YxqDTqD4dTlp9PiNNtoIUvcjE7QlKO1WZ+0wFwK9yLUCooTwS9I
+ hvN1ExOrmm/SpzQNIWOb2eb9246vFmbuTG8nrfecAw==
+X-Google-Smtp-Source: AGHT+IHrJJtV4unjsOVjZ19Av3KIOs5hgVzF3kjKHs2sqCRTlw/2eUeaPMOkPL1iinNFDkf2Cb2rrw==
+X-Received: by 2002:a17:906:5a6b:b0:a18:a5b1:31a9 with SMTP id
+ my43-20020a1709065a6b00b00a18a5b131a9mr9045138ejc.12.1702485795035; 
  Wed, 13 Dec 2023 08:43:15 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-80-182-13-188.pool80182.interbusiness.it. [80.182.13.188])
  by smtp.gmail.com with ESMTPSA id
- rl19-20020a1709076c1300b00a1f8bae93d3sm6017326ejc.215.2023.12.13.08.43.15
+ rl19-20020a1709076c1300b00a1f8bae93d3sm6017326ejc.215.2023.12.13.08.43.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 13 Dec 2023 08:43:15 -0800 (PST)
+ Wed, 13 Dec 2023 08:43:14 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Dec 2023 17:43:01 +0100
-Message-ID: <20231213164311.4180059-2-dario.binacchi@amarulasolutions.com>
+Date: Wed, 13 Dec 2023 17:43:00 +0100
+Message-ID: <20231213164311.4180059-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231213164311.4180059-1-dario.binacchi@amarulasolutions.com>
-References: <20231213164311.4180059-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1702485796; x=1703090596;
+ d=amarulasolutions.com; s=google; t=1702485795; x=1703090595;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=8z+ceXyPF1/MAwYsjmyC6gaYiGjfc2Cmajdh2SFPjek=;
- b=cyYHg4hMyfh7U6YKFpJ+La/QJJpSnr8mo6lVkAA96kgx+vDEGYQx021KZ9WynpTSHV
- O/ODFLhMsfNgMo36XIWjuHMBqe5jWGJya7h/hRt3teve2X9c5edGKCwnxa+W28KzO8+e
- QiavvFjZa9G7ve1MBDw4wZSxIYIp2YATmUnfw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=GEoS2Hpzeg2yutB4fvfblOlvap1mBGAsifOCojno0U8=;
+ b=Ro/5XfCO7nL6h1hPkAgNociL1EZjcaIIdR45L41dHl3/Aj80E3J2WxY/H8vwJH8Dac
+ gTdVTi1kwgYBbJ34xxwJKJfs/uzad3HRK9eEd3zkhgIgqTe93QvywwMEMAXPjLdQvgXh
+ Vn2qFiXc45bX3IOU5s3alFA3V+Itttw5vUpgw=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=cyYHg4hM
-Subject: [Buildroot] [PATCH v2 01/11] boot/ti-k3-core-secdev: new package
+ header.b=Ro/5XfCO
+Subject: [Buildroot] [PATCH v2 00/11] Add support for AM62x-SK HS-FS devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,94 +103,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a security development package containing tools for
-High-Security(HS) TI K3 platform devices.
+The SK-AM62B-P1 is the newest version of SK-AM62 which includes
+high-security field-securable (HS-FS) silicon to optionally customize keys
+and encryption for security applications.
+This requires enabling the BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS option,
+which, however, was buggy. This series fixes the errors and bumps the Linux
+kernel and U-Boot required for such a new device.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
+Dario Binacchi (11):
+  boot/ti-k3-core-secdev: new package
+  boot/ti-k3-image-gen: manage HS hardware
+  package/python-jsonschema: add host variant
+  package/python-attrs: add host variant
+  package/python-referencing: add host variant
+  package/python-rpds-py: add host variant
+  package/python-jsonschema-specifications: add host variant
+  boot/ti-k3-r5-loader: set binman environment
+  boot/uboot: set BINMAN_INDIRS for TI K3 DM
+  configs/ti_am62x_sk_defconfig: bump U-Boot version to 2023.10
+  configs/ti_am62x_sk_defconfig: bump Linux version to 6.6.1
+
  DEVELOPERS                                    |  1 +
+ board/ti/am62x-sk/genimage.cfg                |  7 ++-
+ board/ti/am62x-sk/post-build.sh               | 49 +++++++++++++++++++
+ board/ti/am62x-sk/post-image.sh               |  5 ++
  boot/Config.in                                |  1 +
- boot/ti-k3-core-secdev/Config.in              |  9 +++++++++
- boot/ti-k3-core-secdev/ti-k3-core-secdev.hash |  3 +++
- boot/ti-k3-core-secdev/ti-k3-core-secdev.mk   | 19 +++++++++++++++++++
- 5 files changed, 33 insertions(+)
+ boot/ti-k3-core-secdev/Config.in              |  9 ++++
+ boot/ti-k3-core-secdev/ti-k3-core-secdev.hash |  3 ++
+ boot/ti-k3-core-secdev/ti-k3-core-secdev.mk   | 19 +++++++
+ boot/ti-k3-image-gen/Config.in                |  1 +
+ boot/ti-k3-image-gen/ti-k3-image-gen.mk       | 16 +++++-
+ boot/ti-k3-r5-loader/Config.in                | 13 +++++
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk       |  1 +
+ boot/uboot/uboot.mk                           |  3 +-
+ configs/ti_am62x_sk_defconfig                 | 14 ++++--
+ package/Config.in.host                        |  5 ++
+ package/python-attrs/Config.in.host           |  8 +++
+ package/python-attrs/python-attrs.mk          |  6 +++
+ .../Config.in.host                            |  7 +++
+ .../python-jsonschema-specifications.mk       |  5 ++
+ package/python-jsonschema/Config.in.host      |  6 +++
+ .../python-jsonschema/python-jsonschema.mk    |  6 +++
+ package/python-referencing/Config.in.host     |  6 +++
+ .../python-referencing/python-referencing.mk  |  7 +++
+ package/python-rpds-py/Config.in.host         |  8 +++
+ package/python-rpds-py/python-rpds-py.mk      |  1 +
+ 25 files changed, 199 insertions(+), 8 deletions(-)
+ create mode 100755 board/ti/am62x-sk/post-build.sh
+ create mode 100755 board/ti/am62x-sk/post-image.sh
  create mode 100644 boot/ti-k3-core-secdev/Config.in
  create mode 100644 boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
  create mode 100644 boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
+ create mode 100644 package/python-attrs/Config.in.host
+ create mode 100644 package/python-jsonschema-specifications/Config.in.host
+ create mode 100644 package/python-jsonschema/Config.in.host
+ create mode 100644 package/python-referencing/Config.in.host
+ create mode 100644 package/python-rpds-py/Config.in.host
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ccc4d1bb321a..267153ede584 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -754,6 +754,7 @@ F:	package/xinetd/
- N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
- F:	board/bsh/
- F:	board/stmicroelectronics/stm32f769-disco/
-+F:	boot/ti-k3-core-secdev/
- F:	configs/imx8mn_bsh_smm_s2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
- F:	configs/stm32f769_disco_sd_defconfig
-diff --git a/boot/Config.in b/boot/Config.in
-index e5fdf7ad439e..18a7d268f95a 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -20,6 +20,7 @@ source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
- source "boot/syslinux/Config.in"
- source "boot/ti-k3-boot-firmware/Config.in"
-+source "boot/ti-k3-core-secdev/Config.in"
- source "boot/ti-k3-image-gen/Config.in"
- source "boot/ti-k3-r5-loader/Config.in"
- source "boot/uboot/Config.in"
-diff --git a/boot/ti-k3-core-secdev/Config.in b/boot/ti-k3-core-secdev/Config.in
-new file mode 100644
-index 000000000000..1749b7ab5fd9
---- /dev/null
-+++ b/boot/ti-k3-core-secdev/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_TARGET_TI_K3_CORE_SECDEV
-+	bool "ti-k3-core-secdev"
-+	depends on BR2_aarch64
-+	help
-+	  This package downloads and installs development tools for
-+	  High-Security(HS) TI K3 platforms (which include AM62x,
-+	  AM64x, AM65x and more).
-+
-+	  https://git.ti.com/cgit/security-development-tools/core-secdev-k3/
-diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash b/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
-new file mode 100644
-index 000000000000..0460cff6c59f
---- /dev/null
-+++ b/boot/ti-k3-core-secdev/ti-k3-core-secdev.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  b6d3bca0d561d055c6869c5564b06f2fb1b9f67e4ef180c2baf8a14a6a6afa06  core-secdev-k3-08.06.00.007.tar.xz
-+sha256  3e5cf4f5ab9f0333f46cd68fabede3f21e55de1a9e3c6ad673f241f4514d8369  k3-secdev-0.2-manifest.html
-diff --git a/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk b/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
-new file mode 100644
-index 000000000000..0127e6503d4d
---- /dev/null
-+++ b/boot/ti-k3-core-secdev/ti-k3-core-secdev.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# ti-k3-core-secdev
-+#
-+################################################################################
-+
-+TI_K3_CORE_SECDEV_VERSION = 08.06.00.007
-+TI_K3_CORE_SECDEV_SITE = https://git.ti.com/cgit/security-development-tools/core-secdev-k3/snapshot
-+TI_K3_CORE_SECDEV_SOURCE = core-secdev-k3-$(TI_K3_CORE_SECDEV_VERSION).tar.xz
-+TI_K3_CORE_SECDEV_INSTALL_IMAGES = YES
-+TI_K3_CORE_SECDEV_LICENSE = TI Text File, Apache-2.0
-+TI_K3_CORE_SECDEV_LICENSE_FILES = k3-secdev-0.2-manifest.html
-+
-+define TI_K3_CORE_SECDEV_INSTALL_IMAGES_CMDS
-+	cp -dpfr $(@D)/keys $(BINARIES_DIR)/
-+	cp -dpfr $(@D)/scripts $(BINARIES_DIR)/
-+endef
-+
-+$(eval $(generic-package))
 -- 
 2.43.0
 
