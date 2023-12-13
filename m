@@ -4,89 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0792C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 13 Dec 2023 21:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89C05C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 13 Dec 2023 21:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6740F40399;
-	Wed, 13 Dec 2023 21:03:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6740F40399
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF64A43624;
+	Wed, 13 Dec 2023 21:16:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF64A43624
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dmEUXGb1Tupi; Wed, 13 Dec 2023 21:03:49 +0000 (UTC)
+	with ESMTP id r9D9IIoJopIv; Wed, 13 Dec 2023 21:16:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E3CC404B9;
-	Wed, 13 Dec 2023 21:03:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E3CC404B9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 627391BF475
- for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 21:03:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE88943620;
+	Wed, 13 Dec 2023 21:16:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE88943620
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3097B1BF40E
+ for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 21:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A9E9615A3
- for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 21:03:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A9E9615A3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 093E58228D
+ for <buildroot@lists.busybox.net>; Wed, 13 Dec 2023 21:16:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 093E58228D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3EPKVv6lOstJ for <buildroot@lists.busybox.net>;
- Wed, 13 Dec 2023 21:03:45 +0000 (UTC)
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7D7CB607A3
- for <buildroot@buildroot.org>; Wed, 13 Dec 2023 21:03:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D7CB607A3
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-55266a38808so151170a12.1
- for <buildroot@buildroot.org>; Wed, 13 Dec 2023 13:03:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702501422; x=1703106222;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=fxSenTQKvrJ7Cq51SBrveuWGys40K+i1rlYGwcHDwz4=;
- b=XqOTTmtuF2uIxcARuUjOzk+r8M4QOkfPWgr2x6fGE0Hkr1eXA6ArdXgp+GvsqtSrgk
- vbNMv7DpvbKyE+tuVb5XZdYbqh4GVjqOc6tiYKOeYsSSjVgLcx2wbi31nt0QK7tBqs5R
- YdtnIA8uiNK0z9XYYE0RE/1T9cXeIkIosDiNIPTvjl1BNP4r9ffln1EqLgq2OD1XoO4b
- a8RGR5y1Gf9al8vz9CpecYmZ4xRx4f8tGHtWWvS2C+JA6ejmAR1kZN/TM1uVaoWbbOc1
- 3xF+phDXfgWbdLzKUWonE8PxODs0zHP4A/BTvlXBUSMKSDt1/S/gEql6LBwBI10q5lI4
- yhMA==
-X-Gm-Message-State: AOJu0YzEshqLE8jZacmb7YyIDgrMI9G0yCt5fTXG86/KaBqv0LeO17oG
- /vUz5F5REj1lH//R0wRAbazwc4fSDRc2j7iaER8=
-X-Google-Smtp-Source: AGHT+IE7Y1t76H2p306X1nHRGTKq7Q2uVpY5twj9sp0WIMAqDd9lz+xUg0OU7ekAr9pm8/MHW5Go6w==
-X-Received: by 2002:a17:907:da0:b0:a18:692c:cff7 with SMTP id
- go32-20020a1709070da000b00a18692ccff7mr4845449ejc.44.1702501422461; 
- Wed, 13 Dec 2023 13:03:42 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- vg16-20020a170907d31000b00a1cdf29af64sm8345924ejc.45.2023.12.13.13.03.41
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 13 Dec 2023 13:03:41 -0800 (PST)
-Message-ID: <f63d5836-a4fe-467e-b928-184a4aafae26@mind.be>
-Date: Wed, 13 Dec 2023 22:03:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: Yuan Tan <tanyuan@tinylab.org>, buildroot@buildroot.org,
- yann.morin.1998@free.fr, Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h51I9ssMfYQz for <buildroot@lists.busybox.net>;
+ Wed, 13 Dec 2023 21:16:15 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA795813C7
+ for <buildroot@buildroot.org>; Wed, 13 Dec 2023 21:16:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA795813C7
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DFD2A240004;
+ Wed, 13 Dec 2023 21:16:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rDWaR-00BNXe-0Q;
+ Wed, 13 Dec 2023 22:16:11 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 References: <20231211095614.182498-1-tanyuan@tinylab.org>
-In-Reply-To: <20231211095614.182498-1-tanyuan@tinylab.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1702501422; x=1703106222; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=fxSenTQKvrJ7Cq51SBrveuWGys40K+i1rlYGwcHDwz4=;
- b=cLHv5dB1jY3ev8PfyNC6uogiykrtDBtHcpJbrXlZOHB8NU/MGTLuoSFYmRMB2lFiF4
- HPJ7C4x07gpO9X1spp46YTVaejoOGR2d3xILqHmwQ2H1mRXI8/ZsL2t9CBkMW2T7kdOE
- 6sDrcS9xxCoe1pcfCMqJAnRDskHN5P2xeXjt9MP0yXXe4mtrzy47cZ4PHQwx52PAHixj
- PiVl/DCiKwyUkNTlFQrNAyUfPhcumTViYDVQP7NX3DHJijYMwG3dNvO/NwPhXe5KRGMv
- S0xlHNRxGWT33mST3QPpSw/fwbDmwRTddEIVNPmDAUVq671XaXll+FLjMFGB9NldgAqy
- RPew==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cLHv5dB1
+ <f63d5836-a4fe-467e-b928-184a4aafae26@mind.be>
+Date: Wed, 13 Dec 2023 22:16:11 +0100
+In-Reply-To: <f63d5836-a4fe-467e-b928-184a4aafae26@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 13 Dec 2023 22:03:39 +0100")
+Message-ID: <87cyv94xd0.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
 Subject: Re: [Buildroot] Inquiry About Mirroring Methods for Buildroot
  Packages
 X-BeenThere: buildroot@buildroot.org
@@ -100,57 +64,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: yann.morin.1998@free.fr, Yuan Tan <tanyuan@tinylab.org>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 11/12/2023 10:56, Yuan Tan wrote:
-> Hi,
-> 
-> I am reaching out to inquire about the best practices for mirroring
-> Buildroot packages. We aim to establish a reliable mirror for these
-> packages, particularly to facilitate access for users in regions like
-> mainland China, where downloading packages can sometimes be challenging.
-
-  We use cloudflare CDN. I just read up on it and it seems there's a separate 
-CDN that needs to be enabled to serve China. Perhaps that just needs to be enabled?
-Peter?
-
-> I have two suggestions and would like to know if either is possible:
-> 
-> 1. Could you enable rsync for sources.buildroot.net? This would make it
-> easier for mirror sites to stay updated.
-> 
-> 2. If rsync isn't an option, would it be okay to use wget to clone the
-> entire sources.buildroot.net?
-
-  Wouldn't it be easier to construct your own version, by running the same 
-script that Peter uses to update actual sources.buildroot.net? Though IIUC that 
-script is a bit of a hack.
-
-  Regards,
-  Arnout
-
-> I would also like to inquire if there are any licensing or authorization
-> considerations we should be aware of when mirroring Buildroot.
-> 
-> Thank you for taking the time to consider these options. I greatly
-> appreciate any guidance or suggestions you can provide.
-> 
-> Best regards,
-> 
-> Yuan
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkFybm91dCIgPT0gQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPiB3
+cml0ZXM6CgogPiBPbiAxMS8xMi8yMDIzIDEwOjU2LCBZdWFuIFRhbiB3cm90ZToKID4+IEhpLAog
+Pj4gSSBhbSByZWFjaGluZyBvdXQgdG8gaW5xdWlyZSBhYm91dCB0aGUgYmVzdCBwcmFjdGljZXMg
+Zm9yIG1pcnJvcmluZwogPj4gQnVpbGRyb290IHBhY2thZ2VzLiBXZSBhaW0gdG8gZXN0YWJsaXNo
+IGEgcmVsaWFibGUgbWlycm9yIGZvciB0aGVzZQogPj4gcGFja2FnZXMsIHBhcnRpY3VsYXJseSB0
+byBmYWNpbGl0YXRlIGFjY2VzcyBmb3IgdXNlcnMgaW4gcmVnaW9ucyBsaWtlCiA+PiBtYWlubGFu
+ZCBDaGluYSwgd2hlcmUgZG93bmxvYWRpbmcgcGFja2FnZXMgY2FuIHNvbWV0aW1lcyBiZSBjaGFs
+bGVuZ2luZy4KCiA+ICBXZSB1c2UgY2xvdWRmbGFyZSBDRE4uIEkganVzdCByZWFkIHVwIG9uIGl0
+IGFuZCBpdCBzZWVtcyB0aGVyZSdzIGEKID4gIHNlcGFyYXRlIENETiB0aGF0IG5lZWRzIHRvIGJl
+IGVuYWJsZWQgdG8gc2VydmUgQ2hpbmEuIFBlcmhhcHMgdGhhdAogPiBqdXN0IG5lZWRzIHRvIGJl
+IGVuYWJsZWQ/CiA+IFBldGVyPwoKSG1tLCBJIGd1ZXNzIHlvdSBhcmUgcmVmZXJyaW5nIHRvCmh0
+dHBzOi8vd3d3LmNsb3VkZmxhcmUuY29tL2FwcGxpY2F0aW9uLXNlcnZpY2VzL3Byb2R1Y3RzL2No
+aW5hLW5ldHdvcmsvPwoKSWYgc28sIHRoYXQgZG9lc24ndCBsb29rIGFzIGlmIHRoYXQgaXMganVz
+dCBzb21ldGhpbmcgeW91IGNhbiBlbmFibGUgZm9yCnRoZWlyIGZyZWUgb2ZmZXJpbmcsIEUuRy4g
+eW91IGFwcGFyZW50bHkgbmVlZCBhICJJQ1AgbGljZW5zZSI6CgpXaGF0IGlzIGFuIElDUCBsaWNl
+bnNlCgpJQ1AgaXMgdGhlIHNob3J0IG5hbWUgZm9yICJJbnRlcm5ldCBDb250ZW50IFByb3ZpZGVy
+Ii4gQWNjb3JkaW5nIHRvCkNoaW5lc2UgcmVndWxhdGlvbnMsIGFsbCB3ZWJzaXRlcyBob3N0ZWQg
+aW4gTWFpbmxhbmQgQ2hpbmEgb3IgY29udGVudApzZXJ2ZWQgZnJvbSBDaGluZXNlIGRhdGEgY2Vu
+dGVycyAod2hpY2ggaXMgdHJ1ZSBmb3Igb3VyIENoaW5hIE5ldHdvcmsKc2VydmljZSkgbmVlZHMg
+dG8gb2J0YWluIGFuIElDUCAiQmVpQW7lpIfmoYgiIG9yICJMaWNlbnNlIOivgSIgbnVtYmVyIGZv
+cgpldmVyeSBkb21haW4gdGhhdCBzZXJ2ZXMgY29udGVudCB0byB5b3VyIHBhZ2VzLiBUaGlzIG51
+bWJlciBuZWVkcyB0byBiZQpkaXNwbGF5ZWQgb24gdGhlIGZvb3RlciBvZiB5b3VyIHBhZ2VzLgoK
+ID4+IEkgaGF2ZSB0d28gc3VnZ2VzdGlvbnMgYW5kIHdvdWxkIGxpa2UgdG8ga25vdyBpZiBlaXRo
+ZXIgaXMgcG9zc2libGU6CiA+PiAxLiBDb3VsZCB5b3UgZW5hYmxlIHJzeW5jIGZvciBzb3VyY2Vz
+LmJ1aWxkcm9vdC5uZXQ/IFRoaXMgd291bGQgbWFrZQogPj4gaXQKID4+IGVhc2llciBmb3IgbWly
+cm9yIHNpdGVzIHRvIHN0YXkgdXBkYXRlZC4KID4+IDIuIElmIHJzeW5jIGlzbid0IGFuIG9wdGlv
+biwgd291bGQgaXQgYmUgb2theSB0byB1c2Ugd2dldCB0byBjbG9uZQogPj4gdGhlCiA+PiBlbnRp
+cmUgc291cmNlcy5idWlsZHJvb3QubmV0PwoKID4gIFdvdWxkbid0IGl0IGJlIGVhc2llciB0byBj
+b25zdHJ1Y3QgeW91ciBvd24gdmVyc2lvbiwgYnkgcnVubmluZyB0aGUKID4gIHNhbWUgc2NyaXB0
+IHRoYXQgUGV0ZXIgdXNlcyB0byB1cGRhdGUgYWN0dWFsIHNvdXJjZXMuYnVpbGRyb290Lm5ldD8K
+ID4gIFRob3VnaCBJSVVDIHRoYXQgc2NyaXB0IGlzIGEgYml0IG9mIGEgaGFjay4KCnllcywgaXQg
+aXMgYSBiaWcgaGFjay4gSXQgYmFzaWNhbGx5IHJ1bnMgbWFrZSBhbGx5ZXNwYWNrYWdlY29uZmln
+ICYmCm1ha2Ugc291cmNlLCBidXQgdGhlbiBkb2VzIGEgbnVtYmVyIG9mIG11dGF0aW9ucyBhcyB3
+ZWxsIHRvIHRyeSB0byBjYXRjaApwZXItYXJjaGl0ZWN0dXJlIHBhY2thZ2VzIG9yIHBhY2thZ2Vz
+IHdpdGggbXVsdGlwbGUgdmVyc2lvbnMuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
