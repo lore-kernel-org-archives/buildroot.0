@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FC59C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 19:25:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F070C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 19:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A0C883D4B;
-	Thu, 14 Dec 2023 19:25:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A0C883D4B
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAE7680584;
+	Thu, 14 Dec 2023 19:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAE7680584
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C9tcuFElKs-v; Thu, 14 Dec 2023 19:25:13 +0000 (UTC)
+	with ESMTP id JvoSJyp8OdC9; Thu, 14 Dec 2023 19:25:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69E7C83C1C;
-	Thu, 14 Dec 2023 19:25:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69E7C83C1C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 65D111BF3EA
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 19:24:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF51680C1D;
+	Thu, 14 Dec 2023 19:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF51680C1D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5D21BF3EA
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 19:24:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BE0741625
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 19:24:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BE0741625
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD72A83BF4
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 19:24:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD72A83BF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A8pb4rqIMSTo for <buildroot@lists.busybox.net>;
- Thu, 14 Dec 2023 19:24:45 +0000 (UTC)
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 39443416D1
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 19:24:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39443416D1
-Received: by mail-io1-xd31.google.com with SMTP id
- ca18e2360f4ac-7b72d574399so395153939f.0
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 11:24:45 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id urXKCvTqVbDz for <buildroot@lists.busybox.net>;
+ Thu, 14 Dec 2023 19:24:46 +0000 (UTC)
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BDE2F83BC5
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 19:24:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDE2F83BC5
+Received: by mail-il1-x12d.google.com with SMTP id
+ e9e14a558f8ab-35f54ebbe01so14970985ab.0
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 11:24:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702581883; x=1703186683;
+ d=1e100.net; s=20230601; t=1702581885; x=1703186685;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=2XtaoyywSOYuRoqZUTTjQuO3UJT1liYox6iM0mJQPKI=;
- b=nwUIVSe7Xh1NXT0+/34cI7eamMLe6qIc+1hDt9ZuaJTqQkbgshXGeUrf7oVROKksRS
- i7yiSRokiPAttmnjzCG9vZFNxGiTJQ+yjk42ib/112VURu35Bo5GUVx5i6W+e0BWSNUz
- AXjGs+Heq1YRLHpA4KU6eTs+kEg3EnUFwINF+Ahd5lABa8Gy01DuQop2MmgT6aFpHEZA
- At+KJJzf5MWYBpfpSaEv6EMM/XW29FYM5nbwmqThYXo7zHF1SKD2ls3wKCvAcLJiCA9W
- RTUUtVRPxhn0smtIgHHVBnI60N4XjJaf0sw/SKh2+wroO6G1aoTqklYXHB+ZY9TCGoV4
- vIng==
-X-Gm-Message-State: AOJu0YyuVNtaLAwRg9XtqTYSzC9UuHory6QkPjyYISFGOysmdEC4qCE5
- gr9w8a6G5Nyq5duPzSqdfMMLVx4VipF+yw==
-X-Google-Smtp-Source: AGHT+IEPf5/Mtno1OTiGp1EBKKBsprBXXDiYtdLGnBbeFa0nyPFN+AuyxaLXApe2HqTP4oDkGK0rDQ==
-X-Received: by 2002:a6b:dd19:0:b0:7b7:1db4:be12 with SMTP id
- f25-20020a6bdd19000000b007b71db4be12mr11589129ioc.27.1702581883667; 
- Thu, 14 Dec 2023 11:24:43 -0800 (PST)
+ bh=33Y3LTVQw2Y3X6uVADnAH46hY068uX0CCXzU2Kiz2cQ=;
+ b=GIm+D0xx4banrnP5r3cpiLVZnZGxOBaxSD7bPVTEV7kobzZTd82qtGXneAS5m+ZaSB
+ QoWl/cNEDDUzuaJsf1aU9MiUhgFIGQf6emekY4UHfsG2aMBtoOcdYPaeff0AVlJ0I364
+ d5mNxFWsMi1TIF8J9PZ+xJ49MY6w7RDN1Z5QfrHo44IKOUXC7W6U+jpekUWGn3ArC1rx
+ dtupPLeidqmy2DAxRsSF10H2eM1kFQrWbO2CpoSBeGTpvPystR7T5+pwtukv99YwjOcr
+ GnPFCrqL3cTpzMVW6zdIrsO3tco9x02WGHXkYoM2WD4svnmTvZwNS2BbtrlAhYhfdDh9
+ Y2dg==
+X-Gm-Message-State: AOJu0YxWngDDQECRfjyuepKbejZ1IWcF+iFUlaY+fL7jhmLzP0LAwyhR
+ RbzOtMnFyXNjZerLy+Xw21hToYLQJkibMw==
+X-Google-Smtp-Source: AGHT+IHF0q2fbFZa89E7suB9pxBBjv/VA/u+UWgcmGc5wtF0ydaNgoW6igObI/c8y1AWDinRNyOXMg==
+X-Received: by 2002:a92:ca89:0:b0:35f:772b:b89d with SMTP id
+ t9-20020a92ca89000000b0035f772bb89dmr2645049ilo.62.1702581885390; 
+ Thu, 14 Dec 2023 11:24:45 -0800 (PST)
 Received: from james-x399.localdomain (97-118-228-42.hlrn.qwest.net.
  [97.118.228.42]) by smtp.gmail.com with ESMTPSA id
  c16-20020a0290d0000000b00468e80fa254sm1345615jag.148.2023.12.14.11.24.43
@@ -63,28 +63,28 @@ Received: from james-x399.localdomain (97-118-228-42.hlrn.qwest.net.
  Thu, 14 Dec 2023 11:24:43 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Dec 2023 12:24:35 -0700
-Message-Id: <20231214192439.259156-3-james.hilliard1@gmail.com>
+Date: Thu, 14 Dec 2023 12:24:36 -0700
+Message-Id: <20231214192439.259156-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231214192439.259156-1-james.hilliard1@gmail.com>
 References: <20231214192439.259156-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1702581883; x=1703186683; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1702581885; x=1703186685; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=2XtaoyywSOYuRoqZUTTjQuO3UJT1liYox6iM0mJQPKI=;
- b=mKA0Q+DhRhNzDQ74MmbuYj8bMrLKc1Zrr/2/iMvIIe/Ty0QNedEdbWD1cqpn0y2wfL
- KTDDWnm8FlEQrCDNWuboEqLlgqVAEWnpd2i0Opkr4YUDHLAgEEeQzQnS5BEsgYkAmwgA
- j0tR4yK0f+TntG1lUvqIIAWDK+skYY/24gR5SYk0scFdzl4m396pAU+0B5DHkt8MceK+
- leWr5F1PsvtrohDT4xox63Qv9zL4P7CWDQQM8VMbcTqcSPMHcUHBxZrraOmMnmiRFIn4
- 9Qyi8eQQyNAHklVFCupuq2fubF9gpPkCj83Ztf0aGnXF02V1njx6AEYAeYmwhEgIeNbf
- eERA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=33Y3LTVQw2Y3X6uVADnAH46hY068uX0CCXzU2Kiz2cQ=;
+ b=Hl5RCgZFcI29OYkLcz7/FFqenLPMnWwwTUPWnHU2FcfwRYhJVTxJr5yBCZ7GoS+aG5
+ 5HvsAc2caVIH/j1dSOqzLwUatbgUl3WfEGnwlebq2uJJAHHWJ9LtIYvIP0xrJjjIMSQG
+ NPXpSYPNZzvnbs+zoAkkOKG/jDvZctRzqaoQVCGCru8E1jBeOhPeVVGtj5OH0GrfdbKV
+ zWkSdtPah4NAbsWyIi/qsFTM2NE/+MIqp6KNga6upz38RQZsL5ZXfJqj1OF1+y07l5L0
+ JlnStaP/Pkle8ACVoH0tVSK7jZ/6R0Oj/OJfm5G4Gc9d4P/Ui7z1lP/XwNjKYdi3sa8X
+ 3Clw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mKA0Q+Dh
-Subject: [Buildroot] [PATCH 3/7] package/python-cachetools: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=Hl5RCgZF
+Subject: [Buildroot] [PATCH 4/7] package/python-google-auth: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,68 +106,71 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                                |  1 +
- package/python-cachetools/Config.in              |  6 ++++++
- package/python-cachetools/python-cachetools.hash |  5 +++++
- package/python-cachetools/python-cachetools.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-cachetools/Config.in
- create mode 100644 package/python-cachetools/python-cachetools.hash
- create mode 100644 package/python-cachetools/python-cachetools.mk
+ package/Config.in                                  |  1 +
+ package/python-google-auth/Config.in               |  9 +++++++++
+ package/python-google-auth/python-google-auth.hash |  5 +++++
+ package/python-google-auth/python-google-auth.mk   | 14 ++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/python-google-auth/Config.in
+ create mode 100644 package/python-google-auth/python-google-auth.hash
+ create mode 100644 package/python-google-auth/python-google-auth.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5a6de1d1b7..21f711c456 100644
+index 21f711c456..8bc18e9b5d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1008,6 +1008,7 @@ menu "External python modules"
- 	source "package/python-brotli/Config.in"
- 	source "package/python-bsdiff4/Config.in"
- 	source "package/python-cached-property/Config.in"
-+	source "package/python-cachetools/Config.in"
- 	source "package/python-can/Config.in"
- 	source "package/python-canopen/Config.in"
- 	source "package/python-cbor/Config.in"
-diff --git a/package/python-cachetools/Config.in b/package/python-cachetools/Config.in
+@@ -1093,6 +1093,7 @@ menu "External python modules"
+ 	source "package/python-gitdb2/Config.in"
+ 	source "package/python-gnupg/Config.in"
+ 	source "package/python-gobject/Config.in"
++	source "package/python-google-auth/Config.in"
+ 	source "package/python-gpiozero/Config.in"
+ 	source "package/python-greenlet/Config.in"
+ 	source "package/python-grpcio/Config.in"
+diff --git a/package/python-google-auth/Config.in b/package/python-google-auth/Config.in
 new file mode 100644
-index 0000000000..550e3d2560
+index 0000000000..eb5be9cda5
 --- /dev/null
-+++ b/package/python-cachetools/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CACHETOOLS
-+	bool "python-cachetools"
++++ b/package/python-google-auth/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_GOOGLE_AUTH
++	bool "python-google-auth"
++	select BR2_PACKAGE_PYTHON_CACHETOOLS # runtime
++	select BR2_PACKAGE_PYTHON_PYASN1_MODULES # runtime
++	select BR2_PACKAGE_PYTHON_RSA # runtime
 +	help
-+	  Extensible memoizing collections and decorators.
++	  Google Authentication Library.
 +
-+	  https://github.com/tkem/cachetools/
-diff --git a/package/python-cachetools/python-cachetools.hash b/package/python-cachetools/python-cachetools.hash
++	  https://github.com/googleapis/google-auth-library-python
+diff --git a/package/python-google-auth/python-google-auth.hash b/package/python-google-auth/python-google-auth.hash
 new file mode 100644
-index 0000000000..7b6b939191
+index 0000000000..2f965edc91
 --- /dev/null
-+++ b/package/python-cachetools/python-cachetools.hash
++++ b/package/python-google-auth/python-google-auth.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/cachetools/json
-+md5  5317c13b69c4021e925a2fbbc199bcc9  cachetools-5.3.2.tar.gz
-+sha256  086ee420196f7b2ab9ca2db2520aca326318b68fe5ba8bc4d49cca91add450f2  cachetools-5.3.2.tar.gz
++# md5, sha256 from https://pypi.org/pypi/google-auth/json
++md5  40413bc699c6e02d7732e7e09e8cec0c  google-auth-2.25.2.tar.gz
++sha256  42f707937feb4f5e5a39e6c4f343a17300a459aaf03141457ba505812841cc40  google-auth-2.25.2.tar.gz
 +# Locally computed sha256 checksums
-+sha256  76260c1370a7d41d5fac71a27d781f3add5d7249adfbbfa930846d2d9e47dbd5  LICENSE
-diff --git a/package/python-cachetools/python-cachetools.mk b/package/python-cachetools/python-cachetools.mk
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-google-auth/python-google-auth.mk b/package/python-google-auth/python-google-auth.mk
 new file mode 100644
-index 0000000000..c841e0761f
+index 0000000000..8638a2ca46
 --- /dev/null
-+++ b/package/python-cachetools/python-cachetools.mk
++++ b/package/python-google-auth/python-google-auth.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-cachetools
++# python-google-auth
 +#
 +################################################################################
 +
-+PYTHON_CACHETOOLS_VERSION = 5.3.2
-+PYTHON_CACHETOOLS_SOURCE = cachetools-$(PYTHON_CACHETOOLS_VERSION).tar.gz
-+PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/10/21/1b6880557742c49d5b0c4dcf0cf544b441509246cdd71182e0847ac859d5
-+PYTHON_CACHETOOLS_SETUP_TYPE = setuptools
-+PYTHON_CACHETOOLS_LICENSE = MIT
-+PYTHON_CACHETOOLS_LICENSE_FILES = LICENSE
++PYTHON_GOOGLE_AUTH_VERSION = 2.25.2
++PYTHON_GOOGLE_AUTH_SOURCE = google-auth-$(PYTHON_GOOGLE_AUTH_VERSION).tar.gz
++PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/05/77/84608894384e02f3b0b2621b09ecb0b85e57ba368f13eecbbc43cd1b8719
++PYTHON_GOOGLE_AUTH_SETUP_TYPE = setuptools
++PYTHON_GOOGLE_AUTH_LICENSE = Apache-2.0
++PYTHON_GOOGLE_AUTH_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
