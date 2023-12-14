@@ -1,90 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 182BAC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 19:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDDFCC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 19:53:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A0B882F40;
-	Thu, 14 Dec 2023 19:26:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A0B882F40
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B79B40168;
+	Thu, 14 Dec 2023 19:53:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B79B40168
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lavSAo2cl7-5; Thu, 14 Dec 2023 19:26:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3l1kraRelH-S; Thu, 14 Dec 2023 19:53:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B96B83D6A;
-	Thu, 14 Dec 2023 19:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B96B83D6A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 836871BF3EA
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 19:24:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF5E44026A;
+	Thu, 14 Dec 2023 19:53:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF5E44026A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C3D41BF3EA
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 19:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69FB283BDD
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 19:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69FB283BDD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A6204026A
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 19:53:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A6204026A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ga7r21FuewMC for <buildroot@lists.busybox.net>;
- Thu, 14 Dec 2023 19:24:51 +0000 (UTC)
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4FC8483518
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 19:24:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FC8483518
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-7b3b819f8a3so401619839f.1
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 11:24:51 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rWxVbjbLf8kx for <buildroot@lists.busybox.net>;
+ Thu, 14 Dec 2023 19:53:26 +0000 (UTC)
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AAF9D40168
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 19:53:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAF9D40168
+Received: by mail-pj1-x102c.google.com with SMTP id
+ 98e67ed59e1d1-28b011857f0so1123187a91.2
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 11:53:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702581890; x=1703186690;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=PWfaGBcX0VuVKruVhTcIpZ2ToQ6Jjb+qwYe5WjUCBiY=;
- b=bDuej4OlYViaOS3iTHcAethHYuwQkbm4GNcO+sKSgWrj2lg+Uu0UR95T/s9Uyzo2DI
- C0TFa5q8U2afV8nj5J3Bv84H/PXXanUSULyMJdcFZSK9cNj0d54e1zNtItN35ORglZhT
- 6Y5vDGrcyo+qAsw5+KsiE3FQnbT+BBcYhLd4oQ5sLbn70ckt3XtkIs/zB/k1E51iuFnm
- OD0YDHRlqDS/KjrIN+iuvfNJzTl23N1Jk4bA5nT6bDKunRjfIk73yjthasETCnd63Us0
- x+/uGRaLYXj5pOvxcIgdQTQTsl+pBZlr6c0WEzpyAIgjWzgGkf8UDMUWVNnw6XoDeR3p
- 5u/w==
-X-Gm-Message-State: AOJu0YyRzy4z0dmvg+xYjHZFbkAYAw82/+lTsTXQpXK/PsHgB8EAbGBM
- 6DX5KtHglvIzH2QWjp+BAX2/RZqHE3/DuQ==
-X-Google-Smtp-Source: AGHT+IFusU7FyaFV4AVtqFAnYzr007bZBYHkdP7eGCxhkKCw/Rgf7zIi1r8bLn7ALuS0aezYy4mKkQ==
-X-Received: by 2002:a6b:c90b:0:b0:7b7:1307:39f1 with SMTP id
- z11-20020a6bc90b000000b007b7130739f1mr8077488iof.33.1702581889896; 
- Thu, 14 Dec 2023 11:24:49 -0800 (PST)
-Received: from james-x399.localdomain (97-118-228-42.hlrn.qwest.net.
- [97.118.228.42]) by smtp.gmail.com with ESMTPSA id
- c16-20020a0290d0000000b00468e80fa254sm1345615jag.148.2023.12.14.11.24.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Dec 2023 11:24:48 -0800 (PST)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 14 Dec 2023 12:24:39 -0700
-Message-Id: <20231214192439.259156-7-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231214192439.259156-1-james.hilliard1@gmail.com>
-References: <20231214192439.259156-1-james.hilliard1@gmail.com>
+ d=1e100.net; s=20230601; t=1702583606; x=1703188406;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=TvHjFatt1k5aZzUjz55CT655hrpeLPbfOC7Ktv+8/ZI=;
+ b=Gfbndmn3DVNqydIgc/wMGHtkgQr3mmcFj+kqcSg2O4zKbgNh+S1V2UYM5SWes2jXWR
+ 7BohMpSJPhSBhxB9PDxb5/8H6CvM5XSoy4T+5mvspC7ekRVou41xblGJdLrO6ienbrTp
+ 17mdfVqfK7jpxwJ+zs9sCbl5nRF9GPwHhLKOl2qz+fVPrOnswlHvs7f44jR73HjJSHXD
+ 66Ef69fAXP8p+yAJuHx/6ih1lktM8ed/chjyPWwf6+WChU1Ppgril5HFhRGYliiNrtA4
+ cEze6VzpYPYQLnjkOSUYNnFXTW/483TJslfO8dKkF+jA6f04sZwJkeKN7fNQM4wlJioY
+ fcww==
+X-Gm-Message-State: AOJu0YxivVSPZA2y7ERBcWkoU941JhWhZ6S2ySZQEClnOcx5I4yMLhx3
+ n6KKY5wZpRYrZGaNMmPTehAciGJBzPPgvnjD1S0/jg==
+X-Google-Smtp-Source: AGHT+IGYkUijYpM6tzuFlPuG1P4ix5T0a99mxuCczrzfGiqQXvlC4CoEP/oT5DfizG4JwtUTZw0lQhKLVNGF3y5G7G4=
+X-Received: by 2002:a17:90b:1997:b0:28b:7b0:115b with SMTP id
+ mv23-20020a17090b199700b0028b07b0115bmr776460pjb.8.1702583605938; Thu, 14 Dec
+ 2023 11:53:25 -0800 (PST)
 MIME-Version: 1.0
+References: <20231213164311.4180059-1-dario.binacchi@amarulasolutions.com>
+ <20231213164311.4180059-9-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20231213164311.4180059-9-dario.binacchi@amarulasolutions.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 14 Dec 2023 20:53:14 +0100
+Message-ID: <CAAE6iEUgwA3W75KRQ9oJLZx+rO-kcfSVC3kC9VWi0rG2fjHwKw@mail.gmail.com>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1702581890; x=1703186690; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=PWfaGBcX0VuVKruVhTcIpZ2ToQ6Jjb+qwYe5WjUCBiY=;
- b=QpbzXe7gZFGc3JZ6PIRgR+2Shk2D+6yOlpq9LHFVl7WMBZISHCewTassDY7eJORKWP
- AeeYeyY1mBdtjtwXrktCdZOyArJqe7N+DiNSO4yNo8GWz7MIXqaTpVquwhgV7a11Td55
- 2OESRp7d1V3ITidzAsHta9bZX8eEL/BcWnPeXJ3IwsnJl0q+1l/vFnPr9Y1HtPBgvqCK
- +VizPQcvsBHcGpc1S5EEUitQnxZdP1Q0BrO2WHLekgScLMy+bm8maN8G1rI7xiHrY68X
- 7B05kQ9J2GlWIFhig/349YWtlnUqziTJ2zjQZ3tOQ0N3+cuk9c3oaKYi9EH1wbcLNiI+
- 6G6w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=QpbzXe7g
-Subject: [Buildroot] [PATCH 7/7] package/python-grpc-requests: new package
+ d=gadz.org; s=google; t=1702583606; x=1703188406; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=TvHjFatt1k5aZzUjz55CT655hrpeLPbfOC7Ktv+8/ZI=;
+ b=avZxEh3R1AD3aXBWecWcU4sn2G5rJbfOG9X0tnUPtfS9YTdX5J9/ev5SFqqC582aNj
+ Fj+YFFTfe/ID3tgr8Q6tPH9QCcePKFguU4egF0O+QrqepeihjiR3kp5d/XUh2oiDNxca
+ aBAWagvHR7foxnJtX5ke4x8HGw0YDjrVKET0BogKfpXC0f92murANjvqXzs5tVltYI54
+ lXwCZYu5OTECfCJsecy1IU/u22yKOxmHp1AE1ehyG78/QAYX+Yi1++mF0wk6dFOI+hLc
+ +BqWcl7ywgcjWrIJFRT/KwoWuCHV/NybvKSOK39mQ3PXaEiA7k42+vcgb9X4YZ7AsH8I
+ wTiA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
+ header.a=rsa-sha256 header.s=google header.b=avZxEh3R
+Subject: Re: [Buildroot] [PATCH v2 08/11] boot/ti-k3-r5-loader: set binman
+ environment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,89 +91,252 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Anand Gadiyar <gadiyar@ti.com>
+Content-Type: multipart/mixed; boundary="===============8053274048161930353=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/Config.in                                  |  1 +
- package/python-grpc-requests/Config.in             | 11 +++++++++++
- .../python-grpc-requests/python-grpc-requests.hash |  5 +++++
- .../python-grpc-requests/python-grpc-requests.mk   | 14 ++++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/python-grpc-requests/Config.in
- create mode 100644 package/python-grpc-requests/python-grpc-requests.hash
- create mode 100644 package/python-grpc-requests/python-grpc-requests.mk
+--===============8053274048161930353==
+Content-Type: multipart/alternative; boundary="00000000000008d0d1060c7da3b0"
 
-diff --git a/package/Config.in b/package/Config.in
-index 4a65104d60..ef3158dc33 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1100,6 +1100,7 @@ menu "External python modules"
- 	source "package/python-greenlet/Config.in"
- 	source "package/python-grpcio/Config.in"
- 	source "package/python-grpcio-reflection/Config.in"
-+	source "package/python-grpc-requests/Config.in"
- 	source "package/python-gunicorn/Config.in"
- 	source "package/python-h11/Config.in"
- 	source "package/python-h2/Config.in"
-diff --git a/package/python-grpc-requests/Config.in b/package/python-grpc-requests/Config.in
-new file mode 100644
-index 0000000000..3c266e5976
---- /dev/null
-+++ b/package/python-grpc-requests/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_GRPC_REQUESTS
-+	bool "python-grpc-requests"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
-+	select BR2_PACKAGE_PYTHON_GOOGLE_API_CORE # runtime
-+	select BR2_PACKAGE_PYTHON_GRPCIO # runtime
-+	select BR2_PACKAGE_PYTHON_GRPCIO_REFLECTION # runtime
-+	help
-+	  grpc for Humans. grpc reflection support client.
-+
-+	  https://github.com/wesky93/grpc_requests
-diff --git a/package/python-grpc-requests/python-grpc-requests.hash b/package/python-grpc-requests/python-grpc-requests.hash
-new file mode 100644
-index 0000000000..c816a65b50
---- /dev/null
-+++ b/package/python-grpc-requests/python-grpc-requests.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/grpc-requests/json
-+md5  39f0d7ef45ab3620d8b63c2408af35b0  grpc_requests-0.1.13.tar.gz
-+sha256  30a00493b206156b94be21f641edcbef5ea69fb43daf503390da661123520521  grpc_requests-0.1.13.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-grpc-requests/python-grpc-requests.mk b/package/python-grpc-requests/python-grpc-requests.mk
-new file mode 100644
-index 0000000000..9ffd73d424
---- /dev/null
-+++ b/package/python-grpc-requests/python-grpc-requests.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-grpc-requests
-+#
-+################################################################################
-+
-+PYTHON_GRPC_REQUESTS_VERSION = 0.1.13
-+PYTHON_GRPC_REQUESTS_SOURCE = grpc_requests-$(PYTHON_GRPC_REQUESTS_VERSION).tar.gz
-+PYTHON_GRPC_REQUESTS_SITE = https://files.pythonhosted.org/packages/46/51/8981bce4ca61bce1c7b7a12dd04f6cbd35c4ea874842b06283f6bbc9a0e8
-+PYTHON_GRPC_REQUESTS_SETUP_TYPE = setuptools
-+PYTHON_GRPC_REQUESTS_LICENSE = Apache-2.0
-+PYTHON_GRPC_REQUESTS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.34.1
+--00000000000008d0d1060c7da3b0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Le mer. 13 d=C3=A9c. 2023 =C3=A0 17:45, Dario Binacchi <
+dario.binacchi@amarulasolutions.com> a =C3=A9crit :
+
+> Recent version of U-Boot use binman to provide a mechanism for building
+> images, from simple SPL + U-Boot combinations, to more complex
+> arrangements with many parts.
+>
+> The patch set the BINMAN_INDIRS environment variable to provide the
+> directory to search for binary blobs and select the packages required by
+> binman.
+>
+> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>
+> ---
+>
+> Changes in v2:
+> - Change commit message
+> - Add BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN option
+> - Select packages required by binman if
+>   BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN is enabled
+>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  boot/ti-k3-r5-loader/Config.in          | 13 +++++++++++++
+>  boot/ti-k3-r5-loader/ti-k3-r5-loader.mk |  1 +
+>  2 files changed, 14 insertions(+)
+>
+> diff --git a/boot/ti-k3-r5-loader/Config.in
+> b/boot/ti-k3-r5-loader/Config.in
+> index 8c8368a1a5a8..a40eaed9467b 100644
+> --- a/boot/ti-k3-r5-loader/Config.in
+> +++ b/boot/ti-k3-r5-loader/Config.in
+> @@ -93,4 +93,17 @@ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE
+>         help
+>           Path to the TI K3 R5 Loader configuration file.
+>
+> +config BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN
+> +       bool "U-Boot uses binman"
+> +       select BR2_TARGET_UBOOT_NEEDS_PYLIBFDT
+> +       select BR2_PACKAGE_HOST_PYTHON_ATTRS
+> +       select BR2_PACKAGE_HOST_PYTHON_JSONSCHEMA
+> +       select BR2_PACKAGE_HOST_PYTHON_JSONSCHEMA_SPECIFICATIONS
+> +       select BR2_PACKAGE_HOST_PYTHON_PYYAML
+> +       select BR2_PACKAGE_HOST_PYTHON_REFERENCING
+> +       select BR2_PACKAGE_HOST_PYTHON_RPDS_PY
+>
+
+these select statements need their counterpart as dependencies in .mk
+
+for this reason, the build fails with this message:
+   error: command 'swig' failed: No such file or directory
+
+note: the build is successful when it starts after the build of uboot which
+depends on host-python-pylibfdt and host-swig
+
+Fran=C3=A7ois
+
+ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)    # like in uboot.mk
+TI_K3_R5_LOADER_DEPENDENCIES +=3D host-python-pylibfdt
+endif
+
+ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN),y)    # new packages
+TI_K3_R5_LOADER_DEPENDENCIES +=3D \
+    host-python-jsonschema \
+    host-python-jsonschema-specifiactions \
+    host-python-pyyaml \
+    host-python-referencing \
+    host-python-rpds-py
+endif
+
+
++       help
+> +         Select this option if your U-Boot version uses binman
+> +         for building images.
+> +
+>  endif
+> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+> b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+> index 0ffcb8235f2e..d5ec8fa8ba96 100644
+> --- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+> +++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+> @@ -58,6 +58,7 @@ TI_K3_R5_LOADER_MAKE_OPTS =3D \
+>         CROSS_COMPILE=3D$(HOST_DIR)/bin/arm-none-eabi- \
+>         ARCH=3Darm \
+>         HOSTCC=3D"$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem
+> /,$(HOST_CFLAGS)))" \
+> +       BINMAN_INDIRS=3D$(BINARIES_DIR) \
+>         HOSTLDFLAGS=3D"$(HOST_LDFLAGS)"
+>
+>  define TI_K3_R5_LOADER_BUILD_CMDS
+> --
+> 2.43.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+--00000000000008d0d1060c7da3b0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 13 d=C3=A9c. 2023 =C3=A0=
+=C2=A017:45, Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi@amarulasol=
+utions.com">dario.binacchi@amarulasolutions.com</a>&gt; a =C3=A9crit=C2=A0:=
+<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8=
+ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Recent version =
+of U-Boot use binman to provide a mechanism for building<br>
+images, from simple SPL + U-Boot combinations, to more complex<br>
+arrangements with many parts.<br>
+<br>
+The patch set the BINMAN_INDIRS environment variable to provide the<br>
+directory to search for binary blobs and select the packages required by<br=
+>
+binman.<br>
+<br>
+Co-developed-by: Michael Trimarchi &lt;<a href=3D"mailto:michael@amarulasol=
+utions.com" target=3D"_blank">michael@amarulasolutions.com</a>&gt;<br>
+Signed-off-by: Michael Trimarchi &lt;<a href=3D"mailto:michael@amarulasolut=
+ions.com" target=3D"_blank">michael@amarulasolutions.com</a>&gt;<br>
+Signed-off-by: Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi@amarulas=
+olutions.com" target=3D"_blank">dario.binacchi@amarulasolutions.com</a>&gt;=
+<br>
+<br>
+---<br>
+<br>
+Changes in v2:<br>
+- Change commit message<br>
+- Add BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN option<br>
+- Select packages required by binman if<br>
+=C2=A0 BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN is enabled<br>
+<br>
+Signed-off-by: Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi@amarulas=
+olutions.com" target=3D"_blank">dario.binacchi@amarulasolutions.com</a>&gt;=
+<br>
+---<br>
+=C2=A0boot/ti-k3-r5-loader/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 13=
+ +++++++++++++<br>
+=C2=A0boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=3D"nor=
+eferrer" target=3D"_blank">ti-k3-r5-loader.mk</a> |=C2=A0 1 +<br>
+=C2=A02 files changed, 14 insertions(+)<br>
+<br>
+diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.i=
+n<br>
+index 8c8368a1a5a8..a40eaed9467b 100644<br>
+--- a/boot/ti-k3-r5-loader/Config.in<br>
++++ b/boot/ti-k3-r5-loader/Config.in<br>
+@@ -93,4 +93,17 @@ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 help<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Path to the TI K3 R5 Loader configuratio=
+n file.<br>
+<br>
++config BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;U-Boot uses binman&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_TARGET_UBOOT_NEEDS_PYLIBFDT<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_PYTHON_ATTRS<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_PYTHON_JSONSCHEMA<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_PYTHON_JSONSCHEMA_SPECI=
+FICATIONS<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_PYTHON_PYYAML<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_PYTHON_REFERENCING<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_PYTHON_RPDS_PY<br></blo=
+ckquote><div><br></div><div>these select statements need their counterpart =
+as dependencies in .mk</div><div><br></div><div>for this reason, the build =
+fails with this message:</div><div>=C2=A0=C2=A0 error: command &#39;swig&#3=
+9; failed: No such file or directory</div><div><br></div><div>note: the bui=
+ld is successful when it starts after the build of uboot which depends on h=
+ost-python-pylibfdt and host-swig</div><div><br></div><div>Fran=C3=A7ois</d=
+iv><div><br></div><div>ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)=C2=A0=C2=
+=A0=C2=A0 # like in <a href=3D"http://uboot.mk">uboot.mk</a><br>TI_K3_R5_LO=
+ADER_DEPENDENCIES +=3D host-python-pylibfdt<br>endif<br><br>ifeq ($(BR2_TAR=
+GET_TI_K3_R5_LOADER_USE_BINMAN),y)=C2=A0=C2=A0=C2=A0 # new packages<br>TI_K=
+3_R5_LOADER_DEPENDENCIES +=3D \<br>=C2=A0=C2=A0=C2=A0 host-python-jsonschem=
+a \<br>=C2=A0=C2=A0=C2=A0 host-python-jsonschema-specifiactions \<br>=C2=A0=
+=C2=A0=C2=A0 host-python-pyyaml \<br>=C2=A0=C2=A0=C2=A0 host-python-referen=
+cing \<br>=C2=A0=C2=A0=C2=A0 host-python-rpds-py<br>endif<br></div><div><br=
+></div><div><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px=
+ 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
++=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Select this option if your U-Boot versio=
+n uses binman<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0for building images.<br>
++<br>
+=C2=A0endif<br>
+diff --git a/boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=
+=3D"noreferrer" target=3D"_blank">ti-k3-r5-loader.mk</a> b/boot/ti-k3-r5-lo=
+ader/<a href=3D"http://ti-k3-r5-loader.mk" rel=3D"noreferrer" target=3D"_bl=
+ank">ti-k3-r5-loader.mk</a><br>
+index 0ffcb8235f2e..d5ec8fa8ba96 100644<br>
+--- a/boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=3D"nor=
+eferrer" target=3D"_blank">ti-k3-r5-loader.mk</a><br>
++++ b/boot/ti-k3-r5-loader/<a href=3D"http://ti-k3-r5-loader.mk" rel=3D"nor=
+eferrer" target=3D"_blank">ti-k3-r5-loader.mk</a><br>
+@@ -58,6 +58,7 @@ TI_K3_R5_LOADER_MAKE_OPTS =3D \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 CROSS_COMPILE=3D$(HOST_DIR)/bin/arm-none-eabi- =
+\<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 ARCH=3Darm \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 HOSTCC=3D&quot;$(HOSTCC) $(subst -I/,-isystem /=
+,$(subst -I /,-isystem /,$(HOST_CFLAGS)))&quot; \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0BINMAN_INDIRS=3D$(BINARIES_DIR) \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 HOSTLDFLAGS=3D&quot;$(HOST_LDFLAGS)&quot;<br>
+<br>
+=C2=A0define TI_K3_R5_LOADER_BUILD_CMDS<br>
+-- <br>
+2.43.0<br>
+<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div></div>
+
+--00000000000008d0d1060c7da3b0--
+
+--===============8053274048161930353==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8053274048161930353==--
