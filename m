@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B1BC4167D
-	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 16:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63DDAC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 16:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9316F80C93;
-	Thu, 14 Dec 2023 16:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9316F80C93
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18A1380BF9;
+	Thu, 14 Dec 2023 16:55:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18A1380BF9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GMKlXfAItDMk; Thu, 14 Dec 2023 16:55:25 +0000 (UTC)
+	with ESMTP id HxNPewaznFqO; Thu, 14 Dec 2023 16:55:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CC6580C2D;
-	Thu, 14 Dec 2023 16:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CC6580C2D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9BF771BF28E
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 16:54:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FF0781971;
+	Thu, 14 Dec 2023 16:55:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FF0781971
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 696AC1BF990
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 16:54:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 753CE41E1E
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 16:54:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 753CE41E1E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 418BC403C4
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 16:54:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 418BC403C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5VXLLiQUUvoB for <buildroot@lists.busybox.net>;
- Thu, 14 Dec 2023 16:54:48 +0000 (UTC)
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90FAD41D5F
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 16:54:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90FAD41D5F
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-7b7039d30acso487615039f.3
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 08:54:48 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N2q7-PpEVKeT for <buildroot@lists.busybox.net>;
+ Thu, 14 Dec 2023 16:54:50 +0000 (UTC)
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 05B0E4010D
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 16:54:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05B0E4010D
+Received: by mail-io1-xd34.google.com with SMTP id
+ ca18e2360f4ac-7b6f4330598so349256239f.1
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 08:54:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702572887; x=1703177687;
+ d=1e100.net; s=20230601; t=1702572889; x=1703177689;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=O6jaNC8pkHoQR57P1ijEFnievnqROKSBymEBBNYGJXA=;
- b=Z5UfPq8Zl+qgSaE32LIZ2Nj0L2/zZbbWQi22W3a3aU+BALW73YToqi3W4CHqyn2qh8
- cpa2hk3lvbBQFX92uR3ZacD5mMSW+rx1j+UXZnDuFujNw53vinwTw97icvKcW3Qlylck
- wmMROmUDe2ifheMECCaqxXEku5Aiq6KdongBDAwum+tuLKa+EH4Kc3mjJtacUuOZlr37
- fxdwn9y9yYpA6Q48J/tU+ew0JaC14dLGnJiqwDoLBji4yEtAGFJRODjGhvAFLRJA6Tsc
- UPkur9bAhNaRfYNPssXH9GSOexbv1llnUzLZAVDUVUQ+L8cpdpm49Zfc+oABdZb5IO95
- mN3Q==
-X-Gm-Message-State: AOJu0YwSBw/uAMv4s4Q3N95YorTLK3eWM2INLaOf5JWHWv7Hzz+KA7KS
- W8XccbQo8VVNL8dFPJj6l+dVxIHe1GxWZA==
-X-Google-Smtp-Source: AGHT+IE0kk+Dm/5BkU2HS31QNrQ2x8pSutAgBX2LfEcY0ufPhfOucnaUI+t5kqpSBOSre3AAmcDsZA==
-X-Received: by 2002:a05:6602:2c53:b0:7b3:9356:665 with SMTP id
- x19-20020a0566022c5300b007b393560665mr13545318iov.4.1702572887153; 
- Thu, 14 Dec 2023 08:54:47 -0800 (PST)
+ bh=I6cYPqSnmN2TWQb4qa+Qf6rnMzgtpqn5zQwwvEg1ZVA=;
+ b=vnnwI1yPfCs/t2CwGoocJyYngVq50HJQt+9ODh7NM61kmmMXIJCJr3Ym2u2QidX8xz
+ MruNG3UolyhxlY5hYfyMbSBJYlA/i7YI8H5M7pTGh/YRjgNImeA6gbTF+TSq41qzTvUb
+ KoYt7CQCHatC/vJY1TKs4v16MgGEn77bgT+E+W6hIi3Zv8Q3xe3qaycflAn22MybtSff
+ YCIgczybF07LHfDnZ8kOpplhpL4A4TiIqs/HwDLX0X9VuRN11Q/S2x3MncgwMMmnkvpG
+ mAxnUSD9OsAAjE4s4AutE5Rf9FayyJKjd9fkr1sgMnR5DSG3KGYRH5zdwaM2fdtQHxzg
+ ep7A==
+X-Gm-Message-State: AOJu0YxyeqDYGrv3FdcV+8aNXtoVDuYLk0+LIg32fn00rlgeuEzyLwMp
+ HUqhpXjCWwvMNE2LvyDxaX1u1/zu0Id1vQ==
+X-Google-Smtp-Source: AGHT+IEAUygGZiCJb+TiH/AsBRLRvGckzz1hxdozfaVST/pqHaeio8TJtwWmlaumigIqT+6XIgCdBA==
+X-Received: by 2002:a6b:a08:0:b0:7b6:fc52:bf85 with SMTP id
+ z8-20020a6b0a08000000b007b6fc52bf85mr10726281ioi.22.1702572888723; 
+ Thu, 14 Dec 2023 08:54:48 -0800 (PST)
 Received: from james-x399.localdomain (97-118-228-42.hlrn.qwest.net.
  [97.118.228.42]) by smtp.gmail.com with ESMTPSA id
- u16-20020a6b4910000000b007b7372af699sm2912178iob.9.2023.12.14.08.54.45
+ u16-20020a6b4910000000b007b7372af699sm2912178iob.9.2023.12.14.08.54.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Dec 2023 08:54:45 -0800 (PST)
+ Thu, 14 Dec 2023 08:54:47 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Dec 2023 09:54:16 -0700
-Message-Id: <20231214165420.181703-4-james.hilliard1@gmail.com>
+Date: Thu, 14 Dec 2023 09:54:17 -0700
+Message-Id: <20231214165420.181703-5-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231214165420.181703-1-james.hilliard1@gmail.com>
 References: <20231214165420.181703-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1702572887; x=1703177687; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1702572889; x=1703177689; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=O6jaNC8pkHoQR57P1ijEFnievnqROKSBymEBBNYGJXA=;
- b=npse5CK+34Lr4s9zOjZvDWFBlIarUx2NYfNxxQnqA9iKHnktTdX2eHUopDbqERS2GZ
- d9jWpCRqBoCcnvy8tLmn6M2r2whHvfJhEs9an3KlXHXDCQU0kvhsNFr/LBqem84UbejS
- 0CpT6olqBJsmThnRi5Y4vZ+LlvdoBa4E0wbvXKlbs/2reOj7/6IIV71mCj/aTivwXbAX
- ih/JoBool9wPiDbC9uovqpO9H7KzUxFkQb+1AOS6pMmQcPm9cgmbO9hcgqi/dk0uXyQx
- zDphy7B+eY05TCkyawi8xvMO3ozZwsTUAuG4VPlFKkxdMFsAEPHruF7Jrpi4y9V2nmHp
- BcSA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=I6cYPqSnmN2TWQb4qa+Qf6rnMzgtpqn5zQwwvEg1ZVA=;
+ b=NWCAK90XdPB7eZ5Ke02GCEbT1YEGAlhfsQ1jaFYHyJiUo47iNOeA4RYr+Sox6/X9Bn
+ aVZKZQqwUjty3lYJYGEmM6v1bhLv/rdnALqVvOgqWmsY+7Zuj4NHZA6k4WZ4q+VrAdDv
+ rUDUOnVbVlUqSg0Ay8qN5687Fq6rkeuwJKMvZarqPyugvprt4/jVQjaDt4y8egfK4rq+
+ hfgpcVeIr917P0KzHTEtuXJjSIFV9SiWbiywkAYPZUMX3IqAvXc56eH5c2iXxRVius3P
+ EtaZ3ZZYBxVNHsSannoYzm4B6Yrol+YLSrZTjMeXZdB/9iYl6qr4e70Emj+67b2u45uz
+ 8POw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=npse5CK+
-Subject: [Buildroot] [PATCH v3 4/8] package/python-fastapi: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=NWCAK90X
+Subject: [Buildroot] [PATCH v3 5/8] package/python-uvicorn: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,74 +107,70 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
  package/Config.in                          |  1 +
- package/python-fastapi/Config.in           | 12 ++++++++++++
- package/python-fastapi/python-fastapi.hash |  5 +++++
- package/python-fastapi/python-fastapi.mk   | 15 +++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/python-fastapi/Config.in
- create mode 100644 package/python-fastapi/python-fastapi.hash
- create mode 100644 package/python-fastapi/python-fastapi.mk
+ package/python-uvicorn/Config.in           |  8 ++++++++
+ package/python-uvicorn/python-uvicorn.hash |  5 +++++
+ package/python-uvicorn/python-uvicorn.mk   | 15 +++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/python-uvicorn/Config.in
+ create mode 100644 package/python-uvicorn/python-uvicorn.hash
+ create mode 100644 package/python-uvicorn/python-uvicorn.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3a4bf21a2a..8a97eb2897 100644
+index 8a97eb2897..cf530b1355 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1073,6 +1073,7 @@ menu "External python modules"
- 	source "package/python-evdev/Config.in"
- 	source "package/python-executing/Config.in"
- 	source "package/python-falcon/Config.in"
-+	source "package/python-fastapi/Config.in"
- 	source "package/python-filelock/Config.in"
- 	source "package/python-fire/Config.in"
- 	source "package/python-flask/Config.in"
-diff --git a/package/python-fastapi/Config.in b/package/python-fastapi/Config.in
+@@ -1375,6 +1375,7 @@ menu "External python modules"
+ 	source "package/python-unittest-xml-reporting/Config.in"
+ 	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
++	source "package/python-uvicorn/Config.in"
+ 	source "package/python-uvloop/Config.in"
+ 	source "package/python-validators/Config.in"
+ 	source "package/python-versiontools/Config.in"
+diff --git a/package/python-uvicorn/Config.in b/package/python-uvicorn/Config.in
 new file mode 100644
-index 0000000000..7d376d3dd7
+index 0000000000..3e769392f9
 --- /dev/null
-+++ b/package/python-fastapi/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_FASTAPI
-+	bool "python-fastapi"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
-+	select BR2_PACKAGE_PYTHON_ANYIO # runtime
-+	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
-+	select BR2_PACKAGE_PYTHON_STARLETTE # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
++++ b/package/python-uvicorn/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_UVICORN
++	bool "python-uvicorn"
++	select BR2_PACKAGE_PYTHON_CLICK # runtime
++	select BR2_PACKAGE_PYTHON_H11 # runtime
 +	help
-+	  FastAPI framework, high performance, easy to learn, fast to
-+	  code, ready for production.
++	  The lightning-fast ASGI server.
 +
-+	  https://github.com/tiangolo/fastapi
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
++	  https://www.uvicorn.org/
+diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
 new file mode 100644
-index 0000000000..3dc1578cb7
+index 0000000000..cfa999e210
 --- /dev/null
-+++ b/package/python-fastapi/python-fastapi.hash
++++ b/package/python-uvicorn/python-uvicorn.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/fastapi/json
-+md5  06bfa7c610fc9e81d05b0319eb70cae7  fastapi-0.105.0.tar.gz
-+sha256  4d12838819aa52af244580675825e750ad67c9df4614f557a769606af902cf22  fastapi-0.105.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/uvicorn/json
++md5  a1af843e7e305d551030abfa09dd3b15  uvicorn-0.24.0.post1.tar.gz
++sha256  09c8e5a79dc466bdf28dead50093957db184de356fcdc48697bad3bde4c2588e  uvicorn-0.24.0.post1.tar.gz
 +# Locally computed sha256 checksums
-+sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
++sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
+diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
 new file mode 100644
-index 0000000000..db86bfce30
+index 0000000000..887e4ac390
 --- /dev/null
-+++ b/package/python-fastapi/python-fastapi.mk
++++ b/package/python-uvicorn/python-uvicorn.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-fastapi
++# python-uvicorn
 +#
 +################################################################################
 +
-+PYTHON_FASTAPI_VERSION = 0.105.0
-+PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/77/bb/5941e6e2ce3020f64b539a49d39f49be05de17d0c47fea95012589f812a5
-+PYTHON_FASTAPI_SETUP_TYPE = pep517
-+PYTHON_FASTAPI_LICENSE = MIT
-+PYTHON_FASTAPI_LICENSE_FILES = LICENSE
-+PYTHON_FASTAPI_DEPENDENCIES = host-python-hatchling
++PYTHON_UVICORN_VERSION = 0.24.0.post1
++PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
++PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/e5/84/d43ce8fe6b31a316ef0ed04ea0d58cab981bdf7f17f8423491fa8b4f50b6
++PYTHON_UVICORN_SETUP_TYPE = pep517
++PYTHON_UVICORN_LICENSE = BSD-3-Clause
++PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
++PYTHON_UVICORN_DEPENDENCIES = host-python-hatchling
 +
 +$(eval $(python-package))
 -- 
