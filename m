@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A984C4167B
-	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 16:55:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63DA3C4167B
+	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 16:55:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E01383BC5;
-	Thu, 14 Dec 2023 16:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E01383BC5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E77F83CFC;
+	Thu, 14 Dec 2023 16:55:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E77F83CFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cs6hUNZBHiHL; Thu, 14 Dec 2023 16:55:00 +0000 (UTC)
+	with ESMTP id N8DRWiNMycQN; Thu, 14 Dec 2023 16:55:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6033783CD1;
-	Thu, 14 Dec 2023 16:54:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6033783CD1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8CF221BF28E
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 16:54:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A5FA83CE9;
+	Thu, 14 Dec 2023 16:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A5FA83CE9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0343F1BF28E
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 16:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72E7E41E1E
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 16:54:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72E7E41E1E
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDEEF83CC9
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 16:54:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDEEF83CC9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qUMuPLRyIba6 for <buildroot@lists.busybox.net>;
- Thu, 14 Dec 2023 16:54:45 +0000 (UTC)
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 437C941D5F
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 16:54:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 437C941D5F
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-7b71b10391aso307957039f.3
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 08:54:45 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c6-RW-F2CcLc for <buildroot@lists.busybox.net>;
+ Thu, 14 Dec 2023 16:54:47 +0000 (UTC)
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D7AFB83C14
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 16:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7AFB83C14
+Received: by mail-io1-xd36.google.com with SMTP id
+ ca18e2360f4ac-7b72d574399so387824139f.0
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 08:54:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702572884; x=1703177684;
+ d=1e100.net; s=20230601; t=1702572885; x=1703177685;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=FTkQPDWW7eU1knpTVlOFhSHmYt49sTKNvSFKoOCeons=;
- b=VjtkHvhB8emfRN6t0iQsTtBe62FFys23+xIL7xG/Jn2eMAQrYvXpJQ6VE+krQdIY/m
- bUKm4DMPl4wrSXbOn2fi8wr+lPlgqoaOcNf7cOS3WWP6xzluVOU3N0SlmSG9y7Lp2gl3
- 1idf0w0VEptWXUmbA4t44VoGuL+kfg8fPWUN+Rc7us7S/4ImuLdisza/r+7PJ6EwxY7j
- G6HYhyQC13wJSBUCrojxvDTY00e7pWs0m6Xtds/5oMxWjzsUmejb6qMjEnbtxx2/7C4W
- c8zhFQe9XzPkNn98guJ1ebMYn6NVcd1llBot2IkIkqsrsi6VpJDgr+3WHxDQXkGmGxR6
- eElg==
-X-Gm-Message-State: AOJu0YwpxW4mrQL/HaERxH/J2azO/xoC0Zy08VpJvK9OyEp0CAv9Mxn7
- 2htrJFbLigTWK3iflkz7dAxI3PrT+MwSFg==
-X-Google-Smtp-Source: AGHT+IGxYOZ4HPz1egXLDDsmad90rQnQLdd1XPJXeONI63nKvXmmvjTvhGxtfiLfAInRxumhcKIi9g==
-X-Received: by 2002:a05:6602:1855:b0:7b3:59d0:df14 with SMTP id
- d21-20020a056602185500b007b359d0df14mr7672503ioi.4.1702572884017; 
- Thu, 14 Dec 2023 08:54:44 -0800 (PST)
+ bh=2mgOvH0FcOJmUZvCp5oR2TgpTUbYqJSU4hDf7a1rASg=;
+ b=jfOKVgwpBQiB4dLW7p/z2LH90eRBDvxSi02BCiDvoqC/ElEqAgup2gudbt9T00YHGD
+ pQh1hceopeb3dnsmpirspRhEw/+tWj9TXoRLLsimttRSX6oDEp/HrJ3Z2pdvJ3XsGkqD
+ UiKphPz804Ewj6HKvtuvh/IC4si20h1/mNqE1GoidTkeNv+EekFlzCsyBxrF/m+Hmyio
+ vXiIJNUb29/EA/o7csZGcBnzqn1UMMnR+3MJKoSeiSFF4NA5y/LmTw9u89QDwrHHpBpL
+ IUxH1OLjv9Zs9/PH4iazx2qDRvtJsq+/hAh2mdbWi42SDxR4tJv04WWNAsHeQ4ABakgh
+ 2Ceg==
+X-Gm-Message-State: AOJu0YzVUJJme7YtqOpFY5+5eIWLFVS7reJtKayPC/p3rq6XZLbrQakJ
+ PkhlV9piOr5Z6pUOlzSVhst3QUD37xyVLQ==
+X-Google-Smtp-Source: AGHT+IEBZZxNapb5HoUVdf8m8N3f+qCnaHD9DRyjAUiGIuqkjyjEyQaf8qy9ILvQztvLzdNlhqQPAQ==
+X-Received: by 2002:a05:6602:1614:b0:7b6:f40c:2cdb with SMTP id
+ x20-20020a056602161400b007b6f40c2cdbmr15087963iow.12.1702572885501; 
+ Thu, 14 Dec 2023 08:54:45 -0800 (PST)
 Received: from james-x399.localdomain (97-118-228-42.hlrn.qwest.net.
  [97.118.228.42]) by smtp.gmail.com with ESMTPSA id
- u16-20020a6b4910000000b007b7372af699sm2912178iob.9.2023.12.14.08.54.42
+ u16-20020a6b4910000000b007b7372af699sm2912178iob.9.2023.12.14.08.54.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Dec 2023 08:54:42 -0800 (PST)
+ Thu, 14 Dec 2023 08:54:44 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Dec 2023 09:54:14 -0700
-Message-Id: <20231214165420.181703-2-james.hilliard1@gmail.com>
+Date: Thu, 14 Dec 2023 09:54:15 -0700
+Message-Id: <20231214165420.181703-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231214165420.181703-1-james.hilliard1@gmail.com>
 References: <20231214165420.181703-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1702572884; x=1703177684; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1702572885; x=1703177685; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=FTkQPDWW7eU1knpTVlOFhSHmYt49sTKNvSFKoOCeons=;
- b=Bs1Oumgn5qQSSzAqyMKqYtcwYWwYSv14csQ1ivuQbddTFFocb+k/3T3MsmW1xJaom1
- HJwwS0f8uKB+M2mbmpVOOv/B4oQL6mmTZLA1R4NhWM31rW+vw7XRLZgM6c6cm0lSaNWt
- EAckaHGyWPrkhsVFHAR4o8FAR434wQeQVgwL0rB6LMZvk1A+wB2Gegpr4Y8PnIrvicCo
- tINzUA0Cg8jBgzfkL9fMwc99pjp/U30eUzyIaYSlrMIfhVcXHN1wDeQNL9XPVg2lmOru
- PzOcZyKaVM+Kl1CLgW2E0wjaJ9sPvif4W2P57n9phKIYqBSEe8aVCWjf//uguMDmYqq0
- iIeQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=2mgOvH0FcOJmUZvCp5oR2TgpTUbYqJSU4hDf7a1rASg=;
+ b=frACI/60DmA9EarULpQRijSkQU4UGPXhyvVOszV9oWeCb4nZ/pQz2XZXeGsphlof9t
+ 5Nwk4oIV+02/XGPTnViwsa0eXtSFNVtyBg4Oio8RIaoam3jbu4hLjKBlR7qOMVss2+mu
+ S60r/qkaWn3dSQCaIOBqanMuykp8fx7n5fG3xE6/NQeOMy3qP/Hb7KeAWGOt7zWmWYcq
+ rsNQv/KTGoIxgjNBEgMwfxKaSquPwA9otzgOjZ4RiCWqa+QPsmraJIPV5+Cy3AQRoxEA
+ T+o27nQxsNpBwxCgM3Zo87HE3Nz35EdS+brv9aoEA7zz3eKjAz4IPvNWrxFMWTDnE8Ja
+ pHAA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Bs1Oumgn
-Subject: [Buildroot] [PATCH v3 2/8] package/python-anyio: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=frACI/60
+Subject: [Buildroot] [PATCH v3 3/8] package/python-starlette: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,74 +109,72 @@ Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 ---
 Changes v1 -> v2:
-  - downgrade to version 3.7.1
+ - downgrade to version 0.27.0
 ---
- package/Config.in                      |  1 +
- package/python-anyio/Config.in         |  9 +++++++++
- package/python-anyio/python-anyio.hash |  5 +++++
- package/python-anyio/python-anyio.mk   | 15 +++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/python-anyio/Config.in
- create mode 100644 package/python-anyio/python-anyio.hash
- create mode 100644 package/python-anyio/python-anyio.mk
+ package/Config.in                              |  1 +
+ package/python-starlette/Config.in             |  7 +++++++
+ package/python-starlette/python-starlette.hash |  5 +++++
+ package/python-starlette/python-starlette.mk   | 15 +++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-starlette/Config.in
+ create mode 100644 package/python-starlette/python-starlette.hash
+ create mode 100644 package/python-starlette/python-starlette.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fcc09b07c4..c023e0ef3f 100644
+index c023e0ef3f..3a4bf21a2a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -976,6 +976,7 @@ menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-annotated-types/Config.in"
- 	source "package/python-ansicolors/Config.in"
-+	source "package/python-anyio/Config.in"
- 	source "package/python-apispec/Config.in"
- 	source "package/python-appdirs/Config.in"
- 	source "package/python-argh/Config.in"
-diff --git a/package/python-anyio/Config.in b/package/python-anyio/Config.in
+@@ -1338,6 +1338,7 @@ menu "External python modules"
+ 	source "package/python-sqliteschema/Config.in"
+ 	source "package/python-sqlparse/Config.in"
+ 	source "package/python-stack-data/Config.in"
++	source "package/python-starlette/Config.in"
+ 	source "package/python-systemd/Config.in"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
+diff --git a/package/python-starlette/Config.in b/package/python-starlette/Config.in
 new file mode 100644
-index 0000000000..d843f37af0
+index 0000000000..90f590689a
 --- /dev/null
-+++ b/package/python-anyio/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_ANYIO
-+	bool "python-anyio"
-+	select BR2_PACKAGE_PYTHON_IDNA # runtime
-+	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
++++ b/package/python-starlette/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_STARLETTE
++	bool "python-starlette"
++	select BR2_PACKAGE_PYTHON_ANYIO # runtime
 +	help
-+	  High level compatibility layer for multiple asynchronous
-+	  event loop implementations.
++	  The little ASGI library that shines.
 +
-+	  https://github.com/agronholm/anyio
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
++	  https://github.com/encode/starlette
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
 new file mode 100644
-index 0000000000..1cea549bc1
+index 0000000000..a7f1f66446
 --- /dev/null
-+++ b/package/python-anyio/python-anyio.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/anyio/json
-+md5  58d288dd84e28e2507ff9ce7e4620010  anyio-3.7.1.tar.gz
-+sha256  44a3c9aba0f5defa43261a8b3efb97891f2bd7d804e0e1f56419befa1adfc780  anyio-3.7.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/starlette/json
++md5  5193c4b7d2ea4c93635c340a7ba9b54f  starlette-0.27.0.tar.gz
++sha256  6a6b0d042acb8d469a01eba54e9cda6cbd24ac602c4cd016723117d6a7e73b75  starlette-0.27.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
++sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
 new file mode 100644
-index 0000000000..80404ac660
+index 0000000000..40932929a0
 --- /dev/null
-+++ b/package/python-anyio/python-anyio.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-anyio
++# python-starlette
 +#
 +################################################################################
 +
-+PYTHON_ANYIO_VERSION = 3.7.1
-+PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/28/99/2dfd53fd55ce9838e6ff2d4dac20ce58263798bd1a0dbe18b3a9af3fcfce
-+PYTHON_ANYIO_SETUP_TYPE = setuptools
-+PYTHON_ANYIO_LICENSE = MIT
-+PYTHON_ANYIO_LICENSE_FILES = LICENSE
-+PYTHON_ANYIO_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_STARLETTE_VERSION = 0.27.0
++PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/06/68/559bed5484e746f1ab2ebbe22312f2c25ec62e4b534916d41a8c21147bf8
++PYTHON_STARLETTE_SETUP_TYPE = pep517
++PYTHON_STARLETTE_LICENSE = BSD-3-Clause
++PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
++PYTHON_STARLETTE_DEPENDENCIES = host-python-hatchling
 +
 +$(eval $(python-package))
 -- 
