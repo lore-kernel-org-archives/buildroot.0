@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B973C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 10:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69CBBC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 10:08:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39D0661B30;
-	Thu, 14 Dec 2023 10:02:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39D0661B30
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FDF860BB6;
+	Thu, 14 Dec 2023 10:08:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FDF860BB6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RlnMxqXtJ9tT; Thu, 14 Dec 2023 10:02:06 +0000 (UTC)
+	with ESMTP id 2LEVD0VJ28kg; Thu, 14 Dec 2023 10:08:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 558B761B21;
-	Thu, 14 Dec 2023 10:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 558B761B21
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 88EAD1BF59D
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 10:02:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7753B61B11;
+	Thu, 14 Dec 2023 10:08:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7753B61B11
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F1401BF36B
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 10:08:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 60F1F61B19
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 10:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60F1F61B19
+ by smtp1.osuosl.org (Postfix) with ESMTP id 448C383C77
+ for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 10:08:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 448C383C77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y4PSbucqZ4Ta for <buildroot@lists.busybox.net>;
- Thu, 14 Dec 2023 10:01:59 +0000 (UTC)
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
- [IPv6:2607:f8b0:4864:20::129])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 95E1761B11
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 10:01:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95E1761B11
-Received: by mail-il1-x129.google.com with SMTP id
- e9e14a558f8ab-35f82a7448eso722235ab.3
- for <buildroot@buildroot.org>; Thu, 14 Dec 2023 02:01:59 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bLpCct3kMuyU for <buildroot@lists.busybox.net>;
+ Thu, 14 Dec 2023 10:08:39 +0000 (UTC)
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
+ [IPv6:2607:f8b0:4864:20::133])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D5F7282EA1
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 10:08:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5F7282EA1
+Received: by mail-il1-x133.google.com with SMTP id
+ e9e14a558f8ab-35da85e543eso29541005ab.0
+ for <buildroot@buildroot.org>; Thu, 14 Dec 2023 02:08:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702548118; x=1703152918;
+ d=1e100.net; s=20230601; t=1702548517; x=1703153317;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=BJDsnervsi9Qudze2PqRmord8NSHIlN4LFM0zdJW3so=;
- b=hT14fF5gnsiQQyCfxW4j2Biw2AqUHLEMxscbPfndyDC40dJ0k982TwMPeMIoH9kMOX
- wDsukCpwrrUtOBqwcIkAjOD+9l3KEMlfAwvzftceQs/O4oK1o2syrO4FOtWS+3f+fQwX
- gxxteXjcnKfws9YffMIt9ElfQdzQZA3WTWcESJBKyYrOgF28NNel25WOrGZQL1ytvokC
- 90ZYzTfwXJaciZpUnX5Q+OhnIh5NfUMynw5wQXuIop0mfl4k0ElSNe1uUHhJMlkRLwyT
- uL86/ttORIlm2+Xn8dcXBL46rpymdGWs1jsA2+ywbsXOB5+2j+Y1Qys3z8jl6YC+eR7U
- IICg==
-X-Gm-Message-State: AOJu0YxCx+PPrkli8zPLwHVnqKM7tADHGxZIsHjRm6Vcv9Au6JHG5PZA
- XeelX41qLBGcIg5TTlscxiVU+wFfQJ1iDw==
-X-Google-Smtp-Source: AGHT+IGYExge32beakjdplPPekBA1pBDAVAMN6s5zL9LA1HB1q2hfz3BqFtcIXaIMrV9IxVbp1AXnA==
-X-Received: by 2002:a05:6e02:1947:b0:35d:5790:ec8c with SMTP id
- x7-20020a056e02194700b0035d5790ec8cmr13509571ilu.9.1702548118388; 
- Thu, 14 Dec 2023 02:01:58 -0800 (PST)
+ bh=Zqdn+Nq4kDT1ejFIRBKLujz3RE/nH03DHYRKQWdqsh0=;
+ b=bhGWNwwYYNmzY6lIgHQAw7ZfGMmoXtczEFxZVM5DZY8G+XSLYPYeuDxqizx0hLIj0z
+ VOdi6iowBOT9XYXvYWmBw/RmbhEBVXo8vJu4VdgBx7e9DkDlOOVwhqK8luaxNaBx10xh
+ nnRPGD4nq3Fwg15jR4/9NM0bLt6iG3/S+Vok1DcXqCycUPnxgJmI6q/guctnVxgzgbc9
+ VC6+wNdxP5W+2PNeoa5q7KBQaG+s6ZmbODn7Tf/55WNAixf9DaY92xPSxsU5+Z2Yxhhi
+ 37juyEP9gQmnS+OHoIB8QS9CxxYc9UIVXVQHSE+aH9Zg/eGT2w/pPdbildwnhOtDi5wo
+ r/DQ==
+X-Gm-Message-State: AOJu0YyAjEhIr7QRcPtyJz2zYDdCITg86oV/omdWuPWgn1naI3MtBHRs
+ sHNUfFqqmJkx+7H4fYOfDUN29S/8UQb61w==
+X-Google-Smtp-Source: AGHT+IGqXbK6upzn+xOkZxFKI+o5W/T6dd5IJpoOG/kTphZ6NCiE5BMV0PVMgfUcj/Ietk9LmhLVvg==
+X-Received: by 2002:a05:6e02:174a:b0:35d:7054:3dd6 with SMTP id
+ y10-20020a056e02174a00b0035d70543dd6mr13650219ill.6.1702548517232; 
+ Thu, 14 Dec 2023 02:08:37 -0800 (PST)
 Received: from james-x399.localdomain (97-118-228-42.hlrn.qwest.net.
  [97.118.228.42]) by smtp.gmail.com with ESMTPSA id
- y7-20020a920907000000b0035d09c30a90sm1113977ilg.51.2023.12.14.02.01.57
+ bz4-20020a056e02268400b0035d2245ba9dsm4226046ilb.12.2023.12.14.02.08.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Dec 2023 02:01:57 -0800 (PST)
+ Thu, 14 Dec 2023 02:08:36 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Dec 2023 03:01:56 -0700
-Message-Id: <20231214100156.121408-1-james.hilliard1@gmail.com>
+Date: Thu, 14 Dec 2023 03:08:33 -0700
+Message-Id: <20231214100833.123688-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1702548118; x=1703152918; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1702548517; x=1703153317; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=BJDsnervsi9Qudze2PqRmord8NSHIlN4LFM0zdJW3so=;
- b=eqQr8fXBNxjcW4nqowvCoHaYoYPMjKxsYgntZo0i8DW5oWuId/fx2vVw2VowDUmnMI
- wUVA1qGQf5nEFEvZd4kWUUig63N/nuwDZcm3xYjGX5/xkVed2uhb2GEtOEGdIhcd/pRT
- LfTk+YS/Us5VfjjU/0mR5tNWGXuYlh654HMG+aYHFG05FEkyIYQJuKMoDxyD3Zqjm4ek
- HewzlOqki6msVTzUHMqrTjM54xJ3ra4v3T1ijob/39DwKJqaMadJ3k4cq2YW9Xj30Cnd
- fSuklREot1tvKyp2gmnRH7dHGfVDey7fU6npQlPeqdnIVh/3IvNqahs8QRb57INXsNii
- EvmA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Zqdn+Nq4kDT1ejFIRBKLujz3RE/nH03DHYRKQWdqsh0=;
+ b=H64Pf2G3BHGHaKvXh1+4eEs2YkZFuyR0165cs2aoxcnjdiMyS02O69xweYlkjaCYLM
+ bxiJCVX58c0LCfchxIbNFlaFLi9WArMO7ah0d9u3xlo7BDtINIkkVD/zzPZirZjDEHa6
+ wWAB4iVAiFjjI7GObS9wsBDWZC4UNKA6BV3QBin2Qv/9j1+xhaayUTVdFLFO6nIFIuP5
+ NPPSet8v2uDplwu8HAb3jeQbwDVXOAfIVWCTo72QA+tgKbmgMIMjpognFiMtwI9m0dMY
+ cOihztyvQLguwlos4wuXsFECCiRQQHV/sneOkwAbT7hFthz+KjRw3Pie/8D5ojJ5aEEq
+ Hv5w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eqQr8fXB
-Subject: [Buildroot] [PATCH 1/1] package/python-multipart: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=H64Pf2G3
+Subject: [Buildroot] [PATCH 1/1] package/python-decouple: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,69 +103,67 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                              |  1 +
- package/python-multipart/Config.in             |  6 ++++++
- package/python-multipart/python-multipart.hash |  5 +++++
- package/python-multipart/python-multipart.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-multipart/Config.in
- create mode 100644 package/python-multipart/python-multipart.hash
- create mode 100644 package/python-multipart/python-multipart.mk
+ package/Config.in                            |  1 +
+ package/python-decouple/Config.in            |  6 ++++++
+ package/python-decouple/python-decouple.hash |  5 +++++
+ package/python-decouple/python-decouple.mk   | 13 +++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-decouple/Config.in
+ create mode 100644 package/python-decouple/python-decouple.hash
+ create mode 100644 package/python-decouple/python-decouple.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fcc09b07c4..3751679b7c 100644
+index fcc09b07c4..2c574e6b29 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1171,6 +1171,7 @@ menu "External python modules"
- 	source "package/python-msgfy/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-multidict/Config.in"
-+	source "package/python-multipart/Config.in"
- 	source "package/python-munch/Config.in"
- 	source "package/python-mutagen/Config.in"
- 	source "package/python-mwclient/Config.in"
-diff --git a/package/python-multipart/Config.in b/package/python-multipart/Config.in
+@@ -1049,6 +1049,7 @@ menu "External python modules"
+ 	source "package/python-dbus-fast/Config.in"
+ 	source "package/python-dbus-next/Config.in"
+ 	source "package/python-decorator/Config.in"
++	source "package/python-decouple/Config.in"
+ 	source "package/python-defusedxml/Config.in"
+ 	source "package/python-dialog3/Config.in"
+ 	source "package/python-dicttoxml/Config.in"
+diff --git a/package/python-decouple/Config.in b/package/python-decouple/Config.in
 new file mode 100644
-index 0000000000..07002e1018
+index 0000000000..528f43d0cb
 --- /dev/null
-+++ b/package/python-multipart/Config.in
++++ b/package/python-decouple/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_MULTIPART
-+	bool "python-multipart"
++config BR2_PACKAGE_PYTHON_DECOUPLE
++	bool "python-decouple"
 +	help
-+	  A streaming multipart parser for Python.
++	  Strict separation of settings from code.
 +
-+	  https://github.com/andrew-d/python-multipart
-diff --git a/package/python-multipart/python-multipart.hash b/package/python-multipart/python-multipart.hash
++	  http://github.com/henriquebastos/python-decouple/
+diff --git a/package/python-decouple/python-decouple.hash b/package/python-decouple/python-decouple.hash
 new file mode 100644
-index 0000000000..9b2b6d3d82
+index 0000000000..cf1290c90e
 --- /dev/null
-+++ b/package/python-multipart/python-multipart.hash
++++ b/package/python-decouple/python-decouple.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/python-multipart/json
-+md5  a61a045b7f5e64d44dc53c73522ac4d2  python_multipart-0.0.6.tar.gz
-+sha256  e9925a80bb668529f1b67c7fdb0a5dacdd7cbfc6fb0bff3ea443fe22bdd62132  python_multipart-0.0.6.tar.gz
++# md5, sha256 from https://pypi.org/pypi/python-decouple/json
++md5  21b174a381d6bff5f4814018a4fd44cd  python-decouple-3.8.tar.gz
++sha256  ba6e2657d4f376ecc46f77a3a615e058d93ba5e465c01bbe57289bfb7cce680f  python-decouple-3.8.tar.gz
 +# Locally computed sha256 checksums
-+sha256  a8e833176cd617daf00b9d6d39fa15ca8edebc6d1643079cd2f4893c0c289be2  LICENSE.txt
-diff --git a/package/python-multipart/python-multipart.mk b/package/python-multipart/python-multipart.mk
++sha256  4d6e3c2ef229ec3c1a486f52c9d76235e9eb7c94db8ec71a8bff0af60e4f0aa4  LICENSE
+diff --git a/package/python-decouple/python-decouple.mk b/package/python-decouple/python-decouple.mk
 new file mode 100644
-index 0000000000..7ffb05fa92
+index 0000000000..c0d0cdb909
 --- /dev/null
-+++ b/package/python-multipart/python-multipart.mk
-@@ -0,0 +1,15 @@
++++ b/package/python-decouple/python-decouple.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-multipart
++# python-decouple
 +#
 +################################################################################
 +
-+PYTHON_MULTIPART_VERSION = 0.0.6
-+PYTHON_MULTIPART_SOURCE = python_multipart-$(PYTHON_MULTIPART_VERSION).tar.gz
-+PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/2d/23/abcfad10c3348cb6358400f8adbc21b523bbc6c954494fd0974428068672
-+PYTHON_MULTIPART_SETUP_TYPE = pep517
-+PYTHON_MULTIPART_LICENSE = Apache-2.0
-+PYTHON_MULTIPART_LICENSE_FILES = LICENSE.txt
-+PYTHON_MULTIPART_DEPENDENCIES = host-python-hatchling
++PYTHON_DECOUPLE_VERSION = 3.8
++PYTHON_DECOUPLE_SITE = https://files.pythonhosted.org/packages/e1/97/373dcd5844ec0ea5893e13c39a2c67e7537987ad8de3842fe078db4582fa
++PYTHON_DECOUPLE_SETUP_TYPE = setuptools
++PYTHON_DECOUPLE_LICENSE = MIT
++PYTHON_DECOUPLE_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
