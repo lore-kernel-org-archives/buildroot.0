@@ -4,83 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C94CC4167B
-	for <buildroot@archiver.kernel.org>; Fri, 15 Dec 2023 21:26:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 885FEC4167B
+	for <buildroot@archiver.kernel.org>; Fri, 15 Dec 2023 21:30:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9702E404D1;
-	Fri, 15 Dec 2023 21:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9702E404D1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1589B4387F;
+	Fri, 15 Dec 2023 21:30:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1589B4387F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xgDDPgh4iMIF; Fri, 15 Dec 2023 21:26:10 +0000 (UTC)
+	with ESMTP id hCIvGm1psqbV; Fri, 15 Dec 2023 21:30:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 70490404DF;
-	Fri, 15 Dec 2023 21:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70490404DF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E6A861BF2F6
- for <buildroot@lists.busybox.net>; Fri, 15 Dec 2023 21:26:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 10DC641917;
+	Fri, 15 Dec 2023 21:30:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10DC641917
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BB83D1BF2F6
+ for <buildroot@lists.busybox.net>; Fri, 15 Dec 2023 21:30:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C002B6F4C2
- for <buildroot@lists.busybox.net>; Fri, 15 Dec 2023 21:26:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C002B6F4C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 944A242248
+ for <buildroot@lists.busybox.net>; Fri, 15 Dec 2023 21:30:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 944A242248
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z5ZDv-VNmnkJ for <buildroot@lists.busybox.net>;
- Fri, 15 Dec 2023 21:26:06 +0000 (UTC)
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com
- [IPv6:2607:f8b0:4864:20::b2c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9562760D52
- for <buildroot@buildroot.org>; Fri, 15 Dec 2023 21:26:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9562760D52
-Received: by mail-yb1-xb2c.google.com with SMTP id
- 3f1490d57ef6-da077db5145so925805276.0
- for <buildroot@buildroot.org>; Fri, 15 Dec 2023 13:26:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702675565; x=1703280365;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=UJU40Ct4NN9CT4RoTv7Vq6vhjqrRwNm/0w84lJRDBYM=;
- b=NKAs4+jV5IKyZTh/k95OgiZ6sAXs0FknewjhWiijgYqO85mAuLitINSrREfOjk2Hr1
- FOd+K+Mju9Ek/ll8m4albuJcWCuiWHzTizf37yx4iDEfw8Rb31lWSUj45+CHq5EzSweh
- NjIMQ/vpFi2ZQkOM2nMK+QjHBECmsbgQbf2maaUUYos7mLYouPhhSkR5NVjLW7qU8IxR
- h+MnzzYlj/BVMPu4cFO8e39+A6bekvAXKlkOg2Qpfr2y9jEnIIF77rf/HIs+dBjKjZXo
- 9OfeHyInYFFR3ypwmpf30lju7RrXbOBtrVGJbQ8ntYDRzzCapAk4HIwhyft/LUFjH7JU
- r9OQ==
-X-Gm-Message-State: AOJu0YwUBjTKWd6gd7UkL2lfrAn16idDB4FVckPSt6oDLPZdD6fA7tF2
- VelhTMK6/RnxErtCuXcT4lrCgp5XLa6O9w3tisO38w==
-X-Google-Smtp-Source: AGHT+IFOCzk9T3TKuY24QOkb2JrRY5xijw4ZV71ootvyQ/CUZGkr+bh+wkKjvFMFYF86lEHONNsV2EFCMpFJHHScA24=
-X-Received: by 2002:a25:f61f:0:b0:dbc:e2aa:1cb4 with SMTP id
- t31-20020a25f61f000000b00dbce2aa1cb4mr2633285ybd.86.1702675565459; Fri, 15
- Dec 2023 13:26:05 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7xHw7KhSU03K for <buildroot@lists.busybox.net>;
+ Fri, 15 Dec 2023 21:30:25 +0000 (UTC)
+Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CB67742243
+ for <buildroot@buildroot.org>; Fri, 15 Dec 2023 21:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB67742243
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id EFlErCb1fERwlEFlErYrTi; Fri, 15 Dec 2023 22:30:20 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Fri, 15 Dec 2023 22:30:19 +0100
+Message-Id: <20231215213019.32352-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20231213164311.4180059-1-dario.binacchi@amarulasolutions.com>
- <20231213164311.4180059-4-dario.binacchi@amarulasolutions.com>
- <CAAE6iEUqGKqt=qvBQQ+NAqXsJ2dk=5W3PK+=1A5hzFJqrA2uGQ@mail.gmail.com>
-In-Reply-To: <CAAE6iEUqGKqt=qvBQQ+NAqXsJ2dk=5W3PK+=1A5hzFJqrA2uGQ@mail.gmail.com>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Fri, 15 Dec 2023 22:25:54 +0100
-Message-ID: <CABGWkvr07wTs1vmcWvoOec858vx9C4VzFdXJ0TqTDr56rx0Wrw@mail.gmail.com>
-To: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1702675565; x=1703280365;
- darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=UJU40Ct4NN9CT4RoTv7Vq6vhjqrRwNm/0w84lJRDBYM=;
- b=DJU3pBejPaY/Tk1viYOH2Z9ZP4lijmBMxGDhOoOAt/b2a1yq3NhIdI7LXh1O9fAWIV
- lMqDXfA1SDQ1nxR+XRo7BeI66MRsPdpNBm538EKoevRFKxoR5le+2wNY7IrR3fi7665l
- bAfCFrlj+sXqyT0W45KANqluaX1teYjP2KRQk=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=DJU3pBej
-Subject: Re: [Buildroot] [PATCH v2 03/11] package/python-jsonschema: add
- host variant
+X-CMAE-Envelope: MS4xfGf6ss5BxhPmmGDPy37Ij5/soMtORY3+M8NmkUXBIzOxsLn0nx8SyeZXb8aoZA4dxShJji2qgkCzmw3oEtOljq1XTKOYy8469JOa7QqRUGWqfAq3V0Tn
+ xIXdSGhgV0c6dFaGT7R2703d7nhsjHsaBZSoZN1wrhf6jfF3QYavpQK/zoEDQz4fqP+iTWafYgA735SNK5JmHZpH8eFIKfuDl66shJasv4QIZE7uRYFWp8kN
+ CCn3Im0NhTBk+uqlD31Hmfo1Z+TAFiDNjMid4zEFr08=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1702675820; bh=w3UBu17tXNTpGQK+Q8ETrkUcvvlPXrN/ZETX+ayehsA=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=dRxFbi5HJz5xXwBQxYXYjeJOvoMfAmeeRFYQH1LzQIgooBsyXv13SntKmcbd7GRgG
+ dJzkEEIXvxpnDFDc8pHgj0EVeGXW45UXl2qS02yFcSgL41fDZ04ds/9U5rnDPeYw6m
+ YVCNJBGKykSIQZ1uuCCDAkgGGC2aECFld3XiU5qsVcpDgqYhBEuMyoG0L0qpbqHzMM
+ QwyeWm2s/ky3/wNy/fwv48Q5UWd5CZSyO8diMswY0NmxpGFNVij8zBfZXHqwB3C5dx
+ 6RKZzqxr362N26N2e6bqPaG4Ze7nMoDyYkHj4P6PC07iSF2KVk7zMiTbpaA0Ex9kBh
+ oKPjvp4HnbTjg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=dRxFbi5H
+Subject: [Buildroot] [PATCH] configs/mangopi_mq1rdw1_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,76 +71,227 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Michael Trimarchi <michael@amarulasolutions.com>,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRnJhbsOnb2lzLAoKT24gRnJpLCBEZWMgMTUsIDIwMjMgYXQgODo0MeKAr1BNIEZyYW7D
-p29pcyBQZXJyYWQKPGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZz4gd3JvdGU6Cj4KPgo+Cj4gTGUg
-bWVyLiAxMyBkw6ljLiAyMDIzIMOgIDE3OjQ0LCBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNj
-aGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+IGEgw6ljcml0IDoKPj4KPj4gUmVjZW50IHZlcnNpb24g
-b2YgVS1Cb290IHVzZSBiaW5tYW4gdG8gcHJvdmlkZSBhIG1lY2hhbmlzbSBmb3IgYnVpbGRpbmcK
-Pj4gaW1hZ2VzLCBmcm9tIHNpbXBsZSBTUEwgKyBVLUJvb3QgY29tYmluYXRpb25zLCB0byBtb3Jl
-IGNvbXBsZXgKPj4gYXJyYW5nZW1lbnRzIHdpdGggbWFueSBwYXJ0cy4gVGhpcyBwYWNrYWdlIGlz
-IHJlcXVpcmVkIGJ5IGJpbm1hbi4KPj4KPj4gQ28tZGV2ZWxvcGVkLWJ5OiBNaWNoYWVsIFRyaW1h
-cmNoaSA8bWljaGFlbEBhbWFydWxhc29sdXRpb25zLmNvbT4KPj4gU2lnbmVkLW9mZi1ieTogTWlj
-aGFlbCBUcmltYXJjaGkgPG1pY2hhZWxAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4+IFNpZ25lZC1v
-ZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNv
-bT4KPj4gLS0tCj4+ICBwYWNrYWdlL0NvbmZpZy5pbi5ob3N0ICAgICAgICAgICAgICAgICAgICAg
-ICAgIHwgMSArCj4+ICBwYWNrYWdlL3B5dGhvbi1qc29uc2NoZW1hL0NvbmZpZy5pbi5ob3N0ICAg
-ICAgIHwgNiArKysrKysKPgo+Cj4gQWRkaW5nIGFuIENvbmZpZy5pbi5ob3N0IGZvciB0aGlzIGtp
-bmQgb2YgcGFja2FnZSBpcyBub3QgdXNlZnVsLCBzZWUgZG9jdW1lbnRhdGlvbiBzZWN0aW9uIDE4
-LjIuMi4gQ29uZmlnLmluLmhvc3QgZmlsZQo+CgpEbyBJIG5lZWQgdG8gZHJvcCB0aGUgQ29uZmln
-LmluLmhvc3QgZmlsZSBmb3IgYWxsIHRoZSBwYWNrYWdlcyBuZWVkZWQgYnkgYmlubWFuPwpPciBv
-bmx5IGZvciB0aGlzIG9uZT8KClRoYW5rcyBhbmQgcmVnYXJkcywKRGFyaW8KCj4gRnJhbsOnb2lz
-Cj4KPj4gIHBhY2thZ2UvcHl0aG9uLWpzb25zY2hlbWEvcHl0aG9uLWpzb25zY2hlbWEubWsgfCA2
-ICsrKysrKwo+PiAgMyBmaWxlcyBjaGFuZ2VkLCAxMyBpbnNlcnRpb25zKCspCj4+ICBjcmVhdGUg
-bW9kZSAxMDA2NDQgcGFja2FnZS9weXRob24tanNvbnNjaGVtYS9Db25maWcuaW4uaG9zdAo+Pgo+
-PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4uaG9zdCBiL3BhY2thZ2UvQ29uZmlnLmlu
-Lmhvc3QKPj4gaW5kZXggYzgwODQyYzMzYTJmLi41ZDIxMjFkZTAyYTQgMTAwNjQ0Cj4+IC0tLSBh
-L3BhY2thZ2UvQ29uZmlnLmluLmhvc3QKPj4gKysrIGIvcGFja2FnZS9Db25maWcuaW4uaG9zdAo+
-PiBAQCAtODUsNiArODUsNyBAQCBtZW51ICJIb3N0IHV0aWxpdGllcyIKPj4gICAgICAgICBzb3Vy
-Y2UgInBhY2thZ2UvcHl0aG9uLWN5dGhvbi9Db25maWcuaW4uaG9zdCIKPj4gICAgICAgICBzb3Vy
-Y2UgInBhY2thZ2UvcHl0aG9uLWdyZWVubGV0L0NvbmZpZy5pbi5ob3N0Igo+PiAgICAgICAgIHNv
-dXJjZSAicGFja2FnZS9weXRob24taW5pcGFyc2UvQ29uZmlnLmluLmhvc3QiCj4+ICsgICAgICAg
-c291cmNlICJwYWNrYWdlL3B5dGhvbi1qc29uc2NoZW1hL0NvbmZpZy5pbi5ob3N0Igo+PiAgICAg
-ICAgIHNvdXJjZSAicGFja2FnZS9weXRob24ta2ZsYXNoL0NvbmZpZy5pbi5ob3N0Igo+PiAgICAg
-ICAgIHNvdXJjZSAicGFja2FnZS9weXRob24tbHhtbC9Db25maWcuaW4uaG9zdCIKPj4gICAgICAg
-ICBzb3VyY2UgInBhY2thZ2UvcHl0aG9uLXB5eWFtbC9Db25maWcuaW4uaG9zdCIKPj4gZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvcHl0aG9uLWpzb25zY2hlbWEvQ29uZmlnLmluLmhvc3QgYi9wYWNrYWdl
-L3B5dGhvbi1qc29uc2NoZW1hL0NvbmZpZy5pbi5ob3N0Cj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
-Cj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uZmQyNzVhNDFiMjAwCj4+IC0tLSAvZGV2L251bGwKPj4g
-KysrIGIvcGFja2FnZS9weXRob24tanNvbnNjaGVtYS9Db25maWcuaW4uaG9zdAo+PiBAQCAtMCww
-ICsxLDYgQEAKPj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9IT1NUX1BZVEhPTl9KU09OU0NIRU1BCj4+
-ICsgICAgICAgYm9vbCAiaG9zdCBweXRob24tanNvbnNjaGVtYSIKPj4gKyAgICAgICBoZWxwCj4+
-ICsgICAgICAgICBUaGUgaG9zdCBpbXBsZW1lbnRhdGlvbiBvZiBKU09OIFNjaGVtYSB2YWxpZGF0
-aW9uIGZvciBQeXRob24uCj4+ICsKPj4gKyAgICAgICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9weXRo
-b24tanNvbnNjaGVtYS9qc29uc2NoZW1hCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1q
-c29uc2NoZW1hL3B5dGhvbi1qc29uc2NoZW1hLm1rIGIvcGFja2FnZS9weXRob24tanNvbnNjaGVt
-YS9weXRob24tanNvbnNjaGVtYS5tawo+PiBpbmRleCBkZWU4N2U4ZjlkOWIuLjZmMjIwNmYzYTAz
-YyAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9weXRob24tanNvbnNjaGVtYS9weXRob24tanNvbnNj
-aGVtYS5tawo+PiArKysgYi9wYWNrYWdlL3B5dGhvbi1qc29uc2NoZW1hL3B5dGhvbi1qc29uc2No
-ZW1hLm1rCj4+IEBAIC0xNSw0ICsxNSwxMCBAQCBQWVRIT05fSlNPTlNDSEVNQV9ERVBFTkRFTkNJ
-RVMgPSBcCj4+ICAgICAgICAgaG9zdC1weXRob24taGF0Y2gtZmFuY3ktcHlwaS1yZWFkbWUgXAo+
-PiAgICAgICAgIGhvc3QtcHl0aG9uLWhhdGNoLXZjcwo+Pgo+PiArSE9TVF9QWVRIT05fSlNPTlND
-SEVNQV9ERVBFTkRFTkNJRVMgPSBcCj4+ICsgICAgICAgaG9zdC1weXRob24taGF0Y2hsaW5nIFwK
-Pj4gKyAgICAgICBob3N0LXB5dGhvbi1oYXRjaC1mYW5jeS1weXBpLXJlYWRtZSBcCj4+ICsgICAg
-ICAgaG9zdC1weXRob24taGF0Y2gtdmNzCj4+ICsKPj4gICQoZXZhbCAkKHB5dGhvbi1wYWNrYWdl
-KSkKPj4gKyQoZXZhbCAkKGhvc3QtcHl0aG9uLXBhY2thZ2UpKQo+PiAtLQo+PiAyLjQzLjAKPj4K
-Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gYnVp
-bGRyb290IG1haWxpbmcgbGlzdAo+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+PiBodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCgoKLS0gCgpE
-YXJpbyBCaW5hY2NoaQoKU2VuaW9yIEVtYmVkZGVkIExpbnV4IERldmVsb3BlcgoKZGFyaW8uYmlu
-YWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KCgpBbWFydWxhIFNvbHV0aW9ucyBTUkwKClZpYSBMZSBDYW5ldmFyZSAzMCwgMzExMDAg
-VHJldmlzbywgVmVuZXRvLCBJVAoKVC4gKzM5IDA0MiAyNDMgNTMxMAppbmZvQGFtYXJ1bGFzb2x1
-dGlvbnMuY29tCgp3d3cuYW1hcnVsYXNvbHV0aW9ucy5jb20KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+Add support for MangoPi MQ1RDW2:
+https://mangopi.org/mqr
+
+An Allwinner T113-S3(2xCortex-A7+128MB DDR3-1600 embedded) based SBC
+with:
+* USB-OTG Type-C socket
+* USB-HOST Type-C socket
+* 2x 18 pin GPIO headers
+* TF card slot
+* RTL8723DS WiFi module with ext. antenna connector
+* 40 pin RGB FPC connector
+* 6 pin CTP FPC connector
+* 24 pin DVP FPC connector
+* onboard mic
+* onboard audio amplifier
+* FEL,reset button
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ DEVELOPERS                                    |  2 +
+ board/mangopi/mq1rdw2/genimage.cfg            | 17 +++++++
+ board/mangopi/mq1rdw2/readme.txt              | 46 +++++++++++++++++++
+ .../boot/extlinux/extlinux.conf               |  4 ++
+ .../rootfs_overlay/etc/network/interfaces     |  6 +++
+ .../rootfs_overlay/etc/wpa_supplicant.conf    |  8 ++++
+ configs/mangopi_mq1rdw2_defconfig             | 40 ++++++++++++++++
+ 7 files changed, 123 insertions(+)
+ create mode 100644 board/mangopi/mq1rdw2/genimage.cfg
+ create mode 100644 board/mangopi/mq1rdw2/readme.txt
+ create mode 100644 board/mangopi/mq1rdw2/rootfs_overlay/boot/extlinux/extlinux.conf
+ create mode 100644 board/mangopi/mq1rdw2/rootfs_overlay/etc/network/interfaces
+ create mode 100644 board/mangopi/mq1rdw2/rootfs_overlay/etc/wpa_supplicant.conf
+ create mode 100644 configs/mangopi_mq1rdw2_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 83b970b591..12dd1fdcc9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1213,6 +1213,7 @@ N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
+ F:	board/bananapi/bananapi-m2-ultra/
+ F:	board/freescale/imx6ullevk/
+ F:	board/freescale/imxrt1050evk/
++F:	board/mangopi/mq1rdw2
+ F:	board/olimex/a*
+ F:	board/pine64/rockpro64
+ F:	configs/amarula_vyasa_rk3288_defconfig
+@@ -1222,6 +1223,7 @@ F:	configs/bananapi_m2_ultra_defconfig
+ F:	configs/freescale_imx6ullevk_defconfig
+ F:	configs/imx6ullevk_defconfig
+ F:	configs/imxrt1050-evk_defconfig
++F:	configs/mangopi_mq1rdw2_defconfig
+ F:	configs/olimex_a*
+ F:	configs/rockpro64_defconfig
+ F:	package/at/
+diff --git a/board/mangopi/mq1rdw2/genimage.cfg b/board/mangopi/mq1rdw2/genimage.cfg
+new file mode 100644
+index 0000000000..b48e12a831
+--- /dev/null
++++ b/board/mangopi/mq1rdw2/genimage.cfg
+@@ -0,0 +1,17 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++		size = 1016K # 1MB - 8KB
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/mangopi/mq1rdw2/readme.txt b/board/mangopi/mq1rdw2/readme.txt
+new file mode 100644
+index 0000000000..fd37f63154
+--- /dev/null
++++ b/board/mangopi/mq1rdw2/readme.txt
+@@ -0,0 +1,46 @@
++MangoPi MQ1RDW2
++===============
++
++MangoPi MQ1RDW2 is a tiny ARM Cortex-A7 based single board computer.
++It's built around Allwinner T113-S3 dual core 1GHz CPU with integrated
++128MB DDR3-1600 RAM.
++Board features:
++- USB-OTG Type-C socket
++- USB-HOST Type-C socket
++- 2x 18 pin GPIO headers
++- TF card slot
++- RTL8723DS WiFi module with ext. antenna connector
++- 40 pin RGB FPC connector
++- 6 pin CTP FPC connector
++- 24 pin DVP FPC connector
++- onboard mic
++- onboard audio amplifier
++- FEL,reset button
++
++How to build
++============
++
++$ make mangopi_mq1rdw2_defconfig
++$ make
++
++Wifi
++==========
++
++Edit board/mangopi/mq1rdw2/overlay/etc/wpa_supplicant.conf or
++/etc/wpa_supplicant.conf once connected to the board:
++
++* Replace YOURSSID with your AP ssid
++* Replace YOURPASSWD with your AP password
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Connect a TTL UART to the UART3 on P8 header (unpopulated), insert the microSD card and
++plug in a USB-C cable to the OTG or HOST connector to boot the system.
+diff --git a/board/mangopi/mq1rdw2/rootfs_overlay/boot/extlinux/extlinux.conf b/board/mangopi/mq1rdw2/rootfs_overlay/boot/extlinux/extlinux.conf
+new file mode 100644
+index 0000000000..c190ff7659
+--- /dev/null
++++ b/board/mangopi/mq1rdw2/rootfs_overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++label MANGOPI-MQ1RDW2
++    kernel /boot/zImage
++    devicetree /boot/sun8i-t113s-mangopi-mq-r-t113.dtb
++    append console=ttyS3,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
+diff --git a/board/mangopi/mq1rdw2/rootfs_overlay/etc/network/interfaces b/board/mangopi/mq1rdw2/rootfs_overlay/etc/network/interfaces
+new file mode 100644
+index 0000000000..89e7d74aff
+--- /dev/null
++++ b/board/mangopi/mq1rdw2/rootfs_overlay/etc/network/interfaces
+@@ -0,0 +1,6 @@
++auto lo
++iface lo inet loopback
++
++auto wlan0
++iface wlan0 inet dhcp
++wpa-conf /etc/wpa_supplicant.conf
+diff --git a/board/mangopi/mq1rdw2/rootfs_overlay/etc/wpa_supplicant.conf b/board/mangopi/mq1rdw2/rootfs_overlay/etc/wpa_supplicant.conf
+new file mode 100644
+index 0000000000..b43292b0a7
+--- /dev/null
++++ b/board/mangopi/mq1rdw2/rootfs_overlay/etc/wpa_supplicant.conf
+@@ -0,0 +1,8 @@
++ap_scan=1
++
++network={
++        ssid="YOURSSID"
++        scan_ssid=1
++        key_mgmt=WPA-PSK
++        psk="YOURPASSWD"
++}
+diff --git a/configs/mangopi_mq1rdw2_defconfig b/configs/mangopi_mq1rdw2_defconfig
+new file mode 100644
+index 0000000000..a2f8a1299b
+--- /dev/null
++++ b/configs/mangopi_mq1rdw2_defconfig
+@@ -0,0 +1,40 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++BR2_TARGET_GENERIC_HOSTNAME="mangopi-mq1rdw2"
++BR2_TARGET_GENERIC_ISSUE="Welcome to MangoPI MQ1RDW2"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS3"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_OVERLAY="board/mangopi/mq1rdw2/rootfs_overlay"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/mangopi/mq1rdw2/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.5"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-t113s-mangopi-mq-r-t113"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_RTL8723DS=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
++BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
++BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=y
++BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01-rc4"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mangopi_mq_r"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_PACKAGE_HOST_GENIMAGE=y
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
