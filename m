@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48BF6C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 14 Dec 2023 21:53:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C4F4C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 15 Dec 2023 09:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2FB340863;
-	Thu, 14 Dec 2023 21:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2FB340863
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1B064175D;
+	Fri, 15 Dec 2023 09:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1B064175D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vxqCSXek8Ijm; Thu, 14 Dec 2023 21:53:23 +0000 (UTC)
+	with ESMTP id zZPOuNe6gMPb; Fri, 15 Dec 2023 09:06:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3586A4089C;
-	Thu, 14 Dec 2023 21:53:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3586A4089C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11CE74173F;
+	Fri, 15 Dec 2023 09:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11CE74173F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D18721BF42D
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 21:53:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A84B31BF5AD
+ for <buildroot@lists.busybox.net>; Fri, 15 Dec 2023 09:06:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A256240878
- for <buildroot@lists.busybox.net>; Thu, 14 Dec 2023 21:53:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A256240878
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8BFA74173F
+ for <buildroot@lists.busybox.net>; Fri, 15 Dec 2023 09:06:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BFA74173F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XrcK6s2MWTHO for <buildroot@lists.busybox.net>;
- Thu, 14 Dec 2023 21:53:19 +0000 (UTC)
+ with ESMTP id GDic9rATCNms for <buildroot@lists.busybox.net>;
+ Fri, 15 Dec 2023 09:06:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E55140872
- for <buildroot@uclibc.org>; Thu, 14 Dec 2023 21:53:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E55140872
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F59941713
+ for <buildroot@uclibc.org>; Fri, 15 Dec 2023 09:06:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F59941713
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 7B1A386C48; Thu, 14 Dec 2023 21:53:19 +0000 (UTC)
+ id 4DF5187B3E; Fri, 15 Dec 2023 09:06:27 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 14 Dec 2023 21:53:19 +0000
+Date: Fri, 15 Dec 2023 09:06:27 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,7 +47,7 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: marc@rupy.se
+X-Bugzilla-Who: thomas.petazzoni@bootlin.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -55,7 +55,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15892-163-cEC0BpyWJh@https.bugs.busybox.net/>
+Message-ID: <bug-15892-163-NmGOGc2nAL@https.bugs.busybox.net/>
 In-Reply-To: <bug-15892-163@https.bugs.busybox.net/>
 References: <bug-15892-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -80,10 +80,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15892
 
---- Comment #1 from marc@rupy.se ---
-This is on a Raspberry from 2021.
-
-Targeting Risc-V.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+Which distribution/OS are you running?
 
 -- 
 You are receiving this mail because:
