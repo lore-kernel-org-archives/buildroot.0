@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96B78C46CA2
-	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 10:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97556C46CCD
+	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 16:10:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0905782168;
-	Sat, 16 Dec 2023 10:59:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0905782168
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCDBD4175A;
+	Sat, 16 Dec 2023 16:10:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCDBD4175A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aRnCnhshdFdo; Sat, 16 Dec 2023 10:59:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wbBq3VYKKVKG; Sat, 16 Dec 2023 16:10:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B46F82171;
-	Sat, 16 Dec 2023 10:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B46F82171
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 194B61BF28A
- for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 10:59:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10BCC41761;
+	Sat, 16 Dec 2023 16:10:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10BCC41761
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 19B141BF28A
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1043607C7
- for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 10:59:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1043607C7
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2AB440146
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2AB440146
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8wbgKiyGjfn4 for <buildroot@lists.busybox.net>;
- Sat, 16 Dec 2023 10:59:09 +0000 (UTC)
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B3EB560783
- for <buildroot@buildroot.org>; Sat, 16 Dec 2023 10:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3EB560783
-Received: by mail-il1-x12a.google.com with SMTP id
- e9e14a558f8ab-35e70495835so7098825ab.3
- for <buildroot@buildroot.org>; Sat, 16 Dec 2023 02:59:09 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6PKNKIP1GREu for <buildroot@lists.busybox.net>;
+ Sat, 16 Dec 2023 16:10:03 +0000 (UTC)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6E559400B8
+ for <buildroot@buildroot.org>; Sat, 16 Dec 2023 16:10:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E559400B8
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-40c2bb872e2so18675995e9.3
+ for <buildroot@buildroot.org>; Sat, 16 Dec 2023 08:10:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702724348; x=1703329148;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=nq/v1/yJTxs9ZS65mhlmEmyZIlKac73r+DipCeW/tO0=;
- b=WQmI20wp/otX62pSoOgkq3mTUmHPvkf7US2UjqAo3CBCyU5bW3zaqF1Y0ySlX1xx/T
- DhDt2fa8F7+3XNDIDIS4atWNUyhvYyIlLAVD3WU4/BblQL/euSb6v/CAMPBiAoAZuVaP
- m861gc8i1PJSBz6l4Eg3EURduCkTVTVfz/fnEgXL//2zpsonOhIxt7cwUtKmvmGurUY5
- HEpzZ3r6NGrJoddl1ztXjWsWQTKBjM/RqOFsmMGT3togEd5UY0nZAmkQVFIuVbB0QRgN
- I2mMikE0fqfkg2LY08mVLbZF3UMOJw8xP6GUaN6aXgl3XpkgrYaTNpus72tfXh/2z1Jw
- khbQ==
-X-Gm-Message-State: AOJu0YwDfEzsQwsx8fDH4oo9y1jEEwGw9Nwt8kfaKd1Wm6kVSjfm6hsO
- QEjIO9XdfT/N0GdyruJcFSQFoayP5odeL8cidQomonCjtEktvYT7skI=
-X-Google-Smtp-Source: AGHT+IFkJNjI/NzaW+vS/YoYvLbKsQjY0NREhnEwUiXu+Xi41e9slnUI7qDgqAzKWu5dfOTSUfIJw+LMMTa3jcBVKh4=
-X-Received: by 2002:a05:6e02:20c4:b0:35d:6bbc:edf8 with SMTP id
- 4-20020a056e0220c400b0035d6bbcedf8mr19065831ilq.31.1702724348382; Sat, 16 Dec
- 2023 02:59:08 -0800 (PST)
+ d=1e100.net; s=20230601; t=1702743001; x=1703347801;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=b1PrBzGCAzj95zgJ1ecuiE5qe9pO9ci7keutJEePMfg=;
+ b=VA9XaPk463J0jQfoYSrrF5Cfg5N1CGsgfPRIkQWl2IVGTVr5xeRfa6NFK4d5JF/2Vf
+ XUeCg4fdsNalXu2hj+plrLF6Vl7BM5mqeln4h9JD1169BTUH+v4yPBDXabeL5IsNVzpd
+ 9eZ+HgqsX/gkXucucicAjg477hcD24VTTn2nyxTSegJWNxsKK7B8RQ6UNFZ4cihntfXJ
+ B1/bDUm+51NbjZVvkiKpx1ATA28V985h4kYqd2yhcubZ6SYUCWuGml01acFF5a7iSWQ5
+ zugJeAfXOy7kRL7ADyKPjOhyLQeeg1xXw+8nETrYE2Of+UmKqeG6eG9BhOECfciHj8yJ
+ bqjg==
+X-Gm-Message-State: AOJu0YzOi4CJOk7L93T0yKnoPXS4zc2HJ42UEOxuhFAGe4cgIs6iv1Ik
+ YTZ60BwinYRx0szcFKaNKdpr4SstXLM=
+X-Google-Smtp-Source: AGHT+IFQ2eP2qakPU+JXUkieg8EzIZbcxlZlSYgDzxVhHx7wb7pbrzL2Y0UB2CP//+9yZzmvs+TbQA==
+X-Received: by 2002:a05:600c:ac6:b0:40c:310b:b694 with SMTP id
+ c6-20020a05600c0ac600b0040c310bb694mr3054159wmr.333.1702743001061; 
+ Sat, 16 Dec 2023 08:10:01 -0800 (PST)
+Received: from landeda.home ([2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ by smtp.gmail.com with ESMTPSA id
+ l17-20020a5d4bd1000000b00336607f6630sm997263wrt.47.2023.12.16.08.10.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 16 Dec 2023 08:10:00 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 16 Dec 2023 17:10:00 +0100
+Message-ID: <cover.1702742998.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-References: <20231213164311.4180059-1-dario.binacchi@amarulasolutions.com>
- <20231213164311.4180059-4-dario.binacchi@amarulasolutions.com>
- <CAAE6iEUqGKqt=qvBQQ+NAqXsJ2dk=5W3PK+=1A5hzFJqrA2uGQ@mail.gmail.com>
- <CABGWkvr07wTs1vmcWvoOec858vx9C4VzFdXJ0TqTDr56rx0Wrw@mail.gmail.com>
-In-Reply-To: <CABGWkvr07wTs1vmcWvoOec858vx9C4VzFdXJ0TqTDr56rx0Wrw@mail.gmail.com>
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 16 Dec 2023 11:58:57 +0100
-Message-ID: <CAAE6iEW-MWx3aK+mBeoKnAFN9gm3U2_3Ymu9hjgE+JtJsHqCBg@mail.gmail.com>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1702724348; x=1703329148; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=nq/v1/yJTxs9ZS65mhlmEmyZIlKac73r+DipCeW/tO0=;
- b=MCIt6WTZId8/iJ5SamB525BVuf7LcpzYryCiygAf+MY4WL5DT4c6X6C8nGvQvyTpjq
- 4gg4Sr2Ep7F0he5plHSlAly6ZCcUtijoEqASPB2FRK0IrqYenXdFydqUY7Ex2EcENhMt
- 3gpCmAGWcZxt+M0VIIV/hX87pq0pYO4kzraCpYdy3sWZPRZwtL5U2+VL6iHfG8teDSgP
- 477Y40Xz1wfkWlMTV4Wu1Tq0IWOsbdWJ8MtqFgG0OtplYUC2gyFElVmoiaJE6xp+3HPv
- gLAmsa7HFd7j3s4i1PdCTtbhPv8LIKXb10NAmRsRBnqIGbqW2OLMCMs6TL19nHjY1frE
- s7jg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=MCIt6WTZ
-Subject: Re: [Buildroot] [PATCH v2 03/11] package/python-jsonschema: add
- host variant
+ d=gmail.com; s=20230601; t=1702743001; x=1703347801; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=b1PrBzGCAzj95zgJ1ecuiE5qe9pO9ci7keutJEePMfg=;
+ b=QGoTYRQ7rnjD/KtPTvashnys2A5XGcoggKN8ggjHKknZ+LzrRb7sJxFmj4dJeIhGQV
+ UyavJEaJTD2mFnaL8ZiBfrspoxY6tBjk9XKHkVHOJgzmtB0B+u0L96xkEGpKt0GwmTmA
+ 1xpWakKRepKZOAU5rRJYRriglepM1g71Aq0ylQqWNfLhK2xak6C4YzJbeoSYYCdFCljU
+ KbA50WKGayL2BCAZwqea3DZspuiYrvk+ZfP/qtZpK0IFR06PwWRr7TSFy5e7Is+2pEpw
+ YnEbo7inBAJlHQeZ/8Ps4LPUEqhKOliooB3GrW6b1iQUpJzFc60XVyOZN8XdC2fs3gl+
+ H5qA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=QGoTYRQ7
+Subject: [Buildroot] [PATCH 0/9] support/docker: improve and extend our
+ docker image (branch yem/dockers)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,317 +94,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Michael Trimarchi <michael@amarulasolutions.com>,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: multipart/mixed; boundary="===============4364425228719681922=="
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4364425228719681922==
-Content-Type: multipart/alternative; boundary="000000000000eff249060c9e672e"
+Hello All!
 
---000000000000eff249060c9e672e
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This series attempts to improve our docker image, to fulfill a few
+goals:
 
-Le ven. 15 d=C3=A9c. 2023 =C3=A0 22:26, Dario Binacchi <
-dario.binacchi@amarulasolutions.com> a =C3=A9crit :
+  - provide a minimalist, basic image with only the strictly required
+    set of packages, so that it is easy to test that a package does not
+    have a hidden dependency on tools provided by the distribution (e.g.
+    does not require a python interpreter);
 
-> Hello Fran=C3=A7ois,
->
-> On Fri, Dec 15, 2023 at 8:41=E2=80=AFPM Fran=C3=A7ois Perrad
-> <francois.perrad@gadz.org> wrote:
-> >
-> >
-> >
-> > Le mer. 13 d=C3=A9c. 2023 =C3=A0 17:44, Dario Binacchi <
-> dario.binacchi@amarulasolutions.com> a =C3=A9crit :
-> >>
-> >> Recent version of U-Boot use binman to provide a mechanism for buildin=
-g
-> >> images, from simple SPL + U-Boot combinations, to more complex
-> >> arrangements with many parts. This package is required by binman.
-> >>
-> >> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> >> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> >> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> >> ---
-> >>  package/Config.in.host                         | 1 +
-> >>  package/python-jsonschema/Config.in.host       | 6 ++++++
-> >
-> >
-> > Adding an Config.in.host for this kind of package is not useful, see
-> documentation section 18.2.2. Config.in.host file
-> >
->
-> Do I need to drop the Config.in.host file for all the packages needed by
-> binman?
-> Or only for this one?
->
->
-For all host python packages required by binman.
+  - provide an image that can be used in the CI to run all our tooling:
+    check-package, run-time tests, etc...
 
-Fran=C3=A7ois
+  - provide an image that users can run to have a known-working,
+    reference environment without modifying their host distribution
+    (when they can't or don't want to);
+
+  - provide a set of similar images for various mainstream
+    distributions, that can be used to investigate build issues on those
+    distributions.
+
+Regards,
+Yann E. MORIN.
+
+Regards,
+Yann E. MORIN.
 
 
-> Thanks and regards,
-> Dario
->
-> > Fran=C3=A7ois
-> >
-> >>  package/python-jsonschema/python-jsonschema.mk | 6 ++++++
-> >>  3 files changed, 13 insertions(+)
-> >>  create mode 100644 package/python-jsonschema/Config.in.host
-> >>
-> >> diff --git a/package/Config.in.host b/package/Config.in.host
-> >> index c80842c33a2f..5d2121de02a4 100644
-> >> --- a/package/Config.in.host
-> >> +++ b/package/Config.in.host
-> >> @@ -85,6 +85,7 @@ menu "Host utilities"
-> >>         source "package/python-cython/Config.in.host"
-> >>         source "package/python-greenlet/Config.in.host"
-> >>         source "package/python-iniparse/Config.in.host"
-> >> +       source "package/python-jsonschema/Config.in.host"
-> >>         source "package/python-kflash/Config.in.host"
-> >>         source "package/python-lxml/Config.in.host"
-> >>         source "package/python-pyyaml/Config.in.host"
-> >> diff --git a/package/python-jsonschema/Config.in.host
-> b/package/python-jsonschema/Config.in.host
-> >> new file mode 100644
-> >> index 000000000000..fd275a41b200
-> >> --- /dev/null
-> >> +++ b/package/python-jsonschema/Config.in.host
-> >> @@ -0,0 +1,6 @@
-> >> +config BR2_PACKAGE_HOST_PYTHON_JSONSCHEMA
-> >> +       bool "host python-jsonschema"
-> >> +       help
-> >> +         The host implementation of JSON Schema validation for Python=
-.
-> >> +
-> >> +         https://github.com/python-jsonschema/jsonschema
-> >> diff --git a/package/python-jsonschema/python-jsonschema.mk
-> b/package/python-jsonschema/python-jsonschema.mk
-> >> index dee87e8f9d9b..6f2206f3a03c 100644
-> >> --- a/package/python-jsonschema/python-jsonschema.mk
-> >> +++ b/package/python-jsonschema/python-jsonschema.mk
-> >> @@ -15,4 +15,10 @@ PYTHON_JSONSCHEMA_DEPENDENCIES =3D \
-> >>         host-python-hatch-fancy-pypi-readme \
-> >>         host-python-hatch-vcs
-> >>
-> >> +HOST_PYTHON_JSONSCHEMA_DEPENDENCIES =3D \
-> >> +       host-python-hatchling \
-> >> +       host-python-hatch-fancy-pypi-readme \
-> >> +       host-python-hatch-vcs
-> >> +
-> >>  $(eval $(python-package))
-> >> +$(eval $(host-python-package))
-> >> --
-> >> 2.43.0
-> >>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot@buildroot.org
-> >> https://lists.buildroot.org/mailman/listinfo/buildroot
->
->
->
-> --
->
-> Dario Binacchi
->
-> Senior Embedded Linux Developer
->
-> dario.binacchi@amarulasolutions.com
->
-> __________________________________
->
->
-> Amarula Solutions SRL
->
-> Via Le Canevare 30, 31100 Treviso, Veneto, IT
->
-> T. +39 042 243 5310
-> info@amarulasolutions.com
->
-> www.amarulasolutions.com
->
+----------------------------------------------------------------
+Yann E. MORIN (9):
+      doc/manual: fixup ordered lists
+      support/dependencies: make git a mandatory dependency
+      support/docker: retry even more
+      support/docker: allow the br-user to become root
+      support/docker: introduce per-distribution sub-directory
+      support/docker: add script to generate docker images
+      support/docker: split base image into three
+      docs/manual: add section about docker images
+      support/docker: add a Fedora-38-based image
 
---000000000000eff249060c9e672e
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ docs/manual/adding-packages-directory.adoc         | 14 +++----
+ docs/manual/adding-packages-gettext.adoc           |  6 +--
+ docs/manual/customize-quick-guide.adoc             | 28 ++++++-------
+ docs/manual/prerequisite.adoc                      | 45 ++++++++++++++++++++-
+ package/pkg-generic.mk                             |  8 ----
+ support/dependencies/dependencies.sh               |  2 +-
+ support/docker/build-all                           | 32 +++++++++++++++
+ .../docker/{ => debian-bullseye.base}/Dockerfile   | 27 ++-----------
+ .../{ => debian-bullseye.base}/apt-sources.list    |  0
+ support/docker/debian-bullseye.ci/Dockerfile       | 43 ++++++++++++++++++++
+ support/docker/debian-bullseye.user/Dockerfile     | 32 +++++++++++++++
+ support/docker/fedora-38.base/Dockerfile           | 43 ++++++++++++++++++++
+ support/docker/fedora-38.ci/Dockerfile             | 47 ++++++++++++++++++++++
+ support/docker/fedora-38.user/Dockerfile           | 35 ++++++++++++++++
+ 14 files changed, 305 insertions(+), 57 deletions(-)
+ create mode 100755 support/docker/build-all
+ rename support/docker/{ => debian-bullseye.base}/Dockerfile (61%)
+ rename support/docker/{ => debian-bullseye.base}/apt-sources.list (100%)
+ create mode 100644 support/docker/debian-bullseye.ci/Dockerfile
+ create mode 100644 support/docker/debian-bullseye.user/Dockerfile
+ create mode 100644 support/docker/fedora-38.base/Dockerfile
+ create mode 100644 support/docker/fedora-38.ci/Dockerfile
+ create mode 100644 support/docker/fedora-38.user/Dockerfile
 
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0ven. 15 d=C3=A9c. 2023 =C3=A0=
-=C2=A022:26, Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi@amarulasol=
-utions.com">dario.binacchi@amarulasolutions.com</a>&gt; a =C3=A9crit=C2=A0:=
-<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8=
-ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hello Fran=C3=
-=A7ois,<br>
-<br>
-On Fri, Dec 15, 2023 at 8:41=E2=80=AFPM Fran=C3=A7ois Perrad<br>
-&lt;<a href=3D"mailto:francois.perrad@gadz.org" target=3D"_blank">francois.=
-perrad@gadz.org</a>&gt; wrote:<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; Le mer. 13 d=C3=A9c. 2023 =C3=A0 17:44, Dario Binacchi &lt;<a href=3D"=
-mailto:dario.binacchi@amarulasolutions.com" target=3D"_blank">dario.binacch=
-i@amarulasolutions.com</a>&gt; a =C3=A9crit :<br>
-&gt;&gt;<br>
-&gt;&gt; Recent version of U-Boot use binman to provide a mechanism for bui=
-lding<br>
-&gt;&gt; images, from simple SPL + U-Boot combinations, to more complex<br>
-&gt;&gt; arrangements with many parts. This package is required by binman.<=
-br>
-&gt;&gt;<br>
-&gt;&gt; Co-developed-by: Michael Trimarchi &lt;<a href=3D"mailto:michael@a=
-marulasolutions.com" target=3D"_blank">michael@amarulasolutions.com</a>&gt;=
-<br>
-&gt;&gt; Signed-off-by: Michael Trimarchi &lt;<a href=3D"mailto:michael@ama=
-rulasolutions.com" target=3D"_blank">michael@amarulasolutions.com</a>&gt;<b=
-r>
-&gt;&gt; Signed-off-by: Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi=
-@amarulasolutions.com" target=3D"_blank">dario.binacchi@amarulasolutions.co=
-m</a>&gt;<br>
-&gt;&gt; ---<br>
-&gt;&gt;=C2=A0 package/Config.in.host=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 1 +<br>
-&gt;&gt;=C2=A0 package/python-jsonschema/Config.in.host=C2=A0 =C2=A0 =C2=A0=
- =C2=A0| 6 ++++++<br>
-&gt;<br>
-&gt;<br>
-&gt; Adding an Config.in.host for this kind of package is not useful, see d=
-ocumentation section 18.2.2. Config.in.host file<br>
-&gt;<br>
-<br>
-Do I need to drop the Config.in.host file for all the packages needed by bi=
-nman?<br>
-Or only for this one?<br>
-<br></blockquote><div><br></div><div>For all host python packages required =
-by binman.</div><div><br></div><div>Fran=C3=A7ois<br></div><div>=C2=A0</div=
-><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
--left:1px solid rgb(204,204,204);padding-left:1ex">
-Thanks and regards,<br>
-Dario<br>
-<br>
-&gt; Fran=C3=A7ois<br>
-&gt;<br>
-&gt;&gt;=C2=A0 package/python-jsonschema/<a href=3D"http://python-jsonschem=
-a.mk" rel=3D"noreferrer" target=3D"_blank">python-jsonschema.mk</a> | 6 +++=
-+++<br>
-&gt;&gt;=C2=A0 3 files changed, 13 insertions(+)<br>
-&gt;&gt;=C2=A0 create mode 100644 package/python-jsonschema/Config.in.host<=
-br>
-&gt;&gt;<br>
-&gt;&gt; diff --git a/package/Config.in.host b/package/Config.in.host<br>
-&gt;&gt; index c80842c33a2f..5d2121de02a4 100644<br>
-&gt;&gt; --- a/package/Config.in.host<br>
-&gt;&gt; +++ b/package/Config.in.host<br>
-&gt;&gt; @@ -85,6 +85,7 @@ menu &quot;Host utilities&quot;<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/python-cytho=
-n/Config.in.host&quot;<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/python-green=
-let/Config.in.host&quot;<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/python-inipa=
-rse/Config.in.host&quot;<br>
-&gt;&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/python-jsonschema=
-/Config.in.host&quot;<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/python-kflas=
-h/Config.in.host&quot;<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/python-lxml/=
-Config.in.host&quot;<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/python-pyyam=
-l/Config.in.host&quot;<br>
-&gt;&gt; diff --git a/package/python-jsonschema/Config.in.host b/package/py=
-thon-jsonschema/Config.in.host<br>
-&gt;&gt; new file mode 100644<br>
-&gt;&gt; index 000000000000..fd275a41b200<br>
-&gt;&gt; --- /dev/null<br>
-&gt;&gt; +++ b/package/python-jsonschema/Config.in.host<br>
-&gt;&gt; @@ -0,0 +1,6 @@<br>
-&gt;&gt; +config BR2_PACKAGE_HOST_PYTHON_JSONSCHEMA<br>
-&gt;&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;host python-jsonschema&quot=
-;<br>
-&gt;&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-&gt;&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The host implementation of JSON=
- Schema validation for Python.<br>
-&gt;&gt; +<br>
-&gt;&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/p=
-ython-jsonschema/jsonschema" rel=3D"noreferrer" target=3D"_blank">https://g=
-ithub.com/python-jsonschema/jsonschema</a><br>
-&gt;&gt; diff --git a/package/python-jsonschema/<a href=3D"http://python-js=
-onschema.mk" rel=3D"noreferrer" target=3D"_blank">python-jsonschema.mk</a> =
-b/package/python-jsonschema/<a href=3D"http://python-jsonschema.mk" rel=3D"=
-noreferrer" target=3D"_blank">python-jsonschema.mk</a><br>
-&gt;&gt; index dee87e8f9d9b..6f2206f3a03c 100644<br>
-&gt;&gt; --- a/package/python-jsonschema/<a href=3D"http://python-jsonschem=
-a.mk" rel=3D"noreferrer" target=3D"_blank">python-jsonschema.mk</a><br>
-&gt;&gt; +++ b/package/python-jsonschema/<a href=3D"http://python-jsonschem=
-a.mk" rel=3D"noreferrer" target=3D"_blank">python-jsonschema.mk</a><br>
-&gt;&gt; @@ -15,4 +15,10 @@ PYTHON_JSONSCHEMA_DEPENDENCIES =3D \<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0host-python-hatch-fancy-pypi-read=
-me \<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0host-python-hatch-vcs<br>
-&gt;&gt;<br>
-&gt;&gt; +HOST_PYTHON_JSONSCHEMA_DEPENDENCIES =3D \<br>
-&gt;&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0host-python-hatchling \<br>
-&gt;&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0host-python-hatch-fancy-pypi-readme \<=
-br>
-&gt;&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0host-python-hatch-vcs<br>
-&gt;&gt; +<br>
-&gt;&gt;=C2=A0 $(eval $(python-package))<br>
-&gt;&gt; +$(eval $(host-python-package))<br>
-&gt;&gt; --<br>
-&gt;&gt; 2.43.0<br>
-&gt;&gt;<br>
-&gt;&gt; _______________________________________________<br>
-&gt;&gt; buildroot mailing list<br>
-&gt;&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">build=
-root@buildroot.org</a><br>
-&gt;&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/l=
-istinfo/buildroot</a><br>
-<br>
-<br>
-<br>
--- <br>
-<br>
-Dario Binacchi<br>
-<br>
-Senior Embedded Linux Developer<br>
-<br>
-<a href=3D"mailto:dario.binacchi@amarulasolutions.com" target=3D"_blank">da=
-rio.binacchi@amarulasolutions.com</a><br>
-<br>
-__________________________________<br>
-<br>
-<br>
-Amarula Solutions SRL<br>
-<br>
-Via Le Canevare 30, 31100 Treviso, Veneto, IT<br>
-<br>
-T. +39 042 243 5310<br>
-<a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info@amarula=
-solutions.com</a><br>
-<br>
-<a href=3D"http://www.amarulasolutions.com" rel=3D"noreferrer" target=3D"_b=
-lank">www.amarulasolutions.com</a><br>
-</blockquote></div></div>
-
---000000000000eff249060c9e672e--
-
---===============4364425228719681922==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4364425228719681922==--
