@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E891CC46CA2
-	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 16:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AEE1C46CCD
+	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 16:10:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B150417E2;
-	Sat, 16 Dec 2023 16:10:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B150417E2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31DAA41759;
+	Sat, 16 Dec 2023 16:10:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31DAA41759
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T7Grh5UGWDfQ; Sat, 16 Dec 2023 16:10:20 +0000 (UTC)
+	with ESMTP id tFmYAlHXiFnX; Sat, 16 Dec 2023 16:10:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B7484177B;
-	Sat, 16 Dec 2023 16:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B7484177B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4926C1BF28A
- for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4214B41774;
+	Sat, 16 Dec 2023 16:10:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4214B41774
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 345761BF28A
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 302FA81ED7
- for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 302FA81ED7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0BE4F40156
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BE4F40156
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MBr3yLzK9zhM for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OGqpWGvVTIMe for <buildroot@lists.busybox.net>;
  Sat, 16 Dec 2023 16:10:05 +0000 (UTC)
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 632C481EAA
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5E60E400B8
  for <buildroot@buildroot.org>; Sat, 16 Dec 2023 16:10:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 632C481EAA
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-40c60dfa5bfso20044195e9.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E60E400B8
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-40c3ceded81so15797385e9.1
  for <buildroot@buildroot.org>; Sat, 16 Dec 2023 08:10:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1702743003; x=1703347803;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=C9PPUDxcRIdiJVn5GuGiptaf8upR5QlBKQ2O8IXZdY8=;
- b=w6LywhJ0iLM4Jd7w+/dx0h3+xj/M6hKNqZjyqeCoTjfEJVhT2DrGj84QoCxOPtvq/v
- fS3YjRkLpoSNbSL4oNhfTaHNcfeD9F9n+P6PBKeAhvuQ9dMvhkREUg3kOJ4/cDnWzQgb
- jcSjPAdQtGWbkeCukU3aaM9yiM8LaiGE527QoUV1JCC9hM0jg6lZH8M3Ug5oec6u09w8
- LlwT9NUyFk1LTm1G8lEi9UUjPhkWcxuKHce2flAg5Wk4Yn74TDI2JMavorSoq2yUda7M
- zCyzelHHO2UqQZl5SlhjhNmWCNdjP2IZ3nueMymxqkNDnsg+WJZ/MLnNjmIAtpG2BSH3
- Or6A==
-X-Gm-Message-State: AOJu0YwT6Eui4/1X6v+EeLsaJC1pBMtF6Tz4JPt8yxelZMzk2xGp/D4+
- +W9CpjbAR4ox8ky9HhGtbe570glcnCE=
-X-Google-Smtp-Source: AGHT+IFq/wQlB6yE88voYViS+EtC7IPdESqevKIrqkW8X4hABS1eO/sGpHQfAoPNVpVgpb0wvYTalg==
-X-Received: by 2002:a05:600c:204c:b0:40c:2788:28f3 with SMTP id
- p12-20020a05600c204c00b0040c278828f3mr7148437wmg.79.1702743003340; 
- Sat, 16 Dec 2023 08:10:03 -0800 (PST)
+ bh=5abAecsMtmH6leQkrJ9rlv3NPsAJ2jMe0Jel79m9Uiw=;
+ b=pj8bWuRM+CbJeBcnL6vj6HSl3y9HAecyHfR3vlWnLmIPv4XZTmyvDrOGkic8zUzLPR
+ isOONy+5C9dLFe0iTe35bIog1tf32h6xilllRNn8nL9x0Ix/DYD4/xzq/5+3EQq2tTpl
+ 7IgwWo1SosNyJDfNnFR7dYxOu1ShVFfm4gXqpiRMu7oxm7HeA9OvnlKCJw23k73QEREC
+ BwpuT9S6NIUN39MLxkhZQAy7NzA35KRaCbbim4O2T9uANniCS+HK0SZvCJMPLRW/stwb
+ Bh0ncZERHovQ61dbZieAvx3EM5fLiU0guhCqd4VF6D0NldTfxgicBqfq2NGRfb0yUWrX
+ xsAg==
+X-Gm-Message-State: AOJu0Yxmow6/p7vGaGLJ6eT1tNhRXFyvbP6Z6sUhcgz0H4UJ7goD8uz7
+ 6SwzkMSWpkA9rXulBazGDeAlQSFCnH4=
+X-Google-Smtp-Source: AGHT+IGEo24YVF87IAik2phkwUH6EluS1nkjY5fI0ezxrD65hMoB3cPRA38noECs01g2hQd4SB3Z/A==
+X-Received: by 2002:a05:600c:5022:b0:40c:3e95:f658 with SMTP id
+ n34-20020a05600c502200b0040c3e95f658mr6322770wmr.69.1702743002897; 
+ Sat, 16 Dec 2023 08:10:02 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:8290:3800:4f89:5708:1633:580e])
  by smtp.gmail.com with ESMTPSA id
  k40-20020a05600c1ca800b0040b45356b72sm36319926wms.33.2023.12.16.08.10.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Dec 2023 08:10:03 -0800 (PST)
+ Sat, 16 Dec 2023 08:10:02 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Dec 2023 17:09:55 +0100
-Message-ID: <678f73c0753eb09e05301df347c75928b4444f26.1702742998.git.yann.morin.1998@free.fr>
+Date: Sat, 16 Dec 2023 17:09:54 +0100
+Message-ID: <eb0226a2aa30a44696ed763382f0d65b0345eb9a.1702742998.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1702742998.git.yann.morin.1998@free.fr>
 References: <cover.1702742998.git.yann.morin.1998@free.fr>
@@ -74,18 +74,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=C9PPUDxcRIdiJVn5GuGiptaf8upR5QlBKQ2O8IXZdY8=;
- b=SoC33cuZEzpxOaCrPpl7GCCzfEkV+qHHVoKAhp3Drpw9KwVXP95yuXzP9MZPq2v02D
- vUvYwsEVUnFN62fpNRZztO+0JqrfXlAtLeTwH5o1F6Xb1y9Bouu7++cpuRM27pA5ZOyW
- xQET8swvyU7a1Z0gUerx2pZVdh/C75n0+OZA/VDwurWhAMf3MQGPlsUbrgmMCLq/Bxa0
- hs9BmaCUsl53zjrKW5tjOjzzf20ALmRcu9+x370iRamJnbXyhhokmsU6XGP0FoYAkrXH
- NucuBndSdTs04x9KMqS0IDAh2H3WT6l/j7UgOUbCn7jw650jwo2BLu6RY71DdXs4FnA4
- bQ4Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=5abAecsMtmH6leQkrJ9rlv3NPsAJ2jMe0Jel79m9Uiw=;
+ b=jGiT349ybaIjkRDHDKVhcwXMAVpZvntbXIwI2l900L3QmPFz2/Lc8Xjn41XsUO6Rbe
+ S83EJjudbSUjjc3J1ZhnIQcIw9l/Ruk/pcG0lex+9y4NVsGg4b1sJcvpjHu0lnKSou8J
+ nDgKqfnEZJFAhyPnEuA298gdPLwWLBSnaqqb4FZCY5PPJxM5oOMQMkWh8tLA4ieXi/t5
+ mNqbWa3Q/iKsBRr4CoqzlmrlQ1rG50/FVH4TAtTfUSvb2jBgQspkoyHsaHymY0Ow9h10
+ GEC9GWvpvSD6b5dxps8lKlAk0ZEVpgATXIKba8F5EzLztXqfhySQhSTL0Tu5jWGwhOhJ
+ njLQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SoC33cuZ
-Subject: [Buildroot] [PATCH 2/9] support/dependencies: make git a mandatory
- dependency
+ header.a=rsa-sha256 header.s=20230601 header.b=jGiT349y
+Subject: [Buildroot] [PATCH 1/9] doc/manual: fixup ordered lists
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,80 +103,177 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, we only require wget as a download tool. However, git is very
-pervasive and used in many of the packages, making it a de facto
-requirement.
+Recent asiidoc versions (at least 10.2.0 is known to report that),
+rendering the manual yields a few warnings related to ordered lists:
 
-Act on that situation and promote git from an optional dependency to a
-mandatory dependency.
+    asciidoc: WARNING: customize-quick-guide.adoc: line 13: list item index: expected 2 got 1
+    asciidoc: WARNING: customize-quick-guide.adoc: line 15: list item index: expected 3 got 1
+    [...]
+    asciidoc: WARNING: customize-quick-guide.adoc: line 65: list item index: expected 13 got 1
+    asciidoc: WARNING: customize-quick-guide.adoc: line 66: list item index: expected 14 got 1
+    asciidoc: WARNING: adding-packages-gettext.adoc: line 30: list item index: expected 2 got 1
+    asciidoc: WARNING: adding-packages-gettext.adoc: line 41: list item index: expected 3 got 1
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The reason is that we use the same index to tell asciidoc to
+automatically number items.
+
+However, the official way to provide an automatic index is to write no
+index:
+
+    https://docs.asciidoctor.org/asciidoc/latest/lists/ordered/
+
+    [...] since the numbering is obvious, the AsciiDoc processor will
+    insert the numbers for you if you omit them:
+    [...]
+    If you number the ordered list explicitly, you have to manually keep
+    the list numerals sequential. Otherwise, you will get a warning.
+
+So, abide by the documentation, and drop the repeating indices to
+ordered lists where we want automatic numbering.
+
+Note that there is another ordered list, in adding-packages-directory.adoc,
+but it does use explicit, sequential numbering. For consistency within
+the whole document, we also convert it.
+
+To avoid extra useless churn, the idnentation of the items is not
+changed to match the elided indices.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/prerequisite.adoc        | 2 +-
- package/pkg-generic.mk               | 8 --------
- support/dependencies/dependencies.sh | 2 +-
- 3 files changed, 2 insertions(+), 10 deletions(-)
+ docs/manual/adding-packages-directory.adoc | 14 +++++------
+ docs/manual/adding-packages-gettext.adoc   |  6 ++---
+ docs/manual/customize-quick-guide.adoc     | 28 +++++++++++-----------
+ 3 files changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/docs/manual/prerequisite.adoc b/docs/manual/prerequisite.adoc
-index 262a5153f5..6f07cba551 100644
---- a/docs/manual/prerequisite.adoc
-+++ b/docs/manual/prerequisite.adoc
-@@ -41,6 +41,7 @@ between distributions).
+diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
+index 5a0f298eb1..b7519cc01a 100644
+--- a/docs/manual/adding-packages-directory.adoc
++++ b/docs/manual/adding-packages-directory.adoc
+@@ -44,13 +44,13 @@ project after an empty line.
+ As a convention specific to Buildroot, the ordering of the attributes
+ is as follows:
  
- * Source fetching tools:
- ** +wget+
-+** +git+
+-1. The type of option: +bool+, +string+... with the prompt
+-2. If needed, the +default+ value(s)
+-3. Any dependencies on the target in +depends on+ form
+-4. Any dependencies on the toolchain in +depends on+ form
+-5. Any dependencies on other packages in +depends on+ form
+-6. Any dependency of the +select+ form
+-7. The help keyword and help text.
++. The type of option: +bool+, +string+... with the prompt
++. If needed, the +default+ value(s)
++. Any dependencies on the target in +depends on+ form
++. Any dependencies on the toolchain in +depends on+ form
++. Any dependencies on other packages in +depends on+ form
++. Any dependency of the +select+ form
++. The help keyword and help text.
  
- [[requirement-optional]]
+ You can add other sub-options into a +if BR2_PACKAGE_LIBFOO...endif+
+ statement to configure particular things in your software. You can look at
+diff --git a/docs/manual/adding-packages-gettext.adoc b/docs/manual/adding-packages-gettext.adoc
+index e9c6968e79..739bed25d5 100644
+--- a/docs/manual/adding-packages-gettext.adoc
++++ b/docs/manual/adding-packages-gettext.adoc
+@@ -23,11 +23,11 @@ Due to this, and in order to make sure that Native Language Support is
+ properly handled, packages in Buildroot that can use NLS support
+ should:
  
-@@ -76,7 +77,6 @@ corresponding tool on the host system:
- +
- ** +bazaar+
- ** +cvs+
--** +git+
- ** +mercurial+
- ** +scp+
- ** +sftp+
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 577a148c1e..87931f09c1 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1240,7 +1240,6 @@ endif
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
- else ifeq ($$($(2)_SITE_METHOD),git)
--DL_TOOLS_DEPENDENCIES += git
- ifneq ($$($(2)_GIT_LFS),)
- DL_TOOLS_DEPENDENCIES += git-lfs
- endif
-@@ -1254,13 +1253,6 @@ else ifeq ($$($(2)_SITE_METHOD),cvs)
- DL_TOOLS_DEPENDENCIES += cvs
- endif # SITE_METHOD
+-1. Ensure NLS support is enabled when +BR2_SYSTEM_ENABLE_NLS=y+. This
++. Ensure NLS support is enabled when +BR2_SYSTEM_ENABLE_NLS=y+. This
+    is done automatically for 'autotools' packages and therefore should
+    only be done for packages using other package infrastructures.
  
--# cargo/go vendoring (may) need git
--ifeq ($$($(2)_DOWNLOAD_POST_PROCESS),cargo)
--DL_TOOLS_DEPENDENCIES += git
--else ifeq ($$($(2)_DOWNLOAD_POST_PROCESS),go)
--DL_TOOLS_DEPENDENCIES += git
--endif
--
- DL_TOOLS_DEPENDENCIES += $$(call extractor-system-dependency,$$($(2)_SOURCE))
+-1. Add +$(TARGET_NLS_DEPENDENCIES)+ to the package
++. Add +$(TARGET_NLS_DEPENDENCIES)+ to the package
+    +<pkg>_DEPENDENCIES+ variable. This addition should be done
+    unconditionally: the value of this variable is automatically
+    adjusted by the core infrastructure to contain the relevant list of
+@@ -38,7 +38,7 @@ should:
+    also contains +gettext+ in order to get the full-blown 'gettext'
+    implementation.
  
- # Ensure all virtual targets are PHONY. Listed alphabetically.
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 6e7d067ccd..e18e799922 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -154,7 +154,7 @@ fi
+-1. If needed, add +$(TARGET_NLS_LIBS)+ to the linker flags, so that
++. If needed, add +$(TARGET_NLS_LIBS)+ to the linker flags, so that
+    the package gets linked with +libintl+. This is generally not
+    needed with 'autotools' packages as they usually detect
+    automatically that they should link with +libintl+. However,
+diff --git a/docs/manual/customize-quick-guide.adoc b/docs/manual/customize-quick-guide.adoc
+index 627ecbacb1..315027c590 100644
+--- a/docs/manual/customize-quick-guide.adoc
++++ b/docs/manual/customize-quick-guide.adoc
+@@ -9,11 +9,11 @@ now summarize all this by providing step-by-step instructions to storing your
+ project-specific customizations. Clearly, the steps that are not relevant to
+ your project can be skipped.
  
- # Check that a few mandatory programs are installed
- missing_progs="no"
--for prog in perl tar wget cpio unzip rsync bc cmp find xargs ${DL_TOOLS} ; do
-+for prog in perl tar wget git cpio unzip rsync bc cmp find xargs ${DL_TOOLS} ; do
- 	if ! which $prog > /dev/null ; then
- 		echo "You must install '$prog' on your build machine";
- 		missing_progs="yes"
+-1. +make menuconfig+ to configure toolchain, packages and kernel.
+-1. +make linux-menuconfig+ to update the kernel config, similar for
++. +make menuconfig+ to configure toolchain, packages and kernel.
++. +make linux-menuconfig+ to update the kernel config, similar for
+    other configuration like busybox, uclibc, ...
+-1. +mkdir -p board/<manufacturer>/<boardname>+
+-1. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
++. +mkdir -p board/<manufacturer>/<boardname>+
++. Set the following options to +board/<manufacturer>/<boardname>/<package>.config+
+    (as far as they are relevant):
+    * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
+    * +BR2_PACKAGE_BUSYBOX_CONFIG+
+@@ -21,7 +21,7 @@ your project can be skipped.
+    * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
+    * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
+    * +BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE+
+-1. Write the configuration files:
++. Write the configuration files:
+    * +make linux-update-defconfig+
+    * +make busybox-update-config+
+    * +make uclibc-update-config+
+@@ -29,38 +29,38 @@ your project can be skipped.
+      board/<manufacturer>/<boardname>/at91bootstrap3.config+
+    * +make barebox-update-defconfig+
+    * +make uboot-update-defconfig+
+-1. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
++. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
+    with additional files you need on your rootfs, e.g.
+    +board/<manufacturer>/<boardname>/rootfs-overlay/etc/inittab+.
+    Set +BR2_ROOTFS_OVERLAY+
+    to +board/<manufacturer>/<boardname>/rootfs-overlay+.
+-1. Create a post-build script
++. Create a post-build script
+    +board/<manufacturer>/<boardname>/post_build.sh+. Set
+    +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
+    +board/<manufacturer>/<boardname>/post_build.sh+
+-1. If additional setuid permissions have to be set or device nodes have
++. If additional setuid permissions have to be set or device nodes have
+    to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
+    and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
+-1. If additional user accounts have to be created, create
++. If additional user accounts have to be created, create
+    +board/<manufacturer>/<boardname>/users_table.txt+ and add that path
+    to +BR2_ROOTFS_USERS_TABLES+.
+-1. To add custom patches to certain packages, set +BR2_GLOBAL_PATCH_DIR+
++. To add custom patches to certain packages, set +BR2_GLOBAL_PATCH_DIR+
+    to +board/<manufacturer>/<boardname>/patches/+ and add your patches
+    for each package in a subdirectory named after the package. Each
+    patch should be called +<packagename>-<num>-<description>.patch+.
+-1. Specifically for the Linux kernel, there also exists the option
++. Specifically for the Linux kernel, there also exists the option
+    +BR2_LINUX_KERNEL_PATCH+ with as main advantage that it can also
+    download patches from a URL. If you do not need this,
+    +BR2_GLOBAL_PATCH_DIR+ is preferred. U-Boot, Barebox, at91bootstrap
+    and at91bootstrap3 also have separate options, but these do not
+    provide any advantage over +BR2_GLOBAL_PATCH_DIR+ and will likely be
+    removed in the future.
+-1. If you need to add project-specific packages, create
++. If you need to add project-specific packages, create
+    +package/<manufacturer>/+ and place your packages in that
+    directory. Create an overall +<manufacturer>.mk+ file that
+    includes the +.mk+ files of all your packages. Create an overall
+    +Config.in+ file that sources the +Config.in+ files of all your
+    packages. Include this +Config.in+ file from Buildroot's
+    +package/Config.in+ file.
+-1. +make savedefconfig+ to save the buildroot configuration.
+-1. +cp defconfig configs/<boardname>_defconfig+
++. +make savedefconfig+ to save the buildroot configuration.
++. +cp defconfig configs/<boardname>_defconfig+
 -- 
 2.43.0
 
