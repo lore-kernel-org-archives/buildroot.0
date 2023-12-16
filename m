@@ -1,65 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 885FEC4167B
-	for <buildroot@archiver.kernel.org>; Fri, 15 Dec 2023 21:30:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FAEAC4167B
+	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 06:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1589B4387F;
-	Fri, 15 Dec 2023 21:30:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1589B4387F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 938D560A99;
+	Sat, 16 Dec 2023 06:41:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 938D560A99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hCIvGm1psqbV; Fri, 15 Dec 2023 21:30:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IoHk8pwogzQR; Sat, 16 Dec 2023 06:41:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10DC641917;
-	Fri, 15 Dec 2023 21:30:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10DC641917
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB83D1BF2F6
- for <buildroot@lists.busybox.net>; Fri, 15 Dec 2023 21:30:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA0B960EC5;
+	Sat, 16 Dec 2023 06:41:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA0B960EC5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 051A71BF59D
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 06:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 944A242248
- for <buildroot@lists.busybox.net>; Fri, 15 Dec 2023 21:30:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 944A242248
+ by smtp1.osuosl.org (Postfix) with ESMTP id C418983EF7
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 06:41:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C418983EF7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7xHw7KhSU03K for <buildroot@lists.busybox.net>;
- Fri, 15 Dec 2023 21:30:25 +0000 (UTC)
-Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CB67742243
- for <buildroot@buildroot.org>; Fri, 15 Dec 2023 21:30:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB67742243
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id EFlErCb1fERwlEFlErYrTi; Fri, 15 Dec 2023 22:30:20 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Fri, 15 Dec 2023 22:30:19 +0100
-Message-Id: <20231215213019.32352-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nXCIhinclpvK for <buildroot@lists.busybox.net>;
+ Sat, 16 Dec 2023 06:41:47 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0978182419
+ for <buildroot@buildroot.org>; Sat, 16 Dec 2023 06:41:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0978182419
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 37B8160005
+ for <buildroot@buildroot.org>; Sat, 16 Dec 2023 06:41:44 +0000 (UTC)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGf6ss5BxhPmmGDPy37Ij5/soMtORY3+M8NmkUXBIzOxsLn0nx8SyeZXb8aoZA4dxShJji2qgkCzmw3oEtOljq1XTKOYy8469JOa7QqRUGWqfAq3V0Tn
- xIXdSGhgV0c6dFaGT7R2703d7nhsjHsaBZSoZN1wrhf6jfF3QYavpQK/zoEDQz4fqP+iTWafYgA735SNK5JmHZpH8eFIKfuDl66shJasv4QIZE7uRYFWp8kN
- CCn3Im0NhTBk+uqlD31Hmfo1Z+TAFiDNjMid4zEFr08=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1702675820; bh=w3UBu17tXNTpGQK+Q8ETrkUcvvlPXrN/ZETX+ayehsA=;
- h=From:To:Subject:Date:MIME-Version;
- b=dRxFbi5HJz5xXwBQxYXYjeJOvoMfAmeeRFYQH1LzQIgooBsyXv13SntKmcbd7GRgG
- dJzkEEIXvxpnDFDc8pHgj0EVeGXW45UXl2qS02yFcSgL41fDZ04ds/9U5rnDPeYw6m
- YVCNJBGKykSIQZ1uuCCDAkgGGC2aECFld3XiU5qsVcpDgqYhBEuMyoG0L0qpbqHzMM
- QwyeWm2s/ky3/wNy/fwv48Q5UWd5CZSyO8diMswY0NmxpGFNVij8zBfZXHqwB3C5dx
- 6RKZzqxr362N26N2e6bqPaG4Ze7nMoDyYkHj4P6PC07iSF2KVk7zMiTbpaA0Ex9kBh
- oKPjvp4HnbTjg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=dRxFbi5H
-Subject: [Buildroot] [PATCH] configs/mangopi_mq1rdw1_defconfig: new defconfig
+To: buildroot@buildroot.org
+Date: Sat, 16 Dec 2023 06:41:44 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20231216064148.C418983EF7@smtp1.osuosl.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; 
+ t=1702708904; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=dMeHq0a8lOPHQs6vGJ9mJ/kPD8lmjL7NKVcZ8XBPEh8=;
+ b=N2p26bK21MSnvUYxU7heWF9XmFEmUo6GzVfQMfluVukfO4aj6Yo6TFkOhLvwvdXTNT88XI
+ S/rQcORWQusxKnneUBFKFgDFKPBDgKT7Mn8U3q2xa6YqHuy0NwoX54YrCbfRLw5JwlZ5qd
+ IBDHtiDExZoBnc5F2OE9aAZ5HkzxlGyVqB0yPrZq/1mEjcTSdYDVry9Zid8faB1cx+1GKF
+ KbzFCGGSkSdhwxao4PpwN/aprw33I35hSbiIYqsiKPFfmc+Z2AfRVI5lpIa7Ty8KIfcKDw
+ zwkp6Q17Bhvt/CX+mLmUmW+HXTXy4A181J3sFLqUIrBbOPHEiNUgXBtH89VVkg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=N2p26bK2
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-12-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,226 +69,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for MangoPi MQ1RDW2:
-https://mangopi.org/mqr
+Hello,
 
-An Allwinner T113-S3(2xCortex-A7+128MB DDR3-1600 embedded) based SBC
-with:
-* USB-OTG Type-C socket
-* USB-HOST Type-C socket
-* 2x 18 pin GPIO headers
-* TF card slot
-* RTL8723DS WiFi module with ext. antenna connector
-* 40 pin RGB FPC connector
-* 6 pin CTP FPC connector
-* 24 pin DVP FPC connector
-* onboard mic
-* onboard audio amplifier
-* FEL,reset button
+Autobuild statistics for 2023-12-15
+===================================
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- DEVELOPERS                                    |  2 +
- board/mangopi/mq1rdw2/genimage.cfg            | 17 +++++++
- board/mangopi/mq1rdw2/readme.txt              | 46 +++++++++++++++++++
- .../boot/extlinux/extlinux.conf               |  4 ++
- .../rootfs_overlay/etc/network/interfaces     |  6 +++
- .../rootfs_overlay/etc/wpa_supplicant.conf    |  8 ++++
- configs/mangopi_mq1rdw2_defconfig             | 40 ++++++++++++++++
- 7 files changed, 123 insertions(+)
- create mode 100644 board/mangopi/mq1rdw2/genimage.cfg
- create mode 100644 board/mangopi/mq1rdw2/readme.txt
- create mode 100644 board/mangopi/mq1rdw2/rootfs_overlay/boot/extlinux/extlinux.conf
- create mode 100644 board/mangopi/mq1rdw2/rootfs_overlay/etc/network/interfaces
- create mode 100644 board/mangopi/mq1rdw2/rootfs_overlay/etc/wpa_supplicant.conf
- create mode 100644 configs/mangopi_mq1rdw2_defconfig
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  2  |  3  |  0  |  5  |
+  2023.08.x  |  2  |  0  |  0  |  2  |
+    master   | 50  | 35  |  0  | 85  |
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 83b970b591..12dd1fdcc9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1213,6 +1213,7 @@ N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	board/bananapi/bananapi-m2-ultra/
- F:	board/freescale/imx6ullevk/
- F:	board/freescale/imxrt1050evk/
-+F:	board/mangopi/mq1rdw2
- F:	board/olimex/a*
- F:	board/pine64/rockpro64
- F:	configs/amarula_vyasa_rk3288_defconfig
-@@ -1222,6 +1223,7 @@ F:	configs/bananapi_m2_ultra_defconfig
- F:	configs/freescale_imx6ullevk_defconfig
- F:	configs/imx6ullevk_defconfig
- F:	configs/imxrt1050-evk_defconfig
-+F:	configs/mangopi_mq1rdw2_defconfig
- F:	configs/olimex_a*
- F:	configs/rockpro64_defconfig
- F:	package/at/
-diff --git a/board/mangopi/mq1rdw2/genimage.cfg b/board/mangopi/mq1rdw2/genimage.cfg
-new file mode 100644
-index 0000000000..b48e12a831
---- /dev/null
-+++ b/board/mangopi/mq1rdw2/genimage.cfg
-@@ -0,0 +1,17 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8K
-+		size = 1016K # 1MB - 8KB
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/mangopi/mq1rdw2/readme.txt b/board/mangopi/mq1rdw2/readme.txt
-new file mode 100644
-index 0000000000..fd37f63154
---- /dev/null
-+++ b/board/mangopi/mq1rdw2/readme.txt
-@@ -0,0 +1,46 @@
-+MangoPi MQ1RDW2
-+===============
-+
-+MangoPi MQ1RDW2 is a tiny ARM Cortex-A7 based single board computer.
-+It's built around Allwinner T113-S3 dual core 1GHz CPU with integrated
-+128MB DDR3-1600 RAM.
-+Board features:
-+- USB-OTG Type-C socket
-+- USB-HOST Type-C socket
-+- 2x 18 pin GPIO headers
-+- TF card slot
-+- RTL8723DS WiFi module with ext. antenna connector
-+- 40 pin RGB FPC connector
-+- 6 pin CTP FPC connector
-+- 24 pin DVP FPC connector
-+- onboard mic
-+- onboard audio amplifier
-+- FEL,reset button
-+
-+How to build
-+============
-+
-+$ make mangopi_mq1rdw2_defconfig
-+$ make
-+
-+Wifi
-+==========
-+
-+Edit board/mangopi/mq1rdw2/overlay/etc/wpa_supplicant.conf or
-+/etc/wpa_supplicant.conf once connected to the board:
-+
-+* Replace YOURSSID with your AP ssid
-+* Replace YOURPASSWD with your AP password
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Connect a TTL UART to the UART3 on P8 header (unpopulated), insert the microSD card and
-+plug in a USB-C cable to the OTG or HOST connector to boot the system.
-diff --git a/board/mangopi/mq1rdw2/rootfs_overlay/boot/extlinux/extlinux.conf b/board/mangopi/mq1rdw2/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..c190ff7659
---- /dev/null
-+++ b/board/mangopi/mq1rdw2/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label MANGOPI-MQ1RDW2
-+    kernel /boot/zImage
-+    devicetree /boot/sun8i-t113s-mangopi-mq-r-t113.dtb
-+    append console=ttyS3,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-diff --git a/board/mangopi/mq1rdw2/rootfs_overlay/etc/network/interfaces b/board/mangopi/mq1rdw2/rootfs_overlay/etc/network/interfaces
-new file mode 100644
-index 0000000000..89e7d74aff
---- /dev/null
-+++ b/board/mangopi/mq1rdw2/rootfs_overlay/etc/network/interfaces
-@@ -0,0 +1,6 @@
-+auto lo
-+iface lo inet loopback
-+
-+auto wlan0
-+iface wlan0 inet dhcp
-+wpa-conf /etc/wpa_supplicant.conf
-diff --git a/board/mangopi/mq1rdw2/rootfs_overlay/etc/wpa_supplicant.conf b/board/mangopi/mq1rdw2/rootfs_overlay/etc/wpa_supplicant.conf
-new file mode 100644
-index 0000000000..b43292b0a7
---- /dev/null
-+++ b/board/mangopi/mq1rdw2/rootfs_overlay/etc/wpa_supplicant.conf
-@@ -0,0 +1,8 @@
-+ap_scan=1
-+
-+network={
-+        ssid="YOURSSID"
-+        scan_ssid=1
-+        key_mgmt=WPA-PSK
-+        psk="YOURPASSWD"
-+}
-diff --git a/configs/mangopi_mq1rdw2_defconfig b/configs/mangopi_mq1rdw2_defconfig
-new file mode 100644
-index 0000000000..a2f8a1299b
---- /dev/null
-+++ b/configs/mangopi_mq1rdw2_defconfig
-@@ -0,0 +1,40 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_VFPV4=y
-+BR2_TARGET_GENERIC_HOSTNAME="mangopi-mq1rdw2"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to MangoPI MQ1RDW2"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS3"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_OVERLAY="board/mangopi/mq1rdw2/rootfs_overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/mangopi/mq1rdw2/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.5"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-t113s-mangopi-mq-r-t113"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_RTL8723DS=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
-+BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
-+BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01-rc4"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mangopi_mq_r"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_PACKAGE_HOST_GENIMAGE=y
+Classification of failures by reason for master
+-----------------------------------------------
+
+  gobject-introspection-1.76.1 | 4 
+                libressl-3.8.2 | 3 
+                    php-8.2.13 | 3 
+        host-sentry-cli-2.20.3 | 2 
+check-11970a7e112dfe243a2e6... | 1 
+                 dc3dd-7.2.641 | 1 
+glibc-2.38-27-g750a45a78390... | 1 
+                 highway-1.0.3 | 1 
+                host-go-1.21.5 | 1 
+              host-rust-1.71.1 | 1 
+              libarchive-3.7.2 | 1 
+                 libcurl-8.5.0 | 1 
+                libsoup-2.74.3 | 1 
+       libzenoh-pico-0.10.0-rc | 1 
+          linux-5.10.162-cip24 | 1 
+        ltp-testsuite-20230929 | 1 
+ Makefile:727: target-finalize | 1 
+                memtest86-6.20 | 1 
+                  ntp-4.2.8p17 | 1 
+                nushell-0.85.0 | 1 
+        python-pysensors-0.0.4 | 1 
+         python-rpds-py-0.12.0 | 1 
+                python3-3.11.6 | 1 
+           uboot-tools-2021.07 | 1 
+ulog-0389d243352255f6182326... | 1 
+                       unknown | 1 
+               valgrind-3.22.0 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/f8d93f397318327273e6fd6377719fdbb5b76c42 | ORPH
+    or1k     |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/48da59432045a5f8890df2cc59776d70c447e83d | ORPH
+   arceb     | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/5a6d6b7d77cc5bf9b3d42b50e8b532435bda3328 |     
+    i686     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/3b6b8e9657d801f65d0c11c7a047a83d4ec74d8f | ORPH
+   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/61a852655d107462a79693509a46cc426e3d6085 | ORPH
+   s390x     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/d4f117ed4270797bfc617ebb55ae5f381bdf2834 | ORPH
+  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/580647e8dff868dd747d7eeaa645a138a022cd90 | ORPH
+  aarch64    |         highway-1.0.3          | NOK | http://autobuild.buildroot.net/results/2a26988ca0417238c3a902757a569807c1ebd215 |     
+  mips64el   |         host-go-1.21.5         | NOK | http://autobuild.buildroot.net/results/760456315c26b78e269b0859df77e72a2a58f08f |     
+  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/01ebe680228550ad4d47b48f58ece6e1c4126045 |     
+   armeb     |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/d305489cac55e82750a3640b9452121b28b5a43e |     
+  riscv64    |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/04e48ccdfc70fb7cb1ecc060dc5203f118c74cdd |     
+   nios2     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/e17153a192fdf7fb6bb65a1aa17e1b7a0e44d044 |     
+ aarch64_be  |         libcurl-8.5.0          | NOK | http://autobuild.buildroot.net/results/d1e0b0b51e1b197ec7da5f6c3c3327c8d0427ee4 |     
+    arm      |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/a05051305e86119770fa0063d62f39c2f62a7e91 | ORPH
+   nios2     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/1cc4a4bedae314f40898eb7f1e44ae74a356f67e | ORPH
+    arc      |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/9e768f5cad312268e872836e2c84325bb4de9c20 | ORPH
+   sparc     |         libsoup-2.74.3         | NOK | http://autobuild.buildroot.net/results/b5656f99ef6c839e3d7ecf3dd10902c525af3ccc |     
+   mips64    |    libzenoh-pico-0.10.0-rc     | NOK | http://autobuild.buildroot.net/results/20b17da2aa886a3de46250f467befed0e8eeb287 |     
+    i686     |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/89a19f824d8e3fb596df348108b507ddb8e12bd6 | ORPH
+    i686     |     ltp-testsuite-20230929     | NOK | http://autobuild.buildroot.net/results/cf6ed6afe0e8e6e214a9d9334f84b3e78f787bc5 |     
+    arm      | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/4dd1a2a7816c036752e6fea3e91fce7b18b83717 |     
+    i586     |         memtest86-6.20         | NOK | http://autobuild.buildroot.net/results/daa4e95d0e69d8b5b2dc48e4ac5019110e128b59 |     
+    sh4      |          ntp-4.2.8p17          | NOK | http://autobuild.buildroot.net/results/175039c8aa4c0084bb569619acc1f095ec1f5d00 |     
+    arm      |         nushell-0.85.0         | NOK | http://autobuild.buildroot.net/results/9b8d95d4f86d3703df3b58d22a1051ef009fd288 |     
+   sh4eb     |           php-8.2.13           | NOK | http://autobuild.buildroot.net/results/22492f9185e4cd6e8a64c813b42c3f3267878578 |     
+   sh4aeb    |           php-8.2.13           | NOK | http://autobuild.buildroot.net/results/ea316729e51e22cee677ec6a88adc1307c6895a1 |     
+    sh4      |           php-8.2.13           | NOK | http://autobuild.buildroot.net/results/35c9f356ef217d479ec12edab1b9b123e4a4a032 |     
+powerpc64le  |     python-pysensors-0.0.4     | NOK | http://autobuild.buildroot.net/results/44dad57a90f5defaf018bde710c5dd7fae243c8d |     
+   mipsel    |     python-rpds-py-0.12.0      | NOK | http://autobuild.buildroot.net/results/717e7e9026ccc55fa0e688fb855b8fa78a759cae |     
+   x86_64    |         python3-3.11.6         | NOK | http://autobuild.buildroot.net/results/ee77188dd8d564fda198546346396fe0c3adc03a |     
+   xtensa    |      uboot-tools-2021.07       | NOK | http://autobuild.buildroot.net/results/8562d1578143f01c9fa161f028df52b814444dc2 | ORPH
+    sh4a     | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/4e4d4c6b318fd8538db70421e3e28aeeecfd9839 |     
+   mips64    |            unknown             | NOK | http://autobuild.buildroot.net/results/25397435823e09f28aa02d8cf808ec82fd7920ee |     
+  mips64el   |        valgrind-3.22.0         | NOK | http://autobuild.buildroot.net/results/afb766d67871599566f8f1fa1b5aecc8853faf04 | ORPH
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+               host-go-1.20.12 | 2 
+               host-runc-1.1.7 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |        host-go-1.20.12         | NOK | http://autobuild.buildroot.net/results/8f2f9dba52232610c3d9ff657f50226490310f30 |     
+    i686     |        host-go-1.20.12         | NOK | http://autobuild.buildroot.net/results/c3a4f9f73840b82fdd9596436d24ade239b9571b |     
+  riscv64    |        host-runc-1.1.7         | NOK | http://autobuild.buildroot.net/results/b8171dde23b2e5bd77e179ab4410c29cc72231d8 |     
+
+
+
 -- 
-2.34.1
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
