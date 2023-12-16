@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 438B7C38147
-	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 09:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C07C38147
+	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 09:50:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB2DE4209D;
-	Sat, 16 Dec 2023 09:49:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB2DE4209D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 632724211B;
+	Sat, 16 Dec 2023 09:50:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 632724211B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gmn6DOkmK-s5; Sat, 16 Dec 2023 09:49:33 +0000 (UTC)
+	with ESMTP id pE8RmegKd9yB; Sat, 16 Dec 2023 09:50:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A36441E81;
-	Sat, 16 Dec 2023 09:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A36441E81
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BD76A1BF346
- for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 09:49:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BE1D4209D;
+	Sat, 16 Dec 2023 09:50:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BE1D4209D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E660D1BF2C4
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 09:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9674283F14
- for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 09:49:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9674283F14
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE85640146
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 09:50:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE85640146
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FFgdyjsMpTSQ for <buildroot@lists.busybox.net>;
- Sat, 16 Dec 2023 09:49:29 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 90AFC83F11
- for <buildroot@buildroot.org>; Sat, 16 Dec 2023 09:49:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90AFC83F11
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D033220002;
- Sat, 16 Dec 2023 09:49:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kqu8OcGX0bJa for <buildroot@lists.busybox.net>;
+ Sat, 16 Dec 2023 09:50:21 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3E85740123
+ for <buildroot@buildroot.org>; Sat, 16 Dec 2023 09:50:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E85740123
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E8C11BF203;
+ Sat, 16 Dec 2023 09:50:19 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rERIU-00FOun-0m;
- Sat, 16 Dec 2023 10:49:26 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rERJK-00FOvB-1e;
+ Sat, 16 Dec 2023 10:50:18 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-References: <20231211191400.61689-1-ju.o@free.fr>
-Date: Sat, 16 Dec 2023 10:49:26 +0100
-In-Reply-To: <20231211191400.61689-1-ju.o@free.fr> (Julien Olivain's message
- of "Mon, 11 Dec 2023 20:14:00 +0100")
-Message-ID: <87bkaqbhp5.fsf@48ers.dk>
+To: Neal Frager <neal.frager@amd.com>
+References: <20231213134849.2822206-1-neal.frager@amd.com>
+Date: Sat, 16 Dec 2023 10:50:18 +0100
+In-Reply-To: <20231213134849.2822206-1-neal.frager@amd.com> (Neal Frager's
+ message of "Wed, 13 Dec 2023 13:48:49 +0000")
+Message-ID: <877clebhnp.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/z3: bump to version 4.12.4
+Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_kria_kd240_defconfig:
+ new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,36 +63,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: michal.simek@amd.com, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
- > For change log since 4.12.2, see:
- > https://github.com/Z3Prover/z3/blob/z3-4.12.4/RELEASE_NOTES.md#version-4124
+ > This patch adds support for Xilinx Kria KD240 starter kit.
+ > KD240 features can be found here:
+ > https://www.xilinx.com/products/som/kria/kd240-drives-starter-kit.html
 
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > While the Kria SOM is based on a ZynqMP SoC, there are some key
+ > boot config differences from the other ZynqMP evaluation boards.
+
+ > 1. There are no boot switches on Kria SOMs. The boot mode is thus
+ > hard configured for QSPI flash. A pre-programmed boot.bin comes
+ > with every Starter Kit. U-Boot can then find the Linux kernel and
+ > file system on the SD card.
+
+ > Optional instructions for updating the boot.bin in the QSPI flash
+ > can be found in the readme.txt file and the link below.
+
+ > https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM
+
+ > 2. Kria SOMs use UART1 for the console instead of UART0. For this
+ > reason, Kria Starter Kits will use a separate extlinux.conf file
+ > from other ZynqMP evaluation boards.
+
+ > 3. The KD240 has a USB to SD card bridge, so the Linux kernel
+ > and file system are found on /dev/sda1 and /dev/sda2.
+
+ > 4. The following patches have been submitted upstream to u-boot.
+ > Without these patches, the usb, sd card and ethernet peripherals
+ > do not work correctly.
+
+ > https://patchwork.ozlabs.org/project/uboot/patch/20231213134007.2818069-1-neal.frager@amd.com/
+ > https://patchwork.ozlabs.org/project/uboot/patch/20231213134052.2818879-1-neal.frager@amd.com/
+
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
  > ---
- > Patch tested on branch master at commit b79fb3c with commands:
+ >  DEVELOPERS                                    |   1 +
+ >  board/zynqmp/kria/kd240/kd240.sh              |  16 +
+ >  ...nqmp-Fix-k24-psu_init_gpl.c-clocking.patch | 400 ++++++++++++++
+ >  ...ynqmp-Add-output-enable-pins-to-SOMs.patch |  79 +++
+ >  board/zynqmp/kria/kd240/pm_cfg_obj.c          | 494 ++++++++++++++++++
+ >  board/zynqmp/kria/readme.txt                  |  21 +-
+ >  configs/zynqmp_kria_kd240_defconfig           |  42 ++
+ >  7 files changed, 1045 insertions(+), 8 deletions(-)
+ >  create mode 100755 board/zynqmp/kria/kd240/kd240.sh
+ >  create mode 100644 board/zynqmp/kria/kd240/patches/uboot/0001-arm64-zynqmp-Fix-k24-psu_init_gpl.c-clocking.patch
+ >  create mode 100644 board/zynqmp/kria/kd240/patches/uboot/0002-arm64-zynqmp-Add-output-enable-pins-to-SOMs.patch
+ >  create mode 100644 board/zynqmp/kria/kd240/pm_cfg_obj.c
+ >  create mode 100644 configs/zynqmp_kria_kd240_defconfig
 
- >     utils/docker-run make check-package
- >     ...
- >     0 warnings generated
+I've fixed the check-package warnings and applied, thanks.
 
- >     support/testing/run-tests \
- >         -d dl -o output_folder \
- >         tests.package.test_z3
- >     ...
- >     OK
-
- >     utils/test-pkg -p z3
- >     ...
- >     6 builds, 4 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-Committed, thanks.
+board/zynqmp/kria/kd240/patches/uboot/0001-arm64-zynqmp-Fix-k24-psu_init_gpl.c-clocking.patch:4: generate your patches with 'git format-patch -N'
+board/zynqmp/kria/kd240/patches/uboot/0001-arm64-zynqmp-Fix-k24-psu_init_gpl.c-clocking.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
+board/zynqmp/kria/kd240/patches/uboot/0002-arm64-zynqmp-Add-output-enable-pins-to-SOMs.patch:4: generate your patches with 'git format-patch -N'
+board/zynqmp/kria/kd240/patches/uboot/0002-arm64-zynqmp-Add-output-enable-pins-to-SOMs.patch:0: missing Upstream in the header (http://nightly.buildroot.org/#_additional_patch_documentation)
 
 -- 
 Bye, Peter Korsgaard
