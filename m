@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07659C38147
-	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 09:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F451C38147
+	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 09:51:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2C0042148;
-	Sat, 16 Dec 2023 09:51:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2C0042148
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14097421E4;
+	Sat, 16 Dec 2023 09:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14097421E4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EC5TIKVK-QYZ; Sat, 16 Dec 2023 09:51:13 +0000 (UTC)
+	with ESMTP id oMixfVSffj60; Sat, 16 Dec 2023 09:51:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB8B942124;
-	Sat, 16 Dec 2023 09:51:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB8B942124
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 962B01BF33B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BB48421C3;
+	Sat, 16 Dec 2023 09:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BB48421C3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B927B1BF867
  for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 09:51:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F63C83E50
+ by smtp2.osuosl.org (Postfix) with ESMTP id 912A140146
  for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 09:51:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F63C83E50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 912A140146
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qIWS2P4U2GTT for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EjWUUjxtZi5b for <buildroot@lists.busybox.net>;
  Sat, 16 Dec 2023 09:51:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7696F83E4F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 934D740123
  for <buildroot@buildroot.org>; Sat, 16 Dec 2023 09:51:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7696F83E4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 934D740123
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60BAF87A96; Sat, 16 Dec 2023 09:51:10 +0000 (UTC)
+ id 7EFCA81963; Sat, 16 Dec 2023 09:51:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Dec 2023 10:34:17 +0100
+Date: Sat, 16 Dec 2023 10:49:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5a1e20f37c352bad66549b9e011df53d71e42e89
-X-Git-Newrev: 564b00d581c9810f4171a434f02adb0cba0da8a3
+X-Git-Oldrev: 6f9431c3ad04e56b11bb72f3775cc804fc32918a
+X-Git-Newrev: 3b0e7680cf59968f5adac6be8a68d0cdb9dd9e7f
 X-Patchwork-Hint: ignore
-Message-Id: <20231216095110.60BAF87A96@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsyslog: bump version to 8.2312.0
+Message-Id: <20231216095110.7EFCA81963@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/z3: bump to version 4.12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,57 +57,47 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8954489956546622876=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8954489956546622876==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=564b00d581c9810f4171a434f02adb0cba0da8a3
+commit: https://git.buildroot.net/buildroot/commit/?id=3b0e7680cf59968f5adac6be8a68d0cdb9dd9e7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+For change log since 4.12.2, see:
+https://github.com/Z3Prover/z3/blob/z3-4.12.4/RELEASE_NOTES.md#version-4124
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsyslog/rsyslog.hash | 2 +-
- package/rsyslog/rsyslog.mk   | 2 +-
+ package/z3/z3.hash | 2 +-
+ package/z3/z3.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
-index 90df3e054f..9c00365355 100644
---- a/package/rsyslog/rsyslog.hash
-+++ b/package/rsyslog/rsyslog.hash
-@@ -1,5 +1,5 @@
- # From http://www.rsyslog.com/downloads/download-v8-stable/
--sha256  20d9ce792bf0a7ed0703dbf0941490f8be655f48b55b4bebdc0827bbb0ddbf11  rsyslog-8.2310.0.tar.gz
-+sha256  774032006128a896437f5913e132aa27dbfb937cd8847e449522d5a12d63d03e  rsyslog-8.2312.0.tar.gz
- 
+diff --git a/package/z3/z3.hash b/package/z3/z3.hash
+index bddf3066ba..c20bbce2d6 100644
+--- a/package/z3/z3.hash
++++ b/package/z3/z3.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 8ea92ea785..1919863f4f 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
+-sha256  9f58f3710bd2094085951a75791550f547903d75fe7e2fcb373c5f03fc761b8f  z3-4.12.2.tar.gz
++sha256  25e9b18d04ee22f1d872dfe0daaf4c39034744525214e34fedd206e25140e96e  z3-4.12.4.tar.gz
+ sha256  e617cad2ab9347e3129c2b171e87909332174e17961c5c3412d0799469111337  LICENSE.txt
+diff --git a/package/z3/z3.mk b/package/z3/z3.mk
+index 501d9ee61a..f9510ba592 100644
+--- a/package/z3/z3.mk
++++ b/package/z3/z3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RSYSLOG_VERSION = 8.2310.0
-+RSYSLOG_VERSION = 8.2312.0
- RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
-
---===============8954489956546622876==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-Z3_VERSION = 4.12.2
++Z3_VERSION = 4.12.4
+ Z3_SITE = $(call github,Z3Prover,z3,z3-$(Z3_VERSION))
+ Z3_LICENSE = MIT
+ Z3_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8954489956546622876==--
