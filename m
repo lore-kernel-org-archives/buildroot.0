@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 546D9C46CA2
-	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 16:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1D9DC46CCD
+	for <buildroot@archiver.kernel.org>; Sat, 16 Dec 2023 16:11:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F211E60B92;
-	Sat, 16 Dec 2023 16:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F211E60B92
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DCC760F5F;
+	Sat, 16 Dec 2023 16:11:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DCC760F5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FsQv0ZYjvyC8; Sat, 16 Dec 2023 16:11:23 +0000 (UTC)
+	with ESMTP id mpyNT_SVna_B; Sat, 16 Dec 2023 16:11:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E647560B99;
-	Sat, 16 Dec 2023 16:11:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E647560B99
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D09641BF867
- for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 967B860BC8;
+	Sat, 16 Dec 2023 16:11:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 967B860BC8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 240911BF28A
+ for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9B424175A
+ by smtp1.osuosl.org (Postfix) with ESMTP id F022881F39
  for <buildroot@lists.busybox.net>; Sat, 16 Dec 2023 16:10:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9B424175A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F022881F39
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PtGJj4XBc2zN for <buildroot@lists.busybox.net>;
- Sat, 16 Dec 2023 16:10:07 +0000 (UTC)
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 81E9F41774
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I5LgEYVt2dqC for <buildroot@lists.busybox.net>;
+ Sat, 16 Dec 2023 16:10:08 +0000 (UTC)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E88CC81ED7
  for <buildroot@buildroot.org>; Sat, 16 Dec 2023 16:10:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81E9F41774
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-40c60dfa5bfso20044435e9.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E88CC81ED7
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-40c48d7a7a7so16252465e9.3
  for <buildroot@buildroot.org>; Sat, 16 Dec 2023 08:10:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1702743006; x=1703347806;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=BBwgxECHcJib0qmuLdOIlnLtf54IZrKWbLYtcnH6SW0=;
- b=MO0pAq4gZyD5nlhekzmfX7KHszmbVWr7MbOszSagH55sFqFJMAJExYuXTb5q8+DG8X
- 5kEGGot6wwLpI9Od42Vri/vj9cKHSM6MXFZHxj3U641MpZ5u/mL9oeg8FdW+jjHLSdSw
- pr2a30G6kNQ3fz5R6CxsFiG7VVqly8j6RWJc0IuGA3d1zobKF9PIzWIXlG4+mB89D59k
- XhqH3lm3MCEMs1FqwrK9GFTyxM2/EBpS0tUIvJD0wT3weGkNxYNmUbOeoVQY8UbLd9R8
- ogL3CemykZ6LXKE5uQ5iOCsRaXN63GP7HTxHXC5PxfUQwEEGDhCxZjJJ/vAOoTtg6aPq
- XzFw==
-X-Gm-Message-State: AOJu0YxxaGLDpSFbKLy81c3+ATZfQG4cXWZ2Y0ZLPmVvHbOnauwD2OFp
- oxn5G16LZMAAloFOnC4nGxnfyr0fpcE=
-X-Google-Smtp-Source: AGHT+IEeE0onvoHi3try91/vwv78JFYLvXiwrelNumN93J2i1WQF3rhgOevciyGvK6/2WlZKohbA7w==
-X-Received: by 2002:a05:600c:2804:b0:40c:3eab:d987 with SMTP id
- m4-20020a05600c280400b0040c3eabd987mr6523483wmb.125.1702743005589; 
- Sat, 16 Dec 2023 08:10:05 -0800 (PST)
+ bh=p1mE0tVQ7Tu70XpInl+swni2s6TGtEyUDYXsiGXnhXI=;
+ b=qSUQD3xV1DdGjKDzDVpX7hlc6NCZ64LmxeKGwtexdlGgFQH9dKKsLWvUlzRxO6wOQE
+ 0rILElwlTfSBE3XlFAbyjR+GDFop7oJyVhhOAcAQYOuuZaT60jLqv7lxd1zC2rP5/TL9
+ Mlmr9WbnwlJ4Cve+V3Bo9TaKeE9lEbHTI8F5nJgeH3zQ9wWxQbVBf7+djAv57lCVoisg
+ xt4bb+O7yjGKpCjqfiDQ7hw7SYdxkWNUQOQKpSvmjlqX5hn6izjtBMWXx+MDvIylcDr2
+ 9FWii8HpYxgGi+7pA+JDF2j9ly+/lbjVM/Yxs7g0E/3FJTnOP8wgOMdHpLEKAZ4maNQq
+ 9J3A==
+X-Gm-Message-State: AOJu0Yxb5ETpBRn3BvtGIC82t86oh6bL2v/HybbwRD7pjzDDETVT2KdU
+ 6/H9xwg37wqhuqhDm5du0K6Jg3kj/uk=
+X-Google-Smtp-Source: AGHT+IHfKUgj1L75tY2RDd67tHQ7uXk5ayAicGzFslS90Lpv7y1St6hcFh5P2qs+62hqh0zyFB4NYQ==
+X-Received: by 2002:a7b:c84e:0:b0:40c:25e8:70bf with SMTP id
+ c14-20020a7bc84e000000b0040c25e870bfmr8001248wml.110.1702743006049; 
+ Sat, 16 Dec 2023 08:10:06 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:8290:3800:4f89:5708:1633:580e])
  by smtp.gmail.com with ESMTPSA id
  k40-20020a05600c1ca800b0040b45356b72sm36319926wms.33.2023.12.16.08.10.05
@@ -63,28 +63,28 @@ Received: from landeda.home ([2a01:cb19:8290:3800:4f89:5708:1633:580e])
  Sat, 16 Dec 2023 08:10:05 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Dec 2023 17:10:00 +0100
-Message-ID: <ecdf7a2374c264e50f65cda967874e28c4c914e3.1702742998.git.yann.morin.1998@free.fr>
+Date: Sat, 16 Dec 2023 17:10:01 +0100
+Message-ID: <7d90c305cd781885c4161e630f34ef8417fe2b7a.1702742998.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1702742998.git.yann.morin.1998@free.fr>
 References: <cover.1702742998.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1702743005; x=1703347805; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1702743006; x=1703347806; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=BBwgxECHcJib0qmuLdOIlnLtf54IZrKWbLYtcnH6SW0=;
- b=PzuPnwNMSxCoUKYjk9kUzi/xvhB8DtB7jQMlwQ0OQWd1EECdzJn2ltmUPcSQXj40tn
- IQ8ogH15BifzHVnvHy33QP0WQw3bCPHm6jGm1Iu35fhsMTaGf8M0oBVCDc1UgCdKCHz0
- bwYy3qAjc3TprrL2qLluhye6H1+2AKVlHJXYCpncodqeG/p2vKKYNMG4EPY+6ewGux/T
- GJOLrADylQswPTh5ukdq6N+FRfeSDXQvj2Df2pVSX/NxKyJhBw+vVHlHxbYN+szAEOcP
- 8NyHj0/X6F1a/6R+33XXcJIQd+UiaOtC+LSOk462uNuN8B6yqJZQ20tyPB0NCwk8azQ6
- fQ5Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=p1mE0tVQ7Tu70XpInl+swni2s6TGtEyUDYXsiGXnhXI=;
+ b=nU/okhXTF9GF2mTGFodHA+qtYGCVFQIAxA3jEDBCx0uVkhlbnp7jXzSkND7oxkSrTE
+ t7nmUW24Z/rBMUNoMfSpJuL9oSxgNaUZWNhaPb8y4VcA6pofTNaBWqeVOBWIZ1iwPfAZ
+ bNfVCVGu27e4Y4L4E5p/Kf6D/VuaV+GlQl0H9myRAyj7Qw+/LpOkkt8B/XUAzuzu0ibU
+ O66MYxbA/O+n9q7mxgju9drDou5pQ7epXF8kh4SRwy9K6PkCyzMXULnlKTRHPYxBn2Fe
+ SbcctvN8b3UXySWFtyhzzNPBqeLXXPeXoDlItFfM174txjJyz1imF32KUeQAbQdWrvt4
+ mYqQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=PzuPnwNM
-Subject: [Buildroot] [PATCH 7/9] support/docker: split base image into three
+ header.a=rsa-sha256 header.s=20230601 header.b=nU/okhXT
+Subject: [Buildroot] [PATCH 8/9] docs/manual: add section about docker images
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,234 +103,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Our basic image should have only what is strictly required to do the
-build, i.e. only the packages listed as mandatory in the manual.
-
-Then we need an image for running our CI, with a few additional
-toolings.
-
-Finally, we want an image that users can run to use Buildroot (not to
-develop on Buildroot, but just to use it).
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/docker/base                           |  1 -
- support/docker/build-all                      | 31 +++++++++----
- .../Dockerfile                                | 28 ++----------
- .../apt-sources.list                          |  0
- support/docker/debian-bullseye.ci/Dockerfile  | 43 +++++++++++++++++++
- .../docker/debian-bullseye.user/Dockerfile    | 32 ++++++++++++++
- 6 files changed, 101 insertions(+), 34 deletions(-)
- delete mode 120000 support/docker/base
- rename support/docker/{debian-bullseye => debian-bullseye.base}/Dockerfile (59%)
- rename support/docker/{debian-bullseye => debian-bullseye.base}/apt-sources.list (100%)
- create mode 100644 support/docker/debian-bullseye.ci/Dockerfile
- create mode 100644 support/docker/debian-bullseye.user/Dockerfile
+ docs/manual/prerequisite.adoc | 43 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/support/docker/base b/support/docker/base
-deleted file mode 120000
-index 95f9ccb9fc..0000000000
---- a/support/docker/base
-+++ /dev/null
-@@ -1 +0,0 @@
--debian-bullseye
-\ No newline at end of file
-diff --git a/support/docker/build-all b/support/docker/build-all
-index d5c01771cf..6ae4ba5d25 100755
---- a/support/docker/build-all
-+++ b/support/docker/build-all
-@@ -2,16 +2,31 @@
- set -e
- 
- BR2_DOCKER_VERSION="${1}"
-+BR2_REGISTRY="${2:-registry.gitlab.com/buildroot.org/}"
- 
--if [ -z "${BR2_DOCKER_VERSION}" ]; then
--    printf 'Usage: %s VERSION\n' "${0}"
-+case "${BR2_DOCKER_VERSION}" in
-+  (""|*/*)
-+    printf 'Usage: %s VERSION [REGSITRY]\n' "${0}"
-     exit 1
--fi
-+    ;;
-+esac
-+case "${BR2_REGISTRY}" in
-+  (""|*/)   ;;
-+  (*)       BR2_REGISTRY="${BR2_REGISTRY}/";;
-+esac
- 
- BASE_DIR="${0%/*}"
--for context_dir in "${BASE_DIR}"/*/; do \
--    distro="$(basename "${context_dir}")"
--    docker build \
--        -t "buildroot/${distro}:${BR2_DOCKER_VERSION}" \
--        "${context_dir}"
-+# "ci" images use FROM on the "base" images, so need to ensure we build
-+# the "base" images first (don't rely on alphabetical ordering!). Ditto,
-+# the 'user' images are based on the 'ci' ones.
-+for type in base ci user; do
-+    for context_dir in "${BASE_DIR}"/*."${type}"/; do \
-+        [ -e "${context_dir}" ] || continue
-+        distro="$(basename "${context_dir}")"
-+        docker build \
-+            --build-arg BR2_REGISTRY="${BR2_REGISTRY}" \
-+            --build-arg BR2_DOCKER_VERSION="${BR2_DOCKER_VERSION}" \
-+            -t "${BR2_REGISTRY}buildroot/${distro}:${BR2_DOCKER_VERSION}" \
-+            "${context_dir}"
-+    done
- done
-diff --git a/support/docker/debian-bullseye/Dockerfile b/support/docker/debian-bullseye.base/Dockerfile
-similarity index 59%
-rename from support/docker/debian-bullseye/Dockerfile
-rename to support/docker/debian-bullseye.base/Dockerfile
-index f45ff6b0f8..a3e90a79ab 100644
---- a/support/docker/debian-bullseye/Dockerfile
-+++ b/support/docker/debian-bullseye.base/Dockerfile
-@@ -1,7 +1,5 @@
--# This Dockerfile generates the docker image that gets used by Gitlab CI
--# To build it (YYYYMMDD.HHMM is the current date and time in UTC):
--#   docker build -t registry.gitlab.com/buildroot.org/buildroot/base:YYYYMMDD.HHMM support/docker/debian-stretch
--#   docker push registry.gitlab.com/buildroot.org/buildroot/base:YYYYMMDD.HHMM
-+# vi: ft=dockerfile
-+# Debian-based minimal image with only mandatory packages
- 
- # We use a specific tag for the base image *and* the corresponding date
- # for the repository., so do not forget to update the apt-sources.list
-@@ -24,32 +22,14 @@ RUN dpkg --add-architecture i386 && \
- RUN apt-get -o APT::Retries=5 install -y --no-install-recommends \
-         bc \
-         build-essential \
--        bzr \
-         ca-certificates \
--        cmake \
-         cpio \
--        cvs \
-         file \
-         g++-multilib \
-         git \
-         libc6:i386 \
--        libncurses5-dev \
-         locales \
--        mercurial \
--        openssh-server \
--        python3 \
--        python3-flake8 \
--        python3-magic \
--        python3-nose2 \
--        python3-pexpect \
--        python3-pytest \
--        qemu-system-arm \
--        qemu-system-misc \
--        qemu-system-x86 \
-         rsync \
--        shellcheck \
--        subversion \
--        sudo \
-         unzip \
-         wget \
-         && \
-@@ -61,9 +41,7 @@ RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
-     /usr/sbin/locale-gen
- 
- RUN useradd -ms /bin/bash br-user && \
--    chown -R br-user:br-user /home/br-user && \
--    printf 'br-user ALL=NOPASSWD: /bin/su -\n' >/etc/sudoers.d/br-user && \
--    chmod 0440 /etc/sudoers.d/br-user
-+    chown -R br-user:br-user /home/br-user
- 
- USER br-user
- WORKDIR /home/br-user
-diff --git a/support/docker/debian-bullseye/apt-sources.list b/support/docker/debian-bullseye.base/apt-sources.list
-similarity index 100%
-rename from support/docker/debian-bullseye/apt-sources.list
-rename to support/docker/debian-bullseye.base/apt-sources.list
-diff --git a/support/docker/debian-bullseye.ci/Dockerfile b/support/docker/debian-bullseye.ci/Dockerfile
-new file mode 100644
-index 0000000000..06db62e11f
---- /dev/null
-+++ b/support/docker/debian-bullseye.ci/Dockerfile
-@@ -0,0 +1,43 @@
-+# This Dockerfile generates the docker image that gets used by Gitlab CI
-+# To build it (YYYYMMDD.HHMM is the current date and time in UTC):
-+#   docker build -t registry.gitlab.com/buildroot.org/buildroot/base:YYYYMMDD.HHMM support/docker/debian-stretch
-+#   docker push registry.gitlab.com/buildroot.org/buildroot/base:YYYYMMDD.HHMM
+diff --git a/docs/manual/prerequisite.adoc b/docs/manual/prerequisite.adoc
+index 6f07cba551..d15f0a972a 100644
+--- a/docs/manual/prerequisite.adoc
++++ b/docs/manual/prerequisite.adoc
+@@ -96,3 +96,46 @@ corresponding tool on the host system:
+ * Graph generation tools:
+ ** +graphviz+ to use 'graph-depends' and '<pkg>-graph-depends'
+ ** +python-matplotlib+ to use 'graph-build'
 +
-+# Based on our reference build image
-+ARG BR2_REGISTRY
-+ARG BR2_DOCKER_VERSION
-+FROM ${BR2_REGISTRY}buildroot/debian-bullseye.base:${BR2_DOCKER_VERSION}
 +
-+LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
-+      vendor="Buildroot" \
-+description="Container with everything needed to run Buildroot"
++=== Docker images
 +
-+USER root
-+WORKDIR /root
-+ENV HOME /root
++The Buildroot project also provides a set of Docker images descriptions,
++in the directory `support/docker/`, which provide ready to use systems
++for using Buildroot. Those images are available on the
++https://gitlab.com/buildroot.org/buildroot/container_registry[docker
++registry of the Buildroot project].
 +
-+RUN apt-get -o APT::Retries=5 install -y --no-install-recommends \
-+        bzr \
-+        cmake \
-+        cvs \
-+        mercurial \
-+        openssh-server \
-+        python3 \
-+        python3-flake8 \
-+        python3-magic \
-+        python3-nose2 \
-+        python3-pexpect \
-+        python3-pytest \
-+        qemu-system-arm \
-+        qemu-system-misc \
-+        qemu-system-x86 \
-+        shellcheck \
-+        subversion \
-+        && \
-+    apt-get -y autoremove && \
-+    apt-get -y clean
++For a given distribution, and a given version of that distribution,
++there are up to three variants: 'base', 'ci', and 'user':
 +
-+USER br-user
-+WORKDIR /home/br-user
-+ENV HOME /home/br-user
-+ENV LC_ALL en_US.UTF-8
-diff --git a/support/docker/debian-bullseye.user/Dockerfile b/support/docker/debian-bullseye.user/Dockerfile
-new file mode 100644
-index 0000000000..72f807b2d5
---- /dev/null
-+++ b/support/docker/debian-bullseye.user/Dockerfile
-@@ -0,0 +1,32 @@
-+# This Dockerfile generates the docker image that can be used by users
-+# to get a workign build environment
-+# To build it (YYYYMMDD.HHMM is the current date and time in UTC):
-+#   docker build -t registry.gitlab.com/buildroot.org/buildroot/base:YYYYMMDD.HHMM support/docker/debian-stretch
-+#   docker push registry.gitlab.com/buildroot.org/buildroot/base:YYYYMMDD.HHMM
++* the 'base' variant is a minimalist system, which contains only the
++  minimal set of packages required for running Buildroot (i.e. the
++  packages listed as mandatory in the manual). The 'base' image shall
++  be used to verify that a package has all its dependencies defined,
++  for example by using:
 +
-+# Based on our reference build image
-+ARG BR2_REGISTRY
-+ARG BR2_DOCKER_VERSION
-+FROM ${BR2_REGISTRY}buildroot/debian-bullseye.ci:${BR2_DOCKER_VERSION}
++** `utils/test-pkg`
 +
-+LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
-+      vendor="Buildroot" \
-+description="Container with everything needed to run Buildroot"
++* the 'ci' image inherits from the 'base' one, and adds the few packages
++  that are needed to run the CI jobs. The 'ci' image shall be used to
++  run the various tests and tooling in Buildroot:
 +
-+USER root
-+WORKDIR /root
-+ENV HOME /root
++** `make check-package`
++** `support/testing/run-tests`
++** `utils/check-symbols`
 +
-+RUN apt-get -o APT::Retries=5 install -y --no-install-recommends \
-+        libncurses5-dev \
-+        sudo \
-+        && \
-+    apt-get -y autoremove && \
-+    apt-get -y clean && \
-+    printf 'br-user ALL=NOPASSWD: /bin/su -\n' >/etc/sudoers.d/br-user && \
-+    chmod 0440 /etc/sudoers.d/br-user
++* the 'user' image inherits from the 'ci' image, and adds a few more
++  packages and setup that are useful for interactive use (e.g. the
++  `br-user` is sudoer without any password, but can just run a login
++  shell, using _exactly_ `sudo su -`).
 +
-+USER br-user
-+WORKDIR /home/br-user
-+ENV HOME /home/br-user
-+ENV LC_ALL en_US.UTF-8
++The Buildroot developers by no mean enforce or recommend using those
++images, or even suggest that Buildroot only works when using one of
++those images; instead, they are known-working environments that can be
++used where the distribution on the build machine can't be configured
++to match Buildroot's needs (e.g. on a shared server), or to provide a
++quick and easy way to test on various ditributions.
++
++Finally, those images can serve as the basis for further customisation:
++one can use them in the `FROM` directive in their own +Dockerfile+.
 -- 
 2.43.0
 
