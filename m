@@ -1,64 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07265C3DA6E
-	for <buildroot@archiver.kernel.org>; Sun, 17 Dec 2023 08:20:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD6F7C3DA6E
+	for <buildroot@archiver.kernel.org>; Sun, 17 Dec 2023 17:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8010B809EC;
-	Sun, 17 Dec 2023 08:20:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8010B809EC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23654408E1;
+	Sun, 17 Dec 2023 17:18:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23654408E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rmpz0pXBQQ-3; Sun, 17 Dec 2023 08:20:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R8T2c1TRBjUU; Sun, 17 Dec 2023 17:18:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA44881DAB;
-	Sun, 17 Dec 2023 08:20:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA44881DAB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9FB081BF4E6
- for <buildroot@lists.busybox.net>; Sun, 17 Dec 2023 08:20:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AD84408EB;
+	Sun, 17 Dec 2023 17:18:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AD84408EB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A8AC1BF422
+ for <buildroot@lists.busybox.net>; Sun, 17 Dec 2023 17:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82ABA400C8
- for <buildroot@lists.busybox.net>; Sun, 17 Dec 2023 08:20:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82ABA400C8
+ by smtp3.osuosl.org (Postfix) with ESMTP id B46B96001B
+ for <buildroot@lists.busybox.net>; Sun, 17 Dec 2023 17:18:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B46B96001B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id scBuBrep5t1q for <buildroot@lists.busybox.net>;
- Sun, 17 Dec 2023 08:20:15 +0000 (UTC)
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4C75A40012
- for <buildroot@buildroot.org>; Sun, 17 Dec 2023 08:20:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C75A40012
-X-QQ-mid: bizesmtp80t1702800939tnzl2dvw
-Received: from main2-ubuntu.tail147f4.ts.net ( [202.201.15.117])
- by bizesmtp.qq.com (ESMTP) with 
- id ; Sun, 17 Dec 2023 16:15:38 +0800 (CST)
-X-QQ-SSF: 01200000000000B06000000A0000000
-X-QQ-FEAT: znfcQSa1hKYFMvDWDmX9cA6IOQCzf3L5fRukJf+jpz6EGMf/jNhi6mzLzDNCy
- GH+ezW4a8EpDd6oA8Z1ZtpGVz5n3yYzYH+ojHkum1msRmOaAr70qaMEXWI/dxO9yjnnRb6b
- dGp3R18M2bb4X2cpIiOz8kdILtYLnTMxILXuhSCFmhabVfEHc7KQ0l2ni+dc7Okz7kUc0CX
- qAc04utdX2uOazEGalwApYNoiCezYMrizIKPgGZ+2i8oM5lXjVDXAUbDNrjxF1qiSXd6F7P
- HTCrgTvOUI4R3o7sKhi8Kh2xtLljnpMIQU9n1J2iYOn8991cHE1TmdydasucYZLK5v0Byjo
- 1RfUSWmbxpx8hCV2uw=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5760130664181418815
-From: Yuan Tan <tanyuan@tinylab.org>
-To: peter@korsgaard.com
-Date: Sun, 17 Dec 2023 16:15:37 +0800
-Message-Id: <20231217081537.206156-1-tanyuan@tinylab.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <87cyv94xd0.fsf@48ers.dk>
-References: <87cyv94xd0.fsf@48ers.dk>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Osr_pF19a5PO for <buildroot@lists.busybox.net>;
+ Sun, 17 Dec 2023 17:18:25 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2EF5560A98
+ for <buildroot@buildroot.org>; Sun, 17 Dec 2023 17:18:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EF5560A98
+Received: from fli4l.lan.fli4l (p5b3a0598.dip0.t-ipconnect.de [91.58.5.152])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9C659A4C09B7
+ for <buildroot@buildroot.org>; Sun, 17 Dec 2023 18:18:21 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46646)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
+ (envelope-from <bernd@kuhls.net>) id 1rEumT-0005Df-09
+ for buildroot@buildroot.org; Sun, 17 Dec 2023 18:18:21 +0100
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 17 Dec 2023 18:18:20 +0100
+Message-Id: <20231217171821.1893522-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-Subject: Re: [Buildroot] Inquiry About Mirroring Methods for Buildroot
- Packages
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202312101026; t=1702833501;
+ bh=fUknBDYMQU/+dIBDaii9ODrHiFqPxC1J8ztA7eVuQkU=;
+ h=From:To:Subject:Date:From;
+ b=yUsTXhPLJKu27rg3Bbtu+n01zufYKZZ6Cw7pDQMUElDBV5aVdQAIcTnLYH2DiA61A
+ QlUTnipPKjqhMEVD2GmmWd4LeNsWUQIG8fOQJ+QjnCh+uH7zXO26ZD2m4kb/0M+FGD
+ RLBRRC8kQgYEOMrGjf6GV3mLDoxtaC5D/xJhtwH01rAd4T8AXj2/h5x9OED0O+pmYQ
+ UEVV4n0GKcG0KZvhW26gXRSiH0YKKg6uIwRMb2fhTjdyzsuq/eqxStfXadNf+n/On3
+ M0/fAqVJ3D9WyBYWcAiFrv3wOY7f6EccMebYkC/eNDf2QN4Wuv4TT6zcRfjvI291qu
+ 91k85s1goFa7A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=yUsTXhPL
+Subject: [Buildroot] [PATCH 1/2] package/linux-headers: drop 6.5.x option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,64 +74,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin.1998@free.fr, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
-> 
->  > On 11/12/2023 10:56, Yuan Tan wrote:
->  >> Hi,
->  >> I am reaching out to inquire about the best practices for mirroring
->  >> Buildroot packages. We aim to establish a reliable mirror for these
->  >> packages, particularly to facilitate access for users in regions like
->  >> mainland China, where downloading packages can sometimes be challenging.
-> 
->  >  We use cloudflare CDN. I just read up on it and it seems there's a
->  >  separate CDN that needs to be enabled to serve China. Perhaps that
->  > just needs to be enabled?
->  > Peter?
-> 
-> Hmm, I guess you are referring to
-> https://www.cloudflare.com/application-services/products/china-network/?
-> 
-> If so, that doesn't look as if that is just something you can enable for
-> their free offering, E.G. you apparently need a "ICP license":
-> 
-> What is an ICP license
-> 
-> ICP is the short name for "Internet Content Provider". According to
-> Chinese regulations, all websites hosted in Mainland China or content
-> served from Chinese data centers (which is true for our China Network
-> service) needs to obtain an ICP "BeiAn=E5=A4=87=E6=A1=88" or "License =E8=
-> =AF=81" number for
-> every domain that serves content to your pages. This number needs to be
-> displayed on the footer of your pages.
-> 
+The 6.5.x series is now EOL upstream, so drop the linux-headers option
+and add legacy handling for it.
 
-Yes, providing internet services in China is quite troublesome :). Some
-universities have set up some mirror sites, and I am trying to set up one
-for buildroot as well.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ Config.in.legacy                     | 7 +++++++
+ linux/linux.hash                     | 1 -
+ package/linux-headers/Config.in.host | 1 -
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
->  >> I have two suggestions and would like to know if either is possible:
->  >> 1. Could you enable rsync for sources.buildroot.net? This would make
->  >> it
->  >> easier for mirror sites to stay updated.
->  >> 2. If rsync isn't an option, would it be okay to use wget to clone
->  >> the
->  >> entire sources.buildroot.net?
-> 
->  >  Wouldn't it be easier to construct your own version, by running the
->  >  same script that Peter uses to update actual sources.buildroot.net?
->  >  Though IIUC that script is a bit of a hack.
-> 
-> yes, it is a big hack. It basically runs make allyespackageconfig &&
-> make source, but then does a number of mutations as well to try to catch
-> per-architecture packages or packages with multiple versions.
-
-May I ask if this script can be shared?
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 312d53943c..4689226290 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2023.11"
+ 
++config BR2_KERNEL_HEADERS_6_5
++	bool "kernel headers version 6.5.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 6.5.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
+ config BR2_PACKAGE_PYTHON_PYXB
+ 	bool "python-pyxb removed"
+ 	select BR2_LEGACY
+diff --git a/linux/linux.hash b/linux/linux.hash
+index ed9c6143db..9572acda2d 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  28edfc3d4f90cd738f2a20f5a2d68510268176d6111f6278d8f495edfd9495a7  linux-6.6.3.tar.xz
+-sha256  78fbd43822f4c56bc16e89e8874767f592532e1a0ffcd1af4dd279559b5fcbb5  linux-6.5.13.tar.xz
+ sha256  629daa38f3ea67f29610bfbd53f9f38f46834d3654451e9474100490c66dc7e7  linux-6.1.64.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  be2bee8b346f3ccb35879f16c80a323edda571e36190403805c14a9ea24e4a47  linux-5.15.140.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 344acc9cde..ab923cbb95 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -418,7 +418,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.10.202"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.140"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.64"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.5.13"	if BR2_KERNEL_HEADERS_6_5
+ 	default "6.6.3"		if BR2_KERNEL_HEADERS_6_6
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
