@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DFDDC3DA6E
-	for <buildroot@archiver.kernel.org>; Sun, 17 Dec 2023 22:03:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAF75C3DA6E
+	for <buildroot@archiver.kernel.org>; Sun, 17 Dec 2023 22:07:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2446E81E34;
-	Sun, 17 Dec 2023 22:03:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2446E81E34
+	by smtp1.osuosl.org (Postfix) with ESMTP id 933B181B10;
+	Sun, 17 Dec 2023 22:07:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 933B181B10
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Woeisl9JZccE; Sun, 17 Dec 2023 22:03:11 +0000 (UTC)
+	with ESMTP id D0AzmhffTLlM; Sun, 17 Dec 2023 22:07:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2073A81A64;
-	Sun, 17 Dec 2023 22:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2073A81A64
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA69B1BF371
- for <buildroot@lists.busybox.net>; Sun, 17 Dec 2023 22:03:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C995E81A64;
+	Sun, 17 Dec 2023 22:07:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C995E81A64
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CBE41BF425
+ for <buildroot@lists.busybox.net>; Sun, 17 Dec 2023 22:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 91C7B60A84
- for <buildroot@lists.busybox.net>; Sun, 17 Dec 2023 22:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91C7B60A84
+ by smtp1.osuosl.org (Postfix) with ESMTP id C33B781A64
+ for <buildroot@lists.busybox.net>; Sun, 17 Dec 2023 22:07:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C33B781A64
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6FU7AzuaYWb2 for <buildroot@lists.busybox.net>;
- Sun, 17 Dec 2023 22:03:07 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E15EA608A6
- for <buildroot@buildroot.org>; Sun, 17 Dec 2023 22:03:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E15EA608A6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E37EAFF805;
- Sun, 17 Dec 2023 22:03:04 +0000 (UTC)
-Date: Sun, 17 Dec 2023 23:03:03 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dEY736LuVlIx for <buildroot@lists.busybox.net>;
+ Sun, 17 Dec 2023 22:07:08 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 81C3981971
+ for <buildroot@buildroot.org>; Sun, 17 Dec 2023 22:07:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81C3981971
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E4C381C0003;
+ Sun, 17 Dec 2023 22:07:04 +0000 (UTC)
+Date: Sun, 17 Dec 2023 23:07:04 +0100
 To: Ralf Dragon <hypnotoad@lindra.de>
-Message-ID: <20231217230303.3200b052@windsurf>
-In-Reply-To: <20231212160112.94272-1-hypnotoad@lindra.de>
+Message-ID: <20231217230704.003200c7@windsurf>
+In-Reply-To: <20231212160112.94272-2-hypnotoad@lindra.de>
 References: <20231212160112.94272-1-hypnotoad@lindra.de>
+ <20231212160112.94272-2-hypnotoad@lindra.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1702850585;
+ d=bootlin.com; s=gm1; t=1702850825;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=zoqAY/VlaJOXIIIIeOB9ojUQQtXPFIEuh9PFQtsJSCw=;
- b=gmGYgYi6NwsHMiI2S4UOEzFQ/PLhsPx4S6S9y8GyCAmcbvTD0cFTx3nHWzUxgoFqYUSyjs
- AcqzbqkhgcKTQVYYKUu7QbdWwxldj/igkPH6tmmFIO2F7ioCWkAKffjoAmxKrj3IPXIe+i
- 34RAedaKl8jqFz9j+Hvgr3y9Iti1kYYgtPwxdcPrHWNLw2ffrtIS0FCtq4rA+x8VGe1ntH
- +0gh0zHxgvJH7IdhrMfc9IRpzt3o0IhodKQIdGWIWaui3loQlrZj0u86rTGf7PHA6LbOZB
- Zl4frHfPYLWAdQToNTQwOoz2Enaecuqoz+qpxXvy6ZLFaFjdaPMH32Tj+u6qig==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=ATsEkFsIaZOgjzjhXKwhlo4HfkH2v7af0Oj3yRxB0gM=;
+ b=N0e63z5G20TT5Ystt4/9LVUaUPLuS19RRsmEwpI76VWPATTBzCvc/yL3vpwTscnYL4E7Vl
+ hav6jJaVhcF8TRA184XRfeOQiRXjJHiNN0n/nig3mpXkm1zoOc1CzShRzB3sunBIT8Q5ji
+ hxUPnZnjAQ2rP3KqAncB900Bg/a65PY0Educ7vMrJMgHiqDs5tip3okekMq+YIUKLvb6MV
+ 3eCijN5RfxXovr5iib2aDx8Bo+s8VGo/3HmpsYqCvkzfeKyrW5k8o4cjosnXCt7qNWanky
+ FMISokijWR8Abqc90tFLMIVLf8QJ7GqB8Rbf7Xh44rj19BSh1b97Dv7D05cZ8w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gmGYgYi6
-Subject: Re: [Buildroot] [PATCH 1/2] python-sip: fix compile error
+ header.s=gm1 header.b=N0e63z5G
+Subject: Re: [Buildroot] [PATCH 2/2] python-qt5: add PyQt5.sip module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,47 +77,116 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: gwenhael.goavec-merou@trabucayre.com, yann.morin.1998@free.fr,
- asafka7@gmail.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Julien Olivain <ju.o@free.fr>, gwenhael.goavec-merou@trabucayre.com,
+ yann.morin.1998@free.fr, asafka7@gmail.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUmFsZiwKClRoYW5rcyBmb3IgdGhlIHBhdGNoISBJIGhhdmUgYXBwbGllZCBpdCwgd2l0
-aCBzb21lIGNoYW5nZXMsIHNlZSBiZWxvdy4KCk9uIFR1ZSwgMTIgRGVjIDIwMjMgMTc6MDE6MTEg
-KzAxMDAKUmFsZiBEcmFnb24gPGh5cG5vdG9hZEBsaW5kcmEuZGU+IHdyb3RlOgoKPiBXaXRob3V0
-IHRoZSBwYXRjaCwgcHl0aG9uLXNpcCBmYWlscyB0byBjb21waWxlIHdpdGg6Cj4gCj4gc2lwbGli
-LmM6IEluIGZ1bmN0aW9uIOKAmHNpcF9hcGlfZ2V0X2ZyYW1l4oCZOgo+IHNpcGxpYi5jOjEzNzUw
-OjIyOiBlcnJvcjogaW52YWxpZCB1c2Ugb2YgdW5kZWZpbmVkIHR5cGUg4oCYc3RydWN0IF9mcmFt
-ZeKAmQo+IDEzNzUwIHwgICAgICAgICBmcmFtZSA9IGZyYW1lLT5mX2JhY2s7Cj4gCj4gVGhpcyBs
-aWtlbHkgZml4ZXMgYnVnIDE1MjAxIFsxXS4KPiAKPiBbMV0gaHR0cHM6Ly9idWdzLmJ1aWxkcm9v
-dC5vcmcvc2hvd19idWcuY2dpP2lkPTE1MjAxCgpJIGFtIG5vdCBzdXJlIGl0IGZpeGVzIHRoaXMg
-YnVnLiBUaGlzIGJ1ZyBpcyBtb3JlIGFib3V0IHVwZ3JhZGluZwpweXRob24tc2lwLCB3aGljaCBp
-bmRlZWQgd291bGQgYmUgdmVyeSBuaWNlIHRvIGRvIGFzIFNJUCA0LnggaXMgbm8KbG9uZ2VyIG1h
-aW50YWluZWQsIGFzIHlvdSBwb2ludGVkIG91dC4KCkhvd2V2ZXIsIHlvdXIgcGF0Y2ggZml4ZXMK
-aHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvN2IwMTczOWU3NTE0ZTQ4YzA2
-MTgyYmMxODA0YjMyNDk3Y2UyZTQxNC8KZm9yIHN1cmUsIHNvIEkndmUgdXNlZCB0aGF0IGluIHRo
-ZSBjb21taXQgbG9nLgoKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tc2lwLzAwMDItZml4
-ZnJhbWUucGF0Y2ggYi9wYWNrYWdlL3B5dGhvbi1zaXAvMDAwMi1maXhmcmFtZS5wYXRjaAo+IG5l
-dyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uYmVmZTc2ZmM3Mwo+IC0tLSAv
-ZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3B5dGhvbi1zaXAvMDAwMi1maXhmcmFtZS5wYXRjaAo+
-IEBAIC0wLDAgKzEsNTUgQEAKPiArc2lwbGliOiBmaXggYnVpbGQgd2l0aCBweXRob24gPj0gMy4x
-MQo+ICsKPiArV2l0aCBweXRob24gMy4xMSwgdGhlIFB5RnJhbWVPYmplY3Qgc3RydWN0dXJlIG1l
-bWJlcnMgaGF2ZSBiZWVuCj4gK3JlbW92ZWQgZnJvbSB0aGUgcHVibGljIEMgQVBJOgo+ICsKPiAr
-aHR0cHM6Ly9kb2NzLnB5dGhvbi5vcmcvMy4xMS93aGF0c25ldy8zLjExLmh0bWwjd2hhdHNuZXcz
-MTEtYy1hcGktcG9ydGluZwo+ICtodHRwczovL2RvY3MucHl0aG9uLm9yZy8zLjExL3doYXRzbmV3
-LzMuMTEuaHRtbCNweWZyYW1lb2JqZWN0LTMtMTEtaGlkaW5nCj4gKwo+ICtUaGlzIHBhdGNoIG1p
-Z3JhdGVzIHRvIHRoZSBvcGFxdWUgUHlGcmFtZU9iamVjdC4KPiArCj4gK1NpZ25lZC1vZmYtYnk6
-IFJhbGYgRHJhZ29uIDxoeXBub3RvYWRAbGluZHJhLmRlPgo+ICtVcHN0cmVhbTogTi9BIGFzIFNJ
-UCB2NCBpcyBubyBsb25nZXIgc3VwcG9ydGVkLiA0LjE5LjI1IGlzIHRoZSBsYXN0IHJlbGVhc2Uu
-CgpJIHJlZm9ybWF0dGVkIHRoaXMgcGF0Y2ggdXNpbmcgImdpdCBmb3JtYXQtcGF0Y2giIHRvIGJl
-IGxpa2UgcGF0Y2gKMDAwMS4gSSBhbHNvIHNsaWdodGx5IGltcHJvdmVkIHRoZSBjb21taXQgbG9n
-LgoKU2VlIHRoZSBmaW5hbCBjb21taXQ6CgogIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qu
-b3JnL2J1aWxkcm9vdC8tL2NvbW1pdC8zZWY2ODg0ZTZkNTk3NDRkODM2NDkxNzA4MjJhNDgyOWVl
-ZDE0NmZjCgpUaGFua3MgYSBsb3QhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93
-bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmlu
-ZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+Hello Ralf,
+
+On Tue, 12 Dec 2023 17:01:12 +0100
+Ralf Dragon <hypnotoad@lindra.de> wrote:
+
+> This fixes the following runtime error when importing PyQt5 in python:
+> 
+> from PyQt5.QtCore import *
+> ModuleNotFoundError: No module named 'PyQt5.sip'
+
+So it means that python-pyqt5 requires this new python-pyqt5-sip
+package? How come has python-pyqt5 ever worked?
+
+> diff --git a/package/python-pyqt5-sip/Config.in b/package/python-pyqt5-sip/Config.in
+> new file mode 100644
+> index 0000000000..6f26271f70
+> --- /dev/null
+> +++ b/package/python-pyqt5-sip/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_PYQT5_SIP
+> +	bool "python-pyqt5-sip"
+> +	depends on BR2_PACKAGE_PYTHON_PYQT5
+> +	depends on BR2_PACKAGE_PYTHON_SIP
+
+But, but, according to what you described above, it seems like
+python-pyqt5 needs python-pyqt5-sip, but here you have a
+python-pyqt5-sip -> python-pyqt5 dependency.
+
+So with your patch applied, it's still possible to enable only
+python-pyqt5, so we would still have the failure you're mentioning in
+your commit log.
+
+Could you clarify?
+
+Also, it would very, very good to add a runtime test case in
+support/testing/ for this, as such Python issues are only visible at
+runtime. I have added Julien Olivain in Cc, who can probably help with
+this, as he is our resident expert in writing support/testing tests :-)
+
+> diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.hash b/package/python-pyqt5-sip/python-pyqt5-sip.hash
+> new file mode 100644
+> index 0000000000..8039cdafd9
+> --- /dev/null
+> +++ b/package/python-pyqt5-sip/python-pyqt5-sip.hash
+> @@ -0,0 +1,4 @@
+> +# from https://pypi.org/project/PyQt5-sip/12.12.1
+> +
+
+Empty line not needed.
+
+> +sha256  8fdc6e0148abd12d977a1d3828e7b79aae958e83c6cb5adae614916d888a6b10  PyQt5_sip-12.12.1.tar.gz
+> +md5  c2117da3b4c0e081c1c5a9088b8a4d55  PyQt5_sip-12.12.1.tar.gz
+> diff --git a/package/python-pyqt5-sip/python-pyqt5-sip.mk b/package/python-pyqt5-sip/python-pyqt5-sip.mk
+> new file mode 100644
+> index 0000000000..3f689b9d47
+> --- /dev/null
+> +++ b/package/python-pyqt5-sip/python-pyqt5-sip.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-SIP-QT5
+
+Should be all lower-case.
+
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYQT5_SIP_VERSION = 12.12.1
+> +PYTHON_PYQT5_SIP_SITE = https://files.pythonhosted.org/packages/c1/61/4055e7a0f36339964956ff415e36f4abf82561904cc49c021da32949fc55
+> +PYTHON_PYQT5_SIP_SOURCE = PyQt5_sip-$(PYTHON_PYQT5_SIP_VERSION).tar.gz
+> +PYTHON_PYQT5_SIP_LICENSE = MIT
+> +PYTHON_PYQT5_SIP_LICENSE_FILES = LICENSE
+> +PYTHON_PYQT5_SIP_SETUP_TYPE = setuptools
+> +PYTHON_PYQT5_SIP_DEPENDENCIES += python-sip
+
+No +=, just =.
+
+> +
+> +$(eval $(python-package))
+> diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
+> index 9fa7676f98..c2a1976950 100644
+> --- a/package/python-pyqt5/Config.in
+> +++ b/package/python-pyqt5/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_PYQT5
+>  	bool "python-pyqt5"
+>  	depends on BR2_PACKAGE_QT5
+>  	select BR2_PACKAGE_PYTHON_SIP
+> +	select BR2_PACKAGE_PYTHON_PYQT5_SIP
+
+Ah, so python-pyqt5 now selects python-pyqt5-sip, and python-pyqt5-sip
+also selects python-pyqt5. This sounds like a circular dependency.
+
+Could you perhaps give a bit more background, so that we can provide
+some better guidance on how to resolve this issue properly?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
