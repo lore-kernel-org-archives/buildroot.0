@@ -4,83 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C58D9C35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 19:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14958C35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 19:54:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57F5F4096D;
-	Mon, 18 Dec 2023 19:54:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57F5F4096D
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEF43409FC;
+	Mon, 18 Dec 2023 19:54:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEF43409FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ytt-GgwuemtE; Mon, 18 Dec 2023 19:54:14 +0000 (UTC)
+	with ESMTP id MEXb2AQ3Bbh5; Mon, 18 Dec 2023 19:54:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93D1B4094B;
-	Mon, 18 Dec 2023 19:54:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93D1B4094B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 685971BF3DC
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 19:54:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB00A4096D;
+	Mon, 18 Dec 2023 19:54:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB00A4096D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BA3821BF3DC
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 19:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3EF3040463
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 19:54:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EF3040463
+ by smtp1.osuosl.org (Postfix) with ESMTP id A045782215
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 19:54:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A045782215
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rg6RPd9qHVDm for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 19:54:10 +0000 (UTC)
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 324E7400AB
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 19:54:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 324E7400AB
-Received: by mail-pl1-x634.google.com with SMTP id
- d9443c01a7336-1d337dc9697so29785355ad.3
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 11:54:10 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zvHENPdnBGr1 for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 19:54:11 +0000 (UTC)
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8ED5382201
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 19:54:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ED5382201
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-1d075392ff6so25426595ad.1
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 11:54:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702929249; x=1703534049;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CNIQxnEFXDLMKWBNALg6Iqp/mGL/IozaHs68172BwbA=;
- b=iqiaQfSgGATFRHbjL9QM1HaWWXSx7P9FDHWxiq5ojrOk4xurGUtYFC33RGUn4J3oSo
- DkIU30XrOwUW41n3W19duXBvReLFHvrQ0Dv/q+gg1TWpDP5BGBBF1MuCehXSA5j7l9Zi
- kWWJcSiy8jesBaTaLSRaZG1hJwc9dAkZzZPynCbWcXbMCZvCWfYWJoGR3sWzk4uuKNpD
- 4SYvDTJ1MBEvnKk3PL7t2EpdRfvJh+1M+0rcfAsHdLH1duLzAD6jMlLQjqS3l6cx0Iu5
- 7+klS9FZncNow+zeXmdPjO+KxmG+XJFsqAQV+mZIK/2wZ1lilM3knQY3zJpwlQ2WFstz
- OjMA==
-X-Gm-Message-State: AOJu0YwM2w4QwVGs5e5/bLttuT8zhbQy4tstgBHlL8Nm6TrrN0ZX3rOE
- LUqA0IcOFNIOAp1kaOlpstubkrlBPhB+8+gRNlc=
-X-Google-Smtp-Source: AGHT+IEVZfB0aDjcoegaoNKBqmf1W1vXrrjOn2P98Vgh6uzFp4gax6HYecd6N1HFSKbMFdF4gS4RTg==
-X-Received: by 2002:a17:902:f686:b0:1d3:be14:372a with SMTP id
- l6-20020a170902f68600b001d3be14372amr2417550plg.60.1702929248693; 
- Mon, 18 Dec 2023 11:54:08 -0800 (PST)
+ d=1e100.net; s=20230601; t=1702929250; x=1703534050;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=5hhOgWjjrXqhkTXjP692jmy7ZMr4TwtkVCzQdOuogkA=;
+ b=ckRXEXxsgHs58kp2sCumLvnVVmYJWkKkv1R0Ro1HB/u1dX2KLhfsg+mlw85+pGCACG
+ 2+bUsglSZzyWoGyCY6FVXArzTIQlNcgqVyoMLPlssSg7FiVXrQtuuSo0BPBfN5BdW05k
+ mm2IMzFiDZflNldqHY8JRGce+apT7m8Tydj1HTF0ZSa9XdJtDzQjHJHyznCKOqotPtN3
+ TKNG8mBuAktefpMtRry6Xof1+6vlEXz3YOQ+vKaey4R4gBA4KtplKdhUJMUE1olLb3/P
+ mn9D4AkcFefy+mEngPgKPyGgSstGbqp7WWnftX/9Ys2fL51ogVeG8EfXXAGmlVz/0Rkr
+ +/Mg==
+X-Gm-Message-State: AOJu0YyDltlwm5kKDmQFQ9t4/iuQbKHfsHAqI8kei20qShC+bG5kkGYA
+ 39KVg82keZ5trcrSAQxFWXwznWHGSgn1E7YGLwA=
+X-Google-Smtp-Source: AGHT+IG6kPGmiiHMy2K6NFWrAza4bpOsUXE4UA8L97ryJGkPRPEWrL6Ew8R5HQ4tKyX0UkwynDN8hw==
+X-Received: by 2002:a17:902:a511:b0:1d0:6ffd:6112 with SMTP id
+ s17-20020a170902a51100b001d06ffd6112mr15379690plq.52.1702929250120; 
+ Mon, 18 Dec 2023 11:54:10 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.amarulasolutions.com ([174.27.209.61])
  by smtp.gmail.com with ESMTPSA id
- u2-20020a170902e80200b001acae9734c0sm2037283plg.266.2023.12.18.11.54.07
+ u2-20020a170902e80200b001acae9734c0sm2037283plg.266.2023.12.18.11.54.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Dec 2023 11:54:08 -0800 (PST)
+ Mon, 18 Dec 2023 11:54:09 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Dec 2023 12:54:04 -0700
-Message-ID: <20231218195406.553072-1-adam.duskett@amarulasolutions.com>
+Date: Mon, 18 Dec 2023 12:54:05 -0700
+Message-ID: <20231218195406.553072-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231218195406.553072-1-adam.duskett@amarulasolutions.com>
+References: <20231218195406.553072-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1702929249; x=1703534049;
+ d=amarulasolutions.com; s=google; t=1702929250; x=1703534050;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CNIQxnEFXDLMKWBNALg6Iqp/mGL/IozaHs68172BwbA=;
- b=ZnhkrUgKFEB3FbXCtCakS4sufyzcXFej6e8m78u8G0HgBQee5jGhxVPFKR8I4M4EcZ
- Pb5PeSg28x3rFDgfmUjKYhjKKQSxA0jxqdZHepNBSzuNkGSyBNTTAr7Mr6myW2layk5J
- NHky5UEaElbHl2r8j++HLTXu1mRui6yyxD8vo=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=5hhOgWjjrXqhkTXjP692jmy7ZMr4TwtkVCzQdOuogkA=;
+ b=IcuEW94w5GgSYMJibUzWxN29JY6f9BvHZ0HiAUHv9TAB/4s+cha9iVpDEpiapiryec
+ sOwmdcVya8YsybpnQRG59uvxVyeZRYXt9CIjqCCD2brFS6gqZVhfr1yPC3OnQqGsq9DJ
+ JkfHkhKtXHjz2Y6mwhw9kMolvAJgmIlgjeCZM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=ZnhkrUgK
-Subject: [Buildroot] [PATCH v3 1/3] package/itstool: new host-package
+ header.b=IcuEW94w
+Subject: [Buildroot] [PATCH v3 2/3] package/zenity: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,59 +101,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Translate XML with PO files using W3C Internationalization Tag Set rules.
-This is needed for the zenity package.
+This is needed for the ivi-homescreen File selector plugin
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- DEVELOPERS                   |  1 +
- package/itstool/itstool.hash |  3 +++
- package/itstool/itstool.mk   | 14 ++++++++++++++
- 3 files changed, 18 insertions(+)
- create mode 100644 package/itstool/itstool.hash
- create mode 100644 package/itstool/itstool.mk
+v2 -> v3: Fix hash of COPYING
+
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/zenity/Config.in   | 31 +++++++++++++++++++++++++++++++
+ package/zenity/zenity.hash |  3 +++
+ package/zenity/zenity.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 57 insertions(+)
+ create mode 100644 package/zenity/Config.in
+ create mode 100644 package/zenity/zenity.hash
+ create mode 100644 package/zenity/zenity.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 311dcd9504..519ad2984e 100644
+index 519ad2984e..688142f398 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -37,6 +37,7 @@ F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-+F:	package/itstool/
+@@ -40,6 +40,7 @@ F:	package/flutter-sdk-bin/
+ F:	package/itstool/
  F:	package/python-kmod/
  F:	package/python-versioneer/
++F:	package/zenity/
  F:	support/testing/tests/package/test_firewalld.py
-diff --git a/package/itstool/itstool.hash b/package/itstool/itstool.hash
+ F:	support/testing/tests/package/test_flutter.py
+ 
+diff --git a/package/Config.in b/package/Config.in
+index fcc09b07c4..6f6e2bb56d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -333,6 +333,7 @@ comment "Graphic applications"
+ 	source "package/swaybg/Config.in"
+ 	source "package/tesseract-ocr/Config.in"
+ 	source "package/tinifier/Config.in"
++	source "package/zenity/Config.in"
+ 
+ comment "Graphic libraries"
+ 	source "package/cegui/Config.in"
+diff --git a/package/zenity/Config.in b/package/zenity/Config.in
 new file mode 100644
-index 0000000000..937185ec2b
+index 0000000000..de018b4900
 --- /dev/null
-+++ b/package/itstool/itstool.hash
++++ b/package/zenity/Config.in
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_ZENITY
++	bool "zenity"
++	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libgtk3
++	depends on BR2_USE_WCHAR # libgtk3
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk3
++	depends on BR2_USE_MMU # libgtk3
++	depends on BR2_INSTALL_LIBSTDCPP # libgtk3
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk3
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk3
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || BR2_PACKAGE_HAS_LIBGL # libgtk3
++	select BR2_PACKAGE_LIBGTK3
++	help
++	  The GNOME port of the venerable 'dialog'
++	  program, which allows you to display dialog boxes from
++	  the command-line and shell scripts.
++
++	  https://github.com/GNOME/zenity
++
++comment "zenity needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
++	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_HAS_THREADS
++
++comment "zenity needs an OpenGL or an OpenGL-EGL/wayland backend"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND && \
++		!BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/zenity/zenity.hash b/package/zenity/zenity.hash
+new file mode 100644
+index 0000000000..0d1d7b0cb5
+--- /dev/null
++++ b/package/zenity/zenity.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  fba78a37dc3535e4686c7f57407b97d03c676e3a57beac5fb2315162b0cc3176  itstool-2.0.7.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPL3
-diff --git a/package/itstool/itstool.mk b/package/itstool/itstool.mk
++sha256  85bfd8c695c3c2eb6d7ec339b9edfa85d48fa1a9f0b50df111c2da3902fb4c4d  zenity-3.44.2.tar.gz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/zenity/zenity.mk b/package/zenity/zenity.mk
 new file mode 100644
-index 0000000000..d9aa016f50
+index 0000000000..8abe010874
 --- /dev/null
-+++ b/package/itstool/itstool.mk
-@@ -0,0 +1,14 @@
++++ b/package/zenity/zenity.mk
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
-+# itstool
++# zenity
 +#
 +################################################################################
 +
-+ITSTOOL_VERSION = 2.0.7
-+ITSTOOL_SITE = $(call github,itstool,itstool,$(ITSTOOL_VERSION))
-+ITSTOOL_LICENSE = GPL-3.0+
-+ITSTOOL_LICENSE_FILES = COPYING.GPL3
-+HOST_ITSTOOL_AUTORECONF = YES
-+HOST_ITSTOOL_DEPENDENCIES = host-python3
++ZENITY_VERSION = 3.44.2
++ZENITY_SITE = $(call github,GNOME,zenity,$(ZENITY_VERSION))
++ZENITY_LICENSE = LGPL-2.1
++ZENITY_LICENSE_FILES = COPYING
++ZENITY_DEPENDENCIES = \
++	host-itstool \
++	libgtk3
 +
-+$(eval $(host-autotools-package))
++ZENITY_CONF_OPTS = -Dlibnotify=false
++
++ifeq ($(BR2_PACKAGE_WEBKITGTK),y)
++ZENITY_DEPENDENCIES += webkitgtk
++endif
++
++$(eval $(meson-package))
 -- 
 2.43.0
 
