@@ -4,55 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4447C35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 06:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58435C46CA2
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 06:54:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D227404D4;
-	Mon, 18 Dec 2023 06:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D227404D4
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC0B94010C;
+	Mon, 18 Dec 2023 06:54:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC0B94010C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K-tzTxxw1ep3; Mon, 18 Dec 2023 06:53:22 +0000 (UTC)
+	with ESMTP id VyruWZt4yYGe; Mon, 18 Dec 2023 06:54:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 295A440364;
-	Mon, 18 Dec 2023 06:53:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 295A440364
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 555EE1BF3F4
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 06:53:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9244E40364;
+	Mon, 18 Dec 2023 06:54:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9244E40364
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E2ED1BF3BC
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 06:54:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B4C281FA6
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 06:53:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B4C281FA6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7297D40364
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 06:54:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7297D40364
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iVbCIQ1PXuCa for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 06:53:16 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 82C1881F92
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 06:53:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82C1881F92
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 58921240002;
- Mon, 18 Dec 2023 06:53:13 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rF7V2-00Fywv-2S;
- Mon, 18 Dec 2023 07:53:12 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Davis <davikovs@gmail.com>
-References: <CAHQn7p+q+ZEpLdDWYG6M-oLP6mSqXtE1M95MKjQQfEBtOmf6xQ@mail.gmail.com>
- <87ttoia2na.fsf@48ers.dk>
- <CAHQn7pLwHQYFpYwzKd=Wzrebs2AY6jEQbJQoQHKPn2pn1BO1cA@mail.gmail.com>
-Date: Mon, 18 Dec 2023 07:53:12 +0100
-In-Reply-To: <CAHQn7pLwHQYFpYwzKd=Wzrebs2AY6jEQbJQoQHKPn2pn1BO1cA@mail.gmail.com>
- (Davis's message of "Mon, 18 Dec 2023 07:53:00 +0200")
-Message-ID: <87jzpc9f3b.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nmh0VHdTvSXq for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 06:54:50 +0000 (UTC)
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
+ [IPv6:2a00:1450:4864:20::234])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1DBD64010C
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 06:54:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DBD64010C
+Received: by mail-lj1-x234.google.com with SMTP id
+ 38308e7fff4ca-2cc64629c16so14706021fa.3
+ for <buildroot@buildroot.org>; Sun, 17 Dec 2023 22:54:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1702882487; x=1703487287;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=t8iwvev+lgQEsfUseGTBmD/RzeLy3LNx6l/Skjk2o4o=;
+ b=L5BLddp3rnRUSApLtL7h+bProquUhFpxGXWCmRUGpEgEyDkuhKD87HZSG8LBRuxTKP
+ fPaFSLgzBSLovFAvfByReCBnGSnPrTQRVmpPaOksoT2pbeiY6fSupxDxAPDfbxzykLmU
+ 6JaB0fvsjC1JCNtR1kLtrXDZt6G+4hswvd0s9GKgbP0NRzgAgJ5ZgM9vHKRQdONUhNQ9
+ VfD2sVnsmBqpIH0ZIQzF+AzunjYt8R6z8aRDJS0ny7qSIpcVEJ+yE3m7dIaisPdXRdYJ
+ 9EJjpW/6AvIwGuZ0nRCWVsXQgxcQSrjhAop1R0EgoBPGvtEuNhfqvqiU1Lgfrg66Wfu/
+ d0NQ==
+X-Gm-Message-State: AOJu0Yz7+SmtIY1x+h1bGRDIrnONDLaPlpKQYBH+jaeOs+3c2lD3nfBe
+ M3C5GAUKxvbK2LnEUTGvDh6J+N3xi2E=
+X-Google-Smtp-Source: AGHT+IFBqECevFAIrnk4co9clG+gKvV7Td74JarpvrWGNpoMVy3uJkr81UEuuFNsREiWPfbFLJ3nwg==
+X-Received: by 2002:a2e:9ec4:0:b0:2c8:39fc:acf5 with SMTP id
+ h4-20020a2e9ec4000000b002c839fcacf5mr6497557ljk.2.1702882487306; 
+ Sun, 17 Dec 2023 22:54:47 -0800 (PST)
+Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
+ [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
+ bz8-20020a05651c0c8800b002cc72c38d8asm206227ljb.107.2023.12.17.22.54.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 17 Dec 2023 22:54:46 -0800 (PST)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 18 Dec 2023 07:59:16 +0100
+Message-ID: <20231218065916.159076-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] Bluez 5.71 released
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1702882487; x=1703487287; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=t8iwvev+lgQEsfUseGTBmD/RzeLy3LNx6l/Skjk2o4o=;
+ b=cijcrYPx2iOs0ZADaJ/f5SicoHJb6GZdfkMv7oqLzljx3J2X7vB4es1IKGftao6UL2
+ 1SrG3s8ozwn04CfAHXZvb/QrzzRR3lyjlwSvNc/0jpIEtD5T5MlcFiVSOUQcRDPxXEPC
+ 3WlKJ+nhwvmpQWotnS0jXy0X2jBWHkN0t71+inJa3BCzWKCZVjjqongIQ8UsuU2NdppI
+ bbvW9gSTMszxLEJ3b2Sbg206XBjRcEtDEHrGh4y+PRcjbxD00qJfN5WRckKOAfaop9WP
+ zuJS0tfM1X8OP5vmk5iZ1VAPxmUKO/37nPYcuLFn4a9HoWTiCWKKsyRRpQ5gKi1CqNI6
+ VI6A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=cijcrYPx
+Subject: [Buildroot] [PATCH] package/libostree: bump to version 2023.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,24 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Davis" == Davis  <davikovs@gmail.com> writes:
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > I can send a patch if somebody else (who understands the legal side)
- > will sign it off.
- > Also it would be good if somebody could test it with a "vanilla" buildroot.
-
- > Should I send the patch?
-
-Yes please!
-
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 2d8284a99f..d4645c593f 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  19cda718705f7ac8c018c939c38b1bb8412deaaa04862da98cd9fe9243f073bf  libostree-2023.7.tar.xz
++sha256  b6fffc267188e40d60755e6d7f2be65831795baa53b0fd9dd6c6809c7e54796d  libostree-2023.8.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index c1bd5886bf..d13f484041 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION = 2023.7
++LIBOSTREE_VERSION = 2023.8
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
 -- 
-Bye, Peter Korsgaard
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
