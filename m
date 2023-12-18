@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CF11C35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 17:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6B89C35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 17:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54B26817A7;
-	Mon, 18 Dec 2023 17:31:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54B26817A7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87F2481678;
+	Mon, 18 Dec 2023 17:39:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87F2481678
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WOZu-XxBzEl2; Mon, 18 Dec 2023 17:31:18 +0000 (UTC)
+	with ESMTP id LUHhJwV2Ke_s; Mon, 18 Dec 2023 17:39:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 804DD817AE;
-	Mon, 18 Dec 2023 17:31:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 804DD817AE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B3AD11BF20B
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 17:31:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A254381F38;
+	Mon, 18 Dec 2023 17:39:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A254381F38
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D65711BF385
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 17:39:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97DC8405E6
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 17:31:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97DC8405E6
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC5DA81F46
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 17:39:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC5DA81F46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fl3ILcptACCE for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 17:31:14 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3556A4056F
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 17:31:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3556A4056F
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FgAhj2zdY4Wv for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 17:39:17 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8F22F81F38
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 17:39:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F22F81F38
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id F351EB0055E;
- Mon, 18 Dec 2023 18:31:08 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 94E48B00573;
+ Mon, 18 Dec 2023 18:39:11 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 18 Dec 2023 18:31:08 +0100
-Date: Mon, 18 Dec 2023 18:31:08 +0100
+ Mon, 18 Dec 2023 18:39:11 +0100
+Date: Mon, 18 Dec 2023 18:39:11 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <ZYCB3EqymtRdzOzd@landeda>
+Message-ID: <ZYCDv03HW6cpkQFw@landeda>
 References: <20231102184154.46185-1-adam.duskett@amarulasolutions.com>
- <20231102184154.46185-2-adam.duskett@amarulasolutions.com>
+ <ZYB_06OI-Kw5cC0Z@landeda>
+ <CAHDQB6Oa1NHV0fO+kPBixsR-4zcCCH1f-fE-C+75Cb9pDJRcbg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231102184154.46185-2-adam.duskett@amarulasolutions.com>
+In-Reply-To: <CAHDQB6Oa1NHV0fO+kPBixsR-4zcCCH1f-fE-C+75Cb9pDJRcbg@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1702920671;
- bh=yn9nnFseUauPeVXxvRimctJI4XXFA7bXQ1/Rm5CY9Bo=;
+ d=free.fr; s=smtp-20201208; t=1702921154;
+ bh=Ovrry6ISe/AQEZSKSmtG+MCZNNt9CdDsxRPYZ5D/h6Y=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=FeQQHL/eYSbCla0DNrf5ckYHYebzu2sxp/5C1OrVdMV81PLa1tY6STA73ni/hR6BN
- e4c85DIF9zelNmuU/pmWfJ1KnGCKEG8J/zGei6lSCjb2U0wcOSaBKWFXXrkfFTRuud
- TBJejAN2RvGdKFYd7KXTkq7IgPmNEe4rNQ4tf6N1foVZ9O+0qfTk4mjFEtB4qGTxoO
- WcQPS4Esxzz2D4J30lJDfQnNI6FzxAlOWIIL0qWKuObbaoFNYFIHuTX2/OnbDO2Y73
- GsLD5PQyk34KfcvD0S8tAINi3aQ+TBe+YQu5kUg3AIPvD8O6FOSNXUfb5Mr/fo02kZ
- HrEdlL1JuWZEQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=c9QAk1YlbMH4yF9i+gSq2eC3216ImPy5hnq1TqbhnPwTSHVwYQnab0DebUkcdeBG1
+ k/FXI3Z3EyjbjnJbqduOyEHDZY8OEliB/kuzUH+M3ma6TzhX1BTeRWnVXtW9tSjFwl
+ Ulu+BLm5k3R7Grfv0PjI7iWXkUI+XmqhAjYnehdQxmpD2q4DxJaHmKTKvvKyocHZP+
+ mQr/ayZyoP40MUCYQNEPPYfJmHtT0uzpFMhN8/V7IKPKJ+1bsoVRVw0PJg2sNVZ83M
+ a9YT49ljurr4w9qDOqk6SWvtOrbPj7I/7GO5Jj3BWUwKQ8y1mieBSXtWTIrwoaYlAA
+ X1iwkK1K/3Sjg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FeQQHL/e
-Subject: Re: [Buildroot] [PATCH v2 2/2]
- support/testing/tests/package/test_postgresql.py: new test
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=c9QAk1Yl
+Subject: Re: [Buildroot] [PATCH v2 1/2]
+ package/postgresql/postgresql.service: set locale for initdb to C
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,148 +77,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adam, All,
-
-On 2023-11-02 12:41 -0600, Adam Duskett spake thusly:
-> Perform a basic check that performs the following:
->   - Check if /var/lib/pgsql/postmaster.pid exists.
->   - Check if 'psql -c SHOW server_version;' returns sucessfully.
-
-Thanks for this new runtime test!
-
-> Note: systemd takes quite a while to start up, so check the output of
->       `systemctl is-active postgresql` until it shows "active" with a timeout
->       of 15 seconds.
-
-I think that we already concluded that testing if a unit was active or
-not was not representing whether the service was actually running. In
-the fultter test case for example, the unit was active, but the flutter
-app was just keeping crashing again and again, so the test wsa failing
-to detect failure...
-
-So, I don't think usingt is-active is a good way to test whether a
-service is actually running.
-
-Furthermore, the unit may be active, but the service might not yet be
-ready to serve, so again I don;t think it is still valid to reply on it.
-
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->   - Drop BR2_PER_PACKAGE_DIRECTORIES (Thomas)
-
-Actually, I disagree with Thomas here: we added support for PPD in the
-infra, so that if PPD is enabled in a test, then TLPB is done to speed
-up the test.
-
-[--SNIP--]
-> diff --git a/support/testing/tests/package/test_postgresql.py b/support/testing/tests/package/test_postgresql.py
-> new file mode 100644
-> index 0000000000..fa692bab7b
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_postgresql.py
-> @@ -0,0 +1,73 @@
-> +import os
-> +import time
-> +import infra.basetest
-> +
-> +
-> +class TestPostgreSQLInitSysV(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +        """
-> +        BR2_PACKAGE_POSTGRESQL=y
-> +        BR2_TARGET_ROOTFS_EXT2=y
-> +        BR2_TARGET_ROOTFS_EXT2_4=y
-> +        BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-> +        self.emulator.boot(
-> +            arch="armv5",
-> +            kernel="builtin",
-> +            options=["-drive", f"file={img},if=scsi,format=raw"],
-> +            kernel_cmdline=["root=/dev/sda"])
-> +        self.emulator.login()
-> +
-> +        # Check if the Daemon is running
-> +        self.assertRunOk("ls /var/lib/pgsql/postmaster.pid")
-> +        # Check if we can connect to the database.
-> +        self.assertRunOk("su postgres -c \"psql -c 'SHOW server_version;'\"")
-
-I don't understand why we need to test for the PID file before we
-connect to the daemon. If the daemon is not running, we won't be able to
-connect to it, so the test will fail, so the PID file test is redundant,
-no?
-
-Regards,
-Yann E. MORIN.
-
-> +
-> +class TestPostgreSQLInitSystemd(infra.basetest.BRTest):
-> +    # Taken from test_systemd.py
-> +    config = """
-> +        BR2_arm=y
-> +        BR2_cortex_a9=y
-> +        BR2_ARM_ENABLE_VFP=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> +        BR2_INIT_SYSTEMD=y
-> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> +        BR2_PACKAGE_POSTGRESQL=y
-> +        BR2_TARGET_ROOTFS_EXT2=y
-> +        BR2_TARGET_ROOTFS_EXT2_4=y
-> +        BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-> +        self.emulator.boot(
-> +            arch="armv7",
-> +            kernel="builtin",
-> +            options=["-drive", f"file={img},if=sd,format=raw"],
-> +            kernel_cmdline=["root=/dev/mmcblk0"])
-> +        self.emulator.login()
-> +
-> +        # It may take some time for PostgreSQL to finish startup. Give it at least 15 seconds.
-> +        is_active = False
-> +        for i in range(15):
-> +            output, _ = self.emulator.run("systemctl is-active postgresql")
-> +            if output[0] == "active":
-> +                is_active = True
-> +                break
-> +            time.sleep(1)
-> +        if not is_active:
-> +            self.fail("postgresql failed to activate!")
-> +
-> +        # Check if the Daemon is running
-> +        self.assertRunOk("ls /var/lib/pgsql/postmaster.pid")
-> +
-> +        # Check if we can connect to the database.
-> +        self.assertRunOk("cd / && su postgres -c \"psql -c 'SHOW server_version;'\"")
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QWRhbSwgQWxsLAoKW1BsZWFzZSwgZG8gbm90IHRvcC1wb3N0XQoKT24gMjAyMy0xMi0xOCAxMDoy
+OCAtMDcwMCwgQWRhbSBEdXNrZXR0IHNwYWtlIHRodXNseToKPiBJIGRpZG4ndCBhZGQgUGV0ZXIg
+YXMgdGhlIHBhdGNoIGlzIGNvbXBsZXRlbHkgZGlmZmVyZW50IHRoYW4gd2hhdCBoZSBzZW50Cj4g
+YWxvbmcgd2l0aCBhIG1vcmUKPiBjb21wcmVoZW5zaXZlIGV4cGxhbmF0aW9uIGFzIHRvIHdoYXQg
+aXMgaGFwcGVuaW5nLgoKVGhlbiB5b3Ugc2hvdWxkIGFsc28gaGF2ZSBkcm9wcGVkIGhpbSBhcyB0
+aGUgYXV0aG9yOyBub3RlIGhvdyB0aGUgZmlyc3QKbGluZSBvZiB0aGUgcGF0Y2ggd2FzIHN0aWxs
+OgoKICAgIEZyb206IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KCi4uLiB3aGlj
+aCBnaXQgdXNlcyBhcyB0aGUgYXV0aG9yIG9mIHRoZSBwYXRjaC4KCj4gSWYgeW91IHdhbnQgdG8g
+YWRkIFBldGVyCj4gYXMgYQo+IGNvLWF1dGhvciB0aGF0IGlzIG1vcmUgdGhhbiBmaW5lIGJ5IG1l
+LgoKSXQgaXMgbm90IGFib3V0IHdoYXQgSSB3YW50LCBpdCBpcyBhYm91dCBrZWVwaW5nIGF1aHRv
+cnNoaXAgYW5kIFNvQiBpbgpzeW5jIGFuZCBjb2hlcmVudCB3aXRoIHdobyBhY3R1YWxseSBkaWQg
+d2hhdC4KClNvIGlmIEkgdW5kZXJzdGFuZCBjb3JyZWN0bHk6IHlvdSBhcmUgdGhlIGF1dGhvciwg
+c28geW91IGhhdmUgeW91ciBTb0IsCmFuZCBQZXRlciBpcyBhIGNvLWRldiBmb3IgY3JlZGl0cywg
+cmlnaHQ6IFllcy9ObyA/IDstKQoKSWYgeWVzLCB0aGVuIGNhbiBJIGZpeCB0aGUgYXV0aG9yc2hp
+cCBhbmQgYWRkIHRoZSBDby1kZXZlbG9wZWQtYnkgdGFnCmZvciBQZXRlcjogWWVzL05vPwoKSWYg
+bm8gdG8gZWl0aGVyLCBjYW4geW91IHJlc3BpbiBhIGZpeGVkLXVwIHBhdGNoLCBwbGVhc2U/CgpS
+ZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiBBZGFtIER1c2tldHQKPiAKPiBTZW5pb3IgRW1iZWRk
+ZWQgU3lzdGVtcyBEZXZlbG9wZXIKPiAKPiBNLiArMTIwOC01MTUtODEwMgo+IAo+IGFkYW0uZHVz
+a2V0dEBhbWFydWxhc29sdXRpb25zLmNvbQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KPiAKPiAKPiBBbWFydWxhIFNvbHV0aW9ucyBCVgo+IAo+IEpvb3AgR2Vlc2lua3dl
+ZyAxMjUsIDExMTQgQUIsIEFtc3RlcmRhbSwgTkwKPiAKPiBULiArMzEgKDApODUgMTExIDkxNzAK
+PiBpbmZvQGFtYXJ1bGFzb2x1dGlvbnMuY29tCj4gCj4gd3d3LmFtYXJ1bGFzb2x1dGlvbnMuY29t
+Cj4gCj4gCj4gCj4gT24gTW9uLCBEZWMgMTgsIDIwMjMgYXQgMTA6MjLigK9BTSBZYW5uIEUuIE1P
+UklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KPiB3cm90ZToKPiAKPiA+IEFkYW0sIFBldGVy
+LCBBbGwsCj4gPgo+ID4gT24gMjAyMy0xMS0wMiAxMjo0MSAtMDYwMCwgQWRhbSBEdXNrZXR0IHNw
+YWtlIHRodXNseToKPiA+ID4gRnJvbTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0
+Pgo+ID4KPiA+IFNvLCB0aGlzIHBhdGNoIGlzICJGcm9tIFBldGVyIiwgYnV0Li4uCj4gPgo+ID4g
+PiBTeXN0ZW1kIGNyZWF0ZXMgYSAvZXRjL2xvY2FsZS5jb25mIGZpbGUgd2l0aCBMQU5HPSJDLlVU
+Ri04Ii4gT24gYm9vdCwKPiA+IHN5c3RlbWQKPiA+ID4gcmVhZHMgL2V0Yy9sb2NhbGUuY29uZiBh
+bmQgc2V0cyB0aGUgTEFORyBlbnZpcm9ubWVudCB2YXJpYWJsZSwKPiA+ID4gKHNlZSB0aGUgbG9j
+YWxlX2NvbnRleHRfbG9hZF9jb25mIG1ldGhvZCBpbiBsb2NhbC1zZXR1cC5jLikKPiA+ID4KPiA+
+ID4gV2hlbiBpbml0ZGIuYyBpcyBjYWxsZWQsIGEgY2hlY2sgZm9yIHRoZSBMQU5HIGVudmlyb25t
+ZW50IHZhcmlhYmxlIGlzCj4gPiBjYWxsZWQsCj4gPiA+IGFuZCBpZiBpdCBpcyBzZXQgdG8gc29t
+ZXRoaW5nIG90aGVyIHRoYW4gIkMiIGluaXRkYiBhdHRlbXB0cyB0byBsb2FkIHRoZQo+ID4gPiBj
+b3JyZXNwb25kaW5nIExDX0NUWVBFIGZpbGUgaW4gL3Vzci9saWIvbG9jYWxlLy4gSUU6IElmIExB
+TkcgaXMgc2V0IHRvCj4gPiBDLlVURi04LAo+ID4gPiB0aGVuIGluaXRkYi5jIGF0dGVtcHRzIHRv
+IGxvYWQgL3Vzci9saWIvbG9jYWxlL0MuVVRGLTgvTENfQ1RZUEUuCj4gPiBIb3dldmVyLCB0aGVz
+ZQo+ID4gPiBmaWxlcyBkbyBub3QgZXhpc3Qgb24gYSBCdWlsZHJvb3Qgc3lzdGVtLCBhbmQgYXMg
+c3VjaCwgaW5pdGRiIHRocm93cyB0aGUKPiA+ID4gZm9sbG93aW5nIGVycm9yIG9uIHN0YXJ0dXA6
+Cj4gPiA+Cj4gPiA+IGBgYAo+ID4gPiBpbml0ZGI6IGVycm9yOiBpbnZhbGlkIGxvY2FsZSBzZXR0
+aW5nczsgY2hlY2sgTEFORyBhbmQgTENfKiBlbnZpcm9ubWVudAo+ID4gdmFyaWFibGVzCj4gPiA+
+IHBnX2N0bDogZGF0YWJhc2Ugc3lzdGVtIGluaXRpYWxpemF0aW9uIGZhaWxlZAo+ID4gPiBgYGAK
+PiA+ID4KPiA+ID4gVG8gZml4IHRoaXMgaXNzdWUsIGFkZCAiRW52aXJvbm1lbnQ9TEFORz1DIiB0
+byB0aGUgcGFja2FnZSBwcm92aWRlZAo+ID4gPiBwb3N0Z3Jlc3FsLnNlcnZpY2UgZmlsZSB0byBm
+b3JjZSBQb3N0Z3Jlc3FsIHRvIHVzZSB0aGUgQyBsb2NhbGUuCj4gPiA+Cj4gPiA+IFRlc3RlZC1i
+eTogQWRhbSBEdXNrZXR0IDxhZGFtLmR1c2tldHRAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gPiA+
+IFNpZ25lZC1vZmYtYnk6IEFkYW0gRHVza2V0dCA8YWRhbS5kdXNrZXR0QGFtYXJ1bGFzb2x1dGlv
+bnMuY29tPgo+ID4KPiA+IC4uLiB0aGUgZmlyc3QgU29CIGlzIGJ5IEFkYW0sIGFuZCB0aGVyZSBp
+cyBubyBTb0IgYmUgUGV0ZXIuCj4gPgo+ID4gSW4gdGhpcyBjYXNlLCBJIHRoaW5rIEkgdW5kZXJz
+dGFuZCB0aGF0IEFkYW0gdG9vayBQZXRlcidzIHBhdGNoLCBhbmQKPiA+IHRvdGFsbHkgcmV3cm90
+ZSBpdCB3aXRoIGFuIGFsdGVybmF0ZSBzb2x1dGlvbi4gSW4gc3VjaCBhIGNhc2UsIHRoZQo+ID4g
+Y3VzdG9tcyBpcyB0byBjaGFuZ2UgdGhlIGF1dGhvcnNoaXAgdG8gdGhlIG5ldyBhdXRob3IsIGFu
+ZCBrZWVwIGEKPiA+IENvLWRldmVsb3BlZC1ieSB0YWcgdG8ga2VlcCBjcmVkaXRzIHRvIHRoZSBm
+aXJzdCBhdXRob3IuCj4gPgo+ID4gU28sIGlmIHlvdSBjYW4ganVzdCByZXBseSB0byB0aGlzIG1h
+aWwgc3RhdGluZyBJIGdvdCB0aGluZ3MgcmlnaHQsIEkgY2FuCj4gPiBmaXggYXV0aG9yc2hpcCBh
+bmQgdGFncyB3aGVuIGFwcGx5aW5nLiBJZiBJIGdvdCB0aGluZ3Mgd3JvbmcsIHRoZW4KPiA+IHBs
+ZWFzZSByZXN1Ym1pdCB3aXRoIHByb3BlciB0YWdzIGFuZC9vciBhdXRob3JzaGlwLgo+ID4KPiA+
+IEFsc28sIGl0IGRvZXMgbm90IG1ha2UgbXVjaCBzZW5zZSB0aGF0IHRoZSBzdWJtaXR0ZXIgb2Yg
+YSBwYXRjaCBhZGRzCj4gPiB0aGVpciBvd24gVGVzdGVkLUJ5IHRhZywgYXMgaXQgaXMgYWN0dWFs
+bHkgZXhwZWN0ZWQgdGhhdCB0aGUgc3VibWl0dGVyCj4gPiBkaWQgdGVzdCB3aGF0IHRoZXkgc2Vu
+dC4uLgo+ID4KPiA+IFRoYW5rcyEgOi0pCj4gPgo+ID4gUmVnYXJkcywKPiA+IFlhbm4gRS4gTU9S
+SU4uCj4gPgo+ID4gPiAtLS0KPiA+ID4gdjEgLT4gdjI6Cj4gPiA+ICAgLSBHZXQgdG8gdGhlIHJv
+b3QgY2F1c2Ugb2YgdGhlIHByb2JsZW0gYW5kIHByb3ZpZGUgYSBiZXR0ZXIKPiA+IGV4cGxpbmF0
+aW9uIG9mCj4gPiA+ICAgICB3aGF0IGlzIGhhcHBlbmluZy4KPiA+ID4KPiA+ID4gICAtIFVzZSBF
+bnZpcm9ubWVudD1MQU5HPUMgaXNudGVhZCBvZiAtbyAtLWxvY2FsZT1DCj4gPiA+Cj4gPiA+ICBw
+YWNrYWdlL3Bvc3RncmVzcWwvcG9zdGdyZXNxbC5zZXJ2aWNlIHwgNCArKysrCj4gPiA+ICAxIGZp
+bGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspCj4gPiA+Cj4gPiA+IGRpZmYgLS1naXQgYS9wYWNr
+YWdlL3Bvc3RncmVzcWwvcG9zdGdyZXNxbC5zZXJ2aWNlCj4gPiBiL3BhY2thZ2UvcG9zdGdyZXNx
+bC9wb3N0Z3Jlc3FsLnNlcnZpY2UKPiA+ID4gaW5kZXggNTM5ZWVhODk2NC4uYzQ3MGM3MTgxZSAx
+MDA2NDQKPiA+ID4gLS0tIGEvcGFja2FnZS9wb3N0Z3Jlc3FsL3Bvc3RncmVzcWwuc2VydmljZQo+
+ID4gPiArKysgYi9wYWNrYWdlL3Bvc3RncmVzcWwvcG9zdGdyZXNxbC5zZXJ2aWNlCj4gPiA+IEBA
+IC0xNiw2ICsxNiwxMCBAQCBTdGFuZGFyZE91dHB1dD1zeXNsb2cKPiA+ID4gIFN0YW5kYXJkRXJy
+b3I9c3lzbG9nCj4gPiA+ICBTeXNsb2dJZGVudGlmaWVyPXBvc3RncmVzCj4gPiA+Cj4gPiA+ICsj
+IE92ZXJ3cml0ZSB0aGUgTEFORyB2YXJpYWJsZSB0byBwcmV2ZW50IHN5c3RlbWQgZnJvbSBwYXNz
+aW5nIHRoZSBMQU5HCj4gPiA+ICsjIGVudmlyb25tZW50IHZhcmlhYmxlIHNldCBpbiAvZXRjL2xv
+Y2FsZS5jb25mLgo+ID4gPiArRW52aXJvbm1lbnQ9TEFORz1DCj4gPiA+ICsKPiA+ID4gIEV4ZWNT
+dGFydFByZT0vYmluL3NoIC1jICJpZiBbICEgLWYgL3Zhci9saWIvcGdzcWwvUEdfVkVSU0lPTiBd
+OyB0aGVuCj4gPiAvdXNyL2Jpbi9wZ19jdGwgaW5pdGRiIC1EIC92YXIvbGliL3Bnc3FsOyBmaSIK
+PiA+ID4gIEV4ZWNTdGFydD0vdXNyL2Jpbi9wb3N0Z3JlcyAtRCAvdmFyL2xpYi9wZ3NxbAo+ID4g
+PiAgRXhlY1JlbG9hZD0vdXNyL2Jpbi9raWxsIC1IVVAgJE1BSU5QSUQKPiA+ID4gLS0KPiA+ID4g
+Mi40MS4wCj4gPiA+Cj4gPiA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCj4gPiA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiA+ID4gYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKPiA+ID4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cj4gPgo+ID4gLS0KPiA+Cj4gPiAuLS0tLS0tLS0tLS0tLS0tLS0uLS0t
+LS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0t
+Lgo+ID4gfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkg
+UklCQk9OIHwgRXJpY3MnCj4gPiBjb25zcGlyYWN5OiB8Cj4gPiB8ICszMyA2NjIgMzc2IDA1NiB8
+IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fCj4gPiAgICAgIHwK
+PiA+IHwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1Qg
+ICAgICB8ICBcZS8gIFRoZXJlIGlzCj4gPiBubyAgfAo+ID4gfCBodHRwOi8veW1vcmluLmlzLWEt
+Z2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2Cj4gPiAgY29uc3BpcmFj
+eS4gIHwKPiA+Cj4gPiAnLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0t
+LS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwo+ID4KCj4gX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBs
+aXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0t
+LS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0t
+LS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklC
+Qk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAg
+RGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMg
+NTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxl
+LyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8g
+fCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0t
+LS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
