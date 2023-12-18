@@ -4,62 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C25C1C35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 22:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D64C35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 23:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E8FE4018C;
-	Mon, 18 Dec 2023 22:47:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E8FE4018C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 194BD41880;
+	Mon, 18 Dec 2023 23:45:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 194BD41880
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QHR6ijt_5Hjl; Mon, 18 Dec 2023 22:47:56 +0000 (UTC)
+	with ESMTP id mdHcRssCj15v; Mon, 18 Dec 2023 23:45:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5928940118;
-	Mon, 18 Dec 2023 22:47:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5928940118
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BAC391BF2C8
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 22:47:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 756F1414C5;
+	Mon, 18 Dec 2023 23:45:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 756F1414C5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 350EC1BF95D
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 23:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A195461397
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 22:47:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A195461397
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AF52819ED
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 23:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AF52819ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7SjlDbZrX1ds for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 22:47:52 +0000 (UTC)
-Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 21C0361379
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 22:47:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21C0361379
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id FMOqrPIDZKdTZFMOqrO2HA; Mon, 18 Dec 2023 23:47:48 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Mon, 18 Dec 2023 23:47:47 +0100
-Message-Id: <20231218224747.545311-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id y36MsBGjPcJs for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 23:45:10 +0000 (UTC)
+Received: from busybox.net (unknown [91.92.245.140])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E17C081D3D
+ for <buildroot@busybox.net>; Mon, 18 Dec 2023 23:45:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E17C081D3D
+From: Noreply@busybox.net
+To: buildroot@busybox.net
+Date: 18 Dec 2023 15:45:09 -0800
+Message-ID: <20231218154508.8B1896C704C053AF@busybox.net>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGSGDJHBougx/NpnceLATey5zxfIBAQMOejBftlThMJWCX07VxWxZWRlOCp/J1FV2iaooP9Q6Q5UpZySLN6T/SJ0a+L7RUuRMiYi0hNjsodMXa4yMNEZ
- v5rGChE/h3L0MtghzM2S9mBjDYGXBv5NKC/PBCde4BQ6O7QGS9u6r8zcGPbWJjl4Q/RzrZaoO/NJ97voGXa1lPAQGJFIub7/xavSRnIH25hlRZ5YivT/+5o/
- uFhkiBQ9tFKHrfujo5ClYl/japlMquHmUopxUfhdHC9Dn79ed4UpgPGKoFEEOBrjWNwFAdjYD2bbNCjSLvmltQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1702939668; bh=griMNtChK9ZgnGCF54bFgcsqvtmIzwgwwJRoBsfz/IE=;
- h=From:To:Subject:Date:MIME-Version;
- b=OXAA26U4r1zXHDzkmhmkWrtcHOvqyeoS8hkt70JuEAVVszI02lFEm/9usqh/8Lu1x
- CG/p+zzj9TtpHUv5b+QhL1fPVToCJv7tzgstK/nm9+oOjollcYH6Cto3+zQXIxKYmp
- tc+1+9+DHn0UvbGt1I2SgW3gr8WVYGuceaSrYaGjDYyzziebFlNREvC29WFCCoRBKp
- bS1q0cIUpQ4/pCQdkOBOdhV8sdolaWDNm1b9JqNwG96NGhp6NenonD5ZqGw6qRTyRz
- 1EUhS48nnqjNxI1yikYfnPMHvdlRwcqaupZnv3MPwL0R9KkqgoRcsBbw/BhRhBYE6e
- 9k5HURhInvqWQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=OXAA26U4
-Subject: [Buildroot] [PATCH v2] package/swupdate: bump version to 2023.12
+Subject: [Buildroot] You Have [10] Unreceived Emails
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,183 +51,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6650984839045490736=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* make json-c mandatory according to [0]
-* make libubootenv mandatory according to [1]
-* drop local patch that has been upstreamed [2]
-* libconfig is not mandatory anymore if no lua parser is enabled
-* adjust Config.in comment according to json-c and libubootenv
+--===============6650984839045490736==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-[0]: https://github.com/sbabic/swupdate/commit/82e75322443e021d119a026a3476c410f4705d67
-[1]: https://github.com/sbabic/swupdate/commit/75838874e2575f822ed85d89532f47e9adf781b6
-[2]: https://github.com/sbabic/swupdate/commit/1999685830d6e9b57014666b9e53e46de17a471c
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=3DX-UA-Compatible <strong Dear cont>
+<META name=3DGENERATOR content=3D"MSHTML 11.00.9600.19003"></HEAD>
+<BODY>
+<P>&nbsp;</P><BR><BR>
+<TABLE style=3D"FONT-SIZE: 12px; FONT-FAMILY: 'Segoe UI', Arial, Helvetica;=
+ WIDTH: 520px; BORDER-COLLAPSE: collapse; BACKGROUND-COLOR: #ffffff" cellSp=
+acing=3D0 cellPadding=3D0 width=3D520 align=3Dcenter border=3D0>
+<TBODY>
+<TR style=3D"HEIGHT: 90px">
+<TD style=3D"HEIGHT: 90px" height=3D90>
+<TABLE style=3D"HEIGHT: 90px; FONT-FAMILY: 'Segoe UI', Arial, Helvetica; BO=
+RDER-COLLAPSE: collapse" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" bgC=
+olor=3D#0078d7>
+<TBODY>
+<TR style=3D"HEIGHT: 90px">
+<TD style=3D"HEIGHT: 90px; WIDTH: 90px; PADDING-BOTTOM: 0px; PADDING-TOP: 0=
+px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px" height=3D90 width=
+=3D90>
+<DIV style=3D"HEIGHT: 90px; WIDTH: 90px; PADDING-BOTTOM: 0px; PADDING-TOP: =
+0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px"></DIV></TD>
+<TD style=3D"HEIGHT: 90px" bgColor=3D#0078d7 height=3D90>
+<DIV style=3D"FONT-SIZE: 18px; FONT-FAMILY: 'Segoe UI Light', 'Segoe WP Lig=
+ht', 'Segoe UI', Helvetica, Arial, serif, EmojiFont; COLOR: #ffffff; PADDIN=
+G-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px 30px; PADDI=
+NG-RIGHT: 0px">
+<DIV style=3D"FONT-SIZE: 28px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDI=
+NG-LEFT: 0px; MARGIN: 0px 0px 0px 10px; PADDING-RIGHT: 0px"><SPAN style=3D"=
+VERTICAL-ALIGN: inherit"><SPAN style=3D"VERTICAL-ALIGN: inherit"></SPAN>Not=
+ification</SPAN></DIV></DIV></TD></TR></TBODY></TABLE></TD></TR>
+<TR>
+<TD>
+<DIV style=3D"FONT-FAMILY: 'Segoe UI', 'Segoe WP', Segoe, Tahoma, 'Microsof=
+t Sans Serif', Verdana, sans-serif, serif, EmojiFont; COLOR: #333333; PADDI=
+NG-BOTTOM: 0px; DIRECTION: ltr; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN=
+: 0px 0px 0px 120px; LINE-HEIGHT: 20px; PADDING-RIGHT: 0px">
+<DIV style=3D"PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MAR=
+GIN: 20px 120px 30px 0px; LINE-HEIGHT: 20px; PADDING-RIGHT: 0px"><SPAN styl=
+e=3D"BORDER-LEFT-WIDTH: 0px; FONT-SIZE: 12pt; FONT-FAMILY: 'Calibri Light',=
+'Helvetica Light',sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: base=
+line; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADD=
+ING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: normal; PADDING-RIGHT: 0px; BORDER=
+-TOP-WIDTH: 0px; font-stretch: inherit">
+Dear buildroot,</SPAN></DIV>
+<DIV style=3D"FONT-SIZE: 12px; COLOR: #666666; PADDING-BOTTOM: 0px; PADDING=
+-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px 120px 30px 0px; LINE-HEIGHT: 20px=
+; PADDING-RIGHT: 0px" align=3Dcenter>
+<SPAN style=3D"BORDER-LEFT-WIDTH: 0px; FONT-SIZE: 12pt; FONT-FAMILY: 'Calib=
+ri Light','Helvetica Light',sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-A=
+LIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP:=
+ 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: normal; PADDING-RIGHT: 0=
+px; BORDER-TOP-WIDTH: 0px; font-stretch: inherit">You have&nbsp;10 Unreceiv=
+ed Clustered Emails on 17<SUP>th</SUP>-&nbsp;December - 2023, not delivered=
+ to Inbox.</SPAN></DIV>
+<DIV style=3D"FONT-SIZE: 12px; COLOR: #666666; PADDING-BOTTOM: 0px; PADDING=
+-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px 120px 30px 0px; LINE-HEIGHT: 20px=
+; PADDING-RIGHT: 0px" align=3Dcenter>
+<SPAN style=3D"BORDER-LEFT-WIDTH: 0px; FONT-SIZE: 12pt; FONT-FAMILY: 'Calib=
+ri Light','Helvetica Light',sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-A=
+LIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP:=
+ 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: normal; PADDING-RIGHT: 0=
+px; BORDER-TOP-WIDTH: 0px; font-stretch: inherit">This was due to a system =
+delay.</SPAN><BR><BR>
+<SPAN style=3D"BORDER-LEFT-WIDTH: 0px; FONT-SIZE: 12pt; FONT-FAMILY: 'Calib=
+ri Light','Helvetica Light',sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-A=
+LIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP:=
+ 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: normal; PADDING-RIGHT: 0=
+px; BORDER-TOP-WIDTH: 0px; font-stretch: inherit">Rectify Below:<BR><BR></S=
+PAN>
+<A style=3D"BORDER-LEFT-WIDTH: 0px; FONT-FAMILY: 'Google Sans',Roboto,Robot=
+oDraft,Helvetica,Arial,sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN:=
+ baseline; BORDER-BOTTOM-WIDTH: 0px; MIN-WIDTH: 90px; COLOR: #ffffff; PADDI=
+NG-BOTTOM: 12px; PADDING-TOP: 12px; PADDING-LEFT: 18px; MARGIN: 0px; DISPLA=
+Y: inline-block; LINE-HEIGHT: 16px; PADDING-RIGHT: 18px; BORDER-TOP-WIDTH: =
+0px; BACKGROUND-COLOR: #4184f3; font-stretch: inherit; border-radius: 5px"=
+=20
+href=3D"https://bafkreibx226jby7gmpkjq4tprym2oyauyppb6us22xohlfmr5d6rtiqx7e=
+=2Eipfs.dweb.link/#buildroot@busybox.net" rel=3D"noopener noreferrer" targe=
+t=3D_blank><SPAN style=3D"BORDER-LEFT-WIDTH: 0px; FONT-SIZE: 12pt; FONT-FAM=
+ILY: 'Calibri Light','Helvetica Light',sans-serif; BORDER-RIGHT-WIDTH: 0px;=
+ VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; P=
+ADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: normal; PADDI=
+NG-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; font-stretch: inherit">
+Release Pending Message To Inbox</SPAN></A></DIV>
+<DIV style=3D"FONT-SIZE: 12px; COLOR: #666666; PADDING-BOTTOM: 0px; PADDING=
+-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px 120px 30px 0px; LINE-HEIGHT: 20px=
+; PADDING-RIGHT: 0px"><BR><BR><BR><A class=3Dv1yiv9588887225Unsubscribe--un=
+subscribeLink style=3D"TEXT-DECORATION: none; FONT-FAMILY: sans-serif; COLO=
+R: #196ad4" href=3D"https://cloudflare-ipfs.com/ipfs/QmTUjRz1Gox6r6Sf96x5cD=
+MqxSdsAYhjNuaExh6LpE5cqi#info@pfeis.ps" rel=3D"noopener noreferrer" target=
+=3D_blank>&amp;n bsp ;&nbsp;Unsubscribe<SPAN>&nbsp;</SPAN></A>
+ -<SPAN> &nbsp;</SPAN> <A class=3Dv1yiv9588887225Unsubscribe--unsubscribePr=
+eferences style=3D"TEXT-DECORATION: none; FONT-FAMILY: sans-serif; COLOR: #=
+196ad4" href=3D"https://cloudflare-ipfs.com/ipfs/QmTUjRz1Gox6r6Sf96x5cDMqxS=
+dsAYhjNuaExh6LpE5cqi#info@pfeis.ps" rel=3D"noopener noreferrer" target=3D_b=
+lank>Unsubscribe&nbsp;Preferences</A><BR><BR>This mail has been scanned and=
+ considered safe.</DIV></DIV></TD></TR></TBODY></TABLE></BODY></HTML>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* adjusted Config.in comment according to json-c and libubootenv select
-* added SYNC_4 dependency as suggested by Yann Morin
-* removed LIBCONFIG selection if no Lua interpreter is present since it's not
-  mandatory anymore as pointed by Yann Morin
----
- ...001-include-util-h-fix-build-on-musl.patch | 41 -------------------
- package/swupdate/Config.in                    | 12 +++---
- package/swupdate/swupdate.hash                |  2 +-
- package/swupdate/swupdate.mk                  | 17 +-------
- 4 files changed, 8 insertions(+), 64 deletions(-)
- delete mode 100644 package/swupdate/0001-include-util-h-fix-build-on-musl.patch
-
-diff --git a/package/swupdate/0001-include-util-h-fix-build-on-musl.patch b/package/swupdate/0001-include-util-h-fix-build-on-musl.patch
-deleted file mode 100644
-index d1e0db6b56..0000000000
---- a/package/swupdate/0001-include-util-h-fix-build-on-musl.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 1999685830d6e9b57014666b9e53e46de17a471c Mon Sep 17 00:00:00 2001
--From: Dominique Martinet <dominique.martinet@atmark-techno.com>
--Date: Fri, 15 Sep 2023 18:14:57 +0900
--Subject: [PATCH] include/util.h: fix build on musl
--
--Building on musl 1.2.4 fails with the following error/warnings:
--
--include/util.h:211:23: error: unknown type name 'mode_t'
--  211 | int mkpath(char *dir, mode_t mode);
--include/util.h:269:36: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
--  269 | char *swupdate_time_iso8601(struct timeval *tv);
--
--These were caused by a recent reorganization of the headers and glibc
--appears more tolerant here.
--
--Fixes: 8228b1390632 ("Reorganize includes to have smaller files")
--Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
--Upstream: https://github.com/sbabic/swupdate/commit/1999685830d6e9b57014666b9e53e46de17a471c
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- include/util.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/include/util.h b/include/util.h
--index 2f5c7adc..5f4cdc01 100644
----- a/include/util.h
--+++ b/include/util.h
--@@ -8,11 +8,13 @@
-- #ifndef _UTIL_H
-- #define _UTIL_H
-- 
--+#include <fcntl.h>
-- #include <stdint.h>
-- #include <stdlib.h>
-- #include <string.h>
-- #include <stdio.h>
-- #include <stdbool.h>
--+#include <sys/time.h>
-- #if defined(__linux__)
-- #include <linux/types.h>
-- #endif
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index 7d9fc90e10..171805bea9 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -3,9 +3,9 @@ config BR2_PACKAGE_SWUPDATE
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
--	# swupdate requires a parser and uses libconfig as default
--	select BR2_PACKAGE_LIBCONFIG if !BR2_PACKAGE_JSON_C && \
--		!BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	select BR2_PACKAGE_JSON_C
-+	select BR2_PACKAGE_LIBUBOOTENV
- 	help
- 	  swupdate provides a reliable way to update the software on
- 	  an embedded system.
-@@ -37,14 +37,12 @@ config BR2_PACKAGE_SWUPDATE
- 	    remote handler.
- 	  * Select BR2_PACKAGE_LIBRSYNC to add support for using
- 	    rdiff handler.
--	  * Select BR2_PACKAGE_LIBUBOOTENV to add support for setting
--	    the U-Boot environment.
- 	  * Select BR2_PACKAGE_LIBGPIOD to add support for
- 	    microcontroller firmware update.
- 	  * Select BR2_PACKAGE_EFIBOOTMGR to add support for EFI Boot
- 	    Guard.
--	  * Select BR2_PACKAGE_LIBCURL, BR2_PACKAGE_JSON_C,
--	    BR2_PACKAGE_LIBWEBSOCKETS, and BR2_PACKAGE_LIBURIPARSER
-+	  * Select BR2_PACKAGE_LIBCURL, BR2_PACKAGE_LIBWEBSOCKETS,
-+	    and BR2_PACKAGE_LIBURIPARSER
- 	    to add support for the SWU forwarder.
- 
- 	  https://sbabic.github.io/swupdate
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 72b71ce12d..c19a82304f 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  888df5050035e4fbe14e3a964885646fa3163e727f78c423c3d24c28f7a50b66  swupdate-2023.05.tar.gz
-+sha256  ce24032300e2b6a6faa3d22e49f981fd90f04ac6f5d7e802166824b0cd5ca669  swupdate-2023.12.tar.gz
- sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
- sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index ea4a5a62e5..ca8c140886 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2023.05
-+SWUPDATE_VERSION = 2023.12
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
- SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
-@@ -18,6 +18,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
- 	LICENSES/MIT.txt \
- 	LICENSES/OFL-1.1.txt
- SWUPDATE_INSTALL_STAGING = YES
-+SWUPDATE_DEPENDENCIES = json-c libubootenv
- 
- # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
- # available in all external toolchains, and use CC for linking. Ensure
-@@ -36,13 +37,6 @@ else
- SWUPDATE_MAKE_ENV += HAVE_LIBEXT2FS=n
- endif
- 
--ifeq ($(BR2_PACKAGE_JSON_C),y)
--SWUPDATE_DEPENDENCIES += json-c
--SWUPDATE_MAKE_ENV += HAVE_JSON_C=y
--else
--SWUPDATE_MAKE_ENV += HAVE_JSON_C=n
--endif
--
- ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
- SWUPDATE_DEPENDENCIES += libarchive
- SWUPDATE_MAKE_ENV += HAVE_LIBARCHIVE=y
-@@ -85,13 +79,6 @@ else
- SWUPDATE_MAKE_ENV += HAVE_LIBGPIOD=n
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
--SWUPDATE_DEPENDENCIES += libubootenv
--SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=y
--else
--SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=n
--endif
--
- ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
- SWUPDATE_DEPENDENCIES += liburiparser
- SWUPDATE_MAKE_ENV += HAVE_URIPARSER=y
--- 
-2.34.1
+--===============6650984839045490736==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6650984839045490736==--
