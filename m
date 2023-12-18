@@ -4,83 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37C30C35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 22:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A622FC35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 22:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5D724161A;
-	Mon, 18 Dec 2023 22:05:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5D724161A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E19C4168C;
+	Mon, 18 Dec 2023 22:05:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E19C4168C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yl9UJONUwtdm; Mon, 18 Dec 2023 22:05:24 +0000 (UTC)
+	with ESMTP id 495BOq-Sj-wr; Mon, 18 Dec 2023 22:05:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD41C4167D;
-	Mon, 18 Dec 2023 22:05:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD41C4167D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EEAF21BF3D0
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 22:05:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8ADF541920;
+	Mon, 18 Dec 2023 22:05:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ADF541920
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AFBB11BF3D0
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 22:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C73A94167D
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 22:05:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C73A94167D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 96A4E80C09
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 22:05:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96A4E80C09
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Y2ba48kUIwI for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 22:05:19 +0000 (UTC)
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A34B34161A
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 22:05:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A34B34161A
-Received: by mail-pf1-x42b.google.com with SMTP id
- d2e1a72fcca58-6d47bb467a9so1457075b3a.1
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 14:05:19 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RxRJWimIJdlp for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 22:05:22 +0000 (UTC)
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com
+ [IPv6:2607:f8b0:4864:20::c34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C4D4C80AAC
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 22:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4D4C80AAC
+Received: by mail-oo1-xc34.google.com with SMTP id
+ 006d021491bc7-590bb31ccf5so2726207eaf.3
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 14:05:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702937118; x=1703541918;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=q/NQPflZjrdMEMFtT2WfRhf3W1scO1jOVYDtaJw7JXo=;
- b=XLCshs4F7Pejcg+7eGKUPSfZtmmDtqxHT5YvjgyOn5wwzi4eI/qSNr2nUABZSi68wk
- 86Q0ArDCSDSKzlxTv+ZnUT2N8EdGJ/k2XTNBqyqgS52AramX6ThffSwQ8DAYowShbX8Q
- 3eD0wr7r86v+JmVtCSnNi3Er808xem4n/CKsEQI8kw//njicuGVsPU4W2uuANTpOKPRL
- mQRIhXTvD803Bf6PJmkG/SPqqwQL4RM+W5flKJoWmvQAuso+q0wzfzIPB08+qojfMybe
- Xb4iC3gJyXxs1vjfgFYvzklA0WLOD6DNZEozUJTDaOrXy4e8/wn31OO/JwqFVNjmEWlO
- BE1w==
-X-Gm-Message-State: AOJu0YzT1QGs3cTpgsCiVNexYG8k3t0iScw8sblMdTEPTCQdpqjv+Tls
- epJ9uZqgqU18Tupu5Tc5rTG7MjFNttJ5UH3ScVMMDd+maII=
-X-Google-Smtp-Source: AGHT+IEChmYchGeecshxDBSZWciuLSZpycCBvvO9Fw4Cy0wTyhaJx1KJFQOmDwp1N0QT3b6Hpt8t6g==
-X-Received: by 2002:a05:6a20:3d8f:b0:18c:3ea9:b85d with SMTP id
- s15-20020a056a203d8f00b0018c3ea9b85dmr60571pzi.11.1702937118088; 
- Mon, 18 Dec 2023 14:05:18 -0800 (PST)
+ d=1e100.net; s=20230601; t=1702937120; x=1703541920;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Q+JBG0RDPIpLvlvgAEfJ7hdpON48j/zflvemRapBdB8=;
+ b=FAxMfMGK39dXE92Q5NIquyxMP7cRhqZ/H2uLdvvSbaINBEyBNFKogIjjPoB3RuDBv+
+ TNcsO/ZOGudd7yO3nyI3XfEcav/vAlfWS9j1ZcEzGXSkkw5DE34vyPBQL2LoThUP5NUD
+ tGbkPXfHDV/bYgGY6Vo2IzAADioDqGSiUyKed4VGysTAsIYFnAiWscNmHobniLZ4NmTL
+ X4I7nZSrOLdepjriVQ3BFYjnFjDHuGDQjVu5598vwNwJn4z1Zn7hm7NN/npZNIUb5JsV
+ plIFjBlP5XW5V/kgopBZh2nq6Suw8v1SGb6eukSm/ZYmAL1YaMFXrTypgn33qzVidK+Z
+ Ty4w==
+X-Gm-Message-State: AOJu0YxfXIG4fYHmAXsLO6TTGvl7YIY5qcJDNA7AWQGdncU2WUz91Ns2
+ 3QXNzoLmYNjOHe9bbKgffIM+tjGh8WN9IblOAto=
+X-Google-Smtp-Source: AGHT+IEEpvD0l7KcKOp450O5JVL+0cvukFhkYotrfMX+LId8SiF4St5P7Vbj4xVb5orlVXaEwzSDjA==
+X-Received: by 2002:a05:6358:9047:b0:172:98ae:cd35 with SMTP id
+ f7-20020a056358904700b0017298aecd35mr10676627rwf.29.1702937119617; 
+ Mon, 18 Dec 2023 14:05:19 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.amarulasolutions.com ([174.27.209.61])
  by smtp.gmail.com with ESMTPSA id
- r17-20020a63e511000000b005cd78f13608sm4441768pgh.13.2023.12.18.14.05.17
+ r17-20020a63e511000000b005cd78f13608sm4441768pgh.13.2023.12.18.14.05.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Dec 2023 14:05:17 -0800 (PST)
+ Mon, 18 Dec 2023 14:05:18 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Dec 2023 15:04:54 -0700
-Message-ID: <20231218220457.1705749-1-adam.duskett@amarulasolutions.com>
+Date: Mon, 18 Dec 2023 15:04:55 -0700
+Message-ID: <20231218220457.1705749-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231218220457.1705749-1-adam.duskett@amarulasolutions.com>
+References: <20231218220457.1705749-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1702937118; x=1703541918;
+ d=amarulasolutions.com; s=google; t=1702937120; x=1703541920;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=q/NQPflZjrdMEMFtT2WfRhf3W1scO1jOVYDtaJw7JXo=;
- b=NTxfyQ+mzjIgFcWLVuG1JwThS4MG9zTKixzG2VbKZsgE3D538sx4u46HOFfx8l/fB7
- Fcf6QgmsA5JP1Jrwq5+kuUbIBo4L5Y8RjnznUFV0Or+NR4WespNYOfIO8W5XpF2QF7zR
- PW+foG9DOgRaUYNwDoLeJDjyAZRwKm0dG6EhI=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Q+JBG0RDPIpLvlvgAEfJ7hdpON48j/zflvemRapBdB8=;
+ b=YzSjpcOvKcfsLeO0ZxX1hcRHkyeJn1NsIAt/Dynr87bqWkK/4i7Y5cY4pL9STm6N08
+ A3ERfFWawsNjUdbF3HT9SpyVrJgLT6iY6fOKI4kpWMCNfdiQ0IhxdHj9ZE9I5Mvxkt95
+ xqyKFLJN/PnPKTCnGsZPYcoD96uL9swWZGpLg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=NTxfyQ+m
-Subject: [Buildroot] [PATCH v4 1/3] package/python-pygame: drop package
+ header.b=YzSjpcOv
+Subject: [Buildroot] [PATCH v4 2/3] package/python-crossbar: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,157 +99,376 @@ Cc: James Hilliard <james.hilliard1@gmail.com>,
  Adam Duskett <adam.duskett@amarulasolutions.com>,
  Asaf Kahlon <asafka7@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhlIHB5dGhvbi1weWdhbWUgcGFja2FnZSBoYXMgbm90IHJlY2lldmVkIGFueSB1cGRhdGUgc2lu
-Y2UKU3VuIE1heSAxIDIyOjE1OjE3IDIwMTYgKGNvbW1pdDogYTllYzk2ZTU0NTEwMmFlNWNjZDQy
-ODAzMjNkMzUzNjBiMGE1MDcyZCkKCkFsc28sIHRoaXMgcGFja2FnZSBubyBsb25nZXIgYnVpbGRz
-IHByb3Blcmx5IGFnYWluc3QgcHl0aG9uIDMuMTIuMC4gUmVjaWV2aW5nCnRoZSBmb2xsb3dpbmcg
-ZXJyb3Igd2hlbiBidWlsZGluZzoKCmBgYApzcmMvc3VyZmFjZS5jOjI4MTI6MTQ6IGVycm9yOiBp
-bnZhbGlkIHR5cGUgYXJndW1lbnQgb2YgdW5hcnkg4oCYKuKAmSAoaGF2ZQrigJhpbnTigJkpCiAy
-ODEyIHwgICAgICAgICBjaCA9ICpQeVVuaWNvZGVfQVNfVU5JQ09ERSAob2JqKTsKICAgICAgfCAg
-ICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+CnNyYy9zdXJmYWNlLmM6IElu
-IGZ1bmN0aW9uIOKAmFB5U3VyZmFjZV9CbGl04oCZOgpgYGAKCklmIHNvbWVvbmUgd2FudHMgdG8g
-cmUtaW50cm9kdWNlIHRoaXMgcGFja2FnZSBhdCBhIGxhdGVyIGRhdGUgdGhleSBhcmUgbW9yZQp0
-aGFuIHdlbGNvbWUgdG8gZG8gc28hCgpTaWduZWQtb2ZmLWJ5OiBBZGFtIER1c2tldHQgPGFkYW0u
-ZHVza2V0dEBhbWFydWxhc29sdXRpb25zLmNvbT4KLS0tCiBDb25maWcuaW4ubGVnYWN5ICAgICAg
-ICAgICAgICAgICAgICAgICAgIHwgICA5ICsrCiBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHwgICAxIC0KIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAg
-ICAgICAgfCAgIDEgLQogcGFja2FnZS9weXRob24tcHlnYW1lL0NvbmZpZy5pbiAgICAgICAgICB8
-ICA1MCAtLS0tLS0tLS0tCiBwYWNrYWdlL3B5dGhvbi1weWdhbWUvcHl0aG9uLXB5Z2FtZS5oYXNo
-IHwgICAzIC0KIHBhY2thZ2UvcHl0aG9uLXB5Z2FtZS9weXRob24tcHlnYW1lLm1rICAgfCAxMTEg
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KIDYgZmlsZXMgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCsp
-LCAxNjYgZGVsZXRpb25zKC0pCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9weXRob24tcHln
-YW1lL0NvbmZpZy5pbgogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcHl0aG9uLXB5Z2FtZS9w
-eXRob24tcHlnYW1lLmhhc2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3B5dGhvbi1weWdh
-bWUvcHl0aG9uLXB5Z2FtZS5tawoKZGlmZiAtLWdpdCBhL0NvbmZpZy5pbi5sZWdhY3kgYi9Db25m
-aWcuaW4ubGVnYWN5CmluZGV4IDQ2ODkyMjYyOTAuLjdlMDY1NTI0ZGIgMTAwNjQ0Ci0tLSBhL0Nv
-bmZpZy5pbi5sZWdhY3kKKysrIGIvQ29uZmlnLmluLmxlZ2FjeQpAQCAtMTQ0LDYgKzE0NCwxNSBA
-QCBlbmRpZgogCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKK2NvbW1lbnQgIkxlZ2FjeSBvcHRp
-b25zIHJlbW92ZWQgaW4gMjAyNC4wMiIKKworY29uZmlnIEJSMl9QQUNLQUdFX1BZVEhPTl9QWUdB
-TUUKKwlib29sICJweXRob24tcHlnYW1lIHJlbW92ZWQiCisJc2VsZWN0IEJSMl9MRUdBQ1kKKwlo
-ZWxwCisJICBweXRob24tcHlnYW1lIGhhcyBiZWVuIHJlbW92ZWQgZHVlIHRvIGJlaW5nIGFiYW5k
-b25lZCBhbmQKKwkgIHRoZSBvbGQgdmVyc2lvbiBubyBsb25nZXIgYnVpbGRpbmcgd2l0aCBweXRo
-b24gMy4xMi4wLgorCiBjb21tZW50ICJMZWdhY3kgb3B0aW9ucyByZW1vdmVkIGluIDIwMjMuMTEi
-CiAKIGNvbmZpZyBCUjJfS0VSTkVMX0hFQURFUlNfNl81CmRpZmYgLS1naXQgYS9ERVZFTE9QRVJT
-IGIvREVWRUxPUEVSUwppbmRleCAzMTFkY2Q5NTA0Li43N2JiYmU4YzlmIDEwMDY0NAotLS0gYS9E
-RVZFTE9QRVJTCisrKyBiL0RFVkVMT1BFUlMKQEAgLTE2OTUsNyArMTY5NSw2IEBAIEY6CXBhY2th
-Z2UvbGliY2RkYi8KIEY6CXBhY2thZ2UvbGlibW9kYnVzLwogRjoJcGFja2FnZS9sdHJpcy8KIEY6
-CXBhY2thZ2Uvb3BlbnR5cmlhbi8KLUY6CXBhY2thZ2UvcHl0aG9uLXB5Z2FtZS8KIAogTjoJSnVs
-aWVuIENvcmpvbiA8Y29yam9uLmpAZWNhZ3JvdXAuY29tPgogRjoJcGFja2FnZS9xdDUvCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCmluZGV4IGZjYzA5
-YjA3YzQuLjRlN2U5NDkyYzAgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvQ29uZmlnLmluCisrKyBiL3Bh
-Y2thZ2UvQ29uZmlnLmluCkBAIC0xMjMzLDcgKzEyMzMsNiBAQCBtZW51ICJFeHRlcm5hbCBweXRo
-b24gbW9kdWxlcyIKIAlzb3VyY2UgInBhY2thZ2UvcHl0aG9uLXB5ZHlmL0NvbmZpZy5pbiIKIAlz
-b3VyY2UgInBhY2thZ2UvcHl0aG9uLXB5ZWxmdG9vbHMvQ29uZmlnLmluIgogCXNvdXJjZSAicGFj
-a2FnZS9weXRob24tcHlmdHBkbGliL0NvbmZpZy5pbiIKLQlzb3VyY2UgInBhY2thZ2UvcHl0aG9u
-LXB5Z2FtZS9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3B5dGhvbi1weWdtZW50cy9Db25m
-aWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3B5dGhvbi1weWhhbWNyZXN0L0NvbmZpZy5pbiIKIAlz
-b3VyY2UgInBhY2thZ2UvcHl0aG9uLXB5aWN1L0NvbmZpZy5pbiIKZGlmZiAtLWdpdCBhL3BhY2th
-Z2UvcHl0aG9uLXB5Z2FtZS9Db25maWcuaW4gYi9wYWNrYWdlL3B5dGhvbi1weWdhbWUvQ29uZmln
-LmluCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCA1N2ViMDIwNzQyLi4wMDAwMDAwMDAw
-Ci0tLSBhL3BhY2thZ2UvcHl0aG9uLXB5Z2FtZS9Db25maWcuaW4KKysrIC9kZXYvbnVsbApAQCAt
-MSw1MCArMCwwIEBACi1jb25maWcgQlIyX1BBQ0tBR0VfUFlUSE9OX1BZR0FNRQotCWJvb2wgInB5
-dGhvbi1weWdhbWUiCi0Jc2VsZWN0IEJSMl9QQUNLQUdFX1NETAotCWhlbHAKLQkgIFB5Z2FtZSBp
-cyBhIGNyb3NzLXBsYXRmcm9tIGxpYnJhcnkgZGVzaWduZWQgdG8gbWFrZSBpdCBlYXN5Ci0JICB0
-byB3cml0ZSBtdWx0aW1lZGlhIHNvZnR3YXJlLCBzdWNoIGFzIGdhbWVzLCBpbgotCSAgUHl0aG9u
-LiBQeWdhbWUgcmVxdWlyZXMgdGhlIFB5dGhvbiBsYW5ndWFnZSBhbmQgU0RMCi0JICBtdWx0aW1l
-ZGlhIGxpYnJhcnkuCi0JICBJdCBjYW4gYWxzbyBtYWtlIHVzZSBvZiBzZXZlcmFsIG90aGVyIHBv
-cHVsYXIgbGlicmFyaWVzLgotCi0JICBodHRwOi8vd3d3LnB5Z2FtZS5vcmcvCi0KLWlmIEJSMl9Q
-QUNLQUdFX1BZVEhPTl9QWUdBTUUKLWNvbmZpZyBCUjJfUEFDS0FHRV9QWVRIT05fUFlHQU1FX0lN
-QUdFCi0JYm9vbCAicHlnYW1lLmltYWdlIgotCXNlbGVjdCBCUjJfUEFDS0FHRV9TRExfSU1BR0UK
-LQlzZWxlY3QgQlIyX1BBQ0tBR0VfU0RMX0lNQUdFX1BORwotCXNlbGVjdCBCUjJfUEFDS0FHRV9T
-RExfSU1BR0VfSlBFRwotCWhlbHAKLQkgIHB5Z2FtZSBtb2R1bGUgZm9yIGxvYWRpbmcsIHNhdmlu
-ZyBhbmQgdHJhbnNmZXJpbmcgaW1hZ2VzLgotCSAgV2lsbCBhdXRvc2VsZWN0IHNkbF9pbWFnZSB3
-aXRoIHBuZyBhbmQganBlZyBzdXBwb3J0LgotCi1jb25maWcgQlIyX1BBQ0tBR0VfUFlUSE9OX1BZ
-R0FNRV9FWEFNUExFUwotCWJvb2wgInB5Z2FtZS5leGFtcGxlcyIKLQloZWxwCi0JICBJbmNsdWRl
-IGV4YW1wbGVzLgotCSAgU2VsZWN0aW5nIHRoaXMgb3B0aW9uIGFkZHMgYWJvdXQgMS41IE1CIHRv
-IHRoZSB0YXJnZXQgZmlsZQotCSAgc3lzdGVtLgotCi1jb25maWcgQlIyX1BBQ0tBR0VfUFlUSE9O
-X1BZR0FNRV9GT05UCi0JYm9vbCAicHlnYW1lLmZvbnQiCi0Jc2VsZWN0IEJSMl9QQUNLQUdFX1NE
-TF9UVEYKLQloZWxwCi0JICBweWdhbWUgbW9kdWxlIGZvciBsb2FkaW5nIGFuZCByZW5kZXJpbmcg
-Zm9udHMuCi0JICBXaWxsIGF1dG9zZWxlY3Qgc2RsX3R0Zi4KLQotY29uZmlnIEJSMl9QQUNLQUdF
-X1BZVEhPTl9QWUdBTUVfTUlYRVIKLQlib29sICJweWdhbWUubWl4ZXIiCi0Jc2VsZWN0IEJSMl9Q
-QUNLQUdFX1NETF9NSVhFUgotCWhlbHAKLQkgIHB5Z2FtZSBtb2R1bGUgZm9yIGxvYWRpbmcgYW5k
-IHBsYXlpbmcgc291bmRzLgotCSAgV2lsbCBhdXRvc2VsZWN0IHNkbF9taXhlci4KLQotY29uZmln
-IEJSMl9QQUNLQUdFX1BZVEhPTl9QWUdBTUVfU0NSQVAKLQlib29sICJweWdhbWUuc2NyYXAiCi0J
-ZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9TRExfWDExCi0JaGVscAotCSAgcHlnYW1lIG1vZHVsZSBm
-b3IgY2xpcGJvYXJkIHN1cHBvcnQgKFgxMSBuZWVkZWQpCi0KLWVuZGlmCmRpZmYgLS1naXQgYS9w
-YWNrYWdlL3B5dGhvbi1weWdhbWUvcHl0aG9uLXB5Z2FtZS5oYXNoIGIvcGFja2FnZS9weXRob24t
-cHlnYW1lL3B5dGhvbi1weWdhbWUuaGFzaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
-YzA0OTY1MTVlMi4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL3B5dGhvbi1weWdhbWUvcHl0aG9u
-LXB5Z2FtZS5oYXNoCisrKyAvZGV2L251bGwKQEAgLTEsMyArMCwwIEBACi0jIExvY2FsbHkgY29t
-cHV0ZWQKLXNoYTI1NiAgZjk1YTdkZDY4ZWEyOTRkNDE1ZTM2ZTA2OGQyZjUzM2M1YTAxYzY3Nzcz
-NDUyZDE0YTUzNWM1Yzc0NTU2ODFmZSAgcHlnYW1lLWQ2MWVhOGVhYmQ1Ni50YXIuZ3oKLXNoYTI1
-NiAgYTE5MGRjOWM4MDQzNzU1ZDkwZjhiMGE3NWZhNjZiOWU0MmQ0YWY0Yzk4MGJmNWRkYzYzM2Yw
-MTI0ZGIzY2VlNyAgTEdQTApkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tcHlnYW1lL3B5dGhv
-bi1weWdhbWUubWsgYi9wYWNrYWdlL3B5dGhvbi1weWdhbWUvcHl0aG9uLXB5Z2FtZS5tawpkZWxl
-dGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggODRmZDZkZjRlMi4uMDAwMDAwMDAwMAotLS0gYS9w
-YWNrYWdlL3B5dGhvbi1weWdhbWUvcHl0aG9uLXB5Z2FtZS5taworKysgL2Rldi9udWxsCkBAIC0x
-LDExMSArMCwwIEBACi0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwotIwotIyBweXRob24tcHlnYW1l
-Ci0jCi0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwotCi0jIHN0YWJsZSAxLjkuMSByZWxlYXNlIHJl
-cXVpcmVzIFY0TCB3aGljaCBoYXMgYmVlbiB3aXBlZCBvdXQgb2YgcmVjZW50IExpbnV4Ci0jIGtl
-cm5lbHMsIHNvIHVzZSBsYXRlc3QgbWVyY3VyaWFsIHJldmlzaW9uIHVudGlsIG5leHQgc3RhYmxl
-IHJlbGVhc2UgaXMgb3V0LgotUFlUSE9OX1BZR0FNRV9WRVJTSU9OID0gZDYxZWE4ZWFiZDU2Ci1Q
-WVRIT05fUFlHQU1FX1NPVVJDRSA9IHB5Z2FtZS0kKFBZVEhPTl9QWUdBTUVfVkVSU0lPTikudGFy
-Lmd6Ci1QWVRIT05fUFlHQU1FX1NJVEUgPSBodHRwczovL2JpdGJ1Y2tldC5vcmcvcHlnYW1lL3B5
-Z2FtZQotUFlUSE9OX1BZR0FNRV9TSVRFX01FVEhPRCA9IGhnCi1QWVRIT05fUFlHQU1FX1NFVFVQ
-X1RZUEUgPSBzZXR1cHRvb2xzCi1QWVRIT05fUFlHQU1FX0xJQ0VOU0UgPSBMR1BMLTIuMSsKLVBZ
-VEhPTl9QWUdBTUVfTElDRU5TRV9GSUxFUyA9IExHUEwKLQotaWZlcSAoJChCUjJfUEFDS0FHRV9Q
-WVRIT05fUFlHQU1FX0lNQUdFKSx5KQotUFlUSE9OX1BZR0FNRV9PUFRfREVQRU5EUyArPSBzZGxf
-aW1hZ2UKLWVuZGlmCi0KLWlmZXEgKCQoQlIyX1BBQ0tBR0VfUFlUSE9OX1BZR0FNRV9GT05UKSx5
-KQotUFlUSE9OX1BZR0FNRV9PUFRfREVQRU5EUyArPSBzZGxfdHRmCi1lbmRpZgotCi1pZmVxICgk
-KEJSMl9QQUNLQUdFX1BZVEhPTl9QWUdBTUVfTUlYRVIpLHkpCi1QWVRIT05fUFlHQU1FX09QVF9E
-RVBFTkRTICs9IHNkbF9taXhlcgotZW5kaWYKLQotUFlUSE9OX1BZR0FNRV9ERVBFTkRFTkNJRVMg
-PSBzZGwgJChQWVRIT05fUFlHQU1FX09QVF9ERVBFTkRTKQotCi1pZm5lcSAoJChCUjJfUEFDS0FH
-RV9QWVRIT05fUFlHQU1FX0lNQUdFKSx5KQotZGVmaW5lIFBZVEhPTl9QWUdBTUVfVU5DT05GSUdV
-UkVfSU1BR0UKLQkkKFNFRCkgJ3MvXmltYWdlZXh0LyNpbWFnZWV4dC8nICQoQEQpL1NldHVwCi1l
-bmRlZgotZW5kaWYKLQotaWZuZXEgKCQoQlIyX1BBQ0tBR0VfUFlUSE9OX1BZR0FNRV9GT05UKSx5
-KQotZGVmaW5lIFBZVEhPTl9QWUdBTUVfVU5DT05GSUdVUkVfRk9OVAotCSQoU0VEKSAncy9eZm9u
-dC8jZm9udC8nICQoQEQpL1NldHVwCi1lbmRlZgotZW5kaWYKLQotaWZuZXEgKCQoQlIyX1BBQ0tB
-R0VfUFlUSE9OX1BZR0FNRV9NSVhFUikseSkKLWRlZmluZSBQWVRIT05fUFlHQU1FX1VOQ09ORklH
-VVJFX01JWEVSCi0JJChTRUQpICdzL15taXhlci8jbWl4ZXIvZycgJChARCkvU2V0dXAKLWVuZGVm
-Ci1lbmRpZgotCi0jIEJvdGggcmVxdWlyZSBudW1weSBvciBudW1lcmljIHB5dGhvbiBtb2R1bGUK
-LWRlZmluZSBQWVRIT05fUFlHQU1FX1VOQ09ORklHVVJFX1NOREFSUkFZCi0JJChTRUQpICdzL15f
-bnVtZXJpY3NuZGFycmF5LyNfbnVtZXJpY3NuZGFycmF5LycgJChARCkvU2V0dXAKLWVuZGVmCi0K
-LWRlZmluZSBQWVRIT05fUFlHQU1FX1VOQ09ORklHVVJFX1NVUkZBUlJBWQotCSQoU0VEKSAncy9e
-X251bWVyaWNzdXJmYXJyYXkvI19udW1lcmljc3VyZmFycmF5LycgJChARCkvU2V0dXAKLWVuZGVm
-Ci0KLSMgUmVxdWlyZXMgc21wZWcKLWRlZmluZSBQWVRIT05fUFlHQU1FX1VOQ09ORklHVVJFX01P
-VklFCi0JJChTRUQpICdzL15tb3ZpZS8jbW92aWUvJyAkKEBEKS9TZXR1cAotZW5kZWYKLQotaWZu
-ZXEgKCQoQlIyX1BBQ0tBR0VfUFlUSE9OX1BZR0FNRV9TQ1JBUCkseSkKLWRlZmluZSBQWVRIT05f
-UFlHQU1FX1VOQ09ORklHVVJFX1NDUkFQCi0JJChTRUQpICdzL15zY3JhcC8jc2NyYXAvJyAkKEBE
-KS9TZXR1cAotZW5kZWYKLWVuZGlmCi0KLWRlZmluZSBQWVRIT05fUFlHQU1FX1VOQ09ORklHVVJF
-X0ZSRUVUWVBFCi0JJChTRUQpICdzL15fZnJlZXR5cGUvI19mcmVldHlwZS8nICQoQEQpL1NldHVw
-Ci1lbmRlZgotCi1QWVRIT05fUFlHQU1FX1NETF9GTEFHUyA9IGAkKFNUQUdJTkdfRElSKS91c3Iv
-YmluL3NkbC1jb25maWcgLS1jZmxhZ3NgCi1QWVRIT05fUFlHQU1FX1NETF9GTEFHUyArPSBgJChT
-VEFHSU5HX0RJUikvdXNyL2Jpbi9zZGwtY29uZmlnIC0tbGlic2AKLQotIyBQeWdhbWUgbmVlZHMg
-YSBTZXR1cCBmaWxlIHdoZXJlIG9wdGlvbnMgc2hvdWxkIGJlIGNvbW1lbnRlZCBvdXQgaWYKLSMg
-ZGVwZW5kZW5jaWVzIGFyZSBub3QgYXZhaWxhYmxlCi1kZWZpbmUgUFlUSE9OX1BZR0FNRV9DT05G
-SUdVUkVfQ01EUwotCWNwIC1mICQoQEQpL1NldHVwLmluICQoQEQpL1NldHVwCi0JJChTRUQpICJz
-fl5TREwgPSB+U0RMID0gJChQWVRIT05fUFlHQU1FX1NETF9GTEFHUykgXG4jfiIgJChARCkvU2V0
-dXAKLQkkKFNFRCkgJ3MvXnB5cG0vI3B5cG0vJyAkKEBEKS9TZXR1cAotCSQoUFlUSE9OX1BZR0FN
-RV9VTkNPTkZJR1VSRV9JTUFHRSkKLQkkKFBZVEhPTl9QWUdBTUVfVU5DT05GSUdVUkVfRk9OVCkK
-LQkkKFBZVEhPTl9QWUdBTUVfVU5DT05GSUdVUkVfTUlYRVIpCi0JJChQWVRIT05fUFlHQU1FX1VO
-Q09ORklHVVJFX1NOREFSUkFZKQotCSQoUFlUSE9OX1BZR0FNRV9VTkNPTkZJR1VSRV9TVVJGQVJS
-QVkpCi0JJChQWVRIT05fUFlHQU1FX1VOQ09ORklHVVJFX01PVklFKQotCSQoUFlUSE9OX1BZR0FN
-RV9VTkNPTkZJR1VSRV9TQ1JBUCkKLQkkKFBZVEhPTl9QWUdBTUVfVU5DT05GSUdVUkVfRlJFRVRZ
-UEUpCi1lbmRlZgotCi1kZWZpbmUgUFlUSE9OX1BZR0FNRV9SRU1PVkVfRE9DCi0Jcm0gLXJmICQo
-VEFSR0VUX0RJUikvdXNyL2xpYi9weXRob24qL3NpdGUtcGFja2FnZXMvcHlnYW1lL2RvY3MKLWVu
-ZGVmCi0KLVBZVEhPTl9QWUdBTUVfUE9TVF9JTlNUQUxMX1RBUkdFVF9IT09LUyArPSBQWVRIT05f
-UFlHQU1FX1JFTU9WRV9ET0MKLQotZGVmaW5lIFBZVEhPTl9QWUdBTUVfUkVNT1ZFX1RFU1RTCi0J
-cm0gLXJmICQoVEFSR0VUX0RJUikvdXNyL2xpYi9weXRob24qL3NpdGUtcGFja2FnZXMvcHlnYW1l
-L3Rlc3RzCi1lbmRlZgotCi1QWVRIT05fUFlHQU1FX1BPU1RfSU5TVEFMTF9UQVJHRVRfSE9PS1Mg
-Kz0gUFlUSE9OX1BZR0FNRV9SRU1PVkVfVEVTVFMKLQotaWZuZXEgKCQoQlIyX1BBQ0tBR0VfUFlU
-SE9OX1BZR0FNRV9FWEFNUExFUykseSkKLWRlZmluZSBQWVRIT05fUFlHQU1FX1JFTU9WRV9FWEFN
-UExFUwotCXJtIC1yZiAkKFRBUkdFVF9ESVIpL3Vzci9saWIvcHl0aG9uJChQWVRIT04zX1ZFUlNJ
-T05fTUFKT1IpL3NpdGUtcGFja2FnZXMvcHlnYW1lL2V4YW1wbGVzCi1lbmRlZgotUFlUSE9OX1BZ
-R0FNRV9QT1NUX0lOU1RBTExfVEFSR0VUX0hPT0tTICs9IFBZVEhPTl9QWUdBTUVfUkVNT1ZFX0VY
-QU1QTEVTCi1lbmRpZgotCi0kKGV2YWwgJChweXRob24tcGFja2FnZSkpCi0tIAoyLjQzLjAKCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+The current package has not recieved an update since Sat Oct 9 2021
+33ece2446e25e20929d1c7eefa9f3244a3b79a92 and is not python 3.12 compatible.
+
+Furthermore, the current version requires at least 42 new packages worth of
+depedencies of which several require patches to be python 3.12 compatible.
+As nobody has stepped up to maintain the package and its ever-growing list of
+dependencies, along with the other problems, it is time to drop the package.
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ Config.in.legacy                              | 16 ++++
+ DEVELOPERS                                    |  1 -
+ package/Config.in                             |  1 -
+ .../0001-Avoid-intentional-syntax-error.patch | 29 --------
+ ...s-min.txt-drop-indirect-dependencies.patch | 74 -------------------
+ ...ice-wap-use-markupsafe-instead-of-we.patch | 53 -------------
+ package/python-crossbar/Config.in             | 72 ------------------
+ package/python-crossbar/python-crossbar.hash  |  5 --
+ package/python-crossbar/python-crossbar.mk    | 14 ----
+ 9 files changed, 16 insertions(+), 249 deletions(-)
+ delete mode 100644 package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+ delete mode 100644 package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
+ delete mode 100644 package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
+ delete mode 100644 package/python-crossbar/Config.in
+ delete mode 100644 package/python-crossbar/python-crossbar.hash
+ delete mode 100644 package/python-crossbar/python-crossbar.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7e065524db..1e331d17da 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,22 @@ endif
+ 
+ comment "Legacy options removed in 2024.02"
+ 
++config BR2_PACKAGE_PYTHON_CROSSBAR
++	bool "python-crossbar removed"
++	select BR2_LEGACY
++	help
++	  python-crossbar has been removed. The current package has
++	  not recieved an update since Sat Oct 9 13:55:06 2021
++	  commit: 33ece2446e25e20929d1c7eefa9f3244a3b79a92
++	  and is not python 3.12.0 compatible.
++
++	  Furthermore, the current version requires at least 42 new
++	  packages worth of depedencies of which several require
++	  patches to be python 3.12.0 compatible. As nobody has
++	  stepped up to maintain the package and its ever-growing
++	  list of dependencies, along with the other problems, it
++	  is time to drop the package.
++
+ config BR2_PACKAGE_PYTHON_PYGAME
+ 	bool "python-pygame removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 77bbbe8c9f..c7c640585c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2095,7 +2095,6 @@ F:	package/python-autobahn/
+ F:	package/python-cbor/
+ F:	package/python-characteristic/
+ F:	package/python-click/
+-F:	package/python-crossbar/
+ F:	package/python-lmdb/
+ F:	package/python-mistune/
+ F:	package/python-netaddr/
+diff --git a/package/Config.in b/package/Config.in
+index 4e7e9492c0..7249d887d6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1035,7 +1035,6 @@ menu "External python modules"
+ 	source "package/python-crc16/Config.in"
+ 	source "package/python-crcmod/Config.in"
+ 	source "package/python-crontab/Config.in"
+-	source "package/python-crossbar/Config.in"
+ 	source "package/python-cryptography/Config.in"
+ 	source "package/python-cssselect/Config.in"
+ 	source "package/python-cssselect2/Config.in"
+diff --git a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+deleted file mode 100644
+index 0ff7cae21a..0000000000
+--- a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 423a1b081f6b7198f6a921ca83043270ebbace1a Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 1 May 2016 15:35:32 +0200
+-Subject: [PATCH] Avoid intentional syntax error
+-
+-This file has an intentional syntax error, meant to validate QA, but
+-it breaks byte compilation of this package.
+-
+-Issue reported upstream:
+-https://github.com/crossbario/crossbar/issues/750.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- crossbar/worker/test/examples/syntaxerror.py | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/crossbar/worker/test/examples/syntaxerror.py b/crossbar/worker/test/examples/syntaxerror.py
+-index 7b88e088..cd7de901 100644
+---- a/crossbar/worker/test/examples/syntaxerror.py
+-+++ b/crossbar/worker/test/examples/syntaxerror.py
+-@@ -27,5 +27,3 @@
+- #  with this program. If not, see <http://www.gnu.org/licenses/agpl-3.0.en.html>.
+- #
+- #####################################################################################
+--
+--class # noqa
+--- 
+-2.20.1
+-
+diff --git a/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch b/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
+deleted file mode 100644
+index 12027d779c..0000000000
+--- a/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From 3ae2b36e48fc0f75f0bb6c89f893ece033bccd87 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sun, 7 Aug 2022 18:44:29 +0200
+-Subject: [PATCH] requirements-min.txt: drop indirect dependencies
+-
+-For some interesting reason, the crossbar maintainers have decided to
+-include indirect dependencies in their requirements-min.txt, i.e
+-dependencies that they don't use directly, but that packages they
+-depend on themselves depend on.
+-
+-This makes the packaging in Buildroot confusing, as it means not all
+-dependencies in requirements-min.txt should be taken into
+-account. Also some of these indirect dependencies cause issues due to
+-upper bounds set on the version (which is the case for idna and
+-urllib3).
+-
+-This patch therefore clarifies the situation by removing such indirect
+-dependencies from requirements-min.txt. As the patch is obviously not
+-upstreamable, it will require some maintenance effort, but that effort
+-is anyway already there to sort out direct dependencies from indirect
+-dependencies when updating the Buildroot packaging for crossbar.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- requirements-min.txt | 12 ------------
+- 1 file changed, 12 deletions(-)
+-
+-diff --git a/requirements-min.txt b/requirements-min.txt
+-index 5ac4e0ee..cdd82d27 100644
+---- a/requirements-min.txt
+-+++ b/requirements-min.txt
+-@@ -1,20 +1,13 @@
+--attrs>=17.2.0
+- autobahn[asyncio,twisted,encryption,compress,serialization,scram]>=21.3.1
+- bitstring>=3.1.5
+--bcrypt>=3.1.6
+- cbor>=1.0.0
+- click>=6.7
+- colorama>=0.4.4
+--constantly>=15.1.0
+- cryptography>=2.6.1
+--h2>=3.2.0
+--idna<2.6,>=2.5
+- importlib-resources>=4.1.1
+--incremental>=17.5.0
+- jinja2>=2.10.1
+- lmdb>=0.92
+- mistune>=0.7.4
+--netaddr>=0.7.19
+- passlib>=1.7.1
+- priority>=1.3.0
+- psutil>=5.2.2
+-@@ -28,7 +21,6 @@ pyqrcode>=1.2.1
+- pytrie>=0.3
+- pyyaml>=4.2b4
+- sdnotify>=0.3.1
+--service_identity>=17.0.0
+- setproctitle>=1.1.10
+- setuptools>=36.2.7
+- treq>=20.4.1
+-@@ -37,10 +29,6 @@ twisted[tls,conch,http2,osx_platform]>=20.3.0; sys_platform == 'darwin'
+- twisted[tls,conch,http2,windows_platform]>=20.3.0; sys_platform == 'win32'
+- txaio>=21.2.1
+- txtorcon>=20.0.0
+--u-msgpack-python>=2.4.1
+--# urllib3 is an indirect dependency, but we force a recent version because of https://nvd.nist.gov/vuln/detail/CVE-2019-11324
+--# workaround for version conflict in requests vs sth else:
+--urllib3<1.25,>=1.21.1
+- vmprof>=0.4.12; platform_machine=='x86_64' or platform_machine=='i386' or platform_machine=='arm'
+- watchdog>=0.8.3
+- werkzeug>=0.14.1
+--- 
+-2.37.1
+-
+diff --git a/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch b/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
+deleted file mode 100644
+index ab2d4709bd..0000000000
+--- a/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From a6866509b0387ab6d6f99f68cd82bcac922fe839 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Mon, 30 May 2022 19:38:11 +0200
+-Subject: [PATCH] crossbar/webservice/wap: use markupsafe instead of werkzeug
+-
+-wap.py use escape from werkzeug but it has been removed since
+-the version 2.1.0 [1].
+-
+-Replace with escape from markupsafe like upstream commit [2]
+-(wihout other changes).
+-
+-[1] https://github.com/pallets/werkzeug/commit/22d1e9ac13829b83347107a9b4d77072a8e1af6a
+-[2] https://github.com/crossbario/crossbar/commit/ca8d383f01231e2b3f986e791f215f12f2deee5d
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- crossbar/webservice/wap.py | 7 ++++++-
+- requirements-min.txt       | 1 +
+- 2 files changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/crossbar/webservice/wap.py b/crossbar/webservice/wap.py
+-index 825558b1..6daa9b21 100644
+---- a/crossbar/webservice/wap.py
+-+++ b/crossbar/webservice/wap.py
+-@@ -36,7 +36,12 @@ from collections.abc import Mapping, Sequence
+- 
+- from werkzeug.routing import Map, Rule
+- from werkzeug.exceptions import NotFound, MethodNotAllowed
+--from werkzeug.utils import escape
+-+
+-+try:
+-+    # removed in werkzeug 2.1.0
+-+    from werkzeug.utils import escape
+-+except ImportError:
+-+    from markupsafe import escape
+- 
+- from jinja2 import Environment, FileSystemLoader
+- from jinja2.sandbox import SandboxedEnvironment
+-diff --git a/requirements-min.txt b/requirements-min.txt
+-index cdd82d27..50cb1489 100644
+---- a/requirements-min.txt
+-+++ b/requirements-min.txt
+-@@ -7,6 +7,7 @@ cryptography>=2.6.1
+- importlib-resources>=4.1.1
+- jinja2>=2.10.1
+- lmdb>=0.92
+-+MarkupSafe>=1.1.1
+- mistune>=0.7.4
+- passlib>=1.7.1
+- priority>=1.3.0
+--- 
+-2.37.1
+-
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+deleted file mode 100644
+index 357be4803c..0000000000
+--- a/package/python-crossbar/Config.in
++++ /dev/null
+@@ -1,72 +0,0 @@
+-config BR2_PACKAGE_PYTHON_CROSSBAR
+-	bool "python-crossbar"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
+-	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
+-	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # python-numpy
+-	depends on BR2_INSTALL_LIBSTDCPP # python-autobahn's compress and serialization
+-	# All the following dependencies are runtime dependencies. It
+-	# matches almost 1:1 the requirements-min.txt from crossbar
+-	# with the following exceptions:
+-	# - importlib-resources is in Python itself, so no external
+-	#   module is needed
+-	# - vmprof, while listed as a needed dependency, isn't
+-	#   actually strictly necesary
+-	# - wsaccel is not a direct dependency, it is there to make
+-	#   sure autobahn has the 'accelerate' feature, when the
+-	#   Python implementation is CPython, and our package does
+-	#   enable autobahn[accelerate]
+-	select BR2_PACKAGE_PYTHON_AUTOBAHN
+-	select BR2_PACKAGE_PYTHON_AUTOBAHN_ACCELERATE
+-	select BR2_PACKAGE_PYTHON_AUTOBAHN_COMPRESS
+-	select BR2_PACKAGE_PYTHON_AUTOBAHN_ENCRYPTION
+-	select BR2_PACKAGE_PYTHON_AUTOBAHN_SCRAM
+-	select BR2_PACKAGE_PYTHON_AUTOBAHN_SERIALIZATION
+-	select BR2_PACKAGE_PYTHON_AUTOBAHN_TWISTED
+-	select BR2_PACKAGE_PYTHON_BITSTRING
+-	select BR2_PACKAGE_PYTHON_CBOR
+-	select BR2_PACKAGE_PYTHON_CLICK
+-	select BR2_PACKAGE_PYTHON_COLORAMA
+-	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
+-	select BR2_PACKAGE_PYTHON_JINJA2
+-	select BR2_PACKAGE_PYTHON_LMDB
+-	select BR2_PACKAGE_PYTHON_MARKUPSAFE
+-	select BR2_PACKAGE_PYTHON_MISTUNE
+-	select BR2_PACKAGE_PYTHON_PASSLIB
+-	select BR2_PACKAGE_PYTHON_PRIORITY
+-	select BR2_PACKAGE_PYTHON_PSUTIL
+-	select BR2_PACKAGE_PYTHON_PYASN1
+-	select BR2_PACKAGE_PYTHON_PYASN1_MODULES
+-	select BR2_PACKAGE_PYTHON_PYGMENTS
+-	select BR2_PACKAGE_PYTHON_PYNACL
+-	select BR2_PACKAGE_PYTHON_PYOPENSSL
+-	select BR2_PACKAGE_PYTHON_PYQRCODE
+-	select BR2_PACKAGE_PYTHON_PYTRIE
+-	select BR2_PACKAGE_PYTHON_PYYAML
+-	select BR2_PACKAGE_PYTHON_SDNOTIFY
+-	select BR2_PACKAGE_PYTHON_SETPROCTITLE
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+-	select BR2_PACKAGE_PYTHON_TREQ
+-	select BR2_PACKAGE_PYTHON_TWISTED
+-	select BR2_PACKAGE_PYTHON_TWISTED_CONCH
+-	select BR2_PACKAGE_PYTHON_TWISTED_HTTP2
+-	select BR2_PACKAGE_PYTHON_TWISTED_TLS
+-	select BR2_PACKAGE_PYTHON_TXAIO
+-	select BR2_PACKAGE_PYTHON_TXTORCON
+-	select BR2_PACKAGE_PYTHON_UBJSON
+-	select BR2_PACKAGE_PYTHON_WATCHDOG
+-	select BR2_PACKAGE_PYTHON_WERKZEUG
+-	select BR2_PACKAGE_PYTHON_ZLMDB
+-	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
+-	help
+-	  Crossbar.io is an open-source WAMP application router that
+-	  allows to build advanced applications from loosely-coupled
+-	  components that can talk in real-time with each other.
+-
+-	  https://pypi.python.org/pypi/crossbar
+-
+-comment "python-crossbar needs a glibc or musl toolchain w/ C++, gcc >= 9"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
+-		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_9
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+deleted file mode 100644
+index 4441578a29..0000000000
+--- a/package/python-crossbar/python-crossbar.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# md5, sha256 from https://pypi.org/pypi/crossbar/json
+-md5  df576100bcf6e423cdc1e2e96b602140  crossbar-21.3.1.tar.gz
+-sha256  ac71959f0c57ab08d43f7830b85c6312e000b25543a179cd751ac357944dd7ef  crossbar-21.3.1.tar.gz
+-# Locally computed
+-sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  crossbar/LICENSE
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+deleted file mode 100644
+index aae61cd2e8..0000000000
+--- a/package/python-crossbar/python-crossbar.mk
++++ /dev/null
+@@ -1,14 +0,0 @@
+-################################################################################
+-#
+-# python-crossbar
+-#
+-################################################################################
+-
+-PYTHON_CROSSBAR_VERSION = 21.3.1
+-PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/17/37/aafc4ec30068fd7ebb97f1a00d4ddf8de482dfa4c1d2a1fc6bb814d91400
+-PYTHON_CROSSBAR_LICENSE = AGPL-3.0
+-PYTHON_CROSSBAR_LICENSE_FILES = crossbar/LICENSE
+-PYTHON_CROSSBAR_SETUP_TYPE = setuptools
+-
+-$(eval $(python-package))
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
