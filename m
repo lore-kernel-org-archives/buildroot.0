@@ -4,87 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B44AFC35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 08:21:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A28BC35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 08:21:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64869405AF;
-	Mon, 18 Dec 2023 08:21:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64869405AF
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1B5D405D9;
+	Mon, 18 Dec 2023 08:21:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1B5D405D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hloFJ8J057Nt; Mon, 18 Dec 2023 08:21:15 +0000 (UTC)
+	with ESMTP id ER5ureydpDsK; Mon, 18 Dec 2023 08:21:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 508EC409C8;
-	Mon, 18 Dec 2023 08:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 508EC409C8
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE3FB409C8;
+	Mon, 18 Dec 2023 08:21:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE3FB409C8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0864C1BF3BC
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 08:20:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 133C91BF3BC
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 08:20:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DCE8440603
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 08:20:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCE8440603
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4CB1405CB
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 08:20:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4CB1405CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vCWilhnSmxC2 for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 08:20:20 +0000 (UTC)
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D8AAC40906
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 08:20:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8AAC40906
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-a234dc0984fso87143966b.0
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 00:20:19 -0800 (PST)
+ with ESMTP id Ae2tjWCGClX8 for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 08:20:21 +0000 (UTC)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D01FD40948
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 08:20:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D01FD40948
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-a2366012348so7787266b.0
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 00:20:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702887618; x=1703492418;
+ d=1e100.net; s=20230601; t=1702887619; x=1703492419;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=+j8tbYktxNgPtm63402ueJ1ePcp2VKD1Im6SItdOLc8=;
- b=jA+JUi9OwV9wW8Kop5wQ5xmlZPSZEJWmhBpc3EFXQvPskcxaP4nWXBCCCYieo1aHku
- FjlF6Phn31duqUl9w9PUPhQmxf8kzeTONsUX5c8cFvwj7H2OiONQf9Vy8QiWQe0pFwfg
- TEGBNkX3FVU+2Dc7thFGpSjjC5YMyaTPZgiuUsH1s3GN/Y1C4XBamoN8Q9Ctbm0jA+ue
- OXZrwlxm3qG83XIZWpTmCnsTn5caQVsF74hRaiDVf3EUlG5nf0t5bBEGxoy/gbr8/MPq
- SGm13lqUTbjzahX05P5+xd2TdJtRBiLiW5JbQHZCTprJx8E+QXJtkMfpnD0TMekCdUsO
- NmGw==
-X-Gm-Message-State: AOJu0Yxuvm4xLNk+TUANSaK7QiVUxbIAXxOnNvEHRntkhwjdoc42rRvq
- O2Syfk96LjnBYByViz94dBp6RkorlJD66cxGsJL/mQ==
-X-Google-Smtp-Source: AGHT+IGVHTqlxmc08RooykbaQLVwiaM+6QTj12PIu4lA6A9uUpGqlP+UuOEtBsknW49wli5BnsUteQ==
-X-Received: by 2002:a17:906:26c6:b0:a1f:7298:aa25 with SMTP id
- u6-20020a17090626c600b00a1f7298aa25mr8556431ejc.45.1702887617501; 
- Mon, 18 Dec 2023 00:20:17 -0800 (PST)
+ bh=cbwu42yiqMeDNPw6FYHD992LyCl7Kq3Mj5cQVhlTkxc=;
+ b=UrfxLhWf9YSjkZLA8d8ZQDEaz5v8b6Tdwih6aHMkmv3AUpnUe0h56qM7eeRzhgleQk
+ Sg9Z9PcZoclf77MARGyT/UlmNgzi04ccH2RoCEbay4nCD05T1BESFifrrJTZ6aIgZB3h
+ rN91OR8DLvfbJ8F2B5l4VT7bg0NtxHwiIW6x53URANLKZYsZtw0BhcFUj5PuZ6dd7npn
+ j0WWfE8eWY6MOuTMYpkTEg3PyuYvOg3fGdZGeWx8VgBnnA9qbVCbdNjs12ngfIBAGaFP
+ 9kaKJMvXC6yOF9c9YrvXzvC+R0cIR5ZW0bGOKfOBc4IC1YwG9it/HxoLY8xMGLnEiayB
+ KTxw==
+X-Gm-Message-State: AOJu0Yyl+MRO7GIUPng3w6DBvdxv2qRa0wsdraCuXmn/T5efHQC/YOlk
+ FGpg6g3iNViDgp/VtIdH1YUKN8RmRrqUItREeehE3Q==
+X-Google-Smtp-Source: AGHT+IErHov8i/U27PXylVIAyCRq039Wy+x2r7Epn069d+ZR8LqzvzpJn6n3xZh+Mh2oc/yqXAIZng==
+X-Received: by 2002:a17:906:3c1:b0:a01:c31f:c90e with SMTP id
+ c1-20020a17090603c100b00a01c31fc90emr8235443eja.58.1702887618618; 
+ Mon, 18 Dec 2023 00:20:18 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-80-182-13-188.retail.telecomitalia.it. [80.182.13.188])
  by smtp.gmail.com with ESMTPSA id
- lm11-20020a17090718cb00b00a1cf3fce937sm13807835ejc.162.2023.12.18.00.20.16
+ lm11-20020a17090718cb00b00a1cf3fce937sm13807835ejc.162.2023.12.18.00.20.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Dec 2023 00:20:17 -0800 (PST)
+ Mon, 18 Dec 2023 00:20:18 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Dec 2023 09:19:51 +0100
-Message-ID: <20231218081958.506691-5-dario.binacchi@amarulasolutions.com>
+Date: Mon, 18 Dec 2023 09:19:52 +0100
+Message-ID: <20231218081958.506691-6-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231218081958.506691-1-dario.binacchi@amarulasolutions.com>
 References: <20231218081958.506691-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1702887618; x=1703492418;
+ d=amarulasolutions.com; s=google; t=1702887619; x=1703492419;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=+j8tbYktxNgPtm63402ueJ1ePcp2VKD1Im6SItdOLc8=;
- b=Bq+rl51hcKir8DcnaJj5fMn7KLxSezw24SAnmiQFeGVQn1ngH0UK1sual/NbioBEbK
- ZsgqNYQe+Su5MXYxFxTMwJqjj5uo5RvXizV2rBm37cqV6P+mSxe8C8n7GmfnOUJyymNe
- wKuHFagepFlS1T6Va27bLoxs16rXSwvzx4RrE=
+ bh=cbwu42yiqMeDNPw6FYHD992LyCl7Kq3Mj5cQVhlTkxc=;
+ b=ixQFIFHlIiDzEb/IHGbJjHVQG/y8sG7YRpvG7qcHrBVRnPP7Jv1AU4kilEG1+yezRI
+ W3KlkYlHd/G5e9Sdr4Sv+WE51ZsC5HaYwkYSkc1GCyP43JiLXhYA5bFACLyBduj6BIfN
+ 7Kn6obl0F6qfOc5uRmGsMiM6v1zqbqelChd3M=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Bq+rl51h
-Subject: [Buildroot] [PATCH v3 04/11] package/python-attrs: add host variant
+ header.b=ixQFIFHl
+Subject: [Buildroot] [PATCH v3 05/11] package/python-referencing: add host
+ variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -120,22 +121,26 @@ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Changes in v3:
 - Drop Config.in.host
 
- package/python-attrs/python-attrs.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/python-referencing/python-referencing.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
-index 0d704ea11195..96d6b8ad7923 100644
---- a/package/python-attrs/python-attrs.mk
-+++ b/package/python-attrs/python-attrs.mk
-@@ -15,4 +15,10 @@ PYTHON_ATTRS_DEPENDENCIES = \
- 	host-python-hatch-fancy-pypi-readme \
- 	host-python-hatch-vcs
- 
-+HOST_PYTHON_ATTRS_DEPENDENCIES = \
+diff --git a/package/python-referencing/python-referencing.mk b/package/python-referencing/python-referencing.mk
+index 4d11c99deb3b..9d8fc5a2f541 100644
+--- a/package/python-referencing/python-referencing.mk
++++ b/package/python-referencing/python-referencing.mk
+@@ -11,7 +11,14 @@ PYTHON_REFERENCING_SETUP_TYPE = pep517
+ PYTHON_REFERENCING_LICENSE = MIT
+ PYTHON_REFERENCING_LICENSE_FILES = COPYING
+ PYTHON_REFERENCING_DEPENDENCIES = \
++	host-python-attrs \
 +	host-python-hatchling \
-+	host-python-hatch-fancy-pypi-readme \
 +	host-python-hatch-vcs
 +
++HOST_PYTHON_REFERENCING_DEPENDENCIES = \
++	host-python-attrs \
+ 	host-python-hatchling \
+ 	host-python-hatch-vcs
+ 
  $(eval $(python-package))
 +$(eval $(host-python-package))
 -- 
