@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4C4FC35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 08:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63806C35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 08:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5300F4098E;
-	Mon, 18 Dec 2023 08:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5300F4098E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 095E2403C9;
+	Mon, 18 Dec 2023 08:22:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 095E2403C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xMwpuKkHnfF8; Mon, 18 Dec 2023 08:22:10 +0000 (UTC)
+	with ESMTP id e07cj1i1PZa0; Mon, 18 Dec 2023 08:22:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6263C40A5C;
-	Mon, 18 Dec 2023 08:22:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6263C40A5C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 06B6A1BF3BC
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 08:20:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE07D408BD;
+	Mon, 18 Dec 2023 08:22:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE07D408BD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E884B1BF3BC
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 08:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D1EDF41805
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 08:20:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1EDF41805
+ by smtp3.osuosl.org (Postfix) with ESMTP id C1A7760D7B
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 08:20:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1A7760D7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4GD0r3aaR-zc for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 08:20:24 +0000 (UTC)
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F3921417F8
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 08:20:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3921417F8
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-a235eb41251so43151366b.3
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 00:20:23 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qiz_suQ8-IKh for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 08:20:25 +0000 (UTC)
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 31C3660D59
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 08:20:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31C3660D59
+Received: by mail-lf1-x129.google.com with SMTP id
+ 2adb3069b0e04-50e305530baso1247493e87.3
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 00:20:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702887622; x=1703492422;
+ d=1e100.net; s=20230601; t=1702887623; x=1703492423;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=fHOcIozQeZlxJDMpQ9dd5gfCPjt6Jsx9U9ejZJjX9dw=;
- b=MoNjgL+tzVYki1aIv4RX3nF5tEWupu26luTn84vir7QNcTZrhCjkdlZmEbTwcVGSek
- wuV/MbjbPYaWKtypFvKgmpc93Eqk+PZF0i+zkuIfCHNSpFL5afhLhck2X5V+VQYM20Lm
- FpDC4CXcMIT357igGBft5MYoJdZ1yT5rLgbULYrmZNOZeer+7N6+ZNgL97HklA/NC/VD
- XWxat9JwVpxeh+NiL3FMLldRQPxpiyGOX1xIUe+JY+m/bbDS2FNo4DQ3QVRXD3x3A6r5
- BcmS8PCiIGmCf6QKu3BUwMWiMIK8HA4PDJK3ufleMVrzgn65n39oVYliu3ehuUuyOuqA
- 0V2w==
-X-Gm-Message-State: AOJu0Yz+flKy+vQECEml/YLED8eEHHrGILdx2uajrLFmq9WpIAdp8hX3
- OuHuIAtgONAAeyNIEnLTrEhxtuHurZv0umdFcd92LA==
-X-Google-Smtp-Source: AGHT+IGB7U2T6P0DUJfuZUUQ0fFbPhQzZJQ5wZJF9yTElbyBXJSlp4cUajVueRyhothFjPBqJY7oow==
-X-Received: by 2002:a17:906:259:b0:a23:665f:3981 with SMTP id
- 25-20020a170906025900b00a23665f3981mr46473ejl.88.1702887621926; 
- Mon, 18 Dec 2023 00:20:21 -0800 (PST)
+ bh=dof/GJcDXFGBHL7g6Pes+V0YjmvVefsviCiZtZGui7Y=;
+ b=A2qJ7+NhTLgJE63wHNkCLY5WdwdWkIOQZJkMfwh1OT81ZA2X4RCulMoLJZDWYUDhnt
+ U3zDJ3Rnmt/oINjSlV7WoWO6iKaP6IZ4YsrlU7SGwklhI+wjgxx3s/sTNJ9KvHsXszIw
+ TKrZvj/FoDJJDVLIEGdsruU6pIWqBvja7KVUyUZQivhjjw5IgSUncG72uuG/M+Yzd8s/
+ 2gViv/ksUqSWr7iV8i4PjAqG5v6yuxKqlu5TCs4TvdJvzyMVB2A+o7hNdFV9E4mh0XoL
+ l1pwEErAcv7OYZ69/MaVqKV2tIfkzSfY6k/vc8ixEq5HzU5StCy/yDErDBoJGjA9IKV9
+ w4hQ==
+X-Gm-Message-State: AOJu0YykL7mi/Kkux65237kRt4wsKF0fqO2UKsRmK5cyZYioarNKRDzI
+ mcibClHWpg/bBI2OWIIw4KUEf1Y0IAb2fY42S6hqTw==
+X-Google-Smtp-Source: AGHT+IFrcQRZj5gNHuF0R2eoxUi206mjvZtS/Tnn56+y7NtnjJeyitkgcJpojmJIHyr4pVPrJ5+Lew==
+X-Received: by 2002:ac2:562c:0:b0:50e:3b91:99a1 with SMTP id
+ b12-20020ac2562c000000b0050e3b9199a1mr234918lff.86.1702887623017; 
+ Mon, 18 Dec 2023 00:20:23 -0800 (PST)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-80-182-13-188.retail.telecomitalia.it. [80.182.13.188])
  by smtp.gmail.com with ESMTPSA id
- lm11-20020a17090718cb00b00a1cf3fce937sm13807835ejc.162.2023.12.18.00.20.21
+ lm11-20020a17090718cb00b00a1cf3fce937sm13807835ejc.162.2023.12.18.00.20.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Dec 2023 00:20:21 -0800 (PST)
+ Mon, 18 Dec 2023 00:20:22 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Dec 2023 09:19:55 +0100
-Message-ID: <20231218081958.506691-9-dario.binacchi@amarulasolutions.com>
+Date: Mon, 18 Dec 2023 09:19:56 +0100
+Message-ID: <20231218081958.506691-10-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231218081958.506691-1-dario.binacchi@amarulasolutions.com>
 References: <20231218081958.506691-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1702887622; x=1703492422;
+ d=amarulasolutions.com; s=google; t=1702887623; x=1703492423;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=fHOcIozQeZlxJDMpQ9dd5gfCPjt6Jsx9U9ejZJjX9dw=;
- b=p7L3xVAeYX7yPHsa7lJWTtY0Ll/a8hEmlUaBLMg2OfboOzP8wswTZvOCqXPksEyaGj
- RDgIFQXc7Njry/6O/UXxHmQQvtam5AZQN4ztmQWSjQEPHazXZYBYfsTdjv0Iuy736fl9
- fdKSAbBXuMVBjOCQ5RrXQIRt/EjEo1oknWTOs=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=dof/GJcDXFGBHL7g6Pes+V0YjmvVefsviCiZtZGui7Y=;
+ b=Nw5WSdVPt/ySzqCvzfuzaRzXKO8lD7wkHsL38COg3HeqVLrqUgLb5nd7wxvLIbhIs6
+ tOm0vn6cSUgvzq3UO5Vr8cXYMTHNrSDuUCmxRh84VnrI8pS5hvJPkpBda1SsK519h83I
+ oEAL7DOG2n6+cqpAtH+6FW8ON0mDY8WsHDj40=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=p7L3xVAe
-Subject: [Buildroot] [PATCH v3 08/11] boot/ti-k3-r5-loader: set binman
- environment
+ header.b=Nw5WSdVP
+Subject: [Buildroot] [PATCH v3 09/11] boot/uboot: set BINMAN_INDIRS for TI
+ K3 DM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,85 +108,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Recent version of U-Boot use binman to provide a mechanism for building
-images, from simple SPL + U-Boot combinations, to more complex
-arrangements with many parts.
+As explained in [1], adding support for AM62x LP SK in U-Boot, requires
+binman for building bootloader images. The BINMAN_INDIRS environment
+variable is used to provide a space-separated list of directories to
+search for binary blobs.
 
-The patch set the BINMAN_INDIRS environment variable to provide the
-directory to search for binary blobs and select the packages required by
-binman.
-
-Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+[1] https://patchwork.ozlabs.org/project/uboot/patch/20231030110138.1347603-3-n-yadav@ti.com/
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-
 ---
+ boot/uboot/uboot.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Changes in v2:
-- Change commit message
-- Add BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN option
-- Select packages required by binman if
-  BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN is enabled
-
- boot/ti-k3-r5-loader/Config.in          | 13 +++++++++++++
- boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 15 +++++++++++++++
- 2 files changed, 28 insertions(+)
-
-diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
-index 8c8368a1a5a8..a40eaed9467b 100644
---- a/boot/ti-k3-r5-loader/Config.in
-+++ b/boot/ti-k3-r5-loader/Config.in
-@@ -93,4 +93,17 @@ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the TI K3 R5 Loader configuration file.
- 
-+config BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN
-+	bool "U-Boot uses binman"
-+	select BR2_TARGET_UBOOT_NEEDS_PYLIBFDT
-+	select BR2_PACKAGE_HOST_PYTHON_ATTRS
-+	select BR2_PACKAGE_HOST_PYTHON_JSONSCHEMA
-+	select BR2_PACKAGE_HOST_PYTHON_JSONSCHEMA_SPECIFICATIONS
-+	select BR2_PACKAGE_HOST_PYTHON_PYYAML
-+	select BR2_PACKAGE_HOST_PYTHON_REFERENCING
-+	select BR2_PACKAGE_HOST_PYTHON_RPDS_PY
-+	help
-+	  Select this option if your U-Boot version uses binman
-+	  for building images.
-+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index dda606a88059..cf70f86a4132 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -189,7 +189,8 @@ endif
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_TI_K3_DM),y)
+ UBOOT_TI_K3_DM_SOCNAME = $(call qstrip,$(BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME))
+ UBOOT_DEPENDENCIES += ti-k3-boot-firmware
+-UBOOT_MAKE_OPTS += DM=$(BINARIES_DIR)/ti-dm/$(UBOOT_TI_K3_DM_SOCNAME)/ipc_echo_testb_mcu1_0_release_strip.xer5f
++UBOOT_MAKE_OPTS += DM=$(BINARIES_DIR)/ti-dm/$(UBOOT_TI_K3_DM_SOCNAME)/ipc_echo_testb_mcu1_0_release_strip.xer5f \
++	BINMAN_INDIRS=$(BINARIES_DIR)
  endif
-diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-index 0ffcb8235f2e..7f6da0fb24ea 100644
---- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-+++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-@@ -49,6 +49,20 @@ TI_K3_R5_LOADER_KCONFIG_DEPENDENCIES = \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
- 	$(BR2_FLEX_HOST_DEPENDENCY)
  
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
-+TI_K3_R5_LOADER_DEPENDENCIES += host-python-pylibfdt
-+endif
-+
-+ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN),y)
-+TI_K3_R5_LOADER_DEPENDENCIES += \
-+	host-python-attrs \
-+	host-python-jsonschema \
-+	host-python-jsonschema-specifications \
-+	host-python-pyyaml \
-+	host-python-referencing \
-+	host-python-rpds-py
-+endif
-+
- ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_DEFCONFIG),y)
- TI_K3_R5_LOADER_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG))_defconfig
- else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_USE_CUSTOM_CONFIG),y)
-@@ -58,6 +72,7 @@ TI_K3_R5_LOADER_MAKE_OPTS = \
- 	CROSS_COMPILE=$(HOST_DIR)/bin/arm-none-eabi- \
- 	ARCH=arm \
- 	HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS)))" \
-+	BINMAN_INDIRS=$(BINARIES_DIR) \
- 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
- 
- define TI_K3_R5_LOADER_BUILD_CMDS
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSBI),y)
 -- 
 2.43.0
 
