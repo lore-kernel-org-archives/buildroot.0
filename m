@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABD1BC35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 18:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 311D4C46CA2
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 18:57:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62F024195F;
-	Mon, 18 Dec 2023 18:57:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62F024195F
+	by smtp4.osuosl.org (Postfix) with ESMTP id D870441B34;
+	Mon, 18 Dec 2023 18:57:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D870441B34
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RWrae3NqBT3x; Mon, 18 Dec 2023 18:57:05 +0000 (UTC)
+	with ESMTP id asrxkfdRXLhX; Mon, 18 Dec 2023 18:57:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6EF5341A60;
-	Mon, 18 Dec 2023 18:57:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EF5341A60
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D04721BF20B
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:54:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0902941B1B;
+	Mon, 18 Dec 2023 18:57:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0902941B1B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CA261BF20B
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A911D60AE8
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:54:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A911D60AE8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53CC54056F
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:54:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53CC54056F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KMLGIYO4YubY for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 18:54:57 +0000 (UTC)
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
- [IPv6:2607:f8b0:4864:20::52c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 09C6960AC2
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 18:54:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09C6960AC2
-Received: by mail-pg1-x52c.google.com with SMTP id
- 41be03b00d2f7-5c66b093b86so3271882a12.0
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 10:54:56 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bx1uoODTO2Ne for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 18:54:58 +0000 (UTC)
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com
+ [IPv6:2607:f8b0:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1E12B40527
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 18:54:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E12B40527
+Received: by mail-pg1-x530.google.com with SMTP id
+ 41be03b00d2f7-5cd8e2988ddso896962a12.3
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 10:54:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702925695; x=1703530495;
+ d=1e100.net; s=20230601; t=1702925697; x=1703530497;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=8NdA4p6aFSEidjnmt/+wbbP+idMZEz5fQIxSPBV5Xfc=;
- b=MHbdhuUXmzTnzkWjMyNJhGV4KkARzLsN38wW7xyKODpqTlxOG+b23mn/T6S5PdUc+H
- a5O0vSE3X/+ex3QSJzI6KeaQ3yk0GgOLlHcPLuQ8c4paJGGkbNGLNuRGvGlVhBpVukr6
- 87UYc5O5yaR7sHjRArSI1f3DG3cz/UET0wnx3k5mOwqsgNADNSbyESftZiJazzUKUPvz
- zoJBR5QA3ZQROgHK5UbsRqsjpPENVp5pa8bQ0MCScZ2vPkapl8qS3WPgn5wpuDB1mAHT
- hmV311++WZnHZSrggljxaq16Xn0hHLCovSShOG/XIg/a3N1hftdmDA5urZVaxe1kwd6R
- 5+xg==
-X-Gm-Message-State: AOJu0YzK3lHCXGAqvwWjmRtAN4pEI3GFJQi7SBSF75ndX8eaT51XlLY/
- oFFWiCiJ7fcIpriC7uTdkswKjX+YqR+E8fXdUdo=
-X-Google-Smtp-Source: AGHT+IEpC67apLdyAuwPQxn4/ZT9Y60WU5DkIDRmaDz9ZMq7fnUOU39uuwpi5KAoQSfmn6hMC8HpAQ==
-X-Received: by 2002:a17:90a:3883:b0:288:927d:5f93 with SMTP id
- x3-20020a17090a388300b00288927d5f93mr19489294pjb.24.1702925695524; 
- Mon, 18 Dec 2023 10:54:55 -0800 (PST)
+ bh=+2zCCLnrM53V3KVtdKQM+PCC/9bE5HgGJ8ONfdo6PEA=;
+ b=YwiHf4zYdKjEzPGez1DnR3UViRJUoxoCcMvQD1+Qvio0Xg3z5Lb25hnOK5cZtW4YCP
+ 2zxxWJuueu+TpB1Zo/5Hp05puC8czTtT5AZ5MTuwTPyGeP/NQ8fR6bTNBwK0tH03I214
+ sH53rnPvBIjQ/XjF92Xb4WAQh1YVv2uuNPSiSZa2wMZVcLZwkzjePcMEcD6vHRt+8Qm0
+ /Z1J8USVXJRPe8hi/AJkZptFgriJqHqNiSBV+DFAqzwy5s/o3r+uPreTPVuDR4cbxBgg
+ M/kOzQuZ8MEq2ePmuo8io6obTr4HOi14I6/LU/mZ3cCq5Qbeo4yLpFVv6H5PSsryOGck
+ 69Ww==
+X-Gm-Message-State: AOJu0Ywj5tlykrl70f9K+VCjhlhww4ciQ5ExN93+eONEojv/2TAiVaGa
+ ydwNZqw7Kx2P2iu1p4QHD+umLV0p2IxGwuUWx1g=
+X-Google-Smtp-Source: AGHT+IEqhh8G5kNqUqCN1Ci5wl5TH065LihvonekC7O8T3+HMQQb3mAXlqpCjFlu3j27kQmSRv/Qdg==
+X-Received: by 2002:a05:6a20:5486:b0:18f:5f5b:c0a with SMTP id
+ i6-20020a056a20548600b0018f5f5b0c0amr9617534pzk.104.1702925696983; 
+ Mon, 18 Dec 2023 10:54:56 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.amarulasolutions.com ([174.27.209.61])
  by smtp.gmail.com with ESMTPSA id
- p5-20020a17090ac00500b00285cc7a867esm21890580pjt.0.2023.12.18.10.54.54
+ p5-20020a17090ac00500b00285cc7a867esm21890580pjt.0.2023.12.18.10.54.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Dec 2023 10:54:54 -0800 (PST)
+ Mon, 18 Dec 2023 10:54:56 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Dec 2023 11:54:38 -0700
-Message-ID: <20231218185440.506995-12-adam.duskett@amarulasolutions.com>
+Date: Mon, 18 Dec 2023 11:54:39 -0700
+Message-ID: <20231218185440.506995-13-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231218185440.506995-1-adam.duskett@amarulasolutions.com>
 References: <20231218185440.506995-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1702925695; x=1703530495;
+ d=amarulasolutions.com; s=google; t=1702925697; x=1703530497;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8NdA4p6aFSEidjnmt/+wbbP+idMZEz5fQIxSPBV5Xfc=;
- b=XLYcc/3VLXqX6hdTXe2K2PnaqSg//WM8lIqckx4MpF0NlcK7xSV9r80H30Oc0J1OI/
- HbhVYYjnIMHp7JE2UowF2mRIO7r4tVx/6R9CINWynIlFGrHPm2lvfeZ7lWKFfL4h5qMd
- jWJGddd/ukyMnbEtWrlZgaLhqUM1zw1bhOrtk=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=+2zCCLnrM53V3KVtdKQM+PCC/9bE5HgGJ8ONfdo6PEA=;
+ b=nH+iMGQuaPbf9DRHzw97gIwLk59mPgiYG5gZCWWcL8nJyHGtOyLcC1TwAWuKiYhW7D
+ 8uim4d//oC47qMEkIhbnmdT84kNzbNTtCyNZBaUmS4CgkIv91ueBJqHWqUVmmCeLRfAr
+ W9WY8Jznz/02Os1X2xhG8pV/XqKYl9lxkzEHM=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=XLYcc/3V
-Subject: [Buildroot] [PATCH v2 12/13] package/flutter-gallery: clean up
- install_target_cmds
+ header.b=nH+iMGQu
+Subject: [Buildroot] [PATCH v2 13/13]
+ package/flutter-sdk-bin/Config.in.host: add pub-cache location option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,50 +102,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove and create the kernel_blob.bin file in the flutter_assets directory:
+When running the command "flutter pub get," the plugins are stored in the
+pub-cache directory along with their sha256sum hashes. The default location of
+the pub-cache directory is current $(HOST_DIR)/share/flutter/sdk/.pub-cache,
+which is not an acceptable choice by default because every plugin will be
+re-downloaded during every build of a flutter application when building with
+the per-package-directory option enabled. Furthermore, keeping the pub-cache
+in its current location prevents users from committing the pub-cache directory
+to git for faster rebuilds.
 
-  When Flutter compiles the source code, it creates the kernel_blob.bin file,
-  a Dart Kernel Bytecode of the application.
-
-  If kernel_blob.bin exists inside the flutter_assets directory, then the
-  application source code can be extracted with nothing more than apktool.
-  Not only is this a security risk, it's also redundant and a waste of space.
-
-  Removing the kernel_blob.bin file generated for flutter-gallery saves 86M!
-  Because this package is a reference package, and some applications may check
-  if the kernel_blob.bin file exists, we also touch a blank kernel_blob.bin
-  file.
-
-Do not use relative symlinks:
-  Users may not install their applications in the
-  /usr/share/flutter/${package_name} directory. Because this is a reference
-  application, we should use exact symlinks to icudtl.dat and
-  libflutter_engine.so. Besides, the output of ls -la looks cleaner as well!
+To fix the above issue, add a new option to flutter-sdk-bin/Config.in.host,
+BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_PUB_CACHE_LOCATION and set the default to the
+current default of $(DL_DIR)/br-flutter-pub-cache
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/flutter-gallery/flutter-gallery.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+v1 -> v2: Set default path to $(DL_DIR)/br-flutter-pub-cache [ Yann ]
 
-diff --git a/package/flutter-gallery/flutter-gallery.mk b/package/flutter-gallery/flutter-gallery.mk
-index 5299b18134..492b426510 100644
---- a/package/flutter-gallery/flutter-gallery.mk
-+++ b/package/flutter-gallery/flutter-gallery.mk
-@@ -46,10 +46,12 @@ define FLUTTER_GALLERY_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/libapp.so \
- 		$(FLUTTER_GALLERY_INSTALL_DIR)/lib/libapp.so
+ package/flutter-sdk-bin/Config.in.host     | 11 +++++++++++
+ package/flutter-sdk-bin/flutter-sdk-bin.mk |  2 +-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/package/flutter-sdk-bin/Config.in.host b/package/flutter-sdk-bin/Config.in.host
+index 181a2ee6e5..a1ac5835d9 100644
+--- a/package/flutter-sdk-bin/Config.in.host
++++ b/package/flutter-sdk-bin/Config.in.host
+@@ -13,3 +13,14 @@ config BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
+ 	  free and open source.
  
--	ln -sf ../../../$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
-+	ln -sf /usr/share/flutter/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
- 	$(FLUTTER_GALLERY_INSTALL_DIR)/data/
+ 	  https://flutter.dev/
++
++if BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++
++config BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_PUB_CACHE_LOCATION
++	string "pub-cache location"
++	default "$(DL_DIR)/br-flutter-pub-cache"
++	help
++	  Directory to store cached packages used by Pub with
++	  Dart/Flutter.
++
++endif
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+index 0c33d25089..6eea3f2a45 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+@@ -104,4 +104,4 @@ HOST_FLUTTER_SDK_BIN_DART_BIN = \
+ $(eval $(host-generic-package))
  
--	ln -sf ../../../../../lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
-+	ln -sf /usr/lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
-+	$(RM) $(FLUTTER_GALLERY_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
-+	touch $(FLUTTER_GALLERY_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
- endef
- 
- $(eval $(generic-package))
+ # For target packages to locate said pub-cache
+-FLUTTER_SDK_BIN_PUB_CACHE = $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
++FLUTTER_SDK_BIN_PUB_CACHE = $(call qstrip,$(BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_PUB_CACHE_LOCATION))
 -- 
 2.43.0
 
