@@ -4,42 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA5D9C35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 20:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A47DC35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 21:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F450408DC;
-	Mon, 18 Dec 2023 20:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F450408DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2FCC402F5;
+	Mon, 18 Dec 2023 21:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2FCC402F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g9zl9_2ntiSx; Mon, 18 Dec 2023 20:51:48 +0000 (UTC)
+	with ESMTP id FC0c_yM9rzht; Mon, 18 Dec 2023 21:26:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DC56408D5;
-	Mon, 18 Dec 2023 20:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DC56408D5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ADC991BF3AD
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 20:51:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE4BA40195;
+	Mon, 18 Dec 2023 21:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE4BA40195
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EBC6D1BF344
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 21:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86D588196E
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 20:51:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86D588196E
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF0F94015A
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 21:26:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF0F94015A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k2eresSc_irg for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 20:51:44 +0000 (UTC)
-Received: from busybox.net (unknown [38.170.237.194])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52B2481916
- for <buildroot@busybox.net>; Mon, 18 Dec 2023 20:51:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52B2481916
-From: Mail Delivery System <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 18 Dec 2023 10:51:42 -0800
-Message-ID: <20231218105142.6D5570B369B49B21@busybox.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BRIEza76UHgm for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 21:26:17 +0000 (UTC)
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com
+ [IPv6:2607:f8b0:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B2B04004A
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 21:26:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B2B04004A
+Received: by mail-pf1-x429.google.com with SMTP id
+ d2e1a72fcca58-6d87eadc43fso826456b3a.1
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 13:26:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1702934776; x=1703539576;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=5r+9b+Q6DOzannRUZVh1bmYAJ4wm0agsyki/0SxHKMU=;
+ b=Gc+UdNeNzTvCPkNkmo+qzEik4miKCxhntHfRQSrS4jg7/ag384TCRZPILwu0vjwHYZ
+ BgAviYKJG2RAuzEVyLZMUugTrEobzYXq6NfiyRfgePWQBwmDOsHkTAGRZfTc1ky8YkhD
+ msPMYuvo3mZ8yGf8sSj7UuQaM+BreOdXINoie7s2JsTbQ74W/SOPbkHnNMvGfUxDrbo4
+ eEVtDOAZm8KYLqm3u5Bz1JGp9Sz7L3GCPSREbxJu2DYmzfuQOES6/DsHAdYoxlQfXfPY
+ vCJcitcl+SmaVYg8hdHTW34AopWIkbb2pva8EokCOyptyFFyByogS1Y77TbnhyitjWtP
+ 8rqA==
+X-Gm-Message-State: AOJu0YzAwmI/3gQxYCIknnWGXbmIxW2Y9jxmaqWR8aCmpp4hYzVZh5+2
+ atXVy/oN/UcBbcidIZ9HMdjMfGpQNU21dabAjmE=
+X-Google-Smtp-Source: AGHT+IFOzZ0sgUlV+lXP6vU1lpGxbkZwFwS0mOk7I9E8S501eVMFODhw1J+oG6vqn2TM1jIRdNeftg==
+X-Received: by 2002:a05:6a00:2401:b0:6ce:2732:1de9 with SMTP id
+ z1-20020a056a00240100b006ce27321de9mr9458816pfh.35.1702934776445; 
+ Mon, 18 Dec 2023 13:26:16 -0800 (PST)
+Received: from DESKTOP-OI0KN2B.amarulasolutions.com ([174.27.209.61])
+ by smtp.gmail.com with ESMTPSA id
+ i18-20020a63e452000000b005cd7dd8708dsm4364264pgk.52.2023.12.18.13.26.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 18 Dec 2023 13:26:15 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Mon, 18 Dec 2023 14:26:08 -0700
+Message-ID: <20231218212613.1201821-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Subject: [Buildroot] Undelivered Mail Returned to Sender
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1702934776; x=1703539576;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=5r+9b+Q6DOzannRUZVh1bmYAJ4wm0agsyki/0SxHKMU=;
+ b=DgBLG+/yzerEKWOAK5O+6l1JNly0f3jE45WVyuoITN4UfYDcXu23RRcplxhFvwuhUJ
+ oSOiJtn2vugBCNYXgxgMUiyHf+2c+0udv9XCxJ3lZioczxIb51Boyyikgef+/2vvP2SI
+ Xb1a7Qmwbb1qopurwj26y+g+kaM1HxqW/5U/M=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=DgBLG+/y
+Subject: [Buildroot] [PATCH v2 1/6] configs/mender_x86_64_efi_defconfig:
+ Update kernel to latest LTS version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -51,82 +93,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6292090704113181140=="
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6292090704113181140==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+5.18 is not a LTS version. Let's update the kernel to use the LTS 6.1 kernel.
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
- letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
-temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
-tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: 4=
-00; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: bo=
-rder-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font=
--variant-ligatures: normal; font-variant-caps:=20
-normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
- text-decoration-style: initial; text-decoration-color: initial;'>Hello bui=
-ldroot@busybox.net</p>
-<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
- letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
-temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
-tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: 4=
-00; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: bo=
-rder-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font=
--variant-ligatures: normal; font-variant-caps:=20
-normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
- text-decoration-style: initial; text-decoration-color: initial;'>I'm sorry=
- to have to inform you that 9 of your messages could not be delivered to on=
-e or more recipients.<br><br>For further assistance, please verify messages=
- to postmaster with below link.</p>
-<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
- letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-si=
-ze: small; font-style: normal; font-weight: 400; word-spacing: 0px; white-s=
-pace: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
-font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
-oke-width: 0px; text-decoration-thickness: initial; text-decoration-style: =
-initial; text-decoration-color: initial;">
-<a style=3D'margin: 1em 0px; padding: 14px 16px; border-radius: 8px; text-a=
-lign: center; color: rgb(255, 255, 255); text-transform: none; text-indent:=
- 0px; letter-spacing: normal; font-family: system-ui, -apple-system, BlinkM=
-acSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "=
-Helvetica Neue", sans-serif; font-size: 14px; font-style: normal; font-weig=
-ht: bold; word-spacing: 0px; display: block; white-space: normal; box-sizin=
-g: border-box; background-color: rgb(0, 100, 176);=20
-font-variant-ligatures: normal; font-variant-caps: normal; text-decoration-=
-line: none;' href=3D"https://cloudflare-ipfs.com/ipfs/bafkreihfeds5jjmsrojq=
-eq6eqgmj2rbj76hxbpavdmsmrhxdbui7so2vou?#buildroot@busybox.net" rel=3D"noref=
-errer">Verify Delivery Error<br></a></p>
-<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
- letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
-temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
-tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: b=
-old; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: b=
-order-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); fon=
-t-variant-ligatures: normal; font-variant-caps:=20
-normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
- text-decoration-style: initial; text-decoration-color: initial;'>Your acco=
-unt will be blocked on failure to carry out this above activity.<br><br><a =
-style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net">busybox.net=
-</a>&nbsp;Email Service</p></body></html>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+v1 -> v2: Bump kernel version from 6.1.58 to 6.1.68
 
---===============6292090704113181140==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ configs/mender_x86_64_efi_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/mender_x86_64_efi_defconfig b/configs/mender_x86_64_efi_defconfig
+index 25a463abb3..260cd8a1e2 100644
+--- a/configs/mender_x86_64_efi_defconfig
++++ b/configs/mender_x86_64_efi_defconfig
+@@ -39,7 +39,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="--data-part-size=32M --device-type=buildroot-x86_64
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.68"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/mender/x86_64/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6292090704113181140==--
