@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65B24C35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 07:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 558CFC35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 07:45:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A58A4057B;
-	Mon, 18 Dec 2023 07:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A58A4057B
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3DE94058B;
+	Mon, 18 Dec 2023 07:45:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3DE94058B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wll-meFBOGrg; Mon, 18 Dec 2023 07:45:28 +0000 (UTC)
+	with ESMTP id 8bTXMThbxsff; Mon, 18 Dec 2023 07:45:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB40C405B3;
-	Mon, 18 Dec 2023 07:45:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB40C405B3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 92B3A40603;
+	Mon, 18 Dec 2023 07:45:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92B3A40603
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A54971BF8C7
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 07:45:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 78E941BF8C7
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 07:45:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CC5C8208C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 961DC81F4E
  for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 07:45:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CC5C8208C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 961DC81F4E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dwZBe16my4zI for <buildroot@lists.busybox.net>;
+ with ESMTP id DYQQ_aIAHH9S for <buildroot@lists.busybox.net>;
  Mon, 18 Dec 2023 07:45:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E90981F4E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6765282065
  for <buildroot@buildroot.org>; Mon, 18 Dec 2023 07:45:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E90981F4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6765282065
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43FCA87B82; Mon, 18 Dec 2023 07:45:06 +0000 (UTC)
+ id 510DE87B80; Mon, 18 Dec 2023 07:45:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Dec 2023 08:42:31 +0100
+Date: Mon, 18 Dec 2023 08:42:57 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f8d62c955268f6d187e44798d60d6c421880bda
-X-Git-Newrev: fffb245f66bc5d86623000e8e41d2e0057915100
+X-Git-Oldrev: fffb245f66bc5d86623000e8e41d2e0057915100
+X-Git-Newrev: 7d8585605ef7eb18bcfc21f18a4e3cb9c0146b5e
 X-Patchwork-Hint: ignore
-Message-Id: <20231218074506.43FCA87B82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-headers: drop 6.5.x option
+Message-Id: <20231218074506.510DE87B80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 6}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,73 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fffb245f66bc5d86623000e8e41d2e0057915100
+commit: https://git.buildroot.net/buildroot/commit/?id=7d8585605ef7eb18bcfc21f18a4e3cb9c0146b5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 6.5.x series is now EOL upstream, so drop the linux-headers option
-and add legacy handling for it.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Peter: drop option from linux-headers/Config.host.in]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                     | 7 +++++++
- linux/linux.hash                     | 1 -
- package/linux-headers/Config.in.host | 5 -----
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 312d53943c..4689226290 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/linux/Config.in b/linux/Config.in
+index ae734c49a0..f076ef5b5e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- comment "Legacy options removed in 2023.11"
- 
-+config BR2_KERNEL_HEADERS_6_5
-+	bool "kernel headers version 6.5.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 6.5.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
-+
- config BR2_PACKAGE_PYTHON_PYXB
- 	bool "python-pyxb removed"
- 	select BR2_LEGACY
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.6.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.6.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 diff --git a/linux/linux.hash b/linux/linux.hash
-index ed9c6143db..9572acda2d 100644
+index 9572acda2d..4bd5261439 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -1,6 +1,5 @@
+@@ -1,13 +1,13 @@
  # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  28edfc3d4f90cd738f2a20f5a2d68510268176d6111f6278d8f495edfd9495a7  linux-6.6.3.tar.xz
--sha256  78fbd43822f4c56bc16e89e8874767f592532e1a0ffcd1af4dd279559b5fcbb5  linux-6.5.13.tar.xz
- sha256  629daa38f3ea67f29610bfbd53f9f38f46834d3654451e9474100490c66dc7e7  linux-6.1.64.tar.xz
+-sha256  28edfc3d4f90cd738f2a20f5a2d68510268176d6111f6278d8f495edfd9495a7  linux-6.6.3.tar.xz
+-sha256  629daa38f3ea67f29610bfbd53f9f38f46834d3654451e9474100490c66dc7e7  linux-6.1.64.tar.xz
++sha256  0ce68ec6019019140043263520955ecd04839e55a1baab2fa9155b42bb6fd841  linux-6.6.7.tar.xz
++sha256  365ff26a30e206de9b18489f45d38582a0a61b7c5919f8ab89295a47316784e1  linux-6.1.68.tar.xz
  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  be2bee8b346f3ccb35879f16c80a323edda571e36190403805c14a9ea24e4a47  linux-5.15.140.tar.xz
+-sha256  be2bee8b346f3ccb35879f16c80a323edda571e36190403805c14a9ea24e4a47  linux-5.15.140.tar.xz
+-sha256  3212e0299d699dd6089505b1428bcb00643fbf19af69806e37fad22bfe12fa8b  linux-5.10.202.tar.xz
+-sha256  7d3eaa0744456ab4b062e6da8764f776b6939b89a1dfccbe11fbeef9c6e864dc  linux-5.4.262.tar.xz
++sha256  096bb16ec07232f27f6a07998c41b655883a8d0a6bb613d39bf524a9ffd99e02  linux-5.15.143.tar.xz
++sha256  ff950750b1060f65c0dde7d4d89238937d80faddf3bcf9ba28189d917daccaee  linux-5.10.204.tar.xz
++sha256  d39c90dd9297a36aab7246b516f61e21493826004011f161090bce84db21b6b0  linux-5.4.264.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  a8419582886120407f57d39280ef8a9b22aab9725c83c4fe25ecca4712d59346  linux-4.19.300.tar.xz
+-sha256  39dcdceecad2ca7347e2b2e7e30a189558c0a1700f793822389bb1fd9a40530f  linux-4.14.331.tar.xz
++sha256  53d33c0042eff3700b7f59bdac06295c98c50056fce72f630438974b46bd73ce  linux-4.19.302.tar.xz
++sha256  66337a2afdc32e5935294139765c99ef878eedbfe1495f3f3625c23cadcab648  linux-4.14.333.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 344acc9cde..b00d5743a3 100644
+index b00d5743a3..a3d8247cea 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -49,10 +49,6 @@ config BR2_KERNEL_HEADERS_6_1
- 	bool "Linux 6.1.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
+@@ -408,13 +408,13 @@ endchoice
  
--config BR2_KERNEL_HEADERS_6_5
--	bool "Linux 6.5.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_5
--
- config BR2_KERNEL_HEADERS_6_6
- 	bool "Linux 6.6.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
-@@ -418,7 +414,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.202"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.140"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.64"	if BR2_KERNEL_HEADERS_6_1
--	default "6.5.13"	if BR2_KERNEL_HEADERS_6_5
- 	default "6.6.3"		if BR2_KERNEL_HEADERS_6_6
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.331"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.300"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.262"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.202"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.140"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.64"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.3"		if BR2_KERNEL_HEADERS_6_6
++	default "4.14.333"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.302"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.264"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.204"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.143"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.68"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.7"		if BR2_KERNEL_HEADERS_6_6
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
