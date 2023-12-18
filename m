@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A297C46CD2
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 17:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39401C35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 17:22:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E808C81882;
-	Mon, 18 Dec 2023 17:00:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E808C81882
+	by smtp1.osuosl.org (Postfix) with ESMTP id C60B58190B;
+	Mon, 18 Dec 2023 17:22:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C60B58190B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fxI8Tw_UscEV; Mon, 18 Dec 2023 17:00:13 +0000 (UTC)
+	with ESMTP id CJry4feh53CV; Mon, 18 Dec 2023 17:22:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10CAA81E2B;
-	Mon, 18 Dec 2023 17:00:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10CAA81E2B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E2F91BF3E8
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 17:00:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4F8C81852;
+	Mon, 18 Dec 2023 17:22:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4F8C81852
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 372341BF20B
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 17:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E885C41587
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 17:00:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E885C41587
+ by smtp3.osuosl.org (Postfix) with ESMTP id 100FB60F11
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 17:22:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 100FB60F11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y6LcWKcnCsv8 for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 17:00:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vNU7drSz-WE0 for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 17:22:35 +0000 (UTC)
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2DC940894
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 17:00:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2DC940894
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0CB0660D67
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 17:22:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CB0660D67
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 39212B0055A;
- Mon, 18 Dec 2023 18:00:04 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 1084FB00535;
+ Mon, 18 Dec 2023 18:22:27 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 18 Dec 2023 18:00:03 +0100
-Date: Mon, 18 Dec 2023 18:00:03 +0100
+ Mon, 18 Dec 2023 18:22:27 +0100
+Date: Mon, 18 Dec 2023 18:22:27 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <ZYB6k7q06aHaKSRP@landeda>
-References: <20231218131117.152328-1-giulio.benetti@benettiengineering.com>
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <ZYB_06OI-Kw5cC0Z@landeda>
+References: <20231102184154.46185-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231218131117.152328-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20231102184154.46185-1-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1702918806;
- bh=wY1bAQurkIT4TUCuMusrzE5oEu3RVpbtQiLmu/g65H4=;
+ d=free.fr; s=smtp-20201208; t=1702920151;
+ bh=knLA5AfVy27fp3l7LzOE4/u9QCdmSheZordXCVt05QI=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=U2UtQCOQq70oGsDi33xaZzTSainGq75IKfwFv4cDsxinTIr6YnC4FT0a5u0oKvtVf
- 1gEBwtq6/o86uLPblRB86YA5+s7ZacXWE2GZa8opjHROnesDPkviCq14pTzC8WaEjl
- wFJ8fDieSQ96UbgxhOeuFRKcu/4+7Lvdb3LjfnmKqiDYWd9CVKCQHymxKNV5m3mN0i
- sD0H0BaQee8+i4T75MmOn2imOVI41nPIY5fuRVvygcdhiXwZpHSaYP7QRi66eXxvB8
- HK0geUpp2XOlGR7qP2qCIYnbudc716P7rMcNjrzS1KmO4RYSJtLGtTHzJvNbzjqH+f
- DAKTDT5LTS6Hg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=t2V6qrgvoj7kSCzs1Az8ja0m9Eubky75F+SketcbbaIs+2OSUI4ATSneC7VeKltNv
+ If5W01oWmsZIE1Kp8zxxDKNJAo7ZrNejuKLYtkXEYWXDiKs5oC7ntcXm2JsbAhdrmI
+ A8FD+Bp/CCuQvoRcPenqUbALo8oqsmQTsQB17DgTBOKSb45a9h1MPMHHKJJYe2+4uK
+ J9HMEKYnTIOWX4PFfJpZTeEKAL680M7YQNPhD3/FzlU1bqPzlSmyp++VqlOWlTyQF/
+ MZxYkF8DXGb2ass/ygS5TP4VR7OWSN8s16Y5pIxzvmQMrVQXuo00zX9cTobxl8jZK4
+ gA2cdtKvf2fjQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=U2UtQCOQ
-Subject: Re: [Buildroot] [PATCH] package/swupdate: bump version to 2023.12
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=t2V6qrgv
+Subject: Re: [Buildroot] [PATCH v2 1/2]
+ package/postgresql/postgresql.service: set locale for initdb to C
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,116 +75,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+Adam, Peter, All,
 
-On 2023-12-18 14:11 +0100, Giulio Benetti spake thusly:
-> * make json-c mandatory according to [0]
-> * make libubootenv mandatory according to [1]
-> * drop local patch that has been upstreamed [2]
+On 2023-11-02 12:41 -0600, Adam Duskett spake thusly:
+> From: Peter Seiderer <ps.report@gmx.net>
+
+So, this patch is "From Peter", but...
+
+> Systemd creates a /etc/locale.conf file with LANG="C.UTF-8". On boot, systemd
+> reads /etc/locale.conf and sets the LANG environment variable,
+> (see the locale_context_load_conf method in local-setup.c.)
 > 
-> [0]: https://github.com/sbabic/swupdate/commit/82e75322443e021d119a026a3476c410f4705d67
-> [1]: https://github.com/sbabic/swupdate/commit/75838874e2575f822ed85d89532f47e9adf781b6
-> [2]: https://github.com/sbabic/swupdate/commit/1999685830d6e9b57014666b9e53e46de17a471c
+> When initdb.c is called, a check for the LANG environment variable is called,
+> and if it is set to something other than "C" initdb attempts to load the
+> corresponding LC_CTYPE file in /usr/lib/locale/. IE: If LANG is set to C.UTF-8,
+> then initdb.c attempts to load /usr/lib/locale/C.UTF-8/LC_CTYPE. However, these
+> files do not exist on a Buildroot system, and as such, initdb throws the
+> following error on startup:
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-[--SNIP--]
-> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-> index 7d9fc90e10..b5a567fa8f 100644
-> --- a/package/swupdate/Config.in
-> +++ b/package/swupdate/Config.in
-> @@ -3,9 +3,10 @@ config BR2_PACKAGE_SWUPDATE
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_JSON_C
+> ```
+> initdb: error: invalid locale settings; check LANG and LC_* environment variables
+> pg_ctl: database system initialization failed
+> ```
+> 
+> To fix this issue, add "Environment=LANG=C" to the package provided
+> postgresql.service file to force Postgresql to use the C locale.
+> 
+> Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-Json-C depends on SYNC_4, so you must propagate the depndency.
+... the first SoB is by Adam, and there is no SoB be Peter.
 
-> +	select BR2_PACKAGE_LIBUBOOTENV
->  	# swupdate requires a parser and uses libconfig as default
-> -	select BR2_PACKAGE_LIBCONFIG if !BR2_PACKAGE_JSON_C && \
-> -		!BR2_PACKAGE_HAS_LUAINTERPRETER
-> +	select BR2_PACKAGE_LIBCONFIG if !BR2_PACKAGE_HAS_LUAINTERPRETER
+In this case, I think I understand that Adam took Peter's patch, and
+totally rewrote it with an alternate solution. In such a case, the
+customs is to change the authorship to the new author, and keep a
+Co-developed-by tag to keep credits to the first author.
 
-Previously, when json-C was enabled, libconfig was not necessary. Now,
-json-c is always enabled (it is selected), so is it still needed to
-force libconfig even without a lua-interpreter?
+So, if you can just reply to this mail stating I got things right, I can
+fix authorship and tags when applying. If I got things wrong, then
+please resubmit with proper tags and/or authorship.
+
+Also, it does not make much sense that the submitter of a patch adds
+their own Tested-By tag, as it is actually expected that the submitter
+did test what they sent...
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
->  	help
->  	  swupdate provides a reliable way to update the software on
->  	  an embedded system.
-> diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-> index 72b71ce12d..c19a82304f 100644
-> --- a/package/swupdate/swupdate.hash
-> +++ b/package/swupdate/swupdate.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated
-> -sha256  888df5050035e4fbe14e3a964885646fa3163e727f78c423c3d24c28f7a50b66  swupdate-2023.05.tar.gz
-> +sha256  ce24032300e2b6a6faa3d22e49f981fd90f04ac6f5d7e802166824b0cd5ca669  swupdate-2023.12.tar.gz
->  sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
->  sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
->  sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-> index ea4a5a62e5..ca8c140886 100644
-> --- a/package/swupdate/swupdate.mk
-> +++ b/package/swupdate/swupdate.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> ---
+> v1 -> v2:
+>   - Get to the root cause of the problem and provide a better explination of
+>     what is happening.
+> 
+>   - Use Environment=LANG=C isntead of -o --locale=C
+> 
+>  package/postgresql/postgresql.service | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+> index 539eea8964..c470c7181e 100644
+> --- a/package/postgresql/postgresql.service
+> +++ b/package/postgresql/postgresql.service
+> @@ -16,6 +16,10 @@ StandardOutput=syslog
+>  StandardError=syslog
+>  SyslogIdentifier=postgres
 >  
-> -SWUPDATE_VERSION = 2023.05
-> +SWUPDATE_VERSION = 2023.12
->  SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
->  SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
->  SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
-> @@ -18,6 +18,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
->  	LICENSES/MIT.txt \
->  	LICENSES/OFL-1.1.txt
->  SWUPDATE_INSTALL_STAGING = YES
-> +SWUPDATE_DEPENDENCIES = json-c libubootenv
->  
->  # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
->  # available in all external toolchains, and use CC for linking. Ensure
-> @@ -36,13 +37,6 @@ else
->  SWUPDATE_MAKE_ENV += HAVE_LIBEXT2FS=n
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JSON_C),y)
-> -SWUPDATE_DEPENDENCIES += json-c
-> -SWUPDATE_MAKE_ENV += HAVE_JSON_C=y
-> -else
-> -SWUPDATE_MAKE_ENV += HAVE_JSON_C=n
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
->  SWUPDATE_DEPENDENCIES += libarchive
->  SWUPDATE_MAKE_ENV += HAVE_LIBARCHIVE=y
-> @@ -85,13 +79,6 @@ else
->  SWUPDATE_MAKE_ENV += HAVE_LIBGPIOD=n
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
-> -SWUPDATE_DEPENDENCIES += libubootenv
-> -SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=y
-> -else
-> -SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=n
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
->  SWUPDATE_DEPENDENCIES += liburiparser
->  SWUPDATE_MAKE_ENV += HAVE_URIPARSER=y
+> +# Overwrite the LANG variable to prevent systemd from passing the LANG
+> +# environment variable set in /etc/locale.conf.
+> +Environment=LANG=C
+> +
+>  ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+>  ExecStart=/usr/bin/postgres -D /var/lib/pgsql
+>  ExecReload=/usr/bin/kill -HUP $MAINPID
 > -- 
-> 2.34.1
+> 2.41.0
 > 
 > _______________________________________________
 > buildroot mailing list
