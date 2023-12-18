@@ -4,72 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33737C35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 18:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A40FC46CD3
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 18:32:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC26360F2B;
-	Mon, 18 Dec 2023 18:31:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC26360F2B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14F1961125;
+	Mon, 18 Dec 2023 18:32:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14F1961125
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ftFqpLfkR7cO; Mon, 18 Dec 2023 18:31:54 +0000 (UTC)
+	with ESMTP id 3ej7oQQ5z873; Mon, 18 Dec 2023 18:32:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEC2A60F31;
-	Mon, 18 Dec 2023 18:31:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEC2A60F31
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5A2D61BF20B
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:31:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BE9260F33;
+	Mon, 18 Dec 2023 18:32:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BE9260F33
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E1011BF20B
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:32:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EE3841685
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:31:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EE3841685
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4667C60F33
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:32:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4667C60F33
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M73WWrLeoNdI for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 18:31:50 +0000 (UTC)
-X-Greylist: delayed 569 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 18 Dec 2023 18:31:50 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BD2341523
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org
- [IPv6:2001:67c:2050:0:465::202])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4BD2341523
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 18:31:50 +0000 (UTC)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org
- [IPv6:2001:67c:2050:b231:465::2])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Sv7TN5Wsgz9sbC;
- Mon, 18 Dec 2023 19:22:16 +0100 (CET)
-Message-ID: <7f309df0-ae17-419b-8bca-c52d9ec48442@lindra.de>
-Date: Mon, 18 Dec 2023 19:22:14 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LNR3KyPh_1wz for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 18:32:45 +0000 (UTC)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 193C760F2B
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 18:32:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 193C760F2B
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-55359dc0290so2434828a12.1
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 10:32:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1702924363; x=1703529163;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ox4YuqmH0Om1FSiipUvBah+JCLXUuoRl5dd0D1Z9S54=;
+ b=Feih1pjDbVTWVCCpa7JYEdCczBXpkwcQdz/GEn+sCCGOP+rmR8wZuOOx+Z+yt2wOlM
+ MH0T6ze0bhGkgyIn33h11qhNDNlGMuHOoktr3RSKsgNI66vBcZ8+nqCUkvEwqBnuXwS0
+ Ml/khAs6+Y3IcpFe58Ku7rdmHNNkVUQjbXk5cDSJfP5YEf0OLiW30IVhKFiMyqZg0yuU
+ gwUi8ilyD8evqlRYW2k34xWub/Wv8ofwqjgPjBbK3tlsVdJ6fyhfaOnl4AhRM0hNv+68
+ GsyyxhW1zJLyXTmR6NILJxSdig0HfMLOT4NwoYKmGmBVz+DGcQIIV4VNuKbv8P6m8L5R
+ b39w==
+X-Gm-Message-State: AOJu0YygKHSehcY38cfxL4F0FVSX4RfsAO1y7OZq044pN8yhGqvlekD8
+ egBCuXskpDYGoNtBR1nqBuDtXcsRoq/GeQ==
+X-Google-Smtp-Source: AGHT+IG9rafto5ka/f9EFH38tLiWK6+hBGN+7XfM1g066sNUBNctRvTZaJJxWKextU+thgvUeZsrbw==
+X-Received: by 2002:a05:6402:60b:b0:553:3042:195b with SMTP id
+ n11-20020a056402060b00b005533042195bmr3002661edv.4.1702924362834; 
+ Mon, 18 Dec 2023 10:32:42 -0800 (PST)
+Received: from localhost.localdomain (balticom-135-235.balticom.lv.
+ [83.99.135.235]) by smtp.gmail.com with ESMTPSA id
+ cq12-20020a056402220c00b0055335e89ed8sm1753813edb.30.2023.12.18.10.32.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 18 Dec 2023 10:32:42 -0800 (PST)
+From: Davis Mosenkovs <davikovs@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 18 Dec 2023 20:32:30 +0200
+Message-ID: <20231218183230.1899-1-davikovs@gmail.com>
+X-Mailer: git-send-email 2.43.0.windows.1
 MIME-Version: 1.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20231212160112.94272-1-hypnotoad@lindra.de>
- <20231212160112.94272-2-hypnotoad@lindra.de>
- <20231217230704.003200c7@windsurf>
-From: Ralf Dragon <hypnotoad@lindra.de>
-In-Reply-To: <20231217230704.003200c7@windsurf>
-X-Rspamd-Queue-Id: 4Sv7TN5Wsgz9sbC
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lindra.de; s=MBO0001; t=1702923736;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=Z0y7IkHQsmaZTa5PguXWKfombRoYWKc7viD6prR2gi4=;
- b=Ah97vZIrBV4TkC4iqt1h9Rm6czQ6wBerRHeH5enrfH/hjcNhq0w9al5Px5N2ZEtc9UITEv
- Ep+yC9noaZ6Ms1OLaG6ghQKePhWUPYKRPTAH+N+fkJyX2PDvS4H3rr6oPAbORQKQIk2MiW
- a8UR+QhcTd0JNbviPqoz5e5TVYGPUtufEv+GsgFzEwR7ptc1prEF0/xcH174FtK2cFNLAq
- 3zRcrVR3IrI1foEOoy2TkVcLiO3S5/lMoUPEmm6+o+Lypz2y6kixy8CFwgiqwjDzjz9HRq
- cbQZKapuDuyPBXl6vHaTmAlM+0PR9QLEkk7iQb94SGpc6SQP6cl/ije+nyA/ng==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=lindra.de header.i=@lindra.de
- header.a=rsa-sha256 header.s=MBO0001 header.b=Ah97vZIr
-Subject: Re: [Buildroot] [PATCH 2/2] python-qt5: add PyQt5.sip module
+ d=gmail.com; s=20230601; t=1702924363; x=1703529163; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ox4YuqmH0Om1FSiipUvBah+JCLXUuoRl5dd0D1Z9S54=;
+ b=GIysx2REM2kdkgTCLbips4seaxL89ORvETALXdZM6R9WFHVy5TbxmQb8JeJ7xi81Rb
+ gwrC4pvLNtspH/CF/ezklitbK5s6XI4OzeMZtLXt4N789eystdebrccy1YDEQekBv0XR
+ IUoj8u/3n/cO8EMHW8AqTc8tepPP592yffROpV12iSciBb8GWy8+LX7ldSLVXTGkB3bv
+ n3LU6XvGksGB9lVfPhTybrZOzcRFg76aq17yUN9So/ah3+TXnWCbJwLWydtdYWknh0Uh
+ AdjWa0XAi3IvyEeiLkMUb+MOXzrIu5AZ0R9XID/GbAMI50SQ5EtpqXXlyse9A8g/hux3
+ gooA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GIysx2RE
+Subject: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.71
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,164 +94,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, gwenhael.goavec-merou@trabucayre.com,
- yann.morin.1998@free.fr, asafka7@gmail.com, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7936397088694055920=="
+Cc: Davis Mosenkovs <davikovs@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============7936397088694055920==
-Content-Type: multipart/alternative;
- boundary="------------sdekewnaVlUIo0dkQ6Pdqch2"
-Content-Language: en-US
+Changelog:
+https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog
 
-This is a multi-part message in MIME format.
---------------sdekewnaVlUIo0dkQ6Pdqch2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Removed patch which is included in this release.
+---
+ .../bluez5_utils-headers.mk                   |  2 +-
+ .../0001-configure-Check-ell-path.patch       | 35 -------------------
+ package/bluez5_utils/bluez5_utils.hash        |  2 +-
+ package/bluez5_utils/bluez5_utils.mk          |  4 +--
+ 4 files changed, 3 insertions(+), 40 deletions(-)
+ delete mode 100644 package/bluez5_utils/0001-configure-Check-ell-path.patch
 
-Hello Thomas,
-
-> So it means that python-pyqt5 requires this new python-pyqt5-sip
-> package? How come has python-pyqt5 ever worked?
-
-It worked for our community firmware [1] in a buildroot release from 1-2 
-years ago. When we switched to the 2023 release, we had problems, but I 
-could not imagine that it was a problem for everyone. I think that 5.11 
-changed the location of the sip module to PyQt5.sip [2] and required 
-building that in a new module (the build instructions [3] do not say 
-since which release that was needed):
-
-[1] https://cfw.ftcommunity.de/ftcommunity-TXT/en
-[2] 
-https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#pyqt-v5-11
-[3] 
-https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-the-sip-module
-
-> But, but, according to what you described above, it seems like
-> python-pyqt5 needs python-pyqt5-sip, but here you have a
-> python-pyqt5-sip -> python-pyqt5 dependency.
-> So with your patch applied, it's still possible to enable only
-> python-pyqt5, so we would still have the failure you're mentioning in
-> your commit log.
->
-> Could you clarify?
-
-Both can be compiled independently (when I wrote the patch, I assumed 
-that PyQt5.sip can only be compiled when PyQt5 is available, but it 
-really seems only to depend on the sip library). During runtime, PyQt5 
-does not work without PyQt5.sip, but it seems that PyQt5.sip can be used 
-without PyQt5. That is also how it is modeled in Debian 12.
-
-So correctly it would be: python-pyqt5 needs python-pyqt5-sip during 
-runtime. I would model that with "select", not "depends on", or?
-
-> Also, it would very, very good to add a runtime test case in
-> support/testing/ for this, as such Python issues are only visible at
-> runtime. I have added Julien Olivain in Cc, who can probably help with
-> this, as he is our resident expert in writing support/testing tests :-)
-
-Just python3 -c "import PyQt5" would probably be enough to reproduce 
-this error.
-
-I will push another patch with the dependency clarified and the other 
-comments.
-
-Is it possible that both patches get integrated into the 2023 lts branch?
-
-Thanks,
-
-Ralf
-
-
---------------sdekewnaVlUIo0dkQ6Pdqch2
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <p> </p>
-    <p>Hello Thomas,<br>
-    </p>
-    <span style="white-space: pre-wrap">
-</span>
-    <blockquote type="cite" cite="mid:20231217230704.003200c7@windsurf"><span
-      style="white-space: pre-wrap">
-</span>
-      <pre class="moz-quote-pre" wrap="">So it means that python-pyqt5 requires this new python-pyqt5-sip
-package? How come has python-pyqt5 ever worked?</pre>
-    </blockquote>
-    <p>It worked for our community firmware [1] in a buildroot release
-      from 1-2 years ago. When we switched to the 2023 release, we had
-      problems, but I could not imagine that it was a problem for
-      everyone. I think that 5.11 changed the location of the sip module
-      to PyQt5.sip [2] and required building that in a new module (the
-      build instructions [3] do not say since which release that was
-      needed):</p>
-    <p>[1] <a class="moz-txt-link-freetext" href="https://cfw.ftcommunity.de/ftcommunity-TXT/en">https://cfw.ftcommunity.de/ftcommunity-TXT/en</a><br>
-      [2] <a class="moz-txt-link-freetext"
-href="https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#pyqt-v5-11">https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#pyqt-v5-11</a><br>
-      [3] <a class="moz-txt-link-freetext"
-href="https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-the-sip-module">https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-the-sip-module</a></p>
-    <blockquote type="cite" cite="mid:20231217230704.003200c7@windsurf"><span
-      style="white-space: pre-wrap">
-</span><span style="white-space: pre-wrap">
-</span>
-      <pre class="moz-quote-pre" wrap="">But, but, according to what you described above, it seems like
-python-pyqt5 needs python-pyqt5-sip, but here you have a
-python-pyqt5-sip -&gt; python-pyqt5 dependency.</pre>
-    </blockquote>
-    <blockquote type="cite" cite="mid:20231217230704.003200c7@windsurf">
-      <pre class="moz-quote-pre" wrap="">So with your patch applied, it's still possible to enable only
-python-pyqt5, so we would still have the failure you're mentioning in
-your commit log.
-
-Could you clarify?</pre>
-    </blockquote>
-    <p>Both can be compiled independently (when I wrote the patch, I
-      assumed that PyQt5.sip can only be compiled when PyQt5 is
-      available, but it really seems only to depend on the sip library).
-      During runtime, PyQt5 does not work without PyQt5.sip, but it
-      seems that PyQt5.sip can be used without PyQt5. That is also how
-      it is modeled in Debian 12.</p>
-    <p>So correctly it would be: <span style="white-space: pre-wrap">python-pyqt5 needs python-pyqt5-sip during runtime. I would model that with "</span><span
-      style="white-space: pre-wrap">select", not "depends on", or?</span></p>
-    <p></p>
-    <blockquote type="cite" cite="mid:20231217230704.003200c7@windsurf">
-      <pre class="moz-quote-pre" wrap="">Also, it would very, very good to add a runtime test case in
-support/testing/ for this, as such Python issues are only visible at
-runtime. I have added Julien Olivain in Cc, who can probably help with
-this, as he is our resident expert in writing support/testing tests :-)</pre>
-    </blockquote>
-    <p>Just python3 -c "import PyQt5" would probably be enough to
-      reproduce this error.<span style="white-space: pre-wrap">
-</span></p>
-    <p><span style="white-space: pre-wrap">I will push another patch with the dependency clarified and the other comments.</span></p>
-    <p><span style="white-space: pre-wrap">Is it possible that both patches get integrated into the 2023 lts branch?
-</span></p>
-    <p><span style="white-space: pre-wrap">Thanks,</span></p>
-    <p><span style="white-space: pre-wrap">Ralf
-</span></p>
-    <br>
-  </body>
-</html>
-
---------------sdekewnaVlUIo0dkQ6Pdqch2--
-
---===============7936397088694055920==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 0790dd7e0e..03c3ab9287 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.68
++BLUEZ5_UTILS_HEADERS_VERSION = 5.71
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/0001-configure-Check-ell-path.patch b/package/bluez5_utils/0001-configure-Check-ell-path.patch
+deleted file mode 100644
+index 3e5f7c6516..0000000000
+--- a/package/bluez5_utils/0001-configure-Check-ell-path.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 124187ef9abed60a7c40f751153e9c4516cd1f91 Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Sat, 1 Jul 2023 01:31:20 +0000
+-Subject: [PATCH] configure: Check ell path
+-
+-Use of AC_CHECK_FILE prevents cross compilation.
+-Instead use test to support cross compiling.
+-
+-Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
+-
+-Upstream: https://github.com/bluez/bluez/pull/546
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- configure.ac | 7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index eff297960..bc7edfcd3 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -298,9 +298,10 @@ if (test "${enable_external_ell}" = "yes"); then
+- 	AC_SUBST(ELL_LIBS)
+- fi
+- if (test "${enable_external_ell}" != "yes"); then
+--	AC_CHECK_FILE(${srcdir}/ell/ell.h, dummy=yes,
+--			AC_CHECK_FILE(${srcdir}/../ell/ell/ell.h, dummy=yes,
+--				AC_MSG_ERROR(ELL source is required or use --enable-external-ell)))
+-+	if (test ! -f ${srcdir}/ell/ell.h) &&
+-+			(test ! -f ${srcdir}/../ell/ell/ell.h); then
+-+				AC_MSG_ERROR(ELL source is required or use --enable-external-ell)
+-+	fi
+- fi
+- AM_CONDITIONAL(EXTERNAL_ELL, test "${enable_external_ell}" = "yes" ||
+- 				(test "${enable_btpclient}" != "yes" &&
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 45952e60f1..7d0fa980bc 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  fc505e6445cb579a55cacee6821fe70d633921522043d322b696de0a175ff933  bluez-5.68.tar.xz
++sha256  b828d418c93ced1f55b616fb5482cf01537440bfb34fbda1a564f3ece94735d8  bluez-5.71.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 82800c0430..5f8811d6bd 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,12 +5,10 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.68
++BLUEZ5_UTILS_VERSION = 5.71
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+-# 0001-configure-Check-ell-path.patch
+-BLUEZ5_UTILS_AUTORECONF = YES
+ BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
+ BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
+ BLUEZ5_UTILS_CPE_ID_VENDOR = bluez
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7936397088694055920==--
