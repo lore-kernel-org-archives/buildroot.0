@@ -4,84 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12FFAC35274
-	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 18:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33737C35274
+	for <buildroot@archiver.kernel.org>; Mon, 18 Dec 2023 18:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97D2960F26;
-	Mon, 18 Dec 2023 18:10:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97D2960F26
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC26360F2B;
+	Mon, 18 Dec 2023 18:31:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC26360F2B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7kIIf2Q6rt60; Mon, 18 Dec 2023 18:10:39 +0000 (UTC)
+	with ESMTP id ftFqpLfkR7cO; Mon, 18 Dec 2023 18:31:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3D1A60F2B;
-	Mon, 18 Dec 2023 18:10:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3D1A60F2B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 508201BF2C8
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:10:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEC2A60F31;
+	Mon, 18 Dec 2023 18:31:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEC2A60F31
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A2D61BF20B
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 247418141C
- for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:10:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 247418141C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EE3841685
+ for <buildroot@lists.busybox.net>; Mon, 18 Dec 2023 18:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EE3841685
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vG_NN7UVwntC for <buildroot@lists.busybox.net>;
- Mon, 18 Dec 2023 18:10:36 +0000 (UTC)
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A61238141F
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 18:10:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A61238141F
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-40c6a71e88cso44193415e9.0
- for <buildroot@buildroot.org>; Mon, 18 Dec 2023 10:10:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702923034; x=1703527834;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Tr5BoaIGiKwlllUgN5HINsbInvoqKvZURl7oGX22ZdA=;
- b=uYew9qr81Uthj/SaBL4aqsjFfefa3ZE4uUjTEF8t+L3mr6JKgj/dj3PI1dboMB97pa
- Gv1rvrETKvch0cUnUhL/+bSTp+Y3r1pzXAElYC0G/LgO8OkH71cJZj/quhSufsedREMF
- mzn44ijlHkcmA9oUwZ7ZE+XZcfmxl9OSe0/fI+mjtYHmF0QODTmPF/duD9kk3LzElXMq
- HBhy4qG/9hB8cqZ0sFHJ2qgakBA17GHy8rPGa/LCA7ANcE+FdxqHfeaXeJGzmYvW8hdn
- DhKkfn+z87AJFFaB2I/8MYaiYjaxh4UPRT4rmiKN7+WVTcrF8WV2YIcUPJBeXdw1xhUa
- mRtg==
-X-Gm-Message-State: AOJu0YwHkpF549W11JDGHcfIan3BtT3OblKHU6URNoYQPDS3NZ860d+y
- UcbvQACpMs0/8sZIYsa0CHNlVhs0WFpm0DFcg3YSMw==
-X-Google-Smtp-Source: AGHT+IE0QcNLklFbHfrxyqQbtfzBL848G7oc9IakNYXbADOLQcemtOXy43ASNHxhdBDcQrtSucHOj9Qb6UcGicOYpm4=
-X-Received: by 2002:a05:600c:4fd6:b0:40b:2bad:7f61 with SMTP id
- o22-20020a05600c4fd600b0040b2bad7f61mr9410004wmq.10.1702923033641; Mon, 18
- Dec 2023 10:10:33 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M73WWrLeoNdI for <buildroot@lists.busybox.net>;
+ Mon, 18 Dec 2023 18:31:50 +0000 (UTC)
+X-Greylist: delayed 569 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 18 Dec 2023 18:31:50 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BD2341523
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org
+ [IPv6:2001:67c:2050:0:465::202])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4BD2341523
+ for <buildroot@buildroot.org>; Mon, 18 Dec 2023 18:31:50 +0000 (UTC)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org
+ [IPv6:2001:67c:2050:b231:465::2])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Sv7TN5Wsgz9sbC;
+ Mon, 18 Dec 2023 19:22:16 +0100 (CET)
+Message-ID: <7f309df0-ae17-419b-8bca-c52d9ec48442@lindra.de>
+Date: Mon, 18 Dec 2023 19:22:14 +0100
 MIME-Version: 1.0
-References: <20231102184154.46185-1-adam.duskett@amarulasolutions.com>
- <20231102184154.46185-2-adam.duskett@amarulasolutions.com>
- <ZYCB3EqymtRdzOzd@landeda>
- <CAFSsvmpgYLmbpY0ppv1kWG-P7yyE7G5EJC9UHjo1=inmcZYEsQ@mail.gmail.com>
-In-Reply-To: <CAFSsvmpgYLmbpY0ppv1kWG-P7yyE7G5EJC9UHjo1=inmcZYEsQ@mail.gmail.com>
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Mon, 18 Dec 2023 11:10:22 -0700
-Message-ID: <CAHDQB6Pc-kEUputxXCrnK9pUuEbS1CP1U4AX-VqY83qmPj8Meg@mail.gmail.com>
-To: Adam Duskett <aduskett@gmail.com>
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20231212160112.94272-1-hypnotoad@lindra.de>
+ <20231212160112.94272-2-hypnotoad@lindra.de>
+ <20231217230704.003200c7@windsurf>
+From: Ralf Dragon <hypnotoad@lindra.de>
+In-Reply-To: <20231217230704.003200c7@windsurf>
+X-Rspamd-Queue-Id: 4Sv7TN5Wsgz9sbC
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1702923034; x=1703527834;
- darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Tr5BoaIGiKwlllUgN5HINsbInvoqKvZURl7oGX22ZdA=;
- b=XzqsoqcPxRGx+q/AFaEcMNkW8IptFyhSyjT/IIvHTmOb0nao11/ZtfTwZdF7+lX3V1
- x/KB8TC4otYJi1mlESvIvDlyeOj2Ucp95wEOQTa/haUVo/uU2WPDX9S7/gF3rUODhYEi
- isXSFkHbQgTTrenv/9PkRuFyTSO+uK+omtQaQ=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=XzqsoqcP
-Subject: Re: [Buildroot] [PATCH v2 2/2]
- support/testing/tests/package/test_postgresql.py: new test
+ d=lindra.de; s=MBO0001; t=1702923736;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ in-reply-to:in-reply-to:references:references;
+ bh=Z0y7IkHQsmaZTa5PguXWKfombRoYWKc7viD6prR2gi4=;
+ b=Ah97vZIrBV4TkC4iqt1h9Rm6czQ6wBerRHeH5enrfH/hjcNhq0w9al5Px5N2ZEtc9UITEv
+ Ep+yC9noaZ6Ms1OLaG6ghQKePhWUPYKRPTAH+N+fkJyX2PDvS4H3rr6oPAbORQKQIk2MiW
+ a8UR+QhcTd0JNbviPqoz5e5TVYGPUtufEv+GsgFzEwR7ptc1prEF0/xcH174FtK2cFNLAq
+ 3zRcrVR3IrI1foEOoy2TkVcLiO3S5/lMoUPEmm6+o+Lypz2y6kixy8CFwgiqwjDzjz9HRq
+ cbQZKapuDuyPBXl6vHaTmAlM+0PR9QLEkk7iQb94SGpc6SQP6cl/ije+nyA/ng==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=lindra.de header.i=@lindra.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=Ah97vZIr
+Subject: Re: [Buildroot] [PATCH 2/2] python-qt5: add PyQt5.sip module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,125 +81,164 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Julien Olivain <ju.o@free.fr>, gwenhael.goavec-merou@trabucayre.com,
+ yann.morin.1998@free.fr, asafka7@gmail.com, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============7936397088694055920=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBEZWMgMTgsIDIwMjMgYXQgMTA6NDHigK9BTSBBZGFtIER1c2tldHQgPGFkdXNrZXR0
-QGdtYWlsLmNvbT4gd3JvdGU6Cj4KPiBZYW5uOwo+Cj4gVGhhbmsgeW91IGZvciByZXZpZXdpbmcg
-dGhlIHRlc3QuCj4KPiBPbiBNb24sIERlYyAxOCwgMjAyMyBhdCAxMDozMeKAr0FNIFlhbm4gRS4g
-TU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPiA+Cj4gPiBBZGFtLCBBbGws
-Cj4gPgo+ID4gT24gMjAyMy0xMS0wMiAxMjo0MSAtMDYwMCwgQWRhbSBEdXNrZXR0IHNwYWtlIHRo
-dXNseToKPiA+ID4gUGVyZm9ybSBhIGJhc2ljIGNoZWNrIHRoYXQgcGVyZm9ybXMgdGhlIGZvbGxv
-d2luZzoKPiA+ID4gICAtIENoZWNrIGlmIC92YXIvbGliL3Bnc3FsL3Bvc3RtYXN0ZXIucGlkIGV4
-aXN0cy4KPiA+ID4gICAtIENoZWNrIGlmICdwc3FsIC1jIFNIT1cgc2VydmVyX3ZlcnNpb247JyBy
-ZXR1cm5zIHN1Y2Vzc2Z1bGx5Lgo+ID4KPiA+IFRoYW5rcyBmb3IgdGhpcyBuZXcgcnVudGltZSB0
-ZXN0IQo+ID4KPiA+ID4gTm90ZTogc3lzdGVtZCB0YWtlcyBxdWl0ZSBhIHdoaWxlIHRvIHN0YXJ0
-IHVwLCBzbyBjaGVjayB0aGUgb3V0cHV0IG9mCj4gPiA+ICAgICAgIGBzeXN0ZW1jdGwgaXMtYWN0
-aXZlIHBvc3RncmVzcWxgIHVudGlsIGl0IHNob3dzICJhY3RpdmUiIHdpdGggYSB0aW1lb3V0Cj4g
-PiA+ICAgICAgIG9mIDE1IHNlY29uZHMuCj4gPgo+ID4gSSB0aGluayB0aGF0IHdlIGFscmVhZHkg
-Y29uY2x1ZGVkIHRoYXQgdGVzdGluZyBpZiBhIHVuaXQgd2FzIGFjdGl2ZSBvcgo+ID4gbm90IHdh
-cyBub3QgcmVwcmVzZW50aW5nIHdoZXRoZXIgdGhlIHNlcnZpY2Ugd2FzIGFjdHVhbGx5IHJ1bm5p
-bmcuIEluCj4gPiB0aGUgZnVsdHRlciB0ZXN0IGNhc2UgZm9yIGV4YW1wbGUsIHRoZSB1bml0IHdh
-cyBhY3RpdmUsIGJ1dCB0aGUgZmx1dHRlcgo+ID4gYXBwIHdhcyBqdXN0IGtlZXBpbmcgY3Jhc2hp
-bmcgYWdhaW4gYW5kIGFnYWluLCBzbyB0aGUgdGVzdCB3c2EgZmFpbGluZwo+ID4gdG8gZGV0ZWN0
-IGZhaWx1cmUuLi4KPiA+Cj4gdGVzdF9mbHV0dGVyLnB5Ogo+IGNtZCA9ICJzeXN0ZW1jdGwgaXMt
-YWN0aXZlIGZsdXR0ZXItZ2FsbGVyeSIKPiBJIGFtIGZvbGxvd2luZyB3aGF0IGlzIGluIHRlc3Rf
-Zmx1dHRlci5weS4uLgpUbyBhZGQgdG8gdGhpcywgcnVubmluZyBhIHF1ZXJ5IG9uIHBnc3FsIHdv
-dWxkIGZhaWwgaWYgcGdzcWwgaXNuJ3QgcnVubmluZywKc28gdGhpcyBpcyBwZXJmZWN0bHkgc2Fm
-ZS4KCj4KPiA+Cj4gPiBTbywgSSBkb24ndCB0aGluayB1c2luZ3QgaXMtYWN0aXZlIGlzIGEgZ29v
-ZCB3YXkgdG8gdGVzdCB3aGV0aGVyIGEKPiA+IHNlcnZpY2UgaXMgYWN0dWFsbHkgcnVubmluZy4K
-PiA+Cj4gPiBGdXJ0aGVybW9yZSwgdGhlIHVuaXQgbWF5IGJlIGFjdGl2ZSwgYnV0IHRoZSBzZXJ2
-aWNlIG1pZ2h0IG5vdCB5ZXQgYmUKPiA+IHJlYWR5IHRvIHNlcnZlLCBzbyBhZ2FpbiBJIGRvbjt0
-IHRoaW5rIGl0IGlzIHN0aWxsIHZhbGlkIHRvIHJlcGx5IG9uIGl0Lgo+ID4KPiA+ID4gU2lnbmVk
-LW9mZi1ieTogQWRhbSBEdXNrZXR0IDxhZGFtLmR1c2tldHRAYW1hcnVsYXNvbHV0aW9ucy5jb20+
-Cj4gPiA+IC0tLQo+ID4gPiAgIC0gRHJvcCBCUjJfUEVSX1BBQ0tBR0VfRElSRUNUT1JJRVMgKFRo
-b21hcykKPiA+Cj4gV2UgbmVlZCBhIGNvbnNlbnN1cyBvbiB0aGlzLiBUaGlzIHNob3VsZG4ndCBo
-YXBwZW4uIEVpdGhlciBpdCBpcyBPSyB0bwo+IGVuYWJsZSBQUEQgaW4gdGVzdHMgb3IgaXQgaXNu
-J3QuCj4KPiA+IEFjdHVhbGx5LCBJIGRpc2FncmVlIHdpdGggVGhvbWFzIGhlcmU6IHdlIGFkZGVk
-IHN1cHBvcnQgZm9yIFBQRCBpbiB0aGUKPiA+IGluZnJhLCBzbyB0aGF0IGlmIFBQRCBpcyBlbmFi
-bGVkIGluIGEgdGVzdCwgdGhlbiBUTFBCIGlzIGRvbmUgdG8gc3BlZWQKPiA+IHVwIHRoZSB0ZXN0
-Lgo+ID4KPiA+IFstLVNOSVAtLV0KPiA+ID4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90
-ZXN0cy9wYWNrYWdlL3Rlc3RfcG9zdGdyZXNxbC5weSBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9w
-YWNrYWdlL3Rlc3RfcG9zdGdyZXNxbC5weQo+ID4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4g
-PiBpbmRleCAwMDAwMDAwMDAwLi5mYTY5MmJhYjdiCj4gPiA+IC0tLSAvZGV2L251bGwKPiA+ID4g
-KysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9wb3N0Z3Jlc3FsLnB5Cj4g
-PiA+IEBAIC0wLDAgKzEsNzMgQEAKPiA+ID4gK2ltcG9ydCBvcwo+ID4gPiAraW1wb3J0IHRpbWUK
-PiA+ID4gK2ltcG9ydCBpbmZyYS5iYXNldGVzdAo+ID4gPiArCj4gPiA+ICsKPiA+ID4gK2NsYXNz
-IFRlc3RQb3N0Z3JlU1FMSW5pdFN5c1YoaW5mcmEuYmFzZXRlc3QuQlJUZXN0KToKPiA+ID4gKyAg
-ICBjb25maWcgPSBpbmZyYS5iYXNldGVzdC5CQVNJQ19UT09MQ0hBSU5fQ09ORklHICsgXAo+ID4g
-PiArICAgICAgICAiIiIKPiA+ID4gKyAgICAgICAgQlIyX1BBQ0tBR0VfUE9TVEdSRVNRTD15Cj4g
-PiA+ICsgICAgICAgIEJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+ID4gPiArICAgICAgICBCUjJf
-VEFSR0VUX1JPT1RGU19FWFQyXzQ9eQo+ID4gPiArICAgICAgICBCUjJfVEFSR0VUX1JPT1RGU19F
-WFQyX1NJWkU9IjEyOE0iCj4gPiA+ICsgICAgICAgICMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlz
-IG5vdCBzZXQKPiA+ID4gKyAgICAgICAgIiIiCj4gPiA+ICsKPiA+ID4gKyAgICBkZWYgdGVzdF9y
-dW4oc2VsZik6Cj4gPiA+ICsgICAgICAgIGltZyA9IG9zLnBhdGguam9pbihzZWxmLmJ1aWxkZGly
-LCAiaW1hZ2VzIiwgInJvb3Rmcy5leHQyIikKPiA+ID4gKyAgICAgICAgc2VsZi5lbXVsYXRvci5i
-b290KAo+ID4gPiArICAgICAgICAgICAgYXJjaD0iYXJtdjUiLAo+ID4gPiArICAgICAgICAgICAg
-a2VybmVsPSJidWlsdGluIiwKPiA+ID4gKyAgICAgICAgICAgIG9wdGlvbnM9WyItZHJpdmUiLCBm
-ImZpbGU9e2ltZ30saWY9c2NzaSxmb3JtYXQ9cmF3Il0sCj4gPiA+ICsgICAgICAgICAgICBrZXJu
-ZWxfY21kbGluZT1bInJvb3Q9L2Rldi9zZGEiXSkKPiA+ID4gKyAgICAgICAgc2VsZi5lbXVsYXRv
-ci5sb2dpbigpCj4gPiA+ICsKPiA+ID4gKyAgICAgICAgIyBDaGVjayBpZiB0aGUgRGFlbW9uIGlz
-IHJ1bm5pbmcKPiA+ID4gKyAgICAgICAgc2VsZi5hc3NlcnRSdW5PaygibHMgL3Zhci9saWIvcGdz
-cWwvcG9zdG1hc3Rlci5waWQiKQo+ID4gPiArICAgICAgICAjIENoZWNrIGlmIHdlIGNhbiBjb25u
-ZWN0IHRvIHRoZSBkYXRhYmFzZS4KPiA+ID4gKyAgICAgICAgc2VsZi5hc3NlcnRSdW5Paygic3Ug
-cG9zdGdyZXMgLWMgXCJwc3FsIC1jICdTSE9XIHNlcnZlcl92ZXJzaW9uOydcIiIpCj4gPgo+ID4g
-SSBkb24ndCB1bmRlcnN0YW5kIHdoeSB3ZSBuZWVkIHRvIHRlc3QgZm9yIHRoZSBQSUQgZmlsZSBi
-ZWZvcmUgd2UKPiA+IGNvbm5lY3QgdG8gdGhlIGRhZW1vbi4gSWYgdGhlIGRhZW1vbiBpcyBub3Qg
-cnVubmluZywgd2Ugd29uJ3QgYmUgYWJsZSB0bwo+ID4gY29ubmVjdCB0byBpdCwgc28gdGhlIHRl
-c3Qgd2lsbCBmYWlsLCBzbyB0aGUgUElEIGZpbGUgdGVzdCBpcyByZWR1bmRhbnQsCj4gPiBubz8K
-PiBJIGFtIGJlaW5nIHRob3JvdWdoLiBJIGNhbiByZW1vdmUgdGhlIGNoZWNrIGZvciB0aGUgUElE
-IGZpbGUgaWYgeW91IHdhbnQuCj4gPgo+ID4gUmVnYXJkcywKPiA+IFlhbm4gRS4gTU9SSU4uCj4g
-Pgo+ID4gPiArCj4gPiA+ICtjbGFzcyBUZXN0UG9zdGdyZVNRTEluaXRTeXN0ZW1kKGluZnJhLmJh
-c2V0ZXN0LkJSVGVzdCk6Cj4gPiA+ICsgICAgIyBUYWtlbiBmcm9tIHRlc3Rfc3lzdGVtZC5weQo+
-ID4gPiArICAgIGNvbmZpZyA9ICIiIgo+ID4gPiArICAgICAgICBCUjJfYXJtPXkKPiA+ID4gKyAg
-ICAgICAgQlIyX2NvcnRleF9hOT15Cj4gPiA+ICsgICAgICAgIEJSMl9BUk1fRU5BQkxFX1ZGUD15
-Cj4gPiA+ICsgICAgICAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQo+ID4gPiArICAgICAgICBC
-UjJfVE9PTENIQUlOX0VYVEVSTkFMX0JPT1RMSU49eQo+ID4gPiArICAgICAgICBCUjJfSU5JVF9T
-WVNURU1EPXkKPiA+ID4gKyAgICAgICAgQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0
-eUFNQTAiCj4gPiA+ICsgICAgICAgIEJSMl9QQUNLQUdFX1BPU1RHUkVTUUw9eQo+ID4gPiArICAg
-ICAgICBCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKPiA+ID4gKyAgICAgICAgQlIyX1RBUkdFVF9S
-T09URlNfRVhUMl80PXkKPiA+ID4gKyAgICAgICAgQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpF
-PSIxMjhNIgo+ID4gPiArICAgICAgICAjIEJSMl9UQVJHRVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0
-Cj4gPiA+ICsgICAgICAgICIiIgo+ID4gPiArCj4gPiA+ICsgICAgZGVmIHRlc3RfcnVuKHNlbGYp
-Ogo+ID4gPiArICAgICAgICBpbWcgPSBvcy5wYXRoLmpvaW4oc2VsZi5idWlsZGRpciwgImltYWdl
-cyIsICJyb290ZnMuZXh0MiIpCj4gPiA+ICsgICAgICAgIHNlbGYuZW11bGF0b3IuYm9vdCgKPiA+
-ID4gKyAgICAgICAgICAgIGFyY2g9ImFybXY3IiwKPiA+ID4gKyAgICAgICAgICAgIGtlcm5lbD0i
-YnVpbHRpbiIsCj4gPiA+ICsgICAgICAgICAgICBvcHRpb25zPVsiLWRyaXZlIiwgZiJmaWxlPXtp
-bWd9LGlmPXNkLGZvcm1hdD1yYXciXSwKPiA+ID4gKyAgICAgICAgICAgIGtlcm5lbF9jbWRsaW5l
-PVsicm9vdD0vZGV2L21tY2JsazAiXSkKPiA+ID4gKyAgICAgICAgc2VsZi5lbXVsYXRvci5sb2dp
-bigpCj4gPiA+ICsKPiA+ID4gKyAgICAgICAgIyBJdCBtYXkgdGFrZSBzb21lIHRpbWUgZm9yIFBv
-c3RncmVTUUwgdG8gZmluaXNoIHN0YXJ0dXAuIEdpdmUgaXQgYXQgbGVhc3QgMTUgc2Vjb25kcy4K
-PiA+ID4gKyAgICAgICAgaXNfYWN0aXZlID0gRmFsc2UKPiA+ID4gKyAgICAgICAgZm9yIGkgaW4g
-cmFuZ2UoMTUpOgo+ID4gPiArICAgICAgICAgICAgb3V0cHV0LCBfID0gc2VsZi5lbXVsYXRvci5y
-dW4oInN5c3RlbWN0bCBpcy1hY3RpdmUgcG9zdGdyZXNxbCIpCj4gPiA+ICsgICAgICAgICAgICBp
-ZiBvdXRwdXRbMF0gPT0gImFjdGl2ZSI6Cj4gPiA+ICsgICAgICAgICAgICAgICAgaXNfYWN0aXZl
-ID0gVHJ1ZQo+ID4gPiArICAgICAgICAgICAgICAgIGJyZWFrCj4gPiA+ICsgICAgICAgICAgICB0
-aW1lLnNsZWVwKDEpCj4gPiA+ICsgICAgICAgIGlmIG5vdCBpc19hY3RpdmU6Cj4gPiA+ICsgICAg
-ICAgICAgICBzZWxmLmZhaWwoInBvc3RncmVzcWwgZmFpbGVkIHRvIGFjdGl2YXRlISIpCj4gPiA+
-ICsKPiA+ID4gKyAgICAgICAgIyBDaGVjayBpZiB0aGUgRGFlbW9uIGlzIHJ1bm5pbmcKPiA+ID4g
-KyAgICAgICAgc2VsZi5hc3NlcnRSdW5PaygibHMgL3Zhci9saWIvcGdzcWwvcG9zdG1hc3Rlci5w
-aWQiKQo+ID4gPiArCj4gPiA+ICsgICAgICAgICMgQ2hlY2sgaWYgd2UgY2FuIGNvbm5lY3QgdG8g
-dGhlIGRhdGFiYXNlLgo+ID4gPiArICAgICAgICBzZWxmLmFzc2VydFJ1bk9rKCJjZCAvICYmIHN1
-IHBvc3RncmVzIC1jIFwicHNxbCAtYyAnU0hPVyBzZXJ2ZXJfdmVyc2lvbjsnXCIiKQo+ID4gPiAt
-LQo+ID4gPiAyLjQxLjAKPiA+ID4KPiA+ID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KPiA+ID4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+ID4gPiBidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwo+ID4gPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiA+Cj4gPiAtLQo+ID4gLi0tLS0tLS0tLS0tLS0tLS0t
-Li0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0t
-LS0tLS4KPiA+IHwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFT
-Q0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cj4gPiB8ICszMyA2NjIgMzc2IDA1NiB8
-IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAg
-ICAgfAo+ID4gfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdB
-SU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKPiA+IHwgaHR0cDovL3ltb3Jpbi5pcy1h
-LWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3ku
-ICB8Cj4gPiAnLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0t
-LS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwo+ID4gX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiA+
-IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+This is a multi-part message in MIME format.
+--===============7936397088694055920==
+Content-Type: multipart/alternative;
+ boundary="------------sdekewnaVlUIo0dkQ6Pdqch2"
+Content-Language: en-US
+
+This is a multi-part message in MIME format.
+--------------sdekewnaVlUIo0dkQ6Pdqch2
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hello Thomas,
+
+> So it means that python-pyqt5 requires this new python-pyqt5-sip
+> package? How come has python-pyqt5 ever worked?
+
+It worked for our community firmware [1] in a buildroot release from 1-2 
+years ago. When we switched to the 2023 release, we had problems, but I 
+could not imagine that it was a problem for everyone. I think that 5.11 
+changed the location of the sip module to PyQt5.sip [2] and required 
+building that in a new module (the build instructions [3] do not say 
+since which release that was needed):
+
+[1] https://cfw.ftcommunity.de/ftcommunity-TXT/en
+[2] 
+https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#pyqt-v5-11
+[3] 
+https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-the-sip-module
+
+> But, but, according to what you described above, it seems like
+> python-pyqt5 needs python-pyqt5-sip, but here you have a
+> python-pyqt5-sip -> python-pyqt5 dependency.
+> So with your patch applied, it's still possible to enable only
+> python-pyqt5, so we would still have the failure you're mentioning in
+> your commit log.
+>
+> Could you clarify?
+
+Both can be compiled independently (when I wrote the patch, I assumed 
+that PyQt5.sip can only be compiled when PyQt5 is available, but it 
+really seems only to depend on the sip library). During runtime, PyQt5 
+does not work without PyQt5.sip, but it seems that PyQt5.sip can be used 
+without PyQt5. That is also how it is modeled in Debian 12.
+
+So correctly it would be: python-pyqt5 needs python-pyqt5-sip during 
+runtime. I would model that with "select", not "depends on", or?
+
+> Also, it would very, very good to add a runtime test case in
+> support/testing/ for this, as such Python issues are only visible at
+> runtime. I have added Julien Olivain in Cc, who can probably help with
+> this, as he is our resident expert in writing support/testing tests :-)
+
+Just python3 -c "import PyQt5" would probably be enough to reproduce 
+this error.
+
+I will push another patch with the dependency clarified and the other 
+comments.
+
+Is it possible that both patches get integrated into the 2023 lts branch?
+
+Thanks,
+
+Ralf
+
+
+--------------sdekewnaVlUIo0dkQ6Pdqch2
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p> </p>
+    <p>Hello Thomas,<br>
+    </p>
+    <span style="white-space: pre-wrap">
+</span>
+    <blockquote type="cite" cite="mid:20231217230704.003200c7@windsurf"><span
+      style="white-space: pre-wrap">
+</span>
+      <pre class="moz-quote-pre" wrap="">So it means that python-pyqt5 requires this new python-pyqt5-sip
+package? How come has python-pyqt5 ever worked?</pre>
+    </blockquote>
+    <p>It worked for our community firmware [1] in a buildroot release
+      from 1-2 years ago. When we switched to the 2023 release, we had
+      problems, but I could not imagine that it was a problem for
+      everyone. I think that 5.11 changed the location of the sip module
+      to PyQt5.sip [2] and required building that in a new module (the
+      build instructions [3] do not say since which release that was
+      needed):</p>
+    <p>[1] <a class="moz-txt-link-freetext" href="https://cfw.ftcommunity.de/ftcommunity-TXT/en">https://cfw.ftcommunity.de/ftcommunity-TXT/en</a><br>
+      [2] <a class="moz-txt-link-freetext"
+href="https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#pyqt-v5-11">https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#pyqt-v5-11</a><br>
+      [3] <a class="moz-txt-link-freetext"
+href="https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-the-sip-module">https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-the-sip-module</a></p>
+    <blockquote type="cite" cite="mid:20231217230704.003200c7@windsurf"><span
+      style="white-space: pre-wrap">
+</span><span style="white-space: pre-wrap">
+</span>
+      <pre class="moz-quote-pre" wrap="">But, but, according to what you described above, it seems like
+python-pyqt5 needs python-pyqt5-sip, but here you have a
+python-pyqt5-sip -&gt; python-pyqt5 dependency.</pre>
+    </blockquote>
+    <blockquote type="cite" cite="mid:20231217230704.003200c7@windsurf">
+      <pre class="moz-quote-pre" wrap="">So with your patch applied, it's still possible to enable only
+python-pyqt5, so we would still have the failure you're mentioning in
+your commit log.
+
+Could you clarify?</pre>
+    </blockquote>
+    <p>Both can be compiled independently (when I wrote the patch, I
+      assumed that PyQt5.sip can only be compiled when PyQt5 is
+      available, but it really seems only to depend on the sip library).
+      During runtime, PyQt5 does not work without PyQt5.sip, but it
+      seems that PyQt5.sip can be used without PyQt5. That is also how
+      it is modeled in Debian 12.</p>
+    <p>So correctly it would be: <span style="white-space: pre-wrap">python-pyqt5 needs python-pyqt5-sip during runtime. I would model that with "</span><span
+      style="white-space: pre-wrap">select", not "depends on", or?</span></p>
+    <p></p>
+    <blockquote type="cite" cite="mid:20231217230704.003200c7@windsurf">
+      <pre class="moz-quote-pre" wrap="">Also, it would very, very good to add a runtime test case in
+support/testing/ for this, as such Python issues are only visible at
+runtime. I have added Julien Olivain in Cc, who can probably help with
+this, as he is our resident expert in writing support/testing tests :-)</pre>
+    </blockquote>
+    <p>Just python3 -c "import PyQt5" would probably be enough to
+      reproduce this error.<span style="white-space: pre-wrap">
+</span></p>
+    <p><span style="white-space: pre-wrap">I will push another patch with the dependency clarified and the other comments.</span></p>
+    <p><span style="white-space: pre-wrap">Is it possible that both patches get integrated into the 2023 lts branch?
+</span></p>
+    <p><span style="white-space: pre-wrap">Thanks,</span></p>
+    <p><span style="white-space: pre-wrap">Ralf
+</span></p>
+    <br>
+  </body>
+</html>
+
+--------------sdekewnaVlUIo0dkQ6Pdqch2--
+
+--===============7936397088694055920==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7936397088694055920==--
