@@ -4,66 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FA74C41535
-	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 19:10:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58577C41535
+	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 19:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2DE760BD1;
-	Tue, 19 Dec 2023 19:10:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2DE760BD1
+	by smtp3.osuosl.org (Postfix) with ESMTP id F31E660F46;
+	Tue, 19 Dec 2023 19:36:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F31E660F46
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rgAQ9F-H2CG0; Tue, 19 Dec 2023 19:10:35 +0000 (UTC)
+	with ESMTP id keoWVNyLAXFs; Tue, 19 Dec 2023 19:36:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B98960BDE;
-	Tue, 19 Dec 2023 19:10:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B98960BDE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4105160F65;
+	Tue, 19 Dec 2023 19:36:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4105160F65
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D50981BF5B4
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 19:10:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CD4A31BF3BC
+ for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 19:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACD6541DA8
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 19:10:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACD6541DA8
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2D9A41E47
+ for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 19:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2D9A41E47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5ziVunCQE3q2 for <buildroot@lists.busybox.net>;
- Tue, 19 Dec 2023 19:10:30 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4CE6240915
- for <buildroot@buildroot.org>; Tue, 19 Dec 2023 19:10:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CE6240915
-Received: from fli4l.lan.fli4l (p5b3a0598.dip0.t-ipconnect.de [91.58.5.152])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ED327A4C0296;
- Tue, 19 Dec 2023 20:10:26 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59982)
- by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
- (envelope-from <bernd@kuhls.net>) id 1rFfU2-0001wa-1D;
- Tue, 19 Dec 2023 20:10:26 +0100
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Tue, 19 Dec 2023 20:10:26 +0100
-Message-Id: <20231219191026.47158-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id 6pwe9TWWvHT8 for <buildroot@lists.busybox.net>;
+ Tue, 19 Dec 2023 19:36:49 +0000 (UTC)
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org
+ [IPv6:2001:67c:2050:0:465::202])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 09E0141E3E
+ for <buildroot@buildroot.org>; Tue, 19 Dec 2023 19:36:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09E0141E3E
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Svn4r24jmz9spt;
+ Tue, 19 Dec 2023 20:36:44 +0100 (CET)
+Message-ID: <b8cc9bad-dc9f-4e61-ba0f-e9511ba00b90@lindra.de>
+Date: Tue, 19 Dec 2023 20:36:42 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+Content-Language: en-US
+From: Ralf Dragon <hypnotoad@lindra.de>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20231212160112.94272-1-hypnotoad@lindra.de>
+ <20231212160112.94272-2-hypnotoad@lindra.de>
+ <20231217230704.003200c7@windsurf>
+ <7f309df0-ae17-419b-8bca-c52d9ec48442@lindra.de>
+ <20231218205156.619643b1@windsurf>
+ <f329f198-4cb1-4e61-8e47-0653cab03893@lindra.de>
+In-Reply-To: <f329f198-4cb1-4e61-8e47-0653cab03893@lindra.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202312101026; t=1703013026;
- bh=F4yzqzcFWUQhLAqtHh7pkZKkcWFiEoMIVzFQIjf2jrI=;
- h=From:To:Cc:Subject:Date:From;
- b=Sb4pmQEnljUd5tMeDRv6/vkXsC7isq11Ry6qh6VtbCKesKL7TdGANm8YB1fdtb3Kq
- TgmvbkNDwpHRCcEMwXJAjQGyDE6pCuNN6iODwIXF2C7ta21GtvJgTtzX/QYl2P6WtS
- a3cCg4oEf6Lx5ISlEUS7b03vdYcytyXjR0S/hRPxyxpS0JHriYS1L7YLsPMm1ABXRb
- c15qUkliANt8us61BWCNElIC/trdCa3LM40oSp47iAl/xhsF0P+dbQ8ZhMPqXtfCVF
- gw3Jr4bH2p49qlaMblLFW35PgyRq5SpJUskmo5NAvHRJfnedEAnd5I3KcgKyvlmVfy
- eyrXbIVCIavWQ==
+ d=lindra.de; s=MBO0001; t=1703014604;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=khk+RmM/Me08rjLxafZgOUxJ/QNfQYkxVvvqlN+KoFQ=;
+ b=vJIRoBGDQlfK8kS84z29Xdxauk0LTsqlUpDsRbloYN1qTOWbx3Wagj5/NhkaV+3lSXLmH9
+ e6cr2gjQTCJk1GOD/Q+daXDbgHNhGbWOfRTrxxQgE19tbMMk33pAT1ybFYK1x0dWGDeB9y
+ BOwx7aPrulri8dcb/f7qRbTntzfmaSMf0qR/FZav479T7bOZJ8AylCqf+lLLU/4wZydLyr
+ 3Ph8gJZ4A6nnckIf3Mc3t//LKvWQoDikrwBLN5IIa8HfINNfiSW+h8RufCAEQZTIHDUKY/
+ TGcB8fvHgbNNE6dYY+3BQTJoaCJCKTfwB33GP2mHDP/IcsR9IMwPHOPHauQBIA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=Sb4pmQEn
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 23.3.1
+ dkim=pass (2048-bit key) header.d=lindra.de header.i=@lindra.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=vJIRoBGD
+Subject: Re: [Buildroot] [PATCH 2/2] python-qt5: add PyQt5.sip module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,61 +81,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Julien Olivain <ju.o@free.fr>, gwenhael.goavec-merou@trabucayre.com,
+ yann.morin.1998@free.fr, asafka7@gmail.com, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 5 +++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 3bc12ca86e..29a6633132 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 23.2.1
-+MESA3D_HEADERS_VERSION = 23.3.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 0f4ca05831..41835de461 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,4 +1,5 @@
--# From https://gitlab.freedesktop.org/mesa/mesa/-/blob/23.2/docs/relnotes/23.2.1.rst
--sha256  64de0616fc2d801f929ab1ac2a4f16b3e2783c4309a724c8a259b20df8bbc1cc  mesa-23.2.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-dev/2023-December/226085.html
-+sha256  6e48126d70fdb3f20ffeb246ca0c2e41ffdc835f0663a03d4526b8bf5db41de6  mesa-23.3.1.tar.xz
-+sha512  0861fb5083e37439ad8cc0a0d8372a7c84d8665ea298dc784e2dd893162e20ae072f5ef0b860be88ecf74bc123714acbc1dec312e139b892ff40ef1887c5f4a5  mesa-23.3.1.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 6d92eb56f3..993bb90a87 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 23.2.1
-+MESA3D_VERSION = 23.3.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.39.2
+Hi Thomas,
 
+ > Thanks for the additional research. However, we need a bit better than
+ > "I think". Indeed, we need to understand for sure since when things got
+ > broken, so that we understand how this fix should be backported.
+
+PyQt 5.13 did not mention this module yet in their installation 
+instructions [1], but for the sake of backporting it is apparently not 
+needed to know when the incompatibility happened:
+
+Not ok are: 2023.02.8, 2023.02.7 and 2023.02.3 (PyQt 5.15)
+Ok is: 2021.11.3  (PyQt 5.7)
+
+In between these, the only commit touching PyQt's hash is b36ce7e which 
+does this PyQt upgrade in one step. So all LTS branches which have this 
+commit are probably affected. (For completeness: 51c22b4ba905f8 and 
+7e346f494c1507648f6 also touch the directory but they look both less 
+suspicious.)
+
+Unfortunately I don't have the setup to build and test these branches in 
+an automated way. Maybe the author of the PyQt5 upgrade could clarify 
+whether he used this PyQt5 in practice.
+
+Best,
+Ralf
+
+
+[1] 
+https://web.archive.org/web/20190717063706/https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-the-sip-module
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
