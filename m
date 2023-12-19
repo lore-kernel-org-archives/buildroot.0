@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33760C41535
-	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 12:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F7AEC41535
+	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 12:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53C7F43591;
-	Tue, 19 Dec 2023 12:15:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53C7F43591
+	by smtp2.osuosl.org (Postfix) with ESMTP id D68E343598;
+	Tue, 19 Dec 2023 12:15:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D68E343598
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ATI1JIkW4kNV; Tue, 19 Dec 2023 12:15:34 +0000 (UTC)
+	with ESMTP id LplgfuAww3Fa; Tue, 19 Dec 2023 12:15:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 493F54358F;
-	Tue, 19 Dec 2023 12:15:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 493F54358F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D2EE81BF360
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E28C54359A;
+	Tue, 19 Dec 2023 12:15:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E28C54359A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D53FC1BF360
+ for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4EFD43579
+ by smtp3.osuosl.org (Postfix) with ESMTP id B9369605EA
  for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4EFD43579
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9369605EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xqVRiNHQy29s for <buildroot@lists.busybox.net>;
- Tue, 19 Dec 2023 12:15:17 +0000 (UTC)
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5D62243571
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IzwhQ8mrBrez for <buildroot@lists.busybox.net>;
+ Tue, 19 Dec 2023 12:15:18 +0000 (UTC)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D105860E7D
  for <buildroot@buildroot.org>; Tue, 19 Dec 2023 12:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D62243571
-Received: by mail-ed1-x52a.google.com with SMTP id
- 4fb4d7f45d1cf-5534abbc637so2922352a12.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D105860E7D
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-553a45208ffso607865a12.3
  for <buildroot@buildroot.org>; Tue, 19 Dec 2023 04:15:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702988115; x=1703592915;
+ d=1e100.net; s=20230601; t=1702988116; x=1703592916;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=PWrPjI2BPMcGGbu2JP9aXXloJjjUpLGZNgiinpGXiqE=;
- b=iydOcAvKPEuxh7nt8/3CrwuY/1bfMSZEKLSEdTmMTmz0jiEVVmSOEkYDHOsH8BC9v1
- fobIDVoAR5TjB6Y6NEVw94pUXv6MmI+3RJILQ32AHqkb4KxlxpzoikLVH7DYWo/K7Paf
- LoAnqaOZ1ciNmPeod9S7+ygszXZoS8B7EGdbQZ+fhbOqw7XRayJpgJ9SsYSZFqywOLRS
- r2XFScNxZDgf8V1lEI+IsIhtIYLz+CKOzjWRmmVhB4qwPk9oLWb5zgEN87SpENZBmUHQ
- Au4KbUgYG9FQ/hcH0JiG7h8CF6I9NuFf6O2YyuLUR5vjpiaRYUShqPKDyhK0ImClPVEa
- 3Z6g==
-X-Gm-Message-State: AOJu0YxApShFn4n/U3TMdbeEhSLi4B3zSNRX8d2UMfwnEeE99fBzLMnh
- m9k99b9E584SzuY3gXzU4hvCOJGGZ2+K30C1BD8=
-X-Google-Smtp-Source: AGHT+IEcj9e0h2T3jsDsQDLRCmAb3MZkHk6ke9VGbamgNbliQK1yOM3yd95MlPBFn2nQt+bPt2XlRA==
-X-Received: by 2002:a50:9992:0:b0:553:97fd:c42e with SMTP id
- m18-20020a509992000000b0055397fdc42emr361146edb.31.1702988115256; 
+ bh=eM8Xq7o4z3MnrPjoX3xkAjTPXZHrEU9LYISPjM8m3zk=;
+ b=FkM00Tz81rj+mmRgwyzhI1K/0X0dQpoLMNjwpmBTfF3L2dBpdRYmZkjRUMLfJXKLUW
+ H2Xo1HJIsDwiBZtUEwPe6/wKcAVvSvTsoZjUvdLlcYUuQduGPdoR5BIPlpETW+cibmzz
+ 8G7TnD/XKcvaIxryYRYntKMJrz02WVQ4VCo0lHkrxj+JyGna0e1noWSRQ5HnTy8vqNfN
+ jIQQEiR+LlQkZVtZaw5DJJocwqJpMqXw4NVTQb+fFgd6azz59kgqImRjYWYQqPS2PHN+
+ Y33ht/OaMe8sNwPklPhtB45pFQu60UHRx7y2lQY8RWKQ49Ak4kCFDFyCL79GTbZJJfss
+ 1Awg==
+X-Gm-Message-State: AOJu0YyvfkXtHWIDVlD+qnNWsQ2RHEj5tVfBU4bCgK5S9RsAtIh25UWc
+ uxWDEB9kgAORw/Ah2mLg0nWchS4xQ0eQlrPmuvU=
+X-Google-Smtp-Source: AGHT+IGPbiBWKUyeCbc44Mfu7ePNphLFRTagbj+3a6s2nEnppDShHLxa6Hg2kEe1DOqYaDQ45t8tdQ==
+X-Received: by 2002:a50:c102:0:b0:553:81d3:e025 with SMTP id
+ l2-20020a50c102000000b0055381d3e025mr416709edf.136.1702988115904; 
  Tue, 19 Dec 2023 04:15:15 -0800 (PST)
 Received: from marleenlaptop.. (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- bq18-20020a056402215200b0054db440489fsm11371363edb.60.2023.12.19.04.15.14
+ bq18-20020a056402215200b0054db440489fsm11371363edb.60.2023.12.19.04.15.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Dec 2023 04:15:14 -0800 (PST)
+ Tue, 19 Dec 2023 04:15:15 -0800 (PST)
 X-Google-Original-From: marleen.vos@mind.be
 To: buildroot@buildroot.org
-Date: Tue, 19 Dec 2023 13:15:02 +0100
-Message-Id: <20231219121508.1695768-2-marleen.vos@mind.be>
+Date: Tue, 19 Dec 2023 13:15:03 +0100
+Message-Id: <20231219121508.1695768-3-marleen.vos@mind.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231219121508.1695768-1-marleen.vos@mind.be>
 References: <20231219121508.1695768-1-marleen.vos@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=essensium.com; s=google; t=1702988115; x=1703592915; darn=buildroot.org;
+ d=essensium.com; s=google; t=1702988116; x=1703592916; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=PWrPjI2BPMcGGbu2JP9aXXloJjjUpLGZNgiinpGXiqE=;
- b=cf+Jexdg5SHRtIynkU93y3E6Puv9zF0ThevcAFJE4rIfsGQH9xm5q4mjut8TgT8LUb
- xgWw3skZ0axeKdkX/nnKJZ7toMsDMbkXlTpjJPKRe6Us4oR2YetludT6uAXJ2l/zwiSN
- TstItraV13Wi5pTZ/ujin/lPOCxvltbMUqYCljSCNGzy4I8pFBWdT550jp1y+JLIyU5m
- oON2+KtXXzgRtOQC9RvXlzdmaHGTEc8oJdvAhW+qZXPsKOfhpzlWy2TVNBaMy6nkqM5y
- Talt4NxH7akE9n6s7coUkcfbKbD5xGWM990RwkeKqWKeHeB/UV2Z1zITUf/RCTPI/LLT
- QN3A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=eM8Xq7o4z3MnrPjoX3xkAjTPXZHrEU9LYISPjM8m3zk=;
+ b=IJh6jKQCogVbmOlwu9VCQWQcaxf3Hixg5coD3MNPKiePTvOKfK1+mtm4E7viSrfKA1
+ NuwDTYm3J/gLcCOUGA0zM16d/lwVyklR0IYwbHUkRoO8aTBVAN2wuwaESCDyTlEvVa2V
+ xDiJbzDOWzqjZ+VyuvUUVz3z+8TeR9AOy9akTK46b+kVvV+wDUdYVR9KA5sSKkNwcDtX
+ vn3QSTYCHUAj/8bAFFilg9UvEnsQftl6P13F+t86Tnk6gnar9s14s91kecQ2Sjb4icW7
+ gB+u32Cm6cvilS4qyTAbZa0y5AwJxawjxvLNSMaXLLLbnrAyySSKeawYyoBIg7tYQH3z
+ JSsg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=cf+Jexdg
-Subject: [Buildroot] [PATCH 1/7] DEVELOPERS: added marleen.vos@mind.be for
- boards/configs based on stm32mp15
+ header.a=rsa-sha256 header.s=google header.b=IJh6jKQC
+Subject: [Buildroot] [PATCH 2/7] board/stmicroelectronics: generalise
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES regex
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,33 +107,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Marleen Vos <marleen.vos@mind.be>
 
-The buildroot manual says this kind of commit should be done together
-with the actual changes made to a config/board. But since a number of
-changes will follow for some boards and configs, it seemed more
-logical to make a separate commit for this.
+The regex was a bit too strict in which characters it allowed. Thus,
+if e.g. a file name appears in the
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES string, it no
+longer matches, and we end up with an empty ATF_VARIABLES. This makes
+the subsequent grep fail, and the post-image.sh script fails without
+any error message (thanks to the -e option).
+
+Simplify the regex to match everything except the closing quotation
+mark. Note that Kconfig doesn't allow quotation marks at all inside a
+string (even escaped ones), so this regular expression is always OK.
 
 Signed-off-by: Marleen Vos <marleen.vos@mind.be>
 ---
- DEVELOPERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+ board/stmicroelectronics/common/stm32mp157/post-image.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 311dcd9504..810f853c64 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2053,6 +2053,12 @@ F:	board/qemu/riscv64-virt/
- F:	configs/qemu_riscv32_virt_defconfig
- F:	configs/qemu_riscv64_virt_defconfig
- 
-+N:	Marleen Vos <marleen.vos@mind.be>
-+F:	board/stmicroelectronics/common/stm32mp157/
-+F:	configs/avenger96_defconfig
-+F:	configs/stm32mp157a_dk1_defconfig
-+F:	configs/stm32mp157c_dk2_defconfig
-+
- N:	Martin Bark <martin@barkynet.com>
- F:	board/raspberrypi/
- F:	configs/raspberrypi3_defconfig
+diff --git a/board/stmicroelectronics/common/stm32mp157/post-image.sh b/board/stmicroelectronics/common/stm32mp157/post-image.sh
+index 65809e46a4..0cf52f4564 100755
+--- a/board/stmicroelectronics/common/stm32mp157/post-image.sh
++++ b/board/stmicroelectronics/common/stm32mp157/post-image.sh
+@@ -8,7 +8,7 @@
+ #
+ atf_image()
+ {
+-	ATF_VARIABLES="$(sed -n 's/^BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="\([\/a-zA-Z0-9_=. \-]*\)"$/\1/p' ${BR2_CONFIG})"
++	ATF_VARIABLES="$(sed -n 's/^BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="\([^\"]*\)"$/\1/p' ${BR2_CONFIG})"
+ 	# make sure DTB_FILE_NAME is set
+ 	printf '%s\n' "${ATF_VARIABLES}" | grep -Eq 'DTB_FILE_NAME=[0-9A-Za-z_\-]*'
+ 	# extract the value
 -- 
 2.34.1
 
