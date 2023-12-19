@@ -4,83 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C55F6C46CA2
-	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 17:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 616E9C41535
+	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 17:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E40E82A2D;
-	Tue, 19 Dec 2023 17:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E40E82A2D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 156BE831F1;
+	Tue, 19 Dec 2023 17:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 156BE831F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i2Caya3WQ5Hf; Tue, 19 Dec 2023 17:24:53 +0000 (UTC)
+	with ESMTP id x2DchUE3cn_O; Tue, 19 Dec 2023 17:25:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCCD482871;
-	Tue, 19 Dec 2023 17:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCCD482871
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E45F1BF390
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 17:24:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2ABDD831A7;
+	Tue, 19 Dec 2023 17:25:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ABDD831A7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3871F1BF390
+ for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 17:24:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 028ED6149C
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 17:24:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 028ED6149C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1109441B85
+ for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 17:24:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1109441B85
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WFZH-47MaCb8 for <buildroot@lists.busybox.net>;
- Tue, 19 Dec 2023 17:24:50 +0000 (UTC)
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
- [IPv6:2607:f8b0:4864:20::636])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 56C7161496
- for <buildroot@buildroot.org>; Tue, 19 Dec 2023 17:24:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56C7161496
-Received: by mail-pl1-x636.google.com with SMTP id
- d9443c01a7336-1d3c93fadc4so14208845ad.3
- for <buildroot@buildroot.org>; Tue, 19 Dec 2023 09:24:50 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VMrBRavxTklC for <buildroot@lists.busybox.net>;
+ Tue, 19 Dec 2023 17:24:52 +0000 (UTC)
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com
+ [IPv6:2607:f8b0:4864:20::c2c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33C204169B
+ for <buildroot@buildroot.org>; Tue, 19 Dec 2023 17:24:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33C204169B
+Received: by mail-oo1-xc2c.google.com with SMTP id
+ 006d021491bc7-593ea4c2baaso468557eaf.3
+ for <buildroot@buildroot.org>; Tue, 19 Dec 2023 09:24:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703006689; x=1703611489;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=V9gyoGr7m2R4I4bOa0e2nLm9V341UKprl2xgfw9yNQ8=;
- b=XYrCthkomkSR5NlarPVd1KnQf0/Aaz30maGGbOMyBcqRpd9OHViWR/ryEQe/wHJLXN
- 0EsOZLwQDlZqpa9n34bC+fA0BJj+05SictL+Flume5Pw92fvCUuClEvS7p7KiByKZZva
- FPBqK2vZW3eCDxX3I4onRiKVdscVZUn1CxD3q8CeUjoMEaNjIykeO4jkN+x0DvVvL9pZ
- hcEGWgSqHJN6oSRh6YMfcqXvEE1F2d28am02UPvaOBoZ/I7PP2gvm6blpAIjNY83SoaX
- w/dOf6YLlcwYxovDfJQTOvcQ3D7kHHg8sxlC69ktXmLzrA/2rKN9RAabwjy/SrxW26bU
- 3DKw==
-X-Gm-Message-State: AOJu0Yz0knRgdung5lf+rCJ/Lfr7Gh5HYhuBGshLwdi6GvL/dmmER2xy
- o8iPpDJtil3AIo0cihXrcrUSmEQLTvyitss9h94=
-X-Google-Smtp-Source: AGHT+IGnj9J8AVCUCCQe9CsLnIRyfCvuNYFrLxnzJEBEv+0DyjT+JrfEY5MYQgHxXdBgnxCtOMKAJQ==
-X-Received: by 2002:a17:903:25cd:b0:1d3:bb5b:c4f with SMTP id
- jc13-20020a17090325cd00b001d3bb5b0c4fmr2048363plb.35.1703006689293; 
- Tue, 19 Dec 2023 09:24:49 -0800 (PST)
+ d=1e100.net; s=20230601; t=1703006690; x=1703611490;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=yErnj/B4m9jfnJXYaNwTT7buHXR5aHl+qJKX4dMniDo=;
+ b=ox8kGe9d9LJ0YkzhTCGhawsnloInHkzkxVaIcda3/zt5Pv2QtUdeAwIu3qUJSWvG/+
+ eheSI4firfhjxO6XUguB1wDsjI+xBl5KZKcsuCsmA1e3Zhq+qPe8UedIt1U1w03Ykua5
+ HBkxqWoWFRGAjZdMI6xYU4qrPIEmPapnZjcyF4Xi9VVBWYC0kec/CxYX465MRO7Gnspo
+ mUiOzJ6Cjvc618Aa09TIw3wovGIA1gOCVze+PzqYZN9Dd0Lrb8OYio2WPd1oIhw+H4i/
+ DkNY47+TJxU1ZMTNAphY+Env4V6d428XpW/IvEgK8XmAohEebMT06UlcewzCYhMOVmWr
+ h+lQ==
+X-Gm-Message-State: AOJu0Yx38WmQtFoTM+QT2gsY6NMQmLIs6+wb1qKG8kNsk7oe2FV+Gqn1
+ OuEhj5x6TwbFKmcRbwWbkkdL9/FLP4IayOWhaCU=
+X-Google-Smtp-Source: AGHT+IHqErHXxZoG9dgkC76ioMjQLA5PXpd0Ew6rA7Y5PScZ0Rv4INWtUHv+s7llfFWomOlq42MpNg==
+X-Received: by 2002:a05:6358:9497:b0:170:ce56:3797 with SMTP id
+ i23-20020a056358949700b00170ce563797mr12013503rwb.35.1703006690331; 
+ Tue, 19 Dec 2023 09:24:50 -0800 (PST)
 Received: from fedora.. ([75.174.143.7]) by smtp.gmail.com with ESMTPSA id
- g192-20020a636bc9000000b0058901200bbbsm19910829pgc.40.2023.12.19.09.24.48
+ g192-20020a636bc9000000b0058901200bbbsm19910829pgc.40.2023.12.19.09.24.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Dec 2023 09:24:48 -0800 (PST)
+ Tue, 19 Dec 2023 09:24:49 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Dec 2023 10:24:41 -0700
-Message-ID: <20231219172446.498409-1-adam.duskett@amarulasolutions.com>
+Date: Tue, 19 Dec 2023 10:24:42 -0700
+Message-ID: <20231219172446.498409-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231219172446.498409-1-adam.duskett@amarulasolutions.com>
+References: <20231219172446.498409-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1703006689; x=1703611489;
+ d=amarulasolutions.com; s=google; t=1703006690; x=1703611490;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=V9gyoGr7m2R4I4bOa0e2nLm9V341UKprl2xgfw9yNQ8=;
- b=qDhOJPV2OVyCS750YHq/KNsB+9YJ80Lxidl4pK2vH+OfBxP/qTgouZ4QkprVhZnXMK
- aT/gF3t+sTgpioQMOF42qw1Lo/cxtWzmswmk/LdMmBwVKvuGy5BoGI3woJx88vkKIy5J
- pbcpr7GMYWojUZI0DbgGUoT+/Sb9C85au2bYM=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=yErnj/B4m9jfnJXYaNwTT7buHXR5aHl+qJKX4dMniDo=;
+ b=npOVr8BqXTc4Wq5w/X1L8zOvp9fIP6xP9YO1BWYaO8hlhD4AEBf8M2GgqYtCtn7Xuw
+ 6H7ppMqIGKHZCYyXHHFmzzFUAd9zq4lDYRUwtdImREYLkY97DmM10jahzOVQUkbzuNSe
+ o5nplrwFFAWjfg7WtRncAxcZmdWXN7KllP42k=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=qDhOJPV2
-Subject: [Buildroot] [PATCH v3 1/6] configs/mender_x86_64_efi_defconfig:
- Update kernel to latest LTS version
+ header.b=npOVr8Bq
+Subject: [Buildroot] [PATCH v3 2/6] package/mender-grubenv: Fix per-package
+ building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,37 +102,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-5.18 is not a LTS version. Let's update the kernel to use the LTS 6.1 kernel.
+Normally, two packages should never touch the same file. However, the
+mender-grubenv package is a special case, as its sole purpose is to overwrite
+the grub.cfg file.
+
+As per-package directory building has no guarantee that the grub package is
+rsynced to the target directory before the mender-grubenv package, this leads
+to the possiblity that mender-grubenvs grub.conf file is overwritten with the
+stock grub2 packages grub.conf file.
+
+Instead of a MENDER_GRUBENV_INSTALL_I386_CFG and MENDER_GRUBENV_INSTALL_EFI_CFG
+being part if MENDER_GRUBENV_INSTALL_IMAGES_CMDS, move them to
+TARGET_FINALIZE_HOOKS. This guarantees that the grub.cfg provided by the
+mender-grubenv package is installed after grub.conf provided by the grub2
+package.
+
+MENDER_GRUBENV_TARGET_FINALIZE_HOOKS
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-v2 -> v3: Update BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_18 -> 6_1 [Thomas]
+ package/mender-grubenv/mender-grubenv.mk | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
- configs/mender_x86_64_efi_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/configs/mender_x86_64_efi_defconfig b/configs/mender_x86_64_efi_defconfig
-index 25a463abb3..57bfc15d01 100644
---- a/configs/mender_x86_64_efi_defconfig
-+++ b/configs/mender_x86_64_efi_defconfig
-@@ -2,7 +2,7 @@
- BR2_x86_64=y
+diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
+index 8679ad9236..a6d8d48d43 100644
+--- a/package/mender-grubenv/mender-grubenv.mk
++++ b/package/mender-grubenv/mender-grubenv.mk
+@@ -11,7 +11,6 @@ MENDER_GRUBENV_LICENSE_FILES = LICENSE
+ # Grub2 must be built first so this package can overwrite the config files
+ # provided by grub.
+ MENDER_GRUBENV_DEPENDENCIES = grub2
+-MENDER_GRUBENV_INSTALL_IMAGES = YES
  
- # Toolchain
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_18=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ MENDER_GRUBENV_MAKE_ENV = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+@@ -34,12 +33,13 @@ MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/grub
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -39,7 +39,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="--data-part-size=32M --device-type=buildroot-x86_64
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.68"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/mender/x86_64/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ define MENDER_GRUBENV_INSTALL_I386_CFG
+ 	mkdir -p $(BINARIES_DIR)/boot-part/grub
+-	cp -dpfr $(@D)/mender_grub.cfg \
++	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
+ 		$(TARGET_DIR)/boot/grub/grub.cfg
+ 	cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
+ 		$(TARGET_DIR)/boot/grub/grub-mender-grubenv \
+ 		$(BINARIES_DIR)/boot-part/
+ endef
++MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_I386_CFG
+ endif # BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 
+ ifeq ($(BR2_TARGET_GRUB2_HAS_EFI_BOOT),y)
+@@ -51,13 +51,14 @@ MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/EFI/BOOT
+ 
+ define MENDER_GRUBENV_INSTALL_EFI_CFG
+ 	mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+-	cp -dpfr $(@D)/mender_grub.cfg \
++	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
+ 		$(TARGET_DIR)/boot/EFI/BOOT/grub.cfg
+ 	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+ 		$(BINARIES_DIR)/efi-part/EFI/BOOT
+ 	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub-mender-grubenv \
+ 		$(BINARIES_DIR)/efi-part/
+ endef
++MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_EFI_CFG
+ endif # BR2_TARGET_GRUB2_HAS_EFI_BOOT
+ 
+ ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
+@@ -86,9 +87,4 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
+ 	echo 'ENV_DIR=/boot/grub-mender-grubenv' > $(TARGET_DIR)/etc/mender_grubenv.config
+ endef
+ 
+-define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
+-	$(MENDER_GRUBENV_INSTALL_I386_CFG)
+-	$(MENDER_GRUBENV_INSTALL_EFI_CFG)
+-endef
+-
+ $(eval $(generic-package))
 -- 
 2.43.0
 
