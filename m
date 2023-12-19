@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10D89C41535
-	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 12:16:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ED75C46CCD
+	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 12:16:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B46DA43579;
-	Tue, 19 Dec 2023 12:16:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B46DA43579
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A5D343571;
+	Tue, 19 Dec 2023 12:16:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A5D343571
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e2ytJDrJon-4; Tue, 19 Dec 2023 12:16:44 +0000 (UTC)
+	with ESMTP id pHqEOaxYyzyz; Tue, 19 Dec 2023 12:16:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0634443598;
-	Tue, 19 Dec 2023 12:16:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0634443598
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AFA031BF360
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2443F43595;
+	Tue, 19 Dec 2023 12:16:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2443F43595
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D09971BF95F
  for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94A0A605EA
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94A0A605EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id A834743579
+ for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A834743579
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LELJvgrb5kUF for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2nOkU_lvvnLs for <buildroot@lists.busybox.net>;
  Tue, 19 Dec 2023 12:15:21 +0000 (UTC)
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D224D60BAB
- for <buildroot@buildroot.org>; Tue, 19 Dec 2023 12:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D224D60BAB
-Received: by mail-ed1-x52c.google.com with SMTP id
- 4fb4d7f45d1cf-55359dc0290so4231412a12.1
- for <buildroot@buildroot.org>; Tue, 19 Dec 2023 04:15:20 -0800 (PST)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 97FFA4357E
+ for <buildroot@buildroot.org>; Tue, 19 Dec 2023 12:15:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97FFA4357E
+Received: by mail-ed1-x529.google.com with SMTP id
+ 4fb4d7f45d1cf-5534dcfdd61so4585095a12.0
+ for <buildroot@buildroot.org>; Tue, 19 Dec 2023 04:15:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702988119; x=1703592919;
+ d=1e100.net; s=20230601; t=1702988120; x=1703592920;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Rku5KuVYAZKXdaRmP/zbKUlK0thsCU2Jg1MxxPV0WFo=;
- b=Lr4hx1Kj22nKLHPhXBChhLjz/jxAne1p2Y0j2DUP4NTYdB2FpsAKSR6k7EJN1mfxRs
- Vcv0LLWazdox/a0KmSsp2Lo4rvzMQbt5dTkp7LDZr9icIn6Lu7d6I8ef4UBYANdW+05k
- 87SxD/+9OV0AyUYi/e79qNhXpsTshpLgZvtS0/cd70zmcV/Vfk72JdISYFFuhhEzwOlA
- Xc5YwARdFi1a8qrChHYf5mKNWBP1ttiSTzhSVCPaKlHgG1M7QG20b3uuVWEHxEBMypeH
- 5cNVNDRU9fLVT/1H7FpXpUWDYmgn6RRBw3yJULcOyBdPPmdRxJTek02xDVR27s/sPR4y
- XqgA==
-X-Gm-Message-State: AOJu0YxMZFOPoGOm+q9jQmTcmW9LRiDqxq3ItOY82hLsEkGXUhXbjqY0
- v0wO368hXXRheGSkoeMhsDlQx4aa532FmzfG7WU=
-X-Google-Smtp-Source: AGHT+IGN+l3ffIPK+1Hi3JAUBS7tsLwMNUqyFGiBFw6XtVtChJrP1K8loHTxw+piUSVNxBlo5esSOA==
-X-Received: by 2002:a50:931a:0:b0:553:826b:b2b with SMTP id
- m26-20020a50931a000000b00553826b0b2bmr1011038eda.13.1702988119122; 
+ bh=UIOhwdlQztlbPPdinmqGrb43slZ1f9QPQP4PlOmeEps=;
+ b=X/BJbidHhB9xBrP17iOnjteIngqf5NitjdakMPqW+17qV/wGm6s0TE164L1mIHrWgX
+ ieTnoZ3MG48w5eZSHu9vfPvynV8nyVbSr4uwtDi41pGVqRookpfEsYmIGwj+oj1Qb1Ts
+ uGFIlLltqtkIgZlmJylEUAXTuMn/Z8yvKfruDk5KHJ+Ad4T0+XxL8NTe/Lmrnr7bzGa2
+ 93uBjfN6Pglq5UryStQNSDqp0b5pSciF0gcXN+J42a4F6CTyfa2vUGFxvXX8f1Ud0FWU
+ ROWTXYoO5GzZPvbIslqquyFy5IDPd57Z/qLAL0HbWc56sobN8bpE1m0wBbe/fnbDwoEt
+ NgYg==
+X-Gm-Message-State: AOJu0YyHx8gYP3LXkxNUpi3jnl/XTzNMgigvIFVJ9v0vZpoQNOpSmbD9
+ zbVE05GB4dviprL1joHfRwGlZ3dKTf9QHEFWmg8=
+X-Google-Smtp-Source: AGHT+IFuWlno/T3BNwP/4F7a5T8tWXTKqsqqtiVpJhkG9ICtI5HBzn7fzG1F08uo/5flyRNwv8bZXg==
+X-Received: by 2002:a50:c05a:0:b0:553:29b0:7ed7 with SMTP id
+ u26-20020a50c05a000000b0055329b07ed7mr890750edd.28.1702988119863; 
  Tue, 19 Dec 2023 04:15:19 -0800 (PST)
 Received: from marleenlaptop.. (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- bq18-20020a056402215200b0054db440489fsm11371363edb.60.2023.12.19.04.15.18
+ bq18-20020a056402215200b0054db440489fsm11371363edb.60.2023.12.19.04.15.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Dec 2023 04:15:18 -0800 (PST)
+ Tue, 19 Dec 2023 04:15:19 -0800 (PST)
 X-Google-Original-From: marleen.vos@mind.be
 To: buildroot@buildroot.org
-Date: Tue, 19 Dec 2023 13:15:07 +0100
-Message-Id: <20231219121508.1695768-7-marleen.vos@mind.be>
+Date: Tue, 19 Dec 2023 13:15:08 +0100
+Message-Id: <20231219121508.1695768-8-marleen.vos@mind.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231219121508.1695768-1-marleen.vos@mind.be>
 References: <20231219121508.1695768-1-marleen.vos@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=essensium.com; s=google; t=1702988119; x=1703592919; darn=buildroot.org;
+ d=essensium.com; s=google; t=1702988120; x=1703592920; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Rku5KuVYAZKXdaRmP/zbKUlK0thsCU2Jg1MxxPV0WFo=;
- b=ib9RtiDsU+me/s0WG+i7GCXf/nSmBzBeFOkAw29KIpU1xIJVTRTn0O4aWFaIb4K+Hr
- kso3yFgscOMsAJf4ZITBEPDu5ejrm73925zkmfiwZ4felU2/xdRjDXxgdOVcMWRs11RA
- t2wq2Ej63HN+daLTMc20XCTyS0WcoIbSr9CP9kovQZO3NA7ZjGyjlpgEDVA+zKnYflP1
- 3QQmxpgKgbcey1D1bJjq765PGlVNp7EyRJz6XDi5qtMrWAzJjD7d/au6A1mU8i2i/1MP
- BpRfelsCHQSNERcjBl8VNBJIg0WonHVTmWu0Znkgro+tvOuYpBV/lymaKyi3p8+uqyjU
- k2YQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=UIOhwdlQztlbPPdinmqGrb43slZ1f9QPQP4PlOmeEps=;
+ b=Fv9QUme3hcUA+xyuSRUh6KXTonjkaUeJkQEgb8lv27QVE48WdaOQTYjR5hk5kf+hxP
+ LYxwRLv0E4WeFC34CguyW69oaoFvpN7f41vTbLT799I7CuW9ae6QMk9/fsQXGciluQm1
+ nJTEB7sYHrdWRR1obXH/wnziEPuys/iuLHfL+D6XIH5Aauad4FWd/FF5LZcnO5arSX5t
+ rcOqIcjzmxtAlzEtPbkopAIcP4wzWMD6JYI3DfnXuF5fgBNVtjjjULjUv2GDeATV+TZO
+ 8uIooHQDseBJBeu/a6BEWE2HyL0oH1b6A8cJmlpJPUARnPgX8OkD8t0hA8cngaucnFhQ
+ iDYw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=ib9RtiDs
-Subject: [Buildroot] [PATCH 6/7] configs/stm32mp157c_dk2_defconfig: update
- arm-trusted-firmware to lts-v2.8.13
+ header.a=rsa-sha256 header.s=google header.b=Fv9QUme3
+Subject: [Buildroot] [PATCH 7/7] boot/arm-trusted-firmware: bump latest
+ version to v2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,28 +107,47 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Marleen Vos <marleen.vos@mind.be>
 
-The assumption is that updates to the stable branch should not break anything,
-so we use the latest LTS rather than a specific version.
+Patch 0001-build-tools-avoid-unnecessary-link.patch that was applied to
+v2.9 is already in v2.10, so no new patch dir for v2.10 is added
 
 Signed-off-by: Marleen Vos <marleen.vos@mind.be>
 ---
- configs/stm32mp157c_dk2_defconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ boot/arm-trusted-firmware/Config.in                 | 4 ++--
+ boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 7472be38bb..8ef6c82f2e 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -27,8 +27,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 7ebe616365..025cb0f2d6 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -14,7 +14,7 @@ choice
+ 	  Select the specific ATF version you want to use
  
- # Bootloaders
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_v2_8_VERSION=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+-	bool "v2.7"
++	bool "v2.10"
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_v2_8_VERSION
+ 	bool "latest lts-v2.8.x"
+@@ -48,7 +48,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
+ 	string
+ 	default "lts-v2.8.13"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_v2_8_VERSION
+-	default "v2.7"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
++	default "v2.10"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+ 	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
+ 	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+index ed16fc1c0f..eafd8e69c4 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  327c65b1bc231608a7a808b068b00c1a22310e9fc86158813cd10a9711d5725e  arm-trusted-firmware-v2.7.tar.gz
+ sha256  e55ae7105c996b60f748b2eb6adeaf5ac8946425e1d4294ecc1c56aebf435274  trusted-firmware-a-lts-v2.8.13.tar.gz
++sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
+ sha256  130d0c6e5159fa454b1e969fd281fa1d388819aefb203f65dd282544b5ab7ba9  docs/license.rst
 -- 
 2.34.1
 
