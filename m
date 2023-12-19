@@ -4,87 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4985AC41535
-	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 12:16:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AF09C41535
+	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 12:16:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBC2943571;
-	Tue, 19 Dec 2023 12:16:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBC2943571
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3976F435BE;
+	Tue, 19 Dec 2023 12:16:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3976F435BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ke0eqCIiGay8; Tue, 19 Dec 2023 12:16:01 +0000 (UTC)
+	with ESMTP id 08lY1pjs6yEc; Tue, 19 Dec 2023 12:16:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 81B9D435A0;
-	Tue, 19 Dec 2023 12:16:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81B9D435A0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F0311BF360
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C17B2435A6;
+	Tue, 19 Dec 2023 12:16:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C17B2435A6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 24F0E1BF95F
+ for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1D284357D
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1D284357D
+ by smtp4.osuosl.org (Postfix) with ESMTP id F19AE4098E
+ for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 12:15:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F19AE4098E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 60_ycONfd6zv for <buildroot@lists.busybox.net>;
- Tue, 19 Dec 2023 12:15:18 +0000 (UTC)
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 898F643577
- for <buildroot@buildroot.org>; Tue, 19 Dec 2023 12:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 898F643577
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-55359dc0290so4231351a12.1
- for <buildroot@buildroot.org>; Tue, 19 Dec 2023 04:15:18 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D_KdFw8nRHVz for <buildroot@lists.busybox.net>;
+ Tue, 19 Dec 2023 12:15:20 +0000 (UTC)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B0F8640571
+ for <buildroot@buildroot.org>; Tue, 19 Dec 2023 12:15:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0F8640571
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-50e33fe3856so2972192e87.1
+ for <buildroot@buildroot.org>; Tue, 19 Dec 2023 04:15:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1702988116; x=1703592916;
+ d=1e100.net; s=20230601; t=1702988117; x=1703592917;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=jbRkwbU4mnLNoX4dbJ6J7PwKaJIaZxSrl3Hti7O2xnQ=;
- b=X6H/OhAGCwqheWodx374NnWqzQ3wWFEtQDh4xQY7/hJbbY1Oyzb+o4soZWMO2mUUXY
- EiizQyEInsRs/2DPCZK1r/4ekWwri+6PwRLIVzOcCVAijeLYI1CeaqK99sKdmN7smatw
- Zf+kLVDHE8lrDrB59nPZv4ctN4vtGqfFRYdd8VStPpgwl0WtyLyrfjEcC27mvg74w4UI
- navw53sy84UWXzTPKK0KgQgPPqW5mjyTWUc8V6ggxWnabd42yGt76nnxRQdTgx0aQjL1
- vT6u9zPxx6J83vMm2Skty0pGyDEXlDzyoWTGah9OkrCMao6xGYjYCDcUNCdYVUO1Ejc3
- EKZw==
-X-Gm-Message-State: AOJu0Yw9E2HCKwDKFZL5TWMjzm8r814xqUuM38LyrKKjPQcPBbNRvud6
- 23cXlGT24Letrj6UUWMvkrxZX/v2sHHDmnR/zTA=
-X-Google-Smtp-Source: AGHT+IHMPttnSgArwexRpmgTa5Tlbm41PkSJCNl8Uj/QdQVESexeeWAFrhA8lIp7Txi18tHBzADnvQ==
-X-Received: by 2002:a50:d0c6:0:b0:553:a30b:925b with SMTP id
- g6-20020a50d0c6000000b00553a30b925bmr667162edf.39.1702988116691; 
- Tue, 19 Dec 2023 04:15:16 -0800 (PST)
+ bh=fMMrMJxr/H5Al+G+WjZhedoBOw6QPt5SyrpLHXzD9Cw=;
+ b=bfrySyhn7LZ5u6iDi1qCmGbV+mbNVDi771xEnEm46a6gyoXMx5I8+zG8EUl++mhOKY
+ x4UVwSHnCFtgQ3VZbs+UMtnoPDWFtyl6fXeiv7Onk8Fj4ImJR5Im7XLMMSnbX1zfC+3V
+ zVKHDNTqsw60ynIG1Jp7BaJDTe7KV+VxPLeUqquWP7UtSnOtoXP50UPGYBMp9dr8ywFv
+ qeilOLRB6fnbJkHfXJtQ6n7zKvFREWAa+1ssz0sBe5/NViKj9wRBNP7V2PcnuyxqMYEt
+ kklbA68ARFSQ2TEtsXeq8MAUIDBOnTTCZX2nxNMvtXsxK212/935zhWNnE4rDga2hQkL
+ Zw0g==
+X-Gm-Message-State: AOJu0YwEtUw/gAlkP4sdAaR0TtRBkYLywK3YLtetFHpDOas3OPKDXzK0
+ l34PJrPLOx9KPewHRDt7fJ0yZp7NUHxNJECLiGc=
+X-Google-Smtp-Source: AGHT+IET6S0uLJkHSGPA37lcgqgAULI4RZTHrm1FVt3EjYQXGPZwL2LXluzKNxaF6ALKcTtafknYxQ==
+X-Received: by 2002:ac2:4313:0:b0:50e:37f9:37aa with SMTP id
+ l19-20020ac24313000000b0050e37f937aamr1199092lfh.50.1702988117476; 
+ Tue, 19 Dec 2023 04:15:17 -0800 (PST)
 Received: from marleenlaptop.. (ip-188-118-3-185.reverse.destiny.be.
  [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
  bq18-20020a056402215200b0054db440489fsm11371363edb.60.2023.12.19.04.15.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Dec 2023 04:15:16 -0800 (PST)
+ Tue, 19 Dec 2023 04:15:17 -0800 (PST)
 X-Google-Original-From: marleen.vos@mind.be
 To: buildroot@buildroot.org
-Date: Tue, 19 Dec 2023 13:15:04 +0100
-Message-Id: <20231219121508.1695768-4-marleen.vos@mind.be>
+Date: Tue, 19 Dec 2023 13:15:05 +0100
+Message-Id: <20231219121508.1695768-5-marleen.vos@mind.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231219121508.1695768-1-marleen.vos@mind.be>
 References: <20231219121508.1695768-1-marleen.vos@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=essensium.com; s=google; t=1702988116; x=1703592916; darn=buildroot.org;
+ d=essensium.com; s=google; t=1702988117; x=1703592917; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jbRkwbU4mnLNoX4dbJ6J7PwKaJIaZxSrl3Hti7O2xnQ=;
- b=RBUoUtGblQKAY9JWrsAr9fg7ocuSEsCRXyil87PqtZdyKos3EpL3LHvHBjz3MpONxK
- R1lMlMWqlNuU2jW9inJNjYvOMOLKdSFIrSaWI7Y4WP2prF9klNaM3fm22KYcYUOKglit
- TdIl9XpescfdN41r4REWdN0ihV+gVEsl2/E89iuIvTADC4JgLmvERYUT+IUi34YL2m/5
- hN7r047pBZS89Kl4rTIu48sbvdbVuRSr/fcBAaCduZYBRaRAfVKS8fyDVpepFS78qJYk
- FChSyY13nt8jlxpHv+//pCUCamn4CvE3kfSSZFnrbyYKBHxEoRDdFM6OmUJOyhvLw1yR
- 7W6Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=fMMrMJxr/H5Al+G+WjZhedoBOw6QPt5SyrpLHXzD9Cw=;
+ b=FBwemZLR/qWERtkhBzfyrt8jWh6Esw/U26PkdiuoV/3UPbWrNjFtXSgbUOrsz+gAro
+ 9V+7Xcg78spX/Far9UuQefZYIYF5poCPBjlGlgK4unr3Al0tVQECljnEiHuCbf36eQNt
+ P3hgfJ/R2+jyrlC96ptMa91bUaJvlgCOT8FAk+NiVi2NbwG1fmRwFbCbEURnBz85Ppd0
+ Nf8eAyZTN6aWlYK4W2YgRExus0ajQGTv2nThk97alN1bN8KIYzorsUT8zviq93MqoVgE
+ oiU7y+nF10hfJNPDq1gmCDmo9x9DzgiNBkaVYuAKYAW7WaTnwLbMOMSEPljlGwTBQmAV
+ Ux+w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=RBUoUtGb
-Subject: [Buildroot] [PATCH 3/7] configs/stm32mp157*: bump ATF to v2.6
+ header.a=rsa-sha256 header.s=google header.b=FBwemZLR
+Subject: [Buildroot] [PATCH 4/7] boot/arm-trusted-firmware: add config
+ option to use latest lts-v2.8.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,188 +100,106 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Marleen Vos via buildroot <buildroot@buildroot.org>
 Reply-To: marleen.vos@essensium.com
 Cc: Marleen Vos <marleen.vos@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Marleen Vos <marleen.vos@mind.be>
-
-- v2.6 changes to FIP instead of SSBL boot.
-- This requires switching to u-boot.bin in U-Boot, and using that
-  instead of .stm32 in ATF.
-- fiptool expects dtb to be split off from u-boot.bin, so need custom
-  u-boot-nodtb.bin in addition to u-boot.dtb.
-  Caveat: this is perhaps not really obligatory, but the ATF
-          documentation explains it like that.
-- The partition must be named fip (while it must be named ssbl for
-  SSBL boot).
-- Since the partition name is set in the common template, all
-  defconfigs using that template must be bumped in a single commit
-- ATF now produces both fip.bin and <boardname>.stm32, so fip.bin has
-  been added to the configs
-- While we're at it, add the structuring comments to
-  avenger96_defconfig similar like the other defconfigs
-
-Signed-off-by: Marleen Vos <marleen.vos@mind.be>
----
- .../common/stm32mp157/genimage.cfg.template   |  4 +--
- configs/avenger96_defconfig                   | 28 +++++++++++++++----
- configs/stm32mp157a_dk1_defconfig             | 14 +++++++---
- configs/stm32mp157c_dk2_defconfig             | 14 +++++++---
- 4 files changed, 45 insertions(+), 15 deletions(-)
-
-diff --git a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
-index ff4aeceeed..c2affd98ea 100644
---- a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
-+++ b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
-@@ -11,8 +11,8 @@ image sdcard.img {
- 		image = "%ATFBIN%"
- 	}
- 
--	partition ssbl {
--		image = "u-boot.stm32"
-+	partition fip {
-+		image = "fip.bin"
- 		size = 2M
- 	}
- 
-diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
-index 142f6dd8c9..536899583c 100644
---- a/configs/avenger96_defconfig
-+++ b/configs/avenger96_defconfig
-@@ -1,9 +1,16 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a7=y
-+
-+# Linux headers same as kernel, a 5.8 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+
-+# System configuration
- BR2_GLOBAL_PATCH_DIR="board/arrow/avenger96/patches"
- BR2_ROOTFS_OVERLAY="board/arrow/avenger96/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
-+
-+# Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
-@@ -12,16 +19,24 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157a-dhcor-avenger96"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloaders
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb E=0"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-nodtb.bin"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb E=0 BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin *.stm32"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-@@ -29,7 +44,10 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
--BR2_TARGET_UBOOT_FORMAT_STM32=y
--BR2_TARGET_UBOOT_BUILD_FORMAT_STM32_LEGACY=y
-+BR2_TARGET_UBOOT_FORMAT_DTB=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp15xx-dhcor-avenger96"
-+
-+# Additional tools
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index e764a1558d..3122c9647a 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -28,10 +28,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # Bootloaders
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dk1.dtb E=0"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-nodtb.bin"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dk1.dtb E=0 BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin *.stm32"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-@@ -39,9 +43,11 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
--BR2_TARGET_UBOOT_FORMAT_STM32=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_FORMAT_DTB=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157a-dk1"
- 
- # Additional tools
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index aa0fcfa843..7472be38bb 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -28,10 +28,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # Bootloaders
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.6"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb E=0"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-nodtb.bin"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb E=0 BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin *.stm32"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-@@ -39,9 +43,11 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
--BR2_TARGET_UBOOT_FORMAT_STM32=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_FORMAT_DTB=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-dk2"
- 
- # Additional tools
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTogTWFybGVlbiBWb3MgPG1hcmxlZW4udm9zQG1pbmQuYmU+CgpQYXRjaCAwMDAxLWZlYXQt
+YnVpbGQtYWRkLXN1cHBvcnQtZm9yLW5ldy1iaW51dGlscy12ZXJzaW9ucy5wYXRjaCBhcwpmb3Vu
+ZCBpbiB2Mi44IHBhdGNoIGRpciBoYXMgYWxyZWFkeSBiZWVuIGFwcGxpZWQgaW4gbHRzLXYyLjgu
+MTMKUGF0Y2ggMDAwMi1idWlsZC10b29scy1hdm9pZC11bm5lY2Vzc2FyeS1saW5rLnBhdGNoIGZy
+b20gdjIuOCBoYXMKYmVlbiBpbmNsdWRlZCBhcyAwMDAxLWJ1aWxkLXRvb2xzLWF2b2lkLXVubmVj
+ZXNzYXJ5LWxpbmsucGF0Y2ggZm9yCmx0cy12Mi44LjEzCgpTaWduZWQtb2ZmLWJ5OiBNYXJsZWVu
+IFZvcyA8bWFybGVlbi52b3NAbWluZC5iZT4KLS0tCiBib290L2FybS10cnVzdGVkLWZpcm13YXJl
+L0NvbmZpZy5pbiAgICAgICAgICAgfCAgNiArKwogLi4uL2FybS10cnVzdGVkLWZpcm13YXJlLmhh
+c2ggICAgICAgICAgICAgICAgIHwgIDEgKwogLi4uMS1idWlsZC10b29scy1hdm9pZC11bm5lY2Vz
+c2FyeS1saW5rLnBhdGNoIHwgNzcgKysrKysrKysrKysrKysrKysrKwogMyBmaWxlcyBjaGFuZ2Vk
+LCA4NCBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC9hcm0tdHJ1c3RlZC1m
+aXJtd2FyZS9sdHMtdjIuOC4xMy8wMDAxLWJ1aWxkLXRvb2xzLWF2b2lkLXVubmVjZXNzYXJ5LWxp
+bmsucGF0Y2gKCmRpZmYgLS1naXQgYS9ib290L2FybS10cnVzdGVkLWZpcm13YXJlL0NvbmZpZy5p
+biBiL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvQ29uZmlnLmluCmluZGV4IGE1YWM5ODcxNzIu
+LjdlYmU2MTYzNjUgMTAwNjQ0Ci0tLSBhL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvQ29uZmln
+LmluCisrKyBiL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvQ29uZmlnLmluCkBAIC0xNiw2ICsx
+NiwxMSBAQCBjaG9pY2UKIGNvbmZpZyBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0xB
+VEVTVF9WRVJTSU9OCiAJYm9vbCAidjIuNyIKIAorY29uZmlnIEJSMl9UQVJHRVRfQVJNX1RSVVNU
+RURfRklSTVdBUkVfTEFURVNUX0xUU192Ml84X1ZFUlNJT04KKwlib29sICJsYXRlc3QgbHRzLXYy
+LjgueCIKKwloZWxwCisJICBTZWxlY3QgdGhlIGxhdGVzdCBMVFMgdjIuOC54IHZlcnNpb24gYXZh
+aWxhYmxlCisKIGNvbmZpZyBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9W
+RVJTSU9OCiAJYm9vbCAiQ3VzdG9tIHZlcnNpb24iCiAJaGVscApAQCAtNDIsNiArNDcsNyBAQCBj
+b25maWcgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTl9WQUxV
+RQogCiBjb25maWcgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9WRVJTSU9OCiAJc3Ry
+aW5nCisJZGVmYXVsdCAibHRzLXYyLjguMTMiCWlmIEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklS
+TVdBUkVfTEFURVNUX0xUU192Ml84X1ZFUlNJT04KIAlkZWZhdWx0ICJ2Mi43IgkJaWYgQlIyX1RB
+UkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9MQVRFU1RfVkVSU0lPTgogCWRlZmF1bHQgImN1c3Rv
+bSIJaWYgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVEFSQkFMTAogCWRl
+ZmF1bHQgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fUkVQT19WRVJTSU9O
+IFwKZGlmZiAtLWdpdCBhL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmly
+bXdhcmUuaGFzaCBiL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmlybXdh
+cmUuaGFzaAppbmRleCBkOTMxNjEwZGM0Li5lZDE2ZmMxYzBmIDEwMDY0NAotLS0gYS9ib290L2Fy
+bS10cnVzdGVkLWZpcm13YXJlL2FybS10cnVzdGVkLWZpcm13YXJlLmhhc2gKKysrIGIvYm9vdC9h
+cm0tdHJ1c3RlZC1maXJtd2FyZS9hcm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoCkBAIC0xLDMgKzEs
+NCBAQAogIyBMb2NhbGx5IGNhbGN1bGF0ZWQKIHNoYTI1NiAgMzI3YzY1YjFiYzIzMTYwOGE3YTgw
+OGIwNjhiMDBjMWEyMjMxMGU5ZmM4NjE1ODgxM2NkMTBhOTcxMWQ1NzI1ZSAgYXJtLXRydXN0ZWQt
+ZmlybXdhcmUtdjIuNy50YXIuZ3oKK3NoYTI1NiAgZTU1YWU3MTA1Yzk5NmI2MGY3NDhiMmViNmFk
+ZWFmNWFjODk0NjQyNWUxZDQyOTRlY2MxYzU2YWViZjQzNTI3NCAgdHJ1c3RlZC1maXJtd2FyZS1h
+LWx0cy12Mi44LjEzLnRhci5negogc2hhMjU2ICAxMzBkMGM2ZTUxNTlmYTQ1NGIxZTk2OWZkMjgx
+ZmExZDM4ODgxOWFlZmIyMDNmNjVkZDI4MjU0NGI1YWI3YmE5ICBkb2NzL2xpY2Vuc2UucnN0CmRp
+ZmYgLS1naXQgYS9ib290L2FybS10cnVzdGVkLWZpcm13YXJlL2x0cy12Mi44LjEzLzAwMDEtYnVp
+bGQtdG9vbHMtYXZvaWQtdW5uZWNlc3NhcnktbGluay5wYXRjaCBiL2Jvb3QvYXJtLXRydXN0ZWQt
+ZmlybXdhcmUvbHRzLXYyLjguMTMvMDAwMS1idWlsZC10b29scy1hdm9pZC11bm5lY2Vzc2FyeS1s
+aW5rLnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjllMGVhNzQy
+NDgKLS0tIC9kZXYvbnVsbAorKysgYi9ib290L2FybS10cnVzdGVkLWZpcm13YXJlL2x0cy12Mi44
+LjEzLzAwMDEtYnVpbGQtdG9vbHMtYXZvaWQtdW5uZWNlc3NhcnktbGluay5wYXRjaApAQCAtMCww
+ICsxLDc3IEBACitGcm9tIGFhNTdjZTYzMmM2MjlmZTcyZmY0MTdlMjYxZTBmNWJmZDhkYjZiYWIg
+TW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiA9P1VURi04P3E/VmluY2VudD0yMFN0ZWhs
+PUMzPUE5Pz0gPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+CitEYXRlOiBUdWUsIDQgSnVsIDIwMjMg
+MTY6MTQ6MDIgKzAyMDAKK1N1YmplY3Q6IFtQQVRDSF0gYnVpbGQodG9vbHMpOiBhdm9pZCB1bm5l
+Y2Vzc2FyeSBsaW5rCitNSU1FLVZlcnNpb246IDEuMAorQ29udGVudC1UeXBlOiB0ZXh0L3BsYWlu
+OyBjaGFyc2V0PVVURi04CitDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CisKK0luIHRo
+ZWlyIHJlc3BlY3RpdmUgbWFrZWZpbGVzLCBjZXJ0X2NyZWF0ZSwgZW5jcnlwdF9mdyBhbmQgZmlw
+dG9vbAorZGVwZW5kIG9uIHRoZSAtLW9wZW5zc2wgcGhvbnkgdGFyZ2V0IGFzIGEgcHJlcmVxdWlz
+aXRlLiBUaGlzIGZvcmNlcwordGhvc2UgdG9vbHMgdG8gYmUgcmUtbGlua2VkIGVhY2ggdGltZS4K
+KworTW92ZSB0aGUgZGVwZW5kZW5jaWVzIG9uIHRoZSAtLW9wZW5zc2wgdGFyZ2V0IGZyb20gdGhl
+IHRvb2xzIHRvIHRoZWlyCittYWtlZmlsZXMgYWxsIHRhcmdldHMsIHRvIGF2b2lkIHVubmVjZXNz
+YXJ5IGxpbmtpbmcgd2hpbGUgcHJlc2VydmluZyB0aGUKK09wZW5TU0wgdmVyc2lvbiBwcmludGlu
+ZyBkb25lIGluIHRoZSAtLW9wZW5zc2wgdGFyZ2V0cyB3aGVuIGluIGRlYnVnLgorCitGaXhlczog
+Y2YyZGQxN2RkZGEyICgicmVmYWN0b3Ioc2VjdXJpdHkpOiBhZGQgT3BlblNTTCAxLnggY29tcGF0
+aWJpbGl0eSIpCitTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxl
+QGFybS5jb20+CitDaGFuZ2UtSWQ6IEk5OGEzYWIzMGYzNmRmZmMyNTNjZWNhYWYzYTU3ZDI3MTI1
+MjIxMzVkCitVcHN0cmVhbTogaHR0cHM6Ly9naXQudHJ1c3RlZGZpcm13YXJlLm9yZy9URi1BL3Ry
+dXN0ZWQtZmlybXdhcmUtYS5naXQvY29tbWl0Lz9pZD1hYTU3Y2U2MzJjNjI5ZmU3MmZmNDE3ZTI2
+MWUwZjViZmQ4ZGI2YmFiCistLS0KKyB0b29scy9jZXJ0X2NyZWF0ZS9NYWtlZmlsZSB8IDQgKyst
+LQorIHRvb2xzL2VuY3J5cHRfZncvTWFrZWZpbGUgIHwgNCArKy0tCisgdG9vbHMvZmlwdG9vbC9N
+YWtlZmlsZSAgICAgfCA0ICsrLS0KKyAzIGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwg
+NiBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL3Rvb2xzL2NlcnRfY3JlYXRlL01ha2VmaWxl
+IGIvdG9vbHMvY2VydF9jcmVhdGUvTWFrZWZpbGUKK2luZGV4IDA0MmU4NDQ2MjYuLmI5MTFkMTlk
+MmIgMTAwNjQ0CistLS0gYS90b29scy9jZXJ0X2NyZWF0ZS9NYWtlZmlsZQorKysrIGIvdG9vbHMv
+Y2VydF9jcmVhdGUvTWFrZWZpbGUKK0BAIC04NSw5ICs4NSw5IEBAIEhPU1RDQyA/PSBnY2MKKyAK
+KyAuUEhPTlk6IGFsbCBjbGVhbiByZWFsY2xlYW4gLS1vcGVuc3NsCisgCistYWxsOiAke0JJTkFS
+WX0KKythbGw6IC0tb3BlbnNzbCAke0JJTkFSWX0KKyAKKy0ke0JJTkFSWX06IC0tb3BlbnNzbCAk
+e09CSkVDVFN9IE1ha2VmaWxlCisrJHtCSU5BUll9OiAke09CSkVDVFN9IE1ha2VmaWxlCisgCUBl
+Y2hvICIgIEhPU1RMRCAgJEAiCisgCUBlY2hvICdjb25zdCBjaGFyIGJ1aWxkX21zZ1tdID0gIkJ1
+aWx0IDogIl9fVElNRV9fIiwgIl9fREFURV9fOyBcCisgICAgICAgICAgICAgICAgIGNvbnN0IGNo
+YXIgcGxhdGZvcm1fbXNnW10gPSAiJHtQTEFUX01TR30iOycgfCBcCitkaWZmIC0tZ2l0IGEvdG9v
+bHMvZW5jcnlwdF9mdy9NYWtlZmlsZSBiL3Rvb2xzL2VuY3J5cHRfZncvTWFrZWZpbGUKK2luZGV4
+IDI5MzliMTQyYmUuLjkyNGU1ZmViYWIgMTAwNjQ0CistLS0gYS90b29scy9lbmNyeXB0X2Z3L01h
+a2VmaWxlCisrKysgYi90b29scy9lbmNyeXB0X2Z3L01ha2VmaWxlCitAQCAtNjUsOSArNjUsOSBA
+QCBIT1NUQ0MgPz0gZ2NjCisgCisgLlBIT05ZOiBhbGwgY2xlYW4gcmVhbGNsZWFuIC0tb3BlbnNz
+bAorIAorLWFsbDogJHtCSU5BUll9CisrYWxsOiAtLW9wZW5zc2wgJHtCSU5BUll9CisgCistJHtC
+SU5BUll9OiAtLW9wZW5zc2wgJHtPQkpFQ1RTfSBNYWtlZmlsZQorKyR7QklOQVJZfTogJHtPQkpF
+Q1RTfSBNYWtlZmlsZQorIAlAZWNobyAiICBIT1NUTEQgICRAIgorIAlAZWNobyAnY29uc3QgY2hh
+ciBidWlsZF9tc2dbXSA9ICJCdWlsdCA6ICJfX1RJTUVfXyIsICJfX0RBVEVfXzsnIHwgXAorICAg
+ICAgICAgICAgICAgICAke0hPU1RDQ30gLWMgJHtIT1NUQ0NGTEFHU30gLXhjIC0gLW8gc3JjL2J1
+aWxkX21zZy5vCitkaWZmIC0tZ2l0IGEvdG9vbHMvZmlwdG9vbC9NYWtlZmlsZSBiL3Rvb2xzL2Zp
+cHRvb2wvTWFrZWZpbGUKK2luZGV4IDJlYmVlMzM5MzEuLjRiZGViZDkyMzUgMTAwNjQ0CistLS0g
+YS90b29scy9maXB0b29sL01ha2VmaWxlCisrKysgYi90b29scy9maXB0b29sL01ha2VmaWxlCitA
+QCAtNjgsOSArNjgsOSBAQCBERVBTIDo9ICQocGF0c3Vic3QgJS5vLCUuZCwkKE9CSkVDVFMpKQor
+IAorIC5QSE9OWTogYWxsIGNsZWFuIGRpc3RjbGVhbiAtLW9wZW5zc2wKKyAKKy1hbGw6ICR7UFJP
+SkVDVH0KKythbGw6IC0tb3BlbnNzbCAke1BST0pFQ1R9CisgCistJHtQUk9KRUNUfTogLS1vcGVu
+c3NsICR7T0JKRUNUU30gTWFrZWZpbGUKKyske1BST0pFQ1R9OiAke09CSkVDVFN9IE1ha2VmaWxl
+CisgCUBlY2hvICIgIEhPU1RMRCAgJEAiCisgCSR7UX0ke0hPU1RDQ30gJHtPQkpFQ1RTfSAtbyAk
+QCAke0xETElCU30KKyAJQCR7RUNIT19CTEFOS19MSU5FfQorLS0gCisyLjI1LjEKKwotLSAKMi4z
+NC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
