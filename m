@@ -4,65 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00AAAC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D700CC3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50C5940A74;
-	Wed, 20 Dec 2023 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50C5940A74
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F51141763;
+	Wed, 20 Dec 2023 20:01:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F51141763
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 67BVdEbMZkL2; Wed, 20 Dec 2023 20:01:25 +0000 (UTC)
+	with ESMTP id li0N2p6cKhXh; Wed, 20 Dec 2023 20:01:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0645341740;
-	Wed, 20 Dec 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0645341740
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A74271BF39C
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:01:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EAC2436D2;
+	Wed, 20 Dec 2023 20:01:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EAC2436D2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E1D91BF39C
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:01:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7284D82771
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC78B41740
  for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:01:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7284D82771
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC78B41740
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ny4cMoupukPw for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gtUFFERCx0qJ for <buildroot@lists.busybox.net>;
  Wed, 20 Dec 2023 20:01:21 +0000 (UTC)
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 11421826F5
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1117540A74
  for <buildroot@buildroot.org>; Wed, 20 Dec 2023 20:01:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11421826F5
-Received: by mail.gandi.net (Postfix) with ESMTPA id 2B24D60006;
- Wed, 20 Dec 2023 20:01:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1117540A74
+Received: by mail.gandi.net (Postfix) with ESMTPA id 4D77260003;
+ Wed, 20 Dec 2023 20:01:17 +0000 (UTC)
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>, peter.verbrugge@technolution.nl
-Date: Wed, 20 Dec 2023 21:01:09 +0100
-Message-ID: <20231220200110.1819507-3-thomas.petazzoni@bootlin.com>
+Date: Wed, 20 Dec 2023 21:01:07 +0100
+Message-ID: <20231220200110.1819507-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231220200110.1819507-1-thomas.petazzoni@bootlin.com>
-References: <20231220200110.1819507-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703102479;
+ d=bootlin.com; s=gm1; t=1703102478;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Qpfwym+LxDein8+efYrlxzLDfXhu0Vw+mTzwPR+FFJY=;
- b=Z/isTImksUAs4cbQs+amjWs5p5U1MQST4zDIjLZ0jzzP7H5QLpWqrP0yh/seRWXsERlJ1M
- a2pWf5rhjtO+BMZQVRlUw6qz+04iQKXTDjchn1lx0ELl2mYH+AilTyAxdOYjx8pamv+WyR
- l/SyBrryrSNT5VOIGLM25czDSYWc3jU3uddaS2ckPVv3PzDssq1sfKhc33LZLXvD6bWHSv
- Xde/9k6EmDuqoyrdO9H4hB9Kld12/tWLNLhsn0G7qQfoNHqbG1zS8Z+n2gGEBhE7iSftOh
- zOf8/tzau8qkccA7YW7DsQV2WjseiGDCdU0mZruK/lD+HaW3q0kVdP7ab5cwWw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding;
+ bh=hXRl7Cq/ls+8U7IHGey3gz1h2xMaf0E0lEcm7esmHOg=;
+ b=mtwlIAuBn5Zj23knTcfuu/bxUW0BG6JMX9997grYS/Fdd51dBH5eGB5gJkyM5P4mStOtOF
+ J7D89lXBa2s+AgkdSa5SwJiGqv97JyzP8hkYE8NqSq61ba+dYSxqC3754iXid3y4IuS7Te
+ htyV8tJ8OBjr76CA8fELHXCnadMTfvcLgfL0FqQGRgfcngG07HY6nx7W6g667WvdVCh45i
+ MagjDN5mj0oDFWDcBbAyAGJLpEqgJIG5h4Y4I1IttTLYxqIzKoEyNFo2flPh27ghZLIxyZ
+ kXkumLsV9lEpEmJX2oHAN2MfMV0eeyNIByCxrdvD3PBn17XCpsB1yMzdRjQMqQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Z/isTImk
-Subject: [Buildroot] [PATCH 3/3] package/glibc: ignore CVE-2023-0687,
- disputed
+ header.s=gm1 header.b=mtwlIAuB
+Subject: [Buildroot] [PATCH 1/3] package/glibc: add proper CPE ID version
+ detail
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,31 +81,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-According to the glibc maintainers, CVE-2023-0687 is not a security
-issue, and they have sent a rejection request to MITRE, so let's
-ignore it.
+As reported in bug 15895, the GLIBC_VERSION field having a value
+looking like 2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701, it
+prevents the CPE/CVE matching with the NVD database to work correctly.
+
+This commit fixes that by defining GLIBC_CPE_ID_VERSION, derived from
+GLIBC_VERSION, by extracting the base version.
+
+Also, we update GLIBC_IGNORE_CVES to account for the CVEs that have
+clearly been fixed between 2.38 and
+2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701. There are a number
+of other CVEs still affecting the glibc package, but they are not
+related to this
+2.38...2.38-27-g750a45a783906a19591fb8ff6b7841470f1f5701 range.
+
+Fixes: #15895
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-I have chosen to submit this one separately from the previous patch,
-as it's a much newer one, so the Buildroot community may have a
-different view on how we should handle this particular CVE.
----
- package/glibc/glibc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/glibc/glibc.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 29411c58e2..a485d40f8d 100644
+index 0b71530310..32e6516c7f 100644
 --- a/package/glibc/glibc.mk
 +++ b/package/glibc/glibc.mk
-@@ -50,6 +50,11 @@ GLIBC_IGNORE_CVES += \
- 	CVE-2019-1010024 \
- 	CVE-2019-1010025
+@@ -20,6 +20,22 @@ GLIBC_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
+ GLIBC_LICENSE_FILES = COPYING COPYING.LIB LICENSES
+ GLIBC_CPE_ID_VENDOR = gnu
  
-+# This CVE is disputed, and the glibc maintainers don't consider it to
-+# be a security issue, see
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=29444
-+GLIBC_IGNORE_CVES += CVE-2023-0687
++# Extract the base version (e.g. 2.38) from GLIBC_VERSION) in order to
++# allow proper matching with the CPE database.
++GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
++
++# Fixed by b25508dd774b617f99419bdc3cf2ace4560cd2d6, which is between
++# 2.38 and the version we're really using
++GLIBC_IGNORE_CVES += CVE-2023-4527
++
++# Fixed by 750a45a783906a19591fb8ff6b7841470f1f5710, which is between
++# 2.38 and the version we're really using.
++GLIBC_IGNORE_CVES += CVE-2023-4911
++
++# Fixed by 5ee59ca371b99984232d7584fe2b1a758b4421d3, which is between
++# 2.38 and the version we're really using.
++GLIBC_IGNORE_CVES += CVE-2023-5156
 +
  # glibc is part of the toolchain so disable the toolchain dependency
  GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
