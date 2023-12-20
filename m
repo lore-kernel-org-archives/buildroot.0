@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D91EC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 21:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93456C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 21:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D836D6159E;
-	Wed, 20 Dec 2023 21:06:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D836D6159E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E2A161546;
+	Wed, 20 Dec 2023 21:14:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E2A161546
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c-l4aWGEDszO; Wed, 20 Dec 2023 21:06:43 +0000 (UTC)
+	with ESMTP id DC55QjggsZad; Wed, 20 Dec 2023 21:14:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41FAD6157E;
-	Wed, 20 Dec 2023 21:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41FAD6157E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 782DB6107D;
+	Wed, 20 Dec 2023 21:14:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 782DB6107D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7838E1BF361
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 21:06:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E48151BF361
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 21:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E26482275
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 21:06:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E26482275
+ by smtp1.osuosl.org (Postfix) with ESMTP id B005C83A34
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 21:14:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B005C83A34
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7CXXvkxFBIrr for <buildroot@lists.busybox.net>;
- Wed, 20 Dec 2023 21:06:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C2A64834D5
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 21:06:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2A64834D5
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF70887CA7; Wed, 20 Dec 2023 21:06:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 22:05:51 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fdeb41bda6c3f56012264cf38a8d3ae466f04320
-X-Git-Newrev: d107888e38f8c34e7ce429552bb77ade5247ce88
-X-Patchwork-Hint: ignore
-Message-Id: <20231220210618.AF70887CA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sway/Config.in: remove duplicate
- dependencies
+ with ESMTP id xJwb7sdJi3Ar for <buildroot@lists.busybox.net>;
+ Wed, 20 Dec 2023 21:14:25 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D62C819D6
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 21:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D62C819D6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CDB8620007;
+ Wed, 20 Dec 2023 21:14:23 +0000 (UTC)
+Date: Wed, 20 Dec 2023 22:14:23 +0100
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20231220221423.672adf6a@windsurf>
+In-Reply-To: <20231218194001.544887-2-adam.duskett@amarulasolutions.com>
+References: <20231218194001.544887-1-adam.duskett@amarulasolutions.com>
+ <20231218194001.544887-2-adam.duskett@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703106864;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/FVcRMbxMCgK9hoYm4SZBoNecbnK+L15mIgRKnzuPYc=;
+ b=eKGWop5n7+t1/x2WepvMAAGirQokc2TkivbAFY8nFcFcnk32T60p2NvvfDorIL+XNZd04q
+ ImimL0vPfZA6eWQUHffUIAsrAUtVRKAzFbs+ZHti/KrabgX6+VX3f9XtAAflsrVACtnGdr
+ CkC98ULKxlEVW2r5OSYIB+gKkoCDtrA39WYayXsK+gvayK14Qwd5ZLQ9A5PvnIPTeGttXE
+ RHoGsWlEW4Y0YNIoI+2HYBSDw9OZ1I4EaLYkr3F2xTAaZInN5ORERdGuhuGsXrstO5KE94
+ AZDI5fBrGr3uKTMdiq+jG/5i9ORLZ/rJQtQTeOZb+LEZ+g58uh0KmTL0ttIILg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eKGWop5n
+Subject: Re: [Buildroot] [PATCH v2 02/14] package/sway/Config.in: select
+ BR2_PACKAGE_XKEYBOARD_CONFIG
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +78,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d107888e38f8c34e7ce429552bb77ade5247ce88
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 18 Dec 2023 12:39:47 -0700
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sway/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> Much like weston, this is a runtime dependency.
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+>  package/sway/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/sway/Config.in b/package/sway/Config.in
+> index 26b5b2ecea..95b19dd464 100644
+> --- a/package/sway/Config.in
+> +++ b/package/sway/Config.in
+> @@ -18,6 +18,7 @@ config BR2_PACKAGE_SWAY
+>  	select BR2_PACKAGE_CAIRO
+>  	select BR2_PACKAGE_CAIRO_PNG
+>  	select BR2_PACKAGE_PANGO
+> +	select BR2_PACKAGE_XKEYBOARD_CONFIG # Runtime dependency
 
-diff --git a/package/sway/Config.in b/package/sway/Config.in
-index f8d073520f..26b5b2ecea 100644
---- a/package/sway/Config.in
-+++ b/package/sway/Config.in
-@@ -2,17 +2,15 @@ config BR2_PACKAGE_SWAY
- 	bool "sway"
- 	depends on BR2_PACKAGE_SYSTEMD # is required by the sd-bus provider
- 	depends on !BR2_STATIC_LIBS # wlroots
--	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pango, wlroots
- 	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
- 	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
- 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c, pango
- 	depends on BR2_USE_WCHAR # pango
--	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
- 	depends on BR2_USE_MMU # pango
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
- 	select BR2_PACKAGE_WLROOTS
- 	select BR2_PACKAGE_JSON_C
+We usually just put "# runtime" as the comment, so I've changed it like
+this and applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
