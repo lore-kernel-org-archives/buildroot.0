@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3912BC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A846C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0AAE436FC;
-	Wed, 20 Dec 2023 20:58:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0AAE436FC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0EA0043761;
+	Wed, 20 Dec 2023 20:59:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EA0043761
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1kvHDlIBX9eq; Wed, 20 Dec 2023 20:58:56 +0000 (UTC)
+	with ESMTP id NtEuoTXResp8; Wed, 20 Dec 2023 20:59:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5826436E6;
-	Wed, 20 Dec 2023 20:58:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5826436E6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E1FA21BF977
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:58:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1B72436E6;
+	Wed, 20 Dec 2023 20:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1B72436E6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D3BE1BF365
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC0D880BEC
+ by smtp3.osuosl.org (Postfix) with ESMTP id D947A61048
  for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:58:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC0D880BEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D947A61048
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mV-COPrV3ZiC for <buildroot@lists.busybox.net>;
- Wed, 20 Dec 2023 20:58:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2jKNlrNQq36k for <buildroot@lists.busybox.net>;
+ Wed, 20 Dec 2023 20:58:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD99A80BD3
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBE8D61546
  for <buildroot@buildroot.org>; Wed, 20 Dec 2023 20:58:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD99A80BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBE8D61546
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5B7C87C95; Wed, 20 Dec 2023 20:58:25 +0000 (UTC)
+ id D91C287C94; Wed, 20 Dec 2023 20:58:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 21:55:04 +0100
+Date: Wed, 20 Dec 2023 21:56:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa5ee701b11ddafb5565dc0d57a2e045cd68dc19
-X-Git-Newrev: 36db831321f43746afa336869057d588ce470b84
+X-Git-Oldrev: 1e7f0794bbb0075285dc3b4dab8484f12adbb886
+X-Git-Newrev: 2b6c5314867ebf2f5e1370cacbfe139763bf30ec
 X-Patchwork-Hint: ignore
-Message-Id: <20231220205825.B5B7C87C95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-meson-python: new host
- package
+Message-Id: <20231220205825.D91C287C94@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-matplotlib: bump to version
+ 3.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,51 +64,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36db831321f43746afa336869057d588ce470b84
+commit: https://git.buildroot.net/buildroot/commit/?id=2b6c5314867ebf2f5e1370cacbfe139763bf30ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add new python-contourpy runtime dependency.
+
+Add new python-pybind dependency.
+
+Add new host-python-setuptools-scm build dependency.
+
+Update setup.cfg to new mplsetup.cfg install location.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-meson-python/python-meson-python.hash |  5 +++++
- package/python-meson-python/python-meson-python.mk   | 18 ++++++++++++++++++
- 2 files changed, 23 insertions(+)
+ package/python-matplotlib/Config.in              | 2 ++
+ package/python-matplotlib/python-matplotlib.hash | 5 +++--
+ package/python-matplotlib/python-matplotlib.mk   | 8 +++++---
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-meson-python/python-meson-python.hash b/package/python-meson-python/python-meson-python.hash
-new file mode 100644
-index 0000000000..537353bad2
---- /dev/null
-+++ b/package/python-meson-python/python-meson-python.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/meson-python/json
-+md5  e91eb9946d7bb8be06e434c5a2dadd05  meson_python-0.15.0.tar.gz
-+sha256  fddb73eecd49e89c1c41c87937cd89c2d0b65a1c63ba28238681d4bd9484d26f  meson_python-0.15.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  8f82ea9ef9a55b47f4170536d02e48b5bc33fc5135e5b4a1b5f8d6404833ec9b  LICENSE
-diff --git a/package/python-meson-python/python-meson-python.mk b/package/python-meson-python/python-meson-python.mk
-new file mode 100644
-index 0000000000..64d5de4ba9
---- /dev/null
-+++ b/package/python-meson-python/python-meson-python.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# python-meson-python
-+#
-+################################################################################
-+
-+PYTHON_MESON_PYTHON_VERSION = 0.15.0
-+PYTHON_MESON_PYTHON_SOURCE = meson_python-$(PYTHON_MESON_PYTHON_VERSION).tar.gz
-+PYTHON_MESON_PYTHON_SITE = https://files.pythonhosted.org/packages/a2/3b/276b596824a0820987fdcc7721618453b4f9a8305fe20b611a00ac3f948e
-+PYTHON_MESON_PYTHON_SETUP_TYPE = pep517
-+PYTHON_MESON_PYTHON_LICENSE = MIT
-+PYTHON_MESON_PYTHON_LICENSE_FILES = LICENSE
-+HOST_PYTHON_MESON_PYTHON_DEPENDENCIES = \
-+	host-meson \
-+	host-patchelf \
-+	host-python-pyproject-metadata
-+
-+$(eval $(host-python-package))
+diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
+index cc0d830f4f..b3d84e2b43 100644
+--- a/package/python-matplotlib/Config.in
++++ b/package/python-matplotlib/Config.in
+@@ -8,7 +8,9 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
+ 	select BR2_PACKAGE_FREETYPE # runtime
+ 	select BR2_PACKAGE_LIBPNG # runtime
+ 	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
++	select BR2_PACKAGE_PYTHON_CONTOURPY # runtime
+ 	select BR2_PACKAGE_PYTHON_CYCLER
++	select BR2_PACKAGE_PYTHON_PYBIND
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+ 	select BR2_PACKAGE_PYTHON_KIWISOLVER # runtime
+diff --git a/package/python-matplotlib/python-matplotlib.hash b/package/python-matplotlib/python-matplotlib.hash
+index 0d7117811c..c2fb907e2c 100644
+--- a/package/python-matplotlib/python-matplotlib.hash
++++ b/package/python-matplotlib/python-matplotlib.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/project/matplotlib/#files
+-sha256  fc4f526dfdb31c9bd6b8ca06bf9fab663ca12f3ec9cdf4496fb44bc680140318  matplotlib-3.4.3.tar.gz
++# md5, sha256 from https://pypi.org/pypi/matplotlib/json
++md5  72896b8c240903ebddc47be6451d813b  matplotlib-3.8.2.tar.gz
++sha256  01a978b871b881ee76017152f1f1a0cbf6bd5f7b8ff8c96df0df1bd57d8755a1  matplotlib-3.8.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  5a1a81ea301728c8bba2933da832c0cd62229daf20893a024ab3d53244468dbc  LICENSE/LICENSE
+diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
+index 650aac9bd9..4fd2b5f432 100644
+--- a/package/python-matplotlib/python-matplotlib.mk
++++ b/package/python-matplotlib/python-matplotlib.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MATPLOTLIB_VERSION = 3.4.3
++PYTHON_MATPLOTLIB_VERSION = 3.8.2
+ PYTHON_MATPLOTLIB_SOURCE = matplotlib-$(PYTHON_MATPLOTLIB_VERSION).tar.gz
+-PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/21/37/197e68df384ff694f78d687a49ad39f96c67b8d75718bc61503e1676b617
++PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/fb/ab/38a0e94cb01dacb50f06957c2bed1c83b8f9dac6618988a37b2487862944
+ PYTHON_MATPLOTLIB_LICENSE = Python-2.0
+ PYTHON_MATPLOTLIB_LICENSE_FILES = LICENSE/LICENSE
+ PYTHON_MATPLOTLIB_DEPENDENCIES = \
+@@ -14,8 +14,10 @@ PYTHON_MATPLOTLIB_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-python-certifi \
+ 	host-python-numpy \
++	host-python-setuptools-scm \
+ 	libpng \
+ 	python-cycler \
++	python-pybind \
+ 	qhull
+ PYTHON_MATPLOTLIB_SETUP_TYPE = setuptools
+ 
+@@ -24,7 +26,7 @@ PYTHON_MATPLOTLIB_DEPENDENCIES += python-pyqt5
+ endif
+ 
+ define PYTHON_MATPLOTLIB_COPY_SETUP_CFG
+-	cp $(PYTHON_MATPLOTLIB_PKGDIR)/setup.cfg $(@D)/setup.cfg
++	cp $(PYTHON_MATPLOTLIB_PKGDIR)/setup.cfg $(@D)/mplsetup.cfg
+ endef
+ PYTHON_MATPLOTLIB_PRE_CONFIGURE_HOOKS += PYTHON_MATPLOTLIB_COPY_SETUP_CFG
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
