@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F18DFC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 22:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 865DCC3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 22:37:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC73961096;
-	Wed, 20 Dec 2023 22:22:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC73961096
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1EF6060648;
+	Wed, 20 Dec 2023 22:37:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EF6060648
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TeOsFgQd9sUX; Wed, 20 Dec 2023 22:22:57 +0000 (UTC)
+	with ESMTP id Y8ED6Gugzgr7; Wed, 20 Dec 2023 22:37:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B12BC61573;
-	Wed, 20 Dec 2023 22:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B12BC61573
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C9FF21BF471
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 22:22:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FAA561072;
+	Wed, 20 Dec 2023 22:37:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FAA561072
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 568931BF471
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 22:37:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9ED440525
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 22:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9ED440525
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C3534185D
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 22:37:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C3534185D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iilmQXg1Etjs for <buildroot@lists.busybox.net>;
- Wed, 20 Dec 2023 22:22:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w03VdUXPktc1 for <buildroot@lists.busybox.net>;
+ Wed, 20 Dec 2023 22:37:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AB3A41917
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 22:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AB3A41917
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29B9941833
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 22:37:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29B9941833
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4397F87CDA; Wed, 20 Dec 2023 22:22:41 +0000 (UTC)
+ id 0FE8E87CEF; Wed, 20 Dec 2023 22:37:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 23:12:53 +0100
+Date: Wed, 20 Dec 2023 23:36:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 996b786cfc03c3cf2ac631045650545c901e3075
-X-Git-Newrev: de5a82755d11ebd2f351a7c8f9250838542fce43
+X-Git-Oldrev: de5a82755d11ebd2f351a7c8f9250838542fce43
+X-Git-Newrev: 02c818bc5c7a6967a212f12e4caa8ccdfa0b452b
 X-Patchwork-Hint: ignore
-Message-Id: <20231220222241.4397F87CDA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fcft: new package
+Message-Id: <20231220223741.0FE8E87CEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libutempter: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,160 +63,145 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de5a82755d11ebd2f351a7c8f9250838542fce43
+commit: https://git.buildroot.net/buildroot/commit/?id=02c818bc5c7a6967a212f12e4caa8ccdfa0b452b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/fcft/Config.in | 52 ++++++++++++++++++++++++++++++++++++++++++++++++++
- package/fcft/fcft.hash |  3 +++
- package/fcft/fcft.mk   | 44 ++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 101 insertions(+)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../libutempter/0001-force-symlink-creation.patch  | 36 ++++++++++++++++++++++
+ package/libutempter/Config.in                      | 11 +++++++
+ package/libutempter/libutempter.hash               |  3 ++
+ package/libutempter/libutempter.mk                 | 27 ++++++++++++++++
+ 6 files changed, 79 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 4c8a94ebb6..6e5bebeea6 100644
+index 6e5bebeea6..874e7bd3d2 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -33,6 +33,7 @@ F:	package/vulkan-tools/
- 
- N:	Adam Duskett <adam.duskett@amarulasolutions.com>
- F:	package/depot-tools/
-+F:	package/fcft/
- F:	package/flutter-engine/
+@@ -38,6 +38,7 @@ F:	package/flutter-engine/
  F:	package/flutter-gallery/
  F:	package/flutter-pi/
+ F:	package/flutter-sdk-bin/
++F:	package/libutempter/
+ F:	package/python-kmod/
+ F:	package/python-versioneer/
+ F:	package/tllist/
 diff --git a/package/Config.in b/package/Config.in
-index ccef66e1ea..ce8b8a610e 100644
+index ce8b8a610e..7d4d624253 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2225,6 +2225,7 @@ menu "Text and terminal handling"
- 	source "package/cli11/Config.in"
- 	source "package/docopt-cpp/Config.in"
- 	source "package/enchant/Config.in"
-+	source "package/fcft/Config.in"
- 	source "package/fmt/Config.in"
- 	source "package/fstrcmp/Config.in"
- 	source "package/icu/Config.in"
-diff --git a/package/fcft/Config.in b/package/fcft/Config.in
+@@ -2164,6 +2164,7 @@ menu "Other"
+ 	source "package/libunwind/Config.in"
+ 	source "package/liburcu/Config.in"
+ 	source "package/liburing/Config.in"
++	source "package/libutempter/Config.in"
+ 	source "package/libuv/Config.in"
+ 	source "package/lightning/Config.in"
+ 	source "package/linux-pam/Config.in"
+diff --git a/package/libutempter/0001-force-symlink-creation.patch b/package/libutempter/0001-force-symlink-creation.patch
 new file mode 100644
-index 0000000000..b65515a3f1
+index 0000000000..c30928afd5
 --- /dev/null
-+++ b/package/fcft/Config.in
-@@ -0,0 +1,52 @@
-+config BR2_PACKAGE_FCFT
-+	bool "fcft"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_TLLIST
-+	help
-+	  A simple library for font loading and glyph rasterization
-+	  using FontConfig, FreeType and pixman.
++++ b/package/libutempter/0001-force-symlink-creation.patch
+@@ -0,0 +1,36 @@
++From 13e0a4ca67d860bc8f1e3b2ad6a3926758d76b47 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <adam.duskett@amarulasolutions.com>
++Date: Wed, 22 Nov 2023 14:09:13 -0700
++Subject: [PATCH] force symlink creation
 +
-+	  https://codeberg.org/dnkl/fcft
++Force symlink creation to avoid errors when reinstalling
 +
-+if BR2_PACKAGE_FCFT
++Upstream: https://github.com/altlinux/libutempter/pull/5
++Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++---
++ Makefile | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+config BR2_PACKAGE_FCFT_GRAPHEME_SHAPING
-+	bool "grapheme-shaping"
-+	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
-+	select BR2_PACKAGE_HARFBUZZ
-+	help
-+	  Enables shaping of individual grapheme clusters
++diff --git a/Makefile b/Makefile
++index 8c90121..1cfc627 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -83,12 +83,12 @@ install:
++ 	$(INSTALL) -p -m644 $(PROJECT).h $(DESTDIR)$(includedir)/
++ 	$(INSTALL) -p -m755 $(SHAREDLIB) $(DESTDIR)$(libdir)/$(SHAREDLIB).$(VERSION)
++ 	$(INSTALL) -p -m644 $(STATICLIB) $(DESTDIR)$(libdir)/
++-	ln -s $(SHAREDLIB).$(VERSION) $(DESTDIR)$(libdir)/$(SONAME)
++-	ln -s $(SONAME) $(DESTDIR)$(libdir)/$(SHAREDLIB)
+++	ln -sf $(SHAREDLIB).$(VERSION) $(DESTDIR)$(libdir)/$(SONAME)
+++	ln -sf $(SONAME) $(DESTDIR)$(libdir)/$(SHAREDLIB)
++ 	$(INSTALL) -p -m644 $(PROJECT).3 $(DESTDIR)$(man3dir)/
++ 	for n in lib$(PROJECT) utempter_add_record utempter_remove_record \
++ 	    utempter_remove_added_record utempter_set_helper; do \
++-		ln -s $(PROJECT).3 $(DESTDIR)$(man3dir)/$$n.3; \
+++		ln -sf $(PROJECT).3 $(DESTDIR)$(man3dir)/$$n.3; \
++ 	done
++ 
++ clean:
++-- 
++2.42.0
 +
-+comment "grapheme-shaping needs a toolchain w/ C++, gcc >= 4.9"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
-+config BR2_PACKAGE_FCFT_RUN_SHAPING
-+	bool "run-shaping"
-+	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # harfbuzz
-+	select BR2_PACKAGE_HARFBUZZ
-+	select BR2_PACKAGE_UTF8PROC
-+	help
-+	  Enables shaping of whole text runs.
-+
-+comment "run-shaping needs a toolchain w/ C++, gcc >= 4.9"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
-+config BR2_PACKAGE_FCFT_SVG_SUPPORT
-+	bool "svg support"
-+	help
-+	  Enables svg support. This option increases the size of the
-+	  library by approximately 55KB.
-+
-+endif # BR2_PACKAGE_FCFT
-+
-+comment "fcft needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/fcft/fcft.hash b/package/fcft/fcft.hash
+diff --git a/package/libutempter/Config.in b/package/libutempter/Config.in
 new file mode 100644
-index 0000000000..96d885db1d
+index 0000000000..a06a240418
 --- /dev/null
-+++ b/package/fcft/fcft.hash
++++ b/package/libutempter/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBUTEMPTER
++	bool "libutempter"
++	help
++	  The libutempter library provides interface for terminal
++	  emulators such as screen and xterm to record user
++	  sessions to utmp and wtmp files.
++
++	  http://ftp.altlinux.org/pub/people/ldv/utempter/
++
++comment "libutempter needs a toolchain w/ headers >= 4.14, dynamic library"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 || BR2_STATIC_LIBS
+diff --git a/package/libutempter/libutempter.hash b/package/libutempter/libutempter.hash
+new file mode 100644
+index 0000000000..53a6c6db63
+--- /dev/null
++++ b/package/libutempter/libutempter.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  904f40d749d198d97c46c5a459cd3c53fe92f008cf1e3e61949f6cf3036a78b7  3.1.6.tar.gz
-+sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
-diff --git a/package/fcft/fcft.mk b/package/fcft/fcft.mk
++sha256  967fef372f391de501843ad87570c6cf5dabd9651f00f1783090fbc12b2a34cb  libutempter-1.2.1.tar.gz
++sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libutempter/libutempter.mk b/package/libutempter/libutempter.mk
 new file mode 100644
-index 0000000000..538d8a0748
+index 0000000000..44b0dc38b0
 --- /dev/null
-+++ b/package/fcft/fcft.mk
-@@ -0,0 +1,44 @@
++++ b/package/libutempter/libutempter.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# fcft
++# libutempter
 +#
 +################################################################################
 +
-+FCFT_VERSION = 3.1.6
-+FCFT_SOURCE = $(FCFT_VERSION).tar.gz
-+FCFT_SITE = https://codeberg.org/dnkl/fcft/archive
-+FCFT_LICENSE = MIT
-+FCFT_LICENSE_FILES = LICENSE
-+FCFT_INSTALL_STAGING = YES
++LIBUTEMPTER_VERSION = 1.2.1
++LIBUTEMPTER_SITE = ftp.altlinux.org/pub/people/ldv/utempter
++LIBUTEMPTER_INSTALL_STAGING = YES
++LIBUTEMPTER_LICENSE = LGPL-2.1
++LIBUTEMPTER_LICENSE_FILES = COPYING
 +
-+FCFT_DEPENDENCIES = \
-+	fontconfig \
-+	freetype \
-+	pixman \
-+	tllist
++define LIBUTEMPTER_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
 +
-+FCFT_CONF_OPTS = \
-+	-Ddocs=disabled \
-+	-Dexamples=false
++define LIBUTEMPTER_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++		$(MAKE) DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/ install
++endef
 +
-+ifeq ($(BR2_PACKAGE_FCFT_GRAPHEME_SHAPING),y)
-+FCFT_DEPENDENCIES += harfbuzz
-+FCFT_CONF_OPTS += -Dgrapheme-shaping=enabled
-+else
-+FCFT_CONF_OPTS += -Dgrapheme-shaping=disabled
-+endif
++define LIBUTEMPTER_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++		$(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/ install
++endef
 +
-+ifeq ($(BR2_PACKAGE_FCFT_RUN_SHAPING),y)
-+FCFT_DEPENDENCIES += harfbuzz utf8proc
-+FCFT_CONF_OPTS += -Drun-shaping=enabled
-+else
-+FCFT_CONF_OPTS += -Drun-shaping=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FCFT_SVG_SUPPORT),y)
-+FCFT_CONF_OPTS += -Dsvg-backend='nanosvg'
-+else
-+FCFT_CONF_OPTS += -Dsvg-backend='none'
-+endif
-+
-+$(eval $(meson-package))
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
