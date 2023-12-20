@@ -1,65 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 935ABC41535
-	for <buildroot@archiver.kernel.org>; Tue, 19 Dec 2023 23:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6350C46CD3
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 02:08:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 279A983279;
-	Tue, 19 Dec 2023 23:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 279A983279
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Eayvb80yb3EJ; Tue, 19 Dec 2023 23:18:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 51C3683264;
-	Tue, 19 Dec 2023 23:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51C3683264
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D17C11BF3E9
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 23:18:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA36C4058C
- for <buildroot@lists.busybox.net>; Tue, 19 Dec 2023 23:18:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA36C4058C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4004441BD4;
+	Wed, 20 Dec 2023 02:08:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4004441BD4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1zW6cgyHt88J for <buildroot@lists.busybox.net>;
- Tue, 19 Dec 2023 23:18:08 +0000 (UTC)
-Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3F1E740492
- for <buildroot@buildroot.org>; Tue, 19 Dec 2023 23:18:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F1E740492
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id FjLhrxkiOQQ0iFjLhrfLIE; Wed, 20 Dec 2023 00:18:06 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6KnTzigaFPOX; Wed, 20 Dec 2023 02:08:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E195241BB1;
+	Wed, 20 Dec 2023 02:08:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E195241BB1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 02A611BF3B9
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 02:08:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6FF2403C7
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 02:08:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6FF2403C7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lk2PCb3vk8an for <buildroot@lists.busybox.net>;
+ Wed, 20 Dec 2023 02:08:25 +0000 (UTC)
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0B6A403AA
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 02:08:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0B6A403AA
+Received: by mail-il1-x12c.google.com with SMTP id
+ e9e14a558f8ab-35f519f3ea9so23537115ab.3
+ for <buildroot@buildroot.org>; Tue, 19 Dec 2023 18:08:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1703038104; x=1703642904;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Xwfub1jCmwD8bMOLhfk0HC1NpVHS7QfdbnjWLvisQWg=;
+ b=cXZ+GP1TxBACL63MF1B1A8XhnRrS7bejXtn3yUbOO+Z85EOCVJYZp8HOgLkE1g+Thg
+ K7MnZsdi/2n7h+xyQKv97IqG3MH5E6reHO9I0EfrvHPTwuowxA70okzkpXdBkFmKqV0g
+ jpxVn0d6KpBgf9g1p9nAxGF4liXkcNhjTHwsRv4/mxGrlkSyMk13ivyJBqgXlFz0zM3U
+ AKH/zLL1EIn5H7b4fa+tJ7LCEU8dkVXzNj9rk1L1y1mSQQxpY8YaB1VklC90aLvnxx8R
+ +UUpXoHe+XKwGZPfypV4/vCMef22BVDB0v6GCe6TbUYVyagHPZAHa+3/MiKv4cM3kBQ+
+ zlxQ==
+X-Gm-Message-State: AOJu0YzZHLpzFC5MpCHQiLcNyP117WnqjK/mfR0HeyMrH5SGRI3OdbBQ
+ in3pp+czU20GQkuVNQRr4vU0nZRtAM8=
+X-Google-Smtp-Source: AGHT+IH1FQnWxJRn2Rzt0dGKPAwtXOJAJeJjAAr0LerpL46CA2qZZupSljCCUEdhl8PAX1aduZJ7Aw==
+X-Received: by 2002:a05:6e02:1c24:b0:35d:a4a9:7bb4 with SMTP id
+ m4-20020a056e021c2400b0035da4a97bb4mr18351199ilh.6.1703038104386; 
+ Tue, 19 Dec 2023 18:08:24 -0800 (PST)
+Received: from blastoff3.cg.shawcable.net
+ ([2604:3d09:c74:2000:cc05:d215:c02b:b886])
+ by smtp.gmail.com with ESMTPSA id
+ v188-20020a632fc5000000b005c66a7d70fdsm19643781pgv.61.2023.12.19.18.08.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 19 Dec 2023 18:08:23 -0800 (PST)
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 00:18:04 +0100
-Message-Id: <20231219231804.1034479-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue, 19 Dec 2023 19:08:18 -0700
+Message-Id: <20231220020818.23843-1-peter.macleod.thompson@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfANu3FnJuKSW0GvQLBQn5q+omKQZKBU0pNCE2gFZfEWLgWzktK5QWbxV/u04n2ySmltDgUeGXfvXyWiPVP1dUsbPk4SWcGsLkmJ02eeyQUlGuk0WKUmC
- Dv8aA/sbaRhl9qtvKmTAIXEim/FQSSvg6GU/IKjwLFNU+sV4E8IPPP6mPzTERi6THYZvobrno4hslZwq04kynBZsHHFwST+Gq4ywqgEvOJSkl1CQm9RwMZVl
- XwfHVA70ftOyrqhXaMwOw5oOt4cEL+oZxV55EzirE70=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1703027886; bh=xshY/91Y4XOGFGunPBgvdT9a9cgxkUX0xWShoGyQ0ks=;
- h=From:To:Subject:Date:MIME-Version;
- b=dqCmcxNGRXGWNMddJvNBTTfW1/3Qjt6/Id1clnWxWyxKU9m1VQGGN6YAdHc0YQubB
- QtVqdXM/xVAjQuqZTmmuh/EProZQgZAL+VEHvWV4KogeK6ij/jKaOxFK0z1QZVrKaE
- hLL7CnS9Z+Qmy1ngXdHeaD0OkTAIwI6Szd2pGudgrq5yZsM925TNw0Wj2oFMaP9Pt4
- Avb3UXwtD3oMrATXgCwCOpqXD+9TkWiyFxZ1N2mUM5eeCHy2lsT0ySrTcsvBlmAXO4
- 4Qswci+amB4ywg5Kwg8lMyugG60LRTIMtA04Bnu+pLIJh5deygqF6uXFvZfXQocbPb
- Ab2ZK3t2ImLmA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=dqCmcxNG
-Subject: [Buildroot] [PATCH] package/libnvme: bump to version 1.7
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1703038104; x=1703642904; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Xwfub1jCmwD8bMOLhfk0HC1NpVHS7QfdbnjWLvisQWg=;
+ b=abraeaMpRH8OhMbv7l/RsBJ5dKJ+6WYimbna+alqmVWSuh4HhXs+w2PO/s9BabR/rz
+ r/2xcJbhGmzxh1+1N9CCeKvP9Tjc2ioWMVoz/1SAI9MUA100uomP/TGj2aDuj6WrNGls
+ gQ331YabKAKVOPU9hQyLf2ye80AzTGOemAimnufM54UUbhF56/TM7jqz1TEDYNSTwCnc
+ Pk0DY7Rr+ifQzsjEddf1ODct0Zws+po7vmqPJ+WBzEFr0ZAQe63fYRldbkj6XyRRANg8
+ igv3Fh/G0AkzWsjMNs1LF0polb21v6Ey5uqz/i5SVVkDgXereAZwbpTsDNK8HroWVLr6
+ BF/w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=abraeaMp
+Subject: [Buildroot] [PATCH 1/1] package/sdl2_image: bump version to 2.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,176 +94,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop local patches that have been upstreamed.
+From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 ---
- ...01-test-handle-POSIX-ioctl-prototype.patch | 70 -------------------
- ...eson-make-building-tests-conditional.patch | 46 ------------
- package/libnvme/libnvme.hash                  |  2 +-
- package/libnvme/libnvme.mk                    |  2 +-
- 4 files changed, 2 insertions(+), 118 deletions(-)
- delete mode 100644 package/libnvme/0001-test-handle-POSIX-ioctl-prototype.patch
- delete mode 100644 package/libnvme/0002-meson-make-building-tests-conditional.patch
+ package/sdl2_image/sdl2_image.hash | 2 +-
+ package/sdl2_image/sdl2_image.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnvme/0001-test-handle-POSIX-ioctl-prototype.patch b/package/libnvme/0001-test-handle-POSIX-ioctl-prototype.patch
-deleted file mode 100644
-index 175cdcd7dd..0000000000
---- a/package/libnvme/0001-test-handle-POSIX-ioctl-prototype.patch
-+++ /dev/null
-@@ -1,70 +0,0 @@
--From ca47ba3119365eafac0ab25a86cab9d9a1b29bd4 Mon Sep 17 00:00:00 2001
--From: Sam James <sam@gentoo.org>
--Date: Sat, 30 Sep 2023 06:38:53 +0100
--Subject: [PATCH] test: handle POSIX ioctl prototype
--
--glibc has the following prototype for ioctl: int ioctl(int fd, unsigned long request, ...)
--POSIX (inc. musl) has the following for ioctl: int ioctl(int fd, int request, ...)
--
--Check which prototype is used in <sys/ioctl.h> to avoid a conflict and conditionally
--define the right one for the system.
--
--Upstream: https://github.com/linux-nvme/libnvme/commit/ca47ba3119365eafac0ab25a86cab9d9a1b29bd4
--
--Bug: https://bugs.gentoo.org/914921
--Signed-off-by: Sam James <sam@gentoo.org>
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- meson.build       | 10 ++++++++++
-- test/ioctl/mock.c |  6 +++++-
-- 2 files changed, 15 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 6fcf1da..2c979cc 100644
----- a/meson.build
--+++ b/meson.build
--@@ -230,6 +230,16 @@ conf.set(
--     ),
--     description: 'Is network address and service translation available'
-- )
--+conf.set(
--+    'HAVE_GLIBC_IOCTL',
--+    cc.compiles(
--+        '''#include <sys/ioctl.h>
--+        int ioctl(int fd, unsigned long request, ...);
--+        ''',
--+        name: 'ioctl has glibc-style prototype'
--+    ),
--+    description: 'Is ioctl the glibc interface (rather than POSIX)'
--+)
-- 
-- if cc.has_function_attribute('fallthrough')
--   conf.set('fallthrough', '__attribute__((__fallthrough__))')
--diff --git a/test/ioctl/mock.c b/test/ioctl/mock.c
--index e917244..5d2ac94 100644
----- a/test/ioctl/mock.c
--+++ b/test/ioctl/mock.c
--@@ -114,7 +114,11 @@ void end_mock_cmds(void)
-- 	} \
-- })
-- 
--+#ifdef HAVE_GLIBC_IOCTL
-- int ioctl(int fd, unsigned long request, ...)
--+#else
--+int ioctl(int fd, int request, ...)
--+#endif
-- {
-- 	struct mock_cmds *mock_cmds;
-- 	bool result64;
--@@ -141,7 +145,7 @@ int ioctl(int fd, unsigned long request, ...)
-- 		result64 = true;
-- 		break;
-- 	default:
---		fail("unexpected %s %lu", __func__, request);
--+		fail("unexpected %s %lu", __func__, (unsigned long) request);
-- 	}
-- 	check(mock_cmds->remaining_cmds,
-- 	      "unexpected %s command", mock_cmds->name);
---- 
--2.34.1
--
-diff --git a/package/libnvme/0002-meson-make-building-tests-conditional.patch b/package/libnvme/0002-meson-make-building-tests-conditional.patch
-deleted file mode 100644
-index 0b6d3681ca..0000000000
---- a/package/libnvme/0002-meson-make-building-tests-conditional.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From ff742e792725c316ba6de0800188bf36751bd1d1 Mon Sep 17 00:00:00 2001
--From: Sam James <sam@gentoo.org>
--Date: Sat, 30 Sep 2023 06:43:39 +0100
--Subject: [PATCH] meson: make building tests conditional
--
--Just like we do for docs.
--
--Upstream: https://github.com/linux-nvme/libnvme/commit/ff742e792725c316ba6de0800188bf36751bd1d1
--
--Signed-off-by: Sam James <sam@gentoo.org>
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- meson.build       | 4 +++-
-- meson_options.txt | 1 +
-- 2 files changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 2c979cc..a9263b5 100644
----- a/meson.build
--+++ b/meson.build
--@@ -273,7 +273,9 @@ subdir('internal')
-- subdir('ccan')
-- subdir('src')
-- subdir('libnvme')
---subdir('test')
--+if get_option('tests')
--+    subdir('test')
--+endif
-- subdir('examples')
-- subdir('doc')
-- 
--diff --git a/meson_options.txt b/meson_options.txt
--index a1ed79f..251ae11 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -6,6 +6,7 @@ option('rstdir', type : 'string', value : '', description : 'directory for ReST
-- 
-- option('docs', type : 'combo', choices : ['false', 'html', 'man', 'rst', 'all'], description : 'install documentation')
-- option('docs-build', type : 'boolean', value : false,  description : 'build documentation')
--+option('tests', type : 'boolean', value : true, description : 'build tests')
-- 
-- option('python', type : 'feature', value: 'auto', description : 'Generate libnvme python bindings')
-- option('openssl', type : 'feature', value: 'auto', description : 'OpenSSL support')
---- 
--2.34.1
--
-diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
-index b9e0281189..2a446eaf0a 100644
---- a/package/libnvme/libnvme.hash
-+++ b/package/libnvme/libnvme.hash
+diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
+index 55b2661fc0..0236f1ed08 100644
+--- a/package/sdl2_image/sdl2_image.hash
++++ b/package/sdl2_image/sdl2_image.hash
 @@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  0dd8ba8b655abe78c09833edb66632aa6bee82aebf117dd252ded968deaaeec7  libnvme-1.6.tar.gz
-+sha256  93febccd2e4201a6a9c696a0208a7227adfd1649ad0523754c1885503890e77c  libnvme-1.7.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
-index b393122c85..688624a79e 100644
---- a/package/libnvme/libnvme.mk
-+++ b/package/libnvme/libnvme.mk
+ # Locally calculated
+-sha256  931c9be5bf1d7c8fae9b7dc157828b7eee874e23c7f24b44ba7eff6b4836312c  SDL2_image-2.6.3.tar.gz
++sha256  e4cab9a58c347a490c46723c17553b4e12233cd821d3b993a8475a50497f5a3e  SDL2_image-2.6.3.tar.gz
+ sha256  1852c8549e3d154687197d46abababd3e8faae035f19991b2ca850fa3a43ad57  LICENSE.txt
+diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+index aaf379788c..ca9d983892 100644
+--- a/package/sdl2_image/sdl2_image.mk
++++ b/package/sdl2_image/sdl2_image.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNVME_VERSION = 1.6
-+LIBNVME_VERSION = 1.7
- LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
- LIBNVME_LICENSE = LGPL-2.1
- LIBNVME_LICENSE_FILES = COPYING
+-SDL2_IMAGE_VERSION = 2.6.3
++SDL2_IMAGE_VERSION = 2.8.1
+ SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
+ SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL2_IMAGE_INSTALL_STAGING = YES
 -- 
-2.34.1
+2.20.1
 
 _______________________________________________
 buildroot mailing list
