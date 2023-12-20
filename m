@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1359C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 10:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C8F5C46CCD
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 10:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7850141E66;
-	Wed, 20 Dec 2023 10:50:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7850141E66
+	by smtp4.osuosl.org (Postfix) with ESMTP id 075C941BB3;
+	Wed, 20 Dec 2023 10:50:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 075C941BB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tpJdDc5tQmjc; Wed, 20 Dec 2023 10:50:37 +0000 (UTC)
+	with ESMTP id 4Xts7DPEdZ4J; Wed, 20 Dec 2023 10:50:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B11D74202A;
-	Wed, 20 Dec 2023 10:50:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B11D74202A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6B8921BF2B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40F7941EB1;
+	Wed, 20 Dec 2023 10:50:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40F7941EB1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 734AC1BF977
  for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 10:50:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4EBF60759
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 10:50:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4EBF60759
+ by smtp2.osuosl.org (Postfix) with ESMTP id 473F34362E
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 10:50:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 473F34362E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6xzyzcSYQwIf for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5JlTmmXBrB1W for <buildroot@lists.busybox.net>;
  Wed, 20 Dec 2023 10:50:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1389E60741
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F1D1400DC
  for <buildroot@buildroot.org>; Wed, 20 Dec 2023 10:50:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1389E60741
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F1D1400DC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F210C87C2F; Wed, 20 Dec 2023 10:50:04 +0000 (UTC)
+ id 1BD2587C30; Wed, 20 Dec 2023 10:50:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 11:42:27 +0100
+Date: Wed, 20 Dec 2023 11:49:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c047ea463e27ceaafde76d64406862c3322daa0
-X-Git-Newrev: 85646943ec6fb8eeee760b89b5d31a09da7ea92b
+X-Git-Oldrev: 7951bb0686bc058684abe76324d83dcb2e7883e3
+X-Git-Newrev: 620a88f755f81a241e9e64f53d8f611977de5e7a
 X-Patchwork-Hint: ignore
-Message-Id: <20231220105004.F210C87C2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nmap: fix wording for nc symlink
+Message-Id: <20231220105005.1BD2587C30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump to version 3.96.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,28 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85646943ec6fb8eeee760b89b5d31a09da7ea92b
+commit: https://git.buildroot.net/buildroot/commit/?id=620a88f755f81a241e9e64f53d8f611977de5e7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nmap/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nmap/Config.in b/package/nmap/Config.in
-index fc6312d0fc..6e097a9884 100644
---- a/package/nmap/Config.in
-+++ b/package/nmap/Config.in
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_NMAP_NCAT
- 	  written for the Nmap Project as a much-improved
- 	  reimplementation of the venerable Netcat.
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 046f0efcca..e44f729363 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_95_RTM/src/SHA256SUMS
+-sha256  469888e41e8a780051ce00edcd914e8a6bd38da88a82cfb84898dd388635822a  nss-3.95.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_96_1_RTM/src/SHA256SUMS
++sha256  c51e89f6fbb06163f4302e368eeb672d748b52d583948bdb15ef1b069237a496  nss-3.96.1.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 878375e1b6..80f8b53297 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  If symlink to "nc" is installed if neither netcat or
-+	  A symlink to "nc" is installed if neither netcat or
- 	  netcat-openbsd is selected.
- 
- comment "a symlink from ncat to 'nc' will be installed"
+-LIBNSS_VERSION = 3.95
++LIBNSS_VERSION = 3.96.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
