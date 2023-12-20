@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32E24C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 21:04:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52C72C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 21:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD9B46156D;
-	Wed, 20 Dec 2023 21:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD9B46156D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C1A061570;
+	Wed, 20 Dec 2023 21:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C1A061570
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jWSw9GKqSoPd; Wed, 20 Dec 2023 21:04:56 +0000 (UTC)
+	with ESMTP id I7bqVni_nuHP; Wed, 20 Dec 2023 21:06:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4508861546;
-	Wed, 20 Dec 2023 21:04:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4508861546
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0BA061BF361
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 21:04:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D9DA61546;
+	Wed, 20 Dec 2023 21:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D9DA61546
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5ED2A1BF361
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 21:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E554981DEA
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 21:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E554981DEA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BF5F42098
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 21:06:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BF5F42098
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GB6niC5gl41Q for <buildroot@lists.busybox.net>;
- Wed, 20 Dec 2023 21:04:51 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4447281D18
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 21:04:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4447281D18
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 67503C0003;
- Wed, 20 Dec 2023 21:04:49 +0000 (UTC)
-Date: Wed, 20 Dec 2023 22:04:48 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231220220448.66f7aa2a@windsurf>
-In-Reply-To: <20231217172514.1897244-1-bernd@kuhls.net>
-References: <20231217172514.1897244-1-bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id libwyyo2nOmt for <buildroot@lists.busybox.net>;
+ Wed, 20 Dec 2023 21:06:14 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 40243421CA
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 21:06:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40243421CA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 952B220007;
+ Wed, 20 Dec 2023 21:06:12 +0000 (UTC)
+Date: Wed, 20 Dec 2023 22:06:11 +0100
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20231220220611.717533e7@windsurf>
+In-Reply-To: <20231218194001.544887-1-adam.duskett@amarulasolutions.com>
+References: <20231218194001.544887-1-adam.duskett@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703106289;
+ d=bootlin.com; s=gm1; t=1703106372;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=f49s8HvdJpySABE0YRGF0mTMvMuAD+lqL4L8Nh2Q190=;
- b=AYDWfvh/T3/sMXJvKU8y6p5OFmAnMyt0UBBGw4hJVdboad1FPt69awAi88kS1UhA+BvWx5
- rxePL19/+5O8NeDjeVQGoCoPZZVg5mXXopM8LDLnbBEo2GSxWPLeXCAfD/C6a7L288uoB4
- Z3fwOuNYku8arfn2xqs85uc0KZzI8DBzOwiQoqBxBIZsHb4MOiL12lI/qWs5siR7cSDFLc
- mD1i1xIOBQMCsdxh18BsjHdJxPlZgE0LDjYTNG8AcWT69FGKDflv7Bsjb8Ryn/2WX14OxF
- YP0C7q98caa8q+KT7dR7IE8O+nXBjCm+R/emg0Z7oG8OywyCwV4vsijWMszgEw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=DHiRVGzCgjWMwEY9vC5TZpt4C7wVS1oRXVTWbKzomt8=;
+ b=AXYc/fitLNDpR1k/4T18vD4lRz5OOzYAmnmRyt5AZnIssWa/PX88qELIPOHww5xtamgEYU
+ 9AKg6fxeXqlkbVvuYFEZFlHmWKcodNQLBmn+du4qCcA4OIb+W6NRfz7Isgl2+m0XMV4UZk
+ /Qzv8UUkr+NFIvtHg+q2c4k1hUvoSTWYKvQf1rZ2otxK+hUaEedp1+MwKUZ7+ncgp39TV1
+ igzlCDPxK712Ndtui2aXAGbyOxcH/ScbL1tIeRv5CruoX/129fndimTRi0ilK9yZ+8aHtT
+ DgEK/dPOgXNML1E+PX4/6/f+anC29go203d1Tvy3sI+hXxLWwlQWWliKXTKbcA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AYDWfvh/
-Subject: Re: [Buildroot] [PATCH 1/1] package/transmission: bump version to
- 4.0.5
+ header.s=gm1 header.b=AXYc/fit
+Subject: Re: [Buildroot] [PATCH v2 01/14] package/sway/Config.in: Remove
+ duplicate dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,17 +83,12 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 17 Dec 2023 18:25:14 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Mon, 18 Dec 2023 12:39:46 -0700
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-> Release notes:
-> https://github.com/transmission/transmission/releases/tag/4.0.5
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 > ---
->  package/transmission/transmission.hash | 2 +-
->  package/transmission/transmission.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> v1 -> v2: Add to series
 
 Applied to master, thanks.
 
