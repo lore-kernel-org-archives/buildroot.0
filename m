@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8BF3C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:47:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C63FCC3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:55:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12F6143723;
-	Wed, 20 Dec 2023 20:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12F6143723
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6886D40949;
+	Wed, 20 Dec 2023 20:55:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6886D40949
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vR2Ht_sp0MBh; Wed, 20 Dec 2023 20:47:18 +0000 (UTC)
+	with ESMTP id mlOy6kaJ7n1f; Wed, 20 Dec 2023 20:55:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7046436FA;
-	Wed, 20 Dec 2023 20:47:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7046436FA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A666D1BF95D
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:47:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FDF4436FC;
+	Wed, 20 Dec 2023 20:55:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FDF4436FC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E894E1BF365
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FA70839BF
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:47:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FA70839BF
+ by smtp2.osuosl.org (Postfix) with ESMTP id C529A40949
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:55:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C529A40949
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aB8CrHgIGN3X for <buildroot@lists.busybox.net>;
- Wed, 20 Dec 2023 20:47:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F357839B4
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 20:47:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F357839B4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 599BF87C6F; Wed, 20 Dec 2023 20:47:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 21:44:16 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 898941a0d78600971c69e688773c5cdbe35ced96
-X-Git-Newrev: 713a71c73084f9c610dac71df526c8d7c84bf1cf
-X-Patchwork-Hint: ignore
-Message-Id: <20231220204701.599BF87C6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-urwid-readline: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f33IvafpvKOl for <buildroot@lists.busybox.net>;
+ Wed, 20 Dec 2023 20:55:49 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C570403EA
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 20:55:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C570403EA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 51D0120003;
+ Wed, 20 Dec 2023 20:55:47 +0000 (UTC)
+Date: Wed, 20 Dec 2023 21:55:46 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20231220215546.3a763e4e@windsurf>
+In-Reply-To: <20231125062409.708253-1-james.hilliard1@gmail.com>
+References: <20231125062409.708253-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703105747;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=pCQj1aunwo6AoojypPsISyUzfWtGrp6C1SLCyqueXpw=;
+ b=Mj4SA9t2vmR46EPe7+WsNYZdNgjOvazqp5YzdiY0mS3IqA5VrRZqLqvBQ2qeU0Mt2+y0+B
+ zLMVK+YNLuOZalDppHOLraKd2EFpSEiS5lLMo0IO2bsALPEgVRfUcjJRPK/CgmIR1MLxqi
+ MGukthNXnDB0t0eG6fSD6VihX0ga4P8jfWgB0ZD13qsie9TC/MvqSiN7hH4dF/zIHQSa1z
+ EZIVWzV5xzUj63WMJsR60Vmce/CA4ZoaltyK4K6JPqidTLyVIGZsKMHA1ZFxNr5Ycu8dnV
+ YjiYoorBJblvDv7TLgI2V2k/iqTvC6J5rpHoILRBPUAqWXfIqGh6Bvcu//CKWQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Mj4SA9t2
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-urwid-readline: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,78 +77,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=713a71c73084f9c610dac71df526c8d7c84bf1cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 24 Nov 2023 23:24:08 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                                        |  1 +
- package/python-urwid-readline/Config.in                  |  8 ++++++++
- package/python-urwid-readline/python-urwid-readline.hash |  3 +++
- package/python-urwid-readline/python-urwid-readline.mk   | 13 +++++++++++++
- 4 files changed, 25 insertions(+)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/Config.in                                   |  1 +
+>  package/python-urwid-readline/Config.in             |  8 ++++++++
+>  .../python-urwid-readline.hash                      |  3 +++
+>  .../python-urwid-readline/python-urwid-readline.mk  | 13 +++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-urwid-readline/Config.in
+>  create mode 100644 package/python-urwid-readline/python-urwid-readline.hash
+>  create mode 100644 package/python-urwid-readline/python-urwid-readline.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index fcc09b07c4..d3fc4514c4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1372,6 +1372,7 @@ menu "External python modules"
- 	source "package/python-unittest-xml-reporting/Config.in"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
-+	source "package/python-urwid-readline/Config.in"
- 	source "package/python-uvloop/Config.in"
- 	source "package/python-validators/Config.in"
- 	source "package/python-versiontools/Config.in"
-diff --git a/package/python-urwid-readline/Config.in b/package/python-urwid-readline/Config.in
-new file mode 100644
-index 0000000000..a8046fc25b
---- /dev/null
-+++ b/package/python-urwid-readline/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_URWID_READLINE
-+	bool "python-urwid-readline"
-+	select BR2_PACKAGE_PYTHON_URWID # runtime
-+	help
-+	  A textbox edit widget for urwid that supports readline
-+	  shortcuts.
-+
-+	  https://github.com/rr-/urwid_readline
-diff --git a/package/python-urwid-readline/python-urwid-readline.hash b/package/python-urwid-readline/python-urwid-readline.hash
-new file mode 100644
-index 0000000000..75220e937b
---- /dev/null
-+++ b/package/python-urwid-readline/python-urwid-readline.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/urwid_readline/json
-+md5  6e0bd170f621f0ad3edab1875bdb5c5f  urwid_readline-0.13.tar.gz
-+sha256  018020cbc864bb5ed87be17dc26b069eae2755cb29f3a9c569aac3bded1efaf4  urwid_readline-0.13.tar.gz
-diff --git a/package/python-urwid-readline/python-urwid-readline.mk b/package/python-urwid-readline/python-urwid-readline.mk
-new file mode 100644
-index 0000000000..782c425b65
---- /dev/null
-+++ b/package/python-urwid-readline/python-urwid-readline.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-urwid-readline
-+#
-+################################################################################
-+
-+PYTHON_URWID_READLINE_VERSION = 0.13
-+PYTHON_URWID_READLINE_SOURCE = urwid_readline-$(PYTHON_URWID_READLINE_VERSION).tar.gz
-+PYTHON_URWID_READLINE_SITE = https://files.pythonhosted.org/packages/ab/bb/c5b3fec22268d97ad30232f5533d4a5939d4df7ed3917a8d20d447f1d0a7
-+PYTHON_URWID_READLINE_LICENSE = MIT
-+PYTHON_URWID_READLINE_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
