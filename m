@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18DECC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84666C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2CE2403EA;
-	Wed, 20 Dec 2023 20:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2CE2403EA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B9524371D;
+	Wed, 20 Dec 2023 20:42:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B9524371D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ef40CHctJNnb; Wed, 20 Dec 2023 20:42:33 +0000 (UTC)
+	with ESMTP id MHbxBemuzwM3; Wed, 20 Dec 2023 20:42:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFE17436E6;
-	Wed, 20 Dec 2023 20:42:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFE17436E6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E4BB436D9;
+	Wed, 20 Dec 2023 20:42:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E4BB436D9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EAB0C1BF365
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:42:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6889D1BF365
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0D12839BC
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:42:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0D12839BC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42368839A4
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:42:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42368839A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t5psaihc4moq for <buildroot@lists.busybox.net>;
+ with ESMTP id Uu3LtXY7nSbK for <buildroot@lists.busybox.net>;
  Wed, 20 Dec 2023 20:42:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0E9D2839A4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 049BE8399B
  for <buildroot@buildroot.org>; Wed, 20 Dec 2023 20:42:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E9D2839A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 049BE8399B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F155A87C46; Wed, 20 Dec 2023 20:42:16 +0000 (UTC)
+ id E768E87C45; Wed, 20 Dec 2023 20:42:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 21:35:01 +0100
+Date: Wed, 20 Dec 2023 21:32:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 259de5cff6841346dc39cd7eb64a58ccd78c8cd3
-X-Git-Newrev: 898941a0d78600971c69e688773c5cdbe35ced96
+X-Git-Oldrev: ceb678ca19d66ea1be945097d3cf53a3af735ca1
+X-Git-Newrev: 259de5cff6841346dc39cd7eb64a58ccd78c8cd3
 X-Patchwork-Hint: ignore
-Message-Id: <20231220204216.F155A87C46@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-compat53: install compat-5.3.h
+Message-Id: <20231220204216.E768E87C45@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-compat53: bump to version 0.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +58,75 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8862606364750468942=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=898941a0d78600971c69e688773c5cdbe35ced96
+--===============8862606364750468942==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=259de5cff6841346dc39cd7eb64a58ccd78c8cd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-this file could be required by some native modules
+the project has moved to the organization “Lunar Modules”,
+see https://github.com/lunarmodules/
 
-note: compat-5.3.c is included by compat-5.3.h
+diff LICENCE:
+-Copyright (c) 2015 Kepler Project.
++Copyright (C) 1994-2020 Lua.org, PUC-Rio.
++Copyright (C) 2013-2023 The Lua-Compat-5.3 authors.
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-compat53/lua-compat53.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/lua-compat53/Config.in         | 2 +-
+ package/lua-compat53/lua-compat53.hash | 4 ++--
+ package/lua-compat53/lua-compat53.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/package/lua-compat53/Config.in b/package/lua-compat53/Config.in
+index de468fcf66..695c139280 100644
+--- a/package/lua-compat53/Config.in
++++ b/package/lua-compat53/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_LUA_COMPAT53
+ 	  Compatibility module providing Lua-5.3-style APIs for Lua 5.2
+ 	  and 5.1.
+ 
+-	  https://github.com/keplerproject/lua-compat-5.3
++	  https://github.com/lunarmodules/lua-compat-5.3
+diff --git a/package/lua-compat53/lua-compat53.hash b/package/lua-compat53/lua-compat53.hash
+index ccd9a71205..1930063fdc 100644
+--- a/package/lua-compat53/lua-compat53.hash
++++ b/package/lua-compat53/lua-compat53.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  e513e75ba0ef4923a1ec0d4f0beb5972a11cc9bd7ac1b0953b5e4f037b259c92  compat53-0.8-1.src.rock
+-sha256  1b24f475812c979684fb3469f6faccbdc7c33c9d39421728aa0d78deda5a89a5  lua-compat-5.3-0.8/LICENSE
++sha256  bff8e597384776de7c139bee7d6a6f2c05c3eb7315d08733473fa986720cec60  compat53-0.12-1.src.rock
++sha256  870cdff7e4db4c2e84a335b2b9e242b9f963830550026e2057a5885e945982e5  lua-compat-5.3-0.12/LICENSE
 diff --git a/package/lua-compat53/lua-compat53.mk b/package/lua-compat53/lua-compat53.mk
-index 0cfbe2d795..12ac5c011b 100644
+index 0e8f1c3600..0cfbe2d795 100644
 --- a/package/lua-compat53/lua-compat53.mk
 +++ b/package/lua-compat53/lua-compat53.mk
-@@ -10,5 +10,13 @@ LUA_COMPAT53_NAME_UPSTREAM = compat53
- LUA_COMPAT53_SUBDIR = lua-compat-5.3-$(LUA_COMPAT53_VERSION_UPSTREAM)
- LUA_COMPAT53_LICENSE = MIT
- LUA_COMPAT53_LICENSE_FILES = $(LUA_COMPAT53_SUBDIR)/LICENSE
-+LUA_COMPAT53_INSTALL_STAGING = YES
-+
-+define LUA_COMPAT53_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/$(LUA_COMPAT53_SUBDIR)/c-api/compat-5.3.c \
-+		$(STAGING_DIR)/usr/include/compat-5.3.c
-+	$(INSTALL) -D -m 0644 $(@D)/$(LUA_COMPAT53_SUBDIR)/c-api/compat-5.3.h \
-+		$(STAGING_DIR)/usr/include/compat-5.3.h
-+endef
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(luarocks-package))
+-LUA_COMPAT53_VERSION_UPSTREAM = 0.8
++LUA_COMPAT53_VERSION_UPSTREAM = 0.12
+ LUA_COMPAT53_VERSION = $(LUA_COMPAT53_VERSION_UPSTREAM)-1
+ LUA_COMPAT53_NAME_UPSTREAM = compat53
+ LUA_COMPAT53_SUBDIR = lua-compat-5.3-$(LUA_COMPAT53_VERSION_UPSTREAM)
+
+--===============8862606364750468942==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8862606364750468942==--
