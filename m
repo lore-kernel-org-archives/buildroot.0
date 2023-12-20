@@ -4,66 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 465D7C3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 266B4C3DA6E
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 20:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A13D2436EE;
-	Wed, 20 Dec 2023 20:39:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A13D2436EE
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7583403EA;
+	Wed, 20 Dec 2023 20:41:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7583403EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xa26y9W5Lcfz; Wed, 20 Dec 2023 20:39:01 +0000 (UTC)
+	with ESMTP id vyxnXjdHrQFQ; Wed, 20 Dec 2023 20:41:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB932436E6;
-	Wed, 20 Dec 2023 20:39:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB932436E6
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7E61436FD;
+	Wed, 20 Dec 2023 20:41:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7E61436FD
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 67DAD1BF365
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:38:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 650BA1BF365
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:41:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40C4F81973
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:38:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40C4F81973
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E046839A4
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 20:41:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E046839A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pCZPjX2wNjRF for <buildroot@lists.busybox.net>;
- Wed, 20 Dec 2023 20:38:51 +0000 (UTC)
-X-Greylist: delayed 969 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 20 Dec 2023 20:38:51 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EFE7812EA
-Received: from 6.mo582.mail-out.ovh.net (6.mo582.mail-out.ovh.net
- [87.98.177.69])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9EFE7812EA
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 20:38:51 +0000 (UTC)
-Received: from director10.ghost.mail-out.ovh.net (unknown [10.109.176.8])
- by mo582.mail-out.ovh.net (Postfix) with ESMTP id 19C9E249C0
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 20:22:39 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-l94l2 (unknown [10.110.168.38])
- by director10.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 986271FDD4;
- Wed, 20 Dec 2023 20:22:38 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.102])
- by ghost-submission-6684bf9d7b-l94l2 with ESMTPSA
- id MiyICg5Ng2UU7wAAbegRMQ
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Wed, 20 Dec 2023 20:22:38 +0000
-X-OVh-ClientIp: 92.148.253.243
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+ with ESMTP id h_MTTlbCFsYg for <buildroot@lists.busybox.net>;
+ Wed, 20 Dec 2023 20:41:24 +0000 (UTC)
+Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2654A8399B
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 20:41:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2654A8399B
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id G3NZrwVnE598zG3NZrrcFT; Wed, 20 Dec 2023 21:41:21 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 21:21:38 +0100
-Message-ID: <20231220202141.11532-1-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.41.0
+Date: Wed, 20 Dec 2023 21:28:18 +0100
+Message-Id: <20231220202818.165002-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 5552656868272106475
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdduvddgudefiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepuforsggrshhtihgvnhcuufiihihmrghnshhkihcuoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqnecuggftrfgrthhtvghrnhepueejhfekteelueelfffhleevjeeuuedtieetleetvddvhedvjeeiveffgefhtedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrddutddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkedvpdhmohguvgepshhmthhpohhuth
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-102R004b809cd2e-083a-437b-b47c-133c8bb9c61b,
- CCF55E9A36CE62B71F09469834F038924BAB166A)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: [Buildroot] [PATCH v2 0/3] i.MX91 and i.MX93 support
+X-CMAE-Envelope: MS4xfHnlRkEiVrekbqJOZWu8TSJuJBlPGnqZeMFB9cAdjax43n3DtRdFBpLSwsJBuhzneWOW1GahP5BompL8b6rb9HTw30AgU3Do1FXr87DFsrCQ/JNW8Goq
+ 8HxaoLP8BbD0Z3Q3w95xWr+QaMiKS5HDUPzuZYg2sfdEJzIUmFK6A/ewKGL82Ddjmj3TE+GcbyKc+LU1aAm+FP3acUqu/E7f4oAHVOzNq0GRbS9cB8blTDL0
+ HzCkVvs7axHLZB7OBLSqoVAh3Tc9X+tWI/IdK3S3cDQ=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1703104881; bh=jjqfW3exIuFMVXQw+6mHPBupTNLtSHHN8AJchWXJm/A=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=BgoK7VkBTNHddq49wR2CE+YELQhkjXTmHO+Y6LMVlsx1/MeKRSXMl+ZMTkC3oOtSt
+ tHCQPyf3OzfldACtc89J7CvJfCw4xj19mLCdUy4BRfvlox27zBi0YNHjeJ7jF6CLgR
+ +V5KOqMUz4HNrEBb/Ng5RjusJvs6T+vbvw6XddBUP1Ohj4RxGtm1vOhPF36KBDhohU
+ /zrv58uLe/DcT7pjV/oMnkzd/DhqnuFcjfgdcfPbGEqaYvvhSezT6FWT6JDYub0gtH
+ oKcHLgUDmWC7kElnXvGleHbz7XJgvuCJ5pWRm7Nym5zjXlhyGj3ZInHjpO3eJrqtOd
+ aL2NFHyyFKZnw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=BgoK7VkB
+Subject: [Buildroot] [PATCH] package/libnvme: bump to version 1.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,45 +71,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabio Estevam <festevam@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBzZXJpZXMgYWRkcyBpLk1YOTEsIGkuTVg5MyBhbmQgaS5NWDkzIDExeDExIEVWSyB0byBC
-dWlsZHJvb3QuCgotLS0KCkNoYW5nZXMgZm9yIHYyOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9i
-dWlsZHJvb3QvMjAyMzEwMTExMTA5MzIuNDQyNS0xLXNlYmFzdGllbi5zenltYW5za2lAYXJtYWRl
-dXMuY29tLwogLSBwYXRjaCAxIG9mIHYxIGhhcyBiZWVuIGFwcGxpZWQKIC0gbW92ZSBTb0MgYXNp
-YyB2ZXJzaW9uIHNlbGVjdGlvbiB0byBwYWNrYWdlL2ZyZWVzY2FsZS1pbXgvQ29uZmlnLmluCiAt
-IG1pbm9yIGZpeGVzIGluIGxhdGVzdCBwYXRjaAoKU8OpYmFzdGllbiBTenltYW5za2kgKDMpOgog
-IHBhY2thZ2UvZnJlZXNjYWxlLWlteDogYWRkIGkuTVg5MSBhbmQgaS5NWDkzIFNvQyBzdXBwb3J0
-CiAgcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLXNlbnRpbmVsOiBuZXcgcGFja2FnZQog
-IGNvbmZpZ3MvZnJlZXNjYWxlX2lteDkzZXZrOiBuZXcgZGVmY29uZmlnCgogLi4uL2NvbW1vbi9p
-bXgvZ2VuaW1hZ2UuY2ZnLnRlbXBsYXRlX2lteDkgICAgIHwgNDEgKysrKysrKysrKysKIC4uLi9j
-b21tb24vaW14L2lteDktYm9vdGxvYWRlci1wcmVwYXJlLnNoICAgICB8IDM0ICsrKysrKysrKwog
-Ym9hcmQvZnJlZXNjYWxlL2NvbW1vbi9pbXgvcG9zdC1pbWFnZS5zaCAgICAgIHwgIDQgKwogYm9h
-cmQvZnJlZXNjYWxlL2lteDkzZXZrL3JlYWRtZS50eHQgICAgICAgICAgIHwgNzMgKysrKysrKysr
-KysrKysrKysrKwogY29uZmlncy9mcmVlc2NhbGVfaW14OTNldmtfZGVmY29uZmlnICAgICAgICAg
-IHwgMzcgKysrKysrKysrKwogcGFja2FnZS9mcmVlc2NhbGUtaW14L0NvbmZpZy5pbiAgICAgICAg
-ICAgICAgIHwgMzggKysrKysrKysrKwogcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLWlt
-eC9Db25maWcuaW4gIHwgIDkgKysrCiAuLi4vZmlybXdhcmUtaW14L2Zpcm13YXJlLWlteC5tayAg
-ICAgICAgICAgICAgfCAyMyArKysrKysKIC4uLi9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLXNlbnRp
-bmVsL0NvbmZpZy5pbiB8IDIxICsrKysrKwogLi4uL2Zpcm13YXJlLXNlbnRpbmVsL2Zpcm13YXJl
-LXNlbnRpbmVsLmhhc2ggIHwgIDQgKwogLi4uL2Zpcm13YXJlLXNlbnRpbmVsL2Zpcm13YXJlLXNl
-bnRpbmVsLm1rICAgIHwgMjcgKysrKysrKwogMTEgZmlsZXMgY2hhbmdlZCwgMzExIGluc2VydGlv
-bnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9mcmVlc2NhbGUvY29tbW9uL2lteC9nZW5p
-bWFnZS5jZmcudGVtcGxhdGVfaW14OQogY3JlYXRlIG1vZGUgMTAwNzU1IGJvYXJkL2ZyZWVzY2Fs
-ZS9jb21tb24vaW14L2lteDktYm9vdGxvYWRlci1wcmVwYXJlLnNoCiBjcmVhdGUgbW9kZSAxMDA2
-NDQgYm9hcmQvZnJlZXNjYWxlL2lteDkzZXZrL3JlYWRtZS50eHQKIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBjb25maWdzL2ZyZWVzY2FsZV9pbXg5M2V2a19kZWZjb25maWcKIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL2ZyZWVzY2FsZS1pbXgvZmlybXdhcmUtc2VudGluZWwvQ29uZmlnLmluCiBjcmVh
-dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9mcmVlc2NhbGUtaW14L2Zpcm13YXJlLXNlbnRpbmVsL2Zp
-cm13YXJlLXNlbnRpbmVsLmhhc2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2ZyZWVzY2Fs
-ZS1pbXgvZmlybXdhcmUtc2VudGluZWwvZmlybXdhcmUtc2VudGluZWwubWsKCi0tIAoyLjQxLjAK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnvme/libnvme.hash | 2 +-
+ package/libnvme/libnvme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
+index 2a446eaf0a..69963578cd 100644
+--- a/package/libnvme/libnvme.hash
++++ b/package/libnvme/libnvme.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  93febccd2e4201a6a9c696a0208a7227adfd1649ad0523754c1885503890e77c  libnvme-1.7.tar.gz
++sha256  e9c3ad59c068788faf0f0af4296f92f8ce410d12749f0f35a541d6a21e630393  libnvme-1.7.1.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
+index 688624a79e..813f7279e8 100644
+--- a/package/libnvme/libnvme.mk
++++ b/package/libnvme/libnvme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNVME_VERSION = 1.7
++LIBNVME_VERSION = 1.7.1
+ LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
+ LIBNVME_LICENSE = LGPL-2.1
+ LIBNVME_LICENSE_FILES = COPYING
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
