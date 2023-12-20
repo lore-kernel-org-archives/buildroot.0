@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA65BC3DA6E
-	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 22:12:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D394C46CCD
+	for <buildroot@archiver.kernel.org>; Wed, 20 Dec 2023 22:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A857D6159B;
-	Wed, 20 Dec 2023 22:12:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A857D6159B
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC61E610A2;
+	Wed, 20 Dec 2023 22:22:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC61E610A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zm0np7D8nRYI; Wed, 20 Dec 2023 22:12:11 +0000 (UTC)
+	with ESMTP id 1zNDODz-Owhn; Wed, 20 Dec 2023 22:22:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE0CC6158F;
-	Wed, 20 Dec 2023 22:12:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE0CC6158F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 53B311BF95D
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 22:11:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4415061096;
+	Wed, 20 Dec 2023 22:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4415061096
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 592B81BF471
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 22:22:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28500610B1
- for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 22:11:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28500610B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 309724372F
+ for <buildroot@lists.busybox.net>; Wed, 20 Dec 2023 22:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 309724372F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZM2k_CPEhbag for <buildroot@lists.busybox.net>;
- Wed, 20 Dec 2023 22:11:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4CD7D61098
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 22:11:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CD7D61098
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 39C8B87CD2; Wed, 20 Dec 2023 22:11:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 23:08:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e767c81a837883f8035bb7d7ee3925218adcd80
-X-Git-Newrev: 996b786cfc03c3cf2ac631045650545c901e3075
-X-Patchwork-Hint: ignore
-Message-Id: <20231220221146.39C8B87CD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tllist: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QUkfu84ZkjgU for <buildroot@lists.busybox.net>;
+ Wed, 20 Dec 2023 22:22:41 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DAE9D40525
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 22:22:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAE9D40525
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 38555E0004;
+ Wed, 20 Dec 2023 22:22:39 +0000 (UTC)
+Date: Wed, 20 Dec 2023 23:22:38 +0100
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20231220232238.4efd1100@windsurf>
+In-Reply-To: <20231218194001.544887-5-adam.duskett@amarulasolutions.com>
+References: <20231218194001.544887-1-adam.duskett@amarulasolutions.com>
+ <20231218194001.544887-5-adam.duskett@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703110959;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=UW0SEzWQ0x21TTTew+G6g2nwAjbWs6yUso1+A/+iNUo=;
+ b=U3DxEjKlXMQmOyoqcZXfbZqzP6MJHQqfw9x6H9H3P+gzgclCVucf8VQg2zZwiU4DlCoJif
+ EGPnKras7tLz4QpfCdd+06kLTAZtC4qMwlzRogXQrYPtCp5psWPheDkF7AHQDqrqaR/QsR
+ adzgH4mX1lNLN/GT2fVfN6m0YA6RaItGnGlzKORABjMH/ExWDnd8k+0CMDPl4u8RYsiXAK
+ HrW7gVcPTNlZlNFkcJSEXCi8PoX0hb8vxJrS5wautIYxmZm06maYb5zORDTKpPdswu3AdA
+ TzfRc/TJLbmtTq6rJ5vtFP+BvfwcjDOr8tK32B0cTrIw6eG8MWUbOOM7BxqL3A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=U3DxEjKl
+Subject: Re: [Buildroot] [PATCH v2 05/14] package/fcft: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,92 +77,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=996b786cfc03c3cf2ac631045650545c901e3075
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 18 Dec 2023 12:39:50 -0700
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/tllist/Config.in   |  6 ++++++
- package/tllist/tllist.hash |  3 +++
- package/tllist/tllist.mk   | 16 ++++++++++++++++
- 5 files changed, 27 insertions(+)
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+> v1 -> v2: Fix the sha256sum of 3.1.6.tar.gz
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 311dcd9504..4c8a94ebb6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -39,6 +39,7 @@ F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
- F:	package/python-kmod/
- F:	package/python-versioneer/
-+F:	package/tllist/
- F:	support/testing/tests/package/test_firewalld.py
- F:	support/testing/tests/package/test_flutter.py
- 
-diff --git a/package/Config.in b/package/Config.in
-index a91ff8d345..ccef66e1ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2203,6 +2203,7 @@ endif
- 	source "package/tbb/Config.in"
- 	source "package/tinycbor/Config.in"
- 	source "package/tl-expected/Config.in"
-+	source "package/tllist/Config.in"
- 	source "package/tz/Config.in"
- 	source "package/tzdata/Config.in"
- 	source "package/uvw/Config.in"
-diff --git a/package/tllist/Config.in b/package/tllist/Config.in
-new file mode 100644
-index 0000000000..879119d13e
---- /dev/null
-+++ b/package/tllist/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_TLLIST
-+	bool "tllist"
-+	help
-+	  A C header file only implementation of a typed linked list.
-+
-+	  https://codeberg.org/dnkl/tllist
-diff --git a/package/tllist/tllist.hash b/package/tllist/tllist.hash
-new file mode 100644
-index 0000000000..2806d62355
---- /dev/null
-+++ b/package/tllist/tllist.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  3f3fe2f7433719cec816c63937a7aa36e566bd317763ef46d11562073ab6361d  1.1.0.tar.gz
-+sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
-diff --git a/package/tllist/tllist.mk b/package/tllist/tllist.mk
-new file mode 100644
-index 0000000000..88a28d2427
---- /dev/null
-+++ b/package/tllist/tllist.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# tllist
-+#
-+################################################################################
-+
-+TLLIST_VERSION = 1.1.0
-+TLLIST_SOURCE = $(TLLIST_VERSION).tar.gz
-+TLLIST_SITE = https://codeberg.org/dnkl/tllist/archive
-+TLLIST_LICENSE = MIT
-+TLLIST_LICENSE_FILES = LICENSE
-+# header only
-+TLLIST_INSTALL_TARGET = NO
-+TLLIST_INSTALL_STAGING = YES
-+
-+$(eval $(meson-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
