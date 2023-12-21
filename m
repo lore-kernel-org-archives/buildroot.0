@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B480C35274
-	for <buildroot@archiver.kernel.org>; Thu, 21 Dec 2023 14:00:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A32FC35274
+	for <buildroot@archiver.kernel.org>; Thu, 21 Dec 2023 14:23:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A2016104D;
-	Thu, 21 Dec 2023 14:00:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A2016104D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C1F6408B5;
+	Thu, 21 Dec 2023 14:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C1F6408B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CP5YEcXs00dh; Thu, 21 Dec 2023 14:00:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZeoJF0-1XdYo; Thu, 21 Dec 2023 14:23:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E88160AC9;
-	Thu, 21 Dec 2023 14:00:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E88160AC9
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2803408A4;
+	Thu, 21 Dec 2023 14:22:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2803408A4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 62BA91BF361
- for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 14:00:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6D971BF2EF
+ for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 14:22:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BB55831E3
- for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 14:00:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BB55831E3
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD00D83BAA
+ for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 14:22:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD00D83BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id REz-k7Z_qK5w for <buildroot@lists.busybox.net>;
- Thu, 21 Dec 2023 14:00:46 +0000 (UTC)
+ with ESMTP id 4j-J__yTgT99 for <buildroot@lists.busybox.net>;
+ Thu, 21 Dec 2023 14:22:56 +0000 (UTC)
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A9A4982446
- for <buildroot@buildroot.org>; Thu, 21 Dec 2023 14:00:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9A4982446
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B943A60003;
- Thu, 21 Dec 2023 14:00:43 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7FCE183BA3
+ for <buildroot@buildroot.org>; Thu, 21 Dec 2023 14:22:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FCE183BA3
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9DEAB60003;
+ Thu, 21 Dec 2023 14:22:53 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rGJbP-00125Q-03;
- Thu, 21 Dec 2023 15:00:43 +0100
+ (envelope-from <peko@48ers.dk>) id 1rGJwq-001NAb-34;
+ Thu, 21 Dec 2023 15:22:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 21 Dec 2023 15:00:39 +0100
-Message-Id: <20231221140039.246333-1-peter@korsgaard.com>
+Date: Thu, 21 Dec 2023 15:22:49 +0100
+Message-Id: <20231221142249.327382-1-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/putty: security bump to version 0.80
+Subject: [Buildroot] [PATCH] package/libssh: security bump to version 0.10.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,71 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Dahl <post@lespocky.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As described in the announcement, this fixes a security issue:
+Fixes the following security issues:
 
-There is one security fix in this release:
+- CVE-2023-6004: Command Injection using malicious hostname in expanded proxycommand
+  https://www.libssh.org/security/advisories/CVE-2023-6004.txt
 
- - Fix for a newly discovered security issue known as the 'Terrapin'
-   attack, also numbered CVE-2023-48795. The issue affects widely-used
-   OpenSSH extensions to the SSH protocol: the ChaCha20+Poly1305
-   cipher system, and 'encrypt-then-MAC' mode.
+- CVE-2023-48795: Avoid potential downgrade attacks by implementing strict kex
+  https://www.libssh.org/security/advisories/CVE-2023-48795.txt
 
-   In order to benefit from the fix, you must be using a fixed version
-   of PuTTY _and_ a server with the fix, so that they can agree to
-   adopt a modified version of the protocol. Alternatively, you may be
-   able to reconfigure PuTTY to avoid selecting any of the affected
-   modes.
-
-   If PuTTY 0.80 connects to an SSH server without the fix, it will
-   warn you if the initial protocol negotiation chooses an insecure
-   mode to run the connection in, so that you can abandon the
-   connection. If it's possible to alter PuTTY's configuration to
-   avoid the problem, then the warning message will tell you how to do
-   it.
-
-https://lists.tartarus.org/pipermail/putty-announce/2023/000037.html
+- CVE-2023-6918: Avoid potential use of weak keys in low memory conditions
+  by systematically checking return values of MD functions.
+  https://www.libssh.org/security/advisories/CVE-2023-6918.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/putty/putty.hash | 8 ++++----
- package/putty/putty.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libssh/libssh.hash | 4 ++--
+ package/libssh/libssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 0ae2a86be8..84569a31e5 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.79/{sha1,sha256,sha512}sums
--sha1  c40c3ce9fd334c40e64c6b33ee7e1096dad52701  putty-0.79.tar.gz
--sha256  428cc8666fbb938ebf4ac9276341980dcd70de395b33164496cf7995ef0ef0d8  putty-0.79.tar.gz
--sha512  4f10f870b229c89e928921d3b350955ce1c1170a062e7943d9cc8dbd83389d82a9b844623541605f0db5a429d545c2d188bf8e384c6515466fae69b216120983  putty-0.79.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.80/{sha1,sha256,sha512}sums
-+sha1  9c4a96f63ee3e927472191c935cc89228693c03a  putty-0.80.tar.gz
-+sha256  2013c83a721b1753529e9090f7c3830e8fe4c80a070ccce764539badb3f67081  putty-0.80.tar.gz
-+sha512  c8a6b6fa54ecd8bcf4ec274fef51343dd9996e6458b250b5555c4dc88ded25e87f97277da482c29858510e65635112d541f559ab683635bd950572d850129f90  putty-0.80.tar.gz
- 
- # Locally calculated
- sha256  7ede37f344ee03436c155a375ecb6cdb42a77105baa6e7804bf43260dc4a0c54  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index 4c9164d05e..bff6e78074 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+index 0d61191842..e5eba219b5 100644
+--- a/package/libssh/libssh.hash
++++ b/package/libssh/libssh.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.libssh.org/files/0.10/libssh-0.10.5.tar.xz.asc
++# https://www.libssh.org/files/0.10/libssh-0.10.6.tar.xz.asc
+ # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
+-sha256  b60e2ff7f367b9eee2b5634d3a63303ddfede0e6a18dfca88c44a8770e7e4234  libssh-0.10.5.tar.xz
++sha256  1861d498f5b6f1741b6abc73e608478491edcf9c9d4b6630eef6e74596de9dc1  libssh-0.10.6.tar.xz
+ sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index ff4cddaf91..8b995c3555 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PUTTY_VERSION = 0.79
-+PUTTY_VERSION = 0.80
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
+ LIBSSH_VERSION_MAJOR = 0.10
+-LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
++LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).6
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+ LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
+ LIBSSH_LICENSE = LGPL-2.1
 -- 
 2.39.2
 
