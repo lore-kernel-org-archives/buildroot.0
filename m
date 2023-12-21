@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAAEBC3DA6E
-	for <buildroot@archiver.kernel.org>; Thu, 21 Dec 2023 00:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57EA4C3DA6E
+	for <buildroot@archiver.kernel.org>; Thu, 21 Dec 2023 00:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8ED6C42134;
-	Thu, 21 Dec 2023 00:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ED6C42134
+	by smtp4.osuosl.org (Postfix) with ESMTP id 025AD41EB1;
+	Thu, 21 Dec 2023 00:20:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 025AD41EB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5YyU_3F8mCDW; Thu, 21 Dec 2023 00:20:24 +0000 (UTC)
+	with ESMTP id 1pBFOqRLjGMj; Thu, 21 Dec 2023 00:20:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6FB0421CE;
-	Thu, 21 Dec 2023 00:20:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6FB0421CE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B56D01BF408
- for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 00:19:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DC88421D0;
+	Thu, 21 Dec 2023 00:20:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DC88421D0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C89E51BF408
+ for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 00:19:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A21142124
- for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 00:19:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A21142124
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADC6240BEC
+ for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 00:19:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADC6240BEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i0mlVcD-UJ2c for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rbKV8dowYcjG for <buildroot@lists.busybox.net>;
  Thu, 21 Dec 2023 00:19:35 +0000 (UTC)
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com
- [IPv6:2607:f8b0:4864:20::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 044B542117
- for <buildroot@buildroot.org>; Thu, 21 Dec 2023 00:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 044B542117
-Received: by mail-oi1-x231.google.com with SMTP id
- 5614622812f47-3bb6ed2b913so152828b6e.2
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 16:19:34 -0800 (PST)
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
+ [IPv6:2607:f8b0:4864:20::1036])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7569D40323
+ for <buildroot@buildroot.org>; Thu, 21 Dec 2023 00:19:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7569D40323
+Received: by mail-pj1-x1036.google.com with SMTP id
+ 98e67ed59e1d1-28bc20cb501so1032083a91.1
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 16:19:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703117973; x=1703722773;
+ d=1e100.net; s=20230601; t=1703117974; x=1703722774;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=WrqHviaX37J+nkPJSjh2ijJfN/9C5B4R9kCmmlwk+wk=;
- b=vUuydC3Kvq07p182Kmh3UtM4LWLOKqTwpCl2IOTIygV01xWVEDMW1lv3SeT5ifnGQc
- pmBKUndUgvJYgF7DyI361xWSX6du6UEHqw2nAlMTKcZNLQJ2vVDZpJYi8eQP2StuscJx
- 69d5o1Wsqs8fSJnvh1o9yHWbTgFXna476PTDA53/2jSbRHJxtKiWOPRi6pzcz5nZcjyC
- +i4EVw9h30ke5K6oybPKuNroao05U6bI0Q6Gp2RUu/Jus5xOZL/8Uwr1vrqot/vynM3E
- 7ZA8CjdcBeKshrIQ/dH1tCa2Y4rUl5CJBwAvvUgAoozovsZj0oSx9y5e4PSUDlukJUqi
- AgiA==
-X-Gm-Message-State: AOJu0Yy+htNGW91FTA17ZMkCZAOlVh1s7y0tifMxRYXG/7QgHWx/ECn4
- U8ZpA2Rwe3+2uUUJgFpZ0kFbtpXdHI730Urbbuo=
-X-Google-Smtp-Source: AGHT+IG1pMdYGc0N4NU6d4eJgz1AdpbVeZjzxKD7bnYyZBfAmsspc4uEAN3MkHBqLw+1EQOlLXQ7tg==
-X-Received: by 2002:a05:6358:6e87:b0:172:f491:7b60 with SMTP id
- q7-20020a0563586e8700b00172f4917b60mr603261rwm.50.1703117973384; 
- Wed, 20 Dec 2023 16:19:33 -0800 (PST)
+ bh=PkWFTxyiixS9PJyyoUblc8RwUTzvB+isXb0q2ArZbAY=;
+ b=PPyFPJiwKDowIcSDjIIfRxqbkafZAl/JR2Hgsq8SVw9wGKWdItchIycO1bunnf44Uk
+ S1cAMCv+Q4+AI4FQVjcVrHq9r2bmW5eHvugTYd07wdpradpsLJsoS2gXAOon/+mqKdBh
+ Dpr4BD6bHn9skhJx+cAh3wZafAn1MTtRe5cVIG1iUW6cImitdymArQAs5oh2glnsjeK8
+ DL59GgS574xiLqdNagbkBFdRK8V1FhoOxqSiv594mRMHGJ9XeW/x5CzH6uksgQJxDBF4
+ xU8CfHf2En3SO3Tf5qBx4Uzo2VYxVOqlJBHi3EAti4HSe/yeiVXCgyoQCPQrSzlnHfAS
+ 9lWg==
+X-Gm-Message-State: AOJu0YzqXU3VgWGNGUSEmiS11iixjCK9vWVCrLizD4H3+hjYtNMMH7oI
+ KQHaavAHf8v2cxn8BVg8WH1O//MMIvSYWFxU624uMMPxuVE=
+X-Google-Smtp-Source: AGHT+IFMZgBCZJC1M+4k4fA7FYeeT3zn72qajep14KIr8+eXVs61rsvRqOW1pZW4FSSHaL/hn2Tnbg==
+X-Received: by 2002:a17:90b:4fc1:b0:28b:e2c1:8eaf with SMTP id
+ qa1-20020a17090b4fc100b0028be2c18eafmr1151975pjb.2.1703117974379; 
+ Wed, 20 Dec 2023 16:19:34 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.ht.home (174-126-58-188.cpe.sparklight.net.
  [174.126.58.188]) by smtp.gmail.com with ESMTPSA id
- a5-20020a170902ecc500b001d364210979sm294459plh.224.2023.12.20.16.19.32
+ a5-20020a170902ecc500b001d364210979sm294459plh.224.2023.12.20.16.19.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Dec 2023 16:19:32 -0800 (PST)
+ Wed, 20 Dec 2023 16:19:33 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 17:19:19 -0700
-Message-ID: <20231221001924.1356215-5-adam.duskett@amarulasolutions.com>
+Date: Wed, 20 Dec 2023 17:19:20 -0700
+Message-ID: <20231221001924.1356215-6-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231221001924.1356215-1-adam.duskett@amarulasolutions.com>
 References: <20231221001924.1356215-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1703117973; x=1703722773;
+ d=amarulasolutions.com; s=google; t=1703117974; x=1703722774;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=WrqHviaX37J+nkPJSjh2ijJfN/9C5B4R9kCmmlwk+wk=;
- b=ffyElWxQCvRvJfTR2dXx1OF/2ofwyMgxrJ3XoBuy4bUN1w2RmWijRiFZteLxoWVysq
- SvIn8JyFWld11OyCikQfuliVp+arE1GBE40ZVnIPkw4i8bOugSYhptWcn/S3mGjv6Ilc
- t/KUcwRO/0/rQWf7A7QJx4LQfiaVzF2gSYS3I=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=PkWFTxyiixS9PJyyoUblc8RwUTzvB+isXb0q2ArZbAY=;
+ b=JOFtFXPEu94J6XBFmhKcZ73KF6TDM63Qw5vRWQl4aTdrOmpnYIIXOD7sRclmv+Lnya
+ wXfljSI16RqVVXMngbJ8hzzVq/53q7EI9BDwJc/n1uMhW5HZ/BF+gc+WMDNhD0/GyFQA
+ uiEy/gjfJjTULclEYVfRYxW7zTx5nbvYk6NRo=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=ffyElWxQ
-Subject: [Buildroot] [PATCH v3 05/10] package/sway: enable bash-completion
+ header.b=JOFtFXPE
+Subject: [Buildroot] [PATCH v3 06/10] package/sway: enable default-wallpaper
  support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -102,31 +102,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Add a config option to enable the default-wallpaper.
+
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/sway/sway.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/sway/Config.in | 8 ++++++++
+ package/sway/sway.mk   | 7 ++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
+diff --git a/package/sway/Config.in b/package/sway/Config.in
+index 08b6911069..0aab3cbacd 100644
+--- a/package/sway/Config.in
++++ b/package/sway/Config.in
+@@ -24,6 +24,14 @@ config BR2_PACKAGE_SWAY
+ 
+ 	  https://github.com/swaywm/sway
+ 
++if BR2_PACKAGE_SWAY
++
++config BR2_PACKAGE_SWAY_DEFAULT_WALLPAPER
++	bool "Install default wallpaper"
++	select BR2_PACKAGE_SWAYBG
++
++endif # BR2_PACKAGE_SWAY
++
+ comment "sway needs systemd, udev, EGL w/ Wayland backend and OpenGL ES support"
+ 	depends on !BR2_PACKAGE_SYSTEMD || \
+ 		!BR2_PACKAGE_HAS_UDEV || \
 diff --git a/package/sway/sway.mk b/package/sway/sway.mk
-index 19f90b8b00..677b101f1d 100644
+index 677b101f1d..e2065c4d4f 100644
 --- a/package/sway/sway.mk
 +++ b/package/sway/sway.mk
-@@ -13,7 +13,6 @@ SWAY_CONF_OPTS = \
+@@ -11,7 +11,6 @@ SWAY_LICENSE_FILES = LICENSE
+ SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
+ SWAY_CONF_OPTS = \
  	-Dwerror=false \
- 	-Ddefault-wallpaper=false \
+-	-Ddefault-wallpaper=false \
  	-Dzsh-completions=false \
--	-Dbash-completions=false \
  	-Dfish-completions=false \
  	-Dswaybar=false \
- 	-Dswaynag=false \
-@@ -34,4 +33,10 @@ else
- SWAY_CONF_OPTS += -Dgdk-pixbuf=disabled
+@@ -39,4 +38,10 @@ else
+ SWAY_CONF_OPTS += -Dbash-completions=false
  endif
  
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+SWAY_CONF_OPTS += -Dbash-completions=true
++ifeq ($(BR2_PACKAGE_SWAY_DEFAULT_WALLPAPER),y)
++SWAY_CONF_OPTS += -Ddefault-wallpaper=true
 +else
-+SWAY_CONF_OPTS += -Dbash-completions=false
++SWAY_CONF_OPTS += -Ddefault-wallpaper=false
 +endif
 +
  $(eval $(meson-package))
