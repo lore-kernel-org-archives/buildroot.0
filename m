@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57EA4C3DA6E
-	for <buildroot@archiver.kernel.org>; Thu, 21 Dec 2023 00:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC7CC3DA6E
+	for <buildroot@archiver.kernel.org>; Thu, 21 Dec 2023 00:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 025AD41EB1;
-	Thu, 21 Dec 2023 00:20:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 025AD41EB1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90230421E4;
+	Thu, 21 Dec 2023 00:20:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90230421E4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1pBFOqRLjGMj; Thu, 21 Dec 2023 00:20:37 +0000 (UTC)
+	with ESMTP id jhVh06oxv5kq; Thu, 21 Dec 2023 00:20:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DC88421D0;
-	Thu, 21 Dec 2023 00:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DC88421D0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C89E51BF408
- for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 00:19:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E282F421DC;
+	Thu, 21 Dec 2023 00:20:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E282F421DC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 94A821BF408
+ for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 00:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADC6240BEC
- for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 00:19:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADC6240BEC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E33D8135D
+ for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 00:19:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E33D8135D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rbKV8dowYcjG for <buildroot@lists.busybox.net>;
- Thu, 21 Dec 2023 00:19:35 +0000 (UTC)
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7569D40323
- for <buildroot@buildroot.org>; Thu, 21 Dec 2023 00:19:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7569D40323
-Received: by mail-pj1-x1036.google.com with SMTP id
- 98e67ed59e1d1-28bc20cb501so1032083a91.1
- for <buildroot@buildroot.org>; Wed, 20 Dec 2023 16:19:35 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jjznpo2Szq2s for <buildroot@lists.busybox.net>;
+ Thu, 21 Dec 2023 00:19:36 +0000 (UTC)
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
+ [IPv6:2607:f8b0:4864:20::633])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B98748133F
+ for <buildroot@buildroot.org>; Thu, 21 Dec 2023 00:19:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B98748133F
+Received: by mail-pl1-x633.google.com with SMTP id
+ d9443c01a7336-1d3eb299e2eso2102005ad.2
+ for <buildroot@buildroot.org>; Wed, 20 Dec 2023 16:19:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703117974; x=1703722774;
+ d=1e100.net; s=20230601; t=1703117975; x=1703722775;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=PkWFTxyiixS9PJyyoUblc8RwUTzvB+isXb0q2ArZbAY=;
- b=PPyFPJiwKDowIcSDjIIfRxqbkafZAl/JR2Hgsq8SVw9wGKWdItchIycO1bunnf44Uk
- S1cAMCv+Q4+AI4FQVjcVrHq9r2bmW5eHvugTYd07wdpradpsLJsoS2gXAOon/+mqKdBh
- Dpr4BD6bHn9skhJx+cAh3wZafAn1MTtRe5cVIG1iUW6cImitdymArQAs5oh2glnsjeK8
- DL59GgS574xiLqdNagbkBFdRK8V1FhoOxqSiv594mRMHGJ9XeW/x5CzH6uksgQJxDBF4
- xU8CfHf2En3SO3Tf5qBx4Uzo2VYxVOqlJBHi3EAti4HSe/yeiVXCgyoQCPQrSzlnHfAS
- 9lWg==
-X-Gm-Message-State: AOJu0YzqXU3VgWGNGUSEmiS11iixjCK9vWVCrLizD4H3+hjYtNMMH7oI
- KQHaavAHf8v2cxn8BVg8WH1O//MMIvSYWFxU624uMMPxuVE=
-X-Google-Smtp-Source: AGHT+IFMZgBCZJC1M+4k4fA7FYeeT3zn72qajep14KIr8+eXVs61rsvRqOW1pZW4FSSHaL/hn2Tnbg==
-X-Received: by 2002:a17:90b:4fc1:b0:28b:e2c1:8eaf with SMTP id
- qa1-20020a17090b4fc100b0028be2c18eafmr1151975pjb.2.1703117974379; 
- Wed, 20 Dec 2023 16:19:34 -0800 (PST)
+ bh=HZLWj1ex6H35f0VCS3hSbte0eJgiYj6iFyRbkTimJpQ=;
+ b=iB0VlR1DnN8kfCoTkhn4xFnBGnk3MjgqTE5dgROTF0escGUKdEBj/vtdRfIl8kOpVU
+ 1gXYL3oBXSyNj4VfUrLcR7vt6BRnZp2UNCuGpiiam2C+PY4nwha/2gQaRYKKbhFG+gXt
+ uDdNfyhXxZZqP0WUwwvBmgMjkJu1TARTWGncRVS0NbwbhID6ZVawzL5FPS9JcYkx2shn
+ 5UMkL86RsMWJUeIy5AIY3q9fCI5id4D6EdN8+Y5sv8Z/D2GRtUYzcQzzDwD5PLZH4EXi
+ yaeBn3KFniaN1bOYZ5J80vmdRJJCu6Xcqg5dzUK/QfkTZgzUck/JqeVVYaf2j2CxI51x
+ yupw==
+X-Gm-Message-State: AOJu0Yxvb6LURIxivau6/+/Dsjd0VJhPqYN5kbif673QCN+9+2lIakEw
+ FUWwjy79SPmtYUdpWOk0jEDikW66o1WlCLsvy44=
+X-Google-Smtp-Source: AGHT+IEkGD0LH7xDFSKxJRIayVHgUtcnS6qn26pslU2Kk8H2fg5SGAXT//5QjpqRO83yWXAe4u4Syw==
+X-Received: by 2002:a17:903:11d2:b0:1d3:1afb:fe57 with SMTP id
+ q18-20020a17090311d200b001d31afbfe57mr12065310plh.29.1703117975454; 
+ Wed, 20 Dec 2023 16:19:35 -0800 (PST)
 Received: from DESKTOP-OI0KN2B.ht.home (174-126-58-188.cpe.sparklight.net.
  [174.126.58.188]) by smtp.gmail.com with ESMTPSA id
- a5-20020a170902ecc500b001d364210979sm294459plh.224.2023.12.20.16.19.33
+ a5-20020a170902ecc500b001d364210979sm294459plh.224.2023.12.20.16.19.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 Dec 2023 16:19:33 -0800 (PST)
+ Wed, 20 Dec 2023 16:19:35 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 20 Dec 2023 17:19:20 -0700
-Message-ID: <20231221001924.1356215-6-adam.duskett@amarulasolutions.com>
+Date: Wed, 20 Dec 2023 17:19:21 -0700
+Message-ID: <20231221001924.1356215-7-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231221001924.1356215-1-adam.duskett@amarulasolutions.com>
 References: <20231221001924.1356215-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1703117974; x=1703722774;
+ d=amarulasolutions.com; s=google; t=1703117975; x=1703722775;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=PkWFTxyiixS9PJyyoUblc8RwUTzvB+isXb0q2ArZbAY=;
- b=JOFtFXPEu94J6XBFmhKcZ73KF6TDM63Qw5vRWQl4aTdrOmpnYIIXOD7sRclmv+Lnya
- wXfljSI16RqVVXMngbJ8hzzVq/53q7EI9BDwJc/n1uMhW5HZ/BF+gc+WMDNhD0/GyFQA
- uiEy/gjfJjTULclEYVfRYxW7zTx5nbvYk6NRo=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=HZLWj1ex6H35f0VCS3hSbte0eJgiYj6iFyRbkTimJpQ=;
+ b=riwQrzbWCe5JEMISrHo0bW0z/iejwFZV1ecFlLBOoVjJqx26xiX6qBa02FvpuTiUn+
+ zSCe5x36H9IsXI8BWvGAruOBY+urx9ynfz44n5+v92b8THOXStQk8Rg7qBNFak8jarWn
+ 0easFsL28Ql/vS2br5JU/PMBzNOMQYim4PjRM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=JOFtFXPE
-Subject: [Buildroot] [PATCH v3 06/10] package/sway: enable default-wallpaper
- support
+ header.b=riwQrzbW
+Subject: [Buildroot] [PATCH v3 07/10] package/sway: enable swaybar support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,7 +101,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a config option to enable the default-wallpaper.
+Add a config option to build sway with swaybar support.
+  - The bar requires dejavu fonts.
+  - If bash-completions is selected, JQ is required.
+  - Select dmenu-wayland as a runtime dependency.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
@@ -111,44 +113,44 @@ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
  2 files changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/package/sway/Config.in b/package/sway/Config.in
-index 08b6911069..0aab3cbacd 100644
+index 0aab3cbacd..93eaf26ce7 100644
 --- a/package/sway/Config.in
 +++ b/package/sway/Config.in
-@@ -24,6 +24,14 @@ config BR2_PACKAGE_SWAY
+@@ -30,6 +30,14 @@ config BR2_PACKAGE_SWAY_DEFAULT_WALLPAPER
+ 	bool "Install default wallpaper"
+ 	select BR2_PACKAGE_SWAYBG
  
- 	  https://github.com/swaywm/sway
++config BR2_PACKAGE_SWAY_SWAYBAR
++	bool "swaybar"
++	select BR2_PACKAGE_DEJAVU
++	select BR2_PACKAGE_JQ if BR2_PACKAGE_BASH_COMPLETION
++	select BR2_PACKAGE_DMENU_WAYLAND # Runtime
++	help
++	  Enable support for swaybar
++
+ endif # BR2_PACKAGE_SWAY
  
-+if BR2_PACKAGE_SWAY
-+
-+config BR2_PACKAGE_SWAY_DEFAULT_WALLPAPER
-+	bool "Install default wallpaper"
-+	select BR2_PACKAGE_SWAYBG
-+
-+endif # BR2_PACKAGE_SWAY
-+
  comment "sway needs systemd, udev, EGL w/ Wayland backend and OpenGL ES support"
- 	depends on !BR2_PACKAGE_SYSTEMD || \
- 		!BR2_PACKAGE_HAS_UDEV || \
 diff --git a/package/sway/sway.mk b/package/sway/sway.mk
-index 677b101f1d..e2065c4d4f 100644
+index e2065c4d4f..12b039885f 100644
 --- a/package/sway/sway.mk
 +++ b/package/sway/sway.mk
-@@ -11,7 +11,6 @@ SWAY_LICENSE_FILES = LICENSE
- SWAY_DEPENDENCIES = systemd host-pkgconf wlroots json-c pcre cairo pango
- SWAY_CONF_OPTS = \
+@@ -13,7 +13,6 @@ SWAY_CONF_OPTS = \
  	-Dwerror=false \
--	-Ddefault-wallpaper=false \
  	-Dzsh-completions=false \
  	-Dfish-completions=false \
- 	-Dswaybar=false \
-@@ -39,4 +38,10 @@ else
- SWAY_CONF_OPTS += -Dbash-completions=false
+-	-Dswaybar=false \
+ 	-Dswaynag=false \
+ 	-Dtray=disabled \
+ 	-Dman-pages=disabled \
+@@ -44,4 +43,10 @@ else
+ SWAY_CONF_OPTS += -Ddefault-wallpaper=false
  endif
  
-+ifeq ($(BR2_PACKAGE_SWAY_DEFAULT_WALLPAPER),y)
-+SWAY_CONF_OPTS += -Ddefault-wallpaper=true
++ifeq ($(BR2_PACKAGE_SWAY_SWAYBAR),y)
++SWAY_CONF_OPTS += -Dswaybar=true
 +else
-+SWAY_CONF_OPTS += -Ddefault-wallpaper=false
++SWAY_CONF_OPTS += -Dswaybar=false
 +endif
 +
  $(eval $(meson-package))
