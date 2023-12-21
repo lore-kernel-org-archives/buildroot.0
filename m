@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 417E0C35274
-	for <buildroot@archiver.kernel.org>; Thu, 21 Dec 2023 08:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE850C35274
+	for <buildroot@archiver.kernel.org>; Thu, 21 Dec 2023 08:33:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9B3A838B3;
-	Thu, 21 Dec 2023 08:32:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9B3A838B3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75F6F8392C;
+	Thu, 21 Dec 2023 08:33:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75F6F8392C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GrbDdi6kM962; Thu, 21 Dec 2023 08:32:08 +0000 (UTC)
+	with ESMTP id wVjgh_rHMb1C; Thu, 21 Dec 2023 08:33:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A5CE8386F;
-	Thu, 21 Dec 2023 08:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A5CE8386F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0687E1BF4D5
- for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 08:32:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC88B8390F;
+	Thu, 21 Dec 2023 08:33:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC88B8390F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BC471BF4D5
+ for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 08:33:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C90F143753
- for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 08:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C90F143753
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2AF1607C9
+ for <buildroot@lists.busybox.net>; Thu, 21 Dec 2023 08:33:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2AF1607C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7HdqUYQBMJo1 for <buildroot@lists.busybox.net>;
- Thu, 21 Dec 2023 08:32:03 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4F68B4367D
- for <buildroot@buildroot.org>; Thu, 21 Dec 2023 08:32:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F68B4367D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8DBB9C0008;
- Thu, 21 Dec 2023 08:32:00 +0000 (UTC)
-Date: Thu, 21 Dec 2023 09:31:59 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rSRIUO9bhjy4 for <buildroot@lists.busybox.net>;
+ Thu, 21 Dec 2023 08:33:08 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7A5A660670
+ for <buildroot@buildroot.org>; Thu, 21 Dec 2023 08:33:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A5A660670
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A6E841C0007;
+ Thu, 21 Dec 2023 08:33:05 +0000 (UTC)
+Date: Thu, 21 Dec 2023 09:33:04 +0100
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231221093159.6f50cc83@windsurf>
-In-Reply-To: <20231221001924.1356215-1-adam.duskett@amarulasolutions.com>
+Message-ID: <20231221093304.3b68da4b@windsurf>
+In-Reply-To: <20231221001924.1356215-2-adam.duskett@amarulasolutions.com>
 References: <20231221001924.1356215-1-adam.duskett@amarulasolutions.com>
+ <20231221001924.1356215-2-adam.duskett@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703147520;
+ d=bootlin.com; s=gm1; t=1703147585;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=t8uOoZZAH11cJ8YwVVLhWfmzVGroZX30UwMtaCS4ZZ0=;
- b=hMcjGMGDO7sRIWjX63zy3Ax+RXArLm6PObIBlmK+sfDKroducivCi1Q9fHmvS+W5MTtGd0
- dkixf5QWZbZdjeww0CLL30qBlR6TaLT2Lt5k4qayRzEH8qhWZQqegllKveoA9IdEWj/m8w
- KH8hc/P3QwLUKbUY3pegupP2E38JgUsJgVcUUa1XGqwV4LAfa2Dw3o9jDYJJ6Isg3TjRc7
- 7F2D75Qsp6NF7ks8P3kh9bWTJwLdMd7c17AHHOloRpw504m/9qs7Pu3W40xUOOp7F8O9u2
- Qp2ANvCNTtJv05cq7ppmeJTyrGBynzuopkSaMVpdYmfmdFpRINNt9iHuXrF27g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=WUvw7ozcS30Npa5YAMT9chCmh73/6e8Oy8y9No7JVyM=;
+ b=IvHDAq3X6RAHQiOLum+5maAAdUnvqmQBadI26huJgoHI6GLfwraW3NWiRDopTuAvtBpJrg
+ 8Il7yPvKxKC39G/pKeIYIF1NC5W6lTmyFIqo9XppThzNF3UTxgSV82dRmZiXvqwo2t5qCu
+ fVx06/WJXncDCCTySaCtKjGihheXyBpgv0kYX4d136xAxkHl8RQCHrDybwaKMvrHTv1uJJ
+ daH9u4jMco42/QzLMBBmgPzuvDdsnsVLb9I0S7PPetztOFq2fMSloNSF/dlA/XYsB5iruK
+ qbNb5Ut4oG2dk+0fHnlpstYQNWWqxy7LDSmfdHNXJKKFkBS2TJqLVGUJ2BnL6w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hMcjGMGD
-Subject: Re: [Buildroot] [PATCH v3 01/10] package/wlroots: add hwdata and
- hwdata_pnp_ids as a dependency
+ header.s=gm1 header.b=IvHDAq3X
+Subject: Re: [Buildroot] [PATCH v3 02/10] package/dmenu-wayland: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,24 +83,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 20 Dec 2023 17:19:15 -0700
+Hello,
+
+Thanks for this new iteration.
+
+On Wed, 20 Dec 2023 17:19:16 -0700
 Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-> As per backend/drm/meson.build:1-7
-> 
-> hwdata = dependency('hwdata', required: false, native: true)
-> if hwdata.found()
-> 	hwdata_dir = hwdata.get_variable(pkgconfig: 'pkgdatadir')
-> 	pnp_ids = files(hwdata_dir / 'pnp.ids')
-> else
-> 	pnp_ids = files('/usr/share/hwdata/pnp.ids')
-> endif
+> diff --git a/package/dmenu-wayland/Config.in b/package/dmenu-wayland/Config.in
+> new file mode 100644
+> index 0000000000..111bbfb434
+> --- /dev/null
+> +++ b/package/dmenu-wayland/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_DMENU_WAYLAND
+> +	bool "dmenu-wayland"
+> +	depends on BR2_USE_MMU # pango -> lib2
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> glib2, wayland
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuz
+> +	depends on !BR2_STATIC_LIBS # wayland -> dlfcn.h
+> +	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype support
+> +	depends on BR2_USE_WCHAR # pango -> glib2
 
-But does that mean they are actually used, unconditionally, by wlroots?
-Yes, this sets a path in meson, and then? Yes, they *might* be used,
-but how mandatory are those pnp.ids?
+You did not re-use the suggestions from my feedback.
 
-Thanks,
+> +DMENU_WAYLAND_VERSION = a380201dff5bfac2dace553d7eaedb6cea6855f9
+> +DMENU_WAYLAND_SITE = https://github.com/nyyManni/dmenu-wayland.git
+
+Ditto.
+
+Please send new iterations less quickly, but with more
+review/testing/validation.
+
+Thanks!
 
 Thomas
 -- 
