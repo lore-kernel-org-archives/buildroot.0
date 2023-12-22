@@ -4,70 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD83CC41535
-	for <buildroot@archiver.kernel.org>; Fri, 22 Dec 2023 08:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22DFDC41535
+	for <buildroot@archiver.kernel.org>; Fri, 22 Dec 2023 08:19:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BD5360FA7;
-	Fri, 22 Dec 2023 08:07:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BD5360FA7
+	by smtp3.osuosl.org (Postfix) with ESMTP id B112E617B3;
+	Fri, 22 Dec 2023 08:19:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B112E617B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QvIDVOlwXnZ9; Fri, 22 Dec 2023 08:07:20 +0000 (UTC)
+	with ESMTP id wuR53Hq4Hxc2; Fri, 22 Dec 2023 08:19:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9CB0E60BC0;
-	Fri, 22 Dec 2023 08:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CB0E60BC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A13961033;
+	Fri, 22 Dec 2023 08:19:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A13961033
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 779CA1BF2F7
- for <buildroot@lists.busybox.net>; Fri, 22 Dec 2023 08:07:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AFD9C1BF2F7
+ for <buildroot@lists.busybox.net>; Fri, 22 Dec 2023 08:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 509AC83D96
- for <buildroot@lists.busybox.net>; Fri, 22 Dec 2023 08:07:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 509AC83D96
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B31B83DB4
+ for <buildroot@lists.busybox.net>; Fri, 22 Dec 2023 08:19:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B31B83DB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R9z6Udp_kspV for <buildroot@lists.busybox.net>;
- Fri, 22 Dec 2023 08:07:17 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E209183C87
- for <buildroot@buildroot.org>; Fri, 22 Dec 2023 08:07:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E209183C87
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A28DBFF806;
- Fri, 22 Dec 2023 08:07:13 +0000 (UTC)
-Date: Fri, 22 Dec 2023 09:07:12 +0100
-To: Davis <davikovs@gmail.com>
-Message-ID: <20231222090712.4ef84484@windsurf>
-In-Reply-To: <CAHQn7pKD3HBJ96Pe90+gvsNehuALXGbXarqLDDcn8_M5hSKDrA@mail.gmail.com>
-References: <20231218183230.1899-1-davikovs@gmail.com>
- <20231220212445.16494c0f@windsurf>
- <CAHQn7pKn5-Ss+zVkEzGow6TNm8xc2kmfkWMEXe2zZbYmFOmQPw@mail.gmail.com>
- <20231221084252.287ba580@windsurf>
- <CAHQn7pKD3HBJ96Pe90+gvsNehuALXGbXarqLDDcn8_M5hSKDrA@mail.gmail.com>
+ with ESMTP id VEqcSeiZT9dT for <buildroot@lists.busybox.net>;
+ Fri, 22 Dec 2023 08:19:48 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1ABE983A62
+ for <buildroot@buildroot.org>; Fri, 22 Dec 2023 08:19:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ABE983A62
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 952C3E0009;
+ Fri, 22 Dec 2023 08:19:44 +0000 (UTC)
+Date: Fri, 22 Dec 2023 09:19:43 +0100
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20231222091943.10f60c34@windsurf>
+In-Reply-To: <CAHDQB6MUTQT4ebnxowo_7+DFVjA5wRY1O6hA_pK6N2d-cR-cRw@mail.gmail.com>
+References: <20231221001924.1356215-1-adam.duskett@amarulasolutions.com>
+ <20231221093159.6f50cc83@windsurf>
+ <CAHDQB6MUTQT4ebnxowo_7+DFVjA5wRY1O6hA_pK6N2d-cR-cRw@mail.gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703232434;
+ d=bootlin.com; s=gm1; t=1703233184;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=7Z4RfdKC2TSZ4Amwh4GEZ8TRa0rnWUhpZUuspYYY/Y8=;
- b=LUmm7LHASfmJq97x7uneUt2dMc0LsxyBKM8p/rS36doUeylrE25eJIPnOiUo9H7aMJRHpY
- 4fkuOpCFOVCL2cPh0ofxXzVI9pKWjj2MQRfHEeeOqUMMypHpHZ8Lxrox5WYs5aHFOLVkyv
- S5scOnbX1OwovZFAuKlD1T7Ganoz9m7ScWj876ocQtjPNCJzX39vOFvXpDAyAd1Xc9MuGS
- +pw/okWhaUVoiNwVCYx+RNmH19AwMbIhQsTtIyyUGW2hLcb1UKl5hKiKSLjr0mN2XWtAcj
- 9U+/9Em50mr19Xq7+UDOkU8oa8UAZWgr9I7AvxBs/+wbD0Ie+He0U/h5q2bClA==
+ bh=+sq65WNKpryYnMOFIkDgC1EeE3Hju8A+wdsQv9oqX48=;
+ b=XvcQdkDuCvII4R/ctwPOVglf0DbxKw7IG+qT2eeWloDROtlKsyYtlGDwWgwYujW90BJxlB
+ yToZ9O94n9AzKcAIQ4bEbBbFNI+1l4s58HSHvneJtm4a2iR9oP3djeXib7gvhAoEGbXsi1
+ DwE2e9pAdbovI4RZBN1eu7oXN67fgTmQ2nQFEfh+mfj/ZYN3U+30mQcMPat350FXFgYU1R
+ uAQWJlueAnclpxgwtqg0P289Se903rHMfS9FVQl+oJIYuCmO8CyDbwqWSJ9OG9hZZUudKu
+ sbheDS4EqWNzWrTKm65LdC4r5t6Jb83jN4cVpQR71m2XR7EJ7EtL5AOgm3qSLQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LUmm7LHA
-Subject: Re: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.71
+ header.s=gm1 header.b=XvcQdkDu
+Subject: Re: [Buildroot] [PATCH v3 01/10] package/wlroots: add hwdata and
+ hwdata_pnp_ids as a dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,17 +85,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Davis,
+Hello Adam,
 
-On Fri, 22 Dec 2023 00:41:23 +0200
-Davis <davikovs@gmail.com> wrote:
+On Thu, 21 Dec 2023 07:43:37 -0700
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-> Just one more question, BlueZ itself is covered by a license that allows
-> persons not affiliated with BlueZ or Buildroot to bump the package version,
-> correct?
+> > > hwdata = dependency('hwdata', required: false, native: true)
+> > > if hwdata.found()
+> > >       hwdata_dir = hwdata.get_variable(pkgconfig: 'pkgdatadir')
+> > >       pnp_ids = files(hwdata_dir / 'pnp.ids')
+> > > else
+> > >       pnp_ids = files('/usr/share/hwdata/pnp.ids')
+> > > endif  
+> >
+> > But does that mean they are actually used, unconditionally, by wlroots?
+> > Yes, this sets a path in meson, and then? Yes, they *might* be used,
+> > but how mandatory are those pnp.ids?
+> >  
+> The build fails without hwdata and the pnp ids.
 
-I don't even see how the license of a software could prevent that. And
-"affiliated with BlueZ or Buildroot" has absolutely no legal meaning.
+Then please mention this in the commit log, with the error message.
+This sort of detail should really be part of all your commit messages.
+Each time you write a commit message, you should ask yourself "what
+will the person reviewing this patch, who hasn't looked into the issue
+I'm trying to solve, would need to know to understand the issue and be
+convinced that my patch is the correct fix".
+
+Also, if there is a build failure, is the build failure visible in our
+autobuilders? If yes, please add a reference. If not, please say so in
+the commit log. According to
+http://autobuild.buildroot.net/?reason=wlroots% it seems like we didn't
+catch this error. Why? Does it happen only under very specific
+circumstances?
 
 Thomas
 -- 
