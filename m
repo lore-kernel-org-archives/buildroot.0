@@ -4,68 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22DFDC41535
-	for <buildroot@archiver.kernel.org>; Fri, 22 Dec 2023 08:19:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F136C41535
+	for <buildroot@archiver.kernel.org>; Fri, 22 Dec 2023 08:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B112E617B3;
-	Fri, 22 Dec 2023 08:19:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B112E617B3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AB2E60757;
+	Fri, 22 Dec 2023 08:33:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AB2E60757
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wuR53Hq4Hxc2; Fri, 22 Dec 2023 08:19:51 +0000 (UTC)
+	with ESMTP id 2br0U8EVrrGi; Fri, 22 Dec 2023 08:33:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A13961033;
-	Fri, 22 Dec 2023 08:19:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A13961033
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACE65605B5;
+	Fri, 22 Dec 2023 08:33:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACE65605B5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AFD9C1BF2F7
- for <buildroot@lists.busybox.net>; Fri, 22 Dec 2023 08:19:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 876FC1BF2F7
+ for <buildroot@lists.busybox.net>; Fri, 22 Dec 2023 08:33:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B31B83DB4
- for <buildroot@lists.busybox.net>; Fri, 22 Dec 2023 08:19:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B31B83DB4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5DED183E0F
+ for <buildroot@lists.busybox.net>; Fri, 22 Dec 2023 08:33:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DED183E0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VEqcSeiZT9dT for <buildroot@lists.busybox.net>;
- Fri, 22 Dec 2023 08:19:48 +0000 (UTC)
+ with ESMTP id RVO0o0GJXzcI for <buildroot@lists.busybox.net>;
+ Fri, 22 Dec 2023 08:33:14 +0000 (UTC)
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1ABE983A62
- for <buildroot@buildroot.org>; Fri, 22 Dec 2023 08:19:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ABE983A62
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 952C3E0009;
- Fri, 22 Dec 2023 08:19:44 +0000 (UTC)
-Date: Fri, 22 Dec 2023 09:19:43 +0100
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231222091943.10f60c34@windsurf>
-In-Reply-To: <CAHDQB6MUTQT4ebnxowo_7+DFVjA5wRY1O6hA_pK6N2d-cR-cRw@mail.gmail.com>
-References: <20231221001924.1356215-1-adam.duskett@amarulasolutions.com>
- <20231221093159.6f50cc83@windsurf>
- <CAHDQB6MUTQT4ebnxowo_7+DFVjA5wRY1O6hA_pK6N2d-cR-cRw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 579AE83E09
+ for <buildroot@buildroot.org>; Fri, 22 Dec 2023 08:33:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 579AE83E09
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3AD85E0005;
+ Fri, 22 Dec 2023 08:33:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1rGaxz-001xGb-1v;
+ Fri, 22 Dec 2023 09:33:11 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Davis <davikovs@gmail.com>
+References: <20231218183230.1899-1-davikovs@gmail.com>
+ <20231220212445.16494c0f@windsurf>
+ <CAHQn7pKn5-Ss+zVkEzGow6TNm8xc2kmfkWMEXe2zZbYmFOmQPw@mail.gmail.com>
+ <20231221084252.287ba580@windsurf>
+ <CAHQn7pKD3HBJ96Pe90+gvsNehuALXGbXarqLDDcn8_M5hSKDrA@mail.gmail.com>
+Date: Fri, 22 Dec 2023 09:33:11 +0100
+In-Reply-To: <CAHQn7pKD3HBJ96Pe90+gvsNehuALXGbXarqLDDcn8_M5hSKDrA@mail.gmail.com>
+ (Davis's message of "Fri, 22 Dec 2023 00:41:23 +0200")
+Message-ID: <87il4q7i2g.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703233184;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+sq65WNKpryYnMOFIkDgC1EeE3Hju8A+wdsQv9oqX48=;
- b=XvcQdkDuCvII4R/ctwPOVglf0DbxKw7IG+qT2eeWloDROtlKsyYtlGDwWgwYujW90BJxlB
- yToZ9O94n9AzKcAIQ4bEbBbFNI+1l4s58HSHvneJtm4a2iR9oP3djeXib7gvhAoEGbXsi1
- DwE2e9pAdbovI4RZBN1eu7oXN67fgTmQ2nQFEfh+mfj/ZYN3U+30mQcMPat350FXFgYU1R
- uAQWJlueAnclpxgwtqg0P289Se903rHMfS9FVQl+oJIYuCmO8CyDbwqWSJ9OG9hZZUudKu
- sbheDS4EqWNzWrTKm65LdC4r5t6Jb83jN4cVpQR71m2XR7EJ7EtL5AOgm3qSLQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XvcQdkDu
-Subject: Re: [Buildroot] [PATCH v3 01/10] package/wlroots: add hwdata and
- hwdata_pnp_ids as a dependency
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.71
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,52 +67,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
+>>>>> "Davis" == Davis  <davikovs@gmail.com> writes:
 
-On Thu, 21 Dec 2023 07:43:37 -0700
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+ > Hello Thomas,
+ > Thank you!
 
-> > > hwdata = dependency('hwdata', required: false, native: true)
-> > > if hwdata.found()
-> > >       hwdata_dir = hwdata.get_variable(pkgconfig: 'pkgdatadir')
-> > >       pnp_ids = files(hwdata_dir / 'pnp.ids')
-> > > else
-> > >       pnp_ids = files('/usr/share/hwdata/pnp.ids')
-> > > endif  
-> >
-> > But does that mean they are actually used, unconditionally, by wlroots?
-> > Yes, this sets a path in meson, and then? Yes, they *might* be used,
-> > but how mandatory are those pnp.ids?
-> >  
-> The build fails without hwdata and the pnp ids.
+ > Just one more question, BlueZ itself is covered by a license that allows
+ > persons not affiliated with BlueZ or Buildroot to bump the package version,
+ > correct?
 
-Then please mention this in the commit log, with the error message.
-This sort of detail should really be part of all your commit messages.
-Each time you write a commit message, you should ask yourself "what
-will the person reviewing this patch, who hasn't looked into the issue
-I'm trying to solve, would need to know to understand the issue and be
-convinced that my patch is the correct fix".
+Yes. I am not aware of any license having such restrictions (and we
+would not be able to carry such package in Buildroot then).
 
-Also, if there is a build failure, is the build failure visible in our
-autobuilders? If yes, please add a reference. If not, please say so in
-the commit log. According to
-http://autobuild.buildroot.net/?reason=wlroots% it seems like we didn't
-catch this error. Why? Does it happen only under very specific
-circumstances?
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
