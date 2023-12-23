@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670A5C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 17:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACB0BC3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 17:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CA5240498;
-	Sat, 23 Dec 2023 17:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CA5240498
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D397400BA;
+	Sat, 23 Dec 2023 17:01:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D397400BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9VmEYJ_aEm_d; Sat, 23 Dec 2023 17:01:22 +0000 (UTC)
+	with ESMTP id poYXqShab-o9; Sat, 23 Dec 2023 17:01:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FF9240447;
-	Sat, 23 Dec 2023 17:01:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FF9240447
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B93031BF869
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:01:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22CE1404FF;
+	Sat, 23 Dec 2023 17:01:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22CE1404FF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DD53C1BF2C2
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 910F560C0E
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:01:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 910F560C0E
+ by smtp1.osuosl.org (Postfix) with ESMTP id B3E9081EB2
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:01:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3E9081EB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xEcTc_wse3fy for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 17:01:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5734760AA6
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 17:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5734760AA6
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4096687D54; Sat, 23 Dec 2023 17:01:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 15:52:49 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50eed2060ae6a35be257a8773b8e217a623eb29e
-X-Git-Newrev: f2799e80a29d7a7a9723017b6f8b9803e6189577
-X-Patchwork-Hint: ignore
-Message-Id: <20231223170105.4096687D54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8723bu: bump to 2023-12-04
- version
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id As8pb050QfZ9 for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 17:01:17 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B83E98164B
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 17:01:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B83E98164B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C6A7940003;
+ Sat, 23 Dec 2023 17:01:13 +0000 (UTC)
+Date: Sat, 23 Dec 2023 18:01:13 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20231223180113.704d83b1@windsurf>
+In-Reply-To: <20231206200730.1948165-1-giulio.benetti@benettiengineering.com>
+References: <20231206200730.1948165-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703350874;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qjEeGpPvDVjrVdGwK7sa1gtT+md0pemOUjcXUAue//w=;
+ b=RzrLoiENNUuBu/+UPO3iGuYTx0Yp14djsSyHYK+/W6y59M914HS5fnckD7NjfUg5FBSX9p
+ awPXxqLXDe3QUELQy/k8/o9V14pWf6ZfyldGjXFx5QibAO0GmMAvV3vOomj2+pUpYk+YjX
+ kaj5lDrMDF4NzEQrUTpdnB2ctll2z01ZLk+9Dt6kxBDoNvQU3x389JOOt6KFAqvSvuC+S2
+ 96MxH5JtjSdZR8vqofe5+aRbjPJX3mCA1ZdslijVmh5+sXFMtLDmwnZCeS3khbN+VkZZHR
+ oCDnOT5QQOCDUjk344nIcEWpgQpBC/oFPuz/r2wpEz/U4TvCjjpowrJhUAhjXA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RzrLoiEN
+Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: bump to 2023-12-04
+ version on v5.2.2.4 branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +77,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2799e80a29d7a7a9723017b6f8b9803e6189577
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  6 Dec 2023 21:07:30 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-This version allows to build with Linux 6.7
+> This version allows to build with Linux 6.7
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/rtl8188eu/rtl8188eu.hash | 2 +-
+>  package/rtl8188eu/rtl8188eu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rtl8723bu/rtl8723bu.hash | 2 +-
- package/rtl8723bu/rtl8723bu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/rtl8723bu/rtl8723bu.hash b/package/rtl8723bu/rtl8723bu.hash
-index bc3b8fc727..66efdaf771 100644
---- a/package/rtl8723bu/rtl8723bu.hash
-+++ b/package/rtl8723bu/rtl8723bu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  d0db523f256795d8f3284fa2ec03855f231747ede8337e878bc096325b965654  rtl8723bu-92c19318cb54ef96c2cfb4a22b2c98eb512812d8.tar.gz
-+sha256  a36511894a612a9a05254e5938dafcc32b5ca46b8912582ccca84708e0f82cf9  rtl8723bu-49cb04d796d44debe965c1597f397f34ae277dbc.tar.gz
-diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
-index ad9bb9a462..7796def113 100644
---- a/package/rtl8723bu/rtl8723bu.mk
-+++ b/package/rtl8723bu/rtl8723bu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8723BU_VERSION = 92c19318cb54ef96c2cfb4a22b2c98eb512812d8
-+RTL8723BU_VERSION = 49cb04d796d44debe965c1597f397f34ae277dbc
- RTL8723BU_SITE = $(call github,lwfinger,rtl8723bu,$(RTL8723BU_VERSION))
- RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
