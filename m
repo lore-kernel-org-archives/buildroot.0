@@ -1,74 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AD69C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 07:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB508C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 10:20:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 101A483D07;
-	Sat, 23 Dec 2023 07:18:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 101A483D07
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3389760B69;
+	Sat, 23 Dec 2023 10:20:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3389760B69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BDUsqZC7OdFU; Sat, 23 Dec 2023 07:18:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0opav4zvC5Gb; Sat, 23 Dec 2023 10:20:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E75581EB5;
-	Sat, 23 Dec 2023 07:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E75581EB5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8EA841BF31A
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 07:18:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A0AA60B9E;
+	Sat, 23 Dec 2023 10:20:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A0AA60B9E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F2651BF39D
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 10:20:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 729AC4016F
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 07:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 729AC4016F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5872060BBC
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 10:20:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5872060BBC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2g7htb6peaNk for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 07:18:14 +0000 (UTC)
-Received: from mail-108-mta221.mxroute.com (mail-108-mta221.mxroute.com
- [136.175.108.221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1E6BB40169
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 07:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E6BB40169
-Received: from filter006.mxroute.com ([136.175.111.2] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta221.mxroute.com (ZoneMTA) with ESMTPSA id
- 18c9589e4540003727.001 for <buildroot@buildroot.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 23 Dec 2023 07:18:11 +0000
-X-Zone-Loop: 910ec299f7e4563333bc46cc7d3f632c7fbba7fb86a0
-X-Originating-IP: [136.175.111.2]
-From: Grant Nichol <me@grantnichol.com>
-To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 01:17:55 -0600
-Message-ID: <20231223071755.2417948-1-me@grantnichol.com>
-In-Reply-To: <2f0cff7f-b526-44da-a831-85f70218f2aa@grantnichol.com>
-References: <2f0cff7f-b526-44da-a831-85f70218f2aa@grantnichol.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8DhiniB6SG_K for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 10:20:05 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0AC3960B69
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 10:20:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AC3960B69
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 69233B0056A;
+ Sat, 23 Dec 2023 11:19:57 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 23 Dec 2023 11:19:57 +0100
+Date: Sat, 23 Dec 2023 11:19:57 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZYa0TdSBU2JrexMt@landeda>
+References: <20231220200110.1819507-1-thomas.petazzoni@bootlin.com>
+ <20231220200110.1819507-3-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-Authenticated-Id: me@grantnichol.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=grantnichol.com; s=x; h=Content-Transfer-Encoding:MIME-Version:References:
- In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
- List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=BD7SMCtjsDrc6hsD21wXiFMNlW5CXdJzkGbo3kjMeQo=; b=aHzoswcmeBSGblbzYrwOa2/RKK
- dT6GKDLbsQNOOWwvgDJWm6+Ds2YvFhnhZcWKhQqklbk8ZpREJJKxzJvjMEFi4KOMso6sov3ZOTKLg
- 5bfTXRzVEnKvefthqK27MECXUnqkFF6VAggKNlLi/pk8qPySaafMKXRzZtXf9juQk4bkznQeF00MJ
- DCYXXHn0up111fP5ci2rXe8VklcSma80u6Y9m3cEk2AUx+IZUca0gd5XM2nOK4WNk57urcXRJbaYV
- 4q7EVCbsbiyxUYDCx96ejZIg6aooP2cIvTGOYmcUsfJDpU5zs2XyIICeS7k/Nm7x/j61b56P/LDMi
- m0mB7VmQ==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=grantnichol.com header.i=@grantnichol.com
- header.a=rsa-sha256 header.s=x header.b=aHzoswcm
-Subject: [Buildroot] [PATCH v2 1/2] package/libopenssl: add riscv target
- arch support
+Content-Disposition: inline
+In-Reply-To: <20231220200110.1819507-3-thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1703326801;
+ bh=Q1gTRxMUOLasbhaqb9vf9YaerwQYgo10VicSlZYUEOo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=flP006+jU65ImEOngYQHgX+DvNEpr9Cc33pDdtcZ5SqO2b4RYKzamhsdkT4CPbcZZ
+ W5o9pW7koba71WxI0r6oXc6Tl96mt9W4E6ijjM3dx90lt1wPXskg+LxL7L8N1EzVUe
+ pgt0Fuiu39fcqgeklHtF7C4xcxfljtOT8LwjBnz0AU8giN+QTQGNNOCuN2YgQIW5Xp
+ 13cdJRRQnUqK8EPigWc+kulNterBjo8VRBF07O+QjmXOnec/402FabDvmMSigZ3TKs
+ 5b1VjHlFUFIy9ctx7Kk8WVE55ABZ38CeyK6GWx/zn90ZeSo1HrGEOYyKLTuu0lMqAt
+ jX1uRiiU2U+jg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=flP006+j
+Subject: Re: [Buildroot] [PATCH 3/3] package/glibc: ignore CVE-2023-0687,
+ disputed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,41 +76,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Grant Nichol <me@grantnichol.com>
+Cc: peter.verbrugge@technolution.nl, Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adds BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH for riscv32 and riscv64.
-Otherwise, riscv targets fall back to the linux-generic libopenssl
-configs. This exacerbates the issue partially addressed in
-openssl/openssl#22871 which causes build failures.
+Thomas, All,
 
-Signed-off-by: Grant Nichol <me@grantnichol.com>
----
-Changes v1 -> v2:
-  - Rebasing series
+On 2023-12-20 21:01 +0100, Thomas Petazzoni spake thusly:
+> According to the glibc maintainers, CVE-2023-0687 is not a security
+> issue, and they have sent a rejection request to MITRE, so let's
+> ignore it.
 
- package/libopenssl/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+This CVE is supposed to be fixed by 801af9fafd46 (gmon: Fix allocated
+buffer overflow (bug 29444)) which is in 2.38:
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 3199de8cfe..49958d9fd6 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -23,6 +23,8 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
- 	default "linux-x86"			if BR2_i386 && !BR2_TOOLCHAIN_HAS_LIBATOMIC
- 	default "linux-x86-latomic"		if BR2_i386 && BR2_TOOLCHAIN_HAS_LIBATOMIC
- 	default "linux-x86_64"			if BR2_x86_64
-+	default "linux64-riscv64"               if BR2_riscv && BR2_ARCH_IS_64
-+	default "linux32-riscv32"               if BR2_riscv && !BR2_ARCH_IS_64
- 	# no-asm is needed with generic architectures such as
- 	# linux-generic{32,64}, see
- 	# https://github.com/openssl/openssl/issues/9839
---
-2.43.0
+    $ git tag --contains 801af9fafd46
+    glibc-2.38
+    glibc-2.38.9000
 
+So the CVE DB should be updated to state that glibc >= 2.38 is not
+affected.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> I have chosen to submit this one separately from the previous patch,
+> as it's a much newer one, so the Buildroot community may have a
+> different view on how we should handle this particular CVE.
+> ---
+>  package/glibc/glibc.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 29411c58e2..a485d40f8d 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -50,6 +50,11 @@ GLIBC_IGNORE_CVES += \
+>  	CVE-2019-1010024 \
+>  	CVE-2019-1010025
+>  
+> +# This CVE is disputed, and the glibc maintainers don't consider it to
+> +# be a security issue, see
+> +# https://sourceware.org/bugzilla/show_bug.cgi?id=29444
+> +GLIBC_IGNORE_CVES += CVE-2023-0687
+> +
+>  # glibc is part of the toolchain so disable the toolchain dependency
+>  GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  
+> -- 
+> 2.43.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
