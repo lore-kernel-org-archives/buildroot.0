@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3159AC3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 17:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61053C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 17:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E12FE4170F;
-	Sat, 23 Dec 2023 17:34:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E12FE4170F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0102241923;
+	Sat, 23 Dec 2023 17:34:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0102241923
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gvnFsPXWGbnu; Sat, 23 Dec 2023 17:34:25 +0000 (UTC)
+	with ESMTP id NP8ysq5D5MKv; Sat, 23 Dec 2023 17:34:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1638741836;
-	Sat, 23 Dec 2023 17:34:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1638741836
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 273D11BF2E3
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:34:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4361418C9;
+	Sat, 23 Dec 2023 17:34:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4361418C9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 459361BF2C2
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:34:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3F5041607
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:34:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3F5041607
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BDC582125
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:34:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BDC582125
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n7IL2me-mQgr for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qponoZ8Z1J5q for <buildroot@lists.busybox.net>;
  Sat, 23 Dec 2023 17:34:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F7AE41604
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D3A58214B
  for <buildroot@buildroot.org>; Sat, 23 Dec 2023 17:34:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F7AE41604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D3A58214B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BD9B87D9C; Sat, 23 Dec 2023 17:34:08 +0000 (UTC)
+ id 1B62087D9E; Sat, 23 Dec 2023 17:34:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 18:13:43 +0100
+Date: Sat, 23 Dec 2023 18:18:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ef851d6d93d120648d62572c8f8f570ab8c34fa2
-X-Git-Newrev: 85882c69a9d4ed1e821634e1535157ed16c46ac6
+X-Git-Oldrev: 85882c69a9d4ed1e821634e1535157ed16c46ac6
+X-Git-Newrev: 601fef4ab55319ef8f2f28bf0c1fb8f06f502b0a
 X-Patchwork-Hint: ignore
-Message-Id: <20231223173408.0BD9B87D9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-conciseserialization: new
- package
+Message-Id: <20231223173408.1B62087D9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-ubjson: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,74 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85882c69a9d4ed1e821634e1535157ed16c46ac6
+commit: https://git.buildroot.net/buildroot/commit/?id=601fef4ab55319ef8f2f28bf0c1fb8f06f502b0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                                      |  1 +
- package/lua-conciseserialization/Config.in             |  6 ++++++
- .../lua-conciseserialization.hash                      |  4 ++++
- .../lua-conciseserialization.mk                        | 18 ++++++++++++++++++
- 4 files changed, 29 insertions(+)
+ package/Config.in                  |  1 +
+ package/lua-ubjson/Config.in       |  7 +++++++
+ package/lua-ubjson/lua-ubjson.hash |  3 +++
+ package/lua-ubjson/lua-ubjson.mk   | 11 +++++++++++
+ 4 files changed, 22 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 73d286a861..ae7c3e261a 100644
+index ae7c3e261a..bc723fe018 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -728,6 +728,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-coatpersistent/Config.in"
- 	source "package/lua-codegen/Config.in"
- 	source "package/lua-compat53/Config.in"
-+	source "package/lua-conciseserialization/Config.in"
- 	source "package/lua-cqueues/Config.in"
- 	source "package/lua-csnappy/Config.in"
- 	source "package/lua-curl/Config.in"
-diff --git a/package/lua-conciseserialization/Config.in b/package/lua-conciseserialization/Config.in
+@@ -761,6 +761,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-std-normalize/Config.in"
+ 	source "package/lua-stdlib/Config.in"
+ 	source "package/lua-testmore/Config.in"
++	source "package/lua-ubjson/Config.in"
+ 	source "package/lua-utf8/Config.in"
+ 	source "package/lua-valua/Config.in"
+ 	source "package/lua-zlib/Config.in"
+diff --git a/package/lua-ubjson/Config.in b/package/lua-ubjson/Config.in
 new file mode 100644
-index 0000000000..b660147008
+index 0000000000..88ed2c7c79
 --- /dev/null
-+++ b/package/lua-conciseserialization/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LUA_CONCISESERIALIZATION
-+	bool "lua-conciseserialization"
++++ b/package/lua-ubjson/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUA_UBJSON
++	bool "lua-ubjson"
++	select BR2_PACKAGE_LUA_COMPAT53 if BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1 # runtime
 +	help
-+	  a pure Lua implementation of CBOR / RFC8949.
++	  a pure Lua implementation of UBJSON.
 +
-+	  https://fperrad.frama.io/lua-ConciseSerialization/
-diff --git a/package/lua-conciseserialization/lua-conciseserialization.hash b/package/lua-conciseserialization/lua-conciseserialization.hash
++	  https://fperrad.frama.io/lua-ubjson/
+diff --git a/package/lua-ubjson/lua-ubjson.hash b/package/lua-ubjson/lua-ubjson.hash
 new file mode 100644
-index 0000000000..30ae4536f6
+index 0000000000..6db046ec2f
 --- /dev/null
-+++ b/package/lua-conciseserialization/lua-conciseserialization.hash
-@@ -0,0 +1,4 @@
++++ b/package/lua-ubjson/lua-ubjson.hash
+@@ -0,0 +1,3 @@
 +# computed by luarocks/buildroot
-+sha256  1dd7a5bd17349ad78e93b36f05739e4323a8fda8cd66dee423bdd5a21a0c4453  lua-conciseserialization-0.2.4-1.src.rock
-+sha256  7988a3ab9ea3d8c536387c4e7931b1703fa02f7011771569ed56641fa1a0c78c  lua-conciseserialization-lua53-0.2.4-1.src.rock
-+sha256  23ddf0d4a4dbc0667eeb919ceb7cc0a5b527af6cb51b286b78fa42f350de2130  lua-ConciseSerialization-0.2.4/COPYRIGHT
-diff --git a/package/lua-conciseserialization/lua-conciseserialization.mk b/package/lua-conciseserialization/lua-conciseserialization.mk
++sha256  6605a6a0ca5f6cb8ec1aac14840adcdc6b359f5d8666fb3d224510e8d73c43b9  lua-ubjson-0.1.0-1.src.rock
++sha256  c85f6b3d47bcde28fd15bc7e361cdc5ec6b580819f4a891e29cf89513abbadd2  lua-ubjson-0.1.0/COPYRIGHT
+diff --git a/package/lua-ubjson/lua-ubjson.mk b/package/lua-ubjson/lua-ubjson.mk
 new file mode 100644
-index 0000000000..a777a4baea
+index 0000000000..93e6631962
 --- /dev/null
-+++ b/package/lua-conciseserialization/lua-conciseserialization.mk
-@@ -0,0 +1,18 @@
++++ b/package/lua-ubjson/lua-ubjson.mk
+@@ -0,0 +1,11 @@
 +################################################################################
 +#
-+# lua-conciseserialization
++# lua-ubjson
 +#
 +################################################################################
 +
-+LUA_CONCISESERIALIZATION_VERSION_UPSTREAM = 0.2.4
-+LUA_CONCISESERIALIZATION_VERSION = $(LUA_CONCISESERIALIZATION_VERSION_UPSTREAM)-1
-+ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
-+LUA_CONCISESERIALIZATION_NAME_UPSTREAM = lua-ConciseSerialization-lua53
-+else
-+LUA_CONCISESERIALIZATION_NAME_UPSTREAM = lua-ConciseSerialization
-+endif
-+LUA_CONCISESERIALIZATION_SUBDIR = lua-ConciseSerialization-$(LUA_CONCISESERIALIZATION_VERSION_UPSTREAM)
-+LUA_CONCISESERIALIZATION_LICENSE = MIT
-+LUA_CONCISESERIALIZATION_LICENSE_FILES = $(LUA_CONCISESERIALIZATION_SUBDIR)/COPYRIGHT
++LUA_UBJSON_VERSION = 0.1.0-1
++LUA_UBJSON_LICENSE = MIT
++LUA_UBJSON_LICENSE_FILES = $(LUA_UBJSON_SUBDIR)/COPYRIGHT
 +
 +$(eval $(luarocks-package))
 _______________________________________________
