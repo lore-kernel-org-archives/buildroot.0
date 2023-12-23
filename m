@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C76FC3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:07:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28078C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21FB582173;
-	Sat, 23 Dec 2023 20:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21FB582173
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3D8181E9A;
+	Sat, 23 Dec 2023 20:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3D8181E9A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yxbsXDpZf4F9; Sat, 23 Dec 2023 20:07:13 +0000 (UTC)
+	with ESMTP id fqiGVCfH0Qci; Sat, 23 Dec 2023 20:08:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60E3C82165;
-	Sat, 23 Dec 2023 20:07:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60E3C82165
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 919A41BF388
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:07:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3710882171;
+	Sat, 23 Dec 2023 20:08:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3710882171
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E6041BF388
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70791417E7
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:07:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70791417E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82E1340395
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82E1340395
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 35seOCSnCmKI for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 20:07:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RIFYxaNUHeq1 for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 20:08:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF931417CE
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:07:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF931417CE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DDF740195
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DDF740195
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 86003822AD; Sat, 23 Dec 2023 20:07:09 +0000 (UTC)
+ id 3C0A5822B7; Sat, 23 Dec 2023 20:08:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 21:01:37 +0100
+Date: Sat, 23 Dec 2023 21:07:56 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4873799fe761ed3ac97c4f54f8079edbfd4047ef
-X-Git-Newrev: 297c88cfca6586e05769cc41ae755bcce6d69044
+X-Git-Oldrev: 297c88cfca6586e05769cc41ae755bcce6d69044
+X-Git-Newrev: 9b26461bb0d47efd518267401172df7833730a16
 X-Patchwork-Hint: ignore
-Message-Id: <20231223200709.86003822AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/asus_tinker-s_rk3288_defconfig:
- use zImage by default
+Message-Id: <20231223200811.3C0A5822B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglebone_defconfig: bump Linux
+ to 6.1.46-ti-r13 and U-Boot to 2023.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,58 +59,83 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5455012422159956031=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5455012422159956031==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=297c88cfca6586e05769cc41ae755bcce6d69044
+commit: https://git.buildroot.net/buildroot/commit/?id=9b26461bb0d47efd518267401172df7833730a16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Migrates tinker-s away from deprecated uImage
+The linux defconfig 'bb.org_defconfig' is the best for beagleboard.
 
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+To load compressed kernel modules, kmod and xz packages are needed
+because busybox doesn't support it.
+
+Bump U-Boot to version 2023.10. The uboot-tools package is no need.
+
+Tested on beaglebone black.
+
+[1] https://github.com/beagleboard/linux/releases/tag/6.1.46-ti-r13
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/asus/tinker-s/extlinux.conf      | 2 +-
- configs/asus_tinker-s_rk3288_defconfig | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ configs/beaglebone_defconfig | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/board/asus/tinker-s/extlinux.conf b/board/asus/tinker-s/extlinux.conf
-index 5a2d05b811..61ebe50c71 100644
---- a/board/asus/tinker-s/extlinux.conf
-+++ b/board/asus/tinker-s/extlinux.conf
-@@ -1,4 +1,4 @@
- label Tinker linux
--  kernel /boot/uImage
-+  kernel /boot/zImage
-   devicetree /boot/rk3288-tinker-s.dtb
-   append console=ttyS2,115200n8 root=179:1 rootwait
-diff --git a/configs/asus_tinker-s_rk3288_defconfig b/configs/asus_tinker-s_rk3288_defconfig
-index 7082869881..00b42990f8 100644
---- a/configs/asus_tinker-s_rk3288_defconfig
-+++ b/configs/asus_tinker-s_rk3288_defconfig
-@@ -25,8 +25,6 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.65"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 7e006e7a85..e2d67019b1 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -3,11 +3,8 @@ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Patches
+-BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
+-
+-# Linux headers same as kernel, a 5.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ # System
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+@@ -20,8 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.162-ti-r59)/linux-5.10.162-ti-r59.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.1.46-ti-r13)/linux-6.1.46-ti-r13.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-tinker-s"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-
---===============5455012422159956031==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+@@ -34,7 +31,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -48,6 +45,9 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ 
+-# Supporting host tools to build FIT image
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5455012422159956031==--
