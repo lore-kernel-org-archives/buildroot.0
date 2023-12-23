@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFE48C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 14:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D7E8C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 14:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88BA460EB6;
-	Sat, 23 Dec 2023 14:15:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88BA460EB6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4506960E92;
+	Sat, 23 Dec 2023 14:15:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4506960E92
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zXI7CCnxnwis; Sat, 23 Dec 2023 14:15:42 +0000 (UTC)
+	with ESMTP id ktvlunfkvLBB; Sat, 23 Dec 2023 14:15:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABDB860ECA;
-	Sat, 23 Dec 2023 14:15:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABDB860ECA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD41F1BF86B
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:15:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84A8660586;
+	Sat, 23 Dec 2023 14:15:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84A8660586
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 881651BF280
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:15:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A20C6608A6
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:15:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A20C6608A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6022541BED
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:15:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6022541BED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JKUHsYOremKz for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L0U6MvZaXYN0 for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 14:15:16 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3133A41BD6
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 14:15:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3133A41BD6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3FF3660003;
  Sat, 23 Dec 2023 14:15:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B2D1160EA7
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 14:15:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2D1160EA7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C62487D2E; Sat, 23 Dec 2023 14:15:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 15:14:08 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d025f88e62db50ce28730b6e732b2946fe7d5bc
-X-Git-Newrev: 922132c39e233aec10835e2a4d7d8dbf92e99723
-X-Patchwork-Hint: ignore
-Message-Id: <20231223141513.9C62487D2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/putty: security bump to version
- 0.80
+Date: Sat, 23 Dec 2023 15:15:12 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20231223151512.0544e644@windsurf>
+In-Reply-To: <20231220190154.77440-1-bernd@kuhls.net>
+References: <20231220190154.77440-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703340913;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2Ea4ceOIDNUTrxyVdc/lBg631Uvzluf0VFxcyzxhzRo=;
+ b=Ls0AH9Zz9N2cNlLvdLuqtBOkNI5R8LMZz30Iq6qhao9nrlsMfWP1C1vSi0EB53UBfQNo6Z
+ fQaKVtMszxUZHiZ3EmR+8F6mi3cwQriL1imndhyKtUfS48vd8/711sPkkU649BO8Yjfa4D
+ jU0hw5mdHa+os1C7oP7HLRD0fmQl3P10Lv5qfzNvxdNdYSfmerhrwfty4PgS344r460tRC
+ Hh4A6S9rNsb12rKSzmcBx9AWdB2u6SFo2awMtSIr/PL+kLs8n0iZZ+RVui9C09upu/9ren
+ EGK5EifTyYhcgeuggTvCt6GJ3WTM86oyv6vR/yj8yTjoqz4Lq4+D41ygeummng==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Ls0AH9Zz
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-hts: bump version to
+ 20.7.0-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,75 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=922132c39e233aec10835e2a4d7d8dbf92e99723
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 20 Dec 2023 20:01:54 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-As described in the announcement, this fixes a security issue:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
+>  package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-There is one security fix in this release:
+Applied to master, thanks.
 
- - Fix for a newly discovered security issue known as the 'Terrapin'
-   attack, also numbered CVE-2023-48795. The issue affects widely-used
-   OpenSSH extensions to the SSH protocol: the ChaCha20+Poly1305
-   cipher system, and 'encrypt-then-MAC' mode.
-
-   In order to benefit from the fix, you must be using a fixed version
-   of PuTTY _and_ a server with the fix, so that they can agree to
-   adopt a modified version of the protocol. Alternatively, you may be
-   able to reconfigure PuTTY to avoid selecting any of the affected
-   modes.
-
-   If PuTTY 0.80 connects to an SSH server without the fix, it will
-   warn you if the initial protocol negotiation chooses an insecure
-   mode to run the connection in, so that you can abandon the
-   connection. If it's possible to alter PuTTY's configuration to
-   avoid the problem, then the warning message will tell you how to do
-   it.
-
-https://lists.tartarus.org/pipermail/putty-announce/2023/000037.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/putty/putty.hash | 8 ++++----
- package/putty/putty.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 0ae2a86be8..84569a31e5 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.79/{sha1,sha256,sha512}sums
--sha1  c40c3ce9fd334c40e64c6b33ee7e1096dad52701  putty-0.79.tar.gz
--sha256  428cc8666fbb938ebf4ac9276341980dcd70de395b33164496cf7995ef0ef0d8  putty-0.79.tar.gz
--sha512  4f10f870b229c89e928921d3b350955ce1c1170a062e7943d9cc8dbd83389d82a9b844623541605f0db5a429d545c2d188bf8e384c6515466fae69b216120983  putty-0.79.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.80/{sha1,sha256,sha512}sums
-+sha1  9c4a96f63ee3e927472191c935cc89228693c03a  putty-0.80.tar.gz
-+sha256  2013c83a721b1753529e9090f7c3830e8fe4c80a070ccce764539badb3f67081  putty-0.80.tar.gz
-+sha512  c8a6b6fa54ecd8bcf4ec274fef51343dd9996e6458b250b5555c4dc88ded25e87f97277da482c29858510e65635112d541f559ab683635bd950572d850129f90  putty-0.80.tar.gz
- 
- # Locally calculated
- sha256  7ede37f344ee03436c155a375ecb6cdb42a77105baa6e7804bf43260dc4a0c54  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index 4c9164d05e..bff6e78074 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PUTTY_VERSION = 0.79
-+PUTTY_VERSION = 0.80
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
