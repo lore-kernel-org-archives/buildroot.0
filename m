@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CF81C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 17:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20A9CC3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 17:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5468D41807;
-	Sat, 23 Dec 2023 17:43:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5468D41807
+	by smtp4.osuosl.org (Postfix) with ESMTP id C48814188D;
+	Sat, 23 Dec 2023 17:46:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C48814188D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RLrME3I3rlcG; Sat, 23 Dec 2023 17:43:18 +0000 (UTC)
+	with ESMTP id C9wP3WtKqN7x; Sat, 23 Dec 2023 17:46:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CC9441723;
-	Sat, 23 Dec 2023 17:43:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CC9441723
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E9AC41840;
+	Sat, 23 Dec 2023 17:46:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E9AC41840
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 70A171BF2C2
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:43:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6EF941BF2C2
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C7A541723
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:43:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C7A541723
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5563641840
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:46:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5563641840
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aYNwVNSSRsSN for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 17:43:13 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0CFAD41714
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 17:43:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CFAD41714
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D2C51BF204;
- Sat, 23 Dec 2023 17:43:09 +0000 (UTC)
-Date: Sat, 23 Dec 2023 18:43:09 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20231223184309.63501a74@windsurf>
-In-Reply-To: <20231218224747.545311-1-giulio.benetti@benettiengineering.com>
-References: <20231218224747.545311-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703353390;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nhiPSubZ0LDIzPTvbOY3lRLr5uwJe8Q87C7uNA7qOsA=;
- b=QdhIxV/hTgpgfGVcqCSJw4JmxQ1/JGkuCT9U1AbCe7rAXbrebV7laWhtH55/2WivBa6Mjt
- 0i1qMsem1SjyiA/Fmsx/iMYxjouozGzJszeSCtsmGd5lOWlMrIREvUF9GXcJOkFn+aDA3x
- NRNiVQ0c36PYNkB3W0ZcBW0oSkf7j3UmEqCQTKvr7CFBTAtH5+3FQ1e72x8pXMWLbdC/KF
- Bu5cQGlRfY26DK59O/H3m2NTXDfW9TRoacReZmxlOEPHlvoBCKcIL/58Ztb8ijSVLYydh9
- x3VOS8F4NqQPqUD/EGpFnQz56xm0FuSQ2BZ/QG1mRYAOyZJaSnf0RHxDHZ34eA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QdhIxV/h
-Subject: Re: [Buildroot] [PATCH v2] package/swupdate: bump version to 2023.12
+ with ESMTP id fWhCUqds9CYg for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 17:46:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8DDAE41807
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 17:46:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DDAE41807
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 67D1781600; Sat, 23 Dec 2023 17:46:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Dec 2023 18:43:18 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c9c28434b2bc3f0bf87b17ab8733b6709861b093
+X-Git-Newrev: 9dc526aa47f5ca73091504b596d629deb7c227d6
+X-Patchwork-Hint: ignore
+Message-Id: <20231223174633.67D1781600@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cmake: bump version to 3.27.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,60 +57,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9dc526aa47f5ca73091504b596d629deb7c227d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Dec 2023 23:47:47 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Changelog: https://cmake.org/cmake/help/v3.27/release/3.27.html#updates
 
-> * make json-c mandatory according to [0]
-> * make libubootenv mandatory according to [1]
-> * drop local patch that has been upstreamed [2]
-> * libconfig is not mandatory anymore if no lua parser is enabled
-> * adjust Config.in comment according to json-c and libubootenv
-> 
-> [0]: https://github.com/sbabic/swupdate/commit/82e75322443e021d119a026a3476c410f4705d67
-> [1]: https://github.com/sbabic/swupdate/commit/75838874e2575f822ed85d89532f47e9adf781b6
-> [2]: https://github.com/sbabic/swupdate/commit/1999685830d6e9b57014666b9e53e46de17a471c
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Release notes:
+https://www.kitware.com/cmake-3-27-8-available-for-download/
+https://www.kitware.com/cmake-3-27-9-available-for-download/
 
-Thanks for the extensive commit log. I applied with one fix, see below.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
-> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-> index 7d9fc90e10..171805bea9 100644
-> --- a/package/swupdate/Config.in
-> +++ b/package/swupdate/Config.in
-> @@ -3,9 +3,9 @@ config BR2_PACKAGE_SWUPDATE
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # fork()
-> -	# swupdate requires a parser and uses libconfig as default
-> -	select BR2_PACKAGE_LIBCONFIG if !BR2_PACKAGE_JSON_C && \
-> -		!BR2_PACKAGE_HAS_LUAINTERPRETER
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-
-You forgot to replicate this dependency in the Config.in comment of
-swupdate, i.e:
-
- comment "swupdate needs a toolchain w/ dynamic library, threads"
-        depends on BR2_USE_MMU
-+       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-        depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-
-I fixed that when applying. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index e495061bae..fbf0786232 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v3.27/cmake-3.27.7-SHA-256.txt
+-sha256  08f71a106036bf051f692760ef9558c0577c42ac39e96ba097e7662bd4158d8e  cmake-3.27.7.tar.gz
++# From https://cmake.org/files/v3.27/cmake-3.27.9-SHA-256.txt
++sha256  609a9b98572a6a5ea477f912cffb973109ed4d0a6a6b3f9e2353d2cdc048708e  cmake-3.27.9.tar.gz
+ 
+ # Locally calculated
+ sha256  4a01ccf2dc580ba570d02bc015bbe0ec92f1f318717aae9540ba841ba7946756  Copyright.txt
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 41278bf6db..7506e964a9 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+ CMAKE_VERSION_MAJOR = 3.27
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).7
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
