@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FC66C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:12:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EC7AC3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B84634180D;
-	Sat, 23 Dec 2023 20:12:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B84634180D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B01140591;
+	Sat, 23 Dec 2023 20:12:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B01140591
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ORd3DHo2mo_Z; Sat, 23 Dec 2023 20:12:10 +0000 (UTC)
+	with ESMTP id oaKE6fvbcJMW; Sat, 23 Dec 2023 20:12:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F298A417FB;
-	Sat, 23 Dec 2023 20:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F298A417FB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2F50A1BF388
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:11:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C56241809;
+	Sat, 23 Dec 2023 20:12:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C56241809
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8492E1BF388
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:11:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08ED481DE4
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08ED481DE4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5AAC840120
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:11:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AAC840120
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MWdbiClrD5Pq for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 20:11:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C41682195
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:11:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C41682195
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 081AE82435; Sat, 23 Dec 2023 20:11:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 21:10:38 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 216e4491357ead1711e8021335491439a316af40
-X-Git-Newrev: 7260675c7dca07c431da51337dc42e86013d3ddf
-X-Patchwork-Hint: ignore
-Message-Id: <20231223201130.081AE82435@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 23.4.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WbwYK_qTBpWP for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 20:11:50 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 16FC840148
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:11:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16FC840148
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 098D120002;
+ Sat, 23 Dec 2023 20:11:47 +0000 (UTC)
+Date: Sat, 23 Dec 2023 21:11:47 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20231223211147.756010f2@windsurf>
+In-Reply-To: <20231204211807.12746-1-bernd@kuhls.net>
+References: <20231204211807.12746-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703362308;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=HdBFMUBoCEuo4xXrAmkrX5JXpdN71boPVti0lz0im9o=;
+ b=mOi8kStj+nQGguJKcFuZdPrRvfe8aRXonNl7Uuiy0w6EXu1Ay6tIa92ixYEoRvGqZfy5uh
+ e6saUGeHmIhfyfITCeMKRNlkDWIgUwu+E+kOhPrpcX2sM8ZtiLQ+SI5nqm/41c0CugH9EV
+ FdfAoHQTvKuYwLFBXrrLuogNx1THAwuw705Y5eCNQa/hUwqowkcfG9xY6/AnC2dyAwolWE
+ py2xBmMQAIfSfIiXjOw+WefkLFQLiqe1ONdlM/YQkLmk6z5jKxgVBOmdxHYsUXwEoEWLNZ
+ /qZcLOKxMPOuEx/OCk7OxTBZxC3iEwvTvY+WDG0xdzjq1BIDs5gPKkYDTYsV3g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mOi8kStj
+Subject: Re: [Buildroot] [PATCH 1/4] package/intel-gmmlib: bump version to
+ 22.3.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7260675c7dca07c431da51337dc42e86013d3ddf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  4 Dec 2023 22:18:04 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+>  package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 93930f07f2..d3173260b1 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  67fd15654bb3c596feb8c85e81221de5632e11f598421c35adc4453d727f0130  intel-media-23.3.5.tar.gz
-+sha256  321f2ade9e55ed5b8809ca875d80c81245093fe9f8a26a39712d2f4a6be18d18  intel-media-23.4.2.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 5492411b63..a6c3b469d4 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 23.3.5
-+INTEL_MEDIADRIVER_VERSION = 23.4.2
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+Series applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
