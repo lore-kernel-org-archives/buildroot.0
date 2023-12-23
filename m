@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20A9CC3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 17:46:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC7A3C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 17:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C48814188D;
-	Sat, 23 Dec 2023 17:46:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C48814188D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BAAF41840;
+	Sat, 23 Dec 2023 17:46:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BAAF41840
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C9wP3WtKqN7x; Sat, 23 Dec 2023 17:46:37 +0000 (UTC)
+	with ESMTP id yaO7h7cu-2pH; Sat, 23 Dec 2023 17:46:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E9AC41840;
-	Sat, 23 Dec 2023 17:46:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E9AC41840
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6EF941BF2C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id B45864188D;
+	Sat, 23 Dec 2023 17:46:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B45864188D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 832E01BF2E3
  for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5563641840
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C5EB60DA5
  for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 17:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5563641840
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C5EB60DA5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fWhCUqds9CYg for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VnBFvHwP22zP for <buildroot@lists.busybox.net>;
  Sat, 23 Dec 2023 17:46:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DDAE41807
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9089A60D8E
  for <buildroot@buildroot.org>; Sat, 23 Dec 2023 17:46:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DDAE41807
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9089A60D8E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 67D1781600; Sat, 23 Dec 2023 17:46:33 +0000 (UTC)
+ id 784208141C; Sat, 23 Dec 2023 17:46:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 18:43:18 +0100
+Date: Sat, 23 Dec 2023 18:43:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9c28434b2bc3f0bf87b17ab8733b6709861b093
-X-Git-Newrev: 9dc526aa47f5ca73091504b596d629deb7c227d6
+X-Git-Oldrev: 9dc526aa47f5ca73091504b596d629deb7c227d6
+X-Git-Newrev: ce52fd55969c330868fdae2cb10c6f325a8f42c8
 X-Patchwork-Hint: ignore
-Message-Id: <20231223174633.67D1781600@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cmake: bump version to 3.27.9
+Message-Id: <20231223174633.784208141C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dc526aa47f5ca73091504b596d629deb7c227d6
+commit: https://git.buildroot.net/buildroot/commit/?id=ce52fd55969c330868fdae2cb10c6f325a8f42c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://cmake.org/cmake/help/v3.27/release/3.27.html#updates
-
-Release notes:
-https://www.kitware.com/cmake-3-27-8-available-for-download/
-https://www.kitware.com/cmake-3-27-9-available-for-download/
+Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xmrig/xmrig.hash | 2 +-
+ package/xmrig/xmrig.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index e495061bae..fbf0786232 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,5 +1,5 @@
--# From https://cmake.org/files/v3.27/cmake-3.27.7-SHA-256.txt
--sha256  08f71a106036bf051f692760ef9558c0577c42ac39e96ba097e7662bd4158d8e  cmake-3.27.7.tar.gz
-+# From https://cmake.org/files/v3.27/cmake-3.27.9-SHA-256.txt
-+sha256  609a9b98572a6a5ea477f912cffb973109ed4d0a6a6b3f9e2353d2cdc048708e  cmake-3.27.9.tar.gz
- 
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+index eab24a7eab..3a54d66ce4 100644
+--- a/package/xmrig/xmrig.hash
++++ b/package/xmrig/xmrig.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  4a01ccf2dc580ba570d02bc015bbe0ec92f1f318717aae9540ba841ba7946756  Copyright.txt
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 41278bf6db..7506e964a9 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -6,7 +6,7 @@
+-sha256  86c62eb6db83981b21ac1faac69c28fee2952cbbc207ea7476707d4f1799633f  xmrig-6.20.0.tar.gz
++sha256  4b197c71fa06030216b641b4ea57f7a3d977a17df1b55bd13759d4705dbf5941  xmrig-6.21.0.tar.gz
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+index 982ccc8c5d..35cd1d8d82 100644
+--- a/package/xmrig/xmrig.mk
++++ b/package/xmrig/xmrig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
- CMAKE_VERSION_MAJOR = 3.27
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).7
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
- CMAKE_LICENSE_FILES = Copyright.txt
+-XMRIG_VERSION = 6.20.0
++XMRIG_VERSION = 6.21.0
+ XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+ XMRIG_LICENSE = GPL-3.0+
+ XMRIG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
