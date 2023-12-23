@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5036EC3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73438C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 21:21:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0281E40015;
-	Sat, 23 Dec 2023 20:37:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0281E40015
+	by smtp1.osuosl.org (Postfix) with ESMTP id E98A68218C;
+	Sat, 23 Dec 2023 21:21:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E98A68218C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q6ULXOcy75JK; Sat, 23 Dec 2023 20:37:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XBzB5tMgM6Sn; Sat, 23 Dec 2023 21:21:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61BAC418AB;
-	Sat, 23 Dec 2023 20:37:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61BAC418AB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96FBE1BF47E
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:37:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 184A882183;
+	Sat, 23 Dec 2023 21:21:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 184A882183
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AB001BF406
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 21:21:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FB8E418AB
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:37:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FB8E418AB
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEE5282183
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 21:21:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEE5282183
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z1rn0kwUTTl8 for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 20:37:43 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7138E4086D
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:37:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7138E4086D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 998D8C0002;
- Sat, 23 Dec 2023 20:37:40 +0000 (UTC)
-Date: Sat, 23 Dec 2023 21:37:39 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20231223213739.0227e2b1@windsurf>
-In-Reply-To: <20231204211622.12687-3-bernd@kuhls.net>
-References: <20231204211622.12687-1-bernd@kuhls.net>
- <20231204211622.12687-3-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703363860;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ERetoD9OegC00nOOWNUxRty/BYZmXqpJAIOXoVx1heY=;
- b=UTPwMJ2WnUAj2p5liHEGN5wj3UEugVYMoa2HWfGrwQDXqkMMrmK5jgDvaujSvmgLXUkeID
- B3KDR6vqf8sVMnBLe3+F9SU/FNfT+27ULT65Ho7JPVS5HNXXOUgaO6t0U67vA8fae8WhT1
- hZAb8oN0X6gnv56iMoFahuyxZjiTHylLOuLRv3JXodaD42aw6yXMaiW/0UopKa4MZQHP6a
- 5mzb6XHbpkq3ypK2gGSGEvxdAYtm19PhMAHZGId5ZxoqOOFiE+GL6pDvdMTWKhNpkw9HY2
- aGQmG9j0eYL3OCfZOEDoGdGXT1ogYjMafvzPB2zvbDFhkSZR8RCsYmZ7uvIdtg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UTPwMJ2W
-Subject: Re: [Buildroot] [PATCH 3/3] package/libxml2: bump version to 2.12.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vDsgBLzhJ32q for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 21:21:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0383F8217D
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 21:21:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0383F8217D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E58EA818CC; Sat, 23 Dec 2023 21:21:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Dec 2023 21:34:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 180f119b756258d47461f1e4e70bfd581024de1a
+X-Git-Newrev: d8ac52108c12f0fcc9641b63e7922009270f96c6
+X-Patchwork-Hint: ignore
+Message-Id: <20231223212146.E58EA818CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxml2: bump version to 2.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,43 +57,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  4 Dec 2023 22:16:22 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d8ac52108c12f0fcc9641b63e7922009270f96c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Updated license hash due to upstream commit
-> https://github.com/GNOME/libxml2/commit/4a513d5667d7690998f01b9048c56c4f1f50f6a5
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/libxml2/libxml2.hash | 6 +++---
->  package/libxml2/libxml2.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Updated license hash due to upstream commit
+https://github.com/GNOME/libxml2/commit/4a513d5667d7690998f01b9048c56c4f1f50f6a5
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libxml2/libxml2.hash | 6 +++---
+ package/libxml2/libxml2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-I see you fixed both squid and xmlstarlet before this bump, but
-obviously a concern is whether other packages will be affected. How
-much build testing did you do after this version bump? There are indeed
-a myriad of packages using libxml2.
-
-Of course, the autobuilders will tell us, but I was wondering how much
-breakage we might be seeing. If you could keep an eye on the
-autobuilders in the next few days for possible issues related to this
-version bump, it would be nice!
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 78c1ddc6a2..a3b2230b8a 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.6.sha256sum
+-sha256  c90eee7506764abbe07bb616b82da452529609815aefef423d66ef080eb0c300  libxml2-2.11.6.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.1.sha256sum
++sha256  8982b9ccdf7f456e30d8f7012d50858c6623e495333b6191def455c7e95427eb  libxml2-2.12.1.tar.xz
+ # License files, locally calculated
+-sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
++sha256  7fb0a66f3989f9bd5c7e5438a3de02cd4a7a47dde0aea2f7ea2ba2ff454ee6a4  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index c93a4aacc5..5606532b62 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBXML2_VERSION_MAJOR = 2.11
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).6
++LIBXML2_VERSION_MAJOR = 2.12
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).1
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
