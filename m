@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED9D4C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:00:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C8B2C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9AE2982173;
-	Sat, 23 Dec 2023 20:00:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AE2982173
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDDE78217D;
+	Sat, 23 Dec 2023 20:01:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDDE78217D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1ZP6h9upqObX; Sat, 23 Dec 2023 20:00:40 +0000 (UTC)
+	with ESMTP id I0qyFfc9Fvxz; Sat, 23 Dec 2023 20:01:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1CC98216C;
-	Sat, 23 Dec 2023 20:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1CC98216C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E9BF82173;
+	Sat, 23 Dec 2023 20:01:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E9BF82173
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B18E01BF32A
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:00:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 95A051BF32A
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96C50405A7
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:00:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96C50405A7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C022405A7
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C022405A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DLk0VHvJepyH for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 20:00:37 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 434CF40591
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:00:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 434CF40591
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D0D120004;
- Sat, 23 Dec 2023 20:00:34 +0000 (UTC)
-Date: Sat, 23 Dec 2023 21:00:33 +0100
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20231223210033.39b7c410@windsurf>
-In-Reply-To: <20231129180429.436635-1-adam.duskett@amarulasolutions.com>
-References: <20231129180429.436635-1-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703361634;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=cPSO3+IuB74bFmTWUWtYZMBc+LQ0kav7cG9qCs88AkU=;
- b=XAo11i8vAiPXTXVOhYsXAXuqSorHuK9hQ2XKPFmLq8CDGI4m+XTfLpLEPtXifkaiNlyql7
- 4P4LJNvpROzbYqKP0OH5bvTjhQbmm17H3nac6Je/DjivMTwPYmryb9e8ty+kNYx7aBarl+
- jiqGCkQVEJLGaLzQjBSDUA1MzJTj+TYSYOLv+ZH0EGDYOgV7HKCDMi5bmEbNiK5y819rQS
- ZbZIrTJA3JUSQVmT2/rGC+kZxfbxBcHkmbOLIz6uNci1QjXi4eKPuHSMNiFAFr96RNefyz
- jjf0uuee27M+X+JpF9dANSp3LOslQ6AdAKZ8hg2Kg68XSovrptO5ccj3S1Z7VQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XAo11i8v
-Subject: Re: [Buildroot] [PATCH 1/1] package/openrc: bump version to 0.52.1
+ with ESMTP id WdmrI6F_ALQT for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 20:01:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 948CE40591
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 948CE40591
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7F1F58229C; Sat, 23 Dec 2023 20:01:11 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Dec 2023 21:00:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9ebbfeff38770876e48a4d38741dd9fffc001a42
+X-Git-Newrev: 4873799fe761ed3ac97c4f54f8079edbfd4047ef
+X-Patchwork-Hint: ignore
+Message-Id: <20231223200111.7F1F58229C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openrc: bump version to 0.52.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,39 +57,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 29 Nov 2023 11:04:29 -0700
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4873799fe761ed3ac97c4f54f8079edbfd4047ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The runscript and rc binaries have been removed in this release. However,
-> Buildroot does not use those binaries, so only a simple version bump is
-> necessary.
-> 
-> Fixes:
->   - cgroups being inconsistent
->   - Start-stop-daemon did not work correctly on Linux 6.6
-> 
-> Tested on Debian 11 and Fedora 39 with the following command:
-> ./support/testing/run-tests tests.init.test_openrc
-> 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->  package/openrc/openrc.hash | 2 +-
->  package/openrc/openrc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The runscript and rc binaries have been removed in this release. However,
+Buildroot does not use those binaries, so only a simple version bump is
+necessary.
 
-Applied to master, thanks.
+Fixes:
+  - cgroups being inconsistent
+  - Start-stop-daemon did not work correctly on Linux 6.6
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Tested on Debian 11 and Fedora 39 with the following command:
+./support/testing/run-tests tests.init.test_openrc
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openrc/openrc.hash | 2 +-
+ package/openrc/openrc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/openrc/openrc.hash b/package/openrc/openrc.hash
+index 698acf4978..c1c16a8c45 100644
+--- a/package/openrc/openrc.hash
++++ b/package/openrc/openrc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4ec46f2729c77c4387146b491c4d121f5cba48bff2f0aeaff99895dcda5cea85  openrc-0.51.tar.gz
++sha256  0b911eee4e64ad5e6945c6fed572220d537dfd0108838fa6d6797a2d7ff9f052  openrc-0.52.1.tar.gz
+ sha256  6ac2bf77510808fbec7dc86cbfbca98dfc4c6b47dc99e4ca77b5370e097d8e70  LICENSE
+diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+index 63aec7615e..0dd6a5d1ac 100644
+--- a/package/openrc/openrc.mk
++++ b/package/openrc/openrc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENRC_VERSION = 0.51
++OPENRC_VERSION = 0.52.1
+ OPENRC_SITE = $(call github,OpenRC,openrc,$(OPENRC_VERSION))
+ OPENRC_LICENSE = BSD-2-Clause
+ OPENRC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
