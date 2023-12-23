@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18E09C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 14:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56DCBC3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 14:25:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF58A60E7C;
-	Sat, 23 Dec 2023 14:16:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF58A60E7C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 112B160087;
+	Sat, 23 Dec 2023 14:25:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 112B160087
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O54_wlEUIj3v; Sat, 23 Dec 2023 14:16:54 +0000 (UTC)
+	with ESMTP id 65fvYYBc93yl; Sat, 23 Dec 2023 14:25:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21D5C608A6;
-	Sat, 23 Dec 2023 14:16:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21D5C608A6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 61F2F1BF280
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:16:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6835A60AE1;
+	Sat, 23 Dec 2023 14:25:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6835A60AE1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1760E1BF280
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A67D608A6
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:16:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A67D608A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0F4F40524
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:25:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0F4F40524
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VOEYED2Nat75 for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 14:16:50 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EF78D60586
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 14:16:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF78D60586
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0854220003;
- Sat, 23 Dec 2023 14:16:46 +0000 (UTC)
-Date: Sat, 23 Dec 2023 15:16:46 +0100
-To: Stefan Agner <stefan@agner.ch>
-Message-ID: <20231223151646.27de9baf@windsurf>
-In-Reply-To: <47f41c5f59356bcda28bf1ed0c8046241876b21c.1703096871.git.stefan@agner.ch>
-References: <47f41c5f59356bcda28bf1ed0c8046241876b21c.1703096871.git.stefan@agner.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703341007;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2ZprhQVh/UAWcveEo5denEWxoU7Q71YpGWjL2G9tgYg=;
- b=XhcrP2f8CSvMbjP5ch45yZxecSSqwOOCnQHO45PFH36pxOqq+glFZXoWpWEStYW7FXfNOg
- IeHPky+b+005wBp7tJnIk6w/+pO95ZyykMJQ/T0O0n5mV2maHzGSxbE4dOcRivkBLZuMGd
- La/ftNS4YTkzxwOwl2m5LZBNtpOvB/w8agsaJfYzTyJOuj6X73eX1j6VMIKPmn3S63yWJE
- qgkeDfulK4IAncyJ8j3pRuWq6tjCEDASBvWnu9IFc+ZCCdo+st3Jn/TU3cPuDVZttStCmf
- azRGwt4EJSOpD1N6oTckx/w7jMW/CENDlZlQpCYTfyfRzkKo7GMMfb58T3idxw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XhcrP2f8
-Subject: Re: [Buildroot] [PATCH] package/dbus-broker: bump to release 35
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Iw4KIGCaO3dR for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 14:25:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAC6C40131
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 14:25:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAC6C40131
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9E3487FD65; Sat, 23 Dec 2023 14:25:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Dec 2023 15:24:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 93d38e7c166ff6e782a45afcbac618057198a10e
+X-Git-Newrev: 4dc9ef6895ce6dbd81eb55d7d4c11b2d820b3ce9
+X-Patchwork-Hint: ignore
+Message-Id: <20231223142509.9E3487FD65@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/unrar: bump version to 6.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,49 +57,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: james.hilliard1@gmail.com, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 20 Dec 2023 19:28:51 +0100
-Stefan Agner <stefan@agner.ch> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4dc9ef6895ce6dbd81eb55d7d4c11b2d820b3ce9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This release supports the new `ProcessFD` key in
-> `GetConnectionCredentials()`. It also contains a fix which avoids
-> using randomness during early boot besides other fixes.
-> 
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
-> ---
->  package/dbus-broker/dbus-broker.hash | 2 +-
->  package/dbus-broker/dbus-broker.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+According to the Debian changelog, it doesn't seem like there is any
+security issue addressed between 6.2.10 and 6.2.12:
 
-This change breaks legal-info:
+unrar-nonfree (1:6.2.12-1) unstable; urgency=medium
 
->>> dbus-broker 35 Patching
->>> dbus-broker 35 Collecting legal info
-LICENSE: OK (sha256: 3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4)
-ERROR: while checking hashes from package/dbus-broker//dbus-broker.hash
-ERROR: subprojects/libcdvar-1/AUTHORS has wrong sha256 hash:
-ERROR: expected: 20ea1f96abc15553695c6725bb3dcabff4b43b85b7ca7d675a2b8860e3b01f87
-ERROR: got     : ce7b8b8fb05126e556b3f9ed97fe21aa654e4ff411c00a9fd219ecbaae26abe0
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-make: *** [package/dbus-broker/dbus-broker.mk:71: dbus-broker-legal-info] Error 1
+  * New upstream version 6.2.12
+  * Rediff patches
 
-Could you fix this, and send an updated version? Please don't blindly
-update the hash: verify what are the changes in the file, and summarize
-them in the commit log to explain why they don't change the licensing
-terms.
+ -- YOKOTA Hiroshi <yokota.hgml@gmail.com>  Thu, 05 Oct 2023 20:49:53 +0900
 
-Thanks a lot!
+unrar-nonfree (1:6.2.11-1) unstable; urgency=medium
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  * New upstream version 6.2.11
+
+ -- YOKOTA Hiroshi <yokota.hgml@gmail.com>  Wed, 20 Sep 2023 21:41:29 +0900
+
+Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/unrar/unrar.hash | 2 +-
+ package/unrar/unrar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index f0600af771..c9a5f521a4 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  55fe6ebd5e48d6655bfda3fd19b55438ca05e13c7e69772420caad9fdb68ef42  unrarsrc-6.2.10.tar.gz
++sha256  a008b5f949bca9bb4ffa1bebbfc8b3c14b89df10a10354809b845232d5f582e5  unrarsrc-6.2.12.tar.gz
+ sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  license.txt
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index ac19225937..0a61bcfcba 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNRAR_VERSION = 6.2.10
++UNRAR_VERSION = 6.2.12
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+ UNRAR_SITE = https://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
