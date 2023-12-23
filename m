@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01BDAC3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 21:22:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2D20C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 21:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4A15821C5;
-	Sat, 23 Dec 2023 21:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4A15821C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E8FD8217D;
+	Sat, 23 Dec 2023 21:22:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E8FD8217D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NFepc2UdE7qF; Sat, 23 Dec 2023 21:22:14 +0000 (UTC)
+	with ESMTP id f6SO9oSfyjrw; Sat, 23 Dec 2023 21:22:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF77782193;
-	Sat, 23 Dec 2023 21:22:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF77782193
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5BA9D1BF406
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 21:21:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A902821DD;
+	Sat, 23 Dec 2023 21:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A902821DD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 11E6F1BF406
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 21:21:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40F3F4048C
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 21:21:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40F3F4048C
+ by smtp3.osuosl.org (Postfix) with ESMTP id E63E460EA6
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 21:21:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E63E460EA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8AaRwvOS9NDh for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6rIvpcRzueqq for <buildroot@lists.busybox.net>;
  Sat, 23 Dec 2023 21:21:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1767E4018A
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 21:21:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1767E4018A
+ by smtp3.osuosl.org (Postfix) with ESMTP id F0FF460E08
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 21:21:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0FF460E08
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0426E82565; Sat, 23 Dec 2023 21:21:47 +0000 (UTC)
+ id DBB478255F; Sat, 23 Dec 2023 21:21:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 22:00:19 +0100
+Date: Sat, 23 Dec 2023 21:34:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f1089391a83aa63b6977e65970451365f10dc66a
-X-Git-Newrev: 08fa882d3c443ee9b7a956e84a87e60af8a7a7dd
+X-Git-Oldrev: 3dae30d7d15896eaf8f9d7a8e2d4f86e67545577
+X-Git-Newrev: 180f119b756258d47461f1e4e70bfd581024de1a
 X-Patchwork-Hint: ignore
-Message-Id: <20231223212147.0426E82565@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/google-breakpad: fix building with
- gcc 13.x
+Message-Id: <20231223212146.DBB478255F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xmlstarlet: fix build with
+ libxml2-2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,81 +59,126 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0298444249555935354=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0298444249555935354==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=08fa882d3c443ee9b7a956e84a87e60af8a7a7dd
+commit: https://git.buildroot.net/buildroot/commit/?id=180f119b756258d47461f1e4e70bfd581024de1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following error when building with gcc 13.x:
-
-‘uintptr_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/73f17ec308b6fd20dabdb7e391a3f67793a14d5b/
-
-  (which happens with the target google-breakpad, but the issue can
-  also happen when building host-google-breakpad if the host system
-  uses gcc 13.x)
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Thomas: use upstream fix, improve commit log]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Thomas: improved with a more complete patch provided by upstream
+developer.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...rsion-gcc-13-cannot-use-uintptr_t-via-inc.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ .../0001-Fix-build-issues-with-libxml2-2.12.patch  | 97 ++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
-diff --git a/package/google-breakpad/0001-mainline-version-gcc-13-cannot-use-uintptr_t-via-inc.patch b/package/google-breakpad/0001-mainline-version-gcc-13-cannot-use-uintptr_t-via-inc.patch
+diff --git a/package/xmlstarlet/0001-Fix-build-issues-with-libxml2-2.12.patch b/package/xmlstarlet/0001-Fix-build-issues-with-libxml2-2.12.patch
 new file mode 100644
-index 0000000000..2c3619b74b
+index 0000000000..74034dad53
 --- /dev/null
-+++ b/package/google-breakpad/0001-mainline-version-gcc-13-cannot-use-uintptr_t-via-inc.patch
-@@ -0,0 +1,30 @@
-+From 7ea7ded187b4d739239f3ab7082fcd5a2ccc1eaa Mon Sep 17 00:00:00 2001
-+From: mingtaoxt xt <mingtaoxt@gmail.com>
-+Date: Wed, 19 Oct 2022 19:36:13 +0800
-+Subject: [PATCH] mainline version gcc-13 cannot use "uintptr_t" via "#include
-+ <string>"
++++ b/package/xmlstarlet/0001-Fix-build-issues-with-libxml2-2.12.patch
+@@ -0,0 +1,97 @@
++From 702988467d67c3a33255de4c543f56767c64c72e Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 23 Dec 2023 21:30:30 +0100
++Subject: [PATCH] Fix build issues with libxml2 2.12
 +
-+Change-Id: I0049bb92658b4226e32783ad4d8271787deef5f3
-+Reviewed-on: https://chromium-review.googlesource.com/c/breakpad/breakpad/+/3964166
-+Reviewed-by: Mike Frysinger <vapier@chromium.org>
-+Upstream: https://chromium.googlesource.com/breakpad/breakpad/+/7ea7ded187b4d739239f3ab7082fcd5a2ccc1eaa
++Based on initial work from Bernd Kuhls <bernd@kuhls.net>, improved by
++Yaakov Selkowitz.
++
++Upstream: https://sourceforge.net/p/xmlstar/patches/22/
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ src/client/linux/handler/minidump_descriptor.h | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/trans.h      | 1 +
++ src/xml.c        | 2 +-
++ src/xml_edit.c   | 1 +
++ src/xml_elem.c   | 2 +-
++ src/xml_format.c | 1 +
++ src/xmlstar.h    | 2 +-
++ 6 files changed, 6 insertions(+), 3 deletions(-)
 +
-+diff --git a/src/client/linux/handler/minidump_descriptor.h b/src/client/linux/handler/minidump_descriptor.h
-+index 4349b88f..d822c9d9 100644
-+--- a/src/client/linux/handler/minidump_descriptor.h
-++++ b/src/client/linux/handler/minidump_descriptor.h
-+@@ -32,6 +32,7 @@
-+ #include <assert.h>
-+ #include <sys/types.h>
++diff --git a/src/trans.h b/src/trans.h
++index 016304e..395462c 100644
++--- a/src/trans.h
+++++ b/src/trans.h
++@@ -36,6 +36,7 @@ THE SOFTWARE.
++ #include <libxml/xinclude.h>
++ #include <libxml/parserInternals.h>
++ #include <libxml/uri.h>
+++#include <libxml/globals.h>
 + 
-++#include <cstdint>
-+ #include <string>
++ #include <libxslt/xslt.h>
++ #include <libxslt/xsltInternals.h>
++diff --git a/src/xml.c b/src/xml.c
++index cf47cc2..e6f19c1 100644
++--- a/src/xml.c
+++++ b/src/xml.c
++@@ -104,7 +104,7 @@ void reportGenericError(void* ctx, const char * msg, ...) {
++ /* by default all errors are reported */
++ static ErrorInfo errorInfo = { NULL, NULL, VERBOSE, CONTINUE };
 + 
-+ #include "client/linux/handler/microdump_extra_info.h"
++-void reportError(void *ptr, xmlErrorPtr error)
+++void reportError(void *ptr, const xmlError *error)
++ {
++     ErrorInfo *errorInfo = (ErrorInfo*) ptr;
++     assert(errorInfo);
++diff --git a/src/xml_edit.c b/src/xml_edit.c
++index e199178..b3da8a4 100644
++--- a/src/xml_edit.c
+++++ b/src/xml_edit.c
++@@ -42,6 +42,7 @@ THE SOFTWARE.
++ #include <libxml/xpointer.h>
++ #include <libxml/parserInternals.h>
++ #include <libxml/uri.h>
+++#include <libxml/globals.h>
++ #include <libexslt/exslt.h>
++ 
++ #include "xmlstar.h"
++diff --git a/src/xml_elem.c b/src/xml_elem.c
++index 024e62a..a73038a 100644
++--- a/src/xml_elem.c
+++++ b/src/xml_elem.c
++@@ -186,7 +186,7 @@ typedef struct {
++  * put @name into @data->array[@data->offset]
++  */
++ static void
++-hash_key_put(void *payload, void *data, xmlChar *name)
+++hash_key_put(void *payload, void *data, const xmlChar *name)
++ {
++     ArrayDest *dest = data;
++     dest->array[dest->offset++] = name;
++diff --git a/src/xml_format.c b/src/xml_format.c
++index e9da4df..ddd6614 100644
++--- a/src/xml_format.c
+++++ b/src/xml_format.c
++@@ -42,6 +42,7 @@ THE SOFTWARE.
++ #include <libxml/xpointer.h>
++ #include <libxml/parserInternals.h>
++ #include <libxml/uri.h>
+++#include <libxml/globals.h>
++ 
++ #include "xmlstar.h"
++ 
++diff --git a/src/xmlstar.h b/src/xmlstar.h
++index 3e1eed3..e8d7177 100644
++--- a/src/xmlstar.h
+++++ b/src/xmlstar.h
++@@ -32,7 +32,7 @@ typedef struct _errorInfo {
++     ErrorStop stop;
++ } ErrorInfo;
++ 
++-void reportError(void *ptr, xmlErrorPtr error);
+++void reportError(void *ptr, const xmlError *error);
++ void suppressErrors(void);
++ 
++ typedef struct _gOptions {
 +-- 
 +2.43.0
 +
-
---===============0298444249555935354==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0298444249555935354==--
