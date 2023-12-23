@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E912C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 14:13:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31F07C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 14:13:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C81B60586;
-	Sat, 23 Dec 2023 14:13:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C81B60586
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC8AB60EA0;
+	Sat, 23 Dec 2023 14:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC8AB60EA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xi-f3NiLnpA0; Sat, 23 Dec 2023 14:13:13 +0000 (UTC)
+	with ESMTP id BBWp6_Bs9urM; Sat, 23 Dec 2023 14:13:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95F8060E5F;
-	Sat, 23 Dec 2023 14:13:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95F8060E5F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C15360E7C;
+	Sat, 23 Dec 2023 14:13:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C15360E7C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5CE0F1BF32A
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:13:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E9CD71BF32A
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33E2840490
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:13:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33E2840490
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F1FE40524
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F1FE40524
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zeoWMvxvgO-6 for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 14:13:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0AA0240399
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 14:13:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AA0240399
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E9B7987D0C; Sat, 23 Dec 2023 14:13:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 15:05:01 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cec73bb5f85c9eb41b2cf44dc792765e684fa7a9
-X-Git-Newrev: 4d025f88e62db50ce28730b6e732b2946fe7d5bc
-X-Patchwork-Hint: ignore
-Message-Id: <20231223141308.E9B7987D0C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add python-tftpy runtime
+ with ESMTP id TEfw2H2AJoCl for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 14:13:12 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BA7D740399
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 14:13:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA7D740399
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B731840004;
+ Sat, 23 Dec 2023 14:13:08 +0000 (UTC)
+Date: Sat, 23 Dec 2023 15:13:08 +0100
+To: Colin Foster <colin.foster@in-advantage.com>
+Message-ID: <20231223151308.4e28ec13@windsurf>
+In-Reply-To: <20231221190800.2669237-1-colin.foster@in-advantage.com>
+References: <20231221190800.2669237-1-colin.foster@in-advantage.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703340789;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Ct/w1UW6Z+pRLkzcaa7dGfiiZZxIfK1Hr0cbwSXhG3M=;
+ b=CWgyMRVEPDxvgAoFy2KEi/aCoxjbB9hjtLMoNuMW1MMvoqIypbelOsRqaxOd+voH9XGyJY
+ l1FRIeIjxjVG/qtCrSycUeYEvUOwNuwLSEVYO9K7e1io3M6653bibkTiE5Hwh6A5t+vMlP
+ uHhhMSpKb1t0kBfBw73/2XqbzQ29z8ggv6kAjvViv6POFEkqNzFXkE6hLM+srgl8hfcMa7
+ r34vfLQezIDDFjWyhu8VrXdxx6UwNMSfFV+T4JHFCkBsqYe/VWCo0v7sHek6P4zy7d/+3V
+ FAv1QDqNSjY09+GnNmuhnYbIa3PRb7ZfXo1o4o33IYkjzMshBpptxPry/8coBA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CWgyMRVE
+Subject: Re: [Buildroot] [PATCH] support/testing: add python-tftpy runtime
  test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,63 +77,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d025f88e62db50ce28730b6e732b2946fe7d5bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 21 Dec 2023 13:08:00 -0600
+Colin Foster <colin.foster@in-advantage.com> wrote:
 
-This runtime test verifies the existence of the tftpy module when
-selected.
+> This runtime test verifies the existence of the tftpy module when
+> selected.
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
+>  support/testing/tests/package/sample_python_tftpy.py |  1 +
+>  support/testing/tests/package/test_python_tftpy.py   | 11 +++++++++++
+>  2 files changed, 12 insertions(+)
+>  create mode 100644 support/testing/tests/package/sample_python_tftpy.py
+>  create mode 100644 support/testing/tests/package/test_python_tftpy.py
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                           |  2 ++
- support/testing/tests/package/sample_python_tftpy.py |  1 +
- support/testing/tests/package/test_python_tftpy.py   | 11 +++++++++++
- 3 files changed, 14 insertions(+)
+Applied to master after adding the appropriate entries in the
+DEVELOPERS file. Thanks!
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 874e7bd3d2..bad07d51aa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -678,6 +678,8 @@ F:	configs/beelink_gs1_defconfig
- N:	Colin Foster <colin.foster@in-advantage.com>
- F:	package/python-tftpy/
- F:	package/rauc-hawkbit-updater/
-+F:	support/testing/tests/package/sample_python_tftpy.py
-+F:	support/testing/tests/package/test_python_tftpy.py
- 
- N:	Corentin Guillevic <corentin.guillevic@smile.fr>
- F:	package/libloki/
-diff --git a/support/testing/tests/package/sample_python_tftpy.py b/support/testing/tests/package/sample_python_tftpy.py
-new file mode 100644
-index 0000000000..ea4d20c9a2
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_tftpy.py
-@@ -0,0 +1 @@
-+import tftpy
-diff --git a/support/testing/tests/package/test_python_tftpy.py b/support/testing/tests/package/test_python_tftpy.py
-new file mode 100644
-index 0000000000..d64f2c29d7
---- /dev/null
-+++ b/support/testing/tests/package/test_python_tftpy.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonTftpy(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_TFTPY=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_tftpy.py"]
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
