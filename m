@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26BF5C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:11:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6446BC3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C955C82195;
-	Sat, 23 Dec 2023 20:11:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C955C82195
+	by smtp1.osuosl.org (Postfix) with ESMTP id 223B882199;
+	Sat, 23 Dec 2023 20:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 223B882199
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 05kvIDdHDoDy; Sat, 23 Dec 2023 20:11:46 +0000 (UTC)
+	with ESMTP id 4RZToKzfCAv6; Sat, 23 Dec 2023 20:11:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1616782199;
-	Sat, 23 Dec 2023 20:11:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1616782199
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F23E1BF869
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A6FF82195;
+	Sat, 23 Dec 2023 20:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A6FF82195
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8892A1BF388
  for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB2AF8219E
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:11:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB2AF8219E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CDDA40148
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:11:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CDDA40148
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mny4p8mYVDIl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cFNCbYxmlMZd for <buildroot@lists.busybox.net>;
  Sat, 23 Dec 2023 20:11:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DB7882199
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0160B40120
  for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:11:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DB7882199
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0160B40120
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17AF282466; Sat, 23 Dec 2023 20:11:30 +0000 (UTC)
+ id DB5DE82386; Sat, 23 Dec 2023 20:11:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 21:10:41 +0100
+Date: Sat, 23 Dec 2023 21:10:31 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7260675c7dca07c431da51337dc42e86013d3ddf
-X-Git-Newrev: 1667987a2d66d787b7e7ff77284909dcaea20369
+X-Git-Oldrev: 9b26461bb0d47efd518267401172df7833730a16
+X-Git-Newrev: 33153b0ac965371bd79d4b1aa53b31fb05d5edaa
 X-Patchwork-Hint: ignore
-Message-Id: <20231223201130.17AF282466@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/onevpl-intel-gpu: bump version to
- 23.4.2
+Message-Id: <20231223201129.DB5DE82386@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 22.3.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1667987a2d66d787b7e7ff77284909dcaea20369
+commit: https://git.buildroot.net/buildroot/commit/?id=33153b0ac965371bd79d4b1aa53b31fb05d5edaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
- package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
-index 5f7728e5f9..319bd37de0 100644
---- a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
-+++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index c71f2593d1..01b573d1e9 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  0939232daa2ef3e35b453e4aa0d25674a9b2376b4ef814fb64712cf587654787  onevpl-intel-gpu-23.4.0.tar.gz
-+sha256  ab530e9e221d94f6bfaab853a8aa4528ec2d4de7d48aed95cd4c7ee633095577  onevpl-intel-gpu-23.4.2.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
-index 8c9275fe75..98b228f9fc 100644
---- a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
-+++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+-sha256  14ec859936aea696a65e6b9488e95a0ac26b15126ef65b20956ef219004dd9a6  intel-gmmlib-22.3.12.tar.gz
++sha256  63b879a5a20756b6f74244068f4555a56c4f705c96cbc87e5163448a893e133f  intel-gmmlib-22.3.14.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 578a6ab762..c1a92aaf4f 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ONEVPL_INTEL_GPU_VERSION = 23.4.0
-+ONEVPL_INTEL_GPU_VERSION = 23.4.2
- ONEVPL_INTEL_GPU_SITE = $(call github,oneapi-src,oneVPL-intel-gpu,intel-onevpl-$(ONEVPL_INTEL_GPU_VERSION))
- ONEVPL_INTEL_GPU_LICENSE = MIT
- ONEVPL_INTEL_GPU_LICENSE_FILES = LICENSE
+-INTEL_GMMLIB_VERSION = 22.3.12
++INTEL_GMMLIB_VERSION = 22.3.14
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
