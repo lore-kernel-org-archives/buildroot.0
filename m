@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 239A8C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 14:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFE48C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 14:15:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D022A60ECA;
-	Sat, 23 Dec 2023 14:15:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D022A60ECA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88BA460EB6;
+	Sat, 23 Dec 2023 14:15:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88BA460EB6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vS39fuQPADn6; Sat, 23 Dec 2023 14:15:30 +0000 (UTC)
+	with ESMTP id zXI7CCnxnwis; Sat, 23 Dec 2023 14:15:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BE2B60AE1;
-	Sat, 23 Dec 2023 14:15:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BE2B60AE1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B8DD01BF869
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABDB860ECA;
+	Sat, 23 Dec 2023 14:15:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABDB860ECA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BD41F1BF86B
  for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:15:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 927C641BED
+ by smtp3.osuosl.org (Postfix) with ESMTP id A20C6608A6
  for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 14:15:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 927C641BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A20C6608A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KELoHHggEB4N for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JKUHsYOremKz for <buildroot@lists.busybox.net>;
  Sat, 23 Dec 2023 14:15:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C49BD41BD6
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2D1160EA7
  for <buildroot@buildroot.org>; Sat, 23 Dec 2023 14:15:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C49BD41BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2D1160EA7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B335387D31; Sat, 23 Dec 2023 14:15:13 +0000 (UTC)
+ id 9C62487D2E; Sat, 23 Dec 2023 14:15:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 15:14:50 +0100
+Date: Sat, 23 Dec 2023 15:14:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a8362e5c85973a775a84b3f4ef0b2afb9ff26094
-X-Git-Newrev: 93d38e7c166ff6e782a45afcbac618057198a10e
+X-Git-Oldrev: 4d025f88e62db50ce28730b6e732b2946fe7d5bc
+X-Git-Newrev: 922132c39e233aec10835e2a4d7d8dbf92e99723
 X-Patchwork-Hint: ignore
-Message-Id: <20231223141513.B335387D31@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-hts: bump version to
- 20.7.0-Nexus
+Message-Id: <20231223141513.9C62487D2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/putty: security bump to version
+ 0.80
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93d38e7c166ff6e782a45afcbac618057198a10e
+commit: https://git.buildroot.net/buildroot/commit/?id=922132c39e233aec10835e2a4d7d8dbf92e99723
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+As described in the announcement, this fixes a security issue:
+
+There is one security fix in this release:
+
+ - Fix for a newly discovered security issue known as the 'Terrapin'
+   attack, also numbered CVE-2023-48795. The issue affects widely-used
+   OpenSSH extensions to the SSH protocol: the ChaCha20+Poly1305
+   cipher system, and 'encrypt-then-MAC' mode.
+
+   In order to benefit from the fix, you must be using a fixed version
+   of PuTTY _and_ a server with the fix, so that they can agree to
+   adopt a modified version of the protocol. Alternatively, you may be
+   able to reconfigure PuTTY to avoid selecting any of the affected
+   modes.
+
+   If PuTTY 0.80 connects to an SSH server without the fix, it will
+   warn you if the initial protocol negotiation chooses an insecure
+   mode to run the connection in, so that you can abandon the
+   connection. If it's possible to alter PuTTY's configuration to
+   avoid the problem, then the warning message will tell you how to do
+   it.
+
+https://lists.tartarus.org/pipermail/putty-announce/2023/000037.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
- package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/putty/putty.hash | 8 ++++----
+ package/putty/putty.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-index 046d234d71..a268940b0e 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bd58fc85543447f918ee567192c87a3beb3f6e2c3fc116abe1f584514d202ada  kodi-pvr-hts-20.6.5-Nexus.tar.gz
-+sha256  15d68d928e0794fb42fd0f3483403fb0290c5c94aa3d3b648a8a2f8e8316dfff  kodi-pvr-hts-20.7.0-Nexus.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index 7e667ae1aa..c56d0e0546 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+index 0ae2a86be8..84569a31e5 100644
+--- a/package/putty/putty.hash
++++ b/package/putty/putty.hash
+@@ -1,7 +1,7 @@
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.79/{sha1,sha256,sha512}sums
+-sha1  c40c3ce9fd334c40e64c6b33ee7e1096dad52701  putty-0.79.tar.gz
+-sha256  428cc8666fbb938ebf4ac9276341980dcd70de395b33164496cf7995ef0ef0d8  putty-0.79.tar.gz
+-sha512  4f10f870b229c89e928921d3b350955ce1c1170a062e7943d9cc8dbd83389d82a9b844623541605f0db5a429d545c2d188bf8e384c6515466fae69b216120983  putty-0.79.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.80/{sha1,sha256,sha512}sums
++sha1  9c4a96f63ee3e927472191c935cc89228693c03a  putty-0.80.tar.gz
++sha256  2013c83a721b1753529e9090f7c3830e8fe4c80a070ccce764539badb3f67081  putty-0.80.tar.gz
++sha512  c8a6b6fa54ecd8bcf4ec274fef51343dd9996e6458b250b5555c4dc88ded25e87f97277da482c29858510e65635112d541f559ab683635bd950572d850129f90  putty-0.80.tar.gz
+ 
+ # Locally calculated
+ sha256  7ede37f344ee03436c155a375ecb6cdb42a77105baa6e7804bf43260dc4a0c54  LICENCE
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index 4c9164d05e..bff6e78074 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_HTS_VERSION = 20.6.5-Nexus
-+KODI_PVR_HTS_VERSION = 20.7.0-Nexus
- KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPL-2.0+
- KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
+-PUTTY_VERSION = 0.79
++PUTTY_VERSION = 0.80
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+ PUTTY_LICENSE = MIT
+ PUTTY_LICENSE_FILES = LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
