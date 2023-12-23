@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28078C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59B58C3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 20:08:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3D8181E9A;
-	Sat, 23 Dec 2023 20:08:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3D8181E9A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 153F581768;
+	Sat, 23 Dec 2023 20:08:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 153F581768
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fqiGVCfH0Qci; Sat, 23 Dec 2023 20:08:15 +0000 (UTC)
+	with ESMTP id 1ecteohmgtnm; Sat, 23 Dec 2023 20:08:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3710882171;
-	Sat, 23 Dec 2023 20:08:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3710882171
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9E6041BF388
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:08:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81F9481586;
+	Sat, 23 Dec 2023 20:08:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81F9481586
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 825291BF388
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82E1340395
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82E1340395
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6866260A6A
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 20:08:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6866260A6A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RIFYxaNUHeq1 for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 20:08:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4DDF740195
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:08:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DDF740195
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C0A5822B7; Sat, 23 Dec 2023 20:08:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Dec 2023 21:07:56 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 297c88cfca6586e05769cc41ae755bcce6d69044
-X-Git-Newrev: 9b26461bb0d47efd518267401172df7833730a16
-X-Patchwork-Hint: ignore
-Message-Id: <20231223200811.3C0A5822B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/beaglebone_defconfig: bump Linux
- to 6.1.46-ti-r13 and U-Boot to 2023.10
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zonop-u-GbtG for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 20:08:28 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2739260A64
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 20:08:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2739260A64
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D69D2E0003;
+ Sat, 23 Dec 2023 20:08:25 +0000 (UTC)
+Date: Sat, 23 Dec 2023 21:08:25 +0100
+To: Scott Fan <fancp2007@gmail.com>
+Message-ID: <20231223210825.606ecf04@windsurf>
+In-Reply-To: <20231208001001.6549-1-fancp2007@gmail.com>
+References: <20231206012403.722101-1-fancp2007@gmail.com>
+ <20231208001001.6549-1-fancp2007@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703362106;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=bwcBJvSoXF4Q7O99tC7dU3zStpUJPzWfTH9p5PHzBpQ=;
+ b=W7oIVkMftE3NnFYb+N6mp8+Kpnd35PI8VTF5hxShF5jxMQXqtrrSLvFYtYSJ86S3WxJywR
+ wPL0m3jk4lyLzngKuK2J/Kz0jmZCpzFrW3giSwpQTdLzRwXtP5BEOo/mf6t8DzN5lrBLQq
+ dPzemFm3VJxXMtN3LNrGOMK7TDs7z7OcEyTSWt0LaCWxqpTGQQ0ZsmnHmcgNscn0tEh1dg
+ CqHrnYH/NWkCNCMQuky7ejeq0LROFmgqNpWND6zXnjEqaXDQlvtjDbGhDk1+4LFP4qqIw4
+ sGsRiEUcasOyQvgYAD0rPQyc8NTixOan3K3yQOfxSAd/9ev4GVQy3H2FBGjN3g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=W7oIVkMf
+Subject: Re: [Buildroot] [PATCH] configs/beaglebone_defconfig: bump Linux to
+ 6.1.46-ti-r13 and U-Boot to 2023.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,83 +78,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b26461bb0d47efd518267401172df7833730a16
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  8 Dec 2023 08:09:57 +0800
+Scott Fan <fancp2007@gmail.com> wrote:
 
-The linux defconfig 'bb.org_defconfig' is the best for beagleboard.
+> The linux defconfig 'bb.org_defconfig' is the best for beagleboard.
+> 
+> To load compressed kernel modules, kmod and xz packages are needed
+> because busybox doesn't support it.
+> 
+> Bump U-Boot to version 2023.10. The uboot-tools package is no need.
+> 
+> Tested on beaglebone black.
+> 
+> [1] https://github.com/beagleboard/linux/releases/tag/6.1.46-ti-r13
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> ---
+>  configs/beaglebone_defconfig | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
 
-To load compressed kernel modules, kmod and xz packages are needed
-because busybox doesn't support it.
+Applied to master, thanks.
 
-Bump U-Boot to version 2023.10. The uboot-tools package is no need.
-
-Tested on beaglebone black.
-
-[1] https://github.com/beagleboard/linux/releases/tag/6.1.46-ti-r13
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/beaglebone_defconfig | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 7e006e7a85..e2d67019b1 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -3,11 +3,8 @@ BR2_arm=y
- BR2_cortex_a8=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
--
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 6.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- 
- # System
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-@@ -20,8 +17,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,5.10.162-ti-r59)/linux-5.10.162-ti-r59.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.1.46-ti-r13)/linux-6.1.46-ti-r13.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-@@ -34,7 +31,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -48,6 +45,9 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- 
--# Supporting host tools to build FIT image
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+# Enable compressed kernel module support
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_KMOD_TOOLS=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_KMOD=y
-+BR2_PACKAGE_HOST_KMOD_XZ=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
