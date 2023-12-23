@@ -4,62 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADC99C3DA6E
-	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 19:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4865EC3DA6E
+	for <buildroot@archiver.kernel.org>; Sat, 23 Dec 2023 19:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC45982116;
-	Sat, 23 Dec 2023 19:37:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC45982116
+	by smtp1.osuosl.org (Postfix) with ESMTP id C17AA820E6;
+	Sat, 23 Dec 2023 19:42:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C17AA820E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JCQZ93Bm0stu; Sat, 23 Dec 2023 19:37:34 +0000 (UTC)
+	with ESMTP id VdLBuHGOZbcX; Sat, 23 Dec 2023 19:42:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14B3B820E1;
-	Sat, 23 Dec 2023 19:37:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14B3B820E1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F2B61BF32A
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 19:37:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10A0982110;
+	Sat, 23 Dec 2023 19:42:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10A0982110
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DC5E71BF32A
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 19:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F2700820E1
- for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 19:37:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2700820E1
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC906415FE
+ for <buildroot@lists.busybox.net>; Sat, 23 Dec 2023 19:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC906415FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MCLTrTrvmrwj for <buildroot@lists.busybox.net>;
- Sat, 23 Dec 2023 19:37:28 +0000 (UTC)
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA709820E5
- for <buildroot@buildroot.org>; Sat, 23 Dec 2023 19:37:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA709820E5
-Received: from localhost (unknown [10.0.8.4])
- by mail.tkos.co.il (Postfix) with ESMTP id DDACB440636;
- Sat, 23 Dec 2023 21:35:33 +0200 (IST)
-References: <20231223064053.759D560AFF@smtp3.osuosl.org>
-User-agent: mu4e 1.10.8; emacs 29.1
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Louis Chauvet
- <louis.chauvet@bootlin.com>
-Date: Sat, 23 Dec 2023 21:23:40 +0200
-In-reply-to: <20231223064053.759D560AFF@smtp3.osuosl.org>
-Message-ID: <874jg8n218.fsf@tarshish>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6TIWk_0Aisxq for <buildroot@lists.busybox.net>;
+ Sat, 23 Dec 2023 19:42:09 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 20D20415FB
+ for <buildroot@buildroot.org>; Sat, 23 Dec 2023 19:42:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20D20415FB
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 479B413F8B9;
+ Sat, 23 Dec 2023 20:42:02 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 23 Dec 2023 20:41:49 +0100
+Message-ID: <20231223194150.1152752-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1703360133;
- bh=hn0e1v/mJPwBUtKEePMgDhYRV9fCIgTyC1DMR/RTzc4=;
- h=References:From:To:Cc:Subject:Date:In-reply-to:From;
- b=vcwDu+wMNpEtyHttLJN3OjCuXxQoUQNBv6xU3QR+3tfhoXjfD/xYEduW3NPYdNpQW
- MsTG6qs1YtyM8Cu6JX3D9dobwJQrXynM9q3jWXabPOhOIXfWKqdA22xU7Zg/2odRcr
- uHQOy0sebWJmhAYgpcDpUkRrPJDEYFkrg9HH5gtErKBMktCQOIN1Dej42i4hCg9vyY
- /IrnX+azr8FPqsTKS06WOA93yI1d3lGCJlVgN1ERIlEYCTlKAkbzkVY+hRW3QmJAxi
- 83qxer25fikA3pi5DvqejYVgAYC0wTU4MtaYQxaNUL+p8yehNKR4jCjIyad5PNXnnv
- zY8iwuj1aLz2A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=vcwDu+wM
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2023-12-22
+ d=free.fr; s=smtp-20201208; t=1703360525;
+ bh=ZZzkhCYSeUfBqVwG0h2hTiDnMCjWJBFMsRjVULbCyrI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=poQ/4KcMcHq0B1hEMmQ+8x6uwL4gDg6fBOl6VerHDL4yjVAbc2gaOc7tssATATyfV
+ uVy1MY3DJU5U/pRpWcpjk7Fao0lE33Qu8ojyCGmuPWb2NOtebb1FJhdXWdx1+Y+c2s
+ q4twXiSBM/CgVvBGf6/6LwF2m7K0ZgAapPXBSYmb6XSRA+f3lGHO72rRRo6E56g8X8
+ aYRtd6V0KYza/m1UD7/bQK3p14F2nACLyFFS77hfWShSJ1Zw8SLlSWJs2tquiSxN08
+ G8nisdIHnj0sG8FaBWduvEZO75TnRciIiUx793gND6iJHSd86LX0Wnbr8bV2mv31A4
+ bT8LttEMD4Lhw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=poQ/4KcM
+Subject: [Buildroot] [PATCH 1/2] boot/grub2: add RISC-V 64bit EFI support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,85 +70,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Louis, Buildroot list,
+Grub can be built as a RISC-V UEFI application since commit [1]. This
+commit was first included in grub version 2.04.
 
-On Sat, Dec 23 2023, Thomas Petazzoni via buildroot wrote:
-[snip]
-> Detail of defconfig failures for master
-> ---------------------------------------
->
->                         defconfig |                        link to the job                        | orph?
-> ----------------------------------+---------------------------------------------------------------+------
->                           beaglev | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987287  |      
->                broadcom_northstar | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987344  |      
->               freescale_imx8mpevk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987418  |      
->                        imx8mmpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987483  |      
->                         imx8mpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987492  |      
->                         imx8mqevk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987495  |      
->                kontron_pitx_imx8m | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987511  |      
->                        ls1028ardb | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987542  |      
->                      ls1046a-frwy | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987545  |      
->               octavo_osd32mp1_brk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987654  |      
->               octavo_osd32mp1_red | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987659  |      
->                    orangepi_lite2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987699  |      
->                 orangepi_one_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987705  |      
->                 qemu_aarch64_ebbr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987830  |      
->                 qemu_aarch64_sbsa | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987835  |      
->                     qemu_arm_ebbr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987844  |      
->              qemu_arm_vexpress_tz | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799987857  |      
->                raspberrypi3_qt5we | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799988095  | ORPH 
->                 raspberrypizero2w | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799988122  |      
->              sipeed_licheepi_nano | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799988208  |      
->                snps_arc700_axs101 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799988296  |      
->                  snps_arc700_nsim | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799988310  | ORPH 
->                 socrates_cyclone5 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799988347  |      
->           solidrun_clearfog_gt_8k | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799988354  |      
+This commit enables this support.
 
-arm-trusted-firmware build fails with:
+[1] https://git.savannah.gnu.org/gitweb/?p=grub.git;a=commitdiff;h=f1957dc8a3347278a095bc8f44197662559a8ba3
 
-In file included from fiptool.h:16,
-                 from fiptool.c:19:
-fiptool_platform.h:19:11: fatal error: openssl/sha.h: No such file or directory
-   19 | # include <openssl/sha.h>
-      |           ^~~~~~~~~~~~~~~
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ boot/grub2/Config.in | 10 ++++++++++
+ boot/grub2/grub2.mk  |  9 +++++++++
+ 2 files changed, 19 insertions(+)
 
-I could not reproduce this issue here. The CI build log also shows
-host-libopenssl build way before TF-A (lines 320-325):
-
->>> host-libopenssl 3.2.0 Downloading
->>> host-libopenssl 3.2.0 Extracting
->>> host-libopenssl 3.2.0 Patching
->>> host-libopenssl 3.2.0 Configuring
->>> host-libopenssl 3.2.0 Building
->>> host-libopenssl 3.2.0 Installing to host directory
-
-An immediate suspect might be the recent change in fiptool build with
-commit e7d16c35ae6b21 ("boot/arm-trusted-firmware: fix the RPATH of
-fiptool"). Maybe something is missing in fiptool CFLAGS?
-
-Any other idea?
-
-Thanks,
-baruch
-
->             solidrun_macchiatobin | https://gitlab.com/buildroot.org/buildroot/-/jobs/5799988359  | ORPH 
->                       ti_am62x_sk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5808182268  |      
->                       ti_am64x_sk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5808182300  |      
->               toradex_apalis_imx6 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5808182330  |      
-
-
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index f05f33ccc7..7c235e96f7 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -4,6 +4,7 @@ config BR2_TARGET_GRUB2_ARCH_SUPPORTS
+ 	default y if BR2_x86_64
+ 	default y if BR2_arm
+ 	default y if BR2_aarch64
++	default y if BR2_RISCV_64
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_TARGET_GRUB2
+@@ -102,6 +103,15 @@ config BR2_TARGET_GRUB2_ARM64_EFI
+ 	  Aarch64 platform and you want to boot Grub 2 as an EFI
+ 	  application.
+ 
++config BR2_TARGET_GRUB2_RISCV64_EFI
++	bool "riscv64-efi"
++	depends on BR2_RISCV_64
++	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
++	help
++	  Select this option if the platform you're targetting is a
++	  64bit RISC-V platform and you want to boot Grub 2 as an EFI
++	  application.
++
+ if BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 
+ comment "Options for the x86 legacy BIOS or ARM U-Boot support"
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index b9be826885..679eac5f46 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -93,6 +93,15 @@ GRUB2_BUILTIN_CONFIG_arm64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
+ GRUB2_BUILTIN_MODULES_arm64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
+ GRUB2_TUPLES-$(BR2_TARGET_GRUB2_ARM64_EFI) += arm64-efi
+ 
++GRUB2_IMAGE_riscv64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootriscv64.efi
++GRUB2_CFG_riscv64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
++GRUB2_PREFIX_riscv64-efi = /EFI/BOOT
++GRUB2_TARGET_riscv64-efi = riscv64
++GRUB2_PLATFORM_riscv64-efi = efi
++GRUB2_BUILTIN_CONFIG_riscv64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
++GRUB2_BUILTIN_MODULES_riscv64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
++GRUB2_TUPLES-$(BR2_TARGET_GRUB2_RISCV64_EFI) += riscv64-efi
++
+ # Grub2 is kind of special: it considers CC, LD and so on to be the
+ # tools to build the host programs and uses TARGET_CC, TARGET_CFLAGS,
+ # TARGET_CPPFLAGS, TARGET_LDFLAGS to build the bootloader itself.
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
