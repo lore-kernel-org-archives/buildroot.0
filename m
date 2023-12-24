@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D672C46CD3
-	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 17:52:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C2B1C46CD2
+	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 17:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C55E281871;
-	Sun, 24 Dec 2023 17:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C55E281871
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A6108177C;
+	Sun, 24 Dec 2023 17:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A6108177C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QDxy2qECfnyN; Sun, 24 Dec 2023 17:52:16 +0000 (UTC)
+	with ESMTP id If9TlB_1-83I; Sun, 24 Dec 2023 17:52:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22E0A8177C;
-	Sun, 24 Dec 2023 17:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22E0A8177C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3B4011BF398
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 17:52:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8179F8188B;
+	Sun, 24 Dec 2023 17:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8179F8188B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B53B1BF398
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 17:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F5FE41529
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 17:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F5FE41529
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D7EC60ADE
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 17:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D7EC60ADE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TxBlInFF3bgF for <buildroot@lists.busybox.net>;
- Sun, 24 Dec 2023 17:52:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C0DA41523
- for <buildroot@buildroot.org>; Sun, 24 Dec 2023 17:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C0DA41523
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0DE6082765; Sun, 24 Dec 2023 17:52:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 24 Dec 2023 18:51:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8219955118fee56ccd3ca8a13a6350d0e15de418
-X-Git-Newrev: cbd06b6ddd20493bf7bb56ee52919ecdd55ec647
-X-Patchwork-Hint: ignore
-Message-Id: <20231224175212.0DE6082765@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3: add option to support
- curses in host-python
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o5WlQCtTnzBS for <buildroot@lists.busybox.net>;
+ Sun, 24 Dec 2023 17:52:37 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F24D60A8B
+ for <buildroot@buildroot.org>; Sun, 24 Dec 2023 17:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F24D60A8B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92B5E1BF203;
+ Sun, 24 Dec 2023 17:52:33 +0000 (UTC)
+Date: Sun, 24 Dec 2023 18:52:33 +0100
+To: Charles Hardin <ckhardin@gmail.com>
+Message-ID: <20231224185233.3ea472de@windsurf>
+In-Reply-To: <20230825195635.30709-1-ckhardin@gmail.com>
+References: <20230825195635.30709-1-ckhardin@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703440353;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AnefbTeBQdF579jUNF5hpJL7RAAUeKoUsYnzpu4AKko=;
+ b=ZARtZpWQ7Eqr/IC684y1Td97N+wWdptRokUFJYZHyPrXJ46jgDTGU47aLv0xIJ5WMadCda
+ d0Xykc2G7nJ9NLeNIl9bh0ZMoHXz/fwGRIWg1hLaNNEPCFUt0xGRuZ+sGcRgsbFiV8BkP8
+ cZHi2l9J4wH3XcdsI8cVJQwjdWzCMDC+wlL9Lgu8cGldhlZfASelklwwTX+3f2knSsAZZr
+ DZHBXGZplevFAAuqUUR+cUih2zQasE9P63MfSrALJryKvrrtjthgxDc/HbdraThI8vvmJM
+ j1a/wmmnQFFGTSypyhKZA9yjPt31cGN6deOuyC59dKLcvWQ0U46R79/szbiFRQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZARtZpWQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: add the configuration
+ to support python curses
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,65 +77,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbd06b6ddd20493bf7bb56ee52919ecdd55ec647
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 25 Aug 2023 12:56:35 -0700
+Charles Hardin <ckhardin@gmail.com> wrote:
 
-This can be relevant for host scripts that use Python.
+> Working on another project with the buildroot sdk and there
+> was a python configuration script that could be started from
+> the build which required the curses module. So, instead of
+> switching python interpreters just add an option to be compile
+> with the curses module for the host-python
+> 
+> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+> ---
+>  package/python3/Config.in.host | 5 +++++
+>  package/python3/python3.mk     | 7 ++++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python3/Config.in.host | 5 +++++
- package/python3/python3.mk     | 7 ++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/python3/Config.in.host b/package/python3/Config.in.host
-index 77d608bdc0..88c286c55b 100644
---- a/package/python3/Config.in.host
-+++ b/package/python3/Config.in.host
-@@ -12,6 +12,11 @@ config BR2_PACKAGE_HOST_PYTHON3_BZIP2
- 	help
- 	  bz2 module for host Python3.
- 
-+config BR2_PACKAGE_HOST_PYTHON3_CURSES
-+	bool "curses"
-+	help
-+	  curses module for host Python3.
-+
- config BR2_PACKAGE_HOST_PYTHON3_SSL
- 	bool "ssl"
- 	select BR2_PACKAGE_HOST_OPENSSL
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b9c5054a21..7a704d81e0 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -22,7 +22,6 @@ HOST_PYTHON3_CONF_OPTS += \
- 	--disable-sqlite3 \
- 	--disable-tk \
- 	--with-expat=system \
--	--disable-curses \
- 	--disable-codecs-cjk \
- 	--disable-nis \
- 	--enable-unicodedata \
-@@ -55,6 +54,12 @@ else
- HOST_PYTHON3_CONF_OPTS += --disable-bzip2
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOST_PYTHON3_CURSES),y)
-+HOST_PYTHON3_DEPENDENCIES += host-ncurses
-+else
-+HOST_PYTHON3_CONF_OPTS += --disable-curses
-+endif
-+
- ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
- HOST_PYTHON3_DEPENDENCIES += host-openssl
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
