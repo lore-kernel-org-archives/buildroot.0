@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9F9EC46CD2
-	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 16:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B44FC46CD2
+	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 16:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D715404D8;
-	Sun, 24 Dec 2023 16:56:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D715404D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C867405A0;
+	Sun, 24 Dec 2023 16:56:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C867405A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NkQSwJo9rKDw; Sun, 24 Dec 2023 16:56:26 +0000 (UTC)
+	with ESMTP id 8L8rA9Qqm0Vv; Sun, 24 Dec 2023 16:56:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 70D3D40518;
-	Sun, 24 Dec 2023 16:56:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70D3D40518
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 532E51BF304
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:56:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 207944054B;
+	Sun, 24 Dec 2023 16:56:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 207944054B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 660301BF304
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD3EB60BB6
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:56:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD3EB60BB6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EB14404CB
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EB14404CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pSbC2BYe9_zM for <buildroot@lists.busybox.net>;
- Sun, 24 Dec 2023 16:56:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C1CF860C03
- for <buildroot@buildroot.org>; Sun, 24 Dec 2023 16:56:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1CF860C03
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AEA7282753; Sun, 24 Dec 2023 16:56:09 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 24 Dec 2023 17:55:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f439b47ed6e987306c7de6d9c3be11de04935377
-X-Git-Newrev: 8219955118fee56ccd3ca8a13a6350d0e15de418
-X-Patchwork-Hint: ignore
-Message-Id: <20231224165609.AEA7282753@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_riscv64_virt_efi: new
- defconfig
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PzAHJquSkaTs for <buildroot@lists.busybox.net>;
+ Sun, 24 Dec 2023 16:56:33 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 392AD402AF
+ for <buildroot@buildroot.org>; Sun, 24 Dec 2023 16:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 392AD402AF
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id F0232B004FF;
+ Sun, 24 Dec 2023 17:56:26 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 24 Dec 2023 17:56:26 +0100
+Date: Sun, 24 Dec 2023 17:56:26 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <ZYhiutawUJnajTRP@landeda>
+References: <20231223212948.2512412-1-ju.o@free.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20231223212948.2512412-1-ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1703436991;
+ bh=SYMno3FEMFcmGCtizX5mK0iJ3RIvICDzAxdST5n5Dao=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=UEIgxte31wsB7KemhEtZOow/hA0CvFkYZjDxgJSvgLjkbQu+6VHgonN1qSKYw5vTX
+ PiPMgWgDz9AA2i7Xzk0E/NXHJe53mkS72EXt33KBYHZ/o2s/SFOMkKTveSnMP5LgIQ
+ aW8XlWrb/vfkdJwBg/AlnEvtCx0Wv/H3l2F+H3FNx84CufSZeMREbwzosqrwx6q7cf
+ O5t73agpaBv5S6z+VsA1m3AOhcOcA1x83Xi9lSA3t/gJkVsutX5V1vScN1BSLO88bX
+ FUXD56QJNHqe0tdezs17jCHf1DWqziYCHggsoEcpvteBeYvTfAlQQnVEga12m/YkJF
+ MDyx4hzSKT0Gw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=UEIgxte3
+Subject: Re: [Buildroot] [PATCH v2 1/2] boot/grub2: add RISC-V 64bit EFI
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,183 +75,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8219955118fee56ccd3ca8a13a6350d0e15de418
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Julien, All,
 
-This defconfig enables edk2 UEFI shell and grub2 riscv64-efi boot
-of a Linux Kernel.
+On 2023-12-23 22:29 +0100, Julien Olivain spake thusly:
+> Grub can be built as a RISC-V UEFI application since commit [1]. This
+> commit was first included in grub version 2.04.
+> 
+> This commit enables this support.
+> 
+> [1] https://git.savannah.gnu.org/gitweb/?p=grub.git;a=commitdiff;h=f1957dc8a3347278a095bc8f44197662559a8ba3
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                                        |  2 ++
- board/qemu/riscv64-virt-efi/assemble-flash-images | 11 +++++++
- board/qemu/riscv64-virt-efi/genimage.cfg          | 34 +++++++++++++++++++++
- board/qemu/riscv64-virt-efi/grub.cfg              |  6 ++++
- board/qemu/riscv64-virt-efi/readme.txt            | 36 +++++++++++++++++++++++
- configs/qemu_riscv64_virt_efi_defconfig           | 19 ++++++++++++
- 6 files changed, 108 insertions(+)
+Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 834be54eb1..b5158ba986 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1713,11 +1713,13 @@ F:	configs/ts7680_defconfig
- F:	package/paho-mqtt-c
- 
- N:	Julien Olivain <ju.o@free.fr>
-+F:	board/qemu/riscv64-virt-efi/
- F:	board/spike/
- F:	board/technexion/imx8mmpico/
- F:	board/technexion/imx8mpico/
- F:	configs/imx8mmpico_defconfig
- F:	configs/imx8mpico_defconfig
-+F:	configs/qemu_riscv64_virt_efi_defconfig
- F:	configs/spike_riscv64_defconfig
- F:	package/fluid-soundfont/
- F:	package/fluidsynth/
-diff --git a/board/qemu/riscv64-virt-efi/assemble-flash-images b/board/qemu/riscv64-virt-efi/assemble-flash-images
-new file mode 100755
-index 0000000000..abcaa2c93b
---- /dev/null
-+++ b/board/qemu/riscv64-virt-efi/assemble-flash-images
-@@ -0,0 +1,11 @@
-+#! /bin/sh
-+
-+set -e
-+
-+BOARD_DIR="$(dirname "$0")"
-+
-+cp -f "${BOARD_DIR}"/grub.cfg "${BINARIES_DIR}"/efi-part/EFI/BOOT/grub.cfg
-+
-+# The QEMU riscv64 virt machine expects flash devices to be 32M.
-+truncate -s 32M "${BINARIES_DIR}"/RISCV_VIRT_CODE.fd
-+truncate -s 32M "${BINARIES_DIR}"/RISCV_VIRT_VARS.fd
-diff --git a/board/qemu/riscv64-virt-efi/genimage.cfg b/board/qemu/riscv64-virt-efi/genimage.cfg
-new file mode 100644
-index 0000000000..46950591e0
---- /dev/null
-+++ b/board/qemu/riscv64-virt-efi/genimage.cfg
-@@ -0,0 +1,34 @@
-+image efi-part.vfat {
-+	vfat {
-+		file EFI {
-+			image = "efi-part/EFI"
-+		}
-+
-+		file Image {
-+			image = "Image"
-+		}
-+	}
-+
-+	size = 64M
-+}
-+
-+image disk.img {
-+	hdimage {
-+		partition-table-type = "gpt"
-+	}
-+
-+	partition boot {
-+		image = "efi-part.vfat"
-+		partition-type-uuid = U
-+		offset = 32K
-+		bootable = true
-+	}
-+
-+	partition root {
-+		# For partition-type-uuid value, see:
-+		# https://uapi-group.org/specifications/specs/discoverable_partitions_specification/
-+		# SD_GPT_ROOT_RISCV64
-+		partition-type-uuid = 72ec70a6-cf74-40e6-bd49-4bda08e8f224
-+		image = "rootfs.ext2"
-+	}
-+}
-diff --git a/board/qemu/riscv64-virt-efi/grub.cfg b/board/qemu/riscv64-virt-efi/grub.cfg
-new file mode 100644
-index 0000000000..d99e19c4cd
---- /dev/null
-+++ b/board/qemu/riscv64-virt-efi/grub.cfg
-@@ -0,0 +1,6 @@
-+set default="0"
-+set timeout="5"
-+
-+menuentry "Buildroot" {
-+	linux /Image root=PARTLABEL=root rootwait
-+}
-diff --git a/board/qemu/riscv64-virt-efi/readme.txt b/board/qemu/riscv64-virt-efi/readme.txt
-new file mode 100644
-index 0000000000..6b9651a011
---- /dev/null
-+++ b/board/qemu/riscv64-virt-efi/readme.txt
-@@ -0,0 +1,36 @@
-+Intro
-+=====
-+
-+This is a RISC-V 64bit UEFI Linux boot demo in QEmu virt machine.
-+
-+Build
-+=====
-+
-+    make qemu_riscv64_virt_efi_defconfig
-+    make
-+
-+Emulation
-+=========
-+
-+Run the emulation with:
-+
-+    qemu-system-riscv64 \
-+        -M virt,pflash0=pflash0,pflash1=pflash1,acpi=off \
-+        -smp 4 \
-+        -m 1024 \
-+        -nographic \
-+        -blockdev node-name=pflash0,driver=file,read-only=on,filename=output/images/RISCV_VIRT_CODE.fd \
-+        -blockdev node-name=pflash1,driver=file,filename=output/images/RISCV_VIRT_VARS.fd \
-+        \
-+        -drive file=output/images/disk.img,format=raw,id=hd0 \
-+        -device virtio-blk-device,drive=hd0 \
-+        \
-+        -netdev user,id=net0 \
-+        -device virtio-net-device,netdev=net0 # qemu_riscv64_virt_efi_defconfig
-+
-+Note: for information, qemu version >= 8.0.0 is needed for this UEFI
-+Linux demo. It introduced the two pflash memories (previous versions
-+had only one). The host-qemu package in Buildroot (enabled in this
-+defconfig) is sufficient to run this demo. In case another qemu is
-+used (for example, from the host OS), make sure to check the version
-+requirement.
-diff --git a/configs/qemu_riscv64_virt_efi_defconfig b/configs/qemu_riscv64_virt_efi_defconfig
-new file mode 100644
-index 0000000000..79aadf78ca
---- /dev/null
-+++ b/configs/qemu_riscv64_virt_efi_defconfig
-@@ -0,0 +1,19 @@
-+BR2_riscv=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/riscv64-virt-efi/assemble-flash-images support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/riscv64-virt-efi/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.69"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_EDK2=y
-+BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_RISCV64_EFI=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+Regards,
+Yann E. MORIN.
+
+> ---
+>  boot/grub2/Config.in | 10 ++++++++++
+>  boot/grub2/grub2.mk  |  9 +++++++++
+>  2 files changed, 19 insertions(+)
+> 
+> diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+> index f05f33ccc7..7c235e96f7 100644
+> --- a/boot/grub2/Config.in
+> +++ b/boot/grub2/Config.in
+> @@ -4,6 +4,7 @@ config BR2_TARGET_GRUB2_ARCH_SUPPORTS
+>  	default y if BR2_x86_64
+>  	default y if BR2_arm
+>  	default y if BR2_aarch64
+> +	default y if BR2_RISCV_64
+>  	depends on BR2_USE_MMU
+>  
+>  config BR2_TARGET_GRUB2
+> @@ -102,6 +103,15 @@ config BR2_TARGET_GRUB2_ARM64_EFI
+>  	  Aarch64 platform and you want to boot Grub 2 as an EFI
+>  	  application.
+>  
+> +config BR2_TARGET_GRUB2_RISCV64_EFI
+> +	bool "riscv64-efi"
+> +	depends on BR2_RISCV_64
+> +	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
+> +	help
+> +	  Select this option if the platform you're targetting is a
+> +	  64bit RISC-V platform and you want to boot Grub 2 as an EFI
+> +	  application.
+> +
+>  if BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+>  
+>  comment "Options for the x86 legacy BIOS or ARM U-Boot support"
+> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+> index b9be826885..679eac5f46 100644
+> --- a/boot/grub2/grub2.mk
+> +++ b/boot/grub2/grub2.mk
+> @@ -93,6 +93,15 @@ GRUB2_BUILTIN_CONFIG_arm64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
+>  GRUB2_BUILTIN_MODULES_arm64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
+>  GRUB2_TUPLES-$(BR2_TARGET_GRUB2_ARM64_EFI) += arm64-efi
+>  
+> +GRUB2_IMAGE_riscv64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootriscv64.efi
+> +GRUB2_CFG_riscv64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
+> +GRUB2_PREFIX_riscv64-efi = /EFI/BOOT
+> +GRUB2_TARGET_riscv64-efi = riscv64
+> +GRUB2_PLATFORM_riscv64-efi = efi
+> +GRUB2_BUILTIN_CONFIG_riscv64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
+> +GRUB2_BUILTIN_MODULES_riscv64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
+> +GRUB2_TUPLES-$(BR2_TARGET_GRUB2_RISCV64_EFI) += riscv64-efi
+> +
+>  # Grub2 is kind of special: it considers CC, LD and so on to be the
+>  # tools to build the host programs and uses TARGET_CC, TARGET_CFLAGS,
+>  # TARGET_CPPFLAGS, TARGET_LDFLAGS to build the bootloader itself.
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
