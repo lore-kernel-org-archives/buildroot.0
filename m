@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01356C46CD3
-	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 16:46:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13189C46CD2
+	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 16:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A66D1404AB;
-	Sun, 24 Dec 2023 16:46:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A66D1404AB
+	by smtp2.osuosl.org (Postfix) with ESMTP id A8785405A0;
+	Sun, 24 Dec 2023 16:47:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8785405A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3UKtQQ_XbhAC; Sun, 24 Dec 2023 16:46:53 +0000 (UTC)
+	with ESMTP id IXLKLvl00Bzl; Sun, 24 Dec 2023 16:47:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7304440518;
-	Sun, 24 Dec 2023 16:46:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7304440518
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1955B1BF870
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:45:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3507405A1;
+	Sun, 24 Dec 2023 16:47:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3507405A1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FE601BF30F
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D9B64404D8
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9B64404D8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4362D415B5
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:46:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4362D415B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R9QeXx0hmXjX for <buildroot@lists.busybox.net>;
- Sun, 24 Dec 2023 16:45:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 652A940018
- for <buildroot@buildroot.org>; Sun, 24 Dec 2023 16:45:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 652A940018
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4E06782663; Sun, 24 Dec 2023 16:45:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 24 Dec 2023 17:18:06 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 77b21f55663eaf3a3a8f930de4b148d11b4d4dab
-X-Git-Newrev: cadbdffd538bcb9cfd89b4907ea3ad878ac4e9fa
-X-Patchwork-Hint: ignore
-Message-Id: <20231224164528.4E06782663@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 23.4.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pX1vGZmIglrr for <buildroot@lists.busybox.net>;
+ Sun, 24 Dec 2023 16:46:29 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CBE9A415A6
+ for <buildroot@buildroot.org>; Sun, 24 Dec 2023 16:46:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBE9A415A6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B590E1BF203;
+ Sun, 24 Dec 2023 16:46:25 +0000 (UTC)
+Date: Sun, 24 Dec 2023 17:46:24 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20231224174624.7359b44b@windsurf>
+In-Reply-To: <20231224081321.19791-1-bernd@kuhls.net>
+References: <20231224081321.19791-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703436386;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3JrOrRwh0WhERE0arQCCMgu/u0bAwMrYJRgKZrEsKJM=;
+ b=A5WsGrsdsMjIlQkXiNxVvxD1WKvC4ZAcZYSLhqJqIPExfi7N0Ofl01ViEweMSyEI7nW0od
+ S3a8QYS3hlJyluzp7srjuZnl8ap+6wh3Kpn1rTcRBBuQsVhNKjVAMe0JWNBvChdhD1Eyi5
+ 15lgBIG6A1V0AERLPcDzOn4ImyRcAVdC13Bi33oryXVT17XtVcqdsQcBdaZTgV23cbE3jd
+ MGKc9VMk//hBjG6Pi5Fgx4KzKsbUyclmM53+4XRSOyhrPn1BtOlJ8EG2+/aG7eYaqTD2Zc
+ uV2b76UxxYVyIvZ2m0fRH6aVd5vRLiuGpcKZ4mitORyhc7PmbxD5RoM3ItrtSA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=A5WsGrsd
+Subject: Re: [Buildroot] [PATCH 1/6] package/onevpl-intel-gpu: bump version
+ to 23.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +77,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Louis-Paul Cordier <lpdev@cordier.org>,
+ Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cadbdffd538bcb9cfd89b4907ea3ad878ac4e9fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 24 Dec 2023 09:13:16 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
+>  package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index d3173260b1..b021d05301 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  321f2ade9e55ed5b8809ca875d80c81245093fe9f8a26a39712d2f4a6be18d18  intel-media-23.4.2.tar.gz
-+sha256  83b95eefe86c9d58d92c2a77793541ea3cb643dff419599ffa87899fd58738cd  intel-media-23.4.3.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index a6c3b469d4..c9989f9380 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 23.4.2
-+INTEL_MEDIADRIVER_VERSION = 23.4.3
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+Thanks, series applied. While applying/testing those patches, I found a
+dependency problem in onevpl-intel-gpu, which I fixed in a separate
+commit:
+
+  https://gitlab.com/buildroot.org/buildroot/-/commit/120f961fc6d4a8902487f17a13646be60f6f7ce1
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
