@@ -1,90 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E764BC46CD3
-	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 19:18:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB3AC46CD2
+	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 21:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DF37606C0;
-	Sun, 24 Dec 2023 19:18:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DF37606C0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D26F81AEF;
+	Sun, 24 Dec 2023 21:37:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D26F81AEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s0-_5ha1kDES; Sun, 24 Dec 2023 19:18:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P0uWumZsAZKu; Sun, 24 Dec 2023 21:37:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B877560B46;
-	Sun, 24 Dec 2023 19:18:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B877560B46
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 40C121BF38D
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 19:18:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8197A81AF3;
+	Sun, 24 Dec 2023 21:37:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8197A81AF3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 780AF1BF279
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 21:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27534415FE
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 19:18:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27534415FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E165403C0
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 21:37:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E165403C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HlzW--1qrwaA for <buildroot@lists.busybox.net>;
- Sun, 24 Dec 2023 19:18:23 +0000 (UTC)
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8C782415FD
- for <buildroot@buildroot.org>; Sun, 24 Dec 2023 19:18:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C782415FD
-Received: by mail-pl1-x632.google.com with SMTP id
- d9443c01a7336-1d3e6c86868so26738075ad.1
- for <buildroot@buildroot.org>; Sun, 24 Dec 2023 11:18:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703445502; x=1704050302;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=vef0qUzz19LWZTU96dV3WHylXq9prGfZgCRL8vjPT7I=;
- b=TJzaWQ80WZ0zJcnPxl8Ea4a3tHTGcTV8APt40hD7XkIuwiTgeM/JHPfToFws3VZvXj
- Y02p0IUT+S47594LnUeflJ1d367g4WEfVADXRVtTg51EPj+rIIG2KI4ssV0+6bbX3RIq
- pNY6mTlkLa4L8ri76tPinKFXT1P9PYZGwQtBnmgKFGit2JfU1SAUfk3fXR1eaBO1Scn5
- c/lZN0X5YXKhwB+kf8oJ8A3qBt7ZWRbjuVLNG1GL2gpp0waGKWmIymwYFGOGDZumtyJE
- Z4+HJ1lOXfa3kQK/jWz6Klpdgczu5Gmn+b9XX6xc/4F4V+nBQQnFUgFuUPtmPRGgRLk3
- syZw==
-X-Gm-Message-State: AOJu0YzvAlAIPWW9wVgie7vhe5/U+IU5ycvVIQb3VUFX3S0Rqm14WnFO
- DON/tR/4v1q+9B3e5j3a45vaFCih69Gp3IsfwmKVAjMQ1Z8=
-X-Google-Smtp-Source: AGHT+IFO4vL38o1RzG10DuUjvj341B9EpyTfGRqGOzliB9gj/Fe/eSGTDZo8JMXNM9CCJYvDFE2EBA==
-X-Received: by 2002:a17:902:fc47:b0:1d4:1327:bd15 with SMTP id
- me7-20020a170902fc4700b001d41327bd15mr6711328plb.32.1703445502122; 
- Sun, 24 Dec 2023 11:18:22 -0800 (PST)
-Received: from DESKTOP-OI0KN2B.ht.home (174-126-58-188.cpe.sparklight.net.
- [174.126.58.188]) by smtp.gmail.com with ESMTPSA id
- s2-20020a170902c64200b001d075e847d5sm6876730pls.44.2023.12.24.11.18.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Dec 2023 11:18:21 -0800 (PST)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yglj_D4YLAYq for <buildroot@lists.busybox.net>;
+ Sun, 24 Dec 2023 21:36:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D008401F3
+ for <buildroot@buildroot.org>; Sun, 24 Dec 2023 21:36:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D008401F3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 567A5828A6; Sun, 24 Dec 2023 21:36:58 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Dec 2023 12:18:17 -0700
-Message-ID: <20231224191817.9599-2-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231224191817.9599-1-adam.duskett@amarulasolutions.com>
-References: <20231224191817.9599-1-adam.duskett@amarulasolutions.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1703445502; x=1704050302;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=vef0qUzz19LWZTU96dV3WHylXq9prGfZgCRL8vjPT7I=;
- b=LohlQwJpXJScnnAXSFygq7XxyWkcnNYG1Dui8FqhybJ0J8otoN/0ipwBRGdHzfqHiO
- DepC6gu0JOrmpXjk3qaNtApGGK/yqbxv0zM7hEC2lWCuCNGV8JJrvwn0L8aTJPj+JhpD
- ZaAT+0F+/H7lT9rIKSjZoW6Cfwf01/YJRCjuM=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=LohlQwJp
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: Remove
- adam.duskett@amarulasolutions non-flutter related packages
+Date: Sun, 24 Dec 2023 22:36:02 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2f6b1b8e6893003efcc72185cd468dcb0b088b2d
+X-Git-Newrev: d62dda206539ef2eeaf767772a00cdd52a55ab1d
+X-Patchwork-Hint: ignore
+Message-Id: <20231224213658.567A5828A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/foot: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,38 +56,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-I will only be supporting Flutter and other packages needed by Amarula Solution
-in a professional related capacity from now on.
+commit: https://git.buildroot.net/buildroot/commit/?id=d62dda206539ef2eeaf767772a00cdd52a55ab1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This is the default terminal sway uses.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[yann.morin.1998@free.fr: add comment only for first-order deps]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/foot/Config.in | 36 ++++++++++++++++++++++++++++++++++++
+ package/foot/foot.hash |  3 +++
+ package/foot/foot.mk   | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 91 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 7a00b6c2da..1d505ba146 100644
+index 9492ebe79b..a232059a62 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -35,10 +35,7 @@ F:	package/flutter-gallery/
+@@ -35,6 +35,7 @@ N:	Adam Duskett <adam.duskett@amarulasolutions.com>
+ F:	package/depot-tools/
+ F:	package/dmenu-wayland/
+ F:	package/fcft/
++F:	package/foot/
+ F:	package/flutter-engine/
+ F:	package/flutter-gallery/
  F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
- F:	package/libutempter/
--F:	package/python-kmod/
--F:	package/python-versioneer/
- F:	package/tllist/
--F:	support/testing/tests/package/test_firewalld.py
- F:	support/testing/tests/package/test_flutter.py
- 
- N:	Adam Heinrich <adam@adamh.cz>
--- 
-2.43.0
-
+diff --git a/package/Config.in b/package/Config.in
+index b0e18436ff..a7c653746e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -314,6 +314,7 @@ comment "Graphic applications"
+ 	source "package/cage/Config.in"
+ 	source "package/cog/Config.in"
+ 	source "package/dmenu-wayland/Config.in"
++	source "package/foot/Config.in"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/ghostscript/Config.in"
+ 	source "package/glmark2/Config.in"
+diff --git a/package/foot/Config.in b/package/foot/Config.in
+new file mode 100644
+index 0000000000..24b3f78821
+--- /dev/null
++++ b/package/foot/Config.in
+@@ -0,0 +1,36 @@
++config BR2_PACKAGE_FOOT
++	bool "foot"
++	depends on !BR2_STATIC_LIBS # wayland
++	depends on BR2_TOOLCHAIN_HAS_THREADS # fcft, wayland
++	select BR2_PACKAGE_FCFT
++	select BR2_PACKAGE_FONTCONFIG
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_LIBXKBCOMMON
++	select BR2_PACKAGE_PIXMAN
++	select BR2_PACKAGE_TLLIST
++	select BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
++	help
++	  A fast, lightweight and minimalistic Wayland terminal
++	  emulator.
++	  NOTE: foot needs a working UTF-8 locale (BR2_GENERATE_LOCALE)
++
++	  https://codeberg.org/dnkl/foot
++
++if BR2_PACKAGE_FOOT
++
++config BR2_PACKAGE_FOOT_GRAPHEME_CLUSTERING
++	bool "grapheme-clustering"
++	select BR2_PACKAGE_UTF8PROC
++	help
++	  Enables grapheme clustering.
++
++config BR2_PACKAGE_FOOT_THEMES
++	bool "themes"
++	help
++	  Install themes (predefined color schemes)
++
++endif # BR2_PACKAGE_FOOT
++
++comment "foot needs a toolchain w/ dynamic library, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/foot/foot.hash b/package/foot/foot.hash
+new file mode 100644
+index 0000000000..f3bf0f6058
+--- /dev/null
++++ b/package/foot/foot.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  8060ec28cbf6e2e3d408665330da4bc48fd094d4f1265d7c58dc75c767463c29  1.16.2.tar.gz
++sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
+diff --git a/package/foot/foot.mk b/package/foot/foot.mk
+new file mode 100644
+index 0000000000..1595e2a718
+--- /dev/null
++++ b/package/foot/foot.mk
+@@ -0,0 +1,50 @@
++################################################################################
++#
++# foot
++#
++################################################################################
++
++FOOT_VERSION = 1.16.2
++FOOT_SOURCE = $(FOOT_VERSION).tar.gz
++FOOT_SITE = https://codeberg.org/dnkl/foot/archive
++FOOT_LICENSE = MIT
++FOOT_LICENSE_FILES = LICENSE
++FOOT_DEPENDENCIES = \
++	fcft \
++	fontconfig \
++	freetype \
++	libxkbcommon \
++	pixman \
++	tllist \
++	wayland \
++	wayland-protocols
++
++FOOT_CONF_OPTS = \
++	-Ddocs=disabled \
++	-Dtests=false
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++FOOT_DEPENDENCIES += systemd
++endif
++
++ifeq ($(BR2_PACKAGE_LIBUTEMPTER),y)
++FOOT_DEPENDENCIES += libutempter
++FOOT_CONF_OPTS += -Dutmp-backend='libutempter'
++else
++FOOT_CONF_OPTS += -Dutmp-backend='none'
++endif
++
++ifeq ($(BR2_PACKAGE_FOOT_GRAPHEME_CLUSTERING),y)
++FOOT_DEPENDENCIES += utf8proc
++FOOT_CONF_OPTS += -Dgrapheme-clustering=enabled
++else
++FOOT_CONF_OPTS += -Dgrapheme-clustering=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_FOOT_THEMES),y)
++FOOT_CONF_OPTS += -Dthemes=true
++else
++FOOT_CONF_OPTS += -Dthemes=false
++endif
++
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
