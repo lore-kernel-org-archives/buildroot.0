@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F01CDC46CD3
-	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 16:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A9FDC46CD3
+	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 16:56:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9614440018;
-	Sun, 24 Dec 2023 16:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9614440018
+	by smtp2.osuosl.org (Postfix) with ESMTP id 223D440018;
+	Sun, 24 Dec 2023 16:56:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 223D440018
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vor-6-UweTcf; Sun, 24 Dec 2023 16:55:25 +0000 (UTC)
+	with ESMTP id hxv3-rN8fz4f; Sun, 24 Dec 2023 16:56:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C3B3404AB;
-	Sun, 24 Dec 2023 16:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C3B3404AB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 16D851BF304
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:55:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C7E14056E;
+	Sun, 24 Dec 2023 16:56:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C7E14056E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E88F1BF304
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAFA5404AB
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAFA5404AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8518460C0F
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:56:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8518460C0F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NWQWt1L4nadO for <buildroot@lists.busybox.net>;
- Sun, 24 Dec 2023 16:55:21 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A869F40018
- for <buildroot@buildroot.org>; Sun, 24 Dec 2023 16:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A869F40018
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 96084B0037C;
- Sun, 24 Dec 2023 17:55:16 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 24 Dec 2023 17:55:16 +0100
-Date: Sun, 24 Dec 2023 17:55:16 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <ZYhidG-NVNvDhx9i@landeda>
-References: <20231222105655.444328-1-ju.o@free.fr> <ZYhf_BKuhSJPyNrJ@landeda>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZYhf_BKuhSJPyNrJ@landeda>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1703436919;
- bh=7lLu3otT7Z3gChxw2HESyyTw4p/6uTNCXIToFDyx4ng=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=hvkJX7G5Rerdf+nZIYvL3DTf0n05rAog5GSaOK1QEDpmQBRc9YOJT6DG9hlvHmwIJ
- ReFzguD9WpIQIZTH4pwCo5f/FeD/c6tXOkkrRLsW7DrFI+w4hosrOZq4mt/vacgzlH
- VBUhQtV60iL0QI57M8x61z/EucpJHNy5Qrf3RFoqP7FXawRI/ef76JBdE3NAjQzxih
- Hx8Xx+F7DU3ppgOQAW0qH7tteKTNFIxWyamrA5TObsij34xycZ5syP8bA3+WF8U/Iu
- DoSlyO81RfErWJFTznlL5BXdn3p6AQlBhAGynU0s/wAbIM8m8KTx7YGdrLRkhrQayL
- wA6salONyHMkA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hvkJX7G5
-Subject: Re: [Buildroot] [PATCH v2 1/1] boot/edk2: add support for RISC-V
- 64bit architecture
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gdl5L4JjitJT for <buildroot@lists.busybox.net>;
+ Sun, 24 Dec 2023 16:56:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B9A1260BB6
+ for <buildroot@buildroot.org>; Sun, 24 Dec 2023 16:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9A1260BB6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A142482751; Sun, 24 Dec 2023 16:56:09 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 24 Dec 2023 17:55:23 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: adf58f26be60462b5d55d4296419d724ba30c014
+X-Git-Newrev: f439b47ed6e987306c7de6d9c3be11de04935377
+X-Patchwork-Hint: ignore
+Message-Id: <20231224165609.A142482751@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/grub2: add RISC-V 64bit EFI support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,67 +56,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f439b47ed6e987306c7de6d9c3be11de04935377
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-12-24 17:44 +0100, Yann E. MORIN spake thusly:
-> On 2023-12-22 11:56 +0100, Julien Olivain spake thusly:
-> > RISC-V 64bit qemu virt machine support has been added in edk2
-> > version "stable202302". See [1].
-> > 
-> > Since edk2-stable202308, introduced in buildroot in commit 5c9f310
-> > "boot/edk2: bump to version edk2-stable202308", it is now possible
-> > to boot the edk2 UEFI shell in qemu.
-> > 
-> > This commit adds this early RISC-V support to edk2.
-> 
-> Building edk2 for risc-v is broken with per-package directories. For
-> example, this defconfig fails to build:
+Grub can be built as a RISC-V UEFI application since commit [1]. This
+commit was first included in grub version 2.04.
 
-It seems it is not related to risc-v, finally, as an AArch64 build is
-broken similarly;
+This commit enables this support.
 
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-    BR2_PER_PACKAGE_DIRECTORIES=y
-    BR2_INIT_NONE=y
-    BR2_SYSTEM_BIN_SH_NONE=y
-    # BR2_PACKAGE_BUSYBOX is not set
-    # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-    # BR2_TARGET_ROOTFS_TAR is not set
-    BR2_TARGET_EDK2=y
+[1] https://git.savannah.gnu.org/gitweb/?p=grub.git;a=commitdiff;h=f1957dc8a3347278a095bc8f44197662559a8ba3
 
-    build.py...
-     : error 7000: Failed to execute command
-        make tbuild [/home/ymorin/dev/buildroot/O/master/build/edk2-edk2-stable202308/Build/ArmVirtQemu-AARCH64/RELEASE_GCC5/AARCH64/MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe]
-    build.py...
-     : error 7000: Failed to execute command
-        make tbuild [/home/ymorin/dev/buildroot/O/master/build/edk2-edk2-stable202308/Build/ArmVirtQemu-AARCH64/RELEASE_GCC5/AARCH64/MdeModulePkg/Universal/DriverHealthManagerDxe/DriverHealthManagerDxe]
-    build.py...
-     : error F002: Failed to build module
-        /home/ymorin/dev/buildroot/O/master/build/edk2-edk2-stable202308/MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf [AARCH64, GCC5, RELEASE]
-    - Failed -
-    Build end time: 17:50:47, Dec.24 2023
-    Build total time: 00:00:11
-    make[1]: *** [package/pkg-generic.mk:283: /home/ymorin/dev/buildroot/O/master/build/edk2-edk2-stable202308/.stamp_built] Error 1
-    make: *** [Makefile:23: _all] Error 2
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/grub2/Config.in | 10 ++++++++++
+ boot/grub2/grub2.mk  |  9 +++++++++
+ 2 files changed, 19 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index f05f33ccc7..7c235e96f7 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -4,6 +4,7 @@ config BR2_TARGET_GRUB2_ARCH_SUPPORTS
+ 	default y if BR2_x86_64
+ 	default y if BR2_arm
+ 	default y if BR2_aarch64
++	default y if BR2_RISCV_64
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_TARGET_GRUB2
+@@ -102,6 +103,15 @@ config BR2_TARGET_GRUB2_ARM64_EFI
+ 	  Aarch64 platform and you want to boot Grub 2 as an EFI
+ 	  application.
+ 
++config BR2_TARGET_GRUB2_RISCV64_EFI
++	bool "riscv64-efi"
++	depends on BR2_RISCV_64
++	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
++	help
++	  Select this option if the platform you're targetting is a
++	  64bit RISC-V platform and you want to boot Grub 2 as an EFI
++	  application.
++
+ if BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+ 
+ comment "Options for the x86 legacy BIOS or ARM U-Boot support"
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 4430aebd59..6d0d71c47d 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -93,6 +93,15 @@ GRUB2_BUILTIN_CONFIG_arm64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
+ GRUB2_BUILTIN_MODULES_arm64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
+ GRUB2_TUPLES-$(BR2_TARGET_GRUB2_ARM64_EFI) += arm64-efi
+ 
++GRUB2_IMAGE_riscv64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootriscv64.efi
++GRUB2_CFG_riscv64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
++GRUB2_PREFIX_riscv64-efi = /EFI/BOOT
++GRUB2_TARGET_riscv64-efi = riscv64
++GRUB2_PLATFORM_riscv64-efi = efi
++GRUB2_BUILTIN_CONFIG_riscv64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
++GRUB2_BUILTIN_MODULES_riscv64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
++GRUB2_TUPLES-$(BR2_TARGET_GRUB2_RISCV64_EFI) += riscv64-efi
++
+ # Grub2 is kind of special: it considers CC, LD and so on to be the
+ # tools to build the host programs and uses TARGET_CC, TARGET_CFLAGS,
+ # TARGET_CPPFLAGS, TARGET_LDFLAGS to build the bootloader itself.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
