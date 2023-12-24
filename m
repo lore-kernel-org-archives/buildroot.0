@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B77E3C46CD2
-	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 18:19:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9546BC46CD3
+	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 18:39:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C94740572;
-	Sun, 24 Dec 2023 18:19:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C94740572
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0FB0440018;
+	Sun, 24 Dec 2023 18:39:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FB0440018
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JB6hEnjib_W1; Sun, 24 Dec 2023 18:19:06 +0000 (UTC)
+	with ESMTP id 76T7yssbwj3z; Sun, 24 Dec 2023 18:39:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B7A340591;
-	Sun, 24 Dec 2023 18:19:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B7A340591
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C1E51BF3BB
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 18:18:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0161F4052F;
+	Sun, 24 Dec 2023 18:39:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0161F4052F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 195F41BF3BB
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 18:39:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54D8B60B44
- for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 18:18:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54D8B60B44
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6C67410E3
+ for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 18:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6C67410E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DqbqxAItueL7 for <buildroot@lists.busybox.net>;
- Sun, 24 Dec 2023 18:18:53 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 062AB607B5
- for <buildroot@buildroot.org>; Sun, 24 Dec 2023 18:18:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 062AB607B5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 97E2460002;
- Sun, 24 Dec 2023 18:18:49 +0000 (UTC)
-Date: Sun, 24 Dec 2023 19:18:48 +0100
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20231224191848.20c7bea7@windsurf>
-In-Reply-To: <20231212190123.7226-1-ju.o@free.fr>
-References: <20231212190123.7226-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703441930;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=DXJ0Q2MjQeaVhH4T51f9vhCzomRPx9t2e33o+Yd07ZY=;
- b=htRGrQPuNl6N1ltElhRVfeu2AY6eTVhRrlWzHAMBVzvvCg24Gx7DDFYdKEbMZRw9ZfZpa7
- /LRCzmt7hAIbmquPf/giv2QzJ9Pa2YeDKG1LGhe7lg2wp+Ir57qQcGuwjnAKloLSB80WHq
- wdWZfSL8GAyCflWkjcca2djf1ThjZaGU0wjNbXl8j9l/lh14RAYuAEyX748BmnCaFm134i
- 8in9DIhGNEEsukrG+tInWxqScbLJq8MgV4Fy94+ncil7f9Bg/eijumLvP48QgErdKQb/6X
- zkuAqE0CtSJ1Rum4vsTU89tR6LO8ea2RWH4HnMwFhoKkvf/rA7eN2UNobdv/uw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=htRGrQPu
-Subject: Re: [Buildroot] [PATCH 1/1] package/perftest: bump to version
- 23.10.0-0.29
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tioMpvtA_92z for <buildroot@lists.busybox.net>;
+ Sun, 24 Dec 2023 18:39:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04F66409FB
+ for <buildroot@buildroot.org>; Sun, 24 Dec 2023 18:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04F66409FB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E41A582852; Sun, 24 Dec 2023 18:39:08 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 24 Dec 2023 19:38:25 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c81af1667f74edaa977fa7c8677555c8efaaa068
+X-Git-Newrev: df89e73e92abcddfdfa5d61cd00757a7c80a699d
+X-Patchwork-Hint: ignore
+Message-Id: <20231224183908.E41A582852@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/imagemagick: add option to build
+ host-imagemagick with XML support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +58,95 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 12 Dec 2023 20:01:23 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=df89e73e92abcddfdfa5d61cd00757a7c80a699d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For change log, see:
-> https://github.com/linux-rdma/perftest/releases/tag/23.10.0-0.29
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch tested on branch master at commit b79fb3c with commands:
+Since upstream commit
+https://github.com/ImageMagick/ImageMagick/commit/25e3a4f3845f59536d19aba0ac0580aa6715147f
+(which first appeared in version 7.1.1-19), ImageMagick does not trust
+unvalidated XMP profiles in images anymore.
 
-Applied to master, thanks.
+If such a XML profile is encountered inside e.g. a PNG image the
+processing is aborted. Validating the XMP profile requires that
+ImageMagick is compiled with XML support.
+As host-imagemagick supports PNG file also activate XML support.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/imagemagick/Config.in.host | 11 +++++++++++
+ package/imagemagick/imagemagick.mk | 14 +++++++++-----
+ 2 files changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/package/imagemagick/Config.in.host b/package/imagemagick/Config.in.host
+index 5055101e23..26912e5f04 100644
+--- a/package/imagemagick/Config.in.host
++++ b/package/imagemagick/Config.in.host
+@@ -18,6 +18,7 @@ config BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
+ 	bool "SVG support"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # host-librsvg
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-pango -> host-harfbuzz
++	select BR2_PACKAGE_HOST_IMAGEMAGICK_XML
+ 	help
+ 	  Say 'y' here is you need ImageMagick tools (like convert)
+ 	  to support SVG.
+@@ -29,4 +30,14 @@ comment "SVG support needs host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on !BR2_HOST_GCC_AT_LEAST_4_9
+ 
++config BR2_PACKAGE_HOST_IMAGEMAGICK_XML
++	bool "XML support"
++	help
++	  Say 'y' here if you need ImageMagick to support XML. Indeed,
++	  ImageMagick does not trust unvalidated XMP profiles in
++	  images. If such a XML profile is encountered inside e.g. a
++	  PNG image the processing is aborted. Validating the XMP
++	  profile requires that ImageMagick is compiled with XML
++	  support.
++
+ endif
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 719c6768af..53cf02abf4 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -238,22 +238,26 @@ HOST_IMAGEMAGICK_DEPENDENCIES += \
+ 	host-fontconfig \
+ 	host-freetype \
+ 	host-librsvg \
+-	host-libxml2 \
+ 	host-pango
+ HOST_IMAGEMAGICK_CONF_ENV += ac_cv_path_xml2_config=$(HOST_DIR)/bin/xml2-config
+ HOST_IMAGEMAGICK_CONF_OPTS += \
+ 	--with-fontconfig \
+ 	--with-freetype \
+ 	--with-pango \
+-	--with-rsvg \
+-	--with-xml
++	--with-rsvg
+ else
+ HOST_IMAGEMAGICK_CONF_OPTS += \
+ 	--without-fontconfig \
+ 	--without-freetype \
+ 	--without-pango \
+-	--without-rsvg \
+-	--without-xml
++	--without-rsvg
++endif
++
++ifeq ($(BR2_PACKAGE_HOST_IMAGEMAGICK_XML),y)
++HOST_IMAGEMAGICK_CONF_OPTS += --with-xml
++HOST_IMAGEMAGICK_DEPENDENCIES += host-libxml2
++else
++HOST_IMAGEMAGICK_CONF_OPTS += --without-xml
+ endif
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
