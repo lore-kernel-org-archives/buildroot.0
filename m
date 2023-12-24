@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 217D1C46CD2
-	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 16:45:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A13DEC46CD2
+	for <buildroot@archiver.kernel.org>; Sun, 24 Dec 2023 16:45:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7460404A5;
-	Sun, 24 Dec 2023 16:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7460404A5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3064140018;
+	Sun, 24 Dec 2023 16:45:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3064140018
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A4cHDIm065P2; Sun, 24 Dec 2023 16:45:31 +0000 (UTC)
+	with ESMTP id GnwjNHG7mZe3; Sun, 24 Dec 2023 16:45:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE026404AB;
-	Sun, 24 Dec 2023 16:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE026404AB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3A92F1BF30F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 607FE404D8;
+	Sun, 24 Dec 2023 16:45:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 607FE404D8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D79C1BF86B
  for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 13C8960B44
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44BAB81BFA
  for <buildroot@lists.busybox.net>; Sun, 24 Dec 2023 16:45:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13C8960B44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44BAB81BFA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YZ-iIKO9WK2t for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 13Hzgq4D4b-y for <buildroot@lists.busybox.net>;
  Sun, 24 Dec 2023 16:45:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3729C60B8D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D96081BCF
  for <buildroot@buildroot.org>; Sun, 24 Dec 2023 16:45:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3729C60B8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D96081BCF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 21054826DF; Sun, 24 Dec 2023 16:45:28 +0000 (UTC)
+ id 6D95280DAA; Sun, 24 Dec 2023 16:45:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Dec 2023 17:16:19 +0100
+Date: Sun, 24 Dec 2023 17:32:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 78e8f3831fbe115b0e6b0b2506852cfc887a083e
-X-Git-Newrev: 120f961fc6d4a8902487f17a13646be60f6f7ce1
+X-Git-Oldrev: f6acde11ab639f5772ceeac51ff21ca7aadeca8d
+X-Git-Newrev: ee2e272b89f565ebc7665f0ec31ea263dee692ee
 X-Patchwork-Hint: ignore
-Message-Id: <20231224164528.21054826DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/onevpl-intel-gpu: add missing
- dependency on BR2_x86_64
+Message-Id: <20231224164528.6D95280DAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libvpl: bump version to 2.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=120f961fc6d4a8902487f17a13646be60f6f7ce1
+commit: https://git.buildroot.net/buildroot/commit/?id=ee2e272b89f565ebc7665f0ec31ea263dee692ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_PACKAGE_ONEVPL_INTEL_GPU selects BR2_PACKAGE_INTEL_MEDIADRIVER,
-but it forgets to replicate all its dependencies, in particular
-BR2_x86_64, causing:
-
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_INTEL_MEDIADRIVER
-  Depends on [n]: BR2_x86_64 [=n] && !BR2_STATIC_LIBS [=n] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_GCC_AT_LEAST_8 [=y] && BR2_TOOLCHAIN_HAS_SYNC_1 [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_TOOLCHAIN_HAS_THREADS_NPTL [=y]
-  Selected by [y]:
-  - BR2_PACKAGE_ONEVPL_INTEL_GPU [=y] && BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS [=y] && BR2_INSTALL_LIBSTDCPP [=y] && !BR2_STATIC_LIBS [=n] && BR2_TOOLCHAIN_GCC_AT_LEAST_7 [=y] && BR2_TOOLCHAIN_HAS_SYNC_1 [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_TOOLCHAIN_HAS_THREADS_NPTL [=y]
-
-Fixes: ac65841defece904e91afe1fb51419084c993dba ("package/onevpl-intel-gpu: new package")
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/onevpl-intel-gpu/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libvpl/libvpl.hash | 2 +-
+ package/libvpl/libvpl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/onevpl-intel-gpu/Config.in b/package/onevpl-intel-gpu/Config.in
-index 11a1c60a0f..b1ab6624e5 100644
---- a/package/onevpl-intel-gpu/Config.in
-+++ b/package/onevpl-intel-gpu/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ONEVPL_INTEL_GPU
- 	bool "onevpl-intel-gpu"
-+	depends on BR2_x86_64 # intel-mediadriver
- 	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS # onevpl
- 	depends on BR2_INSTALL_LIBSTDCPP # onevpl
- 	depends on !BR2_STATIC_LIBS # onevpl
-@@ -17,6 +18,7 @@ config BR2_PACKAGE_ONEVPL_INTEL_GPU
- 	  https://github.com/oneapi-src/oneVPL-intel-gpu
+diff --git a/package/libvpl/libvpl.hash b/package/libvpl/libvpl.hash
+index 8f3ea64d2e..df1914e4a4 100644
+--- a/package/libvpl/libvpl.hash
++++ b/package/libvpl/libvpl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  978398c7bb1665a6ad7a1a15cc57dc0204608e56c88436e376b717320a9e63fd  libvpl-2023.4.0.tar.gz
++sha256  524299a7b920ac0de1f6913ca90515858ea3a8ea2daaea60f8e0be62f22c8041  libvpl-2.10.1.tar.gz
+ sha256  bf1cfac2e2792b6e1e995ce103d70796aecaf2ec7e4c5fe5474f7acec7b4a677  LICENSE
+diff --git a/package/libvpl/libvpl.mk b/package/libvpl/libvpl.mk
+index 3b0adaaf0f..0c5d354874 100644
+--- a/package/libvpl/libvpl.mk
++++ b/package/libvpl/libvpl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "onevpl-intel-gpu needs a toolchain w/ dynamic library, gcc >= 7, C++, NPTL"
-+	depends on BR2_x86_64
- 	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+-LIBVPL_VERSION = 2023.4.0
++LIBVPL_VERSION = 2.10.1
+ LIBVPL_SITE = $(call github,intel,libvpl,v$(LIBVPL_VERSION))
+ LIBVPL_LICENSE = MIT
+ LIBVPL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
