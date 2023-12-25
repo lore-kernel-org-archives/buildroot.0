@@ -1,87 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED7DCC3DA6E
-	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 19:39:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8808C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 20:24:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A86CC813BF;
-	Mon, 25 Dec 2023 19:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A86CC813BF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53A8140018;
+	Mon, 25 Dec 2023 20:24:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53A8140018
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lmbPd6PYFcXK; Mon, 25 Dec 2023 19:39:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZlBZMray4EsP; Mon, 25 Dec 2023 20:24:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F115581429;
-	Mon, 25 Dec 2023 19:39:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F115581429
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D9901BF28C
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 19:39:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5025B400D6;
+	Mon, 25 Dec 2023 20:24:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5025B400D6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 67B3C1BF2BE
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:24:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6695C81394
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 19:39:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6695C81394
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F8EF40939
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:24:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F8EF40939
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0IOUNnbpRVmn for <buildroot@lists.busybox.net>;
- Mon, 25 Dec 2023 19:39:14 +0000 (UTC)
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6136380E6E
- for <buildroot@busybox.net>; Mon, 25 Dec 2023 19:39:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6136380E6E
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-40d4d70eca6so29668085e9.3
- for <buildroot@busybox.net>; Mon, 25 Dec 2023 11:39:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703533152; x=1704137952;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Ee2uBfXnVAin3GbZIt+UF5sNSwpEs3rS1XipwdJi/gQ=;
- b=fxl1M/9Xa72DVNXnlSEM5kY/FHf6QvF4SMSnNFD5q1WSCTgdXTqjQprJQMeDfkDLl9
- 1irK/R0WJ7cwSrstEWiGa9BrgoaMXJOa60Hd+glMVtf+zM118KA2HzKeVr2JF5BVO8WA
- EB/lYaSva098ax02fWrZo0Asd/347zzPDC7Oa6kPEqkiQE7nYtH4Si+iP3ErrxdxnZwU
- 2hXZ0dTf45xPPK6AMdmz1odKLzUv+XCtK8UOQabzXHareb6ZbrE1KjvVlHv/LKbOUAYR
- ISRNnWt5Y2Hrd7rf8Wd+c05FQi1GPy+EbjhE+dHcAXdhwvPH/Ce4lq57rZRp8h8aWKyw
- DHIQ==
-X-Gm-Message-State: AOJu0Yz9vE4+CYmhHNIi3vecVEwiS1mLyk5D4VDIDHPGTK4dS2Pz+8XO
- p+ULoa0hy9s0B68W4tyJU2LyjwnYjDM=
-X-Google-Smtp-Source: AGHT+IHOuTtzw/GC6/8/Z3LiSuaA/JJfhqAsrZGKWOqow4B1MdZAG47J3FlzQjerQykKma6wharfMA==
-X-Received: by 2002:a05:600c:4503:b0:40d:3791:5925 with SMTP id
- t3-20020a05600c450300b0040d37915925mr2141724wmo.135.1703533152279; 
- Mon, 25 Dec 2023 11:39:12 -0800 (PST)
-Received: from xubuntu-23.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- ay14-20020a05600c1e0e00b0040c6ab53cd2sm18697092wmb.10.2023.12.25.11.39.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 25 Dec 2023 11:39:12 -0800 (PST)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Mon, 25 Dec 2023 20:39:09 +0100
-Message-Id: <20231225193909.88025-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TE0AuHPErgho for <buildroot@lists.busybox.net>;
+ Mon, 25 Dec 2023 20:24:19 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3726240937
+ for <buildroot@buildroot.org>; Mon, 25 Dec 2023 20:24:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3726240937
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C1D5340003;
+ Mon, 25 Dec 2023 20:24:15 +0000 (UTC)
+Date: Mon, 25 Dec 2023 21:24:15 +0100
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20231225212415.3e6b7621@windsurf>
+In-Reply-To: <20231214165420.181703-6-james.hilliard1@gmail.com>
+References: <20231214165420.181703-1-james.hilliard1@gmail.com>
+ <20231214165420.181703-6-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703533152; x=1704137952; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Ee2uBfXnVAin3GbZIt+UF5sNSwpEs3rS1XipwdJi/gQ=;
- b=YSx8TwxazlP0t1cGBNljSsOUz3pYz+2LjPSEV7OsZgzhp0QC/AhuysEdlOJGnNJQAL
- 2Lv+FJYd2ruhU68+YxULUu7IPVfgQ/FtFewDkIVkdqmnboP3Q1DUEEyR/qVw63fJrPTC
- qykzfVVi3HxIsplpRVT98b2Srit1Ehc5Lpxb0/mMBFS6BW9+01Lnw/JeWlePum5HRve8
- 8iHJxpSYr2s9fc4qCP8+izAFcNvN6CMJeuPLsNhwCxmfX/Zym16aklFTFavSA32M38ej
- OeiqOdqG8ZgJQDx5nNVzQOFrpEbvNFDwLbnadjKPMA6jsMoWhHHhjuEN3NFac78G/zrL
- CX+g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YSx8Twxa
-Subject: [Buildroot] [PATCH] package/xz: bump to version 5.4.5
+ d=bootlin.com; s=gm1; t=1703535856;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=4u2AcXwoALcqE5FhZmeytnKhi6hIPLh4BHOI0zObkw4=;
+ b=GGq6/z0XrOaNgO6cULoyvhgQNby4ncRI8J7mAEB32KtWNiFrUUAU9KZZOsCZJe9WeIahup
+ t9sxlNrwjS9J09w0hQ9ryBI58qMyYXQRJDxSKh+JzMSKsKp/KMiU/8R+10y8iMUhIJI9I1
+ eDtIb9b6cMg3eVS3vz9Pn2HTWavIKd2ta6HXffX0R7ZrKTErqLVRPVSfkLENElKXW+4Ms2
+ kAmQ0qeYvKSJBdT8oOa+lHb6S//eHue96pmEtuumAArpWtl2VNEo6GAiBFdzBfVp7aMk+W
+ 3yaniqEb/jl6LVvB2gyHHYkF7JIfNU89a/NND8QFlp6cxTCsF1lcz2pVVsLvsA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GGq6/z0X
+Subject: Re: [Buildroot] [PATCH v3 6/8] package/python-fastapi-sessions: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +76,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/xz/xz.hash | 4 ++--
- package/xz/xz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello James,
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index 92bac4046..3d93ad6b5 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://tukaani.org/xz/xz-5.4.4.tar.gz.sig
--sha256  0b6fcde1ac38e90433a2556f500c065950b9bcd2d602006efc334782bdfe6296  xz-5.4.4.tar.bz2
-+# https://tukaani.org/xz/xz-5.4.5.tar.bz2.sig
-+sha256  8ccf5fff868c006f29522e386fb4c6a1b66463fbca65a4cfc3c4bd596e895e79  xz-5.4.5.tar.bz2
- 
- # Hash for license files
- sha256  72d7ef9c98be319fd34ce88b45203b36d5936f9c49e82bf3198ffee5e0c7d87e  COPYING
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 42fee82e8..547959c74 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XZ_VERSION = 5.4.4
-+XZ_VERSION = 5.4.5
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = https://tukaani.org/xz
- XZ_INSTALL_STAGING = YES
+On Thu, 14 Dec 2023 09:54:18 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
+
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+I am applying this series, and I have a few questions on this patch.
+They won't prevent applying the patch, they are more for my
+curiosity/understanding.
+
+> diff --git a/package/python-fastapi-sessions/Config.in b/package/python-fastapi-sessions/Config.in
+> new file mode 100644
+> index 0000000000..a54b072f09
+> --- /dev/null
+> +++ b/package/python-fastapi-sessions/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PYTHON_FASTAPI_SESSIONS
+> +	bool "python-fastapi-sessions"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
+> +	select BR2_PACKAGE_PYTHON_FASTAPI # runtime
+> +	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
+> +	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
+
+I indeed see pydantic imported in two places:
+
+$ grep -r pydantic *
+fastapi_sessions/backends/session_backend.py:from pydantic.main import BaseModel
+fastapi_sessions/frontends/implementations/cookie.py:from pydantic.main import BaseModel
+
+However, it's not listed in setup.py or pyproject.toml, even as an
+optional dependency. Is this an upstream "bug" ?
+
+> +PYTHON_FASTAPI_SESSIONS_VERSION = 0.3.2
+> +PYTHON_FASTAPI_SESSIONS_SOURCE = fastapi-sessions-$(PYTHON_FASTAPI_SESSIONS_VERSION).tar.gz
+> +PYTHON_FASTAPI_SESSIONS_SITE = https://files.pythonhosted.org/packages/1d/89/da83ba47bd70101e14eca0ac57c7f300b055b70104446badfdc1dcbe813f
+> +PYTHON_FASTAPI_SESSIONS_SETUP_TYPE = setuptools
+
+I see you're using plain old setuptools, but this package has a
+pyproject.toml, though it doesn't define a [build-system]. Is this why
+you can't use pep517?
+
+Thanks!
+
+Thomas
 -- 
-2.40.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
