@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40CA2C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 10:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4435C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 10:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E08F2408D4;
-	Mon, 25 Dec 2023 10:13:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E08F2408D4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FC4440151;
+	Mon, 25 Dec 2023 10:14:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FC4440151
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k8KpKX4FJKiO; Mon, 25 Dec 2023 10:13:05 +0000 (UTC)
+	with ESMTP id wcDHIPNoDNeG; Mon, 25 Dec 2023 10:14:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D2F1408A6;
-	Mon, 25 Dec 2023 10:13:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D2F1408A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id B86EA40129;
+	Mon, 25 Dec 2023 10:14:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B86EA40129
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 705A01BF2BE
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 10:13:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8C9711BF2BE
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 10:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55DA2408A6
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 10:13:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55DA2408A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65BF740129
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 10:13:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65BF740129
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y-ISk42DjD-O for <buildroot@lists.busybox.net>;
- Mon, 25 Dec 2023 10:13:01 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 521294089C
- for <buildroot@buildroot.org>; Mon, 25 Dec 2023 10:13:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 521294089C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 46F79FF803;
- Mon, 25 Dec 2023 10:12:58 +0000 (UTC)
-Date: Mon, 25 Dec 2023 11:12:57 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20231225111257.3fdffc23@windsurf>
-In-Reply-To: <20231214100156.121408-1-james.hilliard1@gmail.com>
-References: <20231214100156.121408-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703499178;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=GcVGtZxsmW5B3aLHkVbx6wfATfWq5bOmiSdZItFzVJk=;
- b=Bp1qQsJZ0C3cHhh1k+LhM+iukaU7pXtZna7Vvrfe16A1Dfe16XP9CoJ9URkxUacomXTPdU
- QyBnnEdtVDRY8Qwl+HwvTrSkAQLQU56FYyDjbsekh8w7wzV6Ktu5bciRkeVVhFwaf6IE1K
- qNjryUe3j7TnPZrhNNSJFxBgP3jVqbcvJRkIe6iLGkmsAPW7HAlAs2epA8Z+1w5KsBt4Ft
- Vcb2sC1qzF9ZpqbeOfJvfyfntbhP3JD60JDdbY4vVtW+YGmMC1TQW2Dqh8+AOUKqn/FHRs
- uPf34TefU+H242kRhL9da0mCBIJ+bc7iZa5a0/6ngGcmq/SOT+gi3DmsWZIQhw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Bp1qQsJZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-multipart: new package
+ with ESMTP id XToWeamzRx0A for <buildroot@lists.busybox.net>;
+ Mon, 25 Dec 2023 10:13:57 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80768400BA
+ for <buildroot@buildroot.org>; Mon, 25 Dec 2023 10:13:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80768400BA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6CD9781843; Mon, 25 Dec 2023 10:13:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 25 Dec 2023 11:12:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8dc5506c76a555bd7eb2455407022b1287b9a821
+X-Git-Newrev: b48a1955099085b68df1bdee99bb18848fc2e2cc
+X-Patchwork-Hint: ignore
+Message-Id: <20231225101357.6CD9781843@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-multipart: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,33 +57,80 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 14 Dec 2023 03:01:56 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b48a1955099085b68df1bdee99bb18848fc2e2cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/Config.in                              |  1 +
->  package/python-multipart/Config.in             |  6 ++++++
->  package/python-multipart/python-multipart.hash |  5 +++++
->  package/python-multipart/python-multipart.mk   | 15 +++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-multipart/Config.in
->  create mode 100644 package/python-multipart/python-multipart.hash
->  create mode 100644 package/python-multipart/python-multipart.mk
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Config.in                              |  1 +
+ package/python-multipart/Config.in             |  6 ++++++
+ package/python-multipart/python-multipart.hash |  5 +++++
+ package/python-multipart/python-multipart.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/Config.in b/package/Config.in
+index c3aeb87f08..67713e9209 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1179,6 +1179,7 @@ menu "External python modules"
+ 	source "package/python-msgfy/Config.in"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-multidict/Config.in"
++	source "package/python-multipart/Config.in"
+ 	source "package/python-munch/Config.in"
+ 	source "package/python-mutagen/Config.in"
+ 	source "package/python-mwclient/Config.in"
+diff --git a/package/python-multipart/Config.in b/package/python-multipart/Config.in
+new file mode 100644
+index 0000000000..07002e1018
+--- /dev/null
++++ b/package/python-multipart/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_MULTIPART
++	bool "python-multipart"
++	help
++	  A streaming multipart parser for Python.
++
++	  https://github.com/andrew-d/python-multipart
+diff --git a/package/python-multipart/python-multipart.hash b/package/python-multipart/python-multipart.hash
+new file mode 100644
+index 0000000000..9b2b6d3d82
+--- /dev/null
++++ b/package/python-multipart/python-multipart.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/python-multipart/json
++md5  a61a045b7f5e64d44dc53c73522ac4d2  python_multipart-0.0.6.tar.gz
++sha256  e9925a80bb668529f1b67c7fdb0a5dacdd7cbfc6fb0bff3ea443fe22bdd62132  python_multipart-0.0.6.tar.gz
++# Locally computed sha256 checksums
++sha256  a8e833176cd617daf00b9d6d39fa15ca8edebc6d1643079cd2f4893c0c289be2  LICENSE.txt
+diff --git a/package/python-multipart/python-multipart.mk b/package/python-multipart/python-multipart.mk
+new file mode 100644
+index 0000000000..7ffb05fa92
+--- /dev/null
++++ b/package/python-multipart/python-multipart.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-multipart
++#
++################################################################################
++
++PYTHON_MULTIPART_VERSION = 0.0.6
++PYTHON_MULTIPART_SOURCE = python_multipart-$(PYTHON_MULTIPART_VERSION).tar.gz
++PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/2d/23/abcfad10c3348cb6358400f8adbc21b523bbc6c954494fd0974428068672
++PYTHON_MULTIPART_SETUP_TYPE = pep517
++PYTHON_MULTIPART_LICENSE = Apache-2.0
++PYTHON_MULTIPART_LICENSE_FILES = LICENSE.txt
++PYTHON_MULTIPART_DEPENDENCIES = host-python-hatchling
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
