@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4435C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 10:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4C4EC3DA6E
+	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 10:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FC4440151;
-	Mon, 25 Dec 2023 10:14:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FC4440151
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94BC4415CF;
+	Mon, 25 Dec 2023 10:15:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94BC4415CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wcDHIPNoDNeG; Mon, 25 Dec 2023 10:14:01 +0000 (UTC)
+	with ESMTP id GoNhxlmyRF50; Mon, 25 Dec 2023 10:15:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B86EA40129;
-	Mon, 25 Dec 2023 10:14:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B86EA40129
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4359401BD;
+	Mon, 25 Dec 2023 10:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4359401BD
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8C9711BF2BE
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 10:13:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BF6C81BF94D
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 10:15:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65BF740129
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 10:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65BF740129
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97A83401BD
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 10:15:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97A83401BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XToWeamzRx0A for <buildroot@lists.busybox.net>;
- Mon, 25 Dec 2023 10:13:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80768400BA
- for <buildroot@buildroot.org>; Mon, 25 Dec 2023 10:13:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80768400BA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CD9781843; Mon, 25 Dec 2023 10:13:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 25 Dec 2023 11:12:20 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8dc5506c76a555bd7eb2455407022b1287b9a821
-X-Git-Newrev: b48a1955099085b68df1bdee99bb18848fc2e2cc
-X-Patchwork-Hint: ignore
-Message-Id: <20231225101357.6CD9781843@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-multipart: new package
+ with ESMTP id YnK79JGNFZ5P for <buildroot@lists.busybox.net>;
+ Mon, 25 Dec 2023 10:15:42 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F23C4013F
+ for <buildroot@buildroot.org>; Mon, 25 Dec 2023 10:15:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F23C4013F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0FE41E0002;
+ Mon, 25 Dec 2023 10:15:38 +0000 (UTC)
+Date: Mon, 25 Dec 2023 11:15:37 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20231225111537.7d46ac11@windsurf>
+In-Reply-To: <20231130191305.5345-1-fontaine.fabrice@gmail.com>
+References: <20231130191305.5345-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703499339;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2EZMEpOq3DVGqRUZXA0VG2uTQPJFRXNyFWyPgk9+4Is=;
+ b=dAzuVU3xM5YyjJ9tmVMIP3s3ZyDB+TC1e6DXjjB++R29Rdwj9iZ0XmuB208Jw9G8mdAYGh
+ v+9uPc+6hbl7wZlJGS/Aox567mMptdB2opXdXgOy0PpCUAeQBLvXICisfXkRqsldKKa0hs
+ 6M3iLwejiiTP0VEZ+IerwOVXeetaGeGJL3LXf29CaLfXbCCJLZbU2tA9k5KxDAdfnQtB6i
+ sEhp2GLtkdmTSquxggl/wVZjrBMClfmiOTb2V/J1KhG5WJ+uhnWY7vsrvj1TD5uuMAo/3E
+ GiEfL1poaW7YjGXBilVOL+7C0X2SCAyq7quPr4oAps0V9aYF1XZbEoZ9mVSEew==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dAzuVU3x
+Subject: Re: [Buildroot] [PATCH 1/1] package/libselinux: fix build with
+ BR2_TIME_BITS_64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,80 +77,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Antoine Tenart <atenart@kernel.org>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@smile.fr>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b48a1955099085b68df1bdee99bb18848fc2e2cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 30 Nov 2023 20:13:05 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                              |  1 +
- package/python-multipart/Config.in             |  6 ++++++
- package/python-multipart/python-multipart.hash |  5 +++++
- package/python-multipart/python-multipart.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
+> This LFS workaround for glibc < 2.23 was added in 2016 by commit
+> ebcca24c953d8df4b16bc52c5ba31feae4ed8ad0 and is probably not needed
+> anymore as glibc 2.23 was released in February 2016:
+> https://sourceware.org/glibc/wiki/Release/2.23
 
-diff --git a/package/Config.in b/package/Config.in
-index c3aeb87f08..67713e9209 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1179,6 +1179,7 @@ menu "External python modules"
- 	source "package/python-msgfy/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-multidict/Config.in"
-+	source "package/python-multipart/Config.in"
- 	source "package/python-munch/Config.in"
- 	source "package/python-mutagen/Config.in"
- 	source "package/python-mwclient/Config.in"
-diff --git a/package/python-multipart/Config.in b/package/python-multipart/Config.in
-new file mode 100644
-index 0000000000..07002e1018
---- /dev/null
-+++ b/package/python-multipart/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_MULTIPART
-+	bool "python-multipart"
-+	help
-+	  A streaming multipart parser for Python.
-+
-+	  https://github.com/andrew-d/python-multipart
-diff --git a/package/python-multipart/python-multipart.hash b/package/python-multipart/python-multipart.hash
-new file mode 100644
-index 0000000000..9b2b6d3d82
---- /dev/null
-+++ b/package/python-multipart/python-multipart.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/python-multipart/json
-+md5  a61a045b7f5e64d44dc53c73522ac4d2  python_multipart-0.0.6.tar.gz
-+sha256  e9925a80bb668529f1b67c7fdb0a5dacdd7cbfc6fb0bff3ea443fe22bdd62132  python_multipart-0.0.6.tar.gz
-+# Locally computed sha256 checksums
-+sha256  a8e833176cd617daf00b9d6d39fa15ca8edebc6d1643079cd2f4893c0c289be2  LICENSE.txt
-diff --git a/package/python-multipart/python-multipart.mk b/package/python-multipart/python-multipart.mk
-new file mode 100644
-index 0000000000..7ffb05fa92
---- /dev/null
-+++ b/package/python-multipart/python-multipart.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-multipart
-+#
-+################################################################################
-+
-+PYTHON_MULTIPART_VERSION = 0.0.6
-+PYTHON_MULTIPART_SOURCE = python_multipart-$(PYTHON_MULTIPART_VERSION).tar.gz
-+PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/2d/23/abcfad10c3348cb6358400f8adbc21b523bbc6c954494fd0974428068672
-+PYTHON_MULTIPART_SETUP_TYPE = pep517
-+PYTHON_MULTIPART_LICENSE = Apache-2.0
-+PYTHON_MULTIPART_LICENSE_FILES = LICENSE.txt
-+PYTHON_MULTIPART_DEPENDENCIES = host-python-hatchling
-+
-+$(eval $(python-package))
+We still have in our external toolchains
+toolchain/toolchain-external/toolchain-external-codesourcery-arm/,
+which is a toolchain from 2014, and it uses glibc 2.18. So I suspect
+this change would break with this glibc toolchain. However, this older
+glibc toolchain will clearly not support 64-bit time_t.
+
+So either we decide that we stop supporting anything older than glibc
+2.23, or we have to add some condition on the version of glibc being
+used.
+
+Let's see the opinion of the other maintainers.
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
