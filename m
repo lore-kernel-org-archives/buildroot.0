@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44BA3C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 20:44:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 461E8C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 20:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D750840643;
-	Mon, 25 Dec 2023 20:44:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D750840643
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEAC340018;
+	Mon, 25 Dec 2023 20:45:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEAC340018
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zTmq_WEP3zFp; Mon, 25 Dec 2023 20:44:05 +0000 (UTC)
+	with ESMTP id 0Br5Pb3N7K62; Mon, 25 Dec 2023 20:45:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2343408B4;
-	Mon, 25 Dec 2023 20:44:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2343408B4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B08291BF94D
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:43:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC40F40534;
+	Mon, 25 Dec 2023 20:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC40F40534
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 664551BF94D
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:45:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BCAC40636
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BCAC40636
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F81080F92
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:45:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F81080F92
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gO0dvyVva2WY for <buildroot@lists.busybox.net>;
- Mon, 25 Dec 2023 20:43:46 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A214C40119
- for <buildroot@buildroot.org>; Mon, 25 Dec 2023 20:43:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A214C40119
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A227320002;
- Mon, 25 Dec 2023 20:43:42 +0000 (UTC)
-Date: Mon, 25 Dec 2023 21:43:41 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20231225214341.2325a0ec@windsurf>
-In-Reply-To: <20231214165420.181703-1-james.hilliard1@gmail.com>
-References: <20231214165420.181703-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703537022;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Chhxi9ck2nYOC55LYUdxpKxDBlpkLZ/W4ySEzWS6Hxg=;
- b=OMPiK9rXpbvUVjsbdOQ9v+YY6GJwA4jPM6H0gJ8in3u72BTco72ICFFDKjCIlBqY2vyqxG
- tKhoEEjblBq9Fm1FOYYKujW+whONoM3IZRQ91u4n8KPqNhbOII3ju8MHRzeBJcqjKGDlmZ
- PiB+93fU9u7yjRFtSceQhiga7ttb1e7ebozSgB3SJzocndRBC+2+cSBJ8W0AXlgdpvQDgs
- 7phLpQauDnW6hiedybFfSEeuxjkQHOwauMza3m2XPRiaHmEDMzMGVJa2O/euslTuM/5VMi
- aHYwUBfS1SO3XlpBRTPVh8oe6PDJJP63zgQ+CgAJbaaI55D0O96j5sXX8A+1BA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OMPiK9rX
-Subject: Re: [Buildroot] [PATCH v3 1/8] package/python-typing-extensions:
- bump to version 4.9.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XghaMGLCaC3i for <buildroot@lists.busybox.net>;
+ Mon, 25 Dec 2023 20:45:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7CEBA80ECF
+ for <buildroot@buildroot.org>; Mon, 25 Dec 2023 20:45:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CEBA80ECF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 697F18349A; Mon, 25 Dec 2023 20:45:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 25 Dec 2023 21:44:05 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: be24c10472666d9dbfa12668c9326bc0bc9598b9
+X-Git-Newrev: 248effdd9bd8f4823dfd6287c12112d98b37e886
+X-Patchwork-Hint: ignore
+Message-Id: <20231225204516.697F18349A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libatomic_ops: bump to version
+ 7.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,38 +58,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 14 Dec 2023 09:54:13 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=248effdd9bd8f4823dfd6287c12112d98b37e886
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  .../python-typing-extensions/python-typing-extensions.hash  | 6 +++---
->  .../python-typing-extensions/python-typing-extensions.mk    | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libatomic_ops/libatomic_ops.hash | 2 +-
+ package/libatomic_ops/libatomic_ops.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the contribution, entire series applied!
-
-Ideally, one thing that I would really like to see are test cases in
-support/testing/ for all those Python packages. It's usually not much
-effort to write one, by just taking a simple example from the python
-module documentation, and throwing it into a very dump and simple test
-case. But this allows to ensure that all runtime dependencies have been
-accounted for, at least for a minimal usage of the package.
-
-Thanks a lot again!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
+index c6de93fb4a..1710fd3a47 100644
+--- a/package/libatomic_ops/libatomic_ops.hash
++++ b/package/libatomic_ops/libatomic_ops.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  68c5970b11297056c8e5c63a73f26621a8eb8c667a5fe9a2b3e3ff6c0fbb3177  libatomic_ops-7.8.0.tar.gz
++sha256  ad8428a40e01d41bc4ddad3166afa1fc175c9e58d8ef7ddbd7ef3298e32ac37b  libatomic_ops-7.8.2.tar.gz
+ sha256  969294c9324b2d360ae2a08edd5ca6f9cd754cb71b71e56bee15d2f10bb10496  LICENSE
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index 0c72b1725e..bf6994b3a0 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBATOMIC_OPS_VERSION = 7.8.0
++LIBATOMIC_OPS_VERSION = 7.8.2
+ LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,v$(LIBATOMIC_OPS_VERSION))
+ LIBATOMIC_OPS_AUTORECONF = YES
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
