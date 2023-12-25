@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61563C3DA6E
-	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 20:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1506C3DA6E
+	for <buildroot@archiver.kernel.org>; Mon, 25 Dec 2023 20:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12F8340165;
-	Mon, 25 Dec 2023 20:46:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12F8340165
+	by smtp2.osuosl.org (Postfix) with ESMTP id 658F040642;
+	Mon, 25 Dec 2023 20:46:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 658F040642
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SCVO3dGo0mGi; Mon, 25 Dec 2023 20:46:01 +0000 (UTC)
+	with ESMTP id Y7nHSNozf-IX; Mon, 25 Dec 2023 20:46:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBD7940534;
-	Mon, 25 Dec 2023 20:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBD7940534
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FE3340636;
+	Mon, 25 Dec 2023 20:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FE3340636
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A230C1BF94D
- for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:45:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B41181BF94D
+ for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C01C80ECF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 798DB80EC9
  for <buildroot@lists.busybox.net>; Mon, 25 Dec 2023 20:45:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C01C80ECF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 798DB80EC9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9ke0cNlHd7q6 for <buildroot@lists.busybox.net>;
+ with ESMTP id PeLMaAqIxe_b for <buildroot@lists.busybox.net>;
  Mon, 25 Dec 2023 20:45:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F2B880EC9
+ by smtp1.osuosl.org (Postfix) with ESMTP id A277280F57
  for <buildroot@buildroot.org>; Mon, 25 Dec 2023 20:45:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F2B880EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A277280F57
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57163831CA; Mon, 25 Dec 2023 20:45:16 +0000 (UTC)
+ id 90904831CA; Mon, 25 Dec 2023 20:45:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 25 Dec 2023 21:44:03 +0100
+Date: Mon, 25 Dec 2023 21:44:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae9137661bc11aeb037f0c941d122b1511495729
-X-Git-Newrev: be24c10472666d9dbfa12668c9326bc0bc9598b9
+X-Git-Oldrev: a449898d8216fd0ed2e47996935329612f2b790c
+X-Git-Newrev: 1edafc4b483e82b045d3a0cc9cbbd000d6183ac7
 X-Patchwork-Hint: ignore
-Message-Id: <20231225204516.57163831CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus: bump to version 1.14.10
+Message-Id: <20231225204516.90904831CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lsof: bump to version 4.99.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be24c10472666d9dbfa12668c9326bc0bc9598b9
+commit: https://git.buildroot.net/buildroot/commit/?id=1edafc4b483e82b045d3a0cc9cbbd000d6183ac7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lsof/lsof.hash | 2 +-
+ package/lsof/lsof.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 638bb4bc6f..a06ba50ccd 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.14.8.tar.xz.asc
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.14.10.tar.xz.asc
- # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
--sha256  a6bd5bac5cf19f0c3c594bdae2565a095696980a683a0ef37cb6212e093bde35  dbus-1.14.8.tar.xz
-+sha256  ba1f21d2bd9d339da2d4aa8780c09df32fea87998b73da24f49ab9df1e36a50f  dbus-1.14.10.tar.xz
- 
+diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
+index d9e85ac15c..90d8aede92 100644
+--- a/package/lsof/lsof.hash
++++ b/package/lsof/lsof.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  e61807cd1c32ff4e7bd5b4b61dd21997c6dc5642cf19316124fe38d50e1f9fa3  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 930b1a298b..c41fbcb4dd 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -6,7 +6,7 @@
+-sha256  80308a614508814ac70eb2ae1ed2c4344dcf6076fa60afc7734d6b1a79e62b16  lsof-4.98.0.tar.gz
++sha256  b9c56468b927d9691ab168c0b1e9f8f1f835694a35ff898c549d383bd8d09bd4  lsof-4.99.3.tar.gz
+ sha256  225222ff9bf38abc2cef7205e9b05c60935efa9ec28d1fd01e503c9316088718  COPYING
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 303622d111..bb6eacb696 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # When updating dbus, check if there are changes in session.conf and
- # system.conf, and update the versions in the dbus-broker package accordingly.
--DBUS_VERSION = 1.14.8
-+DBUS_VERSION = 1.14.10
- DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.xz
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+-LSOF_VERSION = 4.98.0
++LSOF_VERSION = 4.99.3
+ LSOF_SITE = $(call github,lsof-org,lsof,$(LSOF_VERSION))
+ LSOF_LICENSE = lsof license
+ LSOF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
