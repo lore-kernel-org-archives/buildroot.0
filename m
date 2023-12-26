@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 077B3C46CD4
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 15:37:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A4D0C46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 16:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A136C40289;
-	Tue, 26 Dec 2023 15:37:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A136C40289
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8785440182;
+	Tue, 26 Dec 2023 16:11:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8785440182
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 43RaQISatvWx; Tue, 26 Dec 2023 15:37:38 +0000 (UTC)
+	with ESMTP id jVVwCLuAosVb; Tue, 26 Dec 2023 16:11:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B77E408D1;
-	Tue, 26 Dec 2023 15:37:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B77E408D1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6EEA41BF2C5
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 15:37:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DBC38402E6;
+	Tue, 26 Dec 2023 16:11:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBC38402E6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CF2A1BF3E1
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5447F60D52
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 15:37:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5447F60D52
+ by smtp2.osuosl.org (Postfix) with ESMTP id D8459402E6
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:11:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8459402E6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GBk7wD_Rcd34 for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 15:37:33 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7020D60C15
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 15:37:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7020D60C15
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-40d4f5d902dso30721905e9.2
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 07:37:33 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KO9GGvR7VpPm for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 16:11:37 +0000 (UTC)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C303840182
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 16:11:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C303840182
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-40d5b7b8adfso2365885e9.0
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 08:11:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703605050; x=1704209850;
+ d=1e100.net; s=20230601; t=1703607094; x=1704211894;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=q+XAN+0RImBWwPhPsBesWpx4tXwNbxiqIjQQmdd5wzo=;
- b=uQ55wQ3t/VehMS3Agd0FkQmPWMXUO8LqCu6SJvUO6KUS3MLWu3Skxl8m+ZeVmBmSgF
- 4mw12wTc+pgmPy8dYuDlEeM/w1zQAETXJL9te4/25a6Rjwelp9/DQaXLmMUe24upM0hJ
- IWUB/cgBY/XoGFAnRG2qbIqXMGtIonwKmumwJtGw/Edk3k/JpIiUC6X/YaECTTy2N22X
- +vPr64PEWR1pAfcU9QIsTLfdFyQzOGn5r2j7kSNnccHOvaMG4Hv8vP1lxpc2XehqF0k7
- /aGghJSoY93DRTcUxhlE1kvJKgOHbIp6ZCF6q94r4G6/cORs/lthEJrWf/pfmvL/wRRk
- Y8zg==
-X-Gm-Message-State: AOJu0YxO8o1d1ypM36KFnxdf/ZYiaa+CMnL3x7HyG6MBHNTxiQW89LkA
- o3rT/z465g7FfsC175lfmq9FiqOtY1g=
-X-Google-Smtp-Source: AGHT+IE910dF9gq5T8b/3fei7KNKxN74LhHKUKJMSf1vxPl7BhBFy7nafoNQdsXTDCHEOw4gbkO2gw==
-X-Received: by 2002:a05:600c:695:b0:40d:2376:d4e6 with SMTP id
- a21-20020a05600c069500b0040d2376d4e6mr3970078wmn.101.1703605050364; 
- Tue, 26 Dec 2023 07:37:30 -0800 (PST)
+ bh=nQA4BpOzY3mYdMM2hUB89L2KMbPT+NKd/GjFaqU0u6w=;
+ b=dMAITM2OdLOMGVGsH2LonvMoRtAe7975tOCyVmal7L9e8E5Wms6pkiFQ/XG7oaKhW7
+ 19JdDIgEi1Fom67DnPgwpvAQY6IgGFFYh5gPNN7/SbJJ2uxI0cI6XNUSbpBGLPzXYbVD
+ t2Lx5IABquwLjYc8Fu6f4dvezLtbGrOopX8qx4WnnFPv+JX2M3XqIAfXUX1orxhVrezb
+ 4o8JROdrfozvsAyL0rTN3WLWvTqC+P69VCXVj48U7kFjdKkNXgEY9ak/LJBd7B4ubXKn
+ RbVoQue0YYluIgHl9H7PsPV2eJPSYRAKEZGo7xelx354zZczTGBDs9w//B4OPYn9OpO8
+ HZtQ==
+X-Gm-Message-State: AOJu0Yy2KhFdZ6YwjvBwVMFdK0bCFiOCP8SrS7GvviHCpxR5ZLUXNiqw
+ jnsPTV8nA/H+4MuDDQAmfk3IV+0beiA=
+X-Google-Smtp-Source: AGHT+IEVWNIGjZfw1/TyM+ME27PWG4kLAuSVgye2VSGQHDXVXhrJKOmqadOvq3zx+4Tr7qdh4Bdp4g==
+X-Received: by 2002:a05:600c:8512:b0:40d:4f66:ef27 with SMTP id
+ gw18-20020a05600c851200b0040d4f66ef27mr2586474wmb.146.1703607093565; 
+ Tue, 26 Dec 2023 08:11:33 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- je17-20020a05600c1f9100b0040d1450ca7esm28862392wmb.7.2023.12.26.07.37.29
+ l15-20020a05600c4f0f00b0040d578a184bsm5643726wmq.22.2023.12.26.08.11.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Dec 2023 07:37:30 -0800 (PST)
+ Tue, 26 Dec 2023 08:11:33 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 16:37:28 +0100
-Message-ID: <20231226153728.538814-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Dec 2023 17:11:29 +0100
+Message-ID: <20231226161129.686616-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703605050; x=1704209850; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703607094; x=1704211894; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=q+XAN+0RImBWwPhPsBesWpx4tXwNbxiqIjQQmdd5wzo=;
- b=eGd9pgWrM4RXKxufOxYeCewuROh5BdiKBNG4/x8JaxeRh5JoBmJbdoZXtK4GSK429B
- 66CeMMPgf8C5P0PoTyf1u7Ub9rcUB9Z9gxIHH90ScoU4g+DTVQpFKtoTmYZAwvacefdN
- IOQRe9m+batEApnDFEp7oApM5ZUvbJVhbxwXAv+J+YU/+S3xq6IZa5eI0fVk2t5xTCBA
- iD79ALWnluudJvSU90MgcgId3c8p/PVXb+iwAsLurLxMKL7/o5tnEfHEZV7nEy2YWbB7
- RO5oFH8VjBJz5udSMqAAvrGhvlM8N37/05gZgs5JW1PIBMwNyvH/zvIa38jP5r7W9N08
- 7EbQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=nQA4BpOzY3mYdMM2hUB89L2KMbPT+NKd/GjFaqU0u6w=;
+ b=SHby4wuxaszKT3Qvs0efSKuFfSN3va5gZ4h3W81DlM3MPvtK6VIceLa/AGIbffmLcR
+ eMIuFGvJ/sBpVtmjHHf+B9lKeo0f6LUL0HzgNiHsGbRZvbX/0q3Rdq1aLJA+XgW+ZZfs
+ TFNYFkAJrNksJCc3qmRGAc1SFZCoTXIxmqO1cAt5IorgrutwUAfPm0jp0pFCoPgl7JJp
+ Ho2u5A04GlLtwITooyUpBbkme2r7nHDfhEAWKgTeWEHGNyR0uO07/g07WtpM6nWf2RgY
+ 82GyyR7KZAFq2ODtw9L8bR9ZY/1DwMX3k4eBfNi4WM/4WldydWqCILEbBv706X1dfK50
+ PAJg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eGd9pgWr
-Subject: [Buildroot] [PATCH 1/1] package/libraw: bump to version 0.21.2
+ header.a=rsa-sha256 header.s=20230601 header.b=SHby4wux
+Subject: [Buildroot] [PATCH 1/1] package/opensc: security bump to version
+ 0.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,82 +100,363 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (already in version)
+- Drop patches (already in version) and so drop autoreconf
+- Fix the following security issues:
+  - CVE-2023-40660: Fix Potential PIN bypass
+  - CVE-2023-40661: Important dynamic analyzers reports
+  - CVE-2023-4535: Out-of-bounds read in MyEID driver handling
+    encryption using symmetric keys
 
-https://github.com/LibRaw/LibRaw/blob/0.21.2/Changelog.txt
+https://github.com/OpenSC/OpenSC/releases/tag/0.24.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...shrink-flag-for-3-4-component-images.patch | 24 -------------------
- package/libraw/libraw.hash                    |  2 +-
- package/libraw/libraw.mk                      |  5 +---
- 3 files changed, 2 insertions(+), 29 deletions(-)
- delete mode 100644 package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+ ...ed-compatibility-with-LibreSSL-3.5.0.patch | 54 ---------------
+ ...ed-compatibility-with-LibreSSL-3.7.0.patch | 28 --------
+ ...onfigure-add-option-to-disable-tests.patch | 67 -------------------
+ ...alculation-to-fix-buffer-overrun-bug.patch | 51 --------------
+ ...L-does-provide-EVP_sha3_-after-3-7-3.patch | 32 ---------
+ ...ixed-detection-of-SHA3-compatibility.patch | 27 --------
+ package/opensc/opensc.hash                    |  2 +-
+ package/opensc/opensc.mk                      |  7 +-
+ 8 files changed, 2 insertions(+), 266 deletions(-)
+ delete mode 100644 package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
+ delete mode 100644 package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch
+ delete mode 100644 package/opensc/0003-configure-add-option-to-disable-tests.patch
+ delete mode 100644 package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
+ delete mode 100644 package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
+ delete mode 100644 package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
 
-diff --git a/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch b/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+diff --git a/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch b/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
 deleted file mode 100644
-index ef93e0901b..0000000000
---- a/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+index 0daf75d5ba..0000000000
+--- a/package/opensc/0001-fixed-compatibility-with-LibreSSL-3.5.0.patch
 +++ /dev/null
-@@ -1,24 +0,0 @@
--From 477e0719ffc07190c89b4f3d12d51b1292e75828 Mon Sep 17 00:00:00 2001
--From: Alex Tutubalin <lexa@lexa.ru>
--Date: Sat, 14 Jan 2023 18:32:59 +0300
--Subject: [PATCH] do not set shrink flag for 3/4 component images
+@@ -1,54 +0,0 @@
+-From da01e5fab9be9865db1aac203e574e0edbfd6584 Mon Sep 17 00:00:00 2001
+-From: Frank Morgner <frankmorgner@gmail.com>
+-Date: Wed, 14 Dec 2022 09:31:29 +0100
+-Subject: [PATCH] fixed compatibility with LibreSSL >= 3.5.0
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/LibRaw/LibRaw/commit/477e0719ffc07190c89b4f3d12d51b1292e75828
+-fixes https://github.com/OpenSC/OpenSC/issues/2664
+-
+-Upstream: https://github.com/OpenSC/OpenSC/commit/da01e5fab9be9865db1aac203e574e0edbfd6584
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ----
-- src/preprocessing/raw2image.cpp | 2 ++
+- src/libopensc/card-iasecc.c    | 12 +-----------
+- src/libopensc/sc-ossl-compat.h |  1 +
+- 2 files changed, 2 insertions(+), 11 deletions(-)
+-
+-diff --git a/src/libopensc/card-iasecc.c b/src/libopensc/card-iasecc.c
+-index 480c1cf87b..1347ed2393 100644
+---- a/src/libopensc/card-iasecc.c
+-+++ b/src/libopensc/card-iasecc.c
+-@@ -38,21 +38,11 @@
+- #include <openssl/pkcs12.h>
+- #include <openssl/x509v3.h>
+- 
+--/*
+-- * OpenSSL-3.0.0 does not allow access to the SHA data
+-- * so this driver can not produces signatures
+-- * OpenSSL 1.1.1 uses EVP_MD_CTX_md_data
+-- * LibreSSL
+-- */
+--
+--#if defined(LIBRESSL_VERSION_NUMBER)
+--# define  EVP_MD_CTX_md_data(x)  (x->md_data)
+--#endif
+--
+- #include "internal.h"
+- #include "asn1.h"
+- #include "cardctl.h"
+- #include "opensc.h"
+-+#include "sc-ossl-compat.h"
+- /* #include "sm.h" */
+- #include "pkcs15.h"
+- /* #include "hash-strings.h" */
+-diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
+-index da53ca8cee..8c0f96701c 100644
+---- a/src/libopensc/sc-ossl-compat.h
+-+++ b/src/libopensc/sc-ossl-compat.h
+-@@ -42,6 +42,7 @@ extern "C" {
+- #define X509_get_extension_flags(x)	(x->ex_flags)
+- #define X509_get_key_usage(x)		(x->ex_kusage)
+- #define X509_get_extended_key_usage(x)	(x->ex_xkusage)
+-+#define EVP_MD_CTX_md_data(x)          (x->md_data)
+- #endif
+- 
+- #if defined(LIBRESSL_VERSION_NUMBER)
+diff --git a/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch b/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch
+deleted file mode 100644
+index 6bbbea6ce6..0000000000
+--- a/package/opensc/0002-fixed-compatibility-with-LibreSSL-3.7.0.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 98ad0f93b0a7673cdce82e1b3faa7dc314c64dd6 Mon Sep 17 00:00:00 2001
+-From: Frank Morgner <frankmorgner@gmail.com>
+-Date: Fri, 16 Dec 2022 11:56:28 +0100
+-Subject: [PATCH] fixed compatibility with LibreSSL 3.7.0
+-
+-Upstream: https://github.com/OpenSC/OpenSC/commit/98ad0f93b0a7673cdce82e1b3faa7dc314c64dd6
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/libopensc/sc-ossl-compat.h | 2 ++
 - 1 file changed, 2 insertions(+)
 -
--diff --git a/src/preprocessing/raw2image.cpp b/src/preprocessing/raw2image.cpp
--index e65e2ad7..702cf290 100644
----- a/src/preprocessing/raw2image.cpp
--+++ b/src/preprocessing/raw2image.cpp
--@@ -43,6 +43,8 @@ void LibRaw::raw2image_start()
+-diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
+-index 8c0f96701c..4425da93f3 100644
+---- a/src/libopensc/sc-ossl-compat.h
+-+++ b/src/libopensc/sc-ossl-compat.h
+-@@ -54,9 +54,11 @@ extern "C" {
+- #define EVP_sha3_256()                          (NULL)
+- #define EVP_sha3_384()                          (NULL)
+- #define EVP_sha3_512()                          (NULL)
+-+#if LIBRESSL_VERSION_NUMBER < 0x3070000fL
+- #define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
+- #define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
+- #endif
+-+#endif
 - 
--   // adjust for half mode!
--   IO.shrink =
--+	  !imgdata.rawdata.color4_image && !imgdata.rawdata.color3_image &&
--+	  !imgdata.rawdata.float4_image && !imgdata.rawdata.float3_image &&
--       P1.filters &&
--       (O.half_size || ((O.threshold || O.aber[0] != 1 || O.aber[2] != 1)));
+- /* OpenSSL 1.1.1 has FIPS_mode function */
+- #if OPENSSL_VERSION_NUMBER >= 0x30000000L
+diff --git a/package/opensc/0003-configure-add-option-to-disable-tests.patch b/package/opensc/0003-configure-add-option-to-disable-tests.patch
+deleted file mode 100644
+index 29342026c1..0000000000
+--- a/package/opensc/0003-configure-add-option-to-disable-tests.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From 3c3ed2ecbf31d41b6e5406da55971b9d9eaa3388 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Mon, 24 Jul 2023 22:28:11 +0200
+-Subject: [PATCH] configure: add option to disable tests
+-
+-Upstream: https://github.com/OpenSC/OpenSC/pull/2822
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- configure.ac    | 9 +++++++++
+- src/Makefile.am | 6 +++++-
+- 2 files changed, 14 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 0a90445b..9b7543da 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -272,6 +272,13 @@ AC_ARG_ENABLE(
+- 	[enable_doc="no"]
+- )
 - 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index 58bb1b4753..838c598d78 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
+-+AC_ARG_ENABLE(
+-+	[tests],
+-+	[AS_HELP_STRING([--enable-tests],[enable tests @<:@enabled@:>@])],
+-+	,
+-+	[enable_tests="yes"]
+-+)
+-+
+- AC_ARG_ENABLE(
+- 	[dnie-ui],
+- 	[AS_HELP_STRING([--enable-dnie-ui],[enable use of external user interface program to request DNIe pin@<:@disabled@:>@])],
+-@@ -1119,6 +1126,7 @@ AM_CONDITIONAL([ENABLE_NOTIFY], [test "${enable_notify}" = "yes"])
+- AM_CONDITIONAL([ENABLE_CRYPTOTOKENKIT], [test "${enable_cryptotokenkit}" = "yes"])
+- AM_CONDITIONAL([ENABLE_OPENCT], [test "${enable_openct}" = "yes"])
+- AM_CONDITIONAL([ENABLE_DOC], [test "${enable_doc}" = "yes"])
+-+AM_CONDITIONAL([ENABLE_TESTS], [test "${enable_tests}" = "yes"])
+- AM_CONDITIONAL([WIN32], [test "${WIN32}" = "yes"])
+- AM_CONDITIONAL([CYGWIN], [test "${CYGWIN}" = "yes"])
+- AM_CONDITIONAL([ENABLE_MINIDRIVER], [test "${enable_minidriver}" = "yes"])
+-@@ -1213,6 +1221,7 @@ XSL stylesheets:         ${xslstylesheetsdir}
+- 
+- man support:             ${enable_man}
+- doc support:             ${enable_doc}
+-+tests:                   ${enable_tests}
+- thread locking support:  ${enable_thread_locking}
+- zlib support:            ${enable_zlib}
+- readline support:        ${enable_readline}
+-diff --git a/src/Makefile.am b/src/Makefile.am
+-index 3ce465bf..bf71b61f 100644
+---- a/src/Makefile.am
+-+++ b/src/Makefile.am
+-@@ -3,7 +3,11 @@ EXTRA_DIST = Makefile.mak
+- 
+- # Order IS important
+- SUBDIRS = common scconf ui pkcs15init sm \
+--		  libopensc pkcs11 tools minidriver tests
+-+		  libopensc pkcs11 tools minidriver
+-+
+-+if ENABLE_TESTS
+-+SUBDIRS += tests
+-+endif
+- 
+- if ENABLE_SM
+- SUBDIRS += smm
+--- 
+-2.39.2
+-
+diff --git a/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch b/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
+deleted file mode 100644
+index 079f960b59..0000000000
+--- a/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 81944d1529202bd28359bede57c0a15deb65ba8a Mon Sep 17 00:00:00 2001
+-From: fullwaywang <fullwaywang@tencent.com>
+-Date: Mon, 29 May 2023 10:38:48 +0800
+-Subject: [PATCH] pkcs15init: correct left length calculation to fix buffer
+- overrun bug. Fixes #2785
+-
+-Upstream: https://github.com/OpenSC/OpenSC/commit/81944d1529202bd28359bede57c0a15deb65ba8a
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/pkcs15init/pkcs15-cardos.c | 10 +++++-----
+- 1 file changed, 5 insertions(+), 5 deletions(-)
+-
+-diff --git a/src/pkcs15init/pkcs15-cardos.c b/src/pkcs15init/pkcs15-cardos.c
+-index 9715cf390f..f41f73c349 100644
+---- a/src/pkcs15init/pkcs15-cardos.c
+-+++ b/src/pkcs15init/pkcs15-cardos.c
+-@@ -872,7 +872,7 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
+- 	sc_apdu_t apdu;
+-         u8        rbuf[SC_MAX_APDU_BUFFER_SIZE];
+-         int       r;
+--	const u8  *p = rbuf, *q;
+-+	const u8  *p = rbuf, *q, *pp;
+- 	size_t    len, tlen = 0, ilen = 0;
+- 
+- 	sc_format_apdu(card, &apdu, SC_APDU_CASE_2_SHORT, 0xca, 0x01, 0x88);
+-@@ -888,13 +888,13 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
+- 		return 0;
+- 
+- 	while (len != 0) {
+--		p = sc_asn1_find_tag(card->ctx, p, len, 0xe1, &tlen);
+--		if (p == NULL)
+-+		pp = sc_asn1_find_tag(card->ctx, p, len, 0xe1, &tlen);
+-+		if (pp == NULL)
+- 			return 0;
+- 		if (card->type == SC_CARD_TYPE_CARDOS_M4_3)	{
+- 			/* the verifyRC package on CardOS 4.3B use Manufacturer ID 0x01	*/
+- 			/* and Package Number 0x07					*/
+--			q = sc_asn1_find_tag(card->ctx, p, tlen, 0x01, &ilen);
+-+			q = sc_asn1_find_tag(card->ctx, pp, tlen, 0x01, &ilen);
+- 			if (q == NULL || ilen != 4)
+- 				return 0;
+- 			if (q[0] == 0x07)
+-@@ -902,7 +902,7 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
+- 		} else if (card->type == SC_CARD_TYPE_CARDOS_M4_4)	{
+- 			/* the verifyRC package on CardOS 4.4 use Manufacturer ID 0x03	*/
+- 			/* and Package Number 0x02					*/
+--			q = sc_asn1_find_tag(card->ctx, p, tlen, 0x03, &ilen);
+-+			q = sc_asn1_find_tag(card->ctx, pp, tlen, 0x03, &ilen);
+- 			if (q == NULL || ilen != 4)
+- 				return 0;
+- 			if (q[0] == 0x02)
+diff --git a/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch b/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
+deleted file mode 100644
+index 80c19a3f5f..0000000000
+--- a/package/opensc/0005-LibreSSL-does-provide-EVP_sha3_-after-3-7-3.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From e015242590ad9131e124232cc5a2fd02d525ef2c Mon Sep 17 00:00:00 2001
+-From: Klemens Nanni <kn@openbsd.org>
+-Date: Thu, 29 Jun 2023 02:41:43 +0300
+-Subject: [PATCH] LibreSSL does provide EVP_sha3_*() after 3.7.3
+-
+-Support was added in 16.04.2023.
+-
+-Compile- and run-tested on OpenBSD/amd64 7.3-current.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/OpenSC/OpenSC/commit/e015242590ad9131e124232cc5a2fd02d525ef2c
+----
+- src/libopensc/sc-ossl-compat.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
+-index df0cebbce2..8012cd4c0f 100644
+---- a/src/libopensc/sc-ossl-compat.h
+-+++ b/src/libopensc/sc-ossl-compat.h
+-@@ -50,10 +50,12 @@ extern "C" {
+- #if LIBRESSL_VERSION_NUMBER < 0x30500000L
+- #define FIPS_mode()                             (0)
+- #endif
+-+#ifndef EVP_sha3_224
+- #define EVP_sha3_224()                          (NULL)
+- #define EVP_sha3_256()                          (NULL)
+- #define EVP_sha3_384()                          (NULL)
+- #define EVP_sha3_512()                          (NULL)
+-+#endif
+- #if LIBRESSL_VERSION_NUMBER < 0x3070000fL
+- #define EVP_PKEY_new_raw_public_key(t, e, p, l) (NULL)
+- #define EVP_PKEY_get_raw_public_key(p, pu, l)   (0)
+diff --git a/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch b/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
+deleted file mode 100644
+index 3d8aa7e4ef..0000000000
+--- a/package/opensc/0006-fixed-detection-of-SHA3-compatibility.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 33351d91aa22fa8077847ba3f19abb5a00b04600 Mon Sep 17 00:00:00 2001
+-From: Frank Morgner <frankmorgner@gmail.com>
+-Date: Tue, 15 Aug 2023 17:58:21 +0200
+-Subject: [PATCH] fixed detection of SHA3 compatibility
+-
+-fixes https://github.com/OpenSC/OpenSC/issues/2836
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/OpenSC/OpenSC/commit/33351d91aa22fa8077847ba3f19abb5a00b04600
+----
+- src/libopensc/sc-ossl-compat.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/libopensc/sc-ossl-compat.h b/src/libopensc/sc-ossl-compat.h
+-index 8012cd4c0f..96ec4bd736 100644
+---- a/src/libopensc/sc-ossl-compat.h
+-+++ b/src/libopensc/sc-ossl-compat.h
+-@@ -50,7 +50,8 @@ extern "C" {
+- #if LIBRESSL_VERSION_NUMBER < 0x30500000L
+- #define FIPS_mode()                             (0)
+- #endif
+--#ifndef EVP_sha3_224
+-+/* OpenSSL 1.1.1 has EVP_sha3_* */
+-+#if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30800000L
+- #define EVP_sha3_224()                          (NULL)
+- #define EVP_sha3_256()                          (NULL)
+- #define EVP_sha3_384()                          (NULL)
+diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
+index e8e675667e..232222062c 100644
+--- a/package/opensc/opensc.hash
++++ b/package/opensc/opensc.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  630a6bcf5e65d1b1b40cdb8608bdb922316759bfb981c65091fec8682d1543cd  LibRaw-0.21.1.tar.gz
-+sha256  fe7288013206854baf6e4417d0fb63ba4ed7227bf36fff021992671c2dd34b03  LibRaw-0.21.2.tar.gz
- sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
- sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
- sha256  7d6650cef6cf892abe95e55a6bda1e1c42f221fd411b807deb2fc0b805b868d4  README.md
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index 63b50e340d..211b67f935 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -4,7 +4,7 @@
+ # Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
+-sha256  a4844a6ea03a522ecf35e49659716dacb6be03f7c010a1a583aaf3eb915ed2e0  opensc-0.23.0.tar.gz
++sha256  24d03c69287291da32a30c4c38a304ad827f56cb85d83619e1f5403ab6480ef8  opensc-0.24.0.tar.gz
+ 
+ # Computed locally
+ sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+index 823bc50102..49bdcae37a 100644
+--- a/package/opensc/opensc.mk
++++ b/package/opensc/opensc.mk
+@@ -4,18 +4,13 @@
  #
  ################################################################################
  
--LIBRAW_VERSION = 0.21.1
-+LIBRAW_VERSION = 0.21.2
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
-@@ -18,9 +18,6 @@ LIBRAW_DEPENDENCIES = host-pkgconf
- LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
- LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
+-OPENSC_VERSION = 0.23.0
++OPENSC_VERSION = 0.24.0
+ OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
+ OPENSC_LICENSE = LGPL-2.1+
+ OPENSC_LICENSE_FILES = COPYING
+ OPENSC_CPE_ID_VENDOR = opensc_project
+-# 0003-configure-add-option-to-disable-tests.patch
+-OPENSC_AUTORECONF = YES
+ OPENSC_DEPENDENCIES = openssl pcsc-lite
+ OPENSC_INSTALL_STAGING = YES
+ OPENSC_CONF_OPTS = --disable-cmocka --disable-strict --disable-tests
  
--# 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
--LIBRAW_IGNORE_CVES += CVE-2023-1729
+-# 0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
+-OPENSC_IGNORE_CVES += CVE-2023-2977
 -
- ifeq ($(BR2_PACKAGE_JASPER),y)
- LIBRAW_CONF_OPTS += --enable-jasper
- LIBRAW_DEPENDENCIES += jasper
+ $(eval $(autotools-package))
 -- 
 2.43.0
 
