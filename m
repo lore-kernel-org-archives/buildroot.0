@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2812EC46CD4
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 16:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 489EEC46CD4
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 16:42:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5C5A60E44;
-	Tue, 26 Dec 2023 16:36:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5C5A60E44
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4D8160E62;
+	Tue, 26 Dec 2023 16:42:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4D8160E62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cuEb4f2_eGqJ; Tue, 26 Dec 2023 16:36:22 +0000 (UTC)
+	with ESMTP id 61XFdRiP-spu; Tue, 26 Dec 2023 16:42:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B16760D5F;
-	Tue, 26 Dec 2023 16:36:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B16760D5F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1749C1BF3B0
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:36:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2058860DFE;
+	Tue, 26 Dec 2023 16:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2058860DFE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 502791BF3E1
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E456660D5F
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E456660D5F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 353D640912
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 353D640912
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4Zv9sGMohr4l for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 16:36:18 +0000 (UTC)
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EC1C660C15
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 16:36:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC1C660C15
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-40d4103aed7so55097735e9.3
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 08:36:17 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id z4lEpfUvv0Ul for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 16:42:53 +0000 (UTC)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BCE8540182
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 16:42:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCE8540182
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-40d5903677fso10217435e9.0
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 08:42:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703608575; x=1704213375;
+ d=1e100.net; s=20230601; t=1703608970; x=1704213770;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=//m7puaCSgMCNV7+22pZy6wSvXxHsjz3c+rtfxfIeFQ=;
- b=Aw9V0/3PwEhrTy1mVI71vK0S07GBbk+8aNP4v/L7ZYe6wdeQ6X2d8jS/ocv8eP3tMd
- CeRM3kiw9Me3jQi9fAeJoRQR66sdxXo2G5+hKL7X0J826OfQRnfF0B2q3+uXEEiTUIMm
- w/xE+VgtZQmJFJ8YrCQUlVr48tG1BefZY+/71PAdBQ4jz8/znEomUDYUWaucqYlBV97g
- 9ekcvt7Hf+9sx2UBpBY6oIGKfYAupKrMwir+O+JUAkE2q4j5ksu7BCQIDslnD55+bmAC
- ZV2IloDUvsgLE3ShEk5dDe70yGxlBKlZ9OrU/NiguOblIPZHzp+CqIvw/qQxKzq5GP2E
- B+dA==
-X-Gm-Message-State: AOJu0YykJEulIdX1VPG7cpy18vBx4o25aA/hZCgSQZLHqA7QKQxm6mBn
- vZoL7tNfpE02i/t9lWLsGq0a767Iq5s=
-X-Google-Smtp-Source: AGHT+IHiPRHMVW12M4zA4wdNItWeSN3aljZlHeSLrBRPuG15+0hGn24d/7FBQL65oh+qMHDvP9cf1A==
-X-Received: by 2002:a05:600c:4ec7:b0:40d:593c:b2c2 with SMTP id
- g7-20020a05600c4ec700b0040d593cb2c2mr1000050wmq.159.1703608574931; 
- Tue, 26 Dec 2023 08:36:14 -0800 (PST)
+ bh=boUnPs7olarcC6NVtBUl4CciVi9rGCl5MXGZruMl0Og=;
+ b=ZNB93XH4ibIxyFRCWe2XoPfGFKcLM7ICSr+ldfq1FiwwPm+8kZuNPc3hvGK4SMZAj0
+ 07mASdWUqKO/zNm8RBeejjasDutOqdSpx56rSLY5ol7Jrw9wU4hoIlZ5p4Kcc24BWujj
+ X2kvlkWyeGpS7NkP63RrWt6KdsYNhq4AK3L5UJNWYG2o/sQe236CKXCGKq9qbBZ6cPFn
+ twPvTUhTbuzrrIYIN8K3o2bUjslTiTuYCKQTDuxiY6CSkqN/pdIBWeolc5UmgVlU/AmM
+ PW7Xxsx0iYUzhLYAKhKQ7Jeu02G9KVVyB7AOdAnz/Rk8RqlSAr+9scu5jN02sKrenSE6
+ a68g==
+X-Gm-Message-State: AOJu0YyDdsjWmh42zeHd+yeSoyhs6Jw2+ewLeRR1JHoAfnYybPnRIdFA
+ 36PrEAzVj4G+5hE/J0ygdSEnQKC8Atc=
+X-Google-Smtp-Source: AGHT+IGWpeab51tm9fFT4mpb87Av/v+vvEwPu8hwGDw+58YehwU2rl/vYXlQsH/N8k/VaBNG8W/LhQ==
+X-Received: by 2002:a05:600c:1d19:b0:40d:5bbf:71f2 with SMTP id
+ l25-20020a05600c1d1900b0040d5bbf71f2mr353672wms.5.1703608970330; 
+ Tue, 26 Dec 2023 08:42:50 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- jg7-20020a05600ca00700b0040c46719966sm28720440wmb.25.2023.12.26.08.36.14
+ h12-20020a05600c314c00b0040d55e8e357sm8017592wmo.45.2023.12.26.08.42.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Dec 2023 08:36:14 -0800 (PST)
+ Tue, 26 Dec 2023 08:42:50 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 17:36:11 +0100
-Message-ID: <20231226163611.774727-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Dec 2023 17:42:47 +0100
+Message-ID: <20231226164247.786588-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703608575; x=1704213375; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703608970; x=1704213770; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=//m7puaCSgMCNV7+22pZy6wSvXxHsjz3c+rtfxfIeFQ=;
- b=KQpcA0EmhdaDI7a9TomOkdZfT57BzjmDktbC8cBFmAVGB43qGlDIgwXyZrQZwESUwN
- /FlRBwKmdn7kaAQVYuVeXq2q74iQKRlX1W4vIm+47v5v7AjB+NRTm8oVmPYyvtMONC2c
- z3I7IDZfLL7doG5uxSLuU5tQWljyIXA8WogRcB/aMqa+/oCqiQwpe+0GSTwmTTHHPg4e
- pNzfICStObDytpQhEakaZ9t8wIPEqoQAyFlq6K8GhSMD3yQ3F9TiafGGhcenhViUNUJ1
- qBtoZqaIuu3VL7wG0KS7kcz7oVawZHAI89kN24b7X8QLFEYXiiBBjvfbJFgXxM0uDPDY
- zqVw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=boUnPs7olarcC6NVtBUl4CciVi9rGCl5MXGZruMl0Og=;
+ b=dZsw0uOBws60e0Gp8OwXjmgoWGHmr2qxxnJJHYx83rg5kn8dwB3jKTUMDdSC0VACfi
+ G5Hx0gfE/A2ukyQJfZ9w/P1wbs+FCsMEDyy3boq5jxAUBchJorJTKxHBicSUTPIfR00R
+ Je7M/9WZQ4n8/M4bGp1a2+7KGJA7qLWhyIHj84jF2cRGYjJW/0VvvfKV61kwPC1CcN/+
+ gZZmphXimyczmT/6PyFaBWYTNGgSBLLJmGWJdipNaOZ6tdl+5hk/sdjfQHgl33KHKS3t
+ Dzv3Sqart8+PpJUVH6RzkXnrjsoYz7P/3leSoFi8kEatYV/yaj8JFPDYmxZ2XXyUEHlP
+ hFbQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=KQpcA0Em
-Subject: [Buildroot] [PATCH 1/1] package/liburing: bump to version 2.5
+ header.a=rsa-sha256 header.s=20230601 header.b=dZsw0uOB
+Subject: [Buildroot] [PATCH 1/1] package/lcms2: bump to version 2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +93,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/axboe/liburing/blob/liburing-2.5/CHANGELOG
+License file has been renamed and year updated with:
+https://github.com/mm2/Little-CMS/commit/120410b92498478405ec571dc304d9c192e50a98
+https://github.com/mm2/Little-CMS/commit/6bf0713c1c1155c3299bdee3b896f005170a4226
+
+https://github.com/mm2/Little-CMS/releases/tag/lcms2.16
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/liburing/liburing.hash | 2 +-
- package/liburing/liburing.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lcms2/lcms2.hash | 8 ++++----
+ package/lcms2/lcms2.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/liburing/liburing.hash b/package/liburing/liburing.hash
-index eaee8fcfa1..30458c6b9f 100644
---- a/package/liburing/liburing.hash
-+++ b/package/liburing/liburing.hash
+diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
+index 45728a36f1..362412e3c4 100644
+--- a/package/lcms2/lcms2.hash
++++ b/package/lcms2/lcms2.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  ca260e7a5820c2d0e737ec1e9b999f10776dbe84a169a02a0eff10c8eeaf3394  liburing-2.4.tar.bz2
-+sha256  319ff9096a5655362a9741c5145b45494db810e38679a1de82e2f440c17181a6  liburing-2.5.tar.bz2
- 
- # Hash for license files
- sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
-diff --git a/package/liburing/liburing.mk b/package/liburing/liburing.mk
-index c35fb39390..2c448d6a87 100644
---- a/package/liburing/liburing.mk
-+++ b/package/liburing/liburing.mk
-@@ -4,7 +4,7 @@
+-# From https://sourceforge.net/projects/lcms/files/lcms/2.15
+-sha1  b143ff29b03676119dbca30f13cbed72af15cce8  lcms2-2.15.tar.gz
++# From https://sourceforge.net/projects/lcms/files/lcms/2.16
++sha1  751d32ba11809e3591c118be9aae8ac2dbd41cb7  lcms2-2.16.tar.gz
+ # Locally computed:
+-sha256  b20cbcbd0f503433be2a4e81462106fa61050a35074dc24a4e356792d971ab39  lcms2-2.15.tar.gz
+-sha256  46d4e05af3bce75332a12d01f19bcce7e32b6bac544be28a64043d0231291e31  COPYING
++sha256  d873d34ad8b9b4cea010631f1a6228d2087475e4dc5e763eb81acc23d9d45a51  lcms2-2.16.tar.gz
++sha256  6dbd60437f8ef91d8de1f08ad75882547fd4931bfcc3566a0735f28db1484d31  LICENSE
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 3892dbfbdc..92aeff8890 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LIBURING_VERSION = 2.4
-+LIBURING_VERSION = 2.5
- LIBURING_SOURCE = liburing-$(LIBURING_VERSION).tar.bz2
- LIBURING_SITE = https://git.kernel.dk/cgit/liburing/snapshot
- LIBURING_LICENSE = (GPL-2.0 with exceptions and LGPL-2.1+) or MIT
+-LCMS2_VERSION = 2.15
++LCMS2_VERSION = 2.16
+ LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
+ LCMS2_LICENSE = MIT
+-LCMS2_LICENSE_FILES = COPYING
++LCMS2_LICENSE_FILES = LICENSE
+ LCMS2_CPE_ID_VENDOR = littlecms
+ LCMS2_CPE_ID_PRODUCT = little_cms
+ LCMS2_INSTALL_STAGING = YES
 -- 
 2.43.0
 
