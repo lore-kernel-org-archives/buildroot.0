@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB761C46CD4
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 11:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEF45C46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 11:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8EAE64086F;
-	Tue, 26 Dec 2023 11:21:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EAE64086F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96EB540894;
+	Tue, 26 Dec 2023 11:24:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96EB540894
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VVJLVM-gPGHh; Tue, 26 Dec 2023 11:21:14 +0000 (UTC)
+	with ESMTP id dMCpEPGWDIav; Tue, 26 Dec 2023 11:24:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C957D40858;
-	Tue, 26 Dec 2023 11:21:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C957D40858
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D652F1BF309
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 11:21:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D96C84086D;
+	Tue, 26 Dec 2023 11:24:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D96C84086D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C3E4F1BF309
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 11:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF98060B94
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 11:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF98060B94
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98350408C5
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 11:24:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98350408C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eeTTA4ORsfjV for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 11:21:10 +0000 (UTC)
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5841460B89
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 11:21:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5841460B89
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-40d352c826eso58786575e9.0
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 03:21:10 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LUCgSGkekbgM for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 11:24:23 +0000 (UTC)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3AB11400EF
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 11:24:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AB11400EF
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-40d5aef534eso2596435e9.0
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 03:24:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703589667; x=1704194467;
+ d=1e100.net; s=20230601; t=1703589860; x=1704194660;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=6ih0cQmmUfE9EuCZMmR+vJdJYcfDvPjR6nVsVPHgCtU=;
- b=TJyNJLVT8uKofXlkNfJ10ktDXbNNXAetfLDQSqyRa5t359ucleEVZ5vRz8sezJUTpp
- 1Zg1IozJzQSE18YlVnXwR5pJA22CHP8sz8NFG3V6qaS0mNGb2IhzmtqpvFD20WDq3h2y
- EnGxtjea1DBAxTAz+d+Oul+ZI0KaAjqago1v1uAK5UjuWkdN4UY4+Ayn4RoxuuirO8kZ
- 2/SrEvT3d8d+TRjGwZB9W2m5lPjhVuk3Zq+qnTdF3EDOc9XBKrgd5oUBrsVSKqHil/OT
- V1TV/RaW2Tf+Y/Z3yiDwcSXKbBPtMpftDfTbMiEAj3KeyZO65SvjWYuzOoq7vAyCz6kL
- hjfA==
-X-Gm-Message-State: AOJu0Yyb5YD9PYU3IoJiXhuOo8ZS8KL3SAXTa5H3Y8eVxmG1rRTF6VP+
- haiLDBLN21U70B72ZaLBVZAcjRVCtjI=
-X-Google-Smtp-Source: AGHT+IHJVyEk6b6+3rS0J/3vfAK2fAF46N1iL/wCTA4WCIxg98ux2skRRE8oJHK5WPUpnuphTvJQAg==
-X-Received: by 2002:a05:600c:3b8d:b0:40c:3ea6:9d84 with SMTP id
- n13-20020a05600c3b8d00b0040c3ea69d84mr4094975wms.139.1703589667091; 
- Tue, 26 Dec 2023 03:21:07 -0800 (PST)
+ bh=4aqpHQPOxk0zZMUJiLZLH5YrN+N3shrP8N5t4QVB0cw=;
+ b=X8RJAQPfSAK8AQD7BNaHpz4XMjUD2zAScqntfWOQA6lXXDQQ1xkn/kymYxskMl0kcT
+ YR2SmgWtOH0pHRZfyl4AW8kZT7bnJCQml+kk9MTj28WGZyUJBo+h7WlRuaMj8fOnz7OX
+ s8ltT4wLuhJEaWcMOE2pjklmMnxWiJfOijnydXy7jLqx/W0wGDrx7ek1gNFQMO1XwBTs
+ /yU4jmEL3xM0yOk3+MCmDikSJgFmyEpNPcp1ph2si7yf6tAuPf0Vg/Ohuaobs0kxd2QU
+ 5bqtSPIWvuzv/esq/g/BsGP80kY67EWrIgUIFAyvNiKfE9f5s2n3GoQrxl0p9wqTRHHy
+ KavQ==
+X-Gm-Message-State: AOJu0YwKfr4pPlmu2AXWcVzeWLWwgrdUfEDTJuLskuygua/F9+UUJE67
+ CP3c9utkR72+yLfAiJVB6MRxZQgy0qw=
+X-Google-Smtp-Source: AGHT+IFL/sxMGmFk50R+k5szu9ZgUfk8Y/5F9nOjAVaVxbyiVj6edPR6JhuJckZku1p+IbJGfGACyQ==
+X-Received: by 2002:a05:600c:1394:b0:40d:3b70:5365 with SMTP id
+ u20-20020a05600c139400b0040d3b705365mr3850871wmf.123.1703589860294; 
+ Tue, 26 Dec 2023 03:24:20 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- b3-20020a5d5503000000b00336b8461a5esm6480489wrv.88.2023.12.26.03.21.06
+ j16-20020a05600c191000b0040c11fbe581sm20490035wmq.27.2023.12.26.03.24.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Dec 2023 03:21:06 -0800 (PST)
+ Tue, 26 Dec 2023 03:24:19 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 12:21:05 +0100
-Message-ID: <20231226112105.8872-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Dec 2023 12:24:17 +0100
+Message-ID: <20231226112417.10657-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703589667; x=1704194467; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703589860; x=1704194660; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6ih0cQmmUfE9EuCZMmR+vJdJYcfDvPjR6nVsVPHgCtU=;
- b=aBzF+5Ob7uCqWt52TItmdOZ/sM8GJ0k5okl2h3jZA+JdAgxy1h5k3kP03Ccv5VwXBX
- 8KTMslBRxvLM0FGofaHAtai+ob63OYIFtvhfKfNBj/LBOJyI6cdj1rM+j0UNuHTx7aN7
- 1idc3EeZFT5YDp9XZEzOSnDXSe6wI6vgMZgzUmA2rTTVf/DwqCCZGMSt1PhePWiS1Qeg
- 83yAKU6BTUVxkcaQD7VjZyl1cwPw8gTQs8Fjs3Y85eAq/7ojjfSeCwoS6Z9VQ2H+1BRc
- RsExHJuQ18GlsaouUKFBlj/ZTkVLtYEWQKmxDh7fB2eeRjA8xwdOYnYkmUo7HqTpTtK5
- hJsA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=4aqpHQPOxk0zZMUJiLZLH5YrN+N3shrP8N5t4QVB0cw=;
+ b=Kq/XkmUQiXqH9Ge+Z/eVmgJjDvoZI/IiB3ST972KODLLfIDqwQTAYItEFRsXiT4Uxh
+ CiCxsRUp3Chf4Ohhbo4mp+HxUOW3AAsAn76dB4FvnQ7RIBY804Hkm8cydK9ktECrkvGf
+ 9W1hMgfF0xkIg5m6uOdQJhz2x8PHnnSQScpXwXjPKLJV8U0qAgyjrZ91rGpO09ZEUkmP
+ jW9PSTbNFoxxajWUmOqZguSyz7bXH5lHdLOxK7YEZXobGyb9wglI9gQSIr0nFR9sBzEm
+ NHLgcv6IIVN7PLg91LIj/Ph3ry2M29RSOqZD1jMpa8NjyNDba6dhK7FKy08jJDtnmjVg
+ +KWQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=aBzF+5Ob
-Subject: [Buildroot] [PATCH 1/1] package/python-starlette: add CPE variables
+ header.a=rsa-sha256 header.s=20230601 header.b=Kq/XkmUQ
+Subject: [Buildroot] [PATCH 1/1] package/python-fastapi: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,25 +100,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:encode:starlette is a valid CPE identifier for this package:
+cpe:2.3:a:fastapi_project:fastapi is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/detail/B4613D5C-E46D-443A-8738-58E4FBC0C127
+  https://nvd.nist.gov/products/cpe/detail/E6E33EA5-0404-4037-9B3E-FE718E1593E5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-starlette/python-starlette.mk | 2 ++
+ package/python-fastapi/python-fastapi.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
-index 40932929a0..b04b95a797 100644
---- a/package/python-starlette/python-starlette.mk
-+++ b/package/python-starlette/python-starlette.mk
-@@ -11,5 +11,7 @@ PYTHON_STARLETTE_SETUP_TYPE = pep517
- PYTHON_STARLETTE_LICENSE = BSD-3-Clause
- PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
- PYTHON_STARLETTE_DEPENDENCIES = host-python-hatchling
-+PYTHON_STARLETTE_CPE_ID_VENDOR = encode
-+PYTHON_STARLETTE_CPE_ID_PRODUCT = starlette
+diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+index db86bfce30..dc6d919926 100644
+--- a/package/python-fastapi/python-fastapi.mk
++++ b/package/python-fastapi/python-fastapi.mk
+@@ -10,6 +10,8 @@ PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/77/bb/5941e6e2ce30
+ PYTHON_FASTAPI_SETUP_TYPE = pep517
+ PYTHON_FASTAPI_LICENSE = MIT
+ PYTHON_FASTAPI_LICENSE_FILES = LICENSE
++PYTHON_FASTAPI_CPE_ID_VENDOR = fastapi_project
++PYTHON_FASTAPI_CPE_ID_PRODUCT = fastapi
+ PYTHON_FASTAPI_DEPENDENCIES = host-python-hatchling
  
  $(eval $(python-package))
 -- 
