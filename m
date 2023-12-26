@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03CCDC46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 21:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B97E1C46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 21:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5406409F8;
-	Tue, 26 Dec 2023 21:28:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5406409F8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4358C40114;
+	Tue, 26 Dec 2023 21:33:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4358C40114
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bjjyDHLgP38d; Tue, 26 Dec 2023 21:28:10 +0000 (UTC)
+	with ESMTP id eF4pXf9u7AFp; Tue, 26 Dec 2023 21:33:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AEE88409F9;
-	Tue, 26 Dec 2023 21:28:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEE88409F9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 27E471BF20F
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 21:28:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 01752409DD;
+	Tue, 26 Dec 2023 21:33:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01752409DD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B68AB1BF20F
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 21:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09DC741759
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 21:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09DC741759
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DBA981FA6
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 21:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DBA981FA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K7CCJoMruAcn for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 21:28:06 +0000 (UTC)
-Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8A8FA4175E
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 21:28:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A8FA4175E
-Received: from [192.168.50.163] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id IEy2rROUk2IzBIEy2rFC10; Tue, 26 Dec 2023 22:28:02 +0100
-Message-ID: <cb4f8256-50a9-4ddd-9bcd-3075ebb0d42e@benettiengineering.com>
-Date: Tue, 26 Dec 2023 22:28:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20231202015123.2609353-1-giulio.benetti@benettiengineering.com>
- <20231224121121.401724a3@windsurf>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20231224121121.401724a3@windsurf>
-X-CMAE-Envelope: MS4xfKpNREaGspEfFmxSWhjFerLHmq7/RfSfrXxdKdm176LgvwRd0tYIjtV/ZmhBU+ZJd4s1WQJ1bvtiPAN4Y83FTGrpdYq/2juL0ZlmpLYDOyS/tDqlLec0
- yQX7OwTnNW6WUx0P0uChX12kPtxrcbS6EwEz7x4sTbqiHp1p5MhD5mVepVnCRjMFfuGqvpso4Gp8fJfxn15RRR7pS9bRku7Pkd+F+SRYXvWW8+dpJuOXJP8M
- C4uj4dhjOlqghaGSBeAXk3UR28JCLaVZvAgaK/ngET9nVVZH45DX1x6mT7ANSJSdU7Ghpk1mCrp+zD5kS3QX29V9gCb4Tg0LiMlmbryF5fI=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1703626082; bh=o6BKUTjVMbJWnCI35WovNk3LpuDYizW8fOEYibsy8aU=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=QMNfHJgqiFFTUuOdlaBIrUj+mhRgsRNj4gTO1IhR8p1cR9inzRnB6mF/ruDtE9it8
- r3HvIB0pxe91vp/Ylzj36JtrBJJV54/JVB7WoYUCSVg6quyGPHMd6ImgIB1JNZS1ku
- tuijlSRNP0u6g/IdRaLaSJw4hc9kSFpba+JTkjyNnZDLAluUXiFPlQSJYChUS99S8p
- 8Aw9PbvPub4VWQmr4a8sf04Z6FfdoKWXw2+NPItlYFxPvuTE4wpeyTYgxO1tWheq0a
- 4y/p8oVXrJSLQu93ey+XFXCSHePjDc3e8O4NTdIC9IYWh02V6BD5FCQauw2HwCeycV
- Llndb0/QITqfQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=QMNfHJgq
-Subject: Re: [Buildroot] [PATCH] package/swugenerator: add missing
- dependencies
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RU7O4cs_nUzD for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 21:33:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF6E881F34
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 21:33:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF6E881F34
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9A5D18361E; Tue, 26 Dec 2023 21:33:32 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 26 Dec 2023 22:29:22 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9f6146acb8d7165d4e06bee6e140cd96984db563
+X-Git-Newrev: 6d8c7aecbb28f1703b8eec1ffb6f555c1b422b31
+X-Patchwork-Hint: ignore
+Message-Id: <20231226213332.9A5D18361E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flickcurl: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,57 +56,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d8c7aecbb28f1703b8eec1ffb6f555c1b422b31
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 24/12/23 12:11, Thomas Petazzoni wrote:
-> Hello Giulio,
-> 
-> On Sat,  2 Dec 2023 02:51:23 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
->>
->> At the moment swugenerator package lacks host-openssl, host-gzip and
->> host-zstd. All their final executables like openssl, gzip and zstd
->> can be used by swugenerator if the correct flag is passed so let's
->> add these missing dependencies.
-> 
-> Could you clarify whether these are runtime dependencies? If there are
-> build time dependencies, do we see build failures in the autobuilders?
+This package is causing some build issues, which are probably due to
+the recent libxml2 upgrade:
 
-I haven't thought about it. They are runtime dependencies, so we can't
-see failure in the autobuilders.
+  http://autobuild.buildroot.net/results/34d6f6c02f884ab9a2578a38ee8646e14632d6ff/
 
->> diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
->> index f4ead1d229..141a6a96c5 100644
->> --- a/package/swugenerator/swugenerator.mk
->> +++ b/package/swugenerator/swugenerator.mk
->> @@ -9,6 +9,6 @@ SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
->>   SWUGENERATOR_LICENSE = GPL-3.0
->>   SWUGENERATOR_LICENSE_FILES = LICENSE
->>   HOST_SWUGENERATOR_SETUP_TYPE = setuptools
->> -HOST_SWUGENERATOR_DEPENDENCIES = host-python-libconf
->> +HOST_SWUGENERATOR_DEPENDENCIES = host-gzip host-openssl host-python-libconf
-> 
-> In your commit log, you mention host-zstd being needed, but you don't
-> add it to the dependencies here. Could you clarify this as well?
+There has been no new commit upstream for the past 8 years:
+https://github.com/dajobe/flickcurl, and the last release, 1.26 is
+from 2014. So let's kill the package.
 
-Ah right, I simply need to add host-zstd because swugenerator can use
-gzip or zstd at runtime.
+Fixes:
 
-Thank you for reviewing.
+  http://autobuild.buildroot.net/results/34d6f6c02f884ab9a2578a38ee8646e14632d6ff/
 
-Best regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy                 |  7 +++++++
+ DEVELOPERS                       |  1 -
+ package/Config.in                |  1 -
+ package/flickcurl/Config.in      | 21 ---------------------
+ package/flickcurl/flickcurl.hash |  7 -------
+ package/flickcurl/flickcurl.mk   | 23 -----------------------
+ 6 files changed, 7 insertions(+), 53 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d46bd97442..e5822eec24 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2023.11"
+ 
++config BR2_PACKAGE_FLICKCURL
++	bool "flickcurl package was removed"
++	select BR2_LEGACY
++	help
++	  The flickcurl package was removed because it was
++	  unmaintained upstream and causing build failures.
++
+ config BR2_PACKAGE_ONEVPL
+ 	bool "onevpl package was renamed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f4adda40a8..cc089e8ff6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2386,7 +2386,6 @@ F:	package/dfu-programmer/
+ F:	package/docker-compose/
+ F:	package/dump1090/
+ F:	package/fatcat/
+-F:	package/flickcurl/
+ F:	package/fscryptctl/
+ F:	package/ifmetric/
+ F:	package/jo/
+diff --git a/package/Config.in b/package/Config.in
+index 98653ff29d..14af880cb8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1934,7 +1934,6 @@ menu "Networking"
+ 	source "package/dht/Config.in"
+ 	source "package/enet/Config.in"
+ 	source "package/filemq/Config.in"
+-	source "package/flickcurl/Config.in"
+ 	source "package/fmlib/Config.in"
+ 	source "package/freeradius-client/Config.in"
+ 	source "package/gensio/Config.in"
+diff --git a/package/flickcurl/Config.in b/package/flickcurl/Config.in
+deleted file mode 100644
+index 426ceecba1..0000000000
+--- a/package/flickcurl/Config.in
++++ /dev/null
+@@ -1,21 +0,0 @@
+-config BR2_PACKAGE_FLICKCURL
+-	bool "flickcurl"
+-	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_LIBXML2
+-	# Ensure that libcurl is built with crypto support, since
+-	# flickcurl must access https:// URLs.
+-	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_LIBNSS)
+-	select BR2_PACKAGE_CA_CERTIFICATES # runtime
+-	help
+-	  Flickcurl is a C library for the Flickr API, handling
+-	  creating the requests, signing, token management, calling
+-	  the API, marshalling request parameters and decoding
+-	  responses.
+-
+-	  http://librdf.org/flickcurl/
+-
+-config BR2_PACKAGE_FLICKCURL_UTILS
+-	bool "flickcurl utilities"
+-	depends on BR2_PACKAGE_FLICKCURL
+-	help
+-	  Install flickcurl utilites (flickcurl + flickrdf) to target.
+diff --git a/package/flickcurl/flickcurl.hash b/package/flickcurl/flickcurl.hash
+deleted file mode 100644
+index 8c3ea1682a..0000000000
+--- a/package/flickcurl/flickcurl.hash
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# Locally calculated after checking pgp signature
+-sha256  ff42a36c7c1c7d368246f6bc9b7d792ed298348e5f0f5d432e49f6803562f5a3  flickcurl-1.26.tar.gz
+-# Locally computed
+-sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+-sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+-sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE-2.0.txt
+-sha256  3590f30b0fb9446a1f0a7ea5bcbb5786fa66fa362800f53d2575875d74b91909  LICENSE.html
+diff --git a/package/flickcurl/flickcurl.mk b/package/flickcurl/flickcurl.mk
+deleted file mode 100644
+index 610b81f4d4..0000000000
+--- a/package/flickcurl/flickcurl.mk
++++ /dev/null
+@@ -1,23 +0,0 @@
+-################################################################################
+-#
+-# flickcurl
+-#
+-################################################################################
+-
+-FLICKCURL_VERSION = 1.26
+-FLICKCURL_SITE = http://download.dajobe.org/flickcurl
+-FLICKCURL_LICENSE = LGPL-2.1+ or GPL-2.0+ or Apache-2.0+
+-FLICKCURL_LICENSE_FILES = COPYING COPYING.LIB LICENSE-2.0.txt LICENSE.html
+-FLICKCURL_INSTALL_STAGING = YES
+-FLICKCURL_CONFIG_SCRIPTS = flickcurl-config
+-FLICKCURL_CONF_OPTS = --without-curl-config --without-xml2-config --without-raptor
+-FLICKCURL_DEPENDENCIES = libcurl libxml2 host-pkgconf
+-
+-ifeq ($(BR2_PACKAGE_FLICKCURL_UTILS),)
+-define FLICKCURL_REMOVE_UTILS
+-	rm -f $(TARGET_DIR)/usr/bin/flickcurl $(TARGET_DIR)/usr/bin/flickrdf
+-endef
+-FLICKCURL_POST_INSTALL_TARGET_HOOKS += FLICKCURL_REMOVE_UTILS
+-endif
+-
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
