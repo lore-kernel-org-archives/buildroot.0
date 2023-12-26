@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AF2AC46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 17:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B606CC46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 17:24:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 303A360EC5;
-	Tue, 26 Dec 2023 17:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 303A360EC5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5201C60F1D;
+	Tue, 26 Dec 2023 17:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5201C60F1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GK4uqiE4xFi3; Tue, 26 Dec 2023 17:20:49 +0000 (UTC)
+	with ESMTP id 0WprcXCOdDPk; Tue, 26 Dec 2023 17:24:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83601605AD;
-	Tue, 26 Dec 2023 17:20:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83601605AD
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA3E060F47;
+	Tue, 26 Dec 2023 17:24:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA3E060F47
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9E6BF1BF2A5
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 17:20:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2E7B11BF5EA
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 17:24:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 83F9D605AD
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 17:20:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83F9D605AD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0707560EC5
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 17:24:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0707560EC5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x4FTKdIYU0kE for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 17:20:46 +0000 (UTC)
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8CEDF600CB
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 17:20:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CEDF600CB
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-33666fb9318so4434085f8f.2
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 09:20:46 -0800 (PST)
+ with ESMTP id rSO0HQtUEuvd for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 17:24:04 +0000 (UTC)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E30AA605E8
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 17:24:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E30AA605E8
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-3367a304091so4549605f8f.3
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 09:24:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703611244; x=1704216044;
+ d=1e100.net; s=20230601; t=1703611441; x=1704216241;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=aNoiJ2yhm3XudjCRs5NDsdpgVFIHL8Buz4pAqPMY64s=;
- b=PvB6xV5HkHdVd6GLlUq83ZKVT5q7jrCYKMmM2fUTYqdulvRJYZnxA5TBwpleeabCI8
- 72cF0vio4idJOf+maxd3euOSrDHM8Mmwxt6L03804nVuH3Gq0fF73SbQbTeiynAGSsi1
- IzrmKNYRpeN3cqhktbxrYN3QdVXdduJEcUdtb7x1kKRuQSRspKIaNgWIBTc3MbsVf4Xy
- YAdXgCFnFz/bY7FcqcZ2BrT8xaubZ118RflXcqhOPJ9kWYnsdrmoFHUPuoUG0IFEoinI
- 6OEARwuEOnZuoMCacSd9x9U/AeQeTyddSTzFGoN7qdfYNcqhmg3dfGr57LKjmNGMA8rM
- H+mw==
-X-Gm-Message-State: AOJu0YwnGmxzn06bzutEkZuIE4OrthcPrdLhVEFXQa+o+Zc3g6bpj2MS
- 4uJ/ufCs1qkjqPl024ZI3SZwrf9/Mtk=
-X-Google-Smtp-Source: AGHT+IEtMRxXnrlVtY7xRJndvUxMIuABPr5ylkTIEf4CPekPST+64zFq7ZXTj2J0G58OY0bVsyyEcg==
-X-Received: by 2002:adf:e30a:0:b0:336:78d9:24e3 with SMTP id
- b10-20020adfe30a000000b0033678d924e3mr5030189wrj.14.1703611244049; 
- Tue, 26 Dec 2023 09:20:44 -0800 (PST)
+ bh=eueMTI8XjE1aadgh9ee7kWzlsQwQRHK+ZHrqr3nV998=;
+ b=PmW8RbT0+PI62qhnGKJkmg28JUV5A+2tsKO7afM5tBaalbB9UVJT7LG9ox6oc6IVA7
+ HH7hDDyRPCWXGayAj5Qv7Dx4CFp28QPcKDrwPxSLL/yHjGzpL0iF01daWBJW5mObsb4+
+ dGUuWlrGsp1xFOMzjPaeQjUA9YKgV7seIF9D4CIkB+HyjeV5Mpj8z9WGwmFdFVknSMNS
+ GTwlZv9euWPkgiLBvqLKpLZr6tRPWrnxAIPpWFl+ArI5TeKFMcu10D2VtTs7WuKDZrF5
+ eo0GZhdI8Wb82BcSfWIZ7ujUjFf5NMWu3QOxIU/u7IwH3oS9ARVzCr1pVM2vpm6xw3hC
+ x4+g==
+X-Gm-Message-State: AOJu0Yywp4lP6xjZwJSyVSzsE1BJdb1Z/wzqEf21tGzkrB6/cJBjhzGU
+ VJQQeKIdbZhO2wJDAqK9j6qz5Crd5NI=
+X-Google-Smtp-Source: AGHT+IHrEoAjkq1VsE5uHX6wuKuH/xcVYz2icGkE49kWhABV5GFfirseURCEmsxE2/19pBVdsF4Dkg==
+X-Received: by 2002:adf:ff8b:0:b0:336:66ff:2031 with SMTP id
+ j11-20020adfff8b000000b0033666ff2031mr2792399wrr.170.1703611441519; 
+ Tue, 26 Dec 2023 09:24:01 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l11-20020a5d560b000000b0033680f7be5fsm13005924wrv.87.2023.12.26.09.20.43
+ ch9-20020a5d5d09000000b00336e3660d82sm1840605wrb.48.2023.12.26.09.24.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Dec 2023 09:20:43 -0800 (PST)
+ Tue, 26 Dec 2023 09:24:01 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 18:20:41 +0100
-Message-ID: <20231226172041.872046-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Dec 2023 18:23:59 +0100
+Message-ID: <20231226172359.876319-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703611244; x=1704216044; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703611441; x=1704216241; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=aNoiJ2yhm3XudjCRs5NDsdpgVFIHL8Buz4pAqPMY64s=;
- b=Le3fzMxi+QPXqN0sGTppc0LgPha7pHN0JTCO3EZplwGMPh3RC6p0LtHLLXtcJscKOC
- ORP8cPYViF3zaO1Jvi9Y1n730Eij1gYd9JPeZLJ5Yz43JDyOSk38Rk5oxQieIKPvwTCl
- aMxFHOhO1FXWkPIq7bUDW/YsyN4zCCAtHhafRmMfX9jHzjxjHzNUesg7o5SvoOmHq4bU
- VIExZ/ghLAlYEMWD9VSgHF7+LvKxQhyk7OVk10pNQvYY9cL/6lGsmQxAdgQY+CHJYV16
- AaEc0AVwsDjJbe3fc1F3J7cSnxOfipzBCC8PE0qxDp/QmnFChN+Hq9c9TUR6kZlIAKrm
- 5ZKQ==
+ bh=eueMTI8XjE1aadgh9ee7kWzlsQwQRHK+ZHrqr3nV998=;
+ b=TENWu3DKMhVlHT67AjqQd04KPksbeM0cbtv8KAvs7hE4ky+69kKJIgdnSpMLU8k8ch
+ 0z83qjaNYy/Wy1u/4UARxLfC3o573Hf43uuTzsZ8PfiHe0JeaMpwXaxx3lCegGbNwKzJ
+ Wa40ejD9WaV9e69BWzc+Fk53jWVG4pMcWL1TjizPdiPrZcGzlMgPovdHeayNx4oKUtos
+ z4BFbYbYlVstgTtJIH9D5Ui8thZ/Jlr/5i0xJ5KTDeix56kcIOv2farRmZIboFMjbR3a
+ /i8/zLS4JdyTqPT4WLP/CNMb8I+1FLRiuHNILsk9KBR3NiiDMbAjMzsKfz9p8lU8GcBD
+ xLkA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Le3fzMxi
-Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 4.0.3
+ header.a=rsa-sha256 header.s=20230601 header.b=TENWu3DK
+Subject: [Buildroot] [PATCH 1/1] package/ncmpc: bump to version 0.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,38 +99,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/zlib-ng/minizip-ng/releases/tag/4.0.3
-https://github.com/zlib-ng/minizip-ng/releases/tag/4.0.2
-https://github.com/zlib-ng/minizip-ng/compare/4.0.1...4.0.3
+https://raw.githubusercontent.com/MusicPlayerDaemon/ncmpc/v0.49/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/minizip/minizip.hash | 2 +-
- package/minizip/minizip.mk   | 2 +-
+ package/ncmpc/ncmpc.hash | 2 +-
+ package/ncmpc/ncmpc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index 5e00881ce3..b21a8490aa 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  63e47a2b4dbac0da501f43f4da74f118dfb3ef0dee0ffbbe89428271002260f8  minizip-4.0.1.tar.gz
-+sha256  e39a736d4f55c22fa548e68225b2e92bc22aedd9ab90d002b0c5851e3a7bdace  minizip-4.0.3.tar.gz
- sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index d3e539d0e9..5a4d920369 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
+index 17bc6e3ace..1d288294d1 100644
+--- a/package/ncmpc/ncmpc.hash
++++ b/package/ncmpc/ncmpc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  61da23b1bc6c7a593fdc28611932cd7a30fcf6803830e01764c29b8abed2249c  ncmpc-0.47.tar.xz
++sha256  65bbec0ede9e6bcf62ac647b0c706485beb2bdd5db70ca8d60103f32f162cf29  ncmpc-0.49.tar.xz
+ 
+ # Hash for license file:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 5d4702de78..bc8a62daea 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MINIZIP_VERSION = 4.0.1
-+MINIZIP_VERSION = 4.0.3
- MINIZIP_SITE = $(call github,zlib-ng,minizip-ng,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = host-pkgconf
- MINIZIP_INSTALL_STAGING = YES
+ NCMPC_VERSION_MAJOR = 0
+-NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).47
++NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).49
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+ NCMPC_DEPENDENCIES = \
 -- 
 2.43.0
 
