@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32FA2C46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 21:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E25C46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 21:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4ADB40A41;
-	Tue, 26 Dec 2023 21:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4ADB40A41
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6624B409DD;
+	Tue, 26 Dec 2023 21:40:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6624B409DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PmR27NIboyiX; Tue, 26 Dec 2023 21:39:27 +0000 (UTC)
+	with ESMTP id OnZGCAqRc44z; Tue, 26 Dec 2023 21:40:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6681F40A58;
-	Tue, 26 Dec 2023 21:39:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6681F40A58
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 162611BF36A
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 21:39:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 69A30409E9;
+	Tue, 26 Dec 2023 21:40:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69A30409E9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A9DC1BF36A
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 21:40:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1FD840A77
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 21:39:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1FD840A77
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1355582245
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 21:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1355582245
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tq1RmrjtW01G for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 21:39:16 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 03DFA40A8B
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 21:39:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03DFA40A8B
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2D48DB0037C;
- Tue, 26 Dec 2023 22:39:12 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 26 Dec 2023 22:39:11 +0100
-Date: Tue, 26 Dec 2023 22:39:11 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZYtH_zeuCWBidlf5@landeda>
-References: <20231226135941.2784505-1-thomas.petazzoni@bootlin.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OgQc8cySk8I4 for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 21:40:42 +0000 (UTC)
+Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9458082244
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 21:40:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9458082244
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id IFAErx3q3fPPQIFAErxEx0; Tue, 26 Dec 2023 22:40:39 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Tue, 26 Dec 2023 22:40:37 +0100
+Message-Id: <20231226214037.144870-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231224121121.401724a3@windsurf>
+References: <20231224121121.401724a3@windsurf>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231226135941.2784505-1-thomas.petazzoni@bootlin.com>
+X-CMAE-Envelope: MS4xfBcjGj8LENyfxZRNomf1wOypwF3+kuOe9V5lXEvOk3PaFHsLz4pC5iVlGkc/nHYnLRLHmf+IF6toeXgegPi/UOigwZfogTFbDyTAHDU/4TKhOtk8Bzhs
+ jvzG/drl9FZf240tcN0S2y2lvdD7s0BCiqChGAtEhI3S8FR8MeWkR6KSOWWw+nkTRj9W7jyq2Gb+DOkCBPaDqFhpviSexnyxdxzdWMil/zVegPwolW0jt859
+ aYUEBtIOLayXvHCiRHDsIYldD8IMIV1B1Xe0sI2HCi1SrdHs9nZQWxUayYtrZvvgur+pZm4xyBxFpxZhFibIFGN5HMvfaVC/SMmGtEetAAs=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1703626754;
- bh=cDyc4E41sbYdq6eoJ7Yy9wlm5ToE0rNmdS7JMCU79LM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=HTqFCyIBtfXszMjTF/cYnW2Eje7Jszf+nBOT0DBHGF6aCDPU3mOieTVAUh9alSYy9
- 5hGI5osVCb7Fp8IkxYwDXjCxLp8zYMbv9PA+s2PZzeZbJ463XNd7HUEvxZj5kUoq6G
- 17ExqpMIMFJW8uHK258vDf3Jx9Dxmlhx5JrqfPGAg546T09OWBpOru/mPpBxDiWHud
- BWRgN0eY/ZGrMew4Rsee3bzDGq3KVZc+rnZsGoroik/wvh0pds0UWusT0DpbO6rfe9
- 9Y5lsquCrBq4QOL+d6qGd5JlmeQt6OwUyAqLRi83qgwMgz2HcDl4q3zIUKHaj5n2qr
- CBjR0y4iVJUQw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=HTqFCyIB
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/gmpc: remove package
+ d=aruba.it; s=a1; 
+ t=1703626839; bh=Cp/Z7DqfRswBYnoFTCKOp/jhDPmXK5JnXbmNGzJk1ZI=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=P8bS3obzT7iqToD47UQivoGmbUpwtx4sYQ/5Rw6QQoKNF6f5sJ8CewCde70hYRTrZ
+ sD27K8AZkl9mRDc3D3cmWkK4H8InxUzjQroGBRa+MB4rwgFgitOgaT6TGVEERFWhvP
+ uzrjbnc6GcHhrQSOlknYVSekFq21dl2++1IlUjrAPdVwtr9rVfL5BV0Xeti3Qs2EsP
+ OIxBRkBas7KU6rFSuaaXDSpxmDAa3+X4BDMhJT/aiq3zuUs5zi37cCCISXfpyFUUR5
+ KaTpjSa8YT8vE1kSqAHeVGjnfLAmsVxYIzhI5Ouki1uS2Kmz6Qc3ew0CCQIReEPLBq
+ ufzB510Uf5/aA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=P8bS3obz
+Subject: [Buildroot] [PATCH v2] package/swugenerator: add missing runtime
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,163 +74,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
 
-On 2023-12-26 14:59 +0100, Thomas Petazzoni via buildroot spake thusly:
-> This package is unmaintained upstream:
-> 
-> - The URL in our Config.in,
->   http://gmpcwiki.sarine.nl/index.php?title=GMPC, no longer works
-> 
-> - https://github.com/DaveDavenport/gmpc says it's unmaintained
-> 
-> - The official lists of MPD clients at
->   https://www.musicpd.org/clients/ says it's maintained, and points at
->   http://gmpclient.org/, which is no longer owned by the developers of
->   GMPC.
-> 
-> - It still uses libsoup (2) which we want to get rid of at some
->   point.
-> 
-> - It was added by Gustavo Zacarias, and no version bumped occurred
->   since 2011.
-> 
-> So let's kill this package.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+At the moment swugenerator package lacks host-openssl, host-gzip and
+host-zstd runtime dependency so let's add them to prevent swugenerator from
+failing to run.
 
-Both applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+---
+V1->V2:
+* add host-zstd and clarify in commit log these are runtime dependencies as
+  pointed by Thomas Petazzoni
+---
+ package/swugenerator/swugenerator.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  Config.in.legacy       |  7 +++++++
->  package/Config.in      |  1 -
->  package/gmpc/Config.in | 26 --------------------------
->  package/gmpc/gmpc.hash |  3 ---
->  package/gmpc/gmpc.mk   | 18 ------------------
->  5 files changed, 7 insertions(+), 48 deletions(-)
->  delete mode 100644 package/gmpc/Config.in
->  delete mode 100644 package/gmpc/gmpc.hash
->  delete mode 100644 package/gmpc/gmpc.mk
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index d46bd97442..0ab9dcadff 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
->  
->  comment "Legacy options removed in 2023.11"
->  
-> +config BR2_PACKAGE_GMPC
-> +	bool "gmpc package was removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The gmpc package was removed because it was unmaintained,
-> +	  and still using the old libsoup2 library.
-> +
->  config BR2_PACKAGE_ONEVPL
->  	bool "onevpl package was renamed"
->  	select BR2_LEGACY
-> diff --git a/package/Config.in b/package/Config.in
-> index 98653ff29d..34efaf29e5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -405,7 +405,6 @@ comment "X applications"
->  	source "package/dillo/Config.in"
->  	source "package/docker/Config.in"
->  	source "package/feh/Config.in"
-> -	source "package/gmpc/Config.in"
->  	source "package/gtkperf/Config.in"
->  	source "package/leafpad/Config.in"
->  	source "package/mupdf/Config.in"
-> diff --git a/package/gmpc/Config.in b/package/gmpc/Config.in
-> deleted file mode 100644
-> index 1aa74251f0..0000000000
-> --- a/package/gmpc/Config.in
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -config BR2_PACKAGE_GMPC
-> -	bool "gmpc"
-> -	depends on BR2_PACKAGE_LIBGTK2
-> -	depends on BR2_USE_WCHAR # glib2
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> -	depends on BR2_USE_MMU # glib2
-> -	depends on BR2_PACKAGE_XORG7
-> -	select BR2_PACKAGE_LIBGLIB2
-> -	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-> -	select BR2_PACKAGE_LIBMPD
-> -	select BR2_PACKAGE_LIBSOUP
-> -	select BR2_PACKAGE_LIBXML2
-> -	select BR2_PACKAGE_SQLITE
-> -	select BR2_PACKAGE_XLIB_LIBICE
-> -	select BR2_PACKAGE_XLIB_LIBSM
-> -	select BR2_PACKAGE_XLIB_LIBX11
-> -	help
-> -	  Gnome Music Player Client is a GNOME/GTK2.2 client for
-> -	  Music Player Daemon.
-> -
-> -	  http://gmpcwiki.sarine.nl/index.php?title=GMPC
-> -
-> -comment "gmpc needs a toolchain w/ wchar, threads"
-> -	depends on BR2_USE_MMU
-> -	depends on BR2_PACKAGE_XORG7 && BR2_PACKAGE_LIBGTK2
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/gmpc/gmpc.hash b/package/gmpc/gmpc.hash
-> deleted file mode 100644
-> index 66de8b6226..0000000000
-> --- a/package/gmpc/gmpc.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# Locally calculated
-> -sha256  a69414f35396846733632ca9619921d7acda537ffd6d49bd84b444945cb76b2c  gmpc-11.8.16.tar.gz
-> -sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
-> deleted file mode 100644
-> index 40b77eb189..0000000000
-> --- a/package/gmpc/gmpc.mk
-> +++ /dev/null
-> @@ -1,18 +0,0 @@
-> -################################################################################
-> -#
-> -# gmpc
-> -#
-> -################################################################################
-> -
-> -GMPC_VERSION = 11.8.16
-> -GMPC_SITE = http://download.sarine.nl/Programs/gmpc/$(GMPC_VERSION)
-> -GMPC_CONF_ENV = ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
-> -GMPC_CONF_OPTS = --disable-mmkeys --disable-unique
-> -GMPC_LICENSE = GPL-2.0+
-> -GMPC_LICENSE_FILES = COPYING
-> -GMPC_DEPENDENCIES = host-gob2 host-intltool host-pkgconf host-vala \
-> -	libglib2 libgtk2 libmpd libsoup sqlite \
-> -	xlib_libICE xlib_libSM xlib_libX11 \
-> -	$(TARGET_NLS_DEPENDENCIES)
-> -
-> -$(eval $(autotools-package))
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
+index f4ead1d229..466fe1f046 100644
+--- a/package/swugenerator/swugenerator.mk
++++ b/package/swugenerator/swugenerator.mk
+@@ -9,6 +9,10 @@ SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
+ SWUGENERATOR_LICENSE = GPL-3.0
+ SWUGENERATOR_LICENSE_FILES = LICENSE
+ HOST_SWUGENERATOR_SETUP_TYPE = setuptools
+-HOST_SWUGENERATOR_DEPENDENCIES = host-python-libconf
++HOST_SWUGENERATOR_DEPENDENCIES = \
++	host-gzip \
++	host-openssl \
++	host-python-libconf \
++	host-zstd
+ 
+ $(eval $(host-python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
