@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2038C46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 16:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3ACFC46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 16:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5ADFF60D5F;
-	Tue, 26 Dec 2023 16:55:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ADFF60D5F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F88660E44;
+	Tue, 26 Dec 2023 16:59:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F88660E44
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FyDqgcCXK0H2; Tue, 26 Dec 2023 16:55:40 +0000 (UTC)
+	with ESMTP id Wg9DYrj_xHOB; Tue, 26 Dec 2023 16:59:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2FB660E44;
-	Tue, 26 Dec 2023 16:55:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2FB660E44
+	by smtp3.osuosl.org (Postfix) with ESMTP id E685A60D5F;
+	Tue, 26 Dec 2023 16:59:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E685A60D5F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 995E51BF300
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:55:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7A1281BF228
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:59:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E6C840530
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:55:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E6C840530
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5167840530
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 16:59:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5167840530
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ASAl17fb0tbj for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 16:55:26 +0000 (UTC)
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2EE4240182
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 16:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EE4240182
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-40d2376db79so44103765e9.0
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 08:55:26 -0800 (PST)
+ with ESMTP id Pnvn-BjnK34F for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 16:59:36 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 556BA40182
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 16:59:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 556BA40182
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40d5095834aso26166915e9.2
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 08:59:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703609724; x=1704214524;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=zSy1L0tc/NhxlxBLQjGYpcUyI80vo1CfMQk8jl4nk94=;
- b=eY01rCS6Xkt1Qmrf7KtPz4Ihd1g1H9Hu2fQ/Cp6CvufFIebA7nzXcQqoFa8RL3oyiU
- uMMgNJ620F4rmDUZr5FAblT3SQQxYLrAcLJB03yl1PJffMGjyVwP9GQCm+mw8PrGpeh8
- 7ZM8dD7ZepXTLTCDsXvzdKieHU4O5uoVbiuWFvFrIiJvmFw2sB2wnNvaloIfR3hjOtRh
- dk3OZ2XIJ6HWPNq2MuulkGqypUMX3orqYmUf5jEX7qB6Rte1CkW1oQLg3G4NH1ayaovc
- 4KCtDI4lnJ12HmzBQO/ZzwgQcoTCALtMvQlaTw0rZQr1zi8+L2u2UxGsVkQjsVX8mVfh
- VikA==
-X-Gm-Message-State: AOJu0Yz10D9ox9FPzKQs2cTImAPbEVFq/YM/ByeZQOMcebUKB01UiV3a
- Xmc9IEKk8LghMUkK3Ug3QemtJ4SFIg4=
-X-Google-Smtp-Source: AGHT+IGwqRO5dPfmKAqlvpuxNsYrLkaF31vd3IHyDqY7urfnNUuDJY1UWjImGUYsmsXkkd4jzoWDUQ==
-X-Received: by 2002:a05:600c:4ed1:b0:40d:5776:85d with SMTP id
- g17-20020a05600c4ed100b0040d5776085dmr1639918wmq.122.1703609723724; 
- Tue, 26 Dec 2023 08:55:23 -0800 (PST)
+ d=1e100.net; s=20230601; t=1703609973; x=1704214773;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8+KPz1IzyUz/tBENmWGSS6RC+z0a9pqMHXV79DkeOGM=;
+ b=ZIMnOuBXO+zOeiwnEXYPFjBdAJkev5xFZJ2WYSivaM0lpDHYzVQgYOarNTNMo17Cbe
+ Il6yABWKHo2iP5bS7+D8XBzWEtZw/Ldb3atnGMQL8rZxoReKD0Aa8hLxNPAI728pGzuL
+ qRyhYG6sWfP9pIPSdiZq7h4BdrvragWpBF+s1bJJ+3psz/wXkB4FwWp21sR097OBp7fc
+ 9OmaeLiG5V3hPZtbNebWQTCU7+6MFXZk/1QAMo4Cjr1ywYHtLQPB1j36KJIgXoHH0poN
+ s8Io0V6MWy4CXYxY+9MWwPmSCRJ1ph23SmP1u9cDlMLcWkBE5M4zWgnc3n6dau2UWlWO
+ jISw==
+X-Gm-Message-State: AOJu0YzW++v9VDGzk80SYU8gc2ikETBgyJNPhNyWWLWVx2BqUZ4ZYEX1
+ ylJqpXHxrxvnfX1Iq3xngAi3PjW9jLw=
+X-Google-Smtp-Source: AGHT+IEPMkSio+u349wT5T0Pvb0/EgLC2XOQOPND2T6vN5dHlXVTJj+/Nw5qOHErbikpGSbjszcB2g==
+X-Received: by 2002:a05:600c:4444:b0:40c:6a6a:bfc0 with SMTP id
+ v4-20020a05600c444400b0040c6a6abfc0mr2169794wmn.34.1703609973450; 
+ Tue, 26 Dec 2023 08:59:33 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- p15-20020a05600c468f00b0040d4e1393dcsm13742373wmo.20.2023.12.26.08.55.23
+ hg12-20020a05600c538c00b0040c41846923sm28592013wmb.26.2023.12.26.08.59.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Dec 2023 08:55:23 -0800 (PST)
+ Tue, 26 Dec 2023 08:59:33 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 17:55:20 +0100
-Message-ID: <20231226165520.806663-2-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Dec 2023 17:58:51 +0100
+Message-ID: <20231226165851.814560-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231226165520.806663-1-fontaine.fabrice@gmail.com>
-References: <20231226165520.806663-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703609724; x=1704214524; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=zSy1L0tc/NhxlxBLQjGYpcUyI80vo1CfMQk8jl4nk94=;
- b=aqqB87ZbIZ5H3iEbZH2BtKGOKKh9oAP7Kz5/zvqdRR3fG0zjFLK0KXlsLtKMIZXrnG
- z0AWX9yOmfg0e/I5GK6WbpLwbSUEPYC2qd8gQ5lBc741ZPfFkZPQkrBH1misrEluq/2u
- I6wuId0Gw7/D2UtZvHrF2jHmGrG9yy4HpG5pqxOm+BRAkxEOW2esx3UD8z5jNDCxaDmX
- +SJUwJBFceJ3rOcR5OUKj3kuoMzlrE+ZpVUdFtZduXAblWGm4d9p1XNa98SSCuWzUEIj
- DK/JedSjJoPqi4UIjrwp4RKbocyvYKrDVDeGb2iSxj55cvCsWi0Nqi7fiXLhUM1TrYsZ
- 9Yaw==
+ d=gmail.com; s=20230601; t=1703609973; x=1704214773; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8+KPz1IzyUz/tBENmWGSS6RC+z0a9pqMHXV79DkeOGM=;
+ b=RGP5MJuTLuTIVEFlfLQgUN1j4vKEuujMUg8+1BhW7RYwipbbSl/GINRyDs9uonx+Fa
+ OvrUqQ3oGSdAm/beZAiNcT6KP/dbnTBXz9CxYwLSD0IT/Byh5FcXrbUlg/4lI3mr5sR+
+ tOHggOBHxD5MoB7Grmz87LPyhLyqlqMEI64tQebUczg/yn1KnJ6GMN5l6zH6SfIDrYGa
+ gkS49i3YoLvewKMa2v/et8yxHV11BltSoUARbaSnuT2i4dLTd3xjw344kbPHjYYP1UyZ
+ MVZsrtSyMQ3EWxC1Rys6OGnGXgB9gsnHkqjn7KeBBipHi3HQbUP4pwAn3QqK35V5vacS
+ Dhsw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=aqqB87Zb
-Subject: [Buildroot] [PATCH 2/2] package/libcap-ng: bump to version 0.8.4
+ header.a=rsa-sha256 header.s=20230601 header.b=RGP5MJuT
+Subject: [Buildroot] [PATCH 1/1] package/libcgicc: bump to version 3.2.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,53 +99,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-python2 support has been dropped with
-https://github.com/stevegrubb/libcap-ng/commit/868a82672a398aec96eba60e73b9a8e8892c4d4a
-
-https://github.com/stevegrubb/libcap-ng/blob/v0.8.4/ChangeLog
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libcap-ng/libcap-ng.hash | 2 +-
- package/libcap-ng/libcap-ng.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libcgicc/libcgicc.hash | 2 +-
+ package/libcgicc/libcgicc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
-index d4590dd739..bb4280368d 100644
---- a/package/libcap-ng/libcap-ng.hash
-+++ b/package/libcap-ng/libcap-ng.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  bed6f6848e22bb2f83b5f764b2aef0ed393054e803a8e3a8711cb2a39e6b492d  libcap-ng-0.8.3.tar.gz
-+sha256  68581d3b38e7553cb6f6ddf7813b1fc99e52856f21421f7b477ce5abd2605a8a  libcap-ng-0.8.4.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index c33460d951..5e3ca20029 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
+diff --git a/package/libcgicc/libcgicc.hash b/package/libcgicc/libcgicc.hash
+index 87540c8144..699a0dbfd4 100644
+--- a/package/libcgicc/libcgicc.hash
++++ b/package/libcgicc/libcgicc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  2a17b976248de03447f9e36d6ce18a80749990d8543e2dfeea09c413eb67f7f0  cgicc-3.2.19.tar.gz
++sha256  0f91c5ce8adf406ad35a46152ffb2b9c8d6079604b796d81f48b66d1f068ad4e  cgicc-3.2.20.tar.gz
+ 
+ # Hash for license files:
+ sha256  a2e480f5e8afd7c587a3c0ac2ed3b73ed4b10fa3a553dea26e7b661c7cedda72  COPYING.LIB
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index e9ce4043f5..3d651aefc0 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCAP_NG_VERSION = 0.8.3
-+LIBCAP_NG_VERSION = 0.8.4
- LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
- LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
-@@ -12,10 +12,10 @@ LIBCAP_NG_CPE_ID_VENDOR = libcap-ng_project
- LIBCAP_NG_INSTALL_STAGING = YES
- 
- LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
--LIBCAP_NG_CONF_OPTS = --without-python --without-python3
-+LIBCAP_NG_CONF_OPTS = --without-python3
- 
- HOST_LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
--HOST_LIBCAP_NG_CONF_OPTS = --without-python --without-python3
-+HOST_LIBCAP_NG_CONF_OPTS = --without-python3
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-LIBCGICC_VERSION = 3.2.19
++LIBCGICC_VERSION = 3.2.20
+ LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.gz
+ LIBCGICC_LICENSE = LGPL-3.0+ (library), GFDL-1.2+ (docs)
 -- 
 2.43.0
 
