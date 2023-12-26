@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F3DAC46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 22:34:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A417C46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 22:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 452DB4192A;
-	Tue, 26 Dec 2023 22:34:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 452DB4192A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B9304192D;
+	Tue, 26 Dec 2023 22:43:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B9304192D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qpx1AHO9sUuQ; Tue, 26 Dec 2023 22:34:15 +0000 (UTC)
+	with ESMTP id jj0UUc2BQ5Z0; Tue, 26 Dec 2023 22:43:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D681418C1;
-	Tue, 26 Dec 2023 22:34:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D681418C1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A4791BF2A5
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 22:34:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A6A44192A;
+	Tue, 26 Dec 2023 22:43:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A6A44192A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F7201BF591
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 22:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32D3A61042
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 22:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32D3A61042
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3883681F34
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 22:43:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3883681F34
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lW_aqFqlVF9R for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 22:34:12 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 24D0761040
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 22:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24D0761040
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-40d4ebcc207so34487005e9.3
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 14:34:12 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2bsjTbsmL0Cj for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 22:43:52 +0000 (UTC)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 43EE581F32
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 22:43:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43EE581F32
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-3367f8f8cb0so4854327f8f.2
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 14:43:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703630050; x=1704234850;
+ d=1e100.net; s=20230601; t=1703630629; x=1704235429;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=YuXhUDz0jVvhfxSfNsNcGMo31YIUDf0+kvVHAWNdWes=;
- b=JuLHFd0ECn4Qb3vg26tTIZXSqkM54Tt3H8LDZ7tshbrtKTaiKaJ3uyyH6QN5m1ExFl
- sc7XC0L8AeBqFjGCXldjVeyod0F4Nol676C6S17y0WffOYhbIczgHp+3JqSfm6X1GoQw
- bG94zGvUUayYZ7VHb0gzRJx8Ml4YGbE2GAGjC9aOQtGYIrd4Ux9Iym1r1t+/AnSpTRIj
- p/Gld6qo1abXsHLOLoirw3QudrrwoxPmaME08vMAuvRpyeNkJRar7WFYoLczNO9Dya3q
- O4H2VRh2rm7nFGYM+4Pbkqj6wXUYxC32HUMHXXnTZR/htV41oZmB2PwONwYEK5iwa8Ff
- JR2g==
-X-Gm-Message-State: AOJu0YzRaqrwrByvfleecjCJY3wQ7dfvnSkQXnZNCS/VNnFP+61sIqZ6
- 7vrm8gtms6dvfQ0IsGZzA9Dqzv0Eyro=
-X-Google-Smtp-Source: AGHT+IHA8CcqDx6AkTORONtux55w7xJVpfL6ODVq04JwrrcplUPO3/F4MSIAmyT3dQSMSnoPZvDaKg==
-X-Received: by 2002:a05:600c:3ba9:b0:40c:f7d:27b2 with SMTP id
- n41-20020a05600c3ba900b0040c0f7d27b2mr4410897wms.2.1703630049527; 
- Tue, 26 Dec 2023 14:34:09 -0800 (PST)
+ bh=7Eby/gM0BxTSmVicna8PAYm/rto1jNtudiaEYHCneAU=;
+ b=ehsSa5nu8NSg3IpbTaJZq2OYcjw1WbTRpyl9ZWFi/tunjonmMai0YOdnyIpNMgx77L
+ hmq+lGm4rOC07wx3ee5aBEn4gwk0QJ67nhja2PCrX70l1/9ugbN5kTUKp4xcmNbIwcol
+ T/LPTrP8Tn4d9JELQWKvHCLuf6hy/UjIArdvU5nONDLyMsAYKkMJtP44SteSOn5yQV0I
+ dhE9Gn8iyFwdOKySJ+SmJcYSxMdCEFfFM1tljznINYUAgM6GyIDM9nmW4Bi528gX6z0u
+ /DsisdGaAExdSi5CbIe6Mjck4PMguzTl73RYiDuoUrf6pI3P1lwprQO+vv3drp8ATVSB
+ 8e2w==
+X-Gm-Message-State: AOJu0YxeHb1lBUHk3HXbGvYIVv4MI3n4zMsaLNQbTk3RD9etiii6P1XE
+ OqNdDaIqLmOxL3g3O8uVHD7eVuRj68M=
+X-Google-Smtp-Source: AGHT+IHw5XNewjvSx7PikkbyFjg6z5V5uR08ibKPgD4K8ifSfCcsxiJcEi51M7T+psk+SceXfFidcw==
+X-Received: by 2002:a5d:4b05:0:b0:336:615e:9308 with SMTP id
+ v5-20020a5d4b05000000b00336615e9308mr4397294wrq.18.1703630629398; 
+ Tue, 26 Dec 2023 14:43:49 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- u11-20020a05600c19cb00b0040d531f4ecasm11382800wmq.15.2023.12.26.14.34.09
+ m17-20020adffe51000000b003364a0e6983sm13347707wrs.62.2023.12.26.14.43.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Dec 2023 14:34:09 -0800 (PST)
+ Tue, 26 Dec 2023 14:43:49 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 23:34:07 +0100
-Message-ID: <20231226223407.2019962-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Dec 2023 23:43:46 +0100
+Message-ID: <20231226224346.2065722-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703630050; x=1704234850; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703630629; x=1704235429; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=YuXhUDz0jVvhfxSfNsNcGMo31YIUDf0+kvVHAWNdWes=;
- b=Vx6xBMxs5dGQjsWt8a9p65tdB6+8qeH3ZMXQ1vDvKjWrGrju/Z+3TgB3Teh8OPGW91
- rWNTE9NBg8XzPHeGKHUp+uxtdVDDa9MFlAYvkurqB7nWC4oksK8ox66CxIpD6p6S+4xm
- N0Ac/L+gl1Ao8WGkNbdyIjU/FDO5UyJxuUh5SfoOofIauXxaZdnebIn5QgLNY+eH3xVN
- omBLu994gk98ILJTCj54DlLIfWa93GTzYV9y3Wd6whal3yQsW7teUs9ULN9q9khO634J
- MfTHhFwuPtGlO0Ty562ihmnC7njmZB+WVEqmTzrvimcfb2edQ/GG4kbqiNMwHwccAEOz
- vn/Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=7Eby/gM0BxTSmVicna8PAYm/rto1jNtudiaEYHCneAU=;
+ b=l6ErL79efSOeopMzq32EFbH+5ugDOuH4ozxAPlfqqzVMF8dWhkEUyNEK8BniCI8hOl
+ jdVWqJBaV11AoCEA3orYfelwusdN6p1geWWkc+9g3J5kaKa8BYsad3PRui94ITY/X2H3
+ /E69RV9uX7UpDQPaUXmlT4bqUTkFJUgmtmN9lQ13hA/2Gnx5iSFo6r9FiAA9hHnkBYOq
+ 8iqeEFpJv8E8rtPdra5TX8CChvMLwR70HSxhZm6nOsxYY2B86w4viqSgOCBO/iPWD+u6
+ H2dKRfvkJO2yk2BEGZSww24y4LdT07INERbVItx6uYJIY51W9WSI5106qFYBiJf2w+r2
+ s7Og==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Vx6xBMxs
-Subject: [Buildroot] [PATCH 1/1] package/zlog: bump to version 1.2.17
+ header.a=rsa-sha256 header.s=20230601 header.b=l6ErL79e
+Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to version
+ 5.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,51 +94,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License changed to Apache-2.0:
-https://github.com/HardySimpson/zlog/commit/1a7b1a6fb956b92a4079ccc91f30da21f34ca063
+- Use official tarball and so drop autoreconf
+- Fix CVE-2023-6935, CVE-2023-6936 and CVE-2023-6937
 
-https://github.com/HardySimpson/zlog/compare/1.2.16...1.2.17
+https://github.com/wolfSSL/wolfssl/releases/tag/v5.6.6-stable
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/zlog/zlog.hash | 4 ++--
- package/zlog/zlog.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 8 ++------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/zlog/zlog.hash b/package/zlog/zlog.hash
-index 3b7c6aa78c..19881183e9 100644
---- a/package/zlog/zlog.hash
-+++ b/package/zlog/zlog.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  742401902f2134eb272c49631fe5c38d7aeb9a2ad56fa3ec3d15219b371ba655  zlog-1.2.16.tar.gz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  7fe412130abbb75a0779df89ae407db5d8f594435cc4ff6b068d924e13fd5c68  zlog-1.2.17.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-index 329f2cfe2c..ccf2576529 100644
---- a/package/zlog/zlog.mk
-+++ b/package/zlog/zlog.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index fb5a570de8..59e42e98b9 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  031691906794ff45e1e792561cf31759f5d29ac74936bc8dffb8b14f16d820b4  wolfssl-5.6.4.tar.gz
++sha256  75aaafe3b8c776d1ac417288116c8d444115f9fac5acb382a39a7d163dfd618d  wolfssl-5.6.6.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 17452fdcaf..68c69afd59 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--ZLOG_VERSION = 1.2.16
-+ZLOG_VERSION = 1.2.17
- ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
--ZLOG_LICENSE = LGPL-2.1
--ZLOG_LICENSE_FILES = COPYING
-+ZLOG_LICENSE = Apache-2.0
-+ZLOG_LICENSE_FILES = LICENSE
- ZLOG_CPE_ID_VENDOR = zlog_project
- ZLOG_INSTALL_STAGING = YES
+-WOLFSSL_VERSION = 5.6.4
+-WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
++WOLFSSL_VERSION = 5.6.6
++WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/releases/download/v$(WOLFSSL_VERSION)-stable
+ WOLFSSL_INSTALL_STAGING = YES
  
+ WOLFSSL_LICENSE = GPL-2.0+
+@@ -14,10 +14,6 @@ WOLFSSL_CPE_ID_VENDOR = wolfssl
+ WOLFSSL_CONFIG_SCRIPTS = wolfssl-config
+ WOLFSSL_DEPENDENCIES = host-pkgconf
+ 
+-# wolfssl's source code is released without a configure
+-# script, so we need autoreconf
+-WOLFSSL_AUTORECONF = YES
+-
+ WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
+ 
+ ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
 -- 
 2.43.0
 
