@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75BB5C46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E094FC46CD4
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1100C4028F;
-	Tue, 26 Dec 2023 13:43:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1100C4028F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69D09405D8;
+	Tue, 26 Dec 2023 13:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69D09405D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7-BwmA2xdb7Q; Tue, 26 Dec 2023 13:43:01 +0000 (UTC)
+	with ESMTP id zPN_YhzA0XzM; Tue, 26 Dec 2023 13:53:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41599402F4;
-	Tue, 26 Dec 2023 13:43:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41599402F4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 333061BF2C5
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:42:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D8F54062B;
+	Tue, 26 Dec 2023 13:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D8F54062B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E05191BF2C5
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7B6A812E3
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7B6A812E3
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4DFE4058D
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:53:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4DFE4058D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Yk4jWNGv5eSu for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 13:42:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2pnBblNhS4OS for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 13:53:44 +0000 (UTC)
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 13102812B2
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 13:42:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13102812B2
-Received: by mail.gandi.net (Postfix) with ESMTPA id 60F38E0004;
- Tue, 26 Dec 2023 13:42:54 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A8C4640529
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 13:53:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8C4640529
+Received: by mail.gandi.net (Postfix) with ESMTPA id 06305E0008;
+ Tue, 26 Dec 2023 13:53:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 14:42:48 +0100
-Message-ID: <20231226134249.2780393-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Dec 2023 14:53:40 +0100
+Message-ID: <20231226135340.2782425-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703598174;
+ d=bootlin.com; s=gm1; t=1703598822;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=dUxhWuzeLNcaX0M+3RPSL107xCLpE7M9Bal+lPxLZ70=;
- b=fKzID+fhABn0Km/n2fR4hN3yuc74TqmLB05iaq/9nr+z8iBE/SuUoYvLFd7v3D4uD4lpVN
- hbOBQ678I2G0fUAMEgOoT0Aw8oW0IkP+uwEMJ6dHOWWLORoUkICQIkCRO+xd4NjamobFEr
- euEqe4C6OzMuU4JDXXYOQLD/F/ag2j7TREsomE7girytkHQoG+Ko88hXiP+Mgu9i7/BTi7
- XmxMKQUFgf8csxZmRC1XJSMw1BnniJkfnrfI6Uc08qzdKi6Dnt/rc6VxNxYDAl6CNBx8QY
- DhS03oBieqOX6PC+Yy0z1kTVISPVs673jkay6IUYy6OWgL9wmvxEthhPfZcHQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=/wGbz6SJv5OQhk8gxJm+1eQai/aVCCT0jLJncZ9Wwis=;
+ b=kHkgr6SjtgsTID8tcU1FTxBmOXbMWXZm9yYXTr/w8l2XgNjiS3yx4AapDqu56bhnIm/46D
+ vvLAT4iTueoRhEFZUzHc6aymQQSVMe+Ff724HD3hhwIoj8ujg1+FtgPKAJjYtRio8VyytN
+ llx8PpFMZLkMpexFD5yMXHHHOv33dk7RO13ekfYnTn+QC0wi4S+MTYgyGXeroaWXK0aE00
+ POV5MOdHQLPQHlQl0Ko8qEDbGk26pD/YOMVjQU4lxWPJ5FJ0hqFdi8Emevc5wuIus67Q+N
+ n5V/NASnH5IEDqDCDY3FOhXdzUeD4mjLFnRRVADWPi0nIxyI2nMknpwDgTnDIA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fKzID+fh
-Subject: [Buildroot] [PATCH] package/libsoup: fix build with libxml2 2.12
+ header.s=gm1 header.b=kHkgr6Sj
+Subject: [Buildroot] [PATCH] package/gmpc: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,81 +72,139 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit adds a libsoup patch that fixes the build with libxml2
-2.12, only due to a missing header inclusion. The patch cannot be
-submitted upstream as libsoup2 is unmaintained, and libsoup3 no longer
-has the problematic XMLRPC code.
+This package is unmaintained upstream:
 
-Fixes:
+- The URL in our Config.in,
+  http://gmpcwiki.sarine.nl/index.php?title=GMPC, no longer works
 
-  http://autobuild.buildroot.net/results/4c3152720d64b204101e1611442e535b14adc41c/
+- https://github.com/DaveDavenport/gmpc says it's unmaintained
+
+- The official lists of MPD clients at
+  https://www.musicpd.org/clients/ says it's maintained, and points at
+  http://gmpclient.org/, which is no longer owned by the developers of
+  GMPC.
+
+- It still uses libsoup (2) which we want to get rid of at some
+  point.
+
+- It was added by Gustavo Zacarias, and no version bumped occurred
+  since 2011.
+
+So let's kill this package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...rpc-soup-xmlrpc-old-add-missing-libx.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/libsoup/0002-libsoup-soup-xmlrpc-soup-xmlrpc-old-add-missing-libx.patch
+ Config.in.legacy       |  7 +++++++
+ package/Config.in      |  1 -
+ package/gmpc/Config.in | 26 --------------------------
+ package/gmpc/gmpc.hash |  3 ---
+ package/gmpc/gmpc.mk   | 18 ------------------
+ 5 files changed, 7 insertions(+), 48 deletions(-)
+ delete mode 100644 package/gmpc/Config.in
+ delete mode 100644 package/gmpc/gmpc.hash
+ delete mode 100644 package/gmpc/gmpc.mk
 
-diff --git a/package/libsoup/0002-libsoup-soup-xmlrpc-soup-xmlrpc-old-add-missing-libx.patch b/package/libsoup/0002-libsoup-soup-xmlrpc-soup-xmlrpc-old-add-missing-libx.patch
-new file mode 100644
-index 0000000000..cceff2d2ba
---- /dev/null
-+++ b/package/libsoup/0002-libsoup-soup-xmlrpc-soup-xmlrpc-old-add-missing-libx.patch
-@@ -0,0 +1,47 @@
-+From 8a21b58b45edbf11d9041f884bb9c42e6440104c Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 26 Dec 2023 14:38:58 +0100
-+Subject: [PATCH] libsoup/{soup-xmlrpc,soup-xmlrpc-old}: add missing
-+ <libxml/parser.h> include
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d46bd97442..0ab9dcadff 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2023.11"
+ 
++config BR2_PACKAGE_GMPC
++	bool "gmpc package was removed"
++	select BR2_LEGACY
++	help
++	  The gmpc package was removed because it was unmaintained,
++	  and still using the old libsoup2 library.
 +
-+Since libxml2 2.12.1, including <libxml/parser.h> is needed to get the
-+prototype of xmlParseMemory(), causing a build breakage of libsoup
-+with a recent version of libxml2.
-+
-+Upstream: Not Applicable
-+[libsoup2 is not maintained upstream, and libsoup3 no longer contains
-+the XMLRPC code. We are keepin libsoup2 in Buildroot for compatibility
-+with packages that haven't moved to libsoup3 yet.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libsoup/soup-xmlrpc-old.c | 1 +
-+ libsoup/soup-xmlrpc.c     | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/libsoup/soup-xmlrpc-old.c b/libsoup/soup-xmlrpc-old.c
-+index c57086b6..dd51de53 100644
-+--- a/libsoup/soup-xmlrpc-old.c
-++++ b/libsoup/soup-xmlrpc-old.c
-+@@ -12,6 +12,7 @@
-+ #include <string.h>
-+ 
-+ #include <libxml/tree.h>
-++#include <libxml/parser.h>
-+ 
-+ #include "soup-xmlrpc-old.h"
-+ #include "soup.h"
-+diff --git a/libsoup/soup-xmlrpc.c b/libsoup/soup-xmlrpc.c
-+index 42dcda9c..b0132d26 100644
-+--- a/libsoup/soup-xmlrpc.c
-++++ b/libsoup/soup-xmlrpc.c
-+@@ -18,6 +18,7 @@
-+ #include <string.h>
-+ #include <errno.h>
-+ #include <libxml/tree.h>
-++#include <libxml/parser.h>
-+ #include "soup-xmlrpc.h"
-+ #include "soup.h"
-+ 
-+-- 
-+2.43.0
-+
+ config BR2_PACKAGE_ONEVPL
+ 	bool "onevpl package was renamed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 98653ff29d..34efaf29e5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -405,7 +405,6 @@ comment "X applications"
+ 	source "package/dillo/Config.in"
+ 	source "package/docker/Config.in"
+ 	source "package/feh/Config.in"
+-	source "package/gmpc/Config.in"
+ 	source "package/gtkperf/Config.in"
+ 	source "package/leafpad/Config.in"
+ 	source "package/mupdf/Config.in"
+diff --git a/package/gmpc/Config.in b/package/gmpc/Config.in
+deleted file mode 100644
+index 1aa74251f0..0000000000
+--- a/package/gmpc/Config.in
++++ /dev/null
+@@ -1,26 +0,0 @@
+-config BR2_PACKAGE_GMPC
+-	bool "gmpc"
+-	depends on BR2_PACKAGE_LIBGTK2
+-	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+-	depends on BR2_USE_MMU # glib2
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	select BR2_PACKAGE_LIBMPD
+-	select BR2_PACKAGE_LIBSOUP
+-	select BR2_PACKAGE_LIBXML2
+-	select BR2_PACKAGE_SQLITE
+-	select BR2_PACKAGE_XLIB_LIBICE
+-	select BR2_PACKAGE_XLIB_LIBSM
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	help
+-	  Gnome Music Player Client is a GNOME/GTK2.2 client for
+-	  Music Player Daemon.
+-
+-	  http://gmpcwiki.sarine.nl/index.php?title=GMPC
+-
+-comment "gmpc needs a toolchain w/ wchar, threads"
+-	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_XORG7 && BR2_PACKAGE_LIBGTK2
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gmpc/gmpc.hash b/package/gmpc/gmpc.hash
+deleted file mode 100644
+index 66de8b6226..0000000000
+--- a/package/gmpc/gmpc.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  a69414f35396846733632ca9619921d7acda537ffd6d49bd84b444945cb76b2c  gmpc-11.8.16.tar.gz
+-sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
+deleted file mode 100644
+index 40b77eb189..0000000000
+--- a/package/gmpc/gmpc.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# gmpc
+-#
+-################################################################################
+-
+-GMPC_VERSION = 11.8.16
+-GMPC_SITE = http://download.sarine.nl/Programs/gmpc/$(GMPC_VERSION)
+-GMPC_CONF_ENV = ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
+-GMPC_CONF_OPTS = --disable-mmkeys --disable-unique
+-GMPC_LICENSE = GPL-2.0+
+-GMPC_LICENSE_FILES = COPYING
+-GMPC_DEPENDENCIES = host-gob2 host-intltool host-pkgconf host-vala \
+-	libglib2 libgtk2 libmpd libsoup sqlite \
+-	xlib_libICE xlib_libSM xlib_libX11 \
+-	$(TARGET_NLS_DEPENDENCIES)
+-
+-$(eval $(autotools-package))
 -- 
 2.43.0
 
