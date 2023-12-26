@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AD15C46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:13:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 536CBC46CD4
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 439B7408E5;
-	Tue, 26 Dec 2023 13:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 439B7408E5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 009D0408F1;
+	Tue, 26 Dec 2023 13:14:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 009D0408F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6jMxfL-feiUI; Tue, 26 Dec 2023 13:13:47 +0000 (UTC)
+	with ESMTP id qGaaIwENSi-z; Tue, 26 Dec 2023 13:14:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 470B8408FB;
-	Tue, 26 Dec 2023 13:13:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 470B8408FB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 02A1C1BF489
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3FB340930;
+	Tue, 26 Dec 2023 13:13:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3FB340930
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FA381BF95D
  for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:13:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFF69408F1
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFF69408F1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06E93606CB
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:13:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06E93606CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RFaluQdjwkg7 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bQ5hN_pi7DPd for <buildroot@lists.busybox.net>;
  Tue, 26 Dec 2023 13:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7910408E5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 856FC60669
  for <buildroot@buildroot.org>; Tue, 26 Dec 2023 13:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7910408E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 856FC60669
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A687182847; Tue, 26 Dec 2023 13:13:30 +0000 (UTC)
+ id 725DA82847; Tue, 26 Dec 2023 13:13:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 14:13:09 +0100
+Date: Tue, 26 Dec 2023 14:13:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3cc18e40856868f24e933a24dfa2ce0708d0f793
-X-Git-Newrev: 449538348ebc941bd7a2ebde3e4e691daca45a91
+X-Git-Oldrev: 55c3fe590f0c2d0207a25d461ae2bf33e5e4c163
+X-Git-Newrev: 3f9709f803667956c58b79b4ea13e10ebace4f47
 X-Patchwork-Hint: ignore
-Message-Id: <20231226131330.A687182847@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cjson: security bump to version
- 1.7.17
+Message-Id: <20231226131330.725DA82847@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-uvicorn: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=449538348ebc941bd7a2ebde3e4e691daca45a91
+commit: https://git.buildroot.net/buildroot/commit/?id=3f9709f803667956c58b79b4ea13e10ebace4f47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix null reference in cJSON_SetValuestring (CVE-2023-50472)
-- Fix null reference in cJSON_InsertItemInArray (CVE-2023-50471)
+cpe:2.3:a:encode:uvicorn is a valid CPE identifier for this package:
 
-https://github.com/DaveGamble/cJSON/releases/tag/v1.7.17
+  https://nvd.nist.gov/products/cpe/detail/D3AA1B54-4363-4E52-90AB-01DC2080D950
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-uvicorn/python-uvicorn.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 74844d6aa6..305dc0d7b8 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  451131a92c55efc5457276807fc0c4c2c2707c9ee96ef90c47d68852d5384c6c  cjson-1.7.16.tar.gz
-+sha256  c91d1eeb7175c50d49f6ba2a25e69b46bd05cffb798382c19bfb202e467ec51c  cjson-1.7.17.tar.gz
- sha256  a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 7ed732ac90..f699c160ef 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
+index 887e4ac390..04e6dd66a7 100644
+--- a/package/python-uvicorn/python-uvicorn.mk
++++ b/package/python-uvicorn/python-uvicorn.mk
+@@ -10,6 +10,8 @@ PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/e5/84/d43ce8fe6b31
+ PYTHON_UVICORN_SETUP_TYPE = pep517
+ PYTHON_UVICORN_LICENSE = BSD-3-Clause
+ PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
++PYTHON_UVICORN_CPE_ID_VENDOR = encode
++PYTHON_UVICORN_CPE_ID_PRODUCT = uvicorn
+ PYTHON_UVICORN_DEPENDENCIES = host-python-hatchling
  
--CJSON_VERSION = 1.7.16
-+CJSON_VERSION = 1.7.17
- CJSON_SITE = $(call github,DaveGamble,cjson,v$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
