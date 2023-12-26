@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57A45C46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AD15C46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E06384038E;
-	Tue, 26 Dec 2023 13:13:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E06384038E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 439B7408E5;
+	Tue, 26 Dec 2023 13:13:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 439B7408E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FY5ryjhg1lMB; Tue, 26 Dec 2023 13:13:33 +0000 (UTC)
+	with ESMTP id 6jMxfL-feiUI; Tue, 26 Dec 2023 13:13:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C8107408F1;
-	Tue, 26 Dec 2023 13:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8107408F1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4B11A1BF489
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:13:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 470B8408FB;
+	Tue, 26 Dec 2023 13:13:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 470B8408FB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 02A1C1BF489
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:13:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3134B408A9
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFF69408F1
  for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3134B408A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFF69408F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q7GUuSUz05wx for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RFaluQdjwkg7 for <buildroot@lists.busybox.net>;
  Tue, 26 Dec 2023 13:13:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5DFBE40858
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7910408E5
  for <buildroot@buildroot.org>; Tue, 26 Dec 2023 13:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DFBE40858
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7910408E5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 476C3835AC; Tue, 26 Dec 2023 13:13:30 +0000 (UTC)
+ id A687182847; Tue, 26 Dec 2023 13:13:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 14:12:59 +0100
+Date: Tue, 26 Dec 2023 14:13:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 814e7fcacfed75c2bbaa83dba160bba7f36dd9ac
-X-Git-Newrev: 7f7a7c34e5747c122815d407a70be0d1eca512d8
+X-Git-Oldrev: 3cc18e40856868f24e933a24dfa2ce0708d0f793
+X-Git-Newrev: 449538348ebc941bd7a2ebde3e4e691daca45a91
 X-Patchwork-Hint: ignore
-Message-Id: <20231226131330.476C3835AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-asyncssh: add CPE variables
+Message-Id: <20231226131330.A687182847@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cjson: security bump to version
+ 1.7.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f7a7c34e5747c122815d407a70be0d1eca512d8
+commit: https://git.buildroot.net/buildroot/commit/?id=449538348ebc941bd7a2ebde3e4e691daca45a91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:asyncssh_project:asyncssh is a valid CPE identifier for this
-package:
+- Fix null reference in cJSON_SetValuestring (CVE-2023-50472)
+- Fix null reference in cJSON_InsertItemInArray (CVE-2023-50471)
 
-  https://nvd.nist.gov/products/cpe/detail/55866328-B495-4FDC-B9EF-C014E6885187
+https://github.com/DaveGamble/cJSON/releases/tag/v1.7.17
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-asyncssh/python-asyncssh.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-asyncssh/python-asyncssh.mk b/package/python-asyncssh/python-asyncssh.mk
-index 91e0d9d419..51e2e1973c 100644
---- a/package/python-asyncssh/python-asyncssh.mk
-+++ b/package/python-asyncssh/python-asyncssh.mk
-@@ -10,5 +10,7 @@ PYTHON_ASYNCSSH_SITE = https://files.pythonhosted.org/packages/5f/86/59278fefc49
- PYTHON_ASYNCSSH_SETUP_TYPE = setuptools
- PYTHON_ASYNCSSH_LICENSE = EPL-2.0 or GPL-2.0+
- PYTHON_ASYNCSSH_LICENSE_FILES = LICENSE COPYRIGHT
-+PYTHON_ASYNCSSH_CPE_ID_VENDOR = asyncssh_project
-+PYTHON_ASYNCSSH_CPE_ID_PRODUCT = asyncssh
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 74844d6aa6..305dc0d7b8 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  451131a92c55efc5457276807fc0c4c2c2707c9ee96ef90c47d68852d5384c6c  cjson-1.7.16.tar.gz
++sha256  c91d1eeb7175c50d49f6ba2a25e69b46bd05cffb798382c19bfb202e467ec51c  cjson-1.7.17.tar.gz
+ sha256  a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 7ed732ac90..f699c160ef 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(python-package))
+-CJSON_VERSION = 1.7.16
++CJSON_VERSION = 1.7.17
+ CJSON_SITE = $(call github,DaveGamble,cjson,v$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
