@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C534FC46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 20:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6240FC46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 20:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 747C6814B5;
-	Tue, 26 Dec 2023 20:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 747C6814B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E9C081586;
+	Tue, 26 Dec 2023 20:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E9C081586
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F4y0vZomry4N; Tue, 26 Dec 2023 20:25:37 +0000 (UTC)
+	with ESMTP id wLLVX2euav9u; Tue, 26 Dec 2023 20:25:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE0D5814AB;
-	Tue, 26 Dec 2023 20:25:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE0D5814AB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 85C721BF591
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48458815CE;
+	Tue, 26 Dec 2023 20:25:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48458815CE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 95C791BF95D
  for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 20:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5EBBE814AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D4ED60F5F
  for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 20:25:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EBBE814AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D4ED60F5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2ney8SoQqlS5 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JyD7PslAa9yN for <buildroot@lists.busybox.net>;
  Tue, 26 Dec 2023 20:25:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A2B28122A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B8AD60AFE
  for <buildroot@buildroot.org>; Tue, 26 Dec 2023 20:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A2B28122A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B8AD60AFE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65BF783601; Tue, 26 Dec 2023 20:25:34 +0000 (UTC)
+ id 88C2483600; Tue, 26 Dec 2023 20:25:34 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 21:23:25 +0100
+Date: Tue, 26 Dec 2023 21:23:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 312f4ab4c8a79e8cdc40dfed6870ac2aea981883
-X-Git-Newrev: 01689a9a65dceb15d453130b663a78ad9669aae5
+X-Git-Oldrev: 158edd5aa94b516cf8710e690431289da2545e40
+X-Git-Newrev: 9e5cbbb4134bf5730e91bc03fe01ab8cb571f0db
 X-Patchwork-Hint: ignore
-Message-Id: <20231226202534.65BF783601@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libheif: security bump to version
- 1.17.6
+Message-Id: <20231226202534.88C2483600@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strongswan: security bump to
+ version 5.9.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01689a9a65dceb15d453130b663a78ad9669aae5
+commit: https://git.buildroot.net/buildroot/commit/?id=9e5cbbb4134bf5730e91bc03fe01ab8cb571f0db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A couple of build fixes and bug fixes detected by fuzzing.
+A vulnerability in charon-tkm related to processing DH public values was
+discovered in strongSwan that can result in a buffer overflow and
+potentially remote code execution. All versions since 5.3.0 are
+affected.
 
-Corrects these issues:
- - CVE-2023-49462
- - CVE-2023-49463
-
-https://github.com/strukturag/libheif/releases/tag/v1.17.6
+https://www.strongswan.org/blog/2023/11/20/strongswan-vulnerability-(cve-2023-41913).html
+https://github.com/strongswan/strongswan/blob/5.9.13/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libheif/libheif.hash | 2 +-
- package/libheif/libheif.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strongswan/strongswan.hash | 6 +++---
+ package/strongswan/strongswan.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
-index 6ea3ba6eec..a2ca065b7a 100644
---- a/package/libheif/libheif.hash
-+++ b/package/libheif/libheif.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  38ab01938ef419dbebb98346dc0b1c8bb503a0449ea61a0e409a988786c2af5b  libheif-1.17.5.tar.gz
-+sha256  8390baf4913eda0a183e132cec62b875fb2ef507ced5ddddc98dfd2f17780aee  libheif-1.17.6.tar.gz
- sha256  b2eb4f6588b005bebac44cfb2dfd23f6a16c5ca9b8a619a315158b0215a917a3  COPYING
-diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-index 419a864ef3..bd307deb7b 100644
---- a/package/libheif/libheif.mk
-+++ b/package/libheif/libheif.mk
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index de8f18747a..ed8cf0ae31 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,7 +1,7 @@
+-# From http://download.strongswan.org/strongswan-5.9.11.tar.bz2.md5
+-md5  673e194cd256af77b46928179f2c81ad  strongswan-5.9.11.tar.bz2
++# From http://download.strongswan.org/strongswan-5.9.13.tar.bz2.md5
++md5  9ada6be0c89846fb7ded1787a17cfbb2  strongswan-5.9.13.tar.bz2
+ # Calculated based on the hash above
+-sha256  ddf53f1f26ad26979d5f55e8da95bd389552f5de3682e35593f9a70b2584ed2d  strongswan-5.9.11.tar.bz2
++sha256  56e30effb578fd9426d8457e3b76c8c3728cd8a5589594b55649b2719308ba55  strongswan-5.9.13.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 6058631696..36cb72f6be 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHEIF_VERSION = 1.17.5
-+LIBHEIF_VERSION = 1.17.6
- LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
- LIBHEIF_LICENSE = LGPL-3.0+
- LIBHEIF_LICENSE_FILES = COPYING
+-STRONGSWAN_VERSION = 5.9.11
++STRONGSWAN_VERSION = 5.9.13
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
