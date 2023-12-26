@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD62C46CD3
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:15:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E61BC46CD4
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:15:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71CE440A2E;
-	Tue, 26 Dec 2023 13:15:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71CE440A2E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D6934095A;
+	Tue, 26 Dec 2023 13:15:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D6934095A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OqG9diBB6LG3; Tue, 26 Dec 2023 13:15:36 +0000 (UTC)
+	with ESMTP id 7pnc8kWMY1uG; Tue, 26 Dec 2023 13:15:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 639BA40912;
-	Tue, 26 Dec 2023 13:15:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 639BA40912
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 13BDF1BF489
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:14:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BEBE4095E;
+	Tue, 26 Dec 2023 13:15:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BEBE4095E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CBD5D1BF489
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:14:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E129B408B4
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:14:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E129B408B4
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4E6F81331
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:14:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4E6F81331
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uX6yIzPLZWyF for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 13:14:01 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5DACB40858
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 13:14:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DACB40858
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A4B71C0006;
- Tue, 26 Dec 2023 13:13:57 +0000 (UTC)
-Date: Tue, 26 Dec 2023 14:13:56 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WYD81qapTiCg for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 13:14:03 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9ABFA8132C
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 13:14:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ABFA8132C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 940FEC0005;
+ Tue, 26 Dec 2023 13:14:00 +0000 (UTC)
+Date: Tue, 26 Dec 2023 14:13:59 +0100
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231226141356.6e9cebe7@windsurf>
-In-Reply-To: <20231226112711.12319-1-fontaine.fabrice@gmail.com>
-References: <20231226112711.12319-1-fontaine.fabrice@gmail.com>
+Message-ID: <20231226141359.69736f66@windsurf>
+In-Reply-To: <20231226112919.13545-1-fontaine.fabrice@gmail.com>
+References: <20231226112919.13545-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703596437;
+ d=bootlin.com; s=gm1; t=1703596440;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=X5DUH0MWICgfAuI/j2MpSf+Aszjv1oLL6iBZ4OmzeSI=;
- b=h9sUmjWAyJOK5B65pyuEhaEkzJp1Xp+7bZG5xTiiNj0Y0GAfnlXBK6xVS7uV0bDmWFG0Ip
- CIL5dDs3RPRHmZncm4rgYKCykouKCYhgMzZoYPO3VGoC5brEbrOLv9eOghMHf+PM6g3ih3
- /DBx/OxyaGEg6XEQbq0mxgPtRXvbOiI/N5+L2DGKz2j/sJprOt5YD3oukYrxT6o8Y5WTiZ
- H5lGAH8fUb327JQN5kUSJALEVUlljU/cgcsgqTRozEABlM9JgQKYWc2nj/DoIXQpmkGn23
- qmnMoqluElXWvNE6S0ZdkVeJQP5mPFnKYJ5QJ33Z/XM5EBzVHPwd0DOesLM9Pw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=H2pJ6Dh7AGjtVBtGwwjlqisSXOYokVrAzTfAu695fnI=;
+ b=n/Um1d3jvVSgeI5XMnjyve6Nt82Mm7e75gA6dW8lxqR0wyrHVDV78mgj15Mn8QKFbU6SeG
+ 5REND2FvsLO0JDJyKSJ22xTjUEDwl/3A0zP0dNtW6Frp+914btLTYpAdT7hFE/Qsycrlgx
+ y31fQT4Uo68A/UaGRR/IC1y4KaoErAaWiU/IforsukkFtcPLpj1yJtM2hxqWcxhwb721SH
+ 4P0wFBuwEkGnLf9q3QJUoZpxItA77WvgL7F8x3yUZxXl3/1HSir1vvGdCTfyX0euzz4Nl0
+ F8sRgEqPjdk+UXqWob0UscbBdhOpX67lB0xHDMguZD9C0w3niUe2aMzxE3HVbw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=h9sUmjWA
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-uvicorn: add CPE
- variables
+ header.s=gm1 header.b=n/Um1d3j
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-httpx: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,16 +83,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Dec 2023 12:27:11 +0100
+On Tue, 26 Dec 2023 12:29:19 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> cpe:2.3:a:encode:uvicorn is a valid CPE identifier for this package:
+> cpe:2.3:a:encode:httpx is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/detail/D3AA1B54-4363-4E52-90AB-01DC2080D950
+>   https://nvd.nist.gov/products/cpe/detail/0B9D7A81-3934-40D1-A7E4-FD8132304152
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-uvicorn/python-uvicorn.mk | 2 ++
+>  package/python-httpx/python-httpx.mk | 2 ++
 >  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
