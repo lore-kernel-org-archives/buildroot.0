@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E094FC46CD4
-	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56606C46CD3
+	for <buildroot@archiver.kernel.org>; Tue, 26 Dec 2023 13:59:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69D09405D8;
-	Tue, 26 Dec 2023 13:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69D09405D8
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3B07402CD;
+	Tue, 26 Dec 2023 13:59:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B07402CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zPN_YhzA0XzM; Tue, 26 Dec 2023 13:53:48 +0000 (UTC)
+	with ESMTP id ZYr-aueuaGtU; Tue, 26 Dec 2023 13:59:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D8F54062B;
-	Tue, 26 Dec 2023 13:53:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D8F54062B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E05191BF2C5
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:53:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC568402FD;
+	Tue, 26 Dec 2023 13:59:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC568402FD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 624C41BF228
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4DFE4058D
- for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:53:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4DFE4058D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B9D68139E
+ for <buildroot@lists.busybox.net>; Tue, 26 Dec 2023 13:59:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B9D68139E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2pnBblNhS4OS for <buildroot@lists.busybox.net>;
- Tue, 26 Dec 2023 13:53:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1qLPVX5BMzBo for <buildroot@lists.busybox.net>;
+ Tue, 26 Dec 2023 13:59:45 +0000 (UTC)
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A8C4640529
- for <buildroot@buildroot.org>; Tue, 26 Dec 2023 13:53:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8C4640529
-Received: by mail.gandi.net (Postfix) with ESMTPA id 06305E0008;
- Tue, 26 Dec 2023 13:53:41 +0000 (UTC)
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6F282801EC
+ for <buildroot@buildroot.org>; Tue, 26 Dec 2023 13:59:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F282801EC
+Received: by mail.gandi.net (Postfix) with ESMTPA id E6CD4E0003;
+ Tue, 26 Dec 2023 13:59:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 26 Dec 2023 14:53:40 +0100
-Message-ID: <20231226135340.2782425-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Dec 2023 14:59:39 +0100
+Message-ID: <20231226135941.2784505-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703598822;
+ d=bootlin.com; s=gm1; t=1703599184;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
  bh=/wGbz6SJv5OQhk8gxJm+1eQai/aVCCT0jLJncZ9Wwis=;
- b=kHkgr6SjtgsTID8tcU1FTxBmOXbMWXZm9yYXTr/w8l2XgNjiS3yx4AapDqu56bhnIm/46D
- vvLAT4iTueoRhEFZUzHc6aymQQSVMe+Ff724HD3hhwIoj8ujg1+FtgPKAJjYtRio8VyytN
- llx8PpFMZLkMpexFD5yMXHHHOv33dk7RO13ekfYnTn+QC0wi4S+MTYgyGXeroaWXK0aE00
- POV5MOdHQLPQHlQl0Ko8qEDbGk26pD/YOMVjQU4lxWPJ5FJ0hqFdi8Emevc5wuIus67Q+N
- n5V/NASnH5IEDqDCDY3FOhXdzUeD4mjLFnRRVADWPi0nIxyI2nMknpwDgTnDIA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=EJfZDfSzYpQMdrTUELdhenqxr+tqID4ClpP+RB6nmtLD6FV9JZGem6AdWqV5AUMatZFNAt
+ icoq+CM33IL0iN83/9V2DoE/0rn8soy4FRsOGNz78HgqOwA42c2h1yxfJ1S7OKb5JJOpsS
+ 9P8+shjEKYgQ1RC+xcUkOJfxewZaKqUbEyk97eY7FCDbXic244gEwHUuHNx/gujAJLQ05c
+ yYWt/oBSYj5FpTL8zETfBpaZ/kCsrKyS8L2r3pcI2oyjLA9g4hexT5ky290LEoB4cmC2P7
+ Dwhsovm9ZEPVc8f6E2D9v3sd8Di5zFlU4WmYcXZFw5oDjlMLGNPpSIaqhKQhtw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kHkgr6Sj
-Subject: [Buildroot] [PATCH] package/gmpc: remove package
+ header.s=gm1 header.b=EJfZDfSz
+Subject: [Buildroot] [PATCH v2 1/2] package/gmpc: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
