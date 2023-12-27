@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45B40C46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 13:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E985C46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 14:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A264E821ED;
-	Wed, 27 Dec 2023 13:47:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A264E821ED
+	by smtp4.osuosl.org (Postfix) with ESMTP id 267EE414D6;
+	Wed, 27 Dec 2023 14:07:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 267EE414D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WRJFXpohl_DU; Wed, 27 Dec 2023 13:47:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0hbAImAZPT-q; Wed, 27 Dec 2023 14:07:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CB92821D9;
-	Wed, 27 Dec 2023 13:47:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CB92821D9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3951A40961;
+	Wed, 27 Dec 2023 14:07:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3951A40961
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D5E41BF366
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 13:47:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 94DE31BF4D6
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 14:06:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 367F84136C
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 13:47:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 367F84136C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E51A40961
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 14:06:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E51A40961
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h59Yga8jMerS for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 13:47:01 +0000 (UTC)
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ECE83410D5
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 13:47:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECE83410D5
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-3367a304091so5118592f8f.3
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 05:47:00 -0800 (PST)
+ with ESMTP id W0oCpgYITyfQ for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 14:06:55 +0000 (UTC)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 61E674092F
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 14:06:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61E674092F
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-40d5d898162so5039525e9.3
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 06:06:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703684818; x=1704289618;
+ d=1e100.net; s=20230601; t=1703686013; x=1704290813;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=MibuMXJWsVtd4GSCoRUXTiI7gLR/4hkxUevvCjCX+Io=;
- b=MwbfX6y7lB3n0NnLJnhxcOJWB8jmMR28k5Aq5hTIYNpA6BNCXcy6l8DflaZeEpwmvu
- gnaFYoeZ/4b56hae6O08q3owtrCofy67cT4hZOY3E83piIPHK6UahQ50LeAL2RAW86K1
- T6hqjeuF4EELibuVN4ibAFsA7NO4Ilbu3UJVb/iN94xam+YbFjYfInlTBiYyfcCXvFCc
- 6hRrghHvTgjqunq4eErS1OYc4mNPR30W+Hfwjmu/V6MM1TdJbNg1FQCVw3dFH5WgDS/0
- qOeRoTvgE719bek3j3k/+VlveMGMqBPKLUirUYsFn8/qlp/smfjvcVQsz+YXS6xh3m9x
- avwQ==
-X-Gm-Message-State: AOJu0YxgHZauHkLCqYnDj9l2itz+0v4V/zW/kWJzHWZwmxfF/5pys4s5
- idTlszM+jBR/peBZtvk3VewCUP4/hQg=
-X-Google-Smtp-Source: AGHT+IFrhnmBMXEvWxD7ChTxlGFvCAbc6GFeIh171bgOarRAnGhp2XY5it5XiQ1gn9Zs/nMwoDydDg==
-X-Received: by 2002:a5d:4b84:0:b0:336:74e3:63cc with SMTP id
- b4-20020a5d4b84000000b0033674e363ccmr3030186wrt.209.1703684818359; 
- Wed, 27 Dec 2023 05:46:58 -0800 (PST)
+ bh=gJmfyP+10e26I+Sz7AqT+icB5cLK0A+NDrDO4Q0j57Y=;
+ b=Vuny/tbgfbKzZcjyy0b6w2/KrKzuvZeD2IyXeyIH7695ETOm2j9UCf+rxP2Oia1HBS
+ sy0zc+Z2zosRpCl9rozn7GKdXvDkS9yeNvdfnw6xSvFUJZYE16hTQI3nyWxJp7l1S+P3
+ bYhkNvhJGl45Bk5qNgCYzNLlQrnZ2cMp5CLHRJX9oVUciBISSIl04rZVZRBgIOJEipFa
+ uG7K1/WSHwTCUOj4g8seqXFskHp6mXEIYUlLR4TrvoYxIhAsTMK56GtdPq4jxM3iAmFS
+ m3pUbIw/VPUOHwIORBIv8G0MpqwXwwz0oot0H4Qh8X1jdU1OkrF3wY3oPVJe54viZf18
+ sC6A==
+X-Gm-Message-State: AOJu0YyTkM8pTHPQCRu0aZe0NWHHBL4SX9XephHxR8vX/QoSNWhI1aE7
+ BRZ4cOGdP0Ih2PZxL3rmiNEMjYETafE=
+X-Google-Smtp-Source: AGHT+IHx5rD3qNxceUEzyfwoLzU/hjmvI7PoPU5lgzz732Fao7GV2FJyT0SC3kEWZqecpNdh8OkCqQ==
+X-Received: by 2002:a05:600c:34d4:b0:40d:59ed:e8e6 with SMTP id
+ d20-20020a05600c34d400b0040d59ede8e6mr1608223wmq.60.1703686013056; 
+ Wed, 27 Dec 2023 06:06:53 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- u16-20020adfed50000000b003367b7a5581sm14812044wro.28.2023.12.27.05.46.57
+ o20-20020a05600c4fd400b004094d4292aesm24078081wmq.18.2023.12.27.06.06.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Dec 2023 05:46:58 -0800 (PST)
+ Wed, 27 Dec 2023 06:06:52 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 14:46:56 +0100
-Message-ID: <20231227134656.1288718-1-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Dec 2023 15:06:51 +0100
+Message-ID: <20231227140651.1303381-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703684818; x=1704289618; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703686013; x=1704290813; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=MibuMXJWsVtd4GSCoRUXTiI7gLR/4hkxUevvCjCX+Io=;
- b=Ge8Zio2A6PeH4WM8tx+JNnrbaVCADgq/MxfxuJdvW+aD8E5TndhwL0EhFOneMcGxm9
- qzdCyDLZDV49UCxmF/1jVxzzv4fgodtwat8yIDW1uFb8M+IrLjmEPUJu9Gy74cwWDGJL
- 6KhMlG7v5mG5CHPyuSFuF7FghIXkV7qVws46EaQZoEkr6dEVsUemE11uoXa7jsMST1r0
- ijuwZgljjHlBVjYfjLO959jKpmBg/U3LW6qpAb3oPcqt23AKNDiSeHUrWx60NG94M+UO
- 2WMlKcqqFa2tB8phESSPLYxfX8oKoZjAqCbuy5x+mT7PYE0SuMAW1MGJkSV+P/AzpwOC
- dAtA==
+ bh=gJmfyP+10e26I+Sz7AqT+icB5cLK0A+NDrDO4Q0j57Y=;
+ b=RD2m+iiA9dPwM9ECFbNTDNs6xD10x5wZAUm+SqDk8s9jlL6bjZ+DPlpGH1E9l8o9jZ
+ zUoVJCvs0HTmDbbi5CkU2ws+fW4gepPDgUqhDGASYkWVDdUgkqw/HBSZTBAGydpyqM/H
+ 7ATSY/dgaz/l3+PphoX/FBrDmDKuhHQqhdJAu4b77cGoRx+H6Of2OpierEbnrikMxT6k
+ vc7edXup7fNQ9heS+7BQyoIUT0Z2DW51cY4QDzfBVUCLGMa+ApGicq/cTGmVFddn/yXo
+ i++Eo5pbRmzcKbohjgNdlCF/y0d+JQCeatur2K5DALzzKIvJntm1EqFLauoZJHChh2wS
+ Il0w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Ge8Zio2A
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gstd: drop readline
- dependency
+ header.a=rsa-sha256 header.s=20230601 header.b=RD2m+iiA
+Subject: [Buildroot] [PATCH 1/1] package/mpd-mpc: bump to version 0.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,48 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Thierry Bultel <tbultel@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-readline is not a dependency since bump to version 0.15.0 in commit
-cbd06adac50e304f413689febf676911ae29d967 and
-https://github.com/RidgeRun/gstd-1.x/commit/978b503840e0f9ae99f732113babbc4fbfb2a770
+https://github.com/MusicPlayerDaemon/mpc/blob/v0.35/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gstreamer1/gstd/Config.in | 1 -
- package/gstreamer1/gstd/gstd.mk   | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ package/mpd-mpc/mpd-mpc.hash | 2 +-
+ package/mpd-mpc/mpd-mpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gstd/Config.in b/package/gstreamer1/gstd/Config.in
-index df1d2f59c3..bfe1a40bfd 100644
---- a/package/gstreamer1/gstd/Config.in
-+++ b/package/gstreamer1/gstd/Config.in
-@@ -10,7 +10,6 @@ config BR2_PACKAGE_GSTD
- 	select BR2_PACKAGE_LIBEDIT
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBSOUP
--	select BR2_PACKAGE_READLINE
- 	help
- 	  GStreamer Daemon, also called gstd, is a GStreamer framework
- 	  for controlling audio and video streaming using an
-diff --git a/package/gstreamer1/gstd/gstd.mk b/package/gstreamer1/gstd/gstd.mk
-index ccb3b3e1bc..965ede7949 100644
---- a/package/gstreamer1/gstd/gstd.mk
-+++ b/package/gstreamer1/gstd/gstd.mk
-@@ -17,8 +17,7 @@ GSTD_DEPENDENCIES = \
- 	libdaemon \
- 	libedit \
- 	libglib2 \
--	libsoup \
--	readline
-+	libsoup
+diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
+index 4f4af9a91d..0ccda3c785 100644
+--- a/package/mpd-mpc/mpd-mpc.hash
++++ b/package/mpd-mpc/mpd-mpc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  691e3f3654bc10d022bb0310234d0bc2d8c075a698f09924d9ebed8f506fda20  mpc-0.34.tar.xz
++sha256  382959c3bfa2765b5346232438650491b822a16607ff5699178aa1386e3878d4  mpc-0.35.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index 00d1964fe6..a58423b4bc 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- GSTD_CONF_OPTS = \
- 	-Denable-tests=disabled \
+ MPD_MPC_VERSION_MAJOR = 0
+-MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).34
++MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).35
+ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPL-2.0+
 -- 
 2.43.0
 
