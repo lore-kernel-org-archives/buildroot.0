@@ -4,48 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1ECDC46CD4
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 16:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F359DC46CD4
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 16:58:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3062E4161A;
-	Wed, 27 Dec 2023 16:22:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3062E4161A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8032640450;
+	Wed, 27 Dec 2023 16:58:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8032640450
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I02Ebf0uNcrh; Wed, 27 Dec 2023 16:22:36 +0000 (UTC)
+	with ESMTP id nVp0HjAaQzQe; Wed, 27 Dec 2023 16:58:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 792F241600;
-	Wed, 27 Dec 2023 16:22:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 792F241600
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4FE301BF3E1
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:22:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1EB740422;
+	Wed, 27 Dec 2023 16:58:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1EB740422
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CF7A1BF5A3
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:58:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3655F8238F
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:22:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3655F8238F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B17540422
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:58:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B17540422
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i6rCovGz_PBH for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 16:22:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57D0C8238E
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 16:22:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57D0C8238E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43CA783687; Wed, 27 Dec 2023 16:22:32 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 17:20:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 64a5831679cf743357e725284e56cf0365010c36
-X-Git-Newrev: 078b8558b9e25917db680fdeb8d9c64db9aafc8e
-X-Patchwork-Hint: ignore
-Message-Id: <20231227162232.43CA783687@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xwayland: security bump to
- 23.2.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gEeIL8psTonq for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 16:58:45 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E0CCE403C1
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 16:58:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0CCE403C1
+Received: by mail.gandi.net (Postfix) with ESMTPA id 09B24FF806;
+ Wed, 27 Dec 2023 16:58:41 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Wed, 27 Dec 2023 17:58:40 +0100
+Message-ID: <20231227165840.2900718-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1703696322;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=tbj60dMP26NhIgl05dAt1BuPxvuuxlfUmtW+WxWuQKU=;
+ b=Iy5Br4i1MsplLgU83NCAU7D67b/Njeo6ta61aqrISyDt1o7/uI7kztE2Z8jd5GL3J2ZHvF
+ VBmYNa9vPm8nsdtzCB862S+M6s/TbolAwz1hBnXKk7VlYBZe+mPkor0MB/qfAsl10fiEvQ
+ K+PMWrkM6EBKS8xd56US0/zKZZymxwq4iURpdglbew285oZ8EEqPnb+/z0bYQNHGjfC2sU
+ qisazst0ZR2rEcKF/NeLoJ3sk62MK7VV4mLfLcmmlMJ351YfiS3VInXpD54o0lrp9xYVw1
+ wuX3x7RnzWEOH2is4/HQquHxqE5/23Qxy672xNTfbFQTBzFGk1rTWGLy06ndWg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Iy5Br4i1
+Subject: [Buildroot] [PATCH] Config.in: change default optimization level
+ from -Os to -O2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,61 +71,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: louis.chauvet@bootlin.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=078b8558b9e25917db680fdeb8d9c64db9aafc8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Historically, Buildroot has defaulted to -Os as the gcc optimization
+flags. However, this default is probably not the most appropriate
+anymore, and this commit therefore changes the default to -O2.
 
-According to
-https://lists.x.org/archives/xorg-announce/2023-December/003437.html:
+Here are some arguments in favor of this change:
 
-  This release contains the fixes for CVE-2023-6377 and CVE-2023-6478
-  in today's security advisory:
-  https://lists.x.org/archives/xorg-announce/2023-December/003435.html
+- Most Buildroot uses use Buildroot for platforms that have a
+  reasonable amount of storage, and the difference between -Os and -O2
+  in terms of code size is no longer than significant compared to the
+  size of storage typically available on average embedded Linux
+  devices
 
-The release has only 10 commits compared to 23.2.2, all of which being
-fixes, two of them being the security fixes. So it seems like bumping
-the version is a reasonable trade-off vs. backporting the security
-fixes.
+- -Os can have a pretty bad performance impact, compared to -O2.
+
+- -Os is much less widely tested than -O2. For example, with recent
+   versions of gcc, there are parts of Qt5 that segfault when compiled
+   with -Os and work perfectly fine with -O2. Yes, it's a compiler bug
+   that should be fixed, but in the mean time, having a default that's
+   more widely used/tested makes sense.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xwayland/xwayland.hash | 6 +++---
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 12363a66bf..533ef9de86 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-October/003432.html
--sha256  9f7c0938d2a41e941ffa04f99c35e5db2bcd3eec034afe8d35d5c810a22eb0a8  xwayland-23.2.2.tar.xz
--sha512  f5b319fdace7d7c078544730ecd26afeb63b1a0c779fb097455147945df85af32d9e91501ebdb70209d48e8a3ead3b23be31e9d5118358ac17e699abb4b6ac07  xwayland-23.2.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-December/003437.html
-+sha256  eb9d9aa7232c47412c8835ec15a97c575f03563726c787754ff0c019bd07e302  xwayland-23.2.3.tar.xz
-+sha512  37198aa2f06313a0cb2add51cc78f81b26a42f2c9d55a0d3eecf958777107ea5560961c128f2d0af055f7460ba10fadb1b9050251c2c50f2251b40ab517e79cd  xwayland-23.2.3.tar.xz
+diff --git a/Config.in b/Config.in
+index 554b4062eb..c38b1e6454 100644
+--- a/Config.in
++++ b/Config.in
+@@ -474,7 +474,7 @@ config BR2_STRIP_EXCLUDE_DIRS
  
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index b0bff19be5..8f4bcd8117 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ choice
+ 	prompt "gcc optimization level"
+-	default BR2_OPTIMIZE_S
++	default BR2_OPTIMIZE_2
+ 	help
+ 	  Set the optimization level for gcc
  
--XWAYLAND_VERSION = 23.2.2
-+XWAYLAND_VERSION = 23.2.3
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
