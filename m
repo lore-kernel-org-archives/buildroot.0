@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27DA3C46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 10:02:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9BBFC46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 10:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDF0C81E65;
-	Wed, 27 Dec 2023 10:02:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDF0C81E65
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3723C81E87;
+	Wed, 27 Dec 2023 10:56:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3723C81E87
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YdODpS-Wdy40; Wed, 27 Dec 2023 10:02:23 +0000 (UTC)
+	with ESMTP id XZulGyovsHPn; Wed, 27 Dec 2023 10:56:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 836CC81E77;
-	Wed, 27 Dec 2023 10:02:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 836CC81E77
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB9921BF263
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 10:02:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BD0781E95;
+	Wed, 27 Dec 2023 10:56:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BD0781E95
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 23EF31BF2A3
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 10:56:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C469560BF7
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 10:02:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C469560BF7
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0FED81E96
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 10:56:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0FED81E96
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sxx4WshsfFsc for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 10:02:10 +0000 (UTC)
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 505D660B06
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 10:02:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 505D660B06
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-3367601a301so4975710f8f.2
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 02:02:10 -0800 (PST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7aYj1LOxQAgH for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 10:56:19 +0000 (UTC)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ECBA581E95
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 10:56:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECBA581E95
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-336788cb261so4619108f8f.3
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 02:56:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703671327; x=1704276127;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Qi3iPXxJAQVKzuVJAsG/MkAUVoYTohNUESx+0FpuT+Y=;
- b=LrbwHtkNKuiIYTODg/wP4Er6/BeeqVSwbEHKheje5+w4ez50ZoTARbfx3ypPILoM7I
- o2dKuLx81IIhlSXPkQ3Qr4APiya6Vw1vyI5p+NI0gSWFDyeaqd4zOBs0sbdP4vKNxdVH
- XxzvfFFIuA33J8JBRGLmDXeMgSFFYjviEhEDANhn+Lvb+Kv+xnYPYC7jGMnGw/NjERZo
- 6ktO6CQ0TV6jN/sua8iE30lDKd6hp7e/blyvmAKB0HVWa4B77aA3UTMNoRu+KI/4w2gx
- CUAC9175asL5vEjammaP2M/Y7ijQmWyLl2pWi6B8mLa3gz0i9qZGQUQZIoin8rqv7X/k
- jtAw==
-X-Gm-Message-State: AOJu0YyxnvQpo8EIn+t8Iss5Aifbay8shsgt0Ga/AvhzTEM22vS0fyVR
- ndblpK6+l4KHvmUJ+90uNr/BIXK8WUM=
-X-Google-Smtp-Source: AGHT+IExo6weKDhaQE4rKvJ9m42Ig7Blrmntx3K3xtq+pBOJaZyNiQwV8UPytKbfjl5h8i637+jjZA==
-X-Received: by 2002:adf:f8cc:0:b0:336:5ec5:b2ef with SMTP id
- f12-20020adff8cc000000b003365ec5b2efmr3304998wrq.149.1703671327409; 
- Wed, 27 Dec 2023 02:02:07 -0800 (PST)
+ d=1e100.net; s=20230601; t=1703674576; x=1704279376;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HZI9FdN7jwNG6fbrhKYAaKFvbFkx8xAt96B+J/6rT6w=;
+ b=o2KCQnnPKiefeOPHspheH0vY2TgLZ5dRnGrddEDEegHJdTpgrmi2BUC6/4SuGMoTt8
+ UNEHog23ZwocCW6R+W8ymy12VJBQbzSz7Su9fVYMYudC+ZhEKR/1SRERI1VR/TxAW9m0
+ Sfw4WawABaMr7/9L/KZJomZOujHdZ6eaKFDSX4pIpPldhkFSweIt4a0XxbW3AgFbEL7h
+ 48YnQwhqDHNHDGDwyihmA6zqroVb9DrsX4RRqKwE2SUP4J9mhYe/fRFOlsUrkmLqUiGa
+ 6JbDf+FWioJCRcO4yS3Ktu4jpqISjj0VcFWQio6w452r5ooIXRmNA+EyIHBjiF8pOO+D
+ KwzQ==
+X-Gm-Message-State: AOJu0Yzbo0aGHDQk7YSFHwXpS7J4jehKLKANnKQ/+X6tX4B6syEsQ1ps
+ /fY6+aRkhvgFnAgNMQnp30qqHkpBXS4=
+X-Google-Smtp-Source: AGHT+IFGsox87cKhWCpMGLPLtuhAb9Z7mCPk2sN9GCmk71Q/qm0p/i36qkOE66453SEo85z0b4Q9pQ==
+X-Received: by 2002:a5d:648d:0:b0:336:c291:24a6 with SMTP id
+ o13-20020a5d648d000000b00336c29124a6mr2052436wri.141.1703674576284; 
+ Wed, 27 Dec 2023 02:56:16 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- bl13-20020adfe24d000000b003365fcc1846sm14423547wrb.52.2023.12.27.02.02.06
+ q28-20020adfab1c000000b0033690139ea5sm12199885wrc.44.2023.12.27.02.56.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Dec 2023 02:02:07 -0800 (PST)
+ Wed, 27 Dec 2023 02:56:15 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 11:01:58 +0100
-Message-ID: <20231227100158.124316-2-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Dec 2023 11:56:07 +0100
+Message-ID: <20231227105607.1010960-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231227100158.124316-1-fontaine.fabrice@gmail.com>
-References: <20231227100158.124316-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703671327; x=1704276127; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Qi3iPXxJAQVKzuVJAsG/MkAUVoYTohNUESx+0FpuT+Y=;
- b=LZiUysKvqREYi3dt0SotcOde5N8xAearqfk5uEhqUcn4mjrRrA14cmlH39pPBue1JB
- MEifOXAGjzJpgMB7yDox6UFH8Rb6MIeY0ToC2j4QD86z90X/UEKQIGEOP/t8zklmLG1Q
- P+ExP7ibakP9xWHV00A4OANCzYKyawVmFyW6FGqkDLLmmHwN/4ZtRWc4CGVBpjH7LG8Z
- l2Tt7VQYcKDvdBpeNz9o39MCwIgVeJNnqCww9titv6ukhueG1T1fnG6Cpi2SC5YvUEZq
- Y+wN2oVb9YfKgPa5gYKoZOIt8ya2HxoiI3Zxel7l/TFdGsEK3xT5tJFlkGptKzeh2ojm
- IHlA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1703674576; x=1704279376; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HZI9FdN7jwNG6fbrhKYAaKFvbFkx8xAt96B+J/6rT6w=;
+ b=Ln4PwHq06D7i7Va34O/hMhKKOTwRjr2qySToI7sVCRQ7C5UHqhK+ywIfpDoUtzOdUL
+ ZBUFiY4uIg1w7we5Bk3zD0BjavN7FKZW5jZMZyUqo+7HwRrr7/AGmZlLQmZ5s09kcBip
+ 1JzweHfYPNp4RWpaTn2ZgyTxuDWGA/TZLJVJR53da4On4tppRMTRI3dbLvy/gqGXSSv1
+ 4LdVVkH85J+bZcMm3Gg/J/7RvcpScJWvcKerfiR77vkENvqwV3toPwelHKyBL1GXxmmJ
+ +5mqT8pxTwm5mOT6lbl2UsJcasBx8zQJZ4/RxGge05ib84XH391ubrCnAjdoFIjmVDp1
+ qE9w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=LZiUysKv
-Subject: [Buildroot] [PATCH 2/2] package/gupnp: bump to version 1.6.6
+ header.a=rsa-sha256 header.s=20230601 header.b=Ln4PwHq0
+Subject: [Buildroot] [PATCH 1/1] package/libostree: switch to libsoup3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,302 +93,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patches (already in version)
-- Add patch to fix build with libxml2 2.12
-
-https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.6.6/NEWS
+libsoup3 is supported since bump to version 2023.3 in commit
+618eb375a046cc4ff007758510c883788e6ff690 and
+https://github.com/ostreedev/ostree/commit/d0ea2db4300eb7871b59d0b997a7f06869120297
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-all-Drop-xmlRecoverMemory.patch      | 113 ------------------
- ...ix-compatibility-with-libxml2-2-12-x.patch |  84 +++++++++++++
- ...properly-spell-provide-in-wrap-files.patch |  30 -----
- package/gupnp/gupnp.hash                      |   4 +-
- package/gupnp/gupnp.mk                        |   4 +-
- 5 files changed, 88 insertions(+), 147 deletions(-)
- delete mode 100644 package/gupnp/0001-all-Drop-xmlRecoverMemory.patch
- create mode 100644 package/gupnp/0001-all-Fix-compatibility-with-libxml2-2-12-x.patch
- delete mode 100644 package/gupnp/0002-build-properly-spell-provide-in-wrap-files.patch
+ package/libostree/libostree.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/gupnp/0001-all-Drop-xmlRecoverMemory.patch b/package/gupnp/0001-all-Drop-xmlRecoverMemory.patch
-deleted file mode 100644
-index 46e09c267e..0000000000
---- a/package/gupnp/0001-all-Drop-xmlRecoverMemory.patch
-+++ /dev/null
-@@ -1,113 +0,0 @@
--From c3d084736cca81dd4ec05f7e4b634050eb6e8525 Mon Sep 17 00:00:00 2001
--From: Jens Georg <mail@jensge.org>
--Date: Thu, 4 May 2023 19:14:29 +0200
--Subject: [PATCH] all: Drop xmlRecoverMemory
--
--use xmlReadMemory, also use NONET flat
--
--Upstream: https://gitlab.gnome.org/GNOME/gupnp/-/commit/80e68995b745a5900eaaa1d0c424d3a9d354e42d
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--[Bernd: backported to branch gupnp-1.4]
-----
-- libgupnp/gupnp-control-point.c        | 7 +++++--
-- libgupnp/gupnp-service-info.c         | 8 ++++++--
-- libgupnp/gupnp-service-proxy-action.c | 7 +++++--
-- libgupnp/gupnp-service-proxy.c        | 7 +++++--
-- libgupnp/gupnp-service.c              | 7 +++++--
-- 5 files changed, 26 insertions(+), 10 deletions(-)
--
--diff --git a/libgupnp/gupnp-control-point.c b/libgupnp/gupnp-control-point.c
--index deb4b42..17c485a 100644
----- a/libgupnp/gupnp-control-point.c
--+++ b/libgupnp/gupnp-control-point.c
--@@ -613,8 +613,11 @@ got_description_url (SoupSession           *session,
--                 xmlDoc *xml_doc;
-- 
--                 /* Parse response */
---                xml_doc = xmlRecoverMemory (msg->response_body->data,
---                                            msg->response_body->length);
--+                xml_doc = xmlReadMemory (msg->response_body->data,
--+                                         msg->response_body->length,
--+                                         NULL,
--+                                         NULL,
--+                                         XML_PARSE_NONET | XML_PARSE_RECOVER);
--                 if (xml_doc) {
--                         doc = gupnp_xml_doc_new (xml_doc);
-- 
--diff --git a/libgupnp/gupnp-service-info.c b/libgupnp/gupnp-service-info.c
--index 9a9f4de..1c7489e 100644
----- a/libgupnp/gupnp-service-info.c
--+++ b/libgupnp/gupnp-service-info.c
--@@ -592,8 +592,12 @@ got_scpd_url (G_GNUC_UNUSED SoupSession *session,
--         if (SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
--                 xmlDoc *scpd;
-- 
---                scpd = xmlRecoverMemory (msg->response_body->data,
---                                         msg->response_body->length);
--+                scpd = xmlReadMemory (msg->response_body->data,
--+                                      msg->response_body->length,
--+                                      NULL,
--+                                      NULL,
--+                                      XML_PARSE_NONET | XML_PARSE_RECOVER);
--+
--                 if (scpd) {
--                         introspection = gupnp_service_introspection_new (scpd);
-- 
--diff --git a/libgupnp/gupnp-service-proxy-action.c b/libgupnp/gupnp-service-proxy-action.c
--index f089152..079219f 100644
----- a/libgupnp/gupnp-service-proxy-action.c
--+++ b/libgupnp/gupnp-service-proxy-action.c
--@@ -87,8 +87,11 @@ check_action_response (G_GNUC_UNUSED GUPnPServiceProxy *proxy,
--         }
-- 
--         /* Parse response */
---        response = xmlRecoverMemory (action->msg->response_body->data,
---                                     action->msg->response_body->length);
--+        response = xmlReadMemory (action->msg->response_body->data,
--+                                  action->msg->response_body->length,
--+                                  NULL,
--+                                  NULL,
--+                                  XML_PARSE_NONET | XML_PARSE_RECOVER);
-- 
--         if (!response) {
--                 if (action->msg->status_code == SOUP_STATUS_OK) {
--diff --git a/libgupnp/gupnp-service-proxy.c b/libgupnp/gupnp-service-proxy.c
--index 5dd1bfc..eed9882 100644
----- a/libgupnp/gupnp-service-proxy.c
--+++ b/libgupnp/gupnp-service-proxy.c
--@@ -1561,8 +1561,11 @@ server_handler (G_GNUC_UNUSED SoupServer        *soup_server,
--         }
-- 
--         /* Parse the actual XML message content */
---        doc = xmlRecoverMemory (msg->request_body->data,
---                                msg->request_body->length);
--+        doc = xmlReadMemory (msg->request_body->data,
--+                             msg->request_body->length,
--+                             NULL,
--+                             NULL,
--+                             XML_PARSE_NONET | XML_PARSE_RECOVER);
--         if (doc == NULL) {
--                 /* Failed */
--                 g_warning ("Failed to parse NOTIFY message body");
--diff --git a/libgupnp/gupnp-service.c b/libgupnp/gupnp-service.c
--index 2794ebc..e82daaa 100644
----- a/libgupnp/gupnp-service.c
--+++ b/libgupnp/gupnp-service.c
--@@ -1002,8 +1002,11 @@ control_server_handler (SoupServer                      *server,
--                 *end = '\0';
-- 
--         /* Parse action_node */
---        doc = xmlRecoverMemory (msg->request_body->data,
---                                msg->request_body->length);
--+        doc = xmlReadMemory (msg->request_body->data,
--+                             msg->request_body->length,
--+                             NULL,
--+                             NULL,
--+                             XML_PARSE_NONET | XML_PARSE_RECOVER);
--         if (doc == NULL) {
--                 soup_message_set_status (msg, SOUP_STATUS_BAD_REQUEST);
-- 
---- 
--2.39.2
--
-diff --git a/package/gupnp/0001-all-Fix-compatibility-with-libxml2-2-12-x.patch b/package/gupnp/0001-all-Fix-compatibility-with-libxml2-2-12-x.patch
-new file mode 100644
-index 0000000000..14f696ca80
---- /dev/null
-+++ b/package/gupnp/0001-all-Fix-compatibility-with-libxml2-2-12-x.patch
-@@ -0,0 +1,84 @@
-+From 00514fb62ebd341803fa44e26a6482a8c25dbd34 Mon Sep 17 00:00:00 2001
-+From: Jens Georg <mail@jensge.org>
-+Date: Sat, 25 Nov 2023 17:56:02 +0100
-+Subject: [PATCH] all: Fix compatibility with libxml2 2.12.x
-+
-+Upstream: https://gitlab.gnome.org/GNOME/gupnp/-/commit/00514fb62ebd341803fa44e26a6482a8c25dbd34
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libgupnp/gupnp-control-point.c        | 2 ++
-+ libgupnp/gupnp-service-proxy-action.c | 2 ++
-+ libgupnp/gupnp-service-proxy.c        | 2 ++
-+ libgupnp/gupnp-xml-doc.c              | 3 +++
-+ libgupnp/xml-util.h                   | 2 ++
-+ 5 files changed, 11 insertions(+)
-+
-+diff --git a/libgupnp/gupnp-control-point.c b/libgupnp/gupnp-control-point.c
-+index d4b44721..4374f726 100644
-+--- a/libgupnp/gupnp-control-point.c
-++++ b/libgupnp/gupnp-control-point.c
-+@@ -27,6 +27,8 @@
-+ #include <config.h>
-+ #include <string.h>
-+ 
-++#include <libxml/parser.h>
-++
-+ #include "gupnp-control-point.h"
-+ #include "gupnp-context-private.h"
-+ #include "gupnp-resource-factory-private.h"
-+diff --git a/libgupnp/gupnp-service-proxy-action.c b/libgupnp/gupnp-service-proxy-action.c
-+index b241d86c..6ea241ad 100644
-+--- a/libgupnp/gupnp-service-proxy-action.c
-++++ b/libgupnp/gupnp-service-proxy-action.c
-+@@ -9,6 +9,8 @@
-+ 
-+ #include <config.h>
-+ 
-++#include <libxml/parser.h>
-++
-+ #include "gupnp-error.h"
-+ #include "gupnp-service-proxy.h"
-+ #include "gvalue-util.h"
-+diff --git a/libgupnp/gupnp-service-proxy.c b/libgupnp/gupnp-service-proxy.c
-+index adba5ab0..3f1a4454 100644
-+--- a/libgupnp/gupnp-service-proxy.c
-++++ b/libgupnp/gupnp-service-proxy.c
-+@@ -16,6 +16,8 @@
-+ #include <locale.h>
-+ #include <errno.h>
-+ 
-++#include <libxml/globals.h>
-++
-+ #include "gena-protocol.h"
-+ #include "gupnp-context-private.h"
-+ #include "gupnp-error-private.h"
-+diff --git a/libgupnp/gupnp-xml-doc.c b/libgupnp/gupnp-xml-doc.c
-+index 627f1a28..66f9b3dd 100644
-+--- a/libgupnp/gupnp-xml-doc.c
-++++ b/libgupnp/gupnp-xml-doc.c
-+@@ -15,6 +15,9 @@
-+ #include <config.h>
-+ #include <string.h>
-+ #include <gio/gio.h>
-++
-++#include <libxml/parser.h>
-++
-+ #include "gupnp-xml-doc.h"
-+ #include "gupnp-error.h"
-+ 
-+diff --git a/libgupnp/xml-util.h b/libgupnp/xml-util.h
-+index a02eb3d4..d0dcaeba 100644
-+--- a/libgupnp/xml-util.h
-++++ b/libgupnp/xml-util.h
-+@@ -10,6 +10,8 @@
-+ #define GUPNP_XML_UTIL_H
-+ 
-+ #include <libxml/tree.h>
-++#include <libxml/parser.h>
-++
-+ #include <stdarg.h>
-+ #include <glib-object.h>
-+ 
-+-- 
-+GitLab
-+
-diff --git a/package/gupnp/0002-build-properly-spell-provide-in-wrap-files.patch b/package/gupnp/0002-build-properly-spell-provide-in-wrap-files.patch
-deleted file mode 100644
-index 0632469a98..0000000000
---- a/package/gupnp/0002-build-properly-spell-provide-in-wrap-files.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 884639bd29323cbb8fbd36bc69d08097a2ae2cd1 Mon Sep 17 00:00:00 2001
--From: Jan Beich <jbeich@FreeBSD.org>
--Date: Sun, 9 Jul 2023 03:30:47 +0000
--Subject: [PATCH] build: properly spell [provide] in *.wrap files
--
--meson.build:1:0: ERROR: Unexpected "[provides]" section, did you mean "[provide]"?
--
--Upstream: https://gitlab.gnome.org/GNOME/gupnp/-/commit/884639bd29323cbb8fbd36bc69d08097a2ae2cd1
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--[Bernd: backported to branch gupnp-1.4]
-----
-- subprojects/gssdp-1.6.wrap | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/subprojects/gssdp-1.6.wrap b/subprojects/gssdp-1.6.wrap
--index b0b6504..8adc1a2 100644
----- a/subprojects/gssdp-1.2.wrap
--+++ b/subprojects/gssdp-1.2.wrap
--@@ -3,6 +3,6 @@ url = https://gitlab.gnome.org/GNOME/gssdp.git
-- revision = gssdp-1.4
-- depth = 1
--  
---[provides]
--+[provide]
-- dependency_name = gssdp-1.2
-- 
---- 
--GitLab
--
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index 823dbd7927..b8a3fa082e 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.gnome.org/sources/gupnp/1.4/gupnp-1.4.3.sha256sum:
--sha256  14eda777934da2df743d072489933bd9811332b7b5bf41626b8032efb28b33ba  gupnp-1.4.3.tar.xz
-+# Hash from: https://download.gnome.org/sources/gupnp/1.6/gupnp-1.6.6.sha256sum:
-+sha256  c9dc50e8c78b3792d1b0e6c5c5f52c93e9345d3dae2891e311a993a574f5a04f  gupnp-1.6.6.tar.xz
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index d13f484041..a737dc047f 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -17,6 +17,7 @@ LIBOSTREE_CONF_ENV = \
+ 	GPG_ERROR_CONFIG=$(STAGING_DIR)/usr/bin/gpg-error-config
+ LIBOSTREE_CONF_OPTS += \
+ 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
++	--without-soup \
+ 	--disable-gtk-doc \
+ 	--disable-gtk-doc-html \
+ 	--disable-gtk-doc-pdf \
+@@ -44,10 +45,10 @@ else
+ LIBOSTREE_CONF_OPTS += --without-avahi
+ endif
  
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index f41f26d2dd..cfcc114189 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+-#cURL support depends on libsoup
+-ifeq ($(BR2_PACKAGE_LIBSOUP),y)
+-LIBOSTREE_CONF_OPTS += --with-soup
+-LIBOSTREE_DEPENDENCIES += libsoup
++# cURL support depends on libsoup3
++ifeq ($(BR2_PACKAGE_LIBSOUP3),y)
++LIBOSTREE_CONF_OPTS += --with-soup3
++LIBOSTREE_DEPENDENCIES += libsoup3
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ LIBOSTREE_CONF_OPTS += --with-curl
+ LIBOSTREE_DEPENDENCIES += libcurl
+@@ -55,7 +56,7 @@ else
+ LIBOSTREE_CONF_OPTS += --without-curl
+ endif
+ else
+-LIBOSTREE_CONF_OPTS += --without-soup --without-curl
++LIBOSTREE_CONF_OPTS += --without-soup3 --without-curl
+ endif
  
--GUPNP_VERSION_MAJOR = 1.4
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
-+GUPNP_VERSION_MAJOR = 1.6
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).6
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = https://download.gnome.org/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPL-2.1+
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
 -- 
 2.43.0
 
