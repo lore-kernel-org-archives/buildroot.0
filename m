@@ -4,85 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D032C46CD4
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 14:44:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9B5C46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 16:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C04D40620;
-	Wed, 27 Dec 2023 14:44:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C04D40620
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33B7A41612;
+	Wed, 27 Dec 2023 16:20:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33B7A41612
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wdU92js7-fDd; Wed, 27 Dec 2023 14:44:37 +0000 (UTC)
+	with ESMTP id r944aBJLQEEw; Wed, 27 Dec 2023 16:20:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44CAF4091B;
-	Wed, 27 Dec 2023 14:44:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44CAF4091B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A52E11BF4D6
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 14:44:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 757A0409C3;
+	Wed, 27 Dec 2023 16:20:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 757A0409C3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CA8C1BF3E1
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:20:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75CB381EBA
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 14:44:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75CB381EBA
+ by smtp3.osuosl.org (Postfix) with ESMTP id E925060FDF
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:20:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E925060FDF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id whFeaBFGAljV for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 14:44:33 +0000 (UTC)
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D6CE81CDC
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 14:44:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D6CE81CDC
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-3368d1c7b23so4409542f8f.0
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 06:44:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703688270; x=1704293070;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=oIH+SJIbH4tGprYhaHRU4XphWnURgwa6vl6v+bx2ZHU=;
- b=AVsRM1nJscsX1zPTWto3h6MTjmin+at6nsGOcXDXg7O3t61ow241BjU7EHA9tXJ1p3
- 0XoKQRIWUIUy+ssN+GZH8ghOPcMZ/OeohC0eNi1pauka+/SaGb3XW/Frkq1vwpiXtWeP
- A0isj/Vdde9hiC7yAktpXBq3yIMk/9TWw2ggRf2qP+TaoN0QI7h4Az7S6sqYhEKyCej6
- 8ihItiXF12mXAa/I2sb2sll8wIyb7uA7jsv1KsnwrbTvfZSAsvCbCEFQVZ9OV2YRD07m
- yQrgy5iQ9ntyYT01vFrsSlhjND2LUFO9imqv7m2vFfaQ28fPjt376KvqYinfMHJMHgJK
- HYDQ==
-X-Gm-Message-State: AOJu0YwejNTrci3xGi0G8yMC2lixKIWskgxlSSnSwCrJMbo8oGCvQOmN
- 3sGkQ6MvqcAXMdDWNb0mxXJQaOPLGSM=
-X-Google-Smtp-Source: AGHT+IE279FVHRg9iYLea3/hAPUw9JwRx3BaBwktYUOzQabtFVeMRZs6nom7PQvrcnWVUC5ZxlkBSA==
-X-Received: by 2002:adf:fc47:0:b0:336:4f0a:d30d with SMTP id
- e7-20020adffc47000000b003364f0ad30dmr4806793wrs.30.1703688269593; 
- Wed, 27 Dec 2023 06:44:29 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- e8-20020a5d5948000000b00336aa190139sm10128387wri.5.2023.12.27.06.44.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Dec 2023 06:44:29 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ORSty5qUHuh8 for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 16:20:45 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9DCBB60FDE
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 16:20:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DCBB60FDE
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 55E5A60004;
+ Wed, 27 Dec 2023 16:20:41 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@48ers.dk>) id 1rIWe8-002QrA-1S;
+ Wed, 27 Dec 2023 17:20:40 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 15:44:24 +0100
-Message-ID: <20231227144424.1379160-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Wed, 27 Dec 2023 17:20:38 +0100
+Message-Id: <20231227162039.579880-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703688270; x=1704293070; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=oIH+SJIbH4tGprYhaHRU4XphWnURgwa6vl6v+bx2ZHU=;
- b=GTXzt9btWInXBxlXkXg8H8sUQ3cWHGoXvHvQxIKFodJnmtxfTFrOnDRp+4WYVeS8zL
- ERy+ReOW0HvqF0qjJMICRs/UW2EGLzpk/b8g8HnXAOXEZsnCipQJ72yBxPLT++LzXgr5
- CPRR2MCKesXQBOSg1ui/jYwGMGCtuaO9dLN3SXhaUttxfUCdoyPa/gQ60CvKoqDhYZkh
- kjNvQbSkSvgpwNoW5G2Whn1cqQWsZSMsVDiH+hcnaXxPjsFfM7d1Intjj8tOfPwN3UZv
- Et6OiVfMTJ+ZRE+uWUzPxJxLr7qo0R7AW95En95Taq+LjZ11i7GbPgOIhiK3Ut2Vcd0q
- fj2g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GTXzt9bt
-Subject: [Buildroot] [PATCH 1/1] package/mp4v2: security bump to version
- 2.1.3
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH] package/xserver_xorg-server: security bump to
+ version 21.1.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,47 +60,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-1450, CVE-2023-1451 and CVE-2023-29584
+Fixes the following security issues:
 
-https://github.com/enzo1982/mp4v2/releases/tag/v2.1.3
-https://github.com/enzo1982/mp4v2/releases/tag/v2.1.2
+1) CVE-2023-6377: X.Org server: Out-of-bounds memory write in XKB button actions
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+A device has XKB button actions for each button on the device.  When a
+logical device switch happens (e.g.  moving from a touchpad to a mouse), the
+server re-calculates the information available on the respective master
+device (typically the Virtual Core Pointer).  This re-calculation only
+allocated enough memory for a single XKB action rather instead of enough for
+the newly active physical device's number of button.  As a result, querying
+or changing the XKB button actions results in out-of-bounds memory reads and
+writes.
+
+This may lead to local privilege escalation if the server is run as root or
+remote code execution (e.g. x11 over ssh).
+
+2) CVE-2023-6478: X.Org server: Out-of-bounds memory read in
+RRChangeOutputProperty and RRChangeProviderProperty
+
+This fixes an OOB read and the resulting information disclosure.
+
+Length calculation for the request was clipped to a 32-bit integer.  With
+the correct stuff->nUnits value the expected request size was truncated,
+passing the REQUEST_FIXED_SIZE check.
+
+The server then proceeded with reading at least stuff->nUnits bytes
+(depending on stuff->format) from the request and stuffing whatever it finds
+into the property.  In the process it would also allocate at least
+stuff->nUnits bytes, i.e.  4GB.
+
+See also CVE-2022-46344 where this issue was fixed for other requests.
+
+For more details, see the advisory:
+https://lists.x.org/archives/xorg-announce/2023-December/003435.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mp4v2/mp4v2.hash | 2 +-
- package/mp4v2/mp4v2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mp4v2/mp4v2.hash b/package/mp4v2/mp4v2.hash
-index d3f0243650..4605ee6b0d 100644
---- a/package/mp4v2/mp4v2.hash
-+++ b/package/mp4v2/mp4v2.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  29420c62e56a2e527fd8979d59d05ed6d83ebe27e0e2c782c1ec19a3a402eaee  mp4v2-2.1.1.tar.bz2
-+sha256  033185c17bf3c5fdd94020c95f8325be2e5356558e3913c3d6547a85dd61f7f1  mp4v2-2.1.3.tar.bz2
- sha256  7187891a4c39ee9e7ec70c71fc7dc8b8ed02c6f56ae1ffc017a34ac66dca5390  COPYING
-diff --git a/package/mp4v2/mp4v2.mk b/package/mp4v2/mp4v2.mk
-index 7de837c170..ae777cdc75 100644
---- a/package/mp4v2/mp4v2.mk
-+++ b/package/mp4v2/mp4v2.mk
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index ccd7cc74fa..de93b11927 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-October/003431.html
+-sha256  ff697be2011b4c4966b7806929e51b7a08e9d33800d505305d26d9ccde4b533a  xorg-server-21.1.9.tar.xz
+-sha512  9044e1b9222616fb63aea444b75f4ca6582edb7d899018f8ea30359e57edf04b1555e69397ebc4d288f7e36d6b82a54dde3895f11d414573d229e908ac17bfe8  xorg-server-21.1.9.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-December/003436.html
++sha256  ceb0b3a2efc57ac3ccf388d3dc88b97615068639fb284d469689ae3d105611d0  xorg-server-21.1.10.tar.xz
++sha512  8135d9b7c0c71f427ba0a3b80741fee4f6ae195779399b73261a00858882f3516e367a08e2da1403734b04eacabae9aa231e5375eff23b57a3ff764e9caf8926  xorg-server-21.1.10.tar.xz
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index cf0e688c36..4ac4283e4b 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MP4V2_VERSION = 2.1.1
-+MP4V2_VERSION = 2.1.3
- MP4V2_SITE = \
- 	https://github.com/enzo1982/mp4v2/releases/download/v$(MP4V2_VERSION)
- MP4V2_SOURCE = mp4v2-$(MP4V2_VERSION).tar.bz2
+-XSERVER_XORG_SERVER_VERSION = 21.1.9
++XSERVER_XORG_SERVER_VERSION = 21.1.10
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 -- 
-2.43.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
