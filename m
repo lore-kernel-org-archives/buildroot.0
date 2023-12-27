@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19C23C46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 19:23:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 885C2C46CD4
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 19:23:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C68398267F;
-	Wed, 27 Dec 2023 19:23:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C68398267F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 341B6812B7;
+	Wed, 27 Dec 2023 19:23:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 341B6812B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OY7bruD2KL8I; Wed, 27 Dec 2023 19:23:15 +0000 (UTC)
+	with ESMTP id wc0zujT1gO2R; Wed, 27 Dec 2023 19:23:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24A1482675;
-	Wed, 27 Dec 2023 19:23:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24A1482675
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6744E1BF2E4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F87880EB6;
+	Wed, 27 Dec 2023 19:23:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F87880EB6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DC10C1BF2E4
  for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 19:23:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40BE64015A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B21E74011D
  for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 19:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40BE64015A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B21E74011D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6naTt65Hv6Pj for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JkWKkbLRk-o8 for <buildroot@lists.busybox.net>;
  Wed, 27 Dec 2023 19:22:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63D6C40118
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77C9440108
  for <buildroot@buildroot.org>; Wed, 27 Dec 2023 19:22:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63D6C40118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77C9440108
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FD42836E0; Wed, 27 Dec 2023 19:22:59 +0000 (UTC)
+ id 6207B836E1; Wed, 27 Dec 2023 19:22:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 20:17:41 +0100
+Date: Wed, 27 Dec 2023 20:20:36 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0c4bd703a424f69451d7774727680fae2b4daa3
-X-Git-Newrev: 53779570e50307482d095ff6ef95582cac2a0165
+X-Git-Oldrev: 53779570e50307482d095ff6ef95582cac2a0165
+X-Git-Newrev: a760645bfb3fa74253d24462a39e29d4c54ee5ea
 X-Patchwork-Hint: ignore
-Message-Id: <20231227192259.4FD42836E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zlog: bump to version 1.2.17
+Message-Id: <20231227192259.6207B836E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good:
+ switch to libsoup3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,49 +63,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53779570e50307482d095ff6ef95582cac2a0165
+commit: https://git.buildroot.net/buildroot/commit/?id=a760645bfb3fa74253d24462a39e29d4c54ee5ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License changed to Apache-2.0:
-https://github.com/HardySimpson/zlog/commit/1a7b1a6fb956b92a4079ccc91f30da21f34ca063
-
-https://github.com/HardySimpson/zlog/compare/1.2.16...1.2.17
+libsoup3 is supported since
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/c3455def2e7bd09a7c3806283ceb69d0bef24869
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zlog/zlog.hash | 4 ++--
- package/zlog/zlog.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gstreamer1/gst1-plugins-good/Config.in            | 10 +++++-----
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/zlog/zlog.hash b/package/zlog/zlog.hash
-index 3b7c6aa78c..19881183e9 100644
---- a/package/zlog/zlog.hash
-+++ b/package/zlog/zlog.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  742401902f2134eb272c49631fe5c38d7aeb9a2ad56fa3ec3d15219b371ba655  zlog-1.2.16.tar.gz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  7fe412130abbb75a0779df89ae407db5d8f594435cc4ff6b068d924e13fd5c68  zlog-1.2.17.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-index 329f2cfe2c..ccf2576529 100644
---- a/package/zlog/zlog.mk
-+++ b/package/zlog/zlog.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 36a542227a..e1e2674a4a 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -261,7 +261,7 @@ comment "plugins with external dependencies"
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_ADAPTIVEMUX2
+ 	bool "adaptivedemux2 (Adaptive Streaming 2)"
+ 	select BR2_PACKAGE_LIBXML2
+-	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_LIBSOUP3
  
--ZLOG_VERSION = 1.2.16
-+ZLOG_VERSION = 1.2.17
- ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
--ZLOG_LICENSE = LGPL-2.1
--ZLOG_LICENSE_FILES = COPYING
-+ZLOG_LICENSE = Apache-2.0
-+ZLOG_LICENSE_FILES = LICENSE
- ZLOG_CPE_ID_VENDOR = zlog_project
- ZLOG_INSTALL_STAGING = YES
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAME
+ 	bool "lame (*.mp3 audio encoder)"
+@@ -383,11 +383,11 @@ comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library
  
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
+ 	bool "souphttpsrc (http client)"
+-	depends on BR2_USE_WCHAR # libsoup -> glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libsoup -> glib2
+-	select BR2_PACKAGE_LIBSOUP
++	depends on BR2_USE_WCHAR # libsoup3 -> glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libsoup3 -> glib2
++	select BR2_PACKAGE_LIBSOUP3
+ 	help
+-	  libsoup HTTP client src/sink
++	  libsoup3 HTTP client src/sink
+ 
+ comment "souphttpsrc needs a toolchain w/ wchar, threads"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 4a84ea01b9..d1a0d71dfb 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -60,7 +60,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ADAPTIVEMUX2),y)
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Dadaptivedemux2=enabled
+-GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup libxml2
++GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup3 libxml2
+ else
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Dadaptivedemux2=disabled
+ endif
+@@ -453,7 +453,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC),y)
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Dsoup=enabled
+-GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup
++GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup3
+ else
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Dsoup=disabled
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
