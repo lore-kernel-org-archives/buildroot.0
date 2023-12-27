@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4523C46CD4
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 22:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDF8C46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 22:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D85841B72;
-	Wed, 27 Dec 2023 22:13:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D85841B72
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5544941B97;
+	Wed, 27 Dec 2023 22:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5544941B97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tgBhTeCF8GCg; Wed, 27 Dec 2023 22:13:19 +0000 (UTC)
+	with ESMTP id 3HeEFu-Givvc; Wed, 27 Dec 2023 22:13:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BEE6341930;
-	Wed, 27 Dec 2023 22:13:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEE6341930
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D8E641BEC;
+	Wed, 27 Dec 2023 22:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D8E641BEC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 176341BF2E4
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 22:13:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 32DBB1BF2E4
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 22:13:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFF4841846
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 22:13:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFF4841846
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F98241748
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 22:13:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F98241748
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VuuC6o8asCy0 for <buildroot@lists.busybox.net>;
+ with ESMTP id V3BfNL2-mYQV for <buildroot@lists.busybox.net>;
  Wed, 27 Dec 2023 22:13:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2ACC941748
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B4F44182C
  for <buildroot@buildroot.org>; Wed, 27 Dec 2023 22:13:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ACC941748
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B4F44182C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15BCE8373F; Wed, 27 Dec 2023 22:13:16 +0000 (UTC)
+ id 28F4883740; Wed, 27 Dec 2023 22:13:16 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 23:04:54 +0100
+Date: Wed, 27 Dec 2023 23:10:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b45c2a048d02a0e30da8534b5c048d048b252452
-X-Git-Newrev: bf7a1f10ddb1f9c327f110dc745762af30310828
+X-Git-Oldrev: bf7a1f10ddb1f9c327f110dc745762af30310828
+X-Git-Newrev: 782d268abadc2541953d1782d79d142a7b6f07b1
 X-Patchwork-Hint: ignore
-Message-Id: <20231227221316.15BCE8373F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/libcamera-apps: bump to
- version 1.3.0"
+Message-Id: <20231227221316.28F4883740@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera: pipeline option
+ 'raspberrypi' changed to 'rpi/vc4'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf7a1f10ddb1f9c327f110dc745762af30310828
+commit: https://git.buildroot.net/buildroot/commit/?id=782d268abadc2541953d1782d79d142a7b6f07b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit c9645fd29bf38b5a960aed3eeac36975d64a400a.
+With upstram commit [1] (since version v0.1.0) the pipeline option 'raspberrypi'
+was renamed to 'rpi/vc4'.
 
-Building libcamera-apps 1.3.0 with current libcamera 0.1.0 fails because
-some of the symbols like controls::AeFlickerMode are not recognized.
-According to my research, they have been introduced after libcamera 0.1.0
-but there is no release version of libcamera newer than 0.1.0 available
-to which we could bump.
+Change the buildroot option name from BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI
+to BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4 (and add Config.in.legacy entry
+accordingly) and move handling in Config.in/libcamer.mk to follow alphabetic
+ordering.
 
-Signed-off-by: Sebastian Bauer <mail@sebastianbauer.info>
+Fixes:
+
+  .../build/libcamera-v0.1.0/meson.build:3:0: ERROR: Options "raspberrypi" are not in allowed choices: "all, auto, imx8-isi, ipu3, rkisp1, rpi/vc4, simple, uvcvideo, vimc"
+
+[1] https://git.libcamera.org/libcamera/libcamera.git/commit/?id=726e9274ea95fa46352556d340c5793a8da51fcd
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libcamera-apps/libcamera-apps.hash | 2 +-
- package/libcamera-apps/libcamera-apps.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy               | 10 ++++++++++
+ package/libcamera/Config.in    | 16 ++++++++--------
+ package/libcamera/libcamera.mk |  6 +++---
+ 3 files changed, 21 insertions(+), 11 deletions(-)
 
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-index 281aab88be..1437a0e8fa 100644
---- a/package/libcamera-apps/libcamera-apps.hash
-+++ b/package/libcamera-apps/libcamera-apps.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  92ff51e2aa4cd7165a8f5131df57cb0967a259bc74e4a47d7fb9dcfd65e45e25  libcamera-apps-1.3.0.tar.gz
-+sha256  e6b74a0ba10a962f1930199d7dd828c8d9ee370dfe1fdfd8ae2638df744f1344  libcamera-apps-1.2.1.tar.gz
- sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index d60e58e7e4..2a217f095f 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index f06fc851c4..bca483215f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,16 @@ endif
  
--LIBCAMERA_APPS_VERSION = 1.3.0
-+LIBCAMERA_APPS_VERSION = 1.2.1
- LIBCAMERA_APPS_SITE = $(call github,raspberrypi,libcamera-apps,v$(LIBCAMERA_APPS_VERSION))
- LIBCAMERA_APPS_LICENSE = BSD-2-Clause
- LIBCAMERA_APPS_LICENSE_FILES = license.txt
+ comment "Legacy options removed in 2024.02"
+ 
++config BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI
++	bool "libcamera pipeline 'raspberrypi' was renamed to 'rpi/vc4'"
++	depends on BR2_arm || BR2_aarch64
++	depends on BR2_USE_WCHAR
++	select BR2_LEGACY
++	select BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4
++	help
++	  Since version ... the libcamera pipeline option 'raspberrypi' was
++	  renamed to 'rpi/vc4'.
++
+ config BR2_GDB_VERSION_11
+ 	bool "gdb 11.x removed"
+ 	select BR2_LEGACY
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index 63c06173db..65d5fb37f8 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -40,21 +40,21 @@ config BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3
+ 	help
+ 	  Pipeline for Intel IPU3.
+ 
+-config BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI
+-	bool "raspberrypi pipeline"
++config BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1
++	bool "rkisp1 pipeline"
+ 	depends on BR2_arm || BR2_aarch64
+-	depends on BR2_USE_WCHAR # boost (already enforced for gnutls)
+-	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
+ 	help
+-	  Pipeline for Raspberry Pi devices.
++	  Pipeline for Rockchip ISP1.
+ 
+-config BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1
+-	bool "rkisp1 pipeline"
++config BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4
++	bool "rpi/vc4 pipeline"
+ 	depends on BR2_arm || BR2_aarch64
++	depends on BR2_USE_WCHAR # boost (already enforced for gnutls)
++	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
+ 	help
+-	  Pipeline for Rockchip ISP1.
++	  Pipeline for Raspberry Pi devices.
+ 
+ config BR2_PACKAGE_LIBCAMERA_PIPELINE_SIMPLE
+ 	bool "simple pipeline"
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 8dce67f60f..c1c8bb7b33 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -51,11 +51,11 @@ LIBCAMERA_CONF_OPTS += -Dv4l2=false
+ endif
+ 
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3) += ipu3
+-ifeq ($(BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI),y)
+-LIBCAMERA_PIPELINES-y += raspberrypi
++LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1) += rkisp1
++ifeq ($(BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4),y)
++LIBCAMERA_PIPELINES-y += rpi/vc4
+ LIBCAMERA_DEPENDENCIES += boost
+ endif
+-LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1) += rkisp1
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_SIMPLE) += simple
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_UVCVIDEO) += uvcvideo
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC) += vimc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
