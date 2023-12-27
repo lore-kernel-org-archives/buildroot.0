@@ -4,51 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9B5C46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 16:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44F2DC46CD4
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 16:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33B7A41612;
-	Wed, 27 Dec 2023 16:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33B7A41612
+	by smtp4.osuosl.org (Postfix) with ESMTP id C85A7409C3;
+	Wed, 27 Dec 2023 16:22:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C85A7409C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r944aBJLQEEw; Wed, 27 Dec 2023 16:20:49 +0000 (UTC)
+	with ESMTP id jA5fTMPI5nFD; Wed, 27 Dec 2023 16:22:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 757A0409C3;
-	Wed, 27 Dec 2023 16:20:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 757A0409C3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1CA8C1BF3E1
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:20:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14FB54161A;
+	Wed, 27 Dec 2023 16:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14FB54161A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 972D41BF3E1
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E925060FDF
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:20:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E925060FDF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D69B41621
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 16:22:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D69B41621
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ORSty5qUHuh8 for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 16:20:45 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9DCBB60FDE
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 16:20:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DCBB60FDE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 55E5A60004;
- Wed, 27 Dec 2023 16:20:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v61CQrhrTnOj for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 16:22:04 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4B65640210
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 16:22:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B65640210
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E6757E0003;
+ Wed, 27 Dec 2023 16:22:00 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rIWe8-002QrA-1S;
- Wed, 27 Dec 2023 17:20:40 +0100
+ (envelope-from <peter@korsgaard.com>) id 1rIWfP-002Quj-33;
+ Wed, 27 Dec 2023 17:21:59 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 17:20:38 +0100
-Message-Id: <20231227162039.579880-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20231223195510.18755-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 27 Dec 2023 17:21:59 +0100
+In-Reply-To: <20231223195510.18755-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Sat, 23 Dec 2023 20:55:09
+ +0100")
+Message-ID: <87a5pvr4yg.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/xserver_xorg-server: security bump to
- version 21.1.10
+Subject: Re: [Buildroot] [PATCH] package/x11r7/xwayland: security bump to
+ 23.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,81 +64,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-1) CVE-2023-6377: X.Org server: Out-of-bounds memory write in XKB button actions
+ > According to
+ > https://lists.x.org/archives/xorg-announce/2023-December/003437.html:
 
-A device has XKB button actions for each button on the device.  When a
-logical device switch happens (e.g.  moving from a touchpad to a mouse), the
-server re-calculates the information available on the respective master
-device (typically the Virtual Core Pointer).  This re-calculation only
-allocated enough memory for a single XKB action rather instead of enough for
-the newly active physical device's number of button.  As a result, querying
-or changing the XKB button actions results in out-of-bounds memory reads and
-writes.
+ >   This release contains the fixes for CVE-2023-6377 and CVE-2023-6478
+ >   in today's security advisory:
+ >   https://lists.x.org/archives/xorg-announce/2023-December/003435.html
 
-This may lead to local privilege escalation if the server is run as root or
-remote code execution (e.g. x11 over ssh).
+ > The release has only 10 commits compared to 23.2.2, all of which being
+ > fixes, two of them being the security fixes. So it seems like bumping
+ > the version is a reasonable trade-off vs. backporting the security
+ > fixes.
 
-2) CVE-2023-6478: X.Org server: Out-of-bounds memory read in
-RRChangeOutputProperty and RRChangeProviderProperty
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-This fixes an OOB read and the resulting information disclosure.
+Committed, thanks.
 
-Length calculation for the request was clipped to a 32-bit integer.  With
-the correct stuff->nUnits value the expected request size was truncated,
-passing the REQUEST_FIXED_SIZE check.
+Xserver 21.1.10 has been released with the same fixes, so I have sent a
+patch for that.
 
-The server then proceeded with reading at least stuff->nUnits bytes
-(depending on stuff->format) from the request and stuffing whatever it finds
-into the property.  In the process it would also allocate at least
-stuff->nUnits bytes, i.e.  4GB.
-
-See also CVE-2022-46344 where this issue was fixed for other requests.
-
-For more details, see the advisory:
-https://lists.x.org/archives/xorg-announce/2023-December/003435.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index ccd7cc74fa..de93b11927 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-October/003431.html
--sha256  ff697be2011b4c4966b7806929e51b7a08e9d33800d505305d26d9ccde4b533a  xorg-server-21.1.9.tar.xz
--sha512  9044e1b9222616fb63aea444b75f4ca6582edb7d899018f8ea30359e57edf04b1555e69397ebc4d288f7e36d6b82a54dde3895f11d414573d229e908ac17bfe8  xorg-server-21.1.9.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-December/003436.html
-+sha256  ceb0b3a2efc57ac3ccf388d3dc88b97615068639fb284d469689ae3d105611d0  xorg-server-21.1.10.tar.xz
-+sha512  8135d9b7c0c71f427ba0a3b80741fee4f6ae195779399b73261a00858882f3516e367a08e2da1403734b04eacabae9aa231e5375eff23b57a3ff764e9caf8926  xorg-server-21.1.10.tar.xz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index cf0e688c36..4ac4283e4b 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 21.1.9
-+XSERVER_XORG_SERVER_VERSION = 21.1.10
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
 -- 
-2.39.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
