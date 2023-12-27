@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07C1FC46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 20:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95B72C46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 20:25:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C92541761;
-	Wed, 27 Dec 2023 20:25:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C92541761
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B94941761;
+	Wed, 27 Dec 2023 20:25:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B94941761
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BJ79LGWWj0KX; Wed, 27 Dec 2023 20:25:01 +0000 (UTC)
+	with ESMTP id 2x4cgmda1tet; Wed, 27 Dec 2023 20:25:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F6E54175B;
-	Wed, 27 Dec 2023 20:25:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F6E54175B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CCE481BF5A9
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 20:23:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 364F141741;
+	Wed, 27 Dec 2023 20:25:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 364F141741
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 209FE1BF5A9
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 20:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A661A80F60
+ by smtp3.osuosl.org (Postfix) with ESMTP id B388961002
  for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 20:23:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A661A80F60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B388961002
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cTVHaxDg1Au4 for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 20:23:52 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A517480ED4
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LgwVFLIAuYP6 for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 20:23:51 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 68D3A61011
  for <buildroot@buildroot.org>; Wed, 27 Dec 2023 20:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A517480ED4
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C8FD4E0005;
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68D3A61011
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 566CC40006;
  Wed, 27 Dec 2023 20:23:48 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@48ers.dk>) id 1rIaRQ-002W5w-0I;
- Wed, 27 Dec 2023 21:23:48 +0100
+ (envelope-from <peko@48ers.dk>) id 1rIaRP-002W5o-1r;
+ Wed, 27 Dec 2023 21:23:47 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 21:23:37 +0100
-Message-Id: <20231227202344.599971-6-peter@korsgaard.com>
+Date: Wed, 27 Dec 2023 21:23:36 +0100
+Message-Id: <20231227202344.599971-5-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231227202344.599971-1-peter@korsgaard.com>
 References: <20231227202344.599971-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH 06/12] package/gst1-devtools: bump to version
- 1.22.8
+Subject: [Buildroot] [PATCH 05/12] package/gst1-plugins-ugly: bump to
+ version 1.22.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,33 +69,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-devtools/gst1-devtools.hash | 4 ++--
- package/gstreamer1/gst1-devtools/gst1-devtools.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.hash b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
-index e02af776df..823812114b 100644
---- a/package/gstreamer1/gst1-devtools/gst1-devtools.hash
-+++ b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index 7faf0fe689..7b85301280 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.22.7.tar.xz.sha256sum
--sha256  157cf93fb2741cf0c3dea731be3af2ffae703c9f2cd3c0c91b380fbc685eb9f9  gst-devtools-1.22.7.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.22.8.tar.xz.sha256sum
-+sha256  cd634056fcb16d035b3df5953ec85ae8bd56c68f29920b720ef920ca71ea76a7  gst-devtools-1.22.8.tar.xz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  validate/COPYING
-diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.mk b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-index cc633bad82..21d7253d91 100644
---- a/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-+++ b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.7.tar.xz.sha256sum
+-sha256  520b46bca637189ad86a298ff245b2d89375dbcac8b05d74daea910f81a9e9da  gst-plugins-ugly-1.22.7.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.8.tar.xz.sha256sum
++sha256  0761d96ba508e01c0271881b26828c2bffd7d8afd50872219f088f755b252ca7  gst-plugins-ugly-1.22.8.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index f5df83bed0..90be791e0c 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_DEVTOOLS_VERSION = 1.22.7
-+GST1_DEVTOOLS_VERSION = 1.22.8
- GST1_DEVTOOLS_SOURCE = gst-devtools-$(GST1_DEVTOOLS_VERSION).tar.xz
- GST1_DEVTOOLS_SITE = https://gstreamer.freedesktop.org/src/gst-devtools
- GST1_DEVTOOLS_LICENSE = LGPL-2.1+
+-GST1_PLUGINS_UGLY_VERSION = 1.22.7
++GST1_PLUGINS_UGLY_VERSION = 1.22.8
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
 -- 
 2.39.2
 
