@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9BBFC46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 10:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 444C8C46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 11:30:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3723C81E87;
-	Wed, 27 Dec 2023 10:56:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3723C81E87
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0E8960F89;
+	Wed, 27 Dec 2023 11:30:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0E8960F89
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XZulGyovsHPn; Wed, 27 Dec 2023 10:56:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id od7JqYApcCni; Wed, 27 Dec 2023 11:30:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BD0781E95;
-	Wed, 27 Dec 2023 10:56:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BD0781E95
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 23EF31BF2A3
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 10:56:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EC3560F95;
+	Wed, 27 Dec 2023 11:30:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EC3560F95
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 43EAE1BF267
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 11:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0FED81E96
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 10:56:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0FED81E96
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D278408F5
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 11:30:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D278408F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7aYj1LOxQAgH for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 10:56:19 +0000 (UTC)
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ECBA581E95
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 10:56:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECBA581E95
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-336788cb261so4619108f8f.3
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 02:56:18 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3AHF0e-4Jh6c for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 11:30:51 +0000 (UTC)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0881940300
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 11:30:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0881940300
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-40d2764c0f2so68322825e9.2
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 03:30:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703674576; x=1704279376;
+ d=1e100.net; s=20230601; t=1703676648; x=1704281448;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HZI9FdN7jwNG6fbrhKYAaKFvbFkx8xAt96B+J/6rT6w=;
- b=o2KCQnnPKiefeOPHspheH0vY2TgLZ5dRnGrddEDEegHJdTpgrmi2BUC6/4SuGMoTt8
- UNEHog23ZwocCW6R+W8ymy12VJBQbzSz7Su9fVYMYudC+ZhEKR/1SRERI1VR/TxAW9m0
- Sfw4WawABaMr7/9L/KZJomZOujHdZ6eaKFDSX4pIpPldhkFSweIt4a0XxbW3AgFbEL7h
- 48YnQwhqDHNHDGDwyihmA6zqroVb9DrsX4RRqKwE2SUP4J9mhYe/fRFOlsUrkmLqUiGa
- 6JbDf+FWioJCRcO4yS3Ktu4jpqISjj0VcFWQio6w452r5ooIXRmNA+EyIHBjiF8pOO+D
- KwzQ==
-X-Gm-Message-State: AOJu0Yzbo0aGHDQk7YSFHwXpS7J4jehKLKANnKQ/+X6tX4B6syEsQ1ps
- /fY6+aRkhvgFnAgNMQnp30qqHkpBXS4=
-X-Google-Smtp-Source: AGHT+IFGsox87cKhWCpMGLPLtuhAb9Z7mCPk2sN9GCmk71Q/qm0p/i36qkOE66453SEo85z0b4Q9pQ==
-X-Received: by 2002:a5d:648d:0:b0:336:c291:24a6 with SMTP id
- o13-20020a5d648d000000b00336c29124a6mr2052436wri.141.1703674576284; 
- Wed, 27 Dec 2023 02:56:16 -0800 (PST)
+ bh=i8AhVDRgiHiwuu7wadEt6EZLBCYH3N6n+Jh8HIG1u/s=;
+ b=IMF1QSccbDqxdavWmfltDpm+6BLUra7zxNe36cTmi1UTH5kJXRgdS/qMOFI1yO3OrN
+ lVgkf9Jheyi3ztsEyGBHOpHhdckpGbm7LziZYo6vCQ5Z29+OI4cwzHp8ay/DxRd4wIxi
+ ccqdjb3dLiO+RCrvrKxS2WF2WT0TK0LaoVQN4lVzNt1ePrmGUIeUty3lVU6ujAMvfP4d
+ MkCDuNWtuSMVKzz3nW4CPGAWAIPbMtSekWMXsMpErY2EnJ1FS7RszOC/tUK8raoaDxn2
+ msbTgUD8JMcs2qWo6kgozFVcayLdVE360/3qNHSLSIWACIBnddyvIxMSSIgaF4xE1p7m
+ xJeg==
+X-Gm-Message-State: AOJu0YxE1RQD7N1D0wiOpvGueWfeDpvkI9UUmrR25pTe2gmsMh+aQwww
+ 848nAmHR/5e8owlxSuQssfbFmDk1ptE=
+X-Google-Smtp-Source: AGHT+IH1SZVSfiqcyCUfLwK0et61VdfcRWG9ALeL9PaB05S+XHyZfo7uJp5Aj+1+SNNIhvF5wGliSw==
+X-Received: by 2002:a05:600c:4e8f:b0:40d:5f55:5e9 with SMTP id
+ f15-20020a05600c4e8f00b0040d5f5505e9mr330211wmq.92.1703676647933; 
+ Wed, 27 Dec 2023 03:30:47 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- q28-20020adfab1c000000b0033690139ea5sm12199885wrc.44.2023.12.27.02.56.15
+ g20-20020a05600c4ed400b0040d4329d3d9sm19807022wmq.24.2023.12.27.03.30.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Dec 2023 02:56:15 -0800 (PST)
+ Wed, 27 Dec 2023 03:30:47 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 11:56:07 +0100
-Message-ID: <20231227105607.1010960-1-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Dec 2023 12:30:45 +0100
+Message-ID: <20231227113045.1141473-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703674576; x=1704279376; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703676648; x=1704281448; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HZI9FdN7jwNG6fbrhKYAaKFvbFkx8xAt96B+J/6rT6w=;
- b=Ln4PwHq06D7i7Va34O/hMhKKOTwRjr2qySToI7sVCRQ7C5UHqhK+ywIfpDoUtzOdUL
- ZBUFiY4uIg1w7we5Bk3zD0BjavN7FKZW5jZMZyUqo+7HwRrr7/AGmZlLQmZ5s09kcBip
- 1JzweHfYPNp4RWpaTn2ZgyTxuDWGA/TZLJVJR53da4On4tppRMTRI3dbLvy/gqGXSSv1
- 4LdVVkH85J+bZcMm3Gg/J/7RvcpScJWvcKerfiR77vkENvqwV3toPwelHKyBL1GXxmmJ
- +5mqT8pxTwm5mOT6lbl2UsJcasBx8zQJZ4/RxGge05ib84XH391ubrCnAjdoFIjmVDp1
- qE9w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=i8AhVDRgiHiwuu7wadEt6EZLBCYH3N6n+Jh8HIG1u/s=;
+ b=gtXcE/v9qWLzHOK7RHgvFaJGdiHKyeZMKu6RE27Lziq3eOafKKapNiBj94ugvkGABy
+ 6qWoMJ4+2m+ZGiT+RAzZIkYFjfrdsnzdk71gzTpNgP0digZMpNZcw5b0Qae+RBpBHk/O
+ GnnUKMSWsNKD6vV8yZCQbFY76/XwJUqe6s8WSpvmKruqyXROGDxiLsY+Yt3XO/fYciMF
+ e5dQ+C4UoW7CJFNyA3uU5GptLjPqVNNrkhHCgTg24WBaC9kCJwErGUzIId/R9x42MabT
+ 42OS+zb3I/ix/fVvrbvb+1fN7pPC2SbymXhHuWZvlaNSmmV1y0rym6J4uYUYVKtA+s7r
+ c1+w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Ln4PwHq0
-Subject: [Buildroot] [PATCH 1/1] package/libostree: switch to libsoup3
+ header.a=rsa-sha256 header.s=20230601 header.b=gtXcE/v9
+Subject: [Buildroot] [PATCH 1/1] package/botan: add trousers optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,58 +94,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libsoup3 is supported since bump to version 2023.3 in commit
-618eb375a046cc4ff007758510c883788e6ff690 and
-https://github.com/ostreedev/ostree/commit/d0ea2db4300eb7871b59d0b997a7f06869120297
+trousers is an optional dependency since version 1.11.26 and
+https://github.com/randombit/botan/commit/1752f0d522eef9a4a703fccf702b4b026c1c1d01
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libostree/libostree.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ package/botan/botan.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index d13f484041..a737dc047f 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -17,6 +17,7 @@ LIBOSTREE_CONF_ENV = \
- 	GPG_ERROR_CONFIG=$(STAGING_DIR)/usr/bin/gpg-error-config
- LIBOSTREE_CONF_OPTS += \
- 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
-+	--without-soup \
- 	--disable-gtk-doc \
- 	--disable-gtk-doc-html \
- 	--disable-gtk-doc-pdf \
-@@ -44,10 +45,10 @@ else
- LIBOSTREE_CONF_OPTS += --without-avahi
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 59fbc950b0..52019f36eb 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -67,6 +67,11 @@ BOTAN_DEPENDENCIES += sqlite
+ BOTAN_CONF_OPTS += --with-sqlite
  endif
  
--#cURL support depends on libsoup
--ifeq ($(BR2_PACKAGE_LIBSOUP),y)
--LIBOSTREE_CONF_OPTS += --with-soup
--LIBOSTREE_DEPENDENCIES += libsoup
-+# cURL support depends on libsoup3
-+ifeq ($(BR2_PACKAGE_LIBSOUP3),y)
-+LIBOSTREE_CONF_OPTS += --with-soup3
-+LIBOSTREE_DEPENDENCIES += libsoup3
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- LIBOSTREE_CONF_OPTS += --with-curl
- LIBOSTREE_DEPENDENCIES += libcurl
-@@ -55,7 +56,7 @@ else
- LIBOSTREE_CONF_OPTS += --without-curl
- endif
- else
--LIBOSTREE_CONF_OPTS += --without-soup --without-curl
-+LIBOSTREE_CONF_OPTS += --without-soup3 --without-curl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
++ifeq ($(BR2_PACKAGE_TROUSERS),y)
++BOTAN_DEPENDENCIES += trousers
++BOTAN_CONF_OPTS += --with-tpm
++endif
++
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ BOTAN_DEPENDENCIES += xz
+ BOTAN_CONF_OPTS += --with-lzma
 -- 
 2.43.0
 
