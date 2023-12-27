@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 885C2C46CD4
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 19:23:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E79C8C46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 19:23:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 341B6812B7;
-	Wed, 27 Dec 2023 19:23:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 341B6812B7
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3816825C7;
+	Wed, 27 Dec 2023 19:23:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3816825C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wc0zujT1gO2R; Wed, 27 Dec 2023 19:23:27 +0000 (UTC)
+	with ESMTP id BxplxhBmKU9k; Wed, 27 Dec 2023 19:23:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F87880EB6;
-	Wed, 27 Dec 2023 19:23:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F87880EB6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DC10C1BF2E4
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 19:23:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F00C781EBA;
+	Wed, 27 Dec 2023 19:23:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F00C781EBA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DF9C1BF2E4
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 19:23:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B21E74011D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4FBEC60ED4
  for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 19:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B21E74011D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FBEC60ED4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JkWKkbLRk-o8 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RaNRpNRGHcav for <buildroot@lists.busybox.net>;
  Wed, 27 Dec 2023 19:22:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77C9440108
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3BE4660F0D
  for <buildroot@buildroot.org>; Wed, 27 Dec 2023 19:22:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77C9440108
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BE4660F0D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6207B836E1; Wed, 27 Dec 2023 19:22:59 +0000 (UTC)
+ id 27D40836E1; Wed, 27 Dec 2023 19:22:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 20:20:36 +0100
+Date: Wed, 27 Dec 2023 20:15:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 53779570e50307482d095ff6ef95582cac2a0165
-X-Git-Newrev: a760645bfb3fa74253d24462a39e29d4c54ee5ea
+X-Git-Oldrev: 95a5ed75457f1511777c57075f33d34b3622a3de
+X-Git-Newrev: 19f083717451eb22e097d3cdc53785161c2f156a
 X-Patchwork-Hint: ignore
-Message-Id: <20231227192259.6207B836E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good:
- switch to libsoup3
+Message-Id: <20231227192259.27D40836E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mp4v2: security bump to version
+ 2.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,70 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a760645bfb3fa74253d24462a39e29d4c54ee5ea
+commit: https://git.buildroot.net/buildroot/commit/?id=19f083717451eb22e097d3cdc53785161c2f156a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libsoup3 is supported since
-https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/c3455def2e7bd09a7c3806283ceb69d0bef24869
+Fix CVE-2023-1450, CVE-2023-1451 and CVE-2023-29584
+
+https://github.com/enzo1982/mp4v2/releases/tag/v2.1.3
+https://github.com/enzo1982/mp4v2/releases/tag/v2.1.2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in            | 10 +++++-----
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/mp4v2/mp4v2.hash | 2 +-
+ package/mp4v2/mp4v2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 36a542227a..e1e2674a4a 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -261,7 +261,7 @@ comment "plugins with external dependencies"
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_ADAPTIVEMUX2
- 	bool "adaptivedemux2 (Adaptive Streaming 2)"
- 	select BR2_PACKAGE_LIBXML2
--	select BR2_PACKAGE_LIBSOUP
-+	select BR2_PACKAGE_LIBSOUP3
+diff --git a/package/mp4v2/mp4v2.hash b/package/mp4v2/mp4v2.hash
+index d3f0243650..4605ee6b0d 100644
+--- a/package/mp4v2/mp4v2.hash
++++ b/package/mp4v2/mp4v2.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  29420c62e56a2e527fd8979d59d05ed6d83ebe27e0e2c782c1ec19a3a402eaee  mp4v2-2.1.1.tar.bz2
++sha256  033185c17bf3c5fdd94020c95f8325be2e5356558e3913c3d6547a85dd61f7f1  mp4v2-2.1.3.tar.bz2
+ sha256  7187891a4c39ee9e7ec70c71fc7dc8b8ed02c6f56ae1ffc017a34ac66dca5390  COPYING
+diff --git a/package/mp4v2/mp4v2.mk b/package/mp4v2/mp4v2.mk
+index 7de837c170..ae777cdc75 100644
+--- a/package/mp4v2/mp4v2.mk
++++ b/package/mp4v2/mp4v2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAME
- 	bool "lame (*.mp3 audio encoder)"
-@@ -383,11 +383,11 @@ comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
--	depends on BR2_USE_WCHAR # libsoup -> glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libsoup -> glib2
--	select BR2_PACKAGE_LIBSOUP
-+	depends on BR2_USE_WCHAR # libsoup3 -> glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libsoup3 -> glib2
-+	select BR2_PACKAGE_LIBSOUP3
- 	help
--	  libsoup HTTP client src/sink
-+	  libsoup3 HTTP client src/sink
- 
- comment "souphttpsrc needs a toolchain w/ wchar, threads"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 4a84ea01b9..d1a0d71dfb 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -60,7 +60,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ADAPTIVEMUX2),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += -Dadaptivedemux2=enabled
--GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup libxml2
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup3 libxml2
- else
- GST1_PLUGINS_GOOD_CONF_OPTS += -Dadaptivedemux2=disabled
- endif
-@@ -453,7 +453,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += -Dsoup=enabled
--GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libsoup3
- else
- GST1_PLUGINS_GOOD_CONF_OPTS += -Dsoup=disabled
- endif
+-MP4V2_VERSION = 2.1.1
++MP4V2_VERSION = 2.1.3
+ MP4V2_SITE = \
+ 	https://github.com/enzo1982/mp4v2/releases/download/v$(MP4V2_VERSION)
+ MP4V2_SOURCE = mp4v2-$(MP4V2_VERSION).tar.bz2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
