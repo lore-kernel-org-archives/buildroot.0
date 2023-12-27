@@ -4,68 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 945ECC46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 18:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2C82C46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 18:30:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49EFD41612;
-	Wed, 27 Dec 2023 18:18:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49EFD41612
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D2F0404BF;
+	Wed, 27 Dec 2023 18:30:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D2F0404BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bEycokQEq58l; Wed, 27 Dec 2023 18:18:18 +0000 (UTC)
+	with ESMTP id 0OqEpE106u09; Wed, 27 Dec 2023 18:30:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B77340268;
-	Wed, 27 Dec 2023 18:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B77340268
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E04A1BF3E1
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 18:18:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C52A740493;
+	Wed, 27 Dec 2023 18:30:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C52A740493
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 426551BF3E3
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 18:30:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 025E440498
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 18:18:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 025E440498
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B49860B21
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 18:30:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B49860B21
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3VjKIQRdIfTa for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 18:18:13 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D15B24025D
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 18:18:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D15B24025D
-Received: from fli4l.lan.fli4l (p5b3a01e6.dip0.t-ipconnect.de [91.58.1.230])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 12D03A4C0B8F;
- Wed, 27 Dec 2023 19:17:57 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37490)
- by fli4l.lan.fli4l with esmtp (Exim 4.96.2)
- (envelope-from <bernd@kuhls.net>) id 1rIYTc-0004WE-2M;
- Wed, 27 Dec 2023 19:17:56 +0100
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GwP6THu4XVy0 for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 18:30:08 +0000 (UTC)
+X-Greylist: delayed 324 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 27 Dec 2023 18:30:07 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D959460B0F
+Received: from relay4.mail.vrmd.de (relay4.mail.vrmd.de [81.28.224.58])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D959460B0F
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 18:30:07 +0000 (UTC)
+Received: from [95.90.241.14] (helo=murray.fritz.box)
+ by relay2.mail.vrmd.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+ (Exim 4.95) (envelope-from <mail@sebastianbauer.info>)
+ id 1rIYaP-009Brb-2Z; Wed, 27 Dec 2023 19:24:57 +0100
+From: Sebastian Bauer <mail@sebastianbauer.info>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 19:17:56 +0100
-Message-Id: <20231227181756.156827-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231227181756.156827-1-bernd@kuhls.net>
-References: <20231227181756.156827-1-bernd@kuhls.net>
+Date: Wed, 27 Dec 2023 19:24:29 +0100
+Message-ID: <20231227182429.1215185-3-mail@sebastianbauer.info>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231227182429.1215185-1-mail@sebastianbauer.info>
+References: <20231227182429.1215185-1-mail@sebastianbauer.info>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202312101026; t=1703701077;
- bh=RfqPQV+bNFofxvDwY6b4r0KS0JVJwD9F5BXRVa93i2E=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=pt8+Af4v20Lm5aA8PaQX3iAi6Fgebf8+6LU0RyVvFw10tSRaqTBFioKPwKnoaD5Vo
- lIw1R9nd79+LsPBLZL84tAeHca0G+BPG18BD2qsfR1rSKLc8OLpvDhYqNMTvB+/0R9
- iB+Lb88T+gGRYKv0yV/KgsHGUQnD1KcyDsdWx6n5ACx/BEV0n9wyW1JGy9OTinvEHK
- MsRRCiNUdgAAnNmvPUdqGcTAyyCc3i5AK4TpufMx2ENL0N0PlPfNXIwqeEjK74fbDh
- v1MwAvSBRf2BvrLxOFlPlu3jKOhXKHr2PAlhWD3ocXQLBH4y3eUqTb5+B3x3Z5QULZ
- ClXDRQxWmVa8w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=pt8+Af4v
-Subject: [Buildroot] [PATCH 2/2] package/exim: do not build perl-based
- utilities
+X-Relay-User: mail@sebastianbauer.info
+Subject: [Buildroot] [PATCH 3/3] packages/libcamera-apps: Fix build to use
+ meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,50 +62,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Sebastian Bauer <mail@sebastianbauer.info>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream added various utilities, for example exim_id_update
-with commit https://github.com/Exim/exim/commit/46a36afae41f63de654269c8a0b7cf5852a85a14
-which is a "Utility for one-time upgrage/downgrade between exim message-
-id formats, around the 4.97 transition" which would add a dependency to
-host-perl/perl so we build only the exim binary.
+Upstream uses meson instead of cmake since a while.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Sebastian Bauer <mail@sebastianbauer.info>
 ---
- package/exim/exim.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/libcamera-apps/libcamera-apps.mk | 27 ++++++++++--------------
+ 1 file changed, 11 insertions(+), 16 deletions(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 30b0d78c94..1b3295697e 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -146,16 +146,15 @@ define EXIM_BUILD_CMDS
- 		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
- 		LFLAGS="-fPIC $(HOST_LDFLAGS)"
- 	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
--		CFLAGS="-std=c99 $(TARGET_CFLAGS) $(EXIM_C_FLAGS)"
-+		CFLAGS="-std=c99 $(TARGET_CFLAGS) $(EXIM_C_FLAGS)" exim
- endef
+diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
+index 2a217f095f..b76d2b2a1b 100644
+--- a/package/libcamera-apps/libcamera-apps.mk
++++ b/package/libcamera-apps/libcamera-apps.mk
+@@ -18,42 +18,37 @@ LIBCAMERA_APPS_DEPENDENCIES = \
+ 	tiff
  
- # Need to replicate the LFLAGS in install, as exim still wants to build
- # something when installing...
- define EXIM_INSTALL_TARGET_CMDS
--	DESTDIR=$(TARGET_DIR) INSTALL_ARG="-no_chown -no_symlink" build=br \
--	  $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
--		CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
--		install
-+	cd $(@D)/build-br; \
-+	DESTDIR=$(TARGET_DIR) build=br \
-+	../scripts/exim_install -no_chown -no_symlink exim
- 	chmod u+s $(TARGET_DIR)/usr/sbin/exim
- endef
+ LIBCAMERA_APPS_CONF_OPTS = \
+-	-DENABLE_COMPILE_FLAGS_FOR_TARGET=disabled \
+-	-DENABLE_OPENCV=0 \
+-	-DENABLE_TFLITE=0
++	-Denable_opencv=false \
++	-Denable_tflite=false
  
+ ifeq ($(BR2_PACKAGE_LIBDRM),y)
+ LIBCAMERA_APPS_DEPENDENCIES += libdrm
+-LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=1
++LIBCAMERA_APPS_CONF_OPTS += -Denable_drm=true
+ else
+-LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=0
++LIBCAMERA_APPS_CONF_OPTS += -Denable_drm=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_LIBDRM),yy)
+ LIBCAMERA_APPS_DEPENDENCIES += ffmpeg libdrm
+-LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=1
++LIBCAMERA_APPS_CONF_OPTS += -Denable_libav=true
+ else
+-LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=0
++LIBCAMERA_APPS_CONF_OPTS += -Denable_libav=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ LIBCAMERA_APPS_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_LIBEPOXY),libepoxy) \
+ 	$(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11)
+-LIBCAMERA_APPS_CONF_OPTS += -DENABLE_X11=1
++LIBCAMERA_APPS_CONF_OPTS += -Denable_egl=true
+ else
+-LIBCAMERA_APPS_CONF_OPTS += -DENABLE_X11=0
++LIBCAMERA_APPS_CONF_OPTS += -Denable_egl=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5),y)
+ LIBCAMERA_APPS_DEPENDENCIES += qt5base
+-LIBCAMERA_APPS_CONF_OPTS += -DENABLE_QT=1
++LIBCAMERA_APPS_CONF_OPTS += -Denable_qt=true
+ else
+-LIBCAMERA_APPS_CONF_OPTS += -DENABLE_QT=0
++LIBCAMERA_APPS_CONF_OPTS += -Denable_qt=false
+ endif
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-LIBCAMERA_APPS_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+-endif
+-
+-$(eval $(cmake-package))
++$(eval $(meson-package))
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
