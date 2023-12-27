@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5321BC46CD4
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 21:17:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFEFCC46CD2
+	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 21:25:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00B4A83C1B;
-	Wed, 27 Dec 2023 21:17:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00B4A83C1B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 433BF83A51;
+	Wed, 27 Dec 2023 21:25:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 433BF83A51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y70RpnZ0TkD4; Wed, 27 Dec 2023 21:17:42 +0000 (UTC)
+	with ESMTP id wpHIymaCMcnb; Wed, 27 Dec 2023 21:25:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3214882F03;
-	Wed, 27 Dec 2023 21:17:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3214882F03
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DDF11BF3E1
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 21:17:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 927DA83A47;
+	Wed, 27 Dec 2023 21:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 927DA83A47
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 920121BF3E3
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 21:25:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCCA0808AC
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 21:13:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCCA0808AC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70A4241BC4
+ for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 21:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70A4241BC4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fzRHlX4TO75Z for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 21:13:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U2Ydkv12GtZz for <buildroot@lists.busybox.net>;
+ Wed, 27 Dec 2023 21:25:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF26A83A92
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 21:13:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF26A83A92
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D29C41BBF
+ for <buildroot@buildroot.org>; Wed, 27 Dec 2023 21:25:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D29C41BBF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D760836E5; Wed, 27 Dec 2023 21:13:22 +0000 (UTC)
+ id 858FC836E4; Wed, 27 Dec 2023 21:25:53 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 22:11:53 +0100
+Date: Wed, 27 Dec 2023 22:22:52 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a760645bfb3fa74253d24462a39e29d4c54ee5ea
-X-Git-Newrev: e5729d3008e4f958324fbbd9ea742badb3f41de4
+X-Git-Oldrev: e5729d3008e4f958324fbbd9ea742badb3f41de4
+X-Git-Newrev: 7b93aade5d48ead736a9ccc01e9ff0d59e32151a
 X-Patchwork-Hint: ignore
-Message-Id: <20231227211322.9D760836E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdb: build and link libbfd and
- libopcodes as static libraries
+Message-Id: <20231227212553.858FC836E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Config.in.legacy: recent removals are for
+ the future release
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,81 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5729d3008e4f958324fbbd9ea742badb3f41de4
+commit: https://git.buildroot.net/buildroot/commit/?id=7b93aade5d48ead736a9ccc01e9ff0d59e32151a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since GDB 13.x and upstream commit
-b686ecb5b10be9a33ab8f1bfdcff22eef920d1a5 ("gdb: link executables with
-libtool"), gdb will be linked against the shared variants of libbfd
-and libopcodes if they exist. However, this causes host gdb and target
-gdb to not work, because our gdb package does not install libbfd and
-libopcodes (to not clash with the ones potentially installed by
-binutils).
+A few package or config removals have been introduced after the 2023.11
+release, but there entries were still added to the list of options
+removed in 2023.11.
 
-In order to get around this, this commit proposes to get back to the
-situation we had before GDB 13.x: libbfd and libopcodes are only
-compiled as static libraries, so that they are linked directly inside
-the gdb binary, avoiding the problem entirely.
+The affected commits are:
+    64a5831679 package/libmpd: remove package
+    f93380ab1a package/gmpc: remove package
+    6d8c7aecbb package/flickcurl: remove package
+    f6acde11ab package/onevpl: rename package to libvpl
+    fffb245f66 package/linux-headers: drop 6.5.x option
 
-This resolves:
+Introduce the 2024.02 section and move the 2023.11 one to where it
+belongs.
 
- # gdb --version
- gdb: error while loading shared libraries: libopcodes-2.39.50.so: cannot open shared object file: No such file or directory
-
-for target gdb, and:
-
- $ ./host/bin/arm-linux-gdb --version
- ./host/bin/arm-linux-gdb: error while loading shared libraries: libopcodes-2.39.50.so: cannot open shared object file: No such file or directory
-
-for host gdb.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gdb/gdb.mk | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ Config.in.legacy | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 070598b385..ea710f0c1f 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -121,8 +121,10 @@ GDB_MAKE_ENV += \
- GDB_CONF_ENV += gdb_cv_prfpregset_t_broken=no
- GDB_MAKE_ENV += gdb_cv_prfpregset_t_broken=no
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1881d43f90..b9089250c8 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,7 +144,7 @@ endif
  
--# The shared only build is not supported by gdb, so enable static build for
--# build-in libraries with --enable-static.
-+# We want the built-in libraries of gdb (libbfd, libopcodes) to be
-+# built and linked statically, as we do not install them on the
-+# target, to not clash with the ones potentially installed by
-+# binutils. This is why we pass --enable-static --disable-shared.
- GDB_CONF_OPTS = \
- 	--without-uiout \
- 	--disable-gdbtk \
-@@ -132,6 +134,7 @@ GDB_CONF_OPTS = \
- 	--without-included-gettext \
- 	--disable-werror \
- 	--enable-static \
-+	--disable-shared \
- 	--without-mpfr \
- 	--disable-source-highlight
+ ###############################################################################
  
-@@ -248,10 +251,14 @@ endif
- # A few notes:
- #  * --target, because we're doing a cross build rather than a real
- #    host build.
--#  * --enable-static because gdb really wants to use libbfd.a
-+#  * --enable-static --disable-shared because we want host gdb to
-+#    build and link against a static version of libbfd and
-+#    libopcodes, because we don't install the shared variants of
-+#    those libraries in $(HOST_DIR), as it might clash with binutils
- HOST_GDB_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--enable-static \
-+	--disable-shared \
- 	--without-uiout \
- 	--disable-gdbtk \
- 	--without-x \
+-comment "Legacy options removed in 2023.11"
++comment "Legacy options removed in 2024.02"
+ 
+ config BR2_PACKAGE_LIBMPD
+ 	bool "libmpd package was removed"
+@@ -179,6 +179,8 @@ config BR2_KERNEL_HEADERS_6_5
+ 	  Version 6.5.x of the Linux kernel headers are no longer
+ 	  maintained upstream and are now removed.
+ 
++comment "Legacy options removed in 2023.11"
++
+ config BR2_PACKAGE_PYTHON_PYXB
+ 	bool "python-pyxb removed"
+ 	select BR2_LEGACY
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
