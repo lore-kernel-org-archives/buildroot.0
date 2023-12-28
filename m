@@ -4,69 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A8FCC4706F
-	for <buildroot@archiver.kernel.org>; Thu, 28 Dec 2023 08:59:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BB46C4706F
+	for <buildroot@archiver.kernel.org>; Thu, 28 Dec 2023 09:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2855F610B3;
-	Thu, 28 Dec 2023 08:59:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2855F610B3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AA40610B0;
+	Thu, 28 Dec 2023 09:03:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AA40610B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v8aPQ3MfErfI; Thu, 28 Dec 2023 08:59:26 +0000 (UTC)
+	with ESMTP id ak9y4kTo-ZMJ; Thu, 28 Dec 2023 09:03:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 644FD610B0;
-	Thu, 28 Dec 2023 08:59:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 644FD610B0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC61B1BF239
- for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 08:59:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89BD9610B3;
+	Thu, 28 Dec 2023 09:03:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89BD9610B3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 614701BF41F
+ for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 09:03:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80B75417D2
- for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 08:59:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80B75417D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39DAC404B2
+ for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 09:03:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39DAC404B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8JEcMCxhrue1 for <buildroot@lists.busybox.net>;
- Thu, 28 Dec 2023 08:59:22 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 65A7F41773
- for <buildroot@buildroot.org>; Thu, 28 Dec 2023 08:59:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65A7F41773
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 444A440003;
- Thu, 28 Dec 2023 08:59:19 +0000 (UTC)
-Date: Thu, 28 Dec 2023 09:59:18 +0100
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20231228095918.43ebbcfa@windsurf>
-In-Reply-To: <CADvTj4qyLnC=L0bn18cE6sNDEw9bWX=785E8ncJek9=G0VQxyQ@mail.gmail.com>
-References: <20231214165420.181703-1-james.hilliard1@gmail.com>
- <20231214165420.181703-6-james.hilliard1@gmail.com>
- <20231225212415.3e6b7621@windsurf>
- <CADvTj4qyLnC=L0bn18cE6sNDEw9bWX=785E8ncJek9=G0VQxyQ@mail.gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g-8DmQuksSVM for <buildroot@lists.busybox.net>;
+ Thu, 28 Dec 2023 09:03:03 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C1D73400CB
+ for <buildroot@buildroot.org>; Thu, 28 Dec 2023 09:03:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1D73400CB
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 95FA81C0003;
+ Thu, 28 Dec 2023 09:02:59 +0000 (UTC)
+Date: Thu, 28 Dec 2023 10:02:57 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20231228100257.20128a04@booty>
+In-Reply-To: <20231227181756.156827-2-bernd@kuhls.net>
+References: <20231227181756.156827-1-bernd@kuhls.net>
+ <20231227181756.156827-2-bernd@kuhls.net>
 Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703753959;
+ d=bootlin.com; s=gm1; t=1703754179;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=hb1f8zNy8SgYbooklRuCsbYPpGBCLDeRHEvq8ffp/1g=;
- b=Se5SbmWSjvbIKLTqqJyrgqZ9VOd1cg2hu+KwG1FaBeoTRmHVw2e5C0sgDJgJQ03Yx+KC6I
- m5YamkIzD+JtO77KHsU6tQIuFnCTfT9xVINPPn9QtE0BZUwLpwp7xCxLtev6FuESrRhuiN
- KTIs+d92fuzBxYkfSnUPyZIGLbDS81IZWpvUxJR8iV7LbPnCTS4uE9DcF9pelNfSt6b9zr
- oZ1cwKLO7LfyntWZ+2TQgLDQMe+qVqps37fDI9ec5xcUpbsDzXDRDmMJdHjSO+M173mk60
- p0KM26Wx6cq74eqy27Eg2eaFdaZbdgW5fytslJb5yQgz9WcMb0/QRrPUlXiZRQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=HqUKaQxXHOnbWcTD1wBRP/y6ZrAJ1eJRpIoFlEHXdBU=;
+ b=Q2cwHOcBn55m0XjxaYmrPzzd3W/E1kXvFplA4vFdbMtmTsk4TjQEZpvzy9fSqBCpV8Tqjg
+ uGm7/mYLGzEgCxFeLcPGXZ8Qgv1Jhhmu94qlLz1RGYWvnXv6hEeGLAS8vQRGK/6l5gvCoH
+ mkoN2GJSFGGAnnjqDdy0tdW61PYviReJFNcJQ72yIWQhNcaw7Sk1Ut04mSTQRISxUKzttU
+ gUwhiMcpx6SxeTtfLJZS5h76wJR5Me1q6ghsInepb5EUGSg5W8E8eel4mfhI1jMqppceJP
+ 3nYVF/UVyX0jPfcpsZQpB8sDo9iAgN+ggGH3y9WE1jhPK1MUju3aRoEIGdKpmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Se5SbmWS
-Subject: Re: [Buildroot] [PATCH v3 6/8] package/python-fastapi-sessions: new
- package
+ header.s=gm1 header.b=Q2cwHOcB
+Subject: Re: [Buildroot] [PATCH 2/2] package/exim: do not build perl-based
+ utilities
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,57 +76,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+Hello Bernd,
 
-On Mon, 25 Dec 2023 17:47:01 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+[+Cc Yann]
 
-> > $ grep -r pydantic *
-> > fastapi_sessions/backends/session_backend.py:from pydantic.main import BaseModel
-> > fastapi_sessions/frontends/implementations/cookie.py:from pydantic.main import BaseModel
-> >
-> > However, it's not listed in setup.py or pyproject.toml, even as an
-> > optional dependency. Is this an upstream "bug" ?  
+On Wed, 27 Dec 2023 19:17:56 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
+
+> Upstream added various utilities, for example exim_id_update
+> with commit https://github.com/Exim/exim/commit/46a36afae41f63de654269c8a0b7cf5852a85a14
+> which is a "Utility for one-time upgrage/downgrade between exim message-
+> id formats, around the 4.97 transition" which would add a dependency to
+> host-perl/perl so we build only the exim binary.
 > 
-> I see it in setup.py here:
-> https://github.com/jordanisaacs/fastapi-sessions/blob/be4126938011abd709fa18e9d9fc8a54c66a2130/setup.py#L12
-
-Thanks for the feedback. Yann replied to you about what I didn't see
-it: it's not in the tarball from pypi, and I always look at the code in
-output/build/<pkg>-<version>/, which is the code really seen by
-Buildroot.
-
-> > I see you're using plain old setuptools, but this package has a
-> > pyproject.toml, though it doesn't define a [build-system]. Is this why
-> > you can't use pep517?  
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/exim/exim.mk | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> A package with no [build-system] section in pyproject.toml per pep517
-> falls back to the setuptools build backend.
+> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+> index 30b0d78c94..1b3295697e 100644
+> --- a/package/exim/exim.mk
+> +++ b/package/exim/exim.mk
+> @@ -146,16 +146,15 @@ define EXIM_BUILD_CMDS
+>  		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
+>  		LFLAGS="-fPIC $(HOST_LDFLAGS)"
+>  	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
+> -		CFLAGS="-std=c99 $(TARGET_CFLAGS) $(EXIM_C_FLAGS)"
+> +		CFLAGS="-std=c99 $(TARGET_CFLAGS) $(EXIM_C_FLAGS)" exim
+>  endef
+>  
+>  # Need to replicate the LFLAGS in install, as exim still wants to build
+>  # something when installing...
+>  define EXIM_INSTALL_TARGET_CMDS
+> -	DESTDIR=$(TARGET_DIR) INSTALL_ARG="-no_chown -no_symlink" build=br \
+> -	  $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
+> -		CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
+> -		install
+> +	cd $(@D)/build-br; \
+> +	DESTDIR=$(TARGET_DIR) build=br \
+> +	../scripts/exim_install -no_chown -no_symlink exim
+>  	chmod u+s $(TARGET_DIR)/usr/sbin/exim
+>  endef
 
-Ah, OK, thanks for clarifying this.
+I like this complete rewrite of the install commands, which get rid of
+the utterly complex installation step currently in place. However I'd
+have mentioned this in the commit log, including a mention of the
+checks done to ensure this is still installing whatever is
+actually needed.
 
-> We can use a pep517 frontend with setuptools packages, see:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20231126180840.2081945-5-james.hilliard1@gmail.com/
+Also, the comment about the LFLAGS, added by Yann in [0], should be
+removed as it it does not apply anymore.
 
-ACK!
+[0]
+https://git.busybox.net/buildroot/commit/?id=bf22cea53fa2af48bde3010673d3babee1ae6873
 
-Thanks for those details, very useful.
+Luca
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
