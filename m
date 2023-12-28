@@ -1,57 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8B09C3DA6E
-	for <buildroot@archiver.kernel.org>; Thu, 28 Dec 2023 09:47:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B99D2C3DA6E
+	for <buildroot@archiver.kernel.org>; Thu, 28 Dec 2023 10:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E926610B4;
-	Thu, 28 Dec 2023 09:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E926610B4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jUfzINsEfvvM; Thu, 28 Dec 2023 09:47:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD76161003;
-	Thu, 28 Dec 2023 09:47:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD76161003
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 00AA51BF3C1
- for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 09:47:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8F9340474
- for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 09:47:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8F9340474
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E866400CB;
+	Thu, 28 Dec 2023 10:46:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E866400CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KNjdcBT7Qpm2 for <buildroot@lists.busybox.net>;
- Thu, 28 Dec 2023 09:47:39 +0000 (UTC)
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 07CDE40364
- for <buildroot@buildroot.org>; Thu, 28 Dec 2023 09:47:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07CDE40364
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 54F2F1814B9; Thu, 28 Dec 2023 10:47:35 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Thu, 28 Dec 2023 10:47:24 +0100
-Message-Id: <20231228094727.27357-1-buildroot@heine.tech>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JJXONSp6UDSb; Thu, 28 Dec 2023 10:46:51 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40DE440494;
+	Thu, 28 Dec 2023 10:46:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40DE440494
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 297C31BF316
+ for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 10:46:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EEC7D417EC
+ for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 10:46:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEC7D417EC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AQ7vhC4bIXSq for <buildroot@lists.busybox.net>;
+ Thu, 28 Dec 2023 10:46:47 +0000 (UTC)
+Received: from relay3.mail.vrmd.de (relay3.mail.vrmd.de [81.28.224.24])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD1F741773
+ for <buildroot@buildroot.org>; Thu, 28 Dec 2023 10:46:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD1F741773
+Received: from [2a00:1c38:1:1:511c:e03c::] (helo=webmail.variomedia.de)
+ by relay3.mail.vrmd.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+ (Exim 4.95) (envelope-from <mail@sebastianbauer.info>)
+ id 1rInuW-001CHo-FI; Thu, 28 Dec 2023 11:46:44 +0100
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1703756856; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=MEgBR+ME4clOSuFB5zDxOknBG7t+F4W6DFdk20fgY8U=;
- b=dohSo6WlZzFQ7wwQo7NNkguTHXlihg4fTVm1ay5JqPPRvqKQpW5ZLQxuhwJqsbXEw4GZLa
- 1HHKGpiDmep8u4JA5KJhUN0M5EOjI1OwCAkKyC0T096bUEk0raLZcwqAlOcWEkC4HqX4Be
- U2GYM6TvV8nlF5XTCRtGNhb3PnSr5nw=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=dohSo6Wl
-Subject: [Buildroot] [PATCH] package/catch2: bump to version 3.5.0
+Date: Thu, 28 Dec 2023 11:46:42 +0100
+From: Sebastian Bauer <mail@sebastianbauer.info>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <ZYyiB4POkcCnTbd6@landeda>
+References: <20231227182429.1215185-1-mail@sebastianbauer.info>
+ <20231227182429.1215185-2-mail@sebastianbauer.info>
+ <ZYyiB4POkcCnTbd6@landeda>
+Message-ID: <1bdef4089fb978901f6afe221af0b456@sebastianbauer.info>
+X-Sender: mail@sebastianbauer.info
+X-Relay-User: mail@sebastianbauer.info
+Subject: Re: [Buildroot] [PATCH 2/3] packages/libcamera: Fix libcamera build
+ with rpi pipeline
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +62,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/catch2/catch2.hash | 2 +-
- package/catch2/catch2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Am 2023-12-27 23:15, schrieb Yann E. MORIN:
+> On 2023-12-27 19:24 +0100, Sebastian Bauer spake thusly:
+>> The name of the pipeline was renamed from raspberrypi to rpi/vc4 in
+>> version 0.1.0 of libcamera, which is why, without this fix, the build 
+>> is
+>> broken.
+> As Peter pointed out, his patch is a bit more complete, so I ended up
+> applying his patch.
 
-diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
-index 88a6a06df2..d118feadf8 100644
---- a/package/catch2/catch2.hash
-+++ b/package/catch2/catch2.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  122928b814b75717316c71af69bd2b43387643ba076a6ec16e7882bfb2dfacbb  catch2-3.4.0.tar.gz
-+sha256  f6d4f8d78a9b59ec72a81d49f58d18eb317372ac07f8d9432710a079e69fd66a  catch2-3.5.0.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
-diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
-index 580ddca5da..49ac5fff2d 100644
---- a/package/catch2/catch2.mk
-+++ b/package/catch2/catch2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CATCH2_VERSION = 3.4.0
-+CATCH2_VERSION = 3.5.0
- CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
- CATCH2_INSTALL_STAGING = YES
- CATCH2_INSTALL_TARGET = NO
--- 
-2.39.3 (Apple Git-145)
+Yes, I agree. I didn't know that there was another patch pending (I have 
+not yet figured out how to search through patches). Thanks for fixing 
+the problem!
 
+Bye
+Sebastian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
