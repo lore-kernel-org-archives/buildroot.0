@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99A6C46CD2
-	for <buildroot@archiver.kernel.org>; Wed, 27 Dec 2023 22:59:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CD23C3DA6E
+	for <buildroot@archiver.kernel.org>; Thu, 28 Dec 2023 06:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37AFF41C21;
-	Wed, 27 Dec 2023 22:59:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37AFF41C21
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7172404AF;
+	Thu, 28 Dec 2023 06:38:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7172404AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n1vxsLBJhGys; Wed, 27 Dec 2023 22:59:51 +0000 (UTC)
+	with ESMTP id rkGUuIvIBJhM; Thu, 28 Dec 2023 06:38:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72B9341B9B;
-	Wed, 27 Dec 2023 22:59:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72B9341B9B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 42B7F1BF20F
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 22:59:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1ABB640493;
+	Thu, 28 Dec 2023 06:38:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ABB640493
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 03CE11BF372
+ for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 06:38:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B757610F9
- for <buildroot@lists.busybox.net>; Wed, 27 Dec 2023 22:59:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B757610F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id D06FC40493
+ for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 06:38:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D06FC40493
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1EFRLyLsP8MD for <buildroot@lists.busybox.net>;
- Wed, 27 Dec 2023 22:59:48 +0000 (UTC)
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF3E7610F4
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 22:59:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF3E7610F4
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-40d5aefcc2fso15731125e9.0
- for <buildroot@buildroot.org>; Wed, 27 Dec 2023 14:59:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703717985; x=1704322785;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+SWvP29OHMFW/z5i4qul76l8g+KWIHmApFeaFlTpuPo=;
- b=Y8pfFMUg6gX0XiWifWPDuG5gTo686JZaDeYo7fX0U5gZZ/HliWQDnT7hhJyQXVfJ6k
- laC07BBT5jV/60bgTwdODQeErS62qLWR5FUxygPNNKt2LUJUjRZLMY+KDQVSrUuYaPCA
- jTDVQf9Jbt4MX4uRfVk1sk1Qj9QWTVAjUFtI+C6bnjHddRHr6247+4p+ohcMOJKixYJU
- nV6xjfixNRisOW/syZNca/9DxengGGWp++qeJAGTT8CyYqEGWP1bYhTDOnVDpv4D/Ec1
- liPCMMgNn9/jcMn1LWCDHRKgj5rmOMqmkoZYWe2hwFlykX0TK0PAQUK7mcxAOCE7vekp
- KClA==
-X-Gm-Message-State: AOJu0Yxd7YGm7bf2Zuga2OoXxp/TWcaTrmPTqKhzt8MoESM1iUvi8lAd
- 6hLo2nN0tVcKmlgxX4LAhPUdEEjnJlM=
-X-Google-Smtp-Source: AGHT+IEFPwEjOSoOyLZIizyzHrP2dyLI2lWxt6O9QhvG0cUvqa65gHAKCuQZa6TgDodyGr6B/rkV8w==
-X-Received: by 2002:a1c:7915:0:b0:40d:6293:fe79 with SMTP id
- l21-20020a1c7915000000b0040d6293fe79mr243069wme.86.1703717984709; 
- Wed, 27 Dec 2023 14:59:44 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- a4-20020adffb84000000b00336d24b4847sm5625947wrr.114.2023.12.27.14.59.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Dec 2023 14:59:44 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Dec 2023 23:59:39 +0100
-Message-ID: <20231227225940.1683593-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ty5dRHBJRKDI for <buildroot@lists.busybox.net>;
+ Thu, 28 Dec 2023 06:38:12 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0FDD340491
+ for <buildroot@buildroot.org>; Thu, 28 Dec 2023 06:38:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FDD340491
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 453111C0005
+ for <buildroot@buildroot.org>; Thu, 28 Dec 2023 06:38:09 +0000 (UTC)
 MIME-Version: 1.0
+To: buildroot@buildroot.org
+Date: Thu, 28 Dec 2023 06:38:09 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20231228063813.D06FC40493@smtp4.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703717985; x=1704322785; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+SWvP29OHMFW/z5i4qul76l8g+KWIHmApFeaFlTpuPo=;
- b=XVJQ6uSsRDCxZId7gwafJVhFFr7EOW5h4PWuWRqZQd9uPwkf0vNGy4gtH3EN+mPBuj
- 7A5GGGbRWpTZScD5E5r2MTBTvPgOT9+5u05irbKKbcUgkfTOaowbbrliMOhEnsSo+mDj
- iaJwS3rwIjypRtgVxUSPLFY5dtyWReYHQqRgjkFJB494Gwu8Ozi9tNDGfe04o9RjrHA5
- yNmpED6iXmYwmd/VZ83/4D8hYfRHmx4zF7FLkCj0QRlIjjlJvPZ94Fq9MZZUkrpBM6uI
- IrN6cFv1+hUJ4aZ8qskMGnSe8XgsC6YZXgStogKC+Ow7gGMioSafjUYDNXXqW9hqUMfH
- T/uQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=XVJQ6uSs
-Subject: [Buildroot] [PATCH v2,1/1] package/libostree: switch to libsoup3
+ d=bootlin.com; s=gm1; 
+ t=1703745489; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=W7e5lsnbWgNSeymz9s5xQ0W1CMiMLzRlRwsoU9d88E8=;
+ b=WJOUdFO7SK2Y/DjLw1rYusAhc7jyLukT3RpxDQfB1NfJhC+GDqvdhJbBI01CEZC9AEMpA4
+ nhdZOlRcPHWX7HS5ZW6+VOC9axDL77A2JuUbHpbccg2ZZIQ4gHagPj2Z52uf9T4YP+PUnG
+ 9FGqi78S0P6phkVm4ytSxN9qPyFJrLbmD6YRGwx8ZVN9t2U2fV4IpMbrQI6NUKYWWPIogC
+ p6Be6EDmbM+XTpyBcnvT8gfVBHbnibQB0fqBjTZWSH0zmd2fva5j13gyg4TKA8+HEOKfe6
+ inO+mI/nm/+9Lui3SkdK1wA4ITYhnTPUtvrh1IXqXCm5aVx+GySgqJWeffVjPg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WJOUdFO7
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-12-27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,70 +69,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libsoup3 is supported since bump to version 2023.3 in commit
-618eb375a046cc4ff007758510c883788e6ff690 and
-https://github.com/ostreedev/ostree/commit/d0ea2db4300eb7871b59d0b997a7f06869120297
+Hello,
 
-So switch to libsoup3 and drop libsoup2 as:
- - libsoup2 is unmaintained (as stated by commit
-   b45c2a048d02a0e30da8534b5c048d048b252452)
- - libsoup2 will be removed at some point (as stated by commit
-   f93380ab1a36bdd019cfbc651a9df5904096e189)
+Autobuild statistics for 2023-12-27
+===================================
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Update commit message and explain why libsoup2 is dropped
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  6  |  4  |  0  | 10  |
+  2023.08.x  |  4  |  4  |  0  |  8  |
+    master   | 11  | 14  |  1  | 26  |
 
- package/libostree/libostree.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Classification of failures by reason for master
+-----------------------------------------------
 
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index d13f484041..a737dc047f 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -17,6 +17,7 @@ LIBOSTREE_CONF_ENV = \
- 	GPG_ERROR_CONFIG=$(STAGING_DIR)/usr/bin/gpg-error-config
- LIBOSTREE_CONF_OPTS += \
- 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
-+	--without-soup \
- 	--disable-gtk-doc \
- 	--disable-gtk-doc-html \
- 	--disable-gtk-doc-pdf \
-@@ -44,10 +45,10 @@ else
- LIBOSTREE_CONF_OPTS += --without-avahi
- endif
- 
--#cURL support depends on libsoup
--ifeq ($(BR2_PACKAGE_LIBSOUP),y)
--LIBOSTREE_CONF_OPTS += --with-soup
--LIBOSTREE_DEPENDENCIES += libsoup
-+# cURL support depends on libsoup3
-+ifeq ($(BR2_PACKAGE_LIBSOUP3),y)
-+LIBOSTREE_CONF_OPTS += --with-soup3
-+LIBOSTREE_DEPENDENCIES += libsoup3
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- LIBOSTREE_CONF_OPTS += --with-curl
- LIBOSTREE_DEPENDENCIES += libcurl
-@@ -55,7 +56,7 @@ else
- LIBOSTREE_CONF_OPTS += --without-curl
- endif
- else
--LIBOSTREE_CONF_OPTS += --without-soup --without-curl
-+LIBOSTREE_CONF_OPTS += --without-soup3 --without-curl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
+              libopenssl-3.2.0 | 3 
+                     exim-4.97 | 2 
+                       unknown | 2 
+                elfutils-0.189 | 1 
+         gobject-introspection | 1 
+  gobject-introspection-1.76.1 | 1 
+                host-go-1.21.5 | 1 
+                libressl-3.8.2 | 1 
+            linux-fusion-9.0.3 | 1 
+        python-pysensors-0.0.4 | 1 
+                 zlib-ng-2.1.3 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/dc2a59adc295418d1eae2b76ef5b0c9e30bdd845 | ORPH
+   xtensa    |           exim-4.97            | NOK | http://autobuild.buildroot.net/results/282882371e1d8c224c457bf65016f8abd11f8c45 |     
+   sh4aeb    |           exim-4.97            | NOK | http://autobuild.buildroot.net/results/5d76dc80f1eb830d66646985b72e9bd24281bf2b |     
+microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/e3da8b2cd3fdfe440184bd7f65221475988190fd |     
+   sh4aeb    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/344cf634937446512b78ec54dc03070e5874305e | ORPH
+    i686     |         host-go-1.21.5         | NOK | http://autobuild.buildroot.net/results/69eb2f13784a8f7573c1606a79362f6e6f2a207b |     
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/e15112e0872d4dc3029e74e2a373845709fa3102 | ORPH
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/503d4d89fa7033276f8eb53b26098e62eee42b65 | ORPH
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/6a5b671f2f01ad84deecb2ac67736b503d43059b | ORPH
+   sparc     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/e81fd70bce5dd680a8e657b8f75ca8bed6f4b2cd | ORPH
+ powerpc64   |       linux-fusion-9.0.3       | NOK | http://autobuild.buildroot.net/results/33b618e618ef679fb059090f026b1bb0cc4780fd | ORPH
+  aarch64    |     python-pysensors-0.0.4     | NOK | http://autobuild.buildroot.net/results/f963995821117f008989167ac95d048415d9c187 |     
+microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/54404b231f78be06f75e48b7d55ff2a9487c0898 |     
+   sh4eb     |            unknown             | NOK | http://autobuild.buildroot.net/results/022070d7ce7bdd0c4334a24c42f271d34f1d909d |     
+powerpc64le  |         zlib-ng-2.1.3          | NOK | http://autobuild.buildroot.net/results/09ebd9c51d6884c0bda8c720fedb0f057574a042 | ORPH
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+                 coreutils-9.1 | 1 
+               gupnp-av-0.14.0 | 1 
+              host-rust-1.67.1 | 1 
+                 raptor-2.0.15 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   sh4aeb    |         coreutils-9.1          | NOK | http://autobuild.buildroot.net/results/7b6b5679cf1cd1a40acbcd4382fa3a4ff3ea47a3 | ORPH
+   nios2     |        gupnp-av-0.14.0         | NOK | http://autobuild.buildroot.net/results/65f0d4019e445e8f82bc7eb1288ddbb15fc669e6 |     
+   mipsel    |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/e4036ce596b20b7c66b4fc8686fc3705f4a97f3f |     
+powerpc64le  |         raptor-2.0.15          | NOK | http://autobuild.buildroot.net/results/e7ba21a14ba37b765f2557bc617b49984cebb184 | ORPH
+
+
+Classification of failures by reason for 2023.08.x
+--------------------------------------------------
+
+                    brltty-6.5 | 1 
+                elfutils-0.189 | 1 
+          libfastjson-0.99.9.1 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2023.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mipsel    |           brltty-6.5           | NOK | http://autobuild.buildroot.net/results/2ab22c8469872fcea27d1262c577e86f83a7bcb3 |     
+ microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/67912cc10f070e7a662c97c4b3c30e85c5f1aa85 | ORPH
+  riscv64    |      libfastjson-0.99.9.1      | NOK | http://autobuild.buildroot.net/results/89709d8186ddbc9426367ab8acd84df76536e8f7 |     
+    i686     |            unknown             | NOK | http://autobuild.buildroot.net/results/3ae1976bda69fcd5005949ae9386638fb5c45c41 |     
+
+
+
 -- 
-2.43.0
-
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
