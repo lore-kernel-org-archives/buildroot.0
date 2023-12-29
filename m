@@ -1,71 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F241C3DA6E
-	for <buildroot@archiver.kernel.org>; Thu, 28 Dec 2023 21:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75465C46CD4
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 06:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CCACF417AB;
-	Thu, 28 Dec 2023 21:06:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCACF417AB
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC636400FB;
+	Fri, 29 Dec 2023 06:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC636400FB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4wtg6nnYResa; Fri, 29 Dec 2023 06:40:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F2E340184;
+	Fri, 29 Dec 2023 06:40:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F2E340184
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F32B1BF847
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 06:40:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBD424094F
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 06:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBD424094F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fBSiR-HHf8Q6; Thu, 28 Dec 2023 21:06:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B60E417A5;
-	Thu, 28 Dec 2023 21:06:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B60E417A5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8461B1BF336
- for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 21:06:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6888382B3E
- for <buildroot@lists.busybox.net>; Thu, 28 Dec 2023 21:06:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6888382B3E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n7YAszokhdm0 for <buildroot@lists.busybox.net>;
- Thu, 28 Dec 2023 21:06:06 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 624AB82660
- for <buildroot@buildroot.org>; Thu, 28 Dec 2023 21:06:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 624AB82660
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 572ACB00548;
- Thu, 28 Dec 2023 22:05:59 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 28 Dec 2023 22:05:59 +0100
-Date: Thu, 28 Dec 2023 22:05:59 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZY3jN2pXiI6ZEb-A@landeda>
-References: <20231227171343.2903354-1-thomas.petazzoni@bootlin.com>
- <20231227171343.2903354-2-thomas.petazzoni@bootlin.com>
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PFWMIA8gn98C for <buildroot@lists.busybox.net>;
+ Fri, 29 Dec 2023 06:40:51 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BD1D340922
+ for <buildroot@buildroot.org>; Fri, 29 Dec 2023 06:40:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD1D340922
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DC19740008
+ for <buildroot@buildroot.org>; Fri, 29 Dec 2023 06:40:47 +0000 (UTC)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231227171343.2903354-2-thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1703797564;
- bh=VNi1I4WOKkIr/KTQeLdrLiSND+E7G9AUJaE7h8CQoaU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=iCW0Fw6ort18B5NBUMVy1GVIazREAOezDfz3mVFOoPL9lanjlFEVisEdmzRH9jJr3
- 1/VSIFwtIvv2FgpOheTv2pB0EReLjX3LdI404erYp/fSsNlBNuVbHUTv57KxZCEYkY
- JsS4vV1BCe5rTq7COGGBDBEv239EGgTpIo8AZp15TGTIYUMzildkxjz/kydliXxP8t
- ajs2372LIBmGf7utFhclHHpVRthLGKEDCj8HRNvaxU/v+THAQcx++pjkrLZ1xDhUkP
- idfPJzhOs2JgtME20BBLdFgFlo+ZamNiRZx71l6XUfIULLAZLNCgtQs+fiXC9YkPol
- nzSAVRMhoBQ0w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iCW0Fw6o
-Subject: Re: [Buildroot] [PATCH 2/2]
- toolchain/toolchain-external/toolchain-external-bootlin: update to
- 2023.11-1
+To: buildroot@buildroot.org
+Date: Fri, 29 Dec 2023 06:40:47 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20231229064052.EBD424094F@smtp4.osuosl.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; 
+ t=1703832047; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=RbKANFdANEi4cetZRtcJB6EaeclZe3lzmROkaww7BEQ=;
+ b=aq3mcTfkKltlE8s2vxjNdtVcqPOX05r08BVt0qtZSgqivyydmwimmURd2znJmSygJZ1OWM
+ ouOaDRdoNixg4PqI0ZFaHODxU2eJWNTIGDGWkK7ZbMa8QDaQopAY2qRtF4q4mIcdFKza0b
+ wJp7qCYiqI+OuyQYkrZF9pLCV57pAGM6SNUkVEW+9b92wdb3nDx+nPwIdz9qj+jpKdl7UB
+ JbpbRnh1gyXDlsB1VAeVHXRgGkPBrTUriKg0simFO6lraXfXZp5AX8raJx0Qkj6wozbvbQ
+ cWWy8/r2IiaArDEf32deytRYRO2aWlyPhZwQEI+oB4R/PDfRCNaLgvmLtHyaqA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=aq3mcTfk
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-12-28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,69 +69,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Hello,
 
-On 2023-12-27 18:13 +0100, Thomas Petazzoni via buildroot spake thusly:
-> New toolchains have been released, with the following changes:
-> 
-> - The bleeding-edge toolchains are based on gcc 13.2, binutils 2.41,
->   gdb 14.1, kernel headers 5.10, glibc 2.38, musl 1.2.4 or uclibc-ng
->   1.0.45.
-> 
-> - The stable toolchains are based on gcc 12.3, binutils 2.40, gdb
->   13.2, kernel headers 4.14, glibc 2.38, musl 1.2.4 or uclibc-ng
->   1.0.45.
-> 
-> - The glibc version is no longer affected by CVE-2023-4911
-> 
-> - The gdb build has been fixed to no longer rely on uninstalled
->   libbfd.so and libopcodes.so libraries
-> 
-> - The zlib library, which was incorrectly present in the toolchain
->   sysroot, is gone, fixing various build failures encountered with
->   2023.08 toolchains.
-> 
-> - There are now toolchains for m68k 68xxx based on uclibc and musl in
->   addition to glibc, which was already supported
-> 
-> The careful reviewer will notice that a number of
-> 
->     depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
-> 
-> are being added to the toolchains that use gcc 13.x, as per
-> a0d2a5cfec0ade7cb577cbff25aac289e746e61b
-> ("support/scripts/gen-bootlin-toolchains: generate
-> BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard").
-> 
-> All 214 test cases were successfully run:
-> 
->   https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1120323562
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Autobuild statistics for 2023-12-28
+===================================
 
-Applied to master, thanks.
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  4  |  4  |  0  |  8  |
+  2023.08.x  |  1  |  3  |  2  |  6  |
+    master   | 10  | 20  |  0  | 30  |
 
-Regards,
-Yann E. MORIN.
+Classification of failures by reason for master
+-----------------------------------------------
 
-[--SNIP big patch--]
+                     exim-4.97 | 2 
+                   gupnp-1.4.3 | 2 
+ibm-sw-tpm2-5452af422edeff7... | 2 
+                       unknown | 2 
+cegui-00b4e1fe174da53b7ed72... | 1 
+                elfutils-0.189 | 1 
+glibc-2.38-27-g750a45a78390... | 1 
+  gobject-introspection-1.76.1 | 1 
+              libarchive-3.7.2 | 1 
+                   libiio-0.25 | 1 
+              libopenssl-3.2.0 | 1 
+                libressl-3.8.2 | 1 
+                libxmlpp-5.0.2 | 1 
+                   rsync-3.2.7 | 1 
+                   sdl2-2.28.5 | 1 
+                    zeek-4.1.1 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  sparc64    | cegui-00b4e1fe174da53b7ed72... | NOK | http://autobuild.buildroot.net/results/eae33ec067f208454033316af6febfcd562f39f3 |     
+ microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/f8d20329b79bca54a2cabe6ee843a8362a594ee5 | ORPH
+    arm      |           exim-4.97            | NOK | http://autobuild.buildroot.net/results/d0b1e9b847d8ddf27a3ffda552089b3176d543b9 |     
+   mipsel    |           exim-4.97            | NOK | http://autobuild.buildroot.net/results/656defb75c159ccafad969e559c62218a34166c0 |     
+powerpc64le  | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/ed5e59bc919188d1d0e0cdb699f3cb3cabeea329 |     
+    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/d66c52bab019397263c34a764e0cf9d3911d02f9 | ORPH
+powerpc64le  |          gupnp-1.4.3           | NOK | http://autobuild.buildroot.net/results/10c4429b7fa0e2b89662071a538f05da801f573e |     
+ powerpc64   |          gupnp-1.4.3           | NOK | http://autobuild.buildroot.net/results/e0a6899470be3c0834838b46008686cc22fb6576 |     
+ microblaze  | ibm-sw-tpm2-5452af422edeff7... | NOK | http://autobuild.buildroot.net/results/783bafdfd2fbc06d78a181f970117aa30a4afaca |     
+   sh4eb     | ibm-sw-tpm2-5452af422edeff7... | NOK | http://autobuild.buildroot.net/results/2a52c19370f8bd1f9b08a51d403275b7e5314e52 |     
+    i686     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/0c79c93e1845ec081ae5ad7406c6517fdbe9328f |     
+    arc      |          libiio-0.25           | NOK | http://autobuild.buildroot.net/results/f97c2db33e07a02699e4650caf97de5f3c475eb8 |     
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/c34d23a78d021633fc9b20ef7c910f600edcdc0b | ORPH
+    sh4a     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/5f093368b87d805b7f7086b7aa50d4331480b90e | ORPH
+  sparc64    |         libxmlpp-5.0.2         | NOK | http://autobuild.buildroot.net/results/f3cef04950eeaa744ebe9409561d505606375787 | ORPH
+ aarch64_be  |          rsync-3.2.7           | NOK | http://autobuild.buildroot.net/results/6c1636f7556e7370a4c9f6d02c63cf3e20dc985c |     
+   armeb     |          sdl2-2.28.5           | NOK | http://autobuild.buildroot.net/results/432ee50e38e3028f5adc5bb0a61973d220a0fbc3 |     
+   mips64    |            unknown             | NOK | http://autobuild.buildroot.net/results/a86963352a268c3d0c1702d6099ef289d0ecf183 |     
+  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/2f37c88f1f533c5eb826c99891281586bdad8864 |     
+microblazeel |           zeek-4.1.1           | NOK | http://autobuild.buildroot.net/results/3b9208bf43e3a7689871a648ae56cd48e92451e3 |     
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+                  check-0.15.2 | 1 
+                elfutils-0.186 | 1 
+               host-go-1.20.12 | 1 
+                 uclibc-1.0.44 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mipsel    |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/b4fa316a140a60851ca9dd2abdfc5b8a452a949c | ORPH
+ microblaze  |         elfutils-0.186         | NOK | http://autobuild.buildroot.net/results/613cacc598c75b345288f5340f2170e0ff1451dc | ORPH
+  mips64el   |        host-go-1.20.12         | NOK | http://autobuild.buildroot.net/results/2a4e060b4ec88faef782c83f34c285957d1fb75c |     
+  riscv64    |         uclibc-1.0.44          | NOK | http://autobuild.buildroot.net/results/876348289bd62d8b0ea4b112779e78dedac1ad05 |     
+
+
+Classification of failures by reason for 2023.08.x
+--------------------------------------------------
+
+                       unknown | 2 
+                        ffmpeg | 1 
+         gobject-introspection | 1 
+                    php-8.2.12 | 1 
+
+
+Detail of failures for 2023.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |             ffmpeg             | TIM | http://autobuild.buildroot.net/results/e5563e52c00f570588b1b858180166b0dabbd0aa |     
+ microblaze  |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/ffb18a01eef5a4d7fe77a224dc1df2a37e389d06 |     
+ microblaze  |           php-8.2.12           | NOK | http://autobuild.buildroot.net/results/6f9307a722b4ca9e404713c6be13d9e7f17c6a0b |     
+ powerpc64   |            unknown             | NOK | http://autobuild.buildroot.net/results/d069cc3d7f9aa37565063d97a3546bdab9c00075 |     
+ aarch64_be  |            unknown             | NOK | http://autobuild.buildroot.net/results/afb819b6e7063eff942a5868650b6cf892229a1c |     
+
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
