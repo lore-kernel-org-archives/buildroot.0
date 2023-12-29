@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D90EC46CD4
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 112E9C4706F
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F6DB436EE;
-	Fri, 29 Dec 2023 21:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F6DB436EE
+	by smtp2.osuosl.org (Postfix) with ESMTP id B9CB7436F6;
+	Fri, 29 Dec 2023 21:22:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9CB7436F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dD1PlMMq_FB8; Fri, 29 Dec 2023 21:22:10 +0000 (UTC)
+	with ESMTP id JvjvaO1vTvBm; Fri, 29 Dec 2023 21:22:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE79B436C4;
-	Fri, 29 Dec 2023 21:22:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE79B436C4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C3E3436E5;
+	Fri, 29 Dec 2023 21:22:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C3E3436E5
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 362901BF239
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2A31E1BF288
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:18:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D981340070
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D981340070
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FFFD402BC
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:18:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FFFD402BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3150oKHvBf8a for <buildroot@lists.busybox.net>;
- Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 734634008F
- for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 734634008F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B76383911; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 29 Dec 2023 22:14:17 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 030108ba132acab36e9cf06d28a4a5da33fd9a7d
-X-Git-Newrev: 885cda7e0d67eff56bf803e85185f9f86f02120f
-X-Patchwork-Hint: ignore
-Message-Id: <20231229211749.6B76383911@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lldpd: bump to version 1.0.17
+ with ESMTP id M16W2JeRBu6u for <buildroot@lists.busybox.net>;
+ Fri, 29 Dec 2023 21:18:44 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 12F6F402B9
+ for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:18:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12F6F402B9
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 5442CB00548;
+ Fri, 29 Dec 2023 22:18:40 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 29 Dec 2023 22:18:40 +0100
+Date: Fri, 29 Dec 2023 22:18:40 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <ZY83sNIL1ut21xB2@landeda>
+References: <20231226153244.527793-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20231226153244.527793-1-fontaine.fabrice@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1703884722;
+ bh=ayT146/NG1W2P0cOgXiMfBV7TI7eHhORl/rBGuVBwG4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=U26m2mdzXn/csd1JHIMIU+lm1x7H9If2TFyLvcTIOTVCP8B1KZJGJ+j3wl9WYZj6E
+ hgwL+yKJlVrBsPXVLDVyv1R6+QKqQFa71x0z81jvfjiKSqVBzrzHoxgn2pnje3gAtw
+ 1ICN8z6Ab4wP/52OM2XQyfAGFGGooD4SPAVVcO04FW+mpct1njv9KdfCF4awvFoHfo
+ /DRONXdI3I4qpb6J+F/eYxQlmpAc6j9TnOcsQxLt92cEfiX5cICogV2IoTA5n5r+tH
+ NYXPHrbjmcUpKNf/bofcgD4pfKobRz0dHH2vpqDaKEiEwngTZjKiby/yAzFG/teFKO
+ 9z/utSBhtRtKw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=U26m2mdz
+Subject: Re: [Buildroot] [PATCH 1/1] package/assimp: bump to version 5.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,92 +74,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=885cda7e0d67eff56bf803e85185f9f86f02120f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Drop patch (already in version)
+On 2023-12-26 16:32 +0100, Fabrice Fontaine spake thusly:
+> https://github.com/assimp/assimp/releases/tag/v5.3.1
+> https://github.com/assimp/assimp/releases/tag/v5.3.0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-https://github.com/lldpd/lldpd/blob/1.0.17/NEWS
+Applied to master, along with all the following patches doing version
+bumps, up to and including the wavpack bump. Thanks!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...-read-overflow-when-parsing-CDP-addresses.patch | 24 ----------------------
- package/lldpd/lldpd.hash                           |  4 ++--
- package/lldpd/lldpd.mk                             |  5 +----
- 3 files changed, 3 insertions(+), 30 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/lldpd/0001-daemon-fix-read-overflow-when-parsing-CDP-addresses.patch b/package/lldpd/0001-daemon-fix-read-overflow-when-parsing-CDP-addresses.patch
-deleted file mode 100644
-index 05d882a07a..0000000000
---- a/package/lldpd/0001-daemon-fix-read-overflow-when-parsing-CDP-addresses.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--From a9aeabdf879c25c584852a0bb5523837632f099b Mon Sep 17 00:00:00 2001
--From: Vincent Bernat <vincent@bernat.ch>
--Date: Wed, 12 Apr 2023 07:38:31 +0200
--Subject: [PATCH] daemon: fix read overflow when parsing CDP addresses
--
--Upstream: https://github.com/lldpd/lldpd/commit/a9aeabdf879c25c584852a0bb5523837632f099b
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- NEWS                       | 4 ++++
-- src/daemon/protocols/cdp.c | 1 +
-- 2 files changed, 5 insertions(+)
--
--diff --git a/src/daemon/protocols/cdp.c b/src/daemon/protocols/cdp.c
--index 8a1be863..42861c0e 100644
----- a/src/daemon/protocols/cdp.c
--+++ b/src/daemon/protocols/cdp.c
--@@ -466,6 +466,7 @@ cdp_decode(struct lldpd *cfg, char *frame, int s, struct lldpd_hardware *hardwar
-- 					goto malformed;
-- 				}
-- 				PEEK_DISCARD(address_len);
--+				addresses_len -= address_len;
-- 				(void)PEEK_SAVE(pos_next_address);
-- 				/* Next, we go back and try to extract
-- 				   IPv4 address */
-diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-index 6db5ca98f1..e798e2beb2 100644
---- a/package/lldpd/lldpd.hash
-+++ b/package/lldpd/lldpd.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking gpg key
--# https://media.luffy.cx/files/lldpd/lldpd-1.0.15.tar.gz.gpg
-+# https://media.luffy.cx/files/lldpd/lldpd-1.0.17.tar.gz.gpg
- # using key AEF2348766F371C689A7360095A42FE8353525F9
--sha256  f7fe3a130be98a19c491479ef60f36b8ee41a9e6bc4d7f2c41033f63956a3126  lldpd-1.0.15.tar.gz
-+sha256  9343177f145d2bca66ef03d59528079d3f1663c624b1e2b9d08268efdc6127ce  lldpd-1.0.17.tar.gz
- sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index d4abfade81..75457a25e3 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LLDPD_VERSION = 1.0.15
-+LLDPD_VERSION = 1.0.17
- LLDPD_SITE = https://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_CHECK),check) \
-@@ -16,9 +16,6 @@ LLDPD_LICENSE = ISC
- LLDPD_LICENSE_FILES = LICENSE
- LLDPD_CPE_ID_VENDOR = lldpd_project
- 
--# 0001-daemon-fix-read-overflow-when-parsing-CDP-addresses.patch
--LLDPD_IGNORE_CVES += CVE-2023-41910
--
- # Detection of c99 support in configure fails without WCHAR. To enable
- # automatic detection of c99 support by configure, we need to enable
- # WCHAR in toolchain. But actually we do not need WCHAR at lldpd
+> ---
+>  package/assimp/assimp.hash | 2 +-
+>  package/assimp/assimp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
+> index 86a90927ed..79415706f9 100644
+> --- a/package/assimp/assimp.hash
+> +++ b/package/assimp/assimp.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  b5219e63ae31d895d60d98001ee5bb809fb2c7b2de1e7f78ceeb600063641e1a  assimp-5.2.5.tar.gz
+> +sha256  a07666be71afe1ad4bc008c2336b7c688aca391271188eb9108d0c6db1be53f1  assimp-5.3.1.tar.gz
+>  sha256  147874443d242b4e2bae97036e26ec9d6b37f706174c1bd5ecfcc8c1294cef51  LICENSE
+> diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+> index 0b6034fb8e..2765cc7171 100644
+> --- a/package/assimp/assimp.mk
+> +++ b/package/assimp/assimp.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -ASSIMP_VERSION = 5.2.5
+> +ASSIMP_VERSION = 5.3.1
+>  ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+>  ASSIMP_LICENSE = BSD-3-Clause
+>  ASSIMP_LICENSE_FILES = LICENSE
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
