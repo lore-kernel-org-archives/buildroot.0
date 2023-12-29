@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C2CBC4706F
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FF86C46CD4
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:19:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD870435EE;
-	Fri, 29 Dec 2023 21:18:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD870435EE
+	by smtp2.osuosl.org (Postfix) with ESMTP id A8837436CB;
+	Fri, 29 Dec 2023 21:19:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8837436CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rQUgnogRgZie; Fri, 29 Dec 2023 21:18:56 +0000 (UTC)
+	with ESMTP id WA0WfeRjljaG; Fri, 29 Dec 2023 21:19:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA5C0436A7;
-	Fri, 29 Dec 2023 21:18:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA5C0436A7
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC5FF436AA;
+	Fri, 29 Dec 2023 21:19:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC5FF436AA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2614C1BF997
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1BD281BF239
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3379436A7
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3379436A7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18C96435BE
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18C96435BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jGwXn7wLPnH1 for <buildroot@lists.busybox.net>;
+ with ESMTP id EIyvO04xaQPA for <buildroot@lists.busybox.net>;
  Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07F404369C
- for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07F404369C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FEAA43543
+ for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FEAA43543
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D346283915; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
+ id 30C1383912; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 29 Dec 2023 21:56:02 +0100
+Date: Fri, 29 Dec 2023 22:14:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b628e867722a0bdfac3224e3624cc4d1b916d5b6
-X-Git-Newrev: 70e3b5a800f86e08dce14cb4ac14a3d4d7679904
+X-Git-Oldrev: 4908332d51fb68a3473d4fb9bbfb34eeb31e2929
+X-Git-Newrev: 08c1ed5b6e9b475949bc087a783bceff58fbac7a
 X-Patchwork-Hint: ignore
-Message-Id: <20231229211748.D346283915@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liburing: bump to version 2.5
+Message-Id: <20231229211749.30C1383912@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xr819-xradio: bump to version
+ 2023-12-25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70e3b5a800f86e08dce14cb4ac14a3d4d7679904
+commit: https://git.buildroot.net/buildroot/commit/?id=08c1ed5b6e9b475949bc087a783bceff58fbac7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/axboe/liburing/blob/liburing-2.5/CHANGELOG
+With this patch package builds with Linux up to version 6.7
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/liburing/liburing.hash | 2 +-
- package/liburing/liburing.mk   | 2 +-
+ package/xr819-xradio/xr819-xradio.hash | 2 +-
+ package/xr819-xradio/xr819-xradio.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/liburing/liburing.hash b/package/liburing/liburing.hash
-index eaee8fcfa1..30458c6b9f 100644
---- a/package/liburing/liburing.hash
-+++ b/package/liburing/liburing.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  ca260e7a5820c2d0e737ec1e9b999f10776dbe84a169a02a0eff10c8eeaf3394  liburing-2.4.tar.bz2
-+sha256  319ff9096a5655362a9741c5145b45494db810e38679a1de82e2f440c17181a6  liburing-2.5.tar.bz2
- 
- # Hash for license files
- sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
-diff --git a/package/liburing/liburing.mk b/package/liburing/liburing.mk
-index c35fb39390..2c448d6a87 100644
---- a/package/liburing/liburing.mk
-+++ b/package/liburing/liburing.mk
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index 1ff36368ec..388a3a3cd4 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  e27b6b5fb35ef44a93eb1f5b29bd61c06109e951c8a5ea2cc3e0310663f22001  xr819-xradio-547521df27d1a80fb5542e93fa13bd09fb2259a2.tar.gz
++sha256  8bc3d745ed08b7f3a9c0413c2635d0faf647362b41494d04edc98709b869deef  xr819-xradio-3a1f77fb2db248b7d18d93b67b16e0d6c91db184.tar.gz
+ # Locally computed
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+index 1e4cdb6872..8b576a347a 100644
+--- a/package/xr819-xradio/xr819-xradio.mk
++++ b/package/xr819-xradio/xr819-xradio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBURING_VERSION = 2.4
-+LIBURING_VERSION = 2.5
- LIBURING_SOURCE = liburing-$(LIBURING_VERSION).tar.bz2
- LIBURING_SITE = https://git.kernel.dk/cgit/liburing/snapshot
- LIBURING_LICENSE = (GPL-2.0 with exceptions and LGPL-2.1+) or MIT
+-XR819_XRADIO_VERSION = 547521df27d1a80fb5542e93fa13bd09fb2259a2
++XR819_XRADIO_VERSION = 3a1f77fb2db248b7d18d93b67b16e0d6c91db184
+ XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+ XR819_XRADIO_LICENSE = GPL-2.0
+ XR819_XRADIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
