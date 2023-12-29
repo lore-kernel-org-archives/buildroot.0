@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E0EC46CD4
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:18:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA5DC4706F
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7D1EA435EE;
-	Fri, 29 Dec 2023 21:18:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D1EA435EE
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEDC5435EE;
+	Fri, 29 Dec 2023 21:18:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEDC5435EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L1SUl36Qeowf; Fri, 29 Dec 2023 21:18:02 +0000 (UTC)
+	with ESMTP id hfZflpkBhDGx; Fri, 29 Dec 2023 21:18:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E0034367E;
-	Fri, 29 Dec 2023 21:18:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E0034367E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC6381BF239
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9A3D4369D;
+	Fri, 29 Dec 2023 21:18:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9A3D4369D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D05D41BF997
  for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B22744009B
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8AE8436A7
  for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B22744009B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8AE8436A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nd2b6L_dhYke for <buildroot@lists.busybox.net>;
- Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sR4bhhlPwUDM for <buildroot@lists.busybox.net>;
+ Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C27004003C
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3EEB435EE
  for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C27004003C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3EEB435EE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0E6683911; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
+ id A6568838BD; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 29 Dec 2023 21:55:50 +0100
+Date: Fri, 29 Dec 2023 21:55:46 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7a5f153f9cf9751b4840dc0ce40d9a535e87737f
-X-Git-Newrev: c67de80597c830f8b8d92b469bf71457aa42c742
+X-Git-Oldrev: 9a94e85fff629b73cc3b02605793806fb9ce97dd
+X-Git-Newrev: 7a5f153f9cf9751b4840dc0ce40d9a535e87737f
 X-Patchwork-Hint: ignore
-Message-Id: <20231229211748.B0E6683911@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libraw: bump to version 0.21.2
+Message-Id: <20231229211748.A6568838BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/assimp: bump to version 5.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,85 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c67de80597c830f8b8d92b469bf71457aa42c742
+commit: https://git.buildroot.net/buildroot/commit/?id=7a5f153f9cf9751b4840dc0ce40d9a535e87737f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version)
-
-https://github.com/LibRaw/LibRaw/blob/0.21.2/Changelog.txt
+https://github.com/assimp/assimp/releases/tag/v5.3.1
+https://github.com/assimp/assimp/releases/tag/v5.3.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-set-shrink-flag-for-3-4-component-images.patch | 24 ----------------------
- package/libraw/libraw.hash                         |  2 +-
- package/libraw/libraw.mk                           |  5 +----
- 3 files changed, 2 insertions(+), 29 deletions(-)
+ package/assimp/assimp.hash | 2 +-
+ package/assimp/assimp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch b/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
-deleted file mode 100644
-index ef93e0901b..0000000000
---- a/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--From 477e0719ffc07190c89b4f3d12d51b1292e75828 Mon Sep 17 00:00:00 2001
--From: Alex Tutubalin <lexa@lexa.ru>
--Date: Sat, 14 Jan 2023 18:32:59 +0300
--Subject: [PATCH] do not set shrink flag for 3/4 component images
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/LibRaw/LibRaw/commit/477e0719ffc07190c89b4f3d12d51b1292e75828
-----
-- src/preprocessing/raw2image.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/preprocessing/raw2image.cpp b/src/preprocessing/raw2image.cpp
--index e65e2ad7..702cf290 100644
----- a/src/preprocessing/raw2image.cpp
--+++ b/src/preprocessing/raw2image.cpp
--@@ -43,6 +43,8 @@ void LibRaw::raw2image_start()
-- 
--   // adjust for half mode!
--   IO.shrink =
--+	  !imgdata.rawdata.color4_image && !imgdata.rawdata.color3_image &&
--+	  !imgdata.rawdata.float4_image && !imgdata.rawdata.float3_image &&
--       P1.filters &&
--       (O.half_size || ((O.threshold || O.aber[0] != 1 || O.aber[2] != 1)));
-- 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index 58bb1b4753..838c598d78 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
+index 86a90927ed..79415706f9 100644
+--- a/package/assimp/assimp.hash
++++ b/package/assimp/assimp.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  630a6bcf5e65d1b1b40cdb8608bdb922316759bfb981c65091fec8682d1543cd  LibRaw-0.21.1.tar.gz
-+sha256  fe7288013206854baf6e4417d0fb63ba4ed7227bf36fff021992671c2dd34b03  LibRaw-0.21.2.tar.gz
- sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
- sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
- sha256  7d6650cef6cf892abe95e55a6bda1e1c42f221fd411b807deb2fc0b805b868d4  README.md
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index 63b50e340d..211b67f935 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
+-sha256  b5219e63ae31d895d60d98001ee5bb809fb2c7b2de1e7f78ceeb600063641e1a  assimp-5.2.5.tar.gz
++sha256  a07666be71afe1ad4bc008c2336b7c688aca391271188eb9108d0c6db1be53f1  assimp-5.3.1.tar.gz
+ sha256  147874443d242b4e2bae97036e26ec9d6b37f706174c1bd5ecfcc8c1294cef51  LICENSE
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 0b6034fb8e..2765cc7171 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRAW_VERSION = 0.21.1
-+LIBRAW_VERSION = 0.21.2
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
-@@ -18,9 +18,6 @@ LIBRAW_DEPENDENCIES = host-pkgconf
- LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
- LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
- 
--# 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
--LIBRAW_IGNORE_CVES += CVE-2023-1729
--
- ifeq ($(BR2_PACKAGE_JASPER),y)
- LIBRAW_CONF_OPTS += --enable-jasper
- LIBRAW_DEPENDENCIES += jasper
+-ASSIMP_VERSION = 5.2.5
++ASSIMP_VERSION = 5.3.1
+ ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
