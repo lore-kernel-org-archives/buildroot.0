@@ -1,65 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 438FFC46CD3
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 14:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F6BEC47072
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 15:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFE9841822;
-	Fri, 29 Dec 2023 14:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFE9841822
+	by smtp2.osuosl.org (Postfix) with ESMTP id CBFC840360;
+	Fri, 29 Dec 2023 15:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBFC840360
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vlf1fvAHmTGR; Fri, 29 Dec 2023 14:50:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qoEwz9CrbjtT; Fri, 29 Dec 2023 15:47:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13CC141820;
-	Fri, 29 Dec 2023 14:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13CC141820
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5C9343533;
+	Fri, 29 Dec 2023 15:47:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5C9343533
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0CFFD1BF83B
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 14:50:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DB60F1BF383
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 15:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFF8341820
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 14:50:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFF8341820
+ by smtp4.osuosl.org (Postfix) with ESMTP id B36774185C
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 15:47:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B36774185C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mijA5VFWZWJN for <buildroot@lists.busybox.net>;
- Fri, 29 Dec 2023 14:50:36 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9CF4A41817
- for <buildroot@buildroot.org>; Fri, 29 Dec 2023 14:50:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CF4A41817
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ with ESMTP id TJ5pptVqOmQB for <buildroot@lists.busybox.net>;
+ Fri, 29 Dec 2023 15:47:45 +0000 (UTC)
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7C62741836
+ for <buildroot@buildroot.org>; Fri, 29 Dec 2023 15:47:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C62741836
+Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5AB4013F88D;
- Fri, 29 Dec 2023 15:50:31 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 29 Dec 2023 15:50:25 +0100
-Message-ID: <20231229145025.237058-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.43.0
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 00C0719F57E;
+ Fri, 29 Dec 2023 16:47:38 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:40448])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 29 Dec 2023 16:47:38 +0100
 MIME-Version: 1.0
+Date: Fri, 29 Dec 2023 16:47:38 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <ZYhjQtmfpGir8zsQ@landeda>
+References: <20231223212948.2512412-1-ju.o@free.fr> <ZYhjQtmfpGir8zsQ@landeda>
+User-Agent: Webmail Free/1.6.5
+Message-ID: <783a8cc0ec3eef55827fa3a0bffbb43d@free.fr>
+X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1703861432;
- bh=a1/JX70UcuaRFJ/CdgeuZTIS8xaG6LCsTnt3zoNsX5c=;
- h=From:To:Cc:Subject:Date:From;
- b=CWzs/n45cdwbzzCJXYVb0rId8WeUiSTRAGH287dzAjzC8t+locm3pIC99CUuskOEQ
- Z4nYyA9IotgTMCexWJvNqelzWqvF0zbvFe6zEuYzT6BWzVv3LgG+8OERH+dLHyp7Ic
- LFoSZBFkOtgzfOcHGATIjQUiXk5NlIW75hbEfvfVj9kcVCbf7M640E0I/FLPLZwFJX
- Prann2pZ8AYINMthkup/u4MQOJK2/RMN9PPwebIfNu0EOTzX45GX/fnNhxvwzZLxzE
- 9n7IBGw9msxqFR3vACjFdr8O2+sLOnvMxk31TeqrHDrtXgKThBeLPQi6vCWVEDoNTs
- a3EDqJ1XdDXew==
+ d=free.fr; s=smtp-20201208; t=1703864862;
+ bh=0tfHeY2HkMonW2Y7S9ioAbcrihFFivSUHYKhNyIVzSA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=CTs1SQqZZ7LzoRe0KfIUIaO3AGbmcKkm7FUg5lvKGsfJBAF6YUDumvhBqD553rYQL
+ j+rmL+ePZB2zVD7+EZN+LJMz8UjhIX3aiw1yla6iI4tHzKOWMaGSXv4hihopTenrTU
+ LJVrtEp5IwSvOMglLyXt/DY140ZLw36VtEgDI4bKmy0hKcepkJ1U6Uo/LoxF6IrnH2
+ M5kYCKLb/e84Pqp1NsIcf/QNxuwE0eVNuLTiFGO5xMPcusiZpca6KabfiTf/VJt7LM
+ AceRl3YR2LdI1uNf+ZwnjvOVFrs3vAmdic8fRClh0seizTpuThPkQwFeTijfA8n4pB
+ 6ctlumL9AxAKQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CWzs/n45
-Subject: [Buildroot] [PATCH 1/1] support/testing: test_python_ml_dtypes:
- remove BR2_PACKAGE_PYTHON3_ZLIB
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CTs1SQqZ
+Subject: Re: [Buildroot] [PATCH v2 1/2] boot/grub2: add RISC-V 64bit EFI
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,65 +77,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The test_python_ml_dtypes.py enabled BR2_PACKAGE_PYTHON3_ZLIB=y in its
-configuration to workaround the fact that the toolchain used to
-testing was tainted with zlib.
+Hi Yann, All,
 
-The commit 7e0e6e3
-"toolchain/toolchain-external/toolchain-external-bootlin: update to
-2023.11-1" updated the toolchains which are no longer tainted with
-zlib.
+On 24/12/2023 17:58, Yann E. MORIN wrote:
+> Julien, All,
+> 
+> On 2023-12-23 22:29 +0100, Julien Olivain spake thusly:
+>> Grub can be built as a RISC-V UEFI application since commit [1]. This
+>> commit was first included in grub version 2.04.
+>> 
+>> This commit enables this support.
+>> 
+>> [1] 
+>> https://git.savannah.gnu.org/gitweb/?p=grub.git;a=commitdiff;h=f1957dc8a3347278a095bc8f44197662559a8ba3
+>> 
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> 
+> Oh, I forgot to add: it would be awesome if you coulde extend the
+> existing runtiem test to include a risc-v test:
+>     support/testing/tests/boot/test_grub.py
 
-The workaround is no longer needed and this commit removes this
-config, for consistency.
+In fact, I already had a test ready. I didn't send it because
+the current Buildroot docker image does not include qemu with
+RISC-V system emulation. See [1]. I sent a patch, accepted in
+commit [2] to enable this support, but the image was not regenerated
+since then.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch master at commit 7e0e6e3 with commands:
+Moreover, this RISCV 64bit EFI boot requires qemu >= 8.0.0.
+Buildroot docker image is still on Debian 11 bullseye, which
+includes qemu 5.2.0. Debian 12.4 bookworm only includes qemu 7.2.0,
+see [3].
 
-    make check-package
-    ...
-    0 warnings generated
+Do you think in that specific case I could include add
+BR2_PACKAGE_HOST_QEMU=y in this specific runtime test config?
 
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_python_ml_dtypes
-    ...
-    OK
----
- support/testing/tests/package/test_python_ml_dtypes.py | 7 -------
- 1 file changed, 7 deletions(-)
+> Also, it would be nice to extend the readme for grub:
+>     boot/grub2/readme.txt
 
-diff --git a/support/testing/tests/package/test_python_ml_dtypes.py b/support/testing/tests/package/test_python_ml_dtypes.py
-index 8d2369576b..8367107247 100644
---- a/support/testing/tests/package/test_python_ml_dtypes.py
-+++ b/support/testing/tests/package/test_python_ml_dtypes.py
-@@ -4,16 +4,9 @@ from tests.package.test_python import TestPythonPackageBase
- class TestPythonPy3MlDtypes(TestPythonPackageBase):
-     __test__ = True
- 
--    # Note: BR2_PACKAGE_PYTHON3_ZLIB=y is needed as a runtime
--    # dependency because the Bootlin toolchain used for this test is
--    # tainted with zlib (and gets detected by python3/numpy).
--    # See commit 8ce33fed "package/gdb: gdbserver does not need zlib".
--    # This config entry can be removed as soon as the toolchain is
--    # updated without zlib in its sysroot.
-     config = TestPythonPackageBase.config + \
-         """
-         BR2_PACKAGE_PYTHON3=y
--        BR2_PACKAGE_PYTHON3_ZLIB=y
-         BR2_PACKAGE_PYTHON_ML_DTYPES=y
-         """
-     sample_scripts = ["tests/package/sample_python_ml_dtypes.py"]
--- 
-2.43.0
+I added that to my task list!
 
+> Regards,
+> Yann E. MORIN.
+> 
+
+Best regards,
+
+Julien.
+
+[1] 
+https://gitlab.com/buildroot.org/buildroot/-/blob/master/.gitlab-ci.yml?ref_type=heads#L4
+[2] 
+https://gitlab.com/buildroot.org/buildroot/-/commit/93c7b55c778e3dd4d84945918e5d97d5f56256c5
+[3] https://packages.debian.org/bookworm/qemu-system-misc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
