@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50BCAC46CD4
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E0EC46CD4
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0371435EE;
-	Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0371435EE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D1EA435EE;
+	Fri, 29 Dec 2023 21:18:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D1EA435EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dloCGm4Qxd1x; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
+	with ESMTP id L1SUl36Qeowf; Fri, 29 Dec 2023 21:18:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6CC8435BE;
-	Fri, 29 Dec 2023 21:17:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6CC8435BE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E0034367E;
+	Fri, 29 Dec 2023 21:18:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E0034367E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3481E1BF239
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CC6381BF239
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0918141B6E
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0918141B6E
+ by smtp4.osuosl.org (Postfix) with ESMTP id B22744009B
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B22744009B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bJWb8CWBIsuO for <buildroot@lists.busybox.net>;
- Fri, 29 Dec 2023 21:17:45 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1087440983
- for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:17:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1087440983
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id CCC42B0053D;
- Fri, 29 Dec 2023 22:17:38 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 29 Dec 2023 22:17:38 +0100
-Date: Fri, 29 Dec 2023 22:17:38 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <ZY83cvKA8SCz7jbc@landeda>
-References: <20231226200320.143381-1-giulio.benetti@benettiengineering.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231226200320.143381-1-giulio.benetti@benettiengineering.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1703884662;
- bh=O8rDs4xxA6wZrnN2GKH1epsbureV+0Mh5GoSp0Gd9lQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Gch2U7UKNjoFv65BeF4DXQlFklW4HVwSYmsvbZRAoKlZQ+CTeIuZFlY2H8w0+1XGJ
- KIumLDk4btqZ+D0UoCnhEvgylozDLBSoKqXzOzqHsDSVbwEQWs+oIz43NeS1l/GSUz
- fnlbmD+6yT8d6bfXNj5sIbTlW9+eFaZbNpPXFGX9EGlE9ULMESqk1rXCjVIU+Y2CUy
- KmzVzsBIkY+ZXKr1e6xJd+o58+HopL/XPUUYQxS6XbNRP1jctNEiqifzdqINvkFnSL
- Uxmz6UYUE8L5hquTzi/XzI5dhsphtWDQnAtPRUPmZs73rpdxs3hIbMEZRaSCit7zPl
- iOF+uCN1rO6Bw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Gch2U7UK
-Subject: Re: [Buildroot] [PATCH] package/xr819-xradio: bump to version
- 2023-12-25
+ with ESMTP id Nd2b6L_dhYke for <buildroot@lists.busybox.net>;
+ Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C27004003C
+ for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C27004003C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B0E6683911; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 29 Dec 2023 21:55:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7a5f153f9cf9751b4840dc0ce40d9a535e87737f
+X-Git-Newrev: c67de80597c830f8b8d92b469bf71457aa42c742
+X-Patchwork-Hint: ignore
+Message-Id: <20231229211748.B0E6683911@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libraw: bump to version 0.21.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,67 +56,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c67de80597c830f8b8d92b469bf71457aa42c742
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-12-26 21:03 +0100, Giulio Benetti spake thusly:
-> With this patch package builds with Linux up to version 6.7
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Drop patch (already in version)
 
-Applied to master, thanks.
+https://github.com/LibRaw/LibRaw/blob/0.21.2/Changelog.txt
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-set-shrink-flag-for-3-4-component-images.patch | 24 ----------------------
+ package/libraw/libraw.hash                         |  2 +-
+ package/libraw/libraw.mk                           |  5 +----
+ 3 files changed, 2 insertions(+), 29 deletions(-)
 
-> ---
->  package/xr819-xradio/xr819-xradio.hash | 2 +-
->  package/xr819-xradio/xr819-xradio.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-> index 1ff36368ec..388a3a3cd4 100644
-> --- a/package/xr819-xradio/xr819-xradio.hash
-> +++ b/package/xr819-xradio/xr819-xradio.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  e27b6b5fb35ef44a93eb1f5b29bd61c06109e951c8a5ea2cc3e0310663f22001  xr819-xradio-547521df27d1a80fb5542e93fa13bd09fb2259a2.tar.gz
-> +sha256  8bc3d745ed08b7f3a9c0413c2635d0faf647362b41494d04edc98709b869deef  xr819-xradio-3a1f77fb2db248b7d18d93b67b16e0d6c91db184.tar.gz
->  # Locally computed
->  sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
-> diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-> index 1e4cdb6872..8b576a347a 100644
-> --- a/package/xr819-xradio/xr819-xradio.mk
-> +++ b/package/xr819-xradio/xr819-xradio.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -XR819_XRADIO_VERSION = 547521df27d1a80fb5542e93fa13bd09fb2259a2
-> +XR819_XRADIO_VERSION = 3a1f77fb2db248b7d18d93b67b16e0d6c91db184
->  XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
->  XR819_XRADIO_LICENSE = GPL-2.0
->  XR819_XRADIO_LICENSE_FILES = LICENSE
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch b/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+deleted file mode 100644
+index ef93e0901b..0000000000
+--- a/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-From 477e0719ffc07190c89b4f3d12d51b1292e75828 Mon Sep 17 00:00:00 2001
+-From: Alex Tutubalin <lexa@lexa.ru>
+-Date: Sat, 14 Jan 2023 18:32:59 +0300
+-Subject: [PATCH] do not set shrink flag for 3/4 component images
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/LibRaw/LibRaw/commit/477e0719ffc07190c89b4f3d12d51b1292e75828
+----
+- src/preprocessing/raw2image.cpp | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/preprocessing/raw2image.cpp b/src/preprocessing/raw2image.cpp
+-index e65e2ad7..702cf290 100644
+---- a/src/preprocessing/raw2image.cpp
+-+++ b/src/preprocessing/raw2image.cpp
+-@@ -43,6 +43,8 @@ void LibRaw::raw2image_start()
+- 
+-   // adjust for half mode!
+-   IO.shrink =
+-+	  !imgdata.rawdata.color4_image && !imgdata.rawdata.color3_image &&
+-+	  !imgdata.rawdata.float4_image && !imgdata.rawdata.float3_image &&
+-       P1.filters &&
+-       (O.half_size || ((O.threshold || O.aber[0] != 1 || O.aber[2] != 1)));
+- 
+diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
+index 58bb1b4753..838c598d78 100644
+--- a/package/libraw/libraw.hash
++++ b/package/libraw/libraw.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  630a6bcf5e65d1b1b40cdb8608bdb922316759bfb981c65091fec8682d1543cd  LibRaw-0.21.1.tar.gz
++sha256  fe7288013206854baf6e4417d0fb63ba4ed7227bf36fff021992671c2dd34b03  LibRaw-0.21.2.tar.gz
+ sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
+ sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
+ sha256  7d6650cef6cf892abe95e55a6bda1e1c42f221fd411b807deb2fc0b805b868d4  README.md
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index 63b50e340d..211b67f935 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRAW_VERSION = 0.21.1
++LIBRAW_VERSION = 0.21.2
+ LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
+ LIBRAW_SITE = http://www.libraw.org/data
+ LIBRAW_INSTALL_STAGING = YES
+@@ -18,9 +18,6 @@ LIBRAW_DEPENDENCIES = host-pkgconf
+ LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
+ LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
+ 
+-# 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+-LIBRAW_IGNORE_CVES += CVE-2023-1729
+-
+ ifeq ($(BR2_PACKAGE_JASPER),y)
+ LIBRAW_CONF_OPTS += --enable-jasper
+ LIBRAW_DEPENDENCIES += jasper
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
