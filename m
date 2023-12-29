@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BBB1C46CD4
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 20:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50BCAC46CD4
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:17:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF74540540;
-	Fri, 29 Dec 2023 20:54:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF74540540
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0371435EE;
+	Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0371435EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z36Ni-yZjsYo; Fri, 29 Dec 2023 20:54:04 +0000 (UTC)
+	with ESMTP id dloCGm4Qxd1x; Fri, 29 Dec 2023 21:17:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC77743699;
-	Fri, 29 Dec 2023 20:54:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC77743699
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BFEAC1BF30C
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 20:53:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6CC8435BE;
+	Fri, 29 Dec 2023 21:17:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6CC8435BE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3481E1BF239
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7BB7E81CA7
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 20:53:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BB7E81CA7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0918141B6E
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0918141B6E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lDGov6OQZqKZ for <buildroot@lists.busybox.net>;
- Fri, 29 Dec 2023 20:53:56 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7C02781DE9
- for <buildroot@buildroot.org>; Fri, 29 Dec 2023 20:53:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C02781DE9
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bJWb8CWBIsuO for <buildroot@lists.busybox.net>;
+ Fri, 29 Dec 2023 21:17:45 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1087440983
+ for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1087440983
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 260F6B0051B;
- Fri, 29 Dec 2023 21:53:52 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id CCC42B0053D;
+ Fri, 29 Dec 2023 22:17:38 +0100 (CET)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 29 Dec 2023 21:53:51 +0100
-Date: Fri, 29 Dec 2023 21:53:51 +0100
+ Fri, 29 Dec 2023 22:17:38 +0100
+Date: Fri, 29 Dec 2023 22:17:38 +0100
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZY8x33xg3_mh1wun@landeda>
-References: <20231226165520.806663-1-fontaine.fabrice@gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <ZY83cvKA8SCz7jbc@landeda>
+References: <20231226200320.143381-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20231226165520.806663-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20231226200320.143381-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1703883234;
- bh=uauZ2Wdzclcn+oM44s0pWljsrJXZzjLUnLznzKh5e5k=;
+ d=free.fr; s=smtp-20201208; t=1703884662;
+ bh=O8rDs4xxA6wZrnN2GKH1epsbureV+0Mh5GoSp0Gd9lQ=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CoXJMTJfvla/uxoGg9wt1/nn2vI4epAfL88Vob1UhHIya+Wz/REb+0mFX6hHLU5dK
- bQivzf5FKygY0LXbYtIvKdTTNZJRbWVMFyG49cEz2k/zZ25mAAFek+UP3/VKv3YE3n
- MfJHHdPF5aiftx2ZUNjJ9nZVXehapkZehzcyRe2+mQaVEYCh/gUhy92wn02Uxp1trf
- 036uzp/tkLjtG4n0XRBpGFaroSktD9UFbIpg5a5c/NhYlmx3tvplM9VAdII0JCFdCd
- oQTBsI3Osm34nBPMvKXEbej8ljyul5rcGhT6zzYS5VWJhcpzMwUQo8RkoSq0xuarHc
- W1WiJD+psOAaA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Gch2U7UKNjoFv65BeF4DXQlFklW4HVwSYmsvbZRAoKlZQ+CTeIuZFlY2H8w0+1XGJ
+ KIumLDk4btqZ+D0UoCnhEvgylozDLBSoKqXzOzqHsDSVbwEQWs+oIz43NeS1l/GSUz
+ fnlbmD+6yT8d6bfXNj5sIbTlW9+eFaZbNpPXFGX9EGlE9ULMESqk1rXCjVIU+Y2CUy
+ KmzVzsBIkY+ZXKr1e6xJd+o58+HopL/XPUUYQxS6XbNRP1jctNEiqifzdqINvkFnSL
+ Uxmz6UYUE8L5hquTzi/XzI5dhsphtWDQnAtPRUPmZs73rpdxs3hIbMEZRaSCit7zPl
+ iOF+uCN1rO6Bw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CoXJMTJf
-Subject: Re: [Buildroot] [PATCH 1/2] package/libcap-ng: disable python3
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Gch2U7UK
+Subject: Re: [Buildroot] [PATCH] package/xr819-xradio: bump to version
+ 2023-12-25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,49 +75,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Giulio, All,
 
-On 2023-12-26 17:55 +0100, Fabrice Fontaine spake thusly:
-> python3 is an optional dependency (enabled by default) since bump to
-> version 0.7.7 in commit 4314c86b0b932c3d381ae59b641366697906868f and
-> https://github.com/stevegrubb/libcap-ng/commit/02fc25f9d3a00c7d7ccd619d8d678511a73b940b
+On 2023-12-26 21:03 +0100, Giulio Benetti spake thusly:
+> With this patch package builds with Linux up to version 6.7
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Both, applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/libcap-ng/libcap-ng.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/xr819-xradio/xr819-xradio.hash | 2 +-
+>  package/xr819-xradio/xr819-xradio.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-> index 46f72c702e..c33460d951 100644
-> --- a/package/libcap-ng/libcap-ng.mk
-> +++ b/package/libcap-ng/libcap-ng.mk
-> @@ -12,10 +12,10 @@ LIBCAP_NG_CPE_ID_VENDOR = libcap-ng_project
->  LIBCAP_NG_INSTALL_STAGING = YES
+> diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+> index 1ff36368ec..388a3a3cd4 100644
+> --- a/package/xr819-xradio/xr819-xradio.hash
+> +++ b/package/xr819-xradio/xr819-xradio.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+> -sha256  e27b6b5fb35ef44a93eb1f5b29bd61c06109e951c8a5ea2cc3e0310663f22001  xr819-xradio-547521df27d1a80fb5542e93fa13bd09fb2259a2.tar.gz
+> +sha256  8bc3d745ed08b7f3a9c0413c2635d0faf647362b41494d04edc98709b869deef  xr819-xradio-3a1f77fb2db248b7d18d93b67b16e0d6c91db184.tar.gz
+>  # Locally computed
+>  sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+> diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+> index 1e4cdb6872..8b576a347a 100644
+> --- a/package/xr819-xradio/xr819-xradio.mk
+> +++ b/package/xr819-xradio/xr819-xradio.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
-> -LIBCAP_NG_CONF_OPTS = --without-python
-> +LIBCAP_NG_CONF_OPTS = --without-python --without-python3
->  
->  HOST_LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
-> -HOST_LIBCAP_NG_CONF_OPTS = --without-python
-> +HOST_LIBCAP_NG_CONF_OPTS = --without-python --without-python3
->  
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
+> -XR819_XRADIO_VERSION = 547521df27d1a80fb5542e93fa13bd09fb2259a2
+> +XR819_XRADIO_VERSION = 3a1f77fb2db248b7d18d93b67b16e0d6c91db184
+>  XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+>  XR819_XRADIO_LICENSE = GPL-2.0
+>  XR819_XRADIO_LICENSE_FILES = LICENSE
 > -- 
-> 2.43.0
+> 2.34.1
 > 
 > _______________________________________________
 > buildroot mailing list
