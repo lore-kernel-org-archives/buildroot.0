@@ -4,84 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2219BC46CD4
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:54:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDDE8C46CD4
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:56:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 896614017B;
-	Fri, 29 Dec 2023 21:54:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 896614017B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9094A4095E;
+	Fri, 29 Dec 2023 21:56:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9094A4095E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id II9EPyEU0lQu; Fri, 29 Dec 2023 21:54:10 +0000 (UTC)
+	with ESMTP id 0pxh62cUWl3B; Fri, 29 Dec 2023 21:56:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7224B402A7;
-	Fri, 29 Dec 2023 21:54:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7224B402A7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 054521BF995
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:54:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8999441726;
+	Fri, 29 Dec 2023 21:56:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8999441726
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 362951BF995
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0E5B402A7
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:54:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0E5B402A7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F31982531
+ for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F31982531
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YgyEbNO0ml26 for <buildroot@lists.busybox.net>;
- Fri, 29 Dec 2023 21:54:06 +0000 (UTC)
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8E18E4017B
- for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:54:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E18E4017B
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-40d560818b8so46451755e9.1
- for <buildroot@buildroot.org>; Fri, 29 Dec 2023 13:54:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703886844; x=1704491644;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=mTR6FDfi6qMhUNmKlydsZuVfZnfMciMBzg7cHdBIbas=;
- b=TkuCza6yAcBoTAyDFW/unjaOz9wlPHbSL36D3GvSRXGwl0a+Df7FfPj2gbApw5ePxP
- s/jeA8BtUIafyWkHxqZoaq99wvXC81BMcg+2vlG5jWELxsLNvGKory8s8FwfPkx7zx0C
- CD9WQJlzcYcWgvSZiyhz0xW7rAjpe+R3ypZy9ocm++CceZ4AptSiQS+06L6GB7yw522M
- F3GiHx5Vf1CTGeTEJappesMnQRJMWc47ppxHOLbjCdPISJBcpXFWHBzpz9NIjJJJW/vX
- RWGeofYDym11FrckDOhd76LtjdyL/VDt+FganO/BG+Vjz3o8gQ3up+FUc9ekSCKIZkqH
- 4xOg==
-X-Gm-Message-State: AOJu0YxXYHC9nMMy8z8lEkTfYrJ/LgayHoAPXiOvz4aL9dRDQAhPIjJg
- VSXMcdUsdfc0y2qdKaHK2Qznh/AjFDU=
-X-Google-Smtp-Source: AGHT+IHbZQJzVqX5187bQ4dUbAQP/YvbhWgXXPqlYayvPrU7wdsCR9SyBRTPizu3B6VLobxj79HI5A==
-X-Received: by 2002:a05:600c:4ca7:b0:40c:3417:239 with SMTP id
- g39-20020a05600c4ca700b0040c34170239mr6412024wmp.129.1703886843701; 
- Fri, 29 Dec 2023 13:54:03 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- he3-20020a05600c540300b00405d9a950a2sm39300705wmb.28.2023.12.29.13.54.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 Dec 2023 13:54:03 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 29 Dec 2023 22:54:01 +0100
-Message-ID: <20231229215401.24620-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s870UvMT7f-f for <buildroot@lists.busybox.net>;
+ Fri, 29 Dec 2023 21:56:33 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C945882525
+ for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:56:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C945882525
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 8AE6EB0055E;
+ Fri, 29 Dec 2023 22:56:26 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 29 Dec 2023 22:56:26 +0100
+Date: Fri, 29 Dec 2023 22:56:26 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Message-ID: <ZY9AigY5WWfIPT-m@landeda>
+References: <20231227181756.156827-1-bernd@kuhls.net>
+ <20231228095121.5255f937@booty>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703886844; x=1704491644; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mTR6FDfi6qMhUNmKlydsZuVfZnfMciMBzg7cHdBIbas=;
- b=HHLLKS5x0u3GiHdn0PH6jROyfhCS/75pf/YwEjqlSgK2vBdLWlE7uFV17wx07r+Nsf
- nbGJZmfYmg9h1HObJ7p2clrqzKOUr//7q2Z0cJpiupjKgkYZEZFB75a7c2yDQpSni/FO
- vRdqx0daBgxZN/cb4CsUh9DnC+2hQ8tq2TBDwcsh6QZRwd/0FWh7xBVhUN9KgTcCuh3L
- tmmoymkKadpZRzaQ+ISyPM5s7K3nDHWvCIaVnGgNfC8FbAkSdP7zHfxFSFgqTsGTsQ8f
- ay3iYjFanx20AvCAmrqJOPJzBPT7Ag9YsLp7SqoYvIJj+OUC4nauL67v4aVeBX2Ai4zi
- D00w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HHLLKS5x
-Subject: [Buildroot] [PATCH 1/1] package/ncdu: bump to version 1.19
+Content-Disposition: inline
+In-Reply-To: <20231228095121.5255f937@booty>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1703886990;
+ bh=Us5Mv9giLAPXOJl1xhKbNpLvzPhrslW+PA/tInqKK04=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=W97o7r+YohSOSYBfj2GmRjlTmVY+xoa4yaJ8V6s47uKQKoP59buaaxoAlodrtTTIA
+ FWbVc7LdufJsNX7XJevB04Cwo7PyxcP0yYJ71PGpt99IMLzDjMNGZ1FtLxhB8nIgYl
+ 2Mvh9VyF9MMn80ILNHjwLVqCHYddkF7uCx5Q0f0/CcRm9i2IhmkU77M5DVV/DHKW0R
+ qi06ctVM79pdPOPxVR4ddLN0IROhPovrAlt2qpQQY6hmdCtQsDwimsUpT9cQ0+cpx7
+ rSUNKotH3BmKmIVdR5qtbffV1XUD7qZot+wVdUT7D0mErXi29sfyHqkfNhdU+6YmH9
+ OhwZIY7RLdYzw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=W97o7r+Y
+Subject: Re: [Buildroot] [PATCH 1/2] package/exim: fix build with libexecinfo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,56 +75,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bogdan Radulescu <bogdan@nimblex.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update hash of COPYING (update in year:
-https://code.blicky.net/yorhel/ncdu/commit/c08340ee08120244834adb59fcee2abfeb8456a6)
+Bernd, Luca, All,
 
-https://dev.yorhel.nl/ncdu/changes
+On 2023-12-28 09:51 +0100, Luca Ceresoli via buildroot spake thusly:
+> On Wed, 27 Dec 2023 19:17:55 +0100
+> Bernd Kuhls <bernd@kuhls.net> wrote:
+> > Upstream added optional support for execinfo
+[--SNIP--]
+> > @@ -126,6 +127,15 @@ ifeq ($(BR2_STATIC_LIBS),y)
+> >  EXIM_STATIC_FLAGS = LFLAGS="-pthread --static"
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+> > +EXIM_DEPENDENCIES += libexecinfo
+> > +define EXIM_EXTRALIBS
+> > +$(call exim-config-add,EXTRALIBS,-lexecinfo)
+> > +endef
+> > +else
+> > +EXIM_C_FLAGS = -DNO_EXECINFO
+> > +endif
+> 
+> I think this logic is not entirely correct. As I read it:
+> 
+>  * on non-glibc systems it automatically enables the new exim
+>    stack dump feature if libexecinfo is enabled
+>  * on glibc systems, which always have the backtrace() and related
+>    functions without additional libraries, we never enable this feature
+> 
+> For consistency, the else branch should just be removed to avoid
+> setting NO_EXECINFO, thus enabling the stack dump feature whenever it
+> is possible.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ncdu/ncdu.hash | 8 ++++----
- package/ncdu/ncdu.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+If I understand correctly, your proposal would not work either: for a
+non-glibc config that does not have libexecinfo eabled, we do want to
+define NO_EXECINFO.
 
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index 1e31eaea8e..553e128ed1 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
-@@ -1,7 +1,7 @@
- # From https://dev.yorhel.nl/ncdu
--md5  4186b5be477cc3a0944619ade81f123b  ncdu-1.18.tar.gz
--sha1  d47ce3cdf317adadc1426817d07899c90b767aba  ncdu-1.18.tar.gz
--sha256  3c37a1a96580c9c5d2cc352dc3c5eef0d909158c05f1cc29db4712544c8b9f95  ncdu-1.18.tar.gz
-+md5  7986451d5b222b8a99b5382f33a30831  ncdu-1.19.tar.gz
-+sha1  3ee7aff60bdaa1c79eb4f27e3d277fc2d76e0043  ncdu-1.19.tar.gz
-+sha256  30363019180cde0752c7fb006c12e154920412f4e1b5dc3090654698496bb17d  ncdu-1.19.tar.gz
- 
- # computed locally
--sha256  4590cb935ff8a50cee76ce12c2cb0411c0b06e84c267b478579785dcf328660d  COPYING
-+sha256  40372b6016a489b69a5d198526e0a1c284680900f48a8b725de440452098a97b  COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index 240ef9d8ea..f14f61fec5 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NCDU_VERSION = 1.18
-+NCDU_VERSION = 1.19
- NCDU_SITE = http://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = ncurses
+Instead, the logic should be somthong like:
+
+    if glibc:
+        do nothing, execinfo is available
+    elif libexecinfo enabled:
+        add dependency and extra-lib
+    else:
+        define NO_EXECINFO
+
+Since libexecinfo embedds the fact that it is also non-glibc, we can
+rewrite the condition as:
+
+    if libexecinfo:
+        add dependency and extra-lib
+    elif non-glibc;
+        define NO_EXECINFO
+
+So, the 'else' clause only needs to be changed into:
+    else ifneq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+
+Unless I missed something less obvious...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.43.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
