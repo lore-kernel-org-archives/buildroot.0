@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FF86C46CD4
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E24E0C4706F
+	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 21:19:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8837436CB;
-	Fri, 29 Dec 2023 21:19:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8837436CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 94CA7435DB;
+	Fri, 29 Dec 2023 21:19:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94CA7435DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WA0WfeRjljaG; Fri, 29 Dec 2023 21:19:10 +0000 (UTC)
+	with ESMTP id okOgepExodCg; Fri, 29 Dec 2023 21:19:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC5FF436AA;
-	Fri, 29 Dec 2023 21:19:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC5FF436AA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1BD281BF239
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7061840540;
+	Fri, 29 Dec 2023 21:19:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7061840540
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AEFB1BF997
  for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18C96435BE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A8C24003C
  for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 21:17:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18C96435BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A8C24003C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EIyvO04xaQPA for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F4w1zN8vmkDX for <buildroot@lists.busybox.net>;
  Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FEAA43543
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D7C24006E
  for <buildroot@buildroot.org>; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FEAA43543
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D7C24006E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30C1383912; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
+ id 1BCC083911; Fri, 29 Dec 2023 21:17:49 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 29 Dec 2023 22:14:11 +0100
+Date: Fri, 29 Dec 2023 22:14:08 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4908332d51fb68a3473d4fb9bbfb34eeb31e2929
-X-Git-Newrev: 08c1ed5b6e9b475949bc087a783bceff58fbac7a
+X-Git-Oldrev: af5da8f1292bc9839df4ab52ce8d8a64bc8c5f2b
+X-Git-Newrev: 5caa16bd70a3d0d50fddfd1c0e0d2fb00bdfcd3a
 X-Patchwork-Hint: ignore
-Message-Id: <20231229211749.30C1383912@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xr819-xradio: bump to version
- 2023-12-25
+Message-Id: <20231229211749.1BCC083911@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ncmpc: bump to version 0.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +62,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08c1ed5b6e9b475949bc087a783bceff58fbac7a
+commit: https://git.buildroot.net/buildroot/commit/?id=5caa16bd70a3d0d50fddfd1c0e0d2fb00bdfcd3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this patch package builds with Linux up to version 6.7
+https://raw.githubusercontent.com/MusicPlayerDaemon/ncmpc/v0.49/NEWS
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
+ package/ncmpc/ncmpc.hash | 2 +-
+ package/ncmpc/ncmpc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index 1ff36368ec..388a3a3cd4 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  e27b6b5fb35ef44a93eb1f5b29bd61c06109e951c8a5ea2cc3e0310663f22001  xr819-xradio-547521df27d1a80fb5542e93fa13bd09fb2259a2.tar.gz
-+sha256  8bc3d745ed08b7f3a9c0413c2635d0faf647362b41494d04edc98709b869deef  xr819-xradio-3a1f77fb2db248b7d18d93b67b16e0d6c91db184.tar.gz
- # Locally computed
- sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index 1e4cdb6872..8b576a347a 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
+index 17bc6e3ace..1d288294d1 100644
+--- a/package/ncmpc/ncmpc.hash
++++ b/package/ncmpc/ncmpc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  61da23b1bc6c7a593fdc28611932cd7a30fcf6803830e01764c29b8abed2249c  ncmpc-0.47.tar.xz
++sha256  65bbec0ede9e6bcf62ac647b0c706485beb2bdd5db70ca8d60103f32f162cf29  ncmpc-0.49.tar.xz
+ 
+ # Hash for license file:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 5d4702de78..bc8a62daea 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XR819_XRADIO_VERSION = 547521df27d1a80fb5542e93fa13bd09fb2259a2
-+XR819_XRADIO_VERSION = 3a1f77fb2db248b7d18d93b67b16e0d6c91db184
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+ NCMPC_VERSION_MAJOR = 0
+-NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).47
++NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).49
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+ NCMPC_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
