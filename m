@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22CC5C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 17:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E97BCC46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 17:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDAD960A7D;
-	Sat, 30 Dec 2023 17:56:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDAD960A7D
+	by smtp3.osuosl.org (Postfix) with ESMTP id A694D60BE3;
+	Sat, 30 Dec 2023 17:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A694D60BE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dXBgVS4FoEBw; Sat, 30 Dec 2023 17:56:45 +0000 (UTC)
+	with ESMTP id UArd4JIrh6RU; Sat, 30 Dec 2023 17:56:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1762F60BE3;
-	Sat, 30 Dec 2023 17:56:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1762F60BE3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AB7D41BF2F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7A2860A87;
+	Sat, 30 Dec 2023 17:56:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7A2860A87
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B27EF1BF86B
  for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 17:56:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 924CC8149B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99C0F60A7D
  for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 17:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 924CC8149B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99C0F60A7D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ljOouEx-fDlk for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eKOht7u3LG2Z for <buildroot@lists.busybox.net>;
  Sat, 30 Dec 2023 17:56:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7801C8143E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CCA660A5A
  for <buildroot@buildroot.org>; Sat, 30 Dec 2023 17:56:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7801C8143E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CCA660A5A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F898839B3; Sat, 30 Dec 2023 17:56:29 +0000 (UTC)
+ id 871AB839AF; Sat, 30 Dec 2023 17:56:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 Dec 2023 18:51:40 +0100
+Date: Sat, 30 Dec 2023 18:53:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5efd903ef0b92c7ef0deca8b4f050df5c19c31f4
-X-Git-Newrev: 132c71798c6e9c47c61e8a8a45db2d0266ac92f7
+X-Git-Oldrev: 15515ed0cd7efe586dd488a91d66ca6133de9f86
+X-Git-Newrev: 00e5f52f2f3caf8f125bae400be026e7c7747c83
 X-Patchwork-Hint: ignore
-Message-Id: <20231230175629.5F898839B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/audit: bump to version 3.1.2
+Message-Id: <20231230175629.871AB839AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cracklib: bump to version 2.9.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,85 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=132c71798c6e9c47c61e8a8a45db2d0266ac92f7
+commit: https://git.buildroot.net/buildroot/commit/?id=00e5f52f2f3caf8f125bae400be026e7c7747c83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version)
-
-https://github.com/linux-audit/audit-userspace/blob/v3.1.2/ChangeLog
+https://github.com/cracklib/cracklib/blob/v2.9.11/src/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-Define-__attribute_malloc__-when-needed.patch | 35 ----------------------
- package/audit/audit.hash                           |  2 +-
- package/audit/audit.mk                             |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
+ package/cracklib/cracklib.hash | 4 ++--
+ package/cracklib/cracklib.mk   | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/audit/0001-Define-__attribute_malloc__-when-needed.patch b/package/audit/0001-Define-__attribute_malloc__-when-needed.patch
-deleted file mode 100644
-index 3dd5359bfc..0000000000
---- a/package/audit/0001-Define-__attribute_malloc__-when-needed.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From cf93d8579d5cec0b1ba585bd661776f03c2743ba Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Tue, 27 Jun 2023 20:19:13 +0200
--Subject: [PATCH] Define __attribute_malloc__ when needed
--
--attribute_malloc is not available on musl
--
--auparse.h: In function 'auparse_init':
--auparse.h:54:2: error: expected declaration specifiers before '__attribute_malloc__'
--   54 |  __attribute_malloc__ __attr_dealloc (auparse_destroy, 1);
--
--Upstream: https://github.com/linux-audit/audit-userspace/pull/311
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- auparse/auparse.h | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/auparse/auparse.h b/auparse/auparse.h
--index 95cf256d..5cb7402e 100644
----- a/auparse/auparse.h
--+++ b/auparse/auparse.h
--@@ -32,6 +32,9 @@
-- # define __attr_dealloc(dealloc, argno)
-- # define __attr_dealloc_free
-- #endif
--+#ifndef __attribute_malloc__
--+#  define __attribute_malloc__
--+#endif
-- 
-- #ifdef __cplusplus
-- extern "C" {
---- 
--2.39.2
--
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 310b0a0f6a..5743b3a13a 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
+diff --git a/package/cracklib/cracklib.hash b/package/cracklib/cracklib.hash
+index ff527d517a..a97818cbdd 100644
+--- a/package/cracklib/cracklib.hash
++++ b/package/cracklib/cracklib.hash
 @@ -1,4 +1,4 @@
- #Locally computed
--sha256  46e46b37623cce09e6ee134e78d668afc34f4e1c870c853ef12e4193078cfe87  audit-3.1.1.tar.gz
-+sha256  c0b1792d1f0a88c6f1828710509cbb987059fc68712c97669ca90eae103d287d  audit-3.1.2.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ # Locally calculated
+-sha256  1f9d34385ea3aa7cd7c07fa388dc25810aea9d3c33e260c713a3a5873d70e386  cracklib-2.9.8.tar.bz2
+-sha256  ec25ac4a474588c58d901715512d8902b276542b27b8dd197e9c2ad373739ec4  cracklib-words-2.9.8.bz2
++sha256  2c83a91dd21d035eab98bded764eb4579b73fd837b683e1a447b11ef604ee130  cracklib-2.9.11.tar.xz
++sha256  b3d1e0e0ae9bc7ffed65c0042d7c68bdb903368aa6b918f94572453c6ea874dc  cracklib-words-2.9.11.xz
  sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index e77e06bd6b..76828571ca 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
+index bb7c18d5be..c1834b4730 100644
+--- a/package/cracklib/cracklib.mk
++++ b/package/cracklib/cracklib.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--AUDIT_VERSION = 3.1.1
-+AUDIT_VERSION = 3.1.2
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- AUDIT_LICENSE_FILES = COPYING COPYING.LIB
+-CRACKLIB_VERSION = 2.9.8
+-CRACKLIB_SOURCE = cracklib-$(CRACKLIB_VERSION).tar.bz2
++CRACKLIB_VERSION = 2.9.11
++CRACKLIB_SOURCE = cracklib-$(CRACKLIB_VERSION).tar.xz
+ CRACKLIB_SITE = https://github.com/cracklib/cracklib/releases/download/v$(CRACKLIB_VERSION)
+ CRACKLIB_LICENSE = LGPL-2.1
+ CRACKLIB_LICENSE_FILES = COPYING.LIB
+@@ -34,8 +34,8 @@ endif
+ HOST_CRACKLIB_CONF_OPTS += --without-python --without-zlib
+ 
+ ifeq ($(BR2_PACKAGE_CRACKLIB_FULL_DICT),y)
+-CRACKLIB_EXTRA_DOWNLOADS = cracklib-words-$(CRACKLIB_VERSION).bz2
+-CRACKLIB_DICT_SOURCE = $(CRACKLIB_DL_DIR)/cracklib-words-$(CRACKLIB_VERSION).bz2
++CRACKLIB_EXTRA_DOWNLOADS = cracklib-words-$(CRACKLIB_VERSION).xz
++CRACKLIB_DICT_SOURCE = $(CRACKLIB_DL_DIR)/cracklib-words-$(CRACKLIB_VERSION).xz
+ else
+ CRACKLIB_DICT_SOURCE = $(@D)/dicts/cracklib-small
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
