@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8155CC46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 09:51:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96D99C46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 15:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8051A415C8;
-	Sat, 30 Dec 2023 09:51:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8051A415C8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 031FF60DDF;
+	Sat, 30 Dec 2023 15:17:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 031FF60DDF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GnCmALxPKVQi; Sat, 30 Dec 2023 09:51:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6P-8VMUE8asU; Sat, 30 Dec 2023 15:17:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAE41414FA;
-	Sat, 30 Dec 2023 09:51:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAE41414FA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 234F41BF3B5
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 09:51:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30EA760E31;
+	Sat, 30 Dec 2023 15:17:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30EA760E31
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2EF9F1BF3D7
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 15:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EFD52813E3
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 09:51:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFD52813E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0266660E31
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 15:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0266660E31
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BwkfmESwX1FI for <buildroot@lists.busybox.net>;
- Sat, 30 Dec 2023 09:50:58 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C74478293F
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 09:50:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C74478293F
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40d5b7b8adfso19382425e9.0
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 01:50:57 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EX7AwHj5mLnj for <buildroot@lists.busybox.net>;
+ Sat, 30 Dec 2023 15:17:23 +0000 (UTC)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BABE060DDF
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 15:17:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BABE060DDF
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-33723ad790cso1150991f8f.1
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 07:17:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703929855; x=1704534655;
+ d=1e100.net; s=20230601; t=1703949440; x=1704554240;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7KDB1Snr2Uabl6xAJpt3xPORodwl8VuoBAW39+Biy0w=;
- b=NRYTZEtAfvtrAVjPSDV9lfm8dsdGn6fI6R/NvjaRZLzeaZrGtZGN7bdEkXbC9r1HeR
- Pk5TMfJ3gGWDcPVxBpfE6/pMOqC9c/5XlPfOit1HeOL8are2Ws3ahy3IT/Tj166HqVGd
- FxomNc2vs/bLK3UHrEF2F0abfrDnT5ut+vXK9ZyGxMoRQJhJdBeYDyso8xkD7CtP7ZoX
- TVT/B4LgcZhXbQJ2MvzBu9SvcAJDTEO6Q3QahH5eOsJ8xStUdxoE67mkysJeGf5IZP2H
- EUgnS3N4iqC0TmUv5u3uk9MCFTZV3CH+S8J+RSQf0LZ8IEyA56hXytTvdtDMyywaKL4m
- uEww==
-X-Gm-Message-State: AOJu0Yyj7YQLeWn/wQ5gWEOB17p0r2eqPfyukOUR4BmYTTpoNy65MM0J
- D+rEvXy481+EEKLZaqX2t7IfISqzUdg=
-X-Google-Smtp-Source: AGHT+IFlraD59x2bsXQQ4Wc+ijyj0ntqcFyI2aFP+eI41AlYddUMKPT24TM0IDqQUMj3evBoarYmdw==
-X-Received: by 2002:a05:600c:190e:b0:40b:5e26:2379 with SMTP id
- j14-20020a05600c190e00b0040b5e262379mr6399751wmq.42.1703929854775; 
- Sat, 30 Dec 2023 01:50:54 -0800 (PST)
+ bh=RcF66vFPne+8xB3W72sM6ZUlfzyua5DjumA1YQe1Rb0=;
+ b=LeqG3eSgoGXVU4A8TAhRQ1n7QiJBZiIfRzq7jiIUvxu4W5IuM/OApBw6b1VZZCls7Q
+ FPfxOODilrzd0GCEdbkjDLWHTM0tEoPFRIWBsjWtPJAMn+WqFg4TRxes4Sn1eFpon3cA
+ XFGQ9qYl2N5bFmNcsK+3xYd4QGfBUH+lg5zM+u9XpSzdj02+062aZnDs+QrIz/kyqHqz
+ jnnGJYZdNtfrM7uemWoywIPVuNsZ6p/n+kSYZYYDlP6eBF+GBh1GmfFPoW6YS/hmSCRP
+ g5mjQbRhKvSKmZtfhD7bF7TUOa1icelNrUwpBzqXuK1iPKCuKYwZQuqBkcxu8uXy8rQe
+ dEJw==
+X-Gm-Message-State: AOJu0YzfIHc7tIBj6GtnXauVqAzSMfwRKzl4xxgqMwNFy7vHKTqI+MQ3
+ xpt/Mw1/SJYlD82arKKZRwN9fMEcaWc=
+X-Google-Smtp-Source: AGHT+IE8wZilKDQtyWBlN/80UuUt+J917tFldninOOaaxj2geaVXUH0TOhVVBibRd6wdXpV4jKUPww==
+X-Received: by 2002:a05:600c:4ecd:b0:40d:79ee:bc6 with SMTP id
+ g13-20020a05600c4ecd00b0040d79ee0bc6mr854171wmq.219.1703949439467; 
+ Sat, 30 Dec 2023 07:17:19 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- p15-20020a05600c468f00b0040d4e1393dcsm26232218wmo.20.2023.12.30.01.50.54
+ v4-20020a05600c444400b0040d83ab2ecdsm2066883wmn.21.2023.12.30.07.17.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Dec 2023 01:50:54 -0800 (PST)
+ Sat, 30 Dec 2023 07:17:19 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Dec 2023 10:50:51 +0100
-Message-ID: <20231230095051.40929-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Dec 2023 16:16:50 +0100
+Message-ID: <20231230151650.234413-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703929855; x=1704534655; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703949440; x=1704554240; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7KDB1Snr2Uabl6xAJpt3xPORodwl8VuoBAW39+Biy0w=;
- b=BT8ZcifRemF5P9Q0BltENGksNXMqVoG5LxToB2Tn0rUXw95NU9kVeQmutJs9zMv6+W
- VtbXMAwWORnfmP6jgneHDBp0GyUTDgGSn4homUdSNV1JDBqhNZw7PvGx1l4UsKCdUX90
- JXA/uVsZfgy0ZIAsqEXLRVu3TMRivO6FFCS9zAL1uGkZxfdSrrX6CeQAH5h2darvlzX7
- +vjMi6mCVejgyx0hTc5nfzKwT1XwKiBlgyUo0C8UNL6cCNAibYhiNQmQtxfYpkcy/qst
- eeo98dKeRHQCSoqKkIRedpQqXjIQxaeoSuTgyW7C9VUfWDud/IkOfEmatIWUfAarZqWr
- qzbg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=RcF66vFPne+8xB3W72sM6ZUlfzyua5DjumA1YQe1Rb0=;
+ b=UBjSM5gYAwVLV1+bQ08hEv/pJpbftKP5BL1MqF2LlGUjHcmmRlhFiVGoarPFOnoare
+ 0LCsgCWecsJ5CD9l4o/acm269QxSiVamwFupev1RR11TCIl48YHExipkMuy8DdJny/Az
+ QKYWMn/6D49Vyp1yP8GSKv0Lbs+Eis7QnxvmKTvgque9GP+1uAq7zL2h1fxgVkqeBCjh
+ 9dbAV6bt4NZfq9BMKVwpoU1fdgLIM3hocS8uOiABb8ApNuGERt2OJPr0cQo3Xb/gp6XS
+ cRMAA25pmZWydRBFRfosPw6ZpmFGggqmPe1YzL58T9mnz1k6O2wlqG2n7DKHl4Z3BQbP
+ DwEA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BT8ZcifR
-Subject: [Buildroot] [PATCH 1/1] package/upx: bump to version 4.2.1
+ header.a=rsa-sha256 header.s=20230601 header.b=UBjSM5gY
+Subject: [Buildroot] [PATCH 1/1] package/atest: bump to latest commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,42 +93,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabio Estevam <festevam@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/upx/upx/blob/v4.2.1/NEWS
+Drop patch (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/upx/upx.hash | 2 +-
- package/upx/upx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                           |  1 -
+ .../0001-seq.h-fix-build-with-gcc-10.patch    | 40 -------------------
+ package/atest/atest.hash                      |  2 +-
+ package/atest/atest.mk                        |  2 +-
+ 4 files changed, 2 insertions(+), 43 deletions(-)
+ delete mode 100644 package/atest/0001-seq.h-fix-build-with-gcc-10.patch
 
-diff --git a/package/upx/upx.hash b/package/upx/upx.hash
-index 072bc0656e..545eb29af9 100644
---- a/package/upx/upx.hash
-+++ b/package/upx/upx.hash
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 67cd6fabc1..7c38fad6ab 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -163,7 +163,6 @@ package/asterisk/0005-configure-fix-detection-of-re-entrant-resolver-funct.patch
+ package/asterisk/0006-main-iostream.c-fix-build-with-libressl.patch Upstream
+ package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch Upstream
+ package/at/S99at Indent Variables
+-package/atest/0001-seq.h-fix-build-with-gcc-10.patch Upstream
+ package/attr/0001-build-with-older-GCCs.patch Upstream
+ package/audit/S02auditd Shellcheck Variables
+ package/aufs-util/0001-remove-user-settings.patch Upstream
+diff --git a/package/atest/0001-seq.h-fix-build-with-gcc-10.patch b/package/atest/0001-seq.h-fix-build-with-gcc-10.patch
+deleted file mode 100644
+index c0ae042b01..0000000000
+--- a/package/atest/0001-seq.h-fix-build-with-gcc-10.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From fb374e0775fd9772a2cd7b99a5c21f96f7fe2a9a Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 10 Aug 2020 12:12:07 +0200
+-Subject: [PATCH] seq.h: fix build with gcc 10
+-
+-Rename state structure to avoid the following build failure with gcc
+-10.0:
+-
+-/bin/bash ./libtool  --tag=CC   --mode=link /home/test/autobuild/run/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -include config.h   -Wall -Wno-sign-compare -Wno-strict-aliasing  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o atest atest.o seq.o alsa.o capture.o playback.o loopback_delay.o -L/home/test/autobuild/run/instance-0/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lasound -lev
+-libtool: link: /home/test/autobuild/run/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -include config.h -Wall -Wno-sign-compare -Wno-strict-aliasing -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -o atest atest.o seq.o alsa.o capture.o playback.o loopback_delay.o  -L/home/test/autobuild/run/instance-0/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib /home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libasound.so -ldl -lpthread -lrt /home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libev.so -lm -Wl,-rpath -Wl,/home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -Wl,-rpath -Wl,/home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+-/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: seq.o:(.bss+0x8): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
+-/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: capture.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
+-/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: playback.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
+-/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: loopback_delay.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/887c466b3703449239eedaf86f3f4dd2a2dc8afe
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/amouiche/atest/pull/3]
+----
+- seq.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/seq.h b/seq.h
+-index 0fa1a95..b7ba8d1 100644
+---- a/seq.h
+-+++ b/seq.h
+-@@ -30,7 +30,7 @@ enum seq_stat_e {
+-     NULL_FRAME = 0,
+-     INVALID_FRAME,
+-     VALID_FRAME,
+--} state;
+-+};
+- 
+- 
+- struct seq_info {
+--- 
+-2.27.0
+-
+diff --git a/package/atest/atest.hash b/package/atest/atest.hash
+index e411a934e5..a7ade8ad37 100644
+--- a/package/atest/atest.hash
++++ b/package/atest/atest.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0582f78b517ea87ba1caa6e8c111474f58edd167e5f01f074d7d9ca2f81d47d0  upx-4.1.0-src.tar.xz
-+sha256  cc562ea7dbd8cec4505edea68736e04030ec5891c1e2a300e3c0d0eac6364479  upx-4.2.1-src.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/upx/upx.mk b/package/upx/upx.mk
-index 0a0e9086e5..d6c068fc3b 100644
---- a/package/upx/upx.mk
-+++ b/package/upx/upx.mk
+ # Locally computed
+-sha256  91da5a6d4d0b0a8d4bae156a40e91a6dccf62863bfa7acae948efbbd2b4154ca  atest-895b0183a89c15f5e2305a6795bb1667753cd3f0.tar.gz
++sha256  53980d44af542cc02cbcecba1f10c8a16523aa80196fbb8fc257ff6e949344de  atest-9ff52ee5d7764984e21fe40a381b41ecd2d63548.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/atest/atest.mk b/package/atest/atest.mk
+index 68def46cf9..e9f338acf2 100644
+--- a/package/atest/atest.mk
++++ b/package/atest/atest.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UPX_VERSION = 4.1.0
-+UPX_VERSION = 4.2.1
- UPX_SITE = https://github.com/upx/upx/releases/download/v$(UPX_VERSION)
- UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
- UPX_LICENSE = GPL-2.0+
+-ATEST_VERSION = 895b0183a89c15f5e2305a6795bb1667753cd3f0
++ATEST_VERSION = 9ff52ee5d7764984e21fe40a381b41ecd2d63548
+ ATEST_SITE = $(call github,amouiche,atest,$(ATEST_VERSION))
+ ATEST_LICENSE = GPL-2.0+
+ ATEST_LICENSE_FILES = COPYING
 -- 
 2.43.0
 
