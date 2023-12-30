@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21BD8C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 18:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 850C8C46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 18:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE0F36103E;
-	Sat, 30 Dec 2023 18:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE0F36103E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EA1B6104C;
+	Sat, 30 Dec 2023 18:03:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EA1B6104C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QJ9gPH2sTxoq; Sat, 30 Dec 2023 18:03:09 +0000 (UTC)
+	with ESMTP id HWJL6-zkPBKk; Sat, 30 Dec 2023 18:03:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E4EB60F69;
-	Sat, 30 Dec 2023 18:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E4EB60F69
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C33A91BF2F8
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 18:01:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77A5461071;
+	Sat, 30 Dec 2023 18:03:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77A5461071
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B107E1BF2F8
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 18:01:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F28B81E84
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 18:01:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F28B81E84
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8910240189
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 18:01:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8910240189
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gRUCOwpPENw6 for <buildroot@lists.busybox.net>;
- Sat, 30 Dec 2023 18:01:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q6RL_CjL1pAj for <buildroot@lists.busybox.net>;
+ Sat, 30 Dec 2023 18:01:50 +0000 (UTC)
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5FEDB81E82
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 18:01:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FEDB81E82
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4FE571BF205;
- Sat, 30 Dec 2023 18:01:45 +0000 (UTC)
-Date: Sat, 30 Dec 2023 19:01:44 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231230190144.5fdb29d9@windsurf>
-In-Reply-To: <20231227225940.1683593-1-fontaine.fabrice@gmail.com>
-References: <20231227225940.1683593-1-fontaine.fabrice@gmail.com>
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 40AF640103
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 18:01:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40AF640103
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A8A41BF207;
+ Sat, 30 Dec 2023 18:01:48 +0000 (UTC)
+Date: Sat, 30 Dec 2023 19:01:47 +0100
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Message-ID: <20231230190147.4d13dbc9@windsurf>
+In-Reply-To: <20231228094727.27357-1-buildroot@heine.tech>
+References: <20231228094727.27357-1-buildroot@heine.tech>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703959305;
+ d=bootlin.com; s=gm1; t=1703959308;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=I2WC6ntKjey9FBGbkYzJKn4pN5MicMh9odSD6mnFrcw=;
- b=oTUbl80e4i2FMrXfN0LyKmlKwP3zhBs1HGVB+y6Ga5ljHzdAytHX9dhbmtHqjIZ6gr5SB2
- btLdSpIUm6nlDXv8WVujpi+mlp0b62oN4u8ggcb3C7ABTQpw1o7XdN3dxOZ5Srm2G5JNet
- rxzC38vhtUKn/u43Y0sl+/nSVK2NS5zyVTLeMPkQSnRr/9V+pUoeI/0MBRjvOzWdr2VQRr
- 1o2wPJvLGaeKRhwLEiEHxcYHzrbdzvf1xwZtkJs/S7Rh9Mpy7JzWPcPFNru6o+yPurBOF/
- rtQKh1u/7SRsc7fp4flTVf4P3H6FrDRRdz9WefQBmYrKK6nGBWMcxt37YMWtuQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=4O2l+husrO9D8/vX2cMeeIu6hnXM4LBRZNr8J4st3Dw=;
+ b=V14tjaYT6ev8lTyYnG91dfM4IiQjg4WoRhvmiwNWjxoN/m2GHdOXRBsibMVINRXjGEVfwa
+ bktJ/GJRQVZETyGUM3E1IqA1Unu25DiG5QLV9yRRtGPlXg3CEz9n5V+yayftg0DIHn+Y3y
+ gbUpQvpXzLuVWzta8W1ivMsB3IR2ldH0OMyO79UbXSIn/+qMELCxss0FUkWAHwxCUueNwz
+ QhvM7HBnG/rV9xDDtK6Xrm6WxAXMIq5Yya25uIpxmOPpJpcu7fQwWgySApzAONzEn3+XdF
+ MQEeKO2EmSXdTvuL4/zV2Gz8t9G77BUjmwMyTD47Pik/0lqel9kwjqNm+NlVtQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oTUbl80e
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/libostree: switch to libsoup3
+ header.s=gm1 header.b=V14tjaYT
+Subject: Re: [Buildroot] [PATCH] package/catch2: bump to version 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +76,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 27 Dec 2023 23:59:39 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu, 28 Dec 2023 10:47:24 +0100
+Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
 
-> libsoup3 is supported since bump to version 2023.3 in commit
-> 618eb375a046cc4ff007758510c883788e6ff690 and
-> https://github.com/ostreedev/ostree/commit/d0ea2db4300eb7871b59d0b997a7f06869120297
-> 
-> So switch to libsoup3 and drop libsoup2 as:
->  - libsoup2 is unmaintained (as stated by commit
->    b45c2a048d02a0e30da8534b5c048d048b252452)
->  - libsoup2 will be removed at some point (as stated by commit
->    f93380ab1a36bdd019cfbc651a9df5904096e189)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 > ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Update commit message and explain why libsoup2 is dropped
+>  package/catch2/catch2.hash | 2 +-
+>  package/catch2/catch2.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
