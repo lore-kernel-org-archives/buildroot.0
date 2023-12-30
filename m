@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC1C9C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 18:35:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1282EC46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 18:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B24460ECF;
-	Sat, 30 Dec 2023 18:35:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B24460ECF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8104660BE0;
+	Sat, 30 Dec 2023 18:42:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8104660BE0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H8N8q4_k-h1Q; Sat, 30 Dec 2023 18:35:38 +0000 (UTC)
+	with ESMTP id 5cqhHvsH4w7H; Sat, 30 Dec 2023 18:42:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F42D60BE0;
-	Sat, 30 Dec 2023 18:35:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F42D60BE0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B1F571BF40B
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 18:35:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D668A60A7D;
+	Sat, 30 Dec 2023 18:42:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D668A60A7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E4EB81BF29F
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 18:42:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9399E415E2
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 18:35:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9399E415E2
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4EFF403BF
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 18:42:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4EFF403BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B-S6vzoHQ_Sx for <buildroot@lists.busybox.net>;
- Sat, 30 Dec 2023 18:35:34 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7A9B9415DD
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 18:35:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A9B9415DD
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-40d3ae326f6so85354655e9.3
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 10:35:34 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n6LJ-CIIgxw2 for <buildroot@lists.busybox.net>;
+ Sat, 30 Dec 2023 18:42:15 +0000 (UTC)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4FC05400D9
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 18:42:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FC05400D9
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-40d5ab2f9f1so41767005e9.3
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 10:42:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703961332; x=1704566132;
+ d=1e100.net; s=20230601; t=1703961732; x=1704566532;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=M11mMWJbe8Mn/Ug14TZO0+qBzQgwpZmAFagXjU4L1Xc=;
- b=pX7JE5B/ApDS5eWEV04CiiCzhzXTG/6KPes+paNEEOWN9EwxaBpoNufEoZmaUX8/ZC
- 6r5sOugX0Rjksjur1/+dJ5vRnCI+UfGU675c1Dc4yT54acNDaYfgOZMkKD4CJ5+4rYU3
- 6sYX1GpHRkAIvaaNDOJll4atA/Aj+I4s0KocfrNHGS5sHuJ2fECtiVHNA11nshk/cvtl
- BwHdVVLuNnjVUpjaiLCZ8tmva0ikNrFiOTgHGdV0OKWLxF+fU8QXugw3Mv5M96aSHOZp
- IMkhm/SR9O0f0luTeypDQeu6u8SHTuXW6Indx0adOI59DyO2D+MxjxB6LwGi02NxR34c
- gLhg==
-X-Gm-Message-State: AOJu0YwQQNrDMXxI2Lgu2OgcgtTmBS/QREiCvWlAA0zapPjeQ8WlybC0
- RApQiRv3HCRGZlFrEadPa+NOIKdxOOY=
-X-Google-Smtp-Source: AGHT+IFo1zW41LiK8iS6uy8YvZqaCcuKWYWk5O3frpD6tsaAlFpnua8Am79drdp9TclVy+4fw3VxXg==
-X-Received: by 2002:a05:600c:a084:b0:40d:8396:d311 with SMTP id
- jh4-20020a05600ca08400b0040d8396d311mr571574wmb.75.1703961331677; 
- Sat, 30 Dec 2023 10:35:31 -0800 (PST)
+ bh=lWRNOQkzEvvzh+cw9Ih0MhrHlAMIeG/pYpmLFiZbitw=;
+ b=VApPdm0s9rUHdbkNptgnDoWmoeieNiHlmZuABXeB7R9UTAX9kDnl6Kgy4kwButg/V3
+ niCnihv3wrP3YJf8wT3oCE3FTrD0t4wMSmFEDvMzHfgUS+VG9MFvtfj8ptfLFavIQOyz
+ CKJKdhsH8cHvPm1zFpvmxhqsUZR0khyXAKZrkJyrRHomWfwYZkWIliFHLAK+vaMi+2Od
+ 7IfX+eMAvyXrDBZ56n8Joutv9ByyLzLOlWNSSp9tGlmyzcZEFYszrURHQZyHiTa1xEex
+ uv49BkjaEm3+qj8Oq1wxp6zZgQr7KekusV8fTDdPIKqJxpgeaU0hwGuTNH197ElUJR8v
+ +Zaw==
+X-Gm-Message-State: AOJu0YxUWDzupjclhc0MEaR5USjlQtTCszXcs3cKnWjpYMhcwPu1o44+
+ ki1LAOKYPozP8sSxyAFEJScMsXUzfNk=
+X-Google-Smtp-Source: AGHT+IHq5UqYIzRumcVeYJQK5H4g71in7xTvh1+Q/VyeH3FLqddoNsn315z4KgBQmyWePHPZNlw3KA==
+X-Received: by 2002:a05:600c:3ca5:b0:40d:68a1:c08e with SMTP id
+ bg37-20020a05600c3ca500b0040d68a1c08emr1475086wmb.2.1703961731704; 
+ Sat, 30 Dec 2023 10:42:11 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- hg10-20020a05600c538a00b0040d7c3d5454sm5613292wmb.3.2023.12.30.10.35.31
+ w10-20020a05600c474a00b0040d725a9967sm7289250wmo.11.2023.12.30.10.42.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Dec 2023 10:35:31 -0800 (PST)
+ Sat, 30 Dec 2023 10:42:11 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Dec 2023 19:35:25 +0100
-Message-ID: <20231230183525.1110378-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Dec 2023 19:42:10 +0100
+Message-ID: <20231230184210.1141412-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703961332; x=1704566132; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703961732; x=1704566532; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=M11mMWJbe8Mn/Ug14TZO0+qBzQgwpZmAFagXjU4L1Xc=;
- b=JrkbdFoK758yH07drC4CI46QGOed9tEG/ZGmQlEt337MJ6FFHqVrKauBUpUOlkN4GK
- CtFQMH1rh6edn8m+4ElGlJTgGH139jXKDeksV0OO2pJKbS1+l/AN03mVxIsFBOkG7G9c
- qvFE2cvP9uNcOY/2PDWt58vwmuBl0MjzcwWKmqK4mGMjEM/DY97BCGXIx17H4odV6dYi
- x6ih2a/9UouGHjq2ef21WEvqHxAX8nu/aOEpwPrJ+mFdz/MmDP8BsMKzd9mSGgDVf/x2
- Q5osVhbpViLbGr/2Fbeha4ZV2hSm0xMRE63r/JuYX1Rh+C6XRhyGQDR08kUx8R5gZ+no
- mFSA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=lWRNOQkzEvvzh+cw9Ih0MhrHlAMIeG/pYpmLFiZbitw=;
+ b=hc8Lq991MIyuxonV5nqXDjmjEEc49Z9AktuMcMOg8o/h0e3/zby3oluw2eGhpgv/CQ
+ ZnVGa02/fHl58l6PyoxcUo1MGfp81j7UWk03TSPdnyV9K6zm+UXhaxesD4iB0z3hc9ds
+ 5ShvmPgbZW4civozjsmj/cD4r9EBklBj4rKDwQIWshBnWAW059yNUVxCZoYXihNZWZ9l
+ dpA5aI1eYiexkSHTINGkmNKhOmTSa+6/+VlcToE0UH4sh1DgrR1GdzgLR816Vd2cz/Nc
+ E71BRfdCU4AuJx3ty2NPNKFhB5DdLssvzeOrKfughIfSAif8w92Eirbe0YdYpjtguqvx
+ z4aQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JrkbdFoK
-Subject: [Buildroot] [PATCH 1/1] package/libxml2: bump to version 2.12.3
+ header.a=rsa-sha256 header.s=20230601 header.b=hc8Lq991
+Subject: [Buildroot] [PATCH 1/1] package/libnl: bump to version 3.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,57 +93,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This bump will fix the following build failure with libmodsecurity (and
-a lot of other packages) raised since bump of libxml2 to version 2.12.1
-in commit d8ac52108c12f0fcc9641b63e7922009270f96c6:
-
-modsecurity.cc: In constructor 'modsecurity::ModSecurity::ModSecurity()':
-modsecurity.cc:89:5: error: 'xmlInitParser' was not declared in this scope
-   89 |     xmlInitParser();
-      |     ^~~~~~~~~~~~~
-
-https://gitlab.gnome.org/GNOME/libxml2/-/blob/v2.12.3/NEWS
-
-Fixes:
- - http://autobuild.buildroot.org/results/d6749bacf6c7c04a74e136585d36bc731716f6fd
+https://github.com/thom311/libnl/compare/libnl3_7_0...libnl3_9_0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
+ package/libnl/libnl.hash | 4 ++--
+ package/libnl/libnl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index a3b2230b8a..670ff80a41 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index 8a1bd56780..77d7781493 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
 @@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.1.sha256sum
--sha256  8982b9ccdf7f456e30d8f7012d50858c6623e495333b6191def455c7e95427eb  libxml2-2.12.1.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.3.sha256sum
-+sha256  8c8f1092340a89ff32bc44ad5c9693aff9bc8a7a3e161bb239666e5d15ac9aaa  libxml2-2.12.3.tar.xz
- # License files, locally calculated
- sha256  7fb0a66f3989f9bd5c7e5438a3de02cd4a7a47dde0aea2f7ea2ba2ff454ee6a4  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 5606532b62..1893206ccb 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -5,7 +5,7 @@
+-# From https://github.com/thom311/libnl/releases/download/libnl3_7_0/libnl-3.7.0.tar.gz.sha256sum
+-sha256  9fe43ccbeeea72c653bdcf8c93332583135cda46a79507bfd0a483bb57f65939  libnl-3.7.0.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_9_0/libnl-3.9.0.tar.gz.sha256sum
++sha256  aed507004d728a5cf11eab48ca4bf9e6e1874444e33939b9d3dfed25018ee9bb  libnl-3.9.0.tar.gz
+ # Locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 6896188f4d..8fbea3db5f 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBXML2_VERSION_MAJOR = 2.12
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).1
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).3
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+-LIBNL_VERSION = 3.7.0
++LIBNL_VERSION = 3.9.0
+ LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
+ LIBNL_LICENSE = LGPL-2.1+
+ LIBNL_LICENSE_FILES = COPYING
 -- 
 2.43.0
 
