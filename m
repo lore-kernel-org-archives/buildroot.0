@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A99C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 20:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F928C46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 20:55:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2169F60B4C;
-	Sat, 30 Dec 2023 20:43:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2169F60B4C
+	by smtp3.osuosl.org (Postfix) with ESMTP id E280B60B1B;
+	Sat, 30 Dec 2023 20:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E280B60B1B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JpF1Q-DAC7Yo; Sat, 30 Dec 2023 20:43:41 +0000 (UTC)
+	with ESMTP id 27OBaosSo7t7; Sat, 30 Dec 2023 20:55:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FC9260AA0;
-	Sat, 30 Dec 2023 20:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FC9260AA0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3FBEB1BF5B5
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 20:43:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52E0560A87;
+	Sat, 30 Dec 2023 20:55:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52E0560A87
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 52AC11BF5B5
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 20:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18E9D415AB
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 20:43:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18E9D415AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26CA960A87
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 20:55:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26CA960A87
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EbC6HwrLEwqa for <buildroot@lists.busybox.net>;
- Sat, 30 Dec 2023 20:43:37 +0000 (UTC)
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A13B405AE
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 20:43:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A13B405AE
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-3368b9bbeb4so7090048f8f.2
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 12:43:36 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 23p_v1JyyAUn for <buildroot@lists.busybox.net>;
+ Sat, 30 Dec 2023 20:55:05 +0000 (UTC)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 09B9D607CA
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 20:55:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09B9D607CA
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-40d5f40ce04so30931645e9.2
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 12:55:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703969014; x=1704573814;
+ d=1e100.net; s=20230601; t=1703969702; x=1704574502;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Cs96b217RFTQaZ8X8iaaif9jestSWLpHetmvPRwxD+o=;
- b=wNGSZ6aNrAs9QVI020V+gubIQrDb87GxEGriXqOXrWHbSmFsx+9AI7Ym9ymxP3YScP
- 9PpyN45I88QsBMgE2tGB7FAF74HooGqJTlX4VprxcX61JqugmY7IvgbdqUGhrdGrPNUX
- Kfl6jtCm11+7jdmk5i6//pzLZqdqdz2J0pPrWgVkdgOlO/pAP2/5k36nvEntgBoNoXiY
- ndDgqfErJbup2nwmf8JfaqNW0kokAqeqM7E6zxyl6Sk1eKdgHfSDzUV4pJ8mCcl4BCYl
- yreVgcvJwF2z+AWUDr58/sbx/PE+myv9JE1q/C90KORydMtUNyyzYeSQ+zxGXt5S9Uu0
- /mTw==
-X-Gm-Message-State: AOJu0YzszcIbVoB/7hYgthCsobRBpju+VKP9e62cLVQDiU5pDjaCQH9e
- BJbz2Z9o3GtGvnivLpT5541EUlsusGA=
-X-Google-Smtp-Source: AGHT+IEXSmLdZeHqFWDYWP8U+Kw55CoZroZv1DNvjkiSD+xxkDIsv2R3gkp2Uq4MxfEAJZgP1yE03w==
-X-Received: by 2002:adf:a198:0:b0:333:2fd2:7683 with SMTP id
- u24-20020adfa198000000b003332fd27683mr2850393wru.116.1703969013980; 
- Sat, 30 Dec 2023 12:43:33 -0800 (PST)
+ bh=LDc0DCZyjL9TdCi/u+jxR2bdFtGVLLWyoEuqAvaNeJg=;
+ b=oT6oBIRzOfbP3AeK0ABep23LwvpnDg90eVicqWQYQ0r4kiNGUdYz5JevHH35lqHp4R
+ DpkvHUvBJ6WDCJcG+RSvPyUBwcwYD7tJ52daMF1w6qHZxswr1tKByUgQ39nw2FcIPsB8
+ FHfTOoG5uC3OltJCjxEavKz0Cw8gSPcMtTLyNWeGyBiOW1GOqWVd+8Pd18IeHRuf5nZQ
+ LqvutwHtLTumqFMNQ/08wa1JejSJso3uXfXjFN/MnXsz9nHNx60XYX/JiUS5U4AbdsVl
+ vZ71mUMmpYfYHKc0xaucImw6q282OSmJhC0K08wHO54XLrmKg6OZM9UM9l9YJF0oUxU4
+ lvjQ==
+X-Gm-Message-State: AOJu0YxFB6F+ibPEQJLWyX5OAhHrDPOS3wN0dH+tco1kxN8+JJq451X/
+ 9u0J8zdCgrooXfxo+bV4dg5q4DikQK0=
+X-Google-Smtp-Source: AGHT+IFKmM1YtcflDN4QlPSlTScDNsBoRZNr9raKf3iUXs1e6PT0UuIgLmgqNbk75Zqd5ljAeagMcw==
+X-Received: by 2002:a1c:7202:0:b0:40d:719e:1ae with SMTP id
+ n2-20020a1c7202000000b0040d719e01aemr2143693wmc.140.1703969702070; 
+ Sat, 30 Dec 2023 12:55:02 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- t18-20020a0560001a5200b0033699668c2dsm18611456wry.32.2023.12.30.12.43.33
+ ay26-20020a05600c1e1a00b0040d83d796c8sm2776800wmb.36.2023.12.30.12.55.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Dec 2023 12:43:33 -0800 (PST)
+ Sat, 30 Dec 2023 12:55:01 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Dec 2023 21:43:24 +0100
-Message-ID: <20231230204325.1219272-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Dec 2023 21:54:59 +0100
+Message-ID: <20231230205459.1237158-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703969014; x=1704573814; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703969702; x=1704574502; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Cs96b217RFTQaZ8X8iaaif9jestSWLpHetmvPRwxD+o=;
- b=UZSXdDmDj96yhkAIwwXCCOPkUKvMIC2QdkgUn2cTDpPVP4r1CIh4yLpCJvJ28QbT1B
- arriMs7G+R+MEMm4bPDCuqyO1ACXqm1xYK+zlUnAj9oZ4V80wUwTMZkaIhazXbutLxk/
- agARgzM5WS0oAfBIWz33S+M3G8fkkcAgQhaS44Fotb0YirWJqRlw7rk2lGfQIw7+Je9+
- UkmbNHEMKH1QSqSc4hszCBWD5/1W6eELAPR2vFtMmriZFjlfuWy59jMdKnZKURfmndNj
- catBGYrZO/1mPbNQmC9LYWPBVARBXcwWHFYvqFwIg8WakSkGeYcYtOc5prq1qLozpWei
- SNMg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=LDc0DCZyjL9TdCi/u+jxR2bdFtGVLLWyoEuqAvaNeJg=;
+ b=F+J8o0NXBX2OlvaYWEleugI1VaWo6VIuBLu71b/I6UFYVDoN0APePlx3+xOLi5F+sp
+ JT9jWCg0zXr/JqDXR56FBtrlSrvyUYJlcuPASVUFqKpZz+69a1Ep0DP+1OEC/N7qPaLE
+ c8gltZAqVF4aHyMvj8M7KpKsJqRrPJyQhC2ydwK2Hn5F4jl+8X9fixLtNOt1Ts3nQPUw
+ vLUWYfRVFZVLSBb7SBfGQLAZQBgZiec8daOk27d7+ztwt09Y6qtcZYMDyC/xOm2PSx4U
+ /ni3WlQclwwhc1Qvzu6uBmDxC1fzKBiukSd1XIDMoZWtT6X5nCSvWMHV/eL8SHGoIWTA
+ Bi0Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=UZSXdDmD
-Subject: [Buildroot] [PATCH 1/1] package/libseccomp: bump to version 2.5.5
+ header.a=rsa-sha256 header.s=20230601 header.b=F+J8o0NX
+Subject: [Buildroot] [PATCH 1/1] package/libucl: bump to version 0.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,45 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+Cc: Nimai Mahajan <nimaim@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/seccomp/libseccomp/blob/v2.5.5/CHANGELOG
+https://github.com/vstakhov/libucl/releases/tag/0.8.2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libseccomp/libseccomp.hash | 4 ++--
- package/libseccomp/libseccomp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libucl/libucl.hash | 2 +-
+ package/libucl/libucl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
-index 8337f33f3e..b80efd68f5 100644
---- a/package/libseccomp/libseccomp.hash
-+++ b/package/libseccomp/libseccomp.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.4
--sha256  d82902400405cf0068574ef3dc1fe5f5926207543ba1ae6f8e7a1576351dcbdb  libseccomp-2.5.4.tar.gz
-+# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.5
-+sha256  248a2c8a4d9b9858aa6baf52712c34afefcf9c9e94b76dce02c1c9aa25fb3375  libseccomp-2.5.5.tar.gz
+diff --git a/package/libucl/libucl.hash b/package/libucl/libucl.hash
+index 164b00276f..4ad166dc7d 100644
+--- a/package/libucl/libucl.hash
++++ b/package/libucl/libucl.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  LICENSE
-diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-index 7d7f33618e..ff295e986a 100644
---- a/package/libseccomp/libseccomp.mk
-+++ b/package/libseccomp/libseccomp.mk
+-sha256  a6397e179672f0e8171a0f9a2cfc37e01432b357fd748b13f4394436689d24ef  libucl-0.8.1.tar.gz
++sha256  d95a0e2151cc167a0f3e51864fea4e8977a0f4c473faa805269a347f7fb4e165  libucl-0.8.2.tar.gz
+ sha256  1bf976835764c1d827e07472a0a75adb098682df56681878af05fc0db7439b03  COPYING
+diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
+index 9f0378ad9c..bf5e368f2b 100644
+--- a/package/libucl/libucl.mk
++++ b/package/libucl/libucl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSECCOMP_VERSION = 2.5.4
-+LIBSECCOMP_VERSION = 2.5.5
- LIBSECCOMP_SITE = https://github.com/seccomp/libseccomp/releases/download/v$(LIBSECCOMP_VERSION)
- LIBSECCOMP_LICENSE = LGPL-2.1
- LIBSECCOMP_LICENSE_FILES = LICENSE
+-LIBUCL_VERSION = 0.8.1
++LIBUCL_VERSION = 0.8.2
+ LIBUCL_SITE = $(call github,vstakhov,libucl,$(LIBUCL_VERSION))
+ LIBUCL_INSTALL_STAGING = YES
+ LIBUCL_AUTORECONF = YES
 -- 
 2.43.0
 
