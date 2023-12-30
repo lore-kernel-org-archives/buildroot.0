@@ -1,63 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89223C46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 06:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8155CC46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 09:51:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2A18400BA;
-	Sat, 30 Dec 2023 06:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A18400BA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8051A415C8;
+	Sat, 30 Dec 2023 09:51:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8051A415C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bVMLcs7pqVhS; Sat, 30 Dec 2023 06:40:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GnCmALxPKVQi; Sat, 30 Dec 2023 09:51:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4B26840103;
-	Sat, 30 Dec 2023 06:40:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B26840103
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 210281BF20F
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 06:40:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAE41414FA;
+	Sat, 30 Dec 2023 09:51:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAE41414FA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 234F41BF3B5
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 09:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0D4440103
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 06:40:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0D4440103
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFD52813E3
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 09:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFD52813E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KEB8F0SMOObc for <buildroot@lists.busybox.net>;
- Sat, 30 Dec 2023 06:40:47 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 243C3400BA
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 06:40:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 243C3400BA
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 36E2A6000A
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 06:40:44 +0000 (UTC)
-MIME-Version: 1.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BwkfmESwX1FI for <buildroot@lists.busybox.net>;
+ Sat, 30 Dec 2023 09:50:58 +0000 (UTC)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C74478293F
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 09:50:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C74478293F
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-40d5b7b8adfso19382425e9.0
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 01:50:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1703929855; x=1704534655;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=7KDB1Snr2Uabl6xAJpt3xPORodwl8VuoBAW39+Biy0w=;
+ b=NRYTZEtAfvtrAVjPSDV9lfm8dsdGn6fI6R/NvjaRZLzeaZrGtZGN7bdEkXbC9r1HeR
+ Pk5TMfJ3gGWDcPVxBpfE6/pMOqC9c/5XlPfOit1HeOL8are2Ws3ahy3IT/Tj166HqVGd
+ FxomNc2vs/bLK3UHrEF2F0abfrDnT5ut+vXK9ZyGxMoRQJhJdBeYDyso8xkD7CtP7ZoX
+ TVT/B4LgcZhXbQJ2MvzBu9SvcAJDTEO6Q3QahH5eOsJ8xStUdxoE67mkysJeGf5IZP2H
+ EUgnS3N4iqC0TmUv5u3uk9MCFTZV3CH+S8J+RSQf0LZ8IEyA56hXytTvdtDMyywaKL4m
+ uEww==
+X-Gm-Message-State: AOJu0Yyj7YQLeWn/wQ5gWEOB17p0r2eqPfyukOUR4BmYTTpoNy65MM0J
+ D+rEvXy481+EEKLZaqX2t7IfISqzUdg=
+X-Google-Smtp-Source: AGHT+IFlraD59x2bsXQQ4Wc+ijyj0ntqcFyI2aFP+eI41AlYddUMKPT24TM0IDqQUMj3evBoarYmdw==
+X-Received: by 2002:a05:600c:190e:b0:40b:5e26:2379 with SMTP id
+ j14-20020a05600c190e00b0040b5e262379mr6399751wmq.42.1703929854775; 
+ Sat, 30 Dec 2023 01:50:54 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ p15-20020a05600c468f00b0040d4e1393dcsm26232218wmo.20.2023.12.30.01.50.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 Dec 2023 01:50:54 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Dec 2023 06:40:44 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20231230064049.A0D4440103@smtp2.osuosl.org>
+Date: Sat, 30 Dec 2023 10:50:51 +0100
+Message-ID: <20231230095051.40929-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1703918444; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=HO3t0BdVhovTu+4ZHXI4CHGCfPCsT9vcbxfvbI5blKw=;
- b=PpCWwkc0HV452GGfM82OFq6tu4xJU9rDVa06qUv6WgMrZpdfIHXINV12GuthgdpNozHVRE
- 212pxUQ3oAHQRrX28yrPmD0FF/+usk/OL2sf2vYRti81do2A59bOGpkXOYtlybgc8wqFNv
- uMXrn+rh4EzxlZGtfneivESL1iA7+aEw1WI5AjA9HYKhTTYbZh9aN9DazF9o0ahGOwsewb
- 7HGkpu/LtpOSo8BWKb6GdgbMF2RfHhAFKhEHoZEP3Bb9gC2mNj18nzrLvSIPgiJlC2dDhx
- tUeyL778P6MG4HeHKSG5L1DI/W7lGu0J0b0eqRgoof4Fx9owGojwDPWHgkWC3w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PpCWwkc0
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-12-29
+ d=gmail.com; s=20230601; t=1703929855; x=1704534655; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7KDB1Snr2Uabl6xAJpt3xPORodwl8VuoBAW39+Biy0w=;
+ b=BT8ZcifRemF5P9Q0BltENGksNXMqVoG5LxToB2Tn0rUXw95NU9kVeQmutJs9zMv6+W
+ VtbXMAwWORnfmP6jgneHDBp0GyUTDgGSn4homUdSNV1JDBqhNZw7PvGx1l4UsKCdUX90
+ JXA/uVsZfgy0ZIAsqEXLRVu3TMRivO6FFCS9zAL1uGkZxfdSrrX6CeQAH5h2darvlzX7
+ +vjMi6mCVejgyx0hTc5nfzKwT1XwKiBlgyUo0C8UNL6cCNAibYhiNQmQtxfYpkcy/qst
+ eeo98dKeRHQCSoqKkIRedpQqXjIQxaeoSuTgyW7C9VUfWDud/IkOfEmatIWUfAarZqWr
+ qzbg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=BT8ZcifR
+Subject: [Buildroot] [PATCH 1/1] package/upx: bump to version 4.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,148 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+https://github.com/upx/upx/blob/v4.2.1/NEWS
 
-Autobuild statistics for 2023-12-29
-===================================
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/upx/upx.hash | 2 +-
+ package/upx/upx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  4  |  5  |  0  |  9  |
-  2023.08.x  |  2  |  1  |  0  |  3  |
-    master   | 11  | 21  |  0  | 32  |
-
-Classification of failures by reason for master
------------------------------------------------
-
-              host-rust-1.71.1 | 4 
-              libopenssl-3.2.0 | 2 
-                libressl-3.8.2 | 2 
-                   perl-5.38.2 | 2 
-                elfutils-0.189 | 1 
-         flutter-engine-3.13.9 | 1 
-                    fmt-10.1.1 | 1 
-  gobject-introspection-1.76.1 | 1 
-                   gupnp-1.4.3 | 1 
-        host-sentry-cli-2.20.3 | 1 
-                   linux-6.6.8 | 1 
-               nfs-utils-2.6.3 | 1 
-    python-cryptography-39.0.2 | 1 
-                       unknown | 1 
-                  xvisor-0.3.2 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/d7a7ddd9849ac866cbf98df6d852fb0dbcbd4c5d | ORPH
-  aarch64    |     flutter-engine-3.13.9      | NOK | http://autobuild.buildroot.net/results/cbc16b29cca3bc83da45824bfeeabc02e69ffc73 |     
-  mips64el   |           fmt-10.1.1           | NOK | http://autobuild.buildroot.net/results/16f562a60ae5afe0f7fc4bce89b3ebfd9c7c899f |     
-    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/4c28eefe229bb85ab3f63a6318a1285523596d65 | ORPH
-    mips     |          gupnp-1.4.3           | NOK | http://autobuild.buildroot.net/results/30c869d3438c8e4e6ab1ea64ba170aa11aacd58b |     
-  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/a832082b4b481a0454c3dab868d2518eb96432b8 |     
-    i686     |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/ea7decf7bb0e6f8f0b306508bf7911403c245f6a |     
-  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/49121694146e2b13b928cf4373bc2fa73d429f6d |     
-   x86_64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/ec2a7d3f8568766c6c34c099ad00d81d9e0c228f |     
-    m68k     |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/2c93fffa758294e9268a9256454a1cb20e234560 |     
-   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/8be434d3b8f5f2e3f2177f04740cfe77ec74e25a | ORPH
-   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/9acfd9af85224576f027c3ed433866e6feee92a7 | ORPH
-   armeb     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/79fd79c448ab1eb5fff89ff26a0e7491dbb7b777 | ORPH
-    mips     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/aede7bdb790a52a1b3b9c7bca61bc6b70ad2418f | ORPH
-   xtensa    |          linux-6.6.8           | NOK | http://autobuild.buildroot.net/results/08aa139d7216ffdb0951cbcc62e9de2f53effa5d | ORPH
-   mipsel    |        nfs-utils-2.6.3         | NOK | http://autobuild.buildroot.net/results/a3c804151e0a3072f85c435fbf54f8a34e385315 |     
-   x86_64    |          perl-5.38.2           | NOK | http://autobuild.buildroot.net/results/78d70e324f5c94b1779159f1ca12787195de6d23 |     
-    arc      |          perl-5.38.2           | NOK | http://autobuild.buildroot.net/results/c61b60430d36c5c63bd3cf0257f2193a40fb0b60 |     
-  aarch64    |   python-cryptography-39.0.2   | NOK | http://autobuild.buildroot.net/results/4975f0db23fb21975f65db6f38a978c8db29f3aa |     
-microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/7b1fcc7f464fb71b3ccb0943f482ebbab13a9c55 |     
-  aarch64    |          xvisor-0.3.2          | NOK | http://autobuild.buildroot.net/results/55310fbc2d90babe296023da9ffcb90b9f5a6c8d |     
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-            host-binutils-2.38 | 1 
-              host-rust-1.67.1 | 1 
-libuci-4b3db1179747b6a67790... | 1 
-          linux-5.10.162-cip24 | 1 
-                 raptor-2.0.15 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/e5f07823ea6dc907660930b8a3846da42e0a5ab3 |     
-  sparc64    |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/6679503ab18cb5c73a9a2fb1895f0c6c4562ebd7 |     
-   mips64    | libuci-4b3db1179747b6a67790... | NOK | http://autobuild.buildroot.net/results/8e11ffde14b99484ec4f66af83e825fa75d0ffbc |     
-    m68k     |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/eb51642b1ff1332a725d73daca72f80768b24352 | ORPH
-   mips64    |         raptor-2.0.15          | NOK | http://autobuild.buildroot.net/results/cd8c98ab968b4920ae2ae0f9162517249488d77c | ORPH
-
-
-Classification of failures by reason for 2023.08.x
---------------------------------------------------
-
-  gobject-introspection-1.76.1 | 1 
-
-
-Detail of failures for 2023.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/134e8a5c8229c546ab7a28084ac9d3abd78bf8db | ORPH
-
-
-Gitlab CI results for 2023-12-29
-================================
-
-Detail of defconfig failures for master
----------------------------------------
-
-                        defconfig |                        link to the job                        | orph?
-----------------------------------+---------------------------------------------------------------+------
-                          beaglev | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325319  |      
-               broadcom_northstar | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325323  |      
-              freescale_imx8mpevk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325351  |      
-                       imx8mmpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325382  |      
-                        imx8mpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325387  |      
-                        imx8mqevk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325388  |      
-               kontron_pitx_imx8m | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325395  |      
-                       ls1028ardb | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325404  |      
-                     ls1046a-frwy | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325405  |      
-              octavo_osd32mp1_brk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325448  |      
-              octavo_osd32mp1_red | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325450  |      
-                   orangepi_lite2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325467  |      
-                orangepi_one_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325470  |      
-                qemu_aarch64_ebbr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325496  |      
-                qemu_aarch64_sbsa | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325499  |      
-                    qemu_arm_ebbr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325507  |      
-             qemu_arm_vexpress_tz | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325518  |      
-               raspberrypi3_qt5we | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325565  | ORPH 
-                raspberrypizero2w | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325572  |      
-             sipeed_licheepi_nano | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325595  |      
-               snps_arc700_axs101 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834757989  |      
-                 snps_arc700_nsim | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758012  | ORPH 
-                socrates_cyclone5 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758226  |      
-          solidrun_clearfog_gt_8k | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758379  |      
-            solidrun_macchiatobin | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758777  | ORPH 
-                      ti_am62x_sk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834759284  |      
-                      ti_am64x_sk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834759411  |      
-              toradex_apalis_imx6 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834760048  |      
-
-
-
+diff --git a/package/upx/upx.hash b/package/upx/upx.hash
+index 072bc0656e..545eb29af9 100644
+--- a/package/upx/upx.hash
++++ b/package/upx/upx.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  0582f78b517ea87ba1caa6e8c111474f58edd167e5f01f074d7d9ca2f81d47d0  upx-4.1.0-src.tar.xz
++sha256  cc562ea7dbd8cec4505edea68736e04030ec5891c1e2a300e3c0d0eac6364479  upx-4.2.1-src.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index 0a0e9086e5..d6c068fc3b 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPX_VERSION = 4.1.0
++UPX_VERSION = 4.2.1
+ UPX_SITE = https://github.com/upx/upx/releases/download/v$(UPX_VERSION)
+ UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
+ UPX_LICENSE = GPL-2.0+
 -- 
-http://autobuild.buildroot.net
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
