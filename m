@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E2CCC46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 20:33:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA783C46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 20:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C03860A87;
-	Sat, 30 Dec 2023 20:33:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C03860A87
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77AFA60AA0;
+	Sat, 30 Dec 2023 20:39:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77AFA60AA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B7GvwQQRnFwl; Sat, 30 Dec 2023 20:33:37 +0000 (UTC)
+	with ESMTP id WKjHCkDnxBM4; Sat, 30 Dec 2023 20:39:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86EBB60A64;
-	Sat, 30 Dec 2023 20:33:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86EBB60A64
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 72A411BF5B5
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 20:33:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB0FA60838;
+	Sat, 30 Dec 2023 20:39:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB0FA60838
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E7271BF5B5
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 20:39:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B41F60A64
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 20:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B41F60A64
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1224540189
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 20:39:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1224540189
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9gNkO7VUarXV for <buildroot@lists.busybox.net>;
- Sat, 30 Dec 2023 20:33:34 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3FC5E607C7
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 20:33:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FC5E607C7
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-40d604b4b30so16273895e9.1
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 12:33:34 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SWPQNp3KPLTF for <buildroot@lists.busybox.net>;
+ Sat, 30 Dec 2023 20:39:51 +0000 (UTC)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A94B24017A
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 20:39:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A94B24017A
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-336dcebcdb9so3781584f8f.1
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 12:39:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1703968411; x=1704573211;
+ d=1e100.net; s=20230601; t=1703968788; x=1704573588;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=hpqPOvqiBHzUjDSrZrHQa5OTlcYyQvwyJiTsRG9PIEg=;
- b=HZVWhg2kWMVylIUcKNsS13r5jZzr58k1gXmVlqXgR4973A2BMeJxguZMhsQf+NTykE
- 7sjTxgsyPWzPZVQAKAZjUUV6nI+w7RoPrb4FHI194mZmL1rwK0AHcPnwcxXAs7G82JCS
- nlqzV+mOMO5R1KLL3TNThUWYrv7JK56gCGbETkGmEOBqhG47GFkUu7FUmoAcdG0+UV8d
- RIrodzV5pjoZdJlTL7z0ljXbXyRYVoNz9O/agx+CgutO6Y301WL9V47RHiJIiiN7wwvC
- uOflLnAfijp6exGeq5e8dac/hmDetnU5OD9tDRL7Ntpis05Iv7GgVqQuww5w/gzmzv8l
- ycTw==
-X-Gm-Message-State: AOJu0YzMALkvjOIkTQLk1UQNk+07cvs8k0vYo6rJ3q8l/eiPFmeatRcB
- Cbhef7CYLSu87kUbL8tjaQ3mSOodqMY=
-X-Google-Smtp-Source: AGHT+IEja/nETgNWOyhXt0jXczwlv2P4tarnT1yvsQWcpJAgiuAfjLEqbF+nyM496BQus2hxGKMqvg==
-X-Received: by 2002:a05:600c:444a:b0:40d:73e3:41dc with SMTP id
- v10-20020a05600c444a00b0040d73e341dcmr1373175wmn.11.1703968411155; 
- Sat, 30 Dec 2023 12:33:31 -0800 (PST)
+ bh=ZuM9gFVg5SLyXAZST23QHJpRZy+FuJKz4xV2bz1AZhU=;
+ b=O7s595kTBYmIol5+tD8RED34HwDz4M8GjqeZBzCe12v5BX649kJdJf6m/tEtzwQiFD
+ wfpCPUUmAHVIjAgXVApbA82TxKiZsXEGCzI0RYUHdKIzfmt4FasPnrYfLIkCGdE5p4eJ
+ lEKBILP3IsJaoJudK5s982YjLT83g1ybkpS7d4ENQkOO9yR8HRBQ/5XwRABsZxNhMP4J
+ hUtHhufxWGdkfjH2dyW/ZivzQ/2UPYkq6jQ3UuUsHrPLUVjfvtaWzDqdUrpR5XruyWsQ
+ InN7psz/nErht6aEGGOS5S6aTXwlKwcISJh1x4oPn70tU8uGyH9DwYREPgI3vEiMIOns
+ g+tg==
+X-Gm-Message-State: AOJu0YzuADUItot4mwFifhnUhXnUPiKEQY3OeSn6ylMQc+MvZFZvRHRA
+ 33acCVOBVdXSdE+kNVqz586xMTZd34A=
+X-Google-Smtp-Source: AGHT+IGoPRpxDwGVtazZsWSstEbXVfDZvF5mD3vR6lZ8IsUXgUnZJlpZSUAY21Un+GN95OMyC337zA==
+X-Received: by 2002:a05:600c:231a:b0:40d:60e2:d643 with SMTP id
+ 26-20020a05600c231a00b0040d60e2d643mr1408603wmo.26.1703968786950; 
+ Sat, 30 Dec 2023 12:39:46 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- u16-20020a05600c19d000b0040d604dea3bsm12261137wmq.4.2023.12.30.12.33.30
+ r8-20020a5d4948000000b003367a5b6b69sm22070376wrs.106.2023.12.30.12.39.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 Dec 2023 12:33:30 -0800 (PST)
+ Sat, 30 Dec 2023 12:39:46 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 Dec 2023 21:33:28 +0100
-Message-ID: <20231230203328.1202724-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Dec 2023 21:39:42 +0100
+Message-ID: <20231230203942.1211689-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1703968411; x=1704573211; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1703968788; x=1704573588; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hpqPOvqiBHzUjDSrZrHQa5OTlcYyQvwyJiTsRG9PIEg=;
- b=ijbVTxTTdzYn5s3w93p4srK8piscWD4ApGLH4b4G7VG7Iiz9zz7pwUNx49tS5P+pJ3
- sbS3EgEja7fXkeFWFEGbojRjsYjmkSl40Yg9spOtCaQAeMX87vPrOLRkjYEozrmar1LC
- wrPtPi3Y3wItiiEYYE4zWz2eC2tcO2E7K9SkO62ojxr1pQqOibg6tFh5OeueK2sGnhQ9
- XozzteR0ZGUWlewguH6Y1DBuEBp8T63x47qdbhfYpLAPdzsyR/b55FIS1ijHFs64ZeIm
- 51UhOyeAp3WfCw4QWe8qioVP2GVdXGvPNSUH2Ngq1KkwuMrhknRGjscrnFlVr6U29o9g
- yrkQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=ZuM9gFVg5SLyXAZST23QHJpRZy+FuJKz4xV2bz1AZhU=;
+ b=XpCjrlDcYqpMS3Fvru005nk4o7CTFcT0lKBe9FZDo715DTKg8QllweKHJ3YInNJ2D/
+ Iwn+ftwsNioZ479jWiZZPnEq4Asj6dqm2J1Bmfl7IB0enB4or9U4Vjuy+7nYVcNMtYOC
+ IOYqBZCtcJ0bEseVXY6h/gkW8l0KwamUprg2wn1eL+TI39QBW4cz2LrnycynyQOI2m+N
+ oJ9Bk8Ry7QPwm58ki7l6/47lE4oGC2lSs+cKGTpcs8jYLTSCKXHs7YWWwYdreI8NIioL
+ L3G86reMZZF9VndVRqHyc0k90orGEM6eg1ix4CjpCgi8qztx+qeayvgd7d3F4nMf9U8q
+ daNA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ijbVTxTT
-Subject: [Buildroot] [PATCH 1/1] package/libopenh264: bump to version 2.4.0
+ header.a=rsa-sha256 header.s=20230601 header.b=XpCjrlDc
+Subject: [Buildroot] [PATCH 1/1] package/librelp: bump to version 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,43 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
+Cc: David GOUARIN <dgouarin@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/cisco/openh264/blob/v2.4.0/RELEASES
+https://github.com/rsyslog/librelp/blob/v1.11.0/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libopenh264/libopenh264.hash | 2 +-
- package/libopenh264/libopenh264.mk   | 2 +-
+ package/librelp/librelp.hash | 2 +-
+ package/librelp/librelp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
-index eecb0b9625..fe98b7773f 100644
---- a/package/libopenh264/libopenh264.hash
-+++ b/package/libopenh264/libopenh264.hash
+diff --git a/package/librelp/librelp.hash b/package/librelp/librelp.hash
+index 23ce8c15f8..8dcc502583 100644
+--- a/package/librelp/librelp.hash
++++ b/package/librelp/librelp.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32  libopenh264-2.3.1.tar.gz
-+sha256  a44d1ccc348a790f9a272bba2d1c2eb9a9bbd0302e4e9b655d709e1c32f92691  libopenh264-2.4.0.tar.gz
- sha256  dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
-diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
-index 750ec41e4d..478c29d7a8 100644
---- a/package/libopenh264/libopenh264.mk
-+++ b/package/libopenh264/libopenh264.mk
+-sha256  148db4e4d1a23e8136e9ec08810929a55faf5d45e24c2e3186d5ab34355dab31  librelp-1.10.0.tar.gz
++sha256  7719b5f31e07cbb9872289ad32b787c613b5355d407982a0a2c4d69938457fd6  librelp-1.11.0.tar.gz
+ sha256  1ed76f935566e93e3c3c0d9f8fad22eb6d8bbe406e2eb8470a4a2764d9fd9685  COPYING
+diff --git a/package/librelp/librelp.mk b/package/librelp/librelp.mk
+index f8bbdb131c..cf2e391f34 100644
+--- a/package/librelp/librelp.mk
++++ b/package/librelp/librelp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENH264_VERSION = 2.3.1
-+LIBOPENH264_VERSION = 2.4.0
- LIBOPENH264_SITE = $(call github,cisco,openh264,v$(LIBOPENH264_VERSION))
- LIBOPENH264_LICENSE = BSD-2-Clause
- LIBOPENH264_LICENSE_FILES = LICENSE
+-LIBRELP_VERSION = 1.10.0
++LIBRELP_VERSION = 1.11.0
+ LIBRELP_SITE = http://download.rsyslog.com/librelp
+ LIBRELP_LICENSE = GPL-3.0+
+ LIBRELP_LICENSE_FILES = COPYING
 -- 
 2.43.0
 
