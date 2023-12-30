@@ -4,67 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 499A9C46CD4
-	for <buildroot@archiver.kernel.org>; Fri, 29 Dec 2023 22:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89223C46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 06:40:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB0BF40A6E;
-	Fri, 29 Dec 2023 22:13:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB0BF40A6E
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2A18400BA;
+	Sat, 30 Dec 2023 06:40:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A18400BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qETJeTYU8KS5; Fri, 29 Dec 2023 22:13:46 +0000 (UTC)
+	with ESMTP id bVMLcs7pqVhS; Sat, 30 Dec 2023 06:40:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7293E40236;
-	Fri, 29 Dec 2023 22:13:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7293E40236
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B26840103;
+	Sat, 30 Dec 2023 06:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B26840103
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2EC321BF3A1
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 22:13:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 210281BF20F
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 06:40:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FEDF41740
- for <buildroot@lists.busybox.net>; Fri, 29 Dec 2023 22:13:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FEDF41740
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0D4440103
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 06:40:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0D4440103
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tGpei8FqQb4R for <buildroot@lists.busybox.net>;
- Fri, 29 Dec 2023 22:13:41 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 42B74419ED
- for <buildroot@buildroot.org>; Fri, 29 Dec 2023 22:13:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42B74419ED
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 53BCEB0051B;
- Fri, 29 Dec 2023 23:13:35 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 29 Dec 2023 23:13:35 +0100
-Date: Fri, 29 Dec 2023 23:13:35 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Antoine Coutant <antoine.coutant@smile.fr>
-Message-ID: <ZY9Ej76T9DYHuLe3@landeda>
-References: <20231228152657.488457-1-antoine.coutant@smile.fr>
- <20231228152657.488457-2-antoine.coutant@smile.fr>
+ with ESMTP id KEB8F0SMOObc for <buildroot@lists.busybox.net>;
+ Sat, 30 Dec 2023 06:40:47 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 243C3400BA
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 06:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 243C3400BA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 36E2A6000A
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 06:40:44 +0000 (UTC)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20231228152657.488457-2-antoine.coutant@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1703888019;
- bh=1AFmE768His8W2tPwr/xT6v1/obMJspYMLkalUCqt+4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Ti0TZDbCwhrPM2bDF5AaKKGkK5zRPIGWXkRdasjp+eMmO7+aWIVlWadDPJZuHzgwx
- 1n8VlwaLhudpVkCjifSould2qoNYNchgjlxi3xQD+QeY3loOy+JkdjCkCPoSnLNS76
- z8oZnBAWtezHp2yvcMicIFESehdDE2v7Kquu8j5M8NwdTngHEcmkUsV4/1Stc9R43c
- fATaAt5W+aBD42D+oHrgvFEBO/MuC3fHAXpG/Wwl/Smt9LaCGhKyIxfx2dd/BBIy+v
- H7dKAeubwwUSVfEPpuLx3Z6vwrxMgSo8ubaJ6W8dUUrRJ3pxEKsfquFt2yM9ySBrnu
- OFn19XglNPkoQ==
+To: buildroot@buildroot.org
+Date: Sat, 30 Dec 2023 06:40:44 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20231230064049.A0D4440103@smtp2.osuosl.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; 
+ t=1703918444; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=HO3t0BdVhovTu+4ZHXI4CHGCfPCsT9vcbxfvbI5blKw=;
+ b=PpCWwkc0HV452GGfM82OFq6tu4xJU9rDVa06qUv6WgMrZpdfIHXINV12GuthgdpNozHVRE
+ 212pxUQ3oAHQRrX28yrPmD0FF/+usk/OL2sf2vYRti81do2A59bOGpkXOYtlybgc8wqFNv
+ uMXrn+rh4EzxlZGtfneivESL1iA7+aEw1WI5AjA9HYKhTTYbZh9aN9DazF9o0ahGOwsewb
+ 7HGkpu/LtpOSo8BWKb6GdgbMF2RfHhAFKhEHoZEP3Bb9gC2mNj18nzrLvSIPgiJlC2dDhx
+ tUeyL778P6MG4HeHKSG5L1DI/W7lGu0J0b0eqRgoof4Fx9owGojwDPWHgkWC3w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ti0TZDbC
-Subject: Re: [Buildroot] [PATCH v2 2/3] package/ripgrep: bump to version
- 14.0.3
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=PpCWwkc0
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-12-29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,232 +69,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: romain.naour@smile.fr, sebastian.weyer@smile.fr, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Antoine, All,
+Hello,
 
-Thanks for this patchset!
+Autobuild statistics for 2023-12-29
+===================================
 
-On 2023-12-28 16:26 +0100, Antoine Coutant spake thusly:
-> ripgrep previous version hash is no longer valid.
-> The tarball is modified by rust vendoring so the hash
-> may change with rust versions.
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  4  |  5  |  0  |  9  |
+  2023.08.x  |  2  |  1  |  0  |  3  |
+    master   | 11  | 21  |  0  | 32  |
 
-If that's so, then we have a big problem: the hashes for all the
-cargo-based packages will change, and thus it means we will have to
-name the generated archive based on the cargo version used to do the
-vendoring. That would apply to:
+Classification of failures by reason for master
+-----------------------------------------------
 
-    package/bat/bat.mk
-    package/dust/dust.mk
-    package/eza/eza.mk
-    package/hyperfine/hyperfine.mk
-    package/nushell/nushell.mk
-    package/procs/procs.mk
-    package/ripgrep/ripgrep.mk
-    package/rust-bindgen/rust-bindgen.mk
-    package/sentry-cli/sentry-cli.mk
-    package/tealdeer/tealdeer.mk
+              host-rust-1.71.1 | 4 
+              libopenssl-3.2.0 | 2 
+                libressl-3.8.2 | 2 
+                   perl-5.38.2 | 2 
+                elfutils-0.189 | 1 
+         flutter-engine-3.13.9 | 1 
+                    fmt-10.1.1 | 1 
+  gobject-introspection-1.76.1 | 1 
+                   gupnp-1.4.3 | 1 
+        host-sentry-cli-2.20.3 | 1 
+                   linux-6.6.8 | 1 
+               nfs-utils-2.6.3 | 1 
+    python-cryptography-39.0.2 | 1 
+                       unknown | 1 
+                  xvisor-0.3.2 | 1 
 
-Can you clarify this point, please?
 
-Regards,
-Yann E. MORIN.
+Detail of failures for master
+-----------------------------
 
-> The patch has been rebased to ripgrep 14.0.3.
-> 
-> Changelog:
-> https://github.com/BurntSushi/ripgrep/blob/master/CHANGELOG.md
-> 
-> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
-> ---
-> 
-> Tested using qemu_aarch64_virt_defconfig and Arm AArch64 13.2.rel1
-> toolchain.
-> 
-> Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
-> ---
->  ...llocator-behind-a-cargo-feature-flag.patch | 52 ++++++++++---------
->  package/ripgrep/ripgrep.hash                  |  2 +-
->  package/ripgrep/ripgrep.mk                    |  6 +--
->  3 files changed, 29 insertions(+), 31 deletions(-)
-> 
-> diff --git a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
-> index e2ba68f389..aa073c6e7f 100644
-> --- a/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
-> +++ b/package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch
-> @@ -1,4 +1,4 @@
-> -From 68c2a4d7a5d9b46f65121958fdb12d5270bfd1b6 Mon Sep 17 00:00:00 2001
-> +From e4df6678e3e2d018acccafd47d1e484887d23323 Mon Sep 17 00:00:00 2001
->  From: Jonathan Stites <mail@jonstites.com>
->  Date: Wed, 6 May 2020 12:55:35 +0000
->  Subject: [PATCH] puts jemalloc allocator behind a cargo feature flag
-> @@ -9,6 +9,8 @@ Moves jemalloc behind a feature for musl builds, where it is not
->  supported by the upstream project, so ripgrep will fail to build.
->  
->  Signed-off-by: Sam Voss <sam.voss@gmail.com>
-> +[Antoine: update for 14.0.3]
-> +Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
->  ---
->   .github/workflows/ci.yml      | 6 ++++++
->   .github/workflows/release.yml | 8 +++++++-
-> @@ -18,10 +20,10 @@ Signed-off-by: Sam Voss <sam.voss@gmail.com>
->   5 files changed, 35 insertions(+), 4 deletions(-)
->  
->  diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
-> -index ab154ec..aa567d9 100644
-> +index b37753e..a2cdeee 100644
->  --- a/.github/workflows/ci.yml
->  +++ b/.github/workflows/ci.yml
-> -@@ -149,6 +149,12 @@ jobs:
-> +@@ -160,6 +160,12 @@ jobs:
->         if: matrix.target != ''
->         run: ${{ env.CARGO }} test --verbose --workspace ${{ env.TARGET_FLAGS }}
->   
-> @@ -31,14 +33,14 @@ index ab154ec..aa567d9 100644
->  +      if: matrix.os == 'nightly-musl'
->  +      run: ${{ env.CARGO }} test --verbose --all --features jemalloc ${{ env.TARGET_FLAGS }}
->  +
-> -     - name: Test for existence of build artifacts (Windows)
-> -       if: matrix.os == 'windows-2019'
-> -       shell: bash
-> +     - name: Test zsh shell completions (Unix, sans cross)
-> +       # We could test this when using Cross, but we'd have to execute the
-> +       # 'rg' binary (done in test-complete) with qemu, which is a pain and
->  diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
-> -index 7cfb6a4..ad6b82d 100644
-> +index b10c076..58a7a12 100644
->  --- a/.github/workflows/release.yml
->  +++ b/.github/workflows/release.yml
-> -@@ -133,7 +133,13 @@ jobs:
-> +@@ -153,7 +153,13 @@ jobs:
->           echo "target flag is: ${{ env.TARGET_FLAGS }}"
->           echo "target dir is: ${{ env.TARGET_DIR }}"
->   
-> @@ -50,25 +52,25 @@ index 7cfb6a4..ad6b82d 100644
->  +
->  +    - name: Build release binary (non-linux)
->  +      if: matrix.build != 'linux'
-> -       run: ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
-> - 
-> -     - name: Strip release binary (linux and macos)
-> +       shell: bash
-> +       run: |
-> +         ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
->  diff --git a/Cargo.toml b/Cargo.toml
-> -index fb78fcb..0d34b1e 100644
-> +index f30cc0b..6fe4c79 100644
->  --- a/Cargo.toml
->  +++ b/Cargo.toml
-> -@@ -56,8 +56,9 @@ version = "2.33.0"
-> - default-features = false
-> - features = ["suggestions"]
-> +@@ -59,8 +59,9 @@ serde_json = "1.0.23"
-> + termcolor = "1.1.0"
-> + textwrap = { version = "0.16.0", default-features = false }
->   
->  -[target.'cfg(all(target_env = "musl", target_pointer_width = "64"))'.dependencies.jemallocator]
->  +[dependencies.jemallocator]
-> - version = "0.3.0"
-> + version = "0.5.0"
->  +optional = true
->   
-> - [build-dependencies]
-> - lazy_static = "1.1.0"
-> -@@ -75,6 +76,11 @@ walkdir = "2"
-> + [dev-dependencies]
-> + serde = "1.0.77"
-> +@@ -70,6 +71,11 @@ walkdir = "2"
->   [features]
->   simd-accel = ["grep/simd-accel"]
->   pcre2 = ["grep/pcre2"]
-> @@ -81,10 +83,10 @@ index fb78fcb..0d34b1e 100644
->   [profile.release]
->   debug = 1
->  diff --git a/README.md b/README.md
-> -index 46938bc..9917b29 100644
-> +index 63c0725..3d35819 100644
->  --- a/README.md
->  +++ b/README.md
-> -@@ -406,6 +406,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
-> +@@ -442,6 +442,15 @@ build a static executable with MUSL and with PCRE2, then you will need to have
->   `musl-gcc` installed, which might be in a separate package from the actual
->   MUSL library, depending on your Linux distribution.
->   
-> @@ -101,10 +103,10 @@ index 46938bc..9917b29 100644
->   ### Running tests
->   
->  diff --git a/crates/core/main.rs b/crates/core/main.rs
-> -index 47385de..c9dae5a 100644
-> +index 64f35ce..9aa6663 100644
->  --- a/crates/core/main.rs
->  +++ b/crates/core/main.rs
-> -@@ -31,7 +31,7 @@ mod subject;
-> +@@ -27,7 +27,7 @@ mod search;
->   // have the fastest version of everything. Its goal is to be small and amenable
->   // to static compilation.) Even though ripgrep isn't particularly allocation
->   // heavy, musl's allocator appears to slow down ripgrep quite a bit. Therefore,
-> @@ -113,7 +115,7 @@ index 47385de..c9dae5a 100644
->   //
->   // We don't unconditionally use jemalloc because it can be nice to use the
->   // system's default allocator by default. Moreover, jemalloc seems to increase
-> -@@ -39,7 +39,11 @@ mod subject;
-> +@@ -35,7 +35,11 @@ mod search;
->   //
->   // Moreover, we only do this on 64-bit systems since jemalloc doesn't support
->   // i686.
-> @@ -127,5 +129,5 @@ index 47385de..c9dae5a 100644
->   static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
->   
->  -- 
-> -2.32.0
-> +2.25.1
->  
-> diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
-> index 71e74e1bcf..ff86c12ad5 100644
-> --- a/package/ripgrep/ripgrep.hash
-> +++ b/package/ripgrep/ripgrep.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  6f1d4a8b653ce48d59ad777288b1257cbda607db29db19d031b7e622c60526f8  ripgrep-af6b6c543b224d348a8876f0c06245d9ea7929c5.tar.gz
-> +sha256  2f022889c999ffe00955e586fe24b334d1c79060978fc41b95b52a30946e65d0  ripgrep-14.0.3.tar.gz
->  sha256  0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
-> diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
-> index d587441cfa..44662749bb 100644
-> --- a/package/ripgrep/ripgrep.mk
-> +++ b/package/ripgrep/ripgrep.mk
-> @@ -4,11 +4,7 @@
->  #
->  ################################################################################
->  
-> -# Same as 13.0.0, we use a Git commit hash because the hash of this
-> -# tarball changed when moving to the cargo-package infrastructure, and
-> -# we can't change the hash of existing tarball. Please switch back to
-> -# a Git tag at the next version bump.
-> -RIPGREP_VERSION = af6b6c543b224d348a8876f0c06245d9ea7929c5
-> +RIPGREP_VERSION = 14.0.3
->  RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
->  RIPGREP_LICENSE = MIT
->  RIPGREP_LICENSE_FILES = LICENSE-MIT
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/d7a7ddd9849ac866cbf98df6d852fb0dbcbd4c5d | ORPH
+  aarch64    |     flutter-engine-3.13.9      | NOK | http://autobuild.buildroot.net/results/cbc16b29cca3bc83da45824bfeeabc02e69ffc73 |     
+  mips64el   |           fmt-10.1.1           | NOK | http://autobuild.buildroot.net/results/16f562a60ae5afe0f7fc4bce89b3ebfd9c7c899f |     
+    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/4c28eefe229bb85ab3f63a6318a1285523596d65 | ORPH
+    mips     |          gupnp-1.4.3           | NOK | http://autobuild.buildroot.net/results/30c869d3438c8e4e6ab1ea64ba170aa11aacd58b |     
+  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/a832082b4b481a0454c3dab868d2518eb96432b8 |     
+    i686     |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/ea7decf7bb0e6f8f0b306508bf7911403c245f6a |     
+  aarch64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/49121694146e2b13b928cf4373bc2fa73d429f6d |     
+   x86_64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/ec2a7d3f8568766c6c34c099ad00d81d9e0c228f |     
+    m68k     |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/2c93fffa758294e9268a9256454a1cb20e234560 |     
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/8be434d3b8f5f2e3f2177f04740cfe77ec74e25a | ORPH
+   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/9acfd9af85224576f027c3ed433866e6feee92a7 | ORPH
+   armeb     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/79fd79c448ab1eb5fff89ff26a0e7491dbb7b777 | ORPH
+    mips     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/aede7bdb790a52a1b3b9c7bca61bc6b70ad2418f | ORPH
+   xtensa    |          linux-6.6.8           | NOK | http://autobuild.buildroot.net/results/08aa139d7216ffdb0951cbcc62e9de2f53effa5d | ORPH
+   mipsel    |        nfs-utils-2.6.3         | NOK | http://autobuild.buildroot.net/results/a3c804151e0a3072f85c435fbf54f8a34e385315 |     
+   x86_64    |          perl-5.38.2           | NOK | http://autobuild.buildroot.net/results/78d70e324f5c94b1779159f1ca12787195de6d23 |     
+    arc      |          perl-5.38.2           | NOK | http://autobuild.buildroot.net/results/c61b60430d36c5c63bd3cf0257f2193a40fb0b60 |     
+  aarch64    |   python-cryptography-39.0.2   | NOK | http://autobuild.buildroot.net/results/4975f0db23fb21975f65db6f38a978c8db29f3aa |     
+microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/7b1fcc7f464fb71b3ccb0943f482ebbab13a9c55 |     
+  aarch64    |          xvisor-0.3.2          | NOK | http://autobuild.buildroot.net/results/55310fbc2d90babe296023da9ffcb90b9f5a6c8d |     
+
+
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
+
+            host-binutils-2.38 | 1 
+              host-rust-1.67.1 | 1 
+libuci-4b3db1179747b6a67790... | 1 
+          linux-5.10.162-cip24 | 1 
+                 raptor-2.0.15 | 1 
+
+
+Detail of failures for 2023.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/e5f07823ea6dc907660930b8a3846da42e0a5ab3 |     
+  sparc64    |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/6679503ab18cb5c73a9a2fb1895f0c6c4562ebd7 |     
+   mips64    | libuci-4b3db1179747b6a67790... | NOK | http://autobuild.buildroot.net/results/8e11ffde14b99484ec4f66af83e825fa75d0ffbc |     
+    m68k     |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/eb51642b1ff1332a725d73daca72f80768b24352 | ORPH
+   mips64    |         raptor-2.0.15          | NOK | http://autobuild.buildroot.net/results/cd8c98ab968b4920ae2ae0f9162517249488d77c | ORPH
+
+
+Classification of failures by reason for 2023.08.x
+--------------------------------------------------
+
+  gobject-introspection-1.76.1 | 1 
+
+
+Detail of failures for 2023.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/134e8a5c8229c546ab7a28084ac9d3abd78bf8db | ORPH
+
+
+Gitlab CI results for 2023-12-29
+================================
+
+Detail of defconfig failures for master
+---------------------------------------
+
+                        defconfig |                        link to the job                        | orph?
+----------------------------------+---------------------------------------------------------------+------
+                          beaglev | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325319  |      
+               broadcom_northstar | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325323  |      
+              freescale_imx8mpevk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325351  |      
+                       imx8mmpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325382  |      
+                        imx8mpico | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325387  |      
+                        imx8mqevk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325388  |      
+               kontron_pitx_imx8m | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325395  |      
+                       ls1028ardb | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325404  |      
+                     ls1046a-frwy | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325405  |      
+              octavo_osd32mp1_brk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325448  |      
+              octavo_osd32mp1_red | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325450  |      
+                   orangepi_lite2 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325467  |      
+                orangepi_one_plus | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325470  |      
+                qemu_aarch64_ebbr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325496  |      
+                qemu_aarch64_sbsa | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325499  |      
+                    qemu_arm_ebbr | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325507  |      
+             qemu_arm_vexpress_tz | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325518  |      
+               raspberrypi3_qt5we | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325565  | ORPH 
+                raspberrypizero2w | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325572  |      
+             sipeed_licheepi_nano | https://gitlab.com/buildroot.org/buildroot/-/jobs/5829325595  |      
+               snps_arc700_axs101 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834757989  |      
+                 snps_arc700_nsim | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758012  | ORPH 
+                socrates_cyclone5 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758226  |      
+          solidrun_clearfog_gt_8k | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758379  |      
+            solidrun_macchiatobin | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834758777  | ORPH 
+                      ti_am62x_sk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834759284  |      
+                      ti_am64x_sk | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834759411  |      
+              toradex_apalis_imx6 | https://gitlab.com/buildroot.org/buildroot/-/jobs/5834760048  |      
+
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
