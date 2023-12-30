@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A7EBC46CD2
-	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 17:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6CC0C46CD2
+	for <buildroot@archiver.kernel.org>; Sat, 30 Dec 2023 17:56:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 440EA60E3B;
-	Sat, 30 Dec 2023 17:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 440EA60E3B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E68B60AA0;
+	Sat, 30 Dec 2023 17:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E68B60AA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ByAplOqiaatU; Sat, 30 Dec 2023 17:51:35 +0000 (UTC)
+	with ESMTP id i8BM9rX6cXg5; Sat, 30 Dec 2023 17:56:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96C9160AB0;
-	Sat, 30 Dec 2023 17:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96C9160AB0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C109C1BF40B
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 17:51:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B530E60A7D;
+	Sat, 30 Dec 2023 17:56:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B530E60A7D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 62F4D1BF2F8
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 17:56:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 99EDE81E35
- for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 17:51:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99EDE81E35
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38B21410A4
+ for <buildroot@lists.busybox.net>; Sat, 30 Dec 2023 17:56:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38B21410A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u3CIrz_PXoaa for <buildroot@lists.busybox.net>;
- Sat, 30 Dec 2023 17:51:08 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7000481BD6
- for <buildroot@buildroot.org>; Sat, 30 Dec 2023 17:51:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7000481BD6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F1117FF805;
- Sat, 30 Dec 2023 17:51:04 +0000 (UTC)
-Date: Sat, 30 Dec 2023 18:51:04 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20231230185104.2160bea9@windsurf>
-In-Reply-To: <20231230174727.945145-1-fontaine.fabrice@gmail.com>
-References: <20231230174727.945145-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1703958665;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mmwV7HyCLg/seRFT1S1pSOR18+1ZQX/uc5zUjoPrYto=;
- b=DzicAl5y8IuUyb1as27nhgXAKQ8GiSSupIHPgCRTiAthUVyKqNvje6AE2tQh6MmnHnir/L
- paJ/f/r7PQvL1xzHApLcDdINaLfoj6bDj3CAig93ZmEs7xcRYu/QKQwKet5cmC4hSN3L5h
- vhZIrRymNoAy4nw51baQZEvr3Xt29Tsva8LhD6Dj6aPl+Z9QcFz79RiypSX2abkb9Doevb
- 6SqGylnU4qAnt+MhWkKefLwZhCysfqFVD3CvlZzw0+r5gxHi+eKDUXcE2bj4C4zGjSCBlt
- 1NUwKNr5g16dYrnJpiFn5q3YbFvqc16Q3dMJs0eFzlsiWHZXw6vAFRq3y5kQFg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DzicAl5y
-Subject: Re: [Buildroot] [PATCH 1/1] package/libhttpserver: bump to version
- 0.19.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o9YlxhnJKvgh for <buildroot@lists.busybox.net>;
+ Sat, 30 Dec 2023 17:56:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53DAE409C9
+ for <buildroot@buildroot.org>; Sat, 30 Dec 2023 17:56:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53DAE409C9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3C05F839A8; Sat, 30 Dec 2023 17:56:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 30 Dec 2023 18:51:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 699888a49ba14873408bc6dbb34f56d2c29c3692
+X-Git-Newrev: 091036dc84c580691e77100f456d24f3e58337ec
+X-Patchwork-Hint: ignore
+Message-Id: <20231230175629.3C05F839A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/upx: bump to version 4.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,34 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Stephan Hoffmann <sho@relinux.de>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 30 Dec 2023 18:47:27 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=091036dc84c580691e77100f456d24f3e58337ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> C++17 is mandatory since
-> https://github.com/etr/libhttpserver/commit/17772843eac42bbd15e13659f96596d59e622872
-> 
-> https://github.com/etr/libhttpserver/releases/tag/0.19.0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libhttpserver/Config.in          | 6 +++---
->  package/libhttpserver/libhttpserver.hash | 2 +-
->  package/libhttpserver/libhttpserver.mk   | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+https://github.com/upx/upx/blob/v4.2.1/NEWS
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/upx/upx.hash | 2 +-
+ package/upx/upx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/upx/upx.hash b/package/upx/upx.hash
+index 072bc0656e..545eb29af9 100644
+--- a/package/upx/upx.hash
++++ b/package/upx/upx.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  0582f78b517ea87ba1caa6e8c111474f58edd167e5f01f074d7d9ca2f81d47d0  upx-4.1.0-src.tar.xz
++sha256  cc562ea7dbd8cec4505edea68736e04030ec5891c1e2a300e3c0d0eac6364479  upx-4.2.1-src.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index 0a0e9086e5..d6c068fc3b 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPX_VERSION = 4.1.0
++UPX_VERSION = 4.2.1
+ UPX_SITE = https://github.com/upx/upx/releases/download/v$(UPX_VERSION)
+ UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
+ UPX_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
