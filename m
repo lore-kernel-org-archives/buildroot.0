@@ -4,60 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 666A0C3DA6E
-	for <buildroot@archiver.kernel.org>; Sun, 31 Dec 2023 17:35:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7517FC3DA6E
+	for <buildroot@archiver.kernel.org>; Sun, 31 Dec 2023 17:36:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1009A404FC;
-	Sun, 31 Dec 2023 17:35:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1009A404FC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12DBF40477;
+	Sun, 31 Dec 2023 17:36:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12DBF40477
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y9GcuwqWcFOB; Sun, 31 Dec 2023 17:35:50 +0000 (UTC)
+	with ESMTP id IpBu5XznhRVb; Sun, 31 Dec 2023 17:36:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8394A40518;
-	Sun, 31 Dec 2023 17:35:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8394A40518
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 82EB21BF3EB
- for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 17:35:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A90894055D;
+	Sun, 31 Dec 2023 17:36:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A90894055D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EE521BF3EB
+ for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 17:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C45E81063
+ by smtp2.osuosl.org (Postfix) with ESMTP id EAC23404D5
  for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 17:35:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C45E81063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAC23404D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8z87CAdXFZNO for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id piFFryaaccWv for <buildroot@lists.busybox.net>;
  Sun, 31 Dec 2023 17:35:19 +0000 (UTC)
-X-Greylist: delayed 540 seconds by postgrey-1.37 at util1.osuosl.org;
- Sun, 31 Dec 2023 17:35:18 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DC9380FB2
 Received: from helium.openadk.org (helium.openadk.org
  [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9DC9380FB2
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 049A040477
  for <buildroot@buildroot.org>; Sun, 31 Dec 2023 17:35:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 049A040477
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 4589A352100A; Sun, 31 Dec 2023 18:26:22 +0100 (CET)
+ id 53DA83520FA6; Sun, 31 Dec 2023 18:26:21 +0100 (CET)
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Sun, 31 Dec 2023 18:25:35 +0100
-Message-Id: <20231231172538.1279608-4-wbx@openadk.org>
+Date: Sun, 31 Dec 2023 18:25:34 +0100
+Message-Id: <20231231172538.1279608-3-wbx@openadk.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231231172538.1279608-1-wbx@openadk.org>
 References: <20231231172538.1279608-1-wbx@openadk.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1704043582; bh=f7q2FTXgZhB+rpuPTlCWnaGzXouoWr7DjZuWgaFJ6CA=;
+ t=1704043581; bh=9ohCXCYdumkCzca66M55f7h07QteIqxVqAjT41Bl68U=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=FNTxPxD91lhSGYlOOFybsLMDyYpGN5V7b84WBKfqWeJj1pmgFS4e0u96VNqMq8Gtj
- ZU2j9XigU5AYMiREcBKv+vhiIygs5wXxt9se4hsJH6vwq8FW6+eHECOBLFuXe9nHl4
- TLzBN9hEhhVJQRgTMEXzNW+YnxMWRZHbGVkPHDZYuAWKVMbtG3vZAlGndGuwxaVPKc
- Irztc1VS0DxdAb4kyMiKklOEsa6KyIkm1mte5m3bDxilGPTgufFB8NKVz4Ifat548c
- Blu4932IvYu6cAC26F6NRtHQpCTZiTzUspdiX2zOQsp48OsC/q8rhNemmo8f3sA0LV
- 1dzBErBxHSrQg==
-Subject: [Buildroot] [PATCH 3/6] package/gdb: remove special arc version
+ b=mxhmHEADRRqgx72I0SSTH3BvMLOMeoayTuG837ONI0bZZo/NEjU+6tpZWv13TCV7D
+ ivc2OfBg8Ew0bcycl073ElJ2kSac/AZh1EF6Ke38Z7CoOLuxoJMA6QwLxIByJ/kutG
+ rLrnzBHcF4z2iyhQelpzRadruh5tpMX+nDLjARgyPMT9h2JaZ53kSnZON/2+4nMUjB
+ ex0FlII5NA+LHCyZ4f8F8uB7n0eoBox3G9PxVhtvGw49p8CTFCF77AyFgCj6VNkbMW
+ tObaCm+cQaDS+qBm9OaGlcS2eTGBVQwIlx5n5QVJr+wS7xsqYHh73wA0Ro5lOhKSNI
+ D7A41FWVXWgsg==
+Subject: [Buildroot] [PATCH 2/6] package/binutils: remove special arc version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,230 +78,398 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/gdb/Config.in.host                    |   3 -
- ...t-define-basic_string_view-to_string.patch | 114 ------------------
- package/gdb/gdb.hash                          |   3 -
- package/gdb/gdb.mk                            |  23 +---
- 4 files changed, 2 insertions(+), 141 deletions(-)
- delete mode 100644 package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+ package/binutils/Config.in.host               |   9 +-
+ .../0001-poison-system-directories.patch      | 310 ------------------
+ package/binutils/binutils.hash                |   3 -
+ package/binutils/binutils.mk                  |  10 -
+ 4 files changed, 1 insertion(+), 331 deletions(-)
+ delete mode 100644 package/binutils/arc-2020.09-release/0001-poison-system-directories.patch
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index da35fd94f7..69b13e9eb0 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -35,14 +35,12 @@ config BR2_PACKAGE_HOST_GDB_PYTHON3
- 
- config BR2_PACKAGE_HOST_GDB_SIM
- 	bool "Simulator support"
--	depends on !BR2_arc
- 	help
- 	  This option enables the simulator support in the cross gdb.
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index bc7dc4443c..7f76e45a70 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -10,8 +10,7 @@ config BR2_PACKAGE_BINUTILS_HAS_NO_LIBSFRAME
  
  choice
- 	prompt "GDB debugger Version"
- 	default BR2_GDB_VERSION_13
--	depends on !BR2_arc
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_40_X if !BR2_arc
+-	default BR2_BINUTILS_VERSION_ARC if BR2_arc
++	default BR2_BINUTILS_VERSION_2_40_X
  	help
- 	  Select the version of gdb you wish to use.
+ 	  Select the version of binutils you wish to use.
  
-@@ -62,7 +60,6 @@ endif
- # If cross-gdb is not enabled, the latest stable version is chosen.
- config BR2_GDB_VERSION
+@@ -25,16 +24,10 @@ config BR2_BINUTILS_VERSION_2_40_X
+ config BR2_BINUTILS_VERSION_2_41_X
+ 	bool "binutils 2.41"
+ 
+-config BR2_BINUTILS_VERSION_ARC
+-	bool "binutils arc (2.34.50)"
+-	depends on BR2_arc
+-	select BR2_PACKAGE_BINUTILS_HAS_NO_LIBSFRAME
+-
+ endchoice
+ 
+ config BR2_BINUTILS_VERSION
  	string
--	default "arc-2020.09-release-gdb" if BR2_arc
- 	default "12.1"     if BR2_GDB_VERSION_12
- 	default "13.2"     if BR2_GDB_VERSION_13 || !BR2_PACKAGE_HOST_GDB
- 	# When making 14.x the default, or 14.x becomes the oldest version,
-diff --git a/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch b/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+-	default "arc-2020.09-release"	if BR2_BINUTILS_VERSION_ARC
+ 	default "2.39"		if BR2_BINUTILS_VERSION_2_39_X
+ 	default "2.40"		if BR2_BINUTILS_VERSION_2_40_X
+ 	default "2.41"		if BR2_BINUTILS_VERSION_2_41_X
+diff --git a/package/binutils/arc-2020.09-release/0001-poison-system-directories.patch b/package/binutils/arc-2020.09-release/0001-poison-system-directories.patch
 deleted file mode 100644
-index 210ba6d609..0000000000
---- a/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+index 7a76ef2963..0000000000
+--- a/package/binutils/arc-2020.09-release/0001-poison-system-directories.patch
 +++ /dev/null
-@@ -1,114 +0,0 @@
--From 5ac588997c3c2d032d5d5145d9245eb37354c23b Mon Sep 17 00:00:00 2001
--From: Tom Tromey <tromey@adacore.com>
--Date: Tue, 30 Jun 2020 07:53:03 -0600
--Subject: [PATCH] Do not define basic_string_view::to_string
+@@ -1,310 +0,0 @@
+-From 5f62ad7ce534e3384d6ed8892614979da297bd70 Mon Sep 17 00:00:00 2001
+-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+-Date: Mon, 14 Oct 2019 16:45:15 +0300
+-Subject: [PATCH] [PATCH] poison-system-directories
 -
--gdb's copy of basic_string_view includes a to_string method.  However,
--according to cppreference, this is not a method on the real
--std::basic_string_view:
+-Patch adapted to arc-binutils-gdb-2019.09
+-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
 -
--https://en.cppreference.com/w/cpp/string/basic_string_view
+-Patch adapted to binutils 2.23.2 and extended to use
+-BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
 -
--This difference matters because gdb_string_view.h will use the
--standard implementation when built with a C++17 or later.  This caused
--PR build/26183.
+-[Romain: rebase on top of 2.26]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-[Gustavo: adapt to binutils 2.25]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--This patch fixes the problem by changing the method to be a standalone
--helper function, and then rewriting the uses.  Tested by rebuilding
--with a version of GCC that defaults to C++17.
+-Upstream-Status: Inappropriate [distribution: codesourcery]
 -
--(Note that the build still is not clean; and also I noticed that the
--libstdc++ string_view forbids the use of nullptr ... I wonder if gdb
--violates that.)
+-Patch originally created by Mark Hatle, forward-ported to
+-binutils 2.21 by Scott Garman.
 -
--gdb/ChangeLog
--2020-06-30  Tom Tromey  <tromey@adacore.com>
+-purpose:  warn for uses of system directories when cross linking
 -
--	PR build/26183:
--	* ada-lang.c (ada_lookup_name_info::ada_lookup_name_info): Use
--	gdb::to_string.
+-Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
 -
--gdbsupport/ChangeLog
--2020-06-30  Tom Tromey  <tromey@adacore.com>
+-2008-07-02  Joseph Myers  <joseph@codesourcery.com>
 -
--	PR build/26183:
--	* gdb_string_view.h (basic_string_view::to_string): Remove.
--	(gdb::to_string): New function.
+-    ld/
+-    * ld.h (args_type): Add error_poison_system_directories.
+-    * ld.texinfo (--error-poison-system-directories): Document.
+-    * ldfile.c (ldfile_add_library_path): Check
+-    command_line.error_poison_system_directories.
+-    * ldmain.c (main): Initialize
+-    command_line.error_poison_system_directories.
+-    * lexsup.c (enum option_values): Add
+-    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
+-    (ld_options): Add --error-poison-system-directories.
+-    (parse_args): Handle new option.
 -
--Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=5ac588997c3c2d032d5d5145d9245eb37354c23b
--Bug report: https://sourceware.org/bugzilla/show_bug.cgi?id=26183
+-2007-06-13  Joseph Myers  <joseph@codesourcery.com>
 -
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+-    ld/
+-    * config.in: Regenerate.
+-    * ld.h (args_type): Add poison_system_directories.
+-    * ld.texinfo (--no-poison-system-directories): Document.
+-    * ldfile.c (ldfile_add_library_path): Check
+-    command_line.poison_system_directories.
+-    * ldmain.c (main): Initialize
+-    command_line.poison_system_directories.
+-    * lexsup.c (enum option_values): Add
+-    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
+-    (ld_options): Add --no-poison-system-directories.
+-    (parse_args): Handle new option.
+-
+-2007-04-20  Joseph Myers  <joseph@codesourcery.com>
+-
+-    Merge from Sourcery G++ binutils 2.17:
+-
+-    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
+-    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
+-    ld/
+-    * configure.ac (--enable-poison-system-directories): New option.
+-    * configure, config.in: Regenerate.
+-    * ldfile.c (ldfile_add_library_path): If
+-    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
+-    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
+-
+-Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
+-Signed-off-by: Scott Garman <scott.a.garman@intel.com>
 ----
-- gdb/ChangeLog                |  6 ++++++
-- gdb/ada-lang.c               |  8 ++++----
-- gdbsupport/ChangeLog         |  6 ++++++
-- gdbsupport/gdb_string_view.h | 17 ++++++++++-------
-- 4 files changed, 26 insertions(+), 11 deletions(-)
+- ld/config.in    |  3 +++
+- ld/configure    | 14 ++++++++++++++
+- ld/configure.ac | 10 ++++++++++
+- ld/ld.h         |  8 ++++++++
+- ld/ld.texi      | 12 ++++++++++++
+- ld/ldfile.c     | 17 +++++++++++++++++
+- ld/ldlex.h      |  2 ++
+- ld/ldmain.c     |  2 ++
+- ld/lexsup.c     | 21 +++++++++++++++++++++
+- 9 files changed, 89 insertions(+)
 -
--diff --git a/gdb/ada-lang.c b/gdb/ada-lang.c
--index 9b0c2efbfe2..98508c168bc 100644
----- a/gdb/ada-lang.c
--+++ b/gdb/ada-lang.c
--@@ -13553,10 +13553,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
+-diff --git a/ld/config.in b/ld/config.in
+-index d93c9b08300..5da2742beac 100644
+---- a/ld/config.in
+-+++ b/ld/config.in
+-@@ -31,6 +31,9 @@
+-    language is requested. */
+- #undef ENABLE_NLS
+- 
+-+/* Define to warn for use of native system library directories */
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+
+- /* Additional extension a shared object might have. */
+- #undef EXTRA_SHLIB_EXTENSION
+- 
+-diff --git a/ld/configure b/ld/configure
+-index 2d6ca5c0445..563f9921f7f 100755
+---- a/ld/configure
+-+++ b/ld/configure
+-@@ -823,6 +823,7 @@ with_lib_path
+- enable_targets
+- enable_64_bit_bfd
+- with_sysroot
+-+enable_poison_system_directories
+- enable_gold
+- enable_got
+- enable_compressed_debug_sections
+-@@ -1487,6 +1488,8 @@ Optional Features:
+-   --disable-largefile     omit support for large files
+-   --enable-targets        alternative target configurations
+-   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
+-+  --enable-poison-system-directories
+-+                          warn for use of native system library directories
+-   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
+-   --enable-got=<type>     GOT handling scheme (target, single, negative,
+-                           multigot)
+-@@ -15804,7 +15807,18 @@ else
+- fi
+- 
+- 
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
+-+fi
+-+
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+- 
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+-+
+-+fi
+- 
+- # Check whether --enable-got was given.
+- if test "${enable_got+set}" = set; then :
+-diff --git a/ld/configure.ac b/ld/configure.ac
+-index 41a51bbb7e9..dbaa98a9e17 100644
+---- a/ld/configure.ac
+-+++ b/ld/configure.ac
+-@@ -94,6 +94,16 @@ AC_SUBST(use_sysroot)
+- AC_SUBST(TARGET_SYSTEM_ROOT)
+- AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
+- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+         AS_HELP_STRING([--enable-poison-system-directories],
+-+                [warn for use of native system library directories]),,
+-+         [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+       [1],
+-+       [Define to warn for use of native system library directories])
+-+fi
+-+
+- dnl Use --enable-gold to decide if this linker should be the default.
+- dnl "install_as_default" is set to false if gold is the default linker.
+- dnl "installed_linker" is the installed BFD linker name.
+-diff --git a/ld/ld.h b/ld/ld.h
+-index 55078a9637b..511e9bc34b7 100644
+---- a/ld/ld.h
+-+++ b/ld/ld.h
+-@@ -180,6 +180,14 @@ typedef struct
+-      in the linker script.  */
+-   bfd_boolean force_group_allocation;
+- 
+-+  /* If TRUE (the default) warn for uses of system directories when
+-+     cross linking.  */
+-+  bfd_boolean poison_system_directories;
+-+
+-+  /* If TRUE (default FALSE) give an error for uses of system
+-+     directories when cross linking instead of a warning.  */
+-+  bfd_boolean error_poison_system_directories;
+-+
+-   /* Big or little endian as set on command line.  */
+-   enum endian_enum endian;
+- 
+-diff --git a/ld/ld.texi b/ld/ld.texi
+-index fcbc335c95e..6ba7ebdb32a 100644
+---- a/ld/ld.texi
+-+++ b/ld/ld.texi
+-@@ -2557,6 +2557,18 @@ string identifying the original linked file does not change.
+- 
+- Passing @code{none} for @var{style} disables the setting from any
+- @code{--build-id} options earlier on the command line.
+-+
+-+@kindex --no-poison-system-directories
+-+@item --no-poison-system-directories
+-+Do not warn for @option{-L} options using system directories such as
+-+@file{/usr/lib} when cross linking.  This option is intended for use
+-+in chroot environments when such directories contain the correct
+-+libraries for the target system rather than the host.
+-+
+-+@kindex --error-poison-system-directories
+-+@item --error-poison-system-directories
+-+Give an error instead of a warning for @option{-L} options using
+-+system directories when cross linking.
+- @end table
+- 
+- @c man end
+-diff --git a/ld/ldfile.c b/ld/ldfile.c
+-index 7f60319390e..0bcc06db964 100644
+---- a/ld/ldfile.c
+-+++ b/ld/ldfile.c
+-@@ -116,6 +116,23 @@ ldfile_add_library_path (const char *name, bfd_boolean cmdline)
+-     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
+-   else
+-     new_dirs->name = xstrdup (name);
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (command_line.poison_system_directories
+-+  && ((!strncmp (name, "/lib", 4))
+-+      || (!strncmp (name, "/usr/lib", 8))
+-+      || (!strncmp (name, "/usr/local/lib", 14))
+-+      || (!strncmp (name, "/usr/X11R6/lib", 14))))
+-+   {
+-+     if (command_line.error_poison_system_directories)
+-+       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+-+            "cross-compilation\n"), name);
+-+     else
+-+       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+-+            "cross-compilation\n"), name);
+-+   }
+-+#endif
+-+
+- }
+- 
+- /* Try to open a BFD for a lang_input_statement.  */
+-diff --git a/ld/ldlex.h b/ld/ldlex.h
+-index 32a7a6409e8..c02b64bf92f 100644
+---- a/ld/ldlex.h
+-+++ b/ld/ldlex.h
+-@@ -152,6 +152,8 @@ enum option_values
+-   OPTION_NO_PRINT_MAP_DISCARDED,
+-   OPTION_NON_CONTIGUOUS_REGIONS,
+-   OPTION_NON_CONTIGUOUS_REGIONS_WARNINGS,
+-+  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+-+  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
+- };
+-
+- 
+- /* The initial parser states.  */
+-diff --git a/ld/ldmain.c b/ld/ldmain.c
+-index 34c19223137..66d2c3f4bcf 100644
+---- a/ld/ldmain.c
+-+++ b/ld/ldmain.c
+-@@ -270,6 +270,8 @@ main (int argc, char **argv)
+-   command_line.warn_mismatch = TRUE;
+-   command_line.warn_search_mismatch = TRUE;
+-   command_line.check_section_addresses = -1;
+-+  command_line.poison_system_directories = TRUE;
+-+  command_line.error_poison_system_directories = FALSE;
+- 
+-   /* We initialize DEMANGLING based on the environment variable
+-      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
+-diff --git a/ld/lexsup.c b/ld/lexsup.c
+-index 1c15ac29c0c..8b714e10a40 100644
+---- a/ld/lexsup.c
+-+++ b/ld/lexsup.c
+-@@ -549,6 +549,14 @@ static const struct ld_option ld_options[] =
+-   { {"no-print-map-discarded", no_argument, NULL, OPTION_NO_PRINT_MAP_DISCARDED},
+-     '\0', NULL, N_("Do not show discarded sections in map file output"),
+-     TWO_DASHES },
+-+  { {"no-poison-system-directories", no_argument, NULL,
+-+    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
+-+    '\0', NULL, N_("Do not warn for -L options using system directories"),
+-+    TWO_DASHES },
+-+  { {"error-poison-system-directories", no_argument, NULL,
+-+    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+-+    '\0', NULL, N_("Give an error for -L options using system directories"),
+-+    TWO_DASHES },
+- };
+- 
+- #define OPTION_COUNT ARRAY_SIZE (ld_options)
+-@@ -561,6 +569,7 @@ parse_args (unsigned argc, char **argv)
+-   int ingroup = 0;
+-   char *default_dirlist = NULL;
+-   char *shortopts;
+-+  char *BR_paranoid_env;
+-   struct option *longopts;
+-   struct option *really_longopts;
+-   int last_optind;
+-@@ -1549,6 +1558,14 @@ parse_args (unsigned argc, char **argv)
+- 	  }
+- 	  break;
+- 
+-+	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
+-+	  command_line.poison_system_directories = FALSE;
+-+	  break;
+-+
+-+	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+-+	  command_line.error_poison_system_directories = TRUE;
+-+	  break;
+-+
+- 	case OPTION_PUSH_STATE:
+- 	  input_flags.pushed = xmemdup (&input_flags,
+- 					sizeof (input_flags),
+-@@ -1600,6 +1617,10 @@ parse_args (unsigned argc, char **argv)
+-       command_line.soname = NULL;
+-     }
+- 
+-+  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+-+    command_line.error_poison_system_directories = TRUE;
+-+
+-   while (ingroup)
 -     {
--       if (user_name.back () == '>')
-- 	m_encoded_name
---	  = user_name.substr (1, user_name.size () - 2).to_string ();
--+	  = gdb::to_string (user_name.substr (1, user_name.size () - 2));
--       else
-- 	m_encoded_name
---	  = user_name.substr (1, user_name.size () - 1).to_string ();
--+	  = gdb::to_string (user_name.substr (1, user_name.size () - 1));
--       m_encoded_p = true;
--       m_verbatim_p = true;
--       m_wild_match_p = false;
--@@ -13575,10 +13575,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
-- 	  if (encoded != NULL)
-- 	    m_encoded_name = encoded;
-- 	  else
---	    m_encoded_name = user_name.to_string ();
--+	    m_encoded_name = gdb::to_string (user_name);
-- 	}
--       else
---	m_encoded_name = user_name.to_string ();
--+	m_encoded_name = gdb::to_string (user_name);
-- 
--       /* Handle the 'package Standard' special case.  See description
-- 	 of m_standard_p.  */
--diff --git a/gdbsupport/gdb_string_view.h b/gdbsupport/gdb_string_view.h
--index c0ae7a8a2d9..65124e67e54 100644
----- a/gdbsupport/gdb_string_view.h
--+++ b/gdbsupport/gdb_string_view.h
--@@ -245,13 +245,6 @@ namespace gdb {
-- 	  return { this->_M_str, this->_M_len };
-- 	}
-- 
---      template<typename _Allocator = std::allocator<_CharT>>
---	std::basic_string<_CharT, _Traits, _Allocator>
---	to_string(const _Allocator& __alloc = _Allocator()) const
---	{
---	  return { this->_M_str, this->_M_len, __alloc };
---	}
---
--       size_type
--       copy(_CharT* __str, size_type __n, size_type __pos = 0) const
--       {
--@@ -560,4 +553,14 @@ namespace gdb {
-- 
-- #endif // __cplusplus < 201703L
-- 
--+namespace gdb {
--+
--+static inline std::string
--+to_string(const gdb::string_view &view)
--+{
--+  return { view.data (), view.size () };
--+}
--+
--+}
--+
-- #endif /* COMMON_GDB_STRING_VIEW_H */
+-       einfo (_("%P: missing --end-group; added as last command line option\n"));
 --- 
--2.39.3
+-2.16.2
 -
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index ba90bff5d6..bdc236daf3 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -4,6 +4,3 @@ sha512  07e9026423438049b11f4f784d57401ece4e940570f613bd6958b3714fe7fbc2c048470b
- sha512  425568d2e84672177d0fb87b1ad7daafdde097648d605e30cf0656970f66adc6a82ca2d83375ea4be583e9683a340e5bfdf5819668ddf66728200141ae50ff2d  gdb-12.1.tar.xz
- sha512  8185d3e11ab60dafff5860a5016577bfe7dd7547ef01ebc867bc247603d82b74ff74c4f29492c7d2aee57076f52be33e289f4c6b414a4b870d4b3004909f4c34  gdb-13.2.tar.xz
- sha512  575e198105076fc4a88f68591aa114ab9c1196e84386a3f7b9b58fe5f30cdeed33f6a5f957b68f08c47284ec922bb60c964627e238471419673fd913575ce427  gdb-14.1.tar.xz
--
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 564a4c3bd7..f71a238517 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -3,9 +3,6 @@ sha512  68e038f339a8c21faa19a57bbc447a51c817f47c2e06d740847c6e9cc3396c025d35d536
+ sha512  a37e042523bc46494d99d5637c3f3d8f9956d9477b748b3b1f6d7dfbb8d968ed52c932e88a4e946c6f77b8f48f1e1b360ca54c3d298f17193f3b4963472f6925  binutils-2.40.tar.xz
+ sha512  5df45d0bd6ddabdce4f35878c041e46a92deef01e7dea5facc97fd65cc06b59abc6fba0eb454b68e571c7e14038dc823fe7f2263843e6e627b7444eaf0fe9374  binutils-2.41.tar.xz
+ 
 -# Locally calculated (fetched from Github)
--sha512  5a2acf2fd33ab2ff589e1037ca40abda54328997dcff26b2b49b874bd3be980be5a63342962254f3c3bda98e32ce7a33af704d37353352833dee193135600458  gdb-arc-2020.09-release-gdb.tar.gz
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index af40f7f986..26695b2cd4 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -8,12 +8,6 @@ GDB_VERSION = $(call qstrip,$(BR2_GDB_VERSION))
- GDB_SITE = $(BR2_GNU_MIRROR)/gdb
- GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
- 
+-sha512  76a8227a19218435319c660e4983ea17985194b7f496f163e97543e7f6fd3e9249241fdc05a16ba512fba96a1d846c1f7b080983404d821d6215f10e7f11e238  binutils-gdb-arc-2020.09-release.tar.gz
+-
+ # locally computed
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
+ sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 4bc1b69fa0..73d15b6102 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -8,19 +8,9 @@
+ # If not, we do like other packages
+ BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+ ifeq ($(BINUTILS_VERSION),)
 -ifeq ($(BR2_arc),y)
--GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
--GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
--GDB_FROM_GIT = y
+-BINUTILS_VERSION = arc-2020.09-release
+-else
+ BINUTILS_VERSION = 2.40
+-endif
+ endif # BINUTILS_VERSION
+ 
+-ifeq ($(BINUTILS_VERSION),arc-2020.09-release)
+-BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
+-BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
+-BINUTILS_FROM_GIT = y
 -endif
 -
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- GDB_CPE_ID_VENDOR = gnu
-@@ -56,11 +50,8 @@ GDB_DEPENDENCIES += host-flex host-bison
- HOST_GDB_DEPENDENCIES += host-flex host-bison
- endif
- 
--# All newer versions of GDB need host-gmp, so it's only for older
--# versions that the dependency can be avoided.
--ifeq ($(BR2_arc),)
-+# All newer versions of GDB need host-gmp
- HOST_GDB_DEPENDENCIES += host-gmp
--endif
- 
- # When gdb sources are fetched from the binutils-gdb repository, they
- # also contain the binutils sources, but binutils shouldn't be built,
-@@ -158,13 +149,10 @@ GDB_CONF_OPTS += \
- endif
- 
- # Starting from GDB 11.x, gmp is needed as a dependency to build full
--# gdb. So we avoid the dependency only for the special version used on
--# ARC.
--ifeq ($(BR2_arc):$(BR2_PACKAGE_GDB_DEBUGGER),:y)
-+# gdb.
- GDB_CONF_OPTS += \
- 	--with-libgmp-prefix=$(STAGING_DIR)/usr
- GDB_DEPENDENCIES += gmp
--endif
- 
- # Starting from GDB 14.x, mpfr is needed as a dependency to build full
- # gdb.
-@@ -182,13 +170,6 @@ else
- GDB_CONF_OPTS += --disable-gdbserver
- endif
- 
--# When gdb is built as C++ application for ARC it segfaults at runtime
--# So we pass --disable-build-with-cxx config option to force gdb not to
--# be built as C++ app.
--ifeq ($(BR2_arc),y)
--GDB_CONF_OPTS += --disable-build-with-cxx
--endif
--
- # gdb 7.12+ by default builds with a C++ compiler, which doesn't work
- # when we don't have C++ support in the toolchain
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
+ BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
+ BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
 -- 
 2.30.2
 
