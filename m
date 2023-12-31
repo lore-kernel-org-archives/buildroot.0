@@ -1,63 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15C29C3DA6E
-	for <buildroot@archiver.kernel.org>; Sun, 31 Dec 2023 06:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90B88C3DA6E
+	for <buildroot@archiver.kernel.org>; Sun, 31 Dec 2023 09:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77F3E41523;
-	Sun, 31 Dec 2023 06:46:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77F3E41523
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C68160783;
+	Sun, 31 Dec 2023 09:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C68160783
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yfh1vd7ZIJYj; Sun, 31 Dec 2023 06:46:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JhnNdZxH0hMX; Sun, 31 Dec 2023 09:26:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F3944156C;
-	Sun, 31 Dec 2023 06:46:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F3944156C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42CA41BF3FF
- for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 06:46:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41FAA607C0;
+	Sun, 31 Dec 2023 09:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41FAA607C0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BF5BC1BF40B
+ for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 09:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6CAA82142
- for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 06:46:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6CAA82142
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9453540471
+ for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 09:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9453540471
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LKjh49I_Di4P for <buildroot@lists.busybox.net>;
- Sun, 31 Dec 2023 06:46:01 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C227E82140
- for <buildroot@buildroot.org>; Sun, 31 Dec 2023 06:46:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C227E82140
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 50FD9240006
- for <buildroot@buildroot.org>; Sun, 31 Dec 2023 06:45:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yyryiXyA2cQJ for <buildroot@lists.busybox.net>;
+ Sun, 31 Dec 2023 09:26:02 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B725E400FE
+ for <buildroot@buildroot.org>; Sun, 31 Dec 2023 09:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B725E400FE
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 5707DB0055A;
+ Sun, 31 Dec 2023 10:25:52 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 31 Dec 2023 10:25:52 +0100
+Date: Sun, 31 Dec 2023 10:25:52 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZZEzoC30PnpTgqLa@landeda>
+References: <20231228152657.488457-1-antoine.coutant@smile.fr>
+ <20231228152657.488457-2-antoine.coutant@smile.fr>
+ <ZY9Ej76T9DYHuLe3@landeda> <20231230190019.434e1b4b@windsurf>
+ <ZZBzIdHGdJufQNWn@landeda>
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Sun, 31 Dec 2023 06:45:57 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20231231064602.C6CAA82142@smtp1.osuosl.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1704005157; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=bcJMrDKGz/vmHwhVumiTONRn6yTQmkrm9aUwMdbnZaQ=;
- b=En2FkwrL8ZE3QrDy0LBQB/SLOFF/eN3AWZc3nHJs1YGjfK9Z/n39l3AJjq0AkWFu3ks4nI
- lFgNlvRpVbTcjwtndrLc1/wVDeBvZFY3acp3di+Rc9k04CB/jBNJlYWxylIAg32nsUoLLH
- SwTvElCnRw+jLE+urhw+Jze6mijPaAgQKZYKHIEHLMYgMcKYp25dNoi7ve+IOKlws5Yu9i
- ij2LITGnyFF/udgzIbFxgaLT2+/FIg/aHhw+JZfaBzfFSnrxdx+p8P5E2M14PmGybhm2qf
- Su/XHWnQQDvrrGRTkrnn5K79iPjU+w1uY/vaVn0L2iibhVkEYnedK9GXf/6D7g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=En2FkwrL
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-12-30
+Content-Disposition: inline
+In-Reply-To: <ZZBzIdHGdJufQNWn@landeda>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1704014759;
+ bh=VAHpR/fFWXzeprqJ32kKhQ5Bbzp5GB9A0mqvMZNXdow=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=MuxbsWESGA1jqol7d/eHjS0qKKkjMZcOIfvoAHL9m5C2PUhkBEEdBKugINkxWRMKN
+ mR9LLtM5QG7GexqKQ1mw6eEm6M3rKfUnMe/Csfu7v434Yx29L7/AzXZPO1lMg+ZnAN
+ C2g5un3Mp96gKToHoyvL3B39O3nszBxZCsWCR/3qgKKgU3bSAvTXfp3sCDxBg2iUH/
+ CIXreAq26oiueAunCglMNIscOGgFuM7+39PWUH42J+HiMb/DKzZoRzXt9IWWmGWlK7
+ e3nizWu6cEWN4Qu6/as/AHd+w5JDvHKbPhB9cxote6LYUtxOwonOggFujnrNZRBxm4
+ DmKGOGNCfF0qQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=MuxbsWES
+Subject: Re: [Buildroot] [PATCH v2 2/3] package/ripgrep: bump to version
+ 14.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,118 +78,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, sebastian.weyer@smile.fr,
+ Antoine Coutant <antoine.coutant@smile.fr>,
+ James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org,
+ romain.naour@smile.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Thomas, Antoine, All,
 
-Autobuild statistics for 2023-12-30
-===================================
++James and Eric fr their previous work on the rust side
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  6  |  3  |  0  |  9  |
-  2023.08.x  |  3  |  5  |  0  |  8  |
-    master   |  9  | 22  |  0  | 31  |
+On 2023-12-30 20:44 +0100, Yann E. MORIN spake thusly:
+> On 2023-12-30 19:00 +0100, Thomas Petazzoni via buildroot spake thusly:
+> > On Fri, 29 Dec 2023 23:13:35 +0100
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > Note that I also encountered some hash mismatch on some Rust/Cargo
+> > package recently, and BR was falling back to sources.buildroot.net. I
+> > did not have the time to investigate at the time (I was looking into
+> > another issue, and didn't want to enter an infinite recursion of
+> > problem solving quest). And now, I don't remember with which package I
+> > encountered this. But yes, it seems like we have a reproducibility
+> > issue.
+> So, I tested with commit b7938d2, i.e. before the rust version bump, and
+> ripgrep already has a hash issue:
+>     ERROR: ripgrep-af6b6c543b224d348a8876f0c06245d9ea7929c5.tar.gz has wrong sha256 hash:
+>     ERROR: expected: 6f1d4a8b653ce48d59ad777288b1257cbda607db29db19d031b7e622c60526f8
+>     ERROR: got     : 9d9769e45ffe6089f58bc19fa39dd6b6299aa0c3ad90508d21dfa27a3d3416d5
 
-Classification of failures by reason for master
------------------------------------------------
+I took some time to try and pinpoint the issue. Alas, I have no clue,
+just more questions.
 
-                       unknown | 3 
-              libopenssl-3.2.0 | 2 
-  binutils-arc-2020.09-release | 1 
-check-11970a7e112dfe243a2e6... | 1 
-                 dc3dd-7.2.641 | 1 
-                elfutils-0.189 | 1 
-                     exim-4.97 | 1 
-                    fcft-3.1.6 | 1 
-              fluent-bit-2.1.7 | 1 
-glibc-2.38-27-g750a45a78390... | 1 
-                   gupnp-1.4.3 | 1 
-                host-go-1.21.5 | 1 
-              host-rust-1.71.1 | 1 
-ibm-sw-tpm2-5452af422edeff7... | 1 
-         libmodsecurity-3.0.11 | 1 
-                libxmlpp-5.0.2 | 1 
- Makefile:727: target-finalize | 1 
-                    pppd-2.5.0 | 1 
-                xenomai-3.0.10 | 1 
+I first tried to reproduce the original hash for ripgrep, i.e. when it
+was converted over to the cargo infra, commit 342fd3e735. But that fails
+to build because of an unrelated issue in the package infra, which was
+fixed a few commits later, e27a700f3e.
 
+And on that commit, it fails to reproduce a valid hash here: the hash I
+got was again something else totally:
+    ERROR: got     : 37d14c1eecb24e5b921c3b0e8a22ed93501db6f7aa4d0732d6be03dfc8647f77
 
-Detail of failures for master
------------------------------
+This is very troubling. My system is a Fedora 39 recently installed on
+my new laptop. What about I try and reproduce on an older system that
+was current back when ripgrep was converted? So I used that old Ubuntu
+16.04 that lies around, and there, miracle, the hash for ripgrep, on
+commit e27a700f3e, does match what we expect!
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   arceb     |  binutils-arc-2020.09-release  | NOK | http://autobuild.buildroot.net/results/0db9d707d43fd2f12b99bdf67029e9ab1a0fdb5a |     
-   xtensa    | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/fb97ba5538c92bafc51182dff6d773fde8946ec8 | ORPH
-    or1k     |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/8d1e6eb0b1fe579c6a914e13d6919d6bee7bbee4 | ORPH
- microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/193392fa6e57eb85616219a7b1438561f8a2d446 | ORPH
-  sparc64    |           exim-4.97            | NOK | http://autobuild.buildroot.net/results/c5c2496d22392411dd58e3cc23a7d5e089bef0fa |     
-   arceb     |           fcft-3.1.6           | NOK | http://autobuild.buildroot.net/results/5f03bb5c0c107a2b908be974421ae0a032d4dd89 |     
-   nios2     |        fluent-bit-2.1.7        | NOK | http://autobuild.buildroot.net/results/ec5ceca16ddcedf13a2b771866124b01b1c40b03 |     
- powerpc64   | glibc-2.38-27-g750a45a78390... | NOK | http://autobuild.buildroot.net/results/283c52c580c92bdf1ee23cc93c48636207384312 |     
-    i586     |          gupnp-1.4.3           | NOK | http://autobuild.buildroot.net/results/7080d0419f48385e8643b212b3d8acb6e9bd2ee2 |     
-microblazeel |         host-go-1.21.5         | NOK | http://autobuild.buildroot.net/results/8f6b4c3d3224f47866e64479381199fde0f8c634 |     
-    i686     |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/8735241edf6ae2a187d51fc8ea4e98e35866e054 |     
-  aarch64    | ibm-sw-tpm2-5452af422edeff7... | NOK | http://autobuild.buildroot.net/results/6879700f671237db651e7cb4e3537407ddccc6d3 |     
-    sh4      |     libmodsecurity-3.0.11      | NOK | http://autobuild.buildroot.net/results/d6749bacf6c7c04a74e136585d36bc731716f6fd |     
-   s390x     |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/5c8def1e001712ada3afc8eb9406cd4bed8d943f | ORPH
-  riscv64    |        libopenssl-3.2.0        | NOK | http://autobuild.buildroot.net/results/4328c025f6f2bcd2ebc5a4368c78e00da0aea1ae | ORPH
-   mipsel    |         libxmlpp-5.0.2         | NOK | http://autobuild.buildroot.net/results/1c409ec13c0a3faa9de7efc561f7fd9ac059f349 | ORPH
-    mips     | Makefile:727: target-finalize  | NOK | http://autobuild.buildroot.net/results/ad53a091029fe475cb05fd204a501109d26f50c0 |     
-  sparc64    |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/dd6c3ddf2eb00ba0e04c1ba97e679e4d17f77fb6 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/2cf045f45183a711de6e076e40e306e4982cb6e9 |     
-    sh4a     |            unknown             | NOK | http://autobuild.buildroot.net/results/1cc32fb91a97b5524023fb066d6b159770dd492c |     
-  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/37d880d0a15e589852478c4386253a98f6fa785e |     
-   x86_64    |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/091584cc10c3c170a800afec27827823444c7823 |     
+So, can that machine get us a proper hash for ripgrep on master? Nope;
+    ERROR: got     : 9d9769e45ffe6089f58bc19fa39dd6b6299aa0c3ad90508d21dfa27a3d3416d5
 
+OK, back to square one.
 
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
+So, can our (current) docker-run wrapper help us? Back to commit
+e27a700f3e, which is known good on ubuntu 16.04, but bad on Fedora 39:
 
-  gobject-introspection-1.72.0 | 1 
-            host-binutils-2.38 | 1 
-               host-runc-1.1.7 | 1 
+    ripgrep-af6b6c543b224d348a8876f0c06245d9ea7929c5.tar.gz: OK (sha256: 6f1d4a8b653ce48d59ad777288b1257cbda607db29db19d031b7e622c60526f8)
 
+OK, so what, now?
 
-Detail of failures for 2023.02.x
---------------------------------
+As a reminder, commit e27a700f3e contains the core infra fix just after
+the conversion of ripgrep to the cargo infra. Here's a little summary of
+what happens
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/0fb9ef863c5d2b3a578d7f699e668fe8b28359e9 | ORPH
-powerpc64le  |       host-binutils-2.38       | NOK | http://autobuild.buildroot.net/results/fb7e105c8c2d9447b66e0e7d61a9d420add47c1e |     
-   mips64    |        host-runc-1.1.7         | NOK | http://autobuild.buildroot.net/results/0f55425f0ff7b3edd4e8f5e93b8e14bb040d4765 |     
+                            e27a700f3e      master
+    Ubuntu 16.04.7;
+      - native              OK              KO +
+    Fedora 39:
+      - native              KO *            KO +
+      - ./utils/docker-run  OK              KO +
 
+*: hash 37d14c1eecb24e5b921c3b0e8a22ed93501db6f7aa4d0732d6be03dfc8647f77
++: hash 9d9769e45ffe6089f58bc19fa39dd6b6299aa0c3ad90508d21dfa27a3d3416d5
 
-Classification of failures by reason for 2023.08.x
---------------------------------------------------
+So, we have two issues:
 
-               host-go-1.20.11 | 2 
-              host-rust-1.71.1 | 1 
-                  linux-6.4.16 | 1 
-             util-linux-2.39.1 | 1 
+  - the cargo version has an impact on the vendoring
 
+  - the build environment has an impact on the vendoring.
 
-Detail of failures for 2023.08.x
---------------------------------
+On my side, further investigations will probably have to wait for next
+year... Notably, I'll try and see what diffoscope points out as a delta
+between those various tarballs...
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-powerpc64le  |        host-go-1.20.11         | NOK | http://autobuild.buildroot.net/results/95fd9fe4615b8232d329b84eac2b52c6d146e0ac |     
-   x86_64    |        host-go-1.20.11         | NOK | http://autobuild.buildroot.net/results/237962af37d7df52e307d568130a2d87d0ac5d7d |     
-  sparc64    |        host-rust-1.71.1        | NOK | http://autobuild.buildroot.net/results/063feba8a76eb55d5087bc1ff6f81cf211274fb4 |     
-    arc      |          linux-6.4.16          | NOK | http://autobuild.buildroot.net/results/040c42f1183da9bbc4f972509ffba65ce6f9e97e | ORPH
-   mips64    |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/e25777310ec79a6aa16f399194a6cdce2838268e | ORPH
-
-
+Regards,
+Yann E. MORIN.
 
 -- 
-http://autobuild.buildroot.net
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
