@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB9DC3DA6E
-	for <buildroot@archiver.kernel.org>; Sun, 31 Dec 2023 17:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 666A0C3DA6E
+	for <buildroot@archiver.kernel.org>; Sun, 31 Dec 2023 17:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3C264053E;
-	Sun, 31 Dec 2023 17:35:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3C264053E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1009A404FC;
+	Sun, 31 Dec 2023 17:35:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1009A404FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sdD-P7K4F_Oc; Sun, 31 Dec 2023 17:35:37 +0000 (UTC)
+	with ESMTP id Y9GcuwqWcFOB; Sun, 31 Dec 2023 17:35:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECCB6404D5;
-	Sun, 31 Dec 2023 17:35:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECCB6404D5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 34DBF1BF3EB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8394A40518;
+	Sun, 31 Dec 2023 17:35:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8394A40518
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 82EB21BF3EB
  for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 17:35:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0969B404D5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C45E81063
  for <buildroot@lists.busybox.net>; Sun, 31 Dec 2023 17:35:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0969B404D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C45E81063
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Uia7PG6LOqf for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8z87CAdXFZNO for <buildroot@lists.busybox.net>;
  Sun, 31 Dec 2023 17:35:19 +0000 (UTC)
+X-Greylist: delayed 540 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 31 Dec 2023 17:35:18 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DC9380FB2
 Received: from helium.openadk.org (helium.openadk.org
  [IPv6:2a00:1828:2000:679::23])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 315C2404A8
- for <buildroot@buildroot.org>; Sun, 31 Dec 2023 17:35:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 315C2404A8
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9DC9380FB2
+ for <buildroot@buildroot.org>; Sun, 31 Dec 2023 17:35:18 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id D97B435353C8; Sun, 31 Dec 2023 18:26:23 +0100 (CET)
+ id 4589A352100A; Sun, 31 Dec 2023 18:26:22 +0100 (CET)
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Sun, 31 Dec 2023 18:25:37 +0100
-Message-Id: <20231231172538.1279608-6-wbx@openadk.org>
+Date: Sun, 31 Dec 2023 18:25:35 +0100
+Message-Id: <20231231172538.1279608-4-wbx@openadk.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231231172538.1279608-1-wbx@openadk.org>
 References: <20231231172538.1279608-1-wbx@openadk.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1704043583; bh=mMsjiWe5ZSrIPTetMsBMAsVNfU9NevLnzKyhZ0JZIcM=;
+ t=1704043582; bh=f7q2FTXgZhB+rpuPTlCWnaGzXouoWr7DjZuWgaFJ6CA=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=JEpv6fFU46ykdNfzM1qFvULrK0EFUKFked3FlKSyt6LMs/BHAVIYN7VIgmdYE0dge
- 7mB2hhlJ150NqlFb+aRSN0cQadOdTa6M+FKnjC49++ELfFykUc6ix3Zb6DoZfg6u1j
- wof5//7UGa2Cd0da0IY7fJWayUlcQilxE7X+DdQ+92BO5keyqnsSTHbrre85LCXsyY
- rfP4vn3UAJWkt3ifnawrbJz3r8UwFXJR0CD8Bd1XRGDnC4eyynoL3r9cpedA3hx5L7
- ysNtgNz9o41HDwY/dPUMO8Q4/XXxmFGQf6t5Ye8xAHYOujyjkEe56DM/wJr9jeQ7Cf
- 3m1uBlE4Sv/Xw==
-Subject: [Buildroot] [PATCH 5/6] configs/snps_arc700_nsim_defconfig: update
- kernel
+ b=FNTxPxD91lhSGYlOOFybsLMDyYpGN5V7b84WBKfqWeJj1pmgFS4e0u96VNqMq8Gtj
+ ZU2j9XigU5AYMiREcBKv+vhiIygs5wXxt9se4hsJH6vwq8FW6+eHECOBLFuXe9nHl4
+ TLzBN9hEhhVJQRgTMEXzNW+YnxMWRZHbGVkPHDZYuAWKVMbtG3vZAlGndGuwxaVPKc
+ Irztc1VS0DxdAb4kyMiKklOEsa6KyIkm1mte5m3bDxilGPTgufFB8NKVz4Ifat548c
+ Blu4932IvYu6cAC26F6NRtHQpCTZiTzUspdiX2zOQsp48OsC/q8rhNemmo8f3sA0LV
+ 1dzBErBxHSrQg==
+Subject: [Buildroot] [PATCH 3/6] package/gdb: remove special arc version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,50 +80,230 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- board/synopsys/nsim/readme.txt     | 2 +-
- configs/snps_arc700_nsim_defconfig | 9 ++++++---
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/gdb/Config.in.host                    |   3 -
+ ...t-define-basic_string_view-to_string.patch | 114 ------------------
+ package/gdb/gdb.hash                          |   3 -
+ package/gdb/gdb.mk                            |  23 +---
+ 4 files changed, 2 insertions(+), 141 deletions(-)
+ delete mode 100644 package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
 
-diff --git a/board/synopsys/nsim/readme.txt b/board/synopsys/nsim/readme.txt
-index cc89cf87ac..bf47ecaf4d 100644
---- a/board/synopsys/nsim/readme.txt
-+++ b/board/synopsys/nsim/readme.txt
-@@ -2,7 +2,7 @@ How to build it
- ===============
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index da35fd94f7..69b13e9eb0 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -35,14 +35,12 @@ config BR2_PACKAGE_HOST_GDB_PYTHON3
  
- Configure build for the selected nSIM target. For instance, for
--ARC700 nSIM target use the following defauilt configuration:
-+ARC700 nSIM target use the following default configuration:
- $ make snps_arc700_nsim_defconfig
+ config BR2_PACKAGE_HOST_GDB_SIM
+ 	bool "Simulator support"
+-	depends on !BR2_arc
+ 	help
+ 	  This option enables the simulator support in the cross gdb.
  
- Optionally modify the configuration:
-diff --git a/configs/snps_arc700_nsim_defconfig b/configs/snps_arc700_nsim_defconfig
-index 3964924bed..e782522d33 100644
---- a/configs/snps_arc700_nsim_defconfig
-+++ b/configs/snps_arc700_nsim_defconfig
-@@ -1,16 +1,19 @@
- # Architecture
- BR2_arcle=y
+ choice
+ 	prompt "GDB debugger Version"
+ 	default BR2_GDB_VERSION_13
+-	depends on !BR2_arc
+ 	help
+ 	  Select the version of gdb you wish to use.
  
-+# arc700 not supported by glibc
-+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-+
- # System
- BR2_TARGET_GENERIC_HOSTNAME="arc700"
+@@ -62,7 +60,6 @@ endif
+ # If cross-gdb is not enabled, the latest stable version is chosen.
+ config BR2_GDB_VERSION
+ 	string
+-	default "arc-2020.09-release-gdb" if BR2_arc
+ 	default "12.1"     if BR2_GDB_VERSION_12
+ 	default "13.2"     if BR2_GDB_VERSION_13 || !BR2_PACKAGE_HOST_GDB
+ 	# When making 14.x the default, or 14.x becomes the oldest version,
+diff --git a/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch b/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+deleted file mode 100644
+index 210ba6d609..0000000000
+--- a/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
++++ /dev/null
+@@ -1,114 +0,0 @@
+-From 5ac588997c3c2d032d5d5145d9245eb37354c23b Mon Sep 17 00:00:00 2001
+-From: Tom Tromey <tromey@adacore.com>
+-Date: Tue, 30 Jun 2020 07:53:03 -0600
+-Subject: [PATCH] Do not define basic_string_view::to_string
+-
+-gdb's copy of basic_string_view includes a to_string method.  However,
+-according to cppreference, this is not a method on the real
+-std::basic_string_view:
+-
+-https://en.cppreference.com/w/cpp/string/basic_string_view
+-
+-This difference matters because gdb_string_view.h will use the
+-standard implementation when built with a C++17 or later.  This caused
+-PR build/26183.
+-
+-This patch fixes the problem by changing the method to be a standalone
+-helper function, and then rewriting the uses.  Tested by rebuilding
+-with a version of GCC that defaults to C++17.
+-
+-(Note that the build still is not clean; and also I noticed that the
+-libstdc++ string_view forbids the use of nullptr ... I wonder if gdb
+-violates that.)
+-
+-gdb/ChangeLog
+-2020-06-30  Tom Tromey  <tromey@adacore.com>
+-
+-	PR build/26183:
+-	* ada-lang.c (ada_lookup_name_info::ada_lookup_name_info): Use
+-	gdb::to_string.
+-
+-gdbsupport/ChangeLog
+-2020-06-30  Tom Tromey  <tromey@adacore.com>
+-
+-	PR build/26183:
+-	* gdb_string_view.h (basic_string_view::to_string): Remove.
+-	(gdb::to_string): New function.
+-
+-Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=5ac588997c3c2d032d5d5145d9245eb37354c23b
+-Bug report: https://sourceware.org/bugzilla/show_bug.cgi?id=26183
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- gdb/ChangeLog                |  6 ++++++
+- gdb/ada-lang.c               |  8 ++++----
+- gdbsupport/ChangeLog         |  6 ++++++
+- gdbsupport/gdb_string_view.h | 17 ++++++++++-------
+- 4 files changed, 26 insertions(+), 11 deletions(-)
+-
+-diff --git a/gdb/ada-lang.c b/gdb/ada-lang.c
+-index 9b0c2efbfe2..98508c168bc 100644
+---- a/gdb/ada-lang.c
+-+++ b/gdb/ada-lang.c
+-@@ -13553,10 +13553,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
+-     {
+-       if (user_name.back () == '>')
+- 	m_encoded_name
+--	  = user_name.substr (1, user_name.size () - 2).to_string ();
+-+	  = gdb::to_string (user_name.substr (1, user_name.size () - 2));
+-       else
+- 	m_encoded_name
+--	  = user_name.substr (1, user_name.size () - 1).to_string ();
+-+	  = gdb::to_string (user_name.substr (1, user_name.size () - 1));
+-       m_encoded_p = true;
+-       m_verbatim_p = true;
+-       m_wild_match_p = false;
+-@@ -13575,10 +13575,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
+- 	  if (encoded != NULL)
+- 	    m_encoded_name = encoded;
+- 	  else
+--	    m_encoded_name = user_name.to_string ();
+-+	    m_encoded_name = gdb::to_string (user_name);
+- 	}
+-       else
+--	m_encoded_name = user_name.to_string ();
+-+	m_encoded_name = gdb::to_string (user_name);
+- 
+-       /* Handle the 'package Standard' special case.  See description
+- 	 of m_standard_p.  */
+-diff --git a/gdbsupport/gdb_string_view.h b/gdbsupport/gdb_string_view.h
+-index c0ae7a8a2d9..65124e67e54 100644
+---- a/gdbsupport/gdb_string_view.h
+-+++ b/gdbsupport/gdb_string_view.h
+-@@ -245,13 +245,6 @@ namespace gdb {
+- 	  return { this->_M_str, this->_M_len };
+- 	}
+- 
+--      template<typename _Allocator = std::allocator<_CharT>>
+--	std::basic_string<_CharT, _Traits, _Allocator>
+--	to_string(const _Allocator& __alloc = _Allocator()) const
+--	{
+--	  return { this->_M_str, this->_M_len, __alloc };
+--	}
+--
+-       size_type
+-       copy(_CharT* __str, size_type __n, size_type __pos = 0) const
+-       {
+-@@ -560,4 +553,14 @@ namespace gdb {
+- 
+- #endif // __cplusplus < 201703L
+- 
+-+namespace gdb {
+-+
+-+static inline std::string
+-+to_string(const gdb::string_view &view)
+-+{
+-+  return { view.data (), view.size () };
+-+}
+-+
+-+}
+-+
+- #endif /* COMMON_GDB_STRING_VIEW_H */
+--- 
+-2.39.3
+-
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index ba90bff5d6..bdc236daf3 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -4,6 +4,3 @@ sha512  07e9026423438049b11f4f784d57401ece4e940570f613bd6958b3714fe7fbc2c048470b
+ sha512  425568d2e84672177d0fb87b1ad7daafdde097648d605e30cf0656970f66adc6a82ca2d83375ea4be583e9683a340e5bfdf5819668ddf66728200141ae50ff2d  gdb-12.1.tar.xz
+ sha512  8185d3e11ab60dafff5860a5016577bfe7dd7547ef01ebc867bc247603d82b74ff74c4f29492c7d2aee57076f52be33e289f4c6b414a4b870d4b3004909f4c34  gdb-13.2.tar.xz
+ sha512  575e198105076fc4a88f68591aa114ab9c1196e84386a3f7b9b58fe5f30cdeed33f6a5f957b68f08c47284ec922bb60c964627e238471419673fd913575ce427  gdb-14.1.tar.xz
+-
+-# Locally calculated (fetched from Github)
+-sha512  5a2acf2fd33ab2ff589e1037ca40abda54328997dcff26b2b49b874bd3be980be5a63342962254f3c3bda98e32ce7a33af704d37353352833dee193135600458  gdb-arc-2020.09-release-gdb.tar.gz
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index af40f7f986..26695b2cd4 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -8,12 +8,6 @@ GDB_VERSION = $(call qstrip,$(BR2_GDB_VERSION))
+ GDB_SITE = $(BR2_GNU_MIRROR)/gdb
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
  
--# Linux headers same as kernel, a 6.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
-+# Linux headers same as kernel, a 6.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+-ifeq ($(BR2_arc),y)
+-GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
+-GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+-GDB_FROM_GIT = y
+-endif
+-
+ GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ GDB_CPE_ID_VENDOR = gnu
+@@ -56,11 +50,8 @@ GDB_DEPENDENCIES += host-flex host-bison
+ HOST_GDB_DEPENDENCIES += host-flex host-bison
+ endif
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.0.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.69"
- BR2_LINUX_KERNEL_DEFCONFIG="nsim_700"
- BR2_LINUX_KERNEL_VMLINUX=y
+-# All newer versions of GDB need host-gmp, so it's only for older
+-# versions that the dependency can be avoided.
+-ifeq ($(BR2_arc),)
++# All newer versions of GDB need host-gmp
+ HOST_GDB_DEPENDENCIES += host-gmp
+-endif
  
+ # When gdb sources are fetched from the binutils-gdb repository, they
+ # also contain the binutils sources, but binutils shouldn't be built,
+@@ -158,13 +149,10 @@ GDB_CONF_OPTS += \
+ endif
+ 
+ # Starting from GDB 11.x, gmp is needed as a dependency to build full
+-# gdb. So we avoid the dependency only for the special version used on
+-# ARC.
+-ifeq ($(BR2_arc):$(BR2_PACKAGE_GDB_DEBUGGER),:y)
++# gdb.
+ GDB_CONF_OPTS += \
+ 	--with-libgmp-prefix=$(STAGING_DIR)/usr
+ GDB_DEPENDENCIES += gmp
+-endif
+ 
+ # Starting from GDB 14.x, mpfr is needed as a dependency to build full
+ # gdb.
+@@ -182,13 +170,6 @@ else
+ GDB_CONF_OPTS += --disable-gdbserver
+ endif
+ 
+-# When gdb is built as C++ application for ARC it segfaults at runtime
+-# So we pass --disable-build-with-cxx config option to force gdb not to
+-# be built as C++ app.
+-ifeq ($(BR2_arc),y)
+-GDB_CONF_OPTS += --disable-build-with-cxx
+-endif
+-
+ # gdb 7.12+ by default builds with a C++ compiler, which doesn't work
+ # when we don't have C++ support in the toolchain
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
 -- 
 2.30.2
 
