@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 568CBC47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:23:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE04FC4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 020F54369C;
-	Mon,  1 Jan 2024 21:23:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 020F54369C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 623AD40A9B;
+	Mon,  1 Jan 2024 21:23:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 623AD40A9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VpHKr4MF6wX6; Mon,  1 Jan 2024 21:23:13 +0000 (UTC)
+	with ESMTP id Zpwz7TkMZN9b; Mon,  1 Jan 2024 21:23:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F31824357C;
-	Mon,  1 Jan 2024 21:23:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F31824357C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AF28436A0;
+	Mon,  1 Jan 2024 21:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AF28436A0
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1476E1BF3F0
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:20:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12D9A1BF37C
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF97B435C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id D7C9E435C3
  for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:15:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF97B435C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7C9E435C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SWmYRHPg2Ztn for <buildroot@lists.busybox.net>;
+ with ESMTP id hMqqfhZzJE1U for <buildroot@lists.busybox.net>;
  Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92554435C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id B2F20435C5
  for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92554435C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2F20435C5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79F6A83B4C; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
+ id 9B61983B15; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Jan 2024 22:07:27 +0100
+Date: Mon, 1 Jan 2024 22:07:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bdeaa933fbe899c515edf80602ce4128b3a3cf45
-X-Git-Newrev: f8470817bdacc810d7cfc2dd6c37fd4c0c9f17fe
+X-Git-Oldrev: e619785d79880a5ae24c6cf4db4c642a555facf6
+X-Git-Newrev: 4b2e01cc492b05383ce4be12240e47ab3e9009d4
 X-Patchwork-Hint: ignore
-Message-Id: <20240101211459.79F6A83B4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/librelp: bump to version 1.11.0
+Message-Id: <20240101211459.9B61983B15@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/log4cpp: bump to version 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8470817bdacc810d7cfc2dd6c37fd4c0c9f17fe
+commit: https://git.buildroot.net/buildroot/commit/?id=4b2e01cc492b05383ce4be12240e47ab3e9009d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/rsyslog/librelp/blob/v1.11.0/ChangeLog
+configure script has been fixed and so autoreconf can be dropped
+
+https://log4cpp.sourceforge.net/#releases
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/librelp/librelp.hash | 2 +-
- package/librelp/librelp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/log4cpp/log4cpp.hash | 6 +++---
+ package/log4cpp/log4cpp.mk   | 5 +----
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/librelp/librelp.hash b/package/librelp/librelp.hash
-index 23ce8c15f8..8dcc502583 100644
---- a/package/librelp/librelp.hash
-+++ b/package/librelp/librelp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  148db4e4d1a23e8136e9ec08810929a55faf5d45e24c2e3186d5ab34355dab31  librelp-1.10.0.tar.gz
-+sha256  7719b5f31e07cbb9872289ad32b787c613b5355d407982a0a2c4d69938457fd6  librelp-1.11.0.tar.gz
- sha256  1ed76f935566e93e3c3c0d9f8fad22eb6d8bbe406e2eb8470a4a2764d9fd9685  COPYING
-diff --git a/package/librelp/librelp.mk b/package/librelp/librelp.mk
-index f8bbdb131c..cf2e391f34 100644
---- a/package/librelp/librelp.mk
-+++ b/package/librelp/librelp.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/log4cpp/log4cpp.hash b/package/log4cpp/log4cpp.hash
+index f4084c8112..20b5ade32d 100644
+--- a/package/log4cpp/log4cpp.hash
++++ b/package/log4cpp/log4cpp.hash
+@@ -1,6 +1,6 @@
+ # From http://sourceforge.net/projects/log4cpp/files/log4cpp-1.1.x%20%28new%29/log4cpp-1.1/
+-md5  b9e2cee932da987212f2c74b767b4d8b  log4cpp-1.1.3.tar.gz
+-sha1  74f0fea7931dc1bc4e5cd34a6318cd2a51322041  log4cpp-1.1.3.tar.gz
++md5  d56ef8240014528c354da5b7e93015ca  log4cpp-1.1.4.tar.gz
++sha1  b32e6ec981a5d75864e1097525e1f502cc242d17  log4cpp-1.1.4.tar.gz
+ # Locally computed
+-sha256  2cbbea55a5d6895c9f0116a9a9ce3afb86df383cd05c9d6c1a4238e5e5c8f51d  log4cpp-1.1.3.tar.gz
++sha256  696113659e426540625274a8b251052cc04306d8ee5c42a0c7639f39ca90c9d6  log4cpp-1.1.4.tar.gz
+ sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  log4cpp/COPYING
+diff --git a/package/log4cpp/log4cpp.mk b/package/log4cpp/log4cpp.mk
+index 8664a54385..53c97e554d 100644
+--- a/package/log4cpp/log4cpp.mk
++++ b/package/log4cpp/log4cpp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBRELP_VERSION = 1.10.0
-+LIBRELP_VERSION = 1.11.0
- LIBRELP_SITE = http://download.rsyslog.com/librelp
- LIBRELP_LICENSE = GPL-3.0+
- LIBRELP_LICENSE_FILES = COPYING
+ LOG4CPP_VERSION_MAJOR = 1.1
+-LOG4CPP_VERSION = $(LOG4CPP_VERSION_MAJOR).3
++LOG4CPP_VERSION = $(LOG4CPP_VERSION_MAJOR).4
+ LOG4CPP_SITE = http://downloads.sourceforge.net/project/log4cpp/log4cpp-1.1.x%20%28new%29/log4cpp-$(LOG4CPP_VERSION_MAJOR)
+ LOG4CPP_SUBDIR = log4cpp
+ # The "or later" is indicated in the HTML documentation
+@@ -13,9 +13,6 @@ LOG4CPP_LICENSE = LGPL-2.1+
+ LOG4CPP_LICENSE_FILES = log4cpp/COPYING
+ LOG4CPP_INSTALL_STAGING = YES
+ LOG4CPP_CONF_OPTS = --enable-doxygen=no --enable-dot=no
+-# needed to fix broken configure script
+-LOG4CPP_AUTORECONF = YES
+-LOG4CPP_AUTORECONF_OPTS = -I m4
+ 
+ # The default <pkg>_CONFIG_SCRIPTS handling does not apply
+ define LOG4CPP_STAGING_CONFIG_SCRIPT_FIXUP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
