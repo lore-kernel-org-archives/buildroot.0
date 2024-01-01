@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79502C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 22:02:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41556C47073
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 22:03:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E61D400EF;
-	Mon,  1 Jan 2024 22:02:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E61D400EF
+	by smtp2.osuosl.org (Postfix) with ESMTP id E6E884090D;
+	Mon,  1 Jan 2024 22:03:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6E884090D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gqmq9QsiOY55; Mon,  1 Jan 2024 22:02:23 +0000 (UTC)
+	with ESMTP id rTOR38_YTvtj; Mon,  1 Jan 2024 22:03:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 17E204090D;
-	Mon,  1 Jan 2024 22:02:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17E204090D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9616B1BF3ED
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:02:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0740D40A50;
+	Mon,  1 Jan 2024 22:03:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0740D40A50
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A50A51BF3ED
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67EFF41DEC
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67EFF41DEC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 866F340A50
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:03:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 866F340A50
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sfZsExZWe9uP for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 22:02:18 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5CB9741DE9
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 22:02:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CB9741DE9
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40d3352b525so100125165e9.1
- for <buildroot@buildroot.org>; Mon, 01 Jan 2024 14:02:18 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZbrObY30T0d6 for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 22:03:53 +0000 (UTC)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4857D4090D
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 22:03:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4857D4090D
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-3366e78d872so8662300f8f.3
+ for <buildroot@buildroot.org>; Mon, 01 Jan 2024 14:03:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704146535; x=1704751335;
+ d=1e100.net; s=20230601; t=1704146630; x=1704751430;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OAomARFzoquO6bXab7OYQXYXDFPCruNzp+OkgIIDpNY=;
- b=Pd3UggH75TK6DnLf/Wh9J3eFSLSjh8vtDZDKs4mVuFgCFYxlibuZBpT5i2wL1vBtel
- VikdYKRJK7EkFiBfPQfp2YDl0tfiQxHfDa3JYb3Bf3Jp8y3Z1eQxxElb/eeEFyC9gTOr
- pnYl0lNCPA++ZaoHZGhEnU6z95gvAE1gqDpDprqZhLSblQ1eU0lTR2Ie4BVP0Cy7+cTp
- W2XrE5k3SXkHHSbWdcIdyxMcIDqEFh2Zn5aw4/9g/nl8JZoQpVrvfnHeROZhlHZkLnPP
- kQuBns1LdD8eBrnWKYaSryiLaX7YfuKX8EbHtnzs8BjaMhTG4lNjBvRF0fTR98A/LUtZ
- Idiw==
-X-Gm-Message-State: AOJu0Yzmk8k+g4qR5G/HjYown2qL43h8P5CfEVAAfnTUo7G+xgFN2Hqa
- 4gSMTh0Q0fquypVBHGYFDh3TlvHrMOg=
-X-Google-Smtp-Source: AGHT+IGxSFaiMh6fKFUyc9cBKIXJHiZdx5NTAywyjiDDuNmbWxSgHItIZs4i36ynF3KivulPZsX1bA==
-X-Received: by 2002:a05:600c:1c93:b0:40d:3571:cc13 with SMTP id
- k19-20020a05600c1c9300b0040d3571cc13mr9861020wms.9.1704146535477; 
- Mon, 01 Jan 2024 14:02:15 -0800 (PST)
+ bh=wth3oWRENBr0YeJMuRWoFEbiMTjldv1CFMFo7fCzYKY=;
+ b=Y3Svz7Lk7rn8v0ZlYkee4vdYnYtSNa9rBwWzXW8NFq0IlPUSuFaUIR8Omx805qxJFf
+ 58uWJhjbfs28nLmrkl+YZVZL1EhAU3ttssJToNevihJAc1/hiR5vcUlbFwyiUEYC49gs
+ 47G8FMTYRk/dDx+vh/kasHShIpI1lT8ewTQzn6pM+4/hlwTZhYXZDmd5EmiJPZ6WxMYq
+ Rg6Fv3yFBtH/snG0/N+AiomPSqCX6juUIymo9XwObwb0eYzdpLl5b2w8EnF5Om2E8x3F
+ sAmefwdwZR2qBVMc7S8Lx9oPvQW9odRtlYP0oTGoPF3D4JRpAjWn3t9iTJJ5QhW/xz3L
+ gAKg==
+X-Gm-Message-State: AOJu0YzXae5i8AgTbuOS5+1Qzv5HEcOKSnntxQw0liyswhFhxG7Kt65w
+ muchU4Xbc5siC4GaLWnKRBs8JszNWCA=
+X-Google-Smtp-Source: AGHT+IEBlPnOz/2H5Rjw83ckdLORKbwKU0chrd1TPM9M0cUrfF/qTSe4QLApRnAIx11F0cukVSX2dA==
+X-Received: by 2002:a5d:69cc:0:b0:336:6e55:2350 with SMTP id
+ s12-20020a5d69cc000000b003366e552350mr3987855wrw.200.1704146630452; 
+ Mon, 01 Jan 2024 14:03:50 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l17-20020a05600c4f1100b0040d85a1fad9sm7823794wmq.46.2024.01.01.14.02.15
+ t13-20020adfe10d000000b00336c9ad1173sm17534755wrz.26.2024.01.01.14.03.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jan 2024 14:02:15 -0800 (PST)
+ Mon, 01 Jan 2024 14:03:50 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jan 2024 23:02:13 +0100
-Message-ID: <20240101220213.6175-1-fontaine.fabrice@gmail.com>
+Date: Mon,  1 Jan 2024 23:03:45 +0100
+Message-ID: <20240101220345.7259-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704146535; x=1704751335; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704146630; x=1704751430; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OAomARFzoquO6bXab7OYQXYXDFPCruNzp+OkgIIDpNY=;
- b=JaSFXkg8W3BBUkQQwTyApZbHDTlld2zbDNuQ1f5ocrCfu8NSbm155VfD15r4s34uub
- 24r2ylbEoO9g9+FjkrSZjXpxITcM8uH3Ap2vliqbV4vp5U2xOTvd+jXaRi+E8j1NqEsg
- zn0z+UJ4iG3yj7Q2IbmdvfKe4YIwaolWeQFp+Z22sKiCyEW9Y4WkuDtKrO0C+dyGFTyd
- damTRYYHs0EEhNC1SPOFvrfC0vdbcHt9+xkCEdktgQaZ0i5BPjAYlu5IL7N8JvQxwFk2
- TClZNKdWnav4bl26paKGYIxM9Orv2QXvakmOTBQghDWW1P8HxK9zWB4+ez04H2POSmM4
- AjlQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=wth3oWRENBr0YeJMuRWoFEbiMTjldv1CFMFo7fCzYKY=;
+ b=dNzQvGa3jt0tFJe5PS3EXu85gRG5tvVHunkdEe7Cn+y+qAW2O4QdUFV3AJq+XRDiMq
+ a+NA8XGC1daW7EDTbGV+STwc+zK5hx24UwYvTNcuhE1nNkw70Oju9Y6EY4+LMEtLBMa6
+ u74rn5GSsNh8j5cY7IT2SD7hGhiHDFDDju5SmfPo0bi3wbTQDjUmUHRyVN6hWdWCTVHR
+ L37hFFimqItpLHI/gX9RwRcNQCL+SroFzEnCCFnfOY9BKLnOqWdZO5UtSWLqARkbtQ82
+ uq24M382gV9thH2sH7rLfW+2GvayUfZAtbH8RAXSMg8y18axnZE+fuoWw7WzelcXvbA5
+ o7UA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JaSFXkg8
-Subject: [Buildroot] [PATCH 1/1] package/tinyssh: security bump to version
- 20240101
+ header.a=rsa-sha256 header.s=20230601 header.b=dNzQvGa3
+Subject: [Buildroot] [PATCH 1/1] package/proftpd: security bump to version
+ 1.3.8b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,53 +94,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- License changed from public domain to CC0:
-  https://github.com/janmojzis/tinyssh/commit/39dfb96613660d67ced44cc3995a08797e6c999a
-- Mitigates CVE-2023-48795:
-  https://github.com/advisories/GHSA-45x7-px36-x8w8
+1.3.8b - Released 19-Dec-2023
+--------------------------------
+- Issue 1735 - Compiling ProFTPD 1.3.8a mod_sftp, mod_tls using libressl 3.7.3
+  fails.
+- Issue 1756 - Build system fails for specific module names.
+- Issue 1760 - mod_sftp is affected by "Terrapin" Prefix Truncation Attacks in
+  SSH Specification (CVE-2023-48795).
 
-https://github.com/janmojzis/tinyssh/releases/tag/20230101
-https://github.com/janmojzis/tinyssh/releases/tag/20240101
+https://github.com/proftpd/proftpd/blob/1.3.8/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tinyssh/tinyssh.hash | 4 ++--
- package/tinyssh/tinyssh.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/proftpd/proftpd.hash | 2 +-
+ package/proftpd/proftpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinyssh/tinyssh.hash b/package/tinyssh/tinyssh.hash
-index 462ffb9002..bdb1504234 100644
---- a/package/tinyssh/tinyssh.hash
-+++ b/package/tinyssh/tinyssh.hash
+diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
+index f950f26b86..5a7d153a31 100644
+--- a/package/proftpd/proftpd.hash
++++ b/package/proftpd/proftpd.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256  234656fc8d369608eb5d0f3a26280e0e38e2e6b134cfc610b6e24bce176acd4f  tinyssh-20220801.tar.gz
--sha256  b5dc19477e29f4111e1c16cd89ec0782f5a07b1a30e3bdb7c155425b81b12c46  LICENCE
-+sha256  d2cd49d0e5e8bdb808d86f07f946a0cfbf2dc9a449a4b8243a82be267d852b62  tinyssh-20240101.tar.gz
-+sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENCE
-diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
-index 1472f7ead1..80b6ccb850 100644
---- a/package/tinyssh/tinyssh.mk
-+++ b/package/tinyssh/tinyssh.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated
+-sha256  f7139e7377a2cb059b8b9b14d76a6df5f440e3181cb15ae890d43bbcae574748  proftpd-1.3.8.tar.gz
++sha256  183ab7c6107de271a2959ff268f55c9b6c76b2cf0029e6584fccc019686601e0  proftpd-1.3.8b.tar.gz
+ sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 398155222d..0820822e17 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TINYSSH_VERSION = 20220801
-+TINYSSH_VERSION = 20240101
- TINYSSH_SITE = $(call github,janmojzis,tinyssh,$(TINYSSH_VERSION))
--TINYSSH_LICENSE = Public Domain, CC0-1.0
-+TINYSSH_LICENSE = CC0-1.0
- TINYSSH_LICENSE_FILES = LICENCE
- 
- define TINYSSH_BUILD_CMDS
+-PROFTPD_VERSION = 1.3.8
++PROFTPD_VERSION = 1.3.8b
+ PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
+ PROFTPD_LICENSE = GPL-2.0+
+ PROFTPD_LICENSE_FILES = COPYING
 -- 
 2.43.0
 
