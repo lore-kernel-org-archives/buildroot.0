@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE04FC4706F
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F508C4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:23:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 623AD40A9B;
-	Mon,  1 Jan 2024 21:23:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 623AD40A9B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4398C40A9B;
+	Mon,  1 Jan 2024 21:23:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4398C40A9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zpwz7TkMZN9b; Mon,  1 Jan 2024 21:23:26 +0000 (UTC)
+	with ESMTP id dEC4i6ZCr9KY; Mon,  1 Jan 2024 21:23:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6AF28436A0;
-	Mon,  1 Jan 2024 21:23:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AF28436A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4867A4357C;
+	Mon,  1 Jan 2024 21:23:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4867A4357C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 12D9A1BF37C
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:20:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 120921BF3ED
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:21:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7C9E435C3
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:15:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7C9E435C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB84543662
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:18:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB84543662
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hMqqfhZzJE1U for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
+ with ESMTP id sqUtwSTB3kgB for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 21:18:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2F20435C5
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2F20435C5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5149643664
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:18:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5149643664
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B61983B15; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
+ id 3B75983B65; Mon,  1 Jan 2024 21:18:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Jan 2024 22:07:58 +0100
+Date: Mon, 1 Jan 2024 22:16:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e619785d79880a5ae24c6cf4db4c642a555facf6
-X-Git-Newrev: 4b2e01cc492b05383ce4be12240e47ab3e9009d4
+X-Git-Oldrev: f9b465c66c42e936a80292f7854f605d4c88564e
+X-Git-Newrev: 9cbffdf9be622c8ddad3b28106851b3101b3d201
 X-Patchwork-Hint: ignore
-Message-Id: <20240101211459.9B61983B15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/log4cpp: bump to version 1.1.4
+Message-Id: <20240101211802.3B75983B65@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsoup3: enable vala bindings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b2e01cc492b05383ce4be12240e47ab3e9009d4
+commit: https://git.buildroot.net/buildroot/commit/?id=9cbffdf9be622c8ddad3b28106851b3101b3d201
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-configure script has been fixed and so autoreconf can be dropped
+vala bindings are needed to build gssdp 1.6 vapi bindings and avoid the
+following build failure since commit
+0cd1096eb067542070a991120c953811d6e5e4d1:
 
-https://log4cpp.sourceforge.net/#releases
+FAILED: vala/gssdp-1.6.vapi
+/home/buildroot/autobuild/instance-2/output-1/host/bin/vapigen --quiet --library=gssdp-1.6 --directory=/home/buildroot/autobuild/instance-2/output-1/build/gssdp-1.6.3/build/vala --pkg=gio-2.0 --pkg=libsoup-3.0 --metadatadir=/home/buildroot/autobuild/instance-2/output-1/build/gssdp-1.6.3/vala /home/buildroot/autobuild/instance-2/output-1/build/gssdp-1.6.3/build/libgssdp/GSSDP-1.6.gir
+error: Package `libsoup-3.0' not found in specified Vala API directories or GObject-Introspection GIR directories
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e5fbfc95964beac314c9faffc2c12541d0a10a48
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/log4cpp/log4cpp.hash | 6 +++---
- package/log4cpp/log4cpp.mk   | 5 +----
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/libsoup3/libsoup3.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/log4cpp/log4cpp.hash b/package/log4cpp/log4cpp.hash
-index f4084c8112..20b5ade32d 100644
---- a/package/log4cpp/log4cpp.hash
-+++ b/package/log4cpp/log4cpp.hash
-@@ -1,6 +1,6 @@
- # From http://sourceforge.net/projects/log4cpp/files/log4cpp-1.1.x%20%28new%29/log4cpp-1.1/
--md5  b9e2cee932da987212f2c74b767b4d8b  log4cpp-1.1.3.tar.gz
--sha1  74f0fea7931dc1bc4e5cd34a6318cd2a51322041  log4cpp-1.1.3.tar.gz
-+md5  d56ef8240014528c354da5b7e93015ca  log4cpp-1.1.4.tar.gz
-+sha1  b32e6ec981a5d75864e1097525e1f502cc242d17  log4cpp-1.1.4.tar.gz
- # Locally computed
--sha256  2cbbea55a5d6895c9f0116a9a9ce3afb86df383cd05c9d6c1a4238e5e5c8f51d  log4cpp-1.1.3.tar.gz
-+sha256  696113659e426540625274a8b251052cc04306d8ee5c42a0c7639f39ca90c9d6  log4cpp-1.1.4.tar.gz
- sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  log4cpp/COPYING
-diff --git a/package/log4cpp/log4cpp.mk b/package/log4cpp/log4cpp.mk
-index 8664a54385..53c97e554d 100644
---- a/package/log4cpp/log4cpp.mk
-+++ b/package/log4cpp/log4cpp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
+index 76105cec4e..10caa5bea4 100644
+--- a/package/libsoup3/libsoup3.mk
++++ b/package/libsoup3/libsoup3.mk
+@@ -28,8 +28,7 @@ LIBSOUP3_CONF_OPTS = \
+ 	-Dntlm=disabled \
+ 	-Dsysprof=disabled \
+ 	-Dtests=false \
+-	-Dtls_check=false \
+-	-Dvapi=disabled
++	-Dtls_check=false
  
- LOG4CPP_VERSION_MAJOR = 1.1
--LOG4CPP_VERSION = $(LOG4CPP_VERSION_MAJOR).3
-+LOG4CPP_VERSION = $(LOG4CPP_VERSION_MAJOR).4
- LOG4CPP_SITE = http://downloads.sourceforge.net/project/log4cpp/log4cpp-1.1.x%20%28new%29/log4cpp-$(LOG4CPP_VERSION_MAJOR)
- LOG4CPP_SUBDIR = log4cpp
- # The "or later" is indicated in the HTML documentation
-@@ -13,9 +13,6 @@ LOG4CPP_LICENSE = LGPL-2.1+
- LOG4CPP_LICENSE_FILES = log4cpp/COPYING
- LOG4CPP_INSTALL_STAGING = YES
- LOG4CPP_CONF_OPTS = --enable-doxygen=no --enable-dot=no
--# needed to fix broken configure script
--LOG4CPP_AUTORECONF = YES
--LOG4CPP_AUTORECONF_OPTS = -I m4
+ ifeq ($(BR2_PACKAGE_BROTLI),y)
+ LIBSOUP3_CONF_OPTS += -Dbrotli=enabled
+@@ -39,10 +38,10 @@ LIBSOUP3_CONF_OPTS += -Dbrotli=disabled
+ endif
  
- # The default <pkg>_CONFIG_SCRIPTS handling does not apply
- define LOG4CPP_STAGING_CONFIG_SCRIPT_FIXUP
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-LIBSOUP3_CONF_OPTS += -Dintrospection=enabled
+-LIBSOUP3_DEPENDENCIES += gobject-introspection
++LIBSOUP3_CONF_OPTS += -Dintrospection=enabled -Dvapi=enabled
++LIBSOUP3_DEPENDENCIES += host-vala gobject-introspection
+ else
+-LIBSOUP3_CONF_OPTS += -Dintrospection=disabled
++LIBSOUP3_CONF_OPTS += -Dintrospection=disabled -Dvapi=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBKRB5),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
