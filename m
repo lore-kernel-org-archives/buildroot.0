@@ -4,65 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D883C47074
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 20:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F540C47073
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 20:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 536D760DCA;
-	Mon,  1 Jan 2024 20:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 536D760DCA
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1728600B6;
+	Mon,  1 Jan 2024 20:18:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1728600B6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jL68QAqgwneL; Mon,  1 Jan 2024 20:18:14 +0000 (UTC)
+	with ESMTP id Zri3zcNNSJ7h; Mon,  1 Jan 2024 20:18:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83F1C60BD2;
-	Mon,  1 Jan 2024 20:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83F1C60BD2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DA8C1BF405
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:18:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F20B0606FF;
+	Mon,  1 Jan 2024 20:18:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F20B0606FF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FCD01BF405
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:18:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0492B81329
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:18:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0492B81329
+ by smtp2.osuosl.org (Postfix) with ESMTP id 746104011D
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:18:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 746104011D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id buHKgiXTjlh7 for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 20:18:04 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2254581307
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 20:18:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2254581307
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1AC6360002;
- Mon,  1 Jan 2024 20:18:01 +0000 (UTC)
-Date: Mon, 1 Jan 2024 21:18:00 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240101211800.358198b0@windsurf>
-In-Reply-To: <20231229214717.11148-1-fontaine.fabrice@gmail.com>
-References: <20231229214717.11148-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 15S-JKMukJGl for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 20:18:35 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1F01040104
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 20:18:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F01040104
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id CD586B00535;
+ Mon,  1 Jan 2024 21:18:26 +0100 (CET)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 01 Jan 2024 21:18:26 +0100
+Date: Mon, 1 Jan 2024 21:18:26 +0100
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
+Message-ID: <ZZMeEjKs7cVLRZwb@landeda>
+References: <20231231172538.1279608-1-wbx@openadk.org>
+ <20231231172538.1279608-5-wbx@openadk.org>
+ <ZZHOxLRXJ9U8apJA@landeda> <ZZHjRSzIb7WUnhUo@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704140281;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=GhbZBSHx/EU80BdERcOZ5AC3M67eSzlq+TVr0G8EmyE=;
- b=FslWGbdBBJ9Z5/1e25tN0hE9pB+/LkfQ7IjGjlKsfHVIRJRZoVs7JS+EO1lOKrncq+x2dK
- VKI4Mncc2I3HUl04UU22F88/XXH4GVYL9bvi7ARIHzuhN3rZLyx4SA1Ivl0KiQgte6LWYM
- 2xW1w9UBFK6u6WiS2D1RdyBw/LjPh+miJMs4gwnXRLXHG9No1/+LK2L7SA/wSH2dkVEAEU
- ZKPUO+t7l43c3eFuSRs21fSa89bx5D78SP23zwlcnNh42SK2V4IecYnefWupzcZK17bYHB
- 54w4u9FZpw8bP0MHwazlj8+8zIIp0vzWrsa9JtjtRBSqMkWK84aUZamLdsSpcA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FslWGbdB
-Subject: Re: [Buildroot] [PATCH 1/1] package/gupnp-av: bump to version 0.14.1
+Content-Disposition: inline
+In-Reply-To: <ZZHjRSzIb7WUnhUo@waldemar-brodkorb.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1704140313;
+ bh=nCIP36dtcLtZeuicVz+VyUNg4sU/Tu4bPC01cs0ABYA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=uimH6wO3jtoefvMOaeYjJzisSFmL5bJ0DSJo73yvSXJITD6EZzwn5VDDVIfUpqxZx
+ ZeteAggAldbcvFmkU4TnqvGmrfy08OOImcS/j8mk1SFE/DsuwJbSKg9xDDD/hXvDC7
+ bZv2wTeAvVujCDCbDAdlq6/Z1xvxckRmGb/NVlnUR76pZ8UiMBR+oeQc2ZoUacynFw
+ dM5pX3KGK2PUt5LREZM+OabhPK2efZSwEGfmmSvL/I6MyADyeRtNL8I1se3chWnDsA
+ MjMYMq5hBc2denOCZCO8i6zj5atl8OL6GCjgY4LmgtqQcfPaX40fOCepV4tgT+xSsi
+ 2wIxDTilNhhvA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uimH6wO3
+Subject: Re: [Buildroot] [PATCH 4/6] configs/qemu: add qemu_arc_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,36 +76,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ ARC Maintainers <arc-buildroot@synopsys.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 29 Dec 2023 22:47:17 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Waldemar, All,
 
-> Add patch to fix build with libxml2 2.12
-> 
-> https://gitlab.gnome.org/GNOME/gupnp-av/-/blob/gupnp-av-0.14.1/NEWS
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ix-compatibility-with-libxml2-2-12-x.patch | 26 +++++++++++++++++++
->  package/gupnp-av/gupnp-av.hash                |  4 +--
->  package/gupnp-av/gupnp-av.mk                  |  2 +-
->  3 files changed, 29 insertions(+), 3 deletions(-)
->  create mode 100644 package/gupnp-av/0002-xml-Fix-compatibility-with-libxml2-2-12-x.patch
+On 2023-12-31 22:55 +0100, Waldemar Brodkorb spake thusly:
+> Yann E. MORIN wrote,
+> > On 2023-12-31 18:25 +0100, Waldemar Brodkorb spake thusly:
+> > > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[--SNIP--]
+> > > +You need Qemu fork from here:
+> > > +https://github.com/foss-for-synopsys-dwc-arc-processors/qemu
+> > So, we are dropping all the arc specific versions for the toolchain
+> > components, but we eventually introduce a defconfig that relies on an
+> > arc specific version of qemu, that we do not even package in Buildroot,
+> > so that users can't even enable host-qemu in Buildroot.
+> > That is a bit sad...
+> > What is the rationale for introducing this defconfig, then?
+> Qemu is more widely known then the nsimdrv.
 
-Applied to master, thanks.
+OK, fair enough.
 
-Thomas
+Still, Qemu with ARC support is not sidely available (e.h .it's not ins
+distros), and we do not have a way to easily build it from source,
+leaving to the user the duty to find how to do get such a Qemu.
+
+And since you point to the source tree (which is nice), it implies one
+has to build from source on their own, which we know is a bit tedious...
+
+> And I think when ARCv3
+> support is added to Buildroot
+
+*When* is the key word here. I know Alexey has said he was looking into
+it, but IIRC the topic has been pending since last August, so I would
+like to decorelate the two topics.
+
+> it can be used to test it, too.
+
+That does not change the fact that it is a forked version, not readily
+available, that we do not build in Buildroot, and that the user has to
+manually build from source on their own, which is still problematic.
+
+> I thought it would be nice to have instead of only rely on the nsim
+> defconfig we have now.
+
+That I agree on, but I don;t think it is a good-enough reason to be
+using a non-upstream Qemu.
+
+> Can we keep it? What others say?
+
+"Mom, dad, it's a cute doggy/kitten/duck/poney/hedghog! Can we keep it?"
+
+Let's see what other maintainers think, of course.
+
+And in any case, that does not diminish the fact that the commit log
+should contain a proper rationale.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
