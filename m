@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78992C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 14:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE8C7C4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 14:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA8B360595;
-	Mon,  1 Jan 2024 14:44:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA8B360595
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A84260BCF;
+	Mon,  1 Jan 2024 14:47:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A84260BCF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8fINBf3tympP; Mon,  1 Jan 2024 14:44:05 +0000 (UTC)
+	with ESMTP id Pmzut-2DK_GR; Mon,  1 Jan 2024 14:47:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CFC860BAC;
-	Mon,  1 Jan 2024 14:44:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CFC860BAC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83E75606A0;
+	Mon,  1 Jan 2024 14:47:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83E75606A0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 118581BF35A
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 14:44:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DFF2C1BF35A
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 14:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD9A460BAC
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 14:44:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD9A460BAC
+ by smtp3.osuosl.org (Postfix) with ESMTP id B81ED606A0
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 14:47:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B81ED606A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T6gkWEm5PoH1 for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 14:44:00 +0000 (UTC)
+ with ESMTP id Bq5Or8kYqLDt for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 14:47:46 +0000 (UTC)
 Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com
  [148.163.158.9])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AB27060595
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 14:43:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB27060595
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6836760595
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 14:47:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6836760595
 Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
  by mx0b-00230701.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id
- 401Eb8Tw005532; Mon, 1 Jan 2024 06:43:54 -0800
+ 401EbIAk005638; Mon, 1 Jan 2024 06:47:42 -0800
 Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
- [149.117.73.133])
- by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3vajqfncva-1
+ [149.117.87.133])
+ by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3vajqfnd20-1
  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 01 Jan 2024 06:43:53 -0800 (PST)
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com
- [10.205.2.134])
+ Mon, 01 Jan 2024 06:47:42 -0800 (PST)
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com
+ [10.192.0.17])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits)
  client-signature RSA-PSS (2048 bits))
  (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
- by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 1050D40234;
- Mon,  1 Jan 2024 14:43:50 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com
- [10.202.1.137])
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id EB2F6401C8;
+ Mon,  1 Jan 2024 14:47:38 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com
+ [10.4.161.137])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (Client CN "o365relay-in.synopsys.com",
  Issuer "Entrust Certification Authority - L1K" (verified OK))
- by mailhost.synopsys.com (Postfix) with ESMTPS id 23562A00A9;
- Mon,  1 Jan 2024 14:43:49 +0000 (UTC)
+ by mailhost.synopsys.com (Postfix) with ESMTPS id 9B03DA00BC;
+ Mon,  1 Jan 2024 14:47:36 +0000 (UTC)
 Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
+ (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
  (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
  (Client CN "mail.protection.outlook.com",
  Issuer "DigiCert Cloud Services CA-1" (verified OK))
- by o365relay-in.synopsys.com (Postfix) with ESMTPS id 142984044C;
- Mon,  1 Jan 2024 14:43:47 +0000 (UTC)
+ by o365relay-in.synopsys.com (Postfix) with ESMTPS id A0B6D40169;
+ Mon,  1 Jan 2024 14:47:33 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c8dJucVgTSjDU7CulMFqPCnDqx0syi+UBNtLtbDQZHAVepsjy9uXbrpB7xB2Cd0MN4QZL7wYeneBdHSunM/rs3W37g8G2R3DSzNEmhlEvK3Pkcamo/MgeS39SzB1/TaGeZsXnTV2KbaeOyamiZ5EOp5314bVU2Xm1EGt0/SrHug9hLzbyFwBLTASPpxUordzLhD/X4dA6ddABNmlgLICTypCUpH1XYJh7KepYCMXoKswEdrnEyhWus+PrxDTA9qSIOVn2I8ANfUxFaGeYFrYHZDVN81nupXlSestZS9CGv1/cbobkQxROEPBM31DhPhnjk573oSRZRYYOPDQR6NEVw==
+ b=VGXP0uue5TQZ6DFINg+XrZ9UWzWCF15U7L5nQIONH9H8USmR7ubWGUBdbIsAlAE3/1V4BushfZ6fUW5vFh7ljg37q4f1FbBZiUdbQ0cZLTcsXyHXUOmGNtt6x0tIzUGL5QrOFQMYl+FGP+uwIE+J303nKCPvVeA3MWA6QTFGzHeCTS5I0WBjCyidHdW165yUmrCDe021MYL7DyVHOtvffV6PLII2kle+vcLUtDr/RbMfzM61GuNxQEQNzitYjAHdLDikyi/cwOfHdYLhnfKvghNxY/T+L8y0uur3sLS+EIRYIQFeFFPDupBGJqqhCHpxNj3zG3yeVLMAjhhukYEvTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PHrM7b7b9BXJmO7cX9qXyohElU5lSe83CWmrS0IsE40=;
- b=nZs+qBOVal+duahC7C+AV96wF/T3kIWBjwm6aWHmfHsiGJheeEHhCwKaGbqA3Yp9WWxwJ726RhOog7iPcNDQD5FoFIUkLFPjIX5VbCnV5XRAlaGzz1pHYszQxeiXK9+085MVfN+d+MxbjqzLfaryYzRX1T/qNsrDk6HIBAqemN9PRHDUk1qTWd22gop9t3lZOVrmwp+y4XMMW/776Gnow5A4oxELrZT6zZqFuKflYf0DgmhKzJH2vau67BQiIoEkwwdp3OxROzLNnS2bRvR2R15xGm7feIpYNvklJA91Jrh1+rl+th6qJBQKFpQ22bjrNLIMO/G6tLfvxllAeXL21Q==
+ bh=C2oO3O7zd4E/33itpwrmm2UdMFwrL8quT+NkWFLdZC4=;
+ b=ciLc9wvbj8EaM5+GywEFpDbt0ukFnFUvUwyzkn1Ezrwqk4T0YLQYT+NeGOR2saZJPEf6fLEKWeSMSxpAknvj7YvM6t9SWHcW4W/wSpgdlY/0dK3XI3TeadhLQ4ITjPQIvUGypSW2bSC+UN7/M0KGL6I/tWSJBp75KY+cV9cGwOfyZpmSDmvPubd3zN8NGI7iBPl9iNTzG08arGwcFirMdl/nxmsHACq0EofKGDlEKS45yV29zpzcA6HjTY8JMkgXZEmMAwzJvD+CoSJRt8HQP9PJGPY9RwQXROtRdWHN5buzOgr17670EFO85aewf4tNLQAt3rnG5UloJCI0SaWdZw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
  dkim=pass header.d=synopsys.com; arc=none
@@ -79,22 +79,23 @@ Received: from DS7PR12MB9041.namprd12.prod.outlook.com (2603:10b6:8:ea::19) by
  CYYPR12MB8992.namprd12.prod.outlook.com (2603:10b6:930:bc::21) with
  Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7135.25; Mon, 1 Jan 2024 14:43:44 +0000
+ 15.20.7135.25; Mon, 1 Jan 2024 14:47:30 +0000
 Received: from DS7PR12MB9041.namprd12.prod.outlook.com
  ([fe80::ae52:c4c9:df7a:5a10]) by DS7PR12MB9041.namprd12.prod.outlook.com
  ([fe80::ae52:c4c9:df7a:5a10%2]) with mapi id 15.20.7135.023; Mon, 1 Jan 2024
- 14:43:43 +0000
+ 14:47:30 +0000
 X-SNPS-Relay: synopsys.com
-To: Waldemar Brodkorb <wbx@openadk.org>, "Yann E. MORIN"
- <yann.morin.1998@free.fr>
-Thread-Topic: [arc-buildroot] [Buildroot] [PATCH 1/6] package/gcc: remove
- special arc version
-Thread-Index: AQHaPCRU52T/datrvkKOXA7MaT/0y7DFCWBx
-Date: Mon, 1 Jan 2024 14:43:43 +0000
-Message-ID: <DS7PR12MB9041754BB696E49D8166F54FA162A@DS7PR12MB9041.namprd12.prod.outlook.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, Waldemar Brodkorb
+ <mail@waldemar-brodkorb.de>
+Thread-Topic: [arc-buildroot] [Buildroot] [PATCH 4/6] configs/qemu: add
+ qemu_arc_defconfig
+Thread-Index: AQHaPCfajs8H6qhwkUKdTtgOk0FSD7DD78SAgAEauDU=
+Date: Mon, 1 Jan 2024 14:47:29 +0000
+Message-ID: <DS7PR12MB90412F6E4FBE2387F715BC76A162A@DS7PR12MB9041.namprd12.prod.outlook.com>
 References: <20231231172538.1279608-1-wbx@openadk.org>
- <20231231172538.1279608-2-wbx@openadk.org> <ZZHI1pycJDszqP3I@landeda>
-In-Reply-To: <ZZHI1pycJDszqP3I@landeda>
+ <20231231172538.1279608-5-wbx@openadk.org> <ZZHOxLRXJ9U8apJA@landeda>
+ <ZZHjRSzIb7WUnhUo@waldemar-brodkorb.de>
+In-Reply-To: <ZZHjRSzIb7WUnhUo@waldemar-brodkorb.de>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -102,59 +103,59 @@ X-MS-TNEF-Correlator:
 msip_labels: 
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: DS7PR12MB9041:EE_|CYYPR12MB8992:EE_
-x-ms-office365-filtering-correlation-id: 3d91638d-c43e-4ddb-687f-08dc0ad80d5a
+x-ms-office365-filtering-correlation-id: e79ac558-b466-4c39-ca39-08dc0ad89479
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hhUx3a2RUEvWiW4pOa5L45eiyqyuOU7YMxAjQCtDzp6lG4YleafGeP6zdJ+blwtMxRkEjO/Nar0YnxGuISn/eGVwWrhM0Eh2N3pIxEU0MVMcGhPNG3QcjQaHCGLPXaO/qaA1ds5bFx6+mwjhsTt8k9kXVyNvWr3WfK7HhkjyL/0W62Pg7kDH1YFvhcNn8A3rqq2Cw0wL44qZXddXZuzCncfdkWcY3oLmU+lDReQFL7ruuQdVh4xR12fq7WE4/f047nQiqZepPM4A9n75noy7HJZ/imar5JV0Y6xohGCdRYcd+atpW6oH0iRypNqofaeXy2y7XpBngoU7tNJcKqQ7IBoNLYleZ5JwTas/qrNfNfutnhq2el9e/4A1Q2LrJFODtC++JLfNWHU1Xm8Qxt/nffdVvW4mwVZjp/uZ2pWMgBebqFfWgvyWRoiQaeYhoq2L7wXMbNHcOioW+X3C8oi0slC2A23Kg5QFmYZg7O97Y/LkUztALjiX83rTbj0Noo/RGOhdJYzSOrxd7Pipdup3Ct3Z0O1XZGD91+Mz407DS3ynaIWDTlAqeI3Xq9KtYMBZkP2Lwuutj1px4bsUw6vkFbPCCTepSFbCA+ROzTtYidWJ6Jp5iWsHJvnLRaMxHZ8j2l2fHuI+LjdMMTslg6X/FPnSz4nFJHRDiT50RKblZiVTMoURavSbqd/vH4VWLdUQ
+x-microsoft-antispam-message-info: uwc/+3ro+Fp5FjGlmIQy5uyNMLLdq4o2Wj+3I6cY0Q+wsT6ENfBkRsGIb1ARNsE5WChV22Uq+YeWPAEFietbAwkzumeER19plKNo6yyuipjw9tASZ6CFeGhXV7hQ0I0md7VKnSZ+9VKtsUiUlgAkHbUXGjUJW8XA985ldheBo7M0+dm+ZCdQDxNfeoGUKfHk6PQYqaZtK+wePteDqQ8BnzpkOLfrU6lysf63Nr74Qhgikt/+9cmmk/rL3AF1Zdm17A61HoaNVAwe8oBUs766StjVKKpJu2lRMgnxDRJvWhHDuzkCTUN5/hZax4eIeUVisDtnPdEm+95RjQ5trUdz8RJkziYfy0hEXKW5qp+tdFqCaCOVR6jk+sXU8hLedxLnujJMvwjXaRPB/Gc98kaDiolJ2rv7+RWnLbg+Jl6v8Z9AaPkgXoPb52X+CLRlFxH5Qwwy1b4I8pGTukr3LqBamj5ENQTRw8DoQnUB1ePsBTYZaJzx2APIe24U41q3bmNXUpRuW/ey5omTPLV8mN5tUMShT6FYQHrlLZkkf63QXIS3uQNNL9D0zirptlyXmxqL0yFbDg3A10ek6tZAi+o2EwsTEAfsdHvV5HryhmlmTud5Bal4XZA+6SG3/KyynI9lzC2Lg2RkD/uCm1NvEreeLA==
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DS7PR12MB9041.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(366004)(39860400002)(396003)(136003)(346002)(376002)(230273577357003)(230173577357003)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(55016003)(26005)(83380400001)(86362001)(38070700009)(38100700002)(33656002)(4326008)(52536014)(5660300002)(9686003)(71200400001)(6506007)(7696005)(76116006)(54906003)(8936002)(8676002)(110136005)(66946007)(91956017)(316002)(122000001)(66476007)(66446008)(64756008)(66556008)(4001150100001)(2906002)(41300700001)(966005)(478600001)(21314003)(41080700001);
+ SFS:(13230031)(366004)(39860400002)(396003)(136003)(346002)(376002)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(55016003)(26005)(83380400001)(86362001)(38070700009)(38100700002)(33656002)(4326008)(52536014)(5660300002)(9686003)(71200400001)(6506007)(7696005)(76116006)(54906003)(8936002)(8676002)(110136005)(66946007)(91956017)(316002)(122000001)(66476007)(66446008)(64756008)(66556008)(4001150100001)(2906002)(41300700001)(478600001)(41080700001);
  DIR:OUT; SFP:1102; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?ukZ7pNLEjQMQjTw0fC5+DAUxRZYMDStkF3YjyvGy559ZKrzg4eliNynQtA?=
- =?iso-8859-1?Q?jBloxJAMWSDxWA6f2/hurM9fFAlp38MSwcjqeBUi2tPjk/CWZHHi2SS9NE?=
- =?iso-8859-1?Q?feJRHCokxAliSGlNyORUqErjNTol0K/7kYecWcLzH9Hneiet+hJojDnkz6?=
- =?iso-8859-1?Q?KPtVtZI9gribXMi1IUmC31jt3fYvb9SYgsAat19MFiBIHjKzpffSAG2Qhr?=
- =?iso-8859-1?Q?tWUOn6zLDEPb4bQWXvk3qxp+zr4DeWlC+dlyyhVBeaIfeq6Fjz0bvpJXqH?=
- =?iso-8859-1?Q?UHoK2gA9Fn6fJcbw43QftKGEtAYs3dXBK+84Y+HBL2i7mGhDOVPLwWWLbm?=
- =?iso-8859-1?Q?cUUFhKmeDzfeAIDIXYTGttgRXLgNIgkuZ9U1W7jvrTVMZ5xdQisnfg9a+t?=
- =?iso-8859-1?Q?1U7ObASWGnMWj1Ij4GNg6VbASrwIX6t4sMlgRKOSajZVTZSoPkTfZNjrgr?=
- =?iso-8859-1?Q?+yMG+m67FAjjkrTy3ESTqZCuasBZ9YNn8KWskFccTxiwcSeMP4bxF1wChR?=
- =?iso-8859-1?Q?KJ6ub4aqzBCJn9CeorqhGQK2NEz+NBVBN8zXNb5dbUa4VBRgNZgBZBitQr?=
- =?iso-8859-1?Q?xnu47Y1FNbNHOXZSmmBODb14OmwzzMMHD+q1vxzXc6W3vsnRDA6jxb/sTW?=
- =?iso-8859-1?Q?Mx+qttxE9xg6k594qhyqmtpC5Egg1NelAVhzc7rbfhspPfgpZg75nRHScB?=
- =?iso-8859-1?Q?hUGe9cVKMG3FvKlwlc6yPkV2SYESiUN+ZHHA6b+BMB0Cll9G/rumdiP5Iz?=
- =?iso-8859-1?Q?qTJgI2GezG/bGe4RzHJMuqcvdXKUhI0Xa3BMJThwV4aLwiPsss/X6Y155v?=
- =?iso-8859-1?Q?xIOxfKHCZustxp9YXA8gq3u8DhxrK/FSngn04KSs9h2tjwTqYOHIu9B+Kc?=
- =?iso-8859-1?Q?weobOxEOSVFFc5hTqdWnGMcj/f+HUf8N7nFzYAQLP/sSjUNYTx6Y81/ccN?=
- =?iso-8859-1?Q?SbtmJ84Rza47Ymc4hARx5ADatGTaiyYVtHHevOzZIqyJ0af61v4iEY7gzc?=
- =?iso-8859-1?Q?n9ltrfQBmJoyveu0/BZxJow5Se4gez5+tyqYmjaKIGdqKxpJDrpwHYkV/z?=
- =?iso-8859-1?Q?QORCmde2peQ1Rys/x3GLvDquacLl98Y6CKAND8KYDNQIrOjunssO2UCrqj?=
- =?iso-8859-1?Q?kOXBu6iFkUXoorw8DxikLYUGWON840RbBQnilTlFwrtPQpcqecEEPCmOUt?=
- =?iso-8859-1?Q?oGvq/5AuCBJ/mPetVtvw/p6QgwkR1aEJbcb24QAxLBYAUzuWYy9MZK+IUs?=
- =?iso-8859-1?Q?wXuKVQXmSclyYbCFvqNriqPohD1g6zW0zNHmOsIE3uUn8Dq9gBH2xm98ym?=
- =?iso-8859-1?Q?ZebyS7tsVnpvixBJ2sJKy8hx+EgaWEr9j0AN+fl0XYO1bCFaNyv/LwzLt+?=
- =?iso-8859-1?Q?7danyCqhkk+UINZQ7E1xAuh1rdVe6WhGcOT124pu/ku6f/Y+aP1KiVeA6n?=
- =?iso-8859-1?Q?VuRRSLfetNijqTEF0uNEzFG/+7W1eafkytvk8Hco5fJG0RPHpp1ISfYxme?=
- =?iso-8859-1?Q?wUUZw6V40n1mIYTTjQ8MRuvZ6DvJQWtYNgVbR9x1NqzguEOEx5g89vVrgA?=
- =?iso-8859-1?Q?gsfnwrjUGcSSlHYim1GnpVjMdN0TlC0WYiq8DUwlRI0ZiPCyvbHc+4uccx?=
- =?iso-8859-1?Q?9cX9vnwnGFrKN4y1MxycoIdnXw3ULHxe2m?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?684EIgZPjEYICLnm6CEgOXyYgAS90ZZZu1bAI6zqR4IG6hnNP8prDTtWc7?=
+ =?iso-8859-1?Q?sZ/56JKQ4GzEqFM8qa8A+H/mP9y/0V6xs1Rz3JgPlXY7zAic81yM1YuLrS?=
+ =?iso-8859-1?Q?sdvVHLUG0eRm3nhCKnuo9JOykNAW9+4YI3zt1pxS5vUvdDhtK/GItNKSdr?=
+ =?iso-8859-1?Q?elxUaargYg1vKH+K0FTIxJBOUQFKwHSsefjSPfiyZ3SDXwFpo7DpBW64/W?=
+ =?iso-8859-1?Q?VzkeU0rX4ZIg0NFsXtINY0gYpFvNLwi5o28vN9VBI+QzsMBrYADEbOQv1i?=
+ =?iso-8859-1?Q?Ldquu0jQT77zAYG2ed7PrILdQv6l1qa5Unr2aMqLq6xdmdeUP3Xxxiv3hE?=
+ =?iso-8859-1?Q?vBCbuIvPQFJiEOBcXafKkt7QsW1XgfWq3dXAnk8cCF41ZJiHtxMg2hWGEC?=
+ =?iso-8859-1?Q?T3kp842Xv7rKGyBllKV42yzcagE2PlokDVCkQAtBfZVVkAgdNaX0Uv1BDR?=
+ =?iso-8859-1?Q?gGo6T8mqWndQG6My810sYTx7thjZAbYOZFRSnEFcsmLYIisXnRDZu+EyFf?=
+ =?iso-8859-1?Q?sRlMwfcfma/781pywN2RbtsrSapgEWXNcAOwnSNFZ/JVoi6BXS0ij+VoVj?=
+ =?iso-8859-1?Q?tlFjDbbc2HoJQmX4b5yJR7vuVVdnu4rWpv732cMsXmsg1dkQgL9rV7shsg?=
+ =?iso-8859-1?Q?dxT0lxTCIayKq/U/93Jqn3sfwk0Xuwic9k3r6MvvZ/IZa2fbWFj71XO0Lb?=
+ =?iso-8859-1?Q?OfPV4CmFp89VPxkq73nQh6qQ/ipTXFliw784r264Bkz3jA2LYtDt98aO6o?=
+ =?iso-8859-1?Q?AWeu3FUbN+EB7DDSbx2+VOPOi3Hk9S3ptDW4xUdVttN1Kty3H45CpY9Wlh?=
+ =?iso-8859-1?Q?XF4BK8E1KMhOYCtRPhqjqeVQ7gBtLuywcOy9SJ8cmSouxj/XmsN72dEMDV?=
+ =?iso-8859-1?Q?N4TU4gcZtqMSDfsUTQ060HzlotxFPd91CRYODfMbdzn3ZAQt80NA8KWklb?=
+ =?iso-8859-1?Q?GMs2Y48U8Rk8h9eHNk91oOsoJKDcXcPBWpp2Uudl6tprcJ5PRQo7c9zt1f?=
+ =?iso-8859-1?Q?YGbM+1F8MxATHoMkV1BPuJ8by91JQIfwTD5GEKzSj84Yiv+Q44l0PeJCIs?=
+ =?iso-8859-1?Q?qcefMm8wn9x7JCjKNgjtUayhdKeaK/eVSERf/Sa4XxZaVSwBEtpfiYt1NN?=
+ =?iso-8859-1?Q?jpvCyWWSeNwp+a4vQn1UE+jAUMYleVvNZdxhoYQLfLDHUtwpQN8sJ59d5i?=
+ =?iso-8859-1?Q?5Wu7btmP+8z/5PPrGCyAP8j0GyhdekQyLKHXtD35RifYcVBKDykucFM4TT?=
+ =?iso-8859-1?Q?3UzMem3v9For2q18mWTbdmslzD+g/s2oN6YO07OFxOpEadbt745JIOw2Q0?=
+ =?iso-8859-1?Q?E4aVrtMom6HYQJc2UZoYuqFuxvuxN2J2eRf3mZma29ImWklUa4ElvHCA+r?=
+ =?iso-8859-1?Q?TVoEMsItPYpIw5vXc0cYye0IRDO0Ef2zIe8cqz9kEcBdGkuXMwkMecTMr6?=
+ =?iso-8859-1?Q?uGCCZ6Y0PcM9TeKwvk7jgMJMvws8GvLBwpNHWRrkQxnB1MJ/q+yEOWEKEB?=
+ =?iso-8859-1?Q?nvitcQpufMSDcFgE6qQcd6A33QzlRc412YcbUvdcddI1ZDc5dJ7rWPmUQR?=
+ =?iso-8859-1?Q?SDoDwmFLvARrEcwPidD/Sg0tqMTe+17VeiOnPQxyis3zoH+YOoytLoCAiJ?=
+ =?iso-8859-1?Q?lYyePijldNSc3hzzxfxgszTuYV3wZy7MPL?=
 MIME-Version: 1.0
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: HJkbi0oft3Cryqym+Chpsyu6/EcrQohMRrsroWUDWoPzufLfGwqTHjznRsVs7mVV2CtoAD3PIU2okMqHtQcxRxoUWO9bQPnpMOaGHWn3b+RM4u3y9PaF/Uw+/meZboLhklh/wtwYpvDJQIXU2+o+Fpvc9Jvz5siNW1KZ51t3WYmvmWm0imiCaljuxrqm7jFwbCUELbYpRnaxxKnqSfB4ASrfekEoxmZNNfJm5XkF+yqLopuLhMcqwADy3JHbf1sSy4iCeh42bIQexIXjnYAFXdMZkMseYlfOLFTn0OYQbQF3WqiYtXv9hp5knf0PDv3Y5Yh3rEEOup1laBPAgoOYzLV4PwTCXagaY5pmhMmk7E9SFUDKNghfO++NEAC81yvlrJpByrG10vi+c3a3/YS+rWpZ/8s4DOR5DO6MROu8FtsRyMC8OfcdtBo7u8o+/GB6YlARLX9FSwvEZZMGrrBTOHiuUFbWnMpOviKQJ3K9JF0AXdgA9IIw5CKKHrxlIIEigfIfeTZN0Ub49V6UpwYOCz0u/45jI7uwPAHQ6OPzq3LZlm8S9BttcP3mKXbRKdQxh6K+Kap6Ycaf3r1XG3PInIt00VGx9lC16k4+Mvnk4Mc2skYUBxDDcqh9IZV6J6J7kiU91/TKYd8rCK1M1+6XXg==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: b8Nhgf7fqeY/cwZUqxKBzHWzJwD9GW2TWs/pocCJ8UkejG+u9R8jn4LtHx8uY5l4hSPUPVGtKvVEd8AcxTmMWAGixnTD9eFX7ainUSjd/GdInZEGXv2s8SAg3sjQeGhAe2WSb1BduUgzmIICjU2Bqz61zUWWfHI36WT8V+lMxkVlsBt7PIbiRdEzMYjbD0adGhsfVXaLvR79YQ2z/1AEK0bxPqY9GNhpNCBv3vB4DposICE9gx8yGysKF6MmKg60mq+ps+B5a/ZoHwTPn8kNBVay8WBJ5dZau6FKHPZSLhJlBSSuR/SAeiJVflVIuyOwjFpdGGzxlyuNL1hVEtNh/Px1sePFhkE912umEQcdjjQNTXKQeLbf/wF0/37IDvemukNz9uQN+0G+h7wReqtKf6NiNwn9ekzApgP5LE4SEwoIkkjKlZF4mL91VRlnacq6PZZJH6E1l+ahTAmoYlsrO1LDF9TU9OB5891RAR7SYLfdcG99H1+tkRIjb6jzj4e60YbdspxnmiZxaEEXkV0WZTgBOWWPpAEGOWX1O5+9lXD3a6jjbz0IbM1yBruQ1Pj74pg/Xt7xspCfsV+RwtpvxEfAQ76Ea8nHXLgjhOinfHYWMHYmrmAJUDDI4QTL7/vUh5XeHebs3Hcc6jIGrrC8Ag==
 X-OriginatorOrg: synopsys.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9041.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d91638d-c43e-4ddb-687f-08dc0ad80d5a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jan 2024 14:43:43.2919 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e79ac558-b466-4c39-ca39-08dc0ad89479
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jan 2024 14:47:29.9543 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 84BHoMrAmcASTQY8l1dbmI0cRf5cyBQ5ECSe3Oi1FlKu78xsJmuui2LxG38C8/0E4SuKT5Uhw4XuYcoULeYWDA==
+X-MS-Exchange-CrossTenant-userprincipalname: 8+xnDZ4ZcfXz+wnO5yhNNNIdRWMMTWl3vCp1awH86H/REz8bXWT8X7nA3+/KS4kZZvOpUa4TpqgHwQN5pgXckA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8992
-X-Proofpoint-ORIG-GUID: H5lVtEiyFH_S6QDNHRWNd5ToJ-SnOFai
-X-Proofpoint-GUID: H5lVtEiyFH_S6QDNHRWNd5ToJ-SnOFai
+X-Proofpoint-ORIG-GUID: bw3XUNFz1vtgL8oI_AAl1y0SLViM-unQ
+X-Proofpoint-GUID: bw3XUNFz1vtgL8oI_AAl1y0SLViM-unQ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
@@ -163,41 +164,41 @@ X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
  adultscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
  clxscore=1011 malwarescore=0 priorityscore=1501 suspectscore=0 bulkscore=0
  mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2311290000 definitions=main-2401010118
+ scancount=1 engine=8.19.0-2311290000 definitions=main-2401010119
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=synopsys.com; h=
  from:to:cc:subject:date:message-id:references:in-reply-to
  :content-type:content-transfer-encoding:mime-version; s=
- pfptdkimsnps; bh=PHrM7b7b9BXJmO7cX9qXyohElU5lSe83CWmrS0IsE40=; b=
- FGUeFIqbrtgfHGRRkTnH4C3arXVEyzkNiNPbNQpUBKpHv+Rsyojw2/G+omYFcHHM
- 9ECTbEgV3UIYLY2f+MO77fgtPqg06vwU/tNlL65BpYkPxqkYA5Kb45Jrto3d/Onl
- vwqJxVTmHO7jNf72XD2BTJuGJVR3OEp+3cJZWL8vwfQ1nDlNvaES6Jl7mdS0RSbP
- ewIAWZqL6VtV8L37/M+x/vQYdur5ABzjbzv7c9u0omEsg9YC+jVFZ8bkAUTIOT4m
- 0/VR86+TWpAie4ql6rJ3SjBHm60ipvDzWCh0cDi9wYZO8Rqa3s4PxQDVsJn4QHOb
- +Cp0h6R2NsqDiwdCVvSBAg==
+ pfptdkimsnps; bh=C2oO3O7zd4E/33itpwrmm2UdMFwrL8quT+NkWFLdZC4=; b=
+ KfaylAIwgDQH6m1QAMap1P6IuBrI6ru+wm8ADgxy+E31XN5ikUKNgHaoBdgmTM+E
+ eZVFwl2/YZH3k7hSVf/i0oHCPv+3nsuyRooMTxLafmFBEGxTwvkw0Qr6/9bTkQaU
+ NF1s0yOZ8iVzPrZY5x+Bi0gN6liZTFLQ20Nerjk5xReRHkgmUbtvfsD49y1n9tbV
+ EMpysa02ZBYvHsQcpTrnpJ6xbBs0cVgsUbOnTH4sWzakNCJ/9lzeJ3NzQuzTCxJA
+ WFZ1R831bvudBywmeiFfnAzYJzvv76kwx2aoGOqftqBiRClApuO+TgnzMd17ZRjJ
+ +knK6bSF2sVaIITxWzkP4Q==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=synopsys.com; s=mail; 
- t=1704120232; bh=cyGKle3ZtcHDJcp41dXGcyKeb3A/wlii4OugPwIK0jQ=;
+ t=1704120461; bh=C2oO3O7zd4E/33itpwrmm2UdMFwrL8quT+NkWFLdZC4=;
  h=From:To:CC:Subject:Date:References:In-Reply-To:From;
- b=f+tv4UYw8DC6LqjcIAiztiihfRksdQzviou4sji/dg/5Wp6T5NpUBptpV8VimobjM
- kuF3+40/KoOzDVaJ1JOhNKs7mumi/gFNkVpQEEGKG4+EoFg07+adL5yDf5rit9jNna
- 4mY4ijVPRN8+ujgWt2dad+f9TD4avz3ioD99mV3PDnTqdALIvWR8A1D88BFgy3V9qN
- s56Y+NMlilEUT+0Zjdhe/M2VYMXltQyULL6Wj41ZlfIswv/jmfZnSL6jWFrtqi8s1M
- NcYFdja5m96xBHa/a7RSOrxPc+f09+0RmyVis+PUG2JYsBdAu1mBHlR3f7upJUH3fB
- r7jM+FiYmybFA==
+ b=fpU0gDZJ4AAYK+NgPTM3FsvIIuNs/ccPObBFT18gul4PTQYF01TPu9DEGo+ETrjcV
+ cJ3eUcz1vhSRvLCm30KDuLWitf52O5/kS4SbP6vDEPwmuIAnRE+xHK66vy0fb0F1V1
+ jlpMX4Qr89dzyycbsSjQxPwHBOrnHZ8J/5+KFxkJxQnQLXZGeYROWaGg8BX59N3pn0
+ GL8tm3W9wdTeYUJNbsB7qlHVAJfhXsCwWuGnbxhM7wYeWAJjTH6Z854CbUTgYa2F5t
+ SIzKVQelHpmuYOrJX6hT3mvNUJxLQy+JOFDHGYmMtgmmTAcGWTL04coYnS5MuQvZ7I
+ iAwDt0MrLddnw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=synopsys.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PHrM7b7b9BXJmO7cX9qXyohElU5lSe83CWmrS0IsE40=;
- b=wWSLr98n5Eh9yzqe71jmcSqCr87eeDDHAHSRckxvRnhtIihl174STm/0jDw7BmOBFRRXp49sIaZ1CSqUoE6Aj7hd5V2/U3XK9FL323pRR+rlIyqtxGUdAhNYF0lkwCBIeWyzHw2TBd+dWEpdm/7dGimTqSDpgXEkiidwcz6xgFM=
+ bh=C2oO3O7zd4E/33itpwrmm2UdMFwrL8quT+NkWFLdZC4=;
+ b=gNwSFSdnNiCmZx/nlgTEhhhi6HHEmT2m7sjshh+LzHKgP1Z6dexo5/MKAl7q+L64WXQKMiucGldX4h9gWapewpy4p7eNJh3+ktOQxCKDx10Mgbwt0Ub6Bj93tjg37ZnAWUnIryhGfUaxA4H5LnMl0Z7JqkGhr7tHl5P1rTid+Lk=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
- header.a=rsa-sha256 header.s=pfptdkimsnps header.b=FGUeFIqb; 
+ header.a=rsa-sha256 header.s=pfptdkimsnps header.b=KfaylAIw; 
  dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
- header.a=rsa-sha256 header.s=mail header.b=f+tv4UYw; 
+ header.a=rsa-sha256 header.s=mail header.b=fpU0gDZJ; 
  dkim=fail reason="signature verification failed" (1024-bit key,
  unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256
- header.s=selector1 header.b=wWSLr98n
+ header.s=selector1 header.b=gNwSFSdn
 X-Mailman-Original-Authentication-Results: o365relay-in.synopsys.com;
  dmarc=pass (p=reject dis=none)
  header.from=synopsys.com
@@ -206,10 +207,10 @@ X-Mailman-Original-Authentication-Results: o365relay-in.synopsys.com;
 X-Mailman-Original-Authentication-Results: o365relay-in.synopsys.com;
  dkim=pass (1024-bit key;
  unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256
- header.s=selector1 header.b=wWSLr98n; 
+ header.s=selector1 header.b=gNwSFSdn; 
  dkim-atps=neutral
-Subject: Re: [Buildroot] [arc-buildroot] [PATCH 1/6] package/gcc: remove
- special arc version
+Subject: Re: [Buildroot] [arc-buildroot] [PATCH 4/6] configs/qemu: add
+ qemu_arc_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -223,75 +224,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
 Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- ARC Maintainers <arc-buildroot@synopsys.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
+Cc: ARC Maintainers <arc-buildroot@synopsys.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dear Waldemar, Yann, all,
+Hi Waldemar, Yann, all,
 
-Sorry for a bit late reply.
+> Yann E. MORIN wrote,
+> 
+> > Waldemar, All,
+> >
+> > On 2023-12-31 18:25 +0100, Waldemar Brodkorb spake thusly:
+> > > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> >
+> > Add a bit of explanations in the commit log, especially given the
+> > following...
+> >
+> > > ---
+> > [--SNIP--]
+> > > diff --git a/board/qemu/arc/readme.txt b/board/qemu/arc/readme.txt
+> > > new file mode 100644
+> > > index 0000000000..93bb9c2152
+> > > --- /dev/null
+> > > +++ b/board/qemu/arc/readme.txt
+> > > @@ -0,0 +1,8 @@
+> > > +You need Qemu fork from here:
+> > > +https://urldefense.com/v3/__https://github.com/foss-for-synopsys-dwc-arc-processors/qemu__;!!A4F2R9G_pg!fgGSAQfVckRuijplS-p83y-PGaKlg6lK_iA1kW3cneXd4lEGQc_FCtOb5-gwAhS2NWDw2jkfqPDZYkeaBQ$
+> >
+> > So, we are dropping all the arc specific versions for the toolchain
+> > components, but we eventually introduce a defconfig that relies on an
+> > arc specific version of qemu, that we do not even package in Buildroot,
+> > so that users can't even enable host-qemu in Buildroot.
+> >
+> > That is a bit sad...
+> >
+> > What is the rationale for introducing this defconfig, then?
 
-> On 2023-12-31 18:25 +0100, Waldemar Brodkorb spake thusly:
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
->
-> Thanks for working on this; we discussed that with Thomas the other day,
-> and we concluded that indeed that would be a good idea to get rid of
-> that special version now.
->
-> However, your commit log is empty. It should instead explain the reasons
-> why dropping that special version is now a good thing.
->
-> It is very importaant that this information be recorded in the commit
-> log, because we may (will!) need to refer to it in the future, when we
-> then wonder why that was good idea.
+If there's a pre-built binary of QEMU for ARC, can we use it instead of packaging
+it via Buildroot? I.e. what if in Buildroot's Dockerfile we will just pull-in
+a binary instead of installing it via "apt get"?
 
-Thanks for that clean-up series and indeed it makes a lot of sense for
-ARCompact (AKA ARCv2) & ARCv2 processors - which are perfectly supported in
-all the upstream projects.
+> Qemu is more widely known then the nsimdrv. And I think when ARCv3
+> support is added to Buildroot it can be used to test it, too.
 
-Especially it's nice that you went that far and added confing and instuctions
-on how to run the Linux kernel for ARC on QEMU - that's much appeciated.
-
-But as we discussed some time age there's ARCv3 ISA which support is being
-added in upsream components still and as of now not all the bits and pieces
-got merged upstream, thus we and our user have to rely [sadly again] on our
-GitHub forks, see [1], [2] and [3]
-
-Funny enough uClibc as you know already has full support of ARCv3 starting from 
-v1.0.43, see [4].
-
-What's also nice, both 32-bit and 64-bit versions of ARCv3 are well supported in our QEMU
-fork [5], so relevant configutations will be included as well.
-
-So given that's a short new year break between work fires I may quickly send-out
-patches which will either:
-1. Bump ARC tools to the latest version 2023.09 (see [6]) which will also
-   add support for ARCv3 (in fact we already have it in our fork, see [7])
-2. Update ARC tools (GCC, Binutils/GDB & glibc) for ARCv3 only, while switching
-   ARCompact & ARCv2 to upstream components.
-3. Given ARC seems to be the only use of non-upstream components, remove
-   ARC-specific tools/forks from buildroot and  only enable ARCv3 use via
-   external toolchains.
-
-And while (3) is the slimmest option (no need to add or rather maintain ARC-specific)
-code in package/xxx Config.in.host, xxx.mk especially with uClibc it's a bit too
-restrictive as users may want more flexibility of configuring uClibc to their needs.
+Indeed, with QEMU we'll be able to finally enable runtime testing for ARC as there're
+no license-related limitaiton in case of QEMU such that we have with Free nSIM.
 
 -Alexey
-
-[1] https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/tree/arc-2023.09
-[2] https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/tree/arc-2023.09
-[3] https://github.com/foss-for-synopsys-dwc-arc-processors/glibc/tree/arc-2023.09
-[4] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=de6be7bc60f190a0d746945a3a5a143bc93a1a65
-[5] https://github.com/foss-for-synopsys-dwc-arc-processors/qemu
-[6] https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2023.09-release
-[7] https://github.com/foss-for-synopsys-dwc-arc-processors/buildroot/tree/arc-2023.09
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
