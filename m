@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5188C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79502C47073
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 22:02:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E23D408C0;
-	Mon,  1 Jan 2024 21:59:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E23D408C0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E61D400EF;
+	Mon,  1 Jan 2024 22:02:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E61D400EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hFYX71rZIXS5; Mon,  1 Jan 2024 21:59:42 +0000 (UTC)
+	with ESMTP id Gqmq9QsiOY55; Mon,  1 Jan 2024 22:02:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4E383408E0;
-	Mon,  1 Jan 2024 21:59:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E383408E0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2587F1BF20D
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:59:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 17E204090D;
+	Mon,  1 Jan 2024 22:02:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17E204090D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9616B1BF3ED
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 02E90408E0
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:59:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02E90408E0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67EFF41DEC
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:02:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67EFF41DEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bYZ61qcKq_4b for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 21:59:37 +0000 (UTC)
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 880AB408C0
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:59:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 880AB408C0
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-40d5f402571so53547855e9.0
- for <buildroot@buildroot.org>; Mon, 01 Jan 2024 13:59:37 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sfZsExZWe9uP for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 22:02:18 +0000 (UTC)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5CB9741DE9
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 22:02:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CB9741DE9
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-40d3352b525so100125165e9.1
+ for <buildroot@buildroot.org>; Mon, 01 Jan 2024 14:02:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704146374; x=1704751174;
+ d=1e100.net; s=20230601; t=1704146535; x=1704751335;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HFhcVgKjKfca+w80TCj+iOOyf4P4Htpq6zg2AgF+LVM=;
- b=Onf6EiFCHpjbLXTze3RMEN5mButv7a1Q/et68Paq4t8j+l03/O1nGwJRFv7+bul6kw
- muArHApYsWWFQQebk6J6n2LDEDzrKoX4If2fjFsoJynAknFY8/ErBldh1HKDujYF9G/S
- pVzQye3WJ3hMCJ1XxAtcPc2uv03fs8VMoDg812PAZFHek58JOKKPjt4JmX4oelrteKlB
- ZSb6HmAOwDZ8LaB+sCpzt5Qu3wERhTMLUXaUqQenSGVgXCcmB9XUM1rOvdVZZDuDYUcX
- G9nqbz80/exSIcJM0JKxeg0e8hwaEAo8x55GFl6+Ywl0rQC5HAoVh4o25Whe/pmiLD5e
- BFzQ==
-X-Gm-Message-State: AOJu0YwBm7Zo/zhb+HpzRoRiY4Za4mnJ5ItOX0UHgwnFbJebssoCTApO
- kmdnnMeoKm6rFwMPDl1nVysIOQatd/Q=
-X-Google-Smtp-Source: AGHT+IHzE4DfG+6zQg6JzCpO1wQ2yde5GS2QDhVCFWI3YC9b+29FKz1HMg3ZtHG3ejFeD4WVwKyJtQ==
-X-Received: by 2002:a05:600c:4da1:b0:40d:3c4e:a5a4 with SMTP id
- v33-20020a05600c4da100b0040d3c4ea5a4mr8529015wmp.96.1704146374408; 
- Mon, 01 Jan 2024 13:59:34 -0800 (PST)
+ bh=OAomARFzoquO6bXab7OYQXYXDFPCruNzp+OkgIIDpNY=;
+ b=Pd3UggH75TK6DnLf/Wh9J3eFSLSjh8vtDZDKs4mVuFgCFYxlibuZBpT5i2wL1vBtel
+ VikdYKRJK7EkFiBfPQfp2YDl0tfiQxHfDa3JYb3Bf3Jp8y3Z1eQxxElb/eeEFyC9gTOr
+ pnYl0lNCPA++ZaoHZGhEnU6z95gvAE1gqDpDprqZhLSblQ1eU0lTR2Ie4BVP0Cy7+cTp
+ W2XrE5k3SXkHHSbWdcIdyxMcIDqEFh2Zn5aw4/9g/nl8JZoQpVrvfnHeROZhlHZkLnPP
+ kQuBns1LdD8eBrnWKYaSryiLaX7YfuKX8EbHtnzs8BjaMhTG4lNjBvRF0fTR98A/LUtZ
+ Idiw==
+X-Gm-Message-State: AOJu0Yzmk8k+g4qR5G/HjYown2qL43h8P5CfEVAAfnTUo7G+xgFN2Hqa
+ 4gSMTh0Q0fquypVBHGYFDh3TlvHrMOg=
+X-Google-Smtp-Source: AGHT+IGxSFaiMh6fKFUyc9cBKIXJHiZdx5NTAywyjiDDuNmbWxSgHItIZs4i36ynF3KivulPZsX1bA==
+X-Received: by 2002:a05:600c:1c93:b0:40d:3571:cc13 with SMTP id
+ k19-20020a05600c1c9300b0040d3571cc13mr9861020wms.9.1704146535477; 
+ Mon, 01 Jan 2024 14:02:15 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- fb8-20020a05600c520800b0040d87b9eec7sm6296712wmb.32.2024.01.01.13.59.33
+ l17-20020a05600c4f1100b0040d85a1fad9sm7823794wmq.46.2024.01.01.14.02.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jan 2024 13:59:33 -0800 (PST)
+ Mon, 01 Jan 2024 14:02:15 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jan 2024 22:59:31 +0100
-Message-ID: <20240101215931.4304-1-fontaine.fabrice@gmail.com>
+Date: Mon,  1 Jan 2024 23:02:13 +0100
+Message-ID: <20240101220213.6175-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704146374; x=1704751174; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704146535; x=1704751335; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HFhcVgKjKfca+w80TCj+iOOyf4P4Htpq6zg2AgF+LVM=;
- b=h19tAlApma3TRZY7ARXkD2oXK8P3PHrRi64axpU/XfBwH6pTbSeIE8ch/bGPlD6umd
- M5Qgl7U1WFXW2YC59BAQEzupa6+oHJzFkwViDK54tlymuaAcL/GvUoMIvOKBUYj1djlM
- g1QqGSg+1MtJd5h4IZgsrDgnELhewgUZUtjF/9WYvlj0ZM28DLziZGxGYBlV9p0eUJwh
- HT4+iNq9LcnqXRS1ZINF025csc9ZTkKj0l8+9RuqKrNK6B+fzwVhDa4v6eOTnnNkYbnC
- d2ffxJeZQu5KA6f3NY3Ci7imnsEPDhToqX472C0UP6kC6ZArtDfkUmkiPAHabxabX3B3
- a1Bw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=OAomARFzoquO6bXab7OYQXYXDFPCruNzp+OkgIIDpNY=;
+ b=JaSFXkg8W3BBUkQQwTyApZbHDTlld2zbDNuQ1f5ocrCfu8NSbm155VfD15r4s34uub
+ 24r2ylbEoO9g9+FjkrSZjXpxITcM8uH3Ap2vliqbV4vp5U2xOTvd+jXaRi+E8j1NqEsg
+ zn0z+UJ4iG3yj7Q2IbmdvfKe4YIwaolWeQFp+Z22sKiCyEW9Y4WkuDtKrO0C+dyGFTyd
+ damTRYYHs0EEhNC1SPOFvrfC0vdbcHt9+xkCEdktgQaZ0i5BPjAYlu5IL7N8JvQxwFk2
+ TClZNKdWnav4bl26paKGYIxM9Orv2QXvakmOTBQghDWW1P8HxK9zWB4+ez04H2POSmM4
+ AjlQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=h19tAlAp
-Subject: [Buildroot] [PATCH 1/1] package/domoticz: bump to version 2024.1
+ header.a=rsa-sha256 header.s=20230601 header.b=JaSFXkg8
+Subject: [Buildroot] [PATCH 1/1] package/tinyssh: security bump to version
+ 20240101
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,62 +94,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Vadim Kochan <vadim4j@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-openzwave is not a dependency since
-https://github.com/domoticz/domoticz/commit/62c95f24305f18734cf5ebb3f6517b225fddc36f
+- License changed from public domain to CC0:
+  https://github.com/janmojzis/tinyssh/commit/39dfb96613660d67ced44cc3995a08797e6c999a
+- Mitigates CVE-2023-48795:
+  https://github.com/advisories/GHSA-45x7-px36-x8w8
 
-https://github.com/domoticz/domoticz/blob/2024.1/History.txt
+https://github.com/janmojzis/tinyssh/releases/tag/20230101
+https://github.com/janmojzis/tinyssh/releases/tag/20240101
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/domoticz/domoticz.hash |  2 +-
- package/domoticz/domoticz.mk   | 12 +-----------
- 2 files changed, 2 insertions(+), 12 deletions(-)
+ package/tinyssh/tinyssh.hash | 4 ++--
+ package/tinyssh/tinyssh.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index b54d0229fc..546177332e 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
+diff --git a/package/tinyssh/tinyssh.hash b/package/tinyssh/tinyssh.hash
+index 462ffb9002..bdb1504234 100644
+--- a/package/tinyssh/tinyssh.hash
++++ b/package/tinyssh/tinyssh.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  32bcf49df8c80c470352e63004a82d9601b90ccf406096099656250a4515ac28  domoticz-2023.2.tar.gz
-+sha256  9effa792f856d8d9036c53b9ae500ee3bffa1488addf9d6f1fe4bf960f73f740  domoticz-2024.1.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 3fbff5f4d8..d0856b71af 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -4,7 +4,7 @@
+ # locally computed
+-sha256  234656fc8d369608eb5d0f3a26280e0e38e2e6b134cfc610b6e24bce176acd4f  tinyssh-20220801.tar.gz
+-sha256  b5dc19477e29f4111e1c16cd89ec0782f5a07b1a30e3bdb7c155425b81b12c46  LICENCE
++sha256  d2cd49d0e5e8bdb808d86f07f946a0cfbf2dc9a449a4b8243a82be267d852b62  tinyssh-20240101.tar.gz
++sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENCE
+diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
+index 1472f7ead1..80b6ccb850 100644
+--- a/package/tinyssh/tinyssh.mk
++++ b/package/tinyssh/tinyssh.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--DOMOTICZ_VERSION = 2023.2
-+DOMOTICZ_VERSION = 2024.1
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
-@@ -53,16 +53,6 @@ else
- DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=OFF
- endif
+-TINYSSH_VERSION = 20220801
++TINYSSH_VERSION = 20240101
+ TINYSSH_SITE = $(call github,janmojzis,tinyssh,$(TINYSSH_VERSION))
+-TINYSSH_LICENSE = Public Domain, CC0-1.0
++TINYSSH_LICENSE = CC0-1.0
+ TINYSSH_LICENSE_FILES = LICENCE
  
--ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
--DOMOTICZ_DEPENDENCIES += openzwave
--
--# Due to the dependency on mosquitto, domoticz depends on
--# !BR2_STATIC_LIBS so set USE_STATIC_OPENZWAVE to OFF otherwise
--# domoticz will not find the openzwave library as it searches by
--# default a static library.
--DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- DOMOTICZ_DEPENDENCIES += python3
- DOMOTICZ_CONF_OPTS += -DUSE_PYTHON=ON
+ define TINYSSH_BUILD_CMDS
 -- 
 2.43.0
 
