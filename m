@@ -4,86 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB972C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5188C47073
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:59:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8EBFC40A8B;
-	Mon,  1 Jan 2024 21:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EBFC40A8B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E23D408C0;
+	Mon,  1 Jan 2024 21:59:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E23D408C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 77K-mqZWnDRi; Mon,  1 Jan 2024 21:51:57 +0000 (UTC)
+	with ESMTP id hFYX71rZIXS5; Mon,  1 Jan 2024 21:59:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 577CA40A8E;
-	Mon,  1 Jan 2024 21:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 577CA40A8E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E383408E0;
+	Mon,  1 Jan 2024 21:59:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E383408E0
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 497BB1BF37C
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:51:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2587F1BF20D
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:59:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18BD940A8B
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:51:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18BD940A8B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02E90408E0
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:59:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02E90408E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AuSM9pPfFklc for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 21:51:53 +0000 (UTC)
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A247940A87
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A247940A87
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-40d41555f9dso91890965e9.2
- for <buildroot@buildroot.org>; Mon, 01 Jan 2024 13:51:52 -0800 (PST)
+ with ESMTP id bYZ61qcKq_4b for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 21:59:37 +0000 (UTC)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 880AB408C0
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:59:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 880AB408C0
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-40d5f402571so53547855e9.0
+ for <buildroot@buildroot.org>; Mon, 01 Jan 2024 13:59:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704145911; x=1704750711;
+ d=1e100.net; s=20230601; t=1704146374; x=1704751174;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=J7nOCkZDdNJMXotjhnWUhpV49LiiUROCljHoGi1dYWU=;
- b=jraDt8P66U5kuZQ0l0Gq2he1KoC+XKviNbTQYoeSw6TRA/+1BcNB6sp4hJntY0o1E9
- FcUT8cYlJoSFNGQJIAtR0YkVb2ACu/JCd6uA1PcJwg5TQabnqEqc38VQz0mnrCyPUqGS
- uIuJ75UNPErx7U8UgF1S5ecFAzZ2bpDebi7sSbok0Nuee/kCOyZi0buUq9IJo9asYeCn
- oicAprdpsogv+sQuF/nGlKWJEmjcxCmRHv1c7ofUoVMHnmZ/RDoW619oEqfCx9Wd3vy6
- Fy3gC+77qQt5ovabSh82ilyIuGANylaqT6c6v+6h1QUa3e6gp5uBRcHfnH5d4ydMFdBe
- SnJQ==
-X-Gm-Message-State: AOJu0YxHw+ger4MikAG6Wnl7TMWOmTil7VTsvaWawpJumk+eE9WtDxX+
- gtqlyh5ZsYa6e3aI/U+qGjf1ccbiQys=
-X-Google-Smtp-Source: AGHT+IE+e/uTOA9QIhxof+P1Woc66p2KiKGggWTF/BJvVin9q6Dv0xs6eM2wLgHgIFvcjng9tYXQzA==
-X-Received: by 2002:a05:600c:3553:b0:40d:5a3f:8e90 with SMTP id
- i19-20020a05600c355300b0040d5a3f8e90mr5482998wmq.20.1704145910474; 
- Mon, 01 Jan 2024 13:51:50 -0800 (PST)
-Received: from localhost.localdomain
- ([2a01:cb19:8290:3800:4f89:5708:1633:580e])
- by smtp.gmail.com with ESMTPSA id
- b16-20020a056000055000b003372dcd739csm7485586wrf.86.2024.01.01.13.51.48
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HFhcVgKjKfca+w80TCj+iOOyf4P4Htpq6zg2AgF+LVM=;
+ b=Onf6EiFCHpjbLXTze3RMEN5mButv7a1Q/et68Paq4t8j+l03/O1nGwJRFv7+bul6kw
+ muArHApYsWWFQQebk6J6n2LDEDzrKoX4If2fjFsoJynAknFY8/ErBldh1HKDujYF9G/S
+ pVzQye3WJ3hMCJ1XxAtcPc2uv03fs8VMoDg812PAZFHek58JOKKPjt4JmX4oelrteKlB
+ ZSb6HmAOwDZ8LaB+sCpzt5Qu3wERhTMLUXaUqQenSGVgXCcmB9XUM1rOvdVZZDuDYUcX
+ G9nqbz80/exSIcJM0JKxeg0e8hwaEAo8x55GFl6+Ywl0rQC5HAoVh4o25Whe/pmiLD5e
+ BFzQ==
+X-Gm-Message-State: AOJu0YwBm7Zo/zhb+HpzRoRiY4Za4mnJ5ItOX0UHgwnFbJebssoCTApO
+ kmdnnMeoKm6rFwMPDl1nVysIOQatd/Q=
+X-Google-Smtp-Source: AGHT+IHzE4DfG+6zQg6JzCpO1wQ2yde5GS2QDhVCFWI3YC9b+29FKz1HMg3ZtHG3ejFeD4WVwKyJtQ==
+X-Received: by 2002:a05:600c:4da1:b0:40d:3c4e:a5a4 with SMTP id
+ v33-20020a05600c4da100b0040d3c4ea5a4mr8529015wmp.96.1704146374408; 
+ Mon, 01 Jan 2024 13:59:34 -0800 (PST)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ fb8-20020a05600c520800b0040d87b9eec7sm6296712wmb.32.2024.01.01.13.59.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jan 2024 13:51:48 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Mon, 01 Jan 2024 13:59:33 -0800 (PST)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jan 2024 22:51:42 +0100
-Message-ID: <20240101215142.2480384-1-yann.morin.1998@free.fr>
+Date: Mon,  1 Jan 2024 22:59:31 +0100
+Message-ID: <20240101215931.4304-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704145911; x=1704750711; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704146374; x=1704751174; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=J7nOCkZDdNJMXotjhnWUhpV49LiiUROCljHoGi1dYWU=;
- b=ZuVRTBfWuhCrZxwQnEmlbJkKXkOlWEXKsudaPdDjDiU6Ev0Wy47pWGgBBtyXrdnF0i
- YzM9jz6Y48oM/Jxci+BHQ4zXvr686VvBKfqZKykOBxpz/7eauuHr74EIQxvFsHoY/TBg
- QP4bVDd0c9UxCfJ6cCWgNmM2tJjvdxrtmPALdXUvV6aCs0OWU0g8NS3zwVJ2/oVJo2fh
- mVRLADBEE0wyCQZ9nDAUS6VWJTIK2gibsFrKAJ+oqIHrr9d0GqdVOo9mdyvF2ADT3Mfl
- N3lCBytk2cex9OVaNca4TmLFsfC8Vuqe1RJ7HHnclFIhwJAfDzFpUoI3FuZdtcfSPiKd
- 66RQ==
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HFhcVgKjKfca+w80TCj+iOOyf4P4Htpq6zg2AgF+LVM=;
+ b=h19tAlApma3TRZY7ARXkD2oXK8P3PHrRi64axpU/XfBwH6pTbSeIE8ch/bGPlD6umd
+ M5Qgl7U1WFXW2YC59BAQEzupa6+oHJzFkwViDK54tlymuaAcL/GvUoMIvOKBUYj1djlM
+ g1QqGSg+1MtJd5h4IZgsrDgnELhewgUZUtjF/9WYvlj0ZM28DLziZGxGYBlV9p0eUJwh
+ HT4+iNq9LcnqXRS1ZINF025csc9ZTkKj0l8+9RuqKrNK6B+fzwVhDa4v6eOTnnNkYbnC
+ d2ffxJeZQu5KA6f3NY3Ci7imnsEPDhToqX472C0UP6kC6ZArtDfkUmkiPAHabxabX3B3
+ a1Bw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ZuVRTBfW
-Subject: [Buildroot] [PATCH] Revert "support/download: generate even more
- reproducible tarballs"
+ header.a=rsa-sha256 header.s=20230601 header.b=h19tAlAp
+Subject: [Buildroot] [PATCH 1/1] package/domoticz: bump to version 2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,71 +93,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Antoine Coutant <antoine.coutant@smile.fr>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Vincent Fazio <vfazio@xes-inc.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q29tbWl0IDc2OGY5ZjgwZjYyYyAoc3VwcG9ydC9kb3dubG9hZDogZ2VuZXJhdGUgZXZlbiBtb3Jl
-IHJlcHJvZHVjaWJsZQp0YXJiYWxscykgY2F1c2VzIG5vbi1yZXByb2R1Y2liaWxpdHkgaW4gdGFy
-YmFsbHMgd2UgcHJldmlvdXN5CmdlbmVyYXRlZCwgZXNwZWNpYWxseSB0aGUgYXJjaGl2ZXMgZm9y
-IHR3byBjYXJnby12ZW5kb3JlZCBwYWNrYWdlcywKcmlwZ3JlcCBhbmQgc2VudHJ5LWNsaS4KClRo
-ZSBjYXVzZSBpcyB0aGF0IHRob3NlIHR3byBwYWtjYWdlcyBldmVudHVhbGx5IHZlbmRvciBhIGZp
-bGUgdGhhdCBoYXMKdGhlIHUreCBiaXQgc2V0LCBidXQgaXMgb3RlaHJ3aXNlIGdvLXguIFdpdGgg
-NzY4ZjlmODBmNjJjLCB0aGUgZmlsZXMgYXJlCm5vdyBnbyt4LCBzbyB0aGUgaGFzaCBmb3IgdGhv
-c2UgZ2VuZXJhdGVkIGFyY2hpdmVzIGhhcyBjaGFuZ2VkLgoKQmVzaWRlcywgdGhhdCBjb21taXQg
-d2FzIHdyb25nOiBpdCBkaWQgbm90IGFjY291bnQgZm9yIHRoZSAncicgYml0IGZvcgpnbyBwYXJ0
-LCBsZWF2aW5nIHNvbWUgbm9uLXJlcHJvZHVjaWJpbGl0eSBzdGlsbCB1bmFjY291bnRlZCBmb3Iu
-CgpTbywgdG8gZ2VuZXJhdGUgcmVhbGx5IHJlcHJvZHVjaWJsZSBhcmNoaXZlcywgd2Ugd291bGQg
-bmVlZCB0byBmaXggdGhhdApyZWFkIGJpdCBhcyB3ZWxsLCBhbmQgdGhhdCBoYXMgdGhlIHBvdGVu
-dGlhbCB0byBhZmZlY3QgYWxsIHRoZSBhcmNoaXZlcwp3ZSBnZW5lcmF0ZWQgc28gZmFyLiBJZiB3
-ZSB3YW50ZWQgdG8gZG8gc28sIHdlJ2QgbmVlZCBhIHdheSB0byB2ZXJzaW9uCmFsbCBnZW5lcmF0
-ZWQgYXJjaGl2ZXMsIGxpa2Ugd2UgZG8gZm9yIGdpdCBhbmQgc3ZuLCBidXQgbm93IGZvciBhbGwg
-dGhlCmRpZmZlcmVudCBDVlNlcywgYXMgd2VsbCBhcyBmb3IgYWxsIHRoZSB2ZW5kb3JpbmcgcG9z
-dC1wcm9jZXNzZXMuCgpGb3IgNzY4ZjlmODBmNjJjLCBhbGwgdGhhdCB3YXMgb2YgY29uZXJuIHdh
-cyB0aGUgd29ya2luZyBjb3BpZXMgb2YgQ1ZTZXMKKGkuZS4gZ2l0LCBzdm4sIGN2cy4uLikgdGhh
-dCB3ZSBjYWNoZSBpbiB0aGUgQnVpbGRyb290IGRvd25sb2FkIGRpciwgbm90CnRoZSB0ZW1wb3Jh
-cnkgZmlsZXMgZHVyaW5nIHBvc3QtcHJvY2Vzc2luZy4gSW5kZWVkLCBpbiB0aGF0IGxhdHRlciBj
-YXNlLAp0aGUgdXNlciBoYXMgdmlydHVhbGx5IG5vIHdheSB0byBtYW5nbGUgd2l0aCB0aGUgbW9k
-ZSBvZiB0aGUKaW50ZXJtZWRpYXRlIGV4dHJhY3QgYmVmb3JlIHJlcGFjay4KCkFuZCB3ZSBkbyBo
-YXZlIGEgYmlnIGZhdCB3YXJuaW5nIHRoYXQgdXNlcnMgc2hvdWxkIG5vdCBhdHRlbXB0IHRvIG1l
-ZGRsZQp3aXRoIHRoZSBnaXQgdHJlZSB0aGF0IEJ1aWxkcm9vdCBjYWNoZXMuCgpBcyA3NjhmOWY4
-MGY2MmMgaG93ZXZlciBkZW1vbnN0cmF0ZXMsIGlzIHRoYXQgaXQgdG9vayBxdWl0ZSBhIGxvbmcg
-dGltZQpiZXR3ZWVuIHRoZSBpbnRyb2R1Y3Rpb24gb2YgdGhlIGdpdCBjYWNoaW5nLCBhbmQgdGhl
-IHRpbWUgc29tZW9uZQpldmVudHVhbGx5IGRpc2NvdmVyZWQgdGhleSBjb3VsZCBtZWRkbGUgaW4g
-dGhlcmUuIFRoaXMgc2hvd3MgdGhhdCB0aGUKaXNzdWUgaXQgbm90IGFjdHVhbGx5IGNyaXRpY2Fs
-IGluIG1vc3Qgc2V0dXBzLgoKQWxzbywgdGhlIHRhciBtYW51YWwgWzBdIGhpbnRzIGF0IGEgYmV0
-dGVyIHNvbHV0aW9uIHRvIGhhbmRsZQpyZXByb2R1Y2liaWxpdHksIHdoaWNoIGV2ZW4gYXZvaWRz
-IHRvdWNoaW5nIHRoZSBmaWxlcyBvbiBkaXNrIHdoaWNoIGlzCmV2ZW4gbmljZXI6CgogICAg4oCY
-LS1tb2RlPSdnbyt1LGdvLXcn4oCZCiAgICAgICAgT21pdCBpcnJlbGV2YW50IGluZm9ybWF0aW9u
-IGFib3V0IGZpbGUgcGVybWlzc2lvbnMuCgpJZiB3ZSB3ZXJlIHRvIGFjdHVhbGx5IGhhbmRsZSB0
-aGUgbW9kZSBiaXQgZm9yIHJlcHJvZHVjaWJpbGl0eSwgd2UnZApuZWVkIHRvOgogIC0gaW50cm9k
-dWNlIGFyY2hpdmUgdmVyc2lvbmluZyBmb3IgYWxsIGRvd25sb2FkIGJhY2tlbmRzIGFuZAogICAg
-cHJvc3QtcHJvY2Vzc2luZwogIC0gdXNlIHRoZSB0YXIgb2ZmaWNpYWxseSBzdWdnZXN0ZWQgbWV0
-aG9kCgpTbywgcmV2ZXJ0IHRoYXQgY2hhbmdlLCBhcyBpdCB3YXMgaW5jb21wbGV0ZSwgd2FzIG5v
-dCByZWFsbHkgZml4aW5nIG11Y2gKaXNzdWVzLCBhbmQgY2F1c2VzIGFjdHVhbCBpc3N1ZXMuCgpU
-aGlzIHJldmVydHMgY29tbWl0IDc2OGY5ZjgwZjYyYzFkYTZlMjk4YzY4MGYwZjRiZmE4ODdmMzhj
-NzguCgpbMF0gaHR0cHM6Ly93d3cuZ251Lm9yZy9zb2Z0d2FyZS90YXIvbWFudWFsL3Rhci5odG1s
-I1JlcHJvZHVjaWJpbGl0eQoKVGhhbmtzIHRvIFZpbmNlbnQgYW5kIEFybm91dCBmb3IgcG9pbnRp
-bmcgYXQgdGhlIHRhciBtYW51YWwuCgpSZXBvcnRlZC1ieTogQW50b2luZSBDb3V0YW50IDxhbnRv
-aW5lLmNvdXRhbnRAc21pbGUuZnI+ClJlcG9ydGVkLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9t
-YXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgpTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5
-YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KQ2M6IFZpbmNlbnQgRmF6aW8gPHZmYXppb0B4ZXMtaW5j
-LmNvbT4KQ2M6IEFybm91dCBWYW5kZWNhcHBlbGxlIChFc3NlbnNpdW0vTWluZCkgPGFybm91dEBt
-aW5kLmJlPgotLS0KIHN1cHBvcnQvZG93bmxvYWQvaGVscGVycyB8IDMgLS0tCiAxIGZpbGUgY2hh
-bmdlZCwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zdXBwb3J0L2Rvd25sb2FkL2hlbHBl
-cnMgYi9zdXBwb3J0L2Rvd25sb2FkL2hlbHBlcnMKaW5kZXggMjY1Njg1ZWZmNS4uOTBhN2Q2YzFl
-YyAxMDA3NTUKLS0tIGEvc3VwcG9ydC9kb3dubG9hZC9oZWxwZXJzCisrKyBiL3N1cHBvcnQvZG93
-bmxvYWQvaGVscGVycwpAQCAtNTMsOSArNTMsNiBAQCBta190YXJfZ3ooKSB7CiAgICAgdG1wPSIk
-KG1rdGVtcCAtLXRtcGRpcj0iJChwd2QpIikiCiAgICAgcHVzaGQgIiR7aW5fZGlyfSIgPi9kZXYv
-bnVsbAogCi0gICAgIyBFbmZvcmNlIGdyb3VwL290aGVycyBtb2RlIGJpdHMKLSAgICBjaG1vZCAt
-UiBnby13eCtYIC4KLQogICAgICMgRXN0YWJsaXNoIGxpc3QKICAgICBmaW5kIC4gLW5vdCAtdHlw
-ZSBkIC1hbmQgLW5vdCBcKCAtZmFsc2UgIiR7ZmluZF9vcHRzW0BdfSIgXCkgPiIke3RtcH0ubGlz
-dCIKICAgICAjIFNvcnQgbGlzdCBmb3IgcmVwcm9kdWNpYmlsaXR5Ci0tIAoyLjQzLjAKCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+openzwave is not a dependency since
+https://github.com/domoticz/domoticz/commit/62c95f24305f18734cf5ebb3f6517b225fddc36f
+
+https://github.com/domoticz/domoticz/blob/2024.1/History.txt
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/domoticz/domoticz.hash |  2 +-
+ package/domoticz/domoticz.mk   | 12 +-----------
+ 2 files changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index b54d0229fc..546177332e 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  32bcf49df8c80c470352e63004a82d9601b90ccf406096099656250a4515ac28  domoticz-2023.2.tar.gz
++sha256  9effa792f856d8d9036c53b9ae500ee3bffa1488addf9d6f1fe4bf960f73f740  domoticz-2024.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 3fbff5f4d8..d0856b71af 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOMOTICZ_VERSION = 2023.2
++DOMOTICZ_VERSION = 2024.1
+ DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPL-3.0
+ DOMOTICZ_LICENSE_FILES = License.txt
+@@ -53,16 +53,6 @@ else
+ DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
+-DOMOTICZ_DEPENDENCIES += openzwave
+-
+-# Due to the dependency on mosquitto, domoticz depends on
+-# !BR2_STATIC_LIBS so set USE_STATIC_OPENZWAVE to OFF otherwise
+-# domoticz will not find the openzwave library as it searches by
+-# default a static library.
+-DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ DOMOTICZ_DEPENDENCIES += python3
+ DOMOTICZ_CONF_OPTS += -DUSE_PYTHON=ON
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
