@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93FFEC4706F
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 20:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11CCFC4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 20:33:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23CDE60B74;
-	Mon,  1 Jan 2024 20:33:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23CDE60B74
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6CF560D88;
+	Mon,  1 Jan 2024 20:33:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6CF560D88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vTzYylWGZ0mK; Mon,  1 Jan 2024 20:33:36 +0000 (UTC)
+	with ESMTP id rsw-b6_2Gggx; Mon,  1 Jan 2024 20:33:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6740160B0F;
-	Mon,  1 Jan 2024 20:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6740160B0F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CDCD71BF405
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:33:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A6C860B74;
+	Mon,  1 Jan 2024 20:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A6C860B74
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 806E51BF405
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B39434035D
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:33:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B39434035D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5653C401CA
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:33:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5653C401CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QTB-lQnNjAu5 for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 20:33:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBA1340334
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 20:33:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBA1340334
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0C3183A95; Mon,  1 Jan 2024 20:33:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 1 Jan 2024 21:33:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 498925bc0ee318d6093d44668ad7d6b74849c837
-X-Git-Newrev: 745e1ca054d466618c1cbe82bee6c9af5a405fdf
-X-Patchwork-Hint: ignore
-Message-Id: <20240101203332.A0C3183A95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nbd: bump to version 3.25
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2tbhaeqbWuaL for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 20:33:37 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 90E1A40104
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 20:33:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90E1A40104
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5732F40004;
+ Mon,  1 Jan 2024 20:33:33 +0000 (UTC)
+Date: Mon, 1 Jan 2024 21:33:32 +0100
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240101213332.681062eb@windsurf>
+In-Reply-To: <20231229215306.23834-1-fontaine.fabrice@gmail.com>
+References: <20231229215306.23834-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1704141213;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=e6/3AhaCZwk/kbSMEI7fwcqXQlRCOlWWu+fmdjI9pzg=;
+ b=N+RbhP2JrPho18z+yJVW3qtNl12c67rSZJNdb0+UIvJTiNRA68KssRSPlYqLmqCQBAtlGV
+ 8ut5wXX6PmeJu4aRpynkAdoo5VsxML/FDiS4jnyFqt9raRYhZrUt6G0hl3q7i058xmV2t9
+ g15v2L5DEjdTqQj5DO4AKz3AlkDo0w5g4xOK0sqckA+M4grJVPebGk8VvTGG9tzN91aeL9
+ 6LUgt8i4Np1yE5sSoaZG0ahTmD+KDzsw4tfVJ5+A2QxDB45VkPdrYmxGZnb68SiDxOetI8
+ lnOUjt+adz9Jaq4RlvFmJ0TkRoKCX2kWR0PfOSYkfV2w42EIoRHhXZladz5AaQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=N+RbhP2J
+Subject: Re: [Buildroot] [PATCH 1/1] package/nbd: bump to version 3.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +76,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=745e1ca054d466618c1cbe82bee6c9af5a405fdf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 29 Dec 2023 22:53:06 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Switch site to github to get latest release
+> Switch site to github to get latest release
+> 
+> https://github.com/NetworkBlockDevice/nbd/releases/tag/nbd-3.25
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/nbd/nbd.hash | 6 +-----
+>  package/nbd/nbd.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 7 deletions(-)
 
-https://github.com/NetworkBlockDevice/nbd/releases/tag/nbd-3.25
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/nbd/nbd.hash | 6 +-----
- package/nbd/nbd.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
-index f58a89bf9a..9fe95441af 100644
---- a/package/nbd/nbd.hash
-+++ b/package/nbd/nbd.hash
-@@ -1,7 +1,3 @@
--# From http://sourceforge.net/projects/nbd/files/nbd/3.24/
--md5  a6d9e7bbc311a2ed07ef84a58b82b5dd  nbd-3.24.tar.xz
--sha1  72c59ef5186ae355de6f539a1b348e18cbb8314e  nbd-3.24.tar.xz
--
- # Locally calculated
--sha256  6877156d23a7b33f75eee89d2f5c2c91c542afc3cdcb636dea5a88539a58d10c  nbd-3.24.tar.xz
-+sha256  f5c8fd0fcb57b1c926594d0e57f356432ee08678bef1d40d088f0830f0cbdd0a  nbd-3.25.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index 50f698dd24..b077e43624 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--NBD_VERSION = 3.24
-+NBD_VERSION = 3.25
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
--NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
-+NBD_SITE = https://github.com/NetworkBlockDevice/nbd/releases/download/nbd-$(NBD_VERSION)
- NBD_CONF_OPTS = --enable-lfs
- NBD_DEPENDENCIES = host-bison host-pkgconf libglib2
- NBD_LICENSE = GPL-2.0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
