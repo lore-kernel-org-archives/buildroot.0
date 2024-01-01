@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57BE0C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 22:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 140F3C4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 22:22:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00604411A8;
-	Mon,  1 Jan 2024 22:15:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00604411A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0B6140A50;
+	Mon,  1 Jan 2024 22:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0B6140A50
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tuwuIACS4Rux; Mon,  1 Jan 2024 22:15:31 +0000 (UTC)
+	with ESMTP id azbgv6ObT91d; Mon,  1 Jan 2024 22:22:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0520B4168A;
-	Mon,  1 Jan 2024 22:15:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0520B4168A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C87E11BF3BE
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:15:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B250411A8;
+	Mon,  1 Jan 2024 22:22:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B250411A8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 80D0D1BF3BE
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A173242154
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:15:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A173242154
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67057610BC
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67057610BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5BkUb99T2yqL for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 22:15:26 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A402642120
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 22:15:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A402642120
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-40d5f40ce04so43909755e9.2
- for <buildroot@buildroot.org>; Mon, 01 Jan 2024 14:15:26 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S8m1zTpzwOGX for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 22:22:02 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9758D610B5
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 22:22:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9758D610B5
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-33679c49fe5so7774070f8f.3
+ for <buildroot@buildroot.org>; Mon, 01 Jan 2024 14:22:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704147324; x=1704752124;
+ d=1e100.net; s=20230601; t=1704147719; x=1704752519;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=z+L2zo43pcEsT55euLyPIN0V2Q4iluxTwh8Uselq+nU=;
- b=ndYRoFg4UWOEwyzaB9obCD0U8PaalFgspqJPv4MmDLRbLalAz3cT69d0oHB76dGp8O
- hP6ix0nnfQChLwYF8TgJxn6lb7miwhvEw3Y6x181HqNEXtmIIsJNCJQB3HiKvzTkuYjt
- +5WydWxQdiF4yJcOV5i0s0h6UYBKx2A16JbGSm56sCAQQwfZoyhZwDxNvrcXNYSr1M6z
- hah44MYI9Xu61fBcWiXmoevUrP4eSAT07G0HdCjT7ojd7XghJV/s7xNovokFeQQPr5li
- BrIJ7gy5WIOq2SFrlW58HJe8/Co2RuEUiMEpxE46UawA5D6GIde8XKqfC2I88iMc9x0M
- YchA==
-X-Gm-Message-State: AOJu0YzWfp5rBtIOdf7tJmwMtskPt6lchfAMJmof97/j+TZS6amEmzde
- XqLJiqO+gG8U0YGNhFdtUE6nhQkq2oM=
-X-Google-Smtp-Source: AGHT+IEQT+w3XbS/uVtFM7sejf9SmHBho66F+a61PKec9+XsRSDScjQUBLIFFB5f/zQ7MIW8wZ+/ng==
-X-Received: by 2002:a05:600c:524d:b0:40d:5d89:1c7 with SMTP id
- fc13-20020a05600c524d00b0040d5d8901c7mr4349980wmb.40.1704147323945; 
- Mon, 01 Jan 2024 14:15:23 -0800 (PST)
+ bh=LTKdcsVT0znepbNHG9LcuV4N1URIRBlXEuUblRs9YXc=;
+ b=ZiTp8pZEiBELPVvNlXuCdfMzKNWJHJQ2F4A3dq+nw+XlvEBPj+49XhtwPPq8JSVtbo
+ FzNQ25sUBiHlaKUaH/OHN3MHwFfwxsRHBair9buhdyKNWqW1KRUwdpte+CELrwTC/1p0
+ dsn/SylH8VItbjOZLZkgdtxlusl7SketPy81gigI42M5KZJHI0dY1p0mSHyrmYUU93d/
+ e8zW39bTEGLGW5eKWksF+Nfd8d2F7ayAmHklP9ZMGr5Zt2mXbThhkLw5SDC4hE2yXzIf
+ NeJR6PMgMflkdkF6TJlmTh+4oJGw2piXd0bg3R2v/K9zfzPjZrLZq1vqDHcnGrUq2MSz
+ 2oAA==
+X-Gm-Message-State: AOJu0YxW3wQKNq/s0jQqCIa0xZWyE3/CciBk6B/XOLzHHitbBUcOC8BC
+ NngHKyfKRyyhQg2rQMgc60dfW/0DOsE=
+X-Google-Smtp-Source: AGHT+IHmJ/jZJs3J4tTeLpcVErDm27UmX2vOvvgSGNcbTxQrd2540eRM5tGzUM5Vux31OjelpP120A==
+X-Received: by 2002:a5d:5967:0:b0:336:c3c7:75e8 with SMTP id
+ e39-20020a5d5967000000b00336c3c775e8mr6917249wri.45.1704147718454; 
+ Mon, 01 Jan 2024 14:21:58 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- f11-20020a05600c4e8b00b0040d5118e42esm32953881wmq.22.2024.01.01.14.15.23
+ z4-20020a5d4d04000000b00336a1f6ce7csm22245312wrt.19.2024.01.01.14.21.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jan 2024 14:15:23 -0800 (PST)
+ Mon, 01 Jan 2024 14:21:58 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jan 2024 23:15:21 +0100
-Message-ID: <20240101221521.42578-1-fontaine.fabrice@gmail.com>
+Date: Mon,  1 Jan 2024 23:21:56 +0100
+Message-ID: <20240101222156.46284-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704147324; x=1704752124; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704147719; x=1704752519; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=z+L2zo43pcEsT55euLyPIN0V2Q4iluxTwh8Uselq+nU=;
- b=Zul7c/qE468+YpiGIUQUkVwTxqB1/JNyAoZPJjJc9TXGTWKrWSoLf77f/SN8/OTpzC
- jS59eoSstOTlBzcoGpuFXodCpQdLqu+NuV23Z5N6hjdQc9GN25A6zXF1aDlmjrukKNdI
- fNXanIybfiZqkxlpF/ylkK+25wCyD2EzbQPLdfL2j2IhsoZpwrx4cl2sxxr+OB2et4yN
- 6lnQNPCgnY1q7zQM34IybzckEO4SFrkhMkPonknprVbZnIUMiwj7LIA34VZX6rCSvEn4
- PbKieUIgaV/bmgtwZjVHE3HdvnwR5Ots/kZEVZSgxCn00YTQ0iPT3+WdxUD2V0M8XC90
- EkgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=LTKdcsVT0znepbNHG9LcuV4N1URIRBlXEuUblRs9YXc=;
+ b=YrWdRMB6C9VPVIIcCWuy9uBcg1mdWfFGKIxhhSDAB+5VutgwXHxxONPkd1MMn1BGIl
+ IbWV8desuWmXffL8nZ4QYnBYBUKNAqdLB2YPU9Jri3GkR2IEahOLzAp3toj3TzPJaeiP
+ vMreHryH7W458z5VcNIej+HYMLq9dCdhIz4sEpePHttbsSTzqSluPmYgA2CBU+MDbCJ8
+ uv+553i0/vQTfZYxnsKQkoXq4+y/vxvo7BAxjA8XjcRhO2M2BCys4uIuv/k7ltELV1SB
+ oMCmy7Xyw2cG3DWJseq2yYVScZxKJNwmkqGgolD9lEqvgRWqXbCS5fVFVXeTO+nWvpr7
+ pFBw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Zul7c/qE
-Subject: [Buildroot] [PATCH 1/1] package/python-asyncssh: security bump to
- version 2.14.2
+ header.a=rsa-sha256 header.s=20230601 header.b=YrWdRMB6
+Subject: [Buildroot] [PATCH 1/1] package/highway: bump to version 1.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,54 +93,242 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Implemented "strict kex" support and other countermeasures to protect
-against the Terrapin Attack described in CVE-2023-48795
+Drop patches (already in version)
 
-https://github.com/advisories/GHSA-hfmc-7525-mj55
-https://github.com/ronf/asyncssh/blob/v2.14.2/docs/changes.rst
+https://github.com/google/highway/releases/tag/1.0.7
+https://github.com/google/highway/releases/tag/1.0.6
+https://github.com/google/highway/releases/tag/1.0.5
+https://github.com/google/highway/releases/tag/1.0.4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-asyncssh/python-asyncssh.hash | 4 ++--
- package/python-asyncssh/python-asyncssh.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                           |   2 -
+ ...Fix-compilation-for-armv7-with-gcc-8.patch |  46 -------
+ ...for-armv7-targets-with-vfp-v4-and-gc.patch | 118 ------------------
+ package/highway/highway.hash                  |   2 +-
+ package/highway/highway.mk                    |   2 +-
+ 5 files changed, 2 insertions(+), 168 deletions(-)
+ delete mode 100644 package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
+ delete mode 100644 package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
 
-diff --git a/package/python-asyncssh/python-asyncssh.hash b/package/python-asyncssh/python-asyncssh.hash
-index d72b5329c5..f74cbe9c83 100644
---- a/package/python-asyncssh/python-asyncssh.hash
-+++ b/package/python-asyncssh/python-asyncssh.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/asyncssh/json
--md5  4194feb9e0d17a0750f107f3445ff9f7  asyncssh-2.14.1.tar.gz
--sha256  1ac31c333a0d83c88831523245500caa814503423741b0e465339ef6da5b5e29  asyncssh-2.14.1.tar.gz
-+md5  3b22a39fa9d638b277c9441187b73c5c  asyncssh-2.14.2.tar.gz
-+sha256  e956bf8988d07a06ba3305f6604e261f4ca014c4a232f0873f1c7692fbe3cfc2  asyncssh-2.14.2.tar.gz
- # Locally computed sha256 checksums
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  LICENSE
- sha256  68c286b0cf4507bec8922103efe861adb0bd3218003b1ec1b25e2e64bdd76bd3  COPYRIGHT
-diff --git a/package/python-asyncssh/python-asyncssh.mk b/package/python-asyncssh/python-asyncssh.mk
-index 51e2e1973c..1f6b9d79a2 100644
---- a/package/python-asyncssh/python-asyncssh.mk
-+++ b/package/python-asyncssh/python-asyncssh.mk
-@@ -4,9 +4,9 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0862477966..46d0b827d8 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -525,8 +525,6 @@ package/harfbuzz/0001-meson.build-check-for-pthread.h.patch Upstream
+ package/haserl/0001-add-haserl_lualib.inc.patch Upstream
+ package/haveged/S21haveged Shellcheck Variables
+ package/heirloom-mailx/0001-fix-libressl-support.patch Upstream
+-package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch Upstream
+-package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch Upstream
+ package/hplip/0001-build-use-pkg-config-to-discover-libusb.patch Upstream
+ package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch Upstream
+ package/htpdate/S43htpdate Shellcheck
+diff --git a/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch b/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
+deleted file mode 100644
+index 0634460453..0000000000
+--- a/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 94cda9cc8cd12345a6dbe70e40f3119d5bf7ee78 Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <ju.o@free.fr>
+-Date: Fri, 10 Feb 2023 21:25:36 +0100
+-Subject: [PATCH] Fix compilation for armv7 with gcc < 8
+-
+-Highway uses the construct __attribute__((target(+neon-vfpv4)) for
+-Armv7. The target "+neon-vfpv4" was introduced in gcc 8, in commit [1].
+-When using a gcc < 8 (for example, like [2]), compilation fails with
+-message:
+-
+-    In file included from /build/highway-1.0.3/hwy/foreach_target.h:81:0,
+-                     from /build/highway-1.0.3/hwy/per_target.cc:20:
+-    /build/highway-1.0.3/hwy/per_target.cc: At global scope:
+-    /build/highway-1.0.3/hwy/per_target.cc:23:22: error: attribute(target("+neon-vfpv4")) is unknown
+-
+-This commit protects the definition of HWY_TARGET_STR only when gcc
+-version 8 or greater is used for armv7.
+-
+-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=e87afe54b86c478ae63569e51e7abb67d3fe3fce
+-[2] https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
+-
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- hwy/ops/set_macros-inl.h | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/hwy/ops/set_macros-inl.h b/hwy/ops/set_macros-inl.h
+-index 051dbb3..00b4b1b 100644
+---- a/hwy/ops/set_macros-inl.h
+-+++ b/hwy/ops/set_macros-inl.h
+-@@ -230,7 +230,12 @@
+- // Can use pragmas instead of -march compiler flag
+- #if HWY_HAVE_RUNTIME_DISPATCH
+- #if HWY_ARCH_ARM_V7
+-+#if HWY_COMPILER_GCC_ACTUAL >= 800
+-+// The __attribute__((target(+neon-vfpv4)) was introduced in gcc >= 8.
+-+// In case we have a gcc < 8, we can still compile by keeping
+-+// HWY_TARGET_STR undefined.
+- #define HWY_TARGET_STR "+neon-vfpv4"
+-+#endif
+- #else
+- #define HWY_TARGET_STR "+crypto"
+- #endif  // HWY_ARCH_ARM_V7
+--- 
+-2.39.2
+-
+diff --git a/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch b/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
+deleted file mode 100644
+index f29b385501..0000000000
+--- a/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
++++ /dev/null
+@@ -1,118 +0,0 @@
+-From 93d4579f90dd6ad26fd0dcda6420b3bb2fdcbc02 Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <ju.o@free.fr>
+-Date: Mon, 20 Feb 2023 23:22:28 +0100
+-Subject: [PATCH] Fix compilation for armv7 targets with vfp < v4 and gcc >= 8
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-When using a armv7 gcc >= 8 toolchain (like [1]) with Highway
+-configured with -DHWY_CMAKE_ARM7=OFF and HWY_ENABLE_CONTRIB=ON,
+-compilation fails with error:
+-
+-    In file included from /build/highway-1.0.3/hwy/ops/arm_neon-inl.h:33,
+-                     from /build/highway-1.0.3/hwy/highway.h:358,
+-                     from /build/highway-1.0.3/hwy/contrib/sort/shared-inl.h:104,
+-                     from /build/highway-1.0.3/hwy/contrib/sort/traits128-inl.h:27,
+-                     from /build/highway-1.0.3/hwy/contrib/sort/vqsort_128d.cc:23,
+-                     from /build/highway-1.0.3/hwy/foreach_target.h:81,
+-                     from /build/highway-1.0.3/hwy/contrib/sort/vqsort_128d.cc:20:
+-    /toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/12.2.0/include/arm_neon.h: In function 'void hwy::N_NEON::StoreU(Vec128<long long unsigned int, 2>, Full128<long long unsigned int>, uint64_t*)':
+-    /toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/12.2.0/include/arm_neon.h:11052:1: error: inlining failed in call to 'always_inline' 'void vst1q_u64(uint64_t*, uint64x2_t)': target specific option mismatch
+-    11052 | vst1q_u64 (uint64_t * __a, uint64x2_t __b)
+-          | ^~~~~~~~~
+-    /build/highway-1.0.3/hwy/ops/arm_neon-inl.h:2786:12: note: called from here
+-     2786 |   vst1q_u64(unaligned, v.raw);
+-          |   ~~~~~~~~~^~~~~~~~~~~~~~~~~~
+-
+-The same errors happen when configured with HWY_ENABLE_EXAMPLES=ON,
+-or from client libraries like libjxl (at other places).
+-
+-The issue is that Highway Arm NEON ops have a dependency on the
+-Advanced SIMD (Neon) v2 and the VFPv4 floating-point instructions.
+-The SIMD (Neon) v1 and VFPv3 instructions are not supported.
+-
+-There was several attempts to fix variants of this issues.
+-See #834 and #1032.
+-
+-HWY_NEON target is selected only if __ARM_NEON is defined. See:
+-https://github.com/google/highway/blob/1.0.3/hwy/detect_targets.h#L251
+-
+-This test is not sufficient since __ARM_NEON will be predefined in
+-any cases when Neon is enabled (neon-vfpv3, neon-vfpv4).
+-
+-The issue is that HWY_CMAKE_ARM7=ON implies VFPv4 / NEON SIMD v2.
+-When setting HWY_CMAKE_ARM7=OFF, "neon-vfpv4" will not be forced,
+-but the code is still using intrinsics assuming VFPv4. Gcc will fail
+-with error because code cannot be generated for the selected
+-architecture.
+-
+-This issue can be avoided by adding "-DHWY_DISABLED_TARGETS=HWY_NEON" in
+-CXXFLAGS. The problem with this solution is that every client program will
+-also need to do the same. This goes against the very purpose of
+-"hwy/detect_targets.h".
+-
+-Technically, Armv7-a processors with VFPv4 can be detected using some
+-ACLE (Arm C Language Extensions [2]) predefined macros:
+-
+-Basically, we want Highway to define HWY_NEON only when the target
+-supports SIMDv2/VFPv4 or higher. An older target with vfpv3 only
+-(e.g. Cortex-A8, A9, ...) would NOT define HWY_NEON, and therefore
+-would fallback on HWY_SCALAR implementation.
+-
+-However, not all compiler completely support ACLE. There is also
+-several versions too. So we cannot easily rely on macros like
+-"__ARM_VFPV4__" (which clang predefine, but not gcc).
+-
+-The alternative solution proposed in this patch, is to declare the
+-HWY_NEON target architecture as broken, when we detect the target is
+-Armv7-A, but mandatory features for vfpv4 (namely half-float, FMA)
+-are missing. Half-floats are tested using the macro __ARM_NEON_FP,
+-and the FMA with the macro __ARM_FEATURE_FMA. See ACLE [2]. The
+-intent of declaring the target as broken, rather than selecting
+-HWY_NEON only if vfpv4 features are detected is to remain a bit
+-conservative, since the detection is slithly inaccurate.
+-
+-For a given compiler/cflags, predefined macros for Arm/ACLE can be
+-reviewed with commands like:
+-
+-    arm-linux-gnueabihf-gcc -mcpu=cortex-a9 -mfpu=neon-vfpv3 -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
+-    arm-linux-gnueabihf-gcc -mcpu=cortex-a7 -mfpu=neon-vfpv4 -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
+-    clang -target armv7a -mcpu=cortex-a9 -mfpu=neon-vfpv3 -mfloat-abi=hard -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
+-    clang -target armv7a -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
+-
+-The different values of __ARM_NEON_FP can be seen, depending which
+-"-mfpu" is passed. Same for __ARM_FEATURE_FMA.
+-
+-[1] https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--bleeding-edge-2022.08-1.tar.bz2
+-[2] https://github.com/ARM-software/acle/
+-
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- hwy/detect_targets.h | 10 ++++++++++
+- 1 file changed, 10 insertions(+)
+-
+-diff --git a/hwy/detect_targets.h b/hwy/detect_targets.h
+-index 2beca95..40ae7fe 100644
+---- a/hwy/detect_targets.h
+-+++ b/hwy/detect_targets.h
+-@@ -154,6 +154,16 @@
+-      (defined(__BYTE_ORDER) && __BYTE_ORDER == __BIG_ENDIAN))
+- #define HWY_BROKEN_TARGETS (HWY_NEON)
+- 
+-+// armv7-a without a detected vfpv4 is not supported
+-+// (for example Cortex-A8, Cortex-A9)
+-+// vfpv4 always have neon half-float _and_ FMA.
+-+#elif HWY_ARCH_ARM_V7 && \
+-+    (__ARM_ARCH_PROFILE == 'A') && \
+-+    !defined(__ARM_VFPV4__) && \
+-+        !((__ARM_NEON_FP & 0x2 /* half-float */) && \
+-+          (__ARM_FEATURE_FMA == 1))
+-+#define HWY_BROKEN_TARGETS (HWY_NEON)
+-+
+- // SVE[2] require recent clang or gcc versions.
+- #elif (HWY_COMPILER_CLANG && HWY_COMPILER_CLANG < 1100) || \
+-     (HWY_COMPILER_GCC_ACTUAL && HWY_COMPILER_GCC_ACTUAL < 1000)
+--- 
+-2.39.2
+-
+diff --git a/package/highway/highway.hash b/package/highway/highway.hash
+index 16a9282176..55b1bca774 100644
+--- a/package/highway/highway.hash
++++ b/package/highway/highway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  566fc77315878473d9a6bd815f7de78c73734acdcb745c3dde8579560ac5440e  highway-1.0.3.tar.gz
++sha256  5434488108186c170a5e2fca5e3c9b6ef59a1caa4d520b008a9b8be6b8abe6c5  highway-1.0.7.tar.gz
+ sha256  43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1  LICENSE
+diff --git a/package/highway/highway.mk b/package/highway/highway.mk
+index 56d63a83f9..692794959a 100644
+--- a/package/highway/highway.mk
++++ b/package/highway/highway.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_ASYNCSSH_VERSION = 2.14.1
-+PYTHON_ASYNCSSH_VERSION = 2.14.2
- PYTHON_ASYNCSSH_SOURCE = asyncssh-$(PYTHON_ASYNCSSH_VERSION).tar.gz
--PYTHON_ASYNCSSH_SITE = https://files.pythonhosted.org/packages/5f/86/59278fefc49ddcc10567e52a8e0e1553fc936584e241d516b5682d55ea17
-+PYTHON_ASYNCSSH_SITE = https://files.pythonhosted.org/packages/6c/f9/849f158fe50cdb0b1bf75009861865c9a30c3b5a0d62ad43bb5e00b10feb
- PYTHON_ASYNCSSH_SETUP_TYPE = setuptools
- PYTHON_ASYNCSSH_LICENSE = EPL-2.0 or GPL-2.0+
- PYTHON_ASYNCSSH_LICENSE_FILES = LICENSE COPYRIGHT
+-HIGHWAY_VERSION = 1.0.3
++HIGHWAY_VERSION = 1.0.7
+ HIGHWAY_SITE = $(call github,google,highway,$(HIGHWAY_VERSION))
+ HIGHWAY_LICENSE = Apache-2.0
+ HIGHWAY_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
