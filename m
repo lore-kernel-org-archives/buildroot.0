@@ -4,65 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2250DC4706F
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F468C4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C7B5C4091F;
-	Mon,  1 Jan 2024 21:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7B5C4091F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FA79416D5;
+	Mon,  1 Jan 2024 21:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FA79416D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wmixcaG3QFBh; Mon,  1 Jan 2024 21:25:29 +0000 (UTC)
+	with ESMTP id nBxx27BxH6xS; Mon,  1 Jan 2024 21:25:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8F4E408E6;
-	Mon,  1 Jan 2024 21:25:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8F4E408E6
+	by smtp2.osuosl.org (Postfix) with ESMTP id E30C9435C6;
+	Mon,  1 Jan 2024 21:25:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E30C9435C6
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 853AC1BF954
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:21:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 40FC51BF3F0
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8CF541D66
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8CF541D66
+ by smtp4.osuosl.org (Postfix) with ESMTP id 279C241E77
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:24:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 279C241E77
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d65KyofjBQBT for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 21:18:16 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BFF9741745
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFF9741745
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 076A4C0002;
- Mon,  1 Jan 2024 21:18:13 +0000 (UTC)
-Date: Mon, 1 Jan 2024 22:18:13 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240101221813.2bfe6943@windsurf>
-In-Reply-To: <20231230213622.1394276-1-fontaine.fabrice@gmail.com>
-References: <20231230213622.1394276-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704143894;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2y4wvKq79xTeeuuq272GflE7LzuTZGNuAH+AD6YK7/g=;
- b=S9V51MxvWu6O8/eSUD/JhNZzLJApufagZAp879axJ+iQks2q9ZXdKjhCbg2r5C4TENO/Oa
- Uq46sX8jSvXIqjrLUQis1NFcHMMpgKWk0yf+G80Mlz3f+91FVognA28BVjWnBfb7B3ELot
- b5wJZmLt0dpupQXDR+quYHm6yMyAZoW1sTjuFy4wR+wk6DIHltomp9WV442dFNuqQWguL/
- goyf/XFQ3rKvjBoVu8tPoowu2NqHaPwrOn/GjxMOtyQGN67dptpd3Y8m4+MlZpzZ+wlflR
- fnV75P/qLQ46mQmuR7N7rVVKTQAo0JdExSLucYfVTYeQlg+uRy39phximt7rKQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=S9V51Mxv
-Subject: Re: [Buildroot] [PATCH 1/1] package/scrypt: bump to version 1.3.2
+ with ESMTP id Pmh5NWk3Iqdw for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 21:24:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BC0F41E70
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:24:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BC0F41E70
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2903783B69; Mon,  1 Jan 2024 21:24:30 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 1 Jan 2024 22:23:59 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9cbffdf9be622c8ddad3b28106851b3101b3d201
+X-Git-Newrev: 44af6938fb7f3e19492cdf722534e5e8a9fff0d0
+X-Patchwork-Hint: ignore
+Message-Id: <20240101212430.2903783B69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/edk2: unset MAKEFLAGS in build
+ environment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,35 +57,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Parnell Springmeyer <parnell@digitalmentat.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 30 Dec 2023 22:36:22 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=44af6938fb7f3e19492cdf722534e5e8a9fff0d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update hash of COPYRIGHT (update in year:
-> https://github.com/Tarsnap/scrypt/commit/c6e440c4f51eeb4aaf5e490734f46cdb06f4b4c8)
-> 
-> https://github.com/Tarsnap/scrypt/compare/1.3.1...1.3.2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/scrypt/scrypt.hash | 6 +++---
->  package/scrypt/scrypt.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Yann reported in [1] that edk2 build could sometimes fail. The issue
+can be reproduced when per-package directories is enabled, or also
+when building on a system with GNU Make >= 4.4 using the
+"--shuffle=reverse" option (such as Fedora 39). Those are pointing
+toward a Makefile dependency issue.
 
-Applied to master, thanks.
+The issue can be reproduced with commands:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+    cat > .config <<EOF
+    BR2_riscv=y
+    BR2_RISCV_64=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TARGET_EDK2=y
+    EOF
+    make olddefconfig
+
+Then, building either with:
+
+    make --shuffle=reverse
+
+Or:
+
+    utils/config -e BR2_PER_PACKAGE_DIRECTORIES
+    make olddefconfig
+    make -j$(nproc)
+
+It is interesting to mention that when using "make --shuffle=reverse"
+to build, the build can be completed if restarted only with "make". It
+will not pull any other Buildroot package. This fact hints toward a
+Makefile dependency issue internal to the EDK2 build system, rather
+than in the Buildroot recipe.
+
+The EDK2 build system is quite unique. See [2]. It generates files,
+makefiles and internally uses GNU Make to compile code. This system is
+likely not tested as being a sub-Make process in a complex Makefile
+such as Buildroot.
+
+In order to prevent Buildroot to pass unexpected Make flags to the
+EDK2 sub-Make, this commit unset the MAKEFLAGS variable in the EDK2
+build environment. This will put the EDK2 build script in a more
+common and tested state. See GNU Make documentation about recursive use
+of Make, more specifically [3].
+
+Note: as mentioned, the build failure is likely due to an internal
+issue of the EDK2 build system. The failure points to a missing
+dependency in the EDK2 generator itself. This commit does not fix this
+issue, but rather put the EDK2 build system in a normalized
+environment, avoiding Buildroot flags being passed to the internal
+EDK2 sub-Make invocation. The upstream EDK2 build system most likely
+need a fix too.
+
+Fixes:
+
+    make[2]: *** No rule to make target '/buildroot/output/build/edk2-edk2-stable202308/Build/RiscVVirtQemu/RELEASE_GCC5/RISCV64/MdeModulePkg/Application/UiApp/UiApp/DEBUG/UiApp.efi', needed by '/buildroot/output/build/edk2-edk2-stable202308/Build/RiscVVirtQemu/RELEASE_GCC5/FV/Ffs/462CAA21-7614-4503-836E-8AB6F4662331UiApp/UiApp.offset'.  Stop.
+
+    build.py...
+     : error 7000: Failed to execute command
+	    make tbuild [/buildroot/output/build/edk2-edk2-stable202308/Build/RiscVVirtQemu/RELEASE_GCC5/RISCV64/MdeModulePkg/Application/UiApp/UiApp]
+
+    build.py...
+     : error F002: Failed to build module
+	    /buildroot/output/build/edk2-edk2-stable202308/MdeModulePkg/Application/UiApp/UiApp.inf [RISCV64, GCC5, RELEASE]
+
+[1] https://lists.buildroot.org/pipermail/buildroot/2023-December/681507.html
+[2] https://tianocore-docs.github.io/edk2-BuildSpecification/draft/4_edk_ii_build_process_overview/42_build_process_overview.html
+[3] https://www.gnu.org/software/make/manual/make.html#Options_002fRecursion
+
+Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/edk2/edk2.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index efdb4d02ce..87ac80c88f 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -150,7 +150,13 @@ EDK2_BASETOOLS_OPTS = \
+ 
+ EDK2_PACKAGES_PATH = $(subst $(space),:,$(strip $(EDK2_PACKAGES_PATHS)))
+ 
++# EDK2 "build" script internally uses and calls "make", which controls
++# its own flags. It is mainly tested while not being a sub-make. In
++# order to stay in that configuration, we avoid leaking top-level
++# Buildroot make flags into EDK2 build by clearing the MAKEFLAGS
++# environment variable.
+ EDK2_BUILD_ENV += \
++	MAKEFLAGS= \
+ 	WORKSPACE=$(@D) \
+ 	PACKAGES_PATH=$(EDK2_PACKAGES_PATH) \
+ 	PYTHON_COMMAND=$(HOST_DIR)/bin/python3 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
