@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D47F2C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DED83C4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:20:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8205340A8A;
-	Mon,  1 Jan 2024 21:19:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8205340A8A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7ED7641741;
+	Mon,  1 Jan 2024 21:20:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7ED7641741
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OccsmH0VbfyI; Mon,  1 Jan 2024 21:19:58 +0000 (UTC)
+	with ESMTP id OT8WH3r5I8LE; Mon,  1 Jan 2024 21:20:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B10240A50;
-	Mon,  1 Jan 2024 21:19:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B10240A50
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DEF440A44;
+	Mon,  1 Jan 2024 21:20:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DEF440A44
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 23B951BF3D5
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:19:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1366B1BF3D5
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59EA84064F
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:05:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59EA84064F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74B744086E
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74B744086E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dZTFGJ3Z5kcy for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 21:05:16 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BAC5A408CF
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:05:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAC5A408CF
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 11CB660003;
- Mon,  1 Jan 2024 21:05:13 +0000 (UTC)
-Date: Mon, 1 Jan 2024 22:05:13 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20240101220513.526090ad@windsurf>
-In-Reply-To: <20231227162039.579880-1-peter@korsgaard.com>
-References: <20231227162039.579880-1-peter@korsgaard.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704143114;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=M+ULxvVkfoYmMU5GxvoK0wazKUO8EUUHeDEoLLv1pO8=;
- b=h9FCEWKqamtOntuqbYlen/NnLRZ4eRUthjaTozyCHiIySxYvhGB5oHLvygnPxfqY4dLH3d
- ASOsJ4YQIpo38JY8XCV3orvJZbQxiFYjtVwK6NSErEq7Ih5NlYiGLjXPR3oOW7bV41pgYn
- +ug4hbfwnVuWoLmPs97Zs1j411WvK26oRL/bP+6hyvqYSWoFhay5ts89UiYg8GU9g0kxrk
- 8b2tqXJJjFKuBz6/BWdm1Y8aoyoOl0XkvpHWx7H62YC5xPEFRMpCrEp0eBrbTTbQTTqH2R
- KNB1106J628oAvaro8zZSFjfJ0nEUEt4bD+NXc6QpTb3WVxy0EHXHsdStP3kPA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=h9FCEWKq
-Subject: Re: [Buildroot] [PATCH] package/xserver_xorg-server: security bump
- to version 21.1.10
+ with ESMTP id kd6hKWrTHTqy for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 21:06:33 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 32F2440645
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:06:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32F2440645
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 206CB83B1F; Mon,  1 Jan 2024 21:06:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 1 Jan 2024 22:05:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5328e02cf78a055fdfa81384780bd43771f34a06
+X-Git-Newrev: bdeaa933fbe899c515edf80602ce4128b3a3cf45
+X-Patchwork-Hint: ignore
+Message-Id: <20240101210633.206CB83B1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libopenh264: bump to version 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,63 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 27 Dec 2023 17:20:38 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bdeaa933fbe899c515edf80602ce4128b3a3cf45
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes the following security issues:
-> 
-> 1) CVE-2023-6377: X.Org server: Out-of-bounds memory write in XKB button actions
-> 
-> A device has XKB button actions for each button on the device.  When a
-> logical device switch happens (e.g.  moving from a touchpad to a mouse), the
-> server re-calculates the information available on the respective master
-> device (typically the Virtual Core Pointer).  This re-calculation only
-> allocated enough memory for a single XKB action rather instead of enough for
-> the newly active physical device's number of button.  As a result, querying
-> or changing the XKB button actions results in out-of-bounds memory reads and
-> writes.
-> 
-> This may lead to local privilege escalation if the server is run as root or
-> remote code execution (e.g. x11 over ssh).
-> 
-> 2) CVE-2023-6478: X.Org server: Out-of-bounds memory read in
-> RRChangeOutputProperty and RRChangeProviderProperty
-> 
-> This fixes an OOB read and the resulting information disclosure.
-> 
-> Length calculation for the request was clipped to a 32-bit integer.  With
-> the correct stuff->nUnits value the expected request size was truncated,
-> passing the REQUEST_FIXED_SIZE check.
-> 
-> The server then proceeded with reading at least stuff->nUnits bytes
-> (depending on stuff->format) from the request and stuffing whatever it finds
-> into the property.  In the process it would also allocate at least
-> stuff->nUnits bytes, i.e.  4GB.
-> 
-> See also CVE-2022-46344 where this issue was fixed for other requests.
-> 
-> For more details, see the advisory:
-> https://lists.x.org/archives/xorg-announce/2023-December/003435.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+https://github.com/cisco/openh264/blob/v2.4.0/RELEASES
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libopenh264/libopenh264.hash | 2 +-
+ package/libopenh264/libopenh264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
+index eecb0b9625..fe98b7773f 100644
+--- a/package/libopenh264/libopenh264.hash
++++ b/package/libopenh264/libopenh264.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32  libopenh264-2.3.1.tar.gz
++sha256  a44d1ccc348a790f9a272bba2d1c2eb9a9bbd0302e4e9b655d709e1c32f92691  libopenh264-2.4.0.tar.gz
+ sha256  dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index 750ec41e4d..478c29d7a8 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENH264_VERSION = 2.3.1
++LIBOPENH264_VERSION = 2.4.0
+ LIBOPENH264_SITE = $(call github,cisco,openh264,v$(LIBOPENH264_VERSION))
+ LIBOPENH264_LICENSE = BSD-2-Clause
+ LIBOPENH264_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
