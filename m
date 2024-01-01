@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 140F3C4706F
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 22:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4EDFC4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 22:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0B6140A50;
-	Mon,  1 Jan 2024 22:22:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0B6140A50
+	by smtp2.osuosl.org (Postfix) with ESMTP id 608BA40930;
+	Mon,  1 Jan 2024 22:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 608BA40930
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id azbgv6ObT91d; Mon,  1 Jan 2024 22:22:06 +0000 (UTC)
+	with ESMTP id bisQOlJc7zHX; Mon,  1 Jan 2024 22:25:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B250411A8;
-	Mon,  1 Jan 2024 22:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B250411A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C51340A50;
+	Mon,  1 Jan 2024 22:25:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C51340A50
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80D0D1BF3BE
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:22:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 84DFB1BF3BE
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67057610BC
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67057610BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D85F610B5
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 22:25:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D85F610B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S8m1zTpzwOGX for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 22:22:02 +0000 (UTC)
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9758D610B5
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 22:22:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9758D610B5
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-33679c49fe5so7774070f8f.3
- for <buildroot@buildroot.org>; Mon, 01 Jan 2024 14:22:01 -0800 (PST)
+ with ESMTP id ujJZB7nE7wDm for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 22:25:09 +0000 (UTC)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 20BC860E7D
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 22:25:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20BC860E7D
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-3368d1c7b23so7786651f8f.0
+ for <buildroot@buildroot.org>; Mon, 01 Jan 2024 14:25:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704147719; x=1704752519;
+ d=1e100.net; s=20230601; t=1704147906; x=1704752706;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=LTKdcsVT0znepbNHG9LcuV4N1URIRBlXEuUblRs9YXc=;
- b=ZiTp8pZEiBELPVvNlXuCdfMzKNWJHJQ2F4A3dq+nw+XlvEBPj+49XhtwPPq8JSVtbo
- FzNQ25sUBiHlaKUaH/OHN3MHwFfwxsRHBair9buhdyKNWqW1KRUwdpte+CELrwTC/1p0
- dsn/SylH8VItbjOZLZkgdtxlusl7SketPy81gigI42M5KZJHI0dY1p0mSHyrmYUU93d/
- e8zW39bTEGLGW5eKWksF+Nfd8d2F7ayAmHklP9ZMGr5Zt2mXbThhkLw5SDC4hE2yXzIf
- NeJR6PMgMflkdkF6TJlmTh+4oJGw2piXd0bg3R2v/K9zfzPjZrLZq1vqDHcnGrUq2MSz
- 2oAA==
-X-Gm-Message-State: AOJu0YxW3wQKNq/s0jQqCIa0xZWyE3/CciBk6B/XOLzHHitbBUcOC8BC
- NngHKyfKRyyhQg2rQMgc60dfW/0DOsE=
-X-Google-Smtp-Source: AGHT+IHmJ/jZJs3J4tTeLpcVErDm27UmX2vOvvgSGNcbTxQrd2540eRM5tGzUM5Vux31OjelpP120A==
-X-Received: by 2002:a5d:5967:0:b0:336:c3c7:75e8 with SMTP id
- e39-20020a5d5967000000b00336c3c775e8mr6917249wri.45.1704147718454; 
- Mon, 01 Jan 2024 14:21:58 -0800 (PST)
+ bh=eTZOn0upZj6s/Voj8ud1sb62zVl3vHMTge3zFxdZusU=;
+ b=lLxY639tj6G9eAXMtrbQw4EhmLOEJxVq5F9sSEr8pHdkh3t+n3KJmnzNXqC6PPl7Pe
+ wZVjzedIyLIi+rPQUr/uBuESfG7n6Gb8rUgQFH7xdhsQ6lMDWO6TzzlNYXKZ0y6iZX/Q
+ +oNuQtDZPHhOjTZjpxLThfsOsEps3RR44NM6TE78NoPGd0I/sGf4EwkrTuLisC0QCT6o
+ bwE12nav2fnuCsGOzAyXJKgmaRfCOBaQNPAtlw2SIz9GSuMrhfjoY06rspQU5NhuJ+bo
+ P1kChryU4iIMBNzumQNEbhZ/2GVWEdtBMaAis42eP7TVNtECpTCZK0nhn8v6ULBwKN7Y
+ ecLg==
+X-Gm-Message-State: AOJu0Yx6AeZjg/wejT7IRJ98L4grEfZlg+Eb6AJdFv3jtzICkrqWi/vq
+ 2Fc2u1Hc9/RRYE/Mcze3hAoeNWiCPG8=
+X-Google-Smtp-Source: AGHT+IFOjK0MEJLFljg7qLmiGWKLFdnjEe7T3TEQUKFFMTAPNN1D/k7ob4rbURZx64GIsAQiZM7V3Q==
+X-Received: by 2002:a5d:5711:0:b0:336:7688:315f with SMTP id
+ a17-20020a5d5711000000b003367688315fmr9055124wrv.34.1704147906218; 
+ Mon, 01 Jan 2024 14:25:06 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- z4-20020a5d4d04000000b00336a1f6ce7csm22245312wrt.19.2024.01.01.14.21.57
+ z10-20020a5d4d0a000000b00336a2566aa2sm22333763wrt.61.2024.01.01.14.25.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jan 2024 14:21:58 -0800 (PST)
+ Mon, 01 Jan 2024 14:25:05 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jan 2024 23:21:56 +0100
-Message-ID: <20240101222156.46284-1-fontaine.fabrice@gmail.com>
+Date: Mon,  1 Jan 2024 23:24:59 +0100
+Message-ID: <20240101222501.56147-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704147719; x=1704752519; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704147906; x=1704752706; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LTKdcsVT0znepbNHG9LcuV4N1URIRBlXEuUblRs9YXc=;
- b=YrWdRMB6C9VPVIIcCWuy9uBcg1mdWfFGKIxhhSDAB+5VutgwXHxxONPkd1MMn1BGIl
- IbWV8desuWmXffL8nZ4QYnBYBUKNAqdLB2YPU9Jri3GkR2IEahOLzAp3toj3TzPJaeiP
- vMreHryH7W458z5VcNIej+HYMLq9dCdhIz4sEpePHttbsSTzqSluPmYgA2CBU+MDbCJ8
- uv+553i0/vQTfZYxnsKQkoXq4+y/vxvo7BAxjA8XjcRhO2M2BCys4uIuv/k7ltELV1SB
- oMCmy7Xyw2cG3DWJseq2yYVScZxKJNwmkqGgolD9lEqvgRWqXbCS5fVFVXeTO+nWvpr7
- pFBw==
+ bh=eTZOn0upZj6s/Voj8ud1sb62zVl3vHMTge3zFxdZusU=;
+ b=hlw/IcgqS2JXLZG/PuW7OSNYNkUYJLfrNm+G+wn0jkMXgOfQ9nSeHjnGX1hTJ4CJBr
+ 4Z6nsH8XaUHOlwZOsL9jgH0rt98KzO1VsMy4VDY0o6kseUzMBtwOyFp+G5xEdipav7mC
+ KsP5u9e0p6jhlV+vUqGq7tOO/gvrMfuWr1aBA89B+1kVBcEAxchFgov2XXk53D+LeqwQ
+ uWTV7oGg3wWmZDI+wHXZ17Z+1yqByyO/X8c77HdLpc1zpn7hCnyaYri8i/rgntBp7/qZ
+ l2+QOmHYbPFPmWAAVB7DGPSki0kIxMmhYcdKpXa0zG34HdRCyfIaS5aL+9aOsJKCwYvM
+ ZcNA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YrWdRMB6
-Subject: [Buildroot] [PATCH 1/1] package/highway: bump to version 1.0.7
+ header.a=rsa-sha256 header.s=20230601 header.b=hlw/Icgq
+Subject: [Buildroot] [PATCH 1/1] package/libjxl: bump to version 0.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,244 +95,126 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Julien Olivain <ju.o@free.fr>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patches (already in version)
-
-https://github.com/google/highway/releases/tag/1.0.7
-https://github.com/google/highway/releases/tag/1.0.6
-https://github.com/google/highway/releases/tag/1.0.5
-https://github.com/google/highway/releases/tag/1.0.4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .checkpackageignore                           |   2 -
- ...Fix-compilation-for-armv7-with-gcc-8.patch |  46 -------
- ...for-armv7-targets-with-vfp-v4-and-gc.patch | 118 ------------------
- package/highway/highway.hash                  |   2 +-
- package/highway/highway.mk                    |   2 +-
- 5 files changed, 2 insertions(+), 168 deletions(-)
- delete mode 100644 package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
- delete mode 100644 package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0862477966..46d0b827d8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -525,8 +525,6 @@ package/harfbuzz/0001-meson.build-check-for-pthread.h.patch Upstream
- package/haserl/0001-add-haserl_lualib.inc.patch Upstream
- package/haveged/S21haveged Shellcheck Variables
- package/heirloom-mailx/0001-fix-libressl-support.patch Upstream
--package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch Upstream
--package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch Upstream
- package/hplip/0001-build-use-pkg-config-to-discover-libusb.patch Upstream
- package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch Upstream
- package/htpdate/S43htpdate Shellcheck
-diff --git a/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch b/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
-deleted file mode 100644
-index 0634460453..0000000000
---- a/package/highway/0001-Fix-compilation-for-armv7-with-gcc-8.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 94cda9cc8cd12345a6dbe70e40f3119d5bf7ee78 Mon Sep 17 00:00:00 2001
--From: Julien Olivain <ju.o@free.fr>
--Date: Fri, 10 Feb 2023 21:25:36 +0100
--Subject: [PATCH] Fix compilation for armv7 with gcc < 8
--
--Highway uses the construct __attribute__((target(+neon-vfpv4)) for
--Armv7. The target "+neon-vfpv4" was introduced in gcc 8, in commit [1].
--When using a gcc < 8 (for example, like [2]), compilation fails with
--message:
--
--    In file included from /build/highway-1.0.3/hwy/foreach_target.h:81:0,
--                     from /build/highway-1.0.3/hwy/per_target.cc:20:
--    /build/highway-1.0.3/hwy/per_target.cc: At global scope:
--    /build/highway-1.0.3/hwy/per_target.cc:23:22: error: attribute(target("+neon-vfpv4")) is unknown
--
--This commit protects the definition of HWY_TARGET_STR only when gcc
--version 8 or greater is used for armv7.
--
--[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=e87afe54b86c478ae63569e51e7abb67d3fe3fce
--[2] https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
--
--Signed-off-by: Julien Olivain <ju.o@free.fr>
-----
-- hwy/ops/set_macros-inl.h | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/hwy/ops/set_macros-inl.h b/hwy/ops/set_macros-inl.h
--index 051dbb3..00b4b1b 100644
----- a/hwy/ops/set_macros-inl.h
--+++ b/hwy/ops/set_macros-inl.h
--@@ -230,7 +230,12 @@
-- // Can use pragmas instead of -march compiler flag
-- #if HWY_HAVE_RUNTIME_DISPATCH
-- #if HWY_ARCH_ARM_V7
--+#if HWY_COMPILER_GCC_ACTUAL >= 800
--+// The __attribute__((target(+neon-vfpv4)) was introduced in gcc >= 8.
--+// In case we have a gcc < 8, we can still compile by keeping
--+// HWY_TARGET_STR undefined.
-- #define HWY_TARGET_STR "+neon-vfpv4"
--+#endif
-- #else
-- #define HWY_TARGET_STR "+crypto"
-- #endif  // HWY_ARCH_ARM_V7
---- 
--2.39.2
--
-diff --git a/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch b/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
-deleted file mode 100644
-index f29b385501..0000000000
---- a/package/highway/0002-Fix-compilation-for-armv7-targets-with-vfp-v4-and-gc.patch
-+++ /dev/null
-@@ -1,118 +0,0 @@
--From 93d4579f90dd6ad26fd0dcda6420b3bb2fdcbc02 Mon Sep 17 00:00:00 2001
--From: Julien Olivain <ju.o@free.fr>
--Date: Mon, 20 Feb 2023 23:22:28 +0100
--Subject: [PATCH] Fix compilation for armv7 targets with vfp < v4 and gcc >= 8
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--When using a armv7 gcc >= 8 toolchain (like [1]) with Highway
--configured with -DHWY_CMAKE_ARM7=OFF and HWY_ENABLE_CONTRIB=ON,
--compilation fails with error:
--
--    In file included from /build/highway-1.0.3/hwy/ops/arm_neon-inl.h:33,
--                     from /build/highway-1.0.3/hwy/highway.h:358,
--                     from /build/highway-1.0.3/hwy/contrib/sort/shared-inl.h:104,
--                     from /build/highway-1.0.3/hwy/contrib/sort/traits128-inl.h:27,
--                     from /build/highway-1.0.3/hwy/contrib/sort/vqsort_128d.cc:23,
--                     from /build/highway-1.0.3/hwy/foreach_target.h:81,
--                     from /build/highway-1.0.3/hwy/contrib/sort/vqsort_128d.cc:20:
--    /toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/12.2.0/include/arm_neon.h: In function 'void hwy::N_NEON::StoreU(Vec128<long long unsigned int, 2>, Full128<long long unsigned int>, uint64_t*)':
--    /toolchain/lib/gcc/arm-buildroot-linux-gnueabihf/12.2.0/include/arm_neon.h:11052:1: error: inlining failed in call to 'always_inline' 'void vst1q_u64(uint64_t*, uint64x2_t)': target specific option mismatch
--    11052 | vst1q_u64 (uint64_t * __a, uint64x2_t __b)
--          | ^~~~~~~~~
--    /build/highway-1.0.3/hwy/ops/arm_neon-inl.h:2786:12: note: called from here
--     2786 |   vst1q_u64(unaligned, v.raw);
--          |   ~~~~~~~~~^~~~~~~~~~~~~~~~~~
--
--The same errors happen when configured with HWY_ENABLE_EXAMPLES=ON,
--or from client libraries like libjxl (at other places).
--
--The issue is that Highway Arm NEON ops have a dependency on the
--Advanced SIMD (Neon) v2 and the VFPv4 floating-point instructions.
--The SIMD (Neon) v1 and VFPv3 instructions are not supported.
--
--There was several attempts to fix variants of this issues.
--See #834 and #1032.
--
--HWY_NEON target is selected only if __ARM_NEON is defined. See:
--https://github.com/google/highway/blob/1.0.3/hwy/detect_targets.h#L251
--
--This test is not sufficient since __ARM_NEON will be predefined in
--any cases when Neon is enabled (neon-vfpv3, neon-vfpv4).
--
--The issue is that HWY_CMAKE_ARM7=ON implies VFPv4 / NEON SIMD v2.
--When setting HWY_CMAKE_ARM7=OFF, "neon-vfpv4" will not be forced,
--but the code is still using intrinsics assuming VFPv4. Gcc will fail
--with error because code cannot be generated for the selected
--architecture.
--
--This issue can be avoided by adding "-DHWY_DISABLED_TARGETS=HWY_NEON" in
--CXXFLAGS. The problem with this solution is that every client program will
--also need to do the same. This goes against the very purpose of
--"hwy/detect_targets.h".
--
--Technically, Armv7-a processors with VFPv4 can be detected using some
--ACLE (Arm C Language Extensions [2]) predefined macros:
--
--Basically, we want Highway to define HWY_NEON only when the target
--supports SIMDv2/VFPv4 or higher. An older target with vfpv3 only
--(e.g. Cortex-A8, A9, ...) would NOT define HWY_NEON, and therefore
--would fallback on HWY_SCALAR implementation.
--
--However, not all compiler completely support ACLE. There is also
--several versions too. So we cannot easily rely on macros like
--"__ARM_VFPV4__" (which clang predefine, but not gcc).
--
--The alternative solution proposed in this patch, is to declare the
--HWY_NEON target architecture as broken, when we detect the target is
--Armv7-A, but mandatory features for vfpv4 (namely half-float, FMA)
--are missing. Half-floats are tested using the macro __ARM_NEON_FP,
--and the FMA with the macro __ARM_FEATURE_FMA. See ACLE [2]. The
--intent of declaring the target as broken, rather than selecting
--HWY_NEON only if vfpv4 features are detected is to remain a bit
--conservative, since the detection is slithly inaccurate.
--
--For a given compiler/cflags, predefined macros for Arm/ACLE can be
--reviewed with commands like:
--
--    arm-linux-gnueabihf-gcc -mcpu=cortex-a9 -mfpu=neon-vfpv3 -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
--    arm-linux-gnueabihf-gcc -mcpu=cortex-a7 -mfpu=neon-vfpv4 -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
--    clang -target armv7a -mcpu=cortex-a9 -mfpu=neon-vfpv3 -mfloat-abi=hard -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
--    clang -target armv7a -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -Wp,-dM -E -c - < /dev/null | grep -Fi arm | sort
--
--The different values of __ARM_NEON_FP can be seen, depending which
--"-mfpu" is passed. Same for __ARM_FEATURE_FMA.
--
--[1] https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--bleeding-edge-2022.08-1.tar.bz2
--[2] https://github.com/ARM-software/acle/
--
--Signed-off-by: Julien Olivain <ju.o@free.fr>
-----
-- hwy/detect_targets.h | 10 ++++++++++
-- 1 file changed, 10 insertions(+)
--
--diff --git a/hwy/detect_targets.h b/hwy/detect_targets.h
--index 2beca95..40ae7fe 100644
----- a/hwy/detect_targets.h
--+++ b/hwy/detect_targets.h
--@@ -154,6 +154,16 @@
--      (defined(__BYTE_ORDER) && __BYTE_ORDER == __BIG_ENDIAN))
-- #define HWY_BROKEN_TARGETS (HWY_NEON)
-- 
--+// armv7-a without a detected vfpv4 is not supported
--+// (for example Cortex-A8, Cortex-A9)
--+// vfpv4 always have neon half-float _and_ FMA.
--+#elif HWY_ARCH_ARM_V7 && \
--+    (__ARM_ARCH_PROFILE == 'A') && \
--+    !defined(__ARM_VFPV4__) && \
--+        !((__ARM_NEON_FP & 0x2 /* half-float */) && \
--+          (__ARM_FEATURE_FMA == 1))
--+#define HWY_BROKEN_TARGETS (HWY_NEON)
--+
-- // SVE[2] require recent clang or gcc versions.
-- #elif (HWY_COMPILER_CLANG && HWY_COMPILER_CLANG < 1100) || \
--     (HWY_COMPILER_GCC_ACTUAL && HWY_COMPILER_GCC_ACTUAL < 1000)
---- 
--2.39.2
--
-diff --git a/package/highway/highway.hash b/package/highway/highway.hash
-index 16a9282176..55b1bca774 100644
---- a/package/highway/highway.hash
-+++ b/package/highway/highway.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  566fc77315878473d9a6bd815f7de78c73734acdcb745c3dde8579560ac5440e  highway-1.0.3.tar.gz
-+sha256  5434488108186c170a5e2fca5e3c9b6ef59a1caa4d520b008a9b8be6b8abe6c5  highway-1.0.7.tar.gz
- sha256  43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1  LICENSE
-diff --git a/package/highway/highway.mk b/package/highway/highway.mk
-index 56d63a83f9..692794959a 100644
---- a/package/highway/highway.mk
-+++ b/package/highway/highway.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HIGHWAY_VERSION = 1.0.3
-+HIGHWAY_VERSION = 1.0.7
- HIGHWAY_SITE = $(call github,google,highway,$(HIGHWAY_VERSION))
- HIGHWAY_LICENSE = Apache-2.0
- HIGHWAY_LICENSE_FILES = LICENSE
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+LSBEcm9wIGZpcnN0IHBhdGNoIChub3QgbmVlZGVkIHNpbmNlCiAgaHR0cHM6Ly9naXRodWIuY29t
+L2xpYmp4bC9saWJqeGwvY29tbWl0L2MzYTRmOWNhODlhZTU5YzYyNjVhMmYxYmYyYTZkMmE4N2E3
+MWZjMTYpCi0gRHJvcCBzZWNvbmQgcGF0Y2ggKGFscmVhZHkgaW4gdmVyc2lvbikKLSBBZGQgSlBF
+R1hMX0VOQUJMRV9KUEVHTEk9T0ZGOgogIGh0dHBzOi8vZ2l0aHViLmNvbS9saWJqeGwvbGlianhs
+L2lzc3Vlcy8zMDY5CgpodHRwczovL2dpdGh1Yi5jb20vbGlianhsL2xpYmp4bC9yZWxlYXNlcy90
+YWcvdjAuOS4wCgpTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJy
+aWNlQGdtYWlsLmNvbT4KLS0tCiAuY2hlY2twYWNrYWdlaWdub3JlICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgfCAgMSAtCiAuLi5lbnRhdGlvbi1mYXVsdC13aGVuLUpQRUctaXMtZGlzYWJsZWQu
+cGF0Y2ggfCA0NCAtLS0tLS0tLS0tLS0tLS0tLQogLi4uaWMtY29udGVudC10by1maXgtZ2NjLWNv
+bXBpbGF0aW9uLWZvLnBhdGNoIHwgNDcgLS0tLS0tLS0tLS0tLS0tLS0tLQogcGFja2FnZS9saWJq
+eGwvbGlianhsLmhhc2ggICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGlianhs
+L2xpYmp4bC5tayAgICAgICAgICAgICAgICAgICAgICB8ICAzICstCiA1IGZpbGVzIGNoYW5nZWQs
+IDMgaW5zZXJ0aW9ucygrKSwgOTQgZGVsZXRpb25zKC0pCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFj
+a2FnZS9saWJqeGwvMDAwMS1kanhsLWZpeC1zZWdtZW50YXRpb24tZmF1bHQtd2hlbi1KUEVHLWlz
+LWRpc2FibGVkLnBhdGNoCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJqeGwvMDAwMi1B
+ZGQtbWlzc2luZy1hdG9taWMtY29udGVudC10by1maXgtZ2NjLWNvbXBpbGF0aW9uLWZvLnBhdGNo
+CgpkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2FnZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25vcmUK
+aW5kZXggNDZkMGI4MjdkOC4uYzk2OGFkZDY2YiAxMDA2NDQKLS0tIGEvLmNoZWNrcGFja2FnZWln
+bm9yZQorKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCkBAIC02NTksNyArNjU5LDYgQEAgcGFja2Fn
+ZS9saWJpaW8vUzk5aWlvZCBTaGVsbGNoZWNrIFZhcmlhYmxlcwogcGFja2FnZS9saWJpcXJmLzAw
+MDEtY21ha2UtaGFuZGxlLXN0YXRpYy1saWJyYXJ5LWFuZC1maW5kLXJlcXVpcmVkLXRocmVhZC5w
+YXRjaCBVcHN0cmVhbQogcGFja2FnZS9saWJpcXJmLzAwMDItdXNlLW9ubHktYy1sYW5ndWFnZS5w
+YXRjaCBVcHN0cmVhbQogcGFja2FnZS9saWJqc29uLzAwMDEtZml4LWJyb2tlbi1tYWtlZmlsZS5w
+YXRjaCBVcHN0cmVhbQotcGFja2FnZS9saWJqeGwvMDAwMS1kanhsLWZpeC1zZWdtZW50YXRpb24t
+ZmF1bHQtd2hlbi1KUEVHLWlzLWRpc2FibGVkLnBhdGNoIFVwc3RyZWFtCiBwYWNrYWdlL2xpYmtj
+YXBpLzAwMDEtbGliLWtjYXBpLWtlcm5lbC1pZi5jLWZpeC11Y2xpYmMtYnVpbGQucGF0Y2ggVXBz
+dHJlYW0KIHBhY2thZ2UvbGlia2NhcGkvMDAwMi1BZGQtZGlzYWJsZS13ZXJyb3IucGF0Y2ggVXBz
+dHJlYW0KIHBhY2thZ2UvbGlia2NhcGkvMDAwMy1GaXgtc3ltdmVyLWJ1aWxkLWVycm9yLW9uLW5v
+bi1FTEYtcGxhdGZvcm1zLnBhdGNoIFVwc3RyZWFtCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmp4
+bC8wMDAxLWRqeGwtZml4LXNlZ21lbnRhdGlvbi1mYXVsdC13aGVuLUpQRUctaXMtZGlzYWJsZWQu
+cGF0Y2ggYi9wYWNrYWdlL2xpYmp4bC8wMDAxLWRqeGwtZml4LXNlZ21lbnRhdGlvbi1mYXVsdC13
+aGVuLUpQRUctaXMtZGlzYWJsZWQucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
+IDNkNzA5Yzk1NmIuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9saWJqeGwvMDAwMS1kanhsLWZp
+eC1zZWdtZW50YXRpb24tZmF1bHQtd2hlbi1KUEVHLWlzLWRpc2FibGVkLnBhdGNoCisrKyAvZGV2
+L251bGwKQEAgLTEsNDQgKzAsMCBAQAotRnJvbSA1MDRmMzVjODIwNDI0OGFlNmY5NzI3OGU4Yjdj
+NmNjNTg1M2ExYjk0IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogSnVsaWVuIE9saXZh
+aW4gPGp1Lm9AZnJlZS5mcj4KLURhdGU6IEZyaSwgMTAgRmViIDIwMjMgMjE6MzE6MzAgKzAxMDAK
+LVN1YmplY3Q6IFtQQVRDSF0gZGp4bDogZml4IHNlZ21lbnRhdGlvbiBmYXVsdCB3aGVuIEpQRUcg
+aXMgZGlzYWJsZWQKLQotV2hlbiBsaWJqeGwgaXMgY29tcGlsZWQgd2l0aG91dCBKUEVHIHN1cHBv
+cnQsIGJ5IGNvbmZpZ3VyaW5nIGZvciBleGFtcGxlCi13aXRoOgotCi0gICAgY21ha2UgLURDTUFL
+RV9ESVNBQkxFX0ZJTkRfUEFDS0FHRV9KUEVHPVRSVUUgLi4uCi0KLWRqeGwgY3Jhc2hlcyB3aXRo
+IGEgc2VnbWVudGF0aW9uIGZhdWx0IGF0OgotaHR0cHM6Ly9naXRodWIuY29tL2xpYmp4bC9saWJq
+eGwvYmxvYi92MC44LjEvdG9vbHMvZGp4bF9tYWluLmNjI0wzNjcKLQotVGhlIGNyYXNoIGNhbiBi
+ZSByZXByb2R1Y2VkIHdpdGggdGhlIHNlcXVlbmNlOgotCi0gICAgZ20gY29udmVydCBJTUFHRTpM
+T0dPIHJlZi5wcG0KLSAgICBjanhsIHJlZi5wcG0gZW5jLmp4bAotICAgIGRqeGwgZW5jLmp4bCBk
+ZWMucHBtCi0KLVRoZSBjcmFzaCBoYXBwZW4gYmVjYXVzZSBvcHRfanBlZ19xdWFsaXR5X2lkIGRv
+ZXMgbm90IGdldAotaW5pdGlhbGl6ZWQgYXQ6Ci1odHRwczovL2dpdGh1Yi5jb20vbGlianhsL2xp
+Ymp4bC9ibG9iL3YwLjguMS90b29scy9kanhsX21haW4uY2MjTDEwNwotCi1UaGlzIGNvbW1pdCBm
+aXhlcyB0aGUgY3Jhc2ggYnkgYWRkaW5nIGEgdGVzdCBvbiBvcHRfanBlZ19xdWFsaXR5X2lkLgot
+Ci1TaWduZWQtb2ZmLWJ5OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgotW1JldHJpZXZl
+ZCBmcm9tOgotaHR0cHM6Ly9naXRodWIuY29tL2xpYmp4bC9saWJqeGwvcHVsbC8yMTc4L2NvbW1p
+dHMvNTA0ZjM1YzgyMDQyNDhhZTZmOTcyNzhlOGI3YzZjYzU4NTNhMWI5NF0KLS0tLQotIHRvb2xz
+L2RqeGxfbWFpbi5jYyB8IDEgKwotIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQotCi1k
+aWZmIC0tZ2l0IGEvdG9vbHMvZGp4bF9tYWluLmNjIGIvdG9vbHMvZGp4bF9tYWluLmNjCi1pbmRl
+eCBiNzU1MzAxZmNiLi40MmI4ODllN2NlIDEwMDY0NAotLS0tIGEvdG9vbHMvZGp4bF9tYWluLmNj
+Ci0rKysgYi90b29scy9kanhsX21haW4uY2MKLUBAIC0zNzAsNiArMzcwLDcgQEAgaW50IG1haW4o
+aW50IGFyZ2MsIGNvbnN0IGNoYXIqIGFyZ3ZbXSkgewotICAgICBhcmdzLmNvbG9yX3NwYWNlID0g
+Zm9yY2VfY29sb3JzcGFjZTsKLSAgIH0KLSAgIGlmIChjb2RlYyA9PSBqeGw6OmV4dHJhczo6Q29k
+ZWM6OmtQTk0gJiYgZXh0ZW5zaW9uICE9ICIucGZtIiAmJgotKyAgICAgIGFyZ3Mub3B0X2pwZWdf
+cXVhbGl0eV9pZCAhPSAtMSAmJgotICAgICAgICFjbWRsaW5lLkdldE9wdGlvbihhcmdzLm9wdF9q
+cGVnX3F1YWxpdHlfaWQpLT5tYXRjaGVkKCkpIHsKLSAgICAgYXJncy5iaXRzX3Blcl9zYW1wbGUg
+PSAwOwotICAgfQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJqeGwvMDAwMi1BZGQtbWlzc2luZy1h
+dG9taWMtY29udGVudC10by1maXgtZ2NjLWNvbXBpbGF0aW9uLWZvLnBhdGNoIGIvcGFja2FnZS9s
+aWJqeGwvMDAwMi1BZGQtbWlzc2luZy1hdG9taWMtY29udGVudC10by1maXgtZ2NjLWNvbXBpbGF0
+aW9uLWZvLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCBiODU2YjAwNzI4Li4w
+MDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvbGlianhsLzAwMDItQWRkLW1pc3NpbmctYXRvbWljLWNv
+bnRlbnQtdG8tZml4LWdjYy1jb21waWxhdGlvbi1mby5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0x
+LDQ3ICswLDAgQEAKLUZyb20gNDJlOTQ0YTQ3MTY3MmRhZTg1MjJmYmNmMTYxOTQxODk1YmExNjYz
+MiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IEVhc3Rkb25nIDwzMTkyMDkyNStJRUFT
+VEB1c2Vycy5ub3JlcGx5LmdpdGh1Yi5jb20+Ci1EYXRlOiBUaHUsIDIzIEZlYiAyMDIzIDA2OjA4
+OjM2ICswODAwCi1TdWJqZWN0OiBbUEFUQ0hdIEFkZCBtaXNzaW5nIDxhdG9taWM+IGNvbnRlbnQg
+dG8gZml4IGdjYyBjb21waWxhdGlvbiBmb3IgUklTQ1YKLSBhcmNoaXRlY3R1cmUuICgjMjIxMSkK
+LQotKiBBZGQgbWlzc2luZyA8YXRvbWljPiBjb250ZW50IHRvIGZpeCBnY2MgY29tcGlsYXRpb24g
+Zm9yIFJJU0NWIGFyY2hpdGVjdHVyZS4KLQotKiBhZGQgbmFtZSB0byBBVVRIT1JTCi0KLSogbGlu
+dCBmaXgKLQotQ28tYXV0aG9yZWQtYnk6IE1vcml0eiBGaXJzY2hpbmcgPGZpcnNjaGluZ0Bnb29n
+bGUuY29tPgotVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9saWJqeGwvbGlianhsL2NvbW1p
+dC8yMmQxMmQ3NGU3YmM1NmIwOWNmYjE5NzNhYTg5ZWM4ZDcxNGZhM2ZjCi1TaWduZWQtb2ZmLWJ5
+OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgotLS0tCi0gQVVUSE9SUyAgICAgICAgICAg
+IHwgMSArCi0gbGliL2p4bC9lbmNfeHliLmNjIHwgMSArCi0gMiBmaWxlcyBjaGFuZ2VkLCAyIGlu
+c2VydGlvbnMoKykKLQotZGlmZiAtLWdpdCBhL0FVVEhPUlMgYi9BVVRIT1JTCi1pbmRleCA0NGRj
+YzQwOS4uMzM0MDQyMmQgMTAwNjQ0Ci0tLS0gYS9BVVRIT1JTCi0rKysgYi9BVVRIT1JTCi1AQCAt
+MzAsNiArMzAsNyBAQCBEYW5pZWwgTm92b21lc2vDvSA8ZG5vdm9tZXNreUBnbWFpbC5jb20+Ci0g
+RGF2aWQgQnVybmV0dCA8dmFyZ29sc29mdEBnbWFpbC5jb20+Ci0gRGlyayBMZW1zdHJhIDxkaXJr
+QGxlbXN0cmEub3JnPgotIERvbiBPbG1zdGVhZCA8ZG9uLmoub2xtc3RlYWRAZ21haWwuY29tPgot
+K0RvbmcgWHUgPHhkb25nMTgxQGdtYWlsLmNvbT4KLSBFdmVuIFJvdWF1bHQgPGV2ZW4ucm91YXVs
+dEBzcGF0aWFseXMuY29tPgotIEZyZWQgQnJlbm5hbiA8Y29weXBhc3RlQGtpdHRlbnMucGg+Ci0g
+SGVpa28gQmVja2VyIDxoZWlyZWNrYUBleGhlcmJvLm9yZz4KLWRpZmYgLS1naXQgYS9saWIvanhs
+L2VuY194eWIuY2MgYi9saWIvanhsL2VuY194eWIuY2MKLWluZGV4IGM3MzEwNzY1Li4yZmQ1ZDAy
+NSAxMDA2NDQKLS0tLSBhL2xpYi9qeGwvZW5jX3h5Yi5jYwotKysrIGIvbGliL2p4bC9lbmNfeHli
+LmNjCi1AQCAtNiw2ICs2LDcgQEAKLSAjaW5jbHVkZSAibGliL2p4bC9lbmNfeHliLmgiCi0gCi0g
+I2luY2x1ZGUgPGFsZ29yaXRobT4KLSsjaW5jbHVkZSA8YXRvbWljPgotICNpbmNsdWRlIDxjc3Rk
+bGliPgotIAotICN1bmRlZiBIV1lfVEFSR0VUX0lOQ0xVREUKLS0tIAotMi40MS4wCi0KZGlmZiAt
+LWdpdCBhL3BhY2thZ2UvbGlianhsL2xpYmp4bC5oYXNoIGIvcGFja2FnZS9saWJqeGwvbGlianhs
+Lmhhc2gKaW5kZXggYzhmOThkMTBlYS4uMDc2NmMyNGE1MyAxMDA2NDQKLS0tIGEvcGFja2FnZS9s
+aWJqeGwvbGlianhsLmhhc2gKKysrIGIvcGFja2FnZS9saWJqeGwvbGlianhsLmhhc2gKQEAgLTEs
+NCArMSw0IEBACiAjIExvY2FsbHkgY29tcHV0ZWQ6Ci1zaGEyNTYgIGM3MDkxNmZiM2VkNDM3ODRl
+Yjg0MGY4MmYwNWQzOTAwNTNhNTU4ZTJkYTEwNmU0MDg2MzkxOTIzOGZhN2I0MjAgIGxpYmp4bC0w
+LjguMi50YXIuZ3oKK3NoYTI1NiAgZDgzYmJlMTg4ZDhmYTk3MjViYjc1MTA5YzkyMmMzN2ZjZmY4
+YzNiODAyODA4ZjNhNmMyYzE0YWFmODMzN2Q5ZiAgbGlianhsLTAuOS4wLnRhci5negogc2hhMjU2
+ICA4NDA1OTMyMDIyYTU1NjM4MGMyZDhjMjcyZWZmMTU0YTkyM2ZlYjE5NzIzM2YzNDhjZTVmNzMz
+NGZiMGE1ZWRlICBMSUNFTlNFCiBzaGEyNTYgIDkxOTE1ZjhhZTA1NmE2OGEzYzViZGYwNWQ5ZjZm
+NzhiYjY5MDNlMjdhOGNhM2E4NDM0YzllNGFjODczMDA1NzUgIFBBVEVOVFMKZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvbGlianhsL2xpYmp4bC5tayBiL3BhY2thZ2UvbGlianhsL2xpYmp4bC5tawppbmRl
+eCA0N2MxMTBlYjUzLi5kMmM1ZTcwYzk4IDEwMDY0NAotLS0gYS9wYWNrYWdlL2xpYmp4bC9saWJq
+eGwubWsKKysrIGIvcGFja2FnZS9saWJqeGwvbGlianhsLm1rCkBAIC00LDcgKzQsNyBAQAogIwog
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotTElCSlhMX1ZFUlNJT04gPSAwLjguMgorTElCSlhM
+X1ZFUlNJT04gPSAwLjkuMAogTElCSlhMX1NJVEUgPSAkKGNhbGwgZ2l0aHViLGxpYmp4bCxsaWJq
+eGwsdiQoTElCSlhMX1ZFUlNJT04pKQogTElCSlhMX0xJQ0VOU0UgPSBCU0QtMy1DbGF1c2UKIExJ
+QkpYTF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRSBQQVRFTlRTCkBAIC0yNyw2ICsyNyw3IEBAIExJ
+QkpYTF9DT05GX09QVFMgPSBcCiAJLURKUEVHWExfRU5BQkxFX0RPWFlHRU49T0ZGIFwKIAktREpQ
+RUdYTF9FTkFCTEVfRVhBTVBMRVM9T0ZGIFwKIAktREpQRUdYTF9FTkFCTEVfSk5JPU9GRiBcCisJ
+LURKUEVHWExfRU5BQkxFX0pQRUdMST1PRkYgXAogCS1ESlBFR1hMX0VOQUJMRV9NQU5QQUdFUz1P
+RkYgXAogCS1ESlBFR1hMX0VOQUJMRV9PUEVORVhSPU9GRiBcCiAJLURKUEVHWExfRU5BQkxFX1NK
+UEVHPU9GRiBcCi0tIAoyLjQzLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
