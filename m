@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E944CC4706F
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABAB0C47073
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:23:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94F874368D;
-	Mon,  1 Jan 2024 21:22:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F874368D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56AB0409F8;
+	Mon,  1 Jan 2024 21:23:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56AB0409F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xiRfP0RKzx5A; Mon,  1 Jan 2024 21:22:45 +0000 (UTC)
+	with ESMTP id V8J3ox9eR-O0; Mon,  1 Jan 2024 21:22:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 926A94357F;
-	Mon,  1 Jan 2024 21:22:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 926A94357F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43F2940A9B;
+	Mon,  1 Jan 2024 21:22:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43F2940A9B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 153AC1BF37C
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:20:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 250881BF37C
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A582D435C4
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A582D435C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B95340A4B
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:15:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B95340A4B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8-70eHU7bljz for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 21:14:58 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7CB1740A4B
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:14:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CB1740A4B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 89A1BE0003;
- Mon,  1 Jan 2024 21:14:56 +0000 (UTC)
-Date: Mon, 1 Jan 2024 22:14:55 +0100
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240101221455.412dcaf0@windsurf>
-In-Reply-To: <20231230204325.1219272-1-fontaine.fabrice@gmail.com>
-References: <20231230204325.1219272-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1704143696;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=G7VenrE3XJgXEX1N0nbFfTvM7VNJG3ic/ZI3K9widzI=;
- b=LBofk4RZ3g2GsppB6paVahM+lN3iyFBRtJ8PaY14SB4izMoS0KXNC/b8R7vGNMvxOdVlok
- Pacpqn25gys7bmB3NJ+YnPb8p4hS+DzeqgMeN+BxZ/khClQd1ahFM8Rg5yoU1rV4V5+lE5
- JZaFR+yLVeXBYhqzptEn99QZnidkzdd4DomfFm4dQCJtXqwQ5MxlUsCLjD3A1P87dN2es1
- mRKjHae2Ca6ZyP2YroQ+oW7Xfsxh0laI0VPTSzFydOAiV0aCMfxP7BoD6f6FUYfNUmcgRr
- VbTQR+lG3cGVMpNEpKGv6aanJzVKIRjmXZGuscMX+9KWc3NRQsPYFWYTF8w8qQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LBofk4RZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/libseccomp: bump to version
- 2.5.5
+ with ESMTP id Oc9wq_zm21D5 for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C95C3435C6
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C95C3435C6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A3FE683B53; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 1 Jan 2024 22:08:04 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4b2e01cc492b05383ce4be12240e47ab3e9009d4
+X-Git-Newrev: 2e26e9e5aa7604aafbe0197c91b7e3f59a2585c2
+X-Patchwork-Hint: ignore
+Message-Id: <20240101211459.A3FE683B53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/logrotate: bump to version 3.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,30 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 30 Dec 2023 21:43:24 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2e26e9e5aa7604aafbe0197c91b7e3f59a2585c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/seccomp/libseccomp/blob/v2.5.5/CHANGELOG
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libseccomp/libseccomp.hash | 4 ++--
->  package/libseccomp/libseccomp.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+https://github.com/logrotate/logrotate/releases/tag/3.21.0
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index 9c8e73f738..cc466a6f4e 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256  742f6d6e18eceffa49a4bacd933686d3e42931cfccfb694d7f6369b704e5d094  logrotate-3.20.1.tar.xz
++sha256  8fa12015e3b8415c121fc9c0ca53aa872f7b0702f543afda7e32b6c4900f6516  logrotate-3.21.0.tar.xz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 453dbe477a..37c48121f1 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LOGROTATE_VERSION = 3.20.1
++LOGROTATE_VERSION = 3.21.0
+ LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.xz
+ LOGROTATE_SITE = https://github.com/logrotate/logrotate/releases/download/$(LOGROTATE_VERSION)
+ LOGROTATE_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
