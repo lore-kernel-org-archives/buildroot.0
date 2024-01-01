@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26D26C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 20:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DD66C4706F
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 20:11:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABF6060ABF;
-	Mon,  1 Jan 2024 20:05:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABF6060ABF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 102D060B29;
+	Mon,  1 Jan 2024 20:11:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 102D060B29
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EUnMhzqHwXvh; Mon,  1 Jan 2024 20:05:24 +0000 (UTC)
+	with ESMTP id T9b0-_sQYwWL; Mon,  1 Jan 2024 20:11:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6EE060B0F;
-	Mon,  1 Jan 2024 20:05:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6EE060B0F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DCC0A1BF37C
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:05:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D21060B38;
+	Mon,  1 Jan 2024 20:11:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D21060B38
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 90A481BF37C
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:11:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C262D60ABF
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:05:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C262D60ABF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E49F4011D
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:11:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E49F4011D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IUipH48Rk23n for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 20:05:20 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5A42560B38
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 20:05:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A42560B38
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id B1F51B0056A;
- Mon,  1 Jan 2024 21:05:09 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 01 Jan 2024 21:05:09 +0100
-Date: Mon, 1 Jan 2024 21:05:09 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Message-ID: <ZZMa9YgqUvg-w73D@landeda>
-References: <20231231172538.1279608-1-wbx@openadk.org>
- <20231231172538.1279608-2-wbx@openadk.org>
- <ZZHI1pycJDszqP3I@landeda>
- <DS7PR12MB9041754BB696E49D8166F54FA162A@DS7PR12MB9041.namprd12.prod.outlook.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <DS7PR12MB9041754BB696E49D8166F54FA162A@DS7PR12MB9041.namprd12.prod.outlook.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704139517;
- bh=U0QrpjimhNgRgQQvekt97T2LRPwPt7biRtm7dj66A58=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ej3WIResEERoUnSmLI1Pj0gKve3vO/yUUnN+1APq4Wv21y1a0zPaKoo3JSDrF4G8L
- VLCZNZNBb9/FEvr2/Ck0EDCR8yeLDOZgHFQyIu03QdxFdpxAa8SpkxUlcDxWF02prz
- cnnRtmXq5TiCewWAwrBTa+GZfGRaSuV+xVLb+vCnDYg5vrsmA8oG4Phpz1aT/UsUSw
- qIvlbxVTms1WemYy7db3+y5SBMZuqdU4unPsBuOW+7vLfeNYf6fden/IfsXlfQbnxy
- hTxTotxy5c6jOYhcV21JYGDRg6GvZPV5lgPqU+/BKS2d3HKzFFOSb9O4R55mkTg7Yd
- hXSUkZdU65Vbw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ej3WIRes
-Subject: Re: [Buildroot] [arc-buildroot] [PATCH 1/6] package/gcc: remove
- special arc version
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d7-3WCi6p6Wj for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 20:10:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D673940104
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 20:10:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D673940104
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BD3CC83A55; Mon,  1 Jan 2024 20:10:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 1 Jan 2024 21:09:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 05392a5eae61c2855bc8d94f5bf9677ebbc5462a
+X-Git-Newrev: a6a587b537cd5827d73529da7d71932b3fcf0333
+X-Patchwork-Hint: ignore
+Message-Id: <20240101201058.BD3CC83A55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxmlpp: fix build with libxml2
+ >= 2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,85 +56,185 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: ARC Maintainers <arc-buildroot@synopsys.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Alexey, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a6a587b537cd5827d73529da7d71932b3fcf0333
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thank you for quickly jumping ship in the discussion, Alexey!
+Fix the following build failure raised since bump of libxml2 to version
+2.12.1 in commit d8ac52108c12f0fcc9641b63e7922009270f96c6:
 
-On 2024-01-01 14:43 +0000, Alexey Brodkin via buildroot spake thusly:
-> > On 2023-12-31 18:25 +0100, Waldemar Brodkorb spake thusly:
-> > > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > Thanks for working on this; we discussed that with Thomas the other day,
-> > and we concluded that indeed that would be a good idea to get rid of
-> > that special version now.
-[--SNIP--]
-> So given that's a short new year break between work fires I may quickly send-out
-> patches which will either:
-> 1. Bump ARC tools to the latest version 2023.09 (see [6]) which will also
->    add support for ARCv3 (in fact we already have it in our fork, see [7])
-> 2. Update ARC tools (GCC, Binutils/GDB & glibc) for ARCv3 only, while switching
->    ARCompact & ARCv2 to upstream components.
-> 3. Given ARC seems to be the only use of non-upstream components, remove
->    ARC-specific tools/forks from buildroot and  only enable ARCv3 use via
->    external toolchains.
+../libxml++/nodes/entityreference.cc: In member function 'xmlpp::ustring xmlpp::EntityReference::get_resolved_text() const':
+../libxml++/nodes/entityreference.cc:30:35: error: invalid use of incomplete type 'struct _xmlEntity'
+   30 |       const xmlChar* pch = cEntity->content;
+      |                                   ^~
 
-As you said, the ARCv2 is perfectly supported in the upstream
-components. Then it makes sense to no longer have the ARC specific
-versions for the ARCv2 CPUs, especially since that version (10.x) is
-older than the oldest generic version we have (11.x).
+Fixes:
+ - http://autobuild.buildroot.org/results/f3cef04950eeaa744ebe9409561d505606375787
 
-Furthermore, we currently have no ARCv3 CPU support in Buildroot.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...1-Make-it-compatible-with-libxml2--2-12-0.patch | 145 +++++++++++++++++++++
+ 1 file changed, 145 insertions(+)
 
-So, I think that, looking at the situation *as it is today*, Waldemar's
-series (improved with the various comments I made earlier) is the best
-course of action for Buildroot.
-
-Then, when we get support for ARCv3 CPUs, we can either:
-
-  - use your option 2 above if that comes before we remove the current
-    ARC-specific version, or
-
-  - reintroduce an ARC-specific version otherwise.
-
-> And while (3) is the slimmest option (no need to add or rather maintain ARC-specific)
-> code in package/xxx Config.in.host, xxx.mk especially with uClibc it's a bit too
-> restrictive as users may want more flexibility of configuring uClibc to their needs.
-
-I agree that option 3 is not very interesting.
-
-Regards,
-Yann E. MORIN.
-
-> -Alexey
-> 
-> [1] https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/tree/arc-2023.09
-> [2] https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/tree/arc-2023.09
-> [3] https://github.com/foss-for-synopsys-dwc-arc-processors/glibc/tree/arc-2023.09
-> [4] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=de6be7bc60f190a0d746945a3a5a143bc93a1a65
-> [5] https://github.com/foss-for-synopsys-dwc-arc-processors/qemu
-> [6] https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2023.09-release
-> [7] https://github.com/foss-for-synopsys-dwc-arc-processors/buildroot/tree/arc-2023.09
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libxmlpp/0001-Make-it-compatible-with-libxml2--2-12-0.patch b/package/libxmlpp/0001-Make-it-compatible-with-libxml2--2-12-0.patch
+new file mode 100644
+index 0000000000..b9100b4966
+--- /dev/null
++++ b/package/libxmlpp/0001-Make-it-compatible-with-libxml2--2-12-0.patch
+@@ -0,0 +1,145 @@
++From 49471812d57adfb22dcce3cbea1a8956658731b9 Mon Sep 17 00:00:00 2001
++From: Kjell Ahlstedt <kjellahlstedt@gmail.com>
++Date: Sat, 18 Nov 2023 18:34:07 +0100
++Subject: [PATCH] Make it compatible with libxml2 >= 2.12.0
++
++* libxml++/document.cc:
++* libxml++/dtd.cc:
++* libxml++/nodes/entitydeclaration.cc:
++* libxml++/nodes/entityreference.cc:
++* libxml++/validators/relaxngvalidator.cc: Modify #include directives.
++* libxml++/keepblanks.cc: Ignore deprecation of xmlKeepBlanksDefault().
++* tests/saxparser_chunk_parsing_inconsistent_state/main.cc:
++Accept that MySaxParser::on_start_document() can be called before
++MySaxParser::on_error().
++
++Upstream: https://github.com/libxmlplusplus/libxmlplusplus/commit/49471812d57adfb22dcce3cbea1a8956658731b9
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libxml++/document.cc                                   |  1 +
++ libxml++/dtd.cc                                        |  2 +-
++ libxml++/keepblanks.cc                                 |  5 ++++-
++ libxml++/nodes/entitydeclaration.cc                    |  2 +-
++ libxml++/nodes/entityreference.cc                      |  2 +-
++ libxml++/validators/relaxngvalidator.cc                |  1 +
++ .../saxparser_chunk_parsing_inconsistent_state/main.cc | 10 +++++++++-
++ 7 files changed, 18 insertions(+), 5 deletions(-)
++
++diff --git a/libxml++/document.cc b/libxml++/document.cc
++index da0a8f5..d5476c6 100644
++--- a/libxml++/document.cc
+++++ b/libxml++/document.cc
++@@ -16,6 +16,7 @@
++ 
++ #include <libxml/tree.h>
++ #include <libxml/xinclude.h>
+++#include <libxml/xmlsave.h>
++ #include <libxml/parser.h> // XML_PARSE_NOXINCNODE, XML_PARSE_NOBASEFIX
++ 
++ #include <iostream>
++diff --git a/libxml++/dtd.cc b/libxml++/dtd.cc
++index 238b3a0..8014c07 100644
++--- a/libxml++/dtd.cc
+++++ b/libxml++/dtd.cc
++@@ -8,7 +8,7 @@
++ #include <libxml++/exceptions/parse_error.h>
++ #include <libxml++/io/istreamparserinputbuffer.h>
++ 
++-#include <libxml/tree.h>
+++#include <libxml/parser.h>
++ 
++ #include <sstream>
++ 
++diff --git a/libxml++/keepblanks.cc b/libxml++/keepblanks.cc
++index 4228b8d..56b00cf 100644
++--- a/libxml++/keepblanks.cc
+++++ b/libxml++/keepblanks.cc
++@@ -5,8 +5,11 @@
++  * included with libxml++ as the file COPYING.
++  */
++ 
++-#include <libxml++/keepblanks.h>
+++// xmlKeepBlanksDefault() is deprecated since libxml2 2.12.0.
+++// Ignore deprecations here.
+++#define XML_DEPRECATED
++ 
+++#include <libxml++/keepblanks.h>
++ #include <libxml/globals.h>
++ 
++ namespace xmlpp
++diff --git a/libxml++/nodes/entitydeclaration.cc b/libxml++/nodes/entitydeclaration.cc
++index 0a6390e..d5bfa75 100644
++--- a/libxml++/nodes/entitydeclaration.cc
+++++ b/libxml++/nodes/entitydeclaration.cc
++@@ -5,7 +5,7 @@
++  */
++ 
++ #include <libxml++/nodes/entitydeclaration.h>
++-#include <libxml/tree.h>
+++#include <libxml/entities.h>
++ 
++ namespace xmlpp
++ {
++diff --git a/libxml++/nodes/entityreference.cc b/libxml++/nodes/entityreference.cc
++index 19b1b22..278a126 100644
++--- a/libxml++/nodes/entityreference.cc
+++++ b/libxml++/nodes/entityreference.cc
++@@ -6,7 +6,7 @@
++ 
++ #include <libxml++/nodes/entityreference.h>
++ 
++-#include <libxml/tree.h>
+++#include <libxml/entities.h>
++ 
++ namespace xmlpp
++ {
++diff --git a/libxml++/validators/relaxngvalidator.cc b/libxml++/validators/relaxngvalidator.cc
++index 9bb10c2..68a814c 100644
++--- a/libxml++/validators/relaxngvalidator.cc
+++++ b/libxml++/validators/relaxngvalidator.cc
++@@ -22,6 +22,7 @@
++ #include "libxml++/parsers/domparser.h"
++ #include "libxml++/relaxngschema.h"
++ 
+++#include <libxml/tree.h>
++ #include <libxml/relaxng.h>
++ 
++ namespace xmlpp
++diff --git a/tests/saxparser_chunk_parsing_inconsistent_state/main.cc b/tests/saxparser_chunk_parsing_inconsistent_state/main.cc
++index 07cc3ef..53f55b3 100644
++--- a/tests/saxparser_chunk_parsing_inconsistent_state/main.cc
+++++ b/tests/saxparser_chunk_parsing_inconsistent_state/main.cc
++@@ -24,10 +24,14 @@
++ 
++ class MySaxParser : public xmlpp::SaxParser
++ {
+++public:
+++  bool throw_on_start_doc = true;
+++
++ protected:
++   void on_start_document() override
++   {
++-    throw std::runtime_error("some custom runtime exception");
+++    if (throw_on_start_doc)
+++      throw std::runtime_error("some custom runtime exception");
++   }
++   void on_error(const xmlpp::ustring& /* text */) override
++   {
++@@ -43,6 +47,9 @@ int main()
++     bool exceptionThrown = false;
++     try
++     {
+++      // Depending on the libxml2 version, MySaxParser::on_start_document()
+++      // may or may not be called before MySaxParser::on_error().
+++      parser.throw_on_start_doc = false;
++       parser.parse_chunk("<?");
++       parser.finish_chunk_parsing();
++     }
++@@ -61,6 +68,7 @@ int main()
++     exceptionThrown = false;
++     try
++     {
+++      parser.throw_on_start_doc = true;
++       std::stringstream ss("<root></root>");
++       parser.parse_stream(ss);
++     }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
