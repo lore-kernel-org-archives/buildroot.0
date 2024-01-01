@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F540C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 20:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41F37C47073
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 20:19:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1728600B6;
-	Mon,  1 Jan 2024 20:18:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1728600B6
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0DAC60BC1;
+	Mon,  1 Jan 2024 20:19:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0DAC60BC1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zri3zcNNSJ7h; Mon,  1 Jan 2024 20:18:38 +0000 (UTC)
+	with ESMTP id kpjBqC4vIve3; Mon,  1 Jan 2024 20:19:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F20B0606FF;
-	Mon,  1 Jan 2024 20:18:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F20B0606FF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8FCD01BF405
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:18:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D50260671;
+	Mon,  1 Jan 2024 20:19:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D50260671
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 185B11BF405
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:19:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 746104011D
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:18:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 746104011D
+ by smtp3.osuosl.org (Postfix) with ESMTP id F21C560671
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 20:19:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F21C560671
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 15S-JKMukJGl for <buildroot@lists.busybox.net>;
- Mon,  1 Jan 2024 20:18:35 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F01040104
- for <buildroot@buildroot.org>; Mon,  1 Jan 2024 20:18:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F01040104
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:4f89:5708:1633:580e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id CD586B00535;
- Mon,  1 Jan 2024 21:18:26 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 01 Jan 2024 21:18:26 +0100
-Date: Mon, 1 Jan 2024 21:18:26 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
-Message-ID: <ZZMeEjKs7cVLRZwb@landeda>
-References: <20231231172538.1279608-1-wbx@openadk.org>
- <20231231172538.1279608-5-wbx@openadk.org>
- <ZZHOxLRXJ9U8apJA@landeda> <ZZHjRSzIb7WUnhUo@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZZHjRSzIb7WUnhUo@waldemar-brodkorb.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1704140313;
- bh=nCIP36dtcLtZeuicVz+VyUNg4sU/Tu4bPC01cs0ABYA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uimH6wO3jtoefvMOaeYjJzisSFmL5bJ0DSJo73yvSXJITD6EZzwn5VDDVIfUpqxZx
- ZeteAggAldbcvFmkU4TnqvGmrfy08OOImcS/j8mk1SFE/DsuwJbSKg9xDDD/hXvDC7
- bZv2wTeAvVujCDCbDAdlq6/Z1xvxckRmGb/NVlnUR76pZ8UiMBR+oeQc2ZoUacynFw
- dM5pX3KGK2PUt5LREZM+OabhPK2efZSwEGfmmSvL/I6MyADyeRtNL8I1se3chWnDsA
- MjMYMq5hBc2denOCZCO8i6zj5atl8OL6GCjgY4LmgtqQcfPaX40fOCepV4tgT+xSsi
- 2wIxDTilNhhvA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uimH6wO3
-Subject: Re: [Buildroot] [PATCH 4/6] configs/qemu: add qemu_arc_defconfig
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VW1aPw-v6M4S for <buildroot@lists.busybox.net>;
+ Mon,  1 Jan 2024 20:19:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B3BB600B6
+ for <buildroot@buildroot.org>; Mon,  1 Jan 2024 20:19:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B3BB600B6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DDF9583A8F; Mon,  1 Jan 2024 20:19:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 1 Jan 2024 21:18:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 27e35b95ca1c7cd5156201935b8d1c11fa921581
+X-Git-Newrev: 498925bc0ee318d6093d44668ad7d6b74849c837
+X-Patchwork-Hint: ignore
+Message-Id: <20240101201939.DDF9583A8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gupnp-tools: bump to version 0.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,79 +55,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- ARC Maintainers <arc-buildroot@synopsys.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Waldemar, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=498925bc0ee318d6093d44668ad7d6b74849c837
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-12-31 22:55 +0100, Waldemar Brodkorb spake thusly:
-> Yann E. MORIN wrote,
-> > On 2023-12-31 18:25 +0100, Waldemar Brodkorb spake thusly:
-> > > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[--SNIP--]
-> > > +You need Qemu fork from here:
-> > > +https://github.com/foss-for-synopsys-dwc-arc-processors/qemu
-> > So, we are dropping all the arc specific versions for the toolchain
-> > components, but we eventually introduce a defconfig that relies on an
-> > arc specific version of qemu, that we do not even package in Buildroot,
-> > so that users can't even enable host-qemu in Buildroot.
-> > That is a bit sad...
-> > What is the rationale for introducing this defconfig, then?
-> Qemu is more widely known then the nsimdrv.
+- libsoup has been replaced by libsoup3
+- Add patches to fix build with libxml2 2.12
 
-OK, fair enough.
+https://gitlab.gnome.org/GNOME/gupnp-tools/-/blob/gupnp-tools-0.12.1/NEWS
 
-Still, Qemu with ARC support is not sidely available (e.h .it's not ins
-distros), and we do not have a way to easily build it from source,
-leaving to the user the duty to find how to do get such a Qemu.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...1-common-Drop-deprecated-xmlRecoverMemory.patch | 33 ++++++++++++++++++++++
+ ...ommon-Fix-compatibility-with-libxml2-2-12.patch | 28 ++++++++++++++++++
+ package/gupnp-tools/Config.in                      |  4 +--
+ package/gupnp-tools/gupnp-tools.hash               |  4 +--
+ package/gupnp-tools/gupnp-tools.mk                 |  6 ++--
+ 5 files changed, 68 insertions(+), 7 deletions(-)
 
-And since you point to the source tree (which is nice), it implies one
-has to build from source on their own, which we know is a bit tedious...
-
-> And I think when ARCv3
-> support is added to Buildroot
-
-*When* is the key word here. I know Alexey has said he was looking into
-it, but IIRC the topic has been pending since last August, so I would
-like to decorelate the two topics.
-
-> it can be used to test it, too.
-
-That does not change the fact that it is a forked version, not readily
-available, that we do not build in Buildroot, and that the user has to
-manually build from source on their own, which is still problematic.
-
-> I thought it would be nice to have instead of only rely on the nsim
-> defconfig we have now.
-
-That I agree on, but I don;t think it is a good-enough reason to be
-using a non-upstream Qemu.
-
-> Can we keep it? What others say?
-
-"Mom, dad, it's a cute doggy/kitten/duck/poney/hedghog! Can we keep it?"
-
-Let's see what other maintainers think, of course.
-
-And in any case, that does not diminish the fact that the commit log
-should contain a proper rationale.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch b/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch
+new file mode 100644
+index 0000000000..c81d1b01fe
+--- /dev/null
++++ b/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch
+@@ -0,0 +1,33 @@
++From f675ac7e0afe67a86f3f1191d3274d6ffbd4e5d7 Mon Sep 17 00:00:00 2001
++From: Jens Georg <mail@jensge.org>
++Date: Thu, 3 Aug 2023 23:44:15 +0200
++Subject: [PATCH] common: Drop deprecated xmlRecoverMemory
++
++Fixes #27
++
++Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/f675ac7e0afe67a86f3f1191d3274d6ffbd4e5d7
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/common/pretty-print.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/src/common/pretty-print.c b/src/common/pretty-print.c
++index c692664..c8ebc9a 100644
++--- a/src/common/pretty-print.c
+++++ b/src/common/pretty-print.c
++@@ -34,7 +34,11 @@ pretty_print_xml (const char *xml)
++         char *text;
++         int length;
++ 
++-        doc = xmlRecoverMemory (xml, strlen (xml));
+++        doc = xmlReadMemory (xml,
+++                             strlen (xml),
+++                             NULL,
+++                             NULL,
+++                             XML_PARSE_NONET | XML_PARSE_RECOVER);
++ 
++         if (!doc)
++                 return NULL;
++-- 
++GitLab
++
+diff --git a/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch b/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch
+new file mode 100644
+index 0000000000..c76d440b5d
+--- /dev/null
++++ b/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch
+@@ -0,0 +1,28 @@
++From 4e06104df81fba2cda06d4747b33e75f4cade458 Mon Sep 17 00:00:00 2001
++From: Jens Georg <mail@jensge.org>
++Date: Fri, 24 Nov 2023 18:12:50 +0100
++Subject: [PATCH] common: Fix compatibility with libxml2 2.12
++
++Fixes #28
++
++Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/4e06104df81fba2cda06d4747b33e75f4cade458
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/common/pretty-print.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/common/pretty-print.c b/src/common/pretty-print.c
++index c8ebc9a..1519cb0 100644
++--- a/src/common/pretty-print.c
+++++ b/src/common/pretty-print.c
++@@ -22,6 +22,7 @@
++ 
++ #include "pretty-print.h"
++ 
+++#include <libxml/globals.h>
++ #include <libxml/xmlreader.h>
++ 
++ #include <string.h>
++-- 
++GitLab
++
+diff --git a/package/gupnp-tools/Config.in b/package/gupnp-tools/Config.in
+index af662417c2..5bce5cabeb 100644
+--- a/package/gupnp-tools/Config.in
++++ b/package/gupnp-tools/Config.in
+@@ -1,13 +1,13 @@
+ config BR2_PACKAGE_GUPNP_TOOLS
+ 	bool "gupnp-tools"
+ 	depends on BR2_PACKAGE_LIBGTK3
+-	# gssdp, gupnp, libsoup all select on libglib2, so they have
++	# gssdp, gupnp, libsoup3 all select on libglib2, so they have
+ 	# the same dependencies as libgtk3, which we depend on. So for
+ 	# the same of simplicity, we don't replicate all those
+ 	# (complex) dependencies.
+ 	select BR2_PACKAGE_GSSDP
+ 	select BR2_PACKAGE_GUPNP
+-	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_LIBSOUP3
+ 	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  GUPnP Tools are free replacements of Intel UPnP tools that
+diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
+index c3808de6e2..28e2661360 100644
+--- a/package/gupnp-tools/gupnp-tools.hash
++++ b/package/gupnp-tools/gupnp-tools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.gnome.org/sources/gupnp-tools/0.10/gupnp-tools-0.10.3.sha256sum:
+-sha256  457f4d923935b078415cd2ba88d78db60079b725926b7ee106e4565efe3204de  gupnp-tools-0.10.3.tar.xz
++# Hash from: https://download.gnome.org/sources/gupnp-tools/0.12/gupnp-tools-0.12.1.sha256sum:
++sha256  53cf93123f397e8f8f0b8e9e4364c86a7502a5334f4c0be2e054a824478bd5ba  gupnp-tools-0.12.1.tar.xz
+ 
+ # Locally computed:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+index f87e98ef03..99fdf54f13 100644
+--- a/package/gupnp-tools/gupnp-tools.mk
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GUPNP_TOOLS_VERSION_MAJOR = 0.10
+-GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).3
++GUPNP_TOOLS_VERSION_MAJOR = 0.12
++GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).1
+ GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
+ GUPNP_TOOLS_SITE = \
+ 	https://download.gnome.org/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
+@@ -18,7 +18,7 @@ GUPNP_TOOLS_DEPENDENCIES = \
+ 	libxml2 \
+ 	gssdp \
+ 	gupnp \
+-	libsoup \
++	libsoup3 \
+ 	libgtk3 \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
