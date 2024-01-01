@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABAB0C47073
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:23:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 568CBC47073
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jan 2024 21:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 56AB0409F8;
-	Mon,  1 Jan 2024 21:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56AB0409F8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 020F54369C;
+	Mon,  1 Jan 2024 21:23:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 020F54369C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V8J3ox9eR-O0; Mon,  1 Jan 2024 21:22:59 +0000 (UTC)
+	with ESMTP id VpHKr4MF6wX6; Mon,  1 Jan 2024 21:23:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43F2940A9B;
-	Mon,  1 Jan 2024 21:22:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43F2940A9B
+	by smtp2.osuosl.org (Postfix) with ESMTP id F31824357C;
+	Mon,  1 Jan 2024 21:23:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F31824357C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 250881BF37C
- for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:20:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1476E1BF3F0
+ for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B95340A4B
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF97B435C6
  for <buildroot@lists.busybox.net>; Mon,  1 Jan 2024 21:15:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B95340A4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF97B435C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Oc9wq_zm21D5 for <buildroot@lists.busybox.net>;
+ with ESMTP id SWmYRHPg2Ztn for <buildroot@lists.busybox.net>;
  Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C95C3435C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92554435C3
  for <buildroot@buildroot.org>; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C95C3435C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92554435C3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3FE683B53; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
+ id 79F6A83B4C; Mon,  1 Jan 2024 21:14:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Jan 2024 22:08:04 +0100
+Date: Mon, 1 Jan 2024 22:07:27 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b2e01cc492b05383ce4be12240e47ab3e9009d4
-X-Git-Newrev: 2e26e9e5aa7604aafbe0197c91b7e3f59a2585c2
+X-Git-Oldrev: bdeaa933fbe899c515edf80602ce4128b3a3cf45
+X-Git-Newrev: f8470817bdacc810d7cfc2dd6c37fd4c0c9f17fe
 X-Patchwork-Hint: ignore
-Message-Id: <20240101211459.A3FE683B53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/logrotate: bump to version 3.21.0
+Message-Id: <20240101211459.79F6A83B4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/librelp: bump to version 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e26e9e5aa7604aafbe0197c91b7e3f59a2585c2
+commit: https://git.buildroot.net/buildroot/commit/?id=f8470817bdacc810d7cfc2dd6c37fd4c0c9f17fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/logrotate/logrotate/releases/tag/3.21.0
+https://github.com/rsyslog/librelp/blob/v1.11.0/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/logrotate/logrotate.hash | 2 +-
- package/logrotate/logrotate.mk   | 2 +-
+ package/librelp/librelp.hash | 2 +-
+ package/librelp/librelp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
-index 9c8e73f738..cc466a6f4e 100644
---- a/package/logrotate/logrotate.hash
-+++ b/package/logrotate/logrotate.hash
+diff --git a/package/librelp/librelp.hash b/package/librelp/librelp.hash
+index 23ce8c15f8..8dcc502583 100644
+--- a/package/librelp/librelp.hash
++++ b/package/librelp/librelp.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  742f6d6e18eceffa49a4bacd933686d3e42931cfccfb694d7f6369b704e5d094  logrotate-3.20.1.tar.xz
-+sha256  8fa12015e3b8415c121fc9c0ca53aa872f7b0702f543afda7e32b6c4900f6516  logrotate-3.21.0.tar.xz
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index 453dbe477a..37c48121f1 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
+-sha256  148db4e4d1a23e8136e9ec08810929a55faf5d45e24c2e3186d5ab34355dab31  librelp-1.10.0.tar.gz
++sha256  7719b5f31e07cbb9872289ad32b787c613b5355d407982a0a2c4d69938457fd6  librelp-1.11.0.tar.gz
+ sha256  1ed76f935566e93e3c3c0d9f8fad22eb6d8bbe406e2eb8470a4a2764d9fd9685  COPYING
+diff --git a/package/librelp/librelp.mk b/package/librelp/librelp.mk
+index f8bbdb131c..cf2e391f34 100644
+--- a/package/librelp/librelp.mk
++++ b/package/librelp/librelp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LOGROTATE_VERSION = 3.20.1
-+LOGROTATE_VERSION = 3.21.0
- LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.xz
- LOGROTATE_SITE = https://github.com/logrotate/logrotate/releases/download/$(LOGROTATE_VERSION)
- LOGROTATE_LICENSE = GPL-2.0+
+-LIBRELP_VERSION = 1.10.0
++LIBRELP_VERSION = 1.11.0
+ LIBRELP_SITE = http://download.rsyslog.com/librelp
+ LIBRELP_LICENSE = GPL-3.0+
+ LIBRELP_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
