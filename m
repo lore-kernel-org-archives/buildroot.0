@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD561C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 22:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6935C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 22:40:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EADB60FCF;
-	Tue,  2 Jan 2024 22:40:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EADB60FCF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 898FF60EF8;
+	Tue,  2 Jan 2024 22:40:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 898FF60EF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BrtknzRyHLRg; Tue,  2 Jan 2024 22:40:35 +0000 (UTC)
+	with ESMTP id uhvmk_WtanSl; Tue,  2 Jan 2024 22:40:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E94960FD3;
-	Tue,  2 Jan 2024 22:40:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E94960FD3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 32DB31BF966
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAA2960F7A;
+	Tue,  2 Jan 2024 22:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAA2960F7A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B09CE1BF2FB
  for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08D284014B
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:39:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08D284014B
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF2258175F
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:39:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF2258175F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BpknYWuI02mP for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 22:39:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4I7eqpMigqe1 for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 22:39:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6A52400CB
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2109815AB
  for <buildroot@buildroot.org>; Tue,  2 Jan 2024 22:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6A52400CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2109815AB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0EAA83E54; Tue,  2 Jan 2024 22:39:39 +0000 (UTC)
+ id DD35E83E72; Tue,  2 Jan 2024 22:39:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jan 2024 23:34:38 +0100
+Date: Tue, 2 Jan 2024 23:36:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 52d405de45d77a737a78fdc3340df0cf32610903
-X-Git-Newrev: ea45b95c0e54866134c63e88e60489a012b3d134
+X-Git-Oldrev: d37766a886a8dc3d49d45e14955411700a5efd26
+X-Git-Newrev: 9553dc98d30edaeb7a7ab4b7d8bc8c6fbb17b9fb
 X-Patchwork-Hint: ignore
-Message-Id: <20240102223939.A0EAA83E54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-grpcio: new package
+Message-Id: <20240102223939.DD35E83E72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-google-api-core: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,71 +63,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea45b95c0e54866134c63e88e60489a012b3d134
+commit: https://git.buildroot.net/buildroot/commit/?id=9553dc98d30edaeb7a7ab4b7d8bc8c6fbb17b9fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                        |  1 +
- package/python-grpcio/Config.in          |  6 ++++++
- package/python-grpcio/python-grpcio.hash |  5 +++++
- package/python-grpcio/python-grpcio.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ package/Config.in                                          |  1 +
+ package/python-google-api-core/Config.in                   | 10 ++++++++++
+ package/python-google-api-core/python-google-api-core.hash |  5 +++++
+ package/python-google-api-core/python-google-api-core.mk   | 14 ++++++++++++++
+ 4 files changed, 30 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index d5d89c50aa..69516c8705 100644
+index dd59baad06..3cd91beaf2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1105,6 +1105,7 @@ menu "External python modules"
+@@ -1104,6 +1104,7 @@ menu "External python modules"
+ 	source "package/python-gitdb2/Config.in"
+ 	source "package/python-gnupg/Config.in"
  	source "package/python-gobject/Config.in"
++	source "package/python-google-api-core/Config.in"
+ 	source "package/python-google-auth/Config.in"
+ 	source "package/python-googleapis-common-protos/Config.in"
  	source "package/python-gpiozero/Config.in"
- 	source "package/python-greenlet/Config.in"
-+	source "package/python-grpcio/Config.in"
- 	source "package/python-gunicorn/Config.in"
- 	source "package/python-h11/Config.in"
- 	source "package/python-h2/Config.in"
-diff --git a/package/python-grpcio/Config.in b/package/python-grpcio/Config.in
+diff --git a/package/python-google-api-core/Config.in b/package/python-google-api-core/Config.in
 new file mode 100644
-index 0000000000..e63ac2ae34
+index 0000000000..689923a2f4
 --- /dev/null
-+++ b/package/python-grpcio/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_GRPCIO
-+	bool "python-grpcio"
++++ b/package/python-google-api-core/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_GOOGLE_API_CORE
++	bool "python-google-api-core"
++	select BR2_PACKAGE_PYTHON_GOOGLE_AUTH # runtime
++	select BR2_PACKAGE_PYTHON_GOOGLEAPIS_COMMON_PROTOS # runtime
++	select BR2_PACKAGE_PYTHON_PROTOBUF # runtime
++	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
 +	help
-+	  HTTP/2-based RPC framework.
++	  Google API client core library.
 +
-+	  https://grpc.io
-diff --git a/package/python-grpcio/python-grpcio.hash b/package/python-grpcio/python-grpcio.hash
++	  https://github.com/googleapis/python-api-core
+diff --git a/package/python-google-api-core/python-google-api-core.hash b/package/python-google-api-core/python-google-api-core.hash
 new file mode 100644
-index 0000000000..39366f576e
+index 0000000000..5a1cd7f1cb
 --- /dev/null
-+++ b/package/python-grpcio/python-grpcio.hash
++++ b/package/python-google-api-core/python-google-api-core.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/grpcio/json
-+md5  480bfb7435426de392a883e6516aae79  grpcio-1.60.0.tar.gz
-+sha256  2199165a1affb666aa24adf0c97436686d0a61bc5fc113c037701fb7c7fceb96  grpcio-1.60.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/google-api-core/json
++md5  58a4ce34a405e514cdb5295c80834cfd  google-api-core-2.15.0.tar.gz
++sha256  abc978a72658f14a2df1e5e12532effe40f94f868f6e23d95133bd6abcca35ca  google-api-core-2.15.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/python-grpcio/python-grpcio.mk b/package/python-grpcio/python-grpcio.mk
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-google-api-core/python-google-api-core.mk b/package/python-google-api-core/python-google-api-core.mk
 new file mode 100644
-index 0000000000..3d264de4af
+index 0000000000..84042d8d7a
 --- /dev/null
-+++ b/package/python-grpcio/python-grpcio.mk
++++ b/package/python-google-api-core/python-google-api-core.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-grpcio
++# python-google-api-core
 +#
 +################################################################################
 +
-+PYTHON_GRPCIO_VERSION = 1.60.0
-+PYTHON_GRPCIO_SOURCE = grpcio-$(PYTHON_GRPCIO_VERSION).tar.gz
-+PYTHON_GRPCIO_SITE = https://files.pythonhosted.org/packages/61/38/c615b5c2be690fb31871f294cc08a96e598b085b8d07c5967a5018e0b90c
-+PYTHON_GRPCIO_SETUP_TYPE = setuptools
-+PYTHON_GRPCIO_LICENSE = Apache-2.0
-+PYTHON_GRPCIO_LICENSE_FILES = LICENSE
++PYTHON_GOOGLE_API_CORE_VERSION = 2.15.0
++PYTHON_GOOGLE_API_CORE_SOURCE = google-api-core-$(PYTHON_GOOGLE_API_CORE_VERSION).tar.gz
++PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/2c/e4/56b14d35057a23cab9067dd8fb841407d05d32b5d6c7a3c66c1360e8a7c0
++PYTHON_GOOGLE_API_CORE_SETUP_TYPE = setuptools
++PYTHON_GOOGLE_API_CORE_LICENSE = Apache-2.0
++PYTHON_GOOGLE_API_CORE_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 _______________________________________________
