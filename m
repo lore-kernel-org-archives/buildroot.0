@@ -4,84 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC1A2C46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 22:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE96BC46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 22:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 83078400CB;
-	Tue,  2 Jan 2024 22:31:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83078400CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E2364014B;
+	Tue,  2 Jan 2024 22:34:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E2364014B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HBJBmT1HzFU3; Tue,  2 Jan 2024 22:31:34 +0000 (UTC)
+	with ESMTP id 6a49MqlWkiwT; Tue,  2 Jan 2024 22:34:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67C7F4014B;
-	Tue,  2 Jan 2024 22:31:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67C7F4014B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DAF031BF276
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:31:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 293E1404C2;
+	Tue,  2 Jan 2024 22:34:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 293E1404C2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 67D711BF2FB
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:34:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE91F4014B
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:31:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE91F4014B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4071D8135F
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 22:34:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4071D8135F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lUehrVCpUXkp for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 22:31:28 +0000 (UTC)
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 082A8400CB
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 22:31:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 082A8400CB
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-40d4f5d902dso87327565e9.2
- for <buildroot@buildroot.org>; Tue, 02 Jan 2024 14:31:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704234685; x=1704839485;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=P1/kvABa0Lt7RaL95hRG0TY8kS+AwsLB4HDWspGZ8L0=;
- b=NpPvGxmj3sz0+GcyWaGt0qkGRgZVrkrOvoVCuD5J7VuXgsHuqP3DhBMVuoOfYcVLYI
- In+IN+SrP0hp8HfNQ9FQplCkH/rqSrTTJ/9RZwnINovdWrcrdr6q1nNhiP6U7URUzGbI
- 37mA+e0c5D9GBXejfJMtyZu5/sU8fzENP+s1oU8uzAN0Rn/4CQOMea8xzoNBdu8NlZ7A
- UeP9dCcg9M1uobeGL7r0Z5mC/JXa8UuVnYvrfa/udkFcukYF6Bq77HMztvLEKDKw+8sX
- W62ZM4/7OePGRa0j35LZMz6I0OWb2wqV1iq8G9rnbqu0DraO4UgR6+4ZjFqKr9dxqvww
- 0n+w==
-X-Gm-Message-State: AOJu0Yw0tl0cMIAqM/3/qVKcZVF2W+6Ea7XAO1T9PucQ56lZoZxT4K5L
- epR9+WaBedkUyJYtAkcudkaFtJMs6BA=
-X-Google-Smtp-Source: AGHT+IGB2f4da86P+ul8XLH4vPJP0BLCKTFuU7SGWmE0JzsiFCD/QguzxVCHxg5/wo6Fq4NnlZgqkg==
-X-Received: by 2002:a05:600c:5124:b0:40d:5ae5:9b9d with SMTP id
- o36-20020a05600c512400b0040d5ae59b9dmr5826440wms.63.1704234685162; 
- Tue, 02 Jan 2024 14:31:25 -0800 (PST)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- f7-20020a5d4dc7000000b00336ebf93416sm17362978wru.17.2024.01.02.14.31.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jan 2024 14:31:24 -0800 (PST)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id muywj3AmB7ZH for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 22:34:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE3A08131D
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 22:34:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE3A08131D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B2ACE83D98; Tue,  2 Jan 2024 22:34:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue,  2 Jan 2024 23:31:22 +0100
-Message-ID: <20240102223122.2463453-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704234685; x=1704839485; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=P1/kvABa0Lt7RaL95hRG0TY8kS+AwsLB4HDWspGZ8L0=;
- b=h7vtlvIFMbVLy8RoLRQYeHcu5hX8cuP8eAceo+gUER6+OSLAhzl8OqikVObEPQqsad
- RyuB1RJZZH69tKHIgFxifM9YZ7bw9LIywoInqaa6mdyp31QekVE/gHqn9kA5YtZ5hpzg
- 9BnabrVKH0lzlQFcjtv5oasnpAnPX7S15l7RNJ9ngoQyy7KXrFMTNvm5qt+R6erO/kju
- PYYFL6OOuyBUHbabKBGLCbK0adbJGUGxf1NidzpFy57c4dXkuqgPyOw4W7t9omY605k5
- gN9Gmf/U8GvJQbFNACuVKoGgsqBNrhbHqspR+/FWeBjWkCuFJcY6kqHxvwhwzrINgGOs
- HPjg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=h7vtlvIF
-Subject: [Buildroot] [PATCH 1/1] package/jszip: bump to version 3.10.1
+Date: Tue, 2 Jan 2024 23:22:55 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f4abda15d3ca3ebd40d9de9cc808e605a71a0733
+X-Git-Newrev: 52d405de45d77a737a78fdc3340df0cf32610903
+X-Patchwork-Hint: ignore
+Message-Id: <20240102223426.B2ACE83D98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nfs-utils: bump version to 2.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +55,315 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/Stuk/jszip/blob/v3.10.1/CHANGES.md
+commit: https://git.buildroot.net/buildroot/commit/?id=52d405de45d77a737a78fdc3340df0cf32610903
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Remove patches backported from this release.
+Backport 2 patches from upstream ML needed for uClibc-ng on mips.
+
+Require kernel 3.17 due getrandom() dependency.
+Add host-util-linux to HOST_NFS_UTILS_DEPENDENCIES
+(new uuid.h dependency).
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/c5fde6099a8b228a8bdc3154d1e47dfa192e94ed/
+
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jszip/jszip.hash | 2 +-
- package/jszip/jszip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...c-libevent-and-libsqlite3-checked-when-nf.patch | 79 ----------------------
+ ...fsidd-reexport-.c-Re-add-missing-includes.patch | 44 ++++++++++++
+ ...ackend_sqlite.c-Add-missing-sys-syscall.h.patch | 31 +++++++++
+ ...xport-guard-dlfcn.h-include-with-HAVE_DLF.patch | 44 ------------
+ package/nfs-utils/Config.in                        |  5 +-
+ package/nfs-utils/nfs-utils.hash                   |  4 +-
+ package/nfs-utils/nfs-utils.mk                     |  4 +-
+ 7 files changed, 82 insertions(+), 129 deletions(-)
 
-diff --git a/package/jszip/jszip.hash b/package/jszip/jszip.hash
-index d0c56a44ab..e90e9cc68b 100644
---- a/package/jszip/jszip.hash
-+++ b/package/jszip/jszip.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  aa3033c6bb5357a0b0965c92fbdb6d6abe64676e70ffa7933b63c573ab79ee45  jszip-3.10.0.tar.gz
-+sha256  e873e5d0d8549c78c0eafcab8fba40f4a1e27c5a9d48f4a6b2eb122470d0d88c  jszip-3.10.1.tar.gz
- sha256  566c953c6090b1218ca6217dd7359d45dde46581968586dc607d59a78af6a9c4  LICENSE.markdown
-diff --git a/package/jszip/jszip.mk b/package/jszip/jszip.mk
-index 3504368675..b282610a0d 100644
---- a/package/jszip/jszip.mk
-+++ b/package/jszip/jszip.mk
+diff --git a/package/nfs-utils/0001-configure.ac-libevent-and-libsqlite3-checked-when-nf.patch b/package/nfs-utils/0001-configure.ac-libevent-and-libsqlite3-checked-when-nf.patch
+deleted file mode 100644
+index a6a6d56d7f..0000000000
+--- a/package/nfs-utils/0001-configure.ac-libevent-and-libsqlite3-checked-when-nf.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-From bc4a5deef9f820c55fdac3c0070364c17cd91cca Mon Sep 17 00:00:00 2001
+-From: Wiktor Jaskulski <wjaskulski@adva.com>
+-Date: Thu, 11 May 2023 15:28:23 -0400
+-Subject: [PATCH] configure.ac: libevent and libsqlite3 checked when nfsv4 is
+- disabled
+-
+-Upstream: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=bc4a5deef9f820c55fdac3c0070364c17cd91cca
+-
+-Signed-off-by: Steve Dickson <steved@redhat.com>
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- configure.ac | 38 +++++++++++++++-----------------------
+- 1 file changed, 15 insertions(+), 23 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 9df52e9c..6fbcb974 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -338,42 +338,34 @@ CPPFLAGS="${nfsutils_save_CPPFLAGS}"
+- AC_CHECK_HEADER(uuid/uuid.h, ,
+- 	AC_MSG_ERROR([Cannot find needed header file uuid/uuid.h. Install libuuid-devel]))
+- 
+-+dnl check for libevent libraries and headers
+-+AC_LIBEVENT
+-+
+-+dnl Check for sqlite3
+-+AC_SQLITE3_VERS
+-+
+-+case $libsqlite3_cv_is_recent in
+-+yes) ;;
+-+unknown)
+-+   dnl do not fail when cross-compiling
+-+   AC_MSG_WARN([assuming sqlite is at least v3.3]) ;;
+-+*)
+-+   AC_MSG_ERROR([nfsdcld requires sqlite-devel]) ;;
+-+esac
+-+
+- if test "$enable_nfsv4" = yes; then
+--  dnl check for libevent libraries and headers
+--  AC_LIBEVENT
+- 
+-   dnl check for the keyutils libraries and headers
+-   AC_KEYUTILS
+- 
+--  dnl Check for sqlite3
+--  AC_SQLITE3_VERS
+--
+-   if test "$enable_nfsdcld" = "yes"; then
+- 	AC_CHECK_HEADERS([libgen.h sys/inotify.h], ,
+- 		AC_MSG_ERROR([Cannot find header needed for nfsdcld]))
+--
+--    case $libsqlite3_cv_is_recent in
+--    yes) ;;
+--    unknown)
+--      dnl do not fail when cross-compiling
+--      AC_MSG_WARN([assuming sqlite is at least v3.3]) ;;
+--    *)
+--      AC_MSG_ERROR([nfsdcld requires sqlite-devel]) ;;
+--    esac
+-   fi
+- 
+-   if test "$enable_nfsdcltrack" = "yes"; then
+- 	AC_CHECK_HEADERS([libgen.h sys/inotify.h], ,
+- 		AC_MSG_ERROR([Cannot find header needed for nfsdcltrack]))
+--
+--    case $libsqlite3_cv_is_recent in
+--    yes) ;;
+--    unknown)
+--      dnl do not fail when cross-compiling
+--      AC_MSG_WARN([assuming sqlite is at least v3.3]) ;;
+--    *)
+--      AC_MSG_ERROR([nfsdcltrack requires sqlite-devel]) ;;
+--    esac
+-   fi
+- 
+- else
+--- 
+-2.34.1
+-
+diff --git a/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch b/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch
+new file mode 100644
+index 0000000000..4f79af450e
+--- /dev/null
++++ b/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch
+@@ -0,0 +1,44 @@
++From 4710e469cd0f512ac5e2c3c4335d8e21b97f21b0 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
++Date: Tue, 5 Dec 2023 20:40:36 +0100
++Subject: [PATCH] reexport/{fsidd,reexport}.c: Re-add missing includes
++
++Older uClibc-ng requires <unistd.h> for close(2), unlink(2) and write(2),
++<sys/un.h> for struct sockaddr_un.
++
++Fixes: 1a4edb2a ("reexport/fsidd.c: Remove unused headers")
++Fixes: bdc79f02 ("support/reexport.c: Remove unused headers")
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++Upstream: https://lore.kernel.org/linux-nfs/20231205223543.31443-1-pvorel@suse.cz/
++---
++ support/reexport/fsidd.c    | 2 ++
++ support/reexport/reexport.c | 1 +
++ 2 files changed, 3 insertions(+)
++
++diff --git a/support/reexport/fsidd.c b/support/reexport/fsidd.c
++index 3e62b3fc..814fb48e 100644
++--- a/support/reexport/fsidd.c
+++++ b/support/reexport/fsidd.c
++@@ -7,6 +7,8 @@
++ #include <dlfcn.h>
++ #endif
++ #include <event2/event.h>
+++#include <sys/un.h>
+++#include <unistd.h>
++
++ #include "conffile.h"
++ #include "reexport_backend.h"
++diff --git a/support/reexport/reexport.c b/support/reexport/reexport.c
++index 78516586..1900b336 100644
++--- a/support/reexport/reexport.c
+++++ b/support/reexport/reexport.c
++@@ -7,6 +7,7 @@
++ #endif
++ #include <sys/types.h>
++ #include <sys/vfs.h>
+++#include <unistd.h>
++ #include <errno.h>
++
++ #include "nfsd_path.h"
++--
++2.43.0
+diff --git a/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch b/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch
+new file mode 100644
+index 0000000000..88e1a9068d
+--- /dev/null
++++ b/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch
+@@ -0,0 +1,31 @@
++From aee92881ba80cf2ae7381d19f09e7fbeda57974c Mon Sep 17 00:00:00 2001
++From: Petr Vorel <petr.vorel@gmail.com>
++Date: Tue, 5 Dec 2023 23:20:33 +0100
++Subject: [PATCH] support/backend_sqlite.c: Add missing <sys/syscall.h>
++
++This fixes build on systems which actually needs getrandom()
++(to get SYS_getrandom).
++
++Fixes: f92fd6ca ("support/backend_sqlite.c: Add getrandom() fallback")
++Fixes: http://autobuild.buildroot.net/results/c5fde6099a8b228a8bdc3154d1e47dfa192e94ed/
++Reported-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++Upstream: https://lore.kernel.org/linux-nfs/20231205223543.31443-2-pvorel@suse.cz/
++---
++ support/reexport/backend_sqlite.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/support/reexport/backend_sqlite.c b/support/reexport/backend_sqlite.c
++index 0eb5ea37..54dfe447 100644
++--- a/support/reexport/backend_sqlite.c
+++++ b/support/reexport/backend_sqlite.c
++@@ -7,6 +7,7 @@
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <string.h>
+++#include <sys/syscall.h>
++ #include <unistd.h>
++
++ #ifdef HAVE_GETRANDOM
++--
++2.43.0
+diff --git a/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch b/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
+deleted file mode 100644
+index 6612847be7..0000000000
+--- a/package/nfs-utils/0002-support-reexport-guard-dlfcn.h-include-with-HAVE_DLF.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 274e4d212c30183242e48b639889865819f3ac33 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 11 Jun 2023 08:57:11 +0200
+-Subject: [PATCH] support/reexport: guard dlfcn.h include with HAVE_DLFCN_H
+-
+-Upstream: http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=8125c6f4ad156a9bad0dc2cc42e0243380fc478d
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- support/reexport/fsidd.c    | 2 ++
+- support/reexport/reexport.c | 2 ++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/support/reexport/fsidd.c b/support/reexport/fsidd.c
+-index 37649d06..d4b245e8 100644
+---- a/support/reexport/fsidd.c
+-+++ b/support/reexport/fsidd.c
+-@@ -3,7 +3,9 @@
+- #endif
+- 
+- #include <assert.h>
+-+#ifdef HAVE_DLFCN_H
+- #include <dlfcn.h>
+-+#endif
+- #include <event2/event.h>
+- #include <limits.h>
+- #include <stdint.h>
+-diff --git a/support/reexport/reexport.c b/support/reexport/reexport.c
+-index d597a2f7..d9a700af 100644
+---- a/support/reexport/reexport.c
+-+++ b/support/reexport/reexport.c
+-@@ -2,7 +2,9 @@
+- #include <config.h>
+- #endif
+- 
+-+#ifdef HAVE_DLFCN_H
+- #include <dlfcn.h>
+-+#endif
+- #include <stdint.h>
+- #include <stdio.h>
+- #include <sys/random.h>
+--- 
+-2.39.2
+-
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index b4568dc6f3..02cc7e78cc 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -1,11 +1,12 @@
+-comment "nfs-utils needs a toolchain w/ threads"
++comment "nfs-utils needs a toolchain w/ threads, headers >= 3.17"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 
+ config BR2_PACKAGE_NFS_UTILS
+ 	bool "nfs-utils"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # getrandom()
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_LIBTIRPC # IPv6 requires libtirpc
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index 015906553d..9d74991df1 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.6.3/sha256sums.asc
+-sha256  38d89e853a71d3c560ff026af3d969d75e24f782ff68324e76261fe0344459e1  nfs-utils-2.6.3.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.6.4/sha256sums.asc
++sha256  01b3b0fb9c7d0bbabf5114c736542030748c788ec2fd9734744201e9b0a1119d  nfs-utils-2.6.4.tar.xz
+ # Locally computed
+ sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 3c85be0558..a11ba154ad 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JSZIP_VERSION = 3.10.0
-+JSZIP_VERSION = 3.10.1
- JSZIP_SITE = $(call github,Stuk,jszip,v$(JSZIP_VERSION))
- JSZIP_LICENSE = MIT or GPL-3.0
- JSZIP_LICENSE_FILES = LICENSE.markdown
--- 
-2.43.0
-
+-NFS_UTILS_VERSION = 2.6.3
++NFS_UTILS_VERSION = 2.6.4
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
+@@ -22,7 +22,7 @@ NFS_UTILS_CONF_OPTS = \
+ 	--with-statedir=/run/nfs \
+ 	--with-rpcgen=$(HOST_DIR)/bin/rpcgen
+ 
+-HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libevent host-sqlite
++HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libevent host-sqlite host-util-linux
+ 
+ HOST_NFS_UTILS_CONF_OPTS = \
+ 	--enable-tirpc \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
