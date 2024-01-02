@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 378BEC46CD2
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 19:42:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B0E7C46CD2
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jan 2024 19:49:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84C0460F9C;
-	Tue,  2 Jan 2024 19:42:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84C0460F9C
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2D5460AFD;
+	Tue,  2 Jan 2024 19:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2D5460AFD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4CnCSGC3yVhu; Tue,  2 Jan 2024 19:42:06 +0000 (UTC)
+	with ESMTP id kj_OHOihHLKf; Tue,  2 Jan 2024 19:49:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDA9160BFD;
-	Tue,  2 Jan 2024 19:42:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDA9160BFD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 94C141BF2FB
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 19:42:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55BE560EC9;
+	Tue,  2 Jan 2024 19:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55BE560EC9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 198101BF2B6
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 19:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6281140204
- for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 19:42:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6281140204
+ by smtp3.osuosl.org (Postfix) with ESMTP id E24EF60BFD
+ for <buildroot@lists.busybox.net>; Tue,  2 Jan 2024 19:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E24EF60BFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ONQSQrfMkjB4 for <buildroot@lists.busybox.net>;
- Tue,  2 Jan 2024 19:42:02 +0000 (UTC)
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1B8F540150
- for <buildroot@buildroot.org>; Tue,  2 Jan 2024 19:42:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B8F540150
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-3368ae75082so5188612f8f.1
- for <buildroot@buildroot.org>; Tue, 02 Jan 2024 11:42:01 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8C62HUxJUenS for <buildroot@lists.busybox.net>;
+ Tue,  2 Jan 2024 19:49:28 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C2FBE60AFD
+ for <buildroot@buildroot.org>; Tue,  2 Jan 2024 19:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2FBE60AFD
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40d5ac76667so49226365e9.1
+ for <buildroot@buildroot.org>; Tue, 02 Jan 2024 11:49:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1704224519; x=1704829319;
+ d=1e100.net; s=20230601; t=1704224965; x=1704829765;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8/Zci0Jc6Rg+1TNpevGNWgGDmcEFMvhF3J1VewvkeB8=;
- b=fr9sA4MQxSYc8dWJn0dK5/oVeHv3VBZI9zgqAHrFGf8SzN7Q64UL4t5OPOWlNK3h5A
- qFctcfotylxo4HuSJjIApkFvidbmCvGvSqtp54L4x839rcryiW8bbBo+92d/G2M6N6wH
- kmcrUS8uhYR2/C2Us1AfnyC+PolAab1s0DxQJ2hGFn1qMsbtjFnvnWtCCEf46vZItZ/F
- veAxbZ0pJAYZsvlY3mec21jRFJmDfIOrp2dd8CG5P8nFoayS1sSkSUGf5K3tXUAuf1c6
- HZyVOr7sJLSW2g24W8VuC5PMDyHnY5QMBG+ifOQokaL1VSfTVen6/HeycJICdSgjdFRt
- gyTQ==
-X-Gm-Message-State: AOJu0YwPUhCbY7G5MkUePWwuwRgFUPSwLxcRdVv8C1UmS6izHQ8UAb5D
- sAkiRLG4bpPxDYk/FfgxPsz3hm5Muto=
-X-Google-Smtp-Source: AGHT+IELoyC8M3vcRcw2n99ZkjbfgN6y2pl+TDlgKT4vJXXL7vsOkP+jmcvNBYIyfYQS5OoSgaUvgQ==
-X-Received: by 2002:a05:600c:1f0e:b0:40d:87c0:92dd with SMTP id
- bd14-20020a05600c1f0e00b0040d87c092ddmr1787273wmb.150.1704224519102; 
- Tue, 02 Jan 2024 11:41:59 -0800 (PST)
+ bh=f2r7pRiPt70bHNB5ZXvJHV89kX7sASv6G2bbi2n9zNM=;
+ b=DNoC9t6w2xBblVxcMH0HfuLYDk69wKbEALanC+RfHBWDoGIuhvMFDvItVBZhuhZ1VC
+ sdv9UDxYg33OqdDHMJ/XSmM8URUUuJXIALYsT6ZQvS8+Zt0698pUin9+Ux71PsliE3/j
+ USUUui1lS3ryhGhOo8JnNlwiPEFqAZdoUcVf3bQ4q92jP9Tgon9LyUzD+lCQ6xytFjqe
+ 06W816r7IH+hx7s0yq1FR0AivbXRAVWchUu8IZQMWo+W6TkcPTHDV2JcSakKOj6AV+QY
+ uxG4pD887GlFieYRZg4OdI54BEB33amdFjWk1OEIBkxt7edLnW5LwACEhg/Qc7vr8g7h
+ 7JAg==
+X-Gm-Message-State: AOJu0Yze0D7F91LIkR+dFQFJux/eQMp/xOl++2DGBtpmC44OUG4oVQ91
+ VAKIbNRJIEl5tYqSckaEd16PLqk49Sc=
+X-Google-Smtp-Source: AGHT+IHCtgSF7+J4i8xhRcCJSybsyiArImZfLkpXxEzQ/av+2+gKUK0s+HOp8xDNTs436dX64fz7WA==
+X-Received: by 2002:a05:600c:45d0:b0:40d:5cea:895f with SMTP id
+ s16-20020a05600c45d000b0040d5cea895fmr6034615wmo.115.1704224964435; 
+ Tue, 02 Jan 2024 11:49:24 -0800 (PST)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- a16-20020a056000101000b003366a9cb0d1sm29092741wrx.92.2024.01.02.11.41.58
+ i16-20020a05600c355000b0040d5a5c523csm26991376wmq.1.2024.01.02.11.49.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jan 2024 11:41:58 -0800 (PST)
+ Tue, 02 Jan 2024 11:49:24 -0800 (PST)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  2 Jan 2024 20:41:55 +0100
-Message-ID: <20240102194155.1345165-1-fontaine.fabrice@gmail.com>
+Date: Tue,  2 Jan 2024 20:49:21 +0100
+Message-ID: <20240102194921.1401867-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1704224519; x=1704829319; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1704224965; x=1704829765; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8/Zci0Jc6Rg+1TNpevGNWgGDmcEFMvhF3J1VewvkeB8=;
- b=Q53SfR7oGfLpGEwMqVlZfwsk64T49r2fF9CteGlHZTmifhFIyrZWQIExFNwZGUn/qV
- h03q5JKVKPQyEH3Z70pxb0dhfBGwRhutN3RXpo/nsc6197GL9hAY/x117NW1liPULAaI
- i4Ns7DLysaIdlJGT19oo60f1OvA7OyRsihpGixx7kp7FvfMdKeb+Wa1nbgQaHskgH/4B
- e0ThTMnf6wc5uTOScUPKDACeVRlB0nCu1KMel9mLgI9+zYbbv5nAajCRvALOjS9bu6QC
- D7iE2TW1s9Elvqg9Zezo/xfF9N7l1rAT9S4DgTpfrDRjWhCjlEn6WARsdfLdPXY/lnQ+
- qHEw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=f2r7pRiPt70bHNB5ZXvJHV89kX7sASv6G2bbi2n9zNM=;
+ b=Gt5/8LuMESz0TY/17d5UDkUJFiQL40v3z2nnDUjz33PBaKpMvAd4SSITRtwmZ4Qaej
+ ioz1ys4KbYEvsfLaLbEmpccIiEEgZt4fSLmLtmAyi8Pbt4hhtKMeP6j+HMIi/44y65BE
+ Ogdb4LusgU1n++KEIBbB9BaxKES5SbEsiD8QOChGGxtaCI+MUcyx0ivqcd2zQiCSatXr
+ TaxstlU++WbuoNeoEBS+wUuNX2jOng8kN94DrghO7AR++Icj8FJYICZcdF7xCeZ/wjlB
+ AeV2LxXl0Yl2cdVfMCbkdZDGzPQQLVyj3DUyNngThzgjj/xxBjZ66NA4CZRFaHwZDmsM
+ gn/Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Q53SfR7o
-Subject: [Buildroot] [PATCH 1/1] Revert "package/docker: enable selinux
- module"
+ header.a=rsa-sha256 header.s=20230601 header.b=Gt5/8LuM
+Subject: [Buildroot] [PATCH 1/1] package/perl: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,38 +99,581 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This reverts commit 245b13a0778ec6ad061555b0b994e7649ef01006 as docker
-selinux module is for docker-engine, not for "a system tray dock for X"
+Fix the following static build failure raised since bump to version
+5.38.2 in commit 41e2828c4163c7480dd31d6c8c3955c123a0f2e7:
 
-Moreover, it raises the following build failure:
-
-Compiling targeted policy.33
-env LD_LIBRARY_PATH="/home/buildroot/autobuild/instance-0/output-1/per-package/refpolicy/host/lib:/home/buildroot/autobuild/instance-0/output-1/per-package/refpolicy/host/usr/lib" /home/buildroot/autobuild/instance-0/output-1/per-package/refpolicy/host/usr/bin/checkpolicy -c 33 -U deny -S -O -E policy.conf -o policy.33
-policy.conf:1912:ERROR 'attribute container_engine_domain is not declared' at token ';' on line 1912:
-type dockerd_t, container_engine_domain;
-type dockerd_exec_t;
+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/10.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: lib/auto/re/re.a(re_comp.o): in function `Perl_reg_add_data':
+re_comp.c:(.text+0x9a24): multiple definition of `Perl_reg_add_data'; libperl.a(regcomp.o):regcomp.c:(.text+0x4f7c): first defined here
 
 Fixes:
- - http://autobuild.buildroot.org/results/87d78b6f15875f0fa3e6fc85e352db14ab0383bb
+ - http://autobuild.buildroot.org/results/c61b60430d36c5c63bd3cf0257f2193a40fb0b60
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/docker/docker.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...ixup-regex-engine-build-under-Uusedl.patch | 554 ++++++++++++++++++
+ 1 file changed, 554 insertions(+)
+ create mode 100644 package/perl/0001-regcomp-c-regexec-c-fixup-regex-engine-build-under-Uusedl.patch
 
-diff --git a/package/docker/docker.mk b/package/docker/docker.mk
-index 39f7ee4580..4a8c6fcd8d 100644
---- a/package/docker/docker.mk
-+++ b/package/docker/docker.mk
-@@ -7,7 +7,7 @@
- DOCKER_VERSION = 1.5
- DOCKER_SITE = http://icculus.org/openbox/2/docker
- DOCKER_DEPENDENCIES = host-pkgconf libglib2 xlib_libX11
--DOCKER_SELINUX_MODULES = docker
+diff --git a/package/perl/0001-regcomp-c-regexec-c-fixup-regex-engine-build-under-Uusedl.patch b/package/perl/0001-regcomp-c-regexec-c-fixup-regex-engine-build-under-Uusedl.patch
+new file mode 100644
+index 0000000000..f0837c2d33
+--- /dev/null
++++ b/package/perl/0001-regcomp-c-regexec-c-fixup-regex-engine-build-under-Uusedl.patch
+@@ -0,0 +1,554 @@
++From ba6e2c38aafc23cf114f3ba0d0ff3baead34328b Mon Sep 17 00:00:00 2001
++From: Yves Orton <demerphq@gmail.com>
++Date: Tue, 1 Aug 2023 23:12:46 +0200
++Subject: [PATCH] regcomp*.c, regexec.c - fixup regex engine build under
++ -Uusedl
 +
- DOCKER_LICENSE = GPL-2.0+
- # The 'or later' is specified at the end of the README, so include that one too.
- DOCKER_LICENSE_FILES = COPYING README
++The regex engine is built a bit different from most of the perl
++codebase. It is compiled as part of the main libperl.so and it is
++also compiled (with DEBUGGING enabled) as part of the re extension.
++When perl itself is compiled with DEBUGGING enabled then the code
++in the re.so extension and the code in libperl.so is the same.
++
++This all works fine and dandy until you have a static build where the
++re.so is linked into libperl.so, which results in duplicate symbols
++being defined. These symbols come in two flaviours: "auxiliary" and
++"debugging" related symbols.
++
++We have basically three cases:
++
++1. USE_DYNAMIC_LOADING is defined. In this case we are doing a dynamic
++   build and re.so will be separate from libperl.so, so it even if this
++   is a DEBUGGING enabled build debug and auxiliary functions can be
++   compiled into *both* re.so and libperl.so. This is basically the
++   "standard build".
++
++2. USE_DYNAMIC_LOADING is not defined, and DEBUGGING is not defined
++   either. In this case auxiliary functions should only be compiled in
++   libperl.so, and the debug functions should only be compiled into
++   re.so
++
++3. USE_DYNAMIC_LOADING is not defined, and DEBUGGING *is* defined. In
++   this case auxiliary functions AND debug functions should only be
++   compiled into libperl.so
++
++It is possible to detect the different build options by looking at the
++defines 'USE_DYNAMIC_LOADING', 'PERL_EXT_RE_DEBUG' and
++'DEBUGGING_RE_ONLY'. 'USE_DYNAMIC_LOADING' is NOT defined when we are
++building a static perl. 'PERL_EXT_RE_DEBUG' is defined only when we are
++building re.so, and 'DEBUGGING_RE_ONLY' is defined only when we are
++building re.so in a perl that is not itself already a DEBUGGING enabled
++perl. The file ext/re/re_top.h responsible for setting up
++DEBUGGING_RE_ONLY.
++
++This patch uses 'PERL_EXT_RE_DEBUG', 'DEBUGGING_RE_ONLY' and
++'USE_DYNAMIC_LOADING' to define in regcomp.h two further define flags
++'PERL_RE_BUILD_DEBUG' and 'PERL_RE_BUILD_AUX'.
++
++The 'PERL_RE_BUILD_DEBUG' flag determines if the debugging functions
++should be compiled into libperl.so or re.so or both. The
++'PERL_RE_BUILD_AUX' flag determines if the auxiliary functions should be
++compiled into just libperl.so or into it and re.so. We then use these
++flags to guard the different types of functions so that we can build in
++all three modes without duplicate symbols.
++
++Upstream: https://github.com/Perl/perl5/commit/ba6e2c38aafc23cf114f3ba0d0ff3baead34328b
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ regcomp.c         |  13 +-
++ regcomp.h         |  14 ++-
++ regcomp_debug.c   | 308 +++++++++++++++++++++++-----------------------
++ regcomp_invlist.c |   3 +-
++ regexec.c         |   3 +-
++ 5 files changed, 181 insertions(+), 160 deletions(-)
++
++diff --git a/regcomp.c b/regcomp.c
++index d3c135fbfad1..6e35d95d2ac6 100644
++--- a/regcomp.c
+++++ b/regcomp.c
++@@ -290,6 +290,7 @@ S_edit_distance(const UV* src,
++ /* END of edit_distance() stuff
++  * ========================================================= */
++ 
+++#ifdef PERL_RE_BUILD_AUX
++ /* add a data member to the struct reg_data attached to this regex, it should
++  * always return a non-zero return. the 's' argument is the type of the items
++  * being added and the n is the number of items. The length of 's' should match
++@@ -340,6 +341,7 @@ Perl_reg_add_data(RExC_state_t* const pRExC_state, const char* const s, const U3
++     assert(count>0);
++     return count;
++ }
+++#endif /* PERL_RE_BUILD_AUX */
++ 
++ /*XXX: todo make this not included in a non debugging perl, but appears to be
++  * used anyway there, in 'use re' */
++@@ -7443,6 +7445,7 @@ S_regatom(pTHX_ RExC_state_t *pRExC_state, I32 *flagp, U32 depth)
++ }
++ 
++ 
+++#ifdef PERL_RE_BUILD_AUX
++ void
++ Perl_populate_anyof_bitmap_from_invlist(pTHX_ regnode *node, SV** invlist_ptr)
++ {
++@@ -7502,6 +7505,7 @@ Perl_populate_anyof_bitmap_from_invlist(pTHX_ regnode *node, SV** invlist_ptr)
++         }
++     }
++ }
+++#endif /* PERL_RE_BUILD_AUX */
++ 
++ /* Parse POSIX character classes: [[:foo:]], [[=foo=]], [[.foo.]].
++    Character classes ([:foo:]) can also be negated ([:^foo:]).
++@@ -9095,6 +9099,7 @@ S_dump_regex_sets_structures(pTHX_ RExC_state_t *pRExC_state,
++ #undef IS_OPERATOR
++ #undef IS_OPERAND
++ 
+++#ifdef PERL_RE_BUILD_AUX
++ void
++ Perl_add_above_Latin1_folds(pTHX_ RExC_state_t *pRExC_state, const U8 cp, SV** invlist)
++ {
++@@ -9182,6 +9187,8 @@ Perl_add_above_Latin1_folds(pTHX_ RExC_state_t *pRExC_state, const U8 cp, SV** i
++          }
++     }
++ }
+++#endif /* PERL_RE_BUILD_AUX */
+++
++ 
++ STATIC void
++ S_output_posix_warnings(pTHX_ RExC_state_t *pRExC_state, AV* posix_warnings)
++@@ -12105,6 +12112,7 @@ S_optimize_regclass(pTHX_
++ 
++ #undef HAS_NONLOCALE_RUNTIME_PROPERTY_DEFINITION
++ 
+++#ifdef PERL_RE_BUILD_AUX
++ void
++ Perl_set_ANYOF_arg(pTHX_ RExC_state_t* const pRExC_state,
++                 regnode* const node,
++@@ -12261,6 +12269,7 @@ Perl_set_ANYOF_arg(pTHX_ RExC_state_t* const pRExC_state,
++     RExC_rxi->data->data[n] = (void*)rv;
++     ARG1u_SET(node, n);
++ }
+++#endif /* PERL_RE_BUILD_AUX */
++ 
++ SV *
++ 
++@@ -12999,6 +13008,8 @@ S_regtail_study(pTHX_ RExC_state_t *pRExC_state, regnode_offset p,
++ }
++ #endif
++ 
+++
+++#ifdef PERL_RE_BUILD_AUX
++ SV*
++ Perl_get_ANYOFM_contents(pTHX_ const regnode * n) {
++ 
++@@ -13047,7 +13058,7 @@ Perl_get_ANYOFHbbm_contents(pTHX_ const regnode * n) {
++                                       UTF_CONTINUATION_MARK | 0));
++     return cp_list;
++ }
++-
+++#endif /* PERL_RE_BUILD_AUX */
++ 
++ 
++ SV *
++diff --git a/regcomp.h b/regcomp.h
++index 31c91e6a68e8..017a9f843514 100644
++--- a/regcomp.h
+++++ b/regcomp.h
++@@ -1554,7 +1554,19 @@ typedef enum {
++ #define EVAL_OPTIMISTIC_FLAG    128
++ #define EVAL_FLAGS_MASK         (EVAL_OPTIMISTIC_FLAG-1)
++ 
++-
+++/* We define PERL_RE_BUILD_DEBUG if we are NOT compiling the re extension and
+++ * we are under DEBUGGING, or if we are ARE compiling the re extension
+++ * and this is not a DEBUGGING enabled build (identified by
+++ * DEBUGGING_RE_ONLY being defined)
+++ */
+++#if ( defined(USE_DYNAMIC_LOADING) && defined(DEBUGGING)) || \
+++    ( defined(PERL_EXT_RE_BUILD) && defined(DEBUGGING_RE_ONLY)) || \
+++    (!defined(PERL_EXT_RE_BUILD) && defined(DEBUGGING))
+++#define PERL_RE_BUILD_DEBUG
+++#endif
+++#if ( defined(USE_DYNAMIC_LOADING) || !defined(PERL_EXT_RE_BUILD) )
+++#define PERL_RE_BUILD_AUX
+++#endif
++ 
++ #endif /* PERL_REGCOMP_H_ */
++ 
++diff --git a/regcomp_debug.c b/regcomp_debug.c
++index 93db7a89cf48..96598c49c0bc 100644
++--- a/regcomp_debug.c
+++++ b/regcomp_debug.c
++@@ -18,8 +18,7 @@
++ #include "unicode_constants.h"
++ #include "regcomp_internal.h"
++ 
++-#ifdef DEBUGGING
++-
+++#ifdef PERL_RE_BUILD_DEBUG
++ int
++ Perl_re_printf(pTHX_ const char *fmt, ...)
++ {
++@@ -159,13 +158,160 @@ Perl_debug_peep(pTHX_ const char *str, const RExC_state_t *pRExC_state,
++    });
++ }
++ 
++-#endif /* DEBUGGING */
+++const regnode *
+++Perl_dumpuntil(pTHX_ const regexp *r, const regnode *start, const regnode *node,
+++            const regnode *last, const regnode *plast,
+++            SV* sv, I32 indent, U32 depth)
+++{
+++    const regnode *next;
+++    const regnode *optstart= NULL;
+++
+++    RXi_GET_DECL(r, ri);
+++    DECLARE_AND_GET_RE_DEBUG_FLAGS;
+++
+++    PERL_ARGS_ASSERT_DUMPUNTIL;
+++
+++#ifdef DEBUG_DUMPUNTIL
+++    Perl_re_printf( aTHX_  "--- %d : %d - %d - %d\n", indent, node-start,
+++        last ? last-start : 0, plast ? plast-start : 0);
+++#endif
+++
+++    if (plast && plast < last)
+++        last= plast;
+++
+++    while (node && (!last || node < last)) {
+++        const U8 op = OP(node);
+++
+++        if (op == CLOSE || op == SRCLOSE || op == WHILEM)
+++            indent--;
+++        next = regnext((regnode *)node);
+++        const regnode *after = regnode_after((regnode *)node,0);
+++
+++        /* Where, what. */
+++        if (op == OPTIMIZED) {
+++            if (!optstart && RE_DEBUG_FLAG(RE_DEBUG_COMPILE_OPTIMISE))
+++                optstart = node;
+++            else
+++                goto after_print;
+++        } else
+++            CLEAR_OPTSTART;
+++
+++        regprop(r, sv, node, NULL, NULL);
+++        Perl_re_printf( aTHX_  "%4" IVdf ":%*s%s", (IV)(node - start),
+++                      (int)(2*indent + 1), "", SvPVX_const(sv));
+++
+++        if (op != OPTIMIZED) {
+++            if (next == NULL)           /* Next ptr. */
+++                Perl_re_printf( aTHX_  " (0)");
+++            else if (REGNODE_TYPE(op) == BRANCH
+++                     && REGNODE_TYPE(OP(next)) != BRANCH )
+++                Perl_re_printf( aTHX_  " (FAIL)");
+++            else
+++                Perl_re_printf( aTHX_  " (%" IVdf ")", (IV)(next - start));
+++            Perl_re_printf( aTHX_ "\n");
+++        }
+++
+++      after_print:
+++        if (REGNODE_TYPE(op) == BRANCHJ) {
+++            assert(next);
+++            const regnode *nnode = (OP(next) == LONGJMP
+++                                   ? regnext((regnode *)next)
+++                                   : next);
+++            if (last && nnode > last)
+++                nnode = last;
+++            DUMPUNTIL(after, nnode);
+++        }
+++        else if (REGNODE_TYPE(op) == BRANCH) {
+++            assert(next);
+++            DUMPUNTIL(after, next);
+++        }
+++        else if ( REGNODE_TYPE(op)  == TRIE ) {
+++            const regnode *this_trie = node;
+++            const U32 n = ARG1u(node);
+++            const reg_ac_data * const ac = op>=AHOCORASICK ?
+++               (reg_ac_data *)ri->data->data[n] :
+++               NULL;
+++            const reg_trie_data * const trie =
+++                (reg_trie_data*)ri->data->data[op<AHOCORASICK ? n : ac->trie];
+++#ifdef DEBUGGING
+++            AV *const trie_words
+++                           = MUTABLE_AV(ri->data->data[n + TRIE_WORDS_OFFSET]);
+++#endif
+++            const regnode *nextbranch= NULL;
+++            I32 word_idx;
+++            SvPVCLEAR(sv);
+++            for (word_idx= 0; word_idx < (I32)trie->wordcount; word_idx++) {
+++                SV ** const elem_ptr = av_fetch_simple(trie_words, word_idx, 0);
+++
+++                Perl_re_indentf( aTHX_  "%s ",
+++                    indent+3,
+++                    elem_ptr
+++                    ? pv_pretty(sv, SvPV_nolen_const(*elem_ptr),
+++                                SvCUR(*elem_ptr), PL_dump_re_max_len,
+++                                PL_colors[0], PL_colors[1],
+++                                (SvUTF8(*elem_ptr)
+++                                 ? PERL_PV_ESCAPE_UNI
+++                                 : 0)
+++                                | PERL_PV_PRETTY_ELLIPSES
+++                                | PERL_PV_PRETTY_LTGT
+++                            )
+++                    : "???"
+++                );
+++                if (trie->jump) {
+++                    U16 dist= trie->jump[word_idx+1];
+++                    Perl_re_printf( aTHX_  "(%" UVuf ")\n",
+++                               (UV)((dist ? this_trie + dist : next) - start));
+++                    if (dist) {
+++                        if (!nextbranch)
+++                            nextbranch= this_trie + trie->jump[0];
+++                        DUMPUNTIL(this_trie + dist, nextbranch);
+++                    }
+++                    if (nextbranch && REGNODE_TYPE(OP(nextbranch))==BRANCH)
+++                        nextbranch= regnext((regnode *)nextbranch);
+++                } else {
+++                    Perl_re_printf( aTHX_  "\n");
+++                }
+++            }
+++            if (last && next > last)
+++                node= last;
+++            else
+++                node= next;
+++        }
+++        else if ( op == CURLY ) {   /* "next" might be very big: optimizer */
+++            DUMPUNTIL(after, after + 1); /* +1 is NOT a REGNODE_AFTER */
+++        }
+++        else if (REGNODE_TYPE(op) == CURLY && op != CURLYX) {
+++            assert(next);
+++            DUMPUNTIL(after, next);
+++        }
+++        else if ( op == PLUS || op == STAR) {
+++            DUMPUNTIL(after, after + 1); /* +1 NOT a REGNODE_AFTER */
+++        }
+++        else if (REGNODE_TYPE(op) == EXACT || op == ANYOFHs) {
+++            /* Literal string, where present. */
+++            node = (const regnode *)REGNODE_AFTER_varies(node);
+++        }
+++        else {
+++            node = REGNODE_AFTER_opcode(node,op);
+++        }
+++        if (op == CURLYX || op == OPEN || op == SROPEN)
+++            indent++;
+++        if (REGNODE_TYPE(op) == END)
+++            break;
+++    }
+++    CLEAR_OPTSTART;
+++#ifdef DEBUG_DUMPUNTIL
+++    Perl_re_printf( aTHX_  "--- %d\n", (int)indent);
+++#endif
+++    return node;
+++}
+++
+++#endif  /* PERL_RE_BUILD_DEBUG */
++ 
++ /*
++  - regdump - dump a regexp onto Perl_debug_log in vaguely comprehensible form
++  */
++ #ifdef DEBUGGING
++-
++ static void
++ S_regdump_intflags(pTHX_ const char *lead, const U32 flags)
++ {
++@@ -907,8 +1053,8 @@ Perl_regprop(pTHX_ const regexp *prog, SV *sv, const regnode *o, const regmatch_
++ #endif  /* DEBUGGING */
++ }
++ 
++-#ifdef DEBUGGING
++ 
+++#ifdef DEBUGGING
++ STATIC void
++ S_put_code_point(pTHX_ SV *sv, UV c)
++ {
++@@ -1517,154 +1663,4 @@ S_put_charclass_bitmap_innards(pTHX_ SV *sv,
++ 
++     return did_output_something;
++ }
++-
++-
++-const regnode *
++-Perl_dumpuntil(pTHX_ const regexp *r, const regnode *start, const regnode *node,
++-            const regnode *last, const regnode *plast,
++-            SV* sv, I32 indent, U32 depth)
++-{
++-    const regnode *next;
++-    const regnode *optstart= NULL;
++-
++-    RXi_GET_DECL(r, ri);
++-    DECLARE_AND_GET_RE_DEBUG_FLAGS;
++-
++-    PERL_ARGS_ASSERT_DUMPUNTIL;
++-
++-#ifdef DEBUG_DUMPUNTIL
++-    Perl_re_printf( aTHX_  "--- %d : %d - %d - %d\n", indent, node-start,
++-        last ? last-start : 0, plast ? plast-start : 0);
++-#endif
++-
++-    if (plast && plast < last)
++-        last= plast;
++-
++-    while (node && (!last || node < last)) {
++-        const U8 op = OP(node);
++-
++-        if (op == CLOSE || op == SRCLOSE || op == WHILEM)
++-            indent--;
++-        next = regnext((regnode *)node);
++-        const regnode *after = regnode_after((regnode *)node,0);
++-
++-        /* Where, what. */
++-        if (op == OPTIMIZED) {
++-            if (!optstart && RE_DEBUG_FLAG(RE_DEBUG_COMPILE_OPTIMISE))
++-                optstart = node;
++-            else
++-                goto after_print;
++-        } else
++-            CLEAR_OPTSTART;
++-
++-        regprop(r, sv, node, NULL, NULL);
++-        Perl_re_printf( aTHX_  "%4" IVdf ":%*s%s", (IV)(node - start),
++-                      (int)(2*indent + 1), "", SvPVX_const(sv));
++-
++-        if (op != OPTIMIZED) {
++-            if (next == NULL)           /* Next ptr. */
++-                Perl_re_printf( aTHX_  " (0)");
++-            else if (REGNODE_TYPE(op) == BRANCH
++-                     && REGNODE_TYPE(OP(next)) != BRANCH )
++-                Perl_re_printf( aTHX_  " (FAIL)");
++-            else
++-                Perl_re_printf( aTHX_  " (%" IVdf ")", (IV)(next - start));
++-            Perl_re_printf( aTHX_ "\n");
++-        }
++-
++-      after_print:
++-        if (REGNODE_TYPE(op) == BRANCHJ) {
++-            assert(next);
++-            const regnode *nnode = (OP(next) == LONGJMP
++-                                   ? regnext((regnode *)next)
++-                                   : next);
++-            if (last && nnode > last)
++-                nnode = last;
++-            DUMPUNTIL(after, nnode);
++-        }
++-        else if (REGNODE_TYPE(op) == BRANCH) {
++-            assert(next);
++-            DUMPUNTIL(after, next);
++-        }
++-        else if ( REGNODE_TYPE(op)  == TRIE ) {
++-            const regnode *this_trie = node;
++-            const U32 n = ARG1u(node);
++-            const reg_ac_data * const ac = op>=AHOCORASICK ?
++-               (reg_ac_data *)ri->data->data[n] :
++-               NULL;
++-            const reg_trie_data * const trie =
++-                (reg_trie_data*)ri->data->data[op<AHOCORASICK ? n : ac->trie];
++-#ifdef DEBUGGING
++-            AV *const trie_words
++-                           = MUTABLE_AV(ri->data->data[n + TRIE_WORDS_OFFSET]);
++-#endif
++-            const regnode *nextbranch= NULL;
++-            I32 word_idx;
++-            SvPVCLEAR(sv);
++-            for (word_idx= 0; word_idx < (I32)trie->wordcount; word_idx++) {
++-                SV ** const elem_ptr = av_fetch_simple(trie_words, word_idx, 0);
++-
++-                Perl_re_indentf( aTHX_  "%s ",
++-                    indent+3,
++-                    elem_ptr
++-                    ? pv_pretty(sv, SvPV_nolen_const(*elem_ptr),
++-                                SvCUR(*elem_ptr), PL_dump_re_max_len,
++-                                PL_colors[0], PL_colors[1],
++-                                (SvUTF8(*elem_ptr)
++-                                 ? PERL_PV_ESCAPE_UNI
++-                                 : 0)
++-                                | PERL_PV_PRETTY_ELLIPSES
++-                                | PERL_PV_PRETTY_LTGT
++-                            )
++-                    : "???"
++-                );
++-                if (trie->jump) {
++-                    U16 dist= trie->jump[word_idx+1];
++-                    Perl_re_printf( aTHX_  "(%" UVuf ")\n",
++-                               (UV)((dist ? this_trie + dist : next) - start));
++-                    if (dist) {
++-                        if (!nextbranch)
++-                            nextbranch= this_trie + trie->jump[0];
++-                        DUMPUNTIL(this_trie + dist, nextbranch);
++-                    }
++-                    if (nextbranch && REGNODE_TYPE(OP(nextbranch))==BRANCH)
++-                        nextbranch= regnext((regnode *)nextbranch);
++-                } else {
++-                    Perl_re_printf( aTHX_  "\n");
++-                }
++-            }
++-            if (last && next > last)
++-                node= last;
++-            else
++-                node= next;
++-        }
++-        else if ( op == CURLY ) {   /* "next" might be very big: optimizer */
++-            DUMPUNTIL(after, after + 1); /* +1 is NOT a REGNODE_AFTER */
++-        }
++-        else if (REGNODE_TYPE(op) == CURLY && op != CURLYX) {
++-            assert(next);
++-            DUMPUNTIL(after, next);
++-        }
++-        else if ( op == PLUS || op == STAR) {
++-            DUMPUNTIL(after, after + 1); /* +1 NOT a REGNODE_AFTER */
++-        }
++-        else if (REGNODE_TYPE(op) == EXACT || op == ANYOFHs) {
++-            /* Literal string, where present. */
++-            node = (const regnode *)REGNODE_AFTER_varies(node);
++-        }
++-        else {
++-            node = REGNODE_AFTER_opcode(node,op);
++-        }
++-        if (op == CURLYX || op == OPEN || op == SROPEN)
++-            indent++;
++-        if (REGNODE_TYPE(op) == END)
++-            break;
++-    }
++-    CLEAR_OPTSTART;
++-#ifdef DEBUG_DUMPUNTIL
++-    Perl_re_printf( aTHX_  "--- %d\n", (int)indent);
++-#endif
++-    return node;
++-}
++-
++-#endif  /* DEBUGGING */
+++#endif /* DEBUGGING */
++diff --git a/regcomp_invlist.c b/regcomp_invlist.c
++index 9ea3f431817d..82f82305846a 100644
++--- a/regcomp_invlist.c
+++++ b/regcomp_invlist.c
++@@ -18,7 +18,7 @@
++ #include "unicode_constants.h"
++ #include "regcomp_internal.h"
++ 
++-
+++#ifdef PERL_RE_BUILD_AUX
++ void
++ Perl_populate_bitmap_from_invlist(pTHX_ SV * invlist, const UV offset, const U8 * bitmap, const Size_t len)
++ {
++@@ -70,6 +70,7 @@ Perl_populate_invlist_from_bitmap(pTHX_ const U8 * bitmap, const Size_t bitmap_l
++         }
++     }
++ }
+++#endif /* PERL_RE_BUILD_AUX */
++ 
++ /* This section of code defines the inversion list object and its methods.  The
++  * interfaces are highly subject to change, so as much as possible is static to
++diff --git a/regexec.c b/regexec.c
++index c404d9aa3d73..de0b7c461918 100644
++--- a/regexec.c
+++++ b/regexec.c
++@@ -4428,7 +4428,8 @@ S_regtry(pTHX_ regmatch_info *reginfo, char **startposp)
++ */
++ #define REPORT_CODE_OFF 29
++ #define INDENT_CHARS(depth) ((int)(depth) % 20)
++-#ifdef DEBUGGING
+++
+++#ifdef PERL_RE_BUILD_DEBUG
++ int
++ Perl_re_exec_indentf(pTHX_ const char *fmt, U32 depth, ...)
++ {
 -- 
 2.43.0
 
